@@ -62,6 +62,7 @@ namespace xmloff
     #define PROPERTY_BUTTONTYPE "ButtonType"
     #define PROPERTY_DATAFIELD "DataField"
     #define PROPERTY_BOUNDCOLUMN "BoundColumn"
+    #define PROPERTY_FILTERCOLUMN "FilterColumn"
     #define PROPERTY_EMPTY_IS_NULL "ConvertEmptyToNull"
     #define PROPERTY_INPUT_REQUIRED "InputRequired"
     #define PROPERTY_LISTSOURCE "ListSource"

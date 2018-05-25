@@ -160,6 +160,7 @@ namespace frm
         m_nClassId = FormComponentType::LISTBOX;
         m_eListSourceType = ListSourceType_VALUELIST;
         m_aBoundColumn <<= sal_Int16(1);
+        m_aFilterColumn <<= sal_Int16(2);
         initValueProperty( PROPERTY_SELECT_SEQ, PROPERTY_ID_SELECT_SEQ);
 
         init();
@@ -173,8 +174,11 @@ namespace frm
         ,m_aListRowSet()
         ,m_eListSourceType( _pOriginal->m_eListSourceType )
         ,m_aBoundColumn( _pOriginal->m_aBoundColumn )
+        ,m_aFilterColumn( _pOriginal->m_aFilterColumn )
         ,m_aListSourceValues( _pOriginal->m_aListSourceValues )
         ,m_aBoundValues( _pOriginal->m_aBoundValues )
+        ,m_aVisibleBoundValues( _pOriginal->m_aVisibleBoundValues )
+        ,m_aFilterField( _pOriginal->m_aFilterField)
         ,m_nConvertedBoundValuesType(0)
         ,m_aDefaultSelectSeq( _pOriginal->m_aDefaultSelectSeq )
         ,m_nNULLPos(-1)
@@ -254,6 +258,10 @@ namespace frm
             _rValue = m_aBoundColumn;
             break;
 
+        case PROPERTY_ID_FILTERCOLUMN:
+            _rValue = m_aFilterColumn;
+            break;
+
         case PROPERTY_ID_LISTSOURCETYPE:
             _rValue <<= m_eListSourceType;
             break;
@@ -263,7 +271,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_VALUE_SEQ:
-            _rValue <<= lcl_convertToStringSequence( m_aBoundValues );
+            _rValue <<= lcl_convertToStringSequence( m_aVisibleBoundValues );
             break;
 
         case PROPERTY_ID_SELECT_VALUE_SEQ:
@@ -280,6 +288,10 @@ namespace frm
 
         case PROPERTY_ID_STRINGITEMLIST:
             _rValue <<= comphelper::containerToSequence(getStringItemList());
+            break;
+
+        case PROPERTY_ID_VISIBLESTRINGITEMLIST:
+            _rValue <<= comphelper::containerToSequence(getVisibleStringItemList());
             break;
 
         case PROPERTY_ID_TYPEDITEMLIST:
@@ -376,8 +388,16 @@ namespace frm
             setNewStringItemList( _rValue, aLock );
                 // TODO: this is bogus. setNewStringItemList expects a guard which has the *only*
                 // lock to the mutex, but setFastPropertyValue_NoBroadcast is already called with
-                // a lock - so we effectively has two locks here, of which setNewStringItemList can
+                // a lock - so we effectively have two locks here, of which setNewStringItemList can
                 // only control one.
+        }
+        resetNoBroadcast();
+        break;
+
+        case PROPERTY_ID_VISIBLESTRINGITEMLIST:
+        {
+            ControlModelLock aLock( *this );
+            setNewVisibleStringItemList( _rValue, aLock );
         }
         resetNoBroadcast();
         break;
@@ -405,6 +425,10 @@ namespace frm
         {
         case PROPERTY_ID_BOUNDCOLUMN :
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aBoundColumn, ::cppu::UnoType<sal_Int16>::get());
+            break;
+
+        case PROPERTY_ID_FILTERCOLUMN :
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aFilterColumn, ::cppu::UnoType<sal_Int16>::get());
             break;
 
         case PROPERTY_ID_LISTSOURCETYPE:
@@ -440,6 +464,10 @@ namespace frm
             break;
 
         case PROPERTY_ID_STRINGITEMLIST:
+            bModified = convertNewListSourceProperty( _rConvertedValue, _rOldValue, _rValue );
+            break;
+
+        case PROPERTY_ID_VISIBLESTRINGITEMLIST:
             bModified = convertNewListSourceProperty( _rConvertedValue, _rOldValue, _rValue );
             break;
 
@@ -492,17 +520,18 @@ namespace frm
 
     void OListBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
-        BEGIN_DESCRIBE_PROPERTIES( 10, OBoundControlModel )
+        BEGIN_DESCRIBE_PROPERTIES( 11, OBoundControlModel )
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
             DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
+            DECL_PROP2(FILTERCOLUMN,        sal_Int16,                      BOUND, MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
-            DECL_PROP1(LISTSOURCE,          css::uno::Sequence<OUString>,                 BOUND);
-            DECL_PROP3(VALUE_SEQ,           css::uno::Sequence<OUString>,                 BOUND, READONLY, TRANSIENT);
+            DECL_PROP1(LISTSOURCE,          css::uno::Sequence<OUString>,   BOUND);
+            DECL_PROP3(VALUE_SEQ,           css::uno::Sequence<OUString>,   BOUND, READONLY, TRANSIENT);
             DECL_PROP2(SELECT_VALUE_SEQ,    Sequence< Any >,                BOUND, TRANSIENT);
             DECL_PROP2(SELECT_VALUE,        Any,                            BOUND, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
-            DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,    BOUND);
-            DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,    OPTIONAL);
+            DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,           BOUND);
+            DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,                OPTIONAL);
         END_DESCRIBE_PROPERTIES();
     }
 
@@ -615,6 +644,7 @@ namespace frm
             SAL_WARN( "forms.component", "OListBoxModel::read : invalid (means unknown) version !");
             ValueList().swap(m_aListSourceValues);
             m_aBoundColumn <<= sal_Int16(0);
+            m_aFilterColumn <<= sal_Int16(1);
             clearBoundValues();
             m_eListSourceType = ListSourceType_VALUELIST;
             m_aDefaultSelectSeq.realloc(0);
@@ -694,6 +724,7 @@ namespace frm
             )
         {
             setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
+            setFastPropertyValue( PROPERTY_ID_VISIBLESTRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
             setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
         }
 
@@ -743,12 +774,17 @@ namespace frm
             return;
         }
 
+        ::boost::optional< sal_Int16 > aFilterColumn(boost::none);
         ::boost::optional< sal_Int16 > aBoundColumn(boost::none);
         if ( m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT )
         {
-            sal_Int16 nBoundColumn( 0 );
-            m_aBoundColumn >>= nBoundColumn;
-            aBoundColumn.reset( nBoundColumn );
+            sal_Int16 nColumn( 0 );
+            m_aBoundColumn >>= nColumn;
+            aBoundColumn.reset( nColumn );
+
+            nColumn = 0;
+            m_aFilterColumn >>= nColumn;
+            aFilterColumn.reset( nColumn );
         }
 
         ::utl::SharedUNOComponent< XResultSet > xListCursor;
@@ -873,7 +909,7 @@ namespace frm
         }
 
         // Fill display and value lists
-        ValueList aDisplayList, aValueList;
+        ValueList aDisplayList, aValueList, aFilterList;
         bool bUseNULL = hasField() && !isRequired();
 
         // empty BoundColumn is treated as BoundColumn==0,
@@ -936,6 +972,7 @@ namespace frm
                     OUString aStr;
                     sal_Int16 entryPos = 0;
                     ORowSetValue aBoundValue;
+                    ORowSetValue aFilterValue;
                     Reference< XRow > xCursorRow( xListCursor, UNO_QUERY_THROW );
                     while ( xListCursor->next() && ( entryPos++ < SHRT_MAX ) ) // SHRT_MAX is the maximum number of entries
                     {
@@ -946,8 +983,14 @@ namespace frm
                             aBoundValue.fill( *aBoundColumn + 1, m_nBoundColumnType, xCursorRow );
                         else
                             // -1 because getRow() is 1-indexed, but ListBox positions are 0-indexed
-                            aBoundValue = static_cast<sal_Int16>(xListCursor->getRow()-1);
+                            aBoundValue = static_cast<sal_Int16>(xListCursor->getRow()-2);
                         aValueList.push_back( aBoundValue );
+
+                        if(*aFilterColumn >= 0)
+                            aFilterValue.fill( *aFilterColumn + 1, DataType::BOOLEAN, xCursorRow );
+                        else
+                            aFilterValue = static_cast<bool>(xListCursor->getRow()-1);
+                        aFilterList.push_back( aFilterValue );
 
                         if ( m_nNULLPos == -1 && aBoundValue.isNull() )
                             m_nNULLPos = sal_Int16( aDisplayList.size() - 1 );
@@ -976,12 +1019,17 @@ namespace frm
                             // the type of i matters! It will be the type of the ORowSetValue pushed to aValueList!
                             for(size_t i=0; i < aDisplayList.size(); ++i)
                             {
-                                aValueList.emplace_back(sal_Int16(i));
+                                aValueList.emplace_back(static_cast<sal_Int16>(i));
                             }
                         }
                         else
                         {
                             aValueList = aDisplayList;
+                        }
+
+                        for(size_t i=0; i < aDisplayList.size(); ++i)
+                        {
+                            aFilterList.emplace_back(static_cast<sal_Int16>(1));
                         }
                     }
                 }
@@ -1002,7 +1050,6 @@ namespace frm
             return;
         }
 
-
         // Create Values sequence
         // Add NULL entry
         if (bUseNULL && m_nNULLPos == -1)
@@ -1013,9 +1060,34 @@ namespace frm
             m_nNULLPos = 0;
         }
 
-        setBoundValues(aValueList);
+        int idx = 0;
+        ValueList aVisibleDisplayList;
+        ValueList aVisibleValueList;
+        bFilterList.resize(aFilterList.size());
+        convertToBooleanSequence(bFilterList, aFilterList);
+        if( static_cast<ValueList::size_type>( bFilterList.size() ) > aDisplayList.size() )
+        {
+            SAL_WARN("forms.component", "OListBoxModel::loadData: Inconsistent boolean entries!");
+        }
+        else
+        {
+            for ( auto const& bVisible : bFilterList )
+            {
+                if(bVisible)
+                {
+                    aVisibleDisplayList.push_back(aDisplayList.at(idx));
+                    aVisibleValueList.push_back(aValueList.at(idx));
+                }
+                idx++;
+            }
+        }
 
-        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aDisplayList ) ) );
+        setBoundValues(aValueList);
+        setVisibleBoundValues(aVisibleValueList);
+        setFilterField(aFilterList);
+
+        //setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aDisplayList ) ) );
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aVisibleDisplayList ) ) );
         setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
     }
 
@@ -1034,6 +1106,24 @@ namespace frm
     }
 
 
+    void OListBoxModel::convertToBooleanSequence(std::vector<bool>& bList, ValueList& aValueList)
+    {
+        //check for sql_boolean and other constraints;
+        int idx = 0;
+        for (auto const& src : aValueList)
+        {
+            if(src == s_aEmptyStringValue ||
+               src == s_aEmptyValue ||
+               src.isNull() //TODO: add affirmative value in OR
+            )
+                bList[idx++] = false;
+            else
+                bList[idx++] = true;
+        }
+    }
+
+
+
     void OListBoxModel::onDisconnectedDbColumn()
     {
         clearBoundValues();
@@ -1043,10 +1133,19 @@ namespace frm
         if ( m_eListSourceType != ListSourceType_VALUELIST )
         {
             if ( !hasExternalListSource() )
+            {
                 setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
+                setFastPropertyValue( PROPERTY_ID_VISIBLESTRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
+            }
 
             m_aListRowSet.dispose();
         }
+    }
+
+
+    void OListBoxModel::setFilterField(const ValueList &l)
+    {
+        m_aFilterField = l;
     }
 
 
@@ -1056,22 +1155,27 @@ namespace frm
         m_aBoundValues = l;
     }
 
+    void OListBoxModel::setVisibleBoundValues(const ValueList &l)
+    {
+        m_aConvertedVisibleBoundValues.clear();
+        m_aVisibleBoundValues = l;
+    }
 
     void OListBoxModel::clearBoundValues()
     {
         ValueList().swap(m_aConvertedBoundValues);
         ValueList().swap(m_aBoundValues);
+        ValueList().swap(m_aConvertedVisibleBoundValues);
+        ValueList().swap(m_aVisibleBoundValues);
     }
 
 
-    void OListBoxModel::convertBoundValues(const sal_Int32 nFieldType) const
+    void OListBoxModel::convertValues(sal_Int32 nFieldType, ValueList aValues, ValueList::iterator dst) const
     {
         assert(s_aEmptyValue.isNull());
         m_nNULLPos = -1;
-        m_aConvertedBoundValues.resize(m_aBoundValues.size());
-        ValueList::iterator dst = m_aConvertedBoundValues.begin();
         sal_Int16 nPos = 0;
-        for (auto const& src : m_aBoundValues)
+        for (auto const& src : aValues)
         {
             if(m_nNULLPos == -1 &&
                !isRequired()    &&
@@ -1089,8 +1193,25 @@ namespace frm
             ++nPos;
         }
         m_nConvertedBoundValuesType = nFieldType;
+    }
+
+
+    void OListBoxModel::convertBoundValues(const sal_Int32 nFieldType) const
+    {
+        m_aConvertedBoundValues.resize(m_aBoundValues.size());
+        ValueList::iterator dst = m_aConvertedBoundValues.begin();
+        convertValues(nFieldType, m_aBoundValues, dst);
         OSL_ENSURE(dst == m_aConvertedBoundValues.end(), "OListBoxModel::convertBoundValues expected to have overwritten all of m_aConvertedBoundValues, but did not.");
         assert(dst == m_aConvertedBoundValues.end());
+    }
+
+    void OListBoxModel::convertVisibleBoundValues(const sal_Int32 nFieldType) const
+    {
+        m_aConvertedVisibleBoundValues.resize(m_aVisibleBoundValues.size());
+        ValueList::iterator dst = m_aConvertedVisibleBoundValues.begin();
+        convertValues(nFieldType, m_aVisibleBoundValues, dst);
+        OSL_ENSURE(dst == m_aConvertedVisibleBoundValues.end(), "OListBoxModel::convertVisibleBoundValues expected to have overwritten all of m_aConvertedBoundValues, but did not.");
+        assert(dst == m_aConvertedVisibleBoundValues.end());
     }
 
     sal_Int32 OListBoxModel::getValueType() const
@@ -1100,7 +1221,7 @@ namespace frm
             ( hasField() ? getFieldType() : DataType::VARCHAR);
     }
 
-    ValueList OListBoxModel::impl_getValues() const
+    ValueList OListBoxModel::impl_getVisibleValues() const
     {
         const sal_Int32 nFieldType = getValueType();
 
@@ -1124,6 +1245,34 @@ namespace frm
         }
         m_nConvertedBoundValuesType = nFieldType;
         OSL_ENSURE(dst == aValues.end(), "OListBoxModel::impl_getValues expected to have set all of aValues, but did not.");
+        assert(dst == aValues.end());
+        return aValues;
+    }
+
+    ValueList OListBoxModel::impl_getValues() const
+    {
+        const sal_Int32 nFieldType = getValueType();
+
+        if ( !m_aConvertedVisibleBoundValues.empty() && m_nConvertedBoundValuesType == nFieldType )
+            return m_aConvertedVisibleBoundValues;
+
+        if ( !m_aVisibleBoundValues.empty() )
+        {
+            convertVisibleBoundValues(nFieldType);
+            return m_aConvertedVisibleBoundValues;
+        }
+
+        const std::vector< OUString >& aStringItems( getStringItemList() );
+        ValueList aValues( aStringItems.size() );
+        ValueList::iterator dst = aValues.begin();
+        for (auto const& src : aStringItems)
+        {
+            *dst = src;
+            dst->setTypeKind(nFieldType);
+            ++dst;
+        }
+        m_nConvertedBoundValuesType = nFieldType;
+        OSL_ENSURE(dst == aValues.end(), "OListBoxModel::impl_getVisibleValues expected to have set all of aValues, but did not.");
         assert(dst == aValues.end());
         return aValues;
     }
@@ -1490,7 +1639,7 @@ namespace frm
                 if ( _rSelectSequence.getLength() == 1 )
                 {
                     sal_Int32 nIndex = _rSelectSequence[0];
-                    if (0 <= nIndex && nIndex < _rTypedList.getLength())
+                    if (nIndex >= 0 && nIndex < _rTypedList.getLength())
                         aReturn = _rTypedList[nIndex];
                 }
             }

@@ -169,6 +169,8 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabIndex), PROPERTY_TABINDEX);
     m_aAttributeMetaData.addInt16Property(
         OAttributeMetaData::getDatabaseAttributeName(DAFlags::BoundColumn), PROPERTY_BOUNDCOLUMN);
+     m_aAttributeMetaData.addInt16Property(
+        OAttributeMetaData::getDatabaseAttributeName(DAFlags::FilterColumn), PROPERTY_FILTERCOLUMN);
 
     // the int32 attributes
     m_aAttributeMetaData.addInt32Property(

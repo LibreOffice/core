@@ -1250,6 +1250,7 @@ namespace pcr
 
             case PROPERTY_ID_TABINDEX:
             case PROPERTY_ID_BOUNDCOLUMN:
+            case PROPERTY_ID_FILTERCOLUMN:
             case PROPERTY_ID_VISIBLESIZE:
             case PROPERTY_ID_MAXTEXTLEN:
             case PROPERTY_ID_LINEINCREMENT:
@@ -1259,7 +1260,9 @@ namespace pcr
                 Optional< double > aMinValue( true, 0 );
                 Optional< double > aMaxValue( true, 0x7FFFFFFF );
 
-                if ( nPropId == PROPERTY_ID_MAXTEXTLEN ||  nPropId == PROPERTY_ID_BOUNDCOLUMN )
+                if ( nPropId == PROPERTY_ID_MAXTEXTLEN ||
+                     nPropId == PROPERTY_ID_BOUNDCOLUMN ||
+                     nPropId == PROPERTY_ID_FILTERCOLUMN )
                     aMinValue.Value = -1;
                 else if ( nPropId == PROPERTY_ID_VISIBLESIZE )
                     aMinValue.Value = 1;
@@ -1500,6 +1503,7 @@ namespace pcr
             aDependentProperties.push_back( PROPERTY_ID_STRINGITEMLIST );
             aDependentProperties.push_back( PROPERTY_ID_TYPEDITEMLIST );
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
+            aDependentProperties.push_back( PROPERTY_ID_FILTERCOLUMN );
             SAL_FALLTHROUGH;
 
         // ----- StringItemList -----
@@ -1526,6 +1530,7 @@ namespace pcr
                 _rxInspectorUI->enablePropertyUI( PROPERTY_EMPTY_IS_NULL, !sControlSource.isEmpty() );
 
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
+            aDependentProperties.push_back( PROPERTY_ID_FILTERCOLUMN );
             aDependentProperties.push_back( PROPERTY_ID_SCALEIMAGE );
             aDependentProperties.push_back( PROPERTY_ID_SCALE_MODE );
             aDependentProperties.push_back( PROPERTY_ID_INPUT_REQUIRED );
@@ -1776,6 +1781,18 @@ namespace pcr
                 );
             }
             break;  // case PROPERTY_ID_BOUNDCOLUMN
+
+            // ----- FilterColumn -----
+            case PROPERTY_ID_FILTERCOLUMN:
+            {
+                ListSourceType eLSType = ListSourceType_VALUELIST;
+                OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_LISTSOURCETYPE ) >>= eLSType );
+
+                _rxInspectorUI->enablePropertyUI( PROPERTY_FILTERCOLUMN,
+                        ( eLSType != ListSourceType_VALUELIST )
+                );
+            }
+            break;  // case PROPERTY_ID_FILTERCOLUMN
 
             // ----- ScaleImage, ScaleMode -----
             case PROPERTY_ID_SCALEIMAGE:

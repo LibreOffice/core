@@ -303,6 +303,18 @@ namespace frm
     }
 
 
+    void OEntryListHelper::setNewVisibleStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
+    {
+        OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );
+        css::uno::Sequence<OUString> aTmp;
+        OSL_VERIFY( _rValue >>= aTmp );
+        comphelper::sequenceToContainer(m_aVisibleStringItems, aTmp);
+        if (m_aTypedItems.getLength())
+            m_aTypedItems = Sequence<Any>();    // doesn't match anymore
+        stringItemListChanged( _rInstanceLock );
+    }
+
+
     void OEntryListHelper::setNewTypedItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewTypedItemList: this should never have survived convertNewListSourceProperty!" );

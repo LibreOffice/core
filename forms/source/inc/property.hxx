@@ -84,7 +84,7 @@ namespace frm
 #define PROPERTY_ID_BOUNDCOLUMN         (PROPERTY_ID_START + 44)    // UINT16 may be null
 #define PROPERTY_ID_LISTSOURCETYPE      (PROPERTY_ID_START + 45)    // UINT16
 #define PROPERTY_ID_LISTSOURCE          (PROPERTY_ID_START + 46)    // string
-    // FREE
+#define PROPERTY_ID_FILTERCOLUMN        (PROPERTY_ID_START + 47)    // UINT16
 #define PROPERTY_ID_TEXT                (PROPERTY_ID_START + 48)    // string
 #define PROPERTY_ID_STRINGITEMLIST      (PROPERTY_ID_START + 49)    // wsstringsequence
 #define PROPERTY_ID_LABEL               (PROPERTY_ID_START + 50)    // string
@@ -119,7 +119,7 @@ namespace frm
 #define PROPERTY_ID_IMAGE_URL           (PROPERTY_ID_START + 79)    // ::rtl::OUString
 #define PROPERTY_ID_SELECT_VALUE        (PROPERTY_ID_START + 80)    // StringSeq
 #define PROPERTY_ID_SELECT_VALUE_SEQ    (PROPERTY_ID_START + 81)    // StringSeq
-    // free
+#define PROPERTY_ID_VISIBLESTRINGITEMLIST (PROPERTY_ID_START + 82)    // stringsequence
     // free
     // free
     // free

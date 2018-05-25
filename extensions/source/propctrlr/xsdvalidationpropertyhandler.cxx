@@ -236,6 +236,7 @@ namespace pcr
             aSuperfluous.push_back(  OUString(PROPERTY_LISTSOURCETYPE) );
             aSuperfluous.push_back(  OUString(PROPERTY_LISTSOURCE) );
             aSuperfluous.push_back(  OUString(PROPERTY_BOUNDCOLUMN) );
+            aSuperfluous.push_back(  OUString(PROPERTY_FILTERCOLUMN) );
 
             bool bAllowBinding = m_pHelper->canBindToAnyDataType();
 
