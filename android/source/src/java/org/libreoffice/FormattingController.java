@@ -15,7 +15,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,6 +62,7 @@ class FormattingController implements View.OnClickListener {
         mContext.findViewById(R.id.button_insert_line).setOnClickListener(this);
         mContext.findViewById(R.id.button_insert_rect).setOnClickListener(this);
         mContext.findViewById(R.id.button_insert_picture).setOnClickListener(this);
+        mContext.findViewById(R.id.button_insert_table).setOnClickListener(this);
 
         mContext.findViewById(R.id.button_font_shrink).setOnClickListener(this);
         mContext.findViewById(R.id.button_font_grow).setOnClickListener(this);
@@ -132,6 +135,9 @@ class FormattingController implements View.OnClickListener {
                 break;
             case R.id.button_insert_picture:
                 insertPicture();
+            case R.id.button_insert_table:
+                insertTable();
+                break;
         }
     }
 
@@ -206,6 +212,14 @@ class FormattingController implements View.OnClickListener {
             }
         });
         builder.show();
+    }
+
+    private void insertTable() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(R.string.please_enter);
+        LinearLayout layout = new LinearLayout(mContext);
+        layout.setLayoutParams(
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
     private void sendImagePickingIntent() {
