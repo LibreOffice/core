@@ -173,57 +173,43 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidat
 |*      angle and the rotation angle of the graphic objects
 |*
 \************************************************************************/
-SvxAngleTabPage::SvxAngleTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage( pParent,"Rotation","cui/ui/rotationtabpage.ui", rInAttrs)
+SvxAngleTabPage::SvxAngleTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pParent, "cui/ui/rotationtabpage.ui", "Rotation", rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FUNIT_NONE)
+    , m_aCtlRect(this)
+    , m_xFlPosition(m_xBuilder->weld_widget("FL_POSITION"))
+    , m_xMtrPosX(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_X", FUNIT_CM))
+    , m_xMtrPosY(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_Y", FUNIT_CM))
+    , m_xCtlRect(new weld::CustomWeld(*m_xBuilder, "CTL_RECT", m_aCtlRect))
+    , m_xFlAngle(m_xBuilder->weld_widget("FL_ANGLE"))
+    , m_xNfAngle(m_xBuilder->weld_spin_button("NF_ANGLE"))
+    , m_xCtlAngle(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", m_aCtlAngle))
 {
-    get(m_pFlPosition, "FL_POSITION");
-    get(m_pMtrPosX, "MTR_FLD_POS_X");
-    get(m_pMtrPosY, "MTR_FLD_POS_Y");
-    get(m_pCtlRect, "CTL_RECT");
-
-    get(m_pFlAngle, "FL_ANGLE");
-    get(m_pNfAngle, "NF_ANGLE");
-    get(m_pCtlAngle, "CTL_ANGLE");
-
     // calculate PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "no pool (!)" );
     ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
-    m_pCtlAngle->SetLinkedField( m_pNfAngle, 2 );
+    m_aCtlAngle.SetLinkedField(m_xNfAngle.get(), 2);
 }
 
 SvxAngleTabPage::~SvxAngleTabPage()
 {
-    disposeOnce();
-}
-
-void SvxAngleTabPage::dispose()
-{
-    m_pFlPosition.clear();
-    m_pMtrPosX.clear();
-    m_pMtrPosY.clear();
-    m_pCtlRect.clear();
-    m_pFlAngle.clear();
-    m_pNfAngle.clear();
-    m_pCtlAngle.clear();
-    SvxTabPage::dispose();
 }
 
 void SvxAngleTabPage::Construct()
 {
     DBG_ASSERT(pView, "No valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
-    SetFieldUnit(*m_pMtrPosX, eDlgUnit, true);
-    SetFieldUnit(*m_pMtrPosY, eDlgUnit, true);
+    SetFieldUnit(*m_xMtrPosX, eDlgUnit, true);
+    SetFieldUnit(*m_xMtrPosY, eDlgUnit, true);
 
-    if(FUNIT_MILE == eDlgUnit || FUNIT_KM == eDlgUnit)
+    if (FUNIT_MILE == eDlgUnit || FUNIT_KM == eDlgUnit)
     {
-        m_pMtrPosX->SetDecimalDigits( 3 );
-        m_pMtrPosY->SetDecimalDigits( 3 );
+        m_xMtrPosX->set_digits(3);
+        m_xMtrPosY->set_digits(3);
     }
 
     { // #i75273#
@@ -251,13 +237,13 @@ void SvxAngleTabPage::Construct()
     TransfrmHelper::ScaleRect(maRange, aUIScale);
 
     // take UI units into account
-    sal_uInt16 nDigits(m_pMtrPosX->GetDecimalDigits());
+    sal_uInt16 nDigits(m_xMtrPosX->get_digits());
     TransfrmHelper::ConvertRect(maRange, nDigits, ePoolUnit, eDlgUnit);
 
     if(!pView->IsRotateAllowed())
     {
-        m_pFlPosition->Disable();
-        m_pFlAngle->Disable();
+        m_xFlPosition->set_sensitive(false);
+        m_xFlAngle->set_sensitive(false);
     }
 }
 
@@ -265,13 +251,13 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 {
     bool bModified = false;
 
-    if(m_pCtlAngle->IsValueModified() || m_pMtrPosX->IsValueModified() || m_pMtrPosY->IsValueModified())
+    if (m_aCtlAngle.IsValueModified() || m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved())
     {
         const double fUIScale(double(pView->GetModel()->GetUIScale()));
-        const double fTmpX((GetCoreValue(*m_pMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
-        const double fTmpY((GetCoreValue(*m_pMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
+        const double fTmpX((GetCoreValue(*m_xMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
+        const double fTmpY((GetCoreValue(*m_xMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
-        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_pCtlAngle->GetRotation()));
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_aCtlAngle.GetRotation()));
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
@@ -290,39 +276,41 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     if(pItem)
     {
         const double fTmp((static_cast<double>(static_cast<const SfxInt32Item*>(pItem)->GetValue()) - maAnchor.getX()) / fUIScale);
-        SetMetricValue(*m_pMtrPosX, basegfx::fround(fTmp), ePoolUnit);
+        SetMetricValue(*m_xMtrPosX, basegfx::fround(fTmp), ePoolUnit);
     }
     else
     {
-        m_pMtrPosX->SetText( OUString() );
+        m_xMtrPosX->set_text(OUString());
     }
 
     pItem = GetItem(*rAttrs, SID_ATTR_TRANSFORM_ROT_Y);
     if(pItem)
     {
         const double fTmp((static_cast<double>(static_cast<const SfxInt32Item*>(pItem)->GetValue()) - maAnchor.getY()) / fUIScale);
-        SetMetricValue(*m_pMtrPosY, basegfx::fround(fTmp), ePoolUnit);
+        SetMetricValue(*m_xMtrPosY, basegfx::fround(fTmp), ePoolUnit);
     }
     else
     {
-        m_pMtrPosY->SetText( OUString() );
+        m_xMtrPosY->set_text(OUString());
     }
 
     pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ANGLE );
     if(pItem)
     {
-        m_pCtlAngle->SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
+        m_aCtlAngle.SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
     }
     else
     {
-        m_pCtlAngle->SetRotation(0);
+        m_aCtlAngle.SetRotation(0);
     }
-    m_pCtlAngle->SaveValue();
+    m_aCtlAngle.SaveValue();
+    m_xMtrPosX->save_value();
+    m_xMtrPosY->save_value();
 }
 
-VclPtr<SfxTabPage> SvxAngleTabPage::Create( TabPageParent pWindow, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxAngleTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxAngleTabPage>::Create(pWindow.pParent, *rSet);
+    return VclPtr<SvxAngleTabPage>::Create(pParent, *rSet);
 }
 
 void SvxAngleTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -330,8 +318,8 @@ void SvxAngleTabPage::ActivatePage(const SfxItemSet& rSet)
     SfxBoolItem const * bPosProtect = nullptr;
     if(SfxItemState::SET == rSet.GetItemState( GetWhich(SID_ATTR_TRANSFORM_PROTECT_POS  ) , false, reinterpret_cast<SfxPoolItem const **>(&bPosProtect) ))
     {
-        m_pFlPosition->Enable(!bPosProtect->GetValue());
-        m_pFlAngle->Enable(!bPosProtect->GetValue());
+        m_xFlPosition->set_sensitive(!bPosProtect->GetValue());
+        m_xFlAngle->set_sensitive(!bPosProtect->GetValue());
     }
 }
 
@@ -345,73 +333,73 @@ DeactivateRC SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-void SvxAngleTabPage::PointChanged(vcl::Window* pWindow, RectPoint eRP)
+void SvxAngleTabPage::PointChanged(vcl::Window*, RectPoint)
 {
-    if(pWindow == m_pCtlRect)
+    assert(false);
+}
+
+void SvxAngleTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint eRP)
+{
+    if (pDrawingArea == m_aCtlRect.GetDrawingArea())
     {
         switch(eRP)
         {
             case RectPoint::LT:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
             case RectPoint::MT:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
             case RectPoint::RT:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
             case RectPoint::LM:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
             case RectPoint::MM:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
             case RectPoint::RM:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
             case RectPoint::LB:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
             }
             case RectPoint::MB:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
             }
             case RectPoint::RB:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_xMtrPosX->set_value( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                m_xMtrPosY->set_value( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
             }
         }
     }
-}
-
-void SvxAngleTabPage::PointChanged(weld::DrawingArea* /*pWindow*/, RectPoint /*eRP*/)
-{
-    assert(false);
 }
 
 /*************************************************************************
