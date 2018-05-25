@@ -2100,7 +2100,7 @@ namespace detail
     class SAL_NO_VTABLE IValueSource
     {
     public:
-        virtual OUString             getString() const = 0;
+        virtual OUString                    getString() const = 0;
         virtual bool                        getBoolean() const = 0;
         virtual sal_Int8                    getByte() const = 0;
         virtual sal_Int16                   getShort() const = 0;
@@ -2130,7 +2130,7 @@ namespace detail
         }
 
         // IValueSource
-        virtual OUString             getString() const override           { return m_xRow->getString( m_nPos ); };
+        virtual OUString                    getString() const override           { return m_xRow->getString( m_nPos ); };
         virtual bool                        getBoolean() const override          { return m_xRow->getBoolean( m_nPos ); };
         virtual sal_Int8                    getByte() const override             { return m_xRow->getByte( m_nPos ); };
         virtual sal_Int16                   getShort() const override            { return m_xRow->getShort( m_nPos ); }
@@ -2161,7 +2161,7 @@ namespace detail
         }
 
         // IValueSource
-        virtual OUString             getString() const override           { return m_xColumn->getString(); };
+        virtual OUString                    getString() const override           { return m_xColumn->getString(); };
         virtual bool                        getBoolean() const override          { return m_xColumn->getBoolean(); };
         virtual sal_Int8                    getByte() const override             { return m_xColumn->getByte(); };
         virtual sal_Int16                   getShort() const override            { return m_xColumn->getShort(); }

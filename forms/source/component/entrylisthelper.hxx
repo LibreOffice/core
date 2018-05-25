@@ -87,6 +87,10 @@ namespace frm
         */
         void        disposing( );
 
+        /** helper for setting the values of m_aListFilter from user entered values
+         */
+        void       getBoolAttr( css::uno::Sequence< rtl::OUString >& _rListFilter );
+
         // prevent method hiding
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override = 0;
 
