@@ -839,6 +839,7 @@ namespace pcr
                 rProperty.Attributes &= ~PropertyAttribute::MAYBEVOID;
                 break;
 
+            //case PROPERTY_ID_LISTFILTER:
             case PROPERTY_ID_LISTSOURCE:
                 // no cursor source if no Base is installed.
                 if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
@@ -874,6 +875,7 @@ namespace pcr
         aInterestingProperties.push_back(  PROPERTY_COMMANDTYPE );
         aInterestingProperties.push_back(  PROPERTY_LISTSOURCE );
         aInterestingProperties.push_back(  PROPERTY_LISTSOURCETYPE );
+        //aInterestingProperties.push_back(  PROPERTY_LISTFILTER );
         aInterestingProperties.push_back(  PROPERTY_SUBMIT_ENCODING );
         aInterestingProperties.push_back(  PROPERTY_REPEAT );
         aInterestingProperties.push_back(  PROPERTY_TABSTOP );
@@ -1250,6 +1252,7 @@ namespace pcr
 
             case PROPERTY_ID_TABINDEX:
             case PROPERTY_ID_BOUNDCOLUMN:
+            case PROPERTY_ID_FILTERCOLUMN:
             case PROPERTY_ID_VISIBLESIZE:
             case PROPERTY_ID_MAXTEXTLEN:
             case PROPERTY_ID_LINEINCREMENT:
@@ -1259,7 +1262,9 @@ namespace pcr
                 Optional< double > aMinValue( true, 0 );
                 Optional< double > aMaxValue( true, 0x7FFFFFFF );
 
-                if ( nPropId == PROPERTY_ID_MAXTEXTLEN ||  nPropId == PROPERTY_ID_BOUNDCOLUMN )
+                if ( nPropId == PROPERTY_ID_MAXTEXTLEN ||
+                     nPropId == PROPERTY_ID_BOUNDCOLUMN ||
+                     nPropId == PROPERTY_ID_FILTERCOLUMN )
                     aMinValue.Value = -1;
                 else if ( nPropId == PROPERTY_ID_VISIBLESIZE )
                     aMinValue.Value = 1;
@@ -1314,6 +1319,9 @@ namespace pcr
             case PROPERTY_ID_LISTSOURCE:
                 impl_describeListSourceUI_throw( aDescriptor, _rxControlFactory );
                 break;
+
+            case PROPERTY_ID_LISTFILTER:
+                impl_describeListFilterUI_throw( aDescriptor, _rxControlFactory );
         }
 
         if ( !aDescriptor.Control.is() )
@@ -1419,6 +1427,7 @@ namespace pcr
             break;
 
         case PROPERTY_ID_COMMAND:
+        //case PROPERTY_ID_LISTFILTER:
         case PROPERTY_ID_LISTSOURCE:
             if ( impl_doDesignSQLCommand_nothrow( _rxInspectorUI, nPropId ) )
                 eResult = InteractiveSelectionResult_Pending;
@@ -1500,6 +1509,8 @@ namespace pcr
             aDependentProperties.push_back( PROPERTY_ID_STRINGITEMLIST );
             aDependentProperties.push_back( PROPERTY_ID_TYPEDITEMLIST );
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
+            aDependentProperties.push_back( PROPERTY_ID_FILTERCOLUMN );
+            aDependentProperties.push_back( PROPERTY_ID_LISTFILTER );
             SAL_FALLTHROUGH;
 
         // ----- StringItemList -----
@@ -1526,6 +1537,7 @@ namespace pcr
                 _rxInspectorUI->enablePropertyUI( PROPERTY_EMPTY_IS_NULL, !sControlSource.isEmpty() );
 
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
+            aDependentProperties.push_back( PROPERTY_ID_FILTERCOLUMN );
             aDependentProperties.push_back( PROPERTY_ID_SCALEIMAGE );
             aDependentProperties.push_back( PROPERTY_ID_SCALE_MODE );
             aDependentProperties.push_back( PROPERTY_ID_INPUT_REQUIRED );
@@ -1777,6 +1789,18 @@ namespace pcr
             }
             break;  // case PROPERTY_ID_BOUNDCOLUMN
 
+            // ----- FilterColumn -----
+            case PROPERTY_ID_FILTERCOLUMN:
+            {
+                ListSourceType eLSType = ListSourceType_VALUELIST;
+                OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_LISTSOURCETYPE ) >>= eLSType );
+
+                _rxInspectorUI->enablePropertyUI( PROPERTY_FILTERCOLUMN,
+                        ( eLSType != ListSourceType_VALUELIST )
+                );
+            }
+            break;  // case PROPERTY_ID_FILTERCOLUMN
+
             // ----- ScaleImage, ScaleMode -----
             case PROPERTY_ID_SCALEIMAGE:
             case PROPERTY_ID_SCALE_MODE:
@@ -1879,6 +1903,18 @@ namespace pcr
                 );
             }
             break;  // case PROPERTY_ID_FILTER:
+
+            // ----- ListFilter -----
+            case PROPERTY_ID_LISTFILTER:
+            {
+                ListSourceType eLSType = ListSourceType_VALUELIST;
+                OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_LISTSOURCETYPE ) >>= eLSType );
+
+                _rxInspectorUI->enablePropertyUI( PROPERTY_LISTFILTER,
+                        ( eLSType == ListSourceType_VALUELIST )
+                );
+            }
+            break;  // case PROPERTY_ID_LISTFILTER
 
             // ----- Command -----
             case PROPERTY_ID_COMMAND:
@@ -2518,6 +2554,25 @@ namespace pcr
             break;
         default: break;
         }
+    }
+
+    void FormComponentPropertyHandler::impl_describeListFilterUI_throw( LineDescriptor& _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory ) const
+    {
+        OSL_PRECOND( m_xComponent.is(), "FormComponentPropertyHandler::impl_describeListFilterUI_throw: no component!" );
+
+        // read out ListSourceTypes
+        Any aListSourceType( m_xComponent->getPropertyValue( PROPERTY_LISTSOURCETYPE ) );
+
+        sal_Int32 nListSourceType = sal_Int32(ListSourceType_VALUELIST);
+        ::cppu::enum2int( nListSourceType, aListSourceType );
+        ListSourceType eListSourceType = static_cast<ListSourceType>(nListSourceType);
+
+        _out_rDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( PROPERTY_ID_LISTFILTER );
+        _out_rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_LISTFILTER ) );
+
+        //ListFilter is only defined for ListSourceType_VALUELIST
+        if( eListSourceType == ListSourceType_VALUELIST )
+            _out_rDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::StringListField, false );
     }
 
 

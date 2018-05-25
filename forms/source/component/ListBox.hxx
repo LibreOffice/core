@@ -108,9 +108,15 @@ class OListBoxModel final :public OBoundControlModel
     // <properties>
     css::form::ListSourceType                   m_eListSourceType;      // type of list source
     css::uno::Any                               m_aBoundColumn;
+    css::uno::Any                               m_aFilterColumn;
     ValueList                                   m_aListSourceValues;
     ValueList                                   m_aBoundValues;         // do not write directly; use setBoundValues()
     mutable ValueList                           m_aConvertedBoundValues;
+    ValueList                                   m_aVisibleBoundValues;  // do not write directly; use setVisibleBoundValues()
+    mutable ValueList                           m_aConvertedVisibleBoundValues;
+    ValueList                                   m_aFilterField;         // to decide if an entry is to be shown or not
+    std::vector<bool>                           bFilterList;
+
     mutable sal_Int32                           m_nConvertedBoundValuesType;
     css::uno::Sequence<sal_Int16>               m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
@@ -218,13 +224,19 @@ private:
     void        impl_refreshDbEntryList( bool _bForce );
 
     void        setBoundValues(const ValueList&);
+    void        setVisibleBoundValues(const ValueList&);
+    void        setFilterField(const ValueList&);
     void        clearBoundValues();
 
     ValueList   impl_getValues() const;
+    ValueList   impl_getVisibleValues() const;
 
     sal_Int32   getValueType() const;
 
+    void        convertValues(sal_Int32 nType, ValueList, ValueList::iterator) const;    //used in both convertBoundValues() and convertVisibleBoundValues()
     void        convertBoundValues(sal_Int32 nType) const;
+    void        convertVisibleBoundValues(sal_Int32 nType) const;
+    void        convertToBooleanSequence(std::vector<bool> &bList, ValueList &aValueList);
 };
 
 
