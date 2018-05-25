@@ -186,7 +186,6 @@ struct SalExtTextInputPosEvent
 
 struct SalInputContextChangeEvent
 {
-    LanguageType    meLanguage;     // new language
 };
 
 struct SalSurroundingTextRequestEvent

@@ -86,8 +86,6 @@ static const OUStringLiteral gPropNames[CB_COUNT] =
 
 TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase )
     : mrBase(rBase)
-    , mbStyleSelected(false)
-    , mbOptionsChanged(false)
 {
     pParent->get(m_pValueSet, "previews");
     m_pValueSet->SetStyle(m_pValueSet->GetStyle() | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_ITEMBORDER);
@@ -146,7 +144,6 @@ static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
 
 IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl, ValueSet*, void)
 {
-    mbStyleSelected = true;
     ApplyStyle();
 }
 
@@ -202,10 +199,7 @@ void TableDesignWidget::ApplyStyle()
 
 IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl, Button*, void)
 {
-    mbOptionsChanged = true;
-
     ApplyOptions();
-
     FillDesignPreviewControl();
 }
 

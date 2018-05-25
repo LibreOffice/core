@@ -100,7 +100,6 @@ protected:
     BitmapEx* pBitmap;
     CTL_STATE m_nState;
 
-    bool mbCompleteDisable : 1;
     bool mbUpdateForeground : 1;
     bool mbUpdateBackground : 1;
 
@@ -143,8 +142,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
-
-    bool IsCompletelyDisabled() const { return mbCompleteDisable; }
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC RectCtl : public weld::CustomWidgetController
@@ -163,7 +160,6 @@ private:
 protected:
     rtl::Reference<RectCtlAccessibleContext> pAccContext;
     sal_uInt16 nBorderWidth;
-    sal_uInt16 nRadius;
     Point aPtLT, aPtMT, aPtRT;
     Point aPtLM, aPtMM, aPtRM;
     Point aPtLB, aPtMB, aPtRB;
@@ -180,8 +176,8 @@ protected:
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
-    RectCtl(SvxTabPage* pPage, RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80);
-    void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircl);
+    RectCtl(SvxTabPage* pPage, RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200);
+    void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder);
     virtual ~RectCtl() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
