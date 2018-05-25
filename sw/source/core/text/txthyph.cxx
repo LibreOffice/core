@@ -56,7 +56,7 @@ Reference< XHyphenatedWord >  SwTextFormatInfo::HyphWord(
 /**
  * We format a row for interactive hyphenation
  */
-bool SwTextFrame::Hyphenate( SwInterHyphInfo &rHyphInf )
+bool SwTextFrame::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTextFrame::Hyphenate" );
@@ -97,7 +97,7 @@ bool SwTextFrame::Hyphenate( SwInterHyphInfo &rHyphInf )
                 aLine.Next();
         }
 
-        const sal_Int32 nEnd = rHyphInf.GetEnd();
+        const TextFrameIndex nEnd = rHyphInf.nEnd;
         while( !bRet && aLine.GetStart() < nEnd )
         {
             bRet = aLine.Hyphenate( rHyphInf );
@@ -124,7 +124,7 @@ void SetParaPortion( SwTextInfo *pInf, SwParaPortion *pRoot )
     pInf->m_pPara = pRoot;
 }
 
-bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
+bool SwTextFormatter::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
 {
     SwTextFormatInfo &rInf = GetInfo();
 
@@ -134,7 +134,7 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( !GetNext() && !rInf.GetTextFly().IsOn() && !m_pFrame->GetFollow() )
         return false;
 
-    sal_Int32 nWrdStart = m_nStart;
+    TextFrameIndex nWrdStart = m_nStart;
 
     // We need to retain the old row
     // E.g.: The attribute for hyphenation was not set, but
@@ -168,16 +168,16 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         // HyphPortion in the specified range.
 
         SwLinePortion *pPos = m_pCurr->GetPortion();
-        const sal_Int32 nPamStart = rHyphInf.nStart;
+        const TextFrameIndex nPamStart = rHyphInf.nStart;
         nWrdStart = m_nStart;
-        const sal_Int32 nEnd = rHyphInf.GetEnd();
+        const TextFrameIndex nEnd = rHyphInf.nEnd;
         while( pPos )
         {
             // Either we are above or we are running into a HyphPortion
             // at the end of line or before a Fly.
             if( nWrdStart >= nEnd )
             {
-                nWrdStart = 0;
+                nWrdStart = TextFrameIndex(0);
                 break;
             }
 
@@ -194,13 +194,13 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         }
         // When pPos is null, no hyphen position was found.
         if( !pPos )
-            nWrdStart = 0;
+            nWrdStart = TextFrameIndex(0);
     }
     else
         // In case the whole line is zero-length, that's the same situation as
         // above when the portion iteration ends without explicitly breaking
         // from the loop.
-        nWrdStart = 0;
+        nWrdStart = TextFrameIndex(0);
 
     // the old LineLayout is set again ...
     delete m_pCurr;
@@ -212,28 +212,30 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         OSL_ENSURE( IsParaLine(), "SwTextFormatter::Hyphenate: even not the first" );
     }
 
-    if( nWrdStart==0 )
+    if (nWrdStart == TextFrameIndex(0))
         return false;
 
     // nWrdStart contains the position in string that should be hyphenated
     rHyphInf.nWordStart = nWrdStart;
 
-    sal_Int32 nLen = 0;
-    const sal_Int32 nEnd = nWrdStart;
+    TextFrameIndex nLen(0);
+    const TextFrameIndex nEnd = nWrdStart;
 
     // we search forwards
     Reference< XHyphenatedWord > xHyphWord;
 
-    Boundary aBound =
-        g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetText(), nWrdStart,
+    Boundary const aBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
+        rInf.GetText(), sal_Int32(nWrdStart),
         g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, true );
-    nWrdStart = aBound.startPos;
-    nLen = aBound.endPos - nWrdStart;
-    if ( nLen == 0 )
+    nWrdStart = TextFrameIndex(aBound.startPos);
+    nLen = TextFrameIndex(aBound.endPos) - nWrdStart;
+    if (nLen == TextFrameIndex(0))
         return false;
 
-    OUString aSelText( rInf.GetText().copy(nWrdStart, nLen) );
-    const sal_Int32 nMinTrail = ( nWrdStart + nLen > nEnd ) ? nWrdStart + nLen - nEnd - 1 : 0;
+    OUString const aSelText(rInf.GetText().copy(sal_Int32(nWrdStart), sal_Int32(nLen)));
+    const sal_Int32 nMinTrail = (nWrdStart + nLen > nEnd)
+            ? sal_Int32(nWrdStart + nLen - nEnd) - 1
+            : 0;
 
     //!! rHyphInf.SetHyphWord( ... ) must done here
     xHyphWord = rInf.HyphWord( aSelText, nMinTrail );

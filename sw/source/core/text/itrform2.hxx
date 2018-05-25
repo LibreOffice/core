@@ -164,7 +164,7 @@ public:
     void RecalcRealHeight();
 
     // We format a line for interactive hyphenation
-    bool Hyphenate( SwInterHyphInfo &rInf );
+    bool Hyphenate(SwInterHyphInfoTextFrame & rInf);
 
     // A special method for QuoVadis texts:
     // nErgo is the page number of the ErgoSum Footnote
