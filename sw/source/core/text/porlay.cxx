@@ -1080,9 +1080,22 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode, rText, nullptr, ModelToViewHelper(),
+            // sw_redlinehide: this is the only place that uses SwScanner with
+            // frame text, so we convert to sal_Int32 here
+            std::function<LanguageType (sal_Int32, sal_Int32, bool)> const pGetLangOfCharM(
+                [&pMerged](sal_Int32 const nBegin, sal_uInt16 const script, bool const bNoChar)
+                    {
+                        std::pair<SwTextNode const*, sal_Int32> const pos(
+                            sw::MapViewToModel(*pMerged, TextFrameIndex(nBegin)));
+                        return pos.first->GetLang(pos.second, bNoChar ? 0 : 1, script);
+                    });
+            std::function<LanguageType (sal_Int32, sal_Int32, bool)> const pGetLangOfChar1(
+                [&rNode](sal_Int32 const nBegin, sal_uInt16 const script, bool const bNoChar)
+                    { return rNode.GetLang(nBegin, bNoChar ? 0 : 1, script); });
+            auto pGetLangOfChar(pMerged ? pGetLangOfCharM : pGetLangOfChar1);
+            SwScanner aScanner( pGetLangOfChar, rText, nullptr, ModelToViewHelper(),
                                 i18n::WordType::DICTIONARY_WORD,
-                                nLastKashida, nChg );
+                                sal_Int32(nLastKashida), sal_Int32(nChg));
 
             // the search has to be performed on a per word base
             while ( aScanner.NextWord() )
@@ -1235,7 +1248,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
                 if ( -1 != nKashidaPos )
                 {
-                    m_Kashida.insert(m_Kashida.begin() + nCntKash, nKashidaPos);
+                    m_Kashida.insert(m_Kashida.begin() + nCntKash, TextFrameIndex(nKashidaPos));
                     nCntKash++;
                 }
             } // end of kashida search
