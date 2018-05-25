@@ -278,7 +278,8 @@ ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
 
 LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
 {
-    assert(!bThreadedGroupCalcInProgress);
+    static osl::Mutex aMutex;
+    osl::MutexGuard aGuard(aMutex);
     if (!pLegacyFuncCollection)
         pLegacyFuncCollection = new LegacyFuncCollection();
     return pLegacyFuncCollection;
@@ -286,7 +287,8 @@ LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
 
 ScUnoAddInCollection* ScGlobal::GetAddInCollection()
 {
-    assert(!bThreadedGroupCalcInProgress);
+    static osl::Mutex aMutex;
+    osl::MutexGuard aGuard(aMutex);
     if (!pAddInCollection)
         pAddInCollection = new ScUnoAddInCollection();
     return pAddInCollection;
