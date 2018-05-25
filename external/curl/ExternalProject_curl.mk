@@ -72,7 +72,7 @@ else ifeq ($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))" \
+		CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC)) $(if $(findstring 120_70,$(VCVER)_$(WINDOWS_SDK_VERSION)),/D_USING_V110_SDK71_)" \
 		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc \
 			mode=dll \
 			VC=12 \
