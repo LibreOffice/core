@@ -16,6 +16,24 @@
       "revId": "a53d9b526b7c5c8de2724579b8e7631cf40619cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_231afc6e",
+        "filename": "sc/source/filter/html/htmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-25T05:47:01Z",
+      "side": 1,
+      "message": "That\u0027s interesting, and explains a few puzzling things. However, that truth does not seem to be roundtrip-able - at least not for named ranges. The absolute, but unflagged3D HTML_1 named range becomes relative when reopening the .ods file.\n\nSo I think your -1 is not for the code change, but for the terminology used in the commit message.\n\n(And that begs the question: if initRange defaults to AbsTab, then should it also default to Flag3D - which would also have fixed this problem? I guess that requires investigation on how export/import handles that in other situations. Obviously that would be a much bigger impact change. My expectation is that unflagged AbsTabs will become relative in most cases during a round-trip. Unfortunately I don\u0027t know calc well enough to plan what other round-trip situations to test...)",
+      "parentUuid": "9a30ddce_bd2609cc",
+      "revId": "a53d9b526b7c5c8de2724579b8e7631cf40619cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
