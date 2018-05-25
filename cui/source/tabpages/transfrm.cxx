@@ -320,12 +320,10 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     m_pCtlAngle->SaveValue();
 }
 
-
 VclPtr<SfxTabPage> SvxAngleTabPage::Create( TabPageParent pWindow, const SfxItemSet* rSet)
 {
     return VclPtr<SvxAngleTabPage>::Create(pWindow.pParent, *rSet);
 }
-
 
 void SvxAngleTabPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -336,7 +334,6 @@ void SvxAngleTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pFlAngle->Enable(!bPosProtect->GetValue());
     }
 }
-
 
 DeactivateRC SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -422,25 +419,23 @@ void SvxAngleTabPage::PointChanged(weld::DrawingArea* /*pWindow*/, RectPoint /*e
 |*      dialog for changing slant and corner radius
 |*
 \************************************************************************/
-SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage( pParent,"SlantAndCornerRadius","cui/ui/slantcornertabpage.ui",
-        rInAttrs)
+SvxSlantTabPage::SvxSlantTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pParent, "cui/ui/slantcornertabpage.ui", "SlantAndCornerRadius", rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FUNIT_NONE)
+    , m_xFlRadius(m_xBuilder->weld_widget("FL_RADIUS"))
+    , m_xMtrRadius(m_xBuilder->weld_metric_spin_button("MTR_FLD_RADIUS", FUNIT_CM))
+    , m_xFlAngle(m_xBuilder->weld_widget("FL_SLANT"))
+    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("MTR_FLD_ANGLE", FUNIT_DEGREE))
 {
-    get(m_pFlRadius, "FL_RADIUS");
-    get(m_pMtrRadius, "MTR_FLD_RADIUS");
-    get(m_pFlAngle, "FL_SLANT");
-    get(m_pMtrAngle, "MTR_FLD_ANGLE");
-
     for (int i = 0; i < 2; ++i)
     {
-        get(m_aControlGroups[i], "controlgroups" + OString::number(i+1));
-        get(m_aControlGroupX[i], "controlgroupx" + OString::number(i+1));
-        get(m_aControlX[i], "controlx" + OString::number(i+1));
-        get(m_aControlGroupY[i], "controlgroupy" + OString::number(i+1));
-        get(m_aControlY[i], "controly" + OString::number(i+1));
+        m_aControlGroups[i].reset(m_xBuilder->weld_widget("controlgroups" + OString::number(i+1)));
+        m_aControlGroupX[i].reset(m_xBuilder->weld_widget("controlgroupx" + OString::number(i+1)));
+        m_aControlX[i].reset(m_xBuilder->weld_metric_spin_button("controlx" + OString::number(i+1), FUNIT_CM));
+        m_aControlGroupY[i].reset(m_xBuilder->weld_widget("controlgroupy" + OString::number(i+1)));
+        m_aControlY[i].reset(m_xBuilder->weld_metric_spin_button("controly" + OString::number(i+1), FUNIT_CM));
     }
 
     // this page needs ExchangeSupport
@@ -448,30 +443,12 @@ SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
 
     // evaluate PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "no pool (!)" );
+    assert(pPool && "no pool (!)");
     ePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 }
 
 SvxSlantTabPage::~SvxSlantTabPage()
 {
-    disposeOnce();
-}
-
-void SvxSlantTabPage::dispose()
-{
-    m_pFlRadius.clear();
-    m_pMtrRadius.clear();
-    m_pFlAngle.clear();
-    m_pMtrAngle.clear();
-    for (int i = 0; i < 2; ++i)
-    {
-        m_aControlGroups[i].clear();
-        m_aControlGroupX[i].clear();
-        m_aControlX[i].clear();
-        m_aControlGroupY[i].clear();
-        m_aControlY[i].clear();
-    }
-    SvxTabPage::dispose();
 }
 
 void SvxSlantTabPage::Construct()
@@ -479,7 +456,7 @@ void SvxSlantTabPage::Construct()
     // get the range
     DBG_ASSERT(pView, "no valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
-    SetFieldUnit(*m_pMtrRadius, eDlgUnit, true);
+    SetFieldUnit(*m_xMtrRadius, eDlgUnit, true);
 
     { // #i75273#
         ::tools::Rectangle aTempRect(pView->GetAllMarkedRect());
@@ -488,23 +465,22 @@ void SvxSlantTabPage::Construct()
     }
 }
 
-
 bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 {
     bool  bModified = false;
 
-    if( m_pMtrRadius->IsValueChangedFromSaved() )
+    if (m_xMtrRadius->get_value_changed_from_saved())
     {
         Fraction aUIScale = pView->GetModel()->GetUIScale();
-        long nTmp = long(GetCoreValue( *m_pMtrRadius, ePoolUnit ) * aUIScale);
+        long nTmp = long(GetCoreValue(*m_xMtrRadius, ePoolUnit) * aUIScale);
 
         rAttrs->Put( makeSdrEckenradiusItem( nTmp ) );
         bModified = true;
     }
 
-    if( m_pMtrAngle->IsValueChangedFromSaved() )
+    if (m_xMtrAngle->get_value_changed_from_saved())
     {
-        sal_Int32 nValue = static_cast<sal_Int32>(m_pMtrAngle->GetValue());
+        sal_Int32 nValue = static_cast<sal_Int32>(m_xMtrAngle->get_value(FUNIT_NONE));
         rAttrs->Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
         bModified = true;
     }
@@ -524,8 +500,8 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     bool bControlPointsChanged = false;
     for (int i = 0; i < 2; ++i)
     {
-        bControlPointsChanged |= (m_aControlX[i]->IsValueChangedFromSaved() ||
-                                  m_aControlY[i]->IsValueChangedFromSaved());
+        bControlPointsChanged |= (m_aControlX[i]->get_value_changed_from_saved() ||
+                                  m_aControlY[i]->get_value_changed_from_saved());
     }
 
     if (!bControlPointsChanged)
@@ -582,7 +558,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
         for (int i = 0; i < 2; ++i)
         {
-            if (m_aControlX[i]->IsValueChangedFromSaved() || m_aControlY[i]->IsValueChangedFromSaved())
+            if (m_aControlX[i]->get_value_changed_from_saved() || m_aControlY[i]->get_value_changed_from_saved())
             {
                 Point aNewPosition(GetCoreValue(*m_aControlX[i], ePoolUnit),
                                 GetCoreValue(*m_aControlY[i], ePoolUnit));
@@ -618,8 +594,8 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     // corner radius
     if(!pView->IsEdgeRadiusAllowed())
     {
-        m_pMtrRadius->SetText( "" );
-        m_pFlRadius->Disable();
+        m_xMtrRadius->set_text("");
+        m_xFlRadius->set_sensitive(false);
     }
     else
     {
@@ -629,21 +605,21 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         {
             const double fUIScale(double(pView->GetModel()->GetUIScale()));
             const double fTmp(static_cast<double>(static_cast<const SdrMetricItem*>(pItem)->GetValue()) / fUIScale);
-            SetMetricValue(*m_pMtrRadius, basegfx::fround(fTmp), ePoolUnit);
+            SetMetricValue(*m_xMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else
         {
-            m_pMtrRadius->SetText( "" );
+            m_xMtrRadius->set_text("");
         }
     }
 
-    m_pMtrRadius->SaveValue();
+    m_xMtrRadius->save_value();
 
     // slant: angle
     if( !pView->IsShearAllowed() )
     {
-        m_pMtrAngle->SetText( "" );
-        m_pFlAngle->Disable();
+        m_xMtrAngle->set_text( "" );
+        m_xFlAngle->set_sensitive(false);
     }
     else
     {
@@ -651,15 +627,15 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
         if( pItem )
         {
-            m_pMtrAngle->SetValue( static_cast<const SfxInt32Item*>(pItem)->GetValue() );
+            m_xMtrAngle->set_value(static_cast<const SfxInt32Item*>(pItem)->GetValue(), FUNIT_NONE);
         }
         else
         {
-            m_pMtrAngle->SetText( "" );
+            m_xMtrAngle->set_text("");
         }
     }
 
-    m_pMtrAngle->SaveValue();
+    m_xMtrAngle->save_value();
 
     bool bSelectionIsSdrObjCustomShape(false);
 
@@ -701,7 +677,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
             Point aInitialPosition;
             if (!aShape.GetHandlePosition(i, aInitialPosition))
                 break;
-            m_aControlGroups[i]->Enable();
+            m_aControlGroups[i]->set_sensitive(true);
             css::awt::Point aPosition;
 
             aPosition.X = SAL_MAX_INT32/2;
@@ -725,19 +701,13 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
             SetMetricValue(*m_aControlY[i], aInitialPosition.Y(), ePoolUnit);
 
             if (aMaxPosition.X() == aMinPosition.X())
-                m_aControlGroupX[i]->Disable();
+                m_aControlGroupX[i]->set_sensitive(false);
             else
-            {
-                m_aControlX[i]->SetMin(aMinPosition.X(), FUNIT_MM);
-                m_aControlX[i]->SetMax(aMaxPosition.X(), FUNIT_MM);
-            }
+                m_aControlX[i]->set_range(aMinPosition.X(), aMaxPosition.X(), FUNIT_MM);
             if (aMaxPosition.Y() == aMinPosition.Y())
-                m_aControlGroupY[i]->Disable();
+                m_aControlGroupY[i]->set_sensitive(false);
             else
-            {
-                m_aControlY[i]->SetMin(aMinPosition.Y(), FUNIT_MM);
-                m_aControlY[i]->SetMax(aMaxPosition.Y(), FUNIT_MM);
-            }
+                m_aControlY[i]->set_range(aMinPosition.Y(), aMaxPosition.Y(), FUNIT_MM);
         }
 
         //restore geometry
@@ -746,14 +716,14 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
     for (int i = 0; i < 2; ++i)
     {
-        m_aControlX[i]->SaveValue();
-        m_aControlY[i]->SaveValue();
+        m_aControlX[i]->save_value();
+        m_aControlY[i]->save_value();
     }
 }
 
-VclPtr<SfxTabPage> SvxSlantTabPage::Create( TabPageParent pWindow, const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxSlantTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SvxSlantTabPage>::Create( pWindow.pParent, *rOutAttrs );
+    return VclPtr<SvxSlantTabPage>::Create(pParent, *rOutAttrs);
 }
 
 void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -769,16 +739,15 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
     SfxBoolItem const * bPosProtect = nullptr;
     if(SfxItemState::SET == rSet.GetItemState( GetWhich(SID_ATTR_TRANSFORM_PROTECT_POS  ) , false, reinterpret_cast<SfxPoolItem const **>(&bPosProtect) ))
     {
-        m_pFlAngle->Enable(!bPosProtect->GetValue());
+        m_xFlAngle->set_sensitive(!bPosProtect->GetValue());
     }
     SfxBoolItem const * bSizeProtect = nullptr;
     if(SfxItemState::SET == rSet.GetItemState( GetWhich(SID_ATTR_TRANSFORM_PROTECT_SIZE ) , false, reinterpret_cast<SfxPoolItem const **>(&bSizeProtect) ))
     {
-        m_pFlAngle->Enable(!bSizeProtect->GetValue());
+        m_xFlAngle->set_sensitive(!bSizeProtect->GetValue());
     }
 
 }
-
 
 DeactivateRC SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
