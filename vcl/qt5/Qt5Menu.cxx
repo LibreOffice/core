@@ -114,7 +114,8 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
                     // leaf menu
                     QAction *pAction = pQMenu->addAction( toQString(aText) );
                     pAction->setShortcut( toQString( nAccelKey.GetName(GetFrame()->GetWindow()) ) );
-                    connect( pAction, &QAction::triggered, this, &Qt5Menu::DispatchCommand );
+                    connect( pAction, &QAction::triggered, this,
+                             [this, pSalMenuItem]{ DispatchCommand(pSalMenuItem); } );
                 }
             }
         }
@@ -156,6 +157,14 @@ void Qt5Menu::GetSystemMenuData( SystemMenuData* pData )
 {
 }
 
+Qt5Menu* Qt5Menu::GetTopLevel()
+{
+    Qt5Menu *pMenu = this;
+    while (pMenu->mpParentSalMenu)
+        pMenu = pMenu->mpParentSalMenu;
+    return pMenu;
+}
+
 const Qt5Frame* Qt5Menu::GetFrame() const
 {
     SolarMutexGuard aGuard;
@@ -165,9 +174,15 @@ const Qt5Frame* Qt5Menu::GetFrame() const
     return pMenu ? pMenu->mpFrame : nullptr;
 }
 
-void Qt5Menu::DispatchCommand()
+void Qt5Menu::DispatchCommand( Qt5MenuItem *pQItem )
 {
-    SAL_WARN("vcl.qt5", "menu triggered");
+    if ( pQItem )
+    {
+        Qt5Menu* pSalMenu = pQItem->mpParentMenu;
+        Qt5Menu* pTopLevel = pSalMenu->GetTopLevel();
+        pTopLevel->GetMenu()->HandleMenuCommandEvent(pSalMenu->GetMenu(), pQItem->mnId);
+        SAL_WARN("vcl.qt5", "menu triggered " << pQItem->mnId );
+    }
 }
 
 void Qt5Menu::NativeItemText( OUString& rItemText )
