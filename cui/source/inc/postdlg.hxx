@@ -71,7 +71,7 @@ public:
     {
         m_xDialog->set_title(rTitle);
     }
-    std::shared_ptr<weld::Dialog> GetDialog()
+    std::shared_ptr<weld::Dialog> const & GetDialog()
     {
         return m_xDialog;
     }

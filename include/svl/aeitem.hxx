@@ -61,7 +61,7 @@ public:
 
     virtual sal_uInt16      GetValueCount() const override;
     sal_uInt16              GetValueByPos( sal_uInt16 nPos ) const;
-    OUString                GetValueTextByPos( sal_uInt16 nPos ) const;
+    OUString const &        GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const override;
 };
