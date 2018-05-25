@@ -466,7 +466,7 @@ void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     // good to think about if this is really needed - it *seems* to be intended
     // for a xShape being a on-demand-creatable resource - wit hthe argument that
     // the SdrPage/UnoPage used influences the SvxShape creation. This uses
-    // ressources and would be nice to get rid of anyways.
+    // resources and would be nice to get rid of anyways.
     if(nullptr == pOldPage || nullptr == pNewPage)
     {
         SvxShape* const pShape(getSvxShape());

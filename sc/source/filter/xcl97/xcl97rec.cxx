@@ -507,7 +507,7 @@ XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectang
             // Problem with creating a Clone here is that it gets cloned, but not inserted to a
             // SdrPage. In deeper export layers this then goes wrong since without being inserted
             // to a Page, no SvxPage/UnoApiPage can be accessed. This was different in previous
-            // revisions of the code in that a SdrObject could be *not* insterted, but have a
+            // revisions of the code in that a SdrObject could be *not* inserted, but have a
             // SdrPage*. That again was redundant, wrong and inconsequent.
             , mpCaption( pCaption )
 
