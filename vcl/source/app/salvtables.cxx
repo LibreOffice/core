@@ -368,6 +368,11 @@ public:
         m_xWidget->CaptureMouse();
     }
 
+    virtual bool has_grab() const override
+    {
+        return m_xWidget->IsMouseCaptured();
+    }
+
     virtual void grab_remove() override
     {
         m_xWidget->ReleaseMouse();
@@ -376,6 +381,11 @@ public:
     virtual bool get_direction() const override
     {
         return m_xWidget->IsRTLEnabled();
+    }
+
+    virtual void set_direction(bool bRTL) override
+    {
+        m_xWidget->EnableRTL(bRTL);
     }
 
     virtual weld::Container* weld_parent() const override;
@@ -1808,6 +1818,11 @@ public:
         m_xDrawingArea->SetKeyReleaseHdl(Link<const KeyEvent&, bool>());
         m_xDrawingArea->SetResizeHdl(Link<const Size&, void>());
         m_xDrawingArea->SetPaintHdl(Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>());
+    }
+
+    virtual OutputDevice& get_ref_device() override
+    {
+        return *m_xDrawingArea;
     }
 };
 

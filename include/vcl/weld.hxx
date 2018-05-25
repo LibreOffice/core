@@ -94,10 +94,12 @@ public:
     }
 
     virtual void grab_add() = 0;
+    virtual bool has_grab() const = 0;
     virtual void grab_remove() = 0;
 
     //true for rtl, false otherwise
     virtual bool get_direction() const = 0;
+    virtual void set_direction(bool bRTL) = 0;
 
     virtual Container* weld_parent() const = 0;
 
@@ -833,6 +835,8 @@ public:
     virtual void queue_resize() = 0;
     virtual a11yref get_accessible_parent() = 0;
     virtual a11yrelationset get_accessible_relation_set() = 0;
+    // use return here just to generate matching VirtualDevices
+    virtual OutputDevice& get_ref_device() = 0;
 };
 
 class VCL_DLLPUBLIC Menu
