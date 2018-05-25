@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_43de1012",
+        "filename": "sw/source/core/unocore/unorefmk.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-25T12:05:41Z",
+      "side": 1,
+      "message": "you created a new SfxHintId::RemoveUnoObject, but then you\u0027re not using it here?",
+      "revId": "8cb1f55debf56ded49fd980420ee699f1bdc45b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
