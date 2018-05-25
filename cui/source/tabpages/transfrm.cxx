@@ -173,21 +173,19 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidat
 |*      angle and the rotation angle of the graphic objects
 |*
 \************************************************************************/
-SvxAngleTabPage::SvxAngleTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage( pParent,"Rotation","cui/ui/rotationtabpage.ui", rInAttrs)
+SvxAngleTabPage::SvxAngleTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pParent, "cui/ui/rotationtabpage.ui", "Rotation", rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FUNIT_NONE)
+    , m_xFlPosition(m_xBuilder->weld_widget("FL_POSITION"))
+    , m_xMtrPosX(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_X", FUNIT_CM))
+    , m_xMtrPosY(m_xBuilder->weld_metric_spin_button("MTR_FLD_POS_Y", FUNIT_CM))
+    , m_xCtlRect(new weld::CustomWeld(*m_xBuilder, "CTL_RECT", m_aCtlRect))
+    , m_xFlAngle(m_xBuilder->weld_widget("FL_ANGLE"))
+    , m_xNfAngle(m_xBuilder->weld_spin_button("NF_ANGLE"))
+    , m_xCtlRect(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", m_aCtlAngle))
 {
-    get(m_pFlPosition, "FL_POSITION");
-    get(m_pMtrPosX, "MTR_FLD_POS_X");
-    get(m_pMtrPosY, "MTR_FLD_POS_Y");
-    get(m_pCtlRect, "CTL_RECT");
-
-    get(m_pFlAngle, "FL_ANGLE");
-    get(m_pNfAngle, "NF_ANGLE");
-    get(m_pCtlAngle, "CTL_ANGLE");
-
     // calculate PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "no pool (!)" );
