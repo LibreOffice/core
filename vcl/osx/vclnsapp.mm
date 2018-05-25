@@ -104,25 +104,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         if( pKeyWin && [pKeyWin isKindOfClass: [SalFrameWindow class]] )
         {
             AquaSalFrame* pFrame = [static_cast<SalFrameWindow*>(pKeyWin) getSalFrame];
-            // handle Cmd-W
-            // FIXME: the correct solution would be to handle this in framework
-            // in the menu code
-            // however that is currently being revised, so let's use a preliminary solution here
-            // this hack is based on assumption
-            // a) Cmd-W is the same in all languages in OOo's menu config
-            // b) Cmd-W is the same in all languages in on MacOS
-            // for now this seems to be true
             unsigned int nModMask = ([pEvent modifierFlags] & (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask));
-            if( (pFrame->mnStyleMask & NSClosableWindowMask) != 0 )
-            {
-                if( nModMask == NSCommandKeyMask
-                    && [[pEvent charactersIgnoringModifiers] isEqualToString: @"w"] )
-                {
-                    [static_cast<SalFrameWindow*>(pFrame->getNSWindow()) windowShouldClose: nil];
-                    return;
-                }
-            }
-
             /*
              * #i98949# - Cmd-M miniaturize window, Cmd-Option-M miniaturize all windows
              */
