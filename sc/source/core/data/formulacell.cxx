@@ -1529,7 +1529,7 @@ void ScFormulaCell::Interpret()
     {
         pDocument->IncInterpretLevel();
 
-        bool bCheckForFGCycle = mxGroup && !pDocument->mbThreadedGroupCalcInProgress &&
+        bool bCheckForFGCycle = mxGroup && !ScGlobal::bThreadedGroupCalcInProgress &&
             mxGroup->meCalcState == sc::GroupCalcEnabled &&
             ScCalcConfig::isThreadingEnabled();
         bool bPopFormulaGroup = false;
@@ -2108,7 +2108,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             // a changed result must still reset the stream flag
             pDocument->SetStreamValid(aPos.Tab(), false, true);
         }
-        if ( !pDocument->mbThreadedGroupCalcInProgress && !pCode->IsRecalcModeAlways() )
+        if ( !ScGlobal::bThreadedGroupCalcInProgress && !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
         //  FORCED cells also immediately tested for validity (start macro possibly)
@@ -2127,7 +2127,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         }
 
         // Reschedule slows the whole thing down considerably, thus only execute on percent change
-        if (!pDocument->mbThreadedGroupCalcInProgress)
+        if (!ScGlobal::bThreadedGroupCalcInProgress)
         {
             ScProgress *pProgress = ScProgress::GetInterpretProgress();
             if (pProgress && pProgress->Enabled())
@@ -2594,7 +2594,7 @@ void ScFormulaCell::MaybeInterpret()
 {
     if (NeedsInterpret())
     {
-        assert(!pDocument->mbThreadedGroupCalcInProgress);
+        assert(!ScGlobal::bThreadedGroupCalcInProgress);
         Interpret();
     }
 }
@@ -4478,8 +4478,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
 
         {
-            assert(!pDocument->mbThreadedGroupCalcInProgress);
-            pDocument->mbThreadedGroupCalcInProgress = true;
+            assert(!ScGlobal::bThreadedGroupCalcInProgress);
+            ScGlobal::bThreadedGroupCalcInProgress = true;
 
             ScMutationDisable aGuard(pDocument, ScMutationGuardFlags::CORE);
 
@@ -4493,7 +4493,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             SAL_INFO("sc.threaded", "Joining threads");
             rThreadPool.waitUntilDone(aTag);
 
-            pDocument->mbThreadedGroupCalcInProgress = false;
+            ScGlobal::bThreadedGroupCalcInProgress = false;
 
             SAL_INFO("sc.threaded", "Done");
         }

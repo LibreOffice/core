@@ -434,8 +434,6 @@ private:
     css::uno::Reference< css::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
 public:
-    bool                mbThreadedGroupCalcInProgress;
-
     /// list of ScInterpreterTableOpParams currently in use
     std::vector<std::unique_ptr<ScInterpreterTableOpParams>> m_TableOpList;
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
@@ -2215,26 +2213,26 @@ public:
 
     void                IncInterpretLevel()
                             {
-                                assert(!mbThreadedGroupCalcInProgress);
+                                assert(!ScGlobal::bThreadedGroupCalcInProgress);
                                 if ( nInterpretLevel < USHRT_MAX )
                                     nInterpretLevel++;
                             }
     void                DecInterpretLevel()
                             {
-                                assert(!mbThreadedGroupCalcInProgress);
+                                assert(!ScGlobal::bThreadedGroupCalcInProgress);
                                 if ( nInterpretLevel )
                                     nInterpretLevel--;
                             }
     sal_uInt16          GetMacroInterpretLevel() { return nMacroInterpretLevel; }
     void                IncMacroInterpretLevel()
                             {
-                                assert(!mbThreadedGroupCalcInProgress);
+                                assert(!ScGlobal::bThreadedGroupCalcInProgress);
                                 if ( nMacroInterpretLevel < USHRT_MAX )
                                     nMacroInterpretLevel++;
                             }
     void                DecMacroInterpretLevel()
                             {
-                                assert(!mbThreadedGroupCalcInProgress);
+                                assert(!ScGlobal::bThreadedGroupCalcInProgress);
                                 if ( nMacroInterpretLevel )
                                     nMacroInterpretLevel--;
                             }

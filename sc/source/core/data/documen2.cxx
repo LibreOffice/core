@@ -169,7 +169,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MAXCOL,0,0),
-        mbThreadedGroupCalcInProgress( false ),
         nFormulaCodeInTree(0),
         nXMLImportedFormulaCount( 0 ),
         nInterpretLevel(0),
@@ -482,7 +481,7 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
 SvNumberFormatter* ScDocument::GetFormatTable() const
 {
-    assert(!mbThreadedGroupCalcInProgress);
+    assert(!ScGlobal::bThreadedGroupCalcInProgress);
     return mxPoolHelper->GetFormTable();
 }
 
@@ -1199,7 +1198,7 @@ ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 {
     ScLookupCache* pCache = nullptr;
-    if (!mbThreadedGroupCalcInProgress)
+    if (!ScGlobal::bThreadedGroupCalcInProgress)
     {
         if (!maNonThreaded.pLookupCacheMapImpl)
             maNonThreaded.pLookupCacheMapImpl = new ScLookupCacheMapImpl;
@@ -1230,7 +1229,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 
 void ScDocument::AddLookupCache( ScLookupCache & rCache )
 {
-    if (!mbThreadedGroupCalcInProgress)
+    if (!ScGlobal::bThreadedGroupCalcInProgress)
     {
         if (!maNonThreaded.pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
                 ScLookupCache*>(rCache.getRange(), &rCache)).second)
@@ -1254,7 +1253,7 @@ void ScDocument::AddLookupCache( ScLookupCache & rCache )
 
 void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 {
-    if (!mbThreadedGroupCalcInProgress)
+    if (!ScGlobal::bThreadedGroupCalcInProgress)
     {
         auto it(maNonThreaded.pLookupCacheMapImpl->aCacheMap.find(rCache.getRange()));
         if (it == maNonThreaded.pLookupCacheMapImpl->aCacheMap.end())
@@ -1286,7 +1285,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 
 void ScDocument::ClearLookupCaches()
 {
-    if (!mbThreadedGroupCalcInProgress)
+    if (!ScGlobal::bThreadedGroupCalcInProgress)
     {
         if (maNonThreaded.pLookupCacheMapImpl )
             maNonThreaded.pLookupCacheMapImpl->clear();

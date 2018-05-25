@@ -6729,7 +6729,7 @@ thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;
 
 ScRecursionHelper& ScDocument::GetRecursionHelper()
 {
-    if (!mbThreadedGroupCalcInProgress)
+    if (!ScGlobal::bThreadedGroupCalcInProgress)
     {
         if (!maNonThreaded.pRecursionHelper)
             maNonThreaded.pRecursionHelper = CreateRecursionHelperInstance();

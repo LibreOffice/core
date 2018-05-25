@@ -125,6 +125,8 @@ SfxViewShell* pScActiveViewShell = nullptr; //FIXME: Make this a member
 sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too
 sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
 
+bool ScGlobal::bThreadedGroupCalcInProgress = false;
+
 // Static functions
 
 bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
