@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_6386b466",
+        "filename": "dbaccess/source/filter/hsqldb/rowinputbinary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-25T07:45:04Z",
+      "side": 1,
+      "message": "Since this is a UTC-0 time, to normalise, you are going to need to do something like:\n\n    if (valueInSecs \u003c 0 )\n        valueInSecs \u003d valuesInSecs + (24 * 60 * 60);",
+      "revId": "bf59dd7812a05d81dc4dc8f937dbdb40cb685aa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_837d6870",
+        "filename": "dbaccess/source/filter/hsqldb/rowinputbinary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-25T07:45:04Z",
+      "side": 1,
+      "message": "you\u0027re dropping the milliseconds part of the time,  you need to do:\n    sal_Int32 nNanos \u003d (valueInSecs % 1000000) * 1000;\n    css::util::Time time( nNanos, nSecs, nMins, nHours, true);",
+      "revId": "bf59dd7812a05d81dc4dc8f937dbdb40cb685aa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
