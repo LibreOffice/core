@@ -28,7 +28,7 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-   Provides access to a singe layer of configuration data
+   Provides access to a single layer of configuration data
 */
 service MultiLayerStratum
 {

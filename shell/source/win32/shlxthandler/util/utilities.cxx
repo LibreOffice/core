@@ -115,7 +115,7 @@ bool HasOnlySpaces(const std::wstring& String)
 
 /** helper function to convert windows paths to short form.
     @returns
-        shortend path.
+        shortened path.
 */
 
 std::wstring getShortPathName( const std::wstring& aLongName )

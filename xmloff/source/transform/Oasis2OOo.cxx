@@ -227,7 +227,7 @@ static XMLTransformerActionInit aActionTable[] =
 
     // process <test:list>'s text:style-name attributes
     // rename <text:list> to <text:ordered-list> or <text:unordered-list>
-    // TODO: All list currenty are renamed to <text:ordered-list>
+    // TODO: All list currently are renamed to <text:ordered-list>
     ENTRY2QN( TEXT, LIST, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
             XML_NAMESPACE_TEXT, XML_ORDERED_LIST,
             OASIS_LIST_STYLE_REF_ACTIONS ),

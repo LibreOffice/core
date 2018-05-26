@@ -50,7 +50,7 @@
  *           |  '&' |  '|'
  *           |  '&&'    |  '||'
  *
- * The normal C order of precidence is supported.
+ * The normal C order of precedence is supported.
  *
  *
  * External Entry Points:
