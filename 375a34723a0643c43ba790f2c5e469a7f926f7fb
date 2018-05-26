@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_71b75a86",
+        "filename": "sw/source/core/access/acccontext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-26T18:52:16Z",
+      "side": 1,
+      "message": "doesn\u0027t that make the if part basically redundant ? ie. we can replace the whole if block with\n    xAccImpl \u003d GetMap()-\u003eGetContextImpl( pLower, false );\n  \n?",
+      "revId": "375a34723a0643c43ba790f2c5e469a7f926f7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
