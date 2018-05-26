@@ -278,7 +278,7 @@ void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCa
                 SfxItemState eState = pSet->GetItemState(nWhich, true, &pItem);
                 if ( eState == SfxItemState::DEFAULT && SfxItemPool::IsWhich(nWhich) )
                     pItem = &pSet->Get(nWhich);
-                UpdateControllers_Impl( aFound[nPos], pItem, eState );
+                UpdateControllers_Impl( rFound, pItem, eState );
             }
             bUpdated = true;
         }
