@@ -20,6 +20,8 @@ public:
     void testTdf116925();
     void testTdf117028();
     void testTdf106390();
+    void testTableExtrusion1();
+    void testTableExtrusion2();
     void testTdf116848();
     void testTdf117245();
 
@@ -28,6 +30,8 @@ public:
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf106390);
+    CPPUNIT_TEST(testTableExtrusion1);
+    CPPUNIT_TEST(testTableExtrusion2);
     CPPUNIT_TEST(testTdf116848);
     CPPUNIT_TEST(testTdf117245);
     CPPUNIT_TEST_SUITE_END();
@@ -128,6 +132,45 @@ void SwLayoutWriter::testTdf106390()
 
     // No end point of line segments shall go below the bottom of the clipping area.
     const OString sXPath = "//polyline/point[@y>" + OString::number(nBottom) + "]";
+
+    assertXPath(pXmlDoc, sXPath, 0);
+}
+
+void SwLayoutWriter::testTableExtrusion1()
+{
+    SwDoc* pDoc = createDoc("table-extrusion1.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nRight = getXPath(pXmlDoc, "//sectrectclipregion", "right").toInt32();
+    sal_Int32 nLeft = (nRight + getXPath(pXmlDoc, "(//rect)[1]", "right").toInt32()) / 2;
+
+    // Expect table borders in right page margin.
+    const OString sXPath = "//polyline/point[@x>" + OString::number(nLeft) + " and @x<"
+                           + OString::number(nRight) + "]";
+
+    assertXPath(pXmlDoc, sXPath, 4);
+}
+
+void SwLayoutWriter::testTableExtrusion2()
+{
+    SwDoc* pDoc = createDoc("table-extrusion2.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // End point position of the outer table.
+    sal_Int32 nX = getXPath(pXmlDoc, "(//polyline[1]/point)[2]", "x").toInt32();
+
+    // Do not allow inner table extrude outer table.
+    const OString sXPath = "//polyline/point[@x>" + OString::number(nX) + "]";
 
     assertXPath(pXmlDoc, sXPath, 0);
 }
