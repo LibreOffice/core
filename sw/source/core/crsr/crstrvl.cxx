@@ -493,6 +493,8 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
 /// jump to next/previous index marker
 bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
 {
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
     if( IsTableMode() )
         return false;
 
@@ -515,30 +517,52 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
         const SwTextTOXMark* pTextTOX;
         sal_uInt32 n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
 
-        for( n = 0; n < nMaxItems; ++n )
+        if( nMaxItems > 0 )
         {
-            const SfxPoolItem* pItem;
-            const SwContentFrame* pCFrame;
-
-            if( nullptr != (pItem = GetDoc()->GetAttrPool().GetItem2(
-                                        RES_TXTATR_TOXMARK, n ) ) &&
-                nullptr != (pTextTOX = static_cast<const SwTOXMark*>(pItem)->GetTextTOXMark() ) &&
-                ( pTextNd = &pTextTOX->GetTextNode())->GetNodes().IsDocNodes() &&
-                nullptr != ( pCFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt, nullptr, false )) &&
-                ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
-            {
-                SwNodeIndex aNdIndex( *pTextNd ); // UNIX needs this object
-                SetGetExpField aCmp( aNdIndex, *pTextTOX );
-                aCmp.SetBodyPos( *pCFrame );
-
-                if( bNext ? ( aCurGEF < aCmp && aCmp < aFndGEF )
-                          : ( aCmp < aCurGEF && aFndGEF < aCmp ))
+            do {
+                for( n = 0; n < nMaxItems; ++n )
                 {
-                    aFndGEF = aCmp;
-                    bFnd = true;
+                    const SfxPoolItem* pItem;
+                    const SwContentFrame* pCFrame;
+
+                    if( nullptr != (pItem = GetDoc()->GetAttrPool().GetItem2(
+                                                RES_TXTATR_TOXMARK, n ) ) &&
+                        nullptr != (pTextTOX = static_cast<const SwTOXMark*>(pItem)->GetTextTOXMark() ) &&
+                        ( pTextNd = &pTextTOX->GetTextNode())->GetNodes().IsDocNodes() &&
+                        nullptr != ( pCFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt, nullptr, false )) &&
+                        ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
+                    {
+                        SwNodeIndex aNdIndex( *pTextNd ); // UNIX needs this object
+                        SetGetExpField aCmp( aNdIndex, *pTextTOX );
+                        aCmp.SetBodyPos( *pCFrame );
+
+                        if( bNext ? ( aCurGEF < aCmp && aCmp < aFndGEF )
+                                  : ( aCmp < aCurGEF && aFndGEF < aCmp ))
+                        {
+                            aFndGEF = aCmp;
+                            bFnd = true;
+                        }
+                    }
                 }
-            }
+                if( !bFnd )
+                {
+                    if ( bNext )
+                    {
+                        rPos.nNode = 0;
+                        rPos.nContent = 0;
+                        aCurGEF = SetGetExpField( rPos );
+                        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
+                    }
+                    else
+                    {
+                        aCurGEF = SetGetExpField( SwPosition( GetDoc()->GetNodes().GetEndOfContent() ) );
+                        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+                    }
+                }
+            } while ( !bFnd );
         }
+        else
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
     }
 
     if( bFnd )
