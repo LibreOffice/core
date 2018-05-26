@@ -57,7 +57,12 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     // ST_TextAlignType
     if ( rAttribs.hasAttribute( XML_algn ) )
     {
-        mrTextParagraphProperties.getParaAdjust() = GetParaAdjust( rAttribs.getToken( XML_algn, XML_l ) );
+        css::style::ParagraphAdjust aAlignment = GetParaAdjust( rAttribs.getToken( XML_algn, XML_l ) );
+        mrTextParagraphProperties.setParaAdjust(aAlignment);
+    }
+    else
+    {
+        mrTextParagraphProperties.setParaAdjust(css::style::ParagraphAdjust::ParagraphAdjust_CENTER);
     }
     // TODO see to do the same with RubyAdjust
 
