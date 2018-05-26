@@ -945,7 +945,7 @@ bool SwCursorShell::GotoNextOutline()
 
     if ( rNds.GetOutLineNds().size() == 0 )
     {
-        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
     }
 
@@ -984,7 +984,7 @@ bool SwCursorShell::GotoPrevOutline()
 
     if ( rNds.GetOutLineNds().size() == 0 )
     {
-        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
     }
 
