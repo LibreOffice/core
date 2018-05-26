@@ -2308,8 +2308,8 @@ class SwTabFramePainter
     const SwTabFrame& mrTabFrame;
 
     void Insert( SwLineEntry&, bool bHori );
-    void Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxItem );
-    void HandleFrame( const SwLayoutFrame& rFrame );
+    void Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem, const SwRect &rPaintArea);
+    void HandleFrame(const SwLayoutFrame& rFrame, const SwRect& rPaintArea);
     void FindStylesForLine( const Point&,
                             const Point&,
                             svx::frame::Style*,
@@ -2324,10 +2324,11 @@ public:
 SwTabFramePainter::SwTabFramePainter( const SwTabFrame& rTabFrame )
     : mrTabFrame( rTabFrame )
 {
-    HandleFrame( rTabFrame );
+    SwRect aPaintArea = rTabFrame.GetUpper()->GetPaintArea();
+    HandleFrame(rTabFrame, aPaintArea);
 }
 
-void SwTabFramePainter::HandleFrame( const SwLayoutFrame& rLayoutFrame )
+void SwTabFramePainter::HandleFrame(const SwLayoutFrame& rLayoutFrame, const SwRect& rPaintArea)
 {
     // Add border lines of cell frames. Skip covered cells. Skip cells
     // in special row span row, which do not have a negative row span:
@@ -2341,7 +2342,7 @@ void SwTabFramePainter::HandleFrame( const SwLayoutFrame& rLayoutFrame )
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), &rLayoutFrame );
             const SwBorderAttrs& rAttrs = *aAccess.Get();
             const SvxBoxItem& rBox = rAttrs.GetBox();
-            Insert( rLayoutFrame, rBox );
+            Insert(rLayoutFrame, rBox, rPaintArea);
         }
     }
 
@@ -2351,7 +2352,7 @@ void SwTabFramePainter::HandleFrame( const SwLayoutFrame& rLayoutFrame )
     {
         const SwLayoutFrame* pLowerLayFrame = dynamic_cast<const SwLayoutFrame*>(pLower);
         if ( pLowerLayFrame && !pLowerLayFrame->IsTabFrame() )
-            HandleFrame( *pLowerLayFrame );
+            HandleFrame(*pLowerLayFrame, rPaintArea);
 
         pLower = pLower->GetNext();
     }
@@ -2725,21 +2726,12 @@ static bool lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
         && rBoxItem.GetBottom());
 }
 
-void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxItem )
+void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem, const SwRect& rPaintArea)
 {
     // build 4 line entries for the 4 borders:
     SwRect aBorderRect = rFrame.getFrameArea();
-    // Frame area of a table might be larger than the containing frame
-    // so we have to intersect the border rect with upper frames til
-    // the first frame that is not part of a table.
-    const SwLayoutFrame *pUpper = rFrame.GetUpper();
-    while(pUpper)
-    {
-        aBorderRect.Intersection(pUpper->getFrameArea());
-        if (!pUpper->IsInTab())
-            break;
-        pUpper = pUpper->GetUpper();
-    }
+
+    aBorderRect.Intersection(rPaintArea);
 
     bool const bBottomAsTop(lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
                 mrTabFrame, rFrame, rBoxItem));
