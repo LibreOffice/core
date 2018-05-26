@@ -847,7 +847,7 @@ public class ConfigExamples
         ATTENTION: This example requires an older version of the
                    org.openoffice.Office.DataAccess schema.
                    It does not work with the current schema.
-                   Because of this, the method currenty does nothing.
+                   Because of this, the method currently does nothing.
                    You can still use the techniques shown in the example code.
     */
     void storeSampleDataSource()

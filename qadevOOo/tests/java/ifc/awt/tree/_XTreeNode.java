@@ -136,7 +136,7 @@ public class _XTreeNode extends MultiMethodTest {
             log.println("ERROR: getChildAt(0): " + ex.toString());
         }
 
-        log.println("try to get parrent of children");
+        log.println("try to get parent of children");
         if (xNode == null) {
             log.println("missing xNode");
             tRes.tested("getParent()", false);
@@ -146,7 +146,7 @@ public class _XTreeNode extends MultiMethodTest {
 
 
             bOK = oObj.equals(xParrent);
-            log.println("original object and parrent should be the same: " + bOK);
+            log.println("original object and parent should be the same: " + bOK);
             tRes.tested("getParent()", bOK);
         }
     }
