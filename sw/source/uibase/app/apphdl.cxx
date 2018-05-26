@@ -362,8 +362,6 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     VclPtr<AbstractMailMergeWizard> m_pWizard;     // always owner
     VclPtr<AbstractMailMergeWizard> m_pWizardToDestroyInCallback;
 
-    bool                     m_bDestroyMMToolbarOnCancel;
-
     DECL_LINK( EndDialogHdl, Dialog&, void );
     DECL_LINK( DestroyDialogHdl, void*, void );
     DECL_LINK( DestroyWizardHdl, void*, void );
@@ -383,8 +381,7 @@ public:
 SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
     : m_pView( nullptr ),
       m_pView2Close( nullptr ),
-      m_pWizard( nullptr ),
-      m_bDestroyMMToolbarOnCancel( false )
+      m_pWizard( nullptr )
 {
 }
 
@@ -449,25 +446,6 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     m_pWizard = pFact->CreateMailMergeWizard(*m_pView, xMMConfig);
 
-    uno::Reference<beans::XPropertySet> xPropSet(m_pView->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
-    if (!xPropSet.is())
-        return;
-
-    uno::Reference<frame::XLayoutManager> xLayoutManager;
-    uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
-    aValue >>= xLayoutManager;
-    if (!xLayoutManager.is())
-        return;
-
-    const OUString sResourceURL( "private:resource/toolbar/mailmerge" );
-    uno::Reference<ui::XUIElement> xUIElement = xLayoutManager->getElement(sResourceURL);
-    if (!xUIElement.is())
-    {
-        // ensure the mail-merge toolbar is displayed and remember if it was before
-        m_bDestroyMMToolbarOnCancel = true;
-        xLayoutManager->createElement(sResourceURL);
-        xLayoutManager->showElement(sResourceURL);
-    }
     ExecuteWizard();
 }
 
@@ -483,21 +461,24 @@ void SwMailMergeWizardExecutor::ExecutionFinished()
         SwDBManager* pDbManager = pDoc->GetDBManager();
         if (pDbManager)
             pDbManager->CommitLastRegistrations();
-    }
 
-    // Update Mail Merge controls
-    const sal_uInt16 slotIds[] = { FN_MAILMERGE_FIRST_ENTRY,
-                                   FN_MAILMERGE_PREV_ENTRY,
-                                   FN_MAILMERGE_NEXT_ENTRY,
-                                   FN_MAILMERGE_LAST_ENTRY,
-                                   FN_MAILMERGE_CURRENT_ENTRY,
-                                   FN_MAILMERGE_EXCLUDE_ENTRY,
-                                   FN_MAILMERGE_CREATE_DOCUMENTS,
-                                   FN_MAILMERGE_SAVE_DOCUMENTS,
-                                   FN_MAILMERGE_PRINT_DOCUMENTS,
-                                   FN_MAILMERGE_EMAIL_DOCUMENTS,
-                                   0 };
-    m_pView->GetViewFrame()->GetBindings().Invalidate(slotIds);
+        // Show the toolbar
+        m_pView->ShowUIElement("private:resource/toolbar/mailmerge");
+
+        // Update Mail Merge controls
+        const sal_uInt16 slotIds[] = { FN_MAILMERGE_FIRST_ENTRY,
+                                       FN_MAILMERGE_PREV_ENTRY,
+                                       FN_MAILMERGE_NEXT_ENTRY,
+                                       FN_MAILMERGE_LAST_ENTRY,
+                                       FN_MAILMERGE_CURRENT_ENTRY,
+                                       FN_MAILMERGE_EXCLUDE_ENTRY,
+                                       FN_MAILMERGE_CREATE_DOCUMENTS,
+                                       FN_MAILMERGE_SAVE_DOCUMENTS,
+                                       FN_MAILMERGE_PRINT_DOCUMENTS,
+                                       FN_MAILMERGE_EMAIL_DOCUMENTS,
+                                       0 };
+        m_pView->GetViewFrame()->GetBindings().Invalidate(slotIds);
+    }
 
     // release/destroy asynchronously
     Application::PostUserEvent( LINK( this, SwMailMergeWizardExecutor, DestroyDialogHdl ) );
@@ -654,19 +635,6 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl, void*, void)
         {
             auto pViewFrame(xMMConfig->GetSourceView()->GetViewFrame());
             pViewFrame->GetFrame().AppearWithUpdate();
-            uno::Reference<beans::XPropertySet> xPropSet(pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
-            if (xPropSet.is() && m_bDestroyMMToolbarOnCancel)
-            {
-                // hide mailmerge toolbar if it hasn't been there before
-                uno::Reference<frame::XLayoutManager> xLayoutManager;
-                uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
-                aValue >>= xLayoutManager;
-                if (xLayoutManager.is())
-                {
-                    const OUString sResourceURL( "private:resource/toolbar/mailmerge" );
-                    xLayoutManager->destroyElement( sResourceURL );
-                }
-            }
         }
         xMMConfig->Commit();
     }
