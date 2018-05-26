@@ -485,6 +485,20 @@ void SwMailMergeWizardExecutor::ExecutionFinished()
             pDbManager->CommitLastRegistrations();
     }
 
+    // Update Mail Merge controls
+    const sal_uInt16 slotIds[] = { FN_MAILMERGE_FIRST_ENTRY,
+                                   FN_MAILMERGE_PREV_ENTRY,
+                                   FN_MAILMERGE_NEXT_ENTRY,
+                                   FN_MAILMERGE_LAST_ENTRY,
+                                   FN_MAILMERGE_CURRENT_ENTRY,
+                                   FN_MAILMERGE_EXCLUDE_ENTRY,
+                                   FN_MAILMERGE_CREATE_DOCUMENTS,
+                                   FN_MAILMERGE_SAVE_DOCUMENTS,
+                                   FN_MAILMERGE_PRINT_DOCUMENTS,
+                                   FN_MAILMERGE_EMAIL_DOCUMENTS,
+                                   0 };
+    m_pView->GetViewFrame()->GetBindings().Invalidate(slotIds);
+
     // release/destroy asynchronously
     Application::PostUserEvent( LINK( this, SwMailMergeWizardExecutor, DestroyDialogHdl ) );
 }
