@@ -18,13 +18,10 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
-#include <vector>
-
 namespace connectivity
 {
     namespace firebird
     {
-        typedef std::vector< OString > OStringVector;
         // Type Blob has 2 subtypes values
         // 0 for BLOB, 1 for CLOB
         // see http://www.firebirdfaq.org/faq48/
