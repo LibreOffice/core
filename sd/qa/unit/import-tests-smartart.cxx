@@ -203,11 +203,6 @@ void SdImportTestSmartArt::testPyramid()
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testChevron()
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
 void SdImportTestSmartArt::testCycle()
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
