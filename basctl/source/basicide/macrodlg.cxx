@@ -460,10 +460,23 @@ void MacroChooser::CheckButtons()
 
 IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, SvTreeListBox*, bool)
 {
+    SbMethod* pMethod = GetMacro();
+    SbModule* pModule = pMethod ? pMethod->GetModule() : nullptr;
+    StarBASIC* pBasic = pModule ? static_cast<StarBASIC*>(pModule->GetParent()) : nullptr;
+    BasicManager* pBasMgr = pBasic ? FindBasicManager(pBasic) : nullptr;
+    ScriptDocument aDocument(ScriptDocument::getDocumentForBasicManager(pBasMgr));
+    if (aDocument.isDocument() && !aDocument.allowMacros())
+    {
+        std::unique_ptr<weld::MessageDialog> xError(
+            Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
+                                             VclButtonsType::Ok, IDEResId(RID_STR_CANNOTRUNMACRO)));
+        xError->run();
+        return false;
+    }
+
     StoreMacroDescription();
     if (nMode == Recording)
     {
-        SbMethod* pMethod = GetMacro();
         if (pMethod && !QueryReplaceMacro(pMethod->GetName(), GetFrameWeld()))
             return false;
     }
