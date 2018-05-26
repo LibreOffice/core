@@ -837,12 +837,19 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
             setParameterNull(nParameterIndex, false);
             const sal_Int32 nMaxSize = 0xFFFF;
             Sequence<sal_Int8> xBytesCopy(xBytes);
-            // First 2 bytes indicate string size
             if (xBytesCopy.getLength() > nMaxSize)
             {
                 xBytesCopy.realloc( nMaxSize );
             }
             const short nSize = xBytesCopy.getLength();
+            // 8000 corresponds to value from lcl_addDefaultParameters
+            // in dbaccess/source/filter/hsqldb/createparser.cxx
+            if (nSize > 8000)
+            {
+                free(pVar->sqldata);
+                pVar->sqldata = static_cast<char *>(malloc(nSize + 2, sizeof(char)));
+            }
+            // First 2 bytes indicate string size
             memcpy(pVar->sqldata, &nSize, 2);
             // Actual data
             memcpy(pVar->sqldata + 2, xBytesCopy.getConstArray(), nSize);
