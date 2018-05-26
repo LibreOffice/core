@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_31efa288",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-26T18:46:41Z",
+      "side": 1,
+      "message": "this comment keeps drifting away from the memcpy it refers to, please move it down there",
+      "revId": "2ef7ad1221b9b00e29ee594f3556bca6f1f0aa52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d1d726bd",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-26T18:46:41Z",
+      "side": 1,
+      "message": "if possible, this constant should be pulled out into a constexpr constant somewhere and shared, so it doesn\u0027t cause problems if the other alloc site changes",
+      "revId": "2ef7ad1221b9b00e29ee594f3556bca6f1f0aa52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_11e29e9f",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-26T18:46:41Z",
+      "side": 1,
+      "message": "since we\u0027re about to memcpy over it, calloc is a waste of time, just use malloc",
+      "revId": "2ef7ad1221b9b00e29ee594f3556bca6f1f0aa52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
