@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <set>
-#include <vector>
 
 #include <unotools/sharedunocomponent.hxx>
 
@@ -37,7 +36,6 @@ namespace dbaui
 {
 
     typedef std::set<OUString> StringBag;
-    typedef std::vector<OUString> StringArray;
 
     typedef ::utl::SharedUNOComponent< css::sdbc::XConnection > SharedConnection;
 

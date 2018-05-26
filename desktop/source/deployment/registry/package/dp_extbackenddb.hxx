@@ -55,8 +55,6 @@ public:
            and the media type
          */
         std::vector< std::pair< OUString, OUString> > items;
-        typedef std::vector<
-            std::pair< OUString, OUString> >::const_iterator ITC_ITEMS;
     };
 
 public:

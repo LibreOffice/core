@@ -26,7 +26,6 @@
 
 
 #include <vector>
-typedef std::vector< OUString > StringVector;
 
 struct SbiParseStack;
 
@@ -72,8 +71,8 @@ public:
     short         nBase;            // OPTION BASE-value
     bool          bExplicit;        // true: OPTION EXPLICIT
     bool          bClassModule;     // true: OPTION ClassModule
-    StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
-    StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
+    std::vector<OUString> aIfaceVector;     // Holds all interfaces implemented by a class module
+    std::vector<OUString> aRequiredTypes;   // Types used in Dim As New <type> outside subs
 #   define N_DEF_TYPES 26
     SbxDataType   eDefTypes[N_DEF_TYPES];    // DEFxxx data types
 
