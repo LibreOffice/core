@@ -843,6 +843,11 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
                 xBytesCopy.realloc( nMaxSize );
             }
             const short nSize = xBytesCopy.getLength();
+            if (nSize > 8000)
+            {
+                free(pVar->sqldata);
+                pVar->sqldata = static_cast<char *>(calloc(nSize + 2, sizeof(char)));
+            }
             memcpy(pVar->sqldata, &nSize, 2);
             // Actual data
             memcpy(pVar->sqldata + 2, xBytesCopy.getConstArray(), nSize);
