@@ -154,8 +154,7 @@ void ZipOutputStream::reduceScheduledThreadsToGivenNumberOrLess(sal_Int32 nThrea
 
         if(static_cast< sal_Int32 >(m_aEntries.size()) > nThreads)
         {
-            const TimeValue aTimeValue(0, 100000);
-            osl_waitThread(&aTimeValue);
+            osl::Thread::wait(std::chrono::microseconds(100));
         }
     }
 }

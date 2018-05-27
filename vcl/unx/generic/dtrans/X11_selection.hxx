@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
-#include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
 
