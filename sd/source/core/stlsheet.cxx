@@ -611,59 +611,86 @@ bool SdStyleSheet::HasClearParentSupport() const
     return true;
 }
 
+namespace
+{
+struct ApiNameMap
+{
+    const sal_Char* mpApiName;
+    sal_uInt32      mnApiNameLength;
+    sal_uInt32      mnHelpId;
+} const pApiNameMap[]
+    = { { RTL_CONSTASCII_STRINGPARAM("title"), HID_PSEUDOSHEET_TITLE },
+        { RTL_CONSTASCII_STRINGPARAM("subtitle"), HID_PSEUDOSHEET_SUBTITLE },
+        { RTL_CONSTASCII_STRINGPARAM("background"), HID_PSEUDOSHEET_BACKGROUND },
+        { RTL_CONSTASCII_STRINGPARAM("backgroundobjects"), HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
+        { RTL_CONSTASCII_STRINGPARAM("notes"), HID_PSEUDOSHEET_NOTES },
+        { RTL_CONSTASCII_STRINGPARAM("standard"), HID_STANDARD_STYLESHEET_NAME },
+        { RTL_CONSTASCII_STRINGPARAM("objectwitharrow"), HID_POOLSHEET_OBJWITHARROW },
+        { RTL_CONSTASCII_STRINGPARAM("objectwithshadow"), HID_POOLSHEET_OBJWITHSHADOW },
+        { RTL_CONSTASCII_STRINGPARAM("objectwithoutfill"), HID_POOLSHEET_OBJWITHOUTFILL },
+        { RTL_CONSTASCII_STRINGPARAM("text"), HID_POOLSHEET_TEXT },
+        { RTL_CONSTASCII_STRINGPARAM("textbody"), HID_POOLSHEET_TEXTBODY },
+        { RTL_CONSTASCII_STRINGPARAM("textbodyjustfied"), HID_POOLSHEET_TEXTBODY_JUSTIFY },
+        { RTL_CONSTASCII_STRINGPARAM("textbodyindent"), HID_POOLSHEET_TEXTBODY_INDENT },
+        { RTL_CONSTASCII_STRINGPARAM("title"), HID_POOLSHEET_TITLE },
+        { RTL_CONSTASCII_STRINGPARAM("title1"), HID_POOLSHEET_TITLE1 },
+        { RTL_CONSTASCII_STRINGPARAM("title2"), HID_POOLSHEET_TITLE2 },
+        { RTL_CONSTASCII_STRINGPARAM("headline"), HID_POOLSHEET_HEADLINE },
+        { RTL_CONSTASCII_STRINGPARAM("headline1"), HID_POOLSHEET_HEADLINE1 },
+        { RTL_CONSTASCII_STRINGPARAM("headline2"), HID_POOLSHEET_HEADLINE2 },
+        { RTL_CONSTASCII_STRINGPARAM("measure"), HID_POOLSHEET_MEASURE },
+        { nullptr, 0, 0 } };
+
+OUString GetApiNameForHelpId(sal_uLong nId)
+{
+    if ((nId >= HID_PSEUDOSHEET_OUTLINE1) && (nId <= HID_PSEUDOSHEET_OUTLINE9))
+        return "outline" + OUStringLiteral1('1' + (nId - HID_PSEUDOSHEET_OUTLINE1));
+
+    const ApiNameMap* p = pApiNameMap;
+    while (p->mpApiName)
+    {
+        if (nId == p->mnHelpId)
+            return OUString(p->mpApiName, p->mnApiNameLength, RTL_TEXTENCODING_ASCII_US);
+        ++p;
+    }
+
+    return OUString();
+}
+
+sal_uInt32 GetHelpIdForApiName(const OUString& sName)
+{
+    OUString sRest;
+    if (sName.startsWith("outline", &sRest))
+    {
+        if (sRest.getLength() == 1)
+        {
+            sal_Unicode ch = sRest.toChar();
+            if ('1' <= ch && ch <= '9')
+                return HID_PSEUDOSHEET_OUTLINE1 + ch - '1';
+        }
+        // No other pre-defined names start with "outline"
+        return 0;
+    }
+
+    const ApiNameMap* p = pApiNameMap;
+    while (p->mpApiName)
+    {
+        if (sName.equalsAscii(p->mpApiName))
+            return p->mnHelpId;
+        ++p;
+    }
+
+    return 0;
+}
+}
+
 void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 {
     SfxStyleSheet::SetHelpId( r, nId );
 
-    if( (nId >= HID_PSEUDOSHEET_OUTLINE1) && ( nId <= HID_PSEUDOSHEET_OUTLINE9 ) )
-    {
-        msApiName = "outline";
-        msApiName += OUStringLiteral1( '1' + (nId - HID_PSEUDOSHEET_OUTLINE1) );
-    }
-    else
-    {
-        static struct ApiNameMap
-        {
-            const sal_Char* mpApiName;
-            sal_uInt32      mnApiNameLength;
-            sal_uInt32      mnHelpId;
-        }
-        pApiNameMap[] =
-        {
-            { RTL_CONSTASCII_STRINGPARAM( "title" ),            HID_PSEUDOSHEET_TITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "subtitle" ),         HID_PSEUDOSHEET_SUBTITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "background" ),       HID_PSEUDOSHEET_BACKGROUND },
-            { RTL_CONSTASCII_STRINGPARAM( "backgroundobjects" ),HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
-            { RTL_CONSTASCII_STRINGPARAM( "notes" ),            HID_PSEUDOSHEET_NOTES },
-            { RTL_CONSTASCII_STRINGPARAM( "standard" ),         HID_STANDARD_STYLESHEET_NAME },
-            { RTL_CONSTASCII_STRINGPARAM( "objectwitharrow" ),  HID_POOLSHEET_OBJWITHARROW },
-            { RTL_CONSTASCII_STRINGPARAM( "objectwithshadow" ), HID_POOLSHEET_OBJWITHSHADOW },
-            { RTL_CONSTASCII_STRINGPARAM( "objectwithoutfill" ),HID_POOLSHEET_OBJWITHOUTFILL },
-            { RTL_CONSTASCII_STRINGPARAM( "text" ),             HID_POOLSHEET_TEXT },
-            { RTL_CONSTASCII_STRINGPARAM( "textbody" ),         HID_POOLSHEET_TEXTBODY },
-            { RTL_CONSTASCII_STRINGPARAM( "textbodyjustfied" ), HID_POOLSHEET_TEXTBODY_JUSTIFY },
-            { RTL_CONSTASCII_STRINGPARAM( "textbodyindent" ),   HID_POOLSHEET_TEXTBODY_INDENT },
-            { RTL_CONSTASCII_STRINGPARAM( "title" ),            HID_POOLSHEET_TITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "title1" ),           HID_POOLSHEET_TITLE1 },
-            { RTL_CONSTASCII_STRINGPARAM( "title2" ),           HID_POOLSHEET_TITLE2 },
-            { RTL_CONSTASCII_STRINGPARAM( "headline" ),         HID_POOLSHEET_HEADLINE },
-            { RTL_CONSTASCII_STRINGPARAM( "headline1" ),        HID_POOLSHEET_HEADLINE1 },
-            { RTL_CONSTASCII_STRINGPARAM( "headline2" ),        HID_POOLSHEET_HEADLINE2 },
-            { RTL_CONSTASCII_STRINGPARAM( "measure" ),          HID_POOLSHEET_MEASURE },
-            { nullptr, 0, 0 }
-        };
-
-        ApiNameMap* p = pApiNameMap;
-        while( p->mpApiName )
-        {
-            if( nId == p->mnHelpId )
-            {
-                msApiName = OUString( p->mpApiName, p->mnApiNameLength, RTL_TEXTENCODING_ASCII_US );
-                break;
-            }
-            p++;
-        }
-    }
+    const OUString sNewApiName = GetApiNameForHelpId(nId);
+    if (!sNewApiName.isEmpty())
+        msApiName = sNewApiName;
 }
 
 OUString SdStyleSheet::GetFamilyString( SfxStyleFamily eFamily )
@@ -867,6 +894,18 @@ Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(Run
     return aNameSequence;
 }
 
+bool SdStyleSheet::SetName(const OUString& rNewName, bool bReindexNow)
+{
+    const bool bResult = SfxUnoStyleSheet::SetName(rNewName, bReindexNow);
+    // Don't overwrite predefined API names
+    if (bResult && GetHelpIdForApiName(msApiName) == 0)
+    {
+        msApiName = rNewName;
+        Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+    }
+    return bResult;
+}
+
 // XNamed
 OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException, std::exception)
 {
@@ -879,12 +918,7 @@ void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeExcep
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
-
-    if( SetName( rName ) )
-    {
-        msApiName = rName;
-        Broadcast(SfxHint(SFX_HINT_DATACHANGED));
-    }
+    SetName(rName);
 }
 
 // XStyle

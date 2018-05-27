@@ -82,6 +82,9 @@ public:
     static void BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet, PresentationObjects ePO,
         SfxStyleSheetBasePool* pSSPool);
 
+    // SfxStyleSheetBase
+    virtual bool SetName(const OUString& rNewName, bool bReindexNow = true) override;
+
     // XInterface
     virtual void SAL_CALL release(  ) throw () override;
 
