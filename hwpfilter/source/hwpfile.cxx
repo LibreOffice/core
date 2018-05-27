@@ -399,7 +399,7 @@ HyperText *HWPFile::GetHyperText()
     }
 
     currenthyper++;
-    return *it;
+    return it != hyperlist.end() ? *it : NULL;
 }
 
 EmPicture *HWPFile::GetEmPicture(Picture * pic)
@@ -455,7 +455,7 @@ ParaShape *HWPFile::getParaShape(int index)
 	  break;
     }
 
-    return *it;
+    return it != pslist.end() ? *it : NULL;
 }
 
 
@@ -468,7 +468,7 @@ CharShape *HWPFile::getCharShape(int index)
 	  break;
     }
 
-    return *it;
+    return it != cslist.end() ? *it : 0;
 }
 
 
@@ -481,7 +481,7 @@ FBoxStyle *HWPFile::getFBoxStyle(int index)
 	  break;
     }
 
-    return *it;
+    return it != fbslist.end() ? *it : 0;
 }
 
 DateCode *HWPFile::getDateCode(int index)
@@ -505,7 +505,7 @@ HeaderFooter *HWPFile::getHeaderFooter(int index)
 	  break;
     }
 
-    return *it;
+    return it != headerfooters.end() ? *it : NULL;
 }
 
 ShowPageNum *HWPFile::getPageNumber(int index)
@@ -517,7 +517,7 @@ ShowPageNum *HWPFile::getPageNumber(int index)
 	  break;
     }
 
-    return *it;
+    return it != pagenumbers.end() ? *it : NULL;
 
 }
 
@@ -530,7 +530,7 @@ Table *HWPFile::getTable(int index)
 	  break;
     }
 
-    return *it;
+    return it != tables.end() ? *it : NULL;
 }
 
 void HWPFile::AddParaShape(ParaShape * pshape)
