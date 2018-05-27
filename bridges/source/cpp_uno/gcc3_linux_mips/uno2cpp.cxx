@@ -127,7 +127,7 @@ namespace
         case 'H':                /* type is long long */
           if (nw & 1) nw++;     /* note even elements gpr[] will map to
                                odd registers*/
-          if (nw < 4) {
+          if (nw < 3) {
             gpr[nw++] = *pStackLongs;
             gpr[nw++] = *(pStackLongs+1);
           } else {

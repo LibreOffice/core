@@ -143,7 +143,7 @@ static void callVirtualMethod(
 #else
             if (n & 1)
                n++;
-            if (n < 8) {
+            if (n < 7) {
                gpr[n++] = *pStackLongs;
                gpr[n++] = *(pStackLongs+1);
 #endif
