@@ -19,43 +19,23 @@
 
 #include <config_features.h>
 
-#include <hintids.hxx>
-
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <osl/diagnose.h>
-#include <tools/link.hxx>
-#include <svl/urihelper.hxx>
-#include <unotools/pathoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/objitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svl/srchitem.hxx>
-#include <svtools/accessibilityoptions.hxx>
-#include <svtools/colorcfg.hxx>
 #include <svtools/restartdialog.hxx>
-#include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/isethint.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svl/stritem.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/wrkwin.hxx>
-#include <svx/insctrl.hxx>
-#include <svx/selctrl.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/docfile.hxx>
-#include <svx/xmlsecctrl.hxx>
+#include <sfx2/objface.hxx>
 #include <navicfg.hxx>
 
-#include <sfx2/objface.hxx>
-#include <sfx2/app.hxx>
-
-#include <edtwin.hxx>
 #include <view.hxx>
 #include <pview.hxx>
 #include <srcview.hxx>
@@ -65,27 +45,19 @@
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
-#include <wdocsh.hxx>
 #include <wview.hxx>
 #include <usrpref.hxx>
 #include <gloslst.hxx>
 #include <glosdoc.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include <cfgitems.hxx>
-#include <prtopt.hxx>
 #include <modcfg.hxx>
-#include <globals.h>
-#include <app.hrc>
 #include <fontcfg.hxx>
 #include <barcfg.hxx>
 #include <uinums.hxx>
 #include <dbconfig.hxx>
 #include <mmconfigitem.hxx>
-#include <linguistic/lngprops.hxx>
-#include <editeng/unolingu.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -95,12 +67,8 @@
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <swabstdlg.hxx>
 
-#include <vcl/status.hxx>
-
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 
