@@ -29,6 +29,7 @@ using namespace ::com::sun::star;
 
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/ehdl.hxx>
@@ -42,6 +43,7 @@ using namespace ::com::sun::star;
 #include <svx/drawitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/xwindowitem.hxx>
+#include <svx/svdoole2.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -415,6 +417,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_UPDATETABLINKS:
             {
                 ScDocument* pDoc = GetDocument();
+                comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+                rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
 
                 ScLkUpdMode nSet=pDoc->GetLinkMode();
 
@@ -463,7 +467,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     rReq.Done();
                 }
                 else
+                {
+                    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
                     rReq.Ignore();
+                }
             }
             break;
 

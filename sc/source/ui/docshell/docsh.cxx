@@ -544,6 +544,9 @@ sal_Bool ScDocShell::Load( SfxMedium& rMedium )
     sal_Bool bRet = SfxObjectShell::Load( rMedium );
     if( bRet )
     {
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+
         if (GetMedium())
         {
             SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);

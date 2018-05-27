@@ -291,8 +291,11 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
     }
 
     bRet = SfxObjectShell::Load( rMedium );
-    if( bRet )
+    if(bRet)
     {
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+
         bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
     }
 
