@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTDATALABEL_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
 #include <svl/itemset.hxx>
 #include <memory>
 

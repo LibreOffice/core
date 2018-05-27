@@ -21,8 +21,8 @@
 
 #include <ObjectIdentifier.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/dlgctrl.hxx>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
 
 namespace chart
 {

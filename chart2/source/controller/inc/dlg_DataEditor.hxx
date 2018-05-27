@@ -20,11 +20,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 
-#include <svl/lstner.hxx>
 #include <vcl/toolbox.hxx>
-#include <comphelper/stl_types.hxx>
 #include <vcl/dialog.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace comphelper { template <class Tp, class Arg> class mem_fun1_t; }
 
 namespace com { namespace sun { namespace star {
     namespace chart2 {

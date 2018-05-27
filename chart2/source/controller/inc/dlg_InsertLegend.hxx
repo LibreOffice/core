@@ -20,13 +20,13 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTLEGEND_HXX
 
 #include <vcl/dialog.hxx>
-#include <sfx2/basedlgs.hxx>
 
 #include <memory>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include "res_LegendPosition.hxx"
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {
