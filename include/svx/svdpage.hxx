@@ -410,12 +410,12 @@ private:
     SdrModel&                   mrSdrModelFromSdrPage;
 
 private:
-    sal_Int32 mnWidth;     // Seitengroesse
-    sal_Int32 mnHeight;     // Seitengroesse
-    sal_Int32 mnBorderLeft; // Seitenrand links
-    sal_Int32 mnBorderUpper; // Seitenrand oben
-    sal_Int32 mnBorderRight; // Seitenrand rechts
-    sal_Int32 mnBorderLower; // Seitenrand unten
+    sal_Int32 mnWidth;       // page size
+    sal_Int32 mnHeight;      // page size
+    sal_Int32 mnBorderLeft;  // left page margin
+    sal_Int32 mnBorderUpper; // top page margin
+    sal_Int32 mnBorderRight; // right page margin
+    sal_Int32 mnBorderLower; // bottom page margin
 
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
     std::unique_ptr<SdrPageProperties> mpSdrPageProperties;

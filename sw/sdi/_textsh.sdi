@@ -1179,7 +1179,7 @@ interface BaseText
     ]
     SID_ATTR_PARA_ADJUST // status(final|play)
     [
-         //          (0=links, 1=rechts, 2=block, 3=zentriert, )"
+         //          (0=left, 1=right, 2=justify, 3=center, )"
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";

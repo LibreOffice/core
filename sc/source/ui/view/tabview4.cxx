@@ -425,7 +425,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
         SetScrollBar( *aVScrollTop.get(), nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), bLayoutRTL );
     }
 
-    //      Bereich testen
+    //      test the range
 
     nDiff = lcl_UpdateBar( *aHScrollLeft.get(), nVisXL );
     if (nDiff) ScrollX( nDiff, SC_SPLIT_LEFT );

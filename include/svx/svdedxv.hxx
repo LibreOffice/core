@@ -257,7 +257,7 @@ public:
     sal_uInt16 GetSelectionLevel() const;
 
 
-    // Object-MacroModus (e.g. rect as button or sth. like that):
+    // Object MacroMode (e.g. rect as button or sth. like that):
 
     bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin);
     void BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin) { BegMacroObj(rPnt,-2,pObj,pPV,pWin); }

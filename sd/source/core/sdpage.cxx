@@ -2503,7 +2503,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         }
         else
         {
-            // Outliner restaurieren
+            // restore the outliner
             pOutl->Init( nOutlMode );
             pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
             pOutl->SetUpdateMode( bUpdateMode );

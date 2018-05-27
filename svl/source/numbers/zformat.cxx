@@ -4733,7 +4733,7 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
     }
     else if ( bString )
     {
-        // vorwaerts
+        // forward
         short const * pType = NumFor[nNumFor].Info().nTypeArray.data() + nPos;
         while ( nPos < nCnt && (*pType != NF_SYMBOLTYPE_STRING) &&
                 (*pType != NF_SYMBOLTYPE_CURRENCY) )

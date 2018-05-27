@@ -385,7 +385,7 @@ public:
     Point FindAnchorPos( const Point &rAbsPos, bool bMoveIt = false );
 
     /** Determines whether a frame or its environment is vertically formatted and right-to-left.
-     also determines, if frame or its environment is in mongolianlayout (vertical left-to-right)
+     also determines, if frame or its environment is in Mongolian layout (vertical left-to-right)
      - add output parameter <bVertL2R> */
     bool IsFrameVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
 
@@ -643,7 +643,7 @@ public:
 
     /// Split cell vertically or horizontally.
     void SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight );
-    bool Sort(const SwSortOptions&);    //Sortieren.
+    bool Sort(const SwSortOptions&);    // sorting
 
     void SetRowHeight( const SwFormatFrameSize &rSz );
 

@@ -716,7 +716,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
     SetDocumentModified();
 }
 
-//              Merge (Aenderungen zusammenfuehren)
+//              Merge (combine documents)
 
 static inline bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, bool bIgnore100Sec )
 {

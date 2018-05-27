@@ -728,7 +728,7 @@ void SvImpLBox::KeyLeftRight( long nDelta )
     nFlags &= (~LBoxFlags::Filling);
     ShowCursor( false );
 
-    // neuen Origin berechnen
+    // calculate new origin
     long nPos = aHorSBar->GetThumbPos();
     Point aOrigin( -nPos, 0 );
 

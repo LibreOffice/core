@@ -2166,7 +2166,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                                                 pPt ).Pos();
 
                     const sal_uInt16 nTotalWidth = static_cast<sal_uInt16>(aRect.Width());
-                    // Initialize nStart and nEnd initialisieren for nNum == 0
+                    // Initialize nStart and nEnd for nNum == 0
                     int nWidth = 0,
                         nStart = 0,
                         nEnd = nTotalWidth;

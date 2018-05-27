@@ -61,7 +61,7 @@ public:
     void    SetFocalLength(double fLen);
     double  GetFocalLength() const { return fFocalLength; }
 
-    // Bank angle links/rechts
+    // Bank angle left/right
     void    SetBankAngle(double fAngle);
 
     void SetAutoAdjustProjection(bool bAdjust)

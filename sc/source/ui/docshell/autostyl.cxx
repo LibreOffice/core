@@ -113,7 +113,7 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
 
     if (!aEntries.empty() && nNow != nTimerStart)
     {
-        OSL_ENSURE(nNow>nTimerStart, "Zeit laeuft rueckwaerts?");
+        OSL_ENSURE(nNow>nTimerStart, "Time is running backwards?");
         AdjustEntries((nNow-nTimerStart)*1000);
     }
 
@@ -187,7 +187,7 @@ void ScAutoStyleList::StartTimer( sal_uLong nNow )      // seconds
 IMPL_LINK_NOARG(ScAutoStyleList, TimerHdl, Timer *, void)
 {
     sal_uLong nNow = TimeNow();
-    AdjustEntries(aTimer.GetTimeout());             // eingestellte Wartezeit
+    AdjustEntries(aTimer.GetTimeout());             // the set waiting time
     ExecuteEntries();
     StartTimer(nNow);
 }
