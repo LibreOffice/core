@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <ado/Awrapado.hxx>
-#include <comphelper/sequence.hxx>
 #include <TConnection.hxx>
 #include <comphelper/types.hxx>
 

@@ -36,7 +36,6 @@
 #include <vcl/svmain.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <comphelper/storagehelper.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <unotools/mediadescriptor.hxx>
 

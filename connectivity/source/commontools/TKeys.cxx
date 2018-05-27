@@ -25,7 +25,6 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/property.hxx>
 #include <TConnection.hxx>
 
 namespace connectivity

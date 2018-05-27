@@ -18,7 +18,6 @@
  */
 
 #include <string>
-#include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/htmlmode.hxx>

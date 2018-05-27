@@ -24,6 +24,7 @@
 #include <dbu_reghelper.hxx>
 #include <advancedsettingsdlg.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/proparrhlp.hxx>
 
 namespace dbaui
 {

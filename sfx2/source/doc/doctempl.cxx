@@ -90,7 +90,6 @@ using namespace ::ucbhelper;
 #include <sfx2/fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
 
-#include <comphelper/storagehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <o3tl/make_unique.hxx>
 #include <memory>

@@ -22,6 +22,7 @@
 
 #include <svtools/genericunodialog.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/proparrhlp.hxx>
 
 namespace dbaui
 {

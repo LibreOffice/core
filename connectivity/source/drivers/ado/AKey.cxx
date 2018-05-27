@@ -21,7 +21,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <ado/AColumns.hxx>
 #include <ado/AConnection.hxx>
 

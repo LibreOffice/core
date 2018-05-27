@@ -29,7 +29,6 @@
 #include <dsitems.hxx>
 #include <osl/process.h>
 #include <dbadmin.hxx>
-#include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>
 #include <sqlmessage.hxx>
 #include "odbcconfig.hxx"

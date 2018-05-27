@@ -19,7 +19,6 @@
 
 #include <memory>
 #include "AppController.hxx"
-#include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <core_resource.hxx>
 #include <stringconstants.hxx>
@@ -43,7 +42,6 @@
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <unotools/ucbhelper.hxx>
 #include <dlgsave.hxx>
-#include <comphelper/types.hxx>
 #include <vcl/weld.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>

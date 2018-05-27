@@ -18,7 +18,9 @@
  */
 #ifndef INCLUDED_COMPHELPER_EVTMETHODHELPER_HXX
 #define INCLUDED_COMPHELPER_EVTMETHODHELPER_HXX
-#include <comphelper/sequence.hxx>
+
+#include <com/sun/star/uno/Sequence.h>
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
 {

@@ -26,7 +26,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

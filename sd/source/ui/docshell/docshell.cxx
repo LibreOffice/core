@@ -47,7 +47,6 @@
 #include <svtools/langtab.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/lok.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
 #include <o3tl/make_unique.hxx>

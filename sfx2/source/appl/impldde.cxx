@@ -25,7 +25,6 @@
 
 #include "impldde.hxx"
 
-#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sot/exchange.hxx>

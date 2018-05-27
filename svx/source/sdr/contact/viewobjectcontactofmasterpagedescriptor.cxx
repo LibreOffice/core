@@ -28,7 +28,6 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <comphelper/sequence.hxx>
 
 
 namespace sdr

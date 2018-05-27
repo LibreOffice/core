@@ -26,8 +26,6 @@
 
 #include <cppcanvas/basegfxfactory.hxx>
 
-#include <comphelper/make_shared_from_uno.hxx>
-
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>

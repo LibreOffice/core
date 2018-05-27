@@ -25,7 +25,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <cppuhelper/weak.hxx>
 
-#include <comphelper/types.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 

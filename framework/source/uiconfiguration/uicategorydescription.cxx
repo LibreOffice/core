@@ -38,7 +38,6 @@
 
 #include <vcl/mnemonic.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <unordered_map>
 

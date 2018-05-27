@@ -83,7 +83,6 @@
 #include "textmarkuphelper.hxx"
 #include "parachangetrackinginfo.hxx"
 #include <com/sun/star/text/TextMarkupType.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/colorwindow.hxx>
 #include <editeng/editids.hrc>

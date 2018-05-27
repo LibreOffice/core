@@ -73,6 +73,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <comphelper/storagehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

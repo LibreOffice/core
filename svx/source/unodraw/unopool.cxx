@@ -21,7 +21,6 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/unopool.hxx>

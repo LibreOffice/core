@@ -30,6 +30,7 @@
 #include <UserAdminDlg.hxx>
 
 #include <connectivity/dbmetadata.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

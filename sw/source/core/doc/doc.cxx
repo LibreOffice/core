@@ -44,7 +44,6 @@
 #include <tools/globname.hxx>
 #include <svx/svxids.hrc>
 
-#include <comphelper/string.hxx>
 #include <comphelper/random.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>

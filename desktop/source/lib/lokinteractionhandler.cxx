@@ -43,7 +43,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewsh.hxx>
-#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 

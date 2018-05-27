@@ -48,7 +48,6 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <comphelper/propertysequence.hxx>
 
 #include <svtools/addresstemplate.hxx>

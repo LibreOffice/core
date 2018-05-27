@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/lok.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <salframe.hxx>
 #include <salinst.hxx>

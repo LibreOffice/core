@@ -27,7 +27,6 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/listenernotification.hxx>
 #include "celltypes.hxx"
 
 struct _xmlTextWriter;

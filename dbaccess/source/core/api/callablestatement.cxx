@@ -21,7 +21,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/property.hxx>
 #include <stringconstants.hxx>
 #include <strings.hxx>
 

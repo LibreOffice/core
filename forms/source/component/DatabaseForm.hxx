@@ -68,7 +68,6 @@
 #include <listenercontainers.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase12.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase7.hxx>

@@ -34,7 +34,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/proparrhlp.hxx>
 #include <connectivity/ParameterCont.hxx>
 #include <rtl/ustrbuf.hxx>
 

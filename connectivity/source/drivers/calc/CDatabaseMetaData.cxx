@@ -34,7 +34,6 @@
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <FDatabaseMetaDataResultSet.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/types.hxx>
 
 using namespace connectivity::calc;
 using namespace connectivity::file;

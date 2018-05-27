@@ -54,7 +54,6 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <utility>
 #include <vector>

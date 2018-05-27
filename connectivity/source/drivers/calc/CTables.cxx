@@ -25,7 +25,6 @@
 #include <file/FCatalog.hxx>
 #include <file/FConnection.hxx>
 #include <calc/CCatalog.hxx>
-#include <comphelper/types.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

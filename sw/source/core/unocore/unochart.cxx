@@ -23,7 +23,6 @@
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/sequence.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>

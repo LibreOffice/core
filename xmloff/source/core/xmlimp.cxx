@@ -58,7 +58,6 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <unotools/fontcvt.hxx>
 #include <o3tl/make_unique.hxx>
 #include <xmloff/fasttokenhandler.hxx>

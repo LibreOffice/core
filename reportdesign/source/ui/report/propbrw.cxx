@@ -42,9 +42,7 @@
 #include <svx/svditer.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/namecontainer.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
 #include <core_resource.hxx>

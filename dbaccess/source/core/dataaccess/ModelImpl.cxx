@@ -41,9 +41,6 @@
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
-#include <comphelper/interaction.hxx>
-#include <comphelper/seqstream.hxx>
-#include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>

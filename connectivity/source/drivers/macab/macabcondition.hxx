@@ -23,7 +23,6 @@
 #include "MacabHeader.hxx"
 #include "MacabRecord.hxx"
 
-#include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 
 namespace connectivity

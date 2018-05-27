@@ -25,7 +25,6 @@
 #include "NPreparedStatement.hxx"
 #include "NStatement.hxx"
 #include <connectivity/dbexception.hxx>
-#include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
 
 using namespace connectivity::evoab;

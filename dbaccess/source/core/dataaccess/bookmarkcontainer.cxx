@@ -22,7 +22,6 @@
 #include <apitools.hxx>
 
 #include <osl/diagnose.h>
-#include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>

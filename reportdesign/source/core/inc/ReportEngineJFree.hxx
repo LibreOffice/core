@@ -31,7 +31,6 @@
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
 

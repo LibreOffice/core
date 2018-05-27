@@ -21,7 +21,6 @@
 #include <scopetools.hxx>
 #include <viewdata.hxx>
 
-#include <comphelper/random.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 

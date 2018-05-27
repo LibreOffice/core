@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <comphelper/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>

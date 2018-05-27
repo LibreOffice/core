@@ -31,7 +31,6 @@
 #include <editsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <comphelper/flagguard.hxx>
 
 using namespace com::sun::star;
 

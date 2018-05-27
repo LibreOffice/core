@@ -20,8 +20,6 @@
 #include <vbahelper/helperdecl.hxx>
 #include <tools/urlobj.hxx>
 #include <boost/optional.hpp>
-#include <comphelper/unwrapargs.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>

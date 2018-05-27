@@ -21,7 +21,6 @@
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <comphelper/string.hxx>
 #include <o3tl/any.hxx>
 
 #include <unoflatpara.hxx>

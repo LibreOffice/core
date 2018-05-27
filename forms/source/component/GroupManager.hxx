@@ -27,14 +27,11 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/types.hxx>
 
 #include <algorithm>
 #include <map>
 #include <memory>
 #include <vector>
-
-using namespace comphelper;
 
 /*
  * The GroupManager listens at the StarForm for FormComponent insertion and removal as well as

@@ -29,7 +29,6 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

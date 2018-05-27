@@ -26,7 +26,6 @@
 #include <xmlsec/mscrypto/app.h>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 

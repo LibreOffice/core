@@ -26,7 +26,6 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 
-#include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustrbuf.hxx>
 
 namespace framework{

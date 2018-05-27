@@ -22,7 +22,6 @@
 #include <stringconstants.hxx>
 
 #include <osl/diagnose.h>
-#include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/propertysequence.hxx>

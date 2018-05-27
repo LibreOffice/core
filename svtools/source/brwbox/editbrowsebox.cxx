@@ -33,7 +33,6 @@
 #include <tools/multisel.hxx>
 #include "editbrowseboximpl.hxx"
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <comphelper/types.hxx>
 
 
 namespace svt

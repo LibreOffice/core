@@ -19,7 +19,6 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <hffrm.hxx>

@@ -19,6 +19,7 @@
 
 #include "spinbutton.hxx"
 #include "scrollbar.hxx"
+#include <comphelper/property.hxx>
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
 

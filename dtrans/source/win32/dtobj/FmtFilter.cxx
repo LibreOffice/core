@@ -21,7 +21,6 @@
 
 #include "FmtFilter.hxx"
 #include <osl/diagnose.h>
-#include <comphelper/sequence.hxx>
 
 #include <shobjidl.h>
 #include <shlguid.h>

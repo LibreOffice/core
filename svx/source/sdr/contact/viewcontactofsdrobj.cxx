@@ -33,7 +33,6 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdhdl.hxx>
-#include <comphelper/sequence.hxx>
 
 namespace sdr { namespace contact {
 

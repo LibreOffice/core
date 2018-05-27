@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <file/FCatalog.hxx>
 #include <file/FConnection.hxx>
-#include <comphelper/types.hxx>
 
 using namespace connectivity;
 using namespace ::comphelper;

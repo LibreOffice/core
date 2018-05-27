@@ -35,7 +35,6 @@
 #include <svl/eitem.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/ctloptions.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>

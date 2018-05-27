@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
-#include <comphelper/types.hxx>
 #include "ftools.hxx"
 #include <scdllapi.h>
 

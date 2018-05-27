@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/string.hxx>
 #include <osl/file.hxx>
 #include <sfx2/new.hxx>
 #include <vcl/builderfactory.hxx>

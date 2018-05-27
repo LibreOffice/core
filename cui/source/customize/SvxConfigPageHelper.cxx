@@ -19,6 +19,8 @@
 
 #include <SvxConfigPageHelper.hxx>
 
+#include <comphelper/random.hxx>
+
 static sal_Int16 theImageType =
     css::ui::ImageType::COLOR_NORMAL |
     css::ui::ImageType::SIZE_DEFAULT;

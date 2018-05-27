@@ -36,6 +36,7 @@
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/dbconversion.hxx>
 
+#include <comphelper/property.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace dbtools;

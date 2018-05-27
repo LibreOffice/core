@@ -32,7 +32,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 

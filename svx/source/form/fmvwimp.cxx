@@ -74,6 +74,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>

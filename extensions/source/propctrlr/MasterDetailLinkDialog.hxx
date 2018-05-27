@@ -18,6 +18,8 @@
  */
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
+
+#include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
 #include "modulepcr.hxx"
 

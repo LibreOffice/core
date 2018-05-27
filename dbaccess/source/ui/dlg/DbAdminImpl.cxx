@@ -52,11 +52,8 @@
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 
-#include <comphelper/guarding.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/string.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>

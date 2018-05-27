@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <comphelper/string.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

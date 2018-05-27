@@ -23,8 +23,6 @@
 #include <sqlbison.hxx>
 #include <file/FDriver.hxx>
 #include <file/FResultSet.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/uno3.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>

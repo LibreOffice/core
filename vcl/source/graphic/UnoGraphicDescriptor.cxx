@@ -22,7 +22,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/itemprop.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyState.hpp>

@@ -21,7 +21,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
-#include <comphelper/string.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

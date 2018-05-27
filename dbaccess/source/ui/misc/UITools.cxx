@@ -69,6 +69,7 @@
 #include <TypeInfo.hxx>
 #include <FieldDescriptions.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/types.hxx>
 #include <comphelper/propertysequence.hxx>
 
 #include <svx/svxids.hrc>

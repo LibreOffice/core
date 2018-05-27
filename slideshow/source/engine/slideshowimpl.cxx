@@ -28,7 +28,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <comphelper/anytostring.hxx>
-#include <comphelper/make_shared_from_uno.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicedecl.hxx>
 

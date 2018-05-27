@@ -32,7 +32,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

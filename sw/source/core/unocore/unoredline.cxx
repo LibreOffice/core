@@ -25,7 +25,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <vcl/svapp.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>

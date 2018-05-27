@@ -35,7 +35,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <editeng/editobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>

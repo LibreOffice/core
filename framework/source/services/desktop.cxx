@@ -59,6 +59,7 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XTerminateListener2.hpp>
 
+#include <comphelper/numberedcollection.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/lok.hxx>
 #include <cppuhelper/supportsservice.hxx>

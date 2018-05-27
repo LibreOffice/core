@@ -39,7 +39,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include <comphelper/basicio.hxx>
-#include <comphelper/listenernotification.hxx>
+#include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>

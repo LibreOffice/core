@@ -31,9 +31,7 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/stl_types.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/GeneralFunction2.hpp>

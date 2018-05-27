@@ -24,6 +24,10 @@
 #include "xpathlib.hxx"
 #include <services.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xforms;

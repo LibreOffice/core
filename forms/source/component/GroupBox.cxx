@@ -20,6 +20,7 @@
 #include "GroupBox.hxx"
 #include <property.hxx>
 #include <services.hxx>
+#include <comphelper/property.hxx>
 #include <tools/debug.hxx>
 
 namespace frm

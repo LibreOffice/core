@@ -30,7 +30,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/listenernotification.hxx>
 
 
 namespace pcr

@@ -34,7 +34,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 
-#include <comphelper/propertysetinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>

@@ -19,7 +19,6 @@
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>

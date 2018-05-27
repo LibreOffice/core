@@ -21,7 +21,6 @@
 
 #include <objc/objc-runtime.h>
 
-#include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <vcl/commandevent.hxx>

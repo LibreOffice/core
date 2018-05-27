@@ -23,6 +23,7 @@
 #include <RefreshListener.hxx>
 #include <sdbcoretools.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>

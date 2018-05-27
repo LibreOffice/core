@@ -23,7 +23,6 @@
 #include <unoadmin.hxx>
 #include <dbadmin.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/property.hxx>
 
 // --- needed because of the solar mutex
 #include <osl/mutex.hxx>

@@ -29,6 +29,7 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <comphelper/basicio.hxx>
+#include <comphelper/property.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>

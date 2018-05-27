@@ -24,7 +24,6 @@
 #include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/ElementExistException.hpp>

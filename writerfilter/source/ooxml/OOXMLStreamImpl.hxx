@@ -22,7 +22,6 @@
 #include <map>
 
 #include <ooxml/OOXMLDocument.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 
 extern OUString customTarget;

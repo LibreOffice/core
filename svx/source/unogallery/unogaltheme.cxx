@@ -31,7 +31,6 @@
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;

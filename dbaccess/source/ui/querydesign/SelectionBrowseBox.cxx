@@ -27,7 +27,6 @@
 #include <browserids.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/types.hxx>
 #include "TableFieldInfo.hxx"
 #include <core_resource.hxx>
 #include <strings.hrc>

@@ -15,7 +15,6 @@
 #include <sfx2/viewsh.hxx>
 #include <cstddef>
 #include <rtl/string.hxx>
-#include <comphelper/lok.hxx>
 
 class SfxViewShell;
 

@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <memory>
 
 class AccessibleStateSetHelperImpl;

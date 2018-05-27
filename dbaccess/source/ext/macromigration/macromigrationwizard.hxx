@@ -23,6 +23,7 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
+#include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
 
 namespace dbmm

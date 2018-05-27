@@ -55,7 +55,6 @@
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::svxform;

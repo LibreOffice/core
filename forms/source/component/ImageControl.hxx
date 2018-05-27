@@ -26,11 +26,8 @@
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
-#include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ref.hxx>
-
-using namespace comphelper;
 
 
 namespace frm

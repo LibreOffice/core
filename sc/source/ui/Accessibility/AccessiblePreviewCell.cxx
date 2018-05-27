@@ -35,7 +35,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;

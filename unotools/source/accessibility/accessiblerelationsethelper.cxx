@@ -23,7 +23,6 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vector>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 
 using namespace ::utl;
 using namespace ::com::sun::star;

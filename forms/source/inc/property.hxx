@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/propshlp.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/propagg.hxx>
 #include <tools/debug.hxx>
 

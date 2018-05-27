@@ -22,7 +22,6 @@
 
 #include "EditBase.hxx"
 #include <tools/link.hxx>
-#include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include "errorbroadcaster.hxx"
 

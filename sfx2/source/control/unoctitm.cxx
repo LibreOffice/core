@@ -43,7 +43,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>

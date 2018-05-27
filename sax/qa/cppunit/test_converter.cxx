@@ -33,7 +33,6 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 
 #include <sax/tools/converter.hxx>
-#include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 
 

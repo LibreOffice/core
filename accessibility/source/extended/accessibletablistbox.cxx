@@ -21,7 +21,6 @@
 #include <extended/accessibletablistbox.hxx>
 #include <extended/accessibletablistboxtable.hxx>
 #include <svtools/svtabbx.hxx>
-#include <comphelper/sequence.hxx>
 
 
 namespace accessibility

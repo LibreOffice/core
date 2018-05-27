@@ -88,12 +88,10 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/seqstream.hxx>
@@ -188,7 +186,6 @@
 namespace reportdesign
 {
     using namespace com::sun::star;
-    using namespace comphelper;
     using namespace rptui;
 
 void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStorage,std::shared_ptr<rptui::OReportModel> const & _rModel)

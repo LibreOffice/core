@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/dialogs/WizardButton.hpp>
 #include <com/sun/star/util/InvalidStateException.hpp>
 
+#include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <tools/diagnose_ex.h>

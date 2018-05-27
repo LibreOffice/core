@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <comphelper/propstate.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/proparrhlp.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 

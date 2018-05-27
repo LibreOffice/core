@@ -42,7 +42,6 @@
 #include <unotools/datetime.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/seqstream.hxx>
 
 using namespace css;

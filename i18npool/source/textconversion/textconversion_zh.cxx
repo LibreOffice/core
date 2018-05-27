@@ -26,7 +26,6 @@
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>
-#include <comphelper/string.hxx>
 #include <memory>
 
 using namespace com::sun::star::lang;

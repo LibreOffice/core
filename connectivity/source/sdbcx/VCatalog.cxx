@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/types.hxx>
 #include <connectivity/sdbcx/VCatalog.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <TConnection.hxx>
-#include <comphelper/uno3.hxx>
 #include <connectivity/dbtools.hxx>
 
 using namespace connectivity;

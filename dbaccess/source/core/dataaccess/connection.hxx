@@ -45,7 +45,6 @@
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 
 #include <cppuhelper/implbase13.hxx>
-#include <comphelper/stl_types.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/warningscontainer.hxx>

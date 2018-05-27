@@ -23,6 +23,7 @@
 #include "modulepcr.hxx"
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <comphelper/proparrhlp.hxx>
 
 
 namespace pcr

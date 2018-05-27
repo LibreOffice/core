@@ -25,7 +25,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/guarding.hxx>
+#include <comphelper/property.hxx>
 
 
 namespace frm

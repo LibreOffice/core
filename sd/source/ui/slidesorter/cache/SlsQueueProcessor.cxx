@@ -21,6 +21,8 @@
 #include "SlsCacheConfiguration.hxx"
 #include "SlsRequestQueue.hxx"
 
+#include <comphelper/profilezone.hxx>
+
 namespace sd { namespace slidesorter { namespace cache {
 
 //=====  QueueProcessor  ======================================================

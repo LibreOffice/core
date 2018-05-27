@@ -53,7 +53,6 @@
 #include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileformat.h>
-#include <comphelper/types.hxx>
 #include <svl/memberid.h>
 #include <svtools/borderhelper.hxx>
 #include <rtl/ustring.hxx>

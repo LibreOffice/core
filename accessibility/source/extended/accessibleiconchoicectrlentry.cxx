@@ -35,7 +35,6 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 

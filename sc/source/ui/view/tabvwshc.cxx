@@ -76,6 +76,7 @@
 
 #include <PivotLayoutDialog.hxx>
 
+#include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 

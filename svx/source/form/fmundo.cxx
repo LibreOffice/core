@@ -52,6 +52,7 @@
 #include <sfx2/event.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 
 using namespace ::com::sun::star::uno;

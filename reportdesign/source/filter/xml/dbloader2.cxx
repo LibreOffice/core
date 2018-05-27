@@ -18,6 +18,8 @@
  */
 #include "dbloader2.hxx"
 #include <tools/urlobj.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace rptxml

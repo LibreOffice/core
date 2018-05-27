@@ -30,7 +30,6 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

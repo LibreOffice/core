@@ -26,7 +26,6 @@
 #include <ado/AConnection.hxx>
 #include <comphelper/types.hxx>
 #include <ado/Awrapado.hxx>
-#include <comphelper/property.hxx>
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>
 

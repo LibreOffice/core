@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <Tools.hxx>
 
@@ -28,7 +27,6 @@ namespace reportdesign
 {
 
     using namespace com::sun::star;
-    using namespace comphelper;
 
 uno::Reference< uno::XInterface > OFunction::create(uno::Reference< uno::XComponentContext > const & xContext)
 {

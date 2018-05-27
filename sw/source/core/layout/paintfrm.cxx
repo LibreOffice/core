@@ -91,7 +91,6 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/framelinkarray.hxx>
-#include <comphelper/sequence.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 

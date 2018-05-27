@@ -32,7 +32,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/sfxuno.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>

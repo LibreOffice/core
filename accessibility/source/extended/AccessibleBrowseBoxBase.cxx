@@ -19,7 +19,6 @@
 
 #include <extended/AccessibleBrowseBoxBase.hxx>
 #include <svtools/accessibletableprovider.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

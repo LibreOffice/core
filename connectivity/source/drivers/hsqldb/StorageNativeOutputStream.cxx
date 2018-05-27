@@ -32,7 +32,6 @@
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <comphelper/types.hxx>
 #include <hsqldb/HStorageAccess.hxx>
 #include <hsqldb/HStorageMap.hxx>
 

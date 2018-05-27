@@ -22,6 +22,7 @@
 #include <services.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/property.hxx>
 
 
 namespace frm

@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
-#include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/signaturestate.hxx>
 
 

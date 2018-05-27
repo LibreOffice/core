@@ -21,7 +21,6 @@
 #include <transliteration_Numeric.hxx>
 #include <nativenumbersupplier.hxx>
 #include <defaultnumberingprovider.hxx>
-#include <comphelper/string.hxx>
 #include <rtl/ref.hxx>
 
 using namespace com::sun::star::i18n;

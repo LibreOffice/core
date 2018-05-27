@@ -81,7 +81,6 @@
 #include <svxslots.hxx>
 
 #include <tbxform.hxx>
-#include <comphelper/property.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <memory>

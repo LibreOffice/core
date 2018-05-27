@@ -24,7 +24,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
-#include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/queryinterface.hxx>

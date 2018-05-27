@@ -31,7 +31,6 @@
 #include <com/sun/star/sdb/XRowSetChangeBroadcaster.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase7.hxx>
 
 

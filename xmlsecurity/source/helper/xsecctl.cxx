@@ -41,7 +41,6 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/datetime.hxx>
-#include <comphelper/ofopxmlhelper.hxx>
 #include <sax/tools/converter.hxx>
 #include "ooxmlsecexporter.hxx"
 #include <xmlsignaturehelper2.hxx>

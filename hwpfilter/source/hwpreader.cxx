@@ -25,7 +25,6 @@
 
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
-#include <comphelper/newarray.hxx>
 
 #include "fontmap.hxx"
 #include "formula.h"

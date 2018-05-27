@@ -26,7 +26,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

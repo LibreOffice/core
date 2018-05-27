@@ -29,8 +29,6 @@
 #include <cppuhelper/component.hxx>
 #include <editeng/editengdllapi.h>
 
-#include <comphelper/servicehelper.hxx>
-
 #include <editeng/mutxhelp.hxx>
 #include <memory>
 

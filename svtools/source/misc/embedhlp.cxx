@@ -24,7 +24,6 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <comphelper/seqstream.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>

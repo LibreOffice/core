@@ -21,7 +21,6 @@
 #include <svtools/accessibletable.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 
 
 using css::uno::Reference;

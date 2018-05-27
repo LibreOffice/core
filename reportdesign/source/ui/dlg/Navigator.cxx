@@ -37,7 +37,6 @@
 #include <rptui_slotid.hrc>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/containermultiplexer.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/SelectionMultiplex.hxx>
 #include <svtools/treelistbox.hxx>

@@ -48,7 +48,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <UITools.hxx>
 #include <strings.hrc>
 #include <osl/diagnose.h>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 #define INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 
-#include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>

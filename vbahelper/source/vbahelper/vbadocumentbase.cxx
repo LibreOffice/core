@@ -36,7 +36,6 @@
 #include <ooo/vba/XApplicationBase.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/unwrapargs.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 

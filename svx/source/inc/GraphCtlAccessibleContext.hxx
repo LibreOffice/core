@@ -41,7 +41,6 @@
 #include <set>
 #include <map>
 
-#include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>

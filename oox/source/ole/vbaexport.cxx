@@ -31,7 +31,6 @@
 
 #include <sot/storage.hxx>
 
-#include <comphelper/string.hxx>
 #include <comphelper/xmltools.hxx>
 
 #define USE_UTF8_CODEPAGE 0

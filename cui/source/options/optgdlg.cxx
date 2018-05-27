@@ -42,8 +42,6 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/configitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <comphelper/string.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/localfilehelper.hxx>

@@ -24,8 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <ooo/vba/msforms/XComboBox.hpp>
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include "vbacontrol.hxx"

@@ -52,7 +52,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-#include <comphelper/propertysetinfo.hxx>
 #include <unotools/textsearch.hxx>
 #include <cppuhelper/typeprovider.hxx>
 

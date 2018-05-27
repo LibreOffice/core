@@ -92,7 +92,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
-#include <comphelper/sequence.hxx>
 #include <utility>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"

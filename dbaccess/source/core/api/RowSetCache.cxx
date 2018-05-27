@@ -43,7 +43,6 @@
 
 #include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqliterator.hxx>

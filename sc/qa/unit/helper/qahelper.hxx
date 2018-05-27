@@ -24,7 +24,6 @@
 
 #include <unotools/tempfile.hxx>
 #include <comphelper/fileformat.h>
-#include <comphelper/storagehelper.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/stritem.hxx>

@@ -63,6 +63,7 @@
 #include <tools/gen.hxx>
 #include <svl/rectitem.hxx>
 #include <svtools/soerr.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 

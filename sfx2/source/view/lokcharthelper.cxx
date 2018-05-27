@@ -9,6 +9,7 @@
 
 #include <sfx2/lokcharthelper.hxx>
 
+#include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/lokhelper.hxx>

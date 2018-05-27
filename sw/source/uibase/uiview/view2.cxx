@@ -122,7 +122,6 @@
 #include <ndtxt.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

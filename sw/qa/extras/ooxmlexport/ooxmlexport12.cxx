@@ -55,7 +55,6 @@
 #include <vcl/bitmapaccess.hxx>
 #include <unotest/assertion_traits.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <swtypes.hxx>
 #include <drawdoc.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>

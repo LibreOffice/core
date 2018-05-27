@@ -83,6 +83,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>

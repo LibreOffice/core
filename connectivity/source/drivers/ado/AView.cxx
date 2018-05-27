@@ -22,7 +22,6 @@
 #include <ado/adoimp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <ado/Awrapado.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <TConnection.hxx>
 

@@ -38,7 +38,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/servicehelper.hxx>
 
 namespace tools { class Rectangle; }
 

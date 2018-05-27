@@ -26,7 +26,6 @@
 #include <comphelper/extract.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
-#include <comphelper/propertysetinfo.hxx>
 
 
 namespace svx
@@ -41,7 +40,6 @@ namespace svx
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::datatransfer;
-    using namespace ::comphelper;
 
     OColumnTransferable::OColumnTransferable(const OUString& _rDatasource
                                             ,const OUString& _rCommand

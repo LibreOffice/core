@@ -59,6 +59,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>

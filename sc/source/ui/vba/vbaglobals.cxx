@@ -20,8 +20,6 @@
 
 #include <sal/macros.h>
 
-#include <comphelper/unwrapargs.hxx>
-
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/component_context.hxx>

@@ -20,7 +20,6 @@
 #include <datasettings.hxx>
 #include <apitools.hxx>
 #include <stringconstants.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <vcl/svapp.hxx>

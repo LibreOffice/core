@@ -27,7 +27,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/sequence.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <memory>

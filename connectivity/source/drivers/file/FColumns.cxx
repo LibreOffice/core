@@ -24,7 +24,6 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <file/FTable.hxx>
-#include <comphelper/property.hxx>
 
 using namespace connectivity::file;
 using namespace connectivity;

@@ -24,7 +24,6 @@
 #include <oox/helper/attributelist.hxx>
 
 #include <osl/diagnose.h>
-#include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
 

@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
 
 
 namespace frm

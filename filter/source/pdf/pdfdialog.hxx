@@ -23,6 +23,7 @@
 #include "pdffilter.hxx"
 #include <svtools/genericunodialog.hxx>
 
+#include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase.hxx>
 
 

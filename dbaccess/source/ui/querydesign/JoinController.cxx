@@ -19,7 +19,6 @@
 
 #include <sfx2/sfxsids.hrc>
 #include <browserids.hxx>
-#include <comphelper/types.hxx>
 #include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -36,8 +35,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <comphelper/streamsection.hxx>
-#include <comphelper/seqstream.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <sqlmessage.hxx>

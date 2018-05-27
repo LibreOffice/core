@@ -29,10 +29,9 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
-#include <comphelper/property.hxx>
-#include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/uno3.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>

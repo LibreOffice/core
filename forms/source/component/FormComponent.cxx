@@ -41,7 +41,7 @@
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/guarding.hxx>
-#include <comphelper/listenernotification.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>

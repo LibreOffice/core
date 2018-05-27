@@ -24,7 +24,6 @@
 #include <tools/helpers.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svl/style.hxx>

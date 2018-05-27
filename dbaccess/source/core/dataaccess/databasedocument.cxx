@@ -65,10 +65,8 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <connectivity/dbtools.hxx>

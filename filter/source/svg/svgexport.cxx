@@ -32,7 +32,6 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
-#include <comphelper/lok.hxx>
 #include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
 #include <svx/unopage.hxx>

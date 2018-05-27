@@ -29,6 +29,7 @@
 #include <comphelper/extract.hxx>
 #include <TConnection.hxx>
 #include <comphelper/numbers.hxx>
+#include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 

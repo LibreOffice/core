@@ -24,7 +24,6 @@
 #include <editeng/flditem.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

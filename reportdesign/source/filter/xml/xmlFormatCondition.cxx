@@ -24,7 +24,6 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlEnums.hxx"
 #include "xmlHelper.hxx"
-#include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
@@ -32,7 +31,6 @@
 
 namespace rptxml
 {
-    using namespace ::comphelper;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;

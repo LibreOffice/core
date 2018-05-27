@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_THEEXTMGR_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_THEEXTMGR_HXX
 
-#include <comphelper/sequence.hxx>
-
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>

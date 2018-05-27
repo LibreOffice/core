@@ -27,13 +27,11 @@
 #include <strings.hxx>
 #include "xmlStyleImport.hxx"
 #include <ucbhelper/content.hxx>
-#include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 namespace rptxml
 {
-    using namespace ::comphelper;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;

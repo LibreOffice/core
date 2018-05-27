@@ -32,7 +32,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/sequence.hxx>
 #include <vcl/outdev.hxx>
 
 #include <vcl/graph.hxx>

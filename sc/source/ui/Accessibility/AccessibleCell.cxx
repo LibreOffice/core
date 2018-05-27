@@ -45,7 +45,6 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <editeng/brushitem.hxx>
-#include <comphelper/sequence.hxx>
 #include <float.h>
 #include <vcl/svapp.hxx>
 

@@ -35,9 +35,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/stl_types.hxx>
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>

@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 
 

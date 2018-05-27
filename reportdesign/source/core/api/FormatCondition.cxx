@@ -21,7 +21,6 @@
 #include <strings.hxx>
 #include <tools/color.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <Tools.hxx>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
@@ -31,7 +30,6 @@ namespace reportdesign
 {
 
     using namespace com::sun::star;
-    using namespace comphelper;
 
 uno::Reference< uno::XInterface > OFormatCondition::create(uno::Reference< uno::XComponentContext > const & xContext)
 {

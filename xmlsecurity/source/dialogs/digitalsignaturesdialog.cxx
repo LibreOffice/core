@@ -54,7 +54,6 @@
 
 #include <vcl/weld.hxx>
 #include <unotools/configitem.hxx>
-#include <comphelper/storagehelper.hxx>
 
 using namespace css::security;
 using namespace css::uno;
