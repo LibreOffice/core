@@ -42,7 +42,7 @@ public:
 
     void            ImplSetSize( sal_uInt16 nSize, bool bResize = true );
     void            ImplCreateFlagArray();
-    void            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pInitPoly = NULL );
+    bool            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pInitPoly = NULL );
 };
 
 #define MAX_POLYGONS        ((sal_uInt16)0x3FF0)
