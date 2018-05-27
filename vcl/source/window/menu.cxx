@@ -903,7 +903,7 @@ void Menu::CheckItem( sal_uInt16 nItemId, bool bCheck )
 
 void Menu::CheckItem( const OString &rIdent , bool bCheck )
 {
-    CheckItem( rIdent, bCheck );
+    CheckItem( GetItemId( rIdent ), bCheck );
 }
 
 bool Menu::IsItemChecked( sal_uInt16 nItemId ) const
