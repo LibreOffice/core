@@ -76,12 +76,10 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    OUString sRealFilter = sFilter;
-
     auto & cache = TheFilterCache::get();
 
     // search filter on cache
-    CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sRealFilter);
+    CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sFilter);
     OUString sFilterService;
     aFilter[PROPNAME_FILTERSERVICE] >>= sFilterService;
 

@@ -59,15 +59,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    OUString sRealHandler = sHandler;
-
     auto & cache = TheFilterCache::get();
 
     // search handler on cache
-    CacheItem aHandler = cache.getItem(FilterCache::E_CONTENTHANDLER, sRealHandler);
+    CacheItem aHandler = cache.getItem(FilterCache::E_CONTENTHANDLER, sHandler);
 
     // create service instance
-    xHandler = m_xContext->getServiceManager()->createInstanceWithContext(sRealHandler, m_xContext);
+    xHandler = m_xContext->getServiceManager()->createInstanceWithContext(sHandler, m_xContext);
 
     // initialize filter
     css::uno::Reference< css::lang::XInitialization > xInit(xHandler, css::uno::UNO_QUERY);
