@@ -439,8 +439,13 @@ void RTFDocumentImpl::setNeedSect(bool bNeedSect)
 
 writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms)
 {
-    int nStyle = m_aStates.top().nCurrentStyleIndex;
-    RTFReferenceTable::Entries_t::iterator it = m_aStyleTableEntries.find(nStyle);
+    RTFReferenceTable::Entries_t::iterator it = m_aStyleTableEntries.end();
+    if (!m_aStates.empty())
+    {
+        int nStyle = m_aStates.top().nCurrentStyleIndex;
+        it = m_aStyleTableEntries.find(nStyle);
+    }
+
     if (it != m_aStyleTableEntries.end())
     {
         RTFReferenceProperties& rProps = *(RTFReferenceProperties*)it->second.get();
