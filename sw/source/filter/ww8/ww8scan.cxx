@@ -1519,7 +1519,11 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
         if( 2 == clxt )                         // PLCFfpcd ?
             break;                              // PLCFfpcd gefunden
         if( 1 == clxt )                         // clxtGrpprl ?
+        {
+            if (nGrpprl == SHRT_MAX)
+                return NULL;
             nGrpprl++;
+        }
         sal_uInt16 nLen(0);
         *pStr >> nLen;
         nLeft -= 2 + nLen;
