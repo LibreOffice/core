@@ -501,7 +501,7 @@ void SvxRubyDialog::Update()
     else
         m_pAdjustLB->SetNoSelection();
     if (nPosition > -1)
-        m_pPositionLB->SelectEntryPos(nPosition ? 1 : 0);
+        m_pPositionLB->SelectEntryPos(nPosition);
     if (!nLen || (bCharStyleEqual && sCharStyleName.isEmpty()))
         sCharStyleName = "Rubies";
     if (!sCharStyleName.isEmpty())
