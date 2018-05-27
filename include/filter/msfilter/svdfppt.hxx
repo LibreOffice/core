@@ -165,6 +165,8 @@ const sal_uInt32 PPTInventor = sal_uInt32('P') * 0x00000001
                              + sal_uInt32('T') * 0x00010000
                              + sal_uInt32('0') * 0x01000000;
 
+const int nMaxPPTLevels = 5;
+
 // Object-Ids fuer StarDraw UserData
 #define PPT_OBJECTINFO_ID       (1)
 
@@ -696,7 +698,7 @@ struct PPTExtParaLevel
 
 struct PPTExtParaSheet
 {
-    PPTExtParaLevel aExtParaLevel[ 5 ];
+    PPTExtParaLevel aExtParaLevel[nMaxPPTLevels];
 };
 
 struct PPTBuGraEntry
@@ -743,7 +745,7 @@ struct PPTCharLevel
 
 struct PPTCharSheet
 {
-    PPTCharLevel    maCharLevel[ 5 ];
+    PPTCharLevel    maCharLevel[nMaxPPTLevels];
 
                     explicit PPTCharSheet( sal_uInt32 nInstance );
                     PPTCharSheet( const PPTCharSheet& rCharSheet );
@@ -776,7 +778,7 @@ struct PPTParaSheet
 {
 public:
 
-    PPTParaLevel    maParaLevel[ 5 ];
+    PPTParaLevel    maParaLevel[nMaxPPTLevels];
 
                     explicit PPTParaSheet( sal_uInt32 nInstance );
                     PPTParaSheet( const PPTParaSheet& rParaSheet );
@@ -959,8 +961,8 @@ struct PPTRuler
 
         sal_Int32           nFlags;
         sal_uInt16          nDefaultTab;
-        sal_uInt16          nTextOfs[ 5 ];
-        sal_uInt16          nBulletOfs[ 5 ];
+        sal_uInt16          nTextOfs[nMaxPPTLevels];
+        sal_uInt16          nBulletOfs[nMaxPPTLevels];
         PPTTabEntry*        pTab;
         sal_uInt16          nTabCount;
 
