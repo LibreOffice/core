@@ -435,8 +435,8 @@ namespace svxform
 
                     // set OpenReadOnly
 
-                    aContextMenu->CheckItem(aContextMenu->GetItemId("designmode"), pFormModel->GetOpenInDesignMode());
-                    aContextMenu->CheckItem(aContextMenu->GetItemId("controlfocus"), pFormModel->GetAutoControlFocus());
+                    aContextMenu->CheckItem("designmode", pFormModel->GetOpenInDesignMode());
+                    aContextMenu->CheckItem("controlfocus", pFormModel->GetAutoControlFocus());
 
                     aContextMenu->Execute(this, ptWhere);
                     OString sIdent;
