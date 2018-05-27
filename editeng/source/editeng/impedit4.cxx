@@ -221,7 +221,7 @@ ErrCode ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++  )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
-        DBG_ASSERT( pNode, "Node not founden: Search&Replace" );
+        DBG_ASSERT( pNode, "Node not found: Search&Replace" );
 
         sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pNode->Len();

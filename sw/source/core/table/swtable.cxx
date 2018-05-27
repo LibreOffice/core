@@ -1698,7 +1698,7 @@ SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
             pNewFormat->LockModify();
             *pNewFormat = *pFormat;
 
-            // Remove values and formulars
+            // Remove values and formulas
             pNewFormat->ResetFormatAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
             pNewFormat->UnlockModify();
 

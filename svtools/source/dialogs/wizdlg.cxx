@@ -76,7 +76,7 @@ void WizardDialog::SetEmptyViewMargin()
 
 void WizardDialog::ImplCalcSize( Size& rSize )
 {
-    // ButtonBar-Hoehe berechnen
+    // calculate ButtonBar height
     long                nMaxHeight = 0;
     ImplWizButtonData*  pBtnData = mpFirstBtn;
     while ( pBtnData )
@@ -90,7 +90,7 @@ void WizardDialog::ImplCalcSize( Size& rSize )
         nMaxHeight += WIZARDDIALOG_BUTTON_OFFSET_Y*2;
     rSize.AdjustHeight(nMaxHeight );
 
-    // View-Window-Groesse dazurechnen
+    // add in the view window size
     if ( mpViewWindow && mpViewWindow->IsVisible() )
     {
         Size aViewSize = mpViewWindow->GetSizePixel();

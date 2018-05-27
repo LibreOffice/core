@@ -595,7 +595,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_INSERT )
         {
-            // you can only set InsertModus for a PatternField if the
+            // you can only set InsertMode for a PatternField if the
             // mask is equal at all input positions
             if ( !bSameMask )
             {

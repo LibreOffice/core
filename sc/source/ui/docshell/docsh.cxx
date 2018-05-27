@@ -2164,7 +2164,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     {
                         // This is nasty. The Unicode to byte encoding
                         // may convert typographical quotation marks to ASCII
-                        // quotation marks, which may interfer with the delimiter,
+                        // quotation marks, which may interfere with the delimiter,
                         // so we have to escape delimiters after the string has
                         // been encoded. Since this may happen also with UTF-8
                         // encoded typographical quotation marks if such was
@@ -3190,7 +3190,7 @@ void ScDocShellModificator::SetDocumentModified()
     rDoc.PrepareFormulaCalc();
     if ( !rDoc.IsImportingXML() )
     {
-        // AutoCalcShellDisabled temporaer restaurieren
+        // temporarily restore AutoCalcShellDisabled
         bool bDisabled = rDoc.IsAutoCalcShellDisabled();
         rDoc.SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
         rDocShell.SetDocumentModified();

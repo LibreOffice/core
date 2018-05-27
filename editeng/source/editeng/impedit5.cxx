@@ -267,7 +267,7 @@ void ImpEditEngine::UndoActionEnd()
 
 void ImpEditEngine::InsertUndo( EditUndo* pUndo, bool bTryMerge )
 {
-    DBG_ASSERT( !IsInUndo(), "InsertUndo in Undomodus!" );
+    DBG_ASSERT( !IsInUndo(), "InsertUndo in Undo mode!" );
     if ( pUndoMarkSelection )
     {
         EditUndoMarkSelection* pU = new EditUndoMarkSelection(pEditEngine, *pUndoMarkSelection);
@@ -525,7 +525,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
         bool bParaAttribFound = false;
         bool bCharAttribFound = false;
 
-        DBG_ASSERT( aEditDoc.GetObject( nNode ), "Node not founden: SetAttribs" );
+        DBG_ASSERT( aEditDoc.GetObject( nNode ), "Node not found: SetAttribs" );
         DBG_ASSERT( GetParaPortions().SafeGetObject( nNode ), "Portion not found: SetAttribs" );
 
         ContentNode* pNode = aEditDoc.GetObject( nNode );

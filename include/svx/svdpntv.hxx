@@ -503,7 +503,7 @@ public:
 #endif
 
     /// Must be called by the App when scrolling etc. in order for
-    /// an active FormularControl to be moved too
+    /// an active FormControl to be moved too
     void VisAreaChanged(const OutputDevice* pOut);
     void VisAreaChanged();
 

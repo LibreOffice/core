@@ -81,7 +81,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
         {
             const XFormTextDistanceItem* pStateItem =
                                 dynamic_cast<const XFormTextDistanceItem*>( pItem );
-            DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextDistanceItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextDistanceItem expected");
             rFontWorkDlg.SetDistance_Impl(pStateItem);
             break;
         }

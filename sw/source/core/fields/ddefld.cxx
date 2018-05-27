@@ -161,7 +161,7 @@ void SwIntrnlRefLink::Closed()
         else
         {
             pSh->StartAction();
-            // am Doc aufrufen ??
+            // to call at the doc ??
             pSh->EndAction();
         }
     }

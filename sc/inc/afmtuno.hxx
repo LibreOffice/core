@@ -100,7 +100,7 @@ public:
                             ScAutoFormatObj(sal_uInt16 nIndex);
     virtual                 ~ScAutoFormatObj() override;
 
-                            // per getImplementation gerufen:
+                            // called via getImplementation:
     bool                    IsInserted() const      { return nFormatIndex != SC_AFMTOBJ_INVALID; }
     void                    InitFormat( sal_uInt16 nNewIndex );
 

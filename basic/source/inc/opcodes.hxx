@@ -91,11 +91,11 @@ enum class SbiOpcode {
 
     SbOP1_START = NUMBER_,
 
-    SCONST_,            // loading a stringconstant (+ID)
+    SCONST_,            // loading a string constant (+ID)
     CONST_,             // Immediate Load (+ value)
     ARGN_,              // saving a named Arg in Argv (+StringID)
     PAD_,               // bring string to a firm length (+length)
-    // Verzweigungen
+    // branch
     JUMP_,              // jump (+target)
     JUMPT_,             // evaluate TOS, conditional jump (+target)
     JUMPF_,             // evaluate TOS, conditional jump  (+target)
@@ -109,7 +109,7 @@ enum class SbiOpcode {
     // E/A
     CLOSE_,             // (+channel/0)
     PRCHAR_,            // (+char)
-    // Verwaltung
+    // management
     SETCLASS_,          // test set + class names (+StringId)
     TESTCLASS_,         // Check TOS class (+StringId)
     LIB_,               // set lib name for declare-procs (+StringId)

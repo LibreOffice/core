@@ -484,7 +484,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         rViewShell.GetViewData().GetDispatcher().
                             Execute(nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
-                        // Get the created FuText now and change into EditModus
+                        // Get the created FuText now and change into EditMode
                         FuPoor* pPoor = rViewShell.GetViewData().GetView()->GetDrawFuncPtr();
                         if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // has no RTTI
                         {

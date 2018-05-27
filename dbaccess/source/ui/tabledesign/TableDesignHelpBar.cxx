@@ -55,10 +55,10 @@ void OTableDesignHelpBar::SetHelpText( const OUString& rText )
 
 void OTableDesignHelpBar::Resize()
 {
-    // Abmessungen parent window
+    // parent window dimensions
     Size aOutputSize( GetOutputSizePixel() );
 
-    // TextWin anpassen
+    // adapt the TextWin
     if(m_pTextWin)
         m_pTextWin->SetPosSizePixel( Point(STANDARD_MARGIN+1, STANDARD_MARGIN+1),
             Size(aOutputSize.Width()-(2*STANDARD_MARGIN)-2,

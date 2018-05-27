@@ -1003,14 +1003,14 @@ void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
     VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/colsmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
-    // let derivees modify the menu
+    // let derivatives modify the menu
     PreExecuteColumnContextMenu( nColId, *aContextMenu );
     aContextMenu->RemoveDisabledEntries( true, true );
 
     // execute the menu
     sal_uInt16 nResult = aContextMenu->Execute( this, _rPreferredPos );
 
-    // let derivees handle the result
+    // let derivatives handle the result
     PostExecuteColumnContextMenu( nColId, *aContextMenu, nResult );
 }
 
@@ -1453,7 +1453,7 @@ void FmGridControl::markColumn(sal_uInt16 nId)
 {
     if (GetHeaderBar() && m_nMarkedColumnId != nId)
     {
-        // deselektieren
+        // deselect
         if (m_nMarkedColumnId != BROWSER_INVALIDID)
         {
             HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(m_nMarkedColumnId) & ~HeaderBarItemBits::FLAT;
@@ -1824,11 +1824,11 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
     {
         Any* pBookmarks = aBookmarks.getArray();
 
-        // (I'm not sure if the problem isn't deeper : The szenario : a large table displayed by a grid with a
+        // (I'm not sure if the problem isn't deeper: The scenario: a large table displayed by a grid with a
         // thread-safe cursor (dBase). On loading the sdb-cursor started a counting thread. While this counting progress
         // was running, I tried do delete 3 records from within the grid. Deletion caused a SeekCursor, which did a
         // m_pSeekCursor->moveRelative and a m_pSeekCursor->getPosition.
-        // Unfortunally the first call caused a propertyChanged(RECORDCOUNT) which resulted in a repaint of the
+        // Unfortunately the first call caused a propertyChanged(RECORDCOUNT) which resulted in a repaint of the
         // navigation bar and the grid. The latter itself will result in SeekRow calls. So after (successfully) returning
         // from the moveRelative the getPosition returns an invalid value. And so the SeekCursor fails.
         // In the consequence ALL parts of code where two calls to the seek cursor are done, while the second call _relies_ on

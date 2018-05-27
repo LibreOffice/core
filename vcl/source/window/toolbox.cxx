@@ -1043,7 +1043,7 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
     mnLineMode = nDragLineMode;
     mnStartLines = pToolBox->mnDockLines;
 
-    // MouseOffset berechnen
+    // calculate MouseOffset
     maMouseOff.setX( rRect.Left() - rPos.X() );
     maMouseOff.setY( rRect.Top() - rPos.Y() );
     maRect = rRect;

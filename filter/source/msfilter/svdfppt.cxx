@@ -826,12 +826,12 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
                     switch( eTextFlow )
                     {
-                        case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
+                        case mso_txflBtoT :                     // Bottom to Top non-@
                             nTextRotationAngle += 9000;
                         break;
-                        case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
-                        case mso_txflTtoBN :                    // Top to Bottom non-@, oben -> unten
-                        case mso_txflVertN :                    // Vertical, non-@, oben -> unten
+                        case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font
+                        case mso_txflTtoBN :                    // Top to Bottom non-@
+                        case mso_txflVertN :                    // Vertical, non-@, top to bottom
                             bVerticalText = !bVerticalText;     // nTextRotationAngle += 27000;
                         break;
     //                  case mso_txflHorzN :                    // Horizontal non-@, normal

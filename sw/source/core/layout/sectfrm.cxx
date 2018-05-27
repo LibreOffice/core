@@ -2837,7 +2837,7 @@ void SwRootFrame::DeleteEmptySct_()
             }
         }
         else {
-            OSL_ENSURE( pSect->GetSection(), "DeleteEmptySct: Halbtoter SectionFrame?!" );
+            OSL_ENSURE( pSect->GetSection(), "DeleteEmptySct: Half-dead SectionFrame?!" );
         }
     }
 }
