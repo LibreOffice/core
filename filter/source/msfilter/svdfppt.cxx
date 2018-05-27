@@ -4058,13 +4058,13 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             rIn >> aTxMasterStyleHd;
             if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
             {
-                sal_uInt16 nLevelAnz;
+                sal_uInt16 nLevelAnz(0);
                 rIn >> nLevelAnz;
 
                 sal_uInt16 nLev = 0;
                 sal_Bool bFirst = sal_True;
                 bFoundTxMasterStyleAtom04 = sal_True;
-                while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
+                while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz && nLev < nMaxPPTLevels)
                 {
                     if ( nLev )
                     {
