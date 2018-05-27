@@ -101,17 +101,22 @@ void LwpTocSuperLayout::Read()
 
     m_SearchItems.Read(m_pObjStrm);
 
-    sal_uInt16 i;
     sal_uInt16 count = m_pObjStrm->QuickReaduInt16();
-    for (i = 0; (i < MAX_LEVELS) && (count > 0); i++, count--)
+    if (count > MAX_LEVELS)
+        throw std::range_error("corrupt LwpTocSuperLayout");
+    for (sal_uInt16 i = 0; i < count; ++i)
         m_DestName[i].Read(m_pObjStrm);
 
     count = m_pObjStrm->QuickReaduInt16();
-    for (i = 0; (i < MAX_LEVELS) && (count > 0); i++, count--)
+    if (count > MAX_LEVELS)
+        throw std::range_error("corrupt LwpTocSuperLayout");
+    for (sal_uInt16 i = 0; i < count; ++i)
         m_DestPGName[i].Read(m_pObjStrm);
 
     count = m_pObjStrm->QuickReaduInt16();
-    for (i = 0; i < count; i++)
+    if (count > MAX_LEVELS)
+        throw std::range_error("corrupt LwpTocSuperLayout");
+    for (sal_uInt16 i = 0; i < count; ++i)
         m_nFlags[i] = m_pObjStrm->QuickReaduInt32();
 
     m_pObjStrm->SkipExtra();
