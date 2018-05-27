@@ -36,6 +36,7 @@
 #include <tools/datetime.hxx>
 
 #include <sfx2/viewsh.hxx>
+#include <svx/svdundo.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 

@@ -48,6 +48,7 @@
 #include <DrawController.hxx>
 #include <customshowlist.hxx>
 #include <unopage.hxx>
+#include <sdpage.hxx>
 
 using ::com::sun::star::presentation::XSlideShowController;
 using ::sd::framework::FrameworkHelper;

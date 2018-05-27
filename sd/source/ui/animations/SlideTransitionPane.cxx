@@ -28,6 +28,7 @@
 #include <DrawDocShell.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <filedlg.hxx>
 #include <strings.hrc>
 #include <DrawController.hxx>

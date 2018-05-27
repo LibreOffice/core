@@ -20,14 +20,12 @@
 #ifndef INCLUDED_SD_INC_OUTLINER_HXX
 #define INCLUDED_SD_INC_OUTLINER_HXX
 
-#include <svx/svdobj.hxx>
 #include <svx/svdoutl.hxx>
 #include "pres.hxx"
 #include "OutlinerIterator.hxx"
 #include <editeng/SpellPortions.hxx>
 #include <memory>
 
-class Dialog;
 class SdrObject;
 class SdrTextObj;
 class SdDrawDocument;

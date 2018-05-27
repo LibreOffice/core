@@ -36,6 +36,7 @@
 #include <ViewTabBar.hxx>
 #include <sfx2/event.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>

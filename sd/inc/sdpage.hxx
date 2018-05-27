@@ -24,15 +24,12 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 
-#include <functional>
-#include <list>
 #include <memory>
 #include <vector>
 #include <editeng/flditem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
 #include <xmloff/autolayout.hxx>
-#include "fadedef.h"
 #include "diadef.h"
 #include "pres.hxx"
 #include "shapelist.hxx"

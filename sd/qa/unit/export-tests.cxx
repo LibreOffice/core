@@ -8,6 +8,8 @@
  */
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
+#include <sdpage.hxx>
+
 #include <Outliner.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
