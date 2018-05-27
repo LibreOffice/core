@@ -77,11 +77,11 @@ struct BAREHWPDOProperty
     int line_pstyle;
     int line_hstyle;
     int line_tstyle;
-    DWORD line_color;
+    unsigned int line_color;
     hunit line_width;
-    DWORD fill_color;
+    unsigned int fill_color;
     uint pattern_type;
-    DWORD pattern_color;
+    unsigned int pattern_color;
     hunit hmargin;
     hunit vmargin;
     uint flag;
@@ -127,14 +127,14 @@ struct RotationProperty
  */
 struct HWPDOProperty
 {
-    int line_pstyle; /* 선 중간 모양 */
-    int line_hstyle; /* 끝 화살표 모양 */
-    int line_tstyle; /* 시작 모양 */
-    DWORD line_color;
+    int line_pstyle;
+    int line_hstyle;
+    int line_tstyle;
+    unsigned int line_color;
     hunit line_width;
-    DWORD fill_color;
+    unsigned int fill_color;
     uint pattern_type;
-    DWORD pattern_color;
+    unsigned int pattern_color;
     hunit hmargin;
     hunit vmargin;
     uint flag;

@@ -46,9 +46,11 @@ class DLLEXPORT HIODev
 /* gzip routine wrapper */
         virtual bool setCompressed( bool ) = 0;
 
-        virtual int read1b() = 0;
-        virtual int read2b() = 0;
-        virtual long read4b() = 0;
+        virtual bool read1b(unsigned char &out) = 0;
+        virtual bool read1b(char &out) = 0;
+        virtual bool read2b(unsigned short &out) = 0;
+        virtual bool read4b(unsigned int &out) = 0;
+        virtual bool read4b(int &out) = 0;
         virtual int readBlock( void *ptr, int size ) = 0;
         virtual int skipBlock( int size ) = 0;
 
@@ -98,17 +100,19 @@ class HStreamIODev : public HIODev
  * Read one byte from stream
  */
         using HIODev::read1b;
-        virtual int read1b();
+        virtual bool read1b(unsigned char &out);
+        virtual bool read1b(char &out);
 /**
  * Read 2 bytes from stream
  */
         using HIODev::read2b;
-        virtual int read2b();
+        virtual bool read2b(unsigned short &out);
 /**
  * Read 4 bytes from stream
  */
         using HIODev::read4b;
-        virtual long read4b();
+        virtual bool read4b(unsigned int &out);
+        virtual bool read4b(int &out);
 /**
  * Read some bytes from stream to given pointer as amount of size
  */
@@ -144,11 +148,13 @@ class HMemIODev : public HIODev
 /* gzip routine wrapper */
         virtual bool setCompressed( bool );
         using HIODev::read1b;
-        virtual int read1b();
+        virtual bool read1b(unsigned char &out);
+        virtual bool read1b(char &out);
         using HIODev::read2b;
-        virtual int read2b();
+        virtual bool read2b(unsigned short &out);
         using HIODev::read4b;
-        virtual long read4b();
+        virtual bool read4b(unsigned int &out);
+        virtual bool read4b(int &out);
         virtual int readBlock( void *ptr, int size );
         virtual int skipBlock( int size );
     protected:

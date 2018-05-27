@@ -61,12 +61,12 @@ int SkipData::Read(HWPFile & hwpf)
 // Field code(5)
 int FieldCode::Read(HWPFile & hwpf)
 {
-    ulong size;
+    uint size;
     hchar dummy;
-    ulong len1;       /* hcharÅ¸ÀÔÀÇ ¹®ÀÚ¿­ Å×ÀÌÅÍ #1ÀÇ ±æÀÌ */
-    ulong len2;       /* hcharÅ¸ÀÔÀÇ ¹®ÀÚ¿­ Å×ÀÌÅÍ #2ÀÇ ±æÀÌ */
-    ulong len3;       /* hcharÅ¸ÀÔÀÇ ¹®ÀÚ¿­ Å×ÀÌÅÍ #3ÀÇ ±æÀÌ */
-    ulong binlen;     /* ÀÓÀÇ Çü½ÄÀÇ ¹ÙÀÌ³Ê¸® µ¥ÀÌÅ¸ ±æÀÌ */
+    uint len1;       /* hcharíƒ€ì…ì˜ ë¬¸ìì—´ í…Œì´í„° #1ì˜ ê¸¸ì´ */
+    uint len2;       /* hcharíƒ€ì…ì˜ ë¬¸ìì—´ í…Œì´í„° #2ì˜ ê¸¸ì´ */
+    uint len3;       /* hcharíƒ€ì…ì˜ ë¬¸ìì—´ í…Œì´í„° #3ì˜ ê¸¸ì´ */
+    uint binlen;     /* ì„ì˜ í˜•ì‹ì˜ ë°”ì´ë„ˆë¦¬ ë°ì´íƒ€ ê¸¸ì´ */
 
     hwpf.Read4b(&size, 1);
     hwpf.Read2b(&dummy, 1);
@@ -79,9 +79,9 @@ int FieldCode::Read(HWPFile & hwpf)
     hwpf.Read4b(&len3, 1);
     hwpf.Read4b(&binlen, 1);
 
-    ulong const len1_ = ((len1 > 1024) ? 1024 : len1) / sizeof(hchar);
-    ulong const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
-    ulong const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
+    uint const len1_ = ((len1 > 1024) ? 1024 : len1) / sizeof(hchar);
+    uint const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
+    uint const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
 
     str1 = new hchar[len1_ ? len1_ : 1];
     str2 = new hchar[len2_ ? len2_ : 1];
@@ -114,14 +114,14 @@ int FieldCode::Read(HWPFile & hwpf)
     return true;
 }
 
-
 // book mark(6)
 int Bookmark::Read(HWPFile & hwpf)
 {
     long len;
 
     hwpf.Read4b(&len, 1);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
 
     if (!(len == 34))// 2 * (BMK_COMMENT_LEN + 1) + 2
      {
@@ -133,17 +133,15 @@ int Bookmark::Read(HWPFile & hwpf)
 
     hwpf.Read2b(id, BMK_COMMENT_LEN + 1);
     hwpf.Read2b(&type, 1);
-//return hwpf.Read2b(&type, 1);
     return 1;
 }
 
-
 // date format(7)
-
 int DateFormat::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_DATE_FORM == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -157,7 +155,8 @@ int DateCode::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
     hwpf.Read2b(date, 6);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_DATE_CODE == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -165,29 +164,29 @@ int DateCode::Read(HWPFile & hwpf)
     return true;
 }
 
-
 // tab(9)
-
 int Tab::Read(HWPFile & hwpf)
 {
-    width = hwpf.Read2b();
-    leader = sal::static_int_cast<unsigned short>(hwpf.Read2b());
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    width = tmp16;
+    if (!hwpf.Read2b(leader))
+        return false;
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_TAB == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return true;
 }
 
-
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
-
 static void UpdateBBox(FBox * fbox)
 {
     fbox->boundsy = fbox->pgy;
     fbox->boundey = fbox->pgy + fbox->ys - 1;
 }
-
 
 void Cell::Read(HWPFile & hwpf)
 {
@@ -411,15 +410,24 @@ int Picture::Read(HWPFile & hwpf)
     hwpf.Read2b(&cap_pos, 1);                     /* Ä¸¼ÇÀ§Ä¡ 0 - 7 ¸Ş´º¼ø¼­. */
     hwpf.Read2b(&num, 1);                         /* ¹Ú½º¹øÈ£ 0ºÎÅÍ ½ÃÀÛÇØ¼­ ¸Å±äÀÏ·Ã¹øÈ£ */
 
-    hwpf.Read1b(&pictype, 1);                     /* ±×¸²Á¾·ù */
+    hwpf.Read1b(&pictype, 1);
 
-    skip[0] = (short) hwpf.Read2b();              /* ±×¸²¿¡¼­ ½ÇÁ¦ Ç¥½Ã¸¦ ½ÃÀÛÇÒ À§Ä¡ °¡·Î */
-    skip[1] = (short) hwpf.Read2b();              /* ¼¼·Î */
-    scale[0] = (short) hwpf.Read2b();             /* È®´ëºñÀ² : 0 °íÁ¤, ÀÌ¿Ü ÆÛ¼¾Æ® ´ÜÀ§ °¡·Î */
-    scale[1] = (short) hwpf.Read2b();             /* ¼¼·Î */
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* ê·¸ë¦¼ì—ì„œ ì‹¤ì œ í‘œì‹œë¥¼ ì‹œì‘í•  ìœ„ì¹˜ ê°€ë¡œ */
+        return false;
+    skip[0] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* ì„¸ë¡œ */
+        return false;
+    skip[1] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* í™•ëŒ€ë¹„ìœ¨ : 0 ê³ ì •, ì´ì™¸ í¼ì„¼íŠ¸ ë‹¨ìœ„ ê°€ë¡œ */
+        return false;
+    scale[0] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* ì„¸ë¡œ */
+        return false;
+    scale[1] = tmp16;
 
-    hwpf.Read1b(picinfo.picun.path, 256);         /* ±×¸²ÆÄÀÏ ÀÌ¸§ : Á¾·ù°¡ DrawingÀÌ ¾Æ´Ò¶§. */
-    hwpf.Read1b(reserved3, 9);                    /* ¹à±â/¸í¾Ï/±×¸²È¿°ú µî */
+    hwpf.Read1b(picinfo.picun.path, 256);
+    hwpf.Read1b(reserved3, 9);
 
     UpdateBBox(this);
     if( pictype != PICTYPE_DRAW )
@@ -589,7 +597,10 @@ int Footnote::Read(HWPFile & hwpf)
     hwpf.Read1b(info, 8);
     hwpf.Read2b(&number, 1);
     hwpf.Read2b(&type, 1);
-    width = (short) hwpf.Read2b();
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    width = tmp16;
     hwpf.ReadParaList(plist, CH_FOOTNOTE);
 
     return !hwpf.State();

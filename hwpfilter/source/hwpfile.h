@@ -124,15 +124,17 @@ class DLLEXPORT HWPFile
 /**
  * Reads one byte from HIODev
  */
-        int Read1b( void );
+        bool Read1b(char &out);
+        bool Read1b(unsigned char &out);
 /**
  * Reads two byte from HIODev
  */
-        int Read2b( void );
+        bool Read2b(unsigned short &out);
 /**
  * Reads four byte from HIODev
  */
-        long Read4b( void );
+        bool Read4b(unsigned int &out);
+        bool Read4b(int &out);
 /**
  * Reads nmemb byte array from HIODev
  */
@@ -191,7 +193,7 @@ class DLLEXPORT HWPFile
 /**
  * Reads additional information like embeded image of hwp file from HIODev
  */
-        bool TagsRead(void);
+        void TagsRead();
 
         enum Paper
         {
