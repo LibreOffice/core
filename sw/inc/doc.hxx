@@ -796,7 +796,7 @@ public:
     virtual void SetVisibleLinks(bool bFlag);
     virtual sfx2::LinkManager& GetLinkManager();
     virtual const sfx2::LinkManager& GetLinkManager() const;
-    virtual void UpdateLinks(bool bUI);
+    virtual void UpdateLinks();
     virtual bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const;
     virtual bool SetData(const OUString& rItem, const OUString& rMimeType, const ::com::sun::star::uno::Any& rValue);
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem);

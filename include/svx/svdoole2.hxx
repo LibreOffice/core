@@ -30,6 +30,8 @@
 #include <vcl/gdimtf.hxx>
 #include <sot/storage.hxx>
 #include <svx/svxdllapi.h>
+#include <sfx2/lnkbase.hxx>
+#include <sfx2/linkmgr.hxx>
 
 //************************************************************
 //   SdrOle2Obj
@@ -191,6 +193,21 @@ public:
 
     // #i118485# missing converter added
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+};
+
+class SVX_DLLPUBLIC SdrEmbedObjectLink : public sfx2::SvBaseLink
+{
+    SdrOle2Obj*         pObj;
+
+public:
+    explicit            SdrEmbedObjectLink(SdrOle2Obj* pObj);
+    virtual             ~SdrEmbedObjectLink();
+
+    virtual void        Closed() override;
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+
+    bool                Connect() { return GetRealObject() != nullptr; }
 };
 
 #endif // INCLUDED_SVX_SVDOOLE2_HXX
