@@ -1,3 +1,5 @@
 [libfuzzer]
 max_len = 65536
 dict = xml.dict
+[env]
+AFL_DRIVER_DONT_DEFER=1
