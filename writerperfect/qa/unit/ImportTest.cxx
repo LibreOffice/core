@@ -95,9 +95,12 @@ WpftLoader ImportTest::createLoader(const rtl::OUString& rUrl,
     aDesc[utl::MediaDescriptor::PROP_URL()] <<= rUrl;
     aDesc[utl::MediaDescriptor::PROP_READONLY()] <<= true;
     uno::Sequence<beans::PropertyValue> lDesc(aDesc.getAsConstPropertyValueList());
-    const rtl::OUString sType = m_xTypeDetection->queryTypeByDescriptor(lDesc, true);
-    CPPUNIT_ASSERT(!sType.isEmpty());
-    const uno::Reference<document::XFilter> xFilter(m_xFilterFactory->createInstance(sType),
+    m_xTypeDetection->queryTypeByDescriptor(lDesc, true);
+    aDesc = lDesc;
+    rtl::OUString sFilter;
+    aDesc[utl::MediaDescriptor::PROP_FILTERNAME()] >>= sFilter;
+    CPPUNIT_ASSERT(!sFilter.isEmpty());
+    const uno::Reference<document::XFilter> xFilter(m_xFilterFactory->createInstance(sFilter),
                                                     UNO_QUERY);
     CPPUNIT_ASSERT(xFilter.is());
     return WpftLoader(rUrl, xFilter, rFactoryUrl, m_xDesktop, m_xTypeMap, m_xContext);
