@@ -775,7 +775,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
             if (eState >= SfxItemState::DEFAULT && pItem.get() != nullptr )
             {
                 bool bChecked = dynamic_cast<const SfxBoolItem*>( pItem.get()) != nullptr && static_cast<SfxBoolItem*>(pItem.get())->GetValue();
-                rMenu.CheckItem(rMenu.GetItemId("column"), bChecked);
+                rMenu.CheckItem("column", bChecked);
             }
         }
     }
