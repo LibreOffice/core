@@ -16,6 +16,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>

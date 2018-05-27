@@ -76,12 +76,14 @@
 #include <GraphicDocShell.hxx>
 #include <strings.hrc>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <sdgrffilter.hxx>
 #include <sdxfer.hxx>
 #include <vcl/svapp.hxx>
 #include <undo/undoobjects.hxx>
 #include <memory>
 #include <vcl/weld.hxx>
+#include <vcl/errinf.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>

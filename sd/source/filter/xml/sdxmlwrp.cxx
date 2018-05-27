@@ -29,6 +29,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <Outliner.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/dialmgr.hxx>

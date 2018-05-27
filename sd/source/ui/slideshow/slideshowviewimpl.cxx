@@ -19,6 +19,7 @@
 
 #include "slideshowviewimpl.hxx"
 #include "slideshowimpl.hxx"
+#include <sdpage.hxx>
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/awt/Pointer.hpp>

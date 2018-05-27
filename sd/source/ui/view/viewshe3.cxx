@@ -43,6 +43,7 @@
 #include <sfx2/bindings.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
+#include <svx/svdundo.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>
 #include <tools/multisel.hxx>

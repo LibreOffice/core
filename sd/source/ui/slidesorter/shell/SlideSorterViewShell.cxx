@@ -39,6 +39,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <ViewShellBase.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <app.hrc>
 #include <sdattr.hrc>
 #include <AccessibleSlideSorterView.hxx>

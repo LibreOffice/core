@@ -23,6 +23,7 @@
 #include <DocumentRenderer.hrc>
 
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <optsitem.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>

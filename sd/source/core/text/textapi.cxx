@@ -31,6 +31,7 @@
 #include <editeng/unoipset.hxx>
 #include <Outliner.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/svdundo.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

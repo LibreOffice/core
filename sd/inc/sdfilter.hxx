@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SD_INC_SDFILTER_HXX
 #define INCLUDED_SD_INC_SDFILTER_HXX
 
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 
 // SdFilter
 class SfxMedium;

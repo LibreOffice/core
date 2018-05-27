@@ -20,10 +20,8 @@
 #ifndef INCLUDED_SD_INC_SDGRFFILTER_HXX
 #define INCLUDED_SD_INC_SDGRFFILTER_HXX
 
-#include <com/sun/star/drawing/XShape.hpp>
-
-#include <vcl/errinf.hxx>
 #include "sdfilter.hxx"
+class ErrCode;
 
 // SdCGMFilter
 class SdGRFFilter : public SdFilter

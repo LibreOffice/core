@@ -23,6 +23,7 @@
 
 // arrange Tab-Page
 
+#include <sfx2/sfxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svl/itempool.hxx>

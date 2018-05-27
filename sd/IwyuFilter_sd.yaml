@@ -26,9 +26,24 @@ blacklist:
     sd/inc/OutlinerIterator.hxx:
     # base class has to be a complete type
     - svx/svdobj.hxx
+    sd/inc/drawdoc.hxx:
+    # base class has to be a complete type
+    - com/sun/star/text/WritingMode.hpp
     sd/inc/sderror.hxx:
     # needed for defines
     - vcl/errcode.hxx
+    sd/inc/sdfilter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/task/XStatusIndicator.hpp
+    sd/inc/sdmod.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    - sot/storage.hxx
+    sd/inc/sdpage.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XDrawPage.hpp
+    - com/sun/star/office/XAnnotation.hpp
     sd/inc/stlfamily.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp

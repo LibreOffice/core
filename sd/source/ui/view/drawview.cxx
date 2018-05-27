@@ -41,6 +41,7 @@
 #include <stlsheet.hxx>
 
 #include <svx/svdoutl.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 

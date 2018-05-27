@@ -28,6 +28,7 @@
 #include <strings.hxx>
 
 #include <drawdoc.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <OutlineViewShell.hxx>
 #include <ViewShell.hxx>
 #include <Window.hxx>

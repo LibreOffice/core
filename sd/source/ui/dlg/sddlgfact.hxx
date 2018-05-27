@@ -21,6 +21,7 @@
 
 #include <sdabstdlg.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)            \
     ScopedVclPtr<DialogClass> pDlg;                     \

@@ -36,6 +36,7 @@
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <drawview.hxx>
 #include <DrawViewShell.hxx>
 #include <ViewShellBase.hxx>

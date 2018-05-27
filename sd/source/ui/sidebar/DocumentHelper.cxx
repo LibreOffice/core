@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <stlpool.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/svdundo.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/autolayout.hxx>
 
