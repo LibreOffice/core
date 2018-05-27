@@ -20,19 +20,17 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ACCESSIBLECHARTVIEW_HXX
 
 #include "AccessibleBase.hxx"
-#include <MutexContainer.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 
 namespace accessibility
 {
@@ -41,8 +39,6 @@ class IAccessibleViewForwarder;
 
 namespace chart
 {
-
-class ExplicitValueProvider;
 
 namespace impl
 {

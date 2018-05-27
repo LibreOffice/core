@@ -21,14 +21,9 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ERRORBARITEMCONVERTER_HXX
 
 #include "ItemConverter.hxx"
-#include "GraphicPropertyItemConverter.hxx"
-#include <NumberFormatterWrapper.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#include <memory>
-#include <vector>
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 class SdrModel;
 
