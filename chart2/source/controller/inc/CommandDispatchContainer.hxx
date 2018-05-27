@@ -19,16 +19,18 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCHCONTAINER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCHCONTAINER_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
-
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 #include <set>
 #include <map>
+#include <vector>
+
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XDispatch; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace frame { struct DispatchDescriptor; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace util { struct URL; } } } }
 
 namespace chart
 {

@@ -21,11 +21,11 @@
 
 #include <memory>
 #include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
 #include <svl/itemset.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include "res_ErrorBar.hxx"
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace chart
 {

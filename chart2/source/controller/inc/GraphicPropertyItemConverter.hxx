@@ -20,8 +20,8 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_GRAPHICPROPERTYITEMCONVERTER_HXX
 
 #include "ItemConverter.hxx"
-#include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 class SdrModel;
 

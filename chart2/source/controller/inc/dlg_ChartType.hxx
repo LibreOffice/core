@@ -20,10 +20,8 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CHARTTYPE_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace chart
 {

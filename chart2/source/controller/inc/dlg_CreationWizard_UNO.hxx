@@ -22,17 +22,20 @@
 
 #include <MutexContainer.hxx>
 #include <cppuhelper/component.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/link.hxx>
-#include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
+
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+
+class VclWindowEvent;
 
 namespace chart
 {

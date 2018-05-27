@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CHARACTERPROPERTYITEMCONVERTER_HXX
 
 #include "ItemConverter.hxx"
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
 #include <boost/optional.hpp>

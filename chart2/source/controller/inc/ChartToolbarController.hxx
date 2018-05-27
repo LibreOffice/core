@@ -18,8 +18,9 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
+
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XFramesSupplier; } } } }
 
 namespace chart {
 

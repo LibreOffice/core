@@ -22,13 +22,14 @@
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
 
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/color.hxx>
 
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 class SdrModel;
 

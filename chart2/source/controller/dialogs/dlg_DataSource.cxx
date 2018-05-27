@@ -28,6 +28,7 @@
 #include "tp_DataSource.hxx"
 
 #include <vcl/layout.hxx>
+#include <vcl/tabctrl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

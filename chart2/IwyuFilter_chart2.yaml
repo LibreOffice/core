@@ -256,3 +256,35 @@ blacklist:
     chart2/source/view/inc/VPolarTransformation.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XTransformation.hpp
+    chart2/source/controller/inc/AccessibleTextHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    chart2/source/controller/inc/AccessibleChartView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/controller/inc/AccessibleBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    chart2/source/controller/inc/CharacterPropertyItemConverter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/Size.hpp
+    chart2/source/controller/inc/ChartToolbarController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp
+    - com/sun/star/frame/XToolbarController.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XUpdatable.hpp
+    chart2/source/controller/inc/ChartController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XDispatchProvider.hpp
+    - com/sun/star/frame/XLayoutManagerListener.hpp
+    - com/sun/star/ui/XContextMenuInterception.hpp
+    - com/sun/star/util/XModeChangeListener.hpp

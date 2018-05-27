@@ -20,14 +20,17 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATASOURCE_HXX
 
 #include <vcl/tabdlg.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/button.hxx>
+#include <vcl/vclptr.hxx>
 
 #include "TabPageNotifiable.hxx"
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 #include <memory>
+
+class TabPage;
 
 namespace chart
 {

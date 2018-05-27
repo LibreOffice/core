@@ -60,6 +60,7 @@
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
+#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/document/XUndoAction.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>

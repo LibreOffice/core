@@ -21,27 +21,25 @@
 
 #include <ObjectIdentifier.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ref.hxx>
 
 #include <map>
-#include <memory>
 #include <vector>
 
 #include <MutexContainer.hxx>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
+namespace utl { class AccessibleStateSetHelper; }
+
 
 class SdrView;
 

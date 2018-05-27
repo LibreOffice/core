@@ -21,7 +21,6 @@
 
 #include "res_Titles.hxx"
 #include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
 #include <memory>
 
 namespace chart

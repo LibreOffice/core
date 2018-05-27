@@ -20,12 +20,10 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CHARTTYPE_UNO_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CHARTTYPE_UNO_HXX
 
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <vcl/vclevent.hxx>
-
 #include <svtools/genericunodialog.hxx>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
 
 namespace chart
 {
