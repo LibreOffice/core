@@ -1739,7 +1739,7 @@ namespace svxform
             {
                 m_bShowDetails = !m_bShowDetails;
                 PopupMenu* pMenu = m_pInstanceBtn->GetPopupMenu();
-                pMenu->CheckItem(pMenu->GetItemId("instancesdetails"), m_bShowDetails );
+                pMenu->CheckItem("instancesdetails", m_bShowDetails );
                 ModelSelectHdl(m_pModelsBox);
             }
             else
