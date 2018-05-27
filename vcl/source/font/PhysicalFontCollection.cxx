@@ -1182,7 +1182,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         utl::FontSubstConfiguration::getMapName( aSearchName, aTempShortName, aTempFamilyName,
                                                  eTempWeight, eTempWidth, nTempType );
 
-        // use a shortend token name if available
+        // use a shortened token name if available
         if( aTempShortName != aSearchName )
         {
             PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aTempShortName );
