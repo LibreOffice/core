@@ -834,6 +834,17 @@ Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames()
     return aNameSequence;
 }
 
+bool SdStyleSheet::SetName(const OUString& rNewName, bool bReindexNow)
+{
+    const bool bResult = SfxUnoStyleSheet::SetName(rNewName, bReindexNow);
+    if (bResult)
+    {
+        msApiName = rNewName;
+        Broadcast(SfxHint(SfxHintId::DataChanged));
+    }
+    return bResult;
+}
+
 // XNamed
 OUString SAL_CALL SdStyleSheet::getName()
 {
@@ -846,12 +857,7 @@ void SAL_CALL SdStyleSheet::setName( const OUString& rName  )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
-
-    if( SetName( rName ) )
-    {
-        msApiName = rName;
-        Broadcast(SfxHint(SfxHintId::DataChanged));
-    }
+    SetName(rName);
 }
 
 // XStyle
