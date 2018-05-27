@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9772feab",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-27T19:19:41Z",
+      "side": 1,
+      "message": "not your problem at all but I wonder why we are making a copy here, since we copy the data again further down",
+      "revId": "6d803b722b62a7b0683126142be710c24efda9e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
