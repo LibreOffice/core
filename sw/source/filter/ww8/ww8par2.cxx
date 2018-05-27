@@ -4281,6 +4281,14 @@ void WW8RStyle::ImportOldFormatStyles()
     std::vector< std::vector<sal_uInt8> > aConvertedChpx;
     while (nByteCount < cbChpx)
     {
+        if (stcp == aCHPXOffsets.size())
+        {
+            //more data than style slots, skip remainder
+            rSt.SeekRel(cbChpx-nByteCount);
+            nByteCount += cbChpx-nByteCount;
+            break;
+        }
+
         sal_uInt8 cb;
         rSt >> cb;
         nByteCount++;
@@ -4303,12 +4311,7 @@ void WW8RStyle::ImportOldFormatStyles()
         else
             aConvertedChpx.push_back( std::vector<sal_uInt8>() );
 
-        stcp++;
-        if (stcp == nStyles)
-    {
-            rSt.SeekRel(cbChpx-nByteCount);
-            nByteCount += cbChpx-nByteCount;
-    }
+        ++stcp;
     }
 
     std::vector<pxoffset> aPAPXOffsets(stcp);
@@ -4318,6 +4321,12 @@ void WW8RStyle::ImportOldFormatStyles()
     stcp=0;
     while (nByteCount < cbPapx)
     {
+        if (stcp == aPAPXOffsets.size())
+        {
+            rSt.SeekRel(cbPapx-nByteCount);
+            nByteCount += cbPapx-nByteCount;
+        }
+
         sal_uInt8 cb;
         rSt >> cb;
         nByteCount++;
@@ -4339,13 +4348,7 @@ void WW8RStyle::ImportOldFormatStyles()
             nByteCount += nRemainder;
         }
 
-        stcp++;
-
-        if (stcp == nStyles)
-    {
-            rSt.SeekRel(cbPapx-nByteCount);
-            nByteCount += cbPapx-nByteCount;
-    }
+        ++stcp;
     }
 
     sal_uInt16 iMac;
