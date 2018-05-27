@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_cc214db6",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2018-05-27T17:20:55Z",
+      "side": 1,
+      "message": "Unlike with the other 3 lines before, this is non-redundant. (If it is correct and not just a copy-paste-mistake. But I\u0027m just translating...)",
+      "range": {
+        "startLine": 834,
+        "startChar": 84,
+        "endLine": 834,
+        "endChar": 97
+      },
+      "revId": "ad785b722f64120fd3c928ad176199d52a5cc40e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ec59b15b",
+        "filename": "include/svx/svdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2018-05-27T17:20:55Z",
+      "side": 1,
+      "message": "Note: If I\u0027m not mistaken, what is meant here seems to be indeed \"margin\" (empty space to the edge of the page) and not \"border\" (a visible line around the page). At least that is what the German comments say, because \"border\" would be \"Seitenumrandung\" (see https://help.libreoffice.org/latest/de/text/swriter/guide/border_page.html ) (or \"Seitenrahmen\" in MS Word). So, the names of the variables seem to be incorrect and these comments are therefore non-redundant.\n\nI might correct the names of the variables some time in the future.",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 418,
+        "endChar": 50
+      },
+      "revId": "ad785b722f64120fd3c928ad176199d52a5cc40e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ac26d9cb",
+        "filename": "sc/source/ui/docshell/docsh3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2018-05-27T17:20:55Z",
+      "side": 1,
+      "message": "This is how it seems to be named in the latest MS Word versions (see https://support.office.com/en-us/article/combine-documents-f8f07f09-4461-4376-b041-89ad67412cfe ). So, I kept it as reference.",
+      "range": {
+        "startLine": 719,
+        "startChar": 23,
+        "endLine": 719,
+        "endChar": 40
+      },
+      "revId": "ad785b722f64120fd3c928ad176199d52a5cc40e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
