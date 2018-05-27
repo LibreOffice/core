@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_0c7e05ae",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_mips/uno2cpp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-27T16:43:07Z",
+      "side": 1,
+      "message": "This change should not make a difference: in the line above, the nw was ensured it\u0027s even; so if it\u0027s less than 4, then it\u0027s less than 3, and vice versa.",
+      "range": {
+        "startLine": 130,
+        "startChar": 19,
+        "endLine": 130,
+        "endChar": 20
+      },
+      "revId": "a05d92cfaabee5daf442c2299324573dc73a89df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2c4bc988",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_powerpc/uno2cpp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-27T16:43:07Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 146,
+        "startChar": 20,
+        "endLine": 146,
+        "endChar": 21
+      },
+      "revId": "a05d92cfaabee5daf442c2299324573dc73a89df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
