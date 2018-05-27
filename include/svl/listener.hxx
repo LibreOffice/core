@@ -21,15 +21,14 @@
 
 #include <svl/svldllapi.h>
 
-#include <unordered_set>
+#include <vector>
 
 class SvtBroadcaster;
 class SfxHint;
 
 class SVL_DLLPUBLIC SvtListener
 {
-    typedef std::unordered_set<SvtBroadcaster*> BroadcastersType;
-    BroadcastersType maBroadcasters;
+    std::vector<SvtBroadcaster*> maBroadcasters;
 
     const SvtListener&  operator=(const SvtListener &) = delete;
 

@@ -43,19 +43,20 @@ SvtListener::~SvtListener() COVERITY_NOEXCEPT_FALSE
 
 bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
 {
-    std::pair<BroadcastersType::iterator, bool> r =
-        maBroadcasters.insert(&rBroadcaster);
-    if (r.second)
+    auto it = std::lower_bound(maBroadcasters.begin(), maBroadcasters.end(), &rBroadcaster);
+    if (it != maBroadcasters.end())
     {
+        maBroadcasters.insert(it, &rBroadcaster);
         // This is a new broadcaster.
         rBroadcaster.Add(this);
+        return true;
     }
-    return r.second;
+    return false;
 }
 
 bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 {
-    BroadcastersType::iterator it = maBroadcasters.find(&rBroadcaster);
+    auto it = std::lower_bound(maBroadcasters.begin(), maBroadcasters.end(), &rBroadcaster);
     if (it == maBroadcasters.end())
         // Not listening to this broadcaster.
         return false;
@@ -67,8 +68,8 @@ bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 
 void SvtListener::EndListeningAll()
 {
-    BroadcastersType::iterator it = maBroadcasters.begin();
-    BroadcastersType::const_iterator itEnd = maBroadcasters.end();
+    std::vector<SvtBroadcaster*>::iterator it = maBroadcasters.begin();
+    std::vector<SvtBroadcaster*>::const_iterator itEnd = maBroadcasters.end();
     for (; it != itEnd; ++it)
     {
         SvtBroadcaster& rBC = **it;
@@ -80,10 +81,9 @@ void SvtListener::EndListeningAll()
 
 void SvtListener::CopyAllBroadcasters( const SvtListener& r )
 {
-    BroadcastersType aCopy(r.maBroadcasters);
-    maBroadcasters.swap(aCopy);
-    BroadcastersType::iterator it = maBroadcasters.begin();
-    BroadcastersType::const_iterator itEnd = maBroadcasters.end();
+    maBroadcasters = r.maBroadcasters;
+    std::vector<SvtBroadcaster*>::iterator it = maBroadcasters.begin();
+    std::vector<SvtBroadcaster*>::const_iterator itEnd = maBroadcasters.end();
     for (; it != itEnd; ++it)
     {
         SvtBroadcaster* p = *it;
