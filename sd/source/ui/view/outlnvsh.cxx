@@ -24,6 +24,7 @@
 #include <app.hrc>
 #include <svx/hyperdlg.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <svx/svdundo.hxx>
 
 #include <sfx2/infobar.hxx>
 #include <sfx2/objface.hxx>

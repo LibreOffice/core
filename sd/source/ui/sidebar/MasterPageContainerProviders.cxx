@@ -21,6 +21,7 @@
 
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <PreviewRenderer.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>

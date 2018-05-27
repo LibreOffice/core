@@ -26,6 +26,7 @@
 #include <tmplctrl.hxx>
 #include <ViewShellBase.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <sdattr.hrc>
 #include <app.hrc>
 #include <sdresid.hxx>

@@ -48,6 +48,7 @@
 #include <undo/undomanager.hxx>
 #include <DrawViewShell.hxx>
 #include <chrono>
+#include <sdpage.hxx>
 
 using namespace ::com::sun::star;
 

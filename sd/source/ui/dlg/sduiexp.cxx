@@ -33,6 +33,7 @@
 #include <custsdlg.hxx>
 #include <copydlg.hxx>
 #include <sal/types.h>
+class SdAbstractDialogFactory;
 
 extern "C"
 {
