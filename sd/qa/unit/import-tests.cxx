@@ -9,6 +9,7 @@
 
 #include <config_poppler.h>
 #include <ostream>
+#include <sdpage.hxx>
 
 #include "sdmodeltestbase.hxx"
 

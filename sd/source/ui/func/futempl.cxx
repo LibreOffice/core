@@ -31,6 +31,7 @@
 #include <sfx2/dispatch.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/lrspitem.hxx>

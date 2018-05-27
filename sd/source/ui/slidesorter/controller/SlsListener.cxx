@@ -33,6 +33,7 @@
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsPageCacheManager.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <DrawDocShell.hxx>
 
 #include <ViewShellBase.hxx>

@@ -73,6 +73,7 @@
 #include <RemoteServer.hxx>
 #include <customshowlist.hxx>
 #include <unopage.hxx>
+#include <sdpage.hxx>
 
 #define CM_SLIDES       21
 

@@ -63,6 +63,7 @@
 #include <ViewShell.hxx>
 #include <drawview.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <OutlineView.hxx>

@@ -21,15 +21,12 @@
 
 #include <vector>
 
-#include <rtl/ref.hxx>
 #include <rtl/string.hxx>
+#include <sfx2/tabdlg.hxx>
+#include <svl/itemset.hxx>
 #include <tools/solar.h>
-#include <sfx2/sfxdlg.hxx>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <vcl/abstdlg.hxx>
 #include "prlayout.hxx"
-#include "sdenumdef.hxx"
 #include "pres.hxx"
 #include "sddllapi.h"
 
@@ -41,10 +38,8 @@ namespace sd {
 }
 
 class SfxObjectShell;
-class SfxObjectShellLock;
 class SvxFieldData;
 class GDIMetaFile;
-class XColorList;
 class SdDrawDocument;
 class SfxMedium;
 class SdrObject;
@@ -53,11 +48,11 @@ class SfxStyleSheetBase;
 class SdrModel;
 class SdrView;
 class Bitmap;
-class List;
 namespace vcl { class Window; }
 class SdPage;
-class TabPage;
 class SdCustomShowList;
+class SfxAbstractDialog;
+class SfxAbstractTabDialog;
 
 class AbstractCopyDlg : public VclAbstractDialog
 {

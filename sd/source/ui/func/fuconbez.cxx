@@ -39,6 +39,7 @@
 #include <Window.hxx>
 #include <ToolBarManager.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

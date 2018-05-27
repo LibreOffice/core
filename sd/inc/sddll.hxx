@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_INC_SDDLL_HXX
 #define INCLUDED_SD_INC_SDDLL_HXX
 
-#include <sfx2/module.hxx>
 #include "sddllapi.h"
 
 class SdModule;

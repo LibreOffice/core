@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_INC_SDRESID_HXX
 #define INCLUDED_SD_INC_SDRESID_HXX
 
+#include <rtl/ustring.hxx>
 #include "sddllapi.h"
-#include "sdmod.hxx"
 
 SD_DLLPUBLIC OUString SdResId(const char* pId);
 
