@@ -24,8 +24,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
-#include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>

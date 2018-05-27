@@ -22,7 +22,6 @@
 
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <connectivity/dbexception.hxx>
-#include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>

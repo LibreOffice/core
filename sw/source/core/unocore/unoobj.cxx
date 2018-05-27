@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/table/TableSortField.hpp>
-#include <comphelper/string.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>

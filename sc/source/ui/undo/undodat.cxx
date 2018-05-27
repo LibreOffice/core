@@ -46,7 +46,6 @@
 #include <markdata.hxx>
 
 #include <sfx2/lokhelper.hxx>
-#include <comphelper/lok.hxx>
 
 // Show or hide outline groups
 

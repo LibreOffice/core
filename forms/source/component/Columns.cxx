@@ -32,7 +32,6 @@
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/servicehelper.hxx>

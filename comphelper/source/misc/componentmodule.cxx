@@ -19,8 +19,6 @@
 
 #include <comphelper/componentmodule.hxx>
 
-#include <comphelper/sequence.hxx>
-
 #include <vector>
 
 namespace comphelper

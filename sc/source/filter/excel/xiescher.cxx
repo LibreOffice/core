@@ -46,7 +46,6 @@
 #include <unotools/fltrcfg.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/wmf.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/point/b2dpoint.hxx>

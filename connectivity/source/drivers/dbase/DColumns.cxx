@@ -21,7 +21,6 @@
 #include <dbase/DTable.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <comphelper/property.hxx>
 
 using namespace connectivity::dbase;
 using namespace connectivity;

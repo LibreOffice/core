@@ -36,7 +36,6 @@
 #include <svtools/htmlcfg.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include <comphelper/storagehelper.hxx>
 #include <uitool.hxx>
 #include <IMark.hxx>
 #include <section.hxx>

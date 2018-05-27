@@ -19,7 +19,6 @@
 
 #include <config_folders.h>
 
-#include <comphelper/string.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svl/style.hxx>
 #include <vcl/help.hxx>

@@ -21,7 +21,6 @@
 #include <extended/AccessibleGridControlHeaderCell.hxx>
 #include <extended/AccessibleGridControlTableCell.hxx>
 #include <svtools/accessibletable.hxx>
-#include <comphelper/servicehelper.hxx>
 
 
 using ::com::sun::star::uno::Reference;

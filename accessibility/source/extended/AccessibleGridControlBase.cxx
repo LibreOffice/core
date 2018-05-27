@@ -19,7 +19,6 @@
 
 #include <extended/AccessibleGridControlBase.hxx>
 #include <svtools/accessibletable.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/types.h>
 

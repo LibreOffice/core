@@ -48,7 +48,6 @@
 #include <sdresid.hxx>
 #include <sdattr.hxx>
 
-#include <comphelper/servicehelper.hxx>
 #include <unotest/macros_test.hxx>
 
 using namespace ::com::sun::star;

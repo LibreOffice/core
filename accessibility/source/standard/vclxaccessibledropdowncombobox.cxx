@@ -32,7 +32,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 

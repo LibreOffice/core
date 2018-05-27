@@ -23,7 +23,6 @@
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 

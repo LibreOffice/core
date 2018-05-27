@@ -31,7 +31,6 @@
 #include <dbase/DIndex.hxx>
 #include <dbase/DIndexes.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>

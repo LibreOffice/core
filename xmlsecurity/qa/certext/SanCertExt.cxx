@@ -36,7 +36,6 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 #include <sal/types.h>
-#include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
 
 #include <neon/ne_ssl.h>

@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/controls/eventcontainer.hxx>
 #include <toolkit/helper/property.hxx>

@@ -19,7 +19,6 @@
 
 #include <DesignView.hxx>
 #include <ReportController.hxx>
-#include <comphelper/types.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>

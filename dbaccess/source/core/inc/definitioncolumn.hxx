@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/IdPropArrayHelper.hxx>
+#include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 

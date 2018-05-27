@@ -70,7 +70,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/interaction.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/configmgr.hxx>
@@ -92,7 +91,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/seqstream.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/bitmapex.hxx>

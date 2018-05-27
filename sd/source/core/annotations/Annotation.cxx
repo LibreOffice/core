@@ -27,7 +27,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
-#include <comphelper/string.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

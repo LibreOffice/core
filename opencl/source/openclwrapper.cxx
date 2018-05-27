@@ -11,7 +11,6 @@
 
 #include <opencl_device.hxx>
 
-#include <comphelper/string.hxx>
 #include <opencl/openclconfig.hxx>
 #include <opencl/openclwrapper.hxx>
 #include <osl/file.hxx>

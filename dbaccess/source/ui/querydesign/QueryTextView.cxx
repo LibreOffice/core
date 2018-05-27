@@ -27,7 +27,6 @@
 #include <stringconstants.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/types.hxx>
 #include <QueryDesignView.hxx>
 
 using namespace dbaui;

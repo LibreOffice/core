@@ -23,7 +23,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <comphelper/property.hxx>
 #include <connectivity/TIndex.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <TConnection.hxx>

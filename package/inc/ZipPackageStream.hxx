@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "ZipPackageEntry.hxx"
 #include <rtl/ref.hxx>
-#include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include "EncryptionData.hxx"

@@ -22,6 +22,7 @@
 #include <frm_resource.hxx>
 #include <strings.hrc>
 #include <propertybaghelper.hxx>
+#include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/numbers.hxx>
 #include <connectivity/dbtools.hxx>

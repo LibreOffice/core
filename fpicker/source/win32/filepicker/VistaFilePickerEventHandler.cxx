@@ -29,8 +29,6 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
-#include <comphelper/storagehelper.hxx>
-
 #include <osl/file.hxx>
 
 

@@ -27,7 +27,6 @@
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <comphelper/scopeguard.hxx>
-#include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>

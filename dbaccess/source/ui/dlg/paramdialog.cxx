@@ -25,6 +25,7 @@
 #include <commontypes.hxx>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <stringconstants.hxx>
 #include <vcl/svapp.hxx>

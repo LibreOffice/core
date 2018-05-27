@@ -33,7 +33,6 @@
 #include <sfx2/app.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
-#include <comphelper/types.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/TextCharacterSpacingPopup.hxx>
 #include <svx/TextUnderlinePopup.hxx>

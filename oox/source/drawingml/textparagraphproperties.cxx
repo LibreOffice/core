@@ -45,7 +45,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <comphelper/genericpropertyset.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #endif

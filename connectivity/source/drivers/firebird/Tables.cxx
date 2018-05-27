@@ -19,6 +19,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <comphelper/types.hxx>
 
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;

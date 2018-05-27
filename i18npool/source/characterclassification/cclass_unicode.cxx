@@ -23,7 +23,6 @@
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <unicode/uchar.h>
-#include <comphelper/string.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <breakiteratorImpl.hxx>

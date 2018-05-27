@@ -20,7 +20,6 @@
 #include <memory>
 #include <string.h>
 
-#include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <i18nlangtag/mslangid.hxx>

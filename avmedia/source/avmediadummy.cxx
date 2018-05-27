@@ -34,8 +34,6 @@
 
 #include <ucbhelper/content.hxx>
 
-#include <comphelper/storagehelper.hxx>
-
 using namespace ::com::sun::star;
 
 namespace avmedia

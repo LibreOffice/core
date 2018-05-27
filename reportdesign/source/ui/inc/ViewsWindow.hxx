@@ -24,7 +24,6 @@
 #include <svtools/colorcfg.hxx>
 #include "ReportDefines.hxx"
 #include "ReportSection.hxx"
-#include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <svx/svdedtv.hxx>

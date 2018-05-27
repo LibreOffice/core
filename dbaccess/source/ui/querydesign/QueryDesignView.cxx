@@ -37,7 +37,6 @@
 #include <strings.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/i18n/XLocaleData.hpp>

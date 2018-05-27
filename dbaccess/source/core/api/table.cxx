@@ -28,7 +28,6 @@
 
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/util/XRefreshListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>

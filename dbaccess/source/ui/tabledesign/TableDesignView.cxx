@@ -25,7 +25,6 @@
 #include "TableFieldDescWin.hxx"
 #include <TableRow.hxx>
 #include <unotools/configmgr.hxx>
-#include <comphelper/types.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <unotools/syslocale.hxx>
 #include <vcl/settings.hxx>

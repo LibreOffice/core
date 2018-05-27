@@ -53,6 +53,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
@@ -60,7 +61,6 @@
 #include <comphelper/propagg.hxx>
 #include <comphelper/propertybag.hxx>
 #include <comphelper/propmultiplex.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>

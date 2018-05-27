@@ -21,7 +21,6 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <comphelper/property.hxx>
 #include <algorithm>
 
 namespace reportdesign

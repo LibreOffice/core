@@ -22,7 +22,6 @@
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <sot/storinfo.hxx>

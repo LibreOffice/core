@@ -7,9 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>

@@ -40,6 +40,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 #include <svl/stritem.hxx>

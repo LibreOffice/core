@@ -21,7 +21,6 @@
 #include <ConnectionLine.hxx>
 #include <TableConnectionData.hxx>
 #include <JoinTableView.hxx>
-#include <comphelper/stl_types.hxx>
 #include <ConnectionLineAccess.hxx>
 
 using namespace dbaui;

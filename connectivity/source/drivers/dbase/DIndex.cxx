@@ -21,7 +21,6 @@
 #include <dbase/DIndexColumns.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/sdbcx/VColumn.hxx>
-#include <comphelper/sequence.hxx>
 #include <dbase/DTable.hxx>
 #include <dbase/DIndexIter.hxx>
 #include <osl/file.hxx>

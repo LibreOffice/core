@@ -30,7 +30,6 @@
 #include <svx/layctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 

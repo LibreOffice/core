@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
-#include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

@@ -108,8 +108,6 @@
 #include <frame.hxx>
 #include <swtable.hxx>
 
-#include <comphelper/string.hxx>
-
 PROT SwProtocol::nRecord = PROT::FileInit;
 SwImplProtocol* SwProtocol::pImpl = nullptr;
 

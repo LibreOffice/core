@@ -33,8 +33,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 
-#include <comphelper/listenernotification.hxx>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>

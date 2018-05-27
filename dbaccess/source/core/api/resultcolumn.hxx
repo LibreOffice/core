@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <column.hxx>
 #include <boost/optional.hpp>
+#include <comphelper/proparrhlp.hxx>
 namespace dbaccess
 {
 

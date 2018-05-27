@@ -22,6 +22,8 @@
 
 #include <unoadmin.hxx>
 
+#include <comphelper/proparrhlp.hxx>
+
 namespace dbaui
 {
 // OUserSettingsDialog

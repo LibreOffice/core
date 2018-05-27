@@ -92,7 +92,6 @@
 #include <memory>
 #include <libxml/xmlwriter.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
 #include <o3tl/enumrange.hxx>
 

@@ -29,6 +29,7 @@
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <comphelper/types.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/settings.hxx>
 

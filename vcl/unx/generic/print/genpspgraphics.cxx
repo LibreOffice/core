@@ -29,7 +29,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <comphelper/string.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/jobdata.hxx>

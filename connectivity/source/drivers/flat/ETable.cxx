@@ -30,8 +30,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <flat/EDriver.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>

@@ -23,7 +23,6 @@
 #include <table/gridtablerenderer.hxx>
 #include <table/tablecontrol.hxx>
 #include "unocontroltablemodel.hxx"
-#include <comphelper/sequence.hxx>
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/property.hxx>

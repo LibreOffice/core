@@ -36,6 +36,7 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <osl/diagnose.h>
 
 #include <specialobject.hxx>
 #include <intercept.hxx>

@@ -22,8 +22,6 @@
 #include "querydescriptor.hxx"
 #include <apitools.hxx>
 #include <stringconstants.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -35,7 +33,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
-using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
 

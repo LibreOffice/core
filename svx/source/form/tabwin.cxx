@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
 
 #include <helpids.h>
 #include <svx/fmshell.hxx>

@@ -24,7 +24,6 @@
 #include <nativenumbersupplier.hxx>
 #include <localedata.hxx>
 #include "data/numberchar.h"
-#include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <map>

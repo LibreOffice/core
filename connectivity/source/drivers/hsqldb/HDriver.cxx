@@ -45,7 +45,6 @@
 #include <osl/process.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/confignode.hxx>

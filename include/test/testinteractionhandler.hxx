@@ -23,7 +23,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/sequence.hxx>
 
 class TestInteractionHandler : public cppu::WeakImplHelper<css::lang::XServiceInfo,
                                                            css::lang::XInitialization,

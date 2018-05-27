@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <unotools/ZipPackageHelper.hxx>
-#include <comphelper/oslfile2streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>

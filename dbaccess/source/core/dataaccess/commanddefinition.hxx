@@ -29,7 +29,6 @@
 #include <ContentHelper.hxx>
 #include "ComponentDefinition.hxx"
 
-#include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase2.hxx>

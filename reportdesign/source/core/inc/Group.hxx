@@ -22,7 +22,6 @@
 #include <com/sun/star/report/XGroup.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <GroupProperties.hxx>

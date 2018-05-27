@@ -23,7 +23,6 @@
 #include <sfx2/docfac.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
-#include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/vcompat.hxx>

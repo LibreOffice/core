@@ -30,7 +30,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/uno3.hxx>
 #include <ado/AConnection.hxx>
 #include <vector>
 #include <ado/Awrapado.hxx>

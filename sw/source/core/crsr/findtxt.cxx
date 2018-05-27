@@ -21,7 +21,6 @@
 
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <comphelper/lok.hxx>
-#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdview.hxx>

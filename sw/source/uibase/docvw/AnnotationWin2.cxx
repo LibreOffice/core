@@ -26,7 +26,6 @@
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <comphelper/string.hxx>
 #include "SidebarTxtControl.hxx"
 #include "SidebarScrollBar.hxx"
 #include "AnchorOverlayObject.hxx"

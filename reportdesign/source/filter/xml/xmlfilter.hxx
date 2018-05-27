@@ -34,7 +34,6 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <map>
 #include <memory>

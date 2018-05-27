@@ -33,7 +33,6 @@
 #include <sfx2/docfac.hxx>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/opengrf.hxx>

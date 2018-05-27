@@ -18,6 +18,7 @@
  */
 
 #include "scrollbar.hxx"
+#include <comphelper/property.hxx>
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
 #include <rtl/math.hxx>

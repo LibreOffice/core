@@ -31,7 +31,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <rtl/ref.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 

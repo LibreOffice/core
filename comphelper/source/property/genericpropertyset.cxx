@@ -30,7 +30,6 @@
 #include <osl/mutex.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/servicehelper.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;

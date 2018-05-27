@@ -23,7 +23,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/solar.hrc>
-#include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -32,7 +31,6 @@ namespace compmodule
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::registry;
-    using namespace ::comphelper;
     using namespace ::cppu;
 
     OUString ModuleRes(const char* pId)

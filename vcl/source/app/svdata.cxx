@@ -21,7 +21,6 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <rtl/process.h>
 #include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>

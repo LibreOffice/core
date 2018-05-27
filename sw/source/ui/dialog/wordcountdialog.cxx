@@ -26,7 +26,6 @@
 #include <wview.hxx>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
-#include <comphelper/string.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>

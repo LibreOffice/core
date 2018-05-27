@@ -27,7 +27,6 @@
 #include <strings.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/sequence.hxx>
 #include <svl/filenotation.hxx>
 #include <unotools/pathoptions.hxx>
 #include <dsntypes.hxx>

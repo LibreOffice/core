@@ -58,7 +58,6 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
-#include <comphelper/genericpropertyset.hxx>
 #include <comphelper/property.hxx>
 #include <tools/diagnose_ex.h>
 #include <PropertyForward.hxx>

@@ -26,7 +26,6 @@
 #include <comphelper/extract.hxx>
 #include <osl/diagnose.h>
 #include <unotools/syslocale.hxx>
-#include <comphelper/types.hxx>
 #include <tools/mapunit.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/editrids.hrc>

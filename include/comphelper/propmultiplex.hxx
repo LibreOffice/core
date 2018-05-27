@@ -20,11 +20,15 @@
 #ifndef INCLUDED_COMPHELPER_PROPMULTIPLEX_HXX
 #define INCLUDED_COMPHELPER_PROPMULTIPLEX_HXX
 
-#include <comphelper/propstate.hxx>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
+#include <vector>
 
+namespace com { namespace sun { namespace star { namespace beans {
+    class XPropertySet;
+} } } }
 
 //= property helper classes
 

@@ -36,7 +36,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt {

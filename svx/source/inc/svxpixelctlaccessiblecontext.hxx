@@ -39,7 +39,6 @@
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <svx/rectenum.hxx>
 #include <tools/gen.hxx>

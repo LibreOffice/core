@@ -31,7 +31,6 @@
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/listenernotification.hxx>
 
 #include <memory>
 #include <vector>

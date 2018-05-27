@@ -20,7 +20,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <comphelper/guarding.hxx>
 
 #include <map>
 #include <limits>

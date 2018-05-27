@@ -22,7 +22,6 @@
 #include <xmloff/families.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/propertysethelper.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>

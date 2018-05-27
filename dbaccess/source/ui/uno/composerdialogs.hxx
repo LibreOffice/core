@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 
+#include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <apitools.hxx>
 

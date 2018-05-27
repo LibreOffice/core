@@ -66,7 +66,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/queryinterface.hxx>

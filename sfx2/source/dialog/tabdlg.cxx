@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include <appdata.hxx>
-#include <comphelper/lok.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>

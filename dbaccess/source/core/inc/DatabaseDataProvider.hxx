@@ -35,8 +35,6 @@
 #include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
-#include <comphelper/sequence.hxx>
-
 #include <connectivity/parameters.hxx>
 #include <connectivity/filtermanager.hxx>
 

@@ -40,7 +40,6 @@
 
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/string.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/tstpitem.hxx>
@@ -140,6 +139,7 @@ using namespace sw::util;
 using namespace sw::types;
 using namespace nsHdFtFlags;
 
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>

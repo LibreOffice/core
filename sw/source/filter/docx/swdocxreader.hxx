@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_FILTER_DOCX_SWDOCXREADER_HXX
 
 #include <shellio.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <tools/ref.hxx>
 

@@ -25,7 +25,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/sysdata.hxx>
-#include <comphelper/lok.hxx>
 
 #include <salgdi.hxx>
 #include <svdata.hxx>

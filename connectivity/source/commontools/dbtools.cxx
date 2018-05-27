@@ -68,6 +68,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/conncleanup.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>

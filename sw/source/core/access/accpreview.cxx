@@ -19,7 +19,6 @@
 
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <strings.hrc>
 #include "accpreview.hxx"

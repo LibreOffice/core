@@ -29,7 +29,6 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <hintids.hxx>
-#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/cmapitem.hxx>
@@ -86,6 +85,7 @@
 #include <fmtsrnd.hxx>
 #include <fmtrowsplt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>

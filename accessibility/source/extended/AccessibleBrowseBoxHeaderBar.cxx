@@ -19,7 +19,6 @@
 
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
 #include <svtools/accessibletableprovider.hxx>
-#include <comphelper/servicehelper.hxx>
 
 
 using ::com::sun::star::uno::Reference;

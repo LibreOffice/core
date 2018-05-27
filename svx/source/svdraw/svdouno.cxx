@@ -32,7 +32,6 @@
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>

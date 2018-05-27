@@ -34,8 +34,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <comphelper/sequence.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <osl/diagnose.h>
 #include <strings.hrc>
 #include <yesno.hrc>
 #include "pcrservices.hxx"

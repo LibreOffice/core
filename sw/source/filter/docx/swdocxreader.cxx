@@ -27,7 +27,6 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <IDocumentStylePoolAccess.hxx>

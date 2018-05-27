@@ -35,7 +35,6 @@
 #include "column.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/TTableHelper.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/IdPropArrayHelper.hxx>
 
 namespace dbaccess

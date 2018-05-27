@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMPONENTDEFINITION_HXX
 
 #include <commandbase.hxx>
-#include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/proparrhlp.hxx>

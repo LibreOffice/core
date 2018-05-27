@@ -44,7 +44,6 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
-#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>

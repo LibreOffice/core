@@ -68,7 +68,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propagg.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/flagguard.hxx>

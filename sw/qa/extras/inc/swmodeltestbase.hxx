@@ -44,6 +44,7 @@
 #include <rtl/byteseq.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/mediadescriptor.hxx>

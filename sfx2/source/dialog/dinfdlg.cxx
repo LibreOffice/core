@@ -63,7 +63,6 @@
 #include <helper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <comphelper/storagehelper.hxx>
 
 #include <documentfontsdialog.hxx>
 #include <dinfdlg.hrc>

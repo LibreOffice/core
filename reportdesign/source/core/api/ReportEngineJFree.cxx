@@ -22,7 +22,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/mimeconfighelper.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

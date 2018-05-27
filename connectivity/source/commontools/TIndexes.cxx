@@ -26,6 +26,7 @@
 #include <connectivity/TTableHelper.hxx>
 #include <TConnection.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
 using namespace connectivity;
 using namespace connectivity::sdbcx;

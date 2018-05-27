@@ -55,7 +55,6 @@
 #include <svtools/ehdl.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>

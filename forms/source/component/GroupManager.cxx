@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 #include <osl/diagnose.h>
 #include <tools/solar.h>
 
@@ -37,6 +38,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
+using namespace ::comphelper;
 
 namespace
 {

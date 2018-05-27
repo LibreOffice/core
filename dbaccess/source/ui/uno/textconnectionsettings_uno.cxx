@@ -30,6 +30,7 @@
 #include <com/sun/star/sdb/XTextConnectionSettings.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <cppuhelper/implbase.hxx>
 

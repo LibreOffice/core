@@ -56,7 +56,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/streamsection.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>

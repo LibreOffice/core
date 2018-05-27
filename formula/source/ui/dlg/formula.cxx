@@ -59,7 +59,6 @@
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <comphelper/string.hxx>
 #include <map>
 
 // For tab page

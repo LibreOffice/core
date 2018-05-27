@@ -21,7 +21,6 @@
 #include <ContentHelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
-#include <comphelper/property.hxx>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
@@ -47,7 +46,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::container;
-using namespace ::comphelper;
 using namespace ::cppu;
 
 OContentHelper_Impl::OContentHelper_Impl()

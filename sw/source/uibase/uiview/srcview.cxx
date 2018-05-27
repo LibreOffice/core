@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/errinf.hxx>

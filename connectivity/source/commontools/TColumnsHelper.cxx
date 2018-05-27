@@ -30,7 +30,6 @@
 #include <connectivity/dbtools.hxx>
 #include <TConnection.hxx>
 #include <connectivity/TTableHelper.hxx>
-#include <comphelper/property.hxx>
 
 using namespace ::comphelper;
 

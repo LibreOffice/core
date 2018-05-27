@@ -11,7 +11,6 @@
 #include <test/screenshot_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
-#include <comphelper/string.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>

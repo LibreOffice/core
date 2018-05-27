@@ -30,7 +30,6 @@
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <comphelper/listenernotification.hxx>
 
 #include <vector>
 #include <set>

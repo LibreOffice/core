@@ -46,11 +46,9 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <osl/file.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <comphelper/storagehelper.hxx>
 
 
 namespace rptxml

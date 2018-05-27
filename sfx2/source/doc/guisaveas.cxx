@@ -64,6 +64,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
@@ -82,7 +83,6 @@
 #include <alienwarn.hxx>
 
 #include <sfx2/docmacromode.hxx>
-#include <comphelper/interaction.hxx>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <rtl/ref.hxx>
 #include <framework/interaction.hxx>

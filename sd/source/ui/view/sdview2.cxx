@@ -61,7 +61,6 @@
 #include <drawview.hxx>
 #include <helpids.h>
 #include <vcl/svapp.hxx>
-#include <comphelper/lok.hxx>
 
 #include <slideshow.hxx>
 #include <memory>

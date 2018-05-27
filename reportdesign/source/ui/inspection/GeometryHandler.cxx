@@ -24,6 +24,7 @@
 
 #include <GeometryHandler.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/mimeconfighelper.hxx>

@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <comphelper/storagehelper.hxx>
 
 namespace writerfilter {
 namespace ooxml

@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEET_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEET_HXX
 
-#include <comphelper/unwrapargs.hxx>
-
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <ooo/vba/excel/XWorksheet.hpp>
 #include <ooo/vba/excel/XComments.hpp>

@@ -37,7 +37,6 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
-#include <comphelper/lok.hxx>
 
 #include <svx/svdtrans.hxx>
 

@@ -27,7 +27,6 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertysequence.hxx>
 
 using namespace css;
 

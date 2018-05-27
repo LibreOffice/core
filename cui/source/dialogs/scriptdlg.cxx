@@ -50,8 +50,6 @@
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertycontainer.hxx>
-#include <comphelper/proparrhlp.hxx>
 
 #include <basic/sbx.hxx>
 #include <svtools/imagemgr.hxx>

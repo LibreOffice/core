@@ -46,7 +46,7 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <comphelper/numberedcollection.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <unotools/cmdoptions.hxx>

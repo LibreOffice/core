@@ -21,7 +21,6 @@
 #include <strings.hxx>
 #include <strings.hrc>
 #include <core_resource.hxx>
-#include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <Tools.hxx>
 #include <FormatCondition.hxx>
@@ -36,7 +35,6 @@ namespace reportdesign
 {
 
     using namespace com::sun::star;
-    using namespace comphelper;
 uno::Sequence< OUString > lcl_getLineOptionals()
 {
     OUString pProps[] = {

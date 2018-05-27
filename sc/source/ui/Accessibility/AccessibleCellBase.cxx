@@ -41,7 +41,6 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <editeng/brushitem.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 

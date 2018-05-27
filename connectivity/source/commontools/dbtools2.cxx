@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
+#include <comphelper/types.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 #include <algorithm>

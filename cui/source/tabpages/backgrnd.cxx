@@ -50,7 +50,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <comphelper/lok.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
 

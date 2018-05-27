@@ -35,7 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <RptObject.hxx>
 #include <ReportDrawPage.hxx>
-#include <comphelper/property.hxx>
 
 namespace reportdesign
 {

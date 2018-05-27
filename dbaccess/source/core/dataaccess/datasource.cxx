@@ -50,11 +50,9 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 
-#include <comphelper/guarding.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>

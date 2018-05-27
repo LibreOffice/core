@@ -65,7 +65,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <comphelper/string.hxx>
 #include <editeng/editview.hxx>
 #include <PostItMgr.hxx>
 #include <DocumentSettingManager.hxx>

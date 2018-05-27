@@ -20,7 +20,6 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <unotools/configmgr.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>

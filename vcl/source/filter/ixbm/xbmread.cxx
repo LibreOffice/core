@@ -20,7 +20,6 @@
 #include <memory>
 #include <sal/config.h>
 
-#include <comphelper/string.hxx>
 #include <rtl/character.hxx>
 #include <bitmapwriteaccess.hxx>
 

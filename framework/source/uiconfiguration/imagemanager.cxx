@@ -33,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/sequence.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;

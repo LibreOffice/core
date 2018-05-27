@@ -19,7 +19,6 @@
 
 #include <java/sql/Timestamp.hxx>
 #include <java/tools.hxx>
-#include <comphelper/types.hxx>
 #include <connectivity/dbconversion.hxx>
 
 using namespace ::comphelper;

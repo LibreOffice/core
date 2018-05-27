@@ -37,7 +37,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>

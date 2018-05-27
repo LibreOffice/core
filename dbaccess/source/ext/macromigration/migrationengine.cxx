@@ -51,10 +51,8 @@
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 
 #include <comphelper/documentinfo.hxx>
-#include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>

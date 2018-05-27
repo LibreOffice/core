@@ -26,7 +26,6 @@
 #include <strings.hrc>
 #include <core_resource.hxx>
 #include <Tools.hxx>
-#include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <Functions.hxx>
 
@@ -35,7 +34,6 @@ namespace reportdesign
 {
 
     using namespace com::sun::star;
-    using namespace comphelper;
 
 OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
                ,const uno::Reference< uno::XComponentContext >& _xContext)

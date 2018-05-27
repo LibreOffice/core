@@ -81,7 +81,6 @@
 #include <oox/token/properties.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
 #include <unotools/ucbstreamhelper.hxx>

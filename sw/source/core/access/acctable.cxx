@@ -50,7 +50,6 @@
 #include <swatrset.hxx>
 #include <frmatr.hxx>
 
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;

@@ -61,7 +61,6 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 

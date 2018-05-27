@@ -21,7 +21,6 @@
 #include "DAVProperties.hxx"
 
 #include "webdavresponseparser.hxx"
-#include <comphelper/seqstream.hxx>
 #include <rtl/strbuf.hxx>
 
 

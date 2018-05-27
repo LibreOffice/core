@@ -21,6 +21,8 @@
 #include <services.hxx>
 #include <property.hxx>
 
+#include <comphelper/property.hxx>
+
 
 namespace frm
 {

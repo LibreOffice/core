@@ -43,7 +43,6 @@
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
 #include <dbadmin.hxx>
-#include <comphelper/types.hxx>
 
 namespace dbaui
 {

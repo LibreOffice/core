@@ -60,7 +60,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/utils/unotools.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <svx/svdograf.hxx>
 #include <sfx2/docfile.hxx>

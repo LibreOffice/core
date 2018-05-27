@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 
+#include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
 
 

@@ -41,7 +41,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <connectivity/dbexception.hxx>

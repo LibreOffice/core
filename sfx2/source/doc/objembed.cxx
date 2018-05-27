@@ -30,8 +30,6 @@
 #include <sfx2/event.hxx>
 
 #include <comphelper/fileformat.h>
-#include <comphelper/seqstream.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>

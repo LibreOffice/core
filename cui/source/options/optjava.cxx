@@ -60,8 +60,6 @@
 
 #define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
 
-#include <comphelper/solarmutex.hxx>
-
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;

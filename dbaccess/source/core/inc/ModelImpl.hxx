@@ -56,8 +56,6 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/sharedmutex.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <cppuhelper/propshlp.hxx>

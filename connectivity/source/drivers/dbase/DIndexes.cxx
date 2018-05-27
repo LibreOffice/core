@@ -21,7 +21,6 @@
 #include <dbase/DIndex.hxx>
 #include <connectivity/dbexception.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <comphelper/types.hxx>
 #include <strings.hrc>
 
 using namespace ::comphelper;

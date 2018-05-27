@@ -22,7 +22,6 @@
 
 #include <FormComponent.hxx>
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

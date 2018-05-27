@@ -8,7 +8,6 @@
  */
 
 #include "ShadowPropertyPanel.hxx"
-#include <comphelper/string.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/svxids.hrc>

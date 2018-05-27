@@ -48,7 +48,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>

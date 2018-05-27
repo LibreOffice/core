@@ -24,7 +24,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 

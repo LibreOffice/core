@@ -44,7 +44,6 @@
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/gen.hxx>

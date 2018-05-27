@@ -45,7 +45,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -93,7 +92,6 @@
 #include <prewin.h>
 #include <wincrypt.h>
 #include <postwin.h>
-#include <comphelper/windowserrorstring.hxx>
 #endif
 
 #include <config_eot.h>

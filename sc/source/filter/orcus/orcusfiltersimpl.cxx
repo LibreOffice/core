@@ -19,7 +19,6 @@
 #include <svl/itemset.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>

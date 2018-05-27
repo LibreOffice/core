@@ -37,7 +37,6 @@
 #include <sot/exchange.hxx>
 #include <memory>
 
-#include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #include <attrib.hxx>

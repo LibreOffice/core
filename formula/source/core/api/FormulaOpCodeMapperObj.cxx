@@ -25,7 +25,6 @@
 #include <formula/FormulaCompiler.hxx>
 #include <formula/FormulaOpCodeMapperObj.hxx>
 #include <formula/opcode.hxx>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/make_unique.hxx>
 

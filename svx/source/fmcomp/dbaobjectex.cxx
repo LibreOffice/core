@@ -24,7 +24,6 @@
 #include <fmprop.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
-#include <comphelper/propertysetinfo.hxx>
 
 
 namespace svx
@@ -40,7 +39,6 @@ namespace svx
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::datatransfer;
-    using namespace ::comphelper;
 
     OComponentTransferable::OComponentTransferable(const OUString& _rDatasourceOrLocation
             ,const Reference< XContent>& _xContent)

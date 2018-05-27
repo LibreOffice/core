@@ -33,8 +33,6 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlnode.hxx>

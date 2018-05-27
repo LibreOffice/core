@@ -49,7 +49,6 @@
 #include <unomod.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/asiancfg.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <swmodule.hxx>
 #include <cfgitems.hxx>

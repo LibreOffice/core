@@ -23,7 +23,6 @@
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-#include <comphelper/storagehelper.hxx>
 
 #include <osl/diagnose.h>
 

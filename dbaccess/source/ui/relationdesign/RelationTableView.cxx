@@ -31,7 +31,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/sequence.hxx>
 #include <helpids.h>
 #include <RelationDesignView.hxx>
 #include <JoinController.hxx>

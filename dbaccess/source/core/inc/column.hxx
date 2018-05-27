@@ -39,7 +39,6 @@
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>

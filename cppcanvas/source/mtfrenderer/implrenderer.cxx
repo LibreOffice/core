@@ -19,7 +19,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>

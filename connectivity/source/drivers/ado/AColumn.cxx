@@ -21,7 +21,6 @@
 #include <ado/AConnection.hxx>
 #include <ado/Awrapado.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>

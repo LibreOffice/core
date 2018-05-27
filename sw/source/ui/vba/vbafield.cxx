@@ -25,7 +25,6 @@
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <comphelper/string.hxx>
 #include <ooo/vba/word/WdFieldType.hpp>
 #include <swtypes.hxx>
 #include <basic/sberrors.hxx>

@@ -31,7 +31,6 @@
 
 #include <undoolk.hxx>
 
-#include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
 /** Change column widths or row heights */

@@ -21,6 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_INTERPOLATION_HXX
 
 #include <basegfx/utils/lerp.hxx>
+#include <osl/diagnose.h>
 
 namespace basegfx
 {
