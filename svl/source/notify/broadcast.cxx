@@ -80,7 +80,7 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
         Normalize();
 
     ListenersType::const_iterator dest(maDestructedListeners.begin());
-    for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
+    for (ListenersType::const_iterator it(maListeners.begin()); it != maListeners.end(); ++it)
     {
         bool bStart = true;
 
@@ -126,7 +126,7 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 
     ListenersType::const_iterator dest(maDestructedListeners.begin());
     ListenersType aListeners(maListeners); // this copy is important to avoid erasing entries while iterating
-    for (ListenersType::iterator it(aListeners.begin()); it != aListeners.end(); ++it)
+    for (ListenersType::const_iterator it(aListeners.begin()); it != aListeners.end(); ++it)
     {
         // skip the destructed ones
         while (dest != maDestructedListeners.end() && (*dest < *it))

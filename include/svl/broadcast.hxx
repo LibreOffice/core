@@ -69,7 +69,7 @@ public:
      * To avoid that, use this call to announce to the broadcaster it is going
      * to die, and the listeners do not have to bother with removing
      * themselves from the broadcaster - the broadcaster will not broadcast
-     * anything after the PrepareForDesctruction() call anyway.
+     * anything after the PrepareForDestruction() call anyway.
      */
     void PrepareForDestruction();
 
