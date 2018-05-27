@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_2c0669ce",
+        "filename": "dbaccess/source/filter/hsqldb/rowinputbinary.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-27T06:40:20Z",
+      "side": 1,
+      "message": "you\u0027re adding 60 * 60 when you need to be adding 24* 60 * 60\n\nAlso, the comment is wrong, we could easily see values anywhere in the range\n  - 24 * 60 * 60 to 24 * 60 * 60",
+      "revId": "6616de2a941de386aaa8b0dad80d316900f936f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
