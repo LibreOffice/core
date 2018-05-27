@@ -56,15 +56,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    OUString sRealLoader = sLoader;
-
     auto & cache = TheFilterCache::get();
 
     // search loader on cache
-    CacheItem aLoader = cache.getItem(m_eType, sRealLoader);
+    CacheItem aLoader = cache.getItem(m_eType, sLoader);
 
     // create service instance
-    css::uno::Reference< css::uno::XInterface > xLoader = m_xContext->getServiceManager()->createInstanceWithContext(sRealLoader, m_xContext);
+    css::uno::Reference< css::uno::XInterface > xLoader = m_xContext->getServiceManager()->createInstanceWithContext(sLoader, m_xContext);
 
     // initialize filter
     css::uno::Reference< css::lang::XInitialization > xInit(xLoader, css::uno::UNO_QUERY);
