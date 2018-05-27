@@ -123,7 +123,7 @@ namespace dbaui
     bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString const & _sCurr)
     {
         // collect all ODBC data source names
-        StringBag aOdbcDatasources;
+        std::set<OUString> aOdbcDatasources;
         OOdbcEnumeration aEnumeration;
         if (!aEnumeration.isLoaded())
         {

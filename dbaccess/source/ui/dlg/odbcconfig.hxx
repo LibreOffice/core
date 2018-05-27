@@ -68,7 +68,7 @@ public:
 #endif
     const OUString& getLibraryName() const { return m_sLibPath; }
 
-    void        getDatasourceNames(StringBag& _rNames);
+    void        getDatasourceNames(std::set<OUString>& _rNames);
 
 private:
     oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);

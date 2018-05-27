@@ -35,8 +35,6 @@ namespace com { namespace sun { namespace star {
 namespace dbaui
 {
 
-    typedef std::set<OUString> StringBag;
-
     typedef ::utl::SharedUNOComponent< css::sdbc::XConnection > SharedConnection;
 
 }   // namespace dbaui
