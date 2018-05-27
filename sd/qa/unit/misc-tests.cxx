@@ -62,6 +62,7 @@ public:
     void testTdf99396TextEdit();
     void testFillGradient();
     void testTdf44774();
+    void testTdf38225();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testTdf99396TextEdit);
     CPPUNIT_TEST(testFillGradient);
     CPPUNIT_TEST(testTdf44774);
+    CPPUNIT_TEST(testTdf38225);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -326,6 +328,38 @@ void SdMiscTest::testTdf44774()
     CPPUNIT_ASSERT(pStyle);
     // The parent set in StyleB used to reset, because parent style's msApiName was empty
     CPPUNIT_ASSERT_EQUAL(OUString("StyleA"), pStyle->GetParent());
+}
+
+void SdMiscTest::testTdf38225()
+{
+    sd::DrawDocShellRef xDocShRef = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false,
+        DocumentType::Draw);
+    const uno::Reference<frame::XLoadable> xLoadable(xDocShRef->GetModel(), uno::UNO_QUERY_THROW);
+    xLoadable->initNew();
+    SfxStyleSheetBasePool* pSSPool = xDocShRef->GetStyleSheetPool();
+
+    // Create a new style with a name
+    pSSPool->Make("StyleWithName1", SfxStyleFamily::Para, SFXSTYLEBIT_USERDEF);
+
+    // Now save the file and reload
+    xDocShRef = saveAndReload(xDocShRef.get(), ODG);
+    pSSPool = xDocShRef->GetStyleSheetPool();
+
+    SfxStyleSheetBase* pStyle = pSSPool->Find("StyleWithName1", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(pStyle);
+
+    // Rename the style
+    CPPUNIT_ASSERT(pStyle->SetName("StyleWithName2"));
+
+    // Save the file and reload again
+    xDocShRef = saveAndReload(xDocShRef.get(), ODG);
+    pSSPool = xDocShRef->GetStyleSheetPool();
+
+    // The problem was that the style kept the old name upon reloading
+    pStyle = pSSPool->Find("StyleWithName1", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(!pStyle);
+    pStyle = pSSPool->Find("StyleWithName2", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(pStyle);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
