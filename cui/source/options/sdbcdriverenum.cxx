@@ -82,13 +82,13 @@ namespace offapp
     }
 
 
-    ODriverEnumeration::const_iterator ODriverEnumeration::begin() const throw()
+    std::vector<OUString>::const_iterator ODriverEnumeration::begin() const throw()
     {
         return m_pImpl->getDriverImplNames().begin();
     }
 
 
-    ODriverEnumeration::const_iterator ODriverEnumeration::end() const throw()
+    std::vector<OUString>::const_iterator ODriverEnumeration::end() const throw()
     {
         return m_pImpl->getDriverImplNames().end();
     }

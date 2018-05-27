@@ -64,15 +64,15 @@ namespace migration
     }
 
 
-    TStringVectorPtr BasicMigration::getFiles( const OUString& rBaseURL ) const
+    pvOUString_t BasicMigration::getFiles( const OUString& rBaseURL ) const
     {
-        TStringVectorPtr aResult( new TStringVector );
+        pvOUString_t aResult( new std::vector<OUString> );
         ::osl::Directory aDir( rBaseURL);
 
         if ( aDir.open() == ::osl::FileBase::E_None )
         {
             // iterate over directory content
-            TStringVector aSubDirs;
+            std::vector<OUString> aSubDirs;
             ::osl::DirectoryItem aItem;
             while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
             {
@@ -89,7 +89,7 @@ namespace migration
             // iterate recursive over subfolders
             for (auto const& subDir : aSubDirs)
             {
-                TStringVectorPtr aSubResult = getFiles(subDir);
+                pvOUString_t aSubResult = getFiles(subDir);
                 aResult->insert( aResult->end(), aSubResult->begin(), aSubResult->end() );
             }
         }
@@ -118,7 +118,7 @@ namespace migration
         if ( aStatus == ::utl::Bootstrap::PATH_EXISTS )
         {
             sTargetDir += sTargetUserBasic;
-            TStringVectorPtr aFileList = getFiles( m_sSourceDir );
+            pvOUString_t aFileList = getFiles( m_sSourceDir );
             for (auto const& elem : *aFileList)
             {
                 OUString sLocalName = elem.copy( m_sSourceDir.getLength() );

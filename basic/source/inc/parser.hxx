@@ -26,7 +26,7 @@
 
 
 #include <vector>
-typedef std::vector< OUString > StringVector;
+
 
 struct SbiParseStack;
 
@@ -60,20 +60,20 @@ class SbiParser : public SbiTokenizer
     void EnableCompatibility();
     static bool IsUnoInterface( const OUString& sTypeName );
 public:
-    SbxArrayRef   rTypeArray;
-    SbxArrayRef   rEnumArray;
-    SbiStringPool aGblStrings;      // string-pool
-    SbiStringPool aLclStrings;      // string-pool
-    SbiSymPool    aGlobals;
-    SbiSymPool    aPublics;         // module global
-    SbiSymPool    aRtlSyms;         // Runtime-Library
-    SbiCodeGen    aGen;             // Code-Generator
-    SbiSymPool*   pPool;
-    short         nBase;            // OPTION BASE-value
-    bool          bExplicit;        // true: OPTION EXPLICIT
-    bool          bClassModule;     // true: OPTION ClassModule
-    StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
-    StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
+    SbxArrayRef            rTypeArray;
+    SbxArrayRef            rEnumArray;
+    SbiStringPool          aGblStrings;      // string-pool
+    SbiStringPool          aLclStrings;      // string-pool
+    SbiSymPool             aGlobals;
+    SbiSymPool             aPublics;         // module global
+    SbiSymPool             aRtlSyms;         // Runtime-Library
+    SbiCodeGen             aGen;             // Code-Generator
+    SbiSymPool*            pPool;
+    short                  nBase;            // OPTION BASE-value
+    bool                   bExplicit;        // true: OPTION EXPLICIT
+    bool                   bClassModule;     // true: OPTION ClassModule
+    std::vector<OUString>  aIfaceVector;     // Holds all interfaces implemented by a class module
+    std::vector<OUString>  aRequiredTypes;   // Types used in Dim As New <type> outside subs
 #   define N_DEF_TYPES 26
     SbxDataType   eDefTypes[N_DEF_TYPES];    // DEFxxx data types
 

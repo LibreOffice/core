@@ -140,8 +140,8 @@ bool DocumentSignatureHelper::isODFPre_1_2(const OUString & sVersion)
 bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & sigInfo)
 {
     bool bOOo3_2 = false;
-    typedef ::std::vector< SignatureReferenceInformation >::const_iterator CIT;
-    for (CIT i = sigInfo.vSignatureReferenceInfors.begin();
+
+    for (auto i = sigInfo.vSignatureReferenceInfors.begin();
         i < sigInfo.vSignatureReferenceInfors.end(); ++i)
     {
         if (i->ouURI == "META-INF/manifest.xml")
@@ -448,8 +448,7 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
             }
 
             //find the file in the element list
-            typedef ::std::vector< OUString >::const_iterator CIT;
-            for (CIT aIter = sElementList.begin(); aIter != sElementList.end(); ++aIter)
+            for (auto aIter = sElementList.begin(); aIter != sElementList.end(); ++aIter)
             {
                 OUString sElementListURI = *aIter;
                 if (alg == DocumentSignatureAlgorithm::OOo2)
@@ -501,8 +500,8 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
     if (vUriSegments.size() == vPathSegments.size())
     {
         retVal = true;
-        typedef std::vector<OUString>::const_iterator CIT;
-        for (CIT i = vUriSegments.begin(), j = vPathSegments.begin();
+
+        for (auto i = vUriSegments.begin(), j = vPathSegments.begin();
             i != vUriSegments.end(); ++i, ++j)
         {
             //Decode the uri segment, so that %20 becomes ' ', etc.

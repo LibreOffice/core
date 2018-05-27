@@ -832,8 +832,8 @@ namespace sw
         sal_uInt16 WrtRedlineAuthor::AddName( const OUString& rNm )
         {
             sal_uInt16 nRet;
-            typedef std::vector<OUString>::iterator myiter;
-            myiter aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
+
+            auto aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
             if (aIter != maAuthors.end())
                 nRet = static_cast< sal_uInt16 >(aIter - maAuthors.begin());
             else

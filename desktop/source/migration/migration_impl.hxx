@@ -50,18 +50,17 @@ struct install_info
     OUString userdata;     // file: url for user installation
 };
 
-typedef std::vector< OUString > strings_v;
-typedef std::unique_ptr< strings_v > strings_vr;
+typedef std::unique_ptr< std::vector<OUString> > pvOUString_t;
 
 struct migration_step
 {
     OUString name;
-    strings_v includeFiles;
-    strings_v excludeFiles;
-    strings_v includeConfig;
-    strings_v excludeConfig;
-    strings_v includeExtensions;
-    strings_v excludeExtensions;
+    std::vector<OUString> includeFiles;
+    std::vector<OUString> excludeFiles;
+    std::vector<OUString> includeConfig;
+    std::vector<OUString> excludeConfig;
+    std::vector<OUString> includeExtensions;
+    std::vector<OUString> excludeExtensions;
     OUString service;
 };
 
@@ -69,7 +68,7 @@ struct supported_migration
 {
     OUString name;
     sal_Int32     nPriority;
-    strings_v     supported_versions;
+    std::vector<OUString>     supported_versions;
 };
 
 typedef std::vector< migration_step > migrations_v;
@@ -161,8 +160,8 @@ private:
     migrations_available m_vMigrationsAvailable; // list of all available migrations
     migrations_vr        m_vrMigrations;         // list of all migration specs from config
     install_info         m_aInfo;                // info about the version being migrated
-    strings_vr           m_vrFileList;           // final list of files to be copied
-     MigrationHashMap     m_aOldVersionItemsHashMap;
+    pvOUString_t         m_vrFileList;           // final list of files to be copied
+    MigrationHashMap     m_aOldVersionItemsHashMap;
 
     // functions to control the migration process
     static bool   readAvailableMigrations(migrations_available&);
@@ -173,12 +172,12 @@ private:
     static OUString preXDGConfigDir(const OUString& rConfigDir);
 #endif
     static void   setInstallInfoIfExist(install_info& aInfo,  const OUString& rConfigDir, const OUString& rVersion);
-    static install_info  findInstallation(const strings_v& rVersions);
-    strings_vr    compileFileList();
+    static install_info  findInstallation(const std::vector<OUString>& rVersions);
+    pvOUString_t    compileFileList();
 
     // helpers
-    strings_vr getAllFiles(const OUString& baseURL) const;
-    static strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns);
+    pvOUString_t getAllFiles(const OUString& baseURL) const;
+    static pvOUString_t applyPatterns(const std::vector<OUString>& vSet, const std::vector<OUString>& vPatterns);
     static css::uno::Reference< css::container::XNameAccess > getConfigAccess(const sal_Char* path, bool rw=false);
 
     std::vector< MigrationModuleInfo > dectectUIChangesForAllModules() const;

@@ -505,7 +505,7 @@ void MigrationImpl::setInstallInfoIfExist(
     }
 }
 
-install_info MigrationImpl::findInstallation(const strings_v& rVersions)
+install_info MigrationImpl::findInstallation(const std::vector<OUString>& rVersions)
 {
 
     OUString aTopConfigDir;
@@ -565,10 +565,10 @@ sal_Int32 MigrationImpl::findPreferredMigrationProcess(const migrations_availabl
     return nIndex;
 }
 
-strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& vPatterns)
+pvOUString_t MigrationImpl::applyPatterns(const std::vector<OUString>& vSet, const std::vector<OUString>& vPatterns)
 {
     using namespace utl;
-    strings_vr vrResult(new strings_v);
+    pvOUString_t vrResult(new std::vector<OUString>);
     for (auto const& pattern : vPatterns)
     {
         // find matches for this pattern in input set
@@ -587,15 +587,15 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
     return vrResult;
 }
 
-strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
+pvOUString_t MigrationImpl::getAllFiles(const OUString& baseURL) const
 {
-    strings_vr vrResult(new strings_v);
+    pvOUString_t vrResult(new std::vector<OUString>);
 
     // get sub dirs
     Directory dir(baseURL);
     if (dir.open() == FileBase::E_None) {
-        strings_v vSubDirs;
-        strings_vr vrSubResult;
+        std::vector<OUString> vSubDirs;
+        pvOUString_t vrSubResult;
 
         // work through directory contents...
         DirectoryItem item;
@@ -623,37 +623,37 @@ namespace
 {
 
 // removes elements of vector 2 in vector 1
-strings_v subtract(strings_v const & va, strings_v const & vb)
+std::vector<OUString> subtract(std::vector<OUString> const & va, std::vector<OUString> const & vb)
 {
-    strings_v a(va);
+    std::vector<OUString> a(va);
     std::sort(a.begin(), a.end());
-    strings_v::iterator ae(std::unique(a.begin(), a.end()));
-    strings_v b(vb);
+    std::vector<OUString>::iterator ae(std::unique(a.begin(), a.end()));
+    std::vector<OUString> b(vb);
     std::sort(b.begin(), b.end());
-    strings_v::iterator be(std::unique(b.begin(), b.end()));
-    strings_v c;
+    std::vector<OUString>::iterator be(std::unique(b.begin(), b.end()));
+    std::vector<OUString> c;
     std::set_difference(a.begin(), ae, b.begin(), be, std::back_inserter(c));
     return c;
 }
 
 }
 
-strings_vr MigrationImpl::compileFileList()
+pvOUString_t MigrationImpl::compileFileList()
 {
 
-    strings_vr vrResult(new strings_v);
-    strings_vr vrInclude;
-    strings_vr vrExclude;
+    pvOUString_t vrResult(new std::vector<OUString>);
+    pvOUString_t vrInclude;
+    pvOUString_t vrExclude;
 
     // get a list of all files:
-    strings_vr vrFiles = getAllFiles(m_aInfo.userdata);
+    pvOUString_t vrFiles = getAllFiles(m_aInfo.userdata);
 
     // get a file list result for each migration step
     for (auto const& rMigration : *m_vrMigrations)
     {
         vrInclude = applyPatterns(*vrFiles, rMigration.includeFiles);
         vrExclude = applyPatterns(*vrFiles, rMigration.excludeFiles);
-        strings_v sub(subtract(*vrInclude, *vrExclude));
+        std::vector<OUString> sub(subtract(*vrInclude, *vrExclude));
         vrResult->insert(vrResult->end(), sub.begin(), sub.end());
     }
     return vrResult;

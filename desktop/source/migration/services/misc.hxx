@@ -30,8 +30,7 @@ namespace migration
 {
 
 
-    typedef std::vector< OUString > TStringVector;
-    typedef std::unique_ptr< TStringVector > TStringVectorPtr;
+    typedef std::unique_ptr<std::vector<OUString>> pvOUString_t;
 
 
 }   // namespace migration

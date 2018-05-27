@@ -69,7 +69,7 @@ namespace migration
         ::osl::Mutex            m_aMutex;
         OUString                m_sSourceDir;
         OUString                m_sTargetDir;
-        TStringVector           m_aBlackList;
+        std::vector<OUString>   m_aBlackList;
 
         enum ScanResult
         {
@@ -79,7 +79,7 @@ namespace migration
         };
 
         ScanResult              scanExtensionFolder( const OUString& sExtFolder );
-        void                    scanUserExtensions( const OUString& sSourceDir, TStringVector& aMigrateExtensions );
+        void                    scanUserExtensions( const OUString& sSourceDir, std::vector<OUString>& aMigrateExtensions );
         bool                    scanDescriptionXml( const OUString& sDescriptionXmlFilePath );
         void                    migrateExtension( const OUString& sSourceDir );
 

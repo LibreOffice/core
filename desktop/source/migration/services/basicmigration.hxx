@@ -57,7 +57,7 @@ namespace migration
         ::osl::Mutex            m_aMutex;
         OUString         m_sSourceDir;
 
-        TStringVectorPtr        getFiles( const OUString& rBaseURL ) const;
+        pvOUString_t            getFiles( const OUString& rBaseURL ) const;
         void                    checkAndCreateDirectory( INetURLObject const & rDirURL );
         void                    copyFiles();
 

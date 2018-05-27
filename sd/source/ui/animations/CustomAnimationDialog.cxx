@@ -141,9 +141,9 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
             OUString aPropertyValue;
             rValue >>= aPropertyValue;
 
-            UStringList aSubTypes( pDescriptor->getSubTypes() );
-            UStringList::iterator aIter( aSubTypes.begin() );
-            const UStringList::iterator aEnd( aSubTypes.end() );
+            std::vector<OUString> aSubTypes( pDescriptor->getSubTypes() );
+            std::vector<OUString>::iterator aIter( aSubTypes.begin() );
+            const std::vector<OUString>::iterator aEnd( aSubTypes.end() );
 
             mpControl->Enable( aIter != aEnd );
 

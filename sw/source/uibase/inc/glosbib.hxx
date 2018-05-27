@@ -73,10 +73,9 @@ class SwGlossaryGroupDlg final : public SvxStandardDialog
     VclPtr<PushButton>     m_pDelPB;
     VclPtr<PushButton>     m_pRenamePB;
 
-    typedef std::vector< OUString> OUVector_t;
-    OUVector_t m_RemovedArr;
-    OUVector_t m_InsertedArr;
-    OUVector_t m_RenamedArr;
+    std::vector<OUString> m_RemovedArr;
+    std::vector<OUString> m_InsertedArr;
+    std::vector<OUString> m_RenamedArr;
 
     SwGlossaryHdl   *pGlosHdl;
 

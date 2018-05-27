@@ -106,8 +106,8 @@ namespace dbp
         OUString sElementsName("RadioGroup");
         disambiguateName(Reference< XNameAccess >(_rContext.xForm, UNO_QUERY), sElementsName);
 
-        StringArray::const_iterator aLabelIter = _rSettings.aLabels.begin();
-        StringArray::const_iterator aValueIter = _rSettings.aValues.begin();
+        std::vector<OUString>::const_iterator aLabelIter = _rSettings.aLabels.begin();
+        std::vector<OUString>::const_iterator aValueIter = _rSettings.aValues.begin();
         for (sal_Int32 i=0; i<nRadioButtons; ++i, ++aLabelIter, ++aValueIter)
         {
             aButtonPosition.Y = aShapePosition.Y + (i+1) * nTempHeight;

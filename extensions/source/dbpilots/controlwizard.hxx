@@ -31,7 +31,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/weld.hxx>
-#include "dbptypes.hxx"
 #include <strings.hrc>
 #include <componentmodule.hxx>
 #include "wizardcontext.hxx"

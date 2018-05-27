@@ -78,7 +78,7 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
 {
 }
 
-void OO3ExtensionMigration::scanUserExtensions( const OUString& sSourceDir, TStringVector& aMigrateExtensions )
+void OO3ExtensionMigration::scanUserExtensions( const OUString& sSourceDir, std::vector<OUString>& aMigrateExtensions )
 {
     osl::Directory    aScanRootDir( sSourceDir );
     osl::FileStatus   fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
@@ -132,7 +132,7 @@ OO3ExtensionMigration::ScanResult OO3ExtensionMigration::scanExtensionFolder( co
         // work through directory contents...
         osl::DirectoryItem item;
         osl::FileStatus fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
-        TStringVector aDirectories;
+        std::vector<OUString> aDirectories;
         while ((aDir.getNextItem(item) == osl::FileBase::E_None ) &&
                ( aResult == SCANRESULT_NOTFOUND ))
         {
@@ -341,7 +341,7 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
         // copy all extensions
         OUString sSourceDir( m_sSourceDir );
         sSourceDir += "/user/uno_packages/cache/uno_packages";
-        TStringVector aExtensionToMigrate;
+        std::vector<OUString> aExtensionToMigrate;
         scanUserExtensions( sSourceDir, aExtensionToMigrate );
         if (!aExtensionToMigrate.empty())
         {

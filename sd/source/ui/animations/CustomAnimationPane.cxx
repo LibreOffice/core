@@ -575,7 +575,7 @@ void CustomAnimationPane::updateControls()
 
             Any aValue;
 
-            UStringList aProperties( pDescriptor->getProperties() );
+            std::vector<OUString> aProperties( pDescriptor->getProperties() );
             if( aProperties.size() >= 1 )
             {
                 mnPropertyType = getPropertyType( aProperties.front() );
@@ -1212,7 +1212,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         {
             sal_Int32 nType = nPropertyTypeNone;
 
-            UStringList aProperties( pDescriptor->getProperties() );
+            std::vector<OUString> aProperties( pDescriptor->getProperties() );
             if( aProperties.size() >= 1 )
                 nType = getPropertyType( aProperties.front() );
 
