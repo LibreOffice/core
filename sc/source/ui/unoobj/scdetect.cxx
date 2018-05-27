@@ -191,7 +191,7 @@ static bool lcl_MayBeDBase( SvStream& rStream )
     // Look for dbf marker, see connectivity/source/inc/dbase/DTable.hxx
     // DBFType for values.
     const sal_uInt8 nValidMarks[] = {
-        0x03, 0x04, 0x05, 0x30, 0x43, 0xB3, 0x83, 0x8b, 0x8e, 0xf5 };
+        0x03, 0x04, 0x05, 0x30, 0x31, 0x43, 0xB3, 0x83, 0x8b, 0x8e, 0xf5 };
     sal_uInt8 nMark;
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     rStream.ReadUChar( nMark );
