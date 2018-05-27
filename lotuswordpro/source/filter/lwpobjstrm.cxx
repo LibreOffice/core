@@ -170,7 +170,7 @@ sal_uInt16 LwpObjectStream::QuickRead(void* buf, sal_uInt16 len)
     memset(buf, 0, len);
     if( len > m_nBufSize - m_nReadPos )
     {
-        assert(false);
+        SAL_WARN("lwp", "read request longer than buffer");
         len = m_nBufSize - m_nReadPos;
     }
     if( m_pContentBuf && len)
