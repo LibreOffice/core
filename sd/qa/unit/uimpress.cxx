@@ -23,6 +23,9 @@
 #include <iostream>
 #include <vector>
 
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 using namespace ::com::sun::star;
 
 namespace {

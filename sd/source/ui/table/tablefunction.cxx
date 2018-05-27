@@ -56,6 +56,7 @@
 #include <tablefunction.hxx>
 #include <DrawViewShell.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <DrawDocShell.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>

@@ -72,6 +72,8 @@
 #include <config_features.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
+#include <sdpage.hxx>
+
 using namespace css;
 using namespace css::animations;
 

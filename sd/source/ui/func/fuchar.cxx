@@ -20,6 +20,7 @@
 #include <fuchar.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 #include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>

@@ -38,6 +38,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include "unosrch.hxx"
+#include <sdpage.hxx>
 
 class SdPage;
 class SdrObject;

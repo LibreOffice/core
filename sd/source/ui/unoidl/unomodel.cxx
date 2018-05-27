@@ -57,6 +57,7 @@
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdsob.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unopool.hxx>

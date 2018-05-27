@@ -20,8 +20,10 @@
 #define INCLUDED_SD_INC_SDXMLWRP_HXX
 
 #include <comphelper/fileformat.h>
-#include <vcl/errcode.hxx>
+#include <tools/solar.h>
 #include "sdfilter.hxx"
+
+class ErrCode;
 
 // SdXMLFilter
 enum SdXMLFilterMode

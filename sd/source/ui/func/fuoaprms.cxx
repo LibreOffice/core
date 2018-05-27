@@ -28,6 +28,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/xtable.hxx>
 

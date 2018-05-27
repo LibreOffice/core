@@ -20,25 +20,21 @@
 #ifndef INCLUDED_SD_INC_DRAWDOC_HXX
 #define INCLUDED_SD_INC_DRAWDOC_HXX
 
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <vcl/print.hxx>
-#include <vcl/idle.hxx>
-#include <svx/fmmodel.hxx>
-#include "pres.hxx"
-#include <svx/pageitem.hxx>
-#include <unotools/charclass.hxx>
-#include <sot/storage.hxx>
 #include <svl/style.hxx>
-#include <com/sun/star/xml/dom/XNode.hpp>
-
-#include <svx/svdundo.hxx>
+#include <svx/fmmodel.hxx>
+#include <vcl/prntypes.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include <vector>
 #include <memory>
 
 #include "sddllapi.h"
-#include "sdpage.hxx"
+#include "pres.hxx"
+
+namespace com { namespace sun { namespace star { namespace xml { namespace dom { class XNode; } } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace vcl { class Font; }
 
 namespace com
 {
@@ -54,11 +50,6 @@ namespace com
     }
 }
 
-namespace sd
-{
-    class FrameView;
-}
-
 class SdOutliner;
 class Timer;
 class SfxObjectShell;
@@ -71,13 +62,21 @@ class SfxMedium;
 class SvxSearchItem;
 class EditStatus;
 class Point;
-namespace vcl { class Window; }
 class SdTransferable;
 struct SpellCallbackInfo;
-class SdDrawDocument;
-class SdCustomShow;
 class SdCustomShowList;
 class SdUndoGroup;
+class SdrObject;
+class CharClass;
+class Idle;
+class ImageMap;
+class Outliner;
+class SdrModel;
+class SdrOutliner;
+class SdrPage;
+class SdrTextObj;
+class SfxItemPool;
+class Size;
 
 namespace sd
 {
