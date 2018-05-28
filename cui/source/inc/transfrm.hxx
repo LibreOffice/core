@@ -74,32 +74,6 @@ class SvxPositionSizeTabPage : public SvxTabPage
     static const sal_uInt16 pPosSizeRanges[];
 
 private:
-    // position
-    VclPtr<VclFrame>            m_pFlPosition;
-    VclPtr<MetricField>         m_pMtrPosX;
-    VclPtr<MetricField>         m_pMtrPosY;
-    VclPtr<SvxRectCtl>          m_pCtlPos;
-
-    // size
-    VclPtr<VclFrame>            m_pFlSize;
-    VclPtr<FixedText>           m_pFtWidth;
-    VclPtr<MetricField>         m_pMtrWidth;
-    VclPtr<FixedText>           m_pFtHeight;
-    VclPtr<MetricField>         m_pMtrHeight;
-    VclPtr<CheckBox>            m_pCbxScale;
-    VclPtr<SvxRectCtl>          m_pCtlSize;
-
-    // protect
-    VclPtr<VclFrame>            m_pFlProtect;
-    VclPtr<TriStateBox>         m_pTsbPosProtect;
-    VclPtr<TriStateBox>         m_pTsbSizeProtect;
-
-    // adjust
-    VclPtr<VclFrame>            m_pFlAdjust;
-    VclPtr<TriStateBox>         m_pTsbAutoGrowWidth;
-    VclPtr<TriStateBox>         m_pTsbAutoGrowHeight;
-
-private:
     const SfxItemSet&   mrOutAttrs;
 
     const SdrView*      mpView;
@@ -123,22 +97,48 @@ private:
     double              mfOldHeight;
     RectPoint          meRP;
 
+    RectCtl          m_aCtlPos;
+    RectCtl          m_aCtlSize;
 
-    DECL_LINK( ChangePosProtectHdl, Button*, void );
-    DECL_LINK( ChangeSizeProtectHdl, Button*, void );
+    // position
+    std::unique_ptr<weld::Widget> m_xFlPosition;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosY;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPos;
+
+    // size
+    std::unique_ptr<weld::Widget> m_xFlSize;
+    std::unique_ptr<weld::Label> m_xFtWidth;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrWidth;
+    std::unique_ptr<weld::Label> m_xFtHeight;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrHeight;
+    std::unique_ptr<weld::CheckButton> m_xCbxScale;
+    std::unique_ptr<weld::CustomWeld> m_xCtlSize;
+
+    // protect
+    std::unique_ptr<weld::Widget> m_xFlProtect;
+    std::unique_ptr<weld::CheckButton> m_xTsbPosProtect;
+    std::unique_ptr<weld::CheckButton> m_xTsbSizeProtect;
+
+    // adjust
+    std::unique_ptr<weld::Widget> m_xFlAdjust;
+    std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowWidth;
+    std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowHeight;
+
+    DECL_LINK(ChangePosProtectHdl, weld::ToggleButton&, void);
+    DECL_LINK(ChangeSizeProtectHdl, weld::ToggleButton&, void);
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
 
-    DECL_LINK( ChangeWidthHdl, Edit&, void );
-    DECL_LINK( ChangeHeightHdl, Edit&, void );
-    DECL_LINK( ClickSizeProtectHdl, Button*, void );
-    DECL_LINK( ClickAutoHdl, Button*, void );
+    DECL_LINK( ChangeWidthHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ClickSizeProtectHdl, weld::ToggleButton&, void );
+    DECL_LINK( ClickAutoHdl, weld::ToggleButton&, void );
 
 public:
-    SvxPositionSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxPositionSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxPositionSizeTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pPosSizeRanges; }
@@ -149,8 +149,8 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
     virtual void PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
