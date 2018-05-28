@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">99.989999999999995</property>
     <property name="step_increment">0.10000000000000001</property>
@@ -11,6 +11,16 @@
     <property name="lower">0.10000000000000001</property>
     <property name="upper">99.989999999999995</property>
     <property name="value">0.5</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">99.989999999999995</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">99.989999999999995</property>
     <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">10</property>
   </object>
@@ -123,7 +133,6 @@
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
                             <property name="width">2</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -132,8 +141,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="hexpand">True</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -141,7 +150,6 @@
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
                             <property name="width">2</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -149,31 +157,28 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="headfootformatpage|labelLeftMarg">_Left margin:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
+                            <property name="mnemonic_widget">spinMargLeft</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinMargLeft:0.00cm">
+                          <object class="GtkSpinButton" id="spinMargLeft">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">center</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -181,31 +186,28 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="headfootformatpage|labelRightMarg">R_ight margin:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMargRight:0.00cm</property>
+                            <property name="mnemonic_widget">spinMargRight</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinMargRight:0.00cm">
+                          <object class="GtkSpinButton" id="spinMargRight">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">center</property>
-                            <property name="adjustment">adjustment1</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -213,31 +215,28 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="headfootformatpage|labelSpacing">_Spacing:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinSpacing:0.00cm</property>
+                            <property name="mnemonic_widget">spinSpacing</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">4</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinSpacing:0.00cm">
+                          <object class="GtkSpinButton" id="spinSpacing">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">center</property>
-                            <property name="adjustment">adjustment1</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment4</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">4</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -254,7 +253,6 @@
                             <property name="left_attach">0</property>
                             <property name="top_attach">5</property>
                             <property name="width">2</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -262,32 +260,29 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="headfootformatpage|labelHeight">_Height:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinHeight:0.00cm</property>
+                            <property name="mnemonic_widget">spinHeight</property>
                             <property name="ellipsize">end</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">6</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinHeight:0.00cm">
+                          <object class="GtkSpinButton" id="spinHeight">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">center</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">6</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -305,7 +300,6 @@
                             <property name="left_attach">0</property>
                             <property name="top_attach">7</property>
                             <property name="width">2</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -347,7 +341,6 @@
                             <property name="left_attach">0</property>
                             <property name="top_attach">8</property>
                             <property name="width">2</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
@@ -372,8 +365,8 @@
               <object class="GtkLabel" id="labelHeaderFormat">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="headfootformatpage|labelHeaderFormat">Header</property>
+                <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -388,8 +381,8 @@
               <object class="GtkLabel" id="labelFooterFormat">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="headfootformatpage|labelFooterFormat">Footer</property>
+                <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -406,8 +399,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -423,7 +414,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="svxlo-SvxPageWindow" id="drawingareaPageHF">
+              <object class="GtkDrawingArea" id="drawingareaPageHF">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
@@ -432,7 +423,7 @@
                 <property name="vexpand">True</property>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
@@ -443,18 +434,16 @@
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="ignore_hidden">True</property>
     <widgets>
-      <widget name="spinMargLeft:0.00cm"/>
-      <widget name="spinMargRight:0.00cm"/>
-      <widget name="spinSpacing:0.00cm"/>
-      <widget name="spinHeight:0.00cm"/>
+      <widget name="spinMargLeft"/>
+      <widget name="spinMargRight"/>
+      <widget name="spinSpacing"/>
+      <widget name="spinHeight"/>
     </widgets>
   </object>
 </interface>
