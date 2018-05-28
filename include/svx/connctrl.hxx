@@ -26,6 +26,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/event.hxx>
 #include <vcl/outdev.hxx>
+#include <memory>
 
 namespace vcl { class Window; }
 
@@ -45,7 +46,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXConnectionPreview : public Control
 
 private:
     SdrEdgeObj*         pEdgeObj;
-    SdrPage*            pSdrPage;
+    std::unique_ptr<SdrPage> pSdrPage;
     const SdrView*      pView;
 
     SVX_DLLPRIVATE void SetStyles();
