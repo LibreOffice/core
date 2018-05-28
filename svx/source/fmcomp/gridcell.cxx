@@ -3194,7 +3194,7 @@ void FmXGridCell::disposing()
 
     OComponentHelper::disposing();
     m_pColumn = nullptr;
-    DELETEZ(m_pCellControl);
+    m_pCellControl.reset();
 }
 
 
@@ -4551,7 +4551,7 @@ const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
 
 void FmXFilterCell::PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect )
 {
-    static_cast< DbFilterField* >( m_pCellControl )->PaintCell( rDev, rRect );
+    static_cast< DbFilterField* >( m_pCellControl.get() )->PaintCell( rDev, rRect );
 }
 
 // OComponentHelper
@@ -4561,7 +4561,7 @@ void FmXFilterCell::disposing()
     css::lang::EventObject aEvt(*this);
     m_aTextListeners.disposeAndClear(aEvt);
 
-    static_cast<DbFilterField*>(m_pCellControl)->SetCommitHdl(Link<DbFilterField&,void>());
+    static_cast<DbFilterField*>(m_pCellControl.get())->SetCommitHdl(Link<DbFilterField&,void>());
 
     FmXGridCell::disposing();
 }
@@ -4606,7 +4606,7 @@ void SAL_CALL FmXFilterCell::removeTextListener(const Reference< css::awt::XText
 void SAL_CALL FmXFilterCell::setText( const OUString& aText )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    static_cast<DbFilterField*>(m_pCellControl)->SetText(aText);
+    static_cast<DbFilterField*>(m_pCellControl.get())->SetText(aText);
 }
 
 
@@ -4618,7 +4618,7 @@ void SAL_CALL FmXFilterCell::insertText( const css::awt::Selection& /*rSel*/, co
 OUString SAL_CALL FmXFilterCell::getText()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return static_cast<DbFilterField*>(m_pCellControl)->GetText();
+    return static_cast<DbFilterField*>(m_pCellControl.get())->GetText();
 }
 
 
