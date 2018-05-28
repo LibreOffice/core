@@ -29,6 +29,7 @@
 
 #include <svx/pagectrl.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 namespace svx
 {
@@ -80,7 +81,7 @@ protected:
     VclPtr<PushButton>      m_pBackgroundBtn;
 
     sal_uInt16       nId;
-    SfxItemSet*      pBBSet;
+    std::unique_ptr<SfxItemSet> pBBSet;
     bool            mbDisableQueryBox : 1;
     bool            mbEnableDrawingLayerFillStyles : 1;
 
