@@ -1315,6 +1315,12 @@ AC_ARG_ENABLE(build-unowinreg,
          compiler is needed on Linux.]),
 ,)
 
+AC_ARG_ENABLE(build-opensymbol,
+    AS_HELP_STRING([--enable-build-opensymbol],
+        [Do not use the prebuilt opens___.ttf. Build it instead. This needs
+         fontforge installed.]),
+,)
+
 AC_ARG_ENABLE(dependency-tracking,
     AS_HELP_STRING([--enable-dependency-tracking],
         [Do not reject slow dependency extractors.])[
@@ -11296,6 +11302,20 @@ if test "x$with_java" != "xno"; then
     libo_CHECK_EXTENSION([NLPSolver],[NLPSOLVER],[nlpsolver],[nlpsolver],[])
     libo_CHECK_EXTENSION([LanguageTool],[LANGUAGETOOL],[languagetool],[languagetool],[])
 fi
+
+AC_MSG_CHECKING([whether to build opens___.ttf])
+if test "$enable_build_opensymbol" = "yes"; then
+    AC_MSG_RESULT([yes])
+    AC_PATH_PROG(FONTFORGE, fontforge)
+    if test -z "$FONTFORGE"; then
+	AC_MSG_ERROR([fontforge not installed])
+    fi
+else
+    AC_MSG_RESULT([no])
+    OPENSYMBOL_TTF=49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63-opens___.ttf
+fi
+AC_SUBST(OPENSYMBOL_TTF)
+AC_SUBST(FONTFORGE)
 
 TEST_FONTS_MISSING=0
 

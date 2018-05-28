@@ -68,4 +68,8 @@ $(eval $(call gb_Module_add_targets,extras,\
 ))
 endif
 
+$(eval $(call gb_Module_add_targets,extras,\
+	CustomTarget_opensymbol \
+))
+
 # vim: set noet sw=4 ts=4:
