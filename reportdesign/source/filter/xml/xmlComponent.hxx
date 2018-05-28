@@ -29,7 +29,6 @@ namespace rptxml
     class OXMLComponent final : public SvXMLImportContext
     {
         css::uno::Reference< css::report::XReportComponent >  m_xComponent;
-        OUString m_sTextStyleName;
 
         OXMLComponent(const OXMLComponent&);
         OXMLComponent& operator =(const OXMLComponent&);

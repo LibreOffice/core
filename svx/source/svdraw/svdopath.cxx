@@ -81,7 +81,6 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     sal_uInt16                  nPoly;          // number of the polygon in the PolyPolygon
     sal_uInt16                  nPnt;           // number of point in the above polygon
     sal_uInt16                  nPointCount;    // number of points of the polygon
-    sal_uInt16                  nPntMax;        // maximum index
     bool                        bBegPnt;        // dragged point is first point of a Polyline
     bool                        bEndPnt;        // dragged point is finishing point of a Polyline
     sal_uInt16                  nPrevPnt;       // index of previous point
@@ -120,7 +119,6 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
     , nPoly(0)
     , nPnt(0)
     , nPointCount(0)
-    , nPntMax(0)
     , bBegPnt(false)
     , bEndPnt(false)
     , nPrevPnt(0)
@@ -166,6 +164,7 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
     }
     else
     {
+        sal_uInt16 nPntMax = 0; // maximum index
         bValid=false;
         bClosed=rPO.IsClosed();          // closed object?
         nPoly=static_cast<sal_uInt16>(rHdl.GetPolyNum());            // number of the polygon in the PolyPolygon

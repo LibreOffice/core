@@ -406,7 +406,6 @@ private:
         bool isDefaulted, bool wrapOptional);
 
     css::uno::Reference< css::uno::XComponentContext > const & m_context;
-    css::uno::Sequence< rtl::OUString > m_absentOptional;
     css::uno::Type m_type;
     css::uno::Reference< css::reflection::XIdlClass > m_idlClass;
 };
@@ -417,7 +416,7 @@ PropertySetMixinImpl::Impl::Impl(
     css::uno::Sequence< rtl::OUString > const & absentOptional,
     css::uno::Type const & type):
     implements(theImplements), disposed(false), m_context(context),
-    m_absentOptional(absentOptional), m_type(type)
+    m_type(type)
 {
     assert(context.is());
     assert(
@@ -444,7 +443,7 @@ PropertySetMixinImpl::Impl::Impl(
              nullptr, anyEx );
     }
     std::vector< rtl::OUString > handleNames;
-    initProperties(ifc, m_absentOptional, &handleNames);
+    initProperties(ifc, absentOptional, &handleNames);
     std::vector< rtl::OUString >::size_type size = handleNames.size();
     assert(size <= SAL_MAX_INT32);
     handleMap.realloc(static_cast< sal_Int32 >(size));

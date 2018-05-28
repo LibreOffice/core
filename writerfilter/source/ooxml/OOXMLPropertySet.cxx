@@ -331,7 +331,6 @@ OOXMLValue * OOXMLInputStreamValue::clone() const
 
 OOXMLPropertySet::OOXMLPropertySet()
 {
-    maType = "OOXMLPropertySet";
 }
 
 OOXMLPropertySet::~OOXMLPropertySet()

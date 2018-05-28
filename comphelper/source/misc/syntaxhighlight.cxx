@@ -687,9 +687,9 @@ void SyntaxHighlighter::Tokenizer::getHighlightPortions(const OUString& rLine,
 
 
 SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
-    eLanguage(language), m_tokenizer(new SyntaxHighlighter::Tokenizer(language))
+    m_tokenizer(new SyntaxHighlighter::Tokenizer(language))
 {
-    switch (eLanguage)
+    switch (language)
     {
         case HighlighterLanguage::Basic:
             m_tokenizer->setKeyWords( strListBasicKeyWords,
