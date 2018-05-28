@@ -73,6 +73,8 @@ SvxShowCharSet::SvxShowCharSet(weld::ScrolledWindow* pScrolledWindow, const VclP
     , mbRecalculateFont(true)
     , mbUpdateForeground(true)
     , mbUpdateBackground(true)
+    , nX(0)
+    , nY(0)
 {
     init();
 
