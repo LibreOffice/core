@@ -74,8 +74,6 @@ namespace drawinglayer
         {
             // #121194# Todo: use alpha channel, too (for 3d)
             maBitmap = maBitmapEx.GetBitmap();
-            mpReadBitmap = Bitmap::ScopedReadAccess(maBitmap);
-            OSL_ENSURE(mpReadBitmap, "GeoTexSvxBitmapEx: Got no read access to Bitmap (!)");
 
             if(mbIsTransparent)
             {
@@ -92,8 +90,13 @@ namespace drawinglayer
                 mpReadTransparence = Bitmap::ScopedReadAccess(maTransparence);
             }
 
-            mfMulX = (double)mpReadBitmap->Width() / maSize.getX();
-            mfMulY = (double)mpReadBitmap->Height() / maSize.getY();
+            mpReadBitmap = Bitmap::ScopedReadAccess(maBitmap);
+            SAL_WARN_IF(!mpReadBitmap, "drawinglayer", "GeoTexSvxBitmapEx: Got no read access to Bitmap");
+            if (mpReadBitmap)
+            {
+                mfMulX = static_cast<double>(mpReadBitmap->Width()) / maSize.getX();
+                mfMulY = static_cast<double>(mpReadBitmap->Height()) / maSize.getY();
+            }
 
             if(maSize.getX() <= 1.0)
             {
