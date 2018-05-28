@@ -63,6 +63,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
     ::Window aObjectParent      = static_cast<::Window>(pEnv->aWindow);
+    pObject->maParentWin = aObjectParent;
 
     // find out on which screen that window is
     XWindowAttributes aParentAttr;
@@ -235,8 +236,7 @@ X11SalObject::~X11SalObject()
     rObjects.remove( this );
 
     GetGenericUnixSalData()->ErrorTrapPush();
-    const SystemEnvData* pEnv   = mpParent->GetSystemData();
-    ::Window aObjectParent      = static_cast<::Window>(pEnv->aWindow);
+    ::Window aObjectParent = maParentWin;
     XSetWindowBackgroundPixmap(static_cast<Display*>(maSystemChildData.pDisplay), aObjectParent, None);
     if ( maSecondary )
         XDestroyWindow( static_cast<Display*>(maSystemChildData.pDisplay), maSecondary );
@@ -400,12 +400,11 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
                )
             {
                 SalMouseEvent aEvt;
-                const SystemEnvData* pParentData = pObject->mpParent->GetSystemData();
                 int dest_x, dest_y;
                 ::Window aChild = None;
                 XTranslateCoordinates( pEvent->xbutton.display,
                                        pEvent->xbutton.root,
-                                       pParentData->aWindow,
+                                       pObject->maParentWin,
                                        pEvent->xbutton.x_root,
                                        pEvent->xbutton.y_root,
                                        &dest_x, &dest_y,
@@ -466,9 +465,8 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
 void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs)
 {
     SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericUnixSalData());
-    const SystemEnvData* pEnv   = mpParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
-    ::Window aObjectParent      = static_cast<::Window>(pEnv->aWindow);
+    ::Window aObjectParent      = maParentWin;
 
     bool bFreePixmap = false;
     Pixmap aPixmap = None;
