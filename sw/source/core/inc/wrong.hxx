@@ -76,6 +76,66 @@ public:
                  SwWrongList* pSubList);
 private:
 
+    static Color getGrammarColor ( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag)
+    {
+        try
+        {
+            if (xPropertyBag.is())
+            {
+                const OUString colorKey("LineColor");
+                css::uno::Any aLineColor = xPropertyBag->getValue(colorKey);
+                css::util::Color lineColor = 0;
+
+                if (aLineColor >>= lineColor)
+                {
+                    return Color( lineColor );
+                }
+            }
+        }
+        catch(const css::container::NoSuchElementException&)
+        {
+        }
+        catch(const css::uno::RuntimeException&)
+        {
+        }
+
+        return COL_LIGHTBLUE;
+    }
+
+    static WrongAreaLineType getGrammarLineType( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
+    {
+        try
+        {
+            if (xPropertyBag.is())
+            {
+                const OUString typeKey("LineType");
+                css::uno::Any aLineType = xPropertyBag->getValue(typeKey);
+                ::sal_Int16 lineType = 0;
+
+                if (!(aLineType >>= lineType))
+                {
+                    return WRONGAREA_WAVE;
+                }
+                if (css::awt::FontUnderline::DASH == lineType)
+                {
+                    return WRONGAREA_DASHED;
+                }
+                if (css::awt::FontUnderline::SMALLWAVE == lineType)
+                {
+                    return WRONGAREA_WAVE; //Code draws wave height based on space that fits.
+                }
+            }
+        }
+        catch(const css::container::NoSuchElementException&)
+        {
+        }
+        catch(const css::uno::RuntimeException&)
+        {
+        }
+
+        return WRONGAREA_WAVE;
+    }
+
     static Color getSmartColor ( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag)
     {
         try
@@ -145,7 +205,7 @@ private:
         }
         else if (WRONGLIST_GRAMMAR == listType)
         {
-            return COL_LIGHTBLUE;
+            return getGrammarColor(xPropertyBag);
         }
         else if (WRONGLIST_SMARTTAG == listType)
         {
@@ -164,7 +224,7 @@ private:
         }
         else if (WRONGLIST_GRAMMAR == listType)
         {
-            return WRONGAREA_WAVE;
+            return getGrammarLineType(xPropertyBag);
         }
         else if (WRONGLIST_SMARTTAG == listType)
         {
