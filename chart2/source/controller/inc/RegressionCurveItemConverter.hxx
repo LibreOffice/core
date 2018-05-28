@@ -21,11 +21,8 @@
 
 #include "ItemConverter.hxx"
 
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#include <memory>
-#include <vector>
+namespace com { namespace sun { namespace star { namespace chart2 { class XRegressionCurveContainer; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 class SdrModel;
 

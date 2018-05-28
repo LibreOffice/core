@@ -20,9 +20,10 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_MULTIPLECHARTCONVERTERS_HXX
 
 #include "MultipleItemConverter.hxx"
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 class SdrModel;
 

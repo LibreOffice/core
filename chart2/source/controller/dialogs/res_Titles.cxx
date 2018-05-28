@@ -20,6 +20,7 @@
 #include <res_Titles.hxx>
 #include <TitleDialogData.hxx>
 #include <svtools/controldims.hxx>
+#include <vcl/builder.hxx>
 
 namespace chart
 {

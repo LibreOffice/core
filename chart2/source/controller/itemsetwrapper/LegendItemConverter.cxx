@@ -25,6 +25,7 @@
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>

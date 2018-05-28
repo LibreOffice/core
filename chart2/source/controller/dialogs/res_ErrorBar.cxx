@@ -22,9 +22,11 @@
 #include <RangeSelectionHelper.hxx>
 #include <TabPageNotifiable.hxx>
 #include <helpids.h>
+#include <chartview/ChartSfxItemIds.hxx>
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 #include <svl/stritem.hxx>
 
 #define CHART_LB_FUNCTION_STD_ERROR     0

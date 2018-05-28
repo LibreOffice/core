@@ -20,8 +20,10 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_TITLES_HXX
 
 #include "TitleDialogData.hxx"
-#include <vcl/builder.hxx>
 #include <vcl/fixed.hxx>
+
+class VclBuilderContainer;
+class Edit;
 
 namespace chart
 {

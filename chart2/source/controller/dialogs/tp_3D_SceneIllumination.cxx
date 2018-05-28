@@ -20,6 +20,7 @@
 #include "tp_3D_SceneIllumination.hxx"
 #include <bitmaps.hlst>
 #include <CommonConverters.hxx>
+#include <ControllerLockGuard.hxx>
 
 #include <svx/colorbox.hxx>
 #include <svx/dialogs.hrc>
