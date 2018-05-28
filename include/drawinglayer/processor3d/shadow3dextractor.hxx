@@ -39,7 +39,7 @@ namespace drawinglayer
     {
         /** Shadow3DExtractingProcessor class
 
-            This processor extracts the 2D shadow geometry (projected geometry) of all feeded primitives.
+            This processor extracts the 2D shadow geometry (projected geometry) of all fed primitives.
             It is used to create the shadow of 3D objects which consists of 2D geometry. It needs quite
             some data to do so since we do not only offer flat projected 2D shadow, but also projections
             dependent on the light source

@@ -82,7 +82,7 @@ class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationL
     ScDragData*         m_pDragData;
     ScSelectionTransferObj* m_pSelTransfer;
     ScMessagePool*      m_pMessagePool;
-    // there is no global InputHandler anymore, each View has it's own
+    // there is no global InputHandler anymore, each View has its own
     ScInputHandler*     m_pRefInputHandler;
     ScViewCfg*          m_pViewCfg;
     ScDocCfg*           m_pDocCfg;
