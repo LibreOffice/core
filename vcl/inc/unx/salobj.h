@@ -56,6 +56,7 @@ class VCLPLUG_GEN_PUBLIC X11SalObject : public SalObject
 public:
     SystemEnvData maSystemChildData;
     SalFrame*       mpParent;
+    ::Window        maParentWin;
     ::Window        maPrimary;
     ::Window        maSecondary;
     Colormap        maColormap;
