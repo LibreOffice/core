@@ -54,7 +54,7 @@ SvxXConnectionPreview::~SvxXConnectionPreview()
 
 void SvxXConnectionPreview::dispose()
 {
-    delete pSdrPage;
+    pSdrPage.reset();
     Control::dispose();
 }
 
@@ -161,9 +161,9 @@ void SvxXConnectionPreview::Construct()
                 // not yet one.
                 if(!pSdrPage)
                 {
-                    pSdrPage = new SdrPage(
+                    pSdrPage.reset( new SdrPage(
                         pView->getSdrModelFromSdrView(),
-                        false);
+                        false) );
                 }
 
                 const SdrEdgeObj* pTmpEdgeObj = static_cast<const SdrEdgeObj*>(pObj);
