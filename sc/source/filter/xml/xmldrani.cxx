@@ -609,9 +609,8 @@ void SAL_CALL ScXMLSourceQueryContext::endFastElement( sal_Int32 /*nElement*/ )
 
 ScXMLConResContext::ScXMLConResContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    ScXMLImportContext( rImport ),
-    pDatabaseRangeContext( pTempDatabaseRangeContext )
+                                      ScXMLDatabaseRangeContext* pDatabaseRangeContext) :
+    ScXMLImportContext( rImport )
 {
     OUString sConRes;
     if ( rAttrList.is() )
@@ -687,9 +686,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSubTotalRulesConte
 
 ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    ScXMLImportContext( rImport ),
-    pDatabaseRangeContext(pTempDatabaseRangeContext)
+                                      ScXMLDatabaseRangeContext* pDatabaseRangeContext) :
+    ScXMLImportContext( rImport )
 {
     pDatabaseRangeContext->SetSubTotalsSortGroups(true);
     if ( rAttrList.is() )

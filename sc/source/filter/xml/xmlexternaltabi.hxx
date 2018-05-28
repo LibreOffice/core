@@ -43,7 +43,6 @@ private:
     ScXMLExternalTabData&   mrExternalRefInfo;
 
     OUString         maRelativeUrl;
-    OUString         maTableName;
     OUString         maFilterName;
     OUString         maFilterOptions;
 };

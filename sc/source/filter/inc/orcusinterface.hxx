@@ -556,7 +556,6 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 
     CellStoreTokensType maCellStoreTokens;
     ScOrcusGlobalSettings maGlobalSettings;
-    ScOrcusRefResolver maRefResolver;
     ScOrcusSharedStrings maSharedStrings;
     ScOrcusNamedExpression maNamedExpressions;
     std::vector<std::unique_ptr<ScOrcusSheet>> maSheets;

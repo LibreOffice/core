@@ -145,8 +145,6 @@ public:
 
 class ScXMLDPSourceSQLContext : public ScXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
-
 public:
 
     ScXMLDPSourceSQLContext( ScXMLImport& rImport,
@@ -158,8 +156,6 @@ public:
 
 class ScXMLDPSourceTableContext : public ScXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
-
 public:
 
     ScXMLDPSourceTableContext( ScXMLImport& rImport,
@@ -171,8 +167,6 @@ public:
 
 class ScXMLDPSourceQueryContext : public ScXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
-
 public:
 
     ScXMLDPSourceQueryContext( ScXMLImport& rImport,
@@ -184,8 +178,6 @@ public:
 
 class ScXMLSourceServiceContext : public ScXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
-
 public:
 
     ScXMLSourceServiceContext( ScXMLImport& rImport,
@@ -382,8 +374,6 @@ public:
 
 class ScXMLDataPilotSubTotalContext : public ScXMLImportContext
 {
-    ScXMLDataPilotSubTotalsContext* pDataPilotSubTotals;
-
 public:
 
     ScXMLDataPilotSubTotalContext( ScXMLImport& rImport,

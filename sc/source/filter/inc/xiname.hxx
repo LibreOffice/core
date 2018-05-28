@@ -66,7 +66,6 @@ private:
     OUString            maXclName;      /// Original name read from the file.
     OUString            maScName;       /// Name inserted into the Calc document.
     const ScRangeData*  mpScData;       /// Pointer to Calc defined name (no ownership).
-    sal_Unicode         mcBuiltIn;      /// Excel built-in name index.
     SCTAB               mnScTab;        /// Calc sheet index of local names.
     ScRangeData::Type   meNameType;
     sal_uInt16          mnXclTab;

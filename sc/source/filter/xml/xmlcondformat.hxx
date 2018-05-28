@@ -101,7 +101,6 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 private:
 
-    ScDataBarFormat* mpDataBarFormat;
     ScDataBarFormatData* mpFormatData;
 
     sal_Int32 mnIndex;

@@ -179,8 +179,6 @@ public:
 
 class ScXMLConResContext : public ScXMLImportContext
 {
-    ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
-
 public:
 
     ScXMLConResContext( ScXMLImport& rImport,
@@ -208,8 +206,6 @@ public:
 
 class ScXMLSortGroupsContext : public ScXMLImportContext
 {
-    ScXMLDatabaseRangeContext* pDatabaseRangeContext;
-
 public:
 
     ScXMLSortGroupsContext( ScXMLImport& rImport,

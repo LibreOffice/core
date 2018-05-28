@@ -122,7 +122,6 @@ public:
 
 class ScXMLErrorMacroContext : public ScXMLImportContext
 {
-    OUString   sName;
     bool        bExecute;
     ScXMLContentValidationContext*  pValidationContext;
 
@@ -562,7 +561,6 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
     ScXMLImportContext( rImport ),
-    sName(),
     bExecute(false)
 {
     pValidationContext = pTempValidationContext;
@@ -573,7 +571,6 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
             switch (aIter.getToken())
             {
             case XML_ELEMENT( TABLE, XML_NAME ):
-                sName = aIter.toString();
                 break;
             case XML_ELEMENT( TABLE, XML_EXECUTE ):
                 bExecute = IsXMLToken(aIter, XML_TRUE);
