@@ -944,7 +944,13 @@ OUString ListBoxUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::ListboxSelect)
     {
         sal_Int32 nPos = mxListBox->GetSelectedEntryPos();
-        return "Action on element: " + mxListBox->get_id() + " with action : SELECT and content {\"POS\": \"" + OUString::number(nPos) + "\"}";
+        return this->get_type() + " Action:SELECT Id:" + mxListBox->get_id() +
+            " POS:" + OUString::number(nPos) + " Parent:" + get_top_parent(mxListBox)->get_id();
+    }
+    else if (nEvent == VclEventId::ListboxFocus)
+    {
+        return this->get_type() + " Action:FOCUS Id:" + mxListBox->get_id() +
+            " Parent:" + get_top_parent(mxListBox)->get_id();
     }
     else
         return WindowUIObject::get_action(nEvent);
