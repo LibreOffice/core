@@ -899,7 +899,8 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 
 void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 {
-    if (bFirstPage && m_bTitlePage && m_aFollowPageStyle.is())
+    bool bCopyFirstToFollow = bFirstPage && m_bTitlePage && m_aFollowPageStyle.is();
+    if (bCopyFirstToFollow)
     {
         // This is a first page and has a follow style, then enable the
         // header/footer there as well to be consistent.
@@ -932,6 +933,13 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
         Insert( PROP_HEADER_BODY_DISTANCE, uno::makeAny( nHeaderTop - MIN_HEAD_FOOT_HEIGHT ) );// ULSpace.Top()
         Insert( PROP_HEADER_HEIGHT, uno::makeAny( nHeaderTop ) );
 
+        if (bCopyFirstToFollow && HasHeader(/*bFirstPage=*/true))
+        {
+            m_aFollowPageStyle->setPropertyValue("HeaderDynamicSpacing",
+                                                 getProperty(PROP_HEADER_DYNAMIC_SPACING)->second);
+            m_aFollowPageStyle->setPropertyValue("HeaderHeight",
+                                                 getProperty(PROP_HEADER_HEIGHT)->second);
+        }
     }
     else
     {
@@ -962,6 +970,14 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
         Insert( PROP_FOOTER_DYNAMIC_SPACING, uno::makeAny( true ) );
         Insert( PROP_FOOTER_BODY_DISTANCE, uno::makeAny( nHeaderBottom - MIN_HEAD_FOOT_HEIGHT ) );
         Insert( PROP_FOOTER_HEIGHT, uno::makeAny( nHeaderBottom ) );
+
+        if (bCopyFirstToFollow && HasFooter(/*bFirstPage=*/true))
+        {
+            m_aFollowPageStyle->setPropertyValue("FooterDynamicSpacing",
+                                                 getProperty(PROP_FOOTER_DYNAMIC_SPACING)->second);
+            m_aFollowPageStyle->setPropertyValue("FooterHeight",
+                                                 getProperty(PROP_FOOTER_HEIGHT)->second);
+        }
     }
     else
     {
@@ -976,6 +992,15 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     //now set the top/bottom margin for the follow page style
     Insert( PROP_TOP_MARGIN, uno::makeAny( std::max<sal_Int32>(nTopMargin, 0) ) );
     Insert( PROP_BOTTOM_MARGIN, uno::makeAny( std::max<sal_Int32>(nBottomMargin, 0) ) );
+
+    if (bCopyFirstToFollow)
+    {
+        if (HasHeader(/*bFirstPage=*/true))
+            m_aFollowPageStyle->setPropertyValue("TopMargin", getProperty(PROP_TOP_MARGIN)->second);
+        if (HasFooter(/*bFirstPage=*/true))
+            m_aFollowPageStyle->setPropertyValue("BottomMargin",
+                                                 getProperty(PROP_BOTTOM_MARGIN)->second);
+    }
 }
 
 uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFirstSection,
