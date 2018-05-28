@@ -481,16 +481,27 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         {
             case SVX_ADJUST_LEFT:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
+                rSet.Put( SfxBoolItem(SID_ATTR_PARA_ADJUST_CENTER, false ) );
+                rSet.Put( SfxBoolItem(SID_ATTR_PARA_ADJUST_RIGHT, false ) );
+                rSet.Put( SfxBoolItem(SID_ATTR_PARA_ADJUST_BLOCK, false ) );
             break;
             case SVX_ADJUST_CENTER:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
-            break;
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, false ) );
+                break;
             case SVX_ADJUST_RIGHT:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, false ) );
             break;
             case SVX_ADJUST_BLOCK:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
-            break;
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, false ) );
             default:
             break;
         }
