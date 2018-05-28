@@ -684,7 +684,7 @@ public:
     }
     void set_help_id(const OString& rName) { m_xSpinButton->set_help_id(rName); }
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
-    const weld::SpinButton* get_widget() const { return m_xSpinButton.get(); }
+    weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
 class VCL_DLLPUBLIC TimeSpinButton
@@ -741,7 +741,7 @@ public:
         return m_xSpinButton->get_value_changed_from_saved();
     }
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
-    weld::SpinButton* get_widget() { return m_xSpinButton.get(); }
+    weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
 class VCL_DLLPUBLIC Label : virtual public Widget
