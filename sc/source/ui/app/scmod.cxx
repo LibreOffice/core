@@ -662,28 +662,22 @@ void ScModule::SetDragJump(
 ScDocument* ScModule::GetClipDoc()
 {
     // called from document
+    SfxViewFrame* pViewFrame = nullptr;
     ScTabViewShell* pViewShell = nullptr;
-    const ScTransferObj* pObj = nullptr;
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
 
     if ((pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current())))
-        pObj = ScTransferObj::GetOwnClipboard(pViewShell->GetClipData());
+        xTransferable.set(pViewShell->GetClipData());
     else if ((pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::GetFirst())))
-        pObj = ScTransferObj::GetOwnClipboard(pViewShell->GetClipData());
-    else
+        xTransferable.set(pViewShell->GetClipData());
+    else if ((pViewFrame = SfxViewFrame::GetFirst()))
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard;
-
-        if (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst())
-            xClipboard = pViewFrame->GetWindow().GetClipboard();
-
-        if (xClipboard.is())
-        {
-            css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(
-                xClipboard->getContents(), css::uno::UNO_QUERY);
-            pObj = ScTransferObj::GetOwnClipboard(xTransferable);
-        }
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+            pViewFrame->GetWindow().GetClipboard();
+        xTransferable.set(xClipboard.is() ? xClipboard->getContents() : nullptr, css::uno::UNO_QUERY);
     }
 
+    const ScTransferObj* pObj = ScTransferObj::GetOwnClipboard(xTransferable);
     if (pObj)
     {
         ScDocument* pDoc = pObj->GetDocument();
