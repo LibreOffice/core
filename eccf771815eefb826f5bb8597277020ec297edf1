@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_121d3cbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-28T14:00:28Z",
+      "side": 1,
+      "message": "it looks relevant to me as the xAccImpl.is() would indeed be false in that case",
+      "revId": "eccf771815eefb826f5bb8597277020ec297edf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
