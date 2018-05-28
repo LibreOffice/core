@@ -2359,8 +2359,7 @@ void SAL_CALL SvxStyleToolBoxControl::dispose()
             m_xBoundItems[i].clear();
             pBoundItems[i] = nullptr;
         }
-        delete pFamilyState[i];
-        pFamilyState[i] = nullptr;
+        pFamilyState[i].reset();
     }
     pStyleSheetPool = nullptr;
     pImpl.reset();
@@ -2547,17 +2546,17 @@ void SvxStyleToolBoxControl::Update()
 
     const SfxTemplateItem* pItem = nullptr;
 
-    if ( nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1]) )
+    if ( nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1].get()) )
     // Current range not within allowed ranges or default
     {
         pStyleSheetPool = pPool;
         nActFamily      = 2;
 
-        pItem = pFamilyState[nActFamily-1];
+        pItem = pFamilyState[nActFamily-1].get();
         if ( !pItem )
         {
             nActFamily++;
-            pItem = pFamilyState[nActFamily-1];
+            pItem = pFamilyState[nActFamily-1].get();
         }
 
         if ( !pItem )
@@ -2577,12 +2576,7 @@ void SvxStyleToolBoxControl::Update()
 void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
                                              const SfxTemplateItem* pItem )
 {
-    delete pFamilyState[nIdx];
-    pFamilyState[nIdx] = nullptr;
-
-    if ( pItem )
-        pFamilyState[nIdx] = new SfxTemplateItem( *pItem );
-
+    pFamilyState[nIdx].reset( pItem == nullptr ? nullptr : new SfxTemplateItem( *pItem ) );
     Update();
 }
 

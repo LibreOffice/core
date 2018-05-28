@@ -190,7 +190,7 @@ private:
     SfxStyleSheetBasePool* pStyleSheetPool;
     SfxStyleControllerItem_Impl* pBoundItems[MAX_FAMILIES];
     css::uno::Reference<css::lang::XComponent> m_xBoundItems[MAX_FAMILIES];
-    SfxTemplateItem* pFamilyState[MAX_FAMILIES];
+    std::unique_ptr<SfxTemplateItem> pFamilyState[MAX_FAMILIES];
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
 
     SVX_DLLPRIVATE void Update();
