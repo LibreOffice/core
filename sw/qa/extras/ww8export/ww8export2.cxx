@@ -814,6 +814,13 @@ DECLARE_WW8EXPORT_TEST(testTdf112118_DOC, "tdf112118.doc")
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf117503, "tdf117503.docx")
+{
+    // This was 3, first page + standard page styles were not merged together
+    // on export.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
