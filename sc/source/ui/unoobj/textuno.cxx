@@ -987,27 +987,18 @@ void ScCellTextData::UpdateData()
 
 void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    const SfxHintId nId = rHint.GetId();
+    if ( nId == SfxHintId::Dying )
     {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+        pDocShell = nullptr;                       // invalid now
 
-        //! Ref-Update
+        DELETEZ( pForwarder );
+        pEditEngine.reset();     // EditEngine uses document's pool
     }
-    else
+    else if ( nId == SfxHintId::DataChanged )
     {
-        const SfxHintId nId = rHint.GetId();
-        if ( nId == SfxHintId::Dying )
-        {
-            pDocShell = nullptr;                       // invalid now
-
-            DELETEZ( pForwarder );
-            pEditEngine.reset();     // EditEngine uses document's pool
-        }
-        else if ( nId == SfxHintId::DataChanged )
-        {
-            if (!bInUpdate)                         // not for own UpdateData calls
-                bDataValid = false;                 // text has to be read from the cell again
-        }
+        if (!bInUpdate)                         // not for own UpdateData calls
+            bDataValid = false;                 // text has to be read from the cell again
     }
 }
 
