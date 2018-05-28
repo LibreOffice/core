@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.18"/>
+  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="adjustmentPOS">
+    <property name="lower">-120</property>
+    <property name="upper">240</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPOS1">
+    <property name="lower">-120</property>
+    <property name="upper">240</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentSIZE">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentSIZE1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkBox" id="PositionAndSize">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -36,58 +59,54 @@
                       <object class="GtkLabel" id="FT_POS_X">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="possizetabpage|FT_POS_X">Position _X:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_POS_X:0.00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_POS_X</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="FT_POS_Y">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="possizetabpage|FT_POS_Y">Position _Y:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_POS_Y:0.00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_POS_Y</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_POS_X:0.00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_POS_X">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPOS</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_POS_Y:0.00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_POS_Y">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPOS1</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -118,10 +137,27 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-SvxRectCtl" id="CTL_POSRECT">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">never</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="CTL_POSRECT">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -144,8 +180,8 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="possizetabpage|label1">Position</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -186,60 +222,54 @@
                       <object class="GtkLabel" id="FT_WIDTH">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="possizetabpage|FT_WIDTH">Wi_dth:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_WIDTH:0.00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_WIDTH</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="FT_HEIGHT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="possizetabpage|FT_HEIGHT">H_eight:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_HEIGHT:0.00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_HEIGHT</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_WIDTH:0.00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_WIDTH">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentSIZE</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_HEIGHT:0.00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_HEIGHT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="adjustment">adjustmentSIZE</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentSIZE1</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -256,7 +286,6 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
                         <property name="width">2</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -287,10 +316,27 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-SvxRectCtl" id="CTL_SIZERECT">
+                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">never</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="CTL_SIZERECT">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -313,8 +359,8 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="possizetabpage|label2">Size</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -393,8 +439,8 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="possizetabpage|label3">Protect</property>
+                <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -467,8 +513,8 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="possizetabpage|label4">Adapt</property>
+                <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -489,17 +535,6 @@
       </packing>
     </child>
   </object>
-  <object class="GtkAdjustment" id="adjustmentPOS">
-    <property name="lower">-120</property>
-    <property name="upper">240</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentSIZE">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
       <widget name="FT_POS_X"/>
@@ -510,10 +545,10 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
-      <widget name="MTR_FLD_POS_X:0.00cm"/>
-      <widget name="MTR_FLD_POS_Y:0.00cm"/>
-      <widget name="MTR_FLD_WIDTH:0.00cm"/>
-      <widget name="MTR_FLD_HEIGHT:0.00cm"/>
+      <widget name="MTR_FLD_POS_X"/>
+      <widget name="MTR_FLD_POS_Y"/>
+      <widget name="MTR_FLD_WIDTH"/>
+      <widget name="MTR_FLD_HEIGHT"/>
     </widgets>
   </object>
 </interface>
