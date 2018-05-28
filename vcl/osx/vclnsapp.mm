@@ -22,6 +22,8 @@
 
 #include <vector>
 
+#include <stdlib.h>
+
 #include <sal/main.h>
 #include <vcl/commandevent.hxx>
 #include <vcl/ImageTree.hxx>
@@ -326,6 +328,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 {
     (void)aNotification;
     sal_detail_deinitialize();
+    _Exit(0);
 }
 
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
