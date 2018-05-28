@@ -703,7 +703,7 @@ class FmXGridCell   :public ::cppu::OComponentHelper
 protected:
     ::osl::Mutex        m_aMutex;
     DbGridColumn*       m_pColumn;
-    DbCellControl*      m_pCellControl;
+    std::unique_ptr<DbCellControl> m_pCellControl;
 
 private:
     ::comphelper::OInterfaceContainerHelper2   m_aWindowListeners;
