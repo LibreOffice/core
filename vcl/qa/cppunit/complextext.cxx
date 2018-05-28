@@ -9,7 +9,9 @@
 
 #include <ostream>
 #include <vector>
+#if !defined(_WIN32)
 std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
+#endif
 
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -23,6 +25,7 @@ std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
 
 #include <config_test.h>
 
+#if !defined(_WIN32)
 std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
 {
     rStream << "{ ";
@@ -32,6 +35,7 @@ std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
     rStream << " }";
     return rStream;
 }
+#endif
 
 class VclComplexTextTest : public test::BootstrapFixture
 {
@@ -76,12 +80,16 @@ void VclComplexTextTest::testArabic()
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
+#if !defined(_WIN32)
     std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
+#endif
     std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
     long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
 
+#if !defined(_WIN32)
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
+#endif
     CPPUNIT_ASSERT_EQUAL(72L, nTextWidth);
     CPPUNIT_ASSERT_EQUAL(nTextWidth, aCharWidths.back());
 
