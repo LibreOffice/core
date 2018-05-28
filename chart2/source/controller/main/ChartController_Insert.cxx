@@ -33,6 +33,7 @@
 #include <TitleHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <ViewElementListProvider.hxx>
 #include <MultipleChartConverters.hxx>

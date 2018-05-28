@@ -21,9 +21,10 @@
 
 #include <memory>
 #include <svx/xtable.hxx>
-#include <svx/svdpage.hxx>
 
 class FontList;
+class SdrObjList;
+class SfxItemSet;
 
 namespace chart
 {

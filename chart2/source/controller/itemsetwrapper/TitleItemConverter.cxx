@@ -27,6 +27,7 @@
 #include <rtl/math.hxx>
 
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <functional>
 #include <algorithm>

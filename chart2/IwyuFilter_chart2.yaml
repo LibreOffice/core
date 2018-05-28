@@ -317,3 +317,9 @@ blacklist:
     - com/sun/star/frame/XLayoutManagerListener.hpp
     - com/sun/star/ui/XContextMenuInterception.hpp
     - com/sun/star/util/XModeChangeListener.hpp
+    chart2/source/controller/inc/ItemPropertyMap.hxx:
+    # base class has to be a complete type
+    - map
+    chart2/source/controller/inc/RangeSelectionHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Sequence.h

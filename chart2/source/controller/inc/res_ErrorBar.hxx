@@ -21,18 +21,15 @@
 
 #include <memory>
 #include <vcl/button.hxx>
-#include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/layout.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
-#include <chartview/ChartSfxItemIds.hxx>
 #include "RangeSelectionListener.hxx"
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
-
-class Dialog;
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 
 namespace chart
 {

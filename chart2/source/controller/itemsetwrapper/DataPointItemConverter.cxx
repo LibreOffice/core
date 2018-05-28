@@ -34,6 +34,7 @@
 #include <svx/chrtitem.hxx>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <svx/xflclit.hxx>
 #include <svl/intitem.hxx>

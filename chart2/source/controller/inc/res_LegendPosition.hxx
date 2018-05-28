@@ -19,12 +19,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_LEGENDPOSITION_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_LEGENDPOSITION_HXX
 
-#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <svl/itemset.hxx>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+class VclBuilderContainer;
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {

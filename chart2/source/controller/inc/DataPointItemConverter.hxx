@@ -21,6 +21,7 @@
 
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
+#include <com/sun/star/uno/Sequence.h>
 
 #include <tools/color.hxx>
 

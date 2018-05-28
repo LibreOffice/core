@@ -21,9 +21,11 @@
 
 #include <unotools/eventlisteneradapter.hxx>
 #include <svl/itemset.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <utility>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
 
 namespace chart { namespace wrapper {
 
