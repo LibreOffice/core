@@ -227,7 +227,6 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, const OUSt
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
     maDoc(rDoc),
     maGlobalSettings(maDoc),
-    maRefResolver(maGlobalSettings),
     maSharedStrings(*this),
     maNamedExpressions(maDoc, maGlobalSettings),
     maStyles(rDoc),

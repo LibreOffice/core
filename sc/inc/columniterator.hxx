@@ -22,7 +22,6 @@ struct ScRefCellValue;
 
 class ScColumnTextWidthIterator
 {
-    sc::CellTextAttrStoreType& mrCellTextAttrs;
     const size_t mnEnd;
     size_t mnCurPos;
     sc::CellTextAttrStoreType::iterator miBlockCur;

@@ -34,7 +34,6 @@ XclImpName::TokenStrmData::TokenStrmData( XclImpStream& rStrm ) :
 XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     XclImpRoot( rStrm.GetRoot() ),
     mpScData( nullptr ),
-    mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
     mnScTab( SCTAB_MAX ),
     meNameType( ScRangeData::Type::Name ),
     mnXclTab( EXC_NAME_GLOBAL ),
@@ -49,6 +48,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     sal_uInt16 nFlags = 0, nFmlaSize = 0, nExtSheet = EXC_NAME_GLOBAL;
     sal_uInt8 nNameLen = 0;
+    sal_Unicode cBuiltIn(EXC_BUILTIN_UNKNOWN);      /// Excel built-in name index.
 
     switch( GetBiff() )
     {
@@ -122,10 +122,10 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     {
         // built-in name
         if( !maXclName.isEmpty() )
-            mcBuiltIn = maXclName[0];
-        if( mcBuiltIn == '?' )      // NUL character is imported as '?'
-            mcBuiltIn = '\0';
-        maScName = XclTools::GetBuiltInDefName( mcBuiltIn );
+            cBuiltIn = maXclName[0];
+        if( cBuiltIn == '?' )      // NUL character is imported as '?'
+            cBuiltIn = '\0';
+        maScName = XclTools::GetBuiltInDefName( cBuiltIn );
     }
     else
     {
@@ -157,7 +157,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
         // --- print ranges or title ranges ---
         rStrm.PushPosition();
-        switch( mcBuiltIn )
+        switch( cBuiltIn )
         {
             case EXC_BUILTIN_PRINTAREA:
                 if( rFmlaConv.Convert( GetPrintAreaBuffer(), rStrm, nFmlaSize, nLocalTab, FT_RangeName ) == ConvErr::OK )
@@ -181,7 +181,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
             ScRange aRange;
             if (pTokArr->IsReference(aRange, ScAddress()))
             {
-                switch( mcBuiltIn )
+                switch( cBuiltIn )
                 {
                     case EXC_BUILTIN_FILTERDATABASE:
                         GetFilterManager().Insert( &GetOldRoot(), aRange);

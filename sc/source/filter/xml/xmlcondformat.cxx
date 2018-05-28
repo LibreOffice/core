@@ -397,7 +397,6 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat):
     ScXMLImportContext( rImport ),
-    mpDataBarFormat(nullptr),
     mpFormatData(nullptr),
     mnIndex(0)
 {
@@ -446,9 +445,9 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
         }
     }
 
-    mpDataBarFormat = new ScDataBarFormat(rImport.GetDocument());
+    ScDataBarFormat* pDataBarFormat = new ScDataBarFormat(rImport.GetDocument());
     mpFormatData = new ScDataBarFormatData();
-    mpDataBarFormat->SetDataBarData(mpFormatData);
+    pDataBarFormat->SetDataBarData(mpFormatData);
     if(!sGradient.isEmpty())
     {
         bool bGradient = true;
@@ -505,7 +504,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
         mpFormatData->mnMaxLength = nVal;
     }
 
-    pFormat->AddEntry(mpDataBarFormat);
+    pFormat->AddEntry(pDataBarFormat);
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarFormatContext::createFastChildContext(

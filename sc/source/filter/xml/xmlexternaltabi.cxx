@@ -58,7 +58,8 @@ ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
             if ( nAttrToken == XML_ELEMENT( XLINK, XML_HREF ) )
                 maRelativeUrl = it.toString();
             else if ( nAttrToken == XML_ELEMENT( TABLE, XML_TABLE_NAME ) )
-                maTableName = it.toString();
+                // todo
+                ;
             else if ( nAttrToken == XML_ELEMENT( TABLE, XML_FILTER_NAME ) )
                 maFilterName = it.toString();
             else if ( nAttrToken == XML_ELEMENT( TABLE, XML_FILTER_OPTIONS ) )

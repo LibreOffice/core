@@ -575,9 +575,8 @@ void ScXMLDataPilotTableContext::SetGrandTotal(
 
 ScXMLDPSourceSQLContext::ScXMLDPSourceSQLContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDataPilotTableContext* pTempDataPilotTable) :
-    ScXMLImportContext( rImport ),
-    pDataPilotTable(pTempDataPilotTable)
+                                      ScXMLDataPilotTableContext* pDataPilotTable) :
+    ScXMLImportContext( rImport )
 {
     if ( rAttrList.is() )
     {
@@ -605,9 +604,8 @@ ScXMLDPSourceSQLContext::~ScXMLDPSourceSQLContext()
 
 ScXMLDPSourceTableContext::ScXMLDPSourceTableContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDataPilotTableContext* pTempDataPilotTable) :
-    ScXMLImportContext( rImport ),
-    pDataPilotTable(pTempDataPilotTable)
+                                      ScXMLDataPilotTableContext* pDataPilotTable) :
+    ScXMLImportContext( rImport )
 {
     if ( rAttrList.is() )
     {
@@ -633,9 +631,8 @@ ScXMLDPSourceTableContext::~ScXMLDPSourceTableContext()
 
 ScXMLDPSourceQueryContext::ScXMLDPSourceQueryContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDataPilotTableContext* pTempDataPilotTable) :
-    ScXMLImportContext( rImport ),
-    pDataPilotTable(pTempDataPilotTable)
+                                      ScXMLDataPilotTableContext* pDataPilotTable) :
+    ScXMLImportContext( rImport )
 {
     if ( rAttrList.is() )
     {
@@ -660,9 +657,8 @@ ScXMLDPSourceQueryContext::~ScXMLDPSourceQueryContext()
 
 ScXMLSourceServiceContext::ScXMLSourceServiceContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDataPilotTableContext* pTempDataPilotTable) :
-    ScXMLImportContext( rImport ),
-    pDataPilotTable(pTempDataPilotTable)
+                                      ScXMLDataPilotTableContext* pDataPilotTable) :
+    ScXMLImportContext( rImport )
 {
     if ( rAttrList.is() )
     {
@@ -1288,9 +1284,8 @@ void ScXMLDataPilotSubTotalsContext::SetDisplayName(const OUString& rName)
 
 ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDataPilotSubTotalsContext* pTempDataPilotSubTotals) :
-    ScXMLImportContext( rImport ),
-    pDataPilotSubTotals(pTempDataPilotSubTotals)
+                                      ScXMLDataPilotSubTotalsContext* pDataPilotSubTotals) :
+    ScXMLImportContext( rImport )
 {
     if ( rAttrList.is() )
     {

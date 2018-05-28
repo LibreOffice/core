@@ -15,22 +15,21 @@
 #include <osl/diagnose.h>
 
 ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow) :
-    mrCellTextAttrs(rCol.maCellTextAttrs),
     mnEnd(static_cast<size_t>(nEndRow)),
-    mnCurPos(0),
-    miBlockCur(mrCellTextAttrs.begin()),
-    miBlockEnd(mrCellTextAttrs.end())
+    mnCurPos(0)
 {
+    miBlockCur = rCol.maCellTextAttrs.begin();
+    miBlockEnd = rCol.maCellTextAttrs.end();
     init(nStartRow, nEndRow);
 }
 
 ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScDocument& rDoc, const ScAddress& rStartPos, SCROW nEndRow) :
-    mrCellTextAttrs(rDoc.maTabs[rStartPos.Tab()]->aCol[rStartPos.Col()].maCellTextAttrs),
     mnEnd(static_cast<size_t>(nEndRow)),
-    mnCurPos(0),
-    miBlockCur(mrCellTextAttrs.begin()),
-    miBlockEnd(mrCellTextAttrs.end())
+    mnCurPos(0)
 {
+    auto & rCellTextAttrs = rDoc.maTabs[rStartPos.Tab()]->aCol[rStartPos.Col()].maCellTextAttrs;
+    miBlockCur = rCellTextAttrs.begin();
+    miBlockEnd = rCellTextAttrs.end();
     init(rStartPos.Row(), nEndRow);
 }
 

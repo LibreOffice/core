@@ -726,7 +726,6 @@ private:
     typedef std::vector< std::unique_ptr<XclExpDxf> > DxfContainer;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
     DxfContainer maDxf;
-    SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 };
 
