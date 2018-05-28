@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_5716c6a7",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-05-28T07:02:48Z",
+      "side": 1,
+      "message": "This is the method definition itself, and calling it recursively inside its own definition without a proper base/stop case will cause runtime stack overflow.\n\nYou better leave this definition alone.",
+      "range": {
+        "startLine": 904,
+        "startChar": 0,
+        "endLine": 907,
+        "endChar": 1
+      },
+      "revId": "51819541e5d529b137d1aab53162cd1b0e3394ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
