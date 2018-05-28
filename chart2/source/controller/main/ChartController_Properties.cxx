@@ -20,6 +20,7 @@
 #include <ChartController.hxx>
 #include <ChartWindow.hxx>
 #include <chartview/DrawModelWrapper.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
 #include <ObjectIdentifier.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <dlg_ObjectProperties.hxx>

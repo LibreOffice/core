@@ -19,13 +19,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_TABPAGENOTIFIABLE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_TABPAGENOTIFIABLE_HXX
 
-#include <vcl/tabpage.hxx>
-#include <tools/color.hxx>
-
 // color to use as foreground for an invalid range
 #define RANGE_SELECTION_INVALID_RANGE_FOREGROUND_COLOR COL_WHITE
 // color to use as background for an invalid range
 #define RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR Color(0xff6563)
+
+class TabPage;
 
 namespace chart
 {

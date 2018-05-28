@@ -41,6 +41,7 @@
 #include <svx/svdobj.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svdpage.hxx>
 
 namespace chart
 {

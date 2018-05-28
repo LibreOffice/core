@@ -20,10 +20,11 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_LEGENDITEMCONVERTER_HXX
 
 #include "ItemConverter.hxx"
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 class SdrModel;
 

@@ -23,13 +23,11 @@
 #include <ObjectIdentifier.hxx>
 
 class SdrObject;
-#include <svx/svdtypes.hxx>
-#include <com/sun/star/drawing/XShape.hpp>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
 namespace chart
 {
-
-class ObjectIdentifier;
 
 class Selection
 {

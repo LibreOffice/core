@@ -21,9 +21,8 @@
 
 #include <ObjectIdentifier.hxx>
 
-#include <rtl/ustring.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/awt/KeyEvent.hpp>
+namespace com { namespace sun { namespace star { namespace awt { struct KeyEvent; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 
 #include <memory>
 #include <vector>

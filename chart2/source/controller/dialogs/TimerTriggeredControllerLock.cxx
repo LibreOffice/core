@@ -18,6 +18,7 @@
  */
 
 #include <TimerTriggeredControllerLock.hxx>
+#include <ControllerLockGuard.hxx>
 
 #include <vcl/edit.hxx>
 

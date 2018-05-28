@@ -31,6 +31,7 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/builder.hxx>
 
 namespace chart
 {
