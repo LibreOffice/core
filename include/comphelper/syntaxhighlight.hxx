@@ -69,7 +69,6 @@ class COMPHELPER_DLLPUBLIC SyntaxHighlighter
 {
     class Tokenizer;
 
-    HighlighterLanguage eLanguage;
     std::unique_ptr<Tokenizer> m_tokenizer;
 
     SyntaxHighlighter(const SyntaxHighlighter&) = delete;

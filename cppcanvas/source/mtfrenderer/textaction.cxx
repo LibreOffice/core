@@ -815,7 +815,6 @@ namespace cppcanvas
                 rendering::RenderState                      maState;
                 const tools::TextLineInfo                   maTextLineInfo;
                 ::basegfx::B2DSize                          maLinesOverallSize;
-                const double                                mnLineWidth;
                 uno::Reference< rendering::XPolyPolygon2D > mxTextLines;
                 const ::basegfx::B2DSize                    maReliefOffset;
                 const ::Color                               maReliefColor;
@@ -841,7 +840,6 @@ namespace cppcanvas
                 maState(),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
                 maLinesOverallSize(),
-                mnLineWidth( getLineWidth( rVDev, rState, maStringContext ) ),
                 mxTextLines(),
                 maReliefOffset( rReliefOffset ),
                 maReliefColor( rReliefColor ),
@@ -849,10 +847,11 @@ namespace cppcanvas
                 maShadowColor( rShadowColor ),
                 maTextDirection( rState.textDirection )
             {
+                const double nLineWidth(getLineWidth( rVDev, rState, maStringContext ));
                 initEffectLinePolyPolygon( maLinesOverallSize,
                                            mxTextLines,
                                            rCanvas,
-                                           mnLineWidth,
+                                           nLineWidth,
                                            maTextLineInfo );
 
                 init( maState, mxFont,
@@ -881,7 +880,6 @@ namespace cppcanvas
                 maState(),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
                 maLinesOverallSize(),
-                mnLineWidth( getLineWidth( rVDev, rState, maStringContext ) ),
                 mxTextLines(),
                 maReliefOffset( rReliefOffset ),
                 maReliefColor( rReliefColor ),
@@ -889,10 +887,11 @@ namespace cppcanvas
                 maShadowColor( rShadowColor ),
                 maTextDirection( rState.textDirection )
             {
+                const double nLineWidth( getLineWidth( rVDev, rState, maStringContext ) );
                 initEffectLinePolyPolygon( maLinesOverallSize,
                                            mxTextLines,
                                            rCanvas,
-                                           mnLineWidth,
+                                           nLineWidth,
                                            maTextLineInfo );
 
                 init( maState, mxFont,

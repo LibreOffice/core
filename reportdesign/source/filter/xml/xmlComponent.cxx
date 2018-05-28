@@ -71,8 +71,6 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
                     m_xComponent->setName(sValue);
                     break;
                 case XML_TOK_TEXT_STYLE_NAME:
-                    m_sTextStyleName = sValue;
-                    break;
                 case XML_TOK_TRANSFORM:
                     break;
                 default:

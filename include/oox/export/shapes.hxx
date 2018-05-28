@@ -114,7 +114,6 @@ protected:
 
 private:
     sal_Int32           mnXmlNamespace;
-    Fraction            maFraction;
     MapMode             maMapModeSrc, maMapModeDest;
     std::shared_ptr<URLTransformer> mpURLTransformer;
 

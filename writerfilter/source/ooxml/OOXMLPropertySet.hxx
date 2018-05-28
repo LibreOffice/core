@@ -141,7 +141,6 @@ public:
     typedef std::shared_ptr<OOXMLPropertySet> Pointer_t;
 private:
     OOXMLProperties_t mProperties;
-    OString maType;
     void add(const OOXMLProperty::Pointer_t& pProperty);
 public:
     OOXMLPropertySet();

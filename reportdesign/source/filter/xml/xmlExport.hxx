@@ -100,7 +100,6 @@ private:
 
     OUString                                 m_sTableStyle;
     OUString                                 m_sCellStyle;
-    OUString                                 m_sColumnStyle;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xTableStylesExportPropertySetMapper;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xCellStylesExportPropertySetMapper;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xColumnStylesExportPropertySetMapper;

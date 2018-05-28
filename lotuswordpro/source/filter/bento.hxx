@@ -309,11 +309,11 @@ class CBenValueSegment : public CUtListElmt
 public: // Internal methods
     CBenValueSegment(CBenValue * pValue, BenContainerPos Pos,
       size_t Size) : CUtListElmt(&pValue->GetValueSegments())
-      { cpValue = pValue; cImmediate = false; cPos = Pos;
+      { cImmediate = false; cPos = Pos;
       cSize = Size; }
     CBenValueSegment(CBenValue * pValue, const void  * pImmData,
       unsigned short Size) : CUtListElmt(&pValue->GetValueSegments())
-      { cpValue = pValue; cImmediate = true;
+      { cImmediate = true;
       std::memcpy(cImmData, pImmData, Size); cSize = Size; }
     bool IsImmediate() { return cImmediate; }
     BenContainerPos GetPosition() { return cPos; }
@@ -321,7 +321,6 @@ public: // Internal methods
     BenByte * GetImmediateData() { return cImmData; }
 
 private: // Data
-    CBenValue * cpValue;
     bool cImmediate;
     union
     {
