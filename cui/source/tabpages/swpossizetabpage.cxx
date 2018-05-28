@@ -490,9 +490,9 @@ static LB lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 
 // #i22341# - helper method on order to determine all possible
 // listbox relations in a relation map for a given string ID
-static LB lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
-                                  const SvxSwFramePosString::StringId _eStrId,
-                                  const bool _bUseMirrorStr )
+static LB lcl_GetLBRelationsForStrID(const FrmMap* _pMap,
+                                     const SvxSwFramePosString::StringId _eStrId,
+                                     const bool _bUseMirrorStr )
 {
     LB nLBRelations = LB::NONE;
 
@@ -509,8 +509,8 @@ static LB lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
     return nLBRelations;
 }
 
-SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "SwPosSizePage", "cui/ui/swpossizepage.ui", &rInAttrs)
+SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "cui/ui/swpossizepage.ui", "SwPosSizePage", &rInAttrs)
     , m_pVMap(nullptr)
     , m_pHMap(nullptr)
     , m_pSdrView(nullptr)
@@ -525,111 +525,77 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     , m_bIsMultiSelection(false)
     , m_bIsInRightToLeft(false)
     , m_nProtectSizeState(TRISTATE_FALSE)
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
+    , m_xHeightMF(m_xBuilder->weld_metric_spin_button("height", FUNIT_CM))
+    , m_xKeepRatioCB(m_xBuilder->weld_check_button("ratio"))
+    , m_xToPageRB(m_xBuilder->weld_radio_button("topage"))
+    , m_xToParaRB(m_xBuilder->weld_radio_button("topara"))
+    , m_xToCharRB(m_xBuilder->weld_radio_button("tochar"))
+    , m_xAsCharRB(m_xBuilder->weld_radio_button("aschar"))
+    , m_xToFrameRB(m_xBuilder->weld_radio_button("toframe"))
+    , m_xPositionCB(m_xBuilder->weld_check_button("pos"))
+    , m_xSizeCB(m_xBuilder->weld_check_button("size"))
+    , m_xPosFrame(m_xBuilder->weld_widget("posframe"))
+    , m_xHoriFT(m_xBuilder->weld_label("horiposft"))
+    , m_xHoriLB(m_xBuilder->weld_combo_box_text("horipos"))
+    , m_xHoriByFT(m_xBuilder->weld_label("horibyft"))
+    , m_xHoriByMF(m_xBuilder->weld_metric_spin_button("byhori", FUNIT_CM))
+    , m_xHoriToFT(m_xBuilder->weld_label("horitoft"))
+    , m_xHoriToLB(m_xBuilder->weld_combo_box_text("horianchor"))
+    , m_xHoriMirrorCB(m_xBuilder->weld_check_button("mirror"))
+    , m_xVertFT(m_xBuilder->weld_label("vertposft"))
+    , m_xVertLB(m_xBuilder->weld_combo_box_text("vertpos"))
+    , m_xVertByFT(m_xBuilder->weld_label("vertbyft"))
+    , m_xVertByMF(m_xBuilder->weld_metric_spin_button("byvert", FUNIT_CM))
+    , m_xVertToFT(m_xBuilder->weld_label("verttoft"))
+    , m_xVertToLB(m_xBuilder->weld_combo_box_text("vertanchor"))
+    , m_xFollowCB(m_xBuilder->weld_check_button("followtextflow"))
+    , m_xExampleWN(new weld::CustomWeld(*m_xBuilder, "preview", m_aExampleWN))
 {
-    get(m_pWidthMF, "width");
-    get(m_pHeightMF, "height");
-    get(m_pKeepRatioCB, "ratio");
-    get(m_pToPageRB, "topage");
-    get(m_pToParaRB, "topara");
-    get(m_pToCharRB, "tochar");
-    get(m_pAsCharRB, "aschar");
-    get(m_pToFrameRB, "toframe");
-    get(m_pPositionCB, "pos");
-    get(m_pSizeCB, "size");
-    get(m_pPosFrame, "posframe");
-    get(m_pHoriFT, "horiposft");
-    get(m_pHoriLB, "horipos");
-    get(m_pHoriByFT, "horibyft");
-    get(m_pHoriByMF, "byhori");
-    get(m_pHoriToFT, "horitoft");
-    get(m_pHoriToLB, "horianchor");
-    get(m_pHoriMirrorCB, "mirror");
-    get(m_pVertFT, "vertposft");
-    get(m_pVertLB, "vertpos");
-    get(m_pVertByFT, "vertbyft");
-    get(m_pVertByMF, "byvert");
-    get(m_pVertToFT, "verttoft");
-    get(m_pVertToLB, "vertanchor");
-    get(m_pFollowCB, "followtextflow");
-    get(m_pExampleWN, "preview");
-
     setOptimalFrmWidth();
     setOptimalRelWidth();
 
     FieldUnit eDlgUnit = GetModuleFieldUnit( rInAttrs );
-    SetFieldUnit( *m_pHoriByMF, eDlgUnit, true );
-    SetFieldUnit( *m_pVertByMF, eDlgUnit, true );
-    SetFieldUnit( *m_pWidthMF , eDlgUnit, true );
-    SetFieldUnit( *m_pHeightMF, eDlgUnit, true );
+    SetFieldUnit(*m_xHoriByMF, eDlgUnit, true);
+    SetFieldUnit(*m_xVertByMF, eDlgUnit, true);
+    SetFieldUnit(*m_xWidthMF , eDlgUnit, true);
+    SetFieldUnit(*m_xHeightMF, eDlgUnit, true);
 
     SetExchangeSupport();
 
-    Link<Control&,void> aLk3 = LINK(this, SvxSwPosSizeTabPage, RangeModifyHdl);
-    m_pWidthMF->SetLoseFocusHdl( aLk3 );
-    m_pHeightMF->SetLoseFocusHdl( aLk3 );
-    m_pHoriByMF->SetLoseFocusHdl( aLk3 );
-    m_pVertByMF->SetLoseFocusHdl( aLk3 );
-    m_pFollowCB->SetClickHdl( LINK(this, SvxSwPosSizeTabPage, RangeModifyClickHdl) );
+    Link<weld::Widget&,void> aLk3 = LINK(this, SvxSwPosSizeTabPage, RangeModifyHdl);
+    m_xWidthMF->connect_focus_out(aLk3);
+    m_xHeightMF->connect_focus_out(aLk3);
+    m_xHoriByMF->connect_focus_out(aLk3);
+    m_xVertByMF->connect_focus_out(aLk3);
+    m_xFollowCB->connect_toggled(LINK(this, SvxSwPosSizeTabPage, RangeModifyClickHdl));
 
-    Link<Edit&,void> aLk = LINK(this, SvxSwPosSizeTabPage, ModifyHdl);
-    m_pWidthMF->SetModifyHdl( aLk );
-    m_pHeightMF->SetModifyHdl( aLk );
-    m_pHoriByMF->SetModifyHdl( aLk );
-    m_pVertByMF->SetModifyHdl( aLk );
+    Link<weld::MetricSpinButton&,void> aLk = LINK(this, SvxSwPosSizeTabPage, ModifyHdl);
+    m_xWidthMF->connect_value_changed( aLk );
+    m_xHeightMF->connect_value_changed( aLk );
+    m_xHoriByMF->connect_value_changed( aLk );
+    m_xVertByMF->connect_value_changed( aLk );
 
-    Link<Button*,void> aLk2 = LINK(this, SvxSwPosSizeTabPage, AnchorTypeHdl);
-    m_pToPageRB->SetClickHdl( aLk2 );
-    m_pToParaRB->SetClickHdl( aLk2 );
-    m_pToCharRB->SetClickHdl( aLk2 );
-    m_pAsCharRB->SetClickHdl( aLk2 );
-    m_pToFrameRB->SetClickHdl( aLk2 );
+    Link<weld::ToggleButton&,void> aLk2 = LINK(this, SvxSwPosSizeTabPage, AnchorTypeHdl);
+    m_xToPageRB->connect_toggled( aLk2 );
+    m_xToParaRB->connect_toggled( aLk2 );
+    m_xToCharRB->connect_toggled( aLk2 );
+    m_xAsCharRB->connect_toggled( aLk2 );
+    m_xToFrameRB->connect_toggled( aLk2 );
 
-    m_pHoriLB->SetSelectHdl(LINK(this, SvxSwPosSizeTabPage, PosHdl));
-    m_pVertLB->SetSelectHdl(LINK(this, SvxSwPosSizeTabPage, PosHdl));
+    m_xHoriLB->connect_changed(LINK(this, SvxSwPosSizeTabPage, PosHdl));
+    m_xVertLB->connect_changed(LINK(this, SvxSwPosSizeTabPage, PosHdl));
 
-    m_pHoriToLB->SetSelectHdl(LINK(this, SvxSwPosSizeTabPage, RelHdl));
-    m_pVertToLB->SetSelectHdl(LINK(this, SvxSwPosSizeTabPage, RelHdl));
+    m_xHoriToLB->connect_changed(LINK(this, SvxSwPosSizeTabPage, RelHdl));
+    m_xVertToLB->connect_changed(LINK(this, SvxSwPosSizeTabPage, RelHdl));
 
-    m_pHoriMirrorCB->SetClickHdl(LINK(this, SvxSwPosSizeTabPage, MirrorHdl));
-    m_pPositionCB->SetClickHdl(LINK(this, SvxSwPosSizeTabPage, ProtectHdl));
+    m_xHoriMirrorCB->connect_toggled(LINK(this, SvxSwPosSizeTabPage, MirrorHdl));
+    m_xPositionCB->connect_toggled(LINK(this, SvxSwPosSizeTabPage, ProtectHdl));
 }
 
 SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
 {
-    disposeOnce();
 }
-
-void SvxSwPosSizeTabPage::dispose()
-{
-    m_pWidthMF.clear();
-    m_pHeightMF.clear();
-    m_pKeepRatioCB.clear();
-    m_pToPageRB.clear();
-    m_pToParaRB.clear();
-    m_pToCharRB.clear();
-    m_pAsCharRB.clear();
-    m_pToFrameRB.clear();
-    m_pPositionCB.clear();
-    m_pSizeCB.clear();
-    m_pPosFrame.clear();
-    m_pHoriFT.clear();
-    m_pHoriLB.clear();
-    m_pHoriByFT.clear();
-    m_pHoriByMF.clear();
-    m_pHoriToFT.clear();
-    m_pHoriToLB.clear();
-    m_pHoriMirrorCB.clear();
-    m_pVertFT.clear();
-    m_pVertLB.clear();
-    m_pVertByFT.clear();
-    m_pVertByMF.clear();
-    m_pVertToFT.clear();
-    m_pVertToLB.clear();
-    m_pFollowCB.clear();
-    m_pExampleWN.clear();
-    SfxTabPage::dispose();
-}
-
 
 namespace
 {
@@ -681,13 +647,13 @@ void SvxSwPosSizeTabPage::setOptimalFrmWidth()
 
     for (auto const& frame : aFrames)
     {
-        m_pHoriLB->InsertEntry(SvxSwFramePosString::GetString(frame));
+        m_xHoriLB->append_text(SvxSwFramePosString::GetString(frame));
     }
 
-    Size aBiggest(m_pHoriLB->GetOptimalSize());
-    m_pHoriLB->set_width_request(aBiggest.Width());
-    m_pVertLB->set_width_request(aBiggest.Width());
-    m_pHoriLB->Clear();
+    Size aBiggest(m_xHoriLB->get_preferred_size());
+    m_xHoriLB->set_size_request(aBiggest.Width(), -1);
+    m_xVertLB->set_size_request(aBiggest.Width(), -1);
+    m_xHoriLB->clear();
 }
 
 namespace
@@ -721,18 +687,18 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
 
     for (auto const& elem : aRels)
     {
-        m_pHoriLB->InsertEntry(SvxSwFramePosString::GetString(elem));
+        m_xHoriLB->append_text(SvxSwFramePosString::GetString(elem));
     }
 
-    Size aBiggest(m_pHoriLB->GetOptimalSize());
-    m_pHoriLB->set_width_request(aBiggest.Width());
-    m_pVertLB->set_width_request(aBiggest.Width());
-    m_pHoriLB->Clear();
+    Size aBiggest(m_xHoriLB->get_preferred_size());
+    m_xHoriLB->set_size_request(aBiggest.Width(), -1);
+    m_xVertLB->set_size_request(aBiggest.Width(), -1);
+    m_xHoriLB->clear();
 }
 
-VclPtr<SfxTabPage> SvxSwPosSizeTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxSwPosSizeTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxSwPosSizeTabPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SvxSwPosSizeTabPage>::Create(pParent, *rSet);
 }
 
 const sal_uInt16* SvxSwPosSizeTabPage::GetRanges()
@@ -774,25 +740,25 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
         rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, static_cast<sal_Int16>(nAnchor)));
         bModified = true;
     }
-    if ( m_pPositionCB->IsValueChangedFromSaved() )
+    if (m_xPositionCB->get_state_changed_from_saved())
     {
-        if( m_pPositionCB->GetState() == TRISTATE_INDET )
+        if (m_xPositionCB->get_inconsistent())
             rSet->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
         else
             rSet->Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
-                m_pPositionCB->GetState() == TRISTATE_TRUE ) );
+                m_xPositionCB->get_state() == TRISTATE_TRUE ) );
         bModified = true;
     }
 
-    if ( m_pSizeCB->IsValueChangedFromSaved() )
+    if (m_xSizeCB->get_state_changed_from_saved())
     {
-        if ( m_pSizeCB->GetState() == TRISTATE_INDET )
+        if (m_xSizeCB->get_inconsistent())
             rSet->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
         else
             rSet->Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
-                m_pSizeCB->GetState() == TRISTATE_TRUE ) );
+                m_xSizeCB->get_state() == TRISTATE_TRUE ) );
         bModified = true;
     }
 
@@ -801,14 +767,12 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     if(!m_bPositioningDisabled)
     {
         //on multiple selections the positioning is set via SdrView
-        if(m_bIsMultiSelection)
+        if (m_bIsMultiSelection)
         {
-            if( m_pHoriByMF->IsValueModified() || m_pVertByMF->IsValueModified() )
+            if (m_xHoriByMF->get_value_changed_from_saved() || m_xVertByMF->get_value_changed_from_saved())
             {
-                long nHoriByPos =
-                            static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
-                long nVertByPos =
-                            static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
+                auto nHoriByPos = m_xHoriByMF->denormalize(m_xHoriByMF->get_value(FUNIT_TWIP));
+                auto nVertByPos = m_xVertByMF->denormalize(m_xVertByMF->get_value(FUNIT_TWIP));
 
                 // old rectangle with CoreUnit
                 m_aRect = m_pSdrView->GetAllMarkedRect();
@@ -834,26 +798,25 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 const SfxInt32Item& rHoriPosition =
                         static_cast<const SfxInt32Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_HORI_POSITION)) ;
 
-                sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriLB);
-                short nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriToLB);
-                short nRel = GetRelation(*m_pHoriToLB);
-                const long nHoriByPos =
-                            static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
+                sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_xHoriLB);
+                short nAlign = GetAlignment(m_pHMap, nMapPos, *m_xHoriToLB);
+                short nRel = GetRelation(*m_xHoriToLB);
+                const auto nHoriByPos = m_xHoriByMF->denormalize(m_xHoriByMF->get_value(FUNIT_TWIP));
                 if (
                     nAlign != rHoriOrient.GetValue() ||
                     nRel != rHoriRelation.GetValue() ||
-                    (m_pHoriByMF->IsEnabled() && nHoriByPos != rHoriPosition.GetValue())
+                    (m_xHoriByMF->get_sensitive() && nHoriByPos != rHoriPosition.GetValue())
                    )
                 {
                     rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_ORIENT, nAlign));
                     rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, nRel));
-                    if(m_pHoriByMF->IsEnabled())
+                    if(m_xHoriByMF->get_sensitive())
                         rSet->Put(SfxInt32Item(SID_ATTR_TRANSFORM_HORI_POSITION, nHoriByPos));
                     bModified = true;
                 }
             }
-            if(m_pHoriMirrorCB->IsEnabled() && m_pHoriMirrorCB->IsValueChangedFromSaved())
-                bModified |= nullptr != rSet->Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, m_pHoriMirrorCB->IsChecked()));
+            if (m_xHoriMirrorCB->get_sensitive() && m_xHoriMirrorCB->get_state_changed_from_saved())
+                bModified |= nullptr != rSet->Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, m_xHoriMirrorCB->get_active()));
 
             if ( m_pVMap )
             {
@@ -864,48 +827,47 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 const SfxInt32Item& rVertPosition =
                         static_cast<const SfxInt32Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_VERT_POSITION));
 
-                sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);
-                short nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertToLB);
-                short nRel = GetRelation(*m_pVertToLB);
+                sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_xVertLB);
+                short nAlign = GetAlignment(m_pVMap, nMapPos, *m_xVertToLB);
+                short nRel = GetRelation(*m_xVertToLB);
                 // #i34055# - convert vertical position for
                 // as-character anchored objects
-                long nVertByPos =
-                        static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
+                auto nVertByPos = m_xVertByMF->denormalize(m_xVertByMF->get_value(FUNIT_TWIP));
                 if (GetAnchorType() == RndStdIds::FLY_AS_CHAR)
                 {
                     nVertByPos *= -1;
                 }
                 if ( nAlign != rVertOrient.GetValue() ||
                      nRel != rVertRelation.GetValue() ||
-                     ( m_pVertByMF->IsEnabled() &&
+                     ( m_xVertByMF->get_sensitive() &&
                        nVertByPos != rVertPosition.GetValue() ) )
                 {
                     rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_ORIENT, nAlign));
                     rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_RELATION, nRel));
-                    if(m_pVertByMF->IsEnabled())
+                    if(m_xVertByMF->get_sensitive())
                         rSet->Put(SfxInt32Item(SID_ATTR_TRANSFORM_VERT_POSITION, nVertByPos));
                     bModified = true;
                 }
             }
 
             // #i18732#
-            if(m_pFollowCB->IsValueChangedFromSaved())
+            if (m_xFollowCB->get_state_changed_from_saved())
             {
                 //Writer internal type - based on SfxBoolItem
                 const SfxPoolItem* pItem = GetItem( rOldSet, SID_SW_FOLLOW_TEXT_FLOW);
                 if(pItem)
                 {
                     std::unique_ptr<SfxBoolItem> pFollow(static_cast<SfxBoolItem*>(pItem->Clone()));
-                    pFollow->SetValue(m_pFollowCB->IsChecked());
+                    pFollow->SetValue(m_xFollowCB->get_active());
                     bModified |= nullptr != rSet->Put(*pFollow);
                 }
             }
         }
     }
-    if ( m_pWidthMF->IsValueModified() || m_pHeightMF->IsValueModified() )
+    if (m_xWidthMF->get_value_changed_from_saved() || m_xHeightMF->get_value_changed_from_saved())
     {
-        sal_uInt32 nWidth = static_cast<sal_uInt32>(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP)));
-        sal_uInt32 nHeight = static_cast<sal_uInt32>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_TWIP)));
+        sal_uInt32 nWidth = static_cast<sal_uInt32>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_TWIP)));
+        sal_uInt32 nHeight = static_cast<sal_uInt32>(m_xHeightMF->denormalize(m_xHeightMF->get_value(FUNIT_TWIP)));
         rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), nWidth ) );
         rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), nHeight ) );
         //this item is required by SdrEditView::SetGeoAttrToMarked()
@@ -927,54 +889,51 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
         nAnchorType = static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
         switch(nAnchorType)
         {
-            case RndStdIds::FLY_AT_PAGE:   m_pToPageRB->Check();  break;
-            case RndStdIds::FLY_AT_PARA:   m_pToParaRB->Check();  break;
-            case RndStdIds::FLY_AT_CHAR:   m_pToCharRB->Check();  break;
-            case RndStdIds::FLY_AS_CHAR:   m_pAsCharRB->Check();  break;
-            case RndStdIds::FLY_AT_FLY:    m_pToFrameRB->Check(); break;
+            case RndStdIds::FLY_AT_PAGE:   m_xToPageRB->set_active(true);  break;
+            case RndStdIds::FLY_AT_PARA:   m_xToParaRB->set_active(true);  break;
+            case RndStdIds::FLY_AT_CHAR:   m_xToCharRB->set_active(true);  break;
+            case RndStdIds::FLY_AS_CHAR:   m_xAsCharRB->set_active(true);  break;
+            case RndStdIds::FLY_AT_FLY:    m_xToFrameRB->set_active(true); break;
             default : bInvalidateAnchor = true;
         }
-        m_pToPageRB->SaveValue();
-        m_pToParaRB->SaveValue();
-        m_pToCharRB->SaveValue();
-        m_pAsCharRB->SaveValue();
-        m_pToFrameRB->SaveValue();
+        m_xToPageRB->save_state();
+        m_xToParaRB->save_state();
+        m_xToCharRB->save_state();
+        m_xAsCharRB->save_state();
+        m_xToFrameRB->save_state();
     }
-    if(bInvalidateAnchor)
+    if (bInvalidateAnchor)
     {
-        m_pToPageRB->Enable( false );
-        m_pToParaRB->Enable( false );
-        m_pToCharRB->Enable( false );
-        m_pAsCharRB->Enable( false );
-        m_pToFrameRB->Enable( false );
+        m_xToPageRB->set_sensitive( false );
+        m_xToParaRB->set_sensitive( false );
+        m_xToCharRB->set_sensitive( false );
+        m_xAsCharRB->set_sensitive( false );
+        m_xToFrameRB->set_sensitive( false );
     }
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_PROTECT_POS );
-    if ( pItem )
+    if (pItem)
     {
         bool bProtected = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        m_pPositionCB->SetState( bProtected ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pPositionCB->EnableTriState( false );
-        m_pSizeCB->Enable( !bProtected );
+        m_xPositionCB->set_active(bProtected);
+        m_xSizeCB->set_sensitive(!bProtected);
     }
     else
     {
-        m_pPositionCB->SetState( TRISTATE_INDET );
+        m_xPositionCB->set_inconsistent(true);
     }
 
-    m_pPositionCB->SaveValue();
+    m_xPositionCB->save_state();
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_PROTECT_SIZE );
 
-    if ( pItem )
+    if (pItem)
     {
-        m_pSizeCB->SetState( static_cast<const SfxBoolItem*>(pItem)->GetValue()
-                              ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pSizeCB->EnableTriState( false );
+        m_xSizeCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     }
     else
-        m_pSizeCB->SetState( TRISTATE_INDET );
-    m_pSizeCB->SaveValue();
+        m_xSizeCB->set_inconsistent(true);
+    m_xSizeCB->save_state();
 
     pItem = GetItem( *rSet, SID_HTML_MODE );
     if(pItem)
@@ -987,9 +946,9 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT );
     if(pItem && static_cast<const SfxBoolItem*>(pItem)->GetValue())
     {
-        OUString sHLabel = m_pHoriFT->GetText();
-        m_pHoriFT->SetText(m_pVertFT->GetText());
-        m_pVertFT->SetText(sHLabel);
+        OUString sHLabel = m_xHoriFT->get_label();
+        m_xHoriFT->set_label(m_xVertFT->get_label());
+        m_xVertFT->set_label(sHLabel);
         m_bIsVerticalFrame = true;
     }
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_IN_RTL_TEXT);
@@ -1001,35 +960,35 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     {
         const bool bFollowTextFlow =
             static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        m_pFollowCB->Check( bFollowTextFlow );
+        m_xFollowCB->set_active(bFollowTextFlow);
     }
-    m_pFollowCB->SaveValue();
+    m_xFollowCB->save_state();
 
     if(m_bHtmlMode)
     {
-        m_pHoriMirrorCB->Show(false);
-        m_pKeepRatioCB->Enable(false);
+        m_xHoriMirrorCB->show(false);
+        m_xKeepRatioCB->set_sensitive(false);
         // #i18732# - hide checkbox in HTML mode
-        m_pFollowCB->Show(false);
+        m_xFollowCB->show(false);
     }
     else
     {
         // #i18732# correct enable/disable of check box 'Mirror on..'
-        m_pHoriMirrorCB->Enable(!m_pAsCharRB->IsChecked() && !m_bIsMultiSelection);
+        m_xHoriMirrorCB->set_sensitive(!m_xAsCharRB->get_active() && !m_bIsMultiSelection);
 
         // #i18732# - enable/disable check box 'Follow text flow'.
-        m_pFollowCB->Enable( m_pToParaRB->IsChecked() ||
-                                  m_pToCharRB->IsChecked() );
+        m_xFollowCB->set_sensitive(m_xToParaRB->get_active() ||
+                                   m_xToCharRB->get_active());
     }
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_WIDTH );
     sal_Int32 nWidth = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, sal_uInt32(1) );
 
-    m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FUNIT_TWIP);
+    m_xWidthMF->set_value(m_xWidthMF->normalize(nWidth), FUNIT_TWIP);
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HEIGHT );
     sal_Int32 nHeight = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, sal_uInt32(1) );
-    m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
+    m_xHeightMF->set_value(m_xHeightMF->normalize(nHeight), FUNIT_TWIP);
     m_fWidthHeightRatio = double(nWidth) / double(nHeight);
 
     if(!m_bPositioningDisabled)
@@ -1059,8 +1018,8 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
         }
         pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_MIRROR);
         if(pItem)
-            m_pHoriMirrorCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
-        m_pHoriMirrorCB->SaveValue();
+            m_xHoriMirrorCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xHoriMirrorCB->save_state();
 
         sal_Int32 nHoriPos = 0;
         sal_Int32 nVertPos = 0;
@@ -1073,12 +1032,12 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
 
         InitPos(nAnchorType, m_nOldH, m_nOldHRel, m_nOldV, m_nOldVRel, nHoriPos, nVertPos);
 
-        m_pVertByMF->SaveValue();
-        m_pHoriByMF->SaveValue();
+        m_xVertByMF->save_value();
+        m_xHoriByMF->save_value();
         // #i18732#
-        m_pFollowCB->SaveValue();
+        m_xFollowCB->save_state();
 
-        RangeModifyHdl(*m_pWidthMF);  // initially set maximum values
+        RangeModifyHdl(m_xWidthMF->get_widget());  // initially set maximum values
     }
 }
 
@@ -1086,10 +1045,10 @@ DeactivateRC SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
     {
-        _pSet->Put(SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
-                m_pPositionCB->GetState() == TRISTATE_TRUE ));
-        _pSet->Put(SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
-                m_pSizeCB->GetState() == TRISTATE_TRUE ));
+        _pSet->Put(SfxBoolItem(GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
+                m_xPositionCB->get_active()));
+        _pSet->Put(SfxBoolItem(GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
+                m_xSizeCB->get_active()));
         FillItemSet( _pSet );
     }
     return DeactivateRC::LeavePage;
@@ -1097,77 +1056,77 @@ DeactivateRC SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxSwPosSizeTabPage::EnableAnchorTypes(SvxAnchorIds nAnchorEnable)
 {
-    if(nAnchorEnable & SvxAnchorIds::Fly)
-        m_pToFrameRB->Show();
-    if(!(nAnchorEnable & SvxAnchorIds::Page))
-        m_pToPageRB->Enable(false);
+    if (nAnchorEnable & SvxAnchorIds::Fly)
+        m_xToFrameRB->show();
+    if (!(nAnchorEnable & SvxAnchorIds::Page))
+        m_xToPageRB->set_sensitive(false);
 }
 
 RndStdIds SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
 {
     RndStdIds nRet = RndStdIds::UNKNOWN;
-    RadioButton* pCheckedButton = nullptr;
-    if(m_pToParaRB->IsEnabled())
+    weld::RadioButton* pCheckedButton = nullptr;
+    if(m_xToParaRB->get_sensitive())
     {
-        if(m_pToPageRB->IsChecked())
+        if(m_xToPageRB->get_active())
         {
             nRet = RndStdIds::FLY_AT_PAGE;
-            pCheckedButton = m_pToPageRB;
+            pCheckedButton = m_xToPageRB.get();
         }
-        else if(m_pToParaRB->IsChecked())
+        else if(m_xToParaRB->get_active())
         {
             nRet = RndStdIds::FLY_AT_PARA;
-            pCheckedButton = m_pToParaRB;
+            pCheckedButton = m_xToParaRB.get();
         }
-        else if(m_pToCharRB->IsChecked())
+        else if(m_xToCharRB->get_active())
         {
             nRet = RndStdIds::FLY_AT_CHAR;
-            pCheckedButton = m_pToCharRB;
+            pCheckedButton = m_xToCharRB.get();
         }
-        else if(m_pAsCharRB->IsChecked())
+        else if(m_xAsCharRB->get_active())
         {
             nRet = RndStdIds::FLY_AS_CHAR;
-            pCheckedButton = m_pAsCharRB;
+            pCheckedButton = m_xAsCharRB.get();
         }
-        else if(m_pToFrameRB->IsChecked())
+        else if(m_xToFrameRB->get_active())
         {
             nRet = RndStdIds::FLY_AT_FLY;
-            pCheckedButton = m_pToFrameRB;
+            pCheckedButton = m_xToFrameRB.get();
         }
     }
     if(pbHasChanged)
     {
          if(pCheckedButton)
-             *pbHasChanged = pCheckedButton->IsValueChangedFromSaved();
+             *pbHasChanged = pCheckedButton->get_state_changed_from_saved();
          else
              *pbHasChanged = false;
     }
    return nRet;
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyClickHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyClickHdl, weld::ToggleButton&, void)
 {
-    RangeModifyHdl(*m_pWidthMF);
+    RangeModifyHdl(m_xWidthMF->get_widget());
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, weld::Widget&, void)
 {
-    if(m_bPositioningDisabled)
+    if (m_bPositioningDisabled)
         return;
     SvxSwFrameValidation        aVal;
 
     aVal.nAnchorType = GetAnchorType();
     aVal.bAutoHeight = false;
-    aVal.bMirror = m_pHoriMirrorCB->IsChecked();
+    aVal.bMirror = m_xHoriMirrorCB->get_active();
     // #i18732#
-    aVal.bFollowTextFlow = m_pFollowCB->IsChecked();
+    aVal.bFollowTextFlow = m_xFollowCB->get_active();
 
     if ( m_pHMap )
     {
         // horizontal alignment
-        sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriToLB);
-        sal_uInt16 nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriToLB);
-        sal_uInt16 nRel = GetRelation(*m_pHoriToLB);
+        sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_xHoriToLB);
+        sal_uInt16 nAlign = GetAlignment(m_pHMap, nMapPos, *m_xHoriToLB);
+        sal_uInt16 nRel = GetRelation(*m_xHoriToLB);
 
         aVal.nHoriOrient = static_cast<short>(nAlign);
         aVal.nHRelOrient = static_cast<short>(nRel);
@@ -1178,9 +1137,9 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
     if ( m_pVMap )
     {
         // vertical alignment
-        sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);
-        sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertToLB);
-        sal_uInt16 nRel = GetRelation(*m_pVertToLB);
+        sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_xVertLB);
+        sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_xVertToLB);
+        sal_uInt16 nRel = GetRelation(*m_xVertToLB);
 
         aVal.nVertOrient = static_cast<short>(nAlign);
         aVal.nVRelOrient = static_cast<short>(nRel);
@@ -1188,74 +1147,72 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
     else
         aVal.nVertOrient = VertOrientation::NONE;
 
-    const long nAtHorzPosVal =
-                    static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
-    const long nAtVertPosVal =
-                    static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
+    const auto nAtHorzPosVal = m_xHoriByMF->denormalize(m_xHoriByMF->get_value(FUNIT_TWIP));
+    const auto nAtVertPosVal = m_xVertByMF->denormalize(m_xVertByMF->get_value(FUNIT_TWIP));
 
     aVal.nHPos = nAtHorzPosVal;
     aVal.nVPos = nAtVertPosVal;
 
-    sal_Int32 nWidth = static_cast<sal_uInt32>(m_pWidthMF-> Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP)));
-    sal_Int32 nHeight = static_cast<sal_uInt32>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_TWIP)));
+    sal_Int32 nWidth = static_cast<sal_uInt32>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_TWIP)));
+    sal_Int32 nHeight = static_cast<sal_uInt32>(m_xHeightMF->denormalize(m_xHeightMF->get_value(FUNIT_TWIP)));
     aVal.nWidth  = nWidth;
     aVal.nHeight = nHeight;
 
     m_aValidateLink.Call(aVal);
 
     // minimum width also for style
-    m_pHeightMF->SetMin(m_pHeightMF->Normalize(aVal.nMinHeight), FUNIT_TWIP);
-    m_pWidthMF-> SetMin(m_pWidthMF->Normalize(aVal.nMinWidth), FUNIT_TWIP);
+    m_xHeightMF->set_min(m_xHeightMF->normalize(aVal.nMinHeight), FUNIT_TWIP);
+    m_xWidthMF->set_min(m_xWidthMF->normalize(aVal.nMinWidth), FUNIT_TWIP);
 
     sal_Int32 nMaxWidth(aVal.nMaxWidth);
     sal_Int32 nMaxHeight(aVal.nMaxHeight);
 
-    sal_Int64 nTmp = m_pHeightMF->Normalize(nMaxHeight);
-    m_pHeightMF->SetMax(nTmp, FUNIT_TWIP);
+    sal_Int64 nTmp = m_xHeightMF->normalize(nMaxHeight);
+    m_xHeightMF->set_max(nTmp, FUNIT_TWIP);
 
-    nTmp = m_pWidthMF->Normalize(nMaxWidth);
-    m_pWidthMF->SetMax(nTmp, FUNIT_TWIP);
+    nTmp = m_xWidthMF->normalize(nMaxWidth);
+    m_xWidthMF->set_max(nTmp, FUNIT_TWIP);
 
-    m_pHoriByMF->SetMin(m_pHoriByMF->Normalize(aVal.nMinHPos), FUNIT_TWIP);
-    m_pHoriByMF->SetMax(m_pHoriByMF->Normalize(aVal.nMaxHPos), FUNIT_TWIP);
+    m_xHoriByMF->set_range(m_xHoriByMF->normalize(aVal.nMinHPos),
+                           m_xHoriByMF->normalize(aVal.nMaxHPos), FUNIT_TWIP);
     if ( aVal.nHPos != nAtHorzPosVal )
-        m_pHoriByMF->SetValue(m_pHoriByMF->Normalize(aVal.nHPos), FUNIT_TWIP);
+        m_xHoriByMF->set_value(m_xHoriByMF->normalize(aVal.nHPos), FUNIT_TWIP);
 
-    m_pVertByMF->SetMin(m_pVertByMF->Normalize(aVal.nMinVPos ), FUNIT_TWIP);
-    m_pVertByMF->SetMax(m_pVertByMF->Normalize(aVal.nMaxVPos), FUNIT_TWIP);
+    m_xVertByMF->set_range(m_xVertByMF->normalize(aVal.nMinVPos),
+                           m_xVertByMF->normalize(aVal.nMaxVPos), FUNIT_TWIP);
     if ( aVal.nVPos != nAtVertPosVal )
-        m_pVertByMF->SetValue(m_pVertByMF->Normalize(aVal.nVPos), FUNIT_TWIP);
+        m_xVertByMF->set_value(m_xVertByMF->normalize(aVal.nVPos), FUNIT_TWIP);
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, weld::ToggleButton&, void)
 {
-    m_pHoriMirrorCB->Enable(!m_pAsCharRB->IsChecked() && !m_bIsMultiSelection);
+    m_xHoriMirrorCB->set_sensitive(!m_xAsCharRB->get_active() && !m_bIsMultiSelection);
 
     // #i18732# - enable check box 'Follow text flow' for anchor
     // type to-paragraph' and to-character
-    m_pFollowCB->Enable( m_pToParaRB->IsChecked() || m_pToCharRB->IsChecked() );
+    m_xFollowCB->set_sensitive(m_xToParaRB->get_active() || m_xToCharRB->get_active());
 
     RndStdIds nId = GetAnchorType();
 
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
-    RangeModifyHdl(*m_pWidthMF);
+    RangeModifyHdl(m_xWidthMF->get_widget());
 
     if(m_bHtmlMode)
     {
-        PosHdl(*m_pHoriLB);
-        PosHdl(*m_pVertLB);
+        PosHdl(*m_xHoriLB);
+        PosHdl(*m_xVertLB);
     }
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl, weld::ToggleButton&, void)
 {
     RndStdIds nId = GetAnchorType();
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
+IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, weld::ComboBoxText&, rLB, void )
 {
-    bool bHori = &rLB == m_pHoriToLB;
+    bool bHori = &rLB == m_xHoriToLB.get();
 
     UpdateExample();
 
@@ -1263,25 +1220,25 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
     {
         if(bHori)
         {
-            sal_uInt16 nRel = GetRelation(*m_pHoriToLB);
-            if(RelOrientation::PRINT_AREA == nRel && 0 == m_pVertLB->GetSelectedEntryPos())
+            sal_uInt16 nRel = GetRelation(*m_xHoriToLB);
+            if(RelOrientation::PRINT_AREA == nRel && 0 == m_xVertLB->get_active())
             {
-                m_pVertLB->SelectEntryPos(1);
+                m_xVertLB->set_active(1);
             }
-            else if(RelOrientation::CHAR == nRel && 1 == m_pVertLB->GetSelectedEntryPos())
+            else if(RelOrientation::CHAR == nRel && 1 == m_xVertLB->get_active())
             {
-                m_pVertLB->SelectEntryPos(0);
+                m_xVertLB->set_active(0);
             }
         }
     }
-    RangeModifyHdl(*m_pWidthMF);
+    RangeModifyHdl(m_xWidthMF->get_widget());
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
+IMPL_LINK(SvxSwPosSizeTabPage, PosHdl, weld::ComboBoxText&, rLB, void)
 {
-    bool bHori = &rLB == m_pHoriLB;
-    ListBox *pRelLB = bHori ? m_pHoriToLB.get() : m_pVertToLB.get();
-    FixedText *pRelFT = bHori ? m_pHoriToFT.get() : m_pVertToFT.get();
+    bool bHori = &rLB == m_xHoriLB.get();
+    weld::ComboBoxText* pRelLB = bHori ? m_xHoriToLB.get() : m_xVertToLB.get();
+    weld::Label* pRelFT = bHori ? m_xHoriToFT.get() : m_xVertToFT.get();
     FrmMap *pMap = bHori ? m_pHMap : m_pVMap;
 
 
@@ -1291,29 +1248,28 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
     if (bHori)
     {
         bool bEnable = HoriOrientation::NONE == nAlign;
-        m_pHoriByMF->Enable( bEnable );
-        m_pHoriByFT->Enable( bEnable );
+        m_xHoriByMF->set_sensitive( bEnable );
+        m_xHoriByFT->set_sensitive( bEnable );
     }
     else
     {
         bool bEnable = VertOrientation::NONE == nAlign;
-        m_pVertByMF->Enable( bEnable );
-        m_pVertByFT->Enable( bEnable );
+        m_xVertByMF->set_sensitive( bEnable );
+        m_xVertByFT->set_sensitive( bEnable );
     }
 
-    RangeModifyHdl( *m_pWidthMF );
+    RangeModifyHdl(m_xWidthMF->get_widget());
 
     short nRel = 0;
-    if (rLB.GetSelectedEntryCount())
+    if (rLB.get_active() != -1)
     {
-
-        if (pRelLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-            nRel = static_cast<RelationMap *>(pRelLB->GetSelectedEntryData())->nRelation;
+        if (pRelLB->get_active() != -1)
+            nRel = reinterpret_cast<RelationMap*>(pRelLB->get_active_id().toUInt64())->nRelation;
 
         FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
     }
     else
-        pRelLB->Clear();
+        pRelLB->clear();
 
     UpdateExample();
 
@@ -1326,101 +1282,100 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
             // on the right only below is allowed - from the left only at the top
             // from the left at the character -> below
             if((HoriOrientation::LEFT == nAlign || HoriOrientation::RIGHT == nAlign) &&
-                    0 == m_pVertLB->GetSelectedEntryPos())
+                    0 == m_xVertLB->get_active())
             {
                 if(RelOrientation::FRAME == nRel)
-                    m_pVertLB->SelectEntryPos(1);
+                    m_xVertLB->set_active(1);
                 else
-                    m_pVertLB->SelectEntryPos(0);
+                    m_xVertLB->set_active(0);
                 bSet = true;
             }
-            else if(HoriOrientation::LEFT == nAlign && 1 == m_pVertLB->GetSelectedEntryPos())
+            else if(HoriOrientation::LEFT == nAlign && 1 == m_xVertLB->get_active())
             {
-                m_pVertLB->SelectEntryPos(0);
+                m_xVertLB->set_active(0);
                 bSet = true;
             }
-            else if(HoriOrientation::NONE == nAlign && 1 == m_pVertLB->GetSelectedEntryPos())
+            else if(HoriOrientation::NONE == nAlign && 1 == m_xVertLB->get_active())
             {
-                m_pVertLB->SelectEntryPos(0);
+                m_xVertLB->set_active(0);
                 bSet = true;
             }
             if(bSet)
-                PosHdl(*m_pVertLB);
+                PosHdl(*m_xVertLB);
         }
         else
         {
             if(VertOrientation::TOP == nAlign)
             {
-                if(1 == m_pHoriLB->GetSelectedEntryPos())
+                if(1 == m_xHoriLB->get_active())
                 {
-                    m_pHoriLB->SelectEntryPos(0);
+                    m_xHoriLB->set_active(0);
                     bSet = true;
                 }
-                m_pHoriToLB->SelectEntryPos(1);
+                m_xHoriToLB->set_active(1);
             }
             else if(VertOrientation::CHAR_BOTTOM == nAlign)
             {
-                if(2 == m_pHoriLB->GetSelectedEntryPos())
+                if(2 == m_xHoriLB->get_active())
                 {
-                    m_pHoriLB->SelectEntryPos(0);
+                    m_xHoriLB->set_active(0);
                     bSet = true;
                 }
-                m_pHoriToLB->SelectEntryPos(0) ;
+                m_xHoriToLB->set_active(0) ;
             }
             if(bSet)
-                PosHdl(*m_pHoriLB);
+                PosHdl(*m_xHoriLB);
         }
 
     }
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, weld::MetricSpinButton&, rEdit, void )
 {
-    sal_Int64 nWidth = m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP));
-    sal_Int64 nHeight = m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_TWIP));
-    if ( m_pKeepRatioCB->IsChecked() )
+    auto nWidth = m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_TWIP));
+    auto nHeight = m_xHeightMF->denormalize(m_xHeightMF->get_value(FUNIT_TWIP));
+    if (m_xKeepRatioCB->get_active())
     {
-        if ( &rEdit == m_pWidthMF )
+        if ( &rEdit == m_xWidthMF.get() )
         {
-            nHeight = sal_Int64(static_cast<double>(nWidth) / m_fWidthHeightRatio);
-            m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
+            nHeight = int(static_cast<double>(nWidth) / m_fWidthHeightRatio);
+            m_xHeightMF->set_value(m_xHeightMF->normalize(nHeight), FUNIT_TWIP);
         }
-        else if(&rEdit == m_pHeightMF)
+        else if(&rEdit == m_xHeightMF.get())
         {
-            nWidth = sal_Int64(static_cast<double>(nHeight) * m_fWidthHeightRatio);
-            m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FUNIT_TWIP);
+            nWidth = int(static_cast<double>(nHeight) * m_fWidthHeightRatio);
+            m_xWidthMF->set_value(m_xWidthMF->normalize(nWidth), FUNIT_TWIP);
         }
     }
     m_fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
     UpdateExample();
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, weld::ToggleButton&, void)
 {
-    if( m_pSizeCB->IsEnabled() )
+    if (m_xSizeCB->get_sensitive())
     {
-        m_nProtectSizeState = m_pSizeCB->GetState();
+        m_nProtectSizeState = m_xSizeCB->get_state();
     }
 
-    m_pSizeCB->SetState( m_pPositionCB->GetState() == TRISTATE_TRUE ?  TRISTATE_TRUE : m_nProtectSizeState );
-    m_pSizeCB->Enable(m_pPositionCB->IsEnabled() && !m_pPositionCB->IsChecked());
+    m_xSizeCB->set_state(m_xPositionCB->get_state() == TRISTATE_TRUE ?  TRISTATE_TRUE : m_nProtectSizeState);
+    m_xSizeCB->set_sensitive(m_xPositionCB->get_sensitive() && !m_xPositionCB->get_active());
 }
 
-short SvxSwPosSizeTabPage::GetRelation(ListBox const &rRelationLB)
+short SvxSwPosSizeTabPage::GetRelation(const weld::ComboBoxText& rRelationLB)
 {
     short nRel = 0;
-    sal_Int32 nPos = rRelationLB.GetSelectedEntryPos();
-
-    if (nPos != LISTBOX_ENTRY_NOTFOUND)
+    int nPos = rRelationLB.get_active();
+    if (nPos != -1)
     {
-        RelationMap *pEntry = static_cast<RelationMap *>(rRelationLB.GetEntryData(nPos));
+        RelationMap *pEntry = reinterpret_cast<RelationMap*>(rRelationLB.get_id(nPos).toUInt64());
         nRel = pEntry->nRelation;
     }
 
     return nRel;
 }
 
-short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, ListBox const &rRelationLB)
+short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, const weld::ComboBoxText& rRelationLB)
 {
     short nAlign = 0;
 
@@ -1429,9 +1384,9 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, 
     if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap ||
             pMap == aVCharMap )
     {
-        if (rRelationLB.GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+        if (rRelationLB.get_active() != -1)
         {
-            LB  nRel = static_cast<RelationMap *>(rRelationLB.GetSelectedEntryData())->nLBRelation;
+            LB  nRel = reinterpret_cast<RelationMap*>(rRelationLB.get_active_id().toUInt64())->nLBRelation;
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1455,17 +1410,17 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, 
     return nAlign;
 }
 
-sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap const *pMap, ListBox const &rAlignLB)
+sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap const *pMap, const weld::ComboBoxText& rAlignLB)
 {
     sal_uInt16 nMapPos = 0;
-    sal_Int32 nLBSelPos = rAlignLB.GetSelectedEntryPos();
+    int nLBSelPos = rAlignLB.get_active();
 
-    if (nLBSelPos != LISTBOX_ENTRY_NOTFOUND)
+    if (nLBSelPos != -1)
     {
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
-            OUString sSelEntry(rAlignLB.GetSelectedEntry());
+            OUString sSelEntry(rAlignLB.get_active_text());
 
             for (std::size_t i = 0; i < nMapCount; i++)
             {
@@ -1495,23 +1450,23 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
                                 long   nX,
                                 long   nY)
 {
-    sal_Int32 nPos = m_pVertLB->GetSelectedEntryPos();
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND && m_pVMap )
+    int nPos = m_xVertLB->get_active();
+    if (nPos != -1 && m_pVMap)
     {
         m_nOldV    = m_pVMap[nPos].nAlign;
-        nPos = m_pVertToLB->GetSelectedEntryPos();
-        if (nPos != LISTBOX_ENTRY_NOTFOUND)
-            m_nOldVRel = static_cast<RelationMap *>(m_pVertToLB->GetEntryData(nPos))->nRelation;
+        nPos = m_xVertToLB->get_active();
+        if (nPos != -1)
+            m_nOldVRel = reinterpret_cast<RelationMap*>(m_xVertToLB->get_id(nPos).toUInt64())->nRelation;
     }
 
-    nPos = m_pHoriLB->GetSelectedEntryPos();
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND && m_pHMap )
+    nPos = m_xHoriLB->get_active();
+    if (nPos != -1 && m_pHMap)
     {
         m_nOldH    = m_pHMap[nPos].nAlign;
 
-        nPos = m_pHoriToLB->GetSelectedEntryPos();
-        if (nPos != LISTBOX_ENTRY_NOTFOUND)
-            m_nOldHRel = static_cast<RelationMap *>(m_pHoriToLB->GetEntryData(nPos))->nRelation;
+        nPos = m_xHoriToLB->get_active();
+        if (nPos != -1)
+            m_nOldHRel = reinterpret_cast<RelationMap*>(m_xHoriToLB->get_id(nPos).toUInt64())->nRelation;
     }
 
     bool bEnable = true;
@@ -1564,8 +1519,8 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
         m_pHMap = nullptr;
         bEnable = false;
     }
-    m_pHoriLB->Enable( bEnable );
-    m_pHoriFT->Enable( bEnable );
+    m_xHoriLB->set_sensitive(bEnable);
+    m_xHoriFT->set_sensitive(bEnable);
 
     // select current Pos
     // horizontal
@@ -1575,8 +1530,8 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
         nHRel = m_nOldHRel;
     }
     // #i22341# - pass <nHRel> as 3rd parameter to method <FillPosLB>
-    sal_uInt16 nMapPos = FillPosLB(m_pHMap, nH, nHRel, *m_pHoriLB);
-    FillRelLB(m_pHMap, nMapPos, nH, nHRel, *m_pHoriToLB, *m_pHoriToFT);
+    sal_uInt16 nMapPos = FillPosLB(m_pHMap, nH, nHRel, *m_xHoriLB);
+    FillRelLB(m_pHMap, nMapPos, nH, nHRel, *m_xHoriToLB, *m_xHoriToFT);
 
     // vertical
     if ( nV == USHRT_MAX )
@@ -1585,39 +1540,35 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
         nVRel = m_nOldVRel;
     }
     // #i22341# - pass <nVRel> as 3rd parameter to method <FillPosLB>
-    nMapPos = FillPosLB(m_pVMap, nV, nVRel, *m_pVertLB);
-    FillRelLB(m_pVMap, nMapPos, nV, nVRel, *m_pVertToLB, *m_pVertToFT);
+    nMapPos = FillPosLB(m_pVMap, nV, nVRel, *m_xVertLB);
+    FillRelLB(m_pVMap, nMapPos, nV, nVRel, *m_xVertToLB, *m_xVertToFT);
 
     // Edits init
     bEnable = nH == HoriOrientation::NONE && nAnchor != RndStdIds::FLY_AS_CHAR; //#61359# why not in formats&& !bFormat;
     if (!bEnable)
     {
-        m_pHoriByMF->SetValue( 0, FUNIT_TWIP );
-        if (nX != LONG_MAX && m_bHtmlMode)
-            m_pHoriByMF->SetModifyFlag();
+        m_xHoriByMF->set_value(0, FUNIT_TWIP);
     }
     else if(m_bIsMultiSelection)
     {
-         m_pHoriByMF->SetValue( m_pHoriByMF->Normalize(m_aRect.Left()), FUNIT_TWIP );
+         m_xHoriByMF->set_value(m_xHoriByMF->normalize(m_aRect.Left()), FUNIT_TWIP);
     }
     else
     {
         if (nX != LONG_MAX)
-            m_pHoriByMF->SetValue( m_pHoriByMF->Normalize(nX), FUNIT_TWIP );
+            m_xHoriByMF->set_value(m_xHoriByMF->normalize(nX), FUNIT_TWIP);
     }
-    m_pHoriByFT->Enable( bEnable );
-    m_pHoriByMF->Enable( bEnable );
+    m_xHoriByFT->set_sensitive(bEnable);
+    m_xHoriByMF->set_sensitive(bEnable);
 
     bEnable = nV == VertOrientation::NONE;
     if ( !bEnable )
     {
-        m_pVertByMF->SetValue( 0, FUNIT_TWIP );
-        if(nY != LONG_MAX && m_bHtmlMode)
-            m_pVertByMF->SetModifyFlag();
+        m_xVertByMF->set_value( 0, FUNIT_TWIP );
     }
     else if(m_bIsMultiSelection)
     {
-         m_pVertByMF->SetValue( m_pVertByMF->Normalize(m_aRect.Top()), FUNIT_TWIP );
+         m_xVertByMF->set_value(m_xVertByMF->normalize(m_aRect.Top()), FUNIT_TWIP);
     }
     else
     {
@@ -1629,60 +1580,60 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
                 nY *= -1;
         }
         if ( nY != LONG_MAX )
-            m_pVertByMF->SetValue( m_pVertByMF->Normalize(nY), FUNIT_TWIP );
+            m_xVertByMF->set_value( m_xVertByMF->normalize(nY), FUNIT_TWIP );
     }
-    m_pVertByFT->Enable( bEnable );
-    m_pVertByMF->Enable( bEnable );
+    m_xVertByFT->set_sensitive( bEnable );
+    m_xVertByMF->set_sensitive( bEnable );
     UpdateExample();
 }
 
 void SvxSwPosSizeTabPage::UpdateExample()
 {
-    sal_Int32 nPos = m_pHoriLB->GetSelectedEntryPos();
-    if ( m_pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
+    int nPos = m_xHoriLB->get_active();
+    if (m_pHMap && nPos != -1)
     {
-        sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriLB);
-        short nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriToLB);
-        short nRel = GetRelation(*m_pHoriToLB);
+        sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_xHoriLB);
+        short nAlign = GetAlignment(m_pHMap, nMapPos, *m_xHoriToLB);
+        short nRel = GetRelation(*m_xHoriToLB);
 
-        m_pExampleWN->SetHAlign(nAlign);
-        m_pExampleWN->SetHoriRel(nRel);
+        m_aExampleWN.SetHAlign(nAlign);
+        m_aExampleWN.SetHoriRel(nRel);
     }
 
-    nPos = m_pVertLB->GetSelectedEntryPos();
-    if ( m_pVMap && nPos != LISTBOX_ENTRY_NOTFOUND )
+    nPos = m_xVertLB->get_active();
+    if (m_pVMap && nPos != -1)
     {
-        sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);
-        sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertToLB);
-        sal_uInt16 nRel = GetRelation(*m_pVertToLB);
+        sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_xVertLB);
+        sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_xVertToLB);
+        sal_uInt16 nRel = GetRelation(*m_xVertToLB);
 
-        m_pExampleWN->SetVAlign(nAlign);
-        m_pExampleWN->SetVertRel(nRel);
+        m_aExampleWN.SetVAlign(nAlign);
+        m_aExampleWN.SetVertRel(nRel);
     }
 
     // Size
-    long nXPos = static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
-    long nYPos = static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
-    m_pExampleWN->SetRelPos(Point(nXPos, nYPos));
+    auto nXPos = m_xHoriByMF->denormalize(m_xHoriByMF->get_value(FUNIT_TWIP));
+    auto nYPos = m_xVertByMF->denormalize(m_xVertByMF->get_value(FUNIT_TWIP));
+    m_aExampleWN.SetRelPos(Point(nXPos, nYPos));
 
-    m_pExampleWN->SetAnchor( GetAnchorType() );
-    m_pExampleWN->Invalidate();
+    m_aExampleWN.SetAnchor( GetAnchorType() );
+    m_aExampleWN.Invalidate();
 }
 
 void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_uInt16 nAlign,
-        sal_uInt16 nRel, ListBox &rLB, FixedText &rFT)
+                                    sal_uInt16 nRel, weld::ComboBoxText& rLB, weld::Label& rFT)
 {
     OUString sSelEntry;
     LB  nLBRelations = LB::NONE;
     std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
 
-    rLB.Clear();
+    rLB.clear();
 
     if (nMapPos < nMapCount)
     {
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
-            OUString sOldEntry(rLB.GetSelectedEntry());
+            OUString sOldEntry(rLB.get_active_text());
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
             for (std::size_t _nMapPos = 0; _nMapPos < nMapCount; _nMapPos++)
@@ -1698,8 +1649,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
 
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
                             OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
-                            sal_Int32 nPos = rLB.InsertEntry(sEntry);
-                            rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
+                            rLB.append(OUString::number(reinterpret_cast<sal_uInt64>(&aAsCharRelationMap[nRelPos])), sEntry);
                             if (pMap[_nMapPos].nAlign == nAlign)
                                 sSelEntry = sEntry;
                             break;
@@ -1708,19 +1658,18 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                 }
             }
             if (!sSelEntry.isEmpty())
-                rLB.SelectEntry(sSelEntry);
+                rLB.set_active_text(sSelEntry);
             else
             {
-                rLB.SelectEntry(sOldEntry);
-
-                if (!rLB.GetSelectedEntryCount())
+                rLB.set_active_text(sOldEntry);
+                if (rLB.get_active() == -1)
                 {
-                    for (sal_Int32 i = 0; i < rLB.GetEntryCount(); i++)
+                    for (int i = 0; i < rLB.get_count(); i++)
                     {
-                        RelationMap *pEntry = static_cast<RelationMap *>(rLB.GetEntryData(i));
+                        RelationMap *pEntry = reinterpret_cast<RelationMap*>(rLB.get_id(i).toUInt64());
                         if (pEntry->nLBRelation == LB::RelChar) // Default
                         {
-                            rLB.SelectEntryPos(i);
+                            rLB.set_active(i);
                             break;
                         }
                     }
@@ -1734,10 +1683,10 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
             if ( pMap == aVCharMap )
             {
                 nLBRelations = ::lcl_GetLBRelationsForStrID( pMap,
-                                             ( m_pHoriMirrorCB->IsChecked()
+                                             ( m_xHoriMirrorCB->get_active()
                                                ? pMap[nMapPos].eMirrorStrId
                                                : pMap[nMapPos].eStrId ),
-                                             m_pHoriMirrorCB->IsChecked() );
+                                             m_xHoriMirrorCB->get_active() );
             }
             else
             {
@@ -1752,11 +1701,10 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                     {
                         if (aRelationMap[nRelPos].nLBRelation == static_cast<LB>(nBit))
                         {
-                            SvxSwFramePosString::StringId sStrId1 = m_pHoriMirrorCB->IsChecked() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
+                            SvxSwFramePosString::StringId sStrId1 = m_xHoriMirrorCB->get_active() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
                             OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
-                            sal_Int32 nPos = rLB.InsertEntry(sEntry);
-                            rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
+                            rLB.append(OUString::number(reinterpret_cast<sal_uInt64>(&aRelationMap[nRelPos])), sEntry);
                             if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == nRel)
                                 sSelEntry = sEntry;
                         }
@@ -1764,7 +1712,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                 }
             }
             if (!sSelEntry.isEmpty())
-                rLB.SelectEntry(sSelEntry);
+                rLB.set_active_text(sSelEntry);
             else
             {
                 // Probably anchor change. So look for a similar relation.
@@ -1780,32 +1728,32 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                     case RelOrientation::PAGE_PRINT_AREA: nRel = RelOrientation::PRINT_AREA;         break;
 
                     default:
-                        if (rLB.GetEntryCount())
+                        if (rLB.get_count())
                         {
-                            RelationMap *pEntry = static_cast<RelationMap *>(rLB.GetEntryData(rLB.GetEntryCount() - 1));
+                            RelationMap *pEntry = reinterpret_cast<RelationMap*>(rLB.get_id(rLB.get_count() - 1).toUInt64());
                             nRel = pEntry->nRelation;
                         }
                         break;
                 }
 
-                for (sal_Int32 i = 0; i < rLB.GetEntryCount(); i++)
+                for (int i = 0; i < rLB.get_count(); ++i)
                 {
-                    RelationMap *pEntry = static_cast<RelationMap *>(rLB.GetEntryData(i));
+                    RelationMap *pEntry = reinterpret_cast<RelationMap*>(rLB.get_id(i).toUInt64());
                     if (pEntry->nRelation == nRel)
                     {
-                        rLB.SelectEntryPos(i);
+                        rLB.set_active(i);
                         break;
                     }
                 }
 
-                if (!rLB.GetSelectedEntryCount())
-                    rLB.SelectEntryPos(0);
+                if (rLB.get_active() == -1)
+                    rLB.set_active(0);
             }
         }
     }
 
-    rLB.Enable(rLB.GetEntryCount() != 0);
-    rFT.Enable(rLB.GetEntryCount() != 0);
+    rLB.set_sensitive(rLB.get_count() != 0);
+    rFT.set_sensitive(rLB.get_count() != 0);
 
     RelHdl(rLB);
 }
@@ -1813,12 +1761,12 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
 sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap const *_pMap,
                                       sal_uInt16 _nAlign,
                                       const sal_uInt16 _nRel,
-                                      ListBox &_rLB)
+                                      weld::ComboBoxText& _rLB)
 {
     OUString sSelEntry, sOldEntry;
-    sOldEntry = _rLB.GetSelectedEntry();
+    sOldEntry = _rLB.get_active_text();
 
-    _rLB.Clear();
+    _rLB.clear();
 
     // #i22341# - determine all possible listbox relations for
     // given relation for map <aVCharMap>
@@ -1830,13 +1778,13 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap const *_pMap,
     std::size_t nCount = ::lcl_GetFrmMapCount(_pMap);
     for (std::size_t i = 0; _pMap && i < nCount; ++i)
     {
-        SvxSwFramePosString::StringId eStrId = m_pHoriMirrorCB->IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
+        SvxSwFramePosString::StringId eStrId = m_xHoriMirrorCB->get_active() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
         eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, m_bIsVerticalFrame, m_bIsInRightToLeft);
         OUString sEntry(SvxSwFramePosString::GetString(eStrId));
-        if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
+        if (_rLB.find_text(sEntry) == -1)
         {
             // don't insert duplicate entries at character wrapped borders
-            _rLB.InsertEntry(sEntry);
+            _rLB.append_text(sEntry);
         }
         // #i22341# - add condition to handle map <aVCharMap>
         // that is ambiguous in the alignment.
@@ -1847,12 +1795,12 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap const *_pMap,
         }
     }
 
-    _rLB.SelectEntry(sSelEntry);
-    if (!_rLB.GetSelectedEntryCount())
-        _rLB.SelectEntry(sOldEntry);
+    _rLB.set_active_text(sSelEntry);
+    if (_rLB.get_active() == -1)
+        _rLB.set_active_text(sOldEntry);
 
-    if (!_rLB.GetSelectedEntryCount())
-        _rLB.SelectEntryPos(0);
+    if (_rLB.get_active() == -1)
+        _rLB.set_active(0);
 
     PosHdl(_rLB);
 
@@ -1890,7 +1838,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
                 if( m_aAnchorPos != pObj->GetAnchorPos() )
                 {
                     // different anchor positions -> disable positioning
-                    m_pPosFrame->Enable(false);
+                    m_xPosFrame->set_sensitive(false);
                     m_bPositioningDisabled = true;
                     return;
                 }
