@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_b778e2c5",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-28T09:21:57Z",
+      "side": 1,
+      "message": "SvSingleRef: done, thanks.\nScRangeData::Type: done. This kind of advice is critical because as is completely obvious, my understanding of calc is non-existant.",
+      "parentUuid": "9a30ddce_bdb1a991",
+      "revId": "ab9d9a0b1a04098b2159db778a289a20a1fdda10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_ddac9d37",
         "filename": "sc/source/filter/excel/xename.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_d721d6b5",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-28T09:21:57Z",
+      "side": 1,
+      "message": "Flag3d. In testing, it seemed like Flag3D was the deciding factor based on round tripping (for xlsx and ods). So that is why my understanding was so wrong on this.  I completely reworked this section to test on IsTabRel instead, and support SingleRef.",
+      "parentUuid": "9a30ddce_ddac9d37",
+      "revId": "ab9d9a0b1a04098b2159db778a289a20a1fdda10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_5dc0ade0",
         "filename": "sc/source/filter/excel/xename.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2018-05-24T11:05:53Z",
       "side": 1,
       "message": "Didn\u0027t trace where rRangeData actually comes from, but this looks as if lcl_Ensure3DNamedRange() operates on the original named expression\u0027s token array, and modifying that would be wrong.",
+      "revId": "ab9d9a0b1a04098b2159db778a289a20a1fdda10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_03c0987a",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-28T09:21:57Z",
+      "side": 1,
+      "message": "True.  That had been fixed later in the patch series, but now I moved that into this first patch. Done.",
+      "parentUuid": "9a30ddce_5dc0ade0",
       "revId": "ab9d9a0b1a04098b2159db778a289a20a1fdda10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
