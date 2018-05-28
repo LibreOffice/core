@@ -96,6 +96,8 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
         QMenu* pQMenu = pParentMenu;
         NativeItemText( aText );
         vcl::KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
+        bool bChecked = pVCLMenu->IsItemChecked( nId );
+        MenuItemBits itemBits = pVCLMenu->GetItemBits( nId );
 
         if (mbMenuBar && mpQMenuBar)
             // top-level menu
@@ -114,6 +116,13 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
                     // leaf menu
                     QAction *pAction = pQMenu->addAction( toQString(aText) );
                     pAction->setShortcut( toQString( nAccelKey.GetName(GetFrame()->GetWindow()) ) );
+
+                    if (itemBits & MenuItemBits::CHECKABLE)
+                    {
+                        pAction->setCheckable( true );
+                        pAction->setChecked( bChecked );
+                    }
+
                     connect( pAction, &QAction::triggered, this,
                              [this, pSalMenuItem]{ DispatchCommand(pSalMenuItem); } );
                 }
