@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_660a3d23",
+        "filename": "sc/inc/validat.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-28T16:47:33Z",
+      "side": 1,
+      "message": "To enforce that this is only called from ScInputHandler I suggest\n\n struct CustomValidationPrivateAccess { friend class ScInputHandler; private: CustomValidationPrivateAccess() {} };\n bool IsDataValidCustom( const OUString\u0026 rTest, const ScPatternAttr\u0026 rPattern, const ScAddress\u0026 rPos, const CustomValidationPrivateAccess\u0026 ) const;\n\n...",
+      "revId": "9a01b306472af50a04a773197e58d0ecfd467dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8672d1ab",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-28T16:47:33Z",
+      "side": 1,
+      "message": "...\n\n bool ScValidationData::IsDataValidCustom(\n         const OUString\u0026 rTest,\n         const ScPatternAttr\u0026 rPattern,\n         const ScAddress\u0026 rPos,\n         const CustomValidationPrivateAccess\u0026 ) const",
+      "revId": "9a01b306472af50a04a773197e58d0ecfd467dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_865bb12d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2666,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-28T16:47:33Z",
+      "side": 1,
+      "message": "...\n\n bOk \u003d pData-\u003eIsDataValidCustom( aString, *pPattern, aCursorPos, ScValidationData::CustomValidationPrivateAccess());",
+      "revId": "9a01b306472af50a04a773197e58d0ecfd467dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
