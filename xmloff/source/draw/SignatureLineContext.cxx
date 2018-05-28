@@ -10,14 +10,27 @@
 #include "SignatureLineContext.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlimp.hxx>
 
 using namespace css;
 using namespace css::xml::sax;
 using namespace css::uno;
 using namespace css::drawing;
+using namespace css::embed;
+using namespace css::frame;
+using namespace css::io;
+using namespace css::graphic;
+using namespace css::security;
 using namespace xmloff::token;
 
 SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -45,6 +58,58 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
         = xAttrList->getValueByName("loext:can-add-comment") == GetXMLToken(XML_TRUE);
     xPropSet->setPropertyValue("SignatureLineShowSignDate", Any(bShowSignDate));
     xPropSet->setPropertyValue("SignatureLineCanAddComment", Any(bCanAddComment));
+
+    Reference<XGraphic> xGraphic;
+    try
+    {
+        // Get the document signatures
+        Reference<XDocumentDigitalSignatures> xSignatures(
+            security::DocumentDigitalSignatures::createWithVersion(
+                comphelper::getProcessComponentContext(), "1.2"));
+
+        css::uno::Reference<XStorable> xStorable(GetImport().GetModel(), UNO_QUERY_THROW);
+        Reference<XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, xStorable->getLocation(), ElementModes::READ);
+
+        if (!xStorage.is())
+        {
+            SAL_WARN("xmloff", "No xStorage!");
+            return;
+        }
+
+        Sequence<DocumentSignatureInformation> xSignatureInfo
+            = xSignatures->verifyDocumentContentSignatures(xStorage, Reference<XInputStream>());
+
+        for (int i = 0; i < xSignatureInfo.getLength(); i++)
+        {
+            // Try to find matching signature line image - if none exists that is fine,
+            // then the signature line is not digitally signed.
+            if (xSignatureInfo[i].SignatureLineId == xAttrList->getValueByName("loext:id"))
+            {
+                if (xSignatureInfo[i].SignatureIsValid)
+                {
+                    // Signature is valid, use the 'valid' image
+                    SAL_WARN_IF(!xSignatureInfo[i].ValidSignatureLineImage.is(), "oox.vml",
+                                "No ValidSignatureLineImage!");
+                    xGraphic = xSignatureInfo[i].ValidSignatureLineImage;
+                }
+                else
+                {
+                    // Signature is invalid, use the 'invalid' image
+                    SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "oox.vml",
+                                "No InvalidSignatureLineImage!");
+                    xGraphic = xSignatureInfo[i].InvalidSignatureLineImage;
+                }
+                xPropSet->setPropertyValue("Graphic", Any(xGraphic));
+                break;
+            }
+        }
+    }
+    catch (css::uno::Exception&)
+    {
+        // DocumentDigitalSignatures service not available.
+        // We render the "unsigned" shape instead.
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
