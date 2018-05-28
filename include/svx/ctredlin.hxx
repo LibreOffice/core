@@ -41,6 +41,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
+#include <memory>
 
 namespace utl {
     class SearchParam;
@@ -126,7 +127,7 @@ private:
     Color           maEntryColor;
     Image           maEntryImage;
     OUString        maEntryString;
-    utl::TextSearch* pCommentSearcher;
+    std::unique_ptr<utl::TextSearch> pCommentSearcher;
     Link<const SvSortData*,sal_Int32>  aColCompareLink;
 
 protected:

@@ -113,8 +113,7 @@ SvxRedlinTable::~SvxRedlinTable()
 
 void SvxRedlinTable::dispose()
 {
-    delete pCommentSearcher;
-    pCommentSearcher = nullptr;
+    pCommentSearcher.reset();
     SvSimpleTable::dispose();
 }
 
@@ -257,9 +256,7 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
 {
     if(pSearchPara!=nullptr)
     {
-        delete pCommentSearcher;
-
-        pCommentSearcher=new utl::TextSearch(*pSearchPara, LANGUAGE_SYSTEM );
+        pCommentSearcher.reset(new utl::TextSearch(*pSearchPara, LANGUAGE_SYSTEM ));
     }
 }
 
