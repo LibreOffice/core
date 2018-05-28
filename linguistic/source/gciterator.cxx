@@ -233,6 +233,50 @@ static lang::Locale lcl_GetPrimaryLanguageOfSentence(
 }
 
 
+SwXStringKeyMap::SwXStringKeyMap() {}
+
+void SAL_CALL SwXStringKeyMap::insertValue(const OUString& aKey, const css::uno::Any& aValue)
+{
+    std::map<OUString, css::uno::Any>::const_iterator aIter = maMap.find(aKey);
+    if (aIter != maMap.end())
+        throw css::container::ElementExistException();
+
+    maMap[aKey] = aValue;
+}
+
+css::uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString& aKey)
+{
+    std::map<OUString, css::uno::Any>::const_iterator aIter = maMap.find(aKey);
+    if (aIter == maMap.end())
+        throw css::container::NoSuchElementException();
+
+    return (*aIter).second;
+}
+
+sal_Bool SAL_CALL SwXStringKeyMap::hasValue(const OUString& aKey)
+{
+    return maMap.find(aKey) != maMap.end();
+}
+
+::sal_Int32 SAL_CALL SwXStringKeyMap::getCount() { return maMap.size(); }
+
+OUString SAL_CALL SwXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
+{
+    if (static_cast<sal_uInt32>(nIndex) >= maMap.size())
+        throw css::lang::IndexOutOfBoundsException();
+
+    return OUString();
+}
+
+css::uno::Any SAL_CALL SwXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
+{
+    if (static_cast<sal_uInt32>(nIndex) >= maMap.size())
+        throw css::lang::IndexOutOfBoundsException();
+
+    return css::uno::Any();
+}
+
+
 GrammarCheckingIterator::GrammarCheckingIterator() :
     m_bEnd( false ),
     m_aCurCheckedDocId(),
@@ -382,6 +426,24 @@ void GrammarCheckingIterator::ProcessResult(
                     // differently for example. But no special handling right now.
                     if (rDesc.nType == text::TextMarkupType::SPELLCHECK)
                         rDesc.nType = text::TextMarkupType::PROOFREADING;
+
+                    uno::Reference< container::XStringKeyMap > xKeyMap(
+                        new SwXStringKeyMap());
+                    for( const beans::PropertyValue& rProperty : rError.aProperties )
+                    {
+                        if ( rProperty.Name == "LineColor" )
+                        {
+                            xKeyMap->insertValue(rProperty.Name,
+                                                 rProperty.Value);
+                            rDesc.xMarkupInfoContainer = xKeyMap;
+                        }
+                        else if ( rProperty.Name == "LineType" )
+                        {
+                            xKeyMap->insertValue(rProperty.Name,
+                                                 rProperty.Value);
+                            rDesc.xMarkupInfoContainer = xKeyMap;
+                        }
+                    }
                 }
 
                 // at pos nErrors -> sentence markup
