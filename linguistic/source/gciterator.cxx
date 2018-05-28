@@ -66,6 +66,7 @@
 #include "lngreg.hxx"
 
 #include "gciterator.hxx"
+#include "gcmarkup.hxx"
 
 using namespace linguistic;
 using namespace ::com::sun::star;
@@ -382,6 +383,28 @@ void GrammarCheckingIterator::ProcessResult(
                     // differently for example. But no special handling right now.
                     if (rDesc.nType == text::TextMarkupType::SPELLCHECK)
                         rDesc.nType = text::TextMarkupType::PROOFREADING;
+
+                    for( const beans::PropertyValue& rProperty : rError.aProperties )
+                    {
+                        if ( rProperty.Name == "LineColor" )
+                        {
+                            uno::Reference< container::XStringKeyMap > xKeyMap(
+                                new SwXStringKeyMap());
+                            xKeyMap->insertValue(rProperty.Name,
+                                                 rProperty.Value);
+                            rDesc.xMarkupInfoContainer = xKeyMap;
+                            break;
+                        }
+                        else if ( rProperty.Name == "LineType" )
+                        {
+                            uno::Reference< container::XStringKeyMap > xKeyMap(
+                                new SwXStringKeyMap());
+                            xKeyMap->insertValue(rProperty.Name,
+                                                 rProperty.Value);
+                            rDesc.xMarkupInfoContainer = xKeyMap;
+                            break;
+                        }
+                    }
                 }
 
                 // at pos nErrors -> sentence markup
