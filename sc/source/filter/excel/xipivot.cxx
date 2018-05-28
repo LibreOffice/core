@@ -1507,13 +1507,13 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
         itr    = aFieldBtns.begin();
         itrEnd = aFieldBtns.end();
         vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
-        for (; itr != itrEnd; ++itr, ++itDim)
+        for (; itr != itrEnd; ++itr)
         {
             ScMF nMFlag = ScMF::Button;
-            const ScDPSaveDimension* pDim = *itDim;
-            if (pDim->HasInvisibleMember())
+            const ScDPSaveDimension* pDim = itDim != aFieldDims.end() ? *itDim++ : nullptr;
+            if (pDim && pDim->HasInvisibleMember())
                 nMFlag |= ScMF::HiddenMember;
-            if (!pDim->IsDataLayout())
+            if (!pDim || !pDim->IsDataLayout())
                 nMFlag |= ScMF::ButtonPopup;
             rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
         }
