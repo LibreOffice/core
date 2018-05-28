@@ -386,7 +386,7 @@ namespace svxform
 
         ::svxform::OControlExchangeHelper   m_aControlExchange;
 
-        NavigatorTreeModel* m_pNavModel;
+        std::unique_ptr<NavigatorTreeModel> m_pNavModel;
         SvTreeListEntry*        m_pRootEntry;
         SvTreeListEntry*        m_pEditEntry;
 
@@ -479,7 +479,7 @@ namespace svxform
 
         OUString GenerateName( FmEntryData const * pEntryData );
 
-        NavigatorTreeModel*    GetNavModel() const { return m_pNavModel; }
+        NavigatorTreeModel*    GetNavModel() const { return m_pNavModel.get(); }
         SvTreeListEntry*        FindEntry( FmEntryData* pEntryData );
 
         virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;

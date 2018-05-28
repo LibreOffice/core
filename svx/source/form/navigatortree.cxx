@@ -143,7 +143,7 @@ namespace svxform
         EnableInplaceEditing( true );
         SetSelectionMode(SelectionMode::Multiple);
 
-        m_pNavModel = new NavigatorTreeModel();
+        m_pNavModel.reset(new NavigatorTreeModel());
         Clear();
 
         StartListening( *m_pNavModel );
@@ -172,7 +172,7 @@ namespace svxform
         DBG_ASSERT(GetNavModel() != nullptr, "NavigatorTree::~NavigatorTree : unexpected : no ExplorerModel");
         EndListening( *m_pNavModel );
         Clear();
-        delete m_pNavModel;
+        m_pNavModel.reset();
         SvTreeListBox::dispose();
     }
 
