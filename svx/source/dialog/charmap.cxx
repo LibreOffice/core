@@ -70,6 +70,8 @@ SvxShowCharSet::SvxShowCharSet(weld::ScrolledWindow* pScrolledWindow, const VclP
     , mxContext(comphelper::getProcessComponentContext())
     , maFontSize(0, 0)
     , maPosition(0,0)
+    , nX(0)
+    , nY(0)
     , mbRecalculateFont(true)
     , mbUpdateForeground(true)
     , mbUpdateBackground(true)
