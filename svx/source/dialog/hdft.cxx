@@ -206,7 +206,7 @@ SvxHFPage::~SvxHFPage()
 
 void SvxHFPage::dispose()
 {
-    delete pBBSet;
+    pBBSet.reset();
     m_pPageLbl.clear();
     m_pTurnOnBox.clear();
     m_pCntSharedBox.clear();
@@ -595,13 +595,13 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
 
         if(mbEnableDrawingLayerFillStyles)
         {
-            pBBSet = new SfxItemSet(
+            pBBSet.reset(new SfxItemSet(
                 *GetItemSet().GetPool(),
                 {{XATTR_FILL_FIRST, XATTR_FILL_LAST},  // DrawingLayer FillStyle definitions
                 {SID_COLOR_TABLE, SID_PATTERN_LIST},   // XPropertyLists for Color, Gradient, Hatch and Graphic fills
                 {nOuter, nOuter},
                 {nInner, nInner},
-                {nShadow, nShadow}});
+                {nShadow, nShadow}}));
 
             // copy items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
@@ -632,12 +632,12 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
         {
             const sal_uInt16 nBrush(GetWhich(SID_ATTR_BRUSH));
 
-            pBBSet = new SfxItemSet(
+            pBBSet.reset( new SfxItemSet(
                 *GetItemSet().GetPool(),
                 {{nBrush, nBrush},
                 {nOuter, nOuter},
                 {nInner, nInner},
-                {nShadow, nShadow}});
+                {nShadow, nShadow}}) );
         }
 
         const SfxPoolItem* pItem;
