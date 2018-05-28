@@ -31,6 +31,7 @@ module com { module sun { module star { module linguistic2 {
     <p> The current set of supported languages is:
     <ul>
         <li>af : Afrikaans</li>
+        <li>bg : Bulgarian</li>
         <li>ca : Catalan</li>
         <li>cs : Czech</li>
         <li>da : Danish</li>
@@ -54,6 +55,7 @@ module com { module sun { module star { module linguistic2 {
         <li>hu : Hungarian</li>
         <li>Hung : Old Hungarian</li>
         <li>id : Indonesian</li>
+        <li>is : Icelandic</li>
         <li>it : Italian</li>
         <li>ja : Japanese</li>
         <li>ko-KP : North-Korean</li>
