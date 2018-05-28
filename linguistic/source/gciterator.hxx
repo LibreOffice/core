@@ -37,6 +37,10 @@
 #include <osl/thread.h>
 #include <rtl/instance.hxx>
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <cppu/unotype.hxx>
+
 #include <map>
 #include <deque>
 
@@ -177,6 +181,30 @@ public:
     // LinguDispatcher
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;
     virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
+};
+
+
+/** Implementation of the css::container::XStringKeyMap interface
+ */
+class SwXStringKeyMap : public ::cppu::WeakImplHelper<css::container::XStringKeyMap>
+{
+public:
+    SwXStringKeyMap();
+
+    virtual css::uno::Any SAL_CALL getValue(const OUString& aKey) override;
+    virtual sal_Bool SAL_CALL hasValue(const OUString& aKey) override;
+    virtual void SAL_CALL insertValue(const OUString& aKey, const css::uno::Any& aValue) override;
+    virtual ::sal_Int32 SAL_CALL getCount() override;
+    virtual OUString SAL_CALL getKeyByIndex(::sal_Int32 nIndex) override;
+    virtual css::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
+
+private:
+    SwXStringKeyMap(SwXStringKeyMap&) = delete;
+    void operator=(SwXStringKeyMap&) = delete;
+
+    ~SwXStringKeyMap() override{};
+
+    std::map<OUString, css::uno::Any> maMap;
 };
 
 

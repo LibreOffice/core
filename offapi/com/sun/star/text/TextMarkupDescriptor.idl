@@ -48,6 +48,8 @@ struct TextMarkupDescriptor
     long        nLength;
 
     /// contains additional information about the markup
+    /// nType = PROOFREADING || SMARTTAG: aKey = "LineColor" changes the markup color from default to aValue (int32)
+    /// nType = PROOFREADING || SMARTTAG: aKey = "LineType" changes the markup type from default to aValue (short) (WAVE || DASH)
     com::sun::star::container::XStringKeyMap xMarkupInfoContainer;
 };
 
