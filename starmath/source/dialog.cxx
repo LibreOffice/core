@@ -635,13 +635,13 @@ IMPL_LINK( SmDistanceDialog, GetFocusHdl, weld::Widget&, rControl, void )
     {
         sal_uInt16  i;
 
-        if (&rControl == m_xMetricField1->get_widget())
+        if (&rControl == &m_xMetricField1->get_widget())
             i = 0;
-        else if (&rControl == m_xMetricField2->get_widget())
+        else if (&rControl == &m_xMetricField2->get_widget())
             i = 1;
-        else if (&rControl == m_xMetricField3->get_widget())
+        else if (&rControl == &m_xMetricField3->get_widget())
             i = 2;
-        else if (&rControl == m_xMetricField4->get_widget())
+        else if (&rControl == &m_xMetricField4->get_widget())
             i = 3;
         else
             return;
