@@ -106,6 +106,7 @@ public:
     void show() { m_xDrawingArea->show(); }
     void set_margin_top(int nMargin) { m_xDrawingArea->set_margin_top(nMargin); }
     void set_margin_bottom(int nMargin) { m_xDrawingArea->set_margin_bottom(nMargin); }
+    void set_sensitive(bool bSensitive) { m_xDrawingArea->set_sensitive(bSensitive); }
 };
 }
 #endif
