@@ -11,6 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,libnumbertext_numbertext,libnum
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(LIBO_SHARE_FOLDER)/numbertext,\
 	data/af.sor \
+	data/bg.sor \
 	data/ca.sor \
 	data/cs.sor \
 	data/da.sor \
@@ -27,6 +28,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(L
 	data/hu.sor \
 	data/Hung.sor \
 	data/id.sor \
+	data/is.sor \
 	data/it.sor \
 	data/ja.sor \
 	data/ko.sor \
