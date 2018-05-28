@@ -7000,7 +7000,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         aTmpName += ".bin";
         SvFileStream aTmpStream(aTmpName,StreamMode::READ|StreamMode::WRITE|StreamMode::TRUNC);
         xMemStream->Seek(0);
-        *xMemStream >> aTmpStream;
+        aTmpStream.WriteStream(*xMemStream);
         aTmpStream.Close();
 #endif
         if ( pName || pFilter )
