@@ -1001,6 +1001,7 @@ class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::Ra
 {
 private:
     VclPtr<::RadioButton> m_xRadioButton;
+    bool m_bBlockNotify;
 
     DECL_LINK(ToggleHdl, ::RadioButton&, void);
 
@@ -1008,13 +1009,16 @@ public:
     SalInstanceRadioButton(::RadioButton* pButton, bool bTakeOwnership)
         : SalInstanceButton(pButton, bTakeOwnership)
         , m_xRadioButton(pButton)
+        , m_bBlockNotify(false)
     {
         m_xRadioButton->SetToggleHdl(LINK(this, SalInstanceRadioButton, ToggleHdl));
     }
 
     virtual void set_active(bool active) override
     {
+        m_bBlockNotify = true;
         m_xRadioButton->Check(active);
+        m_bBlockNotify = false;
     }
 
     virtual bool get_active() const override
@@ -1040,6 +1044,8 @@ public:
 
 IMPL_LINK_NOARG(SalInstanceRadioButton, ToggleHdl, ::RadioButton&, void)
 {
+    if (m_bBlockNotify)
+        return;
     signal_toggled();
 }
 
@@ -1047,6 +1053,7 @@ class SalInstanceToggleButton : public SalInstanceButton, public virtual weld::T
 {
 private:
     VclPtr<PushButton> m_xToggleButton;
+    bool m_bBlockNotify;
 
     DECL_LINK(ToggleListener, VclWindowEvent&, void);
 
@@ -1054,6 +1061,7 @@ public:
     SalInstanceToggleButton(PushButton* pButton, bool bTakeOwnership)
         : SalInstanceButton(pButton, bTakeOwnership)
         , m_xToggleButton(pButton)
+        , m_bBlockNotify(false)
     {
     }
 
@@ -1066,7 +1074,9 @@ public:
 
     virtual void set_active(bool active) override
     {
+        m_bBlockNotify = true;
         m_xToggleButton->Check(active);
+        m_bBlockNotify = false;
     }
 
     virtual bool get_active() const override
@@ -1076,7 +1086,9 @@ public:
 
     virtual void set_inconsistent(bool inconsistent) override
     {
+        m_bBlockNotify = false;
         m_xToggleButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
+        m_bBlockNotify = true;
     }
 
     virtual bool get_inconsistent() const override
@@ -1093,6 +1105,8 @@ public:
 
 IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void)
 {
+    if (m_bBlockNotify)
+        return;
     if (rEvent.GetId() == VclEventId::PushbuttonToggle)
         signal_toggled();
 }
@@ -1101,19 +1115,23 @@ class SalInstanceCheckButton : public SalInstanceButton, public virtual weld::Ch
 {
 private:
     VclPtr<CheckBox> m_xCheckButton;
+    bool m_bBlockNotify;
 
     DECL_LINK(ToggleHdl, CheckBox&, void);
 public:
     SalInstanceCheckButton(CheckBox* pButton, bool bTakeOwnership)
         : SalInstanceButton(pButton, bTakeOwnership)
         , m_xCheckButton(pButton)
+        , m_bBlockNotify(false)
     {
         m_xCheckButton->SetToggleHdl(LINK(this, SalInstanceCheckButton, ToggleHdl));
     }
 
     virtual void set_active(bool active) override
     {
+        m_bBlockNotify = true;
         m_xCheckButton->Check(active);
+        m_bBlockNotify = false;
     }
 
     virtual bool get_active() const override
@@ -1123,7 +1141,9 @@ public:
 
     virtual void set_inconsistent(bool inconsistent) override
     {
+        m_bBlockNotify = true;
         m_xCheckButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
+        m_bBlockNotify = false;
     }
 
     virtual bool get_inconsistent() const override
@@ -1139,6 +1159,8 @@ public:
 
 IMPL_LINK_NOARG(SalInstanceCheckButton, ToggleHdl, CheckBox&, void)
 {
+    if (m_bBlockNotify)
+        return;
     signal_toggled();
 }
 
