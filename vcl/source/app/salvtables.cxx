@@ -2282,9 +2282,8 @@ public:
                                                         bool bTakeOwnership) override
     {
         weld::TimeSpinButton* pRet = new weld::TimeSpinButton(weld_spin_button(id, bTakeOwnership), eFormat);
-        SalInstanceSpinButton* pButton = dynamic_cast<SalInstanceSpinButton*>(pRet->get_widget());
-        assert(pButton);
-        pButton->DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
+        SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(pRet->get_widget());
+        rButton.DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
         return pRet;
     }
 
