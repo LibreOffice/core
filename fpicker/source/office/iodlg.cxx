@@ -2611,17 +2611,17 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
 
     if ( rImage >>= aBmpSequence )
     {
-        Bitmap          aBmp;
+        BitmapEx        aBmp;
         SvMemoryStream  aData( aBmpSequence.getArray(),
                                aBmpSequence.getLength(),
                                StreamMode::READ );
-        ReadDIB(aBmp, aData, true);
+        ReadDIBBitmapEx(aBmp, aData);
 
         _pPrevBmp->SetBitmap( aBmp );
     }
     else
     {
-        Bitmap aEmpty;
+        BitmapEx aEmpty;
         _pPrevBmp->SetBitmap( aEmpty );
     }
 }

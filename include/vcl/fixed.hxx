@@ -22,7 +22,7 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/image.hxx>
@@ -121,7 +121,7 @@ public:
 class VCL_DLLPUBLIC FixedBitmap : public Control
 {
 private:
-    Bitmap          maBitmap;
+    BitmapEx        maBitmap;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -140,7 +140,7 @@ public:
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void            SetBitmap( const Bitmap& rBitmap );
+    void            SetBitmap( const BitmapEx& rBitmap );
     using OutputDevice::GetBitmap;
 };
 
