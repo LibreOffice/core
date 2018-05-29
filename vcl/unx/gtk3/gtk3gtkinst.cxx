@@ -2514,9 +2514,23 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pNotebook, m_nSignalId);
+        GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceContainer::enable_notify_events();
+        g_signal_handler_unblock(m_pNotebook, m_nSignalId);
+    }
+
     virtual void remove_page(const OString& rIdent) override
     {
+        disable_notify_events();
         gtk_notebook_remove_page(m_pNotebook, get_page_number(rIdent));
+        enable_notify_events();
     }
 
     virtual ~GtkInstanceNotebook() override
