@@ -399,7 +399,7 @@ void ShapeController::executeDispatch_TransformDialog()
                 if ( pFact )
                 {
                     ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                        pFact->CreateSvxTransformTabDialog( pChartWindow, &aGeoAttr, pDrawViewWrapper ) );
+                        pFact->CreateSvxTransformTabDialog(pChartWindow ? pChartWindow->GetFrameWeld() : nullptr, &aGeoAttr, pDrawViewWrapper));
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
                         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
