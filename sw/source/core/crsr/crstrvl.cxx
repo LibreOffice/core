@@ -394,8 +394,10 @@ void SwCursorShell::GotoTOXMarkBase()
                 {
                     SwCallLink aLk( *this ); // watch Cursor-Moves
                     SwCursorSaveState aSaveState( *m_pCurrentCursor );
-                    m_pCurrentCursor->GetPoint()->nNode = *pCNd;
-                    m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
+                    assert(pCFrame->IsTextFrame());
+                    *m_pCurrentCursor->GetPoint() =
+                        static_cast<SwTextFrame const*>(pCFrame)
+                            ->MapViewToModelPos(TextFrameIndex(0));
                     bRet = !m_pCurrentCursor->IsInProtectTable() &&
                             !m_pCurrentCursor->IsSelOvr();
                     if( bRet )
