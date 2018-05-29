@@ -3007,7 +3007,7 @@ const char* SC_OPCODE_T_TEST_ARY[] =
     NC_("SC_OPCODE_T_TEST", "Data 2"),
     NC_("SC_OPCODE_T_TEST", "The second record array."),
     NC_("SC_OPCODE_T_TEST", "Mode"),
-    NC_("SC_OPCODE_T_TEST", "Mode specifies the number of distribution tails to return. 1= one-tailed, 2 = two-tailed distribution"),
+    NC_("SC_OPCODE_T_TEST", "Mode specifies the number of distribution tails to return. 1 = one-tailed, 2 = two-tailed distribution"),
     NC_("SC_OPCODE_T_TEST", "Type"),
     NC_("SC_OPCODE_T_TEST", "The type of the T test.")
 };
@@ -3021,7 +3021,7 @@ const char* SC_OPCODE_T_TEST_MS_ARY[] =
     NC_("SC_OPCODE_T_TEST_MS", "Data 2"),
     NC_("SC_OPCODE_T_TEST_MS", "The second record array."),
     NC_("SC_OPCODE_T_TEST_MS", "Mode"),
-    NC_("SC_OPCODE_T_TEST_MS", "Mode specifies the number of distribution tails to return. 1= one-tailed, 2 = two-tailed distribution"),
+    NC_("SC_OPCODE_T_TEST_MS", "Mode specifies the number of distribution tails to return. 1 = one-tailed, 2 = two-tailed distribution"),
     NC_("SC_OPCODE_T_TEST_MS", "Type"),
     NC_("SC_OPCODE_T_TEST_MS", "The type of the T test.")
 };
