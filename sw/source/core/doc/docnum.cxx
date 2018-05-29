@@ -1112,7 +1112,7 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
               aTextNodeIter != aTextNodeList.end(); ++aTextNodeIter )
         {
             SwTextNode* pTNd = *aTextNodeIter;
-            SwIterator<SwTextFrame,SwTextNode> aIter(*pTNd);
+            SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pTNd);
             for(SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
                 if( pFrame->HasAnimation() )
                     pFrame->StopAnimation( pOut );
