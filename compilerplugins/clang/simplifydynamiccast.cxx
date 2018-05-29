@@ -29,8 +29,7 @@ public:
 
     virtual void run() override
     {
-        //        StringRef fn( compiler.getSourceManager().getFileEntryForID(
-        //                          compiler.getSourceManager().getMainFileID())->getName() );
+        //        StringRef fn(handler.getMainFileName());
         //        if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx"))
         //             return;
 

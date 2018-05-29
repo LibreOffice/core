@@ -40,8 +40,7 @@ private:
 
 void StringStatic::run()
 {
-    StringRef fn( compiler.getSourceManager().getFileEntryForID(
-                      compiler.getSourceManager().getMainFileID())->getName() );
+    StringRef fn(handler.getMainFileName());
     // passing around pointers to global OUString
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/svg/"))
          return;

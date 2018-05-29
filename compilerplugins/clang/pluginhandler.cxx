@@ -55,9 +55,21 @@ static int pluginCount = 0;
 static bool bPluginObjectsCreated = false;
 static bool unitTestMode = false;
 
+StringRef initMainFileName(CompilerInstance& compiler)
+{
+    StringRef const& fn(compiler.getASTContext().getSourceManager().getFileEntryForID(
+        compiler.getASTContext().getSourceManager().getMainFileID())->getName());
+    if (fn == "<stdin>")
+        // stdin means icecream, so we can rely on -main-file-name containing the full path name
+        return compiler.getCodeGenOpts().MainFileName;
+    else
+        // this is always a full path name
+        return fn;
+}
+
 PluginHandler::PluginHandler( CompilerInstance& compiler, const std::vector< std::string >& args )
     : compiler( compiler )
-    , mainFileName(compiler.getASTContext().getSourceManager().getFileEntryForID(compiler.getASTContext().getSourceManager().getMainFileID())->getName())
+    , mainFileName(initMainFileName(compiler))
     , rewriter( compiler.getSourceManager(), compiler.getLangOpts())
     , scope( "mainfile" )
     , warningsAsErrors( false )

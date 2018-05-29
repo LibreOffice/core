@@ -72,8 +72,7 @@ public:
     virtual void run() override
     {
         // ignore some files with problematic macros
-        StringRef fn( compiler.getSourceManager().getFileEntryForID(
-                          compiler.getSourceManager().getMainFileID())->getName() );
+        StringRef fn(handler.getMainFileName());
         if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/framework/factories/ChildWindowPane.cxx"))
              return;
         if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/component/Date.cxx"))
@@ -113,7 +112,8 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         return true;
     }
 
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
+    StringRef aFileName = getFileNameOfSpellingLoc(
+        compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
 
     if (isa<CXXDestructorDecl>(methodDecl)
        && !isInUnoIncludeFile(methodDecl))

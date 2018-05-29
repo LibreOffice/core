@@ -67,8 +67,7 @@ public:
 
     virtual void run() override
     {
-        StringRef fn( compiler.getSourceManager().getFileEntryForID(
-                          compiler.getSourceManager().getMainFileID())->getName() );
+        StringRef fn(handler.getMainFileName());
         // fixing this, makes the source in the .y files look horrible
         if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx"))
              return;

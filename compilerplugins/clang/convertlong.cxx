@@ -35,9 +35,7 @@ public:
 
     virtual void run() override
     {
-        std::string fn(compiler.getSourceManager()
-                           .getFileEntryForID(compiler.getSourceManager().getMainFileID())
-                           ->getName());
+        std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         // using sal_uIntPtr as in-between type when converting void* to rtl_TextEncoding
         if (fn == SRCDIR "/sal/osl/unx/thread.cxx")
@@ -74,7 +72,7 @@ bool ConvertLong::VisitVarDecl(VarDecl const* varDecl)
 {
     if (ignoreLocation(varDecl))
         return true;
-    StringRef fileName{ compiler.getSourceManager().getFilename(varDecl->getLocation()) };
+    StringRef fileName{ getFileNameOfSpellingLoc(varDecl->getLocation()) };
     if (loplugin::isSamePathname(fileName, SRCDIR "/include/tools/bigint.hxx"))
         return true;
     if (loplugin::isSamePathname(fileName, SRCDIR "/include/tools/solar.h"))

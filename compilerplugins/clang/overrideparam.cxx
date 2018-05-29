@@ -43,8 +43,7 @@ private:
 void OverrideParam::run()
 {
     /*
-    StringRef fn( compiler.getSourceManager().getFileEntryForID(
-                      compiler.getSourceManager().getMainFileID())->getName() );
+    StringRef fn(handler.getMainFileName());
     if (fn == SRCDIR "/include/svx/checklbx.hxx")
          return;
 */

@@ -83,8 +83,7 @@ public:
 
     virtual void run() override {
         // ignore some files with problematic macros
-        std::string fn( compiler.getSourceManager().getFileEntryForID(
-                        compiler.getSourceManager().getMainFileID())->getName() );
+        std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         // platform-specific stuff
         if (fn == SRCDIR "/sal/osl/unx/thread.cxx"

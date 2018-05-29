@@ -60,6 +60,7 @@ public:
     // without corrupting the source
     bool checkOverlap(SourceRange range);
     void addSourceModification(SourceRange range);
+    StringRef const& getMainFileName() const { return mainFileName; }
 private:
     void handleOption( const std::string& option );
     void createPlugins( std::set< std::string > rewriters );

@@ -215,11 +215,37 @@ const FunctionDecl* Plugin::getParentFunctionDecl( const Stmt* stmt )
     return nullptr;
 }
 
+StringRef Plugin::getFileNameOfSpellingLoc(SourceLocation spellingLocation) const
+{
+    static enum { NOINIT, STDIN, GOOD } s_Mode(NOINIT);
+    if (s_Mode == GOOD)
+    {
+        return compiler.getSourceManager().getFilename(spellingLocation);
+    }
+    else if (s_Mode == STDIN
+             || !compiler.getSourceManager().isInMainFile(spellingLocation))
+    {
+        const char* bufferName = compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename();
+        return bufferName;
+    }
+    else
+    {
+        auto const fn(compiler.getSourceManager().getFilename(spellingLocation));
+        if (!fn.data()) // wtf? happens in sot/source/sdstor/stg.cxx
+        {
+            return fn;
+        }
+#if !defined _WIN32
+        assert(fn.startswith("/") || fn == "<stdin>");
+#endif
+        s_Mode = fn == "<stdin>" ? STDIN : GOOD;
+        return getFileNameOfSpellingLoc(spellingLocation);
+    }
+}
 
 bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const
 {
-    StringRef name {
-        compiler.getSourceManager().getFilename(spellingLocation) };
+    StringRef name{ getFileNameOfSpellingLoc(spellingLocation) };
     return compiler.getSourceManager().isInMainFile(spellingLocation)
         ? (isSamePathname(name, SRCDIR "/cppu/source/cppu/compat.cxx")
            || isSamePathname(name, SRCDIR "/cppuhelper/source/compat.cxx")
