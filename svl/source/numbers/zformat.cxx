@@ -2523,6 +2523,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     OUStringBuffer ExpStr;
     short nExpSign = 1;
     sal_Int32 nExPos = sStr.indexOf('E');
+    sal_Int32 nDecPos = -1;
 
     if ( nExPos >= 0 )
     {
@@ -2581,6 +2582,8 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
 
         while((index = sStr.indexOf('.', index)) >= 0)
         {
+            if (nDecPos < 0)
+                nDecPos = index;
             sStr.remove(index, 1);
         }
     }
@@ -2630,7 +2633,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     }
     else
     {
-        bRes |= ImpDecimalFill(sStr, fNumber, j, nIx, false);
+        bRes |= ImpDecimalFill(sStr, fNumber, nDecPos, j, nIx, false);
     }
 
     if (bSign)
@@ -4104,6 +4107,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
     }
     sal_uInt16 i, j;
+    sal_Int32 nDecPos = -1;
     bool bInteger = false;
     if ( rInfo.nThousand != FLAG_STANDARD_IN_FORMAT )
     {
@@ -4155,17 +4159,17 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, 0, '.');
             sStr.stripStart('0'); // Strip leading zeros
         }
-        sal_Int32 nPoint = sStr.indexOf('.' );
-        if ( nPoint >= 0)
+        nDecPos = sStr.indexOf('.' );
+        if ( nDecPos >= 0)
         {
-            const sal_Unicode* p = sStr.getStr() + nPoint;
+            const sal_Unicode* p = sStr.getStr() + nDecPos;
             while ( *++p == '0' )
                 ;
             if ( !*p )
             {
                 bInteger = true;
             }
-            sStr.remove( nPoint, 1 ); //  Remove .
+            sStr.remove( nDecPos, 1 ); //  Remove .
         }
         if (bSign && (sStr.isEmpty() ||
                       comphelper::string::getTokenCount(sStr.toString(), '0') == sStr.getLength()+1))   // Only 00000
@@ -4177,7 +4181,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                                         // Edit backwards:
     j = NumFor[nIx].GetCount()-1;       // Last symbol
                                         // Decimal places:
-    bRes |= ImpDecimalFill( sStr, fNumber, j, nIx, bInteger );
+    bRes |= ImpDecimalFill( sStr, fNumber, nDecPos, j, nIx, bInteger );
     if (bSign)
     {
         sStr.insert(0, '-');
@@ -4188,6 +4192,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
 
 bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                                    double& rNumber,       // number
+                                   sal_Int32 nDecPos,     // decimals start
                                    sal_uInt16 j,          // symbol index within format code
                                    sal_uInt16 nIx,        // subformat index
                                    bool bInteger)         // is integer
@@ -4232,6 +4237,20 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                 const OUString& rStr = rInfo.sStrArray[j];
                 const sal_Unicode* p1 = rStr.getStr();
                 const sal_Unicode* p = p1 + rStr.getLength();
+                // In case the number of decimals passed are less than the
+                // "digits" given, append trailing '0' characters, which here
+                // means insert them because literal strings may have been
+                // appended already. If they weren't to be '0' characters
+                // they'll be changed below, as if decimals with trailing zeros
+                // were passed.
+                if (nDecPos >= 0 && nDecPos <= k)
+                {
+                    sal_Int32 nAppend = rStr.getLength() - (k - nDecPos);
+                    while (nAppend-- > 0)
+                    {
+                        sStr.insert( k++, '0');
+                    }
+                }
                 while (k && p1 < p--)
                 {
                     const sal_Unicode c = *p;
