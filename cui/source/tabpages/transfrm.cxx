@@ -1063,6 +1063,8 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
         mfOldWidth = std::max( pItem ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0.0, 1.0 );
         double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
+        if (m_xMtrWidth->get_digits())
+            fTmpWidth *= pow(10.0, m_xMtrWidth->get_digits());
         m_xMtrWidth->set_value(static_cast<int>(fTmpWidth), FUNIT_100TH_MM);
     }
 
@@ -1070,6 +1072,8 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_HEIGHT );
         mfOldHeight = std::max( pItem ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0.0, 1.0 );
         double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
+        if (m_xMtrHeight->get_digits())
+            fTmpHeight *= pow(10.0, m_xMtrHeight->get_digits());
         m_xMtrHeight->set_value(static_cast<int>(fTmpHeight), FUNIT_100TH_MM);
     }
 
