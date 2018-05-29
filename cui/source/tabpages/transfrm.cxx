@@ -86,14 +86,9 @@ const sal_uInt16 SvxSlantTabPage::pSlantRanges[] =
 |*
 \************************************************************************/
 
-SvxTransformTabDialog::SvxTransformTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
-                                const SdrView* pSdrView, SvxAnchorIds nAnchorTypes )
-    : SfxTabDialog( pParent
-                  ,"PositionAndSizeDialog"
-                  ,"cui/ui/positionsizedialog.ui"
-                  , pAttr )
-    , nPosSize(0)
-    , nSWPosSize(0)
+SvxTransformTabDialog::SvxTransformTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
+                                             const SdrView* pSdrView, SvxAnchorIds nAnchorTypes)
+    : SfxTabDialogController(pParent, "cui/ui/positionsizedialog.ui", "PositionAndSizeDialog", pAttr)
     , pView(pSdrView)
     , nAnchorCtrls(nAnchorTypes)
 {
@@ -102,65 +97,62 @@ SvxTransformTabDialog::SvxTransformTabDialog( vcl::Window* pParent, const SfxIte
     //different positioning page in Writer
     if(nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))
     {
-        nSWPosSize = AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
+        AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
         RemoveTabPage("RID_SVXPAGE_POSITION_SIZE");
     }
     else
     {
-        nPosSize = AddTabPage("RID_SVXPAGE_POSITION_SIZE", SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
+        AddTabPage("RID_SVXPAGE_POSITION_SIZE", SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
         RemoveTabPage("RID_SVXPAGE_SWPOSSIZE");
     }
 
-    nRotation = AddTabPage("RID_SVXPAGE_ANGLE", SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges);
-    nSlant = AddTabPage("RID_SVXPAGE_SLANT", SvxSlantTabPage::Create, SvxSlantTabPage::GetRanges);
+    AddTabPage("RID_SVXPAGE_ANGLE", SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges);
+    AddTabPage("RID_SVXPAGE_SLANT", SvxSlantTabPage::Create, SvxSlantTabPage::GetRanges);
 }
 
 
-void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
+void SvxTransformTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId==nPosSize)
+    if (rId == "RID_SVXPAGE_POSITION_SIZE")
+    {
+        SvxPositionSizeTabPage& rSvxPos =  static_cast<SvxPositionSizeTabPage&>(rPage);
+        rSvxPos.SetView(pView);
+        rSvxPos.Construct();
+
+        if(nAnchorCtrls & SvxAnchorIds::NoResize)
         {
-            SvxPositionSizeTabPage& rSvxPos =  static_cast<SvxPositionSizeTabPage&>(rPage);
-            rSvxPos.SetView(pView);
-            rSvxPos.Construct();
-
-            if(nAnchorCtrls & SvxAnchorIds::NoResize)
-            {
-                rSvxPos.DisableResize();
-            }
-
-            if(nAnchorCtrls & SvxAnchorIds::NoProtect)
-            {
-                rSvxPos.DisableProtect();
-                rSvxPos.UpdateControlStates();
-            }
-        }
-    else if (nId == nSWPosSize)
-        {
-            SvxSwPosSizeTabPage& rSwPos =  static_cast<SvxSwPosSizeTabPage&>(rPage);
-
-            rSwPos.EnableAnchorTypes(nAnchorCtrls);
-            rSwPos.SetValidateFramePosLink(aValidateLink);
-            rSwPos.SetView(pView);
+            rSvxPos.DisableResize();
         }
 
-    else if( nId == nRotation)
+        if(nAnchorCtrls & SvxAnchorIds::NoProtect)
         {
-            SvxAngleTabPage& rSvxAng =  static_cast<SvxAngleTabPage&>(rPage);
-
-            rSvxAng.SetView( pView );
-            rSvxAng.Construct();
+            rSvxPos.DisableProtect();
+            rSvxPos.UpdateControlStates();
         }
+    }
+    else if (rId == "RID_SVXPAGE_SWPOSSIZE")
+    {
+        SvxSwPosSizeTabPage& rSwPos =  static_cast<SvxSwPosSizeTabPage&>(rPage);
 
-    else if (nId == nSlant)
-        {
-            SvxSlantTabPage& rSvxSlnt =  static_cast<SvxSlantTabPage&>(rPage);
+        rSwPos.EnableAnchorTypes(nAnchorCtrls);
+        rSwPos.SetValidateFramePosLink(aValidateLink);
+        rSwPos.SetView(pView);
+    }
+    else if (rId == "RID_SVXPAGE_ANGLE")
+    {
+        SvxAngleTabPage& rSvxAng =  static_cast<SvxAngleTabPage&>(rPage);
 
-            rSvxSlnt.SetView( pView );
-            rSvxSlnt.Construct();
-        }
+        rSvxAng.SetView( pView );
+        rSvxAng.Construct();
+    }
+    else if (rId == "RID_SVXPAGE_SLANT")
+    {
+        SvxSlantTabPage& rSvxSlnt =  static_cast<SvxSlantTabPage&>(rPage);
+
+        rSvxSlnt.SetView( pView );
+        rSvxSlnt.Construct();
+    }
 }
-
 
 void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidation&,void>& rLink)
 {

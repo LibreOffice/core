@@ -37,28 +37,23 @@ class SdrView;
 \************************************************************************/
 
 struct SvxSwFrameValidation;
-class SvxTransformTabDialog : public SfxTabDialog
+class SvxTransformTabDialog : public SfxTabDialogController
 {
-    sal_uInt16         nPosSize;
-    sal_uInt16         nSWPosSize;
-    sal_uInt16         nRotation;
-    sal_uInt16         nSlant;
 private:
     const SdrView*      pView;
 
     SvxAnchorIds        nAnchorCtrls;
     Link<SvxSwFrameValidation&,void> aValidateLink;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 public:
+    SvxTransformTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
+                          const SdrView* pView,
+                          SvxAnchorIds nAnchorTypes);
 
-            SvxTransformTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
-                            const SdrView* pView,
-                            SvxAnchorIds nAnchorTypes);
-
-            //link for the Writer to validate positions
-            void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );
+    //link for the Writer to validate positions
+    void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );
 };
 
 /*************************************************************************
