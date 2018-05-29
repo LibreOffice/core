@@ -64,7 +64,7 @@ const LanguageTag& CharClass::getLanguageTag() const
 
 const css::lang::Locale& CharClass::getMyLocale() const
 {
-    ::osl::MutexGuard aGuard( aMutex );
+    // Mutex locked by callers.
     return maLanguageTag.getLocale();
 }
 
@@ -113,8 +113,11 @@ bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      nCharClassAlphaType) != 0;
+        }
     }
     catch ( const Exception& )
     {
@@ -132,8 +135,11 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      nCharClassLetterType) != 0;
+        }
     }
     catch ( const Exception& )
     {
@@ -147,7 +153,10 @@ bool CharClass::isLetter( const OUString& rStr ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return isLetterType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
+        }
     }
     catch ( const Exception& )
     {
@@ -165,8 +174,11 @@ bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      KCharacterType::DIGIT) != 0;
+        }
     }
     catch ( const Exception& )
     {
@@ -180,7 +192,10 @@ bool CharClass::isNumeric( const OUString& rStr ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return isNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
+        }
     }
     catch ( const Exception& )
     {
@@ -198,8 +213,11 @@ bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 (nCharClassAlphaType | KCharacterType::DIGIT)) != 0;
+        }
     }
     catch ( const Exception& )
     {
@@ -217,8 +235,11 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      (nCharClassLetterType | KCharacterType::DIGIT)) != 0;
+        }
     }
     catch ( const Exception& )
     {
@@ -232,7 +253,10 @@ bool CharClass::isLetterNumeric( const OUString& rStr ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
+        }
     }
     catch ( const Exception& )
     {
@@ -246,7 +270,10 @@ OUString CharClass::titlecase(const OUString& rStr, sal_Int32 nPos, sal_Int32 nC
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return xCC->toTitle( rStr, nPos, nCount, getMyLocale() );
+        }
     }
     catch ( const Exception& )
     {
@@ -260,7 +287,10 @@ OUString CharClass::uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return xCC->toUpper( rStr, nPos, nCount, getMyLocale() );
+        }
     }
     catch ( const Exception& )
     {
@@ -274,7 +304,10 @@ OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return xCC->toLower( rStr, nPos, nCount, getMyLocale() );
+        }
     }
     catch ( const Exception& )
     {
@@ -288,7 +321,10 @@ sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return xCC->getType( rStr, nPos );
+        }
     }
     catch ( const Exception& )
     {
@@ -302,7 +338,10 @@ css::i18n::DirectionProperty CharClass::getCharacterDirection( const OUString& r
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return static_cast<css::i18n::DirectionProperty>(xCC->getCharacterDirection( rStr, nPos ));
+        }
     }
     catch ( const Exception& )
     {
@@ -316,7 +355,10 @@ css::i18n::UnicodeScript CharClass::getScript( const OUString& rStr, sal_Int32 n
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return static_cast<css::i18n::UnicodeScript>(xCC->getScript( rStr, nPos ));
+        }
     }
     catch ( const Exception& )
     {
@@ -330,7 +372,10 @@ sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) co
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return xCC->getCharacterType( rStr, nPos, getMyLocale() );
+        }
     }
     catch ( const Exception& )
     {
@@ -344,7 +389,10 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return xCC->getStringType( rStr, nPos, nCount, getMyLocale() );
+        }
     }
     catch ( const Exception& )
     {
@@ -364,9 +412,12 @@ css::i18n::ParseResult CharClass::parseAnyToken(
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return xCC->parseAnyToken( rStr, nPos, getMyLocale(),
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
+        }
     }
     catch ( const Exception& e )
     {
@@ -387,9 +438,12 @@ css::i18n::ParseResult CharClass::parsePredefinedToken(
     try
     {
         if ( xCC.is() )
+        {
+            ::osl::MutexGuard aGuard( aMutex );
             return xCC->parsePredefinedToken( nTokenType, rStr, nPos, getMyLocale(),
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
+        }
     }
     catch ( const Exception& e )
     {
