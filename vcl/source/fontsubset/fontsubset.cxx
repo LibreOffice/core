@@ -132,7 +132,7 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
     // remove const_cast when sft-subsetter is const-correct
     sal_uInt8* pEncArray = const_cast<sal_uInt8*>( mpReqEncodedIds );
 #endif
-    int nSFTErr = vcl::SF_BADARG;
+    vcl::SFErrCodes nSFTErr = vcl::SFErrCodes::BadArg;
     if( mnReqFontTypeMask & FontType::TYPE42_FONT )
     {
         nSFTErr = CreateT42FromTTGlyphs( mpSftTTFont, mpOutFile, mpReqFontName,
@@ -150,7 +150,7 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
         // TODO: move functionality from callers here
     }
 
-    return (nSFTErr != vcl::SF_OK);
+    return (nSFTErr != vcl::SFErrCodes::Ok);
 }
 
 // TODO: replace dummy implementation

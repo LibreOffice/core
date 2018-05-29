@@ -562,7 +562,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
     OString aFile = getFontFile( pFont );
     TrueTypeFont* pTTFont = nullptr;
 
-    if( OpenTTFontFile( aFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) == SF_OK )
+    if( OpenTTFontFile( aFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) == SFErrCodes::Ok )
     {
         TTGlobalFontInfo aInfo;
         GetTTGlobalFontInfo( pTTFont, & aInfo );
@@ -1018,7 +1018,7 @@ bool PrintFontManager::createFontSubset(
     const OString aFromFile = getFontFile( pFont );
 
     TrueTypeFont* pTTFont = nullptr; // TODO: rename to SfntFont
-    if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) != SF_OK )
+    if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) != SFErrCodes::Ok )
         return false;
 
     // prepare system name for write access for subset file target
@@ -1097,7 +1097,7 @@ bool PrintFontManager::createFontSubset(
         return false;
     }
 
-    bool bSuccess = ( SF_OK == CreateTTFromTTGlyphs( pTTFont,
+    bool bSuccess = ( SFErrCodes::Ok == CreateTTFromTTGlyphs( pTTFont,
                                                      aToFile.getStr(),
                                                      pGID,
                                                      pEnc,
@@ -1117,7 +1117,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
         return;
     TrueTypeFont* pTTFont = nullptr;
     OString aFromFile = getFontFile( pFont );
-    if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) != SF_OK )
+    if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) != SFErrCodes::Ok )
         return;
     int nGlyphs = GetTTGlyphCount(pTTFont);
     if (nGlyphs > 0)

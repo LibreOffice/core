@@ -1375,36 +1375,37 @@ static void allocTrueTypeFont( TrueTypeFont** ttf )
 }
 
 /* forward declaration for the two entry points to use*/
-static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t );
+static SFErrCodes doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t );
 
 #if !defined(_WIN32)
-int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
+SFErrCodes OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
 {
-    int ret, fd = -1;
+    SFErrCodes ret;
+    int fd = -1;
     struct stat st;
 
-    if (!fname || !*fname) return SF_BADFILE;
+    if (!fname || !*fname) return SFErrCodes::BadFile;
 
     allocTrueTypeFont( ttf );
     if( ! *ttf )
-        return SF_MEMORY;
+        return SFErrCodes::Memory;
 
     (*ttf)->fname = strdup(fname);
     if( ! (*ttf)->fname )
     {
-        ret = SF_MEMORY;
+        ret = SFErrCodes::Memory;
         goto cleanup;
     }
 
     fd = open(fname, O_RDONLY);
 
     if (fd == -1) {
-        ret = SF_BADFILE;
+        ret = SFErrCodes::BadFile;
         goto cleanup;
     }
 
     if (fstat(fd, &st) == -1) {
-        ret = SF_FILEIO;
+        ret = SFErrCodes::FileIo;
         goto cleanup;
     }
 
@@ -1415,12 +1416,12 @@ int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
      * Size will be 0, but fonts smaller than 4 bytes would be broken anyway.
      */
     if ((*ttf)->fsize == 0) {
-        ret = SF_BADFILE;
+        ret = SFErrCodes::BadFile;
         goto cleanup;
     }
 
     if (((*ttf)->ptr = static_cast<sal_uInt8 *>(mmap(nullptr, (*ttf)->fsize, PROT_READ, MAP_SHARED, fd, 0))) == MAP_FAILED) {
-        ret = SF_MEMORY;
+        ret = SFErrCodes::Memory;
         goto cleanup;
     }
     close(fd);
@@ -1437,11 +1438,11 @@ cleanup:
 }
 #endif
 
-int OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf)
+SFErrCodes OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf)
 {
     allocTrueTypeFont( ttf );
     if( *ttf == nullptr )
-        return SF_MEMORY;
+        return SFErrCodes::Memory;
 
     (*ttf)->fname = nullptr;
     (*ttf)->fsize = nLen;
@@ -1480,12 +1481,12 @@ public:
 
 }
 
-static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
+static SFErrCodes doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 {
     TTFontCloser aCloseGuard(t);
 
     if (t->fsize < 4) {
-        return SF_TTFORMAT;
+        return SFErrCodes::TtFormat;
     }
     int i;
     sal_uInt32 length, tag;
@@ -1499,18 +1500,18 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         tdoffset = 0;
     } else if (TTCTag == T_ttcf) {                         /* TrueType collection */
         if (!withinBounds(12, 4 * facenum, sizeof(sal_uInt32), t->fsize)) {
-            return SF_FONTNO;
+            return SFErrCodes::FontNo;
         }
         sal_uInt32 Version = GetUInt32(t->ptr, 4);
         if (Version != 0x00010000 && Version != 0x00020000) {
-            return SF_TTFORMAT;
+            return SFErrCodes::TtFormat;
         }
         if (facenum >= GetUInt32(t->ptr, 8)) {
-            return SF_FONTNO;
+            return SFErrCodes::FontNo;
         }
         tdoffset = GetUInt32(t->ptr, 12 + 4 * facenum);
     } else {
-        return SF_TTFORMAT;
+        return SFErrCodes::TtFormat;
     }
 
     if (withinBounds(tdoffset, 0, 4 + sizeof(sal_uInt16), t->fsize)) {
@@ -1518,7 +1519,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     }
 
     if (t->ntables >= 128 || t->ntables == 0) {
-        return SF_TTFORMAT;
+        return SFErrCodes::TtFormat;
     }
 
     t->tables = static_cast<const sal_uInt8**>(calloc(NUM_TAGS, sizeof(sal_uInt8 *)));
@@ -1568,7 +1569,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     if( facenum == sal_uInt32(~0) ) {
         sal_uInt8* pHead = const_cast<sal_uInt8*>(t->tables[O_head]);
         if (!pHead) {
-            return SF_TTFORMAT;
+            return SFErrCodes::TtFormat;
         }
         /* limit Head candidate to TTC extract's limits */
         if( pHead > t->ptr + (t->fsize - 54) )
@@ -1586,7 +1587,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             }
         }
         if (p <= t->ptr) {
-            return SF_TTFORMAT;
+            return SFErrCodes::TtFormat;
         }
     }
 
@@ -1627,7 +1628,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
      */
 
     if( !(getTable(t, O_maxp) && getTable(t, O_head) && getTable(t, O_name) && getTable(t, O_cmap)) ) {
-        return SF_TTFORMAT;
+        return SFErrCodes::TtFormat;
     }
 
     const sal_uInt8* table = getTable(t, O_maxp);
@@ -1637,13 +1638,13 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     table = getTable(t, O_head);
     table_size = getTableSize(t, O_head);
     if (table_size < 52) {
-        return SF_TTFORMAT;
+        return SFErrCodes::TtFormat;
     }
     t->unitsPerEm = GetUInt16(table, 18);
     int indexfmt = GetInt16(table, 50);
 
     if( ((indexfmt != 0) && (indexfmt != 1)) || (t->unitsPerEm <= 0) ) {
-        return SF_TTFORMAT;
+        return SFErrCodes::TtFormat;
     }
 
     if( getTable(t, O_glyf) && getTable(t, O_loca) ) /* TTF or TTF-OpenType */
@@ -1666,7 +1667,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         /* TODO: implement to get subsetting */
         assert(t->goffsets != nullptr);
     } else {
-        return SF_TTFORMAT;
+        return SFErrCodes::TtFormat;
     }
 
     table = getTable(t, O_hhea);
@@ -1682,7 +1683,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
     aCloseGuard.clear();
 
-    return SF_OK;
+    return SFErrCodes::Ok;
 }
 
 void CloseTTFont(TrueTypeFont *ttf)
@@ -1755,7 +1756,7 @@ int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal
     return n;
 }
 
-int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
+SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
                           sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs,
                           int wmode)
 {
@@ -1813,8 +1814,8 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
 
     const char * const h41 = "(%s) cvn exch definefont pop\n";
 
-    if (!((nGlyphs > 0) && (nGlyphs <= 256))) return SF_GLYPHNUM;
-    if (!glyphArray) return SF_BADARG;
+    if (!((nGlyphs > 0) && (nGlyphs <= 256))) return SFErrCodes::GlyphNum;
+    if (!glyphArray) return SFErrCodes::BadArg;
     if (!fname) fname = ttf->psname;
 
     fprintf(outf, h01, GetInt16(table, 0), GetUInt16(table, 2), GetInt16(table, 4), GetUInt16(table, 6));
@@ -1904,10 +1905,10 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
     fprintf(outf, "%s", h40);
     fprintf(outf, h41, fname);
 
-    return SF_OK;
+    return SFErrCodes::Ok;
 }
 
-int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
+SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                           const char    *fname,
                           sal_uInt16 const *glyphArray,
                           sal_uInt8 const *encoding,
@@ -1916,7 +1917,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     TrueTypeCreator *ttcr;
     TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr, *cmap=nullptr, *name=nullptr, *post = nullptr, *os2 = nullptr;
     int i;
-    int res;
+    SFErrCodes res;
 
     TrueTypeCreatorNewEmpty(T_true, &ttcr);
 
@@ -1997,9 +1998,9 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     AddTable(ttcr, cvt ); AddTable(ttcr, prep); AddTable(ttcr, fpgm);
     AddTable(ttcr, post); AddTable(ttcr, os2);
 
-    if ((res = StreamToFile(ttcr, fname)) != SF_OK) {
+    if ((res = StreamToFile(ttcr, fname)) != SFErrCodes::Ok) {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf(stderr, "StreamToFile: error code: %d.\n", res);
+        fprintf(stderr, "StreamToFile: error code: %d.\n", int(res));
 #endif
     }
 
@@ -2155,7 +2156,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     free(offs);
 }
 
-int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
+SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
                            FILE          *outf,
                            const char    *psname,
                            sal_uInt16 const *glyphArray,
@@ -2165,7 +2166,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     TrueTypeCreator *ttcr;
     TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr;
     int i;
-    int res;
+    SFErrCodes res;
 
     sal_uInt32 ver, rev;
 
@@ -2173,7 +2174,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     sal_uInt32 sfntLen;
     int UPEm = ttf->unitsPerEm;
 
-    if (nGlyphs >= 256) return SF_GLYPHNUM;
+    if (nGlyphs >= 256) return SFErrCodes::GlyphNum;
 
     assert(psname != nullptr);
 
@@ -2224,7 +2225,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     AddTable(ttcr, head); AddTable(ttcr, hhea); AddTable(ttcr, maxp); AddTable(ttcr, cvt);
     AddTable(ttcr, prep); AddTable(ttcr, glyf); AddTable(ttcr, fpgm);
 
-    if ((res = StreamToMemory(ttcr, &sfntP, &sfntLen)) != SF_OK) {
+    if ((res = StreamToMemory(ttcr, &sfntP, &sfntLen)) != SFErrCodes::Ok) {
         TrueTypeCreatorDispose(ttcr);
         free(gID);
         return res;
@@ -2264,7 +2265,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     TrueTypeCreatorDispose(ttcr);
     free(gID);
     free(sfntP);
-    return SF_OK;
+    return SFErrCodes::Ok;
 }
 
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
