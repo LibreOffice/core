@@ -44,8 +44,8 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
     if (ignoreLocation(fieldDecl)) {
         return true;
     }
-    StringRef aFileName = compiler.getSourceManager().getFilename(
-            compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
+    StringRef aFileName = getFileNameOfSpellingLoc(
+        compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
 
     // FIXME complex stuff to fix later
 

@@ -200,7 +200,7 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
         return true;
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(canon->getLocation())))
         return true;
-    StringRef fn = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(canon->getLocStart()));
+    StringRef fn = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(canon->getLocStart()));
     // Some backwards compat magic.
     // TODO Can probably be removed, but need to do some checking
     if (loplugin::isSamePathname(fn, SRCDIR "/include/sax/fshelper.hxx"))

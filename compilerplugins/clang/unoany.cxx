@@ -28,7 +28,8 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
     if (ignoreLocation(expr)) {
         return true;
     }
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
+    StringRef aFileName = getFileNameOfSpellingLoc(
+            compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Any.hxx")) {
         return true;
     }

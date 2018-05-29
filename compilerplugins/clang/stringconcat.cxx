@@ -97,7 +97,7 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         leftLoc = left->getArg(1)->getLocStart();
     }
     StringRef name {
-        compiler.getSourceManager().getFilename(
+        getFileNameOfSpellingLoc(
             compiler.getSourceManager().getSpellingLoc(expr->getLocStart())) };
     if (loplugin::isSamePathname(
             name, SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx")
