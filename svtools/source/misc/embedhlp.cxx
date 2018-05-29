@@ -228,6 +228,7 @@ struct EmbeddedObjectRef_Impl
     sal_Int64                                   nViewAspect;
     bool                                        bIsLocked:1;
     bool                                        bNeedUpdate:1;
+    bool                                        bUpdating:1;
 
     // #i104867#
     sal_uInt32                                  mnGraphicVersion;
@@ -239,6 +240,7 @@ struct EmbeddedObjectRef_Impl
         nViewAspect(embed::Aspects::MSOLE_CONTENT),
         bIsLocked(false),
         bNeedUpdate(false),
+        bUpdating(false),
         mnGraphicVersion(0),
         aDefaultSizeForChart_In_100TH_MM(awt::Size(8000,7000))
     {}
@@ -252,6 +254,7 @@ struct EmbeddedObjectRef_Impl
         nViewAspect(r.nViewAspect),
         bIsLocked(r.bIsLocked),
         bNeedUpdate(r.bNeedUpdate),
+        bUpdating(r.bUpdating),
         mnGraphicVersion(0),
         aDefaultSizeForChart_In_100TH_MM(r.aDefaultSizeForChart_In_100TH_MM)
     {
@@ -805,7 +808,14 @@ bool EmbeddedObjectRef::IsGLChart(const css::uno::Reference < css::embed::XEmbed
 
 void EmbeddedObjectRef::UpdateReplacement()
 {
-    GetReplacement( true );
+    if (mpImpl->bUpdating)
+    {
+        SAL_WARN("svtools.misc", "UpdateReplacement called while UpdateReplacement already underway");
+        return;
+    }
+    mpImpl->bUpdating = true;
+    GetReplacement(true);
+    mpImpl->bUpdating = false;
 }
 
 void EmbeddedObjectRef::UpdateReplacementOnDemand()
