@@ -622,6 +622,7 @@ private:
 
     SVL_DLLPRIVATE bool ImpDecimalFill( OUStringBuffer& sStr,
                                  double& rNumber,
+                                 sal_Int32 nDecPos,
                                  sal_uInt16 j,
                                  sal_uInt16 nIx,
                                  bool bInteger );
