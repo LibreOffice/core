@@ -1114,8 +1114,11 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
             SwTextNode* pTNd = *aTextNodeIter;
             SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pTNd);
             for(SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
-                if( pFrame->HasAnimation() )
+                if (pFrame->HasAnimation() &&
+                    (!pFrame->GetMergedPara() || pFrame->GetMergedPara()->pParaPropsNode == pTNd))
+                {
                     pFrame->StopAnimation( pOut );
+                }
         }
     }
 }
