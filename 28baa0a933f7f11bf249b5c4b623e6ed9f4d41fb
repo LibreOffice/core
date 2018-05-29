@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_29b736d9",
+        "filename": "vcl/source/app/IconThemeSelector.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-29T11:09:19Z",
+      "side": 1,
+      "message": "Just add (void)desktopEnvironment;",
+      "revId": "28baa0a933f7f11bf249b5c4b623e6ed9f4d41fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
