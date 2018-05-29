@@ -87,6 +87,7 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
 
     if ( mbMenuBar && mpQMenuBar )
         mpQMenuBar->clear();
+    QActionGroup* pQAG = nullptr;
 
     for ( sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++ )
     {
@@ -105,8 +106,11 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
         else
         {
             if( pSalMenuItem->mpSubMenu )
+            {
                 // submenu
                 pQMenu = pQMenu->addMenu( toQString(aText) );
+                pQAG = new QActionGroup( pQMenu );
+            }
             else
             {
                 if ( pSalMenuItem->mnType == MenuItemType::SEPARATOR )
@@ -121,6 +125,16 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
                     {
                         pAction->setCheckable( true );
                         pAction->setChecked( bChecked );
+                    }
+                    else if (itemBits & MenuItemBits::RADIOCHECK)
+                    {
+                        pAction->setCheckable(true);
+                        if ( !pQAG )
+                        {
+                            pQAG = new QActionGroup( pQMenu );
+                            pQAG->setExclusive(true);
+                        }
+                        pQAG->addAction( pAction );
                     }
 
                     connect( pAction, &QAction::triggered, this,
