@@ -113,7 +113,8 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         return true;
     }
 
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
+    StringRef aFileName = getFileNameOfSpellingLoc(
+        compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
 
     if (isa<CXXDestructorDecl>(methodDecl)
        && !isInUnoIncludeFile(methodDecl))
