@@ -43,7 +43,8 @@ namespace sdr
 
         void BaseProperties::applyDefaultStyleSheetFromSdrModel()
         {
-            SetStyleSheet(GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheet(), false);
+            // do not delete hard attributes when setting dsefault Style
+            SetStyleSheet(GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheet(), true);
         }
 
         const SdrObject& BaseProperties::GetSdrObject() const
