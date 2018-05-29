@@ -310,7 +310,7 @@ namespace
 void lcl_LOKInvalidateFrames(const SwModify& rMod, const SwRootFrame* pLayout,
         SwFrameType const nFrameType, const Point* pPoint)
 {
-    SwIterator<SwFrame,SwModify> aIter( rMod );
+    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
 
     for (SwFrame* pTmpFrame = aIter.First(); pTmpFrame; pTmpFrame = aIter.Next() )
     {
