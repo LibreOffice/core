@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentPOS">
     <property name="lower">-120</property>
     <property name="upper">240</property>
@@ -86,7 +85,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_POS_X">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPOS</property>
                         <property name="digits">2</property>
@@ -99,7 +98,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_POS_Y">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPOS1</property>
                         <property name="digits">2</property>
@@ -249,7 +248,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_WIDTH">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentSIZE</property>
                         <property name="digits">2</property>
@@ -262,7 +261,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_HEIGHT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentSIZE1</property>
                         <property name="digits">2</property>
@@ -276,7 +275,7 @@
                       <object class="GtkCheckButton" id="CBX_SCALE">
                         <property name="label" translatable="yes" context="possizetabpage|CBX_SCALE">_Keep ratio</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -316,7 +315,7 @@
                       </packing>
                     </child>
                     <child>
-                       <object class="GtkScrolledWindow">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
@@ -401,7 +400,7 @@
                       <object class="GtkCheckButton" id="TSB_POSPROTECT">
                         <property name="label" translatable="yes" context="possizetabpage|TSB_POSPROTECT">Positio_n</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -418,7 +417,7 @@
                       <object class="GtkCheckButton" id="TSB_SIZEPROTECT">
                         <property name="label" translatable="yes" context="possizetabpage|TSB_SIZEPROTECT">_Size</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -475,7 +474,7 @@
                       <object class="GtkCheckButton" id="TSB_AUTOGROW_WIDTH">
                         <property name="label" translatable="yes" context="possizetabpage|TSB_AUTOGROW_WIDTH">_Fit width to text</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -492,7 +491,7 @@
                       <object class="GtkCheckButton" id="TSB_AUTOGROW_HEIGHT">
                         <property name="label" translatable="yes" context="possizetabpage|TSB_AUTOGROW_HEIGHT">Fit _height to text</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
