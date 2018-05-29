@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a9d246fe",
+        "filename": "sd/IwyuFilter_sd.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-29T12:03:54Z",
+      "side": 1,
+      "message": "Looks invalid to me -- did you try to replace this with a fwd decl instead of blacklisting it?",
+      "revId": "f17d9423f9ed521bca205022bd05cac7bdfd6ccb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
