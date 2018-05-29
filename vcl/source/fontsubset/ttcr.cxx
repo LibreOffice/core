@@ -161,12 +161,12 @@ void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
     *_this = ptr;
 }
 
-int AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
+SFErrCodes AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
 {
     if (table != nullptr) {
         listAppend(_this->tables, table);
     }
-    return SF_OK;
+    return SFErrCodes::Ok;
 }
 
 void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
@@ -193,14 +193,14 @@ void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
 
 static void ProcessTables(TrueTypeCreator *);
 
-int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
+SFErrCodes StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
 {
     sal_uInt16 searchRange=1, entrySelector=0, rangeShift;
     sal_uInt32 s, offset, checkSumAdjustment = 0;
     sal_uInt32 *p;
     sal_uInt8 *head = nullptr;     /* saved pointer to the head table data for checkSumAdjustment calculation */
 
-    if (listIsEmpty(_this->tables)) return SF_TTFORMAT;
+    if (listIsEmpty(_this->tables)) return SFErrCodes::TtFormat;
 
     ProcessTables(_this);
 
@@ -269,29 +269,29 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     *ptr = ttf;
     *length = s;
 
-    return SF_OK;
+    return SFErrCodes::Ok;
 }
 
-int StreamToFile(TrueTypeCreator *_this, const char* fname)
+SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
 {
     sal_uInt8 *ptr;
     sal_uInt32 length;
-    int r;
+    SFErrCodes r;
     FILE* fd;
 
-    if ((r = StreamToMemory(_this, &ptr, &length)) != SF_OK) return r;
+    if ((r = StreamToMemory(_this, &ptr, &length)) != SFErrCodes::Ok) return r;
     if (fname && (fd = fopen(fname, "wb")) != nullptr)
     {
         if (fwrite(ptr, 1, length, fd) != length) {
-            r = SF_FILEIO;
+            r = SFErrCodes::FileIo;
         } else {
-            r = SF_OK;
+            r = SFErrCodes::Ok;
         }
         fclose(fd);
     }
     else
     {
-        r = SF_BADFILE;
+        r = SFErrCodes::BadFile;
     }
     free(ptr);
     return r;

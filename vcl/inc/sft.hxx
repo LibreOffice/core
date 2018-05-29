@@ -61,16 +61,16 @@ namespace vcl
 /*@}*/
 
 /** Return value of OpenTTFont() and CreateT3FromTTGlyphs() */
-    enum SFErrCodes {
-        SF_OK,                              /**< no error                                     */
-        SF_BADFILE,                         /**< file not found                               */
-        SF_FILEIO,                          /**< file I/O error                               */
-        SF_MEMORY,                          /**< memory allocation error                      */
-        SF_GLYPHNUM,                        /**< incorrect number of glyphs                   */
-        SF_BADARG,                          /**< incorrect arguments                          */
-        SF_TTFORMAT,                        /**< incorrect TrueType font format               */
-        SF_TABLEFORMAT,                     /**< incorrect format of a TrueType table         */
-        SF_FONTNO                           /**< incorrect logical font number of a TTC font  */
+    enum class SFErrCodes {
+        Ok,                              /**< no error                                     */
+        BadFile,                         /**< file not found                               */
+        FileIo,                          /**< file I/O error                               */
+        Memory,                          /**< memory allocation error                      */
+        GlyphNum,                        /**< incorrect number of glyphs                   */
+        BadArg,                          /**< incorrect arguments                          */
+        TtFormat,                        /**< incorrect TrueType font format               */
+        TableFormat,                     /**< incorrect format of a TrueType table         */
+        FontNo                           /**< incorrect logical font number of a TTC font  */
     };
 
 #ifndef FW_THIN /* WIN32 compilation would conflict */
@@ -213,7 +213,7 @@ namespace vcl
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    int VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf);
+    SFErrCodes VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf);
 #if !defined(_WIN32)
 /**
  * TrueTypeFont constructor.
@@ -226,7 +226,7 @@ namespace vcl
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    int VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
+    SFErrCodes VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
 
     bool VCL_DLLPUBLIC getTTCoverage(
@@ -326,7 +326,7 @@ namespace vcl
  * @ingroup sft
  *
  */
-    int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
+    SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
 
 /**
  * Generates a new TrueType font and dumps it to <b>outf</b> file.
@@ -345,7 +345,7 @@ namespace vcl
  * @ingroup sft
  *
  */
-    int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
+    SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                               const char    *fname,
                               sal_uInt16 const *glyphArray,
                               sal_uInt8 const *encoding,
@@ -363,15 +363,15 @@ namespace vcl
  *                    the glyphID glyphArray[i]. Character code 0 usually points to a default
  *                    glyph (glyphID 0)
  * @param nGlyphs     number of glyph IDs in glyphArray and encoding values in encoding
- * @return            SF_OK - no errors
- *                    SF_GLYPHNUM - too many glyphs (> 255)
- *                    SF_TTFORMAT - corrupted TrueType fonts
+ * @return            SFErrCodes::Ok - no errors
+ *                    SFErrCodes::GlyphNum - too many glyphs (> 255)
+ *                    SFErrCodes::TtFormat - corrupted TrueType fonts
  *
  * @see               SFErrCodes
  * @ingroup sft
  *
  */
-    int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
+    SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
                                FILE          *outf,
                                const char    *psname,
                                sal_uInt16 const *glyphArray,

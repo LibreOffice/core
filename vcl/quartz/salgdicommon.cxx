@@ -225,8 +225,8 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // prepare data for psprint's font subsetter
     TrueTypeFont* pSftFont = nullptr;
-    int nRC = ::OpenTTFontBuffer( static_cast<void*>(&aBuffer[0]), aBuffer.size(), 0, &pSftFont);
-    if( nRC != SF_OK )
+    SFErrCodes nRC = ::OpenTTFontBuffer( static_cast<void*>(&aBuffer[0]), aBuffer.size(), 0, &pSftFont);
+    if( nRC != SFErrCodes::Ok )
     {
         return false;
     }
@@ -320,7 +320,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     nRC = ::CreateTTFromTTGlyphs( pSftFont, aToFile.getStr(), aShortIDs,
                                   aTempEncs, nGlyphCount );
     ::CloseTTFont(pSftFont);
-    return (nRC == SF_OK);
+    return (nRC == SFErrCodes::Ok);
 }
 
 static inline void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_fY )

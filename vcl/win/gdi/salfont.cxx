@@ -1613,7 +1613,7 @@ public:
 
     ~ScopedTrueTypeFont();
 
-    int open(void const * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum);
+    SFErrCodes open(void const * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum);
 
     TrueTypeFont * get() const { return m_pFont; }
 
@@ -1627,7 +1627,7 @@ ScopedTrueTypeFont::~ScopedTrueTypeFont()
         CloseTTFont(m_pFont);
 }
 
-int ScopedTrueTypeFont::open(void const * pBuffer, sal_uInt32 nLen,
+SFErrCodes ScopedTrueTypeFont::open(void const * pBuffer, sal_uInt32 nLen,
                              sal_uInt32 nFaceNum)
 {
     OSL_ENSURE(m_pFont == nullptr, "already open");
@@ -1698,8 +1698,8 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
-    int nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
-    if( nRC != SF_OK )
+    SFErrCodes nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
+    if( nRC != SFErrCodes::Ok )
         return FALSE;
 
     TTGlobalFontInfo aTTInfo;
@@ -1757,7 +1757,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     // write subset into destination file
     nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.getStr(), aShortIDs,
             aTempEncs, nGlyphCount );
-    return (nRC == SF_OK);
+    return (nRC == SFErrCodes::Ok);
 }
 
 const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
@@ -1811,8 +1811,8 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
-    int nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
-    if( nRC != SF_OK )
+    SFErrCodes nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
+    if( nRC != SFErrCodes::Ok )
         return;
 
     int nGlyphs = GetTTGlyphCount( aSftTTF.get() );
