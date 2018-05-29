@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_c9f5bacb",
+        "filename": "vcl/source/app/IconThemeSelector.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-29T09:34:23Z",
+      "side": 1,
+      "message": "This can be simplified to just \u0027#ifdef _WIN32\u0027.",
+      "revId": "779af259fcab54de80feef4231f0ede12a865044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
