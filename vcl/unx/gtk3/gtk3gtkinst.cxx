@@ -2678,6 +2678,7 @@ public:
     virtual void set_active(bool active) override
     {
         disable_notify_events();
+        gtk_toggle_button_set_inconsistent(m_pToggleButton, false);
         gtk_toggle_button_set_active(m_pToggleButton, active);
         enable_notify_events();
     }
