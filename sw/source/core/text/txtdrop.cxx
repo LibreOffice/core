@@ -250,7 +250,9 @@ bool SwTextNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDesce
     for( SwTextFrame* pLastFrame = aIter.First(); pLastFrame; pLastFrame = aIter.Next() )
     {
         // Only (master-) text frames can have a drop cap.
-        if ( !pLastFrame->IsFollow() )
+        if (!pLastFrame->IsFollow() &&
+            // sw_redlinehide: paraPropsNode has the first text of the frame
+            (!pLastFrame->GetMergedPara() || pLastFrame->GetMergedPara()->pParaPropsNode == this))
         {
 
             if( !pLastFrame->HasPara() )
