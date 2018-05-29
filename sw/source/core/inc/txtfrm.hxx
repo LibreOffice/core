@@ -263,7 +263,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     virtual ~SwTextFrame() override;
 
 protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(SwModify const& rModify, SfxHint const& rHint) override;
 
 public:
 
