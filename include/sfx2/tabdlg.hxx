@@ -299,6 +299,8 @@ public:
     void                RemoveResetButton();
 
     short               execute();
+    static bool runAsync(const std::shared_ptr<SfxTabDialogController>& rController,
+                         const std::function<void(sal_Int32)>&);
 
     const SfxItemSet*   GetExampleSet() const { return m_xExampleSet.get(); }
 

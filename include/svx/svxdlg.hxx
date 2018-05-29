@@ -384,15 +384,14 @@ public:
         const SfxItemSet& rCoreSet,
         bool bEnableDrawingLayerFillStyles) = 0;
 
-    virtual VclPtr<AbstractSvxTransformTabDialog> CreateSvxTransformTabDialog( vcl::Window* pParent,
-                                                                const SfxItemSet* pAttr,
-                                                                const SdrView* pView,
-                                                                SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) = 0;
-    virtual VclPtr<SfxAbstractTabDialog> CreateSchTransformTabDialog( vcl::Window* pParent,
-                                                                const SfxItemSet* pAttr,
-                                                                const SdrView* pSdrView,
-                                                                bool bSizeTabPage
-                                                                 )=0;
+    virtual VclPtr<AbstractSvxTransformTabDialog> CreateSvxTransformTabDialog(weld::Window* pParent,
+                                                                              const SfxItemSet* pAttr,
+                                                                              const SdrView* pView,
+                                                                              SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) = 0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateSchTransformTabDialog(weld::Window* pParent,
+                                                                     const SfxItemSet* pAttr,
+                                                                     const SdrView* pSdrView,
+                                                                     bool bSizeTabPage) = 0;
     virtual VclPtr<AbstractSvxJSearchOptionsDialog> CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
                                                             TransliterationFlags nInitialFlags )=0;
