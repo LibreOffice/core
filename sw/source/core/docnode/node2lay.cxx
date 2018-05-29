@@ -36,7 +36,7 @@
  */
 class SwNode2LayImpl
 {
-    std::unique_ptr<SwIterator<SwFrame,SwModify>> pIter;
+    std::unique_ptr<SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti>> pIter;
     SwModify* pMod;
     std::vector<SwFrame*> mvUpperFrames; // To collect the Upper
     sal_uLong nIndex;        // The Index of the to-be-inserted Nodes
@@ -69,7 +69,9 @@ SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
         pNd = &aTmp.GetNode();
         bool bFound = false;
         if ( pNd->IsContentNode() )
-            bFound = SwIterator<SwFrame,SwContentNode>(*static_cast<SwContentNode*>(pNd)).First();
+            // sw_redlinehide: assume that it's OK to find a node with the same
+            // frame as the caller's one
+            bFound = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<SwContentNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
             bFound = SwIterator<SwFrame,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First() ;
         else if( pNd->IsEndNode() && !pNd->StartOfSectionNode()->IsSectionNode() )
@@ -101,7 +103,9 @@ SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
         pNd = &aTmp.GetNode();
         bool bFound = false;
         if ( pNd->IsContentNode() )
-            bFound = SwIterator<SwFrame,SwContentNode>(*static_cast<SwContentNode*>(pNd)).First();
+            // sw_redlinehide: assume that it's OK to find a node with the same
+            // frame as the caller's one
+            bFound = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<SwContentNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
             bFound = SwIterator<SwFrame,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First();
         else if( pNd->IsStartNode() && !pNd->IsSectionNode() )
@@ -169,7 +173,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
             OSL_ENSURE( pNd->IsTableNode(), "For Tablenodes only" );
             pMod = pNd->GetTableNode()->GetTable().GetFrameFormat();
         }
-        pIter.reset(new SwIterator<SwFrame,SwModify>( *pMod ));
+        pIter.reset(new SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti>(*pMod));
     }
     else
     {
