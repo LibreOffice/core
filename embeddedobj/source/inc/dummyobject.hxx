@@ -48,6 +48,10 @@ namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
 }
 
+/**
+ * Represents an OLE object that has native data (next to the replacement
+ * image), but we don't understand that data.
+ */
 class ODummyEmbeddedObject : public ::cppu::WeakImplHelper
                         < css::embed::XEmbeddedObject
                         , css::embed::XEmbedPersist >

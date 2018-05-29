@@ -72,6 +72,10 @@ namespace comphelper {
 
 class Interceptor;
 
+/**
+ * Represents an OLE object that has native data and we loaded that data into a
+ * document model successfully.
+ */
 class OCommonEmbeddedObject : public css::embed::XEmbeddedObject
                             , public css::embed::XEmbedPersist2
                             , public css::embed::XLinkageSupport
