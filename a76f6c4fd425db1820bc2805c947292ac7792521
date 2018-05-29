@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e9aefe83",
+        "filename": "unotools/source/i18n/charclass.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-05-29T11:04:36Z",
+      "side": 1,
+      "message": "Would be lovely to have a set of debugging mutex\u0027s that track which thread owns the mutex and let us assert that they are locked - but we don\u0027t have that. Could rename \u0027getMyLocale\u0027 to \u0027getMyLocaleLocked\u0027 or something (?)",
+      "revId": "a76f6c4fd425db1820bc2805c947292ac7792521",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
