@@ -49,8 +49,7 @@ class tdf53482(UITestCase):
         self.ui_test.close_dialog_through_button(xOK)
         #6. Expected behavior:  Ignore column labels when sorting
         self.assertEqual(get_cell_by_position(document, 0, 6, 7).getString(), "Occupation")
-        # FIXME this fails randomly, e.g. travel Industry or ttavel Industry.
-        #self.assertEqual(get_cell_by_position(document, 0, 6, 8).getString(), "Travel Industry")
+        self.assertEqual(get_cell_by_position(document, 0, 6, 8).getString(), "Travel Industry")
         self.assertEqual(get_cell_by_position(document, 0, 6, 123).getString(), "13")
 
         self.ui_test.close_doc()
