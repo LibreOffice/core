@@ -112,6 +112,9 @@ OUString ScEditUtil::GetMultilineString( const EditTextObject& rEdit )
 
 OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocument* pDoc )
 {
+    if( !rEditText.HasField())
+        return GetMultilineString( rEditText );
+
     static osl::Mutex aMutex;
     osl::MutexGuard aGuard( aMutex);
     // ScFieldEditEngine is needed to resolve field contents.
