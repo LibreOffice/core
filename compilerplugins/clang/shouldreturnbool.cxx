@@ -36,9 +36,7 @@ public:
     {
         if (!compiler.getLangOpts().CPlusPlus)
             return;
-        StringRef fn(compiler.getSourceManager()
-                         .getFileEntryForID(compiler.getSourceManager().getMainFileID())
-                         ->getName());
+        StringRef fn(handler.getMainFileName());
         // functions used as function pointers
         if (loplugin::isSamePathname(fn, SRCDIR "/sal/rtl/alloc_cache.cxx"))
             return;

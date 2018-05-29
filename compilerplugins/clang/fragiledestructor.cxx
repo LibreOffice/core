@@ -47,7 +47,7 @@ bool FragileDestructor::TraverseCXXDestructorDecl(CXXDestructorDecl* pCXXDestruc
         return RecursiveASTVisitor::TraverseCXXDestructorDecl(pCXXDestructorDecl);
     }
     // ignore this for now, too tricky for me to work out
-    StringRef aFileName = compiler.getSourceManager().getFilename(
+    StringRef aFileName = getFileNameOfSpellingLoc(
             compiler.getSourceManager().getSpellingLoc(pCXXDestructorDecl->getLocStart()));
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/comphelper/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/cppuhelper/")
@@ -87,7 +87,8 @@ bool FragileDestructor::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr
         return true;
     }
     // e.g. osl/thread.hxx and cppuhelper/compbase.hxx
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
+    StringRef aFileName = getFileNameOfSpellingLoc(
+        compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/osl/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/comphelper/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/cppuhelper/"))

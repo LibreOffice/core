@@ -62,8 +62,7 @@ public:
     virtual void run() override
     {
         // ignore some files that make clang crash inside EvaluateAsInt
-        std::string fn( compiler.getSourceManager().getFileEntryForID(
-                        compiler.getSourceManager().getMainFileID())->getName() );
+        std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         if (loplugin::isSamePathname(fn, SRCDIR "/basegfx/source/matrix/b2dhommatrix.cxx")
             || loplugin::isSamePathname(fn, SRCDIR "/basegfx/source/matrix/b3dhommatrix.cxx"))

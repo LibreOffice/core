@@ -63,9 +63,7 @@ static bool startswith(const std::string& rStr, const char* pSubStr)
 
 void UnusedVariableMore::run()
 {
-    std::string fn(compiler.getSourceManager()
-                       .getFileEntryForID(compiler.getSourceManager().getMainFileID())
-                       ->getName());
+    std::string fn(handler.getMainFileName());
     loplugin::normalizeDotDotInFilePath(fn);
 
     // ignore QA folders

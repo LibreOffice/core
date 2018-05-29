@@ -38,8 +38,7 @@ public:
     explicit ConstParams(loplugin::InstantiationData const & data): loplugin::FunctionAddress<ConstParams>(data) {}
 
     virtual void run() override {
-        std::string fn( compiler.getSourceManager().getFileEntryForID(
-                        compiler.getSourceManager().getMainFileID())->getName() );
+        std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         if (startswith(fn, SRCDIR "/sal/")
             || fn == SRCDIR "/jurt/source/pipe/staticsalhack.cxx"

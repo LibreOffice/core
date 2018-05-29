@@ -72,6 +72,9 @@ protected:
     const Stmt* getParentStmt( const Stmt* stmt );
     Stmt* getParentStmt( Stmt* stmt );
     const FunctionDecl* getParentFunctionDecl( const Stmt* stmt );
+
+    /// to check file names against whitelists, so that it works with preprocessed input too
+    StringRef getFileNameOfSpellingLoc(SourceLocation spellingLocation) const;
     /**
      Checks if the location is inside an UNO file, more specifically, if it forms part of the URE stable interface,
      which is not allowed to be changed.

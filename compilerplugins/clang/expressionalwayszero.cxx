@@ -35,8 +35,9 @@ public:
 
     virtual void run() override
     {
-        std::string fn( compiler.getSourceManager().getFileEntryForID(
-                        compiler.getSourceManager().getMainFileID())->getName() );
+        // don't use getMainFileID, it may return "<stdin>"
+        std::string fn(handler.getMainFileName());
+
         loplugin::normalizeDotDotInFilePath(fn);
         // encoding of constant value for binary file format
         if (startswith(fn, SRCDIR "/package/source/zipapi/ZipFile.cxx"))

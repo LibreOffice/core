@@ -32,9 +32,7 @@ public:
 
     virtual void run() override
     {
-        std::string fn(compiler.getSourceManager()
-                           .getFileEntryForID(compiler.getSourceManager().getMainFileID())
-                           ->getName());
+        std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         // can't change these because we pass them down to the SfxItemPool stuff
         if (fn == SRCDIR "/sc/source/core/data/docpool.cxx")
@@ -249,7 +247,8 @@ void UseUniquePtr::CheckDeleteExpr(const CXXMethodDecl* methodDecl, const CXXDel
     if (ignoreLocation(fieldDecl))
         return;
     // to ignore things like the CPPUNIT macros
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
+    StringRef aFileName = getFileNameOfSpellingLoc(
+        compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
     if (loplugin::hasPathnamePrefix(aFileName, WORKDIR "/"))
         return;
     // passes and stores pointers to member fields
