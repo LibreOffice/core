@@ -3647,6 +3647,7 @@ private:
     ScopedVclPtrInstance<VirtualDevice> m_xDevice;
     std::vector<unsigned char> m_aBuffer;
     cairo_surface_t* m_pSurface;
+    sal_uInt16 m_nLastMouseButton;
     gulong m_nDrawSignalId;
     gulong m_nSizeAllocateSignalId;
     gulong m_nButtonPressSignalId;
@@ -3776,17 +3777,16 @@ private:
                 return false;
         }
 
-        sal_uInt16 nButton;
         switch (pEvent->button)
         {
             case 1:
-                nButton = MOUSE_LEFT;
+                m_nLastMouseButton = MOUSE_LEFT;
                 break;
             case 2:
-                nButton = MOUSE_MIDDLE;
+                m_nLastMouseButton = MOUSE_MIDDLE;
                 break;
             case 3:
-                nButton = MOUSE_RIGHT;
+                m_nLastMouseButton = MOUSE_RIGHT;
                 break;
             default:
                 return false;
@@ -3794,8 +3794,8 @@ private:
 
         Point aPos(pEvent->x, pEvent->y);
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
-        sal_uInt16 nCode = nButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
-        MouseEvent aMEvt(aPos, nClicks, ImplGetMouseButtonMode(nButton, nModCode), nCode, nCode);
+        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
+        MouseEvent aMEvt(aPos, nClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
 
         if (nEventType == SalEvent::MouseButtonDown)
             m_aMousePressHdl.Call(aMEvt);
@@ -3814,7 +3814,7 @@ private:
     {
         Point aPos(pEvent->x, pEvent->y);
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
-        sal_uInt16 nCode = (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
+        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
         MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nCode, nCode);
 
         m_aMouseMotionHdl.Call(aMEvt);
@@ -3854,6 +3854,7 @@ public:
         , m_pAccessible(nullptr)
         , m_xDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT)
         , m_pSurface(nullptr)
+        , m_nLastMouseButton(0)
         , m_nDrawSignalId(g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
         , m_nSizeAllocateSignalId(g_signal_connect(m_pDrawingArea, "size_allocate", G_CALLBACK(signalSizeAllocate), this))
         , m_nButtonPressSignalId(g_signal_connect(m_pDrawingArea, "button-press-event", G_CALLBACK(signalButton), this))
