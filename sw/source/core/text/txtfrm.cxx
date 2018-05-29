@@ -3099,7 +3099,7 @@ SwTwips SwTextFrame::GetBaseVertOffsetForFly(bool bIgnoreFlysAnchoredAtThisFrame
  */
 void SwTextFrame::repaintTextFrames( const SwTextNode& rNode )
 {
-    SwIterator<SwTextFrame,SwTextNode> aIter( rNode );
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
     for( const SwTextFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
         SwRect aRec( pFrame->GetPaintArea() );

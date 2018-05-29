@@ -2941,7 +2941,7 @@ void SwFlyFrameFormat::MakeFrames()
             }
             if ( pCNd )
             {
-                if( SwIterator<SwFrame,SwContentNode>( *pCNd ).First() )
+                if (SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pCNd).First())
                 {
                     pModify = pCNd;
                 }
@@ -2972,7 +2972,7 @@ void SwFlyFrameFormat::MakeFrames()
             if( nPgNum == 0 && aAnchorAttr.GetContentAnchor() )
             {
                 SwContentNode *pCNd = aAnchorAttr.GetContentAnchor()->nNode.GetNode().GetContentNode();
-                SwIterator<SwFrame,SwContentNode> aIter( *pCNd );
+                SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pCNd);
                 for ( SwFrame* pFrame = aIter.First(); pFrame != nullptr; pFrame = aIter.Next() )
                 {
                     pPage = pFrame->FindPageFrame();
@@ -3004,7 +3004,7 @@ void SwFlyFrameFormat::MakeFrames()
 
     if( pModify )
     {
-        SwIterator<SwFrame,SwModify> aIter( *pModify );
+        SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*pModify);
         for( SwFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
         {
             bool bAdd = !pFrame->IsContentFrame() ||
@@ -3278,14 +3278,16 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat
         {
             // determine 'old' number of anchor frames
             sal_uInt32 nOldNumOfAnchFrame( 0 );
-            SwIterator<SwFrame,SwContentNode> aOldIter( *(aOldAnchorFormat.GetContentAnchor()->nNode.GetNode().GetContentNode()) );
+            SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aOldIter(
+                *(aOldAnchorFormat.GetContentAnchor()->nNode.GetNode().GetContentNode()) );
             for( SwFrame* pOld = aOldIter.First(); pOld; pOld = aOldIter.Next() )
             {
                 ++nOldNumOfAnchFrame;
             }
             // determine 'new' number of anchor frames
             sal_uInt32 nNewNumOfAnchFrame( 0 );
-            SwIterator<SwFrame,SwContentNode> aNewIter( *(_rNewAnchorFormat.GetContentAnchor()->nNode.GetNode().GetContentNode()) );
+            SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aNewIter(
+                *(_rNewAnchorFormat.GetContentAnchor()->nNode.GetNode().GetContentNode()) );
             for( SwFrame* pNew = aNewIter.First(); pNew; pNew = aNewIter.Next() )
             {
                 ++nNewNumOfAnchFrame;

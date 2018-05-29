@@ -1333,7 +1333,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
     nWidth = std::max( nWidth, nProWidth );
 
     // search for a text frame this node belongs to
-    SwIterator<SwTextFrame,SwTextNode> aFrameIter( *this );
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aFrameIter(*this);
     SwTextFrame* pFrame = nullptr;
     for( SwTextFrame* pTmpFrame = aFrameIter.First(); pTmpFrame; pTmpFrame = aFrameIter.Next() )
     {
@@ -1388,7 +1388,7 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
         aPos.nContent += nIdx;
 
         // Find the non-follow text frame:
-        SwIterator<SwTextFrame,SwTextNode> aIter( *this );
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
         for( SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
         {
             // Only consider master frames:

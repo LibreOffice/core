@@ -436,7 +436,7 @@ void SwTextFootnote::DelFrames( const SwFrame* pSib )
     const SwRootFrame* pRoot = pSib ? pSib->getRootFrame() : nullptr;
     bool bFrameFnd = false;
     {
-        SwIterator<SwContentFrame,SwTextNode> aIter( *m_pTextNode );
+        SwIterator<SwContentFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*m_pTextNode);
         for( SwContentFrame* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
         {
             if( pRoot != pFnd->getRootFrame() && pRoot )
@@ -457,7 +457,7 @@ void SwTextFootnote::DelFrames( const SwFrame* pSib )
         SwContentNode* pCNd = m_pTextNode->GetNodes().GoNext( &aIdx );
         if( pCNd )
         {
-            SwIterator<SwContentFrame,SwContentNode> aIter( *pCNd );
+            SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pCNd);
             for( SwContentFrame* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
             {
                 if( pRoot != pFnd->getRootFrame() && pRoot )

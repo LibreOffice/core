@@ -246,7 +246,7 @@ bool SwTextNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDesce
     }
 
     // get text frame
-    SwIterator<SwTextFrame,SwTextNode> aIter( *this );
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
     for( SwTextFrame* pLastFrame = aIter.First(); pLastFrame; pLastFrame = aIter.Next() )
     {
         // Only (master-) text frames can have a drop cap.

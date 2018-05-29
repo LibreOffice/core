@@ -27,7 +27,7 @@
 
 void SwTextNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
 {
-    SwIterator<SwTextFrame,SwTextNode> aIter( *this );
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
     for( const SwTextFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
         // No soft page break in header or footer

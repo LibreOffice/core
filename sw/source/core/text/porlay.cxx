@@ -2097,7 +2097,7 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
                                            SwTextFrame const**const o_ppFrame,
                                            bool const bAllowInvalid)
 {
-    SwIterator<SwTextFrame,SwTextNode> aIter( rTNd );
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rTNd);
     SwScriptInfo* pScriptInfo = nullptr;
 
     for( SwTextFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
