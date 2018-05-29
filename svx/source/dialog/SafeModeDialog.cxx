@@ -343,7 +343,7 @@ namespace {
     };
 
     ProfileExportedDialog::ProfileExportedDialog(weld::Window* pParent)
-        : GenericDialogController(pParent, "svx/ui/profileexporteddialog.ui", "GenericDialogController")
+        : GenericDialogController(pParent, "svx/ui/profileexporteddialog.ui", "ProfileExportedDialog")
         , m_xButton(m_xBuilder->weld_button("ok"))
     {
         m_xButton->connect_clicked(LINK(this, ProfileExportedDialog, OpenHdl));
