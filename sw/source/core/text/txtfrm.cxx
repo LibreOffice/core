@@ -1271,13 +1271,41 @@ static bool isA11yRelevantAttribute(sal_uInt16 nWhich)
     return nWhich != RES_CHRATR_RSID;
 }
 
-void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+// Note: for now this overrides SwClient::SwClientNotify; the intermediary
+// classes still override SwClient::Modify, which should continue to work
+// as their implementation of SwClientNotify is SwClient's which calls Modify.
+// Therefore we also don't need to call SwClient::SwClientNotify(rModify, rHint)
+// because that's all it does, and this implementation calls
+// SwContentFrame::Modify() when appropriate.
+void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 {
+    auto const pHint(dynamic_cast<sw::LegacyModifyHint const*>(&rHint));
+    assert(pHint); // TODO this is the only type expected here for now
+
+    SfxPoolItem const*const pOld(pHint->m_pOld);
+    SfxPoolItem const*const pNew(pHint->m_pNew);
+
+    if (m_pMergedPara)
+    {
+        assert(m_pMergedPara->listener.IsListeningTo(&rModify));
+    }
+
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
     // modifications concerning frame attributes are processed by the base class
     if( IsInRange( aFrameFormatSetRange, nWhich ) || RES_FMT_CHG == nWhich )
     {
+        if (m_pMergedPara)
+        {   // ignore item set changes that don't apply
+            SwTextNode const*const pAttrNode(
+                (nWhich == RES_PAGEDESC || nWhich == RES_BREAK)
+                    ? m_pMergedPara->pFirstNode
+                    : m_pMergedPara->pParaPropsNode);
+            if (pAttrNode != &rModify)
+            {
+                return;
+            }
+        }
         SwContentFrame::Modify( pOld, pNew );
         if( nWhich == RES_FMT_CHG && getRootFrame()->GetCurrShell() )
         {
@@ -1292,6 +1320,14 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             InvalidateLineNum();
         }
         return;
+    }
+
+    if (m_pMergedPara && m_pMergedPara->pParaPropsNode != &rModify)
+    {
+        if (isPARATR(nWhich) || isPARATR_LIST(nWhich)) // FRMATR handled above
+        {
+            return; // ignore it
+        }
     }
 
     // while locked ignore all modifications
@@ -1309,6 +1345,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     {
         case RES_LINENUMBER:
         {
+            assert(false); // should have been forwarded to SwContentFrame
             InvalidateLineNum();
         }
         break;
@@ -1491,23 +1528,27 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                                             RES_PARATR_REGISTER, false );
             if ( bLineSpace || bRegister )
             {
-                Prepare( bRegister ? PREP_REGISTER : PREP_ADJUST_FRM );
-                CalcLineSpace();
-                InvalidateSize();
-                InvalidatePrt_();
+                if (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
+                {
+                    Prepare( bRegister ? PREP_REGISTER : PREP_ADJUST_FRM );
+                    CalcLineSpace();
+                    InvalidateSize();
+                    InvalidatePrt_();
 
-                // i#11859
-                //  (1) Also invalidate next frame on next page/column.
-                //  (2) Skip empty sections and hidden paragraphs
-                //  Thus, use method <InvalidateNextPrtArea()>
-                InvalidateNextPrtArea();
+                    // i#11859
+                    //  (1) Also invalidate next frame on next page/column.
+                    //  (2) Skip empty sections and hidden paragraphs
+                    //  Thus, use method <InvalidateNextPrtArea()>
+                    InvalidateNextPrtArea();
 
-                SetCompletePaint();
+                    SetCompletePaint();
+                }
                 nClear |= 0x04;
                 if ( bLineSpace )
                 {
                     --nCount;
-                    if( IsInSct() && !GetPrev() )
+                    if ((!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
+                        && IsInSct() && !GetPrev())
                     {
                         SwSectionFrame *pSect = FindSctFrame();
                         if( pSect->ContainsAny() == this )
@@ -1520,15 +1561,19 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if ( SfxItemState::SET == rNewSet.GetItemState( RES_PARATR_SPLIT,
                                                        false ))
             {
-                if ( GetPrev() )
-                    CheckKeep();
-                Prepare();
-                InvalidateSize();
+                if (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
+                {
+                    if (GetPrev())
+                        CheckKeep();
+                    Prepare();
+                    InvalidateSize();
+                }
                 nClear |= 0x08;
                 --nCount;
             }
 
             if( SfxItemState::SET == rNewSet.GetItemState( RES_BACKGROUND, false)
+                && (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
                 && !IsFollow() && GetDrawObjs() )
             {
                 SwSortedObjs *pObjs = GetDrawObjs();
@@ -1582,7 +1627,8 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                       rNewSet.GetItemState( RES_CHRATR_CTL_FONT, false ) )
                 lcl_SetScriptInval( *this, 0 );
             else if ( SfxItemState::SET ==
-                      rNewSet.GetItemState( RES_FRAMEDIR, false ) )
+                      rNewSet.GetItemState( RES_FRAMEDIR, false )
+                && (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify))
             {
                 SetDerivedR2L( false );
                 CheckDirChange();
@@ -1598,10 +1644,31 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     InvalidatePrt_();
                 }
 
-                if( nClear )
+                if (nClear || (m_pMergedPara &&
+                        (m_pMergedPara->pParaPropsNode != &rModify ||
+                         m_pMergedPara->pFirstNode != &rModify)))
                 {
                     SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
                     SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
+
+                    if (m_pMergedPara && m_pMergedPara->pParaPropsNode != &rModify)
+                    {
+                        for (sal_uInt16 i = RES_PARATR_BEGIN; i != RES_FRMATR_END; ++i)
+                        {
+                            if (i != RES_BREAK && i != RES_PAGEDESC)
+                            {
+                                aOldSet.ClearItem(i);
+                                aNewSet.ClearItem(i);
+                            }
+                        }
+                    }
+                    if (m_pMergedPara && m_pMergedPara->pFirstNode != &rModify)
+                    {
+                        aOldSet.ClearItem(RES_BREAK);
+                        aNewSet.ClearItem(RES_BREAK);
+                        aOldSet.ClearItem(RES_PAGEDESC);
+                        aNewSet.ClearItem(RES_PAGEDESC);
+                    }
 
                     if( 0x01 & nClear )
                     {
@@ -1670,6 +1737,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             bSetFieldsDirty = true;
             break;
         case RES_FRAMEDIR :
+            assert(false); // should have been forwarded to SwContentFrame
             SetDerivedR2L( false );
             CheckDirChange();
             break;
