@@ -573,7 +573,17 @@ uno::Sequence<sal_Int8> X509Certificate_MSCryptImpl::getSHA256Thumbprint()
 
 svl::crypto::SignatureMethodAlgorithm X509Certificate_MSCryptImpl::getSignatureMethodAlgorithm()
 {
-    return svl::crypto::SignatureMethodAlgorithm::RSA;
+    svl::crypto::SignatureMethodAlgorithm nRet = svl::crypto::SignatureMethodAlgorithm::RSA;
+
+    if (!m_pCertContext || !m_pCertContext->pCertInfo)
+        return nRet;
+
+    CRYPT_ALGORITHM_IDENTIFIER algorithm = m_pCertContext->pCertInfo->SubjectPublicKeyInfo.Algorithm;
+    OString aObjId(algorithm.pszObjId);
+    if (aObjId == szOID_ECC_PUBLIC_KEY)
+        nRet = svl::crypto::SignatureMethodAlgorithm::ECDSA;
+
+    return nRet;
 }
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSHA1Thumbprint()

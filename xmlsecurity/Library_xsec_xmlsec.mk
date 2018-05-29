@@ -98,6 +98,7 @@ $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
 $(eval $(call gb_Library_use_system_win32_libs,xsec_xmlsec,\
 	crypt32 \
 	advapi32 \
+	ncrypt \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\

@@ -1401,14 +1401,22 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     aPara.cMsgCert = 1;
     aPara.rgpMsgCert = &pCertContext;
 
-    HCRYPTPROV hCryptProv;
+    HCRYPTPROV hCryptProv = 0;
+    NCRYPT_KEY_HANDLE hCryptKey = 0;
+    DWORD dwFlags = CRYPT_ACQUIRE_CACHE_FLAG;
+    HCRYPTPROV_OR_NCRYPT_KEY_HANDLE* phCryptProvOrNCryptKey = &hCryptProv;
+    if (svl::crypto::isMSCng())
+    {
+        dwFlags |= CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG;
+        phCryptProvOrNCryptKey = &hCryptKey;
+    }
     DWORD nKeySpec;
     BOOL bFreeNeeded;
 
     if (!CryptAcquireCertificatePrivateKey(pCertContext,
-                                           CRYPT_ACQUIRE_CACHE_FLAG,
+                                           dwFlags,
                                            nullptr,
-                                           &hCryptProv,
+                                           phCryptProvOrNCryptKey,
                                            &nKeySpec,
                                            &bFreeNeeded))
     {
@@ -1423,7 +1431,10 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     memset(&aSignerInfo, 0, sizeof(aSignerInfo));
     aSignerInfo.cbSize = sizeof(aSignerInfo);
     aSignerInfo.pCertInfo = pCertContext->pCertInfo;
-    aSignerInfo.hCryptProv = hCryptProv;
+    if (!svl::crypto::isMSCng())
+        aSignerInfo.hCryptProv = hCryptProv;
+    else
+        aSignerInfo.hNCryptKey = hCryptKey;
     aSignerInfo.dwKeySpec = nKeySpec;
     aSignerInfo.HashAlgorithm.pszObjId = const_cast<LPSTR>(szOID_NIST_sha256);
     aSignerInfo.HashAlgorithm.Parameters.cbData = 0;
@@ -2407,6 +2418,12 @@ bool Signing::Verify(SvStream& rStream,
     (void)rInformation;
     return false;
 #endif
+}
+
+bool isMSCng()
+{
+    static bool bMSCng = getenv("SVL_CRYPTO_CNG");
+    return bMSCng;
 }
 
 }
