@@ -233,35 +233,30 @@ namespace sdr
             // remember if we had a SfxItemSet already
             const bool bHadSfxItemSet(HasSfxItemSet());
 
-            // call parent - this will then guarantee
-            // SfxItemSet existence
+            // call parent - this will guarantee SfxItemSet existence
             DefaultProperties::GetObjectItemSet();
 
             if(!bHadSfxItemSet)
             {
-                // SfxItemSet was created and ForceDefaultAttributes() is done.
-                // We now need to set a default SfxStyleSheet at the SdrObject. This
-                // is possible now since we always have the SdrModel in SdrObject,
-                // so use applyDefaultStyleSheetFromSdrModel() which will do the
-                // right thing in each derivation of BaseProperties.
-                // We also need to 'rescue' mpStyleSheet if it is already set,
-                // which means a SfxStyleSheet was already set/ocopied but not
-                // yet set at the SdrObject. See copy-constructor and how it remembers
-                // the SfxStyleSheet there. This time, do not reset the
-                // attributes already set - this is done above.
-                SfxStyleSheet* pImplicitelyAlreadySet(mpStyleSheet);
-
-                // Set missing defaults and do RemoveHardAttributes. This is
-                // important, it deletes again the attributes set in
-                // ForceDefaultAttributes() which are set in the default
-                // SfxStyleSheet.
-                const_cast< AttributeProperties* >(this)->applyDefaultStyleSheetFromSdrModel();
-
-                if(pImplicitelyAlreadySet)
+                // need to take care for SfxStyleSheet for newly
+                // created SfxItemSet
+                if(nullptr == mpStyleSheet)
+                {
+                    // Set missing defaults without removal of hard attributes. I was
+                    // initially wrong here. I Compared with older versions and saw
+                    // that setting the default Style did not delete any set Items.
+                    const_cast< AttributeProperties* >(this)->applyDefaultStyleSheetFromSdrModel();
+                }
+                else
                 {
                     // Late-Init of setting parent to SfxStyleSheet after
-                    // it's creation.
-                    const_cast< AttributeProperties* >(this)->SetStyleSheet(pImplicitelyAlreadySet, true);
+                    // it's creation. Can only happen from copy-constructor
+                    // (where creation of SfxItemSet is avoided due to the
+                    // problem with constructors and virtual functions in C++),
+                    // thus DontRemoveHardAttr is not needed.
+                    const_cast< AttributeProperties* >(this)->SetStyleSheet(
+                        mpStyleSheet,
+                        true);
                 }
             }
 
@@ -326,11 +321,8 @@ namespace sdr
                     }
                 }
 
-                // set item
-                if(!HasSfxItemSet())
-                {
-                    GetObjectItemSet();
-                }
+                // guarantee SfxItemSet existence
+                GetObjectItemSet();
 
                 if(pResultItem)
                 {
@@ -357,11 +349,8 @@ namespace sdr
 
         void AttributeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            // guarantee SfxItemSet existence here
-            if(!HasSfxItemSet())
-            {
-                GetObjectItemSet();
-            }
+            // guarantee SfxItemSet existence
+            GetObjectItemSet();
 
             ImpRemoveStyleSheet();
             ImpAddStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
@@ -381,11 +370,8 @@ namespace sdr
             if(!GetStyleSheet() || dynamic_cast<const SfxStyleSheet *>(mpStyleSheet) == nullptr)
                 return;
 
-            // force SfxItemSet existence
-            if(!HasSfxItemSet())
-            {
-                GetObjectItemSet();
-            }
+            // guarantee SfxItemSet existence
+            GetObjectItemSet();
 
             // prepare copied, new itemset, but WITHOUT parent
             SfxItemSet* pDestItemSet = new SfxItemSet(*mpItemSet);
