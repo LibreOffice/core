@@ -35,7 +35,7 @@ private:
 
 private:
     /// helpers
-    void implSaveScreenshot(const Bitmap& rScreenshot, const OString& rScreenshotId);
+    void implSaveScreenshot(const BitmapEx& rScreenshot, const OString& rScreenshotId);
     void saveScreenshot(VclAbstractDialog const & rDialog);
     void saveScreenshot(Dialog& rDialog);
 

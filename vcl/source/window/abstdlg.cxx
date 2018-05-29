@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/module.hxx>
 #include <vcl/abstdlg.hxx>
-#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 
 typedef VclAbstractDialogFactory* (*FuncPtrCreateDialogFactory)();
 
@@ -76,10 +76,10 @@ bool VclAbstractDialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDesc
     return true;
 }
 
-Bitmap VclAbstractDialog::createScreenshot() const
+BitmapEx VclAbstractDialog::createScreenshot() const
 {
     // default returns empty bitmap
-    return Bitmap();
+    return BitmapEx();
 }
 
 // virtual

@@ -68,7 +68,7 @@ public:                                             \
     virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override; \
     std::vector<OString> getAllPageUIXMLDescriptions() const override; \
     bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
-    virtual Bitmap  createScreenshot() const override; \
+    virtual BitmapEx createScreenshot() const override; \
     virtual OString GetScreenshotId() const override; \
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
@@ -91,7 +91,7 @@ bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) \
 {                                                   \
    return pDlg->selectPageByUIXMLDescription(rUIXMLDescription);  \
 }                                                   \
-Bitmap Class::createScreenshot() const              \
+BitmapEx Class::createScreenshot() const              \
 {                                                   \
     return pDlg->createScreenshot();                \
 }                                                   \

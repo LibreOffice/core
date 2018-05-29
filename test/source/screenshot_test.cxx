@@ -61,7 +61,7 @@ void ScreenshotTest::setUp()
     }
 }
 
-void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString& rScreenshotId)
+void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, const OString& rScreenshotId)
 {
     OUString aDirname, aBasename;
     splitHelpId(rScreenshotId, aDirname, aBasename);
@@ -87,7 +87,7 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
 
 void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
 {
-    const Bitmap aScreenshot(rDialog.createScreenshot());
+    const BitmapEx aScreenshot(rDialog.createScreenshot());
 
     if (!aScreenshot.IsEmpty())
     {
@@ -102,7 +102,7 @@ void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
 
 void ScreenshotTest::saveScreenshot(Dialog& rDialog)
 {
-    const Bitmap aScreenshot(rDialog.createScreenshot());
+    const BitmapEx aScreenshot(rDialog.createScreenshot());
 
     if (!aScreenshot.IsEmpty())
     {

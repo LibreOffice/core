@@ -129,7 +129,7 @@ public:
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
-    Bitmap createScreenshot();
+    BitmapEx createScreenshot();
 
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }
