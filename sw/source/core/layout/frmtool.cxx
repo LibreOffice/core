@@ -3232,7 +3232,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
     SwRect aCalcRect;
     bool bClientIterChanged = false;
 
-    SwIterator<SwFrame,SwModify> aIter( rMod );
+    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
     do {
         pMinFrame = nullptr;
         aHolder.Reset();
@@ -3424,7 +3424,7 @@ bool SwDeletionChecker::HasBeenDeleted()
     if ( !mpFrame || !mpRegIn )
         return false;
 
-    SwIterator<SwFrame,SwModify> aIter(*mpRegIn);
+    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*mpRegIn);
     SwFrame* pLast = aIter.First();
     while ( pLast )
     {
