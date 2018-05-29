@@ -1836,7 +1836,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                     break;
                 }
 
-                SwIterator<SwFrame,SwModify> aIter( *pModify );
+                SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*pModify);
                 SwFrame* pAnchorFrameOfMaster = nullptr;
                 for( SwFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
                 {
