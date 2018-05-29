@@ -27,51 +27,29 @@
 
 namespace sw
 {
-    class ListenerEntry final : public SwClient
+    bool ListenerEntry::GetInfo(SfxPoolItem& rInfo) const
+        { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
+    void ListenerEntry::Modify(const SfxPoolItem *const pOldValue,
+                               const SfxPoolItem *const pNewValue)
     {
-        SwClient *m_pToTell;
-
-    public:
-        ListenerEntry(SwClient* pTellHim, SwModify * pDepend) : SwClient(pDepend), m_pToTell(pTellHim) {}
-        ListenerEntry(ListenerEntry&) = delete;
-        ListenerEntry& operator=(ListenerEntry const&) = delete;
-        ListenerEntry(ListenerEntry&& other) noexcept
-            : SwClient(std::move(other))
-            , m_pToTell(other.m_pToTell)
-        { }
-        ListenerEntry& operator=(ListenerEntry&& other) noexcept
+        SwClientNotify(*GetRegisteredIn(), sw::LegacyModifyHint(pOldValue, pNewValue));
+    }
+    void ListenerEntry::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+    {
+        if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
         {
-            m_pToTell = other.m_pToTell;
-            other.GetRegisteredIn()->Add(this);
-            other.EndListeningAll();
-            return *this;
-        }
-
-        /** get Client information */
-        virtual bool GetInfo( SfxPoolItem& rInfo) const override
-            { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
-    private:
-        virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) override
-        {
-            SwClientNotify(*GetRegisteredIn(), sw::LegacyModifyHint(pOldValue, pNewValue));
-        }
-        virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override
-        {
-            if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+            if (pLegacyHint->m_pNew && pLegacyHint->m_pNew->Which() == RES_OBJECTDYING)
             {
-                if( pLegacyHint->m_pNew && pLegacyHint->m_pNew->Which() == RES_OBJECTDYING )
-                {
-                    auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
-                    if(pModifyChanged)
-                        m_pToTell->SwClientNotify(rModify, *pModifyChanged);
-                }
-                else if( m_pToTell )
-                    m_pToTell->ModifyNotification(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+                auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
+                if (pModifyChanged)
+                    m_pToTell->SwClientNotify(rModify, *pModifyChanged);
             }
-            else if(m_pToTell)
-                m_pToTell->SwClientNotifyCall(rModify, rHint);
+            else if (m_pToTell)
+                m_pToTell->ModifyNotification(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
         }
-    };
+        else if (m_pToTell)
+            m_pToTell->SwClientNotifyCall(rModify, rHint);
+    }
 }
 
 sw::LegacyModifyHint::~LegacyModifyHint() {}
