@@ -141,7 +141,7 @@ const Color& DialControlBmp::GetButtonFillColor( bool bMain ) const
 void DialControlBmp::Init()
 {
     SetSettings(mrParent.GetSettings());
-    SetBackground();
+    SetBackground(GetBackgroundColor());
 }
 
 void DialControlBmp::SetSize( const Size& rSize )
@@ -567,8 +567,6 @@ void SvxDialControl::Resize()
 void SvxDialControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Point aPos;
-    rRenderContext.SetBackground();
-    rRenderContext.Erase();
     rRenderContext.DrawBitmapEx(aPos, mpImpl->mxBmpBuffered->GetBitmapEx(aPos, mpImpl->maWinSize));
 }
 
