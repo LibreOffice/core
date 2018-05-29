@@ -191,10 +191,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansTibetan-Regular.ttf \
 	NotoSansTifinagh-Regular.ttf \
 	NotoSansUgaritic-Regular.ttf \
-	NotoSansUI-BoldItalic.ttf \
-	NotoSansUI-Bold.ttf \
-	NotoSansUI-Italic.ttf \
-	NotoSansUI-Regular.ttf \
 	NotoSansVai-Regular.ttf \
 	NotoSansYi-Regular.ttf \
 	NotoSerifArmenian-Bold.ttf \
