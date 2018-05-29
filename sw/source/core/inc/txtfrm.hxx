@@ -88,23 +88,7 @@ struct Extent
     }
 };
 
-struct MergedPara
-{
-    std::vector<Extent> const extents;
-    /// note: cannot be const currently to avoid UB because SwTextGuess::Guess
-    /// const_casts it and modifies it
-    OUString mergedText;
-    /// most paragraph properties are taken from the first non-empty node
-    SwTextNode const*const pParaPropsNode;
-    /// except break attributes, those are taken from the first node
-    SwTextNode *const pFirstNode;
-    MergedPara(std::vector<Extent>&& rExtents, OUString const& rText, SwTextNode const*const pProps, SwTextNode *const pFirst)
-        : extents(std::move(rExtents)), mergedText(rText), pParaPropsNode(pProps), pFirstNode(pFirst)
-    {
-        assert(pParaPropsNode);
-        assert(pFirstNode);
-    }
-};
+struct MergedPara;
 
 std::pair<SwTextNode*, sal_Int32> MapViewToModel(MergedPara const&, TextFrameIndex nIndex);
 TextFrameIndex MapModelToView(MergedPara const&, SwTextNode const* pNode, sal_Int32 nIndex);
@@ -917,7 +901,27 @@ public:
 
 namespace sw {
 
-struct MergedPara;
+struct MergedPara
+{
+    sw::WriterMultiListener listener;
+    std::vector<Extent> const extents;
+    /// note: cannot be const currently to avoid UB because SwTextGuess::Guess
+    /// const_casts it and modifies it
+    OUString mergedText;
+    /// most paragraph properties are taken from the first non-empty node
+    SwTextNode const*const pParaPropsNode;
+    /// except break attributes, those are taken from the first node
+    SwTextNode *const pFirstNode;
+    MergedPara(SwTextFrame & rFrame, std::vector<Extent>&& rExtents,
+            OUString const& rText,
+            SwTextNode const*const pProps, SwTextNode *const pFirst)
+        : listener(rFrame), extents(std::move(rExtents)), mergedText(rText)
+        , pParaPropsNode(pProps), pFirstNode(pFirst)
+    {
+        assert(pParaPropsNode);
+        assert(pFirstNode);
+    }
+};
 
 /// iterate SwTextAttr in potentially merged text frame
 class MergedAttrIterBase

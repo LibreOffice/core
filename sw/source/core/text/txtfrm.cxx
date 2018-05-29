@@ -581,6 +581,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     , mnFootnoteLine( 0 )
     , mnHeightOfLastLine( 0 )
     , mnAdditionalFirstLineOffset( 0 )
+    // note: this may change this->pRegisteredIn to m_pMergedPara->listeners
     , m_pMergedPara(CheckParaRedlineMerge(*this, *pNode)) // ensure it is inited
     , mnOffset( 0 )
     , mnCacheIndex( USHRT_MAX )
