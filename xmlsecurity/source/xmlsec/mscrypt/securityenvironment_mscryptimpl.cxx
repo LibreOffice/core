@@ -45,6 +45,7 @@
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <svl/cryptosign.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;
@@ -344,6 +345,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
         HCERTSTORE hSystemKeyStore ;
         DWORD      dwKeySpec;
         HCRYPTPROV hCryptProv;
+        NCRYPT_KEY_HANDLE hCryptKey;
 
 #ifdef SAL_LOG_INFO
         CertEnumSystemStore(CERT_SYSTEM_STORE_CURRENT_USER, nullptr, nullptr, cert_enum_system_store_callback);
@@ -355,10 +357,17 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
             while (pCertContext)
             {
                 // for checking whether the certificate is a personal certificate or not.
+                DWORD dwFlags = CRYPT_ACQUIRE_COMPARE_KEY_FLAG;
+                HCRYPTPROV_OR_NCRYPT_KEY_HANDLE* phCryptProvOrNCryptKey = &hCryptProv;
+                if (svl::crypto::isMSCng())
+                {
+                    dwFlags |= CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG;
+                    phCryptProvOrNCryptKey = &hCryptKey;
+                }
                 if(!(CryptAcquireCertificatePrivateKey(pCertContext,
-                        CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
+                        dwFlags,
                         nullptr,
-                        &hCryptProv,
+                        phCryptProvOrNCryptKey,
                         &dwKeySpec,
                         nullptr)))
                 {
@@ -969,10 +978,18 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::
         BOOL    fCallerFreeProv ;
         DWORD   dwKeySpec ;
         HCRYPTPROV  hProv ;
+        NCRYPT_KEY_HANDLE hKey = 0;
+        DWORD dwFlags = 0;
+        HCRYPTPROV_OR_NCRYPT_KEY_HANDLE* phCryptProvOrNCryptKey = &hProv;
+        if (svl::crypto::isMSCng())
+        {
+            dwFlags |= CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG;
+            phCryptProvOrNCryptKey = &hKey;
+        }
         if( CryptAcquireCertificatePrivateKey( pCertContext ,
-                   0 ,
+                   dwFlags,
                    nullptr ,
-                   &hProv,
+                   phCryptProvOrNCryptKey,
                    &dwKeySpec,
                    &fCallerFreeProv )
         ) {
@@ -980,6 +997,8 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::
 
             if( hProv != NULL && fCallerFreeProv )
                 CryptReleaseContext( hProv, 0 ) ;
+            else if (hKey && fCallerFreeProv)
+                NCryptFreeObject(hKey);
         } else {
             characters &= ~ css::security::CertificateCharacters::HAS_PRIVATE_KEY ;
         }
