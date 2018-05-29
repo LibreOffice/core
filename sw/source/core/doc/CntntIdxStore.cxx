@@ -38,6 +38,7 @@
 #include <sal/types.h>
 #include <unocrsr.hxx>
 #include <edimp.hxx>
+#include <txtfrm.hxx>
 #include <memory>
 
 using namespace ::boost;
@@ -321,7 +322,10 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCont
     SwFrame* pFrame = pNode->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
     if( pFrame )
     {
-        if( !pFrame->GetDrawObjs() )
+        // sw_redlinehide: this looks like an invalid optimisation if merged,
+        // assuming that flys in deleted redlines should be saved here too.
+        if ((!pFrame->IsTextFrame() || !static_cast<SwTextFrame const*>(pFrame)->GetMergedPara())
+                && !pFrame->GetDrawObjs())
             return; // if we have a layout and no DrawObjs, we can skip this
     }
     MarkEntry aSave = { 0, false, 0 };
