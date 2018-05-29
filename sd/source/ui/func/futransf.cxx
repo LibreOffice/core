@@ -81,6 +81,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     SfxItemSet aSet( mpView->GetGeoAttrFromMarked() );
     VclPtr<SfxAbstractTabDialog> pDlg;
 
+    bool bWelded = false;
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if( rMarkList.GetMarkCount() == 1 &&
@@ -109,7 +110,8 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         if (!pFact)
             return;
 
-        pDlg.reset(pFact->CreateSvxTransformTabDialog(mpViewShell->GetActiveWindow(), &aSet, mpView));
+        pDlg.reset(pFact->CreateSvxTransformTabDialog(mpViewShell->GetFrameWeld(), &aSet, mpView));
+        bWelded = true;
     }
 
     if (!pDlg)
@@ -128,6 +130,8 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         // deferred until the dialog ends
         mpViewShell->Invalidate(SID_RULER_OBJECT);
         mpViewShell->Cancel();
+        if (bWelded)
+            pDlg->disposeOnce();
     });
 }
 

@@ -136,8 +136,9 @@ void ChartController::executeDispatch_PositionAndSize()
         SolarMutexGuard aGuard;
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
         OSL_ENSURE( pFact, "No dialog factory" );
+        vcl::Window* pWin = GetChartWindow();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSchTransformTabDialog(
-            GetChartWindow(), &aItemSet, pSdrView, bResizePossible ));
+            pWin ? pWin->GetFrameWeld() : nullptr, &aItemSet, pSdrView, bResizePossible));
         OSL_ENSURE( pDlg, "Couldn't create SchTransformTabDialog" );
 
         if( pDlg->Execute() == RET_OK )

@@ -2028,6 +2028,13 @@ short SfxTabDialogController::execute()
     return m_xDialog->run();
 }
 
+bool SfxTabDialogController::runAsync(const std::shared_ptr<SfxTabDialogController>& rController,
+                                      const std::function<void(sal_Int32)>& rFunc)
+{
+    rController->Start_Impl();
+    return weld::DialogController::runAsync(rController, rFunc);
+}
+
 void SfxTabDialogController::SetInputSet( const SfxItemSet* pInSet )
 
 /*  [Description]
