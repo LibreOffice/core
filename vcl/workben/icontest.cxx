@@ -65,7 +65,7 @@ class MyWorkWindow : public WorkWindow
 
 public:
     Graphic maGraphic;
-    Bitmap *mpBitmap;
+    BitmapEx *mpBitmap;
     VclPtr<FixedBitmap> mpFixedBitmap;
 
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
@@ -112,10 +112,10 @@ void MyWorkWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     aSize.setWidth( aSize.Width() * (1 + (0.1*sin(mnPaintCount/60.))) );
     aSize.setHeight( aSize.Height() * (1 + (0.1*sin(mnPaintCount/50.))) );
 
-    Bitmap aEmpty;
+    BitmapEx aEmpty;
     mpFixedBitmap->SetBitmap( aEmpty );
     GraphicConversionParameters aConv( aSize );
-    mpBitmap = new Bitmap( maGraphic.GetBitmap( aConv ) );
+    mpBitmap = new BitmapEx( maGraphic.GetBitmap( aConv ) );
     mpFixedBitmap->SetBitmap( *mpBitmap );
     mpFixedBitmap->SetSizePixel( aSize );
 

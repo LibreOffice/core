@@ -692,17 +692,15 @@ FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
 
 void FixedBitmap::ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& rSize )
 {
-    Bitmap* pBitmap = &maBitmap;
-
     // do we have a Bitmap?
-    if ( !(!(*pBitmap)) )
+    if ( !!maBitmap )
     {
         if ( GetStyle() & WB_SCALE )
-            pDev->DrawBitmap( rPos, rSize, *pBitmap );
+            pDev->DrawBitmapEx( rPos, rSize, maBitmap );
         else
         {
-            Point aPos = ImplCalcPos( GetStyle(), rPos, pBitmap->GetSizePixel(), rSize );
-            pDev->DrawBitmap( aPos, *pBitmap );
+            Point aPos = ImplCalcPos( GetStyle(), rPos, maBitmap.GetSizePixel(), rSize );
+            pDev->DrawBitmapEx( aPos, maBitmap );
         }
     }
 }
@@ -799,7 +797,7 @@ void FixedBitmap::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
+void FixedBitmap::SetBitmap( const BitmapEx& rBitmap )
 {
     maBitmap = rBitmap;
     CompatStateChanged( StateChangedType::Data );
