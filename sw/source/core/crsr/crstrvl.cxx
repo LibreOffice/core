@@ -1764,7 +1764,7 @@ bool SwContentAtPos::IsInRTLText()const
     }
     if(pNd)
     {
-        SwIterator<SwTextFrame,SwTextNode> aIter(*pNd);
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNd);
         SwTextFrame* pTmpFrame = aIter.First();
         while( pTmpFrame )
         {

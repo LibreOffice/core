@@ -152,7 +152,10 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
                 const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );
                 if( pNd )
                 {
-                    if ( SwIterator<SwFrame,SwContentNode>(*pNd).First() )
+                    if (SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pNd).First())
+                    // sw_redlinehide: not sure if this should happen only if
+                    // it's the first node, because that's where RES_PAGEDESC
+                    // is effective?
                         m_bVirtual = true;
                 }
                 else if( dynamic_cast< const SwFormat* >(pDesc->GetDefinedIn()) !=  nullptr)

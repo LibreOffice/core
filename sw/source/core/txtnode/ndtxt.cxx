@@ -309,7 +309,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
             {
                 if( !pFrame )
                 {
-                    pFrame = SwIterator<SwContentFrame,SwTextNode>(rNode).First();
+                    pFrame = SwIterator<SwContentFrame, SwTextNode, sw::IteratorMode::UnwrapMulti>(rNode).First();
                     if (!pFrame)
                         return;
                 }
@@ -323,7 +323,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
                 if ( !pNd )
                     continue;
 
-                SwIterator<SwContentFrame,SwContentNode> aIter( *pNd );
+                SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pNd);
                 SwContentFrame* pContent = aIter.First();
                 if( pContent )
                 {
@@ -477,7 +477,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         }
 
-        SwIterator<SwTextFrame,SwTextNode> aIter( *this );
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
         for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
             pFrame->RegisterToNode( *pNode );

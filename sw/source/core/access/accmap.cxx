@@ -1320,7 +1320,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     if(nStartIndex.GetNode().IsContentNode())
                     {
                         SwContentNode* pCNd = static_cast<SwContentNode*>(&(nStartIndex.GetNode()));
-                        pFrame = SwIterator<SwFrame, SwContentNode>(*pCNd).First();
+                        pFrame = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pCNd).First();
                     }
                     else if( nStartIndex.GetNode().IsTableNode() )
                     {
@@ -3324,7 +3324,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::BuildSelectedParas()
                 if ( pTextNode )
                 {
                     // loop on all text frames registered at the text node.
-                    SwIterator<SwTextFrame,SwTextNode> aIter( *pTextNode );
+                    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pTextNode);
                     for( SwTextFrame* pTextFrame = aIter.First(); pTextFrame; pTextFrame = aIter.Next() )
                         {
                             uno::WeakReference < XAccessible > xWeakAcc;
