@@ -249,6 +249,7 @@ private:
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
     SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag);
+    SAL_DLLPRIVATE void CreatePages();
 
 protected:
     virtual short               Ok();
