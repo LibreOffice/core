@@ -104,8 +104,7 @@ void ReservedId::run() {
                     if (d->getKind() == MacroDirective::MD_Define) {
                         auto loc = d->getLocation();
                         if (loc.isValid() && !ignoreLocation(loc)) {
-                            auto file = compiler.getSourceManager()
-                                .getFilename(loc);
+                            auto file = getFileNameOfSpellingLoc(loc);
                             if (!loplugin::isSamePathname(
                                     file,
                                     SRCDIR
@@ -137,7 +136,7 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
     if (ignoreLocation(spelLoc)) {
         return true;
     }
-    auto filename = compiler.getSourceManager().getFilename(spelLoc);
+    auto filename = getFileNameOfSpellingLoc(spelLoc);
     if (loplugin::hasPathnamePrefix(filename, SRCDIR "/bridges/source/cpp_uno/")
         && filename.endswith("share.hxx"))
     {
@@ -268,7 +267,7 @@ ReservedId::Kind ReservedId::determineKind(llvm::StringRef const & id) {
 
 bool ReservedId::isInLokIncludeFile(SourceLocation spellingLocation) const {
     return loplugin::hasPathnamePrefix(
-        compiler.getSourceManager().getFilename(spellingLocation),
+        getFileNameOfSpellingLoc(spellingLocation),
         SRCDIR "/include/LibreOfficeKit/");
 }
 

@@ -115,7 +115,7 @@ public:
             // at least some interesting cases (though it would still not be aggressive enough to
             // have found ff570b4b58dbf274d3094d21d974f18b613e9b4b "DocumentSettingsSerializer must
             // be SAL_DLLPUBLIC_RTTI for dynamic_cast"):
-            auto const file = compiler.getSourceManager().getFilename(
+            auto const file = getFileNameOfSpellingLoc(
                 compiler.getSourceManager().getSpellingLoc(rdd->getLocation()));
             if (loplugin::hasPathnamePrefix(file, SRCDIR "/include/")) {
                 std::size_t const n1 = std::strlen(SRCDIR "/include/");

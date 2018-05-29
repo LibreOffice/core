@@ -50,7 +50,7 @@ private:
 StringRef MemoryVar::getFilename(SourceLocation loc)
 {
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(loc);
-    StringRef name { compiler.getSourceManager().getFilename(spellingLocation) };
+    StringRef name { getFileNameOfSpellingLoc(spellingLocation) };
     return name;
 }
 

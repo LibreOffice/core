@@ -57,7 +57,7 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     {
         return true;
     }
-    StringRef fileName { compiler.getSourceManager().getFilename(functionDecl->getLocation()) };
+    StringRef fileName { getFileNameOfSpellingLoc(functionDecl->getLocation()) };
     // the filters use some kind of dynamic loading stunt
     if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/filter/qa/")) {
         return true;
