@@ -55,7 +55,7 @@ gb_CFLAGS_COMMON := \
 	-Wstrict-prototypes \
 	-Wundef \
 	-Wunreachable-code \
-	-Wunused-macros \
+	$(if $(and $(COM_IS_CLANG),$(findstring icecc,$(CC))),,-Wunused-macros) \
 	-finput-charset=UTF-8 \
 	-fmessage-length=0 \
 	-fno-common \
@@ -69,7 +69,7 @@ gb_CXXFLAGS_COMMON := \
 	-Wextra \
 	-Wundef \
 	-Wunreachable-code \
-	-Wunused-macros \
+	$(if $(and $(COM_IS_CLANG),$(findstring icecc,$(CXX))),,-Wunused-macros) \
 	-finput-charset=UTF-8 \
 	-fmessage-length=0 \
 	-fno-common \
