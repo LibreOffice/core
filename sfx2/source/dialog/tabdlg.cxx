@@ -1615,6 +1615,8 @@ IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OString&, rPage, void)
     }
 
     VclPtr<SfxTabPage> pTabPage = pDataObject->pTabPage;
+    if (!pTabPage)
+        return;
 
     if (pDataObject->bRefresh)
         pTabPage->Reset(m_pSet);
@@ -1935,24 +1937,30 @@ void SfxTabDialogController::AddTabPage
 )
 {
     m_pImpl->aData.push_back(new Data_Impl(m_pImpl->aData.size(), rName, pCreateFunc, pRangesFunc));
-    Data_Impl* pDataObject = m_pImpl->aData.back();
+}
 
-    assert(pDataObject->pTabPage == nullptr && "create TabPage more than once");
-    weld::Container* pPage = m_xTabCtrl->get_page(rName);
-    pDataObject->pTabPage = (pDataObject->fnCreatePage)(pPage, m_pSet);
-    pDataObject->pTabPage->SetDialogController(this);
+void SfxTabDialogController::CreatePages()
+{
+    for (auto pDataObject : m_pImpl->aData)
+    {
+        if (pDataObject->pTabPage)
+           continue;
+        weld::Container* pPage = m_xTabCtrl->get_page(pDataObject->sId);
+        pDataObject->pTabPage = (pDataObject->fnCreatePage)(pPage, m_pSet);
+        pDataObject->pTabPage->SetDialogController(this);
 
-    OUString sConfigId = OStringToOUString(pDataObject->pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
-    SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
-    OUString sUserData;
-    Any aUserItem = aPageOpt.GetUserItem(USERITEM_NAME);
-    OUString aTemp;
-    if ( aUserItem >>= aTemp )
-        sUserData = aTemp;
-    pDataObject->pTabPage->SetUserData(sUserData);
+        OUString sConfigId = OStringToOUString(pDataObject->pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
+        SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
+        OUString sUserData;
+        Any aUserItem = aPageOpt.GetUserItem(USERITEM_NAME);
+        OUString aTemp;
+        if ( aUserItem >>= aTemp )
+            sUserData = aTemp;
+        pDataObject->pTabPage->SetUserData(sUserData);
 
-    PageCreated(rName, *pDataObject->pTabPage);
-    pDataObject->pTabPage->Reset(m_pSet);
+        PageCreated(pDataObject->sId, *pDataObject->pTabPage);
+        pDataObject->pTabPage->Reset(m_pSet);
+    }
 }
 
 void SfxTabDialogController::RemoveTabPage(const OString& rId)
@@ -1996,6 +2004,8 @@ void SfxTabDialogController::RemoveTabPage(const OString& rId)
 
 void SfxTabDialogController::Start_Impl()
 {
+    CreatePages();
+
     assert(m_pImpl->aData.size() == static_cast<size_t>(m_xTabCtrl->get_n_pages())
             && "not all pages registered");
 
