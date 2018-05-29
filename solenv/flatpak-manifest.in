@@ -576,6 +576,12 @@
                     "sha256": "46f3a5e4cb4b6c5b29f1cd340d1a6ea60e6fabc59859951f022d35e32a32a458",
                     "type": "file",
                     "dest-filename": "external/tarballs/libnumbertext-1.0.1-3.tar.xz"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/extern/49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63-opens___.ttf",
+                    "sha256": "49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63-opens___.ttf"
                 }
             ],
             "buildsystem": "simple",
