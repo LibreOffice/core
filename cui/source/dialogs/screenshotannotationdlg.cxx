@@ -159,8 +159,8 @@ private:
 
     // local variables
     Dialog&                     mrParentDialog;
-    Bitmap                      maParentDialogBitmap;
-    Bitmap                      maDimmedDialogBitmap;
+    BitmapEx                    maParentDialogBitmap;
+    BitmapEx                    maDimmedDialogBitmap;
     Size                        maParentDialogSize;
 
     // VirtualDevice for buffered interaction paints
@@ -233,7 +233,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
 
         // to make clear that maParentDialogBitmap is a background image, adjust
         // luminance a bit for maDimmedDialogBitmap - other methods may be applied
-        maDimmedDialogBitmap.Adjust(-15);
+        maDimmedDialogBitmap.Adjust(-15, 0, 0, 0, 0);
 
         // init paint buffering VirtualDevice
         mpVirtualBufferDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::BITMASK);
@@ -488,7 +488,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
     if (mpVirtualBufferDevice)
     {
         // reset with original screenshot bitmap
-        mpVirtualBufferDevice->DrawBitmap(
+        mpVirtualBufferDevice->DrawBitmapEx(
             Point(0, 0),
             bUseDimmed ? maDimmedDialogBitmap : maParentDialogBitmap);
 

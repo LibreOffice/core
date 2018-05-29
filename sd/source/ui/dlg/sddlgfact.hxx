@@ -31,7 +31,7 @@ public:                                                 \
     }                                                   \
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const override; \
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
-    virtual Bitmap createScreenshot() const override;   \
+    virtual BitmapEx createScreenshot() const override;   \
     virtual OString GetScreenshotId() const override;   \
     virtual         ~Class() override;                           \
     virtual short   Execute() override ;
@@ -39,7 +39,7 @@ public:                                                 \
 #define IMPL_ABSTDLG_BASE(Class)                    \
 std::vector<OString> Class::getAllPageUIXMLDescriptions() const { return pDlg->getAllPageUIXMLDescriptions(); } \
 bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) { return pDlg->selectPageByUIXMLDescription(rUIXMLDescription); } \
-Bitmap Class::createScreenshot() const { return pDlg->createScreenshot();} \
+BitmapEx Class::createScreenshot() const { return pDlg->createScreenshot();} \
 OString Class::GetScreenshotId() const { return pDlg->GetScreenshotId();} \
 Class::~Class()                                     \
 {                                                   \

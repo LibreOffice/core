@@ -35,6 +35,7 @@
 namespace vcl { class Window; }
 class Dialog;
 class Bitmap;
+class BitmapEx;
 namespace weld
 {
     class DialogController;
@@ -74,7 +75,7 @@ public:
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
-    virtual Bitmap createScreenshot() const;
+    virtual BitmapEx createScreenshot() const;
     virtual OString GetScreenshotId() const { return OString(); };
 };
 

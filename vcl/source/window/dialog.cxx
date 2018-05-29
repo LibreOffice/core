@@ -965,7 +965,7 @@ void Dialog::ensureRepaint()
     }
 }
 
-Bitmap Dialog::createScreenshot()
+BitmapEx Dialog::createScreenshot()
 {
     // same prerequisites as in Execute()
     setDeferredProperties();
@@ -974,7 +974,7 @@ Bitmap Dialog::createScreenshot()
     ToTop();
     ensureRepaint();
 
-    return GetBitmap(Point(), GetOutputSizePixel());
+    return GetBitmapEx(Point(), GetOutputSizePixel());
 }
 
 short Dialog::Execute()
