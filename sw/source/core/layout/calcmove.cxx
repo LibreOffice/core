@@ -999,7 +999,8 @@ bool SwFrame::IsCollapse() const
 
     const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>(this);
     const SwTextNode *pTextNode = pTextFrame->GetTextNodeForParaProps();
-    return pTextNode && pTextNode->IsCollapse();
+    // TODO this SwTextNode function is pointless and should be merged in here
+    return pTextFrame->GetText().isEmpty() && pTextNode && pTextNode->IsCollapse();
 }
 
 void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
