@@ -69,7 +69,6 @@ namespace vcl
         GlyphNum,                        /**< incorrect number of glyphs                   */
         BadArg,                          /**< incorrect arguments                          */
         TtFormat,                        /**< incorrect TrueType font format               */
-        TableFormat,                     /**< incorrect format of a TrueType table         */
         FontNo                           /**< incorrect logical font number of a TTC font  */
     };
 
