@@ -519,7 +519,7 @@ sal_uInt16 PostItField_::GetPageNo(
     //Probably only once. For the page number we don't select a random one,
     //but the PostIt's first occurrence in the selected area.
     rVirtPgNo = 0;
-    SwIterator<SwTextFrame,SwTextNode> aIter( GetTextField()->GetTextNode() );
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(GetTextField()->GetTextNode());
     for( SwTextFrame* pFrame = aIter.First(); pFrame;  pFrame = aIter.Next() )
     {
         TextFrameIndex const nPos = pFrame->MapModelToView(
