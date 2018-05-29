@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_fc8f9ac9",
+        "filename": "instdir/share/config/soffice.cfg/cui/ui/optsavepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-05-29T21:18:51Z",
+      "side": 1,
+      "message": "It seems like you’ve committed this file by accident.\nPlease drop it from the patch and upload an amended commit.",
+      "revId": "fd0f375bea04f97d28d65ccbc7b3b88b626f0fdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
