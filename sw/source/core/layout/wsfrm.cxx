@@ -678,9 +678,33 @@ void SwFrame::InvalidatePage( const SwPageFrame *pPage ) const
         }
         pRoot->SetIdleFlags();
 
-        const SwTextNode *pTextNode = dynamic_cast< const SwTextNode * >(GetDep());
-        if (pTextNode && pTextNode->IsGrammarCheckDirty())
-            pRoot->SetNeedGrammarCheck( true );
+        if (IsTextFrame())
+        {
+            SwTextFrame const*const pText(static_cast<SwTextFrame const*>(this));
+            if (sw::MergedPara const*const pMergedPara = pText->GetMergedPara())
+            {
+                SwTextNode const* pNode(nullptr);
+                for (auto const& e : pMergedPara->extents)
+                {
+                    if (e.pNode != pNode)
+                    {
+                        pNode = e.pNode;
+                        if (pNode->IsGrammarCheckDirty())
+                        {
+                            pRoot->SetNeedGrammarCheck( true );
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (pText->GetTextNodeFirst()->IsGrammarCheckDirty())
+                {
+                    pRoot->SetNeedGrammarCheck( true );
+                }
+            }
+        }
     }
 }
 
