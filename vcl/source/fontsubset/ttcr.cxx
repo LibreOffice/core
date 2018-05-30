@@ -161,12 +161,11 @@ void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
     *_this = ptr;
 }
 
-SFErrCodes AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
+void AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
 {
     if (table != nullptr) {
         listAppend(_this->tables, table);
     }
-    return SFErrCodes::Ok;
 }
 
 void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
