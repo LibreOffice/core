@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_fa9b1a70",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2018-05-30T15:48:43Z",
+      "side": 1,
+      "message": "Why should we swap the meaning of nCol and nRow?  Can\u0027t we just use the right meaning from the very start - ie. swap the nCol and nRow right away above the std::swap?",
+      "range": {
+        "startLine": 418,
+        "startChar": 12,
+        "endLine": 418,
+        "endChar": 33
+      },
+      "revId": "db92539a7050018ecd7c14e6596b133364f5c0e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3a8cd234",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2018-05-30T15:48:43Z",
+      "side": 1,
+      "message": "This could be done directly above in the switch as the XML_sameDir case :-)",
+      "range": {
+        "startLine": 445,
+        "startChar": 11,
+        "endLine": 446,
+        "endChar": 13
+      },
+      "revId": "db92539a7050018ecd7c14e6596b133364f5c0e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
