@@ -724,6 +724,7 @@ namespace vclcanvas
                         BitmapEx aMaskEx(aMask);
                         BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(253));
                         aMask = aMaskEx.GetBitmap();
+                        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMask );
                     }
                     else if( aBmpEx.IsTransparent() )
                     {
