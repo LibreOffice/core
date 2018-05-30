@@ -5685,7 +5685,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                 Graphic aGraf;
                 if ( rManager.GetBLIP( rManager.GetPropertyValue( DFF_Prop_fillBlip, 0 ), aGraf ) )
                 {
-                    Bitmap aBmp( aGraf.GetBitmap() );
+                    Bitmap aBmp( aGraf.GetBitmapEx().GetBitmap() );
                     Size aSize( aBmp.GetSizePixel() );
                     if ( aSize.Width() && aSize.Height() )
                     {

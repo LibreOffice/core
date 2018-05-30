@@ -436,7 +436,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 
         INetURLObject aURLObj( gallery + aPreviewFile );
         aFilter.ImportGraphic( aGraphic, aURLObj );
-        Bitmap aBmp = aGraphic.GetBitmap();
+        BitmapEx aBmp = aGraphic.GetBitmapEx();
         m_vDefaultPersonaImages[nIndex]->Show();
         m_vDefaultPersonaImages[nIndex++]->SetModeImage( Image( aBmp ) );
     }
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox&, vo
     Graphic aGraphic;
     INetURLObject aURLObj( aPreviewFile );
     aFilter.ImportGraphic( aGraphic, aURLObj );
-    Bitmap aBmp = aGraphic.GetBitmap();
+    BitmapEx aBmp = aGraphic.GetBitmapEx();
     m_pExtensionPersonaPreview->SetModeImage( Image( aBmp ) );
 }
 
@@ -781,7 +781,7 @@ void SearchAndParseThread::execute()
             // for VCL to be able to create bitmaps / do visual changes in the thread
             SolarMutexGuard aGuard;
             aFilter.ImportGraphic( aGraphic, aURLObj );
-            Bitmap aBmp = aGraphic.GetBitmap();
+            BitmapEx aBmp = aGraphic.GetBitmapEx();
 
             if( !m_bExecute )
                 return;

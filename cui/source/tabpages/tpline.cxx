@@ -310,7 +310,7 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
 
             if(pGraphic)
             {
-                Bitmap aBitmap(pGraphic->GetBitmap());
+                BitmapEx aBitmap(pGraphic->GetBitmapEx());
                 Size aSize(aBitmap.GetSizePixel());
                 if(aSize.Width()  > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
                 {

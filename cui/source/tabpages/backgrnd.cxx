@@ -685,7 +685,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 {
                     const Graphic* pGraphic = rOldItem.GetGraphic();
                     if (pGraphic)
-                        bModifyBrush = pGraphic->GetBitmap() != aBgdGraphic.GetBitmap();
+                        bModifyBrush = pGraphic->GetBitmapEx() != aBgdGraphic.GetBitmapEx();
                 }
                 if (bModifyBrush)
                 {
@@ -1100,7 +1100,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, Button*, pBox, void )
 
             if ( bIsGraphicValid )
             {
-                Bitmap aBmp = aBgdGraphic.GetBitmap();
+                Bitmap aBmp = aBgdGraphic.GetBitmapEx().GetBitmap();
                 m_pPreviewWin2->NotifyChange( &aBmp );
             }
             else
@@ -1208,7 +1208,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Timer*, pIdle, void )
 
                 if ( m_pBtnPreview->IsChecked() && bIsGraphicValid )
                 {
-                    Bitmap aBmp = aBgdGraphic.GetBitmap();
+                    Bitmap aBmp = aBgdGraphic.GetBitmapEx().GetBitmap();
                     m_pPreviewWin2->NotifyChange( &aBmp );
                 }
                 else
@@ -1415,7 +1415,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if ( m_pBtnPreview->IsChecked() && bIsGraphicValid )
         {
-            Bitmap aBmp = aBgdGraphic.GetBitmap();
+            Bitmap aBmp = aBgdGraphic.GetBitmapEx().GetBitmap();
             m_pPreviewWin2->NotifyChange( &aBmp );
         }
         else

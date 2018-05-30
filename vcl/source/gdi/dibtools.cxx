@@ -1830,9 +1830,10 @@ bool WriteDIB(
 
 bool WriteDIB(
     const BitmapEx& rSource,
-    SvStream& rOStm)
+    SvStream& rOStm,
+    bool bCompressed)
 {
-    return ImplWriteDIB(rSource.GetBitmapRef(), rOStm, /*bCompressed*/true, /*bFileHeader*/true);
+    return ImplWriteDIB(rSource.GetBitmapRef(), rOStm, bCompressed, /*bFileHeader*/true);
 }
 
 bool WriteDIBBitmapEx(

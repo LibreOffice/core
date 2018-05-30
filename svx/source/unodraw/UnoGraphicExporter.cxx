@@ -247,7 +247,7 @@ namespace {
                 aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
             const Graphic aGraphic(rMtf);
 
-            aBmpEx = BitmapEx(aGraphic.GetBitmap(aParameters));
+            aBmpEx = aGraphic.GetBitmapEx(aParameters);
             aBmpEx.SetPrefMapMode( rMtf.GetPrefMapMode() );
             aBmpEx.SetPrefSize( rMtf.GetPrefSize() );
         }

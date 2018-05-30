@@ -517,14 +517,14 @@ void ExportDialog::GetGraphicStream()
     }
 }
 
-Bitmap ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
+BitmapEx ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
 {
-    Bitmap aRet;
+    BitmapEx aRet;
     Graphic aGraphic;
     GraphicFilter aFilter( false );
     if ( aFilter.ImportGraphic( aGraphic, "", rInputStream, GRFILTER_FORMAT_NOTFOUND, nullptr, GraphicFilterImportFlags::NONE, static_cast<css::uno::Sequence< css::beans::PropertyValue >*>(nullptr) ) == ERRCODE_NONE )
     {
-        aRet = aGraphic.GetBitmap();
+        aRet = aGraphic.GetBitmapEx();
     }
     return aRet;
 }

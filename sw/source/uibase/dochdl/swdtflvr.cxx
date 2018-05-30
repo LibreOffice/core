@@ -797,7 +797,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
         m_pWrtShell->Copy( pDoc );
 
-        if (m_pOrigGraphic && !m_pOrigGraphic->GetBitmap().IsEmpty())
+        if (m_pOrigGraphic && !m_pOrigGraphic->GetBitmapEx().IsEmpty())
           AddFormat( SotClipboardFormatId::SVXB );
 
         PrepareOLE( m_aObjDesc );

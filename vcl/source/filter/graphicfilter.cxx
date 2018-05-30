@@ -825,7 +825,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             // Resolution is set
             if( nMode == 1 )
             {
-                Bitmap      aBitmap( rGraphic.GetBitmap() );
+                BitmapEx    aBitmap( rGraphic.GetBitmapEx() );
                 MapMode     aMap( MapUnit::Map100thInch );
 
                 sal_Int32   nDPI = rConfigItem.ReadInt32( "Resolution", 75 );
@@ -2213,16 +2213,16 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
         {
             if( aFilterName.equalsIgnoreAsciiCase( EXP_BMP ) )
             {
-                Bitmap aBmp( aGraphic.GetBitmap() );
+                BitmapEx aBmp( aGraphic.GetBitmapEx() );
                 BmpConversion nColorRes = static_cast<BmpConversion>(aConfigItem.ReadInt32( "Colors", 0 ));
                 if ( nColorRes != BmpConversion::NNONE && ( nColorRes <= BmpConversion::N24Bit) )
                 {
                     if( !aBmp.Convert( nColorRes ) )
-                        aBmp = aGraphic.GetBitmap();
+                        aBmp = aGraphic.GetBitmapEx();
                 }
                 bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", true );
                 // save RLE encoded?
-                WriteDIB(aBmp, rOStm, bRleCoding, true);
+                WriteDIB(aBmp, rOStm, bRleCoding);
 
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;

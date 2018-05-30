@@ -828,7 +828,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMP:
                 {
                     MetaBmpAction*  pAct = static_cast<MetaBmpAction*>(pAction);
-                    const Bitmap    aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
+                    const Bitmap    aBmp( Mask( pAct->GetBitmap() ).GetBitmapEx().GetBitmap() );
 
                     pAct = new MetaBmpAction( pAct->GetPoint(), aBmp );
                     aMtf.AddAction( pAct );
@@ -838,7 +838,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPSCALE:
                 {
                     MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
-                    const Bitmap        aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
+                    const Bitmap        aBmp( Mask( pAct->GetBitmap() ).GetBitmapEx().GetBitmap() );
 
                     pAct = new MetaBmpScaleAction( pAct->GetPoint(), pAct->GetSize(), aBmp );
                     aMtf.AddAction( pAct );
@@ -848,7 +848,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPSCALEPART:
                 {
                     MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
-                    const Bitmap            aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
+                    const Bitmap            aBmp( Mask( pAct->GetBitmap() ).GetBitmapEx().GetBitmap() );
 
                     pAct = new MetaBmpScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
                                                        pAct->GetSrcPoint(), pAct->GetSrcSize(), aBmp );
@@ -1025,7 +1025,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                         }
 
                         // now replace it again with the normal colors
-                        Bitmap  aBitmap( ImpMask( aGraphic.GetBitmap() ) );
+                        Bitmap  aBitmap( ImpMask( aGraphic.GetBitmapEx().GetBitmap() ) );
                         Size    aSize( aBitmap.GetSizePixel() );
 
                         if ( aSize.Width() && aSize.Height() )
