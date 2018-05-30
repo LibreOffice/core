@@ -61,6 +61,8 @@ typedef struct {
 #define NUMBER_OMIT_ONE_67 (NUMBER_OMIT_ONE_6|NUMBER_OMIT_ONE_7)
 #define NUMBER_OMIT_ZERO_ONE_67 ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE_67 )
 
+#define FORMAT_NUMBERTEXT_ID "one"
+
 namespace i18npool {
 
 struct theNatNumMutex : public rtl::Static<osl::Mutex, theNatNumMutex> {};
@@ -774,6 +776,11 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplierService::convertToXmlAttr
     static const sal_Int16 attLong          = 2;
     static const sal_Char *attType[] = { "short", "medium", "long" };
 
+    switch (nNativeNumberMode) {
+        case NativeNumberMode::NATNUM12:    // cardinal and ordinal number names etc.
+            return NativeNumberXmlAttributes(rLocale, FORMAT_NUMBERTEXT_ID, "");
+    }
+
     sal_Int16 number = NumberChar_HalfWidth, type = attShort;
 
     sal_Int16 langnum = -1;
@@ -848,6 +855,9 @@ static bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
 
 sal_Int16 SAL_CALL NativeNumberSupplierService::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr )
 {
+    if ( aAttr.Format == FORMAT_NUMBERTEXT_ID )
+        return NativeNumberMode::NATNUM12;
+
     sal_Unicode numberChar[NumberChar_Count];
     for (sal_Int16 i = 0; i < NumberChar_Count; i++)
         numberChar[i] = NumberChar[i][1];

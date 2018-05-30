@@ -1478,6 +1478,11 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             aFormatCode.append( "[NatNum" );
             aFormatCode.append( nNatNum );
 
+            // NatNum12 formatter codes (cardinal and ordinal number names etc.)
+            if (nNatNum == 12 && !aNatNumAttr.Style.isEmpty() )
+            {
+                aFormatCode.append( " " + aNatNumAttr.Style );
+            }
             LanguageType eLang = aLanguageTag.getLanguageType( false);
             if ( eLang == LANGUAGE_DONTKNOW )
                 eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?

@@ -5382,6 +5382,11 @@ void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes& rAttr,
                     LanguageTag( rNum.GetLang() ).getLocale() );
             rAttr = GetFormatter().GetNatNum()->convertToXmlAttributes(
                     aLocale, rNum.GetNatNum() );
+            if ( !rNum.GetParams().isEmpty() && NatNumTakesParameters(rNum.GetNatNum()) )
+            {
+                // NatNum12 formatting styles, ordinal, ordinal-number etc.
+                rAttr.Style = rNum.GetParams();
+            }
         }
         else
         {
