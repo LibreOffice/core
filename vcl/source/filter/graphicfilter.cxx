@@ -2439,8 +2439,9 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
         }
         else
         {
-            sal_Int32 nIdx{0};
-            do {
+            sal_Int32 nIdx {aFilterPath.isEmpty() ? -1 : 0};
+            while (nIdx>=0)
+            {
 #ifndef DISABLE_DYNLOADING
                 OUString aPhysicalName( ImpCreateFullFilterPath( aFilterPath.getToken(0, ';', nIdx), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
@@ -2471,7 +2472,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 }
                 else
                     nStatus = ERRCODE_GRFILTER_FILTERERROR;
-            } while (nIdx>=0);
+            }
         }
     }
     if( nStatus != ERRCODE_NONE )
