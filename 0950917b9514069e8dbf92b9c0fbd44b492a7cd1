@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ff722c48",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-30T08:55:23Z",
+      "side": 1,
+      "message": "Somehow this look inconsistent with the Done()/Ignore() in the lambda; seems that the request will be unconditionally ignored here, and nothing will be done later in the lambda anyway.",
+      "range": {
+        "startLine": 503,
+        "startChar": 16,
+        "endLine": 503,
+        "endChar": 30
+      },
+      "revId": "0950917b9514069e8dbf92b9c0fbd44b492a7cd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
