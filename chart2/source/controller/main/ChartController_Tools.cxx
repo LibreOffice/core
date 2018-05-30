@@ -524,7 +524,8 @@ void ChartController::executeDispatch_Copy()
             }
             if ( xTransferable.is() )
             {
-                Reference< datatransfer::clipboard::XClipboard > xClipboard( TransferableHelper::GetSystemClipboard() );
+                SolarMutexGuard aSolarGuard;
+                Reference<datatransfer::clipboard::XClipboard> xClipboard(GetChartWindow()->GetClipboard());
                 if ( xClipboard.is() )
                 {
                     xClipboard->setContents( xTransferable, Reference< datatransfer::clipboard::XClipboardOwner >() );
