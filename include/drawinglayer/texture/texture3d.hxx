@@ -60,16 +60,12 @@ namespace drawinglayer
         protected:
             BitmapEx                                    maBitmapEx;
             Bitmap                                      maBitmap;   // Bitmap held within maBitmapEx, to exist during mpReadBitmap scope
-            Bitmap::ScopedReadAccess                    mpReadBitmap;
-            Bitmap                                      maTransparence;
-            Bitmap::ScopedReadAccess                    mpReadTransparence;
             basegfx::B2DPoint                           maTopLeft;
             basegfx::B2DVector                          maSize;
             double                                      mfMulX;
             double                                      mfMulY;
 
             bool                                        mbIsAlpha : 1;
-            bool                                        mbIsTransparent : 1;
 
             // helpers
             bool impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const;
