@@ -13,8 +13,12 @@ class SvStream;
 
 namespace SwReqIfReader
 {
-/// Extracts an OLE2 container binary from an RTF fragment.
-bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle);
+/**
+ * Extracts an OLE2 container binary from an RTF fragment.
+ *
+ * @param bOwnFormat if the extracted data has an ODF class ID or not.
+ */
+bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle, bool& bOwnFormat);
 
 /// Wraps an OLE2 container binary in an RTF fragment.
 bool WrapOleInRtf(SvStream& rOle, SvStream& rRtf);

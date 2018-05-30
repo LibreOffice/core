@@ -106,6 +106,10 @@ public:
 
 class OleComponent;
 class OwnView_Impl;
+/**
+ * Represents an OLE object that has native data and we try to let an external
+ * application handle that data.
+ */
 class OleEmbeddedObject : public ::cppu::WeakImplHelper
                         < css::embed::XEmbeddedObject
                         , css::embed::XEmbeddedOleObject
