@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_dae656b3",
+        "filename": "extensions/source/ole/servprov.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-30T18:23:40Z",
+      "side": 1,
+      "message": "you might get shutdown crashes with this, there was some way of dealing with it, but can\u0027t remember now, probably involves some UNO listener",
+      "revId": "cb00ed39a29e8d9347c5744fb71ccfc61acb4c83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
