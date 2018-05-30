@@ -113,6 +113,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
         {
             OUString aRequires = rAttribs->getOptionalValue(XML_Requires);
             static const char* aFeatures[] = {
+                "wpc",
                 "wps",
                 "wpg",
             };

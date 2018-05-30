@@ -77,6 +77,7 @@ mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/mai
 
 wps                     http://schemas.microsoft.com/office/word/2010/wordprocessingShape
 wpg                     http://schemas.microsoft.com/office/word/2010/wordprocessingGroup
+wpc                     http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas
 wp14                    http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing
 w14                     http://schemas.microsoft.com/office/word/2010/wordml
 a14                     http://schemas.microsoft.com/office/drawing/2010/main

@@ -28,6 +28,7 @@
   xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
   xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
   xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
+  xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
   xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
   xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
   xmlns:wvml="urn:schemas-microsoft-com:office:word"
@@ -2562,6 +2563,12 @@
       <include href="dml-shapeGeometry"/>
       <include href="dml-shapeEffects"/>
       <include href="dml-shapeLineProperties"/>
+      <define name="CT_BackgroundFormatting">
+      </define>
+      <define name="CT_WholeE2oFormatting">
+      </define>
+      <define name="CT_OfficeArtExtensionList">
+      </define>
       <define name="CT_ShapeProperties">
         <element name="xfrm">
           <ref name="CT_Transform2D"/>
@@ -4001,6 +4008,7 @@
         <ref name="lockedCanvas"/>
         <ref name="chart"/>
         <ref name="wsp"/>
+        <ref name="wpc"/>
         <ref name="wgp"/>
         <element>
           <ref name="BUILT_IN_ANY_TYPE"/>
@@ -4026,6 +4034,7 @@
       <element name="lockedCanvas" tokenid="ooxml:CT_GraphicalObjectData_lockedCanvas"/>
       <element name="chart" tokenid="ooxml:CT_GraphicalObjectData_chart"/>
       <element name="wsp" tokenid="ooxml:CT_GraphicalObjectData_wsp"/>
+      <element name="wpc" tokenid="ooxml:CT_GraphicalObjectData_wpc"/>
       <element name="wgp" tokenid="ooxml:CT_GraphicalObjectData_wgp"/>
       <attribute name="uri" tokenid="ooxml:CT_GraphicalObjectData_uri"/>
     </resource>
@@ -8397,6 +8406,25 @@
           <ref name="CT_WordprocessingGroup"/>
         </element>
       </define>
+      <define name="CT_WordprocessingCanvas">
+        <element name="bg">
+          <ref name="CT_BackgroundFormatting"/>
+        </element>
+        <element name="whole">
+          <ref name="CT_WholeE2oFormatting"/>
+        </element>
+        <element name="extLst">
+          <ref name="CT_OfficeArtExtensionList"/>
+        </element>
+        <ref name="pic"/>
+        <ref name="wsp"/>
+        <ref name="wgp"/>
+      </define>
+      <define name="wpc">
+        <element name="wpc:wpc">
+          <ref name="CT_WordprocessingCanvas"/>
+        </element>
+      </define>
     </grammar>
     <resource name="CT_PictureNonVisual" resource="Properties">
       <element name="cNvPr" tokenid="ooxml:CT_PictureNonVisual_cNvPr"/>
@@ -8445,6 +8473,17 @@
     </resource>
     <resource name="wgp" resource="Shape">
       <element name="wpg:wgp" tokenid="ooxml:wpg_wgp"/>
+    </resource>
+    <resource name="CT_WordprocessingCanvas" resource="Shape">
+      <element name="wpc:bg" tokenid="ooxml:CT_BackgroundFormatting"/>
+      <element name="wpc:whole" tokenid="ooxml:CT_WholeE2oFormatting"/>
+      <element name="wpc:extLst" tokenid="ooxml:CT_OfficeArtExtensionList"/>
+      <element name="pic" tokenid="ooxml:CT_GraphicalObjectData_pic"/>
+      <element name="wsp" tokenid="ooxml:CT_GraphicalObjectData_wsp"/>
+      <element name="wgp" tokenid="ooxml:CT_GraphicalObjectData_wgp"/>
+    </resource>
+    <resource name="wpc" resource="Shape">
+      <element name="wpc:wpc" tokenid="ooxml:wpc_wpc"/>
     </resource>
 
   </namespace>
