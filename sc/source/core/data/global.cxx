@@ -1016,10 +1016,18 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
             ::comphelper::getProcessComponentContext(), TransliterationFlags::IGNORE_CASE );
         pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     }
-    OSL_ENSURE(
-        pTransliteration,
-        "ScGlobal::GetpTransliteration() called before ScGlobal::Init()");
     return pTransliteration;
+}
+::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
+{
+    assert(!bThreadedGroupCalcInProgress);
+    if ( !pCaseTransliteration )
+    {
+        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
+        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
+        pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
+    }
+    return pCaseTransliteration;
 }
 
 const LocaleDataWrapper* ScGlobal::GetpLocaleData()
@@ -1058,17 +1066,6 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
             p->loadDefaultCollator( *GetLocale(), 0 );
             return p;
         });
-}
-::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
-{
-    assert(!bThreadedGroupCalcInProgress);
-    if ( !pCaseTransliteration )
-    {
-        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
-        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
-        pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    }
-    return pCaseTransliteration;
 }
 css::lang::Locale*     ScGlobal::GetLocale()
 {
