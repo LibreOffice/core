@@ -435,8 +435,6 @@ private:
     css::uno::Reference< css::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
 public:
-    bool                mbThreadedGroupCalcInProgress;
-
     /// list of ScInterpreterTableOpParams currently in use
     std::vector<std::unique_ptr<ScInterpreterTableOpParams>> m_TableOpList;
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
@@ -575,6 +573,8 @@ public:
         maInterpreterContext.mpFormatter = GetFormatTable();
         return maInterpreterContext;
     }
+    void SetThreadedGroupCalcInProgress( bool set ) { (void)this; ScGlobal::bThreadedGroupCalcInProgress = set; }
+    bool IsThreadedGroupCalcInProgress() const { (void)this; return ScGlobal::bThreadedGroupCalcInProgress; }
 
     SC_DLLPUBLIC sfx2::LinkManager*       GetLinkManager();
     SC_DLLPUBLIC const sfx2::LinkManager* GetLinkManager() const;
@@ -2216,26 +2216,26 @@ public:
 
     void                IncInterpretLevel()
                             {
-                                assert(!mbThreadedGroupCalcInProgress);
+                                assert(!IsThreadedGroupCalcInProgress());
                                 if ( nInterpretLevel < USHRT_MAX )
                                     nInterpretLevel++;
                             }
     void                DecInterpretLevel()
                             {
-                                assert(!mbThreadedGroupCalcInProgress);
+                                assert(!IsThreadedGroupCalcInProgress());
                                 if ( nInterpretLevel )
                                     nInterpretLevel--;
                             }
     sal_uInt16          GetMacroInterpretLevel() { return nMacroInterpretLevel; }
     void                IncMacroInterpretLevel()
                             {
-                                assert(!mbThreadedGroupCalcInProgress);
+                                assert(!IsThreadedGroupCalcInProgress());
                                 if ( nMacroInterpretLevel < USHRT_MAX )
                                     nMacroInterpretLevel++;
                             }
     void                DecMacroInterpretLevel()
                             {
-                                assert(!mbThreadedGroupCalcInProgress);
+                                assert(!IsThreadedGroupCalcInProgress());
                                 if ( nMacroInterpretLevel )
                                     nMacroInterpretLevel--;
                             }
