@@ -125,6 +125,33 @@ SfxViewShell* pScActiveViewShell = nullptr; //FIXME: Make this a member
 sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too
 sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
 
+// Thread-safe singleton creation. Ideally rtl_Instance should be used, but that one doesn't
+// allow accessing the pointer (so ScGlobal::Clear() cannot free the objects). So this function
+// is basically rtl_Instance::create() that uses a given pointer.
+template< typename Type, typename Function = std::function< Type*() >,
+          typename Guard = osl::MutexGuard, typename GuardCtor = osl::GetGlobalMutex >
+static inline
+Type* doubleCheckedInit( Type* pointer, Function function, GuardCtor guardCtor = osl::GetGlobalMutex())
+{
+    Type* p = pointer;
+    if (!p)
+    {
+        Guard guard(guardCtor());
+        p = pointer;
+        if (!p)
+        {
+            p = function();
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            pointer = p;
+        }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
+    return p;
+}
+
 // Static functions
 
 bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
@@ -996,21 +1023,23 @@ CalendarWrapper*     ScGlobal::GetCalendar()
 }
 CollatorWrapper*        ScGlobal::GetCollator()
 {
-    if ( !pCollator )
-    {
-        pCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
-        pCollator->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
-    }
-    return pCollator;
+    return doubleCheckedInit( pCollator,
+        []()
+        {
+            CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
+            p->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
+            return p;
+        });
 }
 CollatorWrapper*        ScGlobal::GetCaseCollator()
 {
-    if ( !pCaseCollator )
-    {
-        pCaseCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
-        pCaseCollator->loadDefaultCollator( *GetLocale(), 0 );
-    }
-    return pCaseCollator;
+    return doubleCheckedInit( pCaseCollator,
+        []()
+        {
+            CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
+            p->loadDefaultCollator( *GetLocale(), 0 );
+            return p;
+        });
 }
 ::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
 {
