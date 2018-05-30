@@ -77,9 +77,9 @@ namespace sw {
 
 struct Extent
 {
-    SwTextNode *const pNode;
-    sal_Int32 const nStart;
-    sal_Int32 const nEnd;
+    SwTextNode * /*const logically, but need assignment for std::vector*/ pNode;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
     Extent(SwTextNode *const p, sal_Int32 const s, sal_Int32 const e)
         : pNode(p), nStart(s), nEnd(e)
     {
@@ -904,9 +904,9 @@ namespace sw {
 struct MergedPara
 {
     sw::WriterMultiListener listener;
-    std::vector<Extent> const extents;
+    std::vector<Extent> extents;
     /// note: cannot be const currently to avoid UB because SwTextGuess::Guess
-    /// const_casts it and modifies it
+    /// const_casts it and modifies it (also, Update will modify it)
     OUString mergedText;
     /// most paragraph properties are taken from the first non-empty node
     SwTextNode const*const pParaPropsNode;
