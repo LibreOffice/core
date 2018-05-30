@@ -1021,7 +1021,7 @@ void SwTextFrame::HideFootnotes(TextFrameIndex const nStart, TextFrameIndex cons
  */
 bool sw_HideObj( const SwTextFrame& _rFrame,
                   const RndStdIds _eAnchorType,
-                  const sal_Int32 _nObjAnchorPos,
+                  SwPosition const& rAnchorPos,
                   SwAnchoredObject* _pAnchoredObj )
 {
     bool bRet( true );
@@ -1035,13 +1035,16 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
               pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              _rFrame.IsInDocBody() && !_rFrame.FindNextCnt() )
         {
-            const OUString &rStr = _rFrame.GetTextNode()->GetText();
-            const sal_Unicode cAnchorChar = _nObjAnchorPos < rStr.getLength() ? rStr[_nObjAnchorPos] : 0;
+            SwTextNode const& rNode(*rAnchorPos.nNode.GetNode().GetTextNode());
+            assert(_rFrame.GetMergedPara() || &rNode == _rFrame.GetRegisteredIn()); // simple consistency check
+            sal_Int32 const nObjAnchorPos(rAnchorPos.nContent.GetIndex());
+            const sal_Unicode cAnchorChar = nObjAnchorPos < rNode.Len()
+                ? rNode.GetText()[nObjAnchorPos]
+                : 0;
             if (cAnchorChar == CH_TXTATR_BREAKWORD)
             {
                 const SwTextAttr* const pHint(
-                    _rFrame.GetTextNode()->GetTextAttrForCharAt(_nObjAnchorPos,
-                        RES_TXTATR_FLYCNT) );
+                    rNode.GetTextAttrForCharAt(nObjAnchorPos, RES_TXTATR_FLYCNT));
                 if ( pHint )
                 {
                     const SwFrameFormat* pFrameFormat =
@@ -1092,9 +1095,8 @@ void SwTextFrame::HideAndShowObjects()
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
-                const sal_Int32 nObjAnchorPos = pContact->GetContentAnchorIndex().GetIndex();
                 if ((eAnchorType != RndStdIds::FLY_AT_CHAR) ||
-                    sw_HideObj( *this, eAnchorType, nObjAnchorPos,
+                    sw_HideObj(*this, eAnchorType, pContact->GetContentAnchor(),
                                  i ))
                 {
                     pContact->MoveObjToInvisibleLayer( pObj );
@@ -1105,7 +1107,6 @@ void SwTextFrame::HideAndShowObjects()
         {
             // paragraph is visible, but can contain hidden text portion.
             // first we check if objects are allowed to be hidden:
-            const SwTextNode& rNode = *GetTextNode();
             const SwViewShell* pVsh = getRootFrame()->GetCurrShell();
             const bool bShouldBeHidden = !pVsh || !pVsh->GetWin() ||
                                          !pVsh->GetViewOptions()->IsShowHiddenChar();
@@ -1129,12 +1130,16 @@ void SwTextFrame::HideAndShowObjects()
                 {
                     sal_Int32 nHiddenStart;
                     sal_Int32 nHiddenEnd;
-                    const sal_Int32 nObjAnchorPos = pContact->GetContentAnchorIndex().GetIndex();
-                    SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd );
+                    const SwPosition& rAnchor = pContact->GetContentAnchor();
+                    SwScriptInfo::GetBoundsOfHiddenRange(
+                        *rAnchor.nNode.GetNode().GetTextNode(),
+                        rAnchor.nContent.GetIndex(), nHiddenStart, nHiddenEnd);
                     // Under certain conditions
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
-                         sw_HideObj( *this, eAnchorType, nObjAnchorPos, i ) )
+                        sw_HideObj(*this, eAnchorType, rAnchor, i))
+                    {
                         pContact->MoveObjToInvisibleLayer( pObj );
+                    }
                     else
                         pContact->MoveObjToVisibleLayer( pObj );
                 }
