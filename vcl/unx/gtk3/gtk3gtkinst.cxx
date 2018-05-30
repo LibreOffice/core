@@ -3653,6 +3653,14 @@ static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
     return nMode;
 }
 
+namespace
+{
+
+AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
+
+}
+
+
 class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::DrawingArea
 {
 private:
@@ -3926,6 +3934,21 @@ public:
         //in the gtk impl the native equivalent should negate the need.
         assert(false && "get_accessible_parent should only be called on a vcl impl");
         return uno::Reference<css::accessibility::XAccessibleRelationSet>();
+    }
+
+    virtual void set_accessible_name(const OUString& rName) override
+    {
+        AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
+        if (!pAtkObject)
+            return;
+        atk_object_set_name(pAtkObject, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual OUString get_accessible_name() const override
+    {
+        AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
+        const char* pStr = pAtkObject ? atk_object_get_name(pAtkObject) : nullptr;
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
     virtual ~GtkInstanceDrawingArea() override
@@ -4410,8 +4433,6 @@ namespace
 
 namespace
 {
-
-AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
 
 AtkObject* drawing_area_get_accessibity(GtkWidget *pWidget)
 {
