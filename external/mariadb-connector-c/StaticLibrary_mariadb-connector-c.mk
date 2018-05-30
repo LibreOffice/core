@@ -25,6 +25,14 @@ $(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
 ## (but then need to add "-lssl -lcrypto -lz" to mysqlcppconn linking)
 $(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-DHAVE_DLOPEN -D ENABLED_LOCAL_INFILE -D LIBMARIADB -D THREAD -DSQLITE_ENABLE_COLUMN_METADATA=1))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-D_TIMESPEC_DEFINED -DHAVE_STRTOULL))
+$(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
+	$$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,mariadb-connector-c)/win-iconv \
+))
+endif
+
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/libmariadb/array \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_dyncol \
