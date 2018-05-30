@@ -1494,7 +1494,6 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
         if(pFact)
         {
             ScopedVclPtr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog(GetFrameWeld()));
-            DBG_ASSERT(aDlg, "Dialog creation failed!");
             uno::Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK )
                 xNewDic.set( aDlg->GetNewDictionary(), UNO_QUERY );
@@ -1528,7 +1527,6 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                     if(pFact)
                     {
                         ScopedVclPtr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName() ));
-                        DBG_ASSERT(aDlg, "Dialog creation failed!");
                         aDlg->Execute();
                     }
                 }

@@ -282,7 +282,6 @@ namespace editeng
             if(pFact)
             {
                 m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection );
-                DBG_ASSERT(m_pConversionDialog, "Dialog creation failed!");
 
                 m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );
 

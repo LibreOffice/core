@@ -43,7 +43,6 @@ ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, c
     , m_nCharBgdId(0)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    assert(pFact && "Dialog creation failed!");
 
     if (rDialog == "BackgroundDialog")
     {

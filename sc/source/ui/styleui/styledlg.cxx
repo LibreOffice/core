@@ -59,7 +59,6 @@ ScStyleDlg::ScStyleDlg( vcl::Window*             pParent,
     , m_nFooterId(0)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     switch ( nRscId )
     {
         case RID_SCDLG_STYLES_PAR:  // cell format styles

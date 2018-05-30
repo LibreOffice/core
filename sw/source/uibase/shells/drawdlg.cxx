@@ -117,13 +117,11 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialog creation failed!");
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( nullptr,
                     &aNewAttr,
                 pDoc,
                 pObj,
                 bHasMarked));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();

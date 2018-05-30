@@ -1419,7 +1419,6 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
                                                                         pSearchItem->GetLEVOther(),
                                                                         pSearchItem->GetLEVShorter(),
                                                                         pSearchItem->GetLEVLonger() ));
-            DBG_ASSERT(pDlg, "Dialog creation failed!");
             if ( pDlg && pDlg->Execute() == RET_OK )
             {
                 pSearchItem->SetLEVRelaxed( pDlg->IsRelaxed() );
@@ -1439,7 +1438,6 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         {
             ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
                     pSearchItem->GetTransliterationFlags() ));
-            DBG_ASSERT(aDlg, "Dialog creation failed!");
             int nRet = aDlg->Execute();
             if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
             {
@@ -2035,7 +2033,6 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
     if(pFact)
     {
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
-        DBG_ASSERT(pDlg, "Dialog creation failed!");
         pDlg->SetText( aTxt );
 
         if ( pDlg->Execute() == RET_OK )
@@ -2119,7 +2116,6 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
     if(pFact)
     {
         ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges.get() ));
-        DBG_ASSERT(pDlg, "Dialog creation failed!");
         pDlg->Execute();
     }
     PaintAttrText_Impl();
