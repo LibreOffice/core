@@ -158,16 +158,18 @@ oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
     {
         bIn = true;
 
-        SolarMutexGuard aLock;
-
-        // do not stop timer because otherwise the UAE-Box will not be painted as well
-        ImplSVData* pSVData = ImplGetSVData();
-        if ( pSVData->mpApp )
+        vcl::SolarMutexTryAndBuyGuard aLock;
+        if( aLock.isAcquired())
         {
-            SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
-            Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
-            pSVData->mpApp->Exception( nVCLException );
-            Application::SetSystemWindowMode( nOldMode );
+            // do not stop timer because otherwise the UAE-Box will not be painted as well
+            ImplSVData* pSVData = ImplGetSVData();
+            if ( pSVData->mpApp )
+            {
+                SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
+                Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
+                pSVData->mpApp->Exception( nVCLException );
+                Application::SetSystemWindowMode( nOldMode );
+            }
         }
         bIn = false;
     }
