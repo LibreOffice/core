@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_353b059e",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-30T23:40:16Z",
+      "side": 1,
+      "message": "LibreOffice supports C++11, let\u0027s use a range-based for loop",
+      "revId": "b39905457355e3c7c663ab79cf99fa15e92c0ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_55423911",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-30T23:40:16Z",
+      "side": 1,
+      "message": "always put \u0027raw\u0027 pointers into a suitable smartptr or RAII object, so we don\u0027t leak in case of exceptions or early exits",
+      "revId": "b39905457355e3c7c663ab79cf99fa15e92c0ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_75457d15",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-30T23:40:16Z",
+      "side": 1,
+      "message": "no need to copy the Any here, rProperty.Value already is of the right type",
+      "revId": "b39905457355e3c7c663ab79cf99fa15e92c0ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f5ba4d09",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-30T23:40:16Z",
+      "side": 1,
+      "message": "added the break here, not sure if that\u0027s the intended behaviour - previously, it would just keep iterating, and the last LineColor or LineType entry (if you have multiple ones) would win. Now the first encounter wins, and we stop iterating pointlessly..",
+      "revId": "b39905457355e3c7c663ab79cf99fa15e92c0ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1538c19f",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-30T23:40:16Z",
+      "side": 1,
+      "message": "same story here",
+      "revId": "b39905457355e3c7c663ab79cf99fa15e92c0ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_954cb143",
+        "filename": "linguistic/source/gcmarkup.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-30T23:40:16Z",
+      "side": 1,
+      "message": "if this is a new file, no need for this one",
+      "revId": "b39905457355e3c7c663ab79cf99fa15e92c0ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_b547f51b",
+        "filename": "linguistic/source/gcmarkup.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-30T23:40:16Z",
+      "side": 1,
+      "message": "uhh.\n\nfor all the code below - either put it all inline into the class declaration above (like you did with ~SwXStringKeyMap() override{}), or move the actual method implementations to gciterator.cxx (which is the only place that\u0027s using this class anyway) - or have a separate gcmarkup.cxx",
+      "revId": "b39905457355e3c7c663ab79cf99fa15e92c0ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d55629d1",
+        "filename": "offapi/com/sun/star/text/TextMarkupDescriptor.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-30T23:40:16Z",
+      "side": 1,
+      "message": "LibreOffice API documentation is produced by doxygen, which is conveniently supporting markdown tables since v1.8",
+      "revId": "b39905457355e3c7c663ab79cf99fa15e92c0ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
