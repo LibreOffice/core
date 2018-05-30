@@ -251,7 +251,6 @@ public:
 
     static void         ClearSelection( vcl::Window *pWindow );
 
-    static css::uno::Reference< css::datatransfer::clipboard::XClipboard > GetSystemClipboard();
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
 public:
