@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3fd76424",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-30T07:49:33Z",
+      "side": 1,
+      "message": "One can easily construct a document with half a million listeners to the same cell, e.g. fill an entire column with alternating \u003d$A$1 formula cell and blank cell. How does the sorted vector perform then compared to the set?",
+      "revId": "79ac607dfbd76e67e5018c57289b214a38b29316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
