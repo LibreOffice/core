@@ -601,34 +601,60 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     mnFrameType = SwFrameType::Txt;
 }
 
+static void RemoveFootnotesForNode(
+        SwTextFrame const& rTextFrame, SwTextNode const& rTextNode)
+{
+    const SwFootnoteIdxs &rFootnoteIdxs = rTextNode.GetDoc()->GetFootnoteIdxs();
+    size_t nPos = 0;
+    sal_uLong const nIndex = rTextNode.GetIndex();
+    rFootnoteIdxs.SeekEntry( rTextNode, &nPos );
+    if (nPos < rFootnoteIdxs.size())
+    {
+        while (nPos && &rTextNode == &(rFootnoteIdxs[ nPos ]->GetTextNode()))
+            --nPos;
+        if (nPos || &rTextNode != &(rFootnoteIdxs[ nPos ]->GetTextNode()))
+            ++nPos;
+    }
+    while (nPos < rFootnoteIdxs.size())
+    {
+        SwTextFootnote* pTextFootnote = rFootnoteIdxs[ nPos ];
+        if (pTextFootnote->GetTextNode().GetIndex() > nIndex)
+            break;
+        pTextFootnote->DelFrames( &rTextFrame );
+        ++nPos;
+    }
+}
+
 void SwTextFrame::DestroyImpl()
 {
     // Remove associated SwParaPortion from s_pTextCache
     ClearPara();
 
-    const SwContentNode* pCNd;
-    if( nullptr != ( pCNd = dynamic_cast<SwContentNode*>( GetRegisteredIn() ) ) &&
-        !pCNd->GetDoc()->IsInDtor() && HasFootnote() )
+    assert(!GetDoc().IsInDtor()); // this shouldn't be happening with ViewShell owning layout
+    if (!GetDoc().IsInDtor() && HasFootnote())
     {
-        SwTextNode *pTextNd = GetTextNode();
-        const SwFootnoteIdxs &rFootnoteIdxs = pCNd->GetDoc()->GetFootnoteIdxs();
-        size_t nPos = 0;
-        sal_uLong nIndex = pCNd->GetIndex();
-        rFootnoteIdxs.SeekEntry( *pTextNd, &nPos );
-        if( nPos < rFootnoteIdxs.size() )
+        if (m_pMergedPara)
         {
-            while( nPos && pTextNd == &(rFootnoteIdxs[ nPos ]->GetTextNode()) )
-                --nPos;
-            if( nPos || pTextNd != &(rFootnoteIdxs[ nPos ]->GetTextNode()) )
-                ++nPos;
+            SwTextNode const* pNode(nullptr);
+            for (auto const& e : m_pMergedPara->extents)
+            {
+                if (e.pNode != pNode)
+                {
+                    pNode = e.pNode;
+                    // sw_redlinehide: not sure if it's necessary to check
+                    // if the nodes are still alive here, which would require
+                    // accessing WriterMultiListener::m_vDepends
+                    RemoveFootnotesForNode(*this, *pNode);
+                }
+            }
         }
-        while( nPos < rFootnoteIdxs.size() )
+        else
         {
-            SwTextFootnote* pTextFootnote = rFootnoteIdxs[ nPos ];
-            if( pTextFootnote->GetTextNode().GetIndex() > nIndex )
-                break;
-            pTextFootnote->DelFrames( this );
-            ++nPos;
+            SwTextNode *const pNode(static_cast<SwTextNode*>(GetRegisteredIn()));
+            if (pNode)
+            {
+                RemoveFootnotesForNode(*this, *pNode);
+            }
         }
     }
 
