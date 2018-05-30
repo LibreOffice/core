@@ -705,23 +705,32 @@ namespace
 
 bool lcl_matchFilter( const rtl::OUString& rFilter, const rtl::OUString& rExt )
 {
-    const sal_Int32 nBegin = rFilter.indexOf(rExt);
+    const sal_Unicode cSep {';'};
+    sal_Int32 nIdx {0};
 
-    if (nBegin<0) // not found
-        return false;
+    for (;;)
+    {
+        const sal_Int32 nBegin = rFilter.indexOf(rExt, nIdx);
 
-    const sal_Unicode cSep{';'};
+        if (nBegin<0) // not found
+            break;
 
-    // Check if the found occurrence is an exact match: left side
-    if (nBegin>0 && rFilter[nBegin-1]!=cSep)
-        return false;
+        // Let nIdx point to end of matched string, useful in order to
+        // check string boundaries and also for a possible next iteration
+        nIdx = nBegin + rExt.getLength();
 
-    // Check if the found occurrence is an exact match: right side
-    const sal_Int32 nEnd = nBegin + rExt.getLength();
-    if (nEnd<rFilter.getLength() && rFilter[nEnd]!=cSep)
-        return false;
+        // Check if the found occurrence is an exact match: right side
+        if (nIdx<rFilter.getLength() && rFilter[nIdx]!=cSep)
+            continue;
 
-    return true;
+        // Check if the found occurrence is an exact match: left side
+        if (nBegin>0 && rFilter[nBegin-1]!=cSep)
+            continue;
+
+        return true;
+    }
+
+    return false;
 }
 
 }
