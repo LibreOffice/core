@@ -1213,7 +1213,9 @@ bool SwTextFrame::IsIdxInside(TextFrameIndex const nPos, TextFrameIndex const nL
     TextFrameIndex const nMax = GetFollow()->GetOfst();
 
     // either the range overlap or our text has been deleted
-    if( nMax > nPos || nMax > GetText().getLength() )
+    // sw_redlinehide: GetText() should be okay here because it has already
+    // been updated in the INS/DEL hint case
+    if (nMax > nPos || nMax > TextFrameIndex(GetText().getLength()))
         return true;
 
     // changes made in the first line of a follow can modify the master
@@ -1332,11 +1334,12 @@ void SwTextFrame::CalcLineSpace()
     }
 }
 
-static void lcl_SetWrong( SwTextFrame& rFrame, sal_Int32 nPos, sal_Int32 nCnt, bool bMove )
+static void lcl_SetWrong( SwTextFrame& rFrame, SwTextNode const& rNode,
+        sal_Int32 const nPos, sal_Int32 const nCnt, bool const bMove)
 {
     if ( !rFrame.IsFollow() )
     {
-        SwTextNode* pTextNode = rFrame.GetTextNode();
+        SwTextNode* pTextNode = const_cast<SwTextNode*>(&rNode);
         IGrammarContact* pGrammarContact = getGrammarContact( *pTextNode );
         SwGrammarMarkUp* pWrongGrammar = pGrammarContact ?
             pGrammarContact->getGrammarCheck( *pTextNode, false ) :
@@ -1396,7 +1399,7 @@ static void lcl_SetWrong( SwTextFrame& rFrame, sal_Int32 nPos, sal_Int32 nCnt, b
     }
 }
 
-static void lcl_SetScriptInval( SwTextFrame& rFrame, sal_Int32 nPos )
+static void lcl_SetScriptInval(SwTextFrame& rFrame, TextFrameIndex const nPos)
 {
     if( rFrame.GetPara() )
         rFrame.GetPara()->GetScriptInfo().SetInvalidityA( nPos );
@@ -1467,7 +1470,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             // collection has changed
             Prepare();
             InvalidatePrt_();
-            lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
+            lcl_SetWrong( *this, rNode, 0, COMPLETE_STRING, false );
             SetDerivedR2L( false );
             CheckDirChange();
             // Force complete paint due to existing indents.
@@ -1491,8 +1494,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 
     // save stack
     // warning: one has to ensure that all variables are set
-    sal_Int32 nPos;
-    sal_Int32 nLen;
+    TextFrameIndex nPos;
+    TextFrameIndex nLen;
     bool bSetFieldsDirty = false;
     bool bRecalcFootnoteFlag = false;
 
@@ -1506,11 +1509,13 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         break;
         case RES_INS_TXT:
         {
-            nPos = static_cast<const SwInsText*>(pNew)->nPos;
-            nLen = static_cast<const SwInsText*>(pNew)->nLen;
+            sal_Int32 const nNPos = static_cast<const SwInsText*>(pNew)->nPos;
+            sal_Int32 const nNLen = static_cast<const SwInsText*>(pNew)->nLen;
+            nPos = MapModelToView(&rNode, nNPos);
+            nLen = TextFrameIndex(nNLen);
             if (m_pMergedPara)
             {
-                UpdateMergedParaForInsert(*m_pMergedPara, rNode, nPos, nLen);
+                UpdateMergedParaForInsert(*m_pMergedPara, rNode, nNPos, nNLen);
             }
             if( IsIdxInside( nPos, nLen ) )
             {
@@ -1523,9 +1528,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                         Prepare();
                 }
                 else
-                    InvalidateRange_( SwCharRange( nPos, nLen ), nLen );
+                    InvalidateRange_( SwCharRange( nPos, nLen ), nNLen );
             }
-            lcl_SetWrong( *this, nPos, nLen, true );
+            lcl_SetWrong( *this, rNode, nNPos, nNLen, true );
             lcl_SetScriptInval( *this, nPos );
             bSetFieldsDirty = true;
             if( HasFollow() )
@@ -1534,35 +1539,41 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         break;
         case RES_DEL_CHR:
         {
-            nPos = static_cast<const SwDelChr*>(pNew)->nPos;
+            sal_Int32 const nNPos = static_cast<const SwDelChr*>(pNew)->nPos;
+            nPos = MapModelToView(&rNode, nNPos);
             if (m_pMergedPara)
             {
-                nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, nPos, 1);
+                nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, nNPos, 1);
             }
             else
             {
                 nLen = TextFrameIndex(1);
             }
-            lcl_SetWrong( *this, nPos, -1, true );
+            lcl_SetWrong( *this, rNode, nNPos, -1, true );
             if (nLen)
             {
                 InvalidateRange( SwCharRange(nPos, nLen), -1 );
                 lcl_SetScriptInval( *this, nPos );
                 bSetFieldsDirty = bRecalcFootnoteFlag = true;
                 if (HasFollow())
-                    lcl_ModifyOfst( this, nPos, COMPLETE_STRING );
+                    lcl_ModifyOfst(this, nPos, TextFrameIndex(COMPLETE_STRING));
             }
         }
         break;
         case RES_DEL_TXT:
         {
-            nPos = static_cast<const SwDelText*>(pNew)->nStart;
-            nLen = static_cast<const SwDelText*>(pNew)->nLen;
+            sal_Int32 const nNPos = static_cast<const SwDelText*>(pNew)->nStart;
+            sal_Int32 const nNLen = static_cast<const SwDelText*>(pNew)->nLen;
+            nPos = MapModelToView(&rNode, nNPos);
             if (m_pMergedPara)
             {   // update merged before doing anything else
-                nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, nPos, nLen);
+                nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, nNPos, nNLen);
             }
-            const sal_Int32 m = -nLen;
+            else
+            {
+                nLen = TextFrameIndex(nNLen);
+            }
+            const sal_Int32 m = -nNLen;
             if ((!m_pMergedPara || nLen) && IsIdxInside(nPos, nLen))
             {
                 if( !nLen )
@@ -1570,7 +1581,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 else
                     InvalidateRange( SwCharRange(nPos, TextFrameIndex(1)), m );
             }
-            lcl_SetWrong( *this, nPos, m, true );
+            lcl_SetWrong( *this, rNode, nNPos, m, true );
             if (nLen)
             {
                 lcl_SetScriptInval( *this, nPos );
@@ -1582,8 +1593,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         break;
         case RES_UPDATE_ATTR:
         {
-            nPos = static_cast<const SwUpdateAttr*>(pNew)->getStart();
-            nLen = static_cast<const SwUpdateAttr*>(pNew)->getEnd() - nPos;
+            sal_Int32 const nNPos = static_cast<const SwUpdateAttr*>(pNew)->getStart();
+            sal_Int32 const nNLen = static_cast<const SwUpdateAttr*>(pNew)->getEnd() - nNPos;
+            nPos = MapModelToView(&rNode, nNPos);
+            nLen = MapModelToView(&rNode, nNPos + nNLen) - nPos;
             if( IsIdxInside( nPos, nLen ) )
             {
                 // We need to reformat anyways, even if the invalidated
@@ -1593,7 +1606,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 
                 // FootnoteNumbers need to be formatted
                 if( !nLen )
-                    nLen = 1;
+                    nLen = TextFrameIndex(1);
 
                 InvalidateRange_( SwCharRange( nPos, nLen) );
                 const sal_uInt16 nTmp = static_cast<const SwUpdateAttr*>(pNew)->getWhichAttr();
@@ -1601,7 +1614,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_INETFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
-                    lcl_SetWrong( *this, nPos, nPos + nLen, false );
+                    lcl_SetWrong( *this, rNode, nNPos, nNPos + nNLen, false );
                     lcl_SetScriptInval( *this, nPos );
                 }
             }
@@ -1635,7 +1648,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         case RES_TXTATR_FIELD:
         case RES_TXTATR_ANNOTATION:
             {
-                nPos = static_cast<const SwFormatField*>(pNew)->GetTextField()->GetStart();
+                sal_Int32 const nNPos = static_cast<const SwFormatField*>(pNew)->GetTextField()->GetStart();
+                nPos = MapModelToView(&rNode, nNPos);
                 if (IsIdxInside(nPos, TextFrameIndex(1)))
                 {
                     if( pNew == pOld )
@@ -1651,13 +1665,14 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 bSetFieldsDirty = true;
                 // ST2
                 if ( SwSmartTagMgr::Get().IsSmartTagsEnabled() )
-                    lcl_SetWrong( *this, nPos, nPos + 1, false );
+                    lcl_SetWrong( *this, rNode, nNPos, nNPos + 1, false );
             }
             break;
 
         case RES_TXTATR_FTN :
         {
-            nPos = static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote()->GetStart();
+            nPos = MapModelToView(&rNode,
+                static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote()->GetStart());
             if (IsInFootnote() || IsIdxInside(nPos, TextFrameIndex(1)))
                 Prepare( PREP_FTN, static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote() );
             break;
@@ -1674,7 +1689,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 
             if( SfxItemState::SET == rNewSet.GetItemState( RES_TXTATR_FTN, false, &pItem ))
             {
-                nPos = static_cast<const SwFormatFootnote*>(pItem)->GetTextFootnote()->GetStart();
+                nPos = MapModelToView(&rNode,
+                    static_cast<const SwFormatFootnote*>(pItem)->GetTextFootnote()->GetStart());
                 if (IsIdxInside(nPos, TextFrameIndex(1)))
                     Prepare( PREP_FTN, pNew );
                 nClear = 0x01;
@@ -1683,7 +1699,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 
             if( SfxItemState::SET == rNewSet.GetItemState( RES_TXTATR_FIELD, false, &pItem ))
             {
-                nPos = static_cast<const SwFormatField*>(pItem)->GetTextField()->GetStart();
+                nPos = MapModelToView(&rNode,
+                    static_cast<const SwFormatField*>(pItem)->GetTextField()->GetStart());
                 if (IsIdxInside(nPos, TextFrameIndex(1)))
                 {
                     const SfxPoolItem* pOldItem = pOld ?
@@ -1786,8 +1803,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             if ( SfxItemState::SET ==
                  rNewSet.GetItemState( RES_TXTATR_CHARFMT, false ) )
             {
-                lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
-                lcl_SetScriptInval( *this, 0 );
+                lcl_SetWrong( *this, rNode, 0, COMPLETE_STRING, false );
+                lcl_SetScriptInval( *this, TextFrameIndex(0) );
             }
             else if ( SfxItemState::SET ==
                       rNewSet.GetItemState( RES_CHRATR_LANGUAGE, false ) ||
@@ -1795,14 +1812,14 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                       rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, false ) ||
                       SfxItemState::SET ==
                       rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, false ) )
-                lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
+                lcl_SetWrong( *this, rNode, 0, COMPLETE_STRING, false );
             else if ( SfxItemState::SET ==
                       rNewSet.GetItemState( RES_CHRATR_FONT, false ) ||
                       SfxItemState::SET ==
                       rNewSet.GetItemState( RES_CHRATR_CJK_FONT, false ) ||
                       SfxItemState::SET ==
                       rNewSet.GetItemState( RES_CHRATR_CTL_FONT, false ) )
-                lcl_SetScriptInval( *this, 0 );
+                lcl_SetScriptInval( *this, TextFrameIndex(0) );
             else if ( SfxItemState::SET ==
                       rNewSet.GetItemState( RES_FRAMEDIR, false )
                 && (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify))
@@ -1901,8 +1918,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 if( pDocPos->nDocPos <= getFrameArea().Top() )
                 {
                     const SwFormatField *pField = static_cast<const SwFormatField *>(pNew);
-                    InvalidateRange(
-                        SwCharRange(pField->GetTextField()->GetStart(), TextFrameIndex(1)));
+                    TextFrameIndex const nIndex(MapModelToView(&rNode,
+                                pField->GetTextField()->GetStart()));
+                    InvalidateRange(SwCharRange(nIndex, TextFrameIndex(1)));
                 }
             }
             break;
@@ -2183,7 +2201,8 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             else
             {
                 // We are the TextFrame _with_ the footnote
-                const sal_Int32 nPos = pFootnote->GetStart();
+                TextFrameIndex const nPos = MapModelToView(
+                        &pFootnote->GetTextNode(), pFootnote->GetStart());
                 InvalidateRange(SwCharRange(nPos, TextFrameIndex(1)), 1);
             }
             break;
