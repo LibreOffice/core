@@ -382,11 +382,11 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     }
     else
     {
-        Bitmap aBmp( rGraphic.GetBitmap() );
+        BitmapEx aBmp( rGraphic.GetBitmapEx() );
         pAMTF.reset( new GDIMetaFile );
         ScopedVclPtrInstance< VirtualDevice > pTmpVDev;
         pAMTF->Record( pTmpVDev );
-        pTmpVDev->DrawBitmap( Point(), aBmp );
+        pTmpVDev->DrawBitmapEx( Point(), aBmp );
         pAMTF->Stop();
         pAMTF->SetPrefSize( aBmp.GetSizePixel() );
         pMTF = pAMTF.get();
@@ -478,7 +478,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     if ( pPreview && aSizePoint.Width() && aSizePoint.Height() )
     {
         Size aSizeBitmap( ( aSizePoint.Width() + 7 ) & ~7, aSizePoint.Height() );
-        Bitmap aTmpBitmap( pPreview->GetBitmap() );
+        Bitmap aTmpBitmap( pPreview->GetBitmapEx().GetBitmap() );
         aTmpBitmap.Scale( aSizeBitmap, BmpScaleFlag::BestQuality );
         aTmpBitmap.Convert( BmpConversion::N1BitThreshold );
         BitmapReadAccess* pAcc = aTmpBitmap.AcquireReadAccess();

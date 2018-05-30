@@ -1962,12 +1962,12 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
             case MetaActionType::BMPEX:
             {
                 const MetaBmpExAction* pAct = static_cast<const MetaBmpExAction*>(pAction);
-                const Bitmap           aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
+                const BitmapEx         aBmp( pAct->GetBitmapEx() );
 
                 rOStm.WriteInt16( GDI_BITMAP_ACTION );
                 rOStm.WriteInt32( 12 );
                 WritePair( rOStm, pAct->GetPoint() );
-                WriteDIB(aBmp, rOStm, false, true);
+                WriteDIB(aBmp, rOStm, false);
                 nCount++;
             }
             break;
@@ -1975,13 +1975,13 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
             case MetaActionType::BMPEXSCALE:
             {
                 const MetaBmpExScaleAction* pAct = static_cast<const MetaBmpExScaleAction*>(pAction);
-                const Bitmap                aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
+                const BitmapEx         aBmp( pAct->GetBitmapEx() );
 
                 rOStm.WriteInt16( GDI_BITMAPSCALE_ACTION );
                 rOStm.WriteInt32( 20 );
                 WritePair( rOStm, pAct->GetPoint() );
                 WritePair( rOStm, pAct->GetSize() );
-                WriteDIB(aBmp, rOStm, false, true);
+                WriteDIB(aBmp, rOStm, false);
                 nCount++;
             }
             break;
@@ -1989,7 +1989,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
             case MetaActionType::BMPEXSCALEPART:
             {
                 const MetaBmpExScalePartAction* pAct = static_cast<const MetaBmpExScalePartAction*>(pAction);
-                const Bitmap                    aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
+                const BitmapEx                  aBmp( pAct->GetBitmapEx() );
 
                 rOStm.WriteInt16( GDI_BITMAPSCALEPART_ACTION );
                 rOStm.WriteInt32( 36 );
@@ -1997,7 +1997,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                 WritePair( rOStm, pAct->GetDestSize() );
                 WritePair( rOStm, pAct->GetSrcPoint() );
                 WritePair( rOStm, pAct->GetSrcSize() );
-                WriteDIB(aBmp, rOStm, false, true);
+                WriteDIB(aBmp, rOStm, false);
                 nCount++;
             }
             break;

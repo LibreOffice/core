@@ -190,12 +190,12 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         mxStatusIndicator->start( OUString(), 100 );
     }
 
-    Bitmap aGraphicBmp( rGraphic.GetBitmap() );
+    Bitmap aGraphicBmp( rGraphic.GetBitmapEx().GetBitmap() );
 
     if ( mbGreys )
     {
         if ( !aGraphicBmp.Convert( BmpConversion::N8BitGreys ) )
-            aGraphicBmp = rGraphic.GetBitmap();
+            aGraphicBmp = rGraphic.GetBitmapEx().GetBitmap();
     }
 
     mpReadAccess = Bitmap::ScopedReadAccess(aGraphicBmp);

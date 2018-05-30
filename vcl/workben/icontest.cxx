@@ -115,7 +115,7 @@ void MyWorkWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     BitmapEx aEmpty;
     mpFixedBitmap->SetBitmap( aEmpty );
     GraphicConversionParameters aConv( aSize );
-    mpBitmap = new BitmapEx( maGraphic.GetBitmap( aConv ) );
+    mpBitmap = new BitmapEx(maGraphic.GetBitmapEx( aConv ));
     mpFixedBitmap->SetBitmap( *mpBitmap );
     mpFixedBitmap->SetSizePixel( aSize );
 
