@@ -93,12 +93,12 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
             @return A string list of internal filter names, including
                     all filters, which match this query.
          */
-        OUStringList impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const;
+        std::vector<OUString> impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const;
 
 
         /** TODO document me
          */
-        OUStringList impl_getListOfInstalledModules() const;
+        std::vector<OUString> impl_getListOfInstalledModules() const;
 
 
         /** @short  implement the container string query:
@@ -110,12 +110,12 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
             @return A string list of internal filter names, including
                     all filters, which match this query.
          */
-        OUStringList impl_getSortedFilterList(const QueryTokenizer& lTokens) const;
+        std::vector<OUString> impl_getSortedFilterList(const QueryTokenizer& lTokens) const;
 
 
         /** TODO document me
          */
-        OUStringList impl_getSortedFilterListForModule(const OUString& sModule,
+        std::vector<OUString> impl_getSortedFilterListForModule(const OUString& sModule,
                                                              sal_Int32        nIFlags,
                                                              sal_Int32        nEFlags) const;
 
@@ -129,7 +129,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
             @return A string list of internal filter names.
                     Can be empty.
          */
-        OUStringList impl_readSortedFilterListFromConfig(const OUString& sModule) const;
+        std::vector<OUString> impl_readSortedFilterListFromConfig(const OUString& sModule) const;
 
 
     // static uno helper!

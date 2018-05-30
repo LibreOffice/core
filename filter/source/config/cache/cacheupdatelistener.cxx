@@ -93,7 +93,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
     aLock.clear();
     // <- SAFE
 
-    OUStringList lChangedItems;
+    std::vector<OUString> lChangedItems;
     sal_Int32    c = aEvent.Changes.getLength();
     sal_Int32    i = 0;
 
@@ -140,8 +140,8 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
         if ( sNode.isEmpty() )
             continue;
 
-        OUStringList::const_iterator pIt = ::std::find(lChangedItems.begin(), lChangedItems.end(), sNode);
-        if (pIt == lChangedItems.end())
+        auto pIt = ::std::find(lChangedItems.cbegin(), lChangedItems.cend(), sNode);
+        if (pIt == lChangedItems.cend())
             lChangedItems.push_back(sNode);
     }
 

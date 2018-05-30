@@ -29,8 +29,8 @@ namespace dbp
 
     struct OOptionGroupSettings : public OControlWizardSettings
     {
-        StringArray     aLabels;
-        StringArray     aValues;
+        std::vector<OUString>     aLabels;
+        std::vector<OUString>     aValues;
         OUString        sDefaultField;
         OUString        sDBField;
     };
@@ -125,7 +125,7 @@ namespace dbp
         VclPtr<Edit>            m_pValue;
         VclPtr<ListBox>         m_pOptions;
 
-        StringArray     m_aUncommittedValues;
+        std::vector<OUString>   m_aUncommittedValues;
         ::svt::WizardTypes::WizardState
                         m_nLastSelection;
 

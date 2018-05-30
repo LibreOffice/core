@@ -228,10 +228,10 @@ class FilterCache : public BaseLock
 
 
         /** TODO document me ... */
-        OUStringList m_lChangedTypes;
-        OUStringList m_lChangedFilters;
-        OUStringList m_lChangedFrameLoaders;
-        OUStringList m_lChangedContentHandlers;
+        std::vector<OUString> m_lChangedTypes;
+        std::vector<OUString> m_lChangedFilters;
+        std::vector<OUString> m_lChangedFrameLoaders;
+        std::vector<OUString> m_lChangedContentHandlers;
 
         /// standard property names for filter config keyed by EReadOption
         css::uno::Sequence< OUString > m_aStandardProps[4];
@@ -358,7 +358,7 @@ class FilterCache : public BaseLock
                         specify the property set, which must not(!) exist at the searched items
                         as minimum.
 
-            @return     [OUStringList]
+            @return     [std::vector<OUString>]
                         a list of key names, which identify items of the queried sub container.
                         May be an empty list.
 
@@ -366,7 +366,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        OUStringList getMatchingItemsByProps(      EItemType  eType                ,
+        std::vector<OUString> getMatchingItemsByProps(      EItemType  eType                ,
                                                      const CacheItem& lIProps              ,
                                                      const CacheItem& lEProps = CacheItem()) const;
 
@@ -407,7 +407,7 @@ class FilterCache : public BaseLock
                         specify the sub container of this cache, which should be used for
                         searching. see also EItemType.
 
-            @return     [OUStringList]
+            @return     [std::vector<OUString>]
                         a list of key names, which can be used to access the item properties
                         using some other methods of this cache.
 
@@ -415,7 +415,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        OUStringList getItemNames(EItemType eType) const;
+        std::vector<OUString> getItemNames(EItemType eType) const;
 
 
         /** @short      check if the required item exist inside this container.
@@ -821,7 +821,7 @@ class FilterCache : public BaseLock
         static void impl_flushByList(const css::uno::Reference< css::container::XNameAccess >& xSet  ,
                                     EItemType                                           eType ,
                               const CacheItemList&                                      rCache,
-                              const OUStringList&                                       lItems);
+                              const std::vector<OUString>&                              lItems);
 
 
         /** @short  specify, which save operation is necessary for the specified item.
@@ -896,7 +896,7 @@ class FilterCache : public BaseLock
 
 
         /** TODO */
-        static OUStringList impl_tokenizeString(const OUString& sData     ,
+        static std::vector<OUString> impl_tokenizeString(const OUString& sData     ,
                                                sal_Unicode      cSeparator);
 
 

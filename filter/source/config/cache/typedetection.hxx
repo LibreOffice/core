@@ -135,7 +135,7 @@ private:
     OUString impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                const FlatDetection&                 lFlatTypes    ,
                                                      bool                       bAllowDeep    ,
-                                                     OUStringList&                  rUsedDetectors,
+                                                     std::vector<OUString>&         rUsedDetectors,
                                                      OUString&               rLastChance   );
 
 

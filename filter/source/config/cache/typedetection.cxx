@@ -424,7 +424,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // outside (bAllowDeep=sal_False) or break the whole detection by
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...
-        OUStringList lUsedDetectors;
+        std::vector<OUString> lUsedDetectors;
         if (lFlatTypes.size()>0)
             sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, lUsedDetectors, sLastChance);
 
@@ -501,7 +501,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
             CacheItem lIProps;
             lIProps[PROPNAME_DOCUMENTSERVICE] <<= sDocumentService;
             lIProps[PROPNAME_TYPE           ] <<= sRealType;
-            OUStringList lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
+            std::vector<OUString> lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
 
             aLock.clear();
             // <- SAFE
@@ -581,7 +581,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
 
         CacheItem lIProps;
         lIProps[PROPNAME_TYPE] <<= sType;
-        OUStringList lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
+        std::vector<OUString> lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
 
         aLock.clear();
         // <- SAFE
@@ -674,8 +674,8 @@ bool TypeDetection::impl_getPreselectionForType(
 
         // otherwise we must know, if it matches to the given URL really.
         // especially if it matches by its extension or pattern registration.
-        OUStringList lExtensions(comphelper::sequenceToContainer<OUStringList>(aType[PROPNAME_EXTENSIONS].get<css::uno::Sequence<OUString> >() ));
-        OUStringList lURLPattern(comphelper::sequenceToContainer<OUStringList>(aType[PROPNAME_URLPATTERN].get<css::uno::Sequence<OUString> >() ));
+        std::vector<OUString> lExtensions(comphelper::sequenceToContainer< std::vector<OUString> >(aType[PROPNAME_EXTENSIONS].get<css::uno::Sequence<OUString> >() ));
+        std::vector<OUString> lURLPattern(comphelper::sequenceToContainer< std::vector<OUString> >(aType[PROPNAME_URLPATTERN].get<css::uno::Sequence<OUString> >() ));
 
         for (auto const& extension : lExtensions)
         {
@@ -727,7 +727,7 @@ bool TypeDetection::impl_getPreselectionForDocumentService(
     const OUString& sPreSelDocumentService, const util::URL& aParsedURL, FlatDetection& rFlatTypes)
 {
     // get all filters, which match to this doc service
-    OUStringList lFilters;
+    std::vector<OUString> lFilters;
     try
     {
         // SAFE -> --------------------------
@@ -792,7 +792,7 @@ void TypeDetection::impl_getAllFormatTypes(
     rFlatTypes.clear();
 
     // Get all filters that we have.
-    OUStringList aFilterNames;
+    std::vector<OUString> aFilterNames;
     try
     {
         osl::MutexGuard aLock(m_aLock);
@@ -863,7 +863,7 @@ void TypeDetection::impl_getAllFormatTypes(
 OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                           const FlatDetection&                 lFlatTypes    ,
                                                                 bool                       bAllowDeep    ,
-                                                                OUStringList&                  rUsedDetectors,
+                                                                std::vector<OUString>&         rUsedDetectors,
                                                                 OUString&               rLastChance   )
 {
     // reset it everytimes, so the outside code can distinguish between
