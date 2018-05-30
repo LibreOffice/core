@@ -20,6 +20,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 #include <svl/aeitem.hxx>
@@ -35,6 +36,7 @@
 #include <osl/thread.h>
 
 #include <sdabstdlg.hxx>
+#include <sdpage.hxx>
 #include <vcl/pngwrite.hxx>
 #include <unomodel.hxx>
 #include <ViewShell.hxx>
