@@ -38,12 +38,14 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
+#include <svx/xoutbmp.hxx>
 #include <xmloff/attrlist.hxx>
 
 #include <xsecctl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace css::xml::sax;
 
 namespace
 {
@@ -584,6 +586,57 @@ void DocumentSignatureHelper::writeSignedProperties(
     xDocumentHandler->startElement("xd:SignaturePolicyImplied", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
     xDocumentHandler->endElement("xd:SignaturePolicyImplied");
     xDocumentHandler->endElement("xd:SignaturePolicyIdentifier");
+
+    if (!signatureInfo.ouSignatureLineId.isEmpty() && signatureInfo.aValidSignatureImage.is()
+        && signatureInfo.aInvalidSignatureImage.is())
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(
+            "xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+        xDocumentHandler->startElement(
+            "loext:SignatureLine",
+            Reference<XAttributeList>(pAttributeList.get()));
+
+        {
+            // Write SignatureLineId element
+            xDocumentHandler->startElement(
+                "loext:SignatureLineId",
+                Reference<XAttributeList>(new SvXMLAttributeList()));
+            xDocumentHandler->characters(signatureInfo.ouSignatureLineId);
+            xDocumentHandler->endElement("loext:SignatureLineId");
+        }
+
+        {
+            // Write SignatureLineId element
+            xDocumentHandler->startElement(
+                "loext:SignatureLineValidImage",
+                Reference<XAttributeList>(new SvXMLAttributeList()));
+
+            OUString aGraphicInBase64;
+            Graphic aGraphic(signatureInfo.aValidSignatureImage);
+            if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64, false))
+                SAL_WARN("xmlsecurity.helper", "could not convert graphic to base64");
+
+            xDocumentHandler->characters(aGraphicInBase64);
+            xDocumentHandler->endElement("loext:SignatureLineValidImage");
+        }
+
+        {
+            // Write SignatureLineId element
+            xDocumentHandler->startElement(
+                "loext:SignatureLineInvalidImage",
+                Reference<XAttributeList>(new SvXMLAttributeList()));
+            OUString aGraphicInBase64;
+            Graphic aGraphic(signatureInfo.aInvalidSignatureImage);
+            if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64, false))
+                SAL_WARN("xmlsecurity.helper", "could not convert graphic to base64");
+            xDocumentHandler->characters(aGraphicInBase64);
+            xDocumentHandler->endElement("loext:SignatureLineInvalidImage");
+        }
+
+        xDocumentHandler->endElement("loext:SignatureLine");
+    }
+
     xDocumentHandler->endElement("xd:SignedSignatureProperties");
 
     xDocumentHandler->endElement("xd:SignedProperties");
