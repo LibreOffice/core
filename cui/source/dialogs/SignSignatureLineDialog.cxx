@@ -164,7 +164,7 @@ SignSignatureLineDialog::getSignedGraphic(bool bValid)
     OUString aIssuerLine = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
                                .replaceFirst("%1", m_xSelectedCertifate->getIssuerName());
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
-    if (!bValid)
+    if (bValid)
         aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
 
     OUString aDate;
