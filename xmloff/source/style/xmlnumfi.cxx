@@ -244,7 +244,8 @@ enum SvXMLStyleAttrTokens
     XML_TOK_STYLE_ATTR_TRANSL_FORMAT,
     XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE,
     XML_TOK_STYLE_ATTR_TRANSL_COUNTRY,
-    XML_TOK_STYLE_ATTR_TRANSL_STYLE
+    XML_TOK_STYLE_ATTR_TRANSL_STYLE,
+    XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT
 };
 
 enum SvXMLStyleElemAttrTokens
@@ -522,6 +523,8 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleAttrTokenMap()
             // not defined in ODF { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_SCRIPT,     XML_TOK_STYLE_ATTR_TRANSL_SCRIPT    },
             { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,    XML_TOK_STYLE_ATTR_TRANSL_COUNTRY   },
             { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,      XML_TOK_STYLE_ATTR_TRANSL_STYLE     },
+            { XML_NAMESPACE_LO_EXT, XML_TRANSLITERATION_SPELLOUT,    XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT   },
+            { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_SPELLOUT,    XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT   },
             XML_TOKEN_MAP_END
         };
 
@@ -1393,6 +1396,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 {
     LanguageTagODF aLanguageTagODF;
     css::i18n::NativeNumberXmlAttributes aNatNumAttr;
+    OUString aSpellout;
     bool bAttrBool(false);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1444,6 +1448,9 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             case XML_TOK_STYLE_ATTR_TRANSL_FORMAT:
                 aNatNumAttr.Format = sValue;
                 break;
+            case XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT:
+                aSpellout = sValue;
+                break;
             case XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE:
                 aNatNumAttr.Locale.Language = sValue;
                 break;
@@ -1463,30 +1470,36 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             nFormatLang = LANGUAGE_SYSTEM;          //! error handling for unknown locales?
     }
 
-    if ( !aNatNumAttr.Format.isEmpty() )
+    if ( !aNatNumAttr.Format.isEmpty() || !aSpellout.isEmpty() )
     {
-        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
-        if ( pFormatter )
-        {
-            LanguageTag aLanguageTag( OUString(), aNatNumAttr.Locale.Language,
+        LanguageTag aLanguageTag( OUString(), aNatNumAttr.Locale.Language,
                     OUString(), aNatNumAttr.Locale.Country);
-            aNatNumAttr.Locale = aLanguageTag.getLocale( false);
+        aNatNumAttr.Locale = aLanguageTag.getLocale( false);
+
+        // NatNum12 spell out formula (cardinal, ordinal, ordinal-feminine etc.)
+        if ( !aSpellout.isEmpty() )
+        {
+            aFormatCode.append( "[NatNum12 " );
+            aFormatCode.append( aSpellout );
+        } else {
+            SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+            if ( !pFormatter ) return;
 
             sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
             aFormatCode.append( "[NatNum" );
             aFormatCode.append( nNatNum );
-
-            LanguageType eLang = aLanguageTag.getLanguageType( false);
-            if ( eLang == LANGUAGE_DONTKNOW )
-                eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?
-            if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
-            {
-                aFormatCode.append( "][$-" );
-                // language code in upper hex:
-                aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
-            }
-            aFormatCode.append( ']' );
         }
+
+        LanguageType eLang = aLanguageTag.getLanguageType( false );
+        if ( eLang == LANGUAGE_DONTKNOW )
+            eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?
+        if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
+        {
+            aFormatCode.append( "][$-" );
+            // language code in upper hex:
+            aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
+        }
+        aFormatCode.append( ']' );
     }
 }
 

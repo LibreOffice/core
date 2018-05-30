@@ -3316,6 +3316,9 @@ namespace xmloff { namespace token {
 
         XML_CREATOR_INITIALS,
 
+        // tdf#115007
+        XML_TRANSLITERATION_SPELLOUT,
+
         XML_TOKEN_END
     };
 
