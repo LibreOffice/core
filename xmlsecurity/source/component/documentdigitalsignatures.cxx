@@ -552,7 +552,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
             rSigInfo.SignatureIsValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
-            // OOXML Signature line info (ID + Images)
+            // Signature line info (ID + Images)
             if (!rInfo.ouSignatureLineId.isEmpty())
                 rSigInfo.SignatureLineId = rInfo.ouSignatureLineId;
 
