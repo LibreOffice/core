@@ -2753,6 +2753,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	MultipleCharsOutputException \
 	NativeNumberMode \
 	NativeNumberXmlAttributes \
+	NativeNumberXmlAttributes2 \
 	NumberFormatCode \
 	NumberFormatIndex \
 	ParseResult \
