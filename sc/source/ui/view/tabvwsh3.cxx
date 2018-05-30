@@ -727,7 +727,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         vcl::Window* pWin = GetDialogParent();
                         pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(pWin ? pWin->GetFrameWeld() : nullptr, aSet));
-                        OSL_ENSURE(pDlg, "Dialog creation failed!");
                     }
                     if (pDlg)
                     {
@@ -848,10 +847,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             else
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScopedVclPtr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetFrameWeld()));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->SetDescription(
                     ScResId( STR_DLG_SELECTTABLES_TITLE ),
                     ScResId( STR_DLG_SELECTTABLES_LBNAME ),

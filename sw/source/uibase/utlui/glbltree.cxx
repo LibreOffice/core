@@ -910,13 +910,11 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
                         FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>{});
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                assert(pFact && "Dialog creation failed!");
                 ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         this, aSet,
                                                         *m_pActiveShell,
                                                         nullptr,
                                                         true));
-                assert(pDlg && "Dialog creation failed!");
                 if(RET_OK == pDlg->Execute())
                 {
                     SwTOXDescription&  rDesc = pDlg->GetTOXDescription(

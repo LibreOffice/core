@@ -880,12 +880,10 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
         OUString aPageName = pSelectedPage->GetName();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialog creation failed!");
         vcl::Window* pWin = mrSlideSorter.GetContentWindow();
         ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 pWin ? pWin->GetFrameWeld() : nullptr,
                 aPageName, aDescr));
-        DBG_ASSERT(aNameDlg, "Dialog creation failed!");
         aNameDlg->SetText( aTitle );
         aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
         aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );

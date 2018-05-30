@@ -36,7 +36,6 @@ SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes n
     SetText(SwResId(STR_FRMUI_BORDER));
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER );
 
     if ( fnCreatePage )

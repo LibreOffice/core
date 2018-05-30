@@ -35,7 +35,6 @@ ScRedComDialog::ScRedComDialog( weld::Window* pParent, const SfxItemSet& rCoreSe
     if(pFact)
     {
         pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext );
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
         pDocShell=pShell;
         pDlg->DontChangeAuthor();
         pDlg->HideAuthor();

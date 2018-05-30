@@ -559,7 +559,6 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, Button*, void)
         {
             ScopedVclPtr<AbstractSvxMultiPathDialog> pMultiDlg(
                 pFact->CreateSvxMultiPathDialog( this ));
-            DBG_ASSERT( pMultiDlg, "Dialog creation failed!" );
 
             OUString sPath( sUser );
             if ( !sPath.isEmpty() )

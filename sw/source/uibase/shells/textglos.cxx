@@ -71,7 +71,6 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                     aShortName = static_cast<const SfxStringItem *>(pItem)->GetValue();
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
@@ -87,7 +86,6 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             {
                 OUString aGroup = static_cast<const SfxStringItem *>(pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
@@ -103,7 +101,6 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 if(SfxItemState::SET ==  pArgs->GetItemState(FN_PARAM_1, false, &pItem ))
                     aName = static_cast<const SfxStringItem *>(pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
