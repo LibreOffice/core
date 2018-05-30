@@ -24,6 +24,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
 #include <vector>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes2.hpp>
 
 namespace utl {
     class DigitGroupingIterator;
@@ -436,6 +437,7 @@ public:
     // rAttr.Number not empty if NatNum attributes are to be stored
     void GetNatNumXml(
             css::i18n::NativeNumberXmlAttributes& rAttr,
+            css::i18n::NativeNumberXmlAttributes2& rAttr2,
             sal_uInt16 nNumFor ) const;
 
     /** Switches to the first non-"gregorian" calendar, but only if the current
