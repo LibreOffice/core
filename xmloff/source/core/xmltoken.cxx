@@ -3308,6 +3308,9 @@ namespace xmloff { namespace token {
         TOKEN( "newline",                         XML_NEWLINE ),
         TOKEN( "creator-initials",                XML_CREATOR_INITIALS ),
 
+        // tdf#115007 spell out numbers, dates, money amounts and cross references
+        TOKEN( "transliteration-spellout",         XML_TRANSLITERATION_SPELLOUT ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }
 #else
