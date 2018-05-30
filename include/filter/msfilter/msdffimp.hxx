@@ -65,6 +65,7 @@ struct SvxMSDffShapeOrder;
 class SvxMSDffManager;
 class SfxItemSet;
 struct DffObjData;
+class SvGlobalName;
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
@@ -734,6 +735,11 @@ public:
         const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
         const OUString& rPropertyName
     );
+
+    /// Determines an ODF filter name (if there is one) for aGlobName.
+    static OUString GetFilterNameFromClassID(const SvGlobalName& aGlobName);
+    /// Extracts ODF data from rSrcStg.
+    static void ExtractOwnStream(SotStorage& rSrcStg, SvMemoryStream& rMemStream);
 
     void insertShapeId( sal_Int32 nShapeId, SdrObject* pShape );
     void removeShapeId( SdrObject const * pShape );

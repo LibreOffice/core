@@ -17,6 +17,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
 #include <tools/stream.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 
 namespace
 {
@@ -109,9 +110,12 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
 
     // ClassName
     rOle1.WriteUInt32(aClassName.getLength());
-    rOle1.WriteOString(aClassName);
-    // Null terminated pascal string.
-    rOle1.WriteChar(0);
+    if (!aClassName.isEmpty())
+    {
+        rOle1.WriteOString(aClassName);
+        // Null terminated pascal string.
+        rOle1.WriteChar(0);
+    }
 
     // TopicName.
     rOle1.WriteUInt32(0);
@@ -133,7 +137,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
 
 namespace SwReqIfReader
 {
-bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle)
+bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle, bool& bOwnFormat)
 {
     // Add missing header/footer.
     SvMemoryStream aRtf;
@@ -149,7 +153,29 @@ bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle)
         return false;
 
     // Write the OLE2 data.
-    return xReader->WriteObjectData(rOle);
+    if (!xReader->WriteObjectData(rOle))
+        return false;
+
+    tools::SvRef<SotStorage> pStorage = new SotStorage(rOle);
+    OUString aFilterName = SvxMSDffManager::GetFilterNameFromClassID(pStorage->GetClassName());
+    bOwnFormat = !aFilterName.isEmpty();
+    if (!bOwnFormat)
+    {
+        // Real OLE2 data, we're done.
+        rOle.Seek(0);
+        return true;
+    }
+
+    // ODF-in-OLE2 case, extract actual data.
+    SvMemoryStream aMemory;
+    SvxMSDffManager::ExtractOwnStream(*pStorage, aMemory);
+    rOle.Seek(0);
+    aMemory.Seek(0);
+    rOle.WriteStream(aMemory);
+    // Stream length is current position + 1.
+    rOle.SetStreamSize(aMemory.GetSize() + 1);
+    rOle.Seek(0);
+    return true;
 }
 
 bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf)
