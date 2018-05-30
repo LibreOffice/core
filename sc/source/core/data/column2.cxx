@@ -2912,7 +2912,7 @@ void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRe
 
 void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
-    assert(GetDoc()->mbThreadedGroupCalcInProgress);
+    assert(GetDoc()->IsThreadedGroupCalcInProgress());
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;

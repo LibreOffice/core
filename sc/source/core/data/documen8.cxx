@@ -433,12 +433,12 @@ const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpr
     if (!pTab)
         return maNonThreaded;
 
-    assert(mbThreadedGroupCalcInProgress);
+    assert(IsThreadedGroupCalcInProgress());
 
     maThreadSpecific.SetupFromNonThreadedData(maNonThreaded);
     pTab->CalculateInColumnInThread(rContext, rTopPos.Col(), rTopPos.Row(), nLen, nThisThread, nThreadsTotal);
 
-    assert(mbThreadedGroupCalcInProgress);
+    assert(IsThreadedGroupCalcInProgress());
 
     return maThreadSpecific;
 }
