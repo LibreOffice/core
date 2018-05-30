@@ -3168,7 +3168,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 
         // Clear clipboard content.
         uno::Reference<datatransfer::clipboard::XClipboard> xSystemClipboard =
-            TransferableHelper::GetSystemClipboard();
+            GetClipboard();
         if (xSystemClipboard.is())
         {
             xSystemClipboard->setContents(
