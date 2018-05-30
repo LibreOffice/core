@@ -642,12 +642,13 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                locale = aLocale;
                bCapitalize = true;
                break;
-          case TEXT_CARDINAL: // cardinal number names (one, two, three, ...)
+          case TEXT_CARDINAL: // cardinal number names (One, Two, Three, ...)
                natNum = NativeNumberMode::NATNUM12;
+               sNatNumParams = "cardinal";
                locale = aLocale;
                bCapitalize = true;
                break;
-          case TEXT_ORDINAL: // ordinal number names (first, second, third, ...)
+          case TEXT_ORDINAL: // ordinal number names (First, Second, Third, ...)
                natNum = NativeNumberMode::NATNUM12;
                sNatNumParams = "ordinal";
                locale = aLocale;

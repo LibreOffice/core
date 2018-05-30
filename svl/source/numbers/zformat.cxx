@@ -952,8 +952,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         }
                         sStr = "NatNum" + OUString::number(nNum);
                         NumFor[nIndex].SetNatNumNum( nNum, false );
-                        if (!sParams.isEmpty())
+                        // NatNum12 supports arguments
+                        if (nNum == 12)
                         {
+                            if (sParams.isEmpty())
+                                sParams = "cardinal"; // default NatNum12 format is "cardinal"
                             NumFor[nIndex].SetNatNumParams(sParams);
                             sStr += " " + sParams;
                         }
@@ -5390,6 +5393,7 @@ void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
 }
 
 void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes& rAttr,
+                                   css::i18n::NativeNumberXmlAttributes2& rAttr2,
                                    sal_uInt16 nNumFor ) const
 {
     if ( nNumFor <= 3 )
@@ -5399,8 +5403,15 @@ void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes& rAttr,
         {
             css::lang::Locale aLocale(
                     LanguageTag( rNum.GetLang() ).getLocale() );
-            rAttr = GetFormatter().GetNatNum()->convertToXmlAttributes(
+
+            if ( NatNumTakesParameters(rNum.GetNatNum()) )
+            {
+                // NatNum12 spell out numbers, dates and money amounts
+                rAttr2 = css::i18n::NativeNumberXmlAttributes2(aLocale, rNum.GetParams());
+            } else {
+                rAttr = GetFormatter().GetNatNum()->convertToXmlAttributes(
                     aLocale, rNum.GetNatNum() );
+            }
         }
         else
         {

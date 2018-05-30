@@ -33,6 +33,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes2.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -1191,7 +1192,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
     // Native number transliteration
     css::i18n::NativeNumberXmlAttributes aAttr;
-    rFormat.GetNatNumXml( aAttr, nPart );
+    css::i18n::NativeNumberXmlAttributes2 aAttr2;
+    rFormat.GetNatNumXml( aAttr, aAttr2, nPart );
     if ( !aAttr.Format.isEmpty() )
     {
         /* FIXME-BCP47: ODF defines no transliteration-script or
@@ -1207,6 +1209,21 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                               aCountry );
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,
                               aAttr.Style );
+    }
+
+    if ( !aAttr2.Spellout.isEmpty() )
+    {
+        /* FIXME-BCP47: ODF defines no transliteration-script or
+         * transliteration-rfc-language-tag */
+        LanguageTag aLanguageTag( aAttr2.Locale);
+        OUString aLanguage, aScript, aCountry;
+        aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_TRANSLITERATION_SPELLOUT,
+                              aAttr2.Spellout );
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,
+                              aLanguage );
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,
+                              aCountry );
     }
 
     // The element
