@@ -125,10 +125,10 @@ struct SignatureInformation
     OUString ouDescriptionPropertyId;
     /// OOXML certificate SHA-256 digest, empty for ODF except when doing XAdES signature.
     OUString ouCertDigest;
-    /// OOXML Valid and invalid signature images
+    /// Valid and invalid signature line images
     css::uno::Reference<css::graphic::XGraphic> aValidSignatureImage;
     css::uno::Reference<css::graphic::XGraphic> aInvalidSignatureImage;
-    /// OOXML Signature Line Id, used to map signatures to their respective signature line images.
+    /// Signature Line Id, used to map signatures to their respective signature line images.
     OUString ouSignatureLineId;
     /// A full OOXML signature for unchanged roundtrip, empty for ODF.
     css::uno::Sequence<sal_Int8> aSignatureBytes;
