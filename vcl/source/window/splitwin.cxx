@@ -86,7 +86,6 @@ public:
 
     std::vector< ImplSplitItem > mvItems;
     std::unique_ptr<Wallpaper>   mpWallpaper;
-    std::unique_ptr<Bitmap>      mpBitmap;
     long                mnLastSize;
     long                mnSplitSize;
     sal_uInt16          mnId;
@@ -118,7 +117,6 @@ ImplSplitItem::ImplSplitItem()
 
 ImplSplitSet::ImplSplitSet() :
     mpWallpaper( nullptr ),
-    mpBitmap( nullptr ),
     mnLastSize( 0 ),
     mnSplitSize( SPLITWIN_SPLITSIZE ),
     mnId( 0 ),
@@ -129,7 +127,6 @@ ImplSplitSet::ImplSplitSet() :
 ImplSplitSet::~ImplSplitSet()
 {
     mpWallpaper.reset();
-    mpBitmap.reset();
 }
 
 /** Check whether the given size is inside the valid range defined by
@@ -894,64 +891,22 @@ static void ImplCalcLogSize( std::vector< ImplSplitItem > & rItems, size_t nItem
     }
 }
 
-void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
-                               const Wallpaper* pWall, const Bitmap* pBitmap)
-{
-    if (pBitmap)
-    {
-        Point aPos = rRect.TopLeft();
-        Size aBmpSize = pBitmap->GetSizePixel();
-        rRenderContext.Push(PushFlags::CLIPREGION);
-        rRenderContext.IntersectClipRegion(rRect);
-        do
-        {
-            aPos.setX( rRect.Left() );
-            do
-            {
-                rRenderContext.DrawBitmap(aPos, *pBitmap);
-                aPos.AdjustX(aBmpSize.Width() );
-            }
-            while (aPos.X() < rRect.Right());
-            aPos.AdjustY(aBmpSize.Height() );
-        }
-        while (aPos.Y() < rRect.Bottom());
-        rRenderContext.Pop();
-    }
-    else
-    {
-        rRenderContext.DrawWallpaper(rRect, *pWall);
-    }
-}
-
 void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet)
 {
     size_t          nItems = pSet->mvItems.size();
     std::vector< ImplSplitItem >& rItems = pSet->mvItems;
-
-    // also draw background for mainset
-    if (pSet->mnId == 0)
-    {
-        if (pSet->mpBitmap)
-        {
-            tools::Rectangle aRect(mnLeftBorder, mnTopBorder,
-                            mnDX - mnRightBorder - 1,
-                            mnDY - mnBottomBorder - 1);
-
-            ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper.get(), pSet->mpBitmap.get());
-        }
-    }
 
     for (size_t i = 0; i < nItems; i++)
     {
         pSet = rItems[i].mpSet.get();
         if (pSet)
         {
-            if (pSet->mpBitmap || pSet->mpWallpaper)
+            if (pSet->mpWallpaper)
             {
                 Point aPoint(rItems[i].mnLeft, rItems[i].mnTop);
                 Size aSize(rItems[i].mnWidth, rItems[i].mnHeight);
                 tools::Rectangle aRect(aPoint, aSize);
-                ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper.get(), pSet->mpBitmap.get());
+                rRenderContext.DrawWallpaper(aRect, *pSet->mpWallpaper);
             }
         }
     }
@@ -1278,12 +1233,9 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
 void SplitWindow::ImplInitSettings()
 {
-    // If a bitmap was set for MainSet, we should not delete the background.
     // If MainSet has a Wallpaper, this is the background,
     // otherwise it is the standard colour
-    if ( mpMainSet->mpBitmap )
-        SetBackground();
-    else if ( mpMainSet->mpWallpaper )
+    if ( mpMainSet->mpWallpaper )
         SetBackground( *mpMainSet->mpWallpaper );
     else
     {
