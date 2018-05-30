@@ -359,14 +359,12 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
     Graphic aVclGraphic(xGraphic);
-    Bitmap aBitmap(aVclGraphic.GetBitmap());
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
-    CPPUNIT_ASSERT(pAccess);
-    CPPUNIT_ASSERT_EQUAL(341L, pAccess->Width());
-    CPPUNIT_ASSERT_EQUAL(181L, pAccess->Height());
-    Color aColor(pAccess->GetPixel(30, 120).GetColor());
+    BitmapEx aBitmap(aVclGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL(341L, aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(181L, aBitmap.GetSizePixel().Height());
+    Color aColor(aBitmap.GetPixelColor(120, 30));
     CPPUNIT_ASSERT_EQUAL(aColor, Color( 0xb1, 0xc8, 0xdd ));
-    aColor = pAccess->GetPixel(130, 260).GetColor();
+    aColor = aBitmap.GetPixelColor(260, 130);
     CPPUNIT_ASSERT_EQUAL(aColor, Color( 0xb1, 0xc8, 0xdd ));
 }
 
@@ -537,13 +535,11 @@ DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
     uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
     Graphic aVclGraphic(graphic);
-    Bitmap aBitmap(aVclGraphic.GetBitmap());
-    Bitmap::ScopedReadAccess pAccess(aBitmap);
-    CPPUNIT_ASSERT(pAccess);
-    CPPUNIT_ASSERT_EQUAL(58L, pAccess->Width());
-    CPPUNIT_ASSERT_EQUAL(320L, pAccess->Height());
-    Color aColor(pAccess->GetPixel(30, 20).GetColor());
-    CPPUNIT_ASSERT_EQUAL(aColor, Color( 0xce, 0xce, 0xce ));
+    BitmapEx aBitmap(aVclGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL(58L, aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(320L, aBitmap.GetSizePixel().Height());
+    Color aColor(aBitmap.GetPixelColor(20, 30));
+    CPPUNIT_ASSERT_EQUAL(Color( 255, 0xce, 0xce, 0xce ), aColor);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")

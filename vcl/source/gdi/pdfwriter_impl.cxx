@@ -9750,7 +9750,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
         rEmit.m_aPDFData = rGraphic.getPdfData();
 
     rEmit.m_nFormObject = createObject();
-    rEmit.m_aPixelSize = rGraphic.GetBitmap().GetPrefSize();
+    rEmit.m_aPixelSize = rGraphic.GetPrefSize();
 }
 
 void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic )
@@ -9773,14 +9773,14 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         // load stream to bitmap and draw the bitmap instead
         Graphic aGraphic;
         GraphicConverter::Import( rDCTData, aGraphic, ConvertDataFormat::JPG );
-        Bitmap aBmp( aGraphic.GetBitmap() );
-        if( !!rMask && rMask.GetSizePixel() == aBmp.GetSizePixel() )
+        if( !!rMask && rMask.GetSizePixel() == aGraphic.GetSizePixel() )
         {
+            Bitmap aBmp( aGraphic.GetBitmapEx().GetBitmap() );
             BitmapEx aBmpEx( aBmp, rMask );
             drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmpEx );
         }
         else
-            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), BitmapEx(aBmp) );
+            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aGraphic.GetBitmapEx() );
         return;
     }
 

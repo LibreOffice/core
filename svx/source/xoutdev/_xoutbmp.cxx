@@ -96,20 +96,9 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags
         }
         else
         {
-            if( rGraphic.IsTransparent() )
-            {
-                BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                aBmpEx.Mirror( nMirrorFlags );
-                aRetGraphic = aBmpEx;
-            }
-            else
-            {
-                Bitmap aBmp( rGraphic.GetBitmap() );
-
-                aBmp.Mirror( nMirrorFlags );
-                aRetGraphic = aBmp;
-            }
+            BitmapEx aBmp( rGraphic.GetBitmapEx() );
+            aBmp.Mirror( nMirrorFlags );
+            aRetGraphic = aBmp;
         }
     }
     else
@@ -322,10 +311,10 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                             aGraphic = pVDev->GetBitmap( Point(), aSize );
                         }
                         else
-                            aGraphic = rGraphic.GetBitmap();
+                            aGraphic = rGraphic.GetBitmapEx();
                     }
                     else
-                        aGraphic = rGraphic.GetBitmap();
+                        aGraphic = rGraphic.GetBitmapEx();
                 }
 
                 // mirror?

@@ -2007,7 +2007,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
 
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
                 {
-                    Bitmap aBitmap(aGraphic.GetBitmap());
+                    BitmapEx aBitmap(aGraphic.GetBitmapEx());
                     Size aSize(aBitmap.GetSizePixel());
                     if(aSize.Width() > MAX_BMP_WIDTH ||
                         aSize.Height() > MAX_BMP_HEIGHT)

@@ -481,7 +481,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                                 }
                             }
 
-                            rWriter.DrawJPGBitmap( aTmp, aGraphic.GetBitmap().GetBitCount() > 8, aGraphic.GetSizePixel(), aOutputRect, aMask, aGraphic );
+                            rWriter.DrawJPGBitmap( aTmp, aGraphic.GetBitmapEx().GetBitCount() > 8, aGraphic.GetSizePixel(), aOutputRect, aMask, aGraphic );
                         }
 
                         if ( bClippingNeeded )

@@ -38,7 +38,7 @@ namespace emfplushelper
                 // non native formats
                 GraphicFilter filter;
                 filter.ImportGraphic(graphic, OUString(), s);
-                SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << graphic.GetBitmap().GetSizePixel().Width() << " height: " << graphic.GetBitmap().GetSizePixel().Height());
+                SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << graphic.GetSizePixel().Width() << " height: " << graphic.GetSizePixel().Height());
             }
         }
         else if (ImageDataTypeMetafile == type)
