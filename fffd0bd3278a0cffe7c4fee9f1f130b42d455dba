@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_dfc9e879",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-30T09:23:33Z",
+      "side": 1,
+      "message": "What is the bFix parameter good for? The function is called only once with the default argument true.",
+      "range": {
+        "startLine": 338,
+        "startChar": 74,
+        "endLine": 338,
+        "endChar": 96
+      },
+      "revId": "fffd0bd3278a0cffe7c4fee9f1f130b42d455dba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ffc06c2c",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-30T09:23:33Z",
+      "side": 1,
+      "message": "Cloning the token array and feeding it through an ScCompiler instance is unnecessary if rRangeData is not of Type::AbsPos or Type::AbsArea. I suggest to split this into two branches, the original for non-cell/range-reference code and the new for cell/range-reference code.\n\nIt may be that creating the modified symbol / formula string is only necessary for writing OOXML (.xlsx), and in the BIFF (.xls) case the created XclTokenArray is already correct (or could be corrected in the conversion). I didn\u0027t investigate deeper though.\n\n\nNote: the following was just a brainstorm that occurred to me but leads to a dead end, I leave it here to hint you some insights:\n\nThen again I wonder if all this shouldn\u0027t be done in XclExpFormulaCompiler or XclExpFmlaCompImpl instead because it clones the tokens anyway (through GetFormulaCompiler().CreateFormula() below) and even gets the information passed to create a formula for a named expression (range).\n\nThen seeing that there is already XclExpFmlaCompImpl::Is3DRefOnly() it seems to me that the actual error here is obtaining the sSymbol formula string from rRangeData instead of the prepared XclTokenArrayRef. However, there is no clever way to create a string from a XclTokenArray except using the XclImpFormulaCompiler::CreateFormula() workaround which internally uses a completely ugly hack to accomplish this. NOT RECOMMENDED.",
+      "revId": "fffd0bd3278a0cffe7c4fee9f1f130b42d455dba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
