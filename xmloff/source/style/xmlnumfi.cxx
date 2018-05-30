@@ -246,7 +246,8 @@ enum SvXMLStyleAttrTokens
     XML_TOK_STYLE_ATTR_TRANSL_FORMAT,
     XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE,
     XML_TOK_STYLE_ATTR_TRANSL_COUNTRY,
-    XML_TOK_STYLE_ATTR_TRANSL_STYLE
+    XML_TOK_STYLE_ATTR_TRANSL_STYLE,
+    XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT
 };
 
 enum SvXMLStyleElemAttrTokens
@@ -524,6 +525,8 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleAttrTokenMap()
             // not defined in ODF { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_SCRIPT,     XML_TOK_STYLE_ATTR_TRANSL_SCRIPT    },
             { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,    XML_TOK_STYLE_ATTR_TRANSL_COUNTRY   },
             { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,      XML_TOK_STYLE_ATTR_TRANSL_STYLE     },
+            { XML_NAMESPACE_LO_EXT, XML_TRANSLITERATION_SPELLOUT,    XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT   },
+            { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_SPELLOUT,    XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT   },
             XML_TOKEN_MAP_END
         };
 
@@ -1452,6 +1455,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             case XML_TOK_STYLE_ATTR_TRANSL_COUNTRY:
                 aNatNumAttr.Locale.Country = sValue;
                 break;
+            case XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT:
             case XML_TOK_STYLE_ATTR_TRANSL_STYLE:
                 aNatNumAttr.Style = sValue;
                 break;
@@ -1478,6 +1482,11 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             aFormatCode.append( "[NatNum" );
             aFormatCode.append( nNatNum );
 
+            // NatNum12 spell out formula (ordinal, ordinal-feminine etc. except the default cardinal)
+            if (nNatNum == 12 && aNatNumAttr.Style != "cardinal")
+            {
+                aFormatCode.append( " " + aNatNumAttr.Style );
+            }
             LanguageType eLang = aLanguageTag.getLanguageType( false);
             if ( eLang == LANGUAGE_DONTKNOW )
                 eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?

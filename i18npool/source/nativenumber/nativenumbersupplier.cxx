@@ -61,6 +61,12 @@ typedef struct {
 #define NUMBER_OMIT_ONE_67 (NUMBER_OMIT_ONE_6|NUMBER_OMIT_ONE_7)
 #define NUMBER_OMIT_ZERO_ONE_67 ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE_67 )
 
+// use default transliteration-format for NatNum12 (spell out
+// cardinal and ordinal numbers, dates and money amounts)
+
+#define DEFAULT_FORMAT "1"
+#define DEFAULT_SPELLOUT "cardinal"
+
 namespace i18npool {
 
 struct theNatNumMutex : public rtl::Static<osl::Mutex, theNatNumMutex> {};
@@ -745,7 +751,8 @@ sal_Bool SAL_CALL NativeNumberSupplierService::isValidNatNum( const Locale& rLoc
     switch (nNativeNumberMode) {
         case NativeNumberMode::NATNUM0:     // Ascii
         case NativeNumberMode::NATNUM3:     // Char, FullWidth
-        case NativeNumberMode::NATNUM12:    // Spell number
+        case NativeNumberMode::NATNUM12:    // spell out numbers, dates and money amounts
+
             return true;
         case NativeNumberMode::NATNUM1:     // Char, Lower
             return (langnum >= 0);
@@ -773,6 +780,11 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplierService::convertToXmlAttr
     static const sal_Int16 attMedium        = 1;
     static const sal_Int16 attLong          = 2;
     static const sal_Char *attType[] = { "short", "medium", "long" };
+
+    switch (nNativeNumberMode) {
+        case NativeNumberMode::NATNUM12:    // spell out numbers, dates and money amounts
+            return NativeNumberXmlAttributes(rLocale, DEFAULT_FORMAT, DEFAULT_SPELLOUT);
+    }
 
     sal_Int16 number = NumberChar_HalfWidth, type = attShort;
 
@@ -848,6 +860,12 @@ static bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
 
 sal_Int16 SAL_CALL NativeNumberSupplierService::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr )
 {
+    if ( aAttr.Format == DEFAULT_FORMAT && !aAttr.Style.isEmpty() &&
+            aAttr.Style != "short" && aAttr.Style != "medium" && aAttr.Style != "long")
+    {
+        return NativeNumberMode::NATNUM12;
+    }
+
     sal_Unicode numberChar[NumberChar_Count];
     for (sal_Int16 i = 0; i < NumberChar_Count; i++)
         numberChar[i] = NumberChar[i][1];

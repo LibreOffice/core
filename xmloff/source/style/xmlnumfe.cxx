@@ -1205,8 +1205,15 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                               aLanguage );
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,
                               aCountry );
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,
+
+        if (aAttr.Style == "short" || aAttr.Style == "medium" || aAttr.Style == "long")
+        {
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,
                               aAttr.Style );
+        } else {
+            rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_TRANSLITERATION_SPELLOUT,
+                              aAttr.Style );
+        }
     }
 
     // The element
