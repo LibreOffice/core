@@ -163,7 +163,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             // and swallows the event wholesale
             NSMenu* pMainMenu = [NSApp mainMenu];
             if( ! bHandled &&
-                (pMainMenu == nullptr || ! ( [pMainMenu performKeyEquivalent: pEvent] || [NSMenu menuBarVisible] ) ) )
+                (pMainMenu == nullptr || ! [NSMenu menuBarVisible] || ! [pMainMenu performKeyEquivalent: pEvent]) )
             {
                 [[pKeyWin contentView] keyDown: pEvent];
                 bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
