@@ -644,6 +644,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                break;
           case TEXT_CARDINAL: // cardinal number names (one, two, three, ...)
                natNum = NativeNumberMode::NATNUM12;
+               sNatNumParams = "cardinal";
                locale = aLocale;
                bCapitalize = true;
                break;
