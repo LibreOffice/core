@@ -46,7 +46,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
+#include <vcl/BitmapAlphaClampFilter.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -720,15 +720,7 @@ namespace vclcanvas
                     // transparency is fully transparent
                     if( aBmpEx.IsAlpha() )
                     {
-                        Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
-                        BitmapEx aMaskEx(aMask);
-                        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(253));
-                        aMask = aMaskEx.GetBitmap();
-                        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMask );
-                    }
-                    else if( aBmpEx.IsTransparent() )
-                    {
-                        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetMask() );
+                        BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
                     }
 
                     mp2ndOutDevProvider->getOutDev().DrawBitmapEx( vcl::unotools::pointFromB2DPoint( aOutputPos ),
