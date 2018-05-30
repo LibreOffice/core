@@ -125,6 +125,8 @@ SfxViewShell* pScActiveViewShell = nullptr; //FIXME: Make this a member
 sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too
 sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
 
+bool ScGlobal::bThreadedGroupCalcInProgress = false;
+
 // Thread-safe singleton creation. Ideally rtl_Instance should be used, but that one doesn't
 // allow accessing the pointer (so ScGlobal::Clear() cannot free the objects). So this function
 // is basically rtl_Instance::create() that uses a given pointer.
