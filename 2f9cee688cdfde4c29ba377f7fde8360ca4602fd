@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_bffef435",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2018-05-30T10:52:25Z",
+      "side": 1,
+      "message": "I think getSourceManager().isInMainFile(spellingLocation) should allow short-circuiting this for many cases (see e.g. SalBool::isFromCIncludeFile()).",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 23
+      },
+      "revId": "2f9cee688cdfde4c29ba377f7fde8360ca4602fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_dffd683b",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2018-05-30T10:52:25Z",
+      "side": 1,
+      "message": "Is it necessary to use getExpansionLoc()? I think using directly getPresumedLoc() should do (although I\u0027m not 100% sure).",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 227,
+        "endChar": 100
+      },
+      "revId": "2f9cee688cdfde4c29ba377f7fde8360ca4602fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
