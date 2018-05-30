@@ -124,6 +124,8 @@
 #include <transobj.hxx>
 #include <chgtrack.hxx>
 #include <table.hxx>
+#include <externaldatauno.hxx>
+#include <externaltransformationuno.hxx>
 
 #include <strings.hrc>
 
@@ -183,6 +185,9 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString("BuildId"),                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
         {OUString(SC_UNO_CODENAME),                0, cppu::UnoType<OUString>::get(),                  0, 0},
         {OUString(SC_UNO_INTEROPGRABBAG),          0, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0, 0},
+        {OUString("ExternalDataProviders"),        0, cppu::UnoType<sheet::XExternalDataProviders>::get(), 0, 0},
+        {OUString("ExternalDataProvider"),         0, cppu::UnoType<sheet::XExternalDataProvider>::get(), 0, 0},
+        {OUString("DataTransformations"),          0, cppu::UnoType<sheet::XDataTransformations>::get(), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDocOptPropertyMap_Impl;
@@ -2541,6 +2546,10 @@ void SAL_CALL ScModelObj::setPropertyValue(
         {
             setGrabBagItem(aValue);
         }
+        else if ( aPropertyName == "ExternalDataProviders" )
+        {
+            throw lang::IllegalArgumentException();
+        }
 
         if ( aNewOpt != rOldOpt )
         {
@@ -2728,6 +2737,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         else if ( aPropertyName == SC_UNO_INTEROPGRABBAG )
         {
             getGrabBagItem(aRet);
+        }
+        else if ( aPropertyName == "ExternalDataProviders" )
+        {
+            aRet <<= uno::Reference<container::XIndexContainer>(new ScExternalDataProvidersObj(&rDoc));
         }
     }
 
