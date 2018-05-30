@@ -3079,4 +3079,6 @@ zeros-denominator-digits
 integer-fraction-delimiter
 reference-language
 newline
+creator-initials
+transliteration-spellout
 TOKEN_END_DUMMY
