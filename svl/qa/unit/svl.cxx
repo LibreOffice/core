@@ -1502,6 +1502,12 @@ void Test::testUserDefinedNumberFormats()
         sCode =     "\"Finnish: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
+    {   // tdf#117819 wrong separator positions when displaying integers with
+        // more decimals than rtl::math::doubleToUString delivers.
+        sCode = "#,##0.00000000000000000000";
+        sExpected = "117,669,030,460,994.00000000000000000000";
+        checkPreviewString(aFormatter, sCode, 117669030460994.0, LANGUAGE_ENGLISH_US, sExpected);
+    }
 }
 
 void Test::testNfEnglishKeywordsIntegrity()
