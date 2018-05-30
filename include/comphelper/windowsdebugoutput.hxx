@@ -15,6 +15,11 @@
 #ifndef INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
 #define INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
 
+// If you get a warning about <codecvt> being deprecated from VS2017, you need to add a "#define
+// _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING 1" to your source file before any #include
+// statements. It would not be enough to have that here. See
+// https://blogs.msdn.microsoft.com/vcblog/2017/12/08/c17-feature-removals-and-deprecations/
+
 #include <codecvt>
 #include <iomanip>
 #include <ostream>
