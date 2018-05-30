@@ -62,6 +62,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/embed/XEmbedPersist2.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
@@ -69,6 +70,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 
 using namespace com::sun::star;
 
@@ -511,11 +514,23 @@ bool SwHTMLParser::InsertEmbed()
                 aFileStream.Seek(0);
                 if (aHeader == aMagic)
                 {
-                    // OLE2 wrapped in RTF.
-                    if (SwReqIfReader::ExtractOleFromRtf(aFileStream, aMemoryStream))
+                    // OLE2 wrapped in RTF: either own format or real OLE2 embedding.
+                    bool bOwnFormat = false;
+                    if (SwReqIfReader::ExtractOleFromRtf(aFileStream, aMemoryStream, bOwnFormat))
                     {
                         xInStream.set(new utl::OStreamWrapper(aMemoryStream));
+                    }
 
+                    if (bOwnFormat)
+                    {
+                        uno::Sequence<beans::PropertyValue> aMedium = comphelper::InitPropertySequence(
+                            { { "InputStream", uno::makeAny(xInStream) },
+                              { "URL", uno::makeAny(OUString("private:stream")) },
+                              { "DocumentBaseURL", uno::makeAny(m_sBaseURL) } });
+                        xObj = aCnt.InsertEmbeddedObject(aMedium, aName, &m_sBaseURL);
+                    }
+                    else
+                    {
                         // The type is now an OLE2 container, not the original XHTML type.
                         aType = "application/vnd.sun.star.oleobject";
                     }
@@ -526,19 +541,24 @@ bool SwHTMLParser::InsertEmbed()
                 // Non-RTF case.
                 xInStream.set(new utl::OStreamWrapper(aFileStream));
 
-            uno::Reference<io::XStream> xOutStream
-                = xStorage->openStreamElement(aObjName, embed::ElementModes::READWRITE);
-            comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream->getOutputStream());
-
-            if (!aType.isEmpty())
+            if (!xObj.is())
             {
-                // Set media type of the native data.
-                uno::Reference<beans::XPropertySet> xOutStreamProps(xOutStream, uno::UNO_QUERY);
-                if (xOutStreamProps.is())
-                    xOutStreamProps->setPropertyValue("MediaType", uno::makeAny(aType));
+                uno::Reference<io::XStream> xOutStream
+                    = xStorage->openStreamElement(aObjName, embed::ElementModes::READWRITE);
+                if (aFileStream.IsOpen())
+                    comphelper::OStorageHelper::CopyInputToOutput(xInStream,
+                                                                  xOutStream->getOutputStream());
+
+                if (!aType.isEmpty())
+                {
+                    // Set media type of the native data.
+                    uno::Reference<beans::XPropertySet> xOutStreamProps(xOutStream, uno::UNO_QUERY);
+                    if (xOutStreamProps.is())
+                        xOutStreamProps->setPropertyValue("MediaType", uno::makeAny(aType));
+                }
             }
+            xObj = aCnt.GetEmbeddedObject(aObjName);
         }
-        xObj = aCnt.GetEmbeddedObject(aObjName);
     }
 
     SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
@@ -1460,23 +1480,47 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         OUString aFileType;
         SvFileStream aOutStream(aFileName, StreamMode::WRITE);
         uno::Reference<io::XActiveDataStreamer> xStreamProvider;
+        uno::Reference<embed::XEmbedPersist2> xOwnEmbedded;
         if (xEmbeddedObject.is())
+        {
             xStreamProvider.set(xEmbeddedObject, uno::UNO_QUERY);
+            xOwnEmbedded.set(xEmbeddedObject, uno::UNO_QUERY);
+        }
         if (xStreamProvider.is())
         {
+            // Real OLE2 case: OleEmbeddedObject.
             uno::Reference<io::XInputStream> xStream(xStreamProvider->getStream(), uno::UNO_QUERY);
             if (xStream.is())
             {
                 std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xStream));
                 if (SwReqIfReader::WrapOleInRtf(*pStream, aOutStream))
                 {
-                    // OLE2 is always wrapped in RTF.
+                    // Data always wrapped in RTF.
                     aFileType = "text/rtf";
                 }
             }
         }
+        else if (xOwnEmbedded.is())
+        {
+            // Our own embedded object: OCommonEmbeddedObject.
+            SvxMSExportOLEObjects aOLEExp(0);
+            // Trigger the load of the OLE object if needed, otherwise we can't
+            // export it.
+            pOLENd->GetTwipSize();
+            SvMemoryStream aMemory;
+            tools::SvRef<SotStorage> pStorage = new SotStorage(aMemory);
+            aOLEExp.ExportOLEObject(rOLEObj.GetObject(), *pStorage);
+            pStorage->Commit();
+            aMemory.Seek(0);
+            if (SwReqIfReader::WrapOleInRtf(aMemory, aOutStream))
+            {
+                // Data always wrapped in RTF.
+                aFileType = "text/rtf";
+            }
+        }
         else
         {
+            // Otherwise the native data is just a grab-bag: ODummyEmbeddedObject.
             OUString aStreamName = rOLEObj.GetCurrentPersistName();
             uno::Reference<embed::XStorage> xStorage = pDocSh->GetStorage();
             uno::Reference<io::XStream> xInStream

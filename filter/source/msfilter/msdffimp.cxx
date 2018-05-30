@@ -6872,7 +6872,7 @@ const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
     return nullptr;
 }
 
-OUString GetFilterNameFromClassID_Impl( const SvGlobalName& aGlobName )
+OUString SvxMSDffManager::GetFilterNameFromClassID( const SvGlobalName& aGlobName )
 {
     if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
         return OUString( "StarOffice XML (Writer)" );
@@ -6911,6 +6911,13 @@ OUString GetFilterNameFromClassID_Impl( const SvGlobalName& aGlobName )
         return OUString( "chart8" );
 
     return OUString();
+}
+
+void SvxMSDffManager::ExtractOwnStream(SotStorage& rSrcStg, SvMemoryStream& rMemStream)
+{
+    tools::SvRef<SotStorageStream> xStr
+        = rSrcStg.OpenSotStream("package_stream", StreamMode::STD_READ);
+    xStr->ReadStream(rMemStream);
 }
 
 css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( sal_uInt32 nConvertFlags,
@@ -6977,8 +6984,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         if ( pName )
         {
             // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also
-            tools::SvRef<SotStorageStream> xStr = rSrcStg.OpenSotStream( "package_stream", StreamMode::STD_READ );
-            xStr->ReadStream( *xMemStream );
+            SvxMSDffManager::ExtractOwnStream(rSrcStg, *xMemStream);
         }
         else
         {
@@ -7013,7 +7019,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             if ( pFilter )
                 aFilterName = pFilter->GetName();
             else
-                aFilterName = GetFilterNameFromClassID_Impl( aStgNm );
+                aFilterName = SvxMSDffManager::GetFilterNameFromClassID( aStgNm );
 
             uno::Sequence<beans::PropertyValue> aMedium(aFilterName.isEmpty() ? 3 : 4);
             aMedium[0].Name = "InputStream";

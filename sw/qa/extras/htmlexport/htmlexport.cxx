@@ -529,6 +529,21 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
     // exception of type com.sun.star.io.IOException was thrown.
 }
 
+DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2Odg, "reqif-ole-odg.xhtml")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier> xTextEmbeddedObject(xObjects->getByIndex(0),
+                                                                          uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xObject(xTextEmbeddedObject->getEmbeddedObject(),
+                                               uno::UNO_QUERY);
+    // This failed, both import and export failed to handle OLE2 that contains
+    // just ODF.
+    CPPUNIT_ASSERT(xObject.is());
+    CPPUNIT_ASSERT(xObject->supportsService("com.sun.star.drawing.DrawingDocument"));
+}
+
 DECLARE_HTMLEXPORT_TEST(testList, "list.html")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
