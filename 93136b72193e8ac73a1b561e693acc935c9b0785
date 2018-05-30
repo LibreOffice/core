@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ff686c89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-30T07:37:09Z",
+      "side": 1,
+      "message": "Really no problem with that. Depending on transitive includes is bad, fixing that up is good.",
+      "revId": "93136b72193e8ac73a1b561e693acc935c9b0785",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
