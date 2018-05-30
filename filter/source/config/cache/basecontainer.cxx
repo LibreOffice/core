@@ -282,7 +282,7 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
     try
     {
         FilterCache* pCache = impl_getWorkingCache();
-        OUStringList lKeys  = pCache->getItemNames(m_eType);
+        std::vector<OUString> lKeys  = pCache->getItemNames(m_eType);
         lNames = comphelper::containerToSequence(lKeys);
     }
     catch(const css::uno::Exception&)
@@ -368,7 +368,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
 {
-    OUStringList                                        lKeys;
+    std::vector<OUString>                               lKeys;
 
     impl_loadOnDemand();
 

@@ -199,8 +199,8 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= uno_s2)
                )
             {
-                OUStringList stl_s1(comphelper::sequenceToContainer<OUStringList>(uno_s1));
-                OUStringList stl_s2(comphelper::sequenceToContainer<OUStringList>(uno_s2));
+                std::vector<OUString> stl_s1(comphelper::sequenceToContainer< std::vector<OUString> >(uno_s1));
+                std::vector<OUString> stl_s2(comphelper::sequenceToContainer< std::vector<OUString> >(uno_s2));
 
                 for (auto const& elem : stl_s1)
                 {

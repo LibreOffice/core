@@ -48,7 +48,6 @@ class SearchProgress;
 class TakeProgress;
 class TPGalleryThemeProperties;
 
-typedef std::vector< OUString > StringList;
 typedef std::vector< sal_uLong > TokenList_impl;
 
 struct FilterEntry
@@ -246,7 +245,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     VclPtr<GalleryPreview>     m_pWndPreview;
 
     ExchangeData*           pData;
-    StringList              aFoundList;
+    std::vector<OUString>   aFoundList;
     std::vector< FilterEntry* >
                             aFilterEntryList;
     Timer                   aPreviewTimer;

@@ -47,9 +47,6 @@ struct BaseLock
 };
 
 
-typedef ::std::vector< OUString > OUStringList;
-
-
 /** @short  represent an item of a FilterCache
             instance.
 
@@ -163,7 +160,7 @@ typedef std::unordered_map< OUString,
             by a pure vector!
  */
 typedef std::unordered_map< OUString,
-                            OUStringList > CacheItemRegistration;
+                            std::vector<OUString> > CacheItemRegistration;
 
 
 /** @short  is used to collect all matching types of an URL
