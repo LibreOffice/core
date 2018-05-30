@@ -597,9 +597,10 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
 
     static auto xNumberText
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
-    OUString numbertext_prefix = sNumberTextParams;
-    if (!numbertext_prefix.isEmpty())
-        numbertext_prefix += " ";
+    OUString numbertext_prefix;
+    // default "cardinal" gets empty prefix
+    if (sNumberTextParams != "cardinal")
+        numbertext_prefix = sNumberTextParams + " ";
     // Several hundreds of headings could result typing lags because
     // of the continuous update of the multiple number names during typing.
     // We fix this by buffering the result of the conversion.
@@ -776,7 +777,7 @@ sal_Bool SAL_CALL NativeNumberSupplierService::isValidNatNum( const Locale& rLoc
     switch (nNativeNumberMode) {
         case NativeNumberMode::NATNUM0:     // Ascii
         case NativeNumberMode::NATNUM3:     // Char, FullWidth
-        case NativeNumberMode::NATNUM12:    // Spell number
+        case NativeNumberMode::NATNUM12:    // spell out numbers, dates and money amounts
             return true;
         case NativeNumberMode::NATNUM1:     // Char, Lower
             return (langnum >= 0);
