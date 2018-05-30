@@ -562,7 +562,8 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
     OString aFile = getFontFile( pFont );
     TrueTypeFont* pTTFont = nullptr;
 
-    if( OpenTTFontFile( aFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) == SFErrCodes::Ok )
+    auto const e = OpenTTFontFile( aFile.getStr(), pFont->m_nCollectionEntry, &pTTFont );
+    if( e == SFErrCodes::Ok )
     {
         TTGlobalFontInfo aInfo;
         GetTTGlobalFontInfo( pTTFont, & aInfo );
@@ -691,7 +692,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
         bSuccess = true;
     }
     else
-        SAL_WARN("vcl.fonts", "Could not OpenTTFont \"" << aFile << "\"");
+        SAL_WARN("vcl.fonts", "Could not OpenTTFont \"" << aFile << "\": " << int(e));
 
     return bSuccess;
 }
