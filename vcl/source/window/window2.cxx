@@ -2006,5 +2006,12 @@ const std::vector<VclPtr<FixedText> >& Window::list_mnemonic_labels() const
 
 } /* namespace vcl */
 
+void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, int nBorder)
+{
+    rRenderContext.Invert(tools::Rectangle(Point(rRect.Left(), rRect.Top()), Size(rRect.GetWidth(), nBorder)), InvertFlags::N50);
+    rRenderContext.Invert(tools::Rectangle(Point(rRect.Left(), rRect.Bottom()-nBorder+1), Size(rRect.GetWidth(), nBorder)), InvertFlags::N50);
+    rRenderContext.Invert(tools::Rectangle(Point(rRect.Left(), rRect.Top()+nBorder), Size(nBorder, rRect.GetHeight()-(nBorder*2))), InvertFlags::N50);
+    rRenderContext.Invert(tools::Rectangle(Point(rRect.Right()-nBorder+1, rRect.Top()+nBorder), Size(nBorder, rRect.GetHeight()-(nBorder*2))), InvertFlags::N50);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

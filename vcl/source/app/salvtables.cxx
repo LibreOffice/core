@@ -1853,7 +1853,7 @@ IMPL_LINK(SalInstanceDrawingArea, PaintHdl, target_and_area, aPayload, void)
     m_aDrawHdl.Call(aPayload);
     tools::Rectangle aFocusRect(m_aGetFocusRectHdl.Call(*this));
     if (!aFocusRect.IsEmpty())
-        aPayload.first.Invert(aFocusRect, InvertFlags(0xffff));
+        DrawFocusRect(aPayload.first, aFocusRect);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, ResizeHdl, const Size&, rSize, void)
