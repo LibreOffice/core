@@ -219,7 +219,7 @@ namespace {
       T * getInstance()
       {
           return rtl_Instance< T, InitInstance,
-                               ::osl::Mutex, ::osl::GetGlobalMutex,
+                               ::osl::MutexGuard, ::osl::GetGlobalMutex,
                                Data, InitData >::create(
               InitInstance(), ::osl::GetGlobalMutex(), InitData());
       }
