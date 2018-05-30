@@ -20,13 +20,15 @@
 #ifndef INCLUDED_SC_INC_REFTOKENHELPER_HXX
 #define INCLUDED_SC_INC_REFTOKENHELPER_HXX
 
-#include "token.hxx"
+#include "address.hxx"
+#include "types.hxx"
+#include "scdllapi.h"
 
 #include <vector>
 
 class ScDocument;
-class ScRange;
 class ScRangeList;
+struct ScComplexRefData;
 
 namespace ScRefTokenHelper
 {

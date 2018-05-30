@@ -16,8 +16,6 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 
-#include <vector>
-
 #include "segmenttree.hxx"
 
 namespace sc {
