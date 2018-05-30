@@ -308,6 +308,8 @@ namespace vcl {
     typedef OutputDevice RenderContext;
 }
 
+VCL_DLLPUBLIC void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, int nBorder = 1);
+
 /**
 * Some things multiple-inherit from VclAbstractDialog and OutputDevice,
 * so we need to use virtual inheritance to keep the referencing counting

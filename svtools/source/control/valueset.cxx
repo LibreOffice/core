@@ -3244,6 +3244,8 @@ void SvtValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 
     WinBits nStyle = GetStyle();
     if (nStyle & WB_MENUSTYLEVALUESET)
     {
+        if (bFocus)
+            DrawFocusRect(rRenderContext, aRect);
         if (bDrawSel)
         {
             rRenderContext.SetLineColor(mbBlackSel ? COL_BLACK : aDoubleColor);
@@ -3296,6 +3298,8 @@ void SvtValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 
             rRenderContext.SetLineColor(COL_LIGHTGRAY);
         }
         rRenderContext.DrawRect(aRect2);
+        if (bFocus)
+            DrawFocusRect(rRenderContext, aRect2);
     }
 
     ImplDrawItemText(rRenderContext, pItem->maText);
