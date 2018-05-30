@@ -1689,6 +1689,8 @@ public:
         {
             GdkRectangle aRect{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
                                static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
+            if (AllSettings::GetLayoutRTL())
+                aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
             gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
         }
         else
@@ -3733,7 +3735,7 @@ private:
     {
         m_aStyleUpdatedHdl.Call(*this);
     }
-    static gboolean signalQueryTooltip(GtkWidget*, gint x, gint y,
+    static gboolean signalQueryTooltip(GtkWidget* pGtkWidget, gint x, gint y,
                                          gboolean /*keyboard_mode*/, GtkTooltip *tooltip,
                                          gpointer widget)
     {
@@ -3748,6 +3750,8 @@ private:
         aGdkHelpArea.y = aHelpArea.Top();
         aGdkHelpArea.width = aHelpArea.GetWidth();
         aGdkHelpArea.height = aHelpArea.GetHeight();
+        if (AllSettings::GetLayoutRTL())
+            aGdkHelpArea.x = gtk_widget_get_allocated_width(pGtkWidget) - aGdkHelpArea.width - 1 - aGdkHelpArea.x;
         gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
         return true;
     }
@@ -3808,6 +3812,8 @@ private:
         }
 
         Point aPos(pEvent->x, pEvent->y);
+        if (AllSettings::GetLayoutRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
         MouseEvent aMEvt(aPos, nClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
@@ -3828,6 +3834,8 @@ private:
     bool signal_motion(GdkEventMotion* pEvent)
     {
         Point aPos(pEvent->x, pEvent->y);
+        if (AllSettings::GetLayoutRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
         MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nCode, nCode);
@@ -3882,6 +3890,7 @@ public:
     {
         gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
+        m_xDevice->EnableRTL(get_direction());
     }
 
     AtkObject* GetAtkObject(AtkObject* pDefaultAccessible)
@@ -3893,6 +3902,12 @@ public:
             g_object_ref(m_pAccessible);
         }
         return m_pAccessible;
+    }
+
+    virtual void set_direction(bool bRTL) override
+    {
+        GtkInstanceWidget::set_direction(bRTL);
+        m_xDevice->EnableRTL(bRTL);
     }
 
     virtual void queue_draw() override
