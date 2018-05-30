@@ -75,6 +75,7 @@
 #include <numrule.hxx>
 #include <swtable.hxx>
 #include <fldupde.hxx>
+#include <docufld.hxx>
 #include <IGrammarContact.hxx>
 #include <calbck.hxx>
 #include <ftnidx.hxx>
@@ -956,10 +957,56 @@ bool SwTextFrame::IsHiddenNow() const
         return true;
     }
 
-    if ( const SwViewShell* pVsh = getRootFrame()->GetCurrShell() )
+    bool bHiddenCharsHidePara(false);
+    bool bHiddenParaField(false);
+    if (m_pMergedPara)
     {
-        const bool bHiddenCharsHidePara = GetTextNode()->HasHiddenCharAttribute(true);
-        const bool bHiddenParaField = GetTextNode()->IsHiddenByParaField();
+        TextFrameIndex nHiddenStart(COMPLETE_STRING);
+        TextFrameIndex nHiddenEnd(0);
+        if (auto const pScriptInfo = GetScriptInfo())
+        {
+            pScriptInfo->GetBoundsOfHiddenRange(TextFrameIndex(0),
+                    nHiddenStart, nHiddenEnd);
+        }
+        else // ParaPortion is created in Format, but this is called earlier
+        {
+            SwScriptInfo aInfo;
+            aInfo.InitScriptInfo(*m_pMergedPara->pFirstNode, m_pMergedPara.get(), IsRightToLeft());
+            aInfo.GetBoundsOfHiddenRange(TextFrameIndex(0),
+                        nHiddenStart, nHiddenEnd);
+        }
+        if (TextFrameIndex(0) == nHiddenStart &&
+            TextFrameIndex(GetText().getLength()) <= nHiddenEnd)
+        {
+            bHiddenCharsHidePara = true;
+        }
+        sw::MergedAttrIter iter(*this);
+        SwTextNode const* pNode(nullptr);
+        for (SwTextAttr const* pHint = iter.NextAttr(&pNode); pHint; pHint = iter.NextAttr(&pNode))
+        {
+            if (pHint->Which() == RES_TXTATR_FIELD)
+            {
+                const SwFormatField& rField = pHint->GetFormatField();
+                if (SwFieldIds::HiddenPara == rField.GetField()->GetTyp()->Which())
+                {
+                    if (static_cast<const SwHiddenParaField*>(rField.GetField())->IsHidden())
+                    {
+                        bHiddenParaField = true;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        bHiddenCharsHidePara = GetTextNode()->HasHiddenCharAttribute( true );
+        bHiddenParaField = GetTextNode()->IsHiddenByParaField();
+    }
+    const SwViewShell* pVsh = getRootFrame()->GetCurrShell();
+
+    if ( pVsh && ( bHiddenCharsHidePara || bHiddenParaField ) )
+    {
 
         if (
              ( bHiddenParaField &&
