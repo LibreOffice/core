@@ -21,8 +21,9 @@
 #define INCLUDED_COMPHELPER_ANYTOSTRING_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
 namespace comphelper
 {
