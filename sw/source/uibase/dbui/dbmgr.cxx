@@ -3070,7 +3070,6 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                                                      sDataTableOrQuery,
                                                      nCmdType,
                                                      xConnection);
-    assert( pImpl->pMergeDialog && "Dialog creation failed!" );
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
         aDescriptor[svx::DataAccessDescriptorProperty::Selection] <<= pImpl->pMergeDialog->GetSelection();
@@ -3176,7 +3175,6 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData ));
-    assert( pDlg && "Dialog creation failed!" );
     if( RET_OK == pDlg->Execute() )
     {
         OUString sDummy;

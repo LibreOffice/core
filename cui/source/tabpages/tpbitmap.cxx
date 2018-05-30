@@ -548,9 +548,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
         OUString aName( m_pBitmapList->GetBitmap( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        assert(pFact && "Dialog creation failed!");
         ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-        assert(pDlg && "Dialog creation failed!");
 
         bool bLoop = true;
         while( bLoop && pDlg->Execute() == RET_OK )
@@ -761,9 +759,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
             OUString        aName;
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialog creation failed!");
             ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aURL.GetName().getToken(0, '.'), aDesc));
-            DBG_ASSERT(pDlg, "Dialog creation failed!");
             nError = ErrCode(1);
 
             while( pDlg->Execute() == RET_OK )

@@ -1112,10 +1112,8 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, void )
         OUString sName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialog creation failed!");
         ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(pButton->GetFrameWeld(),
                             sName, CuiResId(RID_SVXSTR_COLOR_CONFIG_SAVE2) ));
-        DBG_ASSERT(aNameDlg, "Dialog creation failed!");
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         aNameDlg->SetText(CuiResId(RID_SVXSTR_COLOR_CONFIG_SAVE1));
         aNameDlg->SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);

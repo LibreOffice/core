@@ -179,10 +179,8 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
         OUString aCurrentStr(rCurrentRange.Format(ScRefFlags::VALID, pDoc));
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
         ScopedVclPtr<AbstractScSortWarningDlg> pWarningDlg(pFact->CreateScSortWarningDlg(pTabViewShell->GetFrameWeld(), aExtendStr, aCurrentStr));
-        OSL_ENSURE(pWarningDlg, "Dialog create fail!");
         short bResult = pWarningDlg->Execute();
         if( bResult == BTN_EXTEND_RANGE || bResult == BTN_CURRENT_SELECTION )
         {
@@ -333,11 +331,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_DATA_FORM:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(
                     pTabViewShell->GetDialogParent(), pTabViewShell));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
 
                 pDlg->Execute();
 
@@ -738,10 +734,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aList.push_back((*itr)->GetName());
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<AbstractScSelEntryDlg> pDlg(pFact->CreateScSelEntryDlg(pTabViewShell->GetFrameWeld(), aList));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             OUString aName = pDlg->GetSelectedEntry();

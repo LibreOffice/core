@@ -199,11 +199,9 @@ void ScEditWindow::SetCharAttributes()
         SfxItemSet aSet( pEdView->GetAttribs() );
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
             GetParent(),  &aSet, pDocSh));
-        OSL_ENSURE(pDlg, "Dialog create fail!");
         pDlg->SetText( ScResId( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
         {

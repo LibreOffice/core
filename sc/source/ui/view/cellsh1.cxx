@@ -291,10 +291,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         bool bTheFlag=(pDoc->GetChangeTrack()!=nullptr);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg(pTabViewShell->GetFrameWeld(), bTheFlag));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if (pDlg->Execute() == RET_OK)
                             eCmd = pDlg->GetInsCellCmd();
                     }
@@ -363,10 +361,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             (pDoc->GetChangeTrack() != nullptr);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<AbstractScDeleteCellDlg> pDlg(pFact->CreateScDeleteCellDlg( pTabViewShell->GetFrameWeld(), bTheFlag ));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if (pDlg->Execute() == RET_OK)
                             eCmd = pDlg->GetDelCellCmd();
@@ -426,10 +422,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if (aTester.IsEditable())
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetFrameWeld()));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         SCTAB nTab = GetViewData()->GetTabNo();
                         if ( pDoc->IsTabProtected(nTab) )
@@ -500,11 +494,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 else
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetFrameWeld(),
                                                                                                     new OUString(ScResId(STR_FILL_TAB))));
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(true);
 
                     if (pDlg->Execute() == RET_OK)
@@ -719,14 +711,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                     }
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     ScopedVclPtr<AbstractScFillSeriesDlg> pDlg(pFact->CreateScFillSeriesDlg( pTabViewShell->GetFrameWeld(),
                                                             *pDoc,
                                                             eFillDir, eFillCmd, eFillDateCmd,
                                                             aStartStr, fIncVal, fMaxVal,
                                                             nPossDir));
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     if ( nStartCol != nEndCol && nStartRow != nEndRow )
                     {
@@ -1123,12 +1113,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pTabViewShell->HasSelectionForDateGroup( aNumInfo, nParts ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE( pFact, "ScAbstractFactory create fail!" );
                         const Date& rNullDate( GetViewData()->GetDocument()->GetFormatTable()->GetNullDate() );
                         ScopedVclPtr<AbstractScDPDateGroupDlg> pDlg( pFact->CreateScDPDateGroupDlg(
                             pTabViewShell->GetDialogParent(),
                             aNumInfo, nParts, rNullDate ) );
-                        OSL_ENSURE( pDlg, "Dialog create fail!" );
                         if( pDlg->Execute() == RET_OK )
                         {
                             aNumInfo = pDlg->GetGroupInfo();
@@ -1138,10 +1126,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else if ( pTabViewShell->HasSelectionForNumGroup( aNumInfo ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE( pFact, "ScAbstractFactory create fail!" );
                         ScopedVclPtr<AbstractScDPNumGroupDlg> pDlg( pFact->CreateScDPNumGroupDlg(
                             pTabViewShell->GetDialogParent(), aNumInfo ) );
-                        OSL_ENSURE( pDlg, "Dialog create fail!" );
                         if( pDlg->Execute() == RET_OK )
                             pTabViewShell->NumGroupDataPilot( pDlg->GetGroupInfo() );
                     }
@@ -1176,10 +1162,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld()));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();
                         else
@@ -1236,10 +1220,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( bColPoss && bRowPoss && !comphelper::LibreOfficeKit::isActive() )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld(), true));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();
                         else
@@ -1379,10 +1361,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if (aTester.IsEditable())
                         {
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                             ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetFrameWeld()));
-                            OSL_ENSURE(pDlg, "Dialog create fail!");
                             pDlg->SetOtherDoc( bOtherDoc );
                             // if ChangeTrack MoveMode disable
                             pDlg->SetChangeTrack( pDoc->GetChangeTrack() != nullptr );
@@ -1824,10 +1804,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 CreateNameFlags nFlags = pTabViewShell->GetCreateNameFlags();
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScopedVclPtr<AbstractScNameCreateDlg> pDlg(pFact->CreateScNameCreateDlg(pTabViewShell->GetFrameWeld(), nFlags));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
 
                 if( pDlg->Execute() )
                 {
@@ -2147,10 +2125,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_INSERT_NAME:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pTabViewShell->GetDialogParent(), GetViewData()->GetDocShell() ));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
                 switch( pDlg->Execute() )
                 {
                     case BTN_PASTE_LIST:
@@ -2617,12 +2593,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 else
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     pImpl->m_pLinkedDlg.disposeAndClear();
                     pImpl->m_pLinkedDlg =
                         pFact->CreateScLinkedAreaDlg(pTabViewShell->GetFrameWeld());
-                    OSL_ENSURE(pImpl->m_pLinkedDlg, "Dialog create fail!");
                     delete pImpl->m_pRequest;
                     pImpl->m_pRequest = new SfxRequest( rReq );
                     OUString sFile, sFilter, sOptions, sSource;
@@ -2818,7 +2792,6 @@ void ScCellShell::ExecuteDataPilotDialog()
         bool bEnableExt = ScDPObject::HasRegisteredSources();
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
         ScopedVclPtr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
             pFact->CreateScDataPilotSourceTypeDlg(
@@ -2833,7 +2806,6 @@ void ScCellShell::ExecuteDataPilotDialog()
                 pTypeDlg->AppendNamedRange(itr->second->GetName());
         }
 
-        OSL_ENSURE(pTypeDlg, "Dialog create fail!");
         if ( pTypeDlg->Execute() == RET_OK )
         {
             if ( pTypeDlg->IsExternal() )
@@ -2843,7 +2815,6 @@ void ScCellShell::ExecuteDataPilotDialog()
                     pFact->CreateScDataPilotServiceDlg(
                         pTabViewShell->GetFrameWeld(), aSources));
 
-                OSL_ENSURE(pServDlg, "Dialog create fail!");
                 if ( pServDlg->Execute() == RET_OK )
                 {
                     ScDPServiceDesc aServDesc(

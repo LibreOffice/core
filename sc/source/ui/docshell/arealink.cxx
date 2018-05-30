@@ -78,10 +78,8 @@ void ScAreaLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& /* rE
 {
     //  use own dialog instead of SvBaseLink::Edit...
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     ScopedVclPtr<AbstractScLinkedAreaDlg> pDlg(pFact->CreateScLinkedAreaDlg(pParent));
-    OSL_ENSURE(pDlg, "Dialog create fail!");
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
     if ( pDlg->Execute() == RET_OK )
     {

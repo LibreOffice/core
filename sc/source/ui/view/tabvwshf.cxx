@@ -134,10 +134,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     VclPtr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetFrameWeld()));
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     OUString aTabName;
                     bool bFirst = true;
@@ -216,11 +214,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else                                // dialog
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     ScopedVclPtr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetFrameWeld(), rViewData,
                         nTabSelCount, nSlot == FID_INS_TABLE_EXT));
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
                     {
                         if (pDlg->GetTablesFromFile())
@@ -394,7 +390,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     vcl::Window* pWin = GetDialogParent();
                     ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
@@ -402,7 +397,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
                         pHelpId));
 
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     while ( !bDone && nRet == RET_OK )
                     {
@@ -520,11 +514,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     pDoc->GetName( rViewData.GetTabNo(), aDefaultName );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     ScopedVclPtr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetFrameWeld(),
                         aDefaultName));
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();
                     ScMarkData& rMark       = GetViewData().GetMarkData();
@@ -785,7 +777,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
                     ScopedVclPtr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
                                                                 GetFrameWeld(),
                                                                 ScResId(SCSTR_SET_TAB_BG_COLOR),

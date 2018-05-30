@@ -91,7 +91,6 @@ namespace svx {
         if(pFact)
         {
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, false/*bEnableDrawingLayerFillStyles*/ ));
-            DBG_ASSERT(pDlg, "Dialog creation failed!");
             if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
             {
                 SfxItemIter aIter( *pDlg->GetOutputItemSet() );
@@ -676,7 +675,6 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
             *pBBSet,
             mbEnableDrawingLayerFillStyles));
 
-        DBG_ASSERT(pDlg,"Dialog creation failed!");
         if(RET_OK == pDlg->Execute() && pDlg->GetOutputItemSet())
         {
             SfxItemIter aIter(*pDlg->GetOutputItemSet());

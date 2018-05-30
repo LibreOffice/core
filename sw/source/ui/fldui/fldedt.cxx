@@ -327,7 +327,6 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, Button*, void)
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwAddressAbstractDlg(this, aSet));
-    assert(pDlg && "Dialog creation failed!");
     if (RET_OK == pDlg->Execute())
     {
         pSh->UpdateFields( *pCurField );

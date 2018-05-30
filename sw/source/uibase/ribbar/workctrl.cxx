@@ -146,7 +146,6 @@ IMPL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
 
     SwGlossaryHdl* pGlosHdl = ::GetActiveView()->GetGlosHdl();
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
     if ( fnSetActGroup )
         (*fnSetActGroup)( sGroup );

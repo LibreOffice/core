@@ -286,7 +286,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 if(pFact)
                                 {
                                     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxTransformTabDialog(pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr, pView));
-                                    OSL_ENSURE(pDlg, "Dialog creation failed!");
                                     if (pDlg->Execute() == RET_OK)
                                     {
                                         rReq.Done(*(pDlg->GetOutputItemSet()));
@@ -390,13 +389,11 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                 &aNewAttr,
             pViewData->GetDocument()->GetDrawLayer(),
             pObj,
             bHasMarked));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
 
     if ( pDlg->Execute() == RET_OK )
     {

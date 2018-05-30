@@ -534,7 +534,6 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
     bInFormatDialog = true;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScAttrDlg(GetDialogParent(), pOldSet.get()));
 

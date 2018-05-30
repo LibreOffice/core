@@ -140,7 +140,6 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh ));
-                        OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         if (pDlg->Execute() == RET_OK)
                         {
@@ -512,9 +511,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 OUString aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
 
@@ -542,10 +539,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 OUString aDescription(pSelected->GetDescription());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
                             aTitle, aDescription));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if(RET_OK == pDlg->Execute())
                 {

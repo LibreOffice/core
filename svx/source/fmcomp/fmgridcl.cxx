@@ -896,7 +896,6 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         if(pFact)
         {
             ScopedVclPtr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog());
-            DBG_ASSERT(pDlg, "Dialog creation failed!");
             pDlg->SetColumns(xCols);
             pDlg->Execute();
         }

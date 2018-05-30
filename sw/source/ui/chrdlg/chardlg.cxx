@@ -70,7 +70,6 @@ SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreS
         SetText(GetText() + SwResId(STR_TEXTCOLL_HEADER) + *pStr + ")");
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nCharStdId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
     m_nCharExtId = AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
     m_nCharPosId = AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );

@@ -596,7 +596,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(GetView().GetWindow(), &aCoreSet, &rSh));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
 
             if (pDlg)
             {
@@ -682,7 +681,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
                 ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(GetView().GetWindow(), aCoreSet));
-                assert(pDlg && "Dialog creation failed!");
 
                 if (RET_OK == pDlg->Execute())
                 {
@@ -831,7 +829,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(GetView().GetFrameWeld(), &rSh));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
         }
@@ -840,7 +837,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwTableHeightDialog(GetView().GetFrameWeld(), rSh));
-            assert(pDlg && "Dialog creation failed!");
             pDlg->Execute();
             break;
         }
@@ -1038,7 +1034,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 ScopedVclPtr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTableDialog(GetView().GetFrameWeld(), rSh));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
                 rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(pDlg->GetSplitMode()) ) );
                 bCallDone = true;
@@ -1056,7 +1051,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTableMergeDialog(GetView().GetFrameWeld(), bPrev));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK != pDlg->Execute())
                     bPrev = bNext = false;
             }

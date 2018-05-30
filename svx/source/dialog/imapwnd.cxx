@@ -692,7 +692,6 @@ void IMapWindow::DoPropertyDialog()
         {
             ScopedVclPtr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
                                             pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList ));
-            DBG_ASSERT(aDlg, "Dialog creation failed!");
             if ( aDlg->Execute() == RET_OK )
             {
                 const OUString aURLText( aDlg->GetURL() );

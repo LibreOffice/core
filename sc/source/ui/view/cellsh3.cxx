@@ -503,10 +503,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         {
                             bool bSheetProtected = pDoc->IsTabProtected(nTab);
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                             ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetDialogParent(), aName, false, bSheetProtected));
-                            OSL_ENSURE(pNewDlg, "Dialog create fail!");
                             if ( pNewDlg->Execute() == RET_OK )
                             {
                                 pNewDlg->GetScenarioData( aName, aComment, aColor, nFlags );
@@ -871,10 +869,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScGlobal::ClearAutoFormat();
                         std::unique_ptr<ScAutoFormatData> pNewEntry(pTabViewShell->CreateAutoFormatData());
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), GetViewData()));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
                         {

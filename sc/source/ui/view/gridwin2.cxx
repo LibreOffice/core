@@ -203,12 +203,10 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
             ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(
                 pFact->CreateScPivotFilterDlg(
                     pViewData->GetViewShell()->GetDialogParent(), aArgSet, nSrcTab));
-            OSL_ENSURE(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {
                 ScSheetSourceDesc aNewDesc(pDoc);

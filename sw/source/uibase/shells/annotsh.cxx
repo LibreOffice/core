@@ -485,7 +485,6 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, SwCharDlgMode::Ann));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");
@@ -537,7 +536,6 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr, true ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {

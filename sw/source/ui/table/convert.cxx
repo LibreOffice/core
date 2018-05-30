@@ -176,7 +176,6 @@ IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(m_xDialog.get(), pShell, false, mxTAutoFormat.get()));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if (RET_OK == pDlg->Execute())
         mxTAutoFormat.reset(pDlg->FillAutoFormatOfIndex());
 }

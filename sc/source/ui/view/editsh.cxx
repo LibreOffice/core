@@ -464,10 +464,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case FID_INSERT_NAME:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pViewData->GetDocShell() ));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -506,11 +504,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 SfxObjectShell* pObjSh = pViewData->GetSfxDocShell();
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
                     pViewData->GetDialogParent(), &aAttrs, pObjSh));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");

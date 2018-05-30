@@ -770,7 +770,6 @@ void SdrEditView::DistributeMarkedObjects()
         if(pFact)
         {
             ScopedVclPtr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(aNewAttr));
-            DBG_ASSERT(pDlg, "Dialog creation failed!");
 
             sal_uInt16 nResult = pDlg->Execute();
 

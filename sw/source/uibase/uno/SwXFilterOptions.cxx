@@ -99,7 +99,6 @@ sal_Int16 SwXFilterOptions::execute()
 
         ScopedVclPtr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(Application::GetFrameWeld(xDialogParent), *pDocShell,
             pInStream.get()));
-        OSL_ENSURE(pAsciiDlg, "Dialog creation failed!");
         if(RET_OK == pAsciiDlg->Execute())
         {
             SwAsciiOptions aOptions;

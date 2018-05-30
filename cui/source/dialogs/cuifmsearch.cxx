@@ -380,7 +380,6 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
         if(pFact)
         {
             ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() ));
-            DBG_ASSERT(aDlg, "Dialog creation failed!");
             aDlg->Execute();
 
 

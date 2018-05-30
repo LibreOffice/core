@@ -702,7 +702,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             ScopedVclPtr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg());
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
             if(RET_OK == pDlg->Execute())
             {
                 sal_uInt8 nLevel = pDlg->GetLevel();

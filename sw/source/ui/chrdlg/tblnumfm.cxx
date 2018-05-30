@@ -33,7 +33,6 @@ SwNumFormatDlg::SwNumFormatDlg(vcl::Window* pParent, const SfxItemSet& rSet)
 {
     // Create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
 
     if ( fnCreatePage )

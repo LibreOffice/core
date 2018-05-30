@@ -38,7 +38,6 @@ ScAttrDlg::ScAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs)
 {
     SvtCJKOptions aCJKOptions;
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
     m_nNumberPageId = AddTabPage( "numbers", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), nullptr );

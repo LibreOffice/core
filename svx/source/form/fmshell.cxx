@@ -733,7 +733,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 if ( pFact )
                 {
                     ScopedVclPtr<AbstractFmInputRecordNoDialog> dlg(pFact->CreateFmInputRecordNoDialog(rReq.GetFrameWeld()));
-                    assert(dlg.get() && "Dialog creation failed!");
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )
                         nRecord = dlg->GetValue();

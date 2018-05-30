@@ -562,10 +562,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialog creation failed!");
             ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 GetView().GetFrameWeld(), rWrtSh));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
             {
@@ -648,7 +646,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
                 ScopedVclPtr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetFrameWeld(), rWrtSh));
-                assert(pDlg && "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     nKind = pDlg->GetKind();
@@ -706,7 +703,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
             }
 
@@ -738,7 +734,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             ScopedVclPtr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin()));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
 
             switch (lcl_AskRedlineFlags(GetView().GetFrameWeld()))
             {
@@ -1070,7 +1065,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, false, sDefPage ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
             }
 
             if ( !bUseDialog )

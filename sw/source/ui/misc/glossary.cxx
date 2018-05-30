@@ -1038,7 +1038,6 @@ IMPL_LINK_NOARG( SwGlossaryDlg, PathHdl, Button *, void )
     if(pFact)
     {
         ScopedVclPtr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxPathSelectDialog(GetFrameWeld()));
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
         SvtPathOptions aPathOpt;
         const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
         pDlg->SetPath(sGlosPath);

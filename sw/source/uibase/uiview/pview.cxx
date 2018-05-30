@@ -760,7 +760,6 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 if(pFact)
                 {
                     pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aCoreSet));
-                    OSL_ENSURE(pDlg, "Dialog creation failed!");
                 }
 
                 pDlg->SetLimits( MINZOOM, MAXZOOM );

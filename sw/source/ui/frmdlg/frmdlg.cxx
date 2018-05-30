@@ -95,7 +95,6 @@ SwFrameDlg::SwFrameDlg( SfxViewFrame const * pViewFrame,
         m_nColumnId = AddTabPage("columns", SwColumnPage::Create, nullptr);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
 
     // remove?
     // m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0);

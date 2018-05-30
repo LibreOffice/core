@@ -3380,7 +3380,6 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         ScopedVclPtr<AbstractSwRenameXNamedDlg> pDlg(pFact->CreateSwRenameXNamedDlg(GetFrameWeld(), xNamed, xNameAccess));
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
         if(xSecond.is())
             pDlg->SetAlternativeAccess( xSecond, xThird);
 

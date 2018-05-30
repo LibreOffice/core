@@ -373,7 +373,6 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert(pFact && "SwAbstractDialogFactory fail!");
     ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(this, aCoreSet));
-    assert(pDlg && "Dialog creation failed!");
 
     if (RET_OK == pDlg->Execute())
     {

@@ -481,7 +481,6 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
                 ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwDropCapsDialog(GetView().GetWindow(), aSet));
-                assert(pDlg && "Dialog creation failed!");
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();

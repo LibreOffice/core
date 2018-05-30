@@ -87,11 +87,9 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScParagraphDlg(
         pViewData->GetDialogParent(), &aNewAttr));
-    OSL_ENSURE(pDlg, "Dialog create fail!");
     bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )

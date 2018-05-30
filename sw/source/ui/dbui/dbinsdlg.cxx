@@ -761,7 +761,6 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(pButton, pTableSet, &rSh));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute() )
         pTableSet->Put( *pDlg->GetOutputItemSet() );
     else if( bNewSet )
@@ -779,7 +778,6 @@ IMPL_LINK( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton->GetFrameWeld(), pView->GetWrtShellPtr(), false, m_xTAutoFormat.get()));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
         m_xTAutoFormat.reset(pDlg->FillAutoFormatOfIndex());
 }

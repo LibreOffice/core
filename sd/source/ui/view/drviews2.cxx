@@ -787,9 +787,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OUString aPageName = pCurrentPage->GetName();
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialog creation failed!");
                 ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
-                DBG_ASSERT(aNameDlg, "Dialog creation failed!");
                 aNameDlg->SetText( aTitle );
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
                 aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
@@ -2503,9 +2501,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OUString aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(GetFrameWeld(), aName));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
 
@@ -2536,10 +2532,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OUString aDescription(pSelected->GetDescription());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
                             GetFrameWeld(), aTitle, aDescription));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if(RET_OK == pDlg->Execute())
                 {

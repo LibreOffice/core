@@ -348,7 +348,6 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
         if(pFact)
         {
             ScopedVclPtr<VclAbstractRefreshableDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog( this, pTheme ));
-            DBG_ASSERT(aActualizeProgress, "Dialog creation failed!");
 
             aActualizeProgress->Update();
             aActualizeProgress->Execute();
@@ -368,9 +367,7 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
         const OUString  aOldName( pTheme->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        assert(pFact && "Dialog creation failed!");
         ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(GetFrameWeld(), aOldName));
-        assert(aDlg.get() && "Dialog creation failed!");
 
         if( aDlg->Execute() == RET_OK )
         {
@@ -404,7 +401,6 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
             if(pFact)
             {
                 ScopedVclPtr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog(GetFrameWeld(), pTheme));
-                DBG_ASSERT(aDlg, "Dialog creation failed!");
 
                 if( aDlg->Execute() == RET_OK )
                     pTheme->SetId( aDlg->GetId(), true );
