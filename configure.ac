@@ -9892,7 +9892,9 @@ if test  "$test_gtk" = "yes"; then
         GTK_PRINT_CFLAGS=$(printf '%s' "$GTK_PRINT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${GTK_PRINT_LIBS}"
         GTK_PRINT_LIBS="${filteredlibs}"
+    fi
 
+    if test "$ENABLE_GTK" = "TRUE" || test "$ENABLE_GTK3" = "TRUE"; then
         AC_MSG_CHECKING([whether to enable GIO support])
         if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
             dnl Need at least 2.26 for the dbus support.
