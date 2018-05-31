@@ -81,6 +81,11 @@ WScript.Echo "Running Automation client tests"
 
 On Error Resume Next
 
+' FIXME: How can we ever make this work specifically with the
+' LibreOffice in instdir, when WScript.CreateObject() wants the
+' symbolic name that it then looks up from the Registry to find the
+' CLSID of the class?
+
 CheckErrorFatal "Set writer = WScript.CreateObject(""Writer.Application"")"
 CheckErrorFatal "writer.Visible = True"
 CheckErrorFatal "writer.Caption = ""=== This is Writer ==="""

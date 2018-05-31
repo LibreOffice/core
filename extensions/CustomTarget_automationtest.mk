@@ -11,14 +11,17 @@ $(eval $(call gb_CustomTarget_CustomTarget,extensions/automationtest))
 
 extensions_AUTOMATIONTESTDIR := $(call gb_CustomTarget_get_workdir,extensions/automationtest)
 
-extensions_AUTOMATIONTESTLOG := $(extensions_AUTOMATIONTESTDIR)/automationtest.log
+extensions_AUTOMATIONTESTLOG1 := $(extensions_AUTOMATIONTESTDIR)/automationtest.1.log
+extensions_AUTOMATIONTESTLOG2 := $(extensions_AUTOMATIONTESTDIR)/automationtest.2.log
 
 $(call gb_CustomTarget_get_target,extensions/automationtest) : \
 		$(SRCDIR)/extensions/qa/ole/automationtest.vbs \
 		| $(extensions_AUTOMATIONTESTDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),VBS,1) \
+	SAL_LOG=+INFO.extensions.olebridge+WARN $(INSTDIR)/program/soffice 2>$(extensions_AUTOMATIONTESTLOG1) &
+	sleep 10
 	$(call gb_Helper_abbreviate_dirs, \
-	cscript -nologo $(SRCDIR)/extensions/qa/ole/automationtest.vbs $(SRCDIR)) >$(extensions_AUTOMATIONTESTLOG) || \
-            (cat $(extensions_AUTOMATIONTESTLOG) && exit 1)
+	cscript -nologo $(SRCDIR)/extensions/qa/ole/automationtest.vbs $(SRCDIR)) >$(extensions_AUTOMATIONTESTLOG2) || \
+            (cat $(extensions_AUTOMATIONTESTLOG1) $(extensions_AUTOMATIONTESTLOG2) && exit 1)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
