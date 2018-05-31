@@ -4491,7 +4491,10 @@ bool ScFormulaCell::InterpretFormulaGroup()
             }
 
             SAL_INFO("sc.threaded", "Joining threads");
-            rThreadPool.waitUntilDone(aTag);
+            {
+                SolarMutexReleaser release;
+                rThreadPool.waitUntilDone(aTag);
+            }
 
             pDocument->mbThreadedGroupCalcInProgress = false;
 
