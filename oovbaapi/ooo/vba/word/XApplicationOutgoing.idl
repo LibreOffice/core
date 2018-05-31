@@ -18,7 +18,7 @@ module ooo {  module vba {  module word {
 // is identical to that offered to StarBasic code written in a VBA-like fashion.
 
 // This interface exists for technical reasons only, we don't actually have any UNO object that
-// would implemenrt (inherit from) this. We just advertise the type of this interface from Writer to
+// would implement (inherit from) this. We just advertise the type of this interface from Writer to
 // the Automation-UNO bridge code (in extensions/source/ole) so that it can tell the Automation
 // client what the Automation server expects and construct a corresponding COM interface that can
 // receive the callbacks. Or something like that.

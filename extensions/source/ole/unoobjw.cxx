@@ -2036,7 +2036,7 @@ Sink::Call( const OUString& Method, const Sequence< Any >& Arguments )
         }
         nMemId++;
     }
-    SAL_WARN("extensions.olebridge", "Sink::Call: Uknown method '" << Method << "'");
+    SAL_WARN("extensions.olebridge", "Sink::Call: Unknown method '" << Method << "'");
 }
 
 class CXConnectionPoint : public IConnectionPoint,
