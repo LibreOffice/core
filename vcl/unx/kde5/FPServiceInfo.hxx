@@ -23,6 +23,6 @@
 #define FILE_PICKER_SERVICE_NAME "com.sun.star.ui.dialogs.KDE4FilePicker"
 
 // the implementation names
-#define FILE_PICKER_IMPL_NAME    "com.sun.star.ui.dialogs.KDE4FilePicker"
+#define FILE_PICKER_IMPL_NAME "com.sun.star.ui.dialogs.KDE4FilePicker"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
