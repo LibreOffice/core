@@ -547,8 +547,8 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pIDMA->getBookmarksCount());
     IDocumentMarkAccess::const_iterator_t mark = pIDMA->getAllMarksBegin();
     // and it's a TEXT_FIELDMARK
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(IDocumentMarkAccess::GetType( **mark )),
-                          sal_Int32(IDocumentMarkAccess::MarkType::TEXT_FIELDMARK ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(IDocumentMarkAccess::MarkType::TEXT_FIELDMARK),
+                            sal_Int32(IDocumentMarkAccess::GetType( **mark )) );
     sal_uLong src_pos = (*mark)->GetMarkPos().nNode.GetIndex();
 
     // Get the size of the document in nodes
@@ -579,7 +579,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
             countFieldMarks++;
         }
         else // see previous TODO
-            CPPUNIT_ASSERT_EQUAL( sal_Int32(markType), sal_Int32(IDocumentMarkAccess::MarkType::UNO_BOOKMARK) );
+            CPPUNIT_ASSERT_EQUAL( sal_Int32(IDocumentMarkAccess::MarkType::UNO_BOOKMARK), sal_Int32(markType) );
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10), countFieldMarks);
 }

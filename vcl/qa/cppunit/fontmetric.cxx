@@ -55,27 +55,27 @@ void VclFontMetricTest::testSpacings()
     // default constructor should set scalable flag to false
     FontMetric aFontMetric;
 
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetAscent(), 0L );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetDescent(), 0L );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetExternalLeading(), 0L );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetInternalLeading(), 0L );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetLineHeight(), 0L );
+    CPPUNIT_ASSERT_EQUAL( 0L, aFontMetric.GetAscent() );
+    CPPUNIT_ASSERT_EQUAL( 0L, aFontMetric.GetDescent() );
+    CPPUNIT_ASSERT_EQUAL( 0L, aFontMetric.GetExternalLeading() );
+    CPPUNIT_ASSERT_EQUAL( 0L, aFontMetric.GetInternalLeading() );
+    CPPUNIT_ASSERT_EQUAL( 0L, aFontMetric.GetLineHeight() );
 
 
     aFontMetric.SetAscent( 100 );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetAscent(), 100L );
+    CPPUNIT_ASSERT_EQUAL( 100L, aFontMetric.GetAscent() );
 
     aFontMetric.SetDescent( 100 );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetDescent(), 100L );
+    CPPUNIT_ASSERT_EQUAL( 100L, aFontMetric.GetDescent() );
 
     aFontMetric.SetExternalLeading( 100 );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetExternalLeading(), 100L );
+    CPPUNIT_ASSERT_EQUAL( 100L, aFontMetric.GetExternalLeading() );
 
     aFontMetric.SetInternalLeading( 100 );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetInternalLeading(), 100L );
+    CPPUNIT_ASSERT_EQUAL( 100L, aFontMetric.GetInternalLeading() );
 
     aFontMetric.SetLineHeight( 100 );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetLineHeight(), 100L );
+    CPPUNIT_ASSERT_EQUAL( 100L, aFontMetric.GetLineHeight() );
 }
 
 void VclFontMetricTest::testSlant()
@@ -83,10 +83,10 @@ void VclFontMetricTest::testSlant()
     // default constructor should set scalable flag to false
     FontMetric aFontMetric;
 
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetSlant(), 0L );
+    CPPUNIT_ASSERT_EQUAL( 0L, aFontMetric.GetSlant() );
 
     aFontMetric.SetSlant( 45 );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetSlant(), 45L );
+    CPPUNIT_ASSERT_EQUAL( 45L, aFontMetric.GetSlant() );
 }
 
 void VclFontMetricTest::testBulletOffset()
@@ -94,10 +94,10 @@ void VclFontMetricTest::testBulletOffset()
     // default constructor should set scalable flag to false
     FontMetric aFontMetric;
 
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetBulletOffset(), 0L );
+    CPPUNIT_ASSERT_EQUAL( 0L, aFontMetric.GetBulletOffset() );
 
     aFontMetric.SetBulletOffset( 45 );
-    CPPUNIT_ASSERT_EQUAL( aFontMetric.GetBulletOffset(), 45L );
+    CPPUNIT_ASSERT_EQUAL(  45L, aFontMetric.GetBulletOffset() );
 }
 
 void VclFontMetricTest::testEqualityOperator()

@@ -481,7 +481,7 @@ void SwMacrosTest::testFdo87530()
         CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("BarLibrary"));
         Reference<container::XNameContainer> xLibrary(xBasLib->getByName("BarLibrary"), UNO_QUERY);
         Any module(xLibrary->getByName("BarModule"));
-        CPPUNIT_ASSERT_EQUAL(module.get<OUString>(), OUString("Sub Main\nEnd Sub\n"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Sub Main\nEnd Sub\n"), module.get<OUString>());
 
         // add a second module now - tdf#87530 happened here
         Reference<container::XNameContainer> xFooLib(xBasLib->createLibrary("FooLibrary"));
@@ -512,7 +512,7 @@ void SwMacrosTest::testFdo87530()
     CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("FooLibrary"));
     Reference<container::XNameContainer> xLibrary(xBasLib->getByName("FooLibrary"), UNO_QUERY);
     Any module(xLibrary->getByName("FooModule"));
-    CPPUNIT_ASSERT_EQUAL(module.get<OUString>(), OUString("Sub Main\nEnd Sub\n"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sub Main\nEnd Sub\n"), module.get<OUString>());
 
     // close
     Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);

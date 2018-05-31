@@ -813,8 +813,8 @@ void DesktopLOKTest::testCommandResult()
     std::stringstream aStream(m_aCommandResult.getStr());
     boost::property_tree::read_json(aStream, aTree);
 
-    CPPUNIT_ASSERT_EQUAL(aTree.get_child("commandName").get_value<std::string>(), std::string(".uno:Bold"));
-    CPPUNIT_ASSERT_EQUAL(aTree.get_child("success").get_value<bool>(), true);
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), aTree.get_child("commandName").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(true, aTree.get_child("success").get_value<bool>());
 
     comphelper::LibreOfficeKit::setActive(false);
 }
@@ -909,7 +909,7 @@ void DesktopLOKTest::testSheetOperations()
           "{ \"Index\": { \"type\": \"long\", \"value\": 3 } }", false);
 
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(pDocument->pClass->getParts(pDocument), 6);
+    CPPUNIT_ASSERT_EQUAL(6, pDocument->pClass->getParts(pDocument));
 
     std::vector<OString> aExpected = { "FirstSheet", "Renamed", "Sheet3", "Sheet4", "Sheet5", "LastSheet" };
     for (int i = 0; i < 6; ++i)
@@ -2242,7 +2242,7 @@ void DesktopLOKTest::testExtractParameter()
 
 namespace {
 
-size_t documentClassOffset(int i)
+constexpr size_t documentClassOffset(int i)
 {
     return sizeof(static_cast<struct _LibreOfficeKitDocumentClass*>(nullptr)->nSize) + i * sizeof(void*);
 }

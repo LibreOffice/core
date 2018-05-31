@@ -10,9 +10,12 @@
 #include "plugin.hxx"
 #include "check.hxx"
 #include "compat.hxx"
+#include <iostream>
 
 /**
-  Check for calls to CPPUNIT_ASSERT when it should be using CPPUNIT_ASSERT_EQUALS
+  Check for
+   (*) calls to CPPUNIT_ASSERT when it should be using CPPUNIT_ASSERT_EQUALS
+   (*) calls to CPPUNIT_ASSERT_EQUALS where the constant is the second param
 */
 
 namespace {
@@ -38,69 +41,131 @@ private:
         SourceRange range, StringRef name, Expr const * expr, bool negated);
 
     void reportEquals(SourceRange range, StringRef name, bool negative);
+
+    bool isCompileTimeConstant(Expr const * expr);
 };
 
 bool CppunitAssertEquals::VisitCallExpr(const CallExpr* callExpr)
 {
     auto const decl = callExpr->getDirectCallee();
-    if (decl == nullptr
-        || !(loplugin::DeclCheck(decl).Function("failIf").Struct("Asserter")
-             .Namespace("CppUnit").GlobalNamespace()))
+    if (!decl)
+        return true;
+    /*
+       calls to CPPUNIT_ASSERT when it should be using CPPUNIT_ASSERT_EQUALS
+    */
+    if (loplugin::DeclCheck(decl).Function("failIf").Struct("Asserter")
+             .Namespace("CppUnit").GlobalNamespace())
     {
-        return true;
+        // Don't use callExpr->getLocStart() or callExpr->getExprLoc(), as those
+        // fall into a nested use of the CPPUNIT_NS macro; CallExpr::getRParenLoc
+        // happens to be readily available and cause good results:
+        auto loc = callExpr->getRParenLoc();
+        while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
+            loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+        }
+        if (!compiler.getSourceManager().isMacroBodyExpansion(loc)
+            || ignoreLocation(
+                compiler.getSourceManager().getImmediateMacroCallerLoc(loc)))
+        {
+            return true;
+        }
+        auto name = Lexer::getImmediateMacroName(
+            loc, compiler.getSourceManager(), compiler.getLangOpts());
+        if (name != "CPPUNIT_ASSERT" && name != "CPPUNIT_ASSERT_MESSAGE") {
+            return true;
+        }
+        if (decl->getNumParams() != 3) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("TODO: suspicious CppUnit::Asserter::failIf call with %0"
+                 " parameters"),
+                callExpr->getExprLoc())
+                << decl->getNumParams() << callExpr->getSourceRange();
+            return true;
+        }
+        auto const e1 = callExpr->getArg(0)->IgnoreParenImpCasts();
+        Expr const * e2 = nullptr;
+        if (auto const e3 = dyn_cast<UnaryOperator>(e1)) {
+            if (e3->getOpcode() == UO_LNot) {
+                e2 = e3->getSubExpr();
+            }
+        } else if (auto const e4 = dyn_cast<CXXOperatorCallExpr>(e1)) {
+            if (e4->getOperator() == OO_Exclaim) {
+                e2 = e4->getArg(0);
+            }
+        }
+        if (e2 == nullptr) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("TODO: suspicious CppUnit::Asserter::failIf call not wrapping"
+                 " !(...)"),
+                callExpr->getExprLoc())
+                << callExpr->getSourceRange();
+            return true;
+        }
+        auto range = compat::getImmediateExpansionRange(compiler.getSourceManager(), loc);
+        checkExpr(
+            SourceRange(range.first, range.second), name,
+            e2->IgnoreParenImpCasts(), false);
     }
-    // Don't use callExpr->getLocStart() or callExpr->getExprLoc(), as those
-    // fall into a nested use of the CPPUNIT_NS macro; CallExpr::getRParenLoc
-    // happens to be readily available and cause good results:
-    auto loc = callExpr->getRParenLoc();
-    while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
-        loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
-    }
-    if (!compiler.getSourceManager().isMacroBodyExpansion(loc)
-        || ignoreLocation(
-            compiler.getSourceManager().getImmediateMacroCallerLoc(loc)))
+
+    /**
+      Check for calls to CPPUNIT_ASSERT_EQUALS where the constant is the second param
+    */
+    if (loplugin::DeclCheck(decl).Function("assertEquals").
+             Namespace("CppUnit").GlobalNamespace())
     {
-        return true;
+        // can happen in template test code that both params are compile time constants
+        if (isCompileTimeConstant(callExpr->getArg(0)))
+            return true;
+        if (isCompileTimeConstant(callExpr->getArg(1)))
+            report(
+                DiagnosticsEngine::Warning,
+                "CPPUNIT_ASSERT_EQUALS parameters look switched, expected value should be first param",
+                callExpr->getExprLoc())
+                << callExpr->getSourceRange();
     }
-    auto name = Lexer::getImmediateMacroName(
-        loc, compiler.getSourceManager(), compiler.getLangOpts());
-    if (name != "CPPUNIT_ASSERT" && name != "CPPUNIT_ASSERT_MESSAGE") {
-        return true;
-    }
-    if (decl->getNumParams() != 3) {
-        report(
-            DiagnosticsEngine::Warning,
-            ("TODO: suspicious CppUnit::Asserter::failIf call with %0"
-             " parameters"),
-            callExpr->getExprLoc())
-            << decl->getNumParams() << callExpr->getSourceRange();
-        return true;
-    }
-    auto const e1 = callExpr->getArg(0)->IgnoreParenImpCasts();
-    Expr const * e2 = nullptr;
-    if (auto const e3 = dyn_cast<UnaryOperator>(e1)) {
-        if (e3->getOpcode() == UO_LNot) {
-            e2 = e3->getSubExpr();
-        }
-    } else if (auto const e4 = dyn_cast<CXXOperatorCallExpr>(e1)) {
-        if (e4->getOperator() == OO_Exclaim) {
-            e2 = e4->getArg(0);
-        }
-    }
-    if (e2 == nullptr) {
-        report(
-            DiagnosticsEngine::Warning,
-            ("TODO: suspicious CppUnit::Asserter::failIf call not wrapping"
-             " !(...)"),
-            callExpr->getExprLoc())
-            << callExpr->getSourceRange();
-        return true;
-    }
-    auto range = compat::getImmediateExpansionRange(compiler.getSourceManager(), loc);
-    checkExpr(
-        SourceRange(range.first, range.second), name,
-        e2->IgnoreParenImpCasts(), false);
     return true;
+}
+
+// copied from stringconcat.cxx
+Expr const * stripCtor(Expr const * expr) {
+    auto e0 = expr;
+    auto const e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
+    if (e1 != nullptr) {
+        e0 = e1->getSubExpr()->IgnoreParenImpCasts();
+    }
+    auto const e2 = dyn_cast<CXXBindTemporaryExpr>(e0);
+    if (e2 == nullptr) {
+        return expr;
+    }
+    auto const e3 = dyn_cast<CXXConstructExpr>(
+        e2->getSubExpr()->IgnoreParenImpCasts());
+    if (e3 == nullptr) {
+        return expr;
+    }
+    auto qt = loplugin::DeclCheck(e3->getConstructor());
+    if (!((qt.MemberFunction().Class("OString").Namespace("rtl")
+           .GlobalNamespace())
+          || (qt.MemberFunction().Class("OUString").Namespace("rtl")
+              .GlobalNamespace())))
+    {
+        return expr;
+    }
+    if (e3->getNumArgs() != 2) {
+        return expr;
+    }
+    return e3->getArg(0)->IgnoreParenImpCasts();
+}
+
+bool CppunitAssertEquals::isCompileTimeConstant(Expr const * expr)
+{
+    if (expr->isIntegerConstantExpr(compiler.getASTContext()))
+        return true;
+    // is string literal ?
+    expr = expr->IgnoreParenImpCasts();
+    expr = stripCtor(expr);
+    return isa<clang::StringLiteral>(expr);
 }
 
 void CppunitAssertEquals::checkExpr(

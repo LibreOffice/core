@@ -748,7 +748,7 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aString);
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nWord);
 
         //turn on red-lining and show changes
         m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete|RedlineFlags::ShowInsert);
@@ -765,7 +765,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
         pTextNode->SetWordCountDirty(true);
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len()); //but word-counting the text should only count the non-deleted text
-        CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
 
         pTextNode->SetWordCountDirty(true);
 
@@ -1717,24 +1717,24 @@ void SwDocTest::testIntrusiveRing()
     vRings.push_back(&aRing3);
     vRings.push_back(&aRing4);
     vRings.push_back(&aRing5);
-    CPPUNIT_ASSERT_EQUAL(aRing1.GetRingContainer().size(), static_cast<size_t>(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRing1.GetRingContainer().size());
     CPPUNIT_ASSERT(aRing1.lonely());
     CPPUNIT_ASSERT(aRing2.lonely());
     CPPUNIT_ASSERT(aRing3.lonely());
     aRing2.MoveTo(&aRing1);
     aRing3.MoveTo(&aRing1);
-    CPPUNIT_ASSERT_EQUAL(aRing1.GetRingContainer().size(), static_cast<size_t>(3));
-    CPPUNIT_ASSERT_EQUAL(aRing2.GetRingContainer().size(), static_cast<size_t>(3));
-    CPPUNIT_ASSERT_EQUAL(aRing3.GetRingContainer().size(), static_cast<size_t>(3));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aRing1.GetRingContainer().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aRing2.GetRingContainer().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aRing3.GetRingContainer().size());
     CPPUNIT_ASSERT(!aRing1.lonely());
     CPPUNIT_ASSERT(!aRing2.lonely());
     CPPUNIT_ASSERT(!aRing3.lonely());
     aRing5.MoveTo(&aRing4);
-    CPPUNIT_ASSERT_EQUAL(aRing4.GetRingContainer().size(), static_cast<size_t>(2));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aRing4.GetRingContainer().size());
     aRing4.GetRingContainer().merge(aRing1.GetRingContainer());
     for(TestRing* pRing : vRings)
     {
-        CPPUNIT_ASSERT_EQUAL(pRing->GetRingContainer().size(), static_cast<size_t>(5));
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), pRing->GetRingContainer().size());
     }
     for(std::vector<TestRing*>::iterator ppRing = vRings.begin(); ppRing != vRings.end(); ++ppRing)
     {
@@ -1979,7 +1979,7 @@ void SwDocTest::test64kPageDescs()
 
 void SwDocTest::testTdf92308()
 {
-    CPPUNIT_ASSERT_EQUAL(m_pDoc->HasInvisibleContent(), false);
+    CPPUNIT_ASSERT_EQUAL(false, m_pDoc->HasInvisibleContent());
 }
 
 void SwDocTest::testTableCellComparison()

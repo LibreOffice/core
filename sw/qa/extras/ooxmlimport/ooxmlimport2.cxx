@@ -41,7 +41,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109053, "tdf109053.docx")
 {
     // Table was imported into a text frame which led to a one page document
     // Originally the table takes two pages, so Writer should import it accordingly.
-    CPPUNIT_ASSERT_EQUAL(getPages(), 2);
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
@@ -172,7 +172,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
 // DOCX: Textbox wrap differs in MSO and LO
 // Both should layout text regardless of existing text box
 // and as result only one page should be generated.
-DECLARE_OOXMLIMPORT_TEST(testTdf113182, "tdf113182.docx") { CPPUNIT_ASSERT_EQUAL(getPages(), 1); }
+DECLARE_OOXMLIMPORT_TEST(testTdf113182, "tdf113182.docx") { CPPUNIT_ASSERT_EQUAL(1, getPages()); }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
 {

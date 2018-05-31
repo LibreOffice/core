@@ -444,7 +444,7 @@ void TimerTest::testInvokedReStart()
     sal_Int32 nCount = 0;
     IdleInvokedReStart aIdle( nCount );
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL( nCount, sal_Int32(2) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(2), nCount );
 }
 
 
@@ -507,7 +507,7 @@ public:
         : AutoIdle( pDebugName )
         , mrCount( rCount )
     {
-        CPPUNIT_ASSERT_EQUAL( mrCount, sal_uInt32(0) );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32(0), mrCount );
         SetInvokeHandler( LINK( this, TestAutoIdleRR, IdleRRHdl ) );
         Start();
     }

@@ -112,7 +112,7 @@ void Test::testCondFormatINSDEL()
     CPPUNIT_ASSERT_EQUAL(static_cast<const ScRangeList&>(ScRange(2,0,0,2,3,0)), rRange);
 
     OUString aExpr = pEntry->GetExpression(ScAddress(2,0,0), 0);
-    CPPUNIT_ASSERT_EQUAL(aExpr, OUString("D2"));
+    CPPUNIT_ASSERT_EQUAL(OUString("D2"), aExpr);
 
     m_pDoc->DeleteTab(0);
 }

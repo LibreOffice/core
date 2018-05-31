@@ -163,14 +163,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74745, "fdo74745.docx")
 {
     uno::Reference<text::XTextRange > paragraph = getParagraph(3);
     uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(text->getString(),OUString("09/02/14"));
+    CPPUNIT_ASSERT_EQUAL(OUString("09/02/14"), text->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo81486, "fdo81486.docx")
 {
     uno::Reference<text::XTextRange > paragraph = getParagraph(1);
     uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(text->getString(),OUString("CustomTitle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("CustomTitle"), text->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo79738, "fdo79738.docx")
@@ -666,7 +666,7 @@ DECLARE_OOXMLEXPORT_TEST(testFineTableDash, "tableborder-finedash.docx")
     uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
     table::TableBorder2 aBorder;
     xTableProperties->getPropertyValue("TableBorder2") >>= aBorder;
-    CPPUNIT_ASSERT_EQUAL(aBorder.RightLine.LineStyle, table::BorderLineStyle::FINE_DASHED);
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::FINE_DASHED, aBorder.RightLine.LineStyle);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN792778, "n792778.docx")
@@ -754,9 +754,9 @@ DECLARE_OOXMLEXPORT_TEST(testN779642, "n779642.docx")
     aFrame >>= xFrame;
     sal_Int16 nValue;
     xFrame->getPropertyValue("VertOrient") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", nValue, text::VertOrientation::BOTTOM);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::BOTTOM, nValue);
     xFrame->getPropertyValue("VertOrientRelation") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", nValue, text::RelOrientation::PAGE_PRINT_AREA);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", text::RelOrientation::PAGE_PRINT_AREA, nValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTbLrHeight, "tblr-height.docx")
@@ -907,7 +907,7 @@ DECLARE_OOXMLEXPORT_TEST(testN592908_Frame, "n592908-frame.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue("Surround") >>= eValue;
-    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, eValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN592908_Picture, "n592908-picture.docx")
@@ -915,7 +915,7 @@ DECLARE_OOXMLEXPORT_TEST(testN592908_Picture, "n592908-picture.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue("Surround") >>= eValue;
-    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, eValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")

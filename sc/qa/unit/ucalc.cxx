@@ -4648,7 +4648,7 @@ void Test::testJumpToPrecedentsDependents()
         ScRangeList aRange(aC2);
         rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("there should only be one reference token.",
-                               aRefTokens.size(), static_cast<size_t>(1));
+                               static_cast<size_t>(1), aRefTokens.size());
         CPPUNIT_ASSERT_MESSAGE("A1 should be a precedent of C1.",
                                hasRange(aRefTokens, ScRange(0, 0, 0), aC2));
     }
@@ -4718,9 +4718,9 @@ void Test::testAutoFill()
     m_pDoc->SetString( 0, 100, 0, "January" );
     m_pDoc->Fill( 0, 100, 0, 100, nullptr, aMarkData, 2, FILL_TO_BOTTOM, FILL_AUTO );
     OUString aTestValue = m_pDoc->GetString( 0, 101, 0 );
-    CPPUNIT_ASSERT_EQUAL( aTestValue, OUString("February") );
+    CPPUNIT_ASSERT_EQUAL( OUString("February"), aTestValue );
     aTestValue = m_pDoc->GetString( 0, 102, 0 );
-    CPPUNIT_ASSERT_EQUAL( aTestValue, OUString("March") );
+    CPPUNIT_ASSERT_EQUAL( OUString("March"), aTestValue );
 
     // test that two same user data list entries will not result in incremental fill
     m_pDoc->SetString( 0, 101, 0, "January" );
@@ -4728,7 +4728,7 @@ void Test::testAutoFill()
     for ( SCROW i = 102; i <= 103; ++i )
     {
         aTestValue = m_pDoc->GetString( 0, i, 0 );
-        CPPUNIT_ASSERT_EQUAL( aTestValue, OUString("January") );
+        CPPUNIT_ASSERT_EQUAL( OUString("January"), aTestValue );
     }
 
     // Clear column A for a new test.
@@ -4837,15 +4837,15 @@ void Test::testCopyPasteFormulas()
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,11,0), 1.0);
     OUString aFormula;
     m_pDoc->GetFormula(10,10,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=COLUMN($A$1)"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=COLUMN($A$1)"), aFormula);
     m_pDoc->GetFormula(10,11,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$A$1+L12"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$A$1+L12"), aFormula);
     m_pDoc->GetFormula(10,12,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$Sheet2.K11"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K11"), aFormula);
     m_pDoc->GetFormula(10,13,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$Sheet2.$A$1"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.$A$1"), aFormula);
     m_pDoc->GetFormula(10,14,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$Sheet2.K$1"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K$1"), aFormula);
 }
 
 void Test::testCopyPasteFormulasExternalDoc()
@@ -4894,19 +4894,19 @@ void Test::testCopyPasteFormulasExternalDoc()
     OUString aFormula;
     rExtDoc.GetFormula(1,1,1, aFormula);
     //adjust absolute refs pointing to the copy area
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=COLUMN($B$2)"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=COLUMN($B$2)"), aFormula);
     rExtDoc.GetFormula(1,2,1, aFormula);
     //adjust absolute refs and keep relative refs
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$B$2+C3"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$B$2+C3"), aFormula);
     rExtDoc.GetFormula(1,3,1, aFormula);
     // make absolute sheet refs external refs
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.B2"));
+    CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.B2"), aFormula);
     rExtDoc.GetFormula(1,4,1, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.$A$1"));
+    CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.$A$1"), aFormula);
     rExtDoc.GetFormula(1,5,1, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.B$1"));
+    CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.B$1"), aFormula);
     rExtDoc.GetFormula(1,6,1, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$ExtSheet2.$B$2"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=$ExtSheet2.$B$2"), aFormula);
 
     xExtDocSh->DoClose();
 }
@@ -4949,7 +4949,7 @@ void Test::testCopyPasteReferencesExternalDoc()
     OUString aFormula;
     rExtDoc.GetFormula(0,3,0, aFormula);
     //adjust absolute refs pointing to the copy area
-    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=SUM('file:///source.fake'#$Sheet1.A#REF!:A3)"));
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM('file:///source.fake'#$Sheet1.A#REF!:A3)"), aFormula);
 
     xExtDocSh->DoClose();
 }
@@ -6748,7 +6748,7 @@ void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpect
         sal_Int32 nCheckPos = 0;
         SvNumFormatType nType;
         pFormatter->PutEntry( rCode, nCheckPos, nType, nFormat );
-        CPPUNIT_ASSERT_EQUAL( nCheckPos, sal_Int32(0) );
+        CPPUNIT_ASSERT_EQUAL( sal_Int32(0), nCheckPos );
     }
     double fRoundValue = m_pDoc->RoundValueAsShown( fValue, nFormat );
     rtl::OString aMessage = "Format \"";

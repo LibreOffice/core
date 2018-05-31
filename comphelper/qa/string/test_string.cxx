@@ -75,13 +75,13 @@ void TestString::testDecimalStringToNumber()
 void TestString::testIsdigitAsciiString()
 {
     OString s1("1234");
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s1), true);
+    CPPUNIT_ASSERT_EQUAL(true, comphelper::string::isdigitAsciiString(s1));
 
     OString s2("1A34");
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s2), false);
+    CPPUNIT_ASSERT_EQUAL(false, comphelper::string::isdigitAsciiString(s2));
 
     OString s3;
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s3), true);
+    CPPUNIT_ASSERT_EQUAL(true, comphelper::string::isdigitAsciiString(s3));
 }
 
 using namespace ::com::sun::star;

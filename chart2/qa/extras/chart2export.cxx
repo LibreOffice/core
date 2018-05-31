@@ -271,7 +271,7 @@ void testErrorBar( Reference< XPropertySet > const & xErrorBar )
     sal_Int32 nErrorBarStyle;
     CPPUNIT_ASSERT(
         xErrorBar->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle);
-    CPPUNIT_ASSERT_EQUAL(nErrorBarStyle, chart::ErrorBarStyle::RELATIVE);
+    CPPUNIT_ASSERT_EQUAL(chart::ErrorBarStyle::RELATIVE, nErrorBarStyle);
     bool bShowPositive = bool(), bShowNegative = bool();
     CPPUNIT_ASSERT(
         xErrorBar->getPropertyValue("ShowPositiveError") >>= bShowPositive);

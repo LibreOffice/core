@@ -2393,7 +2393,7 @@ void SwUiWriterTest::testTdf72788()
     pCursor->GetNode().GetTextNode()->GetAttr(aSet, 5, 12);
     SfxPoolItem const * pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     //Check that bold is active on the selection and it's in aSet
-    CPPUNIT_ASSERT_EQUAL((*pPoolItem == aWeightItem), true);
+    CPPUNIT_ASSERT_EQUAL(true, (*pPoolItem == aWeightItem));
     //Make selection to remove formatting in first paragraph
     //[this is text
     //]more text
@@ -2412,7 +2412,7 @@ void SwUiWriterTest::testTdf72788()
     //Check that bold is removed in first paragraph
     pTextNode->GetAttr(aSet, 5, 12);
     SfxPoolItem const * pPoolItem2 = aSet.GetItem(RES_CHRATR_WEIGHT);
-    CPPUNIT_ASSERT_EQUAL((*pPoolItem2 != aWeightItem), true);
+    CPPUNIT_ASSERT_EQUAL(true, (*pPoolItem2 != aWeightItem));
 }
 
 void SwUiWriterTest::testTdf60967()
@@ -3766,14 +3766,14 @@ void SwUiWriterTest::testUndoCharAttribute()
     pCursor->GetNode().GetTextNode()->GetAttr(aSet, 10, 19);
     SfxPoolItem const * pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     // Check that bold is active on the selection; checks if it's in aSet
-    CPPUNIT_ASSERT_EQUAL((*pPoolItem == aWeightItem), true);
+    CPPUNIT_ASSERT_EQUAL(true, (*pPoolItem == aWeightItem));
     // Invoke Undo
     rUndoManager.Undo();
     // Check that bold is no longer active
     aSet.ClearItem(RES_CHRATR_WEIGHT);
     pCursor->GetNode().GetTextNode()->GetAttr(aSet, 10, 19);
     pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
-    CPPUNIT_ASSERT_EQUAL((*pPoolItem == aWeightItem), false);
+    CPPUNIT_ASSERT_EQUAL(false, (*pPoolItem == aWeightItem));
 }
 
 void SwUiWriterTest::testUndoDelAsChar()
