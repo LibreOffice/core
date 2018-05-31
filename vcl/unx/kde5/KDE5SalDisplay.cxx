@@ -28,12 +28,12 @@
 
 SalKDE5Display* SalKDE5Display::selfptr = nullptr;
 
-SalKDE5Display::SalKDE5Display( Display* pDisp )
-    : SalX11Display( pDisp )
+SalKDE5Display::SalKDE5Display(Display* pDisp)
+    : SalX11Display(pDisp)
 {
-    assert( selfptr == nullptr );
+    assert(selfptr == nullptr);
     selfptr = this;
-    xim_protocol = XInternAtom( pDisp_, "_XIM_PROTOCOL", False );
+    xim_protocol = XInternAtom(pDisp_, "_XIM_PROTOCOL", False);
 }
 
 SalKDE5Display::~SalKDE5Display()
@@ -48,16 +48,16 @@ SalKDE5Display::~SalKDE5Display()
 
 void SalKDE5Display::Yield()
 {
-    if( DispatchInternalEvent() )
+    if (DispatchInternalEvent())
         return;
 
     // Prevent blocking from Drag'n'Drop events, which may have already have processed the event
-    if (XEventsQueued( pDisp_, QueuedAfterReading ) == 0)
+    if (XEventsQueued(pDisp_, QueuedAfterReading) == 0)
         return;
 
-    DBG_ASSERT( GetSalData()->m_pInstance->GetYieldMutex()->IsCurrentThread() ==
-                osl::Thread::getCurrentIdentifier(),
-                "will crash soon since solar mutex not locked in SalKDE5Display::Yield" );
+    DBG_ASSERT(GetSalData()->m_pInstance->GetYieldMutex()->IsCurrentThread()
+                   == osl::Thread::getCurrentIdentifier(),
+               "will crash soon since solar mutex not locked in SalKDE5Display::Yield");
 
     /*XEvent event;
     XNextEvent( pDisp_, &event );
@@ -74,22 +74,21 @@ void SalKDE5Display::Yield()
 // completely. Skipped events are KeyPress, KeyRelease and also _XIM_PROTOCOL client message
 // (seems to be necessary too, hopefully there are not other internal XIM messages that
 // would need this handling).
-bool SalKDE5Display::checkDirectInputEvent( xcb_generic_event_t* ev )
+bool SalKDE5Display::checkDirectInputEvent(xcb_generic_event_t* ev)
 {
     switch (ev->response_type & ~0x80)
     {
         case XCB_CLIENT_MESSAGE:
         case XCB_KEY_PRESS:
         case XCB_KEY_RELEASE:
-            if( QApplication::activeWindow() == nullptr )
+            if (QApplication::activeWindow() == nullptr)
             {
-//                Dispatch(ev);
+                //                Dispatch(ev);
                 return true;
             }
             break;
     }
     return false;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

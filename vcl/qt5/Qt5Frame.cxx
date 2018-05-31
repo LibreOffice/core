@@ -141,15 +141,15 @@ void Qt5Frame::TriggerPaintEvent(QRect aRect)
     CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-void Qt5Frame::InitSvpSalGraphics( SvpSalGraphics* pSvpSalGraphics )
+void Qt5Frame::InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics)
 {
     int width = m_pQWidget->size().width();
     int height = m_pQWidget->size().height();
     m_pSvpGraphics = pSvpSalGraphics;
     m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
     m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
-    cairo_surface_set_user_data(m_pSurface.get(), SvpSalGraphics::getDamageKey(),
-                                &m_aDamageHandler, nullptr);
+    cairo_surface_set_user_data(m_pSurface.get(), SvpSalGraphics::getDamageKey(), &m_aDamageHandler,
+                                nullptr);
     TriggerPaintEvent();
 }
 
@@ -164,8 +164,8 @@ SalGraphics* Qt5Frame::AcquireGraphics()
     {
         if (!m_pOurSvpGraphics.get())
         {
-            m_pOurSvpGraphics.reset( new SvpSalGraphics() );
-            InitSvpSalGraphics( m_pOurSvpGraphics.get() );
+            m_pOurSvpGraphics.reset(new SvpSalGraphics());
+            InitSvpSalGraphics(m_pOurSvpGraphics.get());
         }
         return m_pOurSvpGraphics.get();
     }
@@ -234,10 +234,7 @@ void Qt5Frame::SetIcon(sal_uInt16 nIcon)
     m_pQWidget->window()->setWindowIcon(aIcon);
 }
 
-void Qt5Frame::SetMenu(SalMenu* pMenu)
-{
-    m_pSalMenu = static_cast<Qt5Menu*>( pMenu );
-}
+void Qt5Frame::SetMenu(SalMenu* pMenu) { m_pSalMenu = static_cast<Qt5Menu*>(pMenu); }
 
 void Qt5Frame::DrawMenuBar() {}
 

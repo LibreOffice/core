@@ -111,27 +111,21 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, D
     }
 }
 
-SalMenu* Qt5Instance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
+SalMenu* Qt5Instance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 {
-    Qt5Menu* pSalMenu = new Qt5Menu( bMenuBar );
-    pSalMenu->SetMenu( pVCLMenu );
+    Qt5Menu* pSalMenu = new Qt5Menu(bMenuBar);
+    pSalMenu->SetMenu(pVCLMenu);
     return pSalMenu;
 }
 
-void Qt5Instance::DestroyMenu( SalMenu* pMenu )
+void Qt5Instance::DestroyMenu(SalMenu* pMenu) { delete pMenu; }
+
+SalMenuItem* Qt5Instance::CreateMenuItem(const SalItemParams* pItemData)
 {
-    delete pMenu;
+    return new Qt5MenuItem(pItemData);
 }
 
-SalMenuItem* Qt5Instance::CreateMenuItem( const SalItemParams* pItemData )
-{
-    return new Qt5MenuItem( pItemData );
-}
-
-void Qt5Instance::DestroyMenuItem( SalMenuItem* pItem )
-{
-    delete pItem;
-}
+void Qt5Instance::DestroyMenuItem(SalMenuItem* pItem) { delete pItem; }
 
 SalTimer* Qt5Instance::CreateSalTimer() { return new Qt5Timer(); }
 
@@ -211,18 +205,18 @@ void Qt5Instance::ProcessEvent(SalUserEvent aEvent)
     aEvent.m_pFrame->CallCallback(aEvent.m_nEvent, aEvent.m_pData);
 }
 
-css::uno::Reference< css::ui::dialogs::XFilePicker2 >
-Qt5Instance::createFilePicker( const css::uno::Reference< css::uno::XComponentContext > & )
+css::uno::Reference<css::ui::dialogs::XFilePicker2>
+Qt5Instance::createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&)
 {
-    return css::uno::Reference< css::ui::dialogs::XFilePicker2 >(
-        new Qt5FilePicker( QFileDialog::ExistingFile ) );
+    return css::uno::Reference<css::ui::dialogs::XFilePicker2>(
+        new Qt5FilePicker(QFileDialog::ExistingFile));
 }
 
-css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
-Qt5Instance::createFolderPicker( const css::uno::Reference< css::uno::XComponentContext > & )
+css::uno::Reference<css::ui::dialogs::XFolderPicker2>
+Qt5Instance::createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&)
 {
-    return css::uno::Reference< css::ui::dialogs::XFolderPicker2 >(
-        new Qt5FilePicker( QFileDialog::Directory ) );
+    return css::uno::Reference<css::ui::dialogs::XFolderPicker2>(
+        new Qt5FilePicker(QFileDialog::Directory));
 }
 
 extern "C" {

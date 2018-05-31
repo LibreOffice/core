@@ -24,18 +24,16 @@
 
 #include "KDE5SalData.hxx"
 
-KDE5SalData::KDE5SalData( SalInstance *pInstance )
-    : Qt5Data( pInstance )
+KDE5SalData::KDE5SalData(SalInstance* pInstance)
+    : Qt5Data(pInstance)
 {
 }
 
-KDE5SalData::~KDE5SalData()
-{
-}
+KDE5SalData::~KDE5SalData() {}
 
 void KDE5SalData::initNWF()
 {
-    ImplSVData *pSVData = ImplGetSVData();
+    ImplSVData* pSVData = ImplGetSVData();
 
     // draw toolbars on separate lines
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
@@ -48,13 +46,11 @@ void KDE5SalData::initNWF()
     pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
 
     // Styled menus need additional space
-    QStyle *style = QApplication::style();
-    pSVData->maNWFData.mnMenuFormatBorderX =
-       style->pixelMetric( QStyle::PM_MenuPanelWidth ) +
-       style->pixelMetric( QStyle::PM_MenuHMargin );
-    pSVData->maNWFData.mnMenuFormatBorderY =
-       style->pixelMetric( QStyle::PM_MenuPanelWidth ) +
-       style->pixelMetric( QStyle::PM_MenuVMargin );
+    QStyle* style = QApplication::style();
+    pSVData->maNWFData.mnMenuFormatBorderX = style->pixelMetric(QStyle::PM_MenuPanelWidth)
+                                             + style->pixelMetric(QStyle::PM_MenuHMargin);
+    pSVData->maNWFData.mnMenuFormatBorderY = style->pixelMetric(QStyle::PM_MenuPanelWidth)
+                                             + style->pixelMetric(QStyle::PM_MenuVMargin);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
