@@ -31,6 +31,7 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/windowsdebugoutput.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
@@ -91,6 +92,8 @@ bool OneInstanceOleWrapper::registerClass(GUID const * pGuid)
             CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,
             REGCLS_MULTIPLEUSE,
             &m_factoryHandle);
+
+    SAL_INFO("extensions.olebridge", "CoRegisterClassObject(" << *pGuid << "): " << WindowsErrorStringFromHRESULT(hresult));
 
     return (hresult == NOERROR);
 }
