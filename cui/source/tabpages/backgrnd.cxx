@@ -1577,6 +1577,12 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         }
         else if (nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)
             bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
+        else if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
+        {
+            VclPtr<vcl::Window> pBtn;
+            get(pBtn, "btnbitmap");
+            pBtn->Show();
+        }
     }
     SvxAreaTabPage::PageCreated( aSet );
 }
