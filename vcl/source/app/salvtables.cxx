@@ -1829,6 +1829,11 @@ public:
         return xSet;
     }
 
+    virtual Point get_accessible_location() override
+    {
+        return m_xDrawingArea->OutputToAbsoluteScreenPixel(Point());
+    }
+
     virtual ~SalInstanceDrawingArea() override
     {
         m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());

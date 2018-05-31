@@ -2824,7 +2824,7 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
 
             if( nPos != VALUESET_ITEM_NOTFOUND )
             {
-                ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(
+                SvtValueItemAcc* pItemAcc = SvtValueItemAcc::getImplementation(
                     mItemList[nPos]->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
 
                 if( pItemAcc )
@@ -2846,9 +2846,9 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
         else
             pItem = mpNoneItem.get();
 
-        ValueItemAcc* pItemAcc = nullptr;
+        SvtValueItemAcc* pItemAcc = nullptr;
         if (pItem != nullptr)
-            pItemAcc = ValueItemAcc::getImplementation( pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
+            pItemAcc = SvtValueItemAcc::getImplementation( pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
 
         if( pItemAcc )
         {
