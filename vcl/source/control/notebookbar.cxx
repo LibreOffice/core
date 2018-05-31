@@ -178,6 +178,21 @@ void NotebookBar::UpdateBackground()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
         Wallpaper aWallpaper(aPersona);
+
+        long nMenubarHeight = 0;
+        Size aSize(VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::RealParent)));
+        SystemWindow* pSysWin = GetSystemWindow();
+        if (pSysWin && pSysWin->GetMenuBar())
+        {
+            vcl::Window* pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
+            if (pMenubarWin)
+                nMenubarHeight = pMenubarWin->GetOutputHeightPixel();
+        }
+        aWallpaper.SetRect(tools::Rectangle(Point(0, -nMenubarHeight),
+                           Size(aSize.Width(),
+                                aSize.Height() + nMenubarHeight)));
+
+
         aWallpaper.SetStyle(WallpaperStyle::TopRight);
     if (!aPersona.IsEmpty())
         {
