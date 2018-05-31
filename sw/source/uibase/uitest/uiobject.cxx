@@ -120,6 +120,20 @@ OUString SwEditWinUIObject::get_name() const
     return OUString("SwEditWinUIObject");
 }
 
+OUString SwEditWinUIObject::get_sw_action(const SwEventId nEvent)
+{
+    if (nEvent == SwEventId::GotoPage)
+    {
+        sal_uInt16 nPageNum = 0;
+        sal_uInt16 nVirtPageNum = 0;
+        SwWrtShell& rWrtShell = getWrtShell(mxEditWin);
+        rWrtShell.GetPageNum(nPageNum, nVirtPageNum);
+        return this->get_type() + " Action:GOTO Id:" + mxEditWin->get_id() +
+            " Page:" + OUString::number(nPageNum) + " Parent:" + mxEditWin->GetParent()->get_id();
+    }
+    return OUString();
+}
+
 std::unique_ptr<UIObject> SwEditWinUIObject::create(vcl::Window* pWindow)
 {
     SwEditWin* pEditWin = dynamic_cast<SwEditWin*>(pWindow);

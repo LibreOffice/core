@@ -11,6 +11,7 @@
 #define SW_SOURCE_UIBASE_INC_UIOBJECT_HXX
 
 #include <memory>
+#include <vcl/uitest/swevents.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
 class SwEditWin;
@@ -25,6 +26,8 @@ public:
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
+
+    virtual OUString get_sw_action(const SwEventId nEvent);
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
