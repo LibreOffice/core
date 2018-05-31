@@ -30,6 +30,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 #include <vector>
 
 class ImageMap;
@@ -112,7 +113,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     sal_uInt16          mnCloseId;
 
     VclPtr<IMapWindow>         pIMapWnd;
-    IMapOwnData*        pOwnData;
+    std::unique_ptr<IMapOwnData> pOwnData;
     void*               pCheckObj;
     SvxIMapDlgItem      aIMapItem;
 
