@@ -531,7 +531,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
                 if (IsFieldEdit() || pBox)    // only when interacting via mouse
                     m_pNameED->SetText(OUString());
 
-                if (nSelPos != 0 && nSelPos != LISTBOX_ENTRY_NOTFOUND)
+                if (nSelData != 0 && nSelData != SIZE_MAX)
                 {
                     bValue = true;      // SubType OFF - knows no Offset
                     if (GetCurField() && IsFieldEdit())
