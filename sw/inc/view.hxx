@@ -166,7 +166,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     tools::Rectangle           m_aVisArea;       // visible region
 
     VclPtr<SwEditWin>    m_pEditWin;
-    SwWrtShell          *m_pWrtShell;
+    std::unique_ptr<SwWrtShell> m_pWrtShell;
 
     SfxShell            *m_pShell;        // current SubShell at the dispatcher
     FmFormShell         *m_pFormShell;    // DB-FormShell
@@ -387,7 +387,7 @@ public:
     void                    StopShellTimer();
 
     SwWrtShell&      GetWrtShell   () const { return *m_pWrtShell; }
-    SwWrtShell*      GetWrtShellPtr() const { return  m_pWrtShell; }
+    SwWrtShell*      GetWrtShellPtr() const { return  m_pWrtShell.get(); }
 
     SwEditWin &GetEditWin()        { return *m_pEditWin; }
     const SwEditWin &GetEditWin () const { return *m_pEditWin; }

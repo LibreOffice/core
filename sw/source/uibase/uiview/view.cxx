@@ -178,7 +178,7 @@ void SwView::GotFocus() const
     if ( pAsFormShell )
     {
         pAsFormShell->ForgetActiveControl();
-        const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell );
+        const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell.get() );
     }
     else if ( m_pPostItMgr )
     {
@@ -186,7 +186,7 @@ void SwView::GotFocus() const
         if ( pAsAnnotationShell )
         {
             m_pPostItMgr->SetActiveSidebarWin(nullptr);
-            const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell );
+            const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell.get() );
         }
     }
     if( GetWrtShellPtr() )
@@ -215,7 +215,7 @@ IMPL_LINK_NOARG(SwView, FormControlActivated, LinkParamNone*, void)
         if ( pSdrView && pSdrView->IsTextEdit() )
             pSdrView->SdrEndTextEdit( true );
 
-        AttrChangedNotify( m_pWrtShell );
+        AttrChangedNotify( m_pWrtShell.get() );
     }
 }
 
@@ -821,11 +821,11 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     SAL_INFO( "sw.ui", "before create WrtShell" );
     if (SwView *pView = dynamic_cast<SwView*>(pExistingSh))
     {
-        m_pWrtShell = new SwWrtShell(*pView->m_pWrtShell, m_pEditWin, *this);
+        m_pWrtShell.reset(new SwWrtShell(*pView->m_pWrtShell, m_pEditWin, *this));
     }
     else if (SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(rDocSh.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()))
     {
-        m_pWrtShell = new SwWrtShell(*pWrtShell, m_pEditWin, *this);
+        m_pWrtShell.reset(new SwWrtShell(*pWrtShell, m_pEditWin, *this));
     }
     else
     {
@@ -848,7 +848,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             aUsrPref.SetViewLayoutBookMode( false );
             aUsrPref.SetViewLayoutColumns( 1 );
         }
-        m_pWrtShell = new SwWrtShell( rDoc, m_pEditWin, *this, &aUsrPref );
+        m_pWrtShell.reset(new SwWrtShell(rDoc, m_pEditWin, *this, &aUsrPref));
         // creating an SwView from a SwPagePreview needs to
         // add the SwViewShell to the ring of the other SwViewShell(s)
         if(m_bOldShellWasPagePreview)
@@ -873,7 +873,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         }
     }
     SAL_INFO( "sw.ui", "after create WrtShell" );
-    m_pHRuler = VclPtr<SwCommentRuler>::Create(m_pWrtShell, &GetViewFrame()->GetWindow(), m_pEditWin,
+    m_pHRuler = VclPtr<SwCommentRuler>::Create(m_pWrtShell.get(), &GetViewFrame()->GetWindow(), m_pEditWin,
                 SvxRulerSupportFlags::TABS |
                 SvxRulerSupportFlags::PARAGRAPH_MARGINS |
                 SvxRulerSupportFlags::BORDERS |
@@ -970,7 +970,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         if (m_pWrtShell->GetDoc()->GetDocumentFieldsManager().containsUpdatableFields())
         {
-            SET_CURR_SHELL( m_pWrtShell );
+            SET_CURR_SHELL(m_pWrtShell.get());
             m_pWrtShell->StartAction();
             m_pWrtShell->CalcLayout();
             m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
@@ -1082,9 +1082,7 @@ SwView::~SwView()
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
     m_pScrollFill.disposeAndClear();
-    delete m_pWrtShell;
-    m_pWrtShell = nullptr;      // Set to 0, so that it is not accessible by the following dtors cannot.
-    m_pShell = nullptr;
+    m_pWrtShell.reset(); // reset here so that it is not accessible by the following dtors.
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
     m_pHRuler.disposeAndClear();
@@ -1164,7 +1162,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
     {
         bool bIsOwnDocument = lcl_IsOwnDocument( *this );
 
-        SET_CURR_SHELL(m_pWrtShell);
+        SET_CURR_SHELL(m_pWrtShell.get());
 
         sal_Int32 nPos = 0;
 
@@ -1282,7 +1280,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     if (!nLength)
         return;
 
-    SET_CURR_SHELL(m_pWrtShell);
+    SET_CURR_SHELL(m_pWrtShell.get());
     const beans::PropertyValue *pValue = rSequence.getConstArray();
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const tools::Rectangle &rVis = GetVisArea();
@@ -1599,7 +1597,7 @@ OUString SwView::GetSelectionTextParam( bool bCompleteWrds, bool bEraseTrail )
 SwGlossaryHdl* SwView::GetGlosHdl()
 {
     if(!m_pGlosHdl)
-        m_pGlosHdl = new SwGlossaryHdl(GetViewFrame(), m_pWrtShell);
+        m_pGlosHdl = new SwGlossaryHdl(GetViewFrame(), m_pWrtShell.get());
     return m_pGlosHdl;
 }
 
@@ -1614,7 +1612,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             GetDrawFuncPtr()->Deactivate();
             SetDrawFuncPtr(nullptr);
             LeaveDrawCreate();
-            AttrChangedNotify(m_pWrtShell);
+            AttrChangedNotify(m_pWrtShell.get());
         }
     }
     else

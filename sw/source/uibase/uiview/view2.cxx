@@ -803,7 +803,7 @@ void SwView::Execute(SfxRequest &rReq)
             else if ( m_pWrtShell->IsDrawCreate() )
             {
                 GetDrawFuncPtr()->BreakCreate();
-                AttrChangedNotify(m_pWrtShell); // shell change if needed
+                AttrChangedNotify(m_pWrtShell.get()); // shell change if needed
             }
             else if ( m_pWrtShell->HasSelection() || IsDrawMode() )
             {
@@ -825,7 +825,7 @@ void SwView::Execute(SfxRequest &rReq)
                         rBind.Invalidate( SID_ATTR_SIZE );
                     }
                     m_pWrtShell->EnterStdMode();
-                    AttrChangedNotify(m_pWrtShell); // shell change if necessary
+                    AttrChangedNotify(m_pWrtShell.get()); // shell change if necessary
                 }
             }
             else if ( GetEditWin().GetApplyTemplate() )
@@ -1854,7 +1854,7 @@ void SwView::InsFrameMode(sal_uInt16 nCols)
 {
     if ( m_pWrtShell->HasWholeTabSelection() )
     {
-        SwFlyFrameAttrMgr aMgr( true, m_pWrtShell, Frmmgr_Type::TEXT );
+        SwFlyFrameAttrMgr aMgr( true, m_pWrtShell.get(), Frmmgr_Type::TEXT );
 
         const SwFrameFormat &rPageFormat =
                 m_pWrtShell->GetPageDesc(m_pWrtShell->GetCurPageDesc()).GetMaster();
@@ -2157,7 +2157,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         if( aRef.is() && 1 < aRef->GetRefCount() )  // still a valid ref?
         {
             SwReader* pRdr;
-            Reader *pRead = pDocSh->StartConvertFrom( *pMedium, &pRdr, m_pWrtShell );
+            Reader *pRead = pDocSh->StartConvertFrom(*pMedium, &pRdr, m_pWrtShell.get());
             if( pRead ||
                 (pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER) )
             {

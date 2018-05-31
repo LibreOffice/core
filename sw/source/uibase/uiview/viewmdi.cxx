@@ -73,7 +73,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
     m_pWrtShell->LockPaint();
 
     { // start of SwActContext scope
-    SwActContext aActContext(m_pWrtShell);
+    SwActContext aActContext(m_pWrtShell.get());
 
     long nFac = nFactor;
 
@@ -210,7 +210,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
 
     {
 
-    SwActContext aActContext(m_pWrtShell);
+    SwActContext aActContext(m_pWrtShell.get());
 
     if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {

@@ -225,7 +225,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             m_pWrtShell->EnterSelFrameMode();
         LeaveDrawCreate();
 
-        AttrChangedNotify(m_pWrtShell);
+        AttrChangedNotify(m_pWrtShell.get());
         return;
     }
 
@@ -240,7 +240,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     {
         case SID_OBJECT_SELECT:
         case SID_DRAW_SELECT:
-            pFuncPtr = new DrawSelection(m_pWrtShell, m_pEditWin, this);
+            pFuncPtr = new DrawSelection(m_pWrtShell.get(), m_pEditWin, this);
             m_nDrawSfxId = m_nFormSfxId = SID_OBJECT_SELECT;
             m_sDrawCustom.clear();
             break;
@@ -262,7 +262,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            pFuncPtr = new ConstRectangle(m_pWrtShell, m_pEditWin, this);
+            pFuncPtr = new ConstRectangle(m_pWrtShell.get(), m_pEditWin, this);
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
@@ -275,7 +275,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_BEZIER_FILL:
         case SID_DRAW_FREELINE_NOFILL:
         case SID_DRAW_FREELINE:
-            pFuncPtr = new ConstPolygon(m_pWrtShell, m_pEditWin, this);
+            pFuncPtr = new ConstPolygon(m_pWrtShell.get(), m_pEditWin, this);
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
@@ -283,7 +283,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_ARC:
         case SID_DRAW_PIE:
         case SID_DRAW_CIRCLECUT:
-            pFuncPtr = new ConstArc(m_pWrtShell, m_pEditWin, this);
+            pFuncPtr = new ConstArc(m_pWrtShell.get(), m_pEditWin, this);
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
@@ -293,7 +293,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
             if( pIdentifierItem )
                 nSlotId = pIdentifierItem->GetValue();
-            pFuncPtr = new ConstFormControl(m_pWrtShell, m_pEditWin, this);
+            pFuncPtr = new ConstFormControl(m_pWrtShell.get(), m_pEditWin, this);
             m_nFormSfxId = nSlotId;
         }
         break;
@@ -306,7 +306,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            pFuncPtr = new ConstCustomShape(m_pWrtShell, m_pEditWin, this, rReq );
+            pFuncPtr = new ConstCustomShape(m_pWrtShell.get(), m_pEditWin, this, rReq );
             m_nDrawSfxId = nSlotId;
             if ( nSlotId != SID_DRAW_CS_ID )
             {
@@ -337,7 +337,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         }
 
         SetDrawFuncPtr(pFuncPtr);
-        AttrChangedNotify(m_pWrtShell);
+        AttrChangedNotify(m_pWrtShell.get());
 
         pFuncPtr->Activate(nSlotId);
         NoRotate();
@@ -376,7 +376,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     if(bEndTextEdit && pSdrView && pSdrView->IsTextEdit())
         pSdrView->SdrEndTextEdit( true );
 
-    AttrChangedNotify(m_pWrtShell);
+    AttrChangedNotify(m_pWrtShell.get());
 }
 
 // End drawing
