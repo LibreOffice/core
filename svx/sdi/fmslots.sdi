@@ -552,7 +552,7 @@ interface FormTextAttributeShell
     /**** <HACK> ****/
     // the following is a slight hack. Problem is that the form shell needs to translate
     // slot names/args into URL dispatch names/args. For this, the SfxSlotPool is used
-    // - it provides convinient methods for this. However, the "pool" is not really a
+    // - it provides convenient methods for this. However, the "pool" is not really a
     // "pool" - it only knows slots, if there is a shell on the dispatcher stack which
     // which is responsible for this slot.
     // So, we declare the form shell as responsible for the following slots.

@@ -103,7 +103,7 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
 
 /*************************************************************************
 |*
-|* Contructor / Destructor
+|* Constructor / Destructor
 |*
 |************************************************************************/
 

@@ -82,7 +82,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw (::com::sun::star::uno::RuntimeException);
 
 private: //methods
-    NameContainer();//no default contructor
+    NameContainer();//no default constructor
 
 private: //member
     const ::com::sun::star::uno::Type   m_aType;

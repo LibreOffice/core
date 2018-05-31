@@ -132,13 +132,13 @@ XMultiPropertySet
         registerProperty(p, id);
     }
 
-    /** Registers a property with this  class and associates the argument id with it.
+    /** Registers a property with this class and associates the argument id with it.
      *  It does the same as {@link #registerProperty(Property, Object)}. The first three
      *  arguments are used to construct a Property object. The value for the Property.Handle
      *  is generated and does not have to be specified here. Use this method for registering
      *  a property if you do not care about the Property's handles.
      *  Registration has to occur during
-     *  initialization of the inheriting class (i.e. within the contructor).
+     *  initialization of the inheriting class (i.e. within the constructor).
      *  @param name The property's name (Property.Name).
      *  @param type The property's type (Property.Type).
      *  @param attributes The property's attributes (Property.Attributes).
@@ -196,8 +196,6 @@ XMultiPropertySet
     {
         registerProperty(propertyName, propertyName, attributes);
     }
-
-
 
     /** Returns the Property object for a given property name or null if that property does
      *  not exists (i.e. it has not been registered). Override this method
@@ -260,7 +258,7 @@ XMultiPropertySet
      *  override {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast} or {@link #getPropertyValue(Property)}
      *  then the argument <em>id</em> has to be a java.lang.String that equals the name of
      *  the member variable that holds the Property's value.
-     *  Override this method if you want to implement your own mapping from Property objects  to ids or
+     *  Override this method if you want to implement your own mapping from Property objects to ids or
      *  if you need ids of a type other then java.lang.String.
      *  Then you also need to override {@link #initMappings initMappings} and {@link #getPropertyId getPropertyId}.
      *  @param prop The Property object that is being assigned an id.
@@ -1090,8 +1088,5 @@ XMultiPropertySet
 
     }
 }
-
-
-
 
 

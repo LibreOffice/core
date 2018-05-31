@@ -152,7 +152,7 @@ namespace comphelper
             queried for the template-parameterized UNO type.
 
             @param dummy
-            Dummy parameter, to distinguish this contructor from the
+            Dummy parameter, to distinguish this constructor from the
             default unary one (which does not perform a
             QueryInterface)
          */

@@ -43,7 +43,7 @@ sal_Char __READONLY_DATA sTelnetScheme[] = INET_TELNET_SCHEME;
 
 /*************************************************************************
 |*
-|* Contructor / Destructor
+|* Constructor / Destructor
 |*
 |************************************************************************/
 

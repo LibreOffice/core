@@ -521,7 +521,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 }
 }
 
-// contructor, which might initialize VCL
+// constructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ):
     cppu::WeakComponentImplHelper7<
     ::com::sun::star::awt::XToolkit,

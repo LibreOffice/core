@@ -332,7 +332,7 @@ class SW_DLLPUBLIC SwFormTokensHelper
 
 public:
     /**
-       contructor
+       constructor
 
        @param rTokens       vector of tokens
     */
@@ -752,7 +752,7 @@ inline const String& SwTOXBase::GetTitle() const
     { return aTitle; }
 
 inline const String& SwTOXBase::GetTypeName() const
-    { return GetTOXType()->GetTypeName();  }
+    { return GetTOXType()->GetTypeName(); }
 
 inline const SwForm& SwTOXBase::GetTOXForm() const
     { return aForm; }
@@ -761,7 +761,7 @@ inline void SwTOXBase::SetCreate(sal_uInt16 nCreate)
     { nCreateType = nCreate; }
 
 inline void SwTOXBase::SetTOXForm(const SwForm& rForm)
-    {  aForm = rForm; }
+    { aForm = rForm; }
 
 inline TOXTypes SwTOXBase::GetType() const
     { return GetTOXType()->GetType(); }

@@ -156,7 +156,7 @@ public:
     /**
         Fill the string data in the new string and clear the buffer.
 
-        This method is more efficient than the contructor of the string. It does
+        This method is more efficient than the constructor of the string. It does
         not copy the buffer.
 
         @return the string previously contained in the buffer.
@@ -200,7 +200,7 @@ public:
 
         The new capacity will be at least as large as the maximum of the current
         length (so that no contents of the buffer is destroyed) and the given
-        minimumCapacity.  If the given minimumCapacity is negative, nothing is
+        minimumCapacity. If the given minimumCapacity is negative, nothing is
         changed.
 
         @param   minimumCapacity   the minimum desired capacity.

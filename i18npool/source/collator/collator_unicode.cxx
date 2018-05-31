@@ -124,7 +124,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             /** ICU collators are loaded using a locale only.
                 ICU uses Variant as collation algorithm name (like de__PHONEBOOK
                 locale), note the empty territory (Country) designator in this special
-                case here. The icu::Locale contructor changes the algorithm name to
+                case here. The icu::Locale constructor changes the algorithm name to
                 uppercase itself, so we don't have to bother with that.
             */
             icu::Locale icuLocale(

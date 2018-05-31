@@ -92,7 +92,7 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 /*************************************************************************
 |*
-|* Contructor / Destructor
+|* Constructor / Destructor
 |*
 |************************************************************************/
 

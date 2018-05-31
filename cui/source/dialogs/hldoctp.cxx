@@ -41,7 +41,7 @@ sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
 
 /*************************************************************************
 |*
-|* Contructor / Destructor
+|* Constructor / Destructor
 |*
 |************************************************************************/
 

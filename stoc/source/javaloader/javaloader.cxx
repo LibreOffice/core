@@ -257,7 +257,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                 throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "javaloader error - no Java environment available")), css::uno::Reference<XInterface>());
 
-            // why is there no convinient contructor?
+            // why is there no convenient constructor?
             OUString sCppu_current_lb_name(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
             uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
             if(!pUno_environment)
