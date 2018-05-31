@@ -833,10 +833,12 @@ public:
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
     virtual void queue_resize() = 0;
-    virtual a11yref get_accessible_parent() = 0;
-    virtual a11yrelationset get_accessible_relation_set() = 0;
     // use return here just to generate matching VirtualDevices
     virtual OutputDevice& get_ref_device() = 0;
+
+    virtual a11yref get_accessible_parent() = 0;
+    virtual a11yrelationset get_accessible_relation_set() = 0;
+    virtual Point get_accessible_location() = 0;
 };
 
 class VCL_DLLPUBLIC Menu
