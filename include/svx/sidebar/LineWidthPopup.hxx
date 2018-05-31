@@ -22,6 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/layout.hxx>
+#include <array>
 
 class Edit;
 class MetricField;
@@ -43,7 +44,7 @@ public:
 
 private:
     LinePropertyPanelBase& m_rParent;
-    OUString* m_pStr;
+    std::array<OUString,9> maStrUnits;
     OUString m_sPt;
     MapUnit m_eMapUnit;
     bool m_bVSFocus;
