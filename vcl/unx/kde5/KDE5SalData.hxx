@@ -23,11 +23,11 @@
 
 class KDE5SalData : public Qt5Data
 {
-    public:
-        KDE5SalData( SalInstance *pInstance );
-        virtual ~KDE5SalData();
+public:
+    KDE5SalData(SalInstance* pInstance);
+    virtual ~KDE5SalData();
 
-        static void initNWF() ;
+    static void initNWF();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

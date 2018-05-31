@@ -41,7 +41,7 @@
 class VclQtMixinBase
 {
 public:
-    VclQtMixinBase( Qt5Frame *pFrame) { m_pFrame = pFrame; }
+    VclQtMixinBase(Qt5Frame* pFrame) { m_pFrame = pFrame; }
 
     void mixinFocusInEvent(QFocusEvent*);
     void mixinFocusOutEvent(QFocusEvent*);
@@ -61,9 +61,8 @@ private:
     bool mixinHandleKeyEvent(QKeyEvent*, bool);
     void mixinHandleMouseButtonEvent(QMouseEvent*, bool);
 
-    Qt5Frame *m_pFrame;
+    Qt5Frame* m_pFrame;
 };
-
 
 void VclQtMixinBase::mixinPaintEvent(QPaintEvent* pEvent, QWidget* widget)
 {
@@ -74,7 +73,7 @@ void VclQtMixinBase::mixinPaintEvent(QPaintEvent* pEvent, QWidget* widget)
         cairo_surface_flush(pSurface);
 
         QImage aImage(cairo_image_surface_get_data(pSurface), widget->size().width(),
-                      widget->size().height(),Qt5_DefaultFormat32);
+                      widget->size().height(), Qt5_DefaultFormat32);
         p.drawImage(pEvent->rect().topLeft(), aImage, pEvent->rect());
     }
     else
@@ -195,7 +194,7 @@ void VclQtMixinBase::mixinMoveEvent(QMoveEvent*)
 
 void VclQtMixinBase::mixinShowEvent(QShowEvent*)
 {
-    QSize aSize( m_pFrame->GetQWidget()->size() );
+    QSize aSize(m_pFrame->GetQWidget()->size());
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
     m_pFrame->CallCallback(SalEvent::Paint, &aPaintEvt);
 }
@@ -380,8 +379,7 @@ void VclQtMixinBase::mixinFocusOutEvent(QFocusEvent*)
     m_pFrame->CallCallback(SalEvent::LoseFocus, nullptr);
 }
 
-template<class ParentClassT>
-class Qt5Widget : public ParentClassT
+template <class ParentClassT> class Qt5Widget : public ParentClassT
 {
     //Q_OBJECT
 
@@ -422,10 +420,7 @@ class Qt5Widget : public ParentClassT
         return maMixin.mixinMouseReleaseEvent(event);
     }
 
-    virtual void moveEvent(QMoveEvent* event) override
-    {
-        return maMixin.mixinMoveEvent(event);
-    }
+    virtual void moveEvent(QMoveEvent* event) override { return maMixin.mixinMoveEvent(event); }
 
     virtual void paintEvent(QPaintEvent* event) override
     {
@@ -437,31 +432,23 @@ class Qt5Widget : public ParentClassT
         return maMixin.mixinResizeEvent(event, ParentClassT::size());
     }
 
-    virtual void showEvent(QShowEvent* event) override
-    {
-        return maMixin.mixinShowEvent(event);
-    }
+    virtual void showEvent(QShowEvent* event) override { return maMixin.mixinShowEvent(event); }
 
-    virtual void wheelEvent(QWheelEvent* event) override
-    {
-        return maMixin.mixinWheelEvent(event);
-    }
+    virtual void wheelEvent(QWheelEvent* event) override { return maMixin.mixinWheelEvent(event); }
 
-    virtual void closeEvent(QCloseEvent* event) override
-    {
-        return maMixin.mixinCloseEvent(event);
-    }
-
+    virtual void closeEvent(QCloseEvent* event) override { return maMixin.mixinCloseEvent(event); }
 
 private:
-    Qt5Widget( Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags() )
-        : QWidget(parent, f), maMixin(&rFrame)
+    Qt5Widget(Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags())
+        : QWidget(parent, f)
+        , maMixin(&rFrame)
     {
         Init();
     }
 
-    Qt5Widget( Qt5Frame& rFrame, Qt::WindowFlags f )
-        : QMainWindow(Q_NULLPTR, f), maMixin(&rFrame)
+    Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
+        : QMainWindow(Q_NULLPTR, f)
+        , maMixin(&rFrame)
     {
         Init();
     }
@@ -472,18 +459,19 @@ private:
         ParentClassT::setMouseTracking(true);
         ParentClassT::setFocusPolicy(Qt::StrongFocus);
     }
-public:
-    virtual ~Qt5Widget() override {};
 
-    friend QWidget* createQt5Widget(Qt5Frame &rFrame, QWidget* parent, Qt::WindowFlags f);
+public:
+    virtual ~Qt5Widget() override{};
+
+    friend QWidget* createQt5Widget(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f);
 };
 
-QWidget* createQt5Widget( Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
+QWidget* createQt5Widget(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
 {
-    if(parent)
-       return new Qt5Widget<QWidget>(rFrame, parent, f);
+    if (parent)
+        return new Qt5Widget<QWidget>(rFrame, parent, f);
     else
-       return new Qt5Widget<QMainWindow>(rFrame, f);
+        return new Qt5Widget<QMainWindow>(rFrame, f);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

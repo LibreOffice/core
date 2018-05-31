@@ -134,14 +134,14 @@ void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVerti
 bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
     const int nLevel = rGlyph.mnFallbackLevel;
-    if( nLevel >= MAX_FALLBACK )
+    if (nLevel >= MAX_FALLBACK)
         return false;
 
-    Qt5Font* pFont = m_pTextStyle[ nLevel ];
-    if( !pFont )
+    Qt5Font* pFont = m_pTextStyle[nLevel];
+    if (!pFont)
         return false;
 
-    QRawFont aRawFont(QRawFont::fromFont( *pFont ));
+    QRawFont aRawFont(QRawFont::fromFont(*pFont));
     rRect = toRectangle(aRawFont.boundingRect(rGlyph.maGlyphId).toAlignedRect());
     return true;
 }
@@ -155,11 +155,11 @@ std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFall
     return std::unique_ptr<SalLayout>();
 }
 
-void Qt5Graphics::DrawTextLayout(const GenericSalLayout &rLayout )
+void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     const Qt5Font* pFont = static_cast<const Qt5Font*>(&rLayout.GetFont());
-    assert( pFont );
-    QRawFont aRawFont(QRawFont::fromFont( *pFont ));
+    assert(pFont);
+    QRawFont aRawFont(QRawFont::fromFont(*pFont));
 
     QVector<quint32> glyphIndexes;
     QVector<QPointF> positions;
@@ -174,14 +174,14 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout &rLayout )
     }
 
     QGlyphRun aGlyphRun;
-    aGlyphRun.setPositions( positions );
-    aGlyphRun.setGlyphIndexes( glyphIndexes );
-    aGlyphRun.setRawFont( aRawFont );
+    aGlyphRun.setPositions(positions);
+    aGlyphRun.setGlyphIndexes(glyphIndexes);
+    aGlyphRun.setRawFont(aRawFont);
 
     Qt5Painter aPainter(*this);
     QColor aColor = toQColor(m_aTextColor);
     aPainter.setPen(aColor);
-    aPainter.drawGlyphRun( QPointF(), aGlyphRun );
+    aPainter.drawGlyphRun(QPointF(), aGlyphRun);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,26 +34,26 @@ class KDE5SalGraphics;
 
 class KDE5SalFrame : public Qt5Frame
 {
-    private:
-        std::unique_ptr<KDE5SalGraphics> m_pKDE5Graphics;
-        bool m_bGraphicsInUse;
+private:
+    std::unique_ptr<KDE5SalGraphics> m_pKDE5Graphics;
+    bool m_bGraphicsInUse;
 
-    public:
-        KDE5SalFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo );
+public:
+    KDE5SalFrame(KDE5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo);
 
-        virtual SalGraphics* AcquireGraphics() override;
-        virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;
-        virtual void UpdateSettings( AllSettings& rSettings ) override;
+    virtual SalGraphics* AcquireGraphics() override;
+    virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
+    virtual void UpdateSettings(AllSettings& rSettings) override;
 
-        virtual void DrawMenuBar() override { return; }
+    virtual void DrawMenuBar() override { return; }
 
-        virtual LanguageType GetInputLanguage() override { return LANGUAGE_SYSTEM; }
-        virtual void Beep() override { return; }
-        virtual const SystemEnvData* GetSystemData() const override { return nullptr; }
-        virtual SalPointerState GetPointerState() override { return SalPointerState(); }
-        virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
+    virtual LanguageType GetInputLanguage() override { return LANGUAGE_SYSTEM; }
+    virtual void Beep() override { return; }
+    virtual const SystemEnvData* GetSystemData() const override { return nullptr; }
+    virtual SalPointerState GetPointerState() override { return SalPointerState(); }
+    virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
 
-        virtual void SetScreenNumber( unsigned int ) override { return; }
+    virtual void SetScreenNumber(unsigned int) override { return; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

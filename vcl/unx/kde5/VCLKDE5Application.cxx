@@ -24,8 +24,8 @@
 
 #include "KDE5SalDisplay.hxx"
 
-VCLKDE5Application::VCLKDE5Application( int argc, char** argv) :
-    QApplication( argc, argv)
+VCLKDE5Application::VCLKDE5Application(int argc, char** argv)
+    : QApplication(argc, argv)
 {
 }
 
@@ -43,7 +43,7 @@ void VCLKDE5Application::preDialogSetup()
     // (see the KDE VCL plug), then this won't happen.
     // We cannot simply release SolarMutex here, because the event loop started
     // by the file dialog would also call back to LO code.
-    assert( QApplication::clipboard()->property( "useEventLoopWhenWaiting" ).toBool() );
+    assert(QApplication::clipboard()->property("useEventLoopWhenWaiting").toBool());
 }
 
 // various hacks to be performed after a Qt dialog has been closed
@@ -67,9 +67,9 @@ void VCLKDE5Application::postDialogCleanup()
     // (it's a mystery why LO's clipboard handling has its own thread when whole LO can
     // get blocked by both trying to send and receive clipboard contents anyway).
     QClipboard* clipboard = QApplication::clipboard();
-    if( clipboard->ownsSelection())
-        clipboard->clear( QClipboard::Selection );
-    if( clipboard->ownsClipboard())
+    if (clipboard->ownsSelection())
+        clipboard->clear(QClipboard::Selection);
+    if (clipboard->ownsClipboard())
         clipboard->clear();
 }
 
