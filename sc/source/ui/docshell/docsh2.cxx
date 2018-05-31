@@ -43,7 +43,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     bool bRet = SfxObjectShell::InitNew( xStor );
 
-    aDocument.MakeTable(0);
+    m_aDocument.MakeTable(0);
 
     //  Additional tables are created by the first View, if bIsEmpty is still sal_True
     if( bRet )
@@ -57,10 +57,10 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     // InitOptions sets the document languages, must be called before CreateStandardStyles
     InitOptions(false);
 
-    aDocument.GetStyleSheetPool()->CreateStandardStyles();
-    aDocument.UpdStlShtPtrsFrmNms();
+    m_aDocument.GetStyleSheetPool()->CreateStandardStyles();
+    m_aDocument.UpdStlShtPtrsFrmNms();
 
-    if (!mbUcalcTest)
+    if (!m_bUcalcTest)
     {
         /* Create styles that are imported through Orcus */
 
@@ -73,8 +73,8 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
         if (pOrcus)
         {
-            pOrcus->importODS_Styles(aDocument, aPath);
-            aDocument.GetStyleSheetPool()->setAllStandard();
+            pOrcus->importODS_Styles(m_aDocument, aPath);
+            m_aDocument.GetStyleSheetPool()->setAllStandard();
         }
     }
 
@@ -87,7 +87,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
 void ScDocShell::SetEmpty(bool bSet)
 {
-    bIsEmpty = bSet;
+    m_bIsEmpty = bSet;
 }
 
 void ScDocShell::InitItems()
@@ -96,7 +96,7 @@ void ScDocShell::InitItems()
     // Printer Options are set in GetPrinter when printing
     UpdateFontList();
 
-    ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = m_aDocument.GetDrawLayer();
     if (pDrawLayer)
     {
         PutItem( SvxColorListItem  ( pDrawLayer->GetColorList(), SID_COLOR_TABLE ) );
@@ -108,7 +108,7 @@ void ScDocShell::InitItems()
         PutItem( SvxLineEndListItem ( pDrawLayer->GetLineEndList(), SID_LINEEND_LIST ) );
 
         // Other modifications after creation of the DrawLayer
-        pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
+        pDrawLayer->SetNotifyUndoActionHdl( LINK( m_pDocFunc, ScDocFunc, NotifyDrawUndo ) );
     }
     else if (!utl::ConfigManager::IsFuzzing())
     {
@@ -117,12 +117,12 @@ void ScDocShell::InitItems()
     }
 
     if (!utl::ConfigManager::IsFuzzing() &&
-        (!aDocument.GetForbiddenCharacters() || !aDocument.IsValidAsianCompression() || !aDocument.IsValidAsianKerning()))
+        (!m_aDocument.GetForbiddenCharacters() || !m_aDocument.IsValidAsianCompression() || !m_aDocument.IsValidAsianKerning()))
     {
         //  get settings from SvxAsianConfig
         SvxAsianConfig aAsian;
 
-        if (!aDocument.GetForbiddenCharacters())
+        if (!m_aDocument.GetForbiddenCharacters())
         {
             // set forbidden characters if necessary
             uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
@@ -141,41 +141,41 @@ void ScDocShell::InitItems()
                     xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
                 }
 
-                aDocument.SetForbiddenCharacters( xForbiddenTable );
+                m_aDocument.SetForbiddenCharacters( xForbiddenTable );
             }
         }
 
-        if ( !aDocument.IsValidAsianCompression() )
+        if ( !m_aDocument.IsValidAsianCompression() )
         {
             // set compression mode from configuration if not already set (e.g. XML import)
-            aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
+            m_aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
         }
 
-        if ( !aDocument.IsValidAsianKerning() )
+        if ( !m_aDocument.IsValidAsianKerning() )
         {
             // set asian punctuation kerning from configuration if not already set (e.g. XML import)
-            aDocument.SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
+            m_aDocument.SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
         }
     }
 }
 
 void ScDocShell::ResetDrawObjectShell()
 {
-    ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = m_aDocument.GetDrawLayer();
     if (pDrawLayer)
         pDrawLayer->SetObjectShell( nullptr );
 }
 
 ScDrawLayer* ScDocShell::MakeDrawLayer()
 {
-    ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = m_aDocument.GetDrawLayer();
     if (!pDrawLayer)
     {
-        aDocument.InitDrawLayer(this);
-        pDrawLayer = aDocument.GetDrawLayer();
+        m_aDocument.InitDrawLayer(this);
+        pDrawLayer = m_aDocument.GetDrawLayer();
         InitItems(); // including Undo and Basic
         Broadcast( SfxHint( SfxHintId::ScDrawLayerNew ) );
-        if (nDocumentLock)
+        if (m_nDocumentLock)
             pDrawLayer->setLock(true);
     }
     return pDrawLayer;
