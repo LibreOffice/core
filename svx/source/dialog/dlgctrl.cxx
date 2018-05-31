@@ -649,8 +649,7 @@ void RectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
 
 RectCtl::~RectCtl()
 {
-    delete pBitmap;
-
+    pBitmap.reset();
     pAccContext.clear();
 }
 
@@ -681,12 +680,12 @@ void RectCtl::Resize_Impl()
 
 void RectCtl::InitRectBitmap()
 {
-    delete pBitmap;
+    pBitmap.reset();
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
 
-    pBitmap = new BitmapEx(RID_SVXCTRL_RECTBTNS);
+    pBitmap.reset(new BitmapEx(RID_SVXCTRL_RECTBTNS));
 
     // set bitmap-colors
     Color aColorAry1[7];
@@ -728,8 +727,7 @@ void RectCtl::InitRectBitmap()
 
 void RectCtl::StyleUpdated()
 {
-    delete pBitmap;
-    pBitmap = nullptr; // forces new creating of bitmap
+    pBitmap.reset(); // forces new creating of bitmap
     CustomWidgetController::StyleUpdated();
 }
 
