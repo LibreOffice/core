@@ -2008,6 +2008,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             // and check at least the types.
             if (bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)))
             {
+                SolarMutexGuard guard;
                 // set number format explicitly
                 pDocument->SetNumberFormat( aPos, nFormatIndex );
                 bChanged = true;
