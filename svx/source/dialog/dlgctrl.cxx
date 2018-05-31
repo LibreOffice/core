@@ -1808,7 +1808,7 @@ SvxPreviewBase::~SvxPreviewBase()
 
 void SvxPreviewBase::dispose()
 {
-    delete mpModel;
+    mpModel.reset();
     mpBufferDevice.disposeAndClear();
     Control::dispose();
 }
