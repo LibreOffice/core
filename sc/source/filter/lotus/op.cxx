@@ -31,6 +31,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <formulacell.hxx>
 #include <rangenam.hxx>
@@ -323,9 +324,15 @@ void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     nDefWidth = static_cast<sal_uInt16>( TWIPS_PER_CHAR * nDefWidth );
 
+    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+
     // instead of default, set all Cols in SC by hand
-    for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
+    for (SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++)
+    {
         rContext.pDoc->SetColWidth( nCol, 0, nDefWidth );
+        if (bFuzzing)
+            break;
+    }
 }
 
 void OP_Blank(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
