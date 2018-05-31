@@ -496,10 +496,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        assert(pFact); //ScAbstractFactory create fail!
-
                         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetFrameWeld(),  &aArgSet));
-                        assert(pDlg); //Dialog create fail!
                         pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
 
                         if ( pDlg->Execute() == RET_OK )
@@ -1005,10 +1002,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aExport.ExportStream( aStream, OUString(), SotClipboardFormatId::STRING );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
                     ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
                             nullptr, OUString(), &aStream, SC_TEXTTOCOLUMNS));
-                    OSL_ENSURE( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
 
                     if ( pDlg->Execute() == RET_OK )
                     {

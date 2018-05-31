@@ -1678,17 +1678,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    if(pFact)
-                    {
-                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aCoreSet));
-                        OSL_ENSURE(pDlg, "Zooming fail!");
-                        if (pDlg)
-                        {
-                            pDlg->SetLimits( MINZOOM, MAXZOOM );
-                            if( pDlg->Execute() != RET_CANCEL )
-                                pSet = pDlg->GetOutputItemSet();
-                        }
-                    }
+                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aCoreSet));
+                    pDlg->SetLimits( MINZOOM, MAXZOOM );
+                    if( pDlg->Execute() != RET_CANCEL )
+                        pSet = pDlg->GetOutputItemSet();
                 }
 
                 const SfxPoolItem* pViewLayoutItem = nullptr;
@@ -1884,10 +1877,7 @@ void SwView::EditLinkDlg()
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
-    if ( pDlg )
-    {
-        pDlg->Execute();
-    }
+    pDlg->Execute();
 }
 
 bool SwView::JumpToSwMark( const OUString& rMark )
@@ -2353,11 +2343,8 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                 if (RET_OK == xWarning->run())
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    if ( pFact )
-                    {
-                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
-                        pDlg->Execute();
-                    }
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
+                    pDlg->Execute();
                 }
                 return ;
             }

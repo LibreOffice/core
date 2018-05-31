@@ -873,8 +873,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
                 ScopedVclPtr<AbstractSwConvertTableDlg> pDlg(pFact->CreateSwConvertTableDlg(GetView(), bToTable));
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -2469,8 +2467,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
                 rSh.GetTabBorders( aSet );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
                 pDlg.disposeAndReset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::TABLE ));
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2485,8 +2481,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
                 pDlg.disposeAndReset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::FRAME ));
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2502,8 +2496,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
                 pDlg.disposeAndReset(pFact->CreateSwBorderDlg( pMDI, aSet, SwBorderModes::PARA ));
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2525,7 +2517,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
             ScopedVclPtr<SfxAbstractDialog> pDlg;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            assert(pFact && "SwAbstractDialogFactory fail!");
 
             // Table cell(s) selected?
             if ( rSh.IsTableMode() )
@@ -2882,8 +2873,6 @@ void SwBaseShell::ExecField( SfxRequest const & rReq )
         case FN_CHANGE_DBFIELD:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
             pDlg->Execute();
         }

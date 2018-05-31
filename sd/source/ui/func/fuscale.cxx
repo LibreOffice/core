@@ -108,65 +108,62 @@ void FuScale::DoExecute( SfxRequest& rReq )
         aNewAttr.Put( *pZoomItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact ? pFact->CreateSvxZoomDialog(nullptr, aNewAttr) : nullptr);
-        if (pDlg)
+        ScopedVclPtr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(nullptr, aNewAttr) );
+        pDlg->SetLimits( static_cast<sal_uInt16>(mpWindow->GetMinZoom()), static_cast<sal_uInt16>(mpWindow->GetMaxZoom()) );
+        sal_uInt16 nResult = pDlg->Execute();
+        switch( nResult )
         {
-            pDlg->SetLimits( static_cast<sal_uInt16>(mpWindow->GetMinZoom()), static_cast<sal_uInt16>(mpWindow->GetMaxZoom()) );
-            sal_uInt16 nResult = pDlg->Execute();
-            switch( nResult )
+            case RET_CANCEL:
             {
-                case RET_CANCEL:
-                {
-                    rReq.Ignore ();
-                    return; // Cancel
-                }
-                default:
-                {
-                    rReq.Ignore ();
-                }
-                break;
+                rReq.Ignore ();
+                return; // Cancel
             }
-
-            const SfxItemSet aArgs (*(pDlg->GetOutputItemSet ()));
-
-            pDlg.disposeAndClear();
-
-            if (!mpViewShell)
-                return;
-
-            switch ( aArgs.Get (SID_ATTR_ZOOM).GetType ())
+            default:
             {
-                case SvxZoomType::PERCENT:
-                {
-                    nValue = aArgs.Get (SID_ATTR_ZOOM).GetValue ();
-
-                    mpViewShell->SetZoom( nValue );
-
-                    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
-                }
-                break;
-
-                case SvxZoomType::OPTIMAL:
-                {
-                    if( dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr )
-                    {
-                        // name confusion: SID_SIZE_ALL -> zoom onto all objects
-                        // --> the program offers it as optimal
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
-                    }
-                }
-                break;
-
-                case SvxZoomType::PAGEWIDTH:
-                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
-                    break;
-
-                case SvxZoomType::WHOLEPAGE:
-                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
-                    break;
-                default:
-                    break;
+                rReq.Ignore ();
             }
+            break;
+        }
+
+        const SfxItemSet aArgs (*(pDlg->GetOutputItemSet ()));
+
+        pDlg.disposeAndClear();
+
+        if (!mpViewShell)
+            return;
+
+        switch ( aArgs.Get (SID_ATTR_ZOOM).GetType ())
+        {
+            case SvxZoomType::PERCENT:
+            {
+                nValue = aArgs.Get (SID_ATTR_ZOOM).GetValue ();
+
+                mpViewShell->SetZoom( nValue );
+
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
+            }
+            break;
+
+            case SvxZoomType::OPTIMAL:
+            {
+                if( dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr )
+                {
+                    // name confusion: SID_SIZE_ALL -> zoom onto all objects
+                    // --> the program offers it as optimal
+                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                }
+            }
+            break;
+
+            case SvxZoomType::PAGEWIDTH:
+                mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                break;
+
+            case SvxZoomType::WHOLEPAGE:
+                mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                break;
+            default:
+                break;
         }
     }
     else if(mpViewShell && (pArgs->Count () == 1))

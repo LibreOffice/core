@@ -1799,45 +1799,42 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 vcl::Window* pWin = GetActiveWindow();
-                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, true, SdResId(STR_INSERTLAYER)) : nullptr);
-                if( pDlg )
+                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg( pFact->CreateSdInsertLayerDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, true, SdResId(STR_INSERTLAYER)) );
+                pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
+
+                // test for already existing names
+                bool bLoop = true;
+                while( bLoop && pDlg->Execute() == RET_OK )
                 {
-                    pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
+                    pDlg->GetAttr( aNewAttr );
+                    aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
-                    // test for already existing names
-                    bool bLoop = true;
-                    while( bLoop && pDlg->Execute() == RET_OK )
+                    if( rLayerAdmin.GetLayer( aLayerName )
+                        || aLayerName.isEmpty() )
                     {
-                        pDlg->GetAttr( aNewAttr );
-                        aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
-
-                        if( rLayerAdmin.GetLayer( aLayerName )
-                            || aLayerName.isEmpty() )
-                        {
-                            // name already exists
-                            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                       VclMessageType::Warning, VclButtonsType::Ok,
-                                                                       SdResId(STR_WARN_NAME_DUPLICATE)));
-                            xWarn->run();
-                        }
-                        else
-                            bLoop = false;
-                    }
-                    if( bLoop ) // was canceled
-                    {
-                        pDlg.disposeAndClear();
-                        Cancel();
-                        rReq.Ignore ();
-                        break;
+                        // name already exists
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                                   SdResId(STR_WARN_NAME_DUPLICATE)));
+                        xWarn->run();
                     }
                     else
-                    {
-                        aLayerTitle  = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
-                        aLayerDesc   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                        bIsVisible   = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                        bIsLocked    = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
-                        bIsPrintable = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
-                    }
+                        bLoop = false;
+                }
+                if( bLoop ) // was canceled
+                {
+                    pDlg.disposeAndClear();
+                    Cancel();
+                    rReq.Ignore ();
+                    break;
+                }
+                else
+                {
+                    aLayerTitle  = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                    aLayerDesc   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                    bIsVisible   = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                    bIsLocked    = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
+                    bIsPrintable = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
                 }
             }
             else if (pArgs->Count () != 4)
@@ -1967,47 +1964,44 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 vcl::Window* pWin = GetActiveWindow();
-                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, bDelete, SdResId(STR_MODIFYLAYER)) : nullptr);
-                if( pDlg )
+                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg( pFact->CreateSdInsertLayerDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, bDelete, SdResId(STR_MODIFYLAYER)) );
+                pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
+
+                // test for already existing names
+                bool    bLoop = true;
+                sal_uInt16  nRet = 0;
+                while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
                 {
-                    pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
+                    pDlg->GetAttr( aNewAttr );
+                    aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
-                    // test for already existing names
-                    bool    bLoop = true;
-                    sal_uInt16  nRet = 0;
-                    while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
+                    if( (rLayerAdmin.GetLayer( aLayerName ) &&
+                         aLayerName != aOldLayerName) || aLayerName.isEmpty() )
                     {
-                        pDlg->GetAttr( aNewAttr );
-                        aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
-
-                        if( (rLayerAdmin.GetLayer( aLayerName ) &&
-                             aLayerName != aOldLayerName) || aLayerName.isEmpty() )
-                        {
-                            // name already exists
-                            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                       VclMessageType::Warning, VclButtonsType::Ok,
-                                                                       SdResId(STR_WARN_NAME_DUPLICATE)));
-                            xWarn->run();
-                        }
-                        else
-                            bLoop = false;
+                        // name already exists
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                                   SdResId(STR_WARN_NAME_DUPLICATE)));
+                        xWarn->run();
                     }
-                    switch (nRet)
-                    {
-                        case RET_OK :
-                            aLayerTitle  = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
-                            aLayerDesc   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                            bIsVisible   = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                            bIsLocked    = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
-                            bIsPrintable = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
-                            break;
+                    else
+                        bLoop = false;
+                }
+                switch (nRet)
+                {
+                    case RET_OK :
+                        aLayerTitle  = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                        aLayerDesc   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                        bIsVisible   = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                        bIsLocked    = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
+                        bIsPrintable = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
+                        break;
 
-                        default :
-                            pDlg.disposeAndClear();
-                            rReq.Ignore ();
-                            Cancel ();
-                            return;
-                    }
+                    default :
+                        pDlg.disposeAndClear();
+                        rReq.Ignore ();
+                        Cancel ();
+                        return;
                 }
             }
             else if (pArgs->Count () == 4)
@@ -2393,8 +2387,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     // Dialog...
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     vcl::Window* pWin = GetActiveWindow();
-                    ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, pFldItem->GetField(), pOLV->GetAttribs() ) : nullptr);
-                    if( pDlg && pDlg->Execute() == RET_OK )
+                    ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg( pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, pFldItem->GetField(), pOLV->GetAttribs() ) );
+                    if( pDlg->Execute() == RET_OK )
                     {
                         // To make a correct SetAttribs() call at the utlinerView
                         // it is necessary to split the actions here
@@ -2792,14 +2786,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 else
                 {
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                    if( pFact )
-                    {
-                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetFrameWeld(), mpDrawView.get(), GetDocSh(), nCount, static_cast<sal_uLong>(nCnt) ));
-                        if( pDlg )
-                        {
-                            pDlg->Execute();
-                        }
-                    }
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetFrameWeld(), mpDrawView.get(), GetDocSh(), nCount, static_cast<sal_uLong>(nCnt) ));
+                    pDlg->Execute();
                 }
             }
 
@@ -3224,12 +3212,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
 #ifdef ENABLE_SDREMOTE
              SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-             if (pFact)
-             {
-                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateRemoteDialog(GetActiveWindow()));
-                 if (pDlg)
-                     pDlg->Execute();
-             }
+             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateRemoteDialog(GetActiveWindow()));
+             pDlg->Execute();
 #endif
         }
         break;
@@ -3315,15 +3299,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
        case SID_PHOTOALBUM:
        {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            if (pFact)
-            {
-                vcl::Window* pWin = GetActiveWindow();
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
-                    pWin ? pWin->GetFrameWeld() : nullptr,
-                    GetDoc()));
+            vcl::Window* pWin = GetActiveWindow();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
+                pWin ? pWin->GetFrameWeld() : nullptr,
+                GetDoc()));
 
-                pDlg->Execute();
-            }
+            pDlg->Execute();
             Cancel();
             rReq.Ignore ();
         }

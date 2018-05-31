@@ -598,8 +598,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 void SwView::ExecFormatFootnote()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
     ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetFrameWeld(), GetWrtShell()));
     pDlg->Execute();
 }

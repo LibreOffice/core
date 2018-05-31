@@ -835,14 +835,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     uno::Reference<container::XNameReplace> xEvents( new ScSheetEventsObj( pDocSh, nCurrentTab ) );
                     uno::Reference<frame::XFrame> xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
                     SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
-                    if (pDlgFactory)
+                    ScopedVclPtr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
+                        GetDialogParent(), xFrame, false, xEvents, 0 ) );
+                    if ( pDialog->Execute() == RET_OK )
                     {
-                        ScopedVclPtr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
-                            GetDialogParent(), xFrame, false, xEvents, 0 ) );
-                        if ( pDialog.get() && pDialog->Execute() == RET_OK )
-                        {
                             // the dialog modifies the settings directly
-                        }
                     }
                 }
                 break;

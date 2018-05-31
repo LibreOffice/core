@@ -1412,21 +1412,18 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
     else if (pBtn == m_pSimilarityBtn)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
+        ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(GetFrameWeld(),
+                                                                    pSearchItem->IsLEVRelaxed(),
+                                                                    pSearchItem->GetLEVOther(),
+                                                                    pSearchItem->GetLEVShorter(),
+                                                                    pSearchItem->GetLEVLonger() ));
+        if ( pDlg->Execute() == RET_OK )
         {
-            ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(GetFrameWeld(),
-                                                                        pSearchItem->IsLEVRelaxed(),
-                                                                        pSearchItem->GetLEVOther(),
-                                                                        pSearchItem->GetLEVShorter(),
-                                                                        pSearchItem->GetLEVLonger() ));
-            if ( pDlg && pDlg->Execute() == RET_OK )
-            {
-                pSearchItem->SetLEVRelaxed( pDlg->IsRelaxed() );
-                pSearchItem->SetLEVOther( pDlg->GetOther() );
-                pSearchItem->SetLEVShorter( pDlg->GetShorter() );
-                pSearchItem->SetLEVLonger( pDlg->GetLonger() );
-                SaveToModule_Impl();
-            }
+            pSearchItem->SetLEVRelaxed( pDlg->IsRelaxed() );
+            pSearchItem->SetLEVOther( pDlg->GetOther() );
+            pSearchItem->SetLEVShorter( pDlg->GetShorter() );
+            pSearchItem->SetLEVLonger( pDlg->GetLonger() );
+            SaveToModule_Impl();
         }
     }
     else if (pBtn == m_pJapOptionsBtn)
@@ -1434,17 +1431,14 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         SfxItemSet aSet( SfxGetpApp()->GetPool() );
         pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
+        ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
+                pSearchItem->GetTransliterationFlags() ));
+        int nRet = aDlg->Execute();
+        if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
         {
-            ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
-                    pSearchItem->GetTransliterationFlags() ));
-            int nRet = aDlg->Execute();
-            if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
-            {
-                TransliterationFlags nFlags = aDlg->GetTransliterationFlags();
-                pSearchItem->SetTransliterationFlags( nFlags );
-                ApplyTransliterationFlags_Impl( nFlags );
-            }
+            TransliterationFlags nFlags = aDlg->GetTransliterationFlags();
+            pSearchItem->SetTransliterationFlags( nFlags );
+            ApplyTransliterationFlags_Impl( nFlags );
         }
     }
     else if (pBtn == m_pSearchComponent1PB || pBtn == m_pSearchComponent2PB)
@@ -2030,37 +2024,34 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
 
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
+    pDlg->SetText( aTxt );
+
+    if ( pDlg->Execute() == RET_OK )
     {
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
-        pDlg->SetText( aTxt );
+        DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
+        SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
 
-        if ( pDlg->Execute() == RET_OK )
+        SearchAttrItemList* pList = bSearch ? pSearchList.get() : pReplaceList.get();
+
+        const SfxPoolItem* pItem;
+        for( sal_uInt16 n = 0; n < pList->Count(); ++n )
         {
-            DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
-            SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
-
-            SearchAttrItemList* pList = bSearch ? pSearchList.get() : pReplaceList.get();
-
-            const SfxPoolItem* pItem;
-            for( sal_uInt16 n = 0; n < pList->Count(); ++n )
+            SearchAttrItem* pAItem;
+            if( !IsInvalidItem( (pAItem = &pList->GetObject(n))->pItem ) &&
+                SfxItemState::SET == aOutSet.GetItemState(
+                    pAItem->pItem->Which(), false, &pItem ) )
             {
-                SearchAttrItem* pAItem;
-                if( !IsInvalidItem( (pAItem = &pList->GetObject(n))->pItem ) &&
-                    SfxItemState::SET == aOutSet.GetItemState(
-                        pAItem->pItem->Which(), false, &pItem ) )
-                {
-                    delete pAItem->pItem;
-                    pAItem->pItem = pItem->Clone();
-                    aOutSet.ClearItem( pAItem->pItem->Which() );
-                }
+                delete pAItem->pItem;
+                pAItem->pItem = pItem->Clone();
+                aOutSet.ClearItem( pAItem->pItem->Which() );
             }
-
-            if( aOutSet.Count() )
-                pList->Put( aOutSet );
-
-            PaintAttrText_Impl(); // Set AttributText in GroupBox
         }
+
+        if( aOutSet.Count() )
+            pList->Put( aOutSet );
+
+        PaintAttrText_Impl(); // Set AttributText in GroupBox
     }
 }
 
@@ -2113,11 +2104,8 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
         return;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
-    {
-        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges.get() ));
-        pDlg->Execute();
-    }
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges.get() ));
+    pDlg->Execute();
     PaintAttrText_Impl();
 }
 

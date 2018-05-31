@@ -93,9 +93,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( aNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if (!pFact)
-            return;
-
         pDlg.reset(pFact->CreateCaptionDialog(mpViewShell->GetActiveWindow(), mpView));
 
         const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
@@ -107,9 +104,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     else
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if (!pFact)
-            return;
-
         pDlg.reset(pFact->CreateSvxTransformTabDialog(mpViewShell->GetFrameWeld(), &aSet, mpView));
         bWelded = true;
     }

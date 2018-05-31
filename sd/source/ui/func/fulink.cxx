@@ -59,11 +59,8 @@ void FuLink::DoExecute( SfxRequest& )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager ));
-    if ( pDlg )
-    {
-        pDlg->Execute();
-        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
-    }
+    pDlg->Execute();
+    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
 }
 
 } // end of namespace sd

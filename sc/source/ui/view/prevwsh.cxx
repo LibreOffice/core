@@ -618,21 +618,18 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
 
                     aSet.Put( aZoomItem );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    if(pFact)
+                    ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, aSet));
+                    pDlg->SetLimits( 20, 400 );
+                    pDlg->HideButton( ZoomButtonId::OPTIMAL );
+                    bCancel = ( RET_CANCEL == pDlg->Execute() );
+
+                    if ( !bCancel )
                     {
-                        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, aSet));
-                        pDlg->SetLimits( 20, 400 );
-                        pDlg->HideButton( ZoomButtonId::OPTIMAL );
-                        bCancel = ( RET_CANCEL == pDlg->Execute() );
+                        const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->
+                                                    Get( SID_ATTR_ZOOM );
 
-                        if ( !bCancel )
-                        {
-                            const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->
-                                                        Get( SID_ATTR_ZOOM );
-
-                            eZoom = rZoomItem.GetType();
-                            nZoom = rZoomItem.GetValue();
-                        }
+                        eZoom = rZoomItem.GetType();
+                        nZoom = rZoomItem.GetValue();
                     }
                 }
 

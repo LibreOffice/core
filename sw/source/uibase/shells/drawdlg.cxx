@@ -52,20 +52,17 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         case FN_DRAWTEXT_ATTR_DLG:
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            if ( pFact )
-            {
-                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(rReq.GetFrameWeld(), &aNewAttr, pView));
-                sal_uInt16 nResult = pDlg->Execute();
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(rReq.GetFrameWeld(), &aNewAttr, pView));
+            sal_uInt16 nResult = pDlg->Execute();
 
-                if (nResult == RET_OK)
+            if (nResult == RET_OK)
+            {
+                if (pView->AreObjectsMarked())
                 {
-                    if (pView->AreObjectsMarked())
-                    {
-                        pSh->StartAction();
-                        pView->SetAttributes(*pDlg->GetOutputItemSet());
-                        rReq.Done(*(pDlg->GetOutputItemSet()));
-                        pSh->EndAction();
-                    }
+                    pSh->StartAction();
+                    pView->SetAttributes(*pDlg->GetOutputItemSet());
+                    rReq.Done(*(pDlg->GetOutputItemSet()));
+                    pSh->EndAction();
                 }
             }
         }

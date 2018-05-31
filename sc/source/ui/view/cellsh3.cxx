@@ -574,13 +574,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetRowHeight( pData->GetCurY(),
                                                               pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
-
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "RowHeightDialog",
                         nCurHeight, ScGlobal::nStdRowHeight,
                         eMetric, 2, MAX_ROW_HEIGHT));
-                    assert(pDlg); //Dialog create fail
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -615,13 +612,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
-
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "OptimalRowHeightDialog",
                         ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT));
-                    assert(pDlg); //Dialog create fail!
-
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
@@ -680,13 +673,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetColWidth( pData->GetCurX(),
                                                              pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
-
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "ColWidthDialog", nCurHeight,
                         STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
-                    assert(pDlg); //Dialog create fail!
-
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
@@ -720,12 +709,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
-
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "OptimalColWidthDialog",
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH));
-                    assert(pDlg); //Dialog create fail!
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();

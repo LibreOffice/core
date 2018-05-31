@@ -77,7 +77,6 @@ SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert(pFact && "SwAbstractDialogFactory fail!");
     pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent);
     SetWindow( pDlgInterface->GetWindow() );
     pDlgInterface->Start();
@@ -117,8 +116,6 @@ SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
     pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent);
 
     SetWindow( pDlgInterface->GetWindow() );

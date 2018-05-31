@@ -93,10 +93,7 @@ sal_Int16 SwXFilterOptions::execute()
     }
     if(pDocShell)
     {
-
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
         ScopedVclPtr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(Application::GetFrameWeld(xDialogParent), *pDocShell,
             pInStream.get()));
         if(RET_OK == pAsciiDlg->Execute())

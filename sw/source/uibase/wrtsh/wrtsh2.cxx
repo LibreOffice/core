@@ -281,8 +281,6 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool b
                                        weld::Window* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
     ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(pParentWin, *this, pField, bPrevButton, bNextButton));
     const short nRet = pDlg->Execute();
 

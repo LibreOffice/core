@@ -137,8 +137,6 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
                         pSh->GetObjAttr(aSet);
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
                         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh ));
 
                         if (pDlg->Execute() == RET_OK)

@@ -432,8 +432,6 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                assert(pFact && "SwAbstractDialogFactory fail!");
-
                 ScopedVclPtr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(aShortName));
                 for(TextBlockInfo_Impl & i : aFoundArr)
                 {
