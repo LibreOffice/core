@@ -34,7 +34,7 @@
 using namespace com::sun::star;
 
 KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
-    :Qt5Instance( pMutex, true )
+    : Qt5Instance(pMutex, true)
 {
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
@@ -43,21 +43,18 @@ KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
     KDE5SalData::initNWF();
 }
 
-SalFrame* KDE5SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
+SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
-    return new KDE5SalFrame( static_cast<KDE5SalFrame*>(pParent), nState, true );
+    return new KDE5SalFrame(static_cast<KDE5SalFrame*>(pParent), nState, true);
 }
 
-uno::Reference< ui::dialogs::XFilePicker2 > KDE5SalInstance::createFilePicker(
-    const uno::Reference< uno::XComponentContext >& xMSF )
+uno::Reference<ui::dialogs::XFilePicker2>
+KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& xMSF)
 {
-    return SalInstance::createFilePicker( xMSF );
+    return SalInstance::createFilePicker(xMSF);
 }
 
-bool KDE5SalInstance::IsMainThread() const
-{
-    return qApp->thread() == QThread::currentThread();
-}
+bool KDE5SalInstance::IsMainThread() const { return qApp->thread() == QThread::currentThread(); }
 
 extern "C" {
 VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()

@@ -31,7 +31,9 @@ class QApplication;
 class SalYieldMutex;
 class SalFrame;
 
-class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject, public SalGenericInstance, public SalUserEventList
+class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
+                                       public SalGenericInstance,
+                                       public SalUserEventList
 {
     Q_OBJECT
 
@@ -79,10 +81,10 @@ public:
     virtual OUString GetDefaultPrinter() override;
     virtual void PostPrintersChanged() override;
 
-    virtual SalMenu*            CreateMenu( bool, Menu* ) override;
-    virtual void                DestroyMenu( SalMenu* pMenu ) override;
-    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* ) override;
-    virtual void                DestroyMenuItem( SalMenuItem* pItem ) override;
+    virtual SalMenu* CreateMenu(bool, Menu*) override;
+    virtual void DestroyMenu(SalMenu* pMenu) override;
+    virtual SalMenuItem* CreateMenuItem(const SalItemParams*) override;
+    virtual void DestroyMenuItem(SalMenuItem* pItem) override;
 
     virtual SalTimer* CreateSalTimer() override;
     virtual SalSystem* CreateSalSystem() override;
@@ -107,11 +109,11 @@ public:
     virtual void TriggerUserEventProcessing() override;
     virtual void ProcessEvent(SalUserEvent aEvent) override;
 
-    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 > createFilePicker(
-        const css::uno::Reference< css::uno::XComponentContext >& ) override;
+    virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>
+    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 
-    virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker(
-        const css::uno::Reference< css::uno::XComponentContext >& ) override;
+    virtual css::uno::Reference<css::ui::dialogs::XFolderPicker2>
+    createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
