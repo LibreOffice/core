@@ -55,6 +55,8 @@ $(eval $(call gb_Library_use_libraries,vclplug_kde5,\
 $(eval $(call gb_Library_use_externals,vclplug_kde5,\
 	boost_headers \
 	cairo \
+	graphite \
+	harfbuzz \
 	icuuc \
 	kde5 \
 	epoxy \
