@@ -59,10 +59,9 @@ IMapWindow::IMapWindow( vcl::Window* pParent, WinBits nBits, const Reference< XF
 {
     SetSdrMode(true);
 
-    pItemInfo = new SfxItemInfo[ 1 ];
-    memset( pItemInfo, 0, sizeof( SfxItemInfo ) );
+    memset( maItemInfos, 0, sizeof( SfxItemInfo ) );
     pIMapPool = new SfxItemPool( "IMapItemPool",
-                                 SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, pItemInfo );
+                                 SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, maItemInfos );
     pIMapPool->FreezeIdRanges();
 }
 
@@ -74,7 +73,6 @@ IMapWindow::~IMapWindow()
 void IMapWindow::dispose()
 {
     SfxItemPool::Free(pIMapPool);
-    delete[] pItemInfo;
     GraphCtrl::dispose();
 }
 
