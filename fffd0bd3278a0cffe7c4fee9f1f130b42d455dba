@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_7aaf2a94",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-31T05:38:19Z",
+      "side": 1,
+      "message": "It is needed for the followup patch for GLOBALs. I missed taking it out of this patch.\n\nP.S. Please do NOT commit this patch before approving all three - there isn\u0027t much point in having a partial solution.",
+      "parentUuid": "9a30ddce_dfc9e879",
+      "range": {
+        "startLine": 338,
+        "startChar": 74,
+        "endLine": 338,
+        "endChar": 96
+      },
+      "revId": "fffd0bd3278a0cffe7c4fee9f1f130b42d455dba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_ffc06c2c",
         "filename": "sc/source/filter/excel/xename.cxx",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2018-05-30T09:23:33Z",
       "side": 1,
       "message": "Cloning the token array and feeding it through an ScCompiler instance is unnecessary if rRangeData is not of Type::AbsPos or Type::AbsArea. I suggest to split this into two branches, the original for non-cell/range-reference code and the new for cell/range-reference code.\n\nIt may be that creating the modified symbol / formula string is only necessary for writing OOXML (.xlsx), and in the BIFF (.xls) case the created XclTokenArray is already correct (or could be corrected in the conversion). I didn\u0027t investigate deeper though.\n\n\nNote: the following was just a brainstorm that occurred to me but leads to a dead end, I leave it here to hint you some insights:\n\nThen again I wonder if all this shouldn\u0027t be done in XclExpFormulaCompiler or XclExpFmlaCompImpl instead because it clones the tokens anyway (through GetFormulaCompiler().CreateFormula() below) and even gets the information passed to create a formula for a named expression (range).\n\nThen seeing that there is already XclExpFmlaCompImpl::Is3DRefOnly() it seems to me that the actual error here is obtaining the sSymbol formula string from rRangeData instead of the prepared XclTokenArrayRef. However, there is no clever way to create a string from a XclTokenArray except using the XclImpFormulaCompiler::CreateFormula() workaround which internally uses a completely ugly hack to accomplish this. NOT RECOMMENDED.",
+      "revId": "fffd0bd3278a0cffe7c4fee9f1f130b42d455dba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9aa4dea6",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-31T05:38:19Z",
+      "side": 1,
+      "message": "two branches: OK, I\u0027ll do that to remove the chance for  unintended impact on other types of names. However, it ALREADY went through the compiler all the time. The compiler code is just an expansion of rRangeData.GetSymbol() since I needed access to the compiler without a RangeData object.  So ultimately no change is happening in that regard. (I haven\u0027t checked yet to see if xName-\u003esSymbol is used anywhere else in case you are suggesting that the original branch doesn\u0027t need the GetSymbol() call at all now that we handle that part for AbsPos/AbsArea).\n\nOOXML: It only uses the sSymbol string, and not the tokenArray directly - just indirectly through the compiler.\nBIFF: doesn\u0027t use sSymbol at all - just the tokenArray.\nI tried to convey those ideas in earlier commit comments (when I had the xls and xlsx commits separated). With AbsPos/AbsArea in a separate branch, I\u0027ve eliminated the sSymbol part for BIFF to speed up the processing.\n\nSince both the compiler and XclTokenArray are created from an ScTokenArray, it seemed best to make the adjustment once instead of multiple places. In addition, for the GLOBAL aspect we need a place to simply test if an adjustment is necessary. That can all nicely be done in one place using ScTokenArray.",
+      "parentUuid": "9a30ddce_ffc06c2c",
       "revId": "fffd0bd3278a0cffe7c4fee9f1f130b42d455dba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
