@@ -3356,7 +3356,7 @@ void SvxColorListBox::ShowPreview(const NamedColor &rColor)
     xDevice->SetLineColor(rStyleSettings.GetDisableColor());
     xDevice->DrawRect(aRect);
 
-    Bitmap aBitmap(xDevice->GetBitmap(Point(0, 0), xDevice->GetOutputSize()));
+    BitmapEx aBitmap(xDevice->GetBitmap(Point(0, 0), xDevice->GetOutputSize()));
     SetImageAlign(ImageAlign::Left);
     SetModeImage(Image(aBitmap));
     SetText(rColor.second);

@@ -406,7 +406,7 @@ void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rP1, const basegfx::
 
 void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
                             Color aColor1, Color aColor2, Color aColorDist,
-                            SvxBorderLineStyle nStyle, Bitmap& rBmp )
+                            SvxBorderLineStyle nStyle, BitmapEx& rBmp )
 {
     //TODO, rather than including the " " text to force
     //the line height, better would be do drop
@@ -608,7 +608,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
         auto& pData = m_vLineList[ n ];
         if ( pData->GetMinWidth() <= m_nWidth )
         {
-            Bitmap      aBmp;
+            BitmapEx aBmp;
             ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
                     pData->GetLine2ForWidth( m_nWidth ),
                     pData->GetDistForWidth( m_nWidth ),

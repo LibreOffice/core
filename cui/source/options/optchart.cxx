@@ -47,7 +47,7 @@ void SvxDefaultColorOptPage::InsertColorEntry(const XColorEntry& rEntry, sal_Int
     xDevice->SetFillColor(rColor);
     xDevice->SetLineColor(rStyleSettings.GetDisableColor());
     xDevice->DrawRect(aRect);
-    Bitmap aBitmap(xDevice->GetBitmap(Point(0, 0), xDevice->GetOutputSize()));
+    BitmapEx aBitmap(xDevice->GetBitmap(Point(0, 0), xDevice->GetOutputSize()));
 
     nPos = m_pLbChartColors->InsertEntry(rStr, Image(aBitmap), nPos);
 

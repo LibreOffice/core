@@ -83,9 +83,9 @@ bool XGradientList::Create()
     return true;
 }
 
-Bitmap XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
+BitmapEx XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
 {
-    Bitmap aRetval;
+    BitmapEx aRetval;
 
     OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
 
@@ -206,14 +206,14 @@ Bitmap XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
     return aRetval;
 }
 
-Bitmap XGradientList::CreateBitmapForUI(long nIndex)
+BitmapEx XGradientList::CreateBitmapForUI(long nIndex)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
     return CreateBitmap(nIndex, rSize);
 }
 
-Bitmap XGradientList::GetBitmapForPreview(long nIndex, const Size& rSize)
+BitmapEx XGradientList::GetBitmapForPreview(long nIndex, const Size& rSize)
 {
     return CreateBitmap(nIndex, rSize);
 }

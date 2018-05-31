@@ -179,7 +179,7 @@ FrameView* DrawDocShell::GetFrameView()
 /**
  * Creates a bitmap of an arbitrary page
  */
-Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
+BitmapEx DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 {
     const sal_uInt16 nMaxEdgePixel = 90;
     MapMode         aMapMode( MapUnit::Map100thMM );
@@ -262,7 +262,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 
     pVDev->SetMapMode( MapMode() );
 
-    Bitmap aPreview( pVDev->GetBitmap( aNullPt, pVDev->GetOutputSizePixel() ) );
+    BitmapEx aPreview( pVDev->GetBitmap( aNullPt, pVDev->GetOutputSizePixel() ) );
 
     DBG_ASSERT(!!aPreview, "Preview-Bitmap could not be generated");
 

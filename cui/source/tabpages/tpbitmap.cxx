@@ -794,7 +794,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
                 m_pBitmapList->Insert(o3tl::make_unique<XBitmapEntry>(aGraphic, aName), nCount);
 
                 sal_Int32 nId = m_pBitmapLB->GetItemId( nCount - 1 );
-                Bitmap aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_pBitmapLB->GetIconSize() );
+                BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_pBitmapLB->GetIconSize() );
 
                 m_pBitmapLB->InsertItem( nId + 1, Image(aBitmap), aName );
                 m_pBitmapLB->SelectItem( nId + 1 );

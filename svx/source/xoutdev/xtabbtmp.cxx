@@ -47,7 +47,7 @@ bool XBitmapList::Create()
     return true;
 }
 
-Bitmap XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
+BitmapEx XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
 {
     OSL_ENSURE( nIndex < Count(), "Access out of range" );
 
@@ -97,20 +97,20 @@ Bitmap XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
             }
         }
         rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
-        return rBitmapEx.GetBitmap();
+        return rBitmapEx;
     }
     else
-        return Bitmap();
+        return BitmapEx();
 }
 
-Bitmap XBitmapList::CreateBitmapForUI( long nIndex )
+BitmapEx XBitmapList::CreateBitmapForUI( long nIndex )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
     return CreateBitmap(nIndex, rSize);
 }
 
-Bitmap XBitmapList::GetBitmapForPreview( long nIndex, const Size& rSize )
+BitmapEx XBitmapList::GetBitmapForPreview( long nIndex, const Size& rSize )
 {
     return CreateBitmap(nIndex, rSize);
 }

@@ -170,7 +170,7 @@ protected:
 
     XPropertyList(XPropertyListType t, const OUString& rPath, const OUString& rReferer);
     bool isValidIdx(long nIndex) const;
-    virtual Bitmap CreateBitmapForUI(long nIndex) = 0;
+    virtual BitmapEx CreateBitmapForUI(long nIndex) = 0;
 
 public:
     XPropertyList(const XPropertyList&) = delete;
@@ -186,7 +186,7 @@ public:
 
     XPropertyEntry* Get(long nIndex) const;
     long GetIndex(const OUString& rName) const;
-    Bitmap GetUiBitmap(long nIndex) const;
+    BitmapEx GetUiBitmap(long nIndex) const;
 
     const OUString& GetName() const { return maName; }
     void SetName(const OUString& rString);
@@ -242,7 +242,7 @@ public:
 class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
 protected:
-    virtual Bitmap  CreateBitmapForUI(long nIndex) override;
+    virtual BitmapEx  CreateBitmapForUI(long nIndex) override;
 
 public:
     XColorList(const OUString& rPath, const OUString& rReferer)
@@ -261,7 +261,7 @@ public:
 class SVX_DLLPUBLIC XLineEndList : public XPropertyList
 {
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) override;
+    virtual BitmapEx CreateBitmapForUI(long nIndex) override;
 
 public:
     XLineEndList(const OUString& rPath, const OUString& rReferer);
@@ -276,13 +276,13 @@ public:
 class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
 private:
-    Bitmap              maBitmapSolidLine;
+    BitmapEx            maBitmapSolidLine;
     OUString            maStringSolidLine;
     OUString            maStringNoLine;
 
 protected:
-    static Bitmap ImpCreateBitmapForXDash(const XDash* pDash);
-    virtual Bitmap CreateBitmapForUI(long nIndex) override;
+    static BitmapEx ImpCreateBitmapForXDash(const XDash* pDash);
+    virtual BitmapEx CreateBitmapForUI(long nIndex) override;
 
 public:
     XDashList(const OUString& rPath, const OUString& rReferer);
@@ -297,7 +297,7 @@ public:
     // Special call to get a bitmap for the solid line representation. It
     // creates a bitmap fitting in size and style to the ones you get by
     // using GetUiBitmap for existing entries.
-    Bitmap const & GetBitmapForUISolidLine() const;
+    BitmapEx const & GetBitmapForUISolidLine() const;
 
     // Special calls to get the translated strings for the UI entry for no
     // line style (XLINE_NONE) and solid line style (XLINE_SOLID) for dialogs
@@ -308,16 +308,16 @@ public:
 class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
 private:
-    Bitmap CreateBitmap(long nIndex, const Size& rSize) const;
+    BitmapEx CreateBitmap(long nIndex, const Size& rSize) const;
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) override;
+    virtual BitmapEx CreateBitmapForUI(long nIndex) override;
 public:
     XHatchList(const OUString& rPath, const OUString& rReferer);
     virtual ~XHatchList() override;
 
     void Replace(std::unique_ptr<XHatchEntry> pEntry, long nIndex);
     XHatchEntry* GetHatch(long nIndex) const;
-    Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
+    BitmapEx GetBitmapForPreview(long nIndex, const Size& rSize);
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
@@ -326,10 +326,10 @@ public:
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
 private:
-    Bitmap CreateBitmap(long nIndex, const Size& rSize) const;
+    BitmapEx CreateBitmap(long nIndex, const Size& rSize) const;
 
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) override;
+    virtual BitmapEx CreateBitmapForUI(long nIndex) override;
 
 public:
     XGradientList(const OUString& rPath, const OUString& rReferer);
@@ -337,7 +337,7 @@ public:
 
     void Replace(std::unique_ptr<XGradientEntry> pEntry, long nIndex);
     XGradientEntry* GetGradient(long nIndex) const;
-    Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
+    BitmapEx GetBitmapForPreview(long nIndex, const Size& rSize);
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
@@ -346,17 +346,17 @@ public:
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 private:
-    Bitmap CreateBitmap( long nIndex, const Size& rSize ) const;
+    BitmapEx CreateBitmap( long nIndex, const Size& rSize ) const;
 
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) override;
+    virtual BitmapEx CreateBitmapForUI(long nIndex) override;
 
 public:
     XBitmapList(const OUString& rPath, const OUString& rReferer)
         : XPropertyList(XPropertyListType::Bitmap, rPath, rReferer) {}
 
     XBitmapEntry* GetBitmap(long nIndex) const;
-    Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
+    BitmapEx GetBitmapForPreview(long nIndex, const Size& rSize);
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
@@ -365,17 +365,17 @@ public:
 class SVX_DLLPUBLIC XPatternList : public XPropertyList
 {
 private:
-    Bitmap CreateBitmap( long nIndex, const Size& rSize ) const;
+    BitmapEx CreateBitmap( long nIndex, const Size& rSize ) const;
 
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) override;
+    virtual BitmapEx CreateBitmapForUI(long nIndex) override;
 
 public:
     XPatternList(const OUString& rPath, const OUString& rReferer)
         : XPropertyList(XPropertyListType::Pattern, rPath, rReferer) {}
 
     XBitmapEntry* GetBitmap(long nIndex) const;
-    Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
+    BitmapEx GetBitmapForPreview(long nIndex, const Size& rSize);
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;

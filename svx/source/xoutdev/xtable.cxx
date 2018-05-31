@@ -165,9 +165,9 @@ long XPropertyList::GetIndex(const OUString& rName) const
     return -1;
 }
 
-Bitmap XPropertyList::GetUiBitmap( long nIndex ) const
+BitmapEx XPropertyList::GetUiBitmap( long nIndex ) const
 {
-    Bitmap aRetval;
+    BitmapEx aRetval;
     if (!isValidIdx(nIndex))
         return aRetval;
 
