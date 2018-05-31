@@ -741,6 +741,35 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf117885, "tdf117885.doc")
+{
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    /* Get the vertical position of the paragraph containing the text "Start" */
+    sal_Int32 nParaA_Top = getXPath(pXmlDoc,
+        "/root/page/body/column[1]/body/txt[text()='Start']/infos/bounds", "top"
+        ).toInt32();
+
+    /* Get the vertical position of the paragraph containing the text "Top B" */
+    sal_Int32 nParaB_Top = getXPath(pXmlDoc,
+        "/root/page/body/column[2]/body/txt[text()='Top B']/infos/bounds", "top"
+        ).toInt32();
+
+    /* These two paragraphs are supposed to be at the top of the left
+     * and right columns respectively.  Check that they actually line up: */
+    CPPUNIT_ASSERT_EQUAL(nParaA_Top, nParaB_Top);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf118412, "tdf118412.doc")
+{
+    /* Check that the first page's bottom margin is 1.251cm (not 2.540cm) */
+    OUString sPageStyleName = getProperty<OUString>(getParagraph(1), "PageStyleName");
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles("PageStyles")->getByName(sPageStyleName), uno::UNO_QUERY);
+    sal_Int32 nBottomMargin = getProperty<sal_Int32>(xPageStyle, "BottomMargin");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1251), nBottomMargin);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
