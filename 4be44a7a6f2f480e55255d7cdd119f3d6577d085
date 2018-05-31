@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_90967f4a",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-31T16:22:31Z",
+      "side": 0,
+      "message": "mode change here probably unintentional?",
+      "revId": "4be44a7a6f2f480e55255d7cdd119f3d6577d085",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
