@@ -96,7 +96,7 @@ SvxRectCtl::~SvxRectCtl()
 
 void SvxRectCtl::dispose()
 {
-    delete pBitmap;
+    pBitmap.reset();
 
     pAccContext.clear();
     Control::dispose();
@@ -133,12 +133,12 @@ void SvxRectCtl::Resize_Impl()
 
 void SvxRectCtl::InitRectBitmap()
 {
-    delete pBitmap;
+    pBitmap.reset();
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
 
-    pBitmap = new BitmapEx(RID_SVXCTRL_RECTBTNS);
+    pBitmap.reset(new BitmapEx(RID_SVXCTRL_RECTBTNS));
 
     // set bitmap-colors
     Color aColorAry1[7];
@@ -183,8 +183,7 @@ void SvxRectCtl::MarkToResetSettings(bool bUpdateForeground, bool bUpdateBackgro
 {
     mbUpdateForeground = bUpdateForeground;
     mbUpdateBackground = bUpdateBackground;
-    delete pBitmap;
-    pBitmap = nullptr; // forces new creating of bitmap
+    pBitmap.reset(); // forces new creating of bitmap
 }
 
 void SvxRectCtl::InitSettings(vcl::RenderContext& rRenderContext)
