@@ -22,6 +22,7 @@
 
 #include <boost/optional.hpp>
 
+#include <o3tl/safeint.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/virdev.hxx>
@@ -201,8 +202,14 @@ awt::Rectangle ShapeType::getAbsRectangle() const
     if ( nHeight == 0 )
         nHeight = 1;
 
-    sal_Int32 nLeft = ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maLeft, 0, true, true )
-        + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true );
+    sal_Int32 nLeft;
+    if (o3tl::checked_add<sal_Int32>(ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maLeft, 0, true, true),
+                                     ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true),
+                                     nLeft))
+    {
+        SAL_WARN("oox", "overflow in addition");
+        nLeft = 0;
+    }
     if (nLeft == 0 && maTypeModel.maPosition == "absolute")
         nLeft = 1;
 
