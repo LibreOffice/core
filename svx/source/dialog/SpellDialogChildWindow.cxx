@@ -31,7 +31,6 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     : SfxChildWindow (_pParent, nId)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SvxAbstractDialogFactory::Create() failed");
     m_xAbstractSpellDialog = pFact->CreateSvxSpellDialog(_pParent,
                                             pBindings,
                                             this );

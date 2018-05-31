@@ -138,18 +138,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( pMDI, &rSh.GetLinkManager(), false, &rLink ));
-                            if ( pDlg )
-                            {
-                                pDlg->Execute();
-                            }
+                            pDlg->Execute();
                         }
                         break;
                     }
                     default:
                     {
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        assert(pFact && "SwAbstractDialogFactory fail!");
-
                         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwFieldEditDlg( GetView() ));
                         pDlg->Execute();
                     }

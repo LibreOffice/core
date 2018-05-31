@@ -1402,14 +1402,9 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
     if ( bCaughtException && bRaiseError )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-        if ( pFact )
-        {
-            ScopedVclPtr<VclAbstractDialog> pScriptErrDlg( pFact->CreateScriptErrorDialog( aException ) );
-            OSL_ENSURE( pScriptErrDlg.get(), "SfxObjectShell::CallXScript: no script error dialog!" );
-
-            if ( pScriptErrDlg.get() )
-                pScriptErrDlg->Execute();
-        }
+        ScopedVclPtr<VclAbstractDialog> pScriptErrDlg( pFact->CreateScriptErrorDialog( aException ) );
+        if ( pScriptErrDlg.get() )
+            pScriptErrDlg->Execute();
     }
 
     SAL_INFO("sfx", "leaving CallXScript" );

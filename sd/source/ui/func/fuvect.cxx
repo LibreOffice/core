@@ -65,7 +65,7 @@ void FuVectorize::DoExecute( SfxRequest& )
             ScopedVclPtr<AbstractSdVectorizeDlg> pDlg(
                     pFact->CreateSdVectorizeDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
                         static_cast<SdrGrafObj*>( pObj )->GetGraphic().GetBitmapEx().GetBitmap(), mpDocSh ) );
-            if( pDlg && pDlg->Execute() == RET_OK )
+            if( pDlg->Execute() == RET_OK )
             {
                 const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
                 SdrPageView*        pPageView = mpView->GetSdrPageView();

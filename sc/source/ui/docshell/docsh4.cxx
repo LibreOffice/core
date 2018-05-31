@@ -1184,11 +1184,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if ( aLangText == "*" )
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    if (pFact)
-                    {
-                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(GetActiveDialogParent(), SID_LANGUAGE_OPTIONS));
-                        pDlg->Execute();
-                    }
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(GetActiveDialogParent(), SID_LANGUAGE_OPTIONS));
+                    pDlg->Execute();
 
                     rDoc.GetLanguage( eLang, eCjk, eCtl );
                 }

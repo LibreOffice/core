@@ -49,7 +49,6 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( vcl::Window *pParentWindow,
         SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert(pFact && "SwAbstractDialogFactory fail!");
     pAbstDlg = pFact->CreateIndexMarkFloatDlg(pBindings, this, pParentWindow, pInfo);
     SetWindow( pAbstDlg->GetWindow() );
     GetWindow()->Show();    // at this point,because before pSh has to be initialized in ReInitDlg()
@@ -77,7 +76,6 @@ SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   vcl::Window *pParentWindow,
         SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
     pAbstDlg = pFact->CreateAuthMarkFloatDlg(pBindings, this, pParentWindow, pInfo);
     SetWindow( pAbstDlg->GetWindow() );
 }

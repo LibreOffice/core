@@ -1707,14 +1707,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SfxItemSet aSet( SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>{});
                     aSet.Put( SvxZoomItem( SvxZoomType::PERCENT, mpGraphic->GetZoom()));
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    if(pFact)
-                    {
-                        ScopedVclPtr<AbstractSvxZoomDialog> xDlg(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aSet));
-                        assert(xDlg);
-                        xDlg->SetLimits( MINZOOM, MAXZOOM );
-                        if (xDlg->Execute() != RET_CANCEL)
-                            ZoomByItemSet(xDlg->GetOutputItemSet());
-                    }
+                    ScopedVclPtr<AbstractSvxZoomDialog> xDlg(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aSet));
+                    xDlg->SetLimits( MINZOOM, MAXZOOM );
+                    if (xDlg->Execute() != RET_CANCEL)
+                        ZoomByItemSet(xDlg->GetOutputItemSet());
                 }
             }
         }

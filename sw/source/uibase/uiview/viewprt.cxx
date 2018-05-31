@@ -308,9 +308,6 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage( weld::Container* pPage,
                                            bool bPreview )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "No Print Dialog");
-    if (!pFact)
-        return nullptr;
 
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc(TP_OPTPRINT_PAGE);
     OSL_ENSURE(pFact, "No Page Creator");

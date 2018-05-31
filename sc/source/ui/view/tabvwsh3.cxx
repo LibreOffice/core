@@ -723,27 +723,21 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     aZoomItem.SetValueSet( nBtnFlags );
                     aSet.Put( aZoomItem );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    if(pFact)
+                    vcl::Window* pWin = GetDialogParent();
+                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(pWin ? pWin->GetFrameWeld() : nullptr, aSet));
+                    pDlg->SetLimits( MINZOOM, MAXZOOM );
+
+                    bCancel = ( RET_CANCEL == pDlg->Execute() );
+
+                    // bCancel is True only if we were in the previous if block,
+                    // so no need to check again pDlg
+                    if ( !bCancel )
                     {
-                        vcl::Window* pWin = GetDialogParent();
-                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(pWin ? pWin->GetFrameWeld() : nullptr, aSet));
-                    }
-                    if (pDlg)
-                    {
-                        pDlg->SetLimits( MINZOOM, MAXZOOM );
+                        const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->
+                                                    Get( SID_ATTR_ZOOM );
 
-                        bCancel = ( RET_CANCEL == pDlg->Execute() );
-
-                        // bCancel is True only if we were in the previous if block,
-                        // so no need to check again pDlg
-                        if ( !bCancel )
-                        {
-                            const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->
-                                                        Get( SID_ATTR_ZOOM );
-
-                            eNewZoomType = rZoomItem.GetType();
-                            nZoom     = rZoomItem.GetValue();
-                        }
+                        eNewZoomType = rZoomItem.GetType();
+                        nZoom     = rZoomItem.GetValue();
                     }
                 }
 

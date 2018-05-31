@@ -267,9 +267,9 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             if (aNewLangTxt == "*" )
             {
                 // open the dialog "Tools/Options/Language Settings - Language"
-                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                if (pFact && mpViewShell)
+                if (mpViewShell)
                 {
+                    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( mpViewShell->GetActiveWindow(), SID_LANGUAGE_OPTIONS ));
                     pDlg->Execute();
                 }

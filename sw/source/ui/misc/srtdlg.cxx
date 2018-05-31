@@ -333,17 +333,14 @@ IMPL_LINK( SwSortDlg, DelimHdl, weld::ToggleButton&, rButton, void )
 IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl, weld::Button&, void)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
+    SfxAllItemSet aSet( rSh.GetAttrPool() );
+    aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
+    ScopedVclPtr<SfxAbstractDialog> pMap(pFact->CreateCharMapDialog(m_xDialog.get(), aSet, false));
+    if( RET_OK == pMap->Execute() )
     {
-        SfxAllItemSet aSet( rSh.GetAttrPool() );
-        aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
-        ScopedVclPtr<SfxAbstractDialog> pMap(pFact->CreateCharMapDialog(m_xDialog.get(), aSet, false));
-        if( RET_OK == pMap->Execute() )
-        {
-            const SfxInt32Item* pItem = SfxItemSet::GetItem<SfxInt32Item>(pMap->GetOutputItemSet(), SID_ATTR_CHAR, false);
-            if ( pItem )
-                m_xDelimEdt->set_text(OUString(sal_Unicode(pItem->GetValue())));
-        }
+        const SfxInt32Item* pItem = SfxItemSet::GetItem<SfxInt32Item>(pMap->GetOutputItemSet(), SID_ATTR_CHAR, false);
+        if ( pItem )
+            m_xDelimEdt->set_text(OUString(sal_Unicode(pItem->GetValue())));
     }
 }
 

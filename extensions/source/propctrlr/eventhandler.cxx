@@ -809,8 +809,6 @@ namespace pcr
 
         // the dialog
         SvxAbstractDialogFactory* pFactory = SvxAbstractDialogFactory::Create();
-        if ( !pFactory )
-            return InteractiveSelectionResult_Cancelled;
 
         ScopedVclPtr<VclAbstractDialog> pDialog( pFactory->CreateSvxMacroAssignDlg(
             PropertyHandlerHelper::getDialogParentWindow( m_xContext ),

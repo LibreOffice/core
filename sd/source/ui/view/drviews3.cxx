@@ -291,14 +291,11 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractHeaderFooterDialog> pDlg(pFact ? pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ) : nullptr);
-            if( pDlg )
-            {
-                pDlg->Execute();
-                pDlg.disposeAndClear();
+            pDlg->Execute();
+            pDlg.disposeAndClear();
 
-                GetActiveWindow()->Invalidate();
-                UpdatePreview( mpActualPage );
-            }
+            GetActiveWindow()->Invalidate();
+            UpdatePreview( mpActualPage );
 
             Invalidate();
             rReq.Done ();
@@ -314,13 +311,10 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 pPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            if (pFact)
-            {
-                vcl::Window* pWin = GetActiveWindow();
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateMasterLayoutDialog(pWin ? pWin->GetFrameWeld() : nullptr, GetDoc(), pPage));
-                pDlg->Execute();
-                Invalidate();
-            }
+            vcl::Window* pWin = GetActiveWindow();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateMasterLayoutDialog(pWin ? pWin->GetFrameWeld() : nullptr, GetDoc(), pPage));
+            pDlg->Execute();
+            Invalidate();
             rReq.Done ();
             break;
         }

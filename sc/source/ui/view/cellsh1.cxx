@@ -1073,10 +1073,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pTabViewShell->HasSelectionForDrillDown( nOrientation ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        assert(pFact && "ScAbstractFactory create fail!");
                         ScopedVclPtr<AbstractScDPShowDetailDlg> pDlg( pFact->CreateScDPShowDetailDlg(
                             pTabViewShell->GetFrameWeld(), *pDPObj, nOrientation ) );
-                        assert(pDlg && "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             OUString aNewDimName( pDlg->GetDimensionName() );
@@ -1547,8 +1545,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pTabViewShell->GetFrameWeld()));
-                            if ( pDlg )
-                            {
                             for (sal_uInt16 i=0; i<nFormatCount; i++)
                             {
                                 SotClipboardFormatId nFormatId = aFormats.GetClipbrdFormatId( i );
@@ -1579,7 +1575,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             {
                                 rReq.SetReturnValue(SfxInt16Item(nSlot, 0));    // 0 = fail
                                 rReq.Ignore();
-                            }
                             }
                         }
                         else
@@ -2492,7 +2487,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_CURRENTCONDFRMT_MANAGER:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                assert(pFact);
 
                 ScViewData* pData = GetViewData();
                 ScDocument* pDoc = pData->GetDocument();
@@ -2935,10 +2929,6 @@ void ScCellShell::ExecuteDataPilotDialog()
 
 void ScCellShell::ExecuteXMLSourceDialog()
 {
-    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    if (!pFact)
-        return;
-
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
     if (!pTabViewShell)
         return;
@@ -2984,10 +2974,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, GetViewData(), &aSubTotalParam ) );
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    assert(pFact); //"ScAbstractFactory create fail
-
     pDlg.disposeAndReset(pFact->CreateScSubTotalDlg(pTabViewShell->GetDialogParent(), &aArgSet));
-    assert(pDlg); // "Dialog create fail
     pDlg->SetCurPageId("1stgroup");
 
     short bResult = pDlg->Execute();
