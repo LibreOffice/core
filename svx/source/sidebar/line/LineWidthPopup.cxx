@@ -31,7 +31,6 @@ namespace svx { namespace sidebar {
 LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     : FloatingWindow(&rParent, "FloatingLineProperty", "svx/ui/floatinglineproperty.ui")
     , m_rParent(rParent)
-    , m_pStr(nullptr)
     , m_sPt(SvxResId(RID_SVXSTR_PT))
     , m_eMapUnit(MapUnit::MapTwip)
     , m_bVSFocus(true)
@@ -48,35 +47,33 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
 
     m_xVSWidth->SetStyle(m_xVSWidth->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
 
-    m_pStr = new OUString[9];
-
-    m_pStr[0] = "0.5";
-    m_pStr[1] = "0.8";
-    m_pStr[2] = "1.0";
-    m_pStr[3] = "1.5";
-    m_pStr[4] = "2.3";
-    m_pStr[5] = "3.0";
-    m_pStr[6] = "4.5";
-    m_pStr[7] = "6.0";
-    m_pStr[8] = SvxResId(RID_SVXSTR_WIDTH_LAST_CUSTOM);
+    maStrUnits[0] = "0.5";
+    maStrUnits[1] = "0.8";
+    maStrUnits[2] = "1.0";
+    maStrUnits[3] = "1.5";
+    maStrUnits[4] = "2.3";
+    maStrUnits[5] = "3.0";
+    maStrUnits[6] = "4.5";
+    maStrUnits[7] = "6.0";
+    maStrUnits[8] = SvxResId(RID_SVXSTR_WIDTH_LAST_CUSTOM);
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
     for(int i = 0; i <= 7 ; i++)
     {
-        m_pStr[i] = m_pStr[i].replace('.', cSep);//Modify
-        m_pStr[i] += " ";
-        m_pStr[i] += m_sPt;
+        maStrUnits[i] = maStrUnits[i].replace('.', cSep);//Modify
+        maStrUnits[i] += " ";
+        maStrUnits[i] += m_sPt;
     }
 
     for (sal_uInt16 i = 1 ; i <= 9; ++i)
     {
         m_xVSWidth->InsertItem(i);
-        m_xVSWidth->SetItemText(i, m_pStr[i-1]);
+        m_xVSWidth->SetItemText(i, maStrUnits[i-1]);
     }
 
-    m_xVSWidth->SetUnit(m_pStr);
+    m_xVSWidth->SetUnit(maStrUnits);
     m_xVSWidth->SetItemData(1, reinterpret_cast<void*>(5));
     m_xVSWidth->SetItemData(2, reinterpret_cast<void*>(8));
     m_xVSWidth->SetItemData(3, reinterpret_cast<void*>(10));
@@ -98,7 +95,6 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
 
 void LineWidthPopup::dispose()
 {
-    delete[] m_pStr;
     m_xVSWidth.disposeAndClear();
     m_xBox.clear();
     m_xMFWidth.clear();
@@ -194,7 +190,7 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
         m_bCustom = false;
         m_xVSWidth->SetImage(m_aIMGCusGray);
         m_xVSWidth->SetCusEnable(false);
-        m_xVSWidth->SetItemText(9, m_pStr[8]);
+        m_xVSWidth->SetItemText(9, maStrUnits[8]);
     }
 
     if (bValuable)
@@ -212,7 +208,7 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
     sal_uInt16 i = 0;
     for(; i < 8; i++)
     {
-        if (strCurrValue == m_pStr[i])
+        if (strCurrValue == maStrUnits[i])
         {
             m_xVSWidth->SetSelItem(i+1);
             break;
