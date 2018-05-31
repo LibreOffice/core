@@ -29,6 +29,7 @@
 #include <svx/xtable.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 #include <array>
 
 class XOBitmap;
@@ -97,7 +98,7 @@ protected:
     Point aPtLB, aPtMB, aPtRB;
     Point aPtNew;
     RectPoint eRP, eDefRP;
-    BitmapEx* pBitmap;
+    std::unique_ptr<BitmapEx> pBitmap;
     CTL_STATE m_nState;
 
     bool mbUpdateForeground : 1;
