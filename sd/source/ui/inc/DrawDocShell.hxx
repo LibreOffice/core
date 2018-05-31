@@ -131,7 +131,7 @@ public:
 
     void                    GotoBookmark(const OUString& rBookmark);
 
-    Bitmap                  GetPagePreviewBitmap(SdPage* pPage);
+    BitmapEx                GetPagePreviewBitmap(SdPage* pPage);
 
     /** checks, if the given name is a valid new name for a slide
 

@@ -323,8 +323,8 @@ public:
     bool getAddStandardFields() const { return mbAddStandardFields; }
     void setAddStandardFields(bool bNew);
 
-    void Append(const XDashEntry& rEntry, const Bitmap& rBitmap );
-    void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
+    void Append(const XDashEntry& rEntry, const BitmapEx& rBitmap );
+    void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
 };
 
 
@@ -338,8 +338,8 @@ public:
 
     void Fill( const XLineEndListRef &pList, bool bStart = true );
 
-    void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap );
-    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
+    void    Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap );
+    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
 };
 
 

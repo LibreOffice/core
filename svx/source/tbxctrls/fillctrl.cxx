@@ -374,7 +374,7 @@ void SvxFillToolBoxControl::Update()
                             XGradientList aGradientList( "", ""/*TODO?*/ );
                             aGradientList.Insert(o3tl::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
                             aGradientList.SetDirty( false );
-                            const Bitmap aBmp = aGradientList.GetUiBitmap( 0 );
+                            const BitmapEx aBmp = aGradientList.GetUiBitmap( 0 );
 
                             if(!aBmp.IsEmpty())
                             {
@@ -432,7 +432,7 @@ void SvxFillToolBoxControl::Update()
                             XHatchList aHatchList( "", ""/*TODO?*/ );
                             aHatchList.Insert(o3tl::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
                             aHatchList.SetDirty( false );
-                            const Bitmap aBmp = aHatchList.GetUiBitmap( 0 );
+                            const BitmapEx & aBmp = aHatchList.GetUiBitmap( 0 );
 
                             if( !aBmp.IsEmpty() )
                             {

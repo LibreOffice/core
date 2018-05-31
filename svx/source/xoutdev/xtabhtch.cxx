@@ -76,9 +76,9 @@ bool XHatchList::Create()
     return true;
 }
 
-Bitmap XHatchList::CreateBitmap( long nIndex, const Size& rSize) const
+BitmapEx XHatchList::CreateBitmap( long nIndex, const Size& rSize) const
 {
-    Bitmap aRetval;
+    BitmapEx aRetval;
     OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
 
     if(nIndex < Count())
@@ -181,15 +181,15 @@ Bitmap XHatchList::CreateBitmap( long nIndex, const Size& rSize) const
     return aRetval;
 }
 
-Bitmap XHatchList::CreateBitmapForUI(long nIndex)
+BitmapEx XHatchList::CreateBitmapForUI(long nIndex)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-    Bitmap aRetVal = CreateBitmap(nIndex, rSize);
+    BitmapEx aRetVal = CreateBitmap(nIndex, rSize);
     return aRetVal;
 }
 
-Bitmap XHatchList::GetBitmapForPreview(long nIndex, const Size& rSize)
+BitmapEx XHatchList::GetBitmapForPreview(long nIndex, const Size& rSize)
 {
     return CreateBitmap(nIndex, rSize);
 }

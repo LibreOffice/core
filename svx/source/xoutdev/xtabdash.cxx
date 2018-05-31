@@ -75,7 +75,7 @@ bool XDashList::Create()
     return true;
 }
 
-Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
+BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
@@ -168,7 +168,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
     }
 
     // get result bitmap and scale
-    Bitmap aRetval(pVirtualDevice->GetBitmap(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));
+    BitmapEx aRetval(pVirtualDevice->GetBitmap(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));
 
     if(1 != nFactor)
     {
@@ -178,14 +178,14 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
     return aRetval;
 }
 
-Bitmap XDashList::CreateBitmapForUI( long nIndex )
+BitmapEx XDashList::CreateBitmapForUI( long nIndex )
 {
     const XDash& rDash = GetDash(nIndex)->GetDash();
 
     return ImpCreateBitmapForXDash(&rDash);
 }
 
-Bitmap const & XDashList::GetBitmapForUISolidLine() const
+BitmapEx const & XDashList::GetBitmapForUISolidLine() const
 {
     if(maBitmapSolidLine.IsEmpty())
     {

@@ -374,7 +374,7 @@ void SvxLineEndWindow::FillValueSet()
     basegfx::B2DPolyPolygon aNothing;
     mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SvxResId(RID_SVXSTR_NONE)));
     const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
-    Bitmap aBmp = mpLineEndList->GetUiBitmap( nCount );
+    BitmapEx aBmp = mpLineEndList->GetUiBitmap( nCount );
     OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
     maBmpSize = aBmp.GetSizePixel();
@@ -383,9 +383,9 @@ void SvxLineEndWindow::FillValueSet()
     Point aPt0( 0, 0 );
     Point aPt1( maBmpSize.Width(), 0 );
 
-    pVD->DrawBitmap( Point(), aBmp );
-    mpLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
-    mpLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
+    pVD->DrawBitmapEx( Point(), aBmp );
+    mpLineEndSet->InsertItem(1, Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
+    mpLineEndSet->InsertItem(2, Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
 
     mpLineEndList->Remove(nCount);
 
@@ -396,11 +396,11 @@ void SvxLineEndWindow::FillValueSet()
         aBmp = mpLineEndList->GetUiBitmap( i );
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
-        pVD->DrawBitmap( aPt0, aBmp );
+        pVD->DrawBitmapEx( aPt0, aBmp );
         mpLineEndSet->InsertItem(static_cast<sal_uInt16>((i+1)*2L+1),
-                Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
+                Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
         mpLineEndSet->InsertItem(static_cast<sal_uInt16>((i+2)*2L),
-                Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
+                Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
     }
     mnLines = std::min( static_cast<sal_uInt16>(nCount + 1), sal_uInt16(MAX_LINES) );
     mpLineEndSet->SetLineCount( mnLines );

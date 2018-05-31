@@ -1609,7 +1609,7 @@ void LineLB::Fill( const XDashListRef &pList )
     for( long i = 0; i < nCount; i++ )
     {
         const XDashEntry* pEntry = pList->GetDash(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        const BitmapEx aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
             InsertEntry(pEntry->GetName(), Image(aBitmap));
@@ -1622,7 +1622,7 @@ void LineLB::Fill( const XDashListRef &pList )
     SetUpdateMode( true );
 }
 
-void LineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
+void LineLB::Append( const XDashEntry& rEntry, const BitmapEx& rBitmap )
 {
     if(!rBitmap.IsEmpty())
     {
@@ -1636,7 +1636,7 @@ void LineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
     AdaptDropDownLineCountToMaximum();
 }
 
-void LineLB::Modify( const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
+void LineLB::Modify( const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap )
 {
     RemoveEntry( nPos );
 
@@ -1684,14 +1684,14 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     for( long i = 0; i < nCount; i++ )
     {
         const XLineEndEntry* pEntry = pList->GetLineEnd(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        const BitmapEx aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
             Size aBmpSize( aBitmap.GetSizePixel() );
             pVD->SetOutputSizePixel( aBmpSize, false );
-            pVD->DrawBitmap( Point(), aBitmap );
+            pVD->DrawBitmapEx( Point(), aBitmap );
             InsertEntry( pEntry->GetName(),
-                Image(pVD->GetBitmap(
+                Image(pVD->GetBitmapEx(
                     bStart ? Point() : Point(aBmpSize.Width() / 2, 0),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
         }
@@ -1703,7 +1703,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     SetUpdateMode( true );
 }
 
-void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap )
+void LineEndLB::Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap )
 {
     if(!rBitmap.IsEmpty())
     {
@@ -1711,10 +1711,10 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap )
         const Size aBmpSize(rBitmap.GetSizePixel());
 
         pVD->SetOutputSizePixel(aBmpSize, false);
-        pVD->DrawBitmap(Point(), rBitmap);
+        pVD->DrawBitmapEx(Point(), rBitmap);
         InsertEntry(
             rEntry.GetName(),
-            Image(pVD->GetBitmap(
+            Image(pVD->GetBitmapEx(
                 Point(),
                 Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
     }
@@ -1726,7 +1726,7 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap )
     AdaptDropDownLineCountToMaximum();
 }
 
-void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
+void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap )
 {
     RemoveEntry( nPos );
 
@@ -1736,10 +1736,10 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitma
         const Size aBmpSize(rBitmap.GetSizePixel());
 
         pVD->SetOutputSizePixel(aBmpSize, false);
-        pVD->DrawBitmap(Point(), rBitmap);
+        pVD->DrawBitmapEx(Point(), rBitmap);
         InsertEntry(
             rEntry.GetName(),
-            Image(pVD->GetBitmap(
+            Image(pVD->GetBitmapEx(
                     Point(),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))),
             nPos);

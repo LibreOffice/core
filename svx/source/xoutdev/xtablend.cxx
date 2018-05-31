@@ -79,9 +79,9 @@ bool XLineEndList::Create()
     return true;
 }
 
-Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
+BitmapEx XLineEndList::CreateBitmapForUI( long nIndex )
 {
-    Bitmap aRetval;
+    BitmapEx aRetval;
     OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
 
     if(nIndex < Count())

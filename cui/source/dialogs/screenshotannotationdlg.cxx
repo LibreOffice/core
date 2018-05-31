@@ -543,7 +543,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintPictureElement()
         // also set image to get repaints right, but trigger no repaint
         mpPicture->SetImage(
             Image(
-            mpVirtualBufferDevice->GetBitmap(
+            mpVirtualBufferDevice->GetBitmapEx(
             Point(0, 0),
             mpVirtualBufferDevice->GetOutputSizePixel())));
         mpPicture->Validate();

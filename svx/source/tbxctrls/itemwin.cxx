@@ -527,7 +527,7 @@ void SvxFillAttrBox::Fill( const XHatchListRef &pList )
     for( long i = 0; i < nCount; i++ )
     {
         const XHatchEntry* pEntry = pList->GetHatch(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        const BitmapEx aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
         else
@@ -548,7 +548,7 @@ void SvxFillAttrBox::Fill( const XGradientListRef &pList )
     for( long i = 0; i < nCount; i++ )
     {
         const XGradientEntry* pEntry = pList->GetGradient(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        const BitmapEx aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
         else

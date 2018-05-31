@@ -173,13 +173,13 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< X
                                     // This is an unknown implementation of a XBitmap interface. We have to
                                     // use a more time consuming way to build an Image!
                                     Image   aImage;
-                                    Bitmap  aBitmap;
+                                    BitmapEx aBitmap;
 
                                     Sequence< sal_Int8 > aDIBSeq;
                                     {
                                         aDIBSeq = xBitmap->getDIB();
                                         SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
-                                        ReadDIB(aBitmap, aMem, true);
+                                        ReadDIBBitmapEx(aBitmap, aMem);
                                     }
 
                                     aDIBSeq = xBitmap->getMaskDIB();
@@ -188,7 +188,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< X
                                         Bitmap aMaskBitmap;
                                         SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
                                         ReadDIB(aMaskBitmap, aMem, true);
-                                        aImage = Image(BitmapEx(aBitmap, aMaskBitmap));
+                                        aImage = Image(BitmapEx(aBitmap.GetBitmap(), aMaskBitmap));
                                     }
                                     else
                                         aImage = Image( aBitmap );

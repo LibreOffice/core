@@ -411,7 +411,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
         m_pGradientList->Insert(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nCount);
 
         sal_Int32 nId = m_pGradientLB->GetItemId(nCount - 1); //calculate the last ID
-        Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( nCount, m_pGradientLB->GetIconSize() );
+        BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( nCount, m_pGradientLB->GetIconSize() );
         m_pGradientLB->InsertItem( nId + 1, Image(aBitmap), aName );
         m_pGradientLB->SelectItem( nId + 1 );
         m_pGradientLB->Resize();
@@ -449,7 +449,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 
         m_pGradientList->Replace(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nPos);
 
-        Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pGradientLB->GetIconSize() );
+        BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pGradientLB->GetIconSize() );
         m_pGradientLB->RemoveItem( nId );
         m_pGradientLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
         m_pGradientLB->SelectItem( nId );

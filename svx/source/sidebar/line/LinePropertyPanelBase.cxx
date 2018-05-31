@@ -55,7 +55,7 @@ const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
 namespace
 {
 
-void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList, const Bitmap& rBitmapZero)
+void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList, const BitmapEx& rBitmapZero)
 {
     const sal_uInt32 nCount(rList.Count());
     const OUString sNone(SvxResId(RID_SVXSTR_NONE));
@@ -69,12 +69,12 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
     for(sal_uInt32 i(0); i < nCount; i++)
     {
         const XLineEndEntry* pEntry = rList.GetLineEnd(i);
-        const Bitmap aBitmap = const_cast< XLineEndList& >(rList).GetUiBitmap(i);
+        const BitmapEx aBitmap = const_cast< XLineEndList& >(rList).GetUiBitmap(i);
 
         if(!aBitmap.IsEmpty())
         {
-            Bitmap aCopyStart(aBitmap);
-            Bitmap aCopyEnd(aBitmap);
+            BitmapEx aCopyStart(aBitmap);
+            BitmapEx aCopyEnd(aBitmap);
 
             const Size aBmpSize(aCopyStart.GetSizePixel());
             const tools::Rectangle aCropRectStart(Point(), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
@@ -105,7 +105,7 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
 
         // take solid line bitmap and crop it to the size of
         // line cap entries
-        Bitmap aCopyZero( rBitmapZero );
+        BitmapEx aCopyZero( rBitmapZero );
         const tools::Rectangle aCropZero( Point(), aImgSize );
         aCopyZero.Crop( aCropZero );
 
@@ -140,11 +140,11 @@ void FillLineStyleListBox(ListBox& rListBox, const XDashList& rList)
     for(sal_uInt32 i(0); i < nCount; i++)
     {
         const XDashEntry* pEntry = rList.GetDash(i);
-        const Bitmap aBitmap = const_cast< XDashList& >(rList).GetUiBitmap(i);
+        const BitmapEx & rBitmap = const_cast< XDashList& >(rList).GetUiBitmap(i);
 
-        if(!aBitmap.IsEmpty())
+        if(!rBitmap.IsEmpty())
         {
-            rListBox.InsertEntry(pEntry->GetName(), Image(aBitmap));
+            rListBox.InsertEntry(pEntry->GetName(), Image(rBitmap));
         }
         else
         {
@@ -744,7 +744,7 @@ void  LinePropertyPanelBase::FillLineEndList()
 
         if (mxLineEndList.is())
         {
-            Bitmap aZeroBitmap;
+            BitmapEx aZeroBitmap;
 
             if (mxLineStyleList.is())
                 aZeroBitmap = mxLineStyleList->GetBitmapForUISolidLine();

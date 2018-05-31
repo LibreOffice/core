@@ -404,7 +404,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
         {
             m_pPatternList->Insert(std::move(pEntry), nCount);
             sal_Int32 nId = m_pPatternLB->GetItemId( nCount - 1 );
-            Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( nCount, m_pPatternLB->GetIconSize() );
+            BitmapEx aBitmap = m_pPatternList->GetBitmapForPreview( nCount, m_pPatternLB->GetIconSize() );
             m_pPatternLB->InsertItem( nId + 1, Image(aBitmap), aName );
             m_pPatternLB->SelectItem( nId + 1 );
             m_pPatternLB->Resize();
@@ -441,7 +441,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
         // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
         m_pPatternList->Replace(o3tl::make_unique<XBitmapEntry>(Graphic(aBitmapEx), aName), nPos);
 
-        Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_pPatternLB->GetIconSize() );
+        BitmapEx aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_pPatternLB->GetIconSize() );
         m_pPatternLB->RemoveItem(nId);
         m_pPatternLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
         m_pPatternLB->SelectItem( nId );
