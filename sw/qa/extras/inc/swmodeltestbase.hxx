@@ -462,7 +462,7 @@ protected:
             // the xpath expression evaluated to a value, not a node
             CPPUNIT_ASSERT_EQUAL_MESSAGE(
                 "attr name should not be supplied when xpath evals to a value",
-                aAttribute.getLength(), sal_Int32(0));
+                sal_Int32(0), aAttribute.getLength());
             pXpathStrResult = xmlXPathCastToString(pXmlXpathObj);
             CPPUNIT_ASSERT_MESSAGE("xpath result cannot be cast to string",
                 pXpathStrResult);

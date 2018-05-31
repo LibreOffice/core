@@ -36,16 +36,16 @@ void XViewPane::testFirstVisibleRow()
 
 void XViewPane::testVisibleRange()
 {
-    sal_Int32 nCol = 5;
-    sal_Int32 nRow = 3;
+    constexpr sal_Int32 nCol = 5;
+    constexpr sal_Int32 nRow = 3;
     uno::Reference < sheet::XViewPane > xViewPane(init(),UNO_QUERY_THROW);
     xViewPane->setFirstVisibleColumn(nCol);
     xViewPane->setFirstVisibleRow(nRow);
 
     table::CellRangeAddress aCellRangeAddress = xViewPane->getVisibleRange();
-    CPPUNIT_ASSERT_EQUAL(aCellRangeAddress.Sheet, short(0));
-    CPPUNIT_ASSERT_EQUAL(aCellRangeAddress.StartRow, nRow);
-    CPPUNIT_ASSERT_EQUAL(aCellRangeAddress.StartColumn, nCol);
+    CPPUNIT_ASSERT_EQUAL(short(0), aCellRangeAddress.Sheet);
+    CPPUNIT_ASSERT_EQUAL(nRow, aCellRangeAddress.StartRow);
+    CPPUNIT_ASSERT_EQUAL(nCol, aCellRangeAddress.StartColumn);
 }
 
 }

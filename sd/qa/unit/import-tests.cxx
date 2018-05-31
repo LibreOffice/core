@@ -2243,7 +2243,7 @@ void SdImportTest::testTdf108925()
 
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL(pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize(), sal_uInt16(25));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(25), pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize());
 
     xDocShRef->DoClose();
 }
@@ -2540,7 +2540,7 @@ void SdImportTest::testTdf116899()
     anim::create_deep_vector(xRootNode, aAnimVector);
     uno::Reference< animations::XAnimate > xNode(
         aAnimVector[8], uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of key times in the animation node isn't 2.", xNode->getKeyTimes().getLength(), static_cast<sal_Int32>(2) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of key times in the animation node isn't 2.", static_cast<sal_Int32>(2), xNode->getKeyTimes().getLength() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "First key time in the animation node isn't 0, key times aren't normalized.", 0., xNode->getKeyTimes()[0] );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second key time in the animation node isn't 1, key times aren't normalized.", 1., xNode->getKeyTimes()[1] );
 }
@@ -2553,9 +2553,9 @@ void SdImportTest::testTdf77747()
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const SvxNumBulletItem *pNumFmt = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", pNumFmt->GetNumRule()->GetLevel(0).GetSuffix(), OUString("-") );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's numbering type is wrong!", pNumFmt->GetNumRule()->GetLevel(0).GetNumberingType(),
-            SVX_NUM_NUMBER_HEBREW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", OUString("-"), pNumFmt->GetNumRule()->GetLevel(0).GetSuffix() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's numbering type is wrong!", SVX_NUM_NUMBER_HEBREW,
+            pNumFmt->GetNumRule()->GetLevel(0).GetNumberingType());
 
     xDocShRef->DoClose();
 }

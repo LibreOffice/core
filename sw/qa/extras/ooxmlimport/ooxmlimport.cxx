@@ -334,7 +334,7 @@ DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
     xPropertySet.set(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue("Surround") >>= eValue;
-    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_THROUGH);
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, eValue);
 
     /*
      * 5th problem: anchor type of the second textbox was wrong.
@@ -486,10 +486,10 @@ DECLARE_OOXMLIMPORT_TEST(testN773061, "n773061.docx")
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "LeftBorderDistance" ), sal_Int32( 0 ));
-    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ), sal_Int32( 0 ));
-    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ), sal_Int32( 0 ));
-    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ), sal_Int32( 0 ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), getProperty< sal_Int32 >( xFrame, "LeftBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN780645, "n780645.docx")

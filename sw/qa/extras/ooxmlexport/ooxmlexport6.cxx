@@ -754,7 +754,7 @@ DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.d
     OUString sFillColor = getXPath(pXmlDocument,
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:srgbClr",
             "val");
-    CPPUNIT_ASSERT_EQUAL(sFillColor.toInt32(16), sal_Int32(0x00b050));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00b050), sFillColor.toInt32(16));
     sal_Int32 nLineColor = getXPath(pXmlDocument,
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr",
             "val").toInt32(16);

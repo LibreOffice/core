@@ -711,7 +711,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
 {
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), static_cast<sal_Int32>(3));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xBookmarksByIdx->getCount());
     uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("B1"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("B2"));
@@ -719,11 +719,11 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
     // B1
     uno::Reference<text::XTextContent> xContent1(xBookmarksByName->getByName("B1"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xRange1(xContent1->getAnchor(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(xRange1->getString(), OUString("ABB"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ABB"), xRange1->getString());
     // B2
     uno::Reference<text::XTextContent> xContent2(xBookmarksByName->getByName("B2"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xRange2(xContent2->getAnchor(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(xRange2->getString(), OUString("BBC"));
+    CPPUNIT_ASSERT_EQUAL(OUString("BBC"), xRange2->getString());
     // B3 -- testing a collapsed bookmark
     uno::Reference<text::XTextContent> xContent3(xBookmarksByName->getByName("B3"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xRange3(xContent3->getAnchor(), uno::UNO_QUERY);
@@ -734,14 +734,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
     xNeighborhoodCursor->goLeft(1, false);
     xNeighborhoodCursor->goRight(2, true);
     uno::Reference<text::XTextRange> xTextNeighborhood(xNeighborhoodCursor, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(xTextNeighborhood->getString(), OUString("AB"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AB"), xTextNeighborhood->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
 {
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), static_cast<sal_Int32>(2));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
     uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("a"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("b"));
@@ -759,13 +759,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf65955_2, "tdf65955_2.odt")
 {
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), static_cast<sal_Int32>(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
     uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("test"));
 
     uno::Reference<text::XTextContent> xContent3(xBookmarksByName->getByName("test"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xRange3(xContent3->getAnchor(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(xRange3->getString(), OUString("foo bar"));
+    CPPUNIT_ASSERT_EQUAL(OUString("foo bar"), xRange3->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")

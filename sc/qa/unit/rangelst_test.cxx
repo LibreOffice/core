@@ -115,7 +115,7 @@ void Test::testDeleteArea_4Ranges()
     ScRangeList aList(ScRange(0,0,0,5,5,0));
     aList.DeleteArea(2,2,0,3,3,0);
 
-    CPPUNIT_ASSERT_EQUAL(aList.size(), static_cast<size_t>(4));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aList.size());
     for(SCCOL nCol = 0; nCol <= 5; ++nCol)
     {
         for(SCROW nRow = 0; nRow <= 5; ++nRow)
@@ -236,8 +236,8 @@ void Test::testDeleteArea_2Ranges()
 
     aList.DeleteArea(4,4,0,6,7,0);
     aList2.DeleteArea(4,4,0,6,7,0);
-    CPPUNIT_ASSERT_EQUAL(aList.size(), static_cast<size_t>(2));
-    CPPUNIT_ASSERT_EQUAL(aList2.size(), static_cast<size_t>(2));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList2.size());
 
     for(SCCOL nCol = 0; nCol <= 5; ++nCol)
     {

@@ -833,7 +833,7 @@ void SigningTest::testODFGoodGPG()
         (OString::number(
              static_cast<std::underlying_type<SignatureState>::type>(nActual))
          .getStr()),
-        nActual, SignatureState::OK);
+        SignatureState::OK, nActual);
 }
 
 void SigningTest::testODFUntrustedGoodGPG()
@@ -851,7 +851,7 @@ void SigningTest::testODFUntrustedGoodGPG()
         (OString::number(
              static_cast<std::underlying_type<SignatureState>::type>(nActual))
          .getStr()),
-        nActual, SignatureState::NOTVALIDATED);
+        SignatureState::NOTVALIDATED, nActual);
 }
 
 void SigningTest::testODFBrokenStreamGPG()

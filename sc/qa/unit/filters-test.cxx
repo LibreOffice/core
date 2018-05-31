@@ -243,7 +243,7 @@ void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, 
         ScAddress aAddress(7, 2, 0);
         ScPostIt* pNote = rDoc.GetNote(aAddress);
         CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", pNote->GetText(), OUString("Test"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", OUString("Test"), pNote->GetText() );
     }
 
     //add additional checks here

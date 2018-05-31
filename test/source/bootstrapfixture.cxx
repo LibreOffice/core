@@ -122,7 +122,7 @@ OString loadFile(const OUString& rURL)
 {
     osl::File aFile(rURL);
     osl::FileBase::RC eStatus = aFile.open(osl_File_OpenFlag_Read);
-    CPPUNIT_ASSERT_EQUAL(eStatus, osl::FileBase::E_None);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, eStatus);
     sal_uInt64 nSize;
     aFile.getSize(nSize);
     std::unique_ptr<char[]> aBytes(new char[nSize]);
