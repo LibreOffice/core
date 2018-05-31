@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENT_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENT_HXX
 
+#include <vector>
+
 #include <ooo/vba/XSink.hpp>
 #include <ooo/vba/XSinkCaller.hpp>
 #include <ooo/vba/word/XDocument.hpp>
