@@ -3951,6 +3951,15 @@ public:
         return uno::Reference<css::accessibility::XAccessibleRelationSet>();
     }
 
+    virtual Point get_accessible_location() override
+    {
+        AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
+        gint x(0), y(0);
+        if (pAtkObject && ATK_IS_COMPONENT(pAtkObject))
+            atk_component_get_extents(ATK_COMPONENT(pAtkObject), &x, &y, nullptr, nullptr, ATK_XY_WINDOW);
+        return Point(x, y);
+    }
+
     virtual void set_accessible_name(const OUString& rName) override
     {
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
