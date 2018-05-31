@@ -893,14 +893,9 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
     else if (sExecutionResult == "more")
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
-        {
-            ScopedVclPtr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog());
-            DBG_ASSERT(pDlg, "Dialog creation failed!");
-            pDlg->SetColumns(xCols);
-            pDlg->Execute();
-        }
-
+        ScopedVclPtr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog());
+        pDlg->SetColumns(xCols);
+        pDlg->Execute();
     }
     else if (sExecutionResult == "all")
     {

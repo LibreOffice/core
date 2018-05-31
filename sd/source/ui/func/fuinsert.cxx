@@ -241,48 +241,45 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(mpViewShell->GetFrameWeld()));
-    if ( pDlg )
+    pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
+    pDlg->Insert( SotClipboardFormatId::LINK_SOURCE, OUString() );
+    pDlg->Insert( SotClipboardFormatId::DRAWING, OUString() );
+    pDlg->Insert( SotClipboardFormatId::SVXB, OUString() );
+    pDlg->Insert( SotClipboardFormatId::GDIMETAFILE, OUString() );
+    pDlg->Insert( SotClipboardFormatId::BITMAP, OUString() );
+    pDlg->Insert( SotClipboardFormatId::NETSCAPE_BOOKMARK, OUString() );
+    pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
+    pDlg->Insert( SotClipboardFormatId::HTML, OUString() );
+    pDlg->Insert( SotClipboardFormatId::RTF, OUString() );
+    pDlg->Insert( SotClipboardFormatId::RICHTEXT, OUString() );
+    pDlg->Insert( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, OUString() );
+
+    //TODO/MBA: testing
+    nFormatId = pDlg->GetFormat( aDataHelper );
+    if( nFormatId != SotClipboardFormatId::NONE && aDataHelper.GetTransferable().is() )
     {
-        pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
-        pDlg->Insert( SotClipboardFormatId::LINK_SOURCE, OUString() );
-        pDlg->Insert( SotClipboardFormatId::DRAWING, OUString() );
-        pDlg->Insert( SotClipboardFormatId::SVXB, OUString() );
-        pDlg->Insert( SotClipboardFormatId::GDIMETAFILE, OUString() );
-        pDlg->Insert( SotClipboardFormatId::BITMAP, OUString() );
-        pDlg->Insert( SotClipboardFormatId::NETSCAPE_BOOKMARK, OUString() );
-        pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
-        pDlg->Insert( SotClipboardFormatId::HTML, OUString() );
-        pDlg->Insert( SotClipboardFormatId::RTF, OUString() );
-        pDlg->Insert( SotClipboardFormatId::RICHTEXT, OUString() );
-        pDlg->Insert( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, OUString() );
+        sal_Int8 nAction = DND_ACTION_COPY;
+        DrawViewShell* pDrViewSh = nullptr;
 
-        //TODO/MBA: testing
-        nFormatId = pDlg->GetFormat( aDataHelper );
-        if( nFormatId != SotClipboardFormatId::NONE && aDataHelper.GetTransferable().is() )
+        if (!mpView->InsertData( aDataHelper,
+                                mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
+                                nAction, false, nFormatId ))
         {
-            sal_Int8 nAction = DND_ACTION_COPY;
-            DrawViewShell* pDrViewSh = nullptr;
+            pDrViewSh = dynamic_cast<DrawViewShell*>(mpViewShell);
+        }
 
-            if (!mpView->InsertData( aDataHelper,
-                                    mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
-                                    nAction, false, nFormatId ))
+        if (pDrViewSh)
+        {
+            INetBookmark        aINetBookmark( "", "" );
+
+            if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
+                aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
+                aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
+                aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
             {
-                pDrViewSh = dynamic_cast<DrawViewShell*>(mpViewShell);
-            }
-
-            if (pDrViewSh)
-            {
-                INetBookmark        aINetBookmark( "", "" );
-
-                if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
-                    aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                    ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
-                    aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                    ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
-                    aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
-                {
-                    pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
-                }
+                pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
             }
         }
     }
@@ -501,19 +498,16 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(
                             pFact->CreateInsertObjectDialog( mpViewShell->GetFrameWeld(), SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommandString(),
                             xStorage, &aServerLst ));
-                    if ( pDlg )
-                    {
-                        pDlg->Execute();
-                        bCreateNew = pDlg->IsCreateNew();
-                        xObj = pDlg->GetObject();
+                    pDlg->Execute();
+                    bCreateNew = pDlg->IsCreateNew();
+                    xObj = pDlg->GetObject();
 
-                        xIconMetaFile = pDlg->GetIconIfIconified( &aIconMediaType );
-                        if ( xIconMetaFile.is() )
-                            nAspect = embed::Aspects::MSOLE_ICON;
+                    xIconMetaFile = pDlg->GetIconIfIconified( &aIconMediaType );
+                    if ( xIconMetaFile.is() )
+                        nAspect = embed::Aspects::MSOLE_ICON;
 
-                        if ( xObj.is() )
-                            mpViewShell->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
-                    }
+                    if ( xObj.is() )
+                        mpViewShell->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
 
                     break;
                 }

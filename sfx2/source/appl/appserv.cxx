@@ -446,31 +446,25 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact =
                 SfxAbstractDialogFactory::Create();
 
-            if ( pFact )
+            const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(SID_CONFIG);
+
+            SfxItemSet aSet(
+                GetPool(), svl::Items<SID_CONFIG, SID_CONFIG>{} );
+
+            if ( pStringItem )
             {
-                const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(SID_CONFIG);
-
-                SfxItemSet aSet(
-                    GetPool(), svl::Items<SID_CONFIG, SID_CONFIG>{} );
-
-                if ( pStringItem )
-                {
-                    aSet.Put( SfxStringItem(
-                        SID_CONFIG, pStringItem->GetValue() ) );
-                }
-
-                Reference <XFrame> xFrame(GetRequestFrame(rReq));
-                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(
-                    &aSet, xFrame ));
-
-                if ( pDlg )
-                {
-                    const short nRet = pDlg->Execute();
-
-                    if ( nRet )
-                        bDone = true;
-                }
+                aSet.Put( SfxStringItem(
+                    SID_CONFIG, pStringItem->GetValue() ) );
             }
+
+            Reference <XFrame> xFrame(GetRequestFrame(rReq));
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(
+                &aSet, xFrame ));
+
+            const short nRet = pDlg->Execute();
+
+            if ( nRet )
+                bDone = true;
             break;
         }
 
@@ -643,12 +637,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_ABOUT:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            if ( pFact )
-            {
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_ABOUT ));
-                pDlg->Execute();
-                bDone = true;
-            }
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_ABOUT ));
+            pDlg->Execute();
+            bDone = true;
             break;
         }
 
@@ -1351,24 +1342,21 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 sPageURL = pURLItem->GetValue();
             Reference <XFrame> xFrame(GetRequestFrame(rReq));
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            if ( pFact )
+            VclPtr<VclAbstractDialog> pDlg =
+                pFact->CreateFrameDialog(rReq.GetFrameWindow(), xFrame, rReq.GetSlot(), sPageURL );
+            short nRet = pDlg->Execute();
+            pDlg.disposeAndClear();
+            SfxViewFrame* pView = SfxViewFrame::GetFirst();
+            while ( pView )
             {
-                VclPtr<VclAbstractDialog> pDlg =
-                    pFact->CreateFrameDialog(rReq.GetFrameWindow(), xFrame, rReq.GetSlot(), sPageURL );
-                short nRet = pDlg->Execute();
-                pDlg.disposeAndClear();
-                SfxViewFrame* pView = SfxViewFrame::GetFirst();
-                while ( pView )
+                if (nRet == RET_OK)
                 {
-                    if (nRet == RET_OK)
-                    {
-                        SfxObjectShell* pObjSh = pView->GetObjectShell();
-                        if (pObjSh)
-                            pObjSh->SetConfigOptionsChecked(false);
-                    }
-                    pView->GetBindings().InvalidateAll(false);
-                    pView = SfxViewFrame::GetNext( *pView );
+                    SfxObjectShell* pObjSh = pView->GetObjectShell();
+                    if (pObjSh)
+                        pObjSh->SetConfigOptionsChecked(false);
                 }
+                pView->GetBindings().InvalidateAll(false);
+                pView = SfxViewFrame::GetNext( *pView );
             }
             break;
         }
@@ -1609,19 +1597,16 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_AUTO_CORRECT_DLG:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            if ( pFact )
-            {
-                SfxItemSet aSet(GetPool(), svl::Items<SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG>{});
-                const SfxPoolItem* pItem=nullptr;
-                const SfxItemSet* pSet = rReq.GetArgs();
-                SfxItemPool* pSetPool = pSet ? pSet->GetPool() : nullptr;
-                if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SfxItemState::SET )
-                    aSet.Put( *pItem );
+            SfxItemSet aSet(GetPool(), svl::Items<SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG>{});
+            const SfxPoolItem* pItem=nullptr;
+            const SfxItemSet* pSet = rReq.GetArgs();
+            SfxItemPool* pSetPool = pSet ? pSet->GetPool() : nullptr;
+            if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SfxItemState::SET )
+                aSet.Put( *pItem );
 
-                const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog(pViewFrame? &pViewFrame->GetWindow(): nullptr, &aSet));
-                pDlg->Execute();
-            }
+            const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog(pViewFrame? &pViewFrame->GetWindow(): nullptr, &aSet));
+            pDlg->Execute();
 
             break;
         }

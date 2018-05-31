@@ -598,10 +598,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 void SwView::ExecFormatFootnote()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
     ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetFrameWeld(), GetWrtShell()));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
 }
 
@@ -609,9 +606,7 @@ void SwView::ExecNumberingOutline(SfxItemPool & rPool)
 {
     SfxItemSet aTmp(rPool, svl::Items<FN_PARAM_1, FN_PARAM_1>{});
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert(pFact && "Dialog creation failed!");
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateOutlineTabDialog(GetFrameWeld(), &aTmp, GetWrtShell()));
-    assert(pDlg && "Dialog creation failed!");
     pDlg->Execute();
 }
 

@@ -41,9 +41,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
 
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialog creation failed!");
     mpDlg = pFact->CreateSvxHpLinkDlg(_pParent, pBindings);
-    DBG_ASSERT(mpDlg, "Dialog creation failed!");
     SetWindow( mpDlg->GetWindow() );
     SetVisible_Impl(false);
 

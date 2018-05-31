@@ -248,7 +248,6 @@ IMPL_LINK( SwBaseShell, InsertDBTextHdl, void*, p, void )
         {
             SwDBData aDBData = pDBStruct->aDBData;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
             ScopedVclPtr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,

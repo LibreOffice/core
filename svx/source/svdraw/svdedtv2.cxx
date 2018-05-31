@@ -767,221 +767,218 @@ void SdrEditView::DistributeMarkedObjects()
         SfxItemSet aNewAttr(mpModel->GetItemPool());
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
+
+        ScopedVclPtr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(aNewAttr));
+
+        sal_uInt16 nResult = pDlg->Execute();
+
+        if(nResult == RET_OK)
         {
-            ScopedVclPtr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(aNewAttr));
-            DBG_ASSERT(pDlg, "Dialog creation failed!");
+            SvxDistributeHorizontal eHor = pDlg->GetDistributeHor();
+            SvxDistributeVertical eVer = pDlg->GetDistributeVer();
+            ImpDistributeEntryList aEntryList;
+            ImpDistributeEntryList::iterator itEntryList;
+            sal_uInt32 nFullLength;
 
-            sal_uInt16 nResult = pDlg->Execute();
+            const bool bUndo = IsUndoEnabled();
+            if( bUndo )
+                BegUndo();
 
-            if(nResult == RET_OK)
+            if(eHor != SvxDistributeHorizontal::NONE)
             {
-                SvxDistributeHorizontal eHor = pDlg->GetDistributeHor();
-                SvxDistributeVertical eVer = pDlg->GetDistributeVer();
-                ImpDistributeEntryList aEntryList;
-                ImpDistributeEntryList::iterator itEntryList;
-                sal_uInt32 nFullLength;
+                // build sorted entry list
+                nFullLength = 0;
 
-                const bool bUndo = IsUndoEnabled();
-                if( bUndo )
-                    BegUndo();
-
-                if(eHor != SvxDistributeHorizontal::NONE)
+                for( size_t a = 0; a < nMark; ++a )
                 {
-                    // build sorted entry list
-                    nFullLength = 0;
+                    SdrMark* pMark = GetSdrMarkByIndex(a);
+                    ImpDistributeEntry* pNew = new ImpDistributeEntry;
 
-                    for( size_t a = 0; a < nMark; ++a )
+                    pNew->mpObj = pMark->GetMarkedSdrObj();
+
+                    switch(eHor)
                     {
-                        SdrMark* pMark = GetSdrMarkByIndex(a);
-                        ImpDistributeEntry* pNew = new ImpDistributeEntry;
-
-                        pNew->mpObj = pMark->GetMarkedSdrObj();
-
-                        switch(eHor)
+                        case SvxDistributeHorizontal::Left:
                         {
-                            case SvxDistributeHorizontal::Left:
-                            {
-                                pNew->mnPos = pNew->mpObj->GetSnapRect().Left();
-                                break;
-                            }
-                            case SvxDistributeHorizontal::Center:
-                            {
-                                pNew->mnPos = (pNew->mpObj->GetSnapRect().Right() + pNew->mpObj->GetSnapRect().Left()) / 2;
-                                break;
-                            }
-                            case SvxDistributeHorizontal::Distance:
-                            {
-                                pNew->mnLength = pNew->mpObj->GetSnapRect().GetWidth() + 1;
-                                nFullLength += pNew->mnLength;
-                                pNew->mnPos = (pNew->mpObj->GetSnapRect().Right() + pNew->mpObj->GetSnapRect().Left()) / 2;
-                                break;
-                            }
-                            case SvxDistributeHorizontal::Right:
-                            {
-                                pNew->mnPos = pNew->mpObj->GetSnapRect().Right();
-                                break;
-                            }
-                            default: break;
+                            pNew->mnPos = pNew->mpObj->GetSnapRect().Left();
+                            break;
                         }
-
-                        for ( itEntryList = aEntryList.begin();
-                              itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
-                              ++itEntryList )
-                        {};
-                        if ( itEntryList < aEntryList.end() )
-                            aEntryList.insert( itEntryList, pNew );
-                        else
-                            aEntryList.push_back( pNew );
+                        case SvxDistributeHorizontal::Center:
+                        {
+                            pNew->mnPos = (pNew->mpObj->GetSnapRect().Right() + pNew->mpObj->GetSnapRect().Left()) / 2;
+                            break;
+                        }
+                        case SvxDistributeHorizontal::Distance:
+                        {
+                            pNew->mnLength = pNew->mpObj->GetSnapRect().GetWidth() + 1;
+                            nFullLength += pNew->mnLength;
+                            pNew->mnPos = (pNew->mpObj->GetSnapRect().Right() + pNew->mpObj->GetSnapRect().Left()) / 2;
+                            break;
+                        }
+                        case SvxDistributeHorizontal::Right:
+                        {
+                            pNew->mnPos = pNew->mpObj->GetSnapRect().Right();
+                            break;
+                        }
+                        default: break;
                     }
 
-                    if(eHor == SvxDistributeHorizontal::Distance)
-                    {
-                        // calculate room in-between
-                        sal_Int32 nWidth = GetAllMarkedBoundRect().GetWidth() + 1;
-                        double fStepWidth = (static_cast<double>(nWidth) - static_cast<double>(nFullLength)) / static_cast<double>(aEntryList.size() - 1);
-                        double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
-                        fStepStart += fStepWidth + static_cast<double>((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
-
-                        // move entries 1..n-1
-                        for( size_t i = 1, n = aEntryList.size()-1; i < n; ++i )
-                        {
-                            ImpDistributeEntry* pCurr = aEntryList[ i    ];
-                            ImpDistributeEntry* pNext = aEntryList[ i + 1];
-                            sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
-                            if( bUndo )
-                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
-                            pCurr->mpObj->Move(Size(nDelta, 0));
-                            fStepStart += fStepWidth + static_cast<double>((pCurr->mnLength + pNext->mnLength) / 2);
-                        }
-                    }
+                    for ( itEntryList = aEntryList.begin();
+                          itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
+                          ++itEntryList )
+                    {};
+                    if ( itEntryList < aEntryList.end() )
+                        aEntryList.insert( itEntryList, pNew );
                     else
-                    {
-                        // calculate distances
-                        sal_Int32 nWidth = aEntryList[ aEntryList.size() - 1 ]->mnPos - aEntryList[ 0 ]->mnPos;
-                        double fStepWidth = static_cast<double>(nWidth) / static_cast<double>(aEntryList.size() - 1);
-                        double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
-                        fStepStart += fStepWidth;
-
-                        // move entries 1..n-1
-                        for( size_t i = 1 ; i < aEntryList.size()-1 ; ++i )
-                        {
-                            ImpDistributeEntry* pCurr = aEntryList[ i ];
-                            sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
-                            if( bUndo )
-                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
-                            pCurr->mpObj->Move(Size(nDelta, 0));
-                            fStepStart += fStepWidth;
-                        }
-                    }
-
-                    // clear list
-                    for (ImpDistributeEntry* p : aEntryList)
-                        delete p;
-                    aEntryList.clear();
+                        aEntryList.push_back( pNew );
                 }
 
-                if(eVer != SvxDistributeVertical::NONE)
+                if(eHor == SvxDistributeHorizontal::Distance)
                 {
-                    // build sorted entry list
-                    nFullLength = 0;
+                    // calculate room in-between
+                    sal_Int32 nWidth = GetAllMarkedBoundRect().GetWidth() + 1;
+                    double fStepWidth = (static_cast<double>(nWidth) - static_cast<double>(nFullLength)) / static_cast<double>(aEntryList.size() - 1);
+                    double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
+                    fStepStart += fStepWidth + static_cast<double>((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
 
-                    for( size_t a = 0; a < nMark; ++a )
+                    // move entries 1..n-1
+                    for( size_t i = 1, n = aEntryList.size()-1; i < n; ++i )
                     {
-                        SdrMark* pMark = GetSdrMarkByIndex(a);
-                        ImpDistributeEntry* pNew = new ImpDistributeEntry;
-
-                        pNew->mpObj = pMark->GetMarkedSdrObj();
-
-                        switch(eVer)
-                        {
-                            case SvxDistributeVertical::Top:
-                            {
-                                pNew->mnPos = pNew->mpObj->GetSnapRect().Top();
-                                break;
-                            }
-                            case SvxDistributeVertical::Center:
-                            {
-                                pNew->mnPos = (pNew->mpObj->GetSnapRect().Bottom() + pNew->mpObj->GetSnapRect().Top()) / 2;
-                                break;
-                            }
-                            case SvxDistributeVertical::Distance:
-                            {
-                                pNew->mnLength = pNew->mpObj->GetSnapRect().GetHeight() + 1;
-                                nFullLength += pNew->mnLength;
-                                pNew->mnPos = (pNew->mpObj->GetSnapRect().Bottom() + pNew->mpObj->GetSnapRect().Top()) / 2;
-                                break;
-                            }
-                            case SvxDistributeVertical::Bottom:
-                            {
-                                pNew->mnPos = pNew->mpObj->GetSnapRect().Bottom();
-                                break;
-                            }
-                            default: break;
-                        }
-
-                        for ( itEntryList = aEntryList.begin();
-                              itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
-                              ++itEntryList )
-                        {};
-                        if ( itEntryList < aEntryList.end() )
-                            aEntryList.insert( itEntryList, pNew );
-                        else
-                            aEntryList.push_back( pNew );
+                        ImpDistributeEntry* pCurr = aEntryList[ i    ];
+                        ImpDistributeEntry* pNext = aEntryList[ i + 1];
+                        sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
+                        if( bUndo )
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
+                        pCurr->mpObj->Move(Size(nDelta, 0));
+                        fStepStart += fStepWidth + static_cast<double>((pCurr->mnLength + pNext->mnLength) / 2);
                     }
+                }
+                else
+                {
+                    // calculate distances
+                    sal_Int32 nWidth = aEntryList[ aEntryList.size() - 1 ]->mnPos - aEntryList[ 0 ]->mnPos;
+                    double fStepWidth = static_cast<double>(nWidth) / static_cast<double>(aEntryList.size() - 1);
+                    double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
+                    fStepStart += fStepWidth;
 
-                    if(eVer == SvxDistributeVertical::Distance)
+                    // move entries 1..n-1
+                    for( size_t i = 1 ; i < aEntryList.size()-1 ; ++i )
                     {
-                        // calculate room in-between
-                        sal_Int32 nHeight = GetAllMarkedBoundRect().GetHeight() + 1;
-                        double fStepWidth = (static_cast<double>(nHeight) - static_cast<double>(nFullLength)) / static_cast<double>(aEntryList.size() - 1);
-                        double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
-                        fStepStart += fStepWidth + static_cast<double>((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
-
-                        // move entries 1..n-1
-                        for( size_t i = 1, n = aEntryList.size()-1; i < n; ++i)
-                        {
-                            ImpDistributeEntry* pCurr = aEntryList[ i     ];
-                            ImpDistributeEntry* pNext = aEntryList[ i + 1 ];
-                            sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
-                            if( bUndo )
-                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
-                            pCurr->mpObj->Move(Size(0, nDelta));
-                            fStepStart += fStepWidth + static_cast<double>((pCurr->mnLength + pNext->mnLength) / 2);
-                        }
-                    }
-                    else
-                    {
-                        // calculate distances
-                        sal_Int32 nHeight = aEntryList[ aEntryList.size() - 1 ]->mnPos - aEntryList[ 0 ]->mnPos;
-                        double fStepWidth = static_cast<double>(nHeight) / static_cast<double>(aEntryList.size() - 1);
-                        double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
+                        ImpDistributeEntry* pCurr = aEntryList[ i ];
+                        sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
+                        if( bUndo )
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
+                        pCurr->mpObj->Move(Size(nDelta, 0));
                         fStepStart += fStepWidth;
-
-                        // move entries 1..n-1
-                        for(size_t i = 1, n = aEntryList.size()-1; i < n; ++i)
-                        {
-                            ImpDistributeEntry* pCurr = aEntryList[ i ];
-                            sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
-                            if( bUndo )
-                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
-                            pCurr->mpObj->Move(Size(0, nDelta));
-                            fStepStart += fStepWidth;
-                        }
                     }
-
-                    // clear list
-                    for (ImpDistributeEntry* p : aEntryList)
-                        delete p;
-                    aEntryList.clear();
                 }
 
-                // UNDO-Comment and end of UNDO
-                mpModel->SetUndoComment(SvxResId(STR_DistributeMarkedObjects));
-
-                if( bUndo )
-                    EndUndo();
+                // clear list
+                for (ImpDistributeEntry* p : aEntryList)
+                    delete p;
+                aEntryList.clear();
             }
+
+            if(eVer != SvxDistributeVertical::NONE)
+            {
+                // build sorted entry list
+                nFullLength = 0;
+
+                for( size_t a = 0; a < nMark; ++a )
+                {
+                    SdrMark* pMark = GetSdrMarkByIndex(a);
+                    ImpDistributeEntry* pNew = new ImpDistributeEntry;
+
+                    pNew->mpObj = pMark->GetMarkedSdrObj();
+
+                    switch(eVer)
+                    {
+                        case SvxDistributeVertical::Top:
+                        {
+                            pNew->mnPos = pNew->mpObj->GetSnapRect().Top();
+                            break;
+                        }
+                        case SvxDistributeVertical::Center:
+                        {
+                            pNew->mnPos = (pNew->mpObj->GetSnapRect().Bottom() + pNew->mpObj->GetSnapRect().Top()) / 2;
+                            break;
+                        }
+                        case SvxDistributeVertical::Distance:
+                        {
+                            pNew->mnLength = pNew->mpObj->GetSnapRect().GetHeight() + 1;
+                            nFullLength += pNew->mnLength;
+                            pNew->mnPos = (pNew->mpObj->GetSnapRect().Bottom() + pNew->mpObj->GetSnapRect().Top()) / 2;
+                            break;
+                        }
+                        case SvxDistributeVertical::Bottom:
+                        {
+                            pNew->mnPos = pNew->mpObj->GetSnapRect().Bottom();
+                            break;
+                        }
+                        default: break;
+                    }
+
+                    for ( itEntryList = aEntryList.begin();
+                          itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
+                          ++itEntryList )
+                    {};
+                    if ( itEntryList < aEntryList.end() )
+                        aEntryList.insert( itEntryList, pNew );
+                    else
+                        aEntryList.push_back( pNew );
+                }
+
+                if(eVer == SvxDistributeVertical::Distance)
+                {
+                    // calculate room in-between
+                    sal_Int32 nHeight = GetAllMarkedBoundRect().GetHeight() + 1;
+                    double fStepWidth = (static_cast<double>(nHeight) - static_cast<double>(nFullLength)) / static_cast<double>(aEntryList.size() - 1);
+                    double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
+                    fStepStart += fStepWidth + static_cast<double>((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
+
+                    // move entries 1..n-1
+                    for( size_t i = 1, n = aEntryList.size()-1; i < n; ++i)
+                    {
+                        ImpDistributeEntry* pCurr = aEntryList[ i     ];
+                        ImpDistributeEntry* pNext = aEntryList[ i + 1 ];
+                        sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
+                        if( bUndo )
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
+                        pCurr->mpObj->Move(Size(0, nDelta));
+                        fStepStart += fStepWidth + static_cast<double>((pCurr->mnLength + pNext->mnLength) / 2);
+                    }
+                }
+                else
+                {
+                    // calculate distances
+                    sal_Int32 nHeight = aEntryList[ aEntryList.size() - 1 ]->mnPos - aEntryList[ 0 ]->mnPos;
+                    double fStepWidth = static_cast<double>(nHeight) / static_cast<double>(aEntryList.size() - 1);
+                    double fStepStart = static_cast<double>(aEntryList[ 0 ]->mnPos);
+                    fStepStart += fStepWidth;
+
+                    // move entries 1..n-1
+                    for(size_t i = 1, n = aEntryList.size()-1; i < n; ++i)
+                    {
+                        ImpDistributeEntry* pCurr = aEntryList[ i ];
+                        sal_Int32 nDelta = static_cast<sal_Int32>(fStepStart + 0.5) - pCurr->mnPos;
+                        if( bUndo )
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
+                        pCurr->mpObj->Move(Size(0, nDelta));
+                        fStepStart += fStepWidth;
+                    }
+                }
+
+                // clear list
+                for (ImpDistributeEntry* p : aEntryList)
+                    delete p;
+                aEntryList.clear();
+            }
+
+            // UNDO-Comment and end of UNDO
+            mpModel->SetUndoComment(SvxResId(STR_DistributeMarkedObjects));
+
+            if( bUndo )
+                EndUndo();
         }
     }
 }

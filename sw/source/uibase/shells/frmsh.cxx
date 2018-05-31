@@ -476,7 +476,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &GetView()) != nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                assert(pFact);
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(
                                                         nSel & SelectionType::Graphic ? OUString("PictureDialog") :
                                                         nSel & SelectionType::Ole ? OUString("ObjectDialog"):
@@ -486,7 +485,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                         aSet,
                                                         false,
                                                         sDefPage));
-                assert(pDlg);
 
                 if ( nSlot == FN_DRAW_WRAP_DLG )
                 {
@@ -634,11 +632,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             {
                 OUString aName(rSh.GetFlyName());
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                assert(pFact);
                 ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(
                     pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
-
-                assert(pDlg);
 
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -660,11 +655,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 OUString aTitle(rSh.GetObjTitle());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                assert(pFact);
                 ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
                     pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
                         aTitle, aDescription ));
-                assert(pDlg);
 
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -1296,13 +1289,11 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
                 rSh.GetFlyFrameAttr(aNewAttr);
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                assert(pFact);
                 ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
                     nullptr,
                     &aNewAttr,
                     pDoc,
                     false));
-                assert(pDlg);
 
                 if(RET_OK == pDlg->Execute())
                 {

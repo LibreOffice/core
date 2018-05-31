@@ -134,21 +134,18 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            if (pFact)
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, mpViewShell->GetActiveWindow(),
+                                                                false, rStyleSheet, ePO, pStyleSheetPool ));
+            if( pDlg->Execute() == RET_OK )
             {
-                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, mpViewShell->GetActiveWindow(),
-                                                                    false, rStyleSheet, ePO, pStyleSheetPool ));
-                if( pDlg->Execute() == RET_OK )
-                {
-                    const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                    // Undo-Action
-                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                    (mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet),                                                    pOutSet);
-                    mpDocSh->GetUndoManager()->AddUndoAction(pAction);
+                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                // Undo-Action
+                StyleSheetUndoAction* pAction = new StyleSheetUndoAction
+                                                (mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet),                                                    pOutSet);
+                mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
-                    pStyleSheet->GetItemSet().Put( *pOutSet );
-                    static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
-                }
+                pStyleSheet->GetItemSet().Put( *pOutSet );
+                static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
             }
         }
     }

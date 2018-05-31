@@ -81,41 +81,31 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr, mpView) : nullptr);
-        if( pDlg )
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdOutlineBulletTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr, mpView) );
+        if ( pPageItem )
+            pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
+        sal_uInt16 nResult = pDlg->Execute();
+
+        if( nResult != RET_OK )
+            return;
+
+        SfxItemSet aSet( *pDlg->GetOutputItemSet() );
+
+        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+
+        std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
+
+        if (OutlineView* pView = dynamic_cast<OutlineView*>(mpView))
         {
-            if ( pPageItem )
-                pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
-            sal_uInt16 nResult = pDlg->Execute();
-
-            switch( nResult )
-            {
-                case RET_OK:
-                {
-                    SfxItemSet aSet( *pDlg->GetOutputItemSet() );
-
-                    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
-
-                    std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
-
-                    if (OutlineView* pView = dynamic_cast<OutlineView*>(mpView))
-                    {
-                        pOLV = pView->GetViewByWindow(mpViewShell->GetActiveWindow());
-                        aGuard.reset(new OutlineViewModelChangeGuard(*pView));
-                    }
-
-                    if( pOLV )
-                        pOLV->EnableBullets();
-
-                    rReq.Done( aSet );
-                    pArgs = rReq.GetArgs();
-                }
-                break;
-
-                default:
-                    return;
-            }
+            pOLV = pView->GetViewByWindow(mpViewShell->GetActiveWindow());
+            aGuard.reset(new OutlineViewModelChangeGuard(*pView));
         }
+
+        if( pOLV )
+            pOLV->EnableBullets();
+
+        rReq.Done( aSet );
+        pArgs = rReq.GetArgs();
     }
 
     /* not direct to pOlView; therefore, SdDrawView::SetAttributes can catch

@@ -177,7 +177,6 @@ namespace pcr
         , m_nCharsId(0)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        assert(pFact); //CreateFactory fail!
         m_nCharsId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr );
         AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr );
     }

@@ -90,9 +90,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr) : nullptr);
-        if (!pDlg)
-            return;
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdParagraphTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr));
 
         sal_uInt16 nResult = pDlg->Execute();
 

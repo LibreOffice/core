@@ -132,7 +132,6 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
     pPatternList = pPatternListItem->GetPatternList();
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
 
     mnLine = AddTabPage( "RID_SVXPAGE_LINE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), nullptr );
     mnArea = AddTabPage( "RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), nullptr );

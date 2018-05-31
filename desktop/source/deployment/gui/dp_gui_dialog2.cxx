@@ -893,13 +893,10 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleOptionsBtn, Button*, void)
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-        if ( pFact )
-        {
-            OUString sExtensionId = m_pExtensionBox->GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId ));
+        OUString sExtensionId = m_pExtensionBox->GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
+        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId ));
 
-            pDlg->Execute();
-        }
+        pDlg->Execute();
     }
 }
 

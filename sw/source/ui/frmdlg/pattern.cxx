@@ -29,7 +29,6 @@ SwBackgroundDlg::SwBackgroundDlg(vcl::Window* pParent, const SfxItemSet& rSet)
 {
     SetText(SwResId(STR_FRMUI_PATTERN));
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
     if ( fnCreatePage )
     {

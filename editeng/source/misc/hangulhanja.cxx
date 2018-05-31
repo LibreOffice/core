@@ -279,27 +279,23 @@ namespace editeng
         if ( m_bIsInteractive && !m_pConversionDialog )
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-            if(pFact)
-            {
-                m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection );
-                DBG_ASSERT(m_pConversionDialog, "Dialog creation failed!");
+            m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection );
 
-                m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );
+            m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );
 
-                m_pConversionDialog->SetByCharacter( m_bByCharacter );
-                m_pConversionDialog->SetConversionFormat( m_eConversionFormat );
-                m_pConversionDialog->SetConversionDirectionState( m_bTryBothDirections, m_ePrimaryConversionDirection );
+            m_pConversionDialog->SetByCharacter( m_bByCharacter );
+            m_pConversionDialog->SetConversionFormat( m_eConversionFormat );
+            m_pConversionDialog->SetConversionDirectionState( m_bTryBothDirections, m_ePrimaryConversionDirection );
 
-                // the handlers
-                m_pConversionDialog->SetOptionsChangedHdl( LINK( this, HangulHanjaConversion_Impl, OnOptionsChanged ) );
-                m_pConversionDialog->SetIgnoreHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnore ) );
-                m_pConversionDialog->SetIgnoreAllHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnoreAll ) );
-                m_pConversionDialog->SetChangeHdl( LINK( this, HangulHanjaConversion_Impl, OnChange ) );
-                m_pConversionDialog->SetChangeAllHdl( LINK( this, HangulHanjaConversion_Impl, OnChangeAll ) );
-                m_pConversionDialog->SetClickByCharacterHdl( LINK( this, HangulHanjaConversion_Impl, OnByCharClicked ) );
-                m_pConversionDialog->SetConversionFormatChangedHdl( LINK( this, HangulHanjaConversion_Impl, OnConversionTypeChanged ) );
-                m_pConversionDialog->SetFindHdl( LINK( this, HangulHanjaConversion_Impl, OnFind ) );
-            }
+            // the handlers
+            m_pConversionDialog->SetOptionsChangedHdl( LINK( this, HangulHanjaConversion_Impl, OnOptionsChanged ) );
+            m_pConversionDialog->SetIgnoreHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnore ) );
+            m_pConversionDialog->SetIgnoreAllHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnoreAll ) );
+            m_pConversionDialog->SetChangeHdl( LINK( this, HangulHanjaConversion_Impl, OnChange ) );
+            m_pConversionDialog->SetChangeAllHdl( LINK( this, HangulHanjaConversion_Impl, OnChangeAll ) );
+            m_pConversionDialog->SetClickByCharacterHdl( LINK( this, HangulHanjaConversion_Impl, OnByCharClicked ) );
+            m_pConversionDialog->SetConversionFormatChangedHdl( LINK( this, HangulHanjaConversion_Impl, OnConversionTypeChanged ) );
+            m_pConversionDialog->SetFindHdl( LINK( this, HangulHanjaConversion_Impl, OnFind ) );
         }
     }
 

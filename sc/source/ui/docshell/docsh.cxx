@@ -3008,7 +3008,6 @@ VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog( const SfxIte
     if( pDocSh == this )
     {
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
         ::CreateTabPage ScDocStatPageCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_STAT);
         OSL_ENSURE(ScDocStatPageCreate, "Tabpage create fail!");
         pDlg->AddFontTabPage();

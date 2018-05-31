@@ -888,12 +888,8 @@ ScVbaWorksheet::ShowDataForm( )
     ScTabViewShell* pTabViewShell = excel::getBestViewShell( xModel );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
     ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(pTabViewShell->GetDialogParent(),
                                                                         pTabViewShell));
-    OSL_ENSURE(pDlg, "Dialog create fail!");
-
     pDlg->Execute();
 }
 

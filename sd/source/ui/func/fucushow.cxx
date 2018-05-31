@@ -56,25 +56,22 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     vcl::Window* pWin = mpViewShell->GetActiveWindow();
-    ScopedVclPtr<AbstractSdCustomShowDlg> pDlg(pFact ? pFact->CreateSdCustomShowDlg(pWin ? pWin->GetFrameWeld() : nullptr, *mpDoc) : nullptr);
-    if( pDlg )
+    ScopedVclPtr<AbstractSdCustomShowDlg> pDlg( pFact->CreateSdCustomShowDlg(pWin ? pWin->GetFrameWeld() : nullptr, *mpDoc) );
+    sal_uInt16 nRet = pDlg->Execute();
+    if( pDlg->IsModified() )
     {
-        sal_uInt16 nRet = pDlg->Execute();
-        if( pDlg->IsModified() )
-        {
-            mpDoc->SetChanged();
-            sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
-            rSettings.mbCustomShow = pDlg->IsCustomShow();
-        }
-        pDlg.disposeAndClear();
+        mpDoc->SetChanged();
+        sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
+        rSettings.mbCustomShow = pDlg->IsCustomShow();
+    }
+    pDlg.disposeAndClear();
 
-        if( nRet == RET_YES )
-        {
-            mpViewShell->SetStartShowWithDialog(true);
+    if( nRet == RET_YES )
+    {
+        mpViewShell->SetStartShowWithDialog(true);
 
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
-                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
-        }
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
     }
 }
 

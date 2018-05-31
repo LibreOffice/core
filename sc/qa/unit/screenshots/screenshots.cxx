@@ -110,7 +110,6 @@ void ScScreenshotTest::initialize()
     CPPUNIT_ASSERT(mpViewShell != nullptr);
 
     mpFact = ScAbstractDialogFactory::Create();
-    CPPUNIT_ASSERT_MESSAGE("Failed to create dialog factory", mpFact);
 
     SvMemoryStream* pNewMemStream = new SvMemoryStream(const_cast<sal_Unicode *>(mCsv.getStr()), mCsv.getLength() * sizeof(sal_Unicode), StreamMode::READ);
     pNewMemStream->SetStreamCharSet( RTL_TEXTENCODING_UNICODE );

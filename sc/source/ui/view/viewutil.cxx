@@ -330,14 +330,11 @@ bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
 {
     bool bRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
-    {
-        SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
-        aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
-        aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rFrame.GetWindow().GetFrameWeld(), aSet, true));
-        pDlg->Execute();
-    }
+    SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
+    aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
+    aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rFrame.GetWindow().GetFrameWeld(), aSet, true));
+    pDlg->Execute();
     return bRet;
 }
 

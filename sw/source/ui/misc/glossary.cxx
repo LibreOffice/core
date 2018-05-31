@@ -1035,22 +1035,18 @@ OUString SwGlossaryDlg::GetCurrGrpName() const
 IMPL_LINK_NOARG( SwGlossaryDlg, PathHdl, Button *, void )
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
+    ScopedVclPtr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxPathSelectDialog(GetFrameWeld()));
+    SvtPathOptions aPathOpt;
+    const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
+    pDlg->SetPath(sGlosPath);
+    if(RET_OK == pDlg->Execute())
     {
-        ScopedVclPtr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxPathSelectDialog(GetFrameWeld()));
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
-        SvtPathOptions aPathOpt;
-        const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
-        pDlg->SetPath(sGlosPath);
-        if(RET_OK == pDlg->Execute())
+        const OUString sTmp(pDlg->GetPath());
+        if(sTmp != sGlosPath)
         {
-            const OUString sTmp(pDlg->GetPath());
-            if(sTmp != sGlosPath)
-            {
-                aPathOpt.SetAutoTextPath( sTmp );
-                ::GetGlossaries()->UpdateGlosPath( true );
-                Init();
-            }
+            aPathOpt.SetAutoTextPath( sTmp );
+            ::GetGlossaries()->UpdateGlosPath( true );
+            Init();
         }
     }
 }

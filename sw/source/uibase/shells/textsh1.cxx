@@ -183,14 +183,7 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, *pCoreSet);
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
         pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), *pCoreSet, SwCharDlgMode::Std));
-        if (!pDlg)
-        {
-            SAL_WARN("sw.ui", "Dialog creation failed!");
-            return;
-        }
 
         if (nSlot == FN_INSERT_HYPERLINK)
             pDlg->SetCurPageId("hyperlink");
@@ -419,11 +412,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // open the dialog "Tools/Options/Language Settings - Language"
                 // to set the documents default language
                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                if (pFact)
-                {
-                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS ));
-                    pDlg->Execute();
-                }
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS ));
+                pDlg->Execute();
             }
             else
             {
@@ -562,10 +552,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialog creation failed!");
             ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 GetView().GetFrameWeld(), rWrtSh));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
             {
@@ -646,9 +634,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                assert(pFact && "SwAbstractDialogFactory fail!");
                 ScopedVclPtr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetFrameWeld(), rWrtSh));
-                assert(pDlg && "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     nKind = pDlg->GetKind();
@@ -703,10 +689,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
             }
 
@@ -735,10 +718,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 pVFrame->ToggleChildWindow(FN_REDLINE_ACCEPT);
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
             ScopedVclPtr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin()));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
 
             switch (lcl_AskRedlineFlags(GetView().GetFrameWeld()))
             {
@@ -1067,10 +1047,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     sDefPage = OUStringToOString(static_cast<const SfxStringItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
                 pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, false, sDefPage ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
             }
 
             if ( !bUseDialog )

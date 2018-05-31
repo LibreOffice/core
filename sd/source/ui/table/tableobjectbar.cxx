@@ -143,11 +143,11 @@ void TableObjectBar::Execute( SfxRequest& rReq )
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     vcl::Window* pWin = mpView->GetViewShell()->GetParentWindow();
-                    pDlg.disposeAndReset(pFact ? pFact->CreateSvxInsRowColDlg(pWin ? pWin->GetFrameWeld() : nullptr,
-                                                                              nSlotId == SID_TABLE_INSERT_COL_DLG,
-                                                                              SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) : nullptr);
+                    pDlg.disposeAndReset( pFact->CreateSvxInsRowColDlg(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       nSlotId == SID_TABLE_INSERT_COL_DLG,
+                                                                       SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) );
 
-                    if (!pDlg.get() || (pDlg->Execute() != 1))
+                    if (pDlg->Execute() != 1)
                         break;
                 }
 

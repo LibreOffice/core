@@ -212,10 +212,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     if ( !pItem )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
         pDlg.disposeAndReset(pFact->CreateSwEnvDlg(pParent ? pParent->GetFrameWeld() : nullptr, aSet, pOldSh, pTempPrinter, !bEnvChange));
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
         nMode = pDlg->Execute();
     }
     else

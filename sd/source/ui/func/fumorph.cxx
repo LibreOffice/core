@@ -92,8 +92,8 @@ void FuMorph::DoExecute( SfxRequest& )
         SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
         SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractMorphDlg> pDlg(pFact ? pFact->CreateMorphDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr, pObj1, pObj2) : nullptr);
-        if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))
+        ScopedVclPtr<AbstractMorphDlg> pDlg( pFact->CreateMorphDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr, pObj1, pObj2) );
+        if(pPolyObj1 && pPolyObj2 && (pDlg->Execute() == RET_OK))
         {
             B2DPolyPolygonList_impl aPolyPolyList;
             ::basegfx::B2DPolyPolygon aPolyPoly1;

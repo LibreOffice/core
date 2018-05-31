@@ -264,9 +264,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
     ImplFillExchangeData( pTheme, *mpExchangeData );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    assert(pFact && "Got no AbstractDialogFactory!");
     mpThemePropertiesDialog = pFact->CreateGalleryThemePropertiesDialog(this, mpExchangeData.get(), mpThemePropsDlgItemSet.get());
-    assert(mpThemePropertiesDialog && "Got no GalleryThemePropertiesDialog!");
 
     if ( bCreateNew )
     {
@@ -345,15 +343,10 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
         GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
-        {
-            ScopedVclPtr<VclAbstractRefreshableDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog( this, pTheme ));
-            DBG_ASSERT(aActualizeProgress, "Dialog creation failed!");
-
-            aActualizeProgress->Update();
-            aActualizeProgress->Execute();
-            mpGallery->ReleaseTheme( pTheme, *this );
-        }
+        ScopedVclPtr<VclAbstractRefreshableDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog( this, pTheme ));
+        aActualizeProgress->Update();
+        aActualizeProgress->Execute();
+        mpGallery->ReleaseTheme( pTheme, *this );
     }
     else if (rIdent == "delete")
     {
@@ -368,10 +361,7 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
         const OUString  aOldName( pTheme->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        assert(pFact && "Dialog creation failed!");
         ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(GetFrameWeld(), aOldName));
-        assert(aDlg.get() && "Dialog creation failed!");
-
         if( aDlg->Execute() == RET_OK )
         {
             const OUString aNewName( aDlg->GetTitle() );
@@ -401,14 +391,9 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
         {
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            if(pFact)
-            {
-                ScopedVclPtr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog(GetFrameWeld(), pTheme));
-                DBG_ASSERT(aDlg, "Dialog creation failed!");
-
-                if( aDlg->Execute() == RET_OK )
-                    pTheme->SetId( aDlg->GetId(), true );
-            }
+            ScopedVclPtr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog(GetFrameWeld(), pTheme));
+            if( aDlg->Execute() == RET_OK )
+                pTheme->SetId( aDlg->GetId(), true );
         }
 
         mpGallery->ReleaseTheme( pTheme, *this );

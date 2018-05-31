@@ -496,27 +496,24 @@ SfxApplication::ChooseScript()
 
 #if HAVE_FEATURE_SCRIPTING
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    if ( pFact )
+    SAL_INFO( "sfx.appl", "create selector dialog");
+
+    const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
+    uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
+
+    ScopedVclPtr<AbstractScriptSelectorDialog> pDlg(
+        pFact->CreateScriptSelectorDialog( nullptr, xFrame ));
+
+    SAL_INFO( "sfx.appl", "done, now exec it");
+
+      sal_uInt16 nRet = pDlg->Execute();
+
+    SAL_INFO( "sfx.appl", "has returned");
+
+    if ( nRet == RET_OK )
     {
-        SAL_INFO( "sfx.appl", "create selector dialog");
-
-        const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
-        uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
-
-        ScopedVclPtr<AbstractScriptSelectorDialog> pDlg(
-            pFact->CreateScriptSelectorDialog( nullptr, xFrame ));
-
-        SAL_INFO( "sfx.appl", "done, now exec it");
-
-          sal_uInt16 nRet = pDlg->Execute();
-
-        SAL_INFO( "sfx.appl", "has returned");
-
-        if ( nRet == RET_OK )
-        {
-            aScriptURL = pDlg->GetScriptURL();
-        }
+        aScriptURL = pDlg->GetScriptURL();
     }
 #endif
     return aScriptURL;

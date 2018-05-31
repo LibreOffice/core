@@ -1414,7 +1414,6 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     , rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nSectionPageId = AddTabPage("section", SwInsertSectionTabPage::Create, nullptr);
     m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
     m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
@@ -2097,7 +2096,6 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     , rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
     m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
     m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);

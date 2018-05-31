@@ -53,52 +53,38 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
         case FN_INSERT_CAPTION:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            assert(pFact && "SwAbstractDialogFactory fail!");
-
             ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( &rMDI, *this ));
-            assert(pDialog && "Dialog creation failed!");
-            if ( pDialog )
-            {
-                pDialog->Execute();
-            }
+            pDialog->Execute();
             break;
         }
         case SID_INSERT_SIGNATURELINE:
         case SID_EDIT_SIGNATURELINE:
         {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            assert(pFact && "VclAbstractDialogFactory fail!");
 
             const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
             ScopedVclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
                 GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_SIGNATURELINE));
-            assert(pDialog && "Dialog creation failed!");
 
-            if (pDialog)
-                pDialog->Execute();
+            pDialog->Execute();
             break;
         }
         case SID_SIGN_SIGNATURELINE:
         {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            assert(pFact && "VclAbstractDialogFactory fail!");
 
             const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
             VclPtr<AbstractSignSignatureLineDialog> pDialog
                 = pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel);
-            assert(pDialog && "Dialog creation failed!");
 
-            if (pDialog)
-                pDialog->Execute();
+            pDialog->Execute();
             break;
         }
         case  FN_EDIT_FOOTNOTE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            assert(pFact && "Dialog creation failed!");
             ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 GetFrameWeld(), *m_pWrtShell, true));
-            assert(pDlg && "Dialog creation failed!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
             pDlg->SetText( SwResId(STR_EDIT_FOOTNOTE) );

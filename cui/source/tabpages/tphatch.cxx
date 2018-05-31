@@ -441,9 +441,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    assert(pFact && "Dialog creation failed!");
     ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    assert(pDlg && "Dialog creation failed!");
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -555,9 +553,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
         OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        assert(pFact && "Dialog creation failed!");
         ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-        assert(pDlg && "Dialog creation failed!");
 
         bool bLoop = true;
         while( bLoop && pDlg->Execute() == RET_OK )

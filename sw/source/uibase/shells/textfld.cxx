@@ -138,20 +138,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( pMDI, &rSh.GetLinkManager(), false, &rLink ));
-                            if ( pDlg )
-                            {
-                                pDlg->Execute();
-                            }
+                            pDlg->Execute();
                         }
                         break;
                     }
                     default:
                     {
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        assert(pFact && "SwAbstractDialogFactory fail!");
-
                         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwFieldEditDlg( GetView() ));
-                        assert(pDlg && "Dialog creation failed!");
                         pDlg->Execute();
                     }
                 }
@@ -546,7 +540,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bool bTravel = false;
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    assert(pFact && "Dialog creation failed!");
                     ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
                     assert(fnGetRange && "Dialog creation failed! GetRanges()");
                     SfxItemSet aSet(GetPool(), fnGetRange());
@@ -591,9 +584,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bTravel |= bNext || bPrev;
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
-                    assert(pFact2 && "Dialog creation failed!");
                     ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog(GetView().GetFrameWeld(), aSet, bTravel));
-                    assert(pDlg && "Dialog creation failed!");
                     pDlg->HideAuthor();
 
                     pDlg->SetText(lcl_BuildTitleWithRedline(pRedline));
@@ -650,9 +641,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 else
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    assert(pFact && "Dialog creation failed!");
                     ScopedVclPtr<AbstractJavaEditDialog> pDlg(pFact->CreateJavaEditDialog(GetView().GetFrameWeld(), &rSh));
-                    assert(pDlg && "Dialog creation failed!");
                     if ( pDlg->Execute() )
                     {
                         aType = pDlg->GetScriptType();

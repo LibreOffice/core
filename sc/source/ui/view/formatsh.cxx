@@ -858,10 +858,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 pTabViewShell->SetInFormatDialog(true);
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
                 pDlg.disposeAndReset(pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc ));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(false);
 
