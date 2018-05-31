@@ -359,15 +359,15 @@ void SvxSearchDialog::dispose()
     Hide();
 
     rBindings.EnterRegistrations();
-    DELETEZ( pSearchController );
-    DELETEZ( pOptionsController );
-    DELETEZ( pFamilyController );
+    pSearchController.reset();
+    pOptionsController.reset();
+    pFamilyController.reset();
     rBindings.LeaveRegistrations();
 
-    delete pSearchItem;
+    pSearchItem.reset();
     pImpl.reset();
-    delete pSearchList;
-    delete pReplaceList;
+    pSearchList.reset();
+    pReplaceList.reset();
     mpDocWin.clear();
     m_pSearchFrame.clear();
     m_pSearchLB.clear();
@@ -444,7 +444,7 @@ void SvxSearchDialog::Construct_Impl()
     InitControls_Impl();
 
     // Get attribute sets only once in constructor()
-    const SfxPoolItem* ppArgs[] = { pSearchItem, nullptr };
+    const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
     const SvxSetItem* pSrchSetItem =
         static_cast<const SvxSetItem*>( rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs ) );
 
@@ -459,10 +459,10 @@ void SvxSearchDialog::Construct_Impl()
 
     // Create controller and update at once
     rBindings.EnterRegistrations();
-    pSearchController =
-        new SvxSearchController( SID_SEARCH_ITEM, rBindings, *this );
-    pOptionsController =
-        new SvxSearchController( SID_SEARCH_OPTIONS, rBindings, *this );
+    pSearchController.reset(
+        new SvxSearchController( SID_SEARCH_ITEM, rBindings, *this ) );
+    pOptionsController.reset(
+        new SvxSearchController( SID_SEARCH_OPTIONS, rBindings, *this ) );
     rBindings.LeaveRegistrations();
     rBindings.GetDispatcher()->Execute( FID_SEARCH_ON, SfxCallMode::SLOT, ppArgs );
     pImpl->aSelectionTimer.Start();
@@ -577,7 +577,7 @@ bool SvxSearchDialog::Close()
     aOpt.SetSearchFormatted         ( m_pSearchFormattedCB->IsChecked() );
     aOpt.Commit();
 
-    const SfxPoolItem* ppArgs[] = { pSearchItem, nullptr };
+    const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
     rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SfxCallMode::SLOT, ppArgs );
     rBindings.Execute( SID_SEARCH_DLG );
 
@@ -909,7 +909,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
             if ( !pSearchList )
             {
                 // Get attribute sets, if it not has been done already
-                const SfxPoolItem* ppArgs[] = { pSearchItem, nullptr };
+                const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
                 const SvxSetItem* pSrchSetItem =
                     static_cast<const SvxSetItem*>(rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs ));
 
@@ -1108,8 +1108,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
     if ( pSSet )
     {
-        delete pSearchList;
-        pSearchList = new SearchAttrItemList;
+        pSearchList.reset(new SearchAttrItemList);
 
         if ( pSSet->Count() )
         {
@@ -1127,8 +1126,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
     if ( pRSet )
     {
-        delete pReplaceList;
-        pReplaceList = new SearchAttrItemList;
+        pReplaceList.reset(new SearchAttrItemList);
 
         if ( pRSet->Count() )
         {
@@ -1392,7 +1390,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
                 pReplaceList->Clear();
         }
         nModifyFlag = ModifyFlags::NONE;
-        const SfxPoolItem* ppArgs[] = { pSearchItem, nullptr };
+        const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
         rBindings.ExecuteSynchron( FID_SEARCH_NOW, ppArgs );
     }
     else if ( pBtn == m_pCloseBtn )
@@ -1553,8 +1551,8 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
             }
 
             rBindings.EnterRegistrations();
-            pFamilyController =
-                new SvxSearchController( nId, rBindings, *this );
+            pFamilyController.reset(
+                new SvxSearchController( nId, rBindings, *this ) );
             rBindings.LeaveRegistrations();
             m_pSearchTmplLB->Clear();
             m_pReplaceTmplLB->Clear();
@@ -1583,7 +1581,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
     {
         // Disable templates controller
         rBindings.EnterRegistrations();
-        DELETEZ( pFamilyController );
+        pFamilyController.reset();
         rBindings.LeaveRegistrations();
 
         m_pSearchLB->Show();
@@ -1915,8 +1913,7 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 {
     if ( pItem )
     {
-        delete pSearchItem;
-        pSearchItem = static_cast<SvxSearchItem*>(pItem->Clone());
+        pSearchItem.reset(static_cast<SvxSearchItem*>(pItem->Clone()));
         Init_Impl( pSearchItem->GetPattern() &&
                    ( !pSearchList || !pSearchList->Count() ) );
     }
@@ -2046,7 +2043,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
             DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
             SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
 
-            SearchAttrItemList* pList = bSearch ? pSearchList : pReplaceList;
+            SearchAttrItemList* pList = bSearch ? pSearchList.get() : pReplaceList.get();
 
             const SfxPoolItem* pItem;
             for( sal_uInt16 n = 0; n < pList->Count(); ++n )
@@ -2159,7 +2156,7 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         return rStr;
 
     SfxItemPool& rPool = pSh->GetPool();
-    SearchAttrItemList* pList = bSrchFlag ? pSearchList : pReplaceList;
+    SearchAttrItemList* pList = bSrchFlag ? pSearchList.get() : pReplaceList.get();
 
     if ( !pList )
         return rStr;
@@ -2340,7 +2337,7 @@ void SvxSearchDialog::SaveToModule_Impl()
 
     pSearchItem->SetCommand( SvxSearchCmd::FIND );
     nModifyFlag = ModifyFlags::NONE;
-    const SfxPoolItem* ppArgs[] = { pSearchItem, nullptr };
+    const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
     rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs );
 }
 
