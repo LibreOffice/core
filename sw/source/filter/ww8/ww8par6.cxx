@@ -532,8 +532,17 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
         nWWUp += rSection.maSep.dzaGutter;
     }
 
-    rData.bHasHeader = (rSection.maSep.grpfIhdt &
-        (WW8_HEADER_EVEN | WW8_HEADER_ODD | WW8_HEADER_FIRST)) != 0;
+    /* Check whether this section has headers / footers */
+    sal_uInt16 nHeaderMask = WW8_HEADER_EVEN | WW8_HEADER_ODD;
+    sal_uInt16 nFooterMask = WW8_FOOTER_EVEN | WW8_FOOTER_ODD;
+    /* Ignore the presence of a first-page header/footer unless it is enabled */
+    if( rSection.HasTitlePage() )
+    {
+        nHeaderMask |= WW8_HEADER_FIRST;
+        nFooterMask |= WW8_FOOTER_FIRST;
+    }
+    rData.bHasHeader = (rSection.maSep.grpfIhdt & nHeaderMask) != 0;
+    rData.bHasFooter = (rSection.maSep.grpfIhdt & nFooterMask) != 0;
 
     if( rData.bHasHeader )
     {
@@ -553,9 +562,6 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
     }
     else // no header -> just use Up as-is
         rData.nSwUp = std::abs(nWWUp);
-
-    rData.bHasFooter = (rSection.maSep.grpfIhdt &
-        (WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST)) != 0;
 
     if( rData.bHasFooter )
     {
