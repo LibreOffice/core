@@ -29,7 +29,6 @@ LineWidthValueSet::LineWidthValueSet(vcl::Window* pParent)
     , nSelItem(0)
     , bCusEnable(false)
 {
-    strUnit = new OUString[9];
 }
 
 void LineWidthValueSet::Resize()
@@ -47,16 +46,12 @@ LineWidthValueSet::~LineWidthValueSet()
 void LineWidthValueSet::dispose()
 {
     pVDev.disposeAndClear();
-    delete[] strUnit;
     ValueSet::dispose();
 }
 
-void LineWidthValueSet::SetUnit(OUString const * str)
+void LineWidthValueSet::SetUnit(std::array<OUString,9> const & strUnits)
 {
-    for(int i = 0; i < 9; i++)
-    {
-        strUnit[i] = str[i];
-    }
+    maStrUnits = strUnits;
 }
 
 void LineWidthValueSet::SetSelItem(sal_uInt16 nSel)
@@ -123,7 +118,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             aFont.SetColor(GetSettings().GetStyleSettings().GetDisableColor());
 
         pDev->SetFont(aFont);
-        pDev->DrawText(aStrRect, strUnit[ nItemId - 1 ], DrawTextFlags::EndEllipsis);
+        pDev->DrawText(aStrRect, maStrUnits[ nItemId - 1 ], DrawTextFlags::EndEllipsis);
     }
     else
     {
@@ -148,7 +143,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor());
         pDev->SetFont(aFont);
         Point aStart(aBLPos.X() + nRectWidth * 7 / 9 , aBLPos.Y() + nRectHeight/6);
-        pDev->DrawText(aStart, strUnit[ nItemId - 1 ]);  //can't set DrawTextFlags::EndEllipsis here ,or the text will disappear
+        pDev->DrawText(aStart, maStrUnits[ nItemId - 1 ]);  //can't set DrawTextFlags::EndEllipsis here ,or the text will disappear
 
         //draw line
         if( nSelItem ==  nItemId )
