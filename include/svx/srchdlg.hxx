@@ -127,9 +127,9 @@ public:
     virtual void    Activate() override;
 
     const SearchAttrItemList*   GetSearchItemList() const
-                                    { return pSearchList; }
+                                    { return pSearchList.get(); }
     const SearchAttrItemList*   GetReplaceItemList() const
-                                    { return pReplaceList; }
+                                    { return pReplaceList.get(); }
 
     TransliterationFlags        GetTransliterationFlags() const;
 
@@ -219,14 +219,14 @@ private:
     std::vector<OUString> aSearchStrings;
     std::vector<OUString> aReplaceStrings;
 
-    std::unique_ptr<SearchDlg_Impl>         pImpl;
-    SearchAttrItemList*     pSearchList;
-    SearchAttrItemList*     pReplaceList;
-    SvxSearchItem*          pSearchItem;
+    std::unique_ptr<SearchDlg_Impl>      pImpl;
+    std::unique_ptr<SearchAttrItemList>  pSearchList;
+    std::unique_ptr<SearchAttrItemList>  pReplaceList;
+    std::unique_ptr<SvxSearchItem>       pSearchItem;
 
-    SvxSearchController*    pSearchController;
-    SvxSearchController*    pOptionsController;
-    SvxSearchController*    pFamilyController;
+    std::unique_ptr<SvxSearchController> pSearchController;
+    std::unique_ptr<SvxSearchController> pOptionsController;
+    std::unique_ptr<SvxSearchController> pFamilyController;
 
     mutable TransliterationFlags
                             nTransliterationFlags;
