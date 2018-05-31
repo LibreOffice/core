@@ -821,6 +821,25 @@ DECLARE_WW8EXPORT_TEST(testTdf117503, "tdf117503.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf117885, "tdf117885.doc")
+{
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    /* Get the vertical position of the paragraph containing the text "Start" */
+    sal_Int32 nParaA_Top = getXPath(pXmlDoc,
+        "/root/page/body/column[1]/body/txt[text()='Start']/infos/bounds", "top"
+        ).toInt32();
+
+    /* Get the vertical position of the paragraph containing the text "Top B" */
+    sal_Int32 nParaB_Top = getXPath(pXmlDoc,
+        "/root/page/body/column[2]/body/txt[text()='Top B']/infos/bounds", "top"
+        ).toInt32();
+
+    /* These two paragraphs are supposed to be at the top of the left
+     * and right columns respectively.  Check that they actually line up: */
+    CPPUNIT_ASSERT_EQUAL(nParaA_Top, nParaB_Top);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
