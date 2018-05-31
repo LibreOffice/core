@@ -2339,7 +2339,7 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
         }
         nMemId++;
     }
-    SAL_WARN("extensions.olebridge", "Sink::Call: Uknown method '" << Method << "'");
+    SAL_WARN("extensions.olebridge", "Sink::Call: Unknown method '" << Method << "'");
 }
 
 class CXEnumConnections : public IEnumConnections,
