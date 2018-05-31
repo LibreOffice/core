@@ -85,34 +85,34 @@ enum class LOKCommentNotificationType { Add, Modify, Remove };
 
 class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
 {
-    ScDocument          aDocument;
+    ScDocument          m_aDocument;
 
-    OUString            aDdeTextFmt;
+    OUString            m_aDdeTextFmt;
 
-    double              nPrtToScreenFactor;
-    DocShell_Impl*      pImpl;
-    ScDocFunc*          pDocFunc;
+    double              m_nPrtToScreenFactor;
+    DocShell_Impl*      m_pImpl;
+    ScDocFunc*          m_pDocFunc;
 
-    bool                bHeaderOn;
-    bool                bFooterOn;
-    bool                bIsInplace:1;         // Is set by the View
-    bool                bIsEmpty:1;
-    bool                bIsInUndo:1;
-    bool                bDocumentModifiedPending:1;
-    bool                bUpdateEnabled:1;
-    bool                mbUcalcTest:1; // avoid loading the styles in the ucalc test
-    sal_uInt16          nDocumentLock;
-    sal_Int16           nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
+    bool                m_bHeaderOn;
+    bool                m_bFooterOn;
+    bool                m_bIsInplace:1;         // Is set by the View
+    bool                m_bIsEmpty:1;
+    bool                m_bIsInUndo:1;
+    bool                m_bDocumentModifiedPending:1;
+    bool                m_bUpdateEnabled:1;
+    bool                m_bUcalcTest:1; // avoid loading the styles in the ucalc test
+    sal_uInt16          m_nDocumentLock;
+    sal_Int16           m_nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
 
-    ScDBData*           pOldAutoDBRange;
+    ScDBData*           m_pOldAutoDBRange;
 
-    ScAutoStyleList*    pAutoStyleList;
-    ScPaintLockData*    pPaintLockData;
-    ScOptSolverSave*    pSolverSaveData;
-    ScSheetSaveData*    pSheetSaveData;
-    ScFormatSaveData*   mpFormatSaveData;
+    ScAutoStyleList*    m_pAutoStyleList;
+    ScPaintLockData*    m_pPaintLockData;
+    ScOptSolverSave*    m_pSolverSaveData;
+    ScSheetSaveData*    m_pSheetSaveData;
+    ScFormatSaveData*   m_pFormatSaveData;
 
-    ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
+    ScDocShellModificator* m_pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
     // Only used by Vba helper functions
     css::uno::Reference<css::script::vba::XVBAScriptListener>   m_xVBAListener;
@@ -221,8 +221,8 @@ public:
 
     void    GetDocStat( ScDocStat& rDocStat );
 
-    ScDocument&     GetDocument()   { return aDocument; }
-    ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
+    ScDocument&     GetDocument()   { return m_aDocument; }
+    ScDocFunc&      GetDocFunc()    { return *m_pDocFunc; }
 
     css::uno::Reference<css::datatransfer::XTransferable2> GetClipData() { return m_xClipData; }
     void SetClipData(const css::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
@@ -323,7 +323,7 @@ public:
     void            PostPaintGridAll();
     void            PostPaintExtras();
 
-    bool            IsPaintLocked() const { return pPaintLockData != nullptr; }
+    bool            IsPaintLocked() const { return m_pPaintLockData != nullptr; }
 
     void            PostDataChanged();
 
@@ -336,7 +336,7 @@ public:
 
     void            LockPaint();
     void            UnlockPaint();
-    sal_uInt16          GetLockCount() const { return nDocumentLock;}
+    sal_uInt16          GetLockCount() const { return m_nDocumentLock;}
     void            SetLockCount(sal_uInt16 nNew);
 
     void            LockDocument();
@@ -348,14 +348,14 @@ public:
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() override;
 
     void            SetInplace( bool bInplace );
-    bool            IsEmpty() const { return bIsEmpty; }
+    bool            IsEmpty() const { return m_bIsEmpty; }
     void            SetEmpty(bool bSet);
 
-    bool            IsInUndo() const                { return bIsInUndo; }
+    bool            IsInUndo() const                { return m_bIsInUndo; }
     void            SetInUndo(bool bSet);
 
     void            CalcOutputFactor();
-    double          GetOutputFactor() const { return nPrtToScreenFactor;}
+    double          GetOutputFactor() const { return m_nPrtToScreenFactor;}
     void            GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
                                                SCTAB             nCurTab,
                                                bool&             rbHeader,
@@ -370,21 +370,21 @@ public:
 
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem ) override;
 
-    const OUString& GetDdeTextFmt() const { return aDdeTextFmt; }
+    const OUString& GetDdeTextFmt() const { return m_aDdeTextFmt; }
 
     SfxBindings*    GetViewBindings();
 
     ScTabViewShell* GetBestViewShell( bool bOnlyVisible = true );
 
     void            SetDocumentModifiedPending( bool bVal )
-                        { bDocumentModifiedPending = bVal; }
+                        { m_bDocumentModifiedPending = bVal; }
     bool            IsDocumentModifiedPending() const
-                        { return bDocumentModifiedPending; }
+                        { return m_bDocumentModifiedPending; }
 
     bool            IsUpdateEnabled() const
-                        { return bUpdateEnabled; }
+                        { return m_bUpdateEnabled; }
     void            SetUpdateEnabled(bool bValue)
-                        { bUpdateEnabled = bValue; }
+                        { m_bUpdateEnabled = bValue; }
 
     OutputDevice*   GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
 
@@ -409,7 +409,7 @@ public:
 
     virtual HiddenInformation GetHiddenInformationState( HiddenInformation nStates ) override;
 
-    const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
+    const ScOptSolverSave* GetSolverSaveData() const    { return m_pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
     ScSheetSaveData* GetSheetSaveData();
     ScFormatSaveData* GetFormatSaveData();
