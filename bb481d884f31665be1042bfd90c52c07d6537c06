@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_f0197b7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-31T10:54:29Z",
+      "side": 1,
+      "message": "accidental revert? ;)",
+      "revId": "bb481d884f31665be1042bfd90c52c07d6537c06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d01e3762",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-31T10:54:29Z",
+      "side": 1,
+      "message": "no idea about the semantics here, but - why not leave _this_ line inside the if-statements? That way, the map will only get set if it actually contains at least one entry.",
+      "revId": "bb481d884f31665be1042bfd90c52c07d6537c06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
