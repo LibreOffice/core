@@ -32,6 +32,11 @@ public:
 
     void logKeyInput(VclPtr<vcl::Window> const & xUIElement, const KeyEvent& rEvent);
 
+    /**
+     * Allow read-only access of mbValid
+     */
+    bool getLoggerStatus();
+
     static UITestLogger& getInstance();
 
 };

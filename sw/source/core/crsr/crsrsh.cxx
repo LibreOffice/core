@@ -70,6 +70,8 @@
 #include <PostItMgr.hxx>
 #include <DocumentSettingManager.hxx>
 
+#include <logger.hxx>
+
 using namespace com::sun::star;
 using namespace util;
 

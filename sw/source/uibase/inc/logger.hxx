@@ -1,0 +1,29 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef SW_SOURCE_UIBASE_INC_LOGGER_HXX
+#define SW_SOURCE_UIBASE_INC_LOGGER_HXX
+
+#include "uiobject.hxx"
+#include "swevents.hxx"
+#include <vcl/uitest/logger.hxx>
+
+class SwUILogger
+{
+public:
+    void logAction(VclPtr<vcl::Window> const& xUIElement, SwEventId nEvent);
+
+    void log(const OUString& rString);
+
+    static SwUILogger& getInstance();
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
