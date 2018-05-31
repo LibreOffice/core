@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_f0517bd9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001885
+      },
+      "writtenOn": "2018-05-31T13:50:29Z",
+      "side": 1,
+      "message": "I don\u0027t know what I have done here ???",
+      "parentUuid": "9a30ddce_f0197b7a",
+      "revId": "bb481d884f31665be1042bfd90c52c07d6537c06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_d01e3762",
         "filename": "linguistic/source/gciterator.cxx",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2018-05-31T10:54:29Z",
       "side": 1,
       "message": "no idea about the semantics here, but - why not leave _this_ line inside the if-statements? That way, the map will only get set if it actually contains at least one entry.",
+      "revId": "bb481d884f31665be1042bfd90c52c07d6537c06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_10752f97",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1001885
+      },
+      "writtenOn": "2018-05-31T13:50:29Z",
+      "side": 1,
+      "message": "Yes this is also a possibility. If both values are set it will be assigned two times. On the other side the allocated memory will be freed sooner, if no property is set.\nWhat do you think, shall I change it?",
+      "parentUuid": "9a30ddce_d01e3762",
       "revId": "bb481d884f31665be1042bfd90c52c07d6537c06",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
