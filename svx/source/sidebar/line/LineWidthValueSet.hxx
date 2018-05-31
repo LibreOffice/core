@@ -31,7 +31,7 @@ public:
     virtual ~LineWidthValueSet() override;
     virtual void dispose() override;
 
-    void SetUnit(OUString const * str);
+    void SetUnit(std::array<OUString,9> const & strUnits);
     void SetSelItem(sal_uInt16 nSel);
     sal_uInt16 GetSelItem() { return nSelItem;}
     void SetImage(const Image& img);
@@ -44,7 +44,7 @@ public:
 private:
     VclPtr<VirtualDevice> pVDev;
     sal_uInt16          nSelItem;
-    OUString*      strUnit;
+    std::array<OUString,9> maStrUnits;
     Image           imgCus;
     bool            bCusEnable;
 };
