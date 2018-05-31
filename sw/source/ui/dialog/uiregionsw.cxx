@@ -64,6 +64,8 @@
 #include <svx/flagsdef.hxx>
 #include <memory>
 
+#include <svx/unobrushitemhelper.hxx>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -1062,6 +1064,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
             RES_BACKGROUND, RES_BACKGROUND,
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
+            XATTR_FILL_FIRST, XATTR_FILL_LAST,
             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
 
     aSet.Put( pSectRepr->GetCol() );
@@ -1071,6 +1074,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
     aSet.Put( pSectRepr->GetBalance() );
     aSet.Put( pSectRepr->GetFrameDir() );
     aSet.Put( pSectRepr->GetLRSpace() );
+
+    setSvxBrushItemAsFillAttributesToTargetSet(pSectRepr->GetBackground(), aSet);
 
     const SwSectionFormats& rDocFormats = rSh.GetDoc()->GetSections();
     SwSectionFormats aOrigArray(rDocFormats);
@@ -1417,7 +1422,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nSectionPageId = AddTabPage("section", SwInsertSectionTabPage::Create, nullptr);
     m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
+    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
     m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
     m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
@@ -2099,7 +2104,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
     m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
     m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
