@@ -388,13 +388,13 @@ void ScTiledRenderingTest::testDocumentSize()
     pViewShell->SetCursor(100, 0);
     // 2 seconds
     osl::Condition::Result aResult = m_aDocSizeCondition.wait(std::chrono::seconds(2));
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+    CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
 
     // Set cursor row
     pViewShell->SetCursor(0, 100);
     // 2 seconds
     aResult = m_aDocSizeCondition.wait(std::chrono::seconds(2));
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+    CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

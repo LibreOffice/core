@@ -9,7 +9,10 @@
 
 #include "sal/config.h"
 
-#include "cppunit/TestAssert.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "cppunitassertequals.hxx"
 
@@ -51,6 +54,15 @@ void test(bool b1, bool b2, OUString const & s1, OUString const & s2, T t) {
     CPPUNIT_ASSERT(bool(b1 && b2));
     CPPUNIT_ASSERT(bool(b1 == b2));
     CPPUNIT_ASSERT(bool(s1 == s2));
+
+    CPPUNIT_ASSERT_EQUAL(b1, true); // expected-error {{CPPUNIT_ASSERT_EQUALS parameters look switched, expected value should be first param [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("foo", b1, true); // expected-error {{CPPUNIT_ASSERT_EQUALS parameters look switched, expected value should be first param [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT_EQUAL(true, b1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("foo", true, b1);
+    CPPUNIT_ASSERT_EQUAL(s1, OUString("xxx")); // expected-error {{CPPUNIT_ASSERT_EQUALS parameters look switched, expected value should be first param [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("foo", s1, OUString("xxx")); // expected-error {{CPPUNIT_ASSERT_EQUALS parameters look switched, expected value should be first param [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT_EQUAL(OUString("xxx"), s1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("foo", OUString("xxx"), s1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

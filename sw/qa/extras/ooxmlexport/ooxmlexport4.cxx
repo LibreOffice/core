@@ -1159,7 +1159,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90697_continuousBreaksComplex2,"tdf92724_continu
         CPPUNIT_ASSERT( xHeaderText->getString() != "Third section - First page header. No follow defined" );
 // Same test stated differently: Pages 4 and 5 OUGHT to use "Second section header", but currently don't.  Page 6 does.
         if( nPages <= 3 )
-            CPPUNIT_ASSERT_EQUAL( xHeaderText->getString(), OUString("First section header") );
+            CPPUNIT_ASSERT_EQUAL( OUString("First section header"), xHeaderText->getString() );
         else
             CPPUNIT_ASSERT( xHeaderText->getString() == "First section header" || xHeaderText->getString() == "Second section header" );
 

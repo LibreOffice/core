@@ -128,7 +128,7 @@ public:
     CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_getProcessInfo returned with failure",
-            osl_error, osl_Process_E_None
+             osl_Process_E_None, osl_error
         );
 
     printf("the exit code is %" SAL_PRIuUINT32 ".\n", pInfo->Code );

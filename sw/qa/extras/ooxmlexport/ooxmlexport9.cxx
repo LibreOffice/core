@@ -303,72 +303,72 @@ DECLARE_SW_EXPORT_TEST(testHFLinkToPrev, "headerfooter-link-to-prev.docx", nullp
     uno::Reference<style::XStyle> xPageStyle(
         xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
     // check page 1 header & footer text
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderText"),
-        OUString("First page header for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterText"),
-        OUString("First page footer for section 1 only"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
+        getHFText(xPageStyle, "HeaderText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page footer for section 1 only"),
+        getHFText(xPageStyle, "FooterText"));
 
     // get LO page style for page 2, corresponding to docx section 1
     xCursor->jumpToPage(2);
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xPageStyle.set( xPageStyles->getByName(pageStyleName), uno::UNO_QUERY );
     // check header & footer text
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderTextLeft"),
-        OUString("Even page header for section 1 only"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterTextLeft"),
-        OUString("Even page footer for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderText"),
-        OUString("Odd page header for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterText"),
-        OUString("Odd page footer for section 1 only"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page header for section 1 only"),
+        getHFText(xPageStyle, "HeaderTextLeft"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer for all sections"),
+        getHFText(xPageStyle, "FooterTextLeft"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header for all sections"),
+        getHFText(xPageStyle, "HeaderText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer for section 1 only"),
+        getHFText(xPageStyle, "FooterText"));
 
     // get LO page style for page 4, corresponding to docx section 2 first page
     xCursor->jumpToPage(4);
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xPageStyle.set( xPageStyles->getByName(pageStyleName), uno::UNO_QUERY );
     // check header & footer text
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderText"),
-        OUString("First page header for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterText"),
-        OUString("First page footer for sections 2 and 3 only"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
+        getHFText(xPageStyle, "HeaderText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page footer for sections 2 and 3 only"),
+        getHFText(xPageStyle, "FooterText"));
 
     // get LO page style for page 5, corresponding to docx section 2
     xCursor->jumpToPage(5);
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xPageStyle.set( xPageStyles->getByName(pageStyleName), uno::UNO_QUERY );
     // check header & footer text
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderTextLeft"),
-        OUString("Even page header for sections 2 and 3 only"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterTextLeft"),
-        OUString("Even page footer for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderText"),
-        OUString("Odd page header for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterText"),
-        OUString("Odd page footer for sections 2 and 3 only"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page header for sections 2 and 3 only"),
+        getHFText(xPageStyle, "HeaderTextLeft"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer for all sections"),
+        getHFText(xPageStyle, "FooterTextLeft"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header for all sections"),
+        getHFText(xPageStyle, "HeaderText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer for sections 2 and 3 only"),
+        getHFText(xPageStyle, "FooterText"));
 
     // get LO page style for page 7, corresponding to docx section 3 first page
     xCursor->jumpToPage(7);
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xPageStyle.set( xPageStyles->getByName(pageStyleName), uno::UNO_QUERY );
     // check header & footer text
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderText"),
-        OUString("First page header for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterText"),
-        OUString("First page footer for sections 2 and 3 only"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
+        getHFText(xPageStyle, "HeaderText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First page footer for sections 2 and 3 only"),
+        getHFText(xPageStyle, "FooterText"));
 
     // get LO page style for page 8, corresponding to docx section 3
     xCursor->jumpToPage(8);
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xPageStyle.set( xPageStyles->getByName(pageStyleName), uno::UNO_QUERY );
     // check header & footer text
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderTextLeft"),
-        OUString("Even page header for sections 2 and 3 only"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterTextLeft"),
-        OUString("Even page footer for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "HeaderText"),
-        OUString("Odd page header for all sections"));
-    CPPUNIT_ASSERT_EQUAL(getHFText(xPageStyle, "FooterText"),
-        OUString("Odd page footer for sections 2 and 3 only"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page header for sections 2 and 3 only"),
+        getHFText(xPageStyle, "HeaderTextLeft"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer for all sections"),
+        getHFText(xPageStyle, "FooterTextLeft"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header for all sections"),
+        getHFText(xPageStyle, "HeaderText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer for sections 2 and 3 only"),
+        getHFText(xPageStyle, "FooterText"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRhbz988516, "rhbz988516.docx")

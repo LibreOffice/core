@@ -547,7 +547,7 @@ void TestLanguageTag::testAllTags()
         LanguageTag qtx( s_qtx );
         qtx.setScriptType( LanguageTag::ScriptType::RTL );
         LanguageType n_qtx = qtx.getLanguageType();
-        CPPUNIT_ASSERT_EQUAL( MsLangId::getScriptType(n_qtx), css::i18n::ScriptType::COMPLEX );
+        CPPUNIT_ASSERT_EQUAL( css::i18n::ScriptType::COMPLEX, MsLangId::getScriptType(n_qtx) );
         CPPUNIT_ASSERT( MsLangId::isRightToLeft(n_qtx) );
         CPPUNIT_ASSERT( !MsLangId::isCJK(n_qtx) );
     }

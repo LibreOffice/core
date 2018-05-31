@@ -1353,9 +1353,9 @@ namespace osl_FileStatus
 
             Directory aDir(aTmpName3);
             nError1 = aDir.open();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = aDir.getNextItem(rItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             aDir.close();
         }
 
@@ -1370,7 +1370,7 @@ namespace osl_FileStatus
         {
             FileStatus rFileStatus(osl_FileStatus_Mask_All);
             nError1 = rItem.getFileStatus(rFileStatus);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             aUStr = rFileStatus.getFileName();
 
             CPPUNIT_ASSERT_MESSAGE("test for ctors function: mask all and see the file name",
@@ -1381,7 +1381,7 @@ namespace osl_FileStatus
         {
             FileStatus rFileStatus(0);
             nError1 = rItem.getFileStatus(rFileStatus);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             aUStr = rFileStatus.getFileName();
 
             CPPUNIT_ASSERT_MESSAGE("test for ctors function: mask is empty",
@@ -1416,16 +1416,16 @@ namespace osl_FileStatus
 
             pDir.reset(new Directory(aTmpName3));
             osl::FileBase::RC nError1 = pDir->open();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = pDir->getNextItem(rItem_file, 1);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
         {
             osl::FileBase::RC nError1 = pDir->close();
             pDir.reset();
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(errorToStr(nError1).getStr(), nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(errorToStr(nError1).getStr(), osl::FileBase::E_None, nError1);
 
             // remove the tempfile in $TEMP/tmpdir/tmpname.
             deleteTestFile(aTmpName4);
@@ -1437,7 +1437,7 @@ namespace osl_FileStatus
             sal_uInt32 mask = 0;
             FileStatus rFileStatus(mask);
             osl::FileBase::RC nError1 = rItem_file.getFileStatus(rFileStatus);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             bool bOk = rFileStatus.isValid(mask);
 
             CPPUNIT_ASSERT_MESSAGE("test for isValid function: no fields specified", bOk);
@@ -1481,7 +1481,7 @@ namespace osl_FileStatus
             DirectoryItem::get(aTmpName6, rItem_file);
             osl::FileBase::RC nError1 = rItem_file.getFileStatus(rFileStatus);
 
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(errorToStr(nError1).getStr(), nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(errorToStr(nError1).getStr(), osl::FileBase::E_None, nError1);
 
             check_FileStatus(rFileStatus);
             deleteTestFile(aTmpName6);
@@ -1554,14 +1554,14 @@ namespace osl_FileStatus
             sal_uInt32 mask_file_all = osl_FileStatus_Mask_All;
             FileStatus   rFileStatus_all(mask_file_all);
             osl::FileBase::RC nError1 = rItem_file.getFileStatus(rFileStatus_all);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             check_FileStatus(rFileStatus_all);
 
             sal_uInt32 mask_file_val = osl_FileStatus_Mask_Validate;
             FileStatus   rFileStatus_val(mask_file_val);
             nError1 = rItem_file.getFileStatus(rFileStatus_val);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             check_FileStatus(rFileStatus_val);
         }
@@ -1600,13 +1600,13 @@ namespace osl_FileStatus
 
             std::unique_ptr<Directory> xDir(new Directory(aTmpName3));
             nError1 = xDir->open();
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("open aTmpName3 failed!", nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("open aTmpName3 failed!", osl::FileBase::E_None, nError1);
             // getNextItem can not assure which item retrieved
             nError1 = xDir->getNextItem(m_aItem_1, 1);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get first item failed!", nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("get first item failed!", osl::FileBase::E_None, nError1);
 
             nError1 = xDir->getNextItem(m_aItem_2);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get second item failed!", nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("get second item failed!", osl::FileBase::E_None, nError1);
             xDir->close();
             // FIXME mindy: failed on my RH9,so removed temporaly
             // nError1 = DirectoryItem::get(aVolURL2, m_aVolumeItem);
@@ -1625,7 +1625,7 @@ namespace osl_FileStatus
         {
             FileStatus   rFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName);
             nError1 = m_aItem_1.getFileStatus(rFileStatus);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("getFileStatus failed", nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("getFileStatus failed", osl::FileBase::E_None, nError1);
 
             check_FileType(rFileStatus);
         }
@@ -1658,7 +1658,7 @@ namespace osl_FileStatus
             FileStatus rFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName);
             nError1 = m_aItem_2.getFileStatus(rFileStatus);
 
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             check_FileType(rFileStatus);
         }
 
@@ -1670,12 +1670,12 @@ namespace osl_FileStatus
         {
 #if defined(__sun) // Special file is different in Windows
             nError1 = DirectoryItem::get(aTypeURL2, m_aSpecialItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // check for File type
             FileStatus   rFileStatus(osl_FileStatus_Mask_Type);
             nError1 = m_aSpecialItem.getFileStatus(rFileStatus);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             if (rFileStatus.isValid(osl_FileStatus_Mask_Type))
             {
@@ -1975,9 +1975,9 @@ namespace osl_FileStatus
         {
             File testfile(aTypeURL);
             nError = testfile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read);
-            CPPUNIT_ASSERT_EQUAL(nError, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError);
             nError = testfile.setSize(TEST_FILE_SIZE);
-            CPPUNIT_ASSERT_EQUAL(nError, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError);
 
             nError = DirectoryItem::get(aTypeURL, rItem);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError);
@@ -2256,10 +2256,10 @@ namespace osl_File
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             nError2 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("close error", nError2, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("close error", osl::FileBase::E_None, nError2);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for open function: open a regular file",
-                                     nError1, osl::FileBase::E_None);
+                                     osl::FileBase::E_None, nError1);
         }
 
         void open_002()
@@ -2279,7 +2279,7 @@ namespace osl_File
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for open function: open a non-exist file",
-                                     nError1, File::E_NOENT);
+                                     File::E_NOENT, nError1);
         }
 
         void open_004()
@@ -2307,7 +2307,7 @@ namespace osl_File
             nError1 = testFile.open(osl_File_OpenFlag_Create);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for open function: create an exist file",
-                                     nError1, File::E_EXIST);
+                                     File::E_EXIST, nError1);
         }
 
         void open_006()
@@ -2320,13 +2320,13 @@ namespace osl_File
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
             nError2 = testFile.write(buffer_write, 30, nCount_write);
             osl::FileBase::RC nError4 = testFile.setPos(osl_Pos_Absolut, 0);
-            CPPUNIT_ASSERT_EQUAL(nError4, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError4);
             nError3 = testFile.read(buffer_read, 10, nCount_read);
 
             osl::FileBase::RC nError5 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError5, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError5);
             osl::FileBase::RC nError6 = osl::File::remove(aCanURL1);
-            CPPUNIT_ASSERT_EQUAL(nError6, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError6);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for open function: test for osl_File_OpenFlag_Read, osl_File_OpenFlag_Write and osl_File_OpenFlag_Create",
                                     osl::FileBase::E_None, nError1);
@@ -2384,12 +2384,12 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError2 = testFile.close();
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for close function: close a regular file",
-                                     nError2, osl::FileBase::E_None);
+                                     osl::FileBase::E_None, nError2);
         }
 
         void close_002()
@@ -2397,7 +2397,7 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError2 = testFile.close();
 
@@ -2442,11 +2442,11 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.write(pBuffer_Char, sizeof(pBuffer_Char), nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
              nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -2462,13 +2462,13 @@ namespace osl_File
             sal_Char buffer_read[2];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.setPos(osl_Pos_Absolut, 26);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.read(buffer_read, 1, nCount_read);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for setPos function: test for osl_Pos_Absolut, set the position to 26, test if the 26th char in file is correct",
                                      pBuffer_Char[26], buffer_read[0]);
@@ -2480,15 +2480,15 @@ namespace osl_File
             sal_Char buffer_read[2];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.setPos(osl_Pos_Absolut, sizeof(pBuffer_Char) - 2);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.setPos(osl_Pos_Current, 0);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.read(buffer_read, 1, nCount_read);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for setPos function: test for osl_Pos_Current, set the position to end, test if the (end -1) char in file is correct",
                                      pBuffer_Char[sizeof(pBuffer_Char) - 2], buffer_read[0]);
@@ -2500,17 +2500,17 @@ namespace osl_File
             sal_Char buffer_read[2];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // the file size is smaller than 100
             nError1 = testFile.setPos(osl_Pos_End,  -100);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("should return error", nError1, osl::FileBase::E_INVAL);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("should return error", osl::FileBase::E_INVAL, nError1);
 
             nError1 = testFile.setPos(osl_Pos_End, -53);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.read(buffer_read, 1, nCount_read);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for setPos function: test for osl_Pos_End, set the position to end, test if the first char in file is correct",
                                      pBuffer_Char[0], buffer_read[0]);
@@ -2550,11 +2550,11 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.write(pBuffer_Char, sizeof(pBuffer_Char), nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -2571,18 +2571,18 @@ namespace osl_File
             sal_uInt64 nFilePointer;
 
             nError1 = testFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_INVAL);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_INVAL, nError1);
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.setPos(osl_Pos_Absolut, 26);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getPos function: set the position to 26, get position and check if it is right",
                                      static_cast<sal_uInt64>(26), nFilePointer);
@@ -2620,11 +2620,11 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.write(pBuffer_Char, sizeof(pBuffer_Char), nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
              nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -2642,15 +2642,15 @@ namespace osl_File
             sal_Bool *pEOF = &bEOF;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.setPos(osl_Pos_End, 0);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.isEndOfFile(pEOF);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_MESSAGE("test for isEndOfFile function: set the position to end, check if reach end",
                                      *pEOF);
@@ -2664,28 +2664,28 @@ namespace osl_File
             sal_uInt64 nFilePointer = 0;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.setPos(osl_Pos_Absolut, 0);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             *pEOF = false;
 
             while (!(*pEOF))
             {
                 nError1 = testFile.isEndOfFile(pEOF);
-                CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
                 nError1 = testFile.setPos(osl_Pos_Current, 1);
-                CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             }
 
             nError1 = testFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for isEndOfFile function: use isEndOfFile to move pointer step by step",
-                                      nFilePointer, static_cast<sal_uInt64>(sizeof(pBuffer_Char) + 1));
+                                      static_cast<sal_uInt64>(sizeof(pBuffer_Char) + 1), nFilePointer);
         }
         CPPUNIT_TEST_SUITE(isEndOfFile);
             CPPUNIT_TEST(isEndOfFile_001);
@@ -2719,11 +2719,11 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.write(pBuffer_Char, sizeof(pBuffer_Char), nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -2740,20 +2740,20 @@ namespace osl_File
             sal_uInt64 nFilePointer;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // enlarge the file to size of 100;
             nError1 = testFile.setSize(100);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // get the file size;
             nError1 = testFile.setPos(osl_Pos_End, 0);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for setSize function: enlarge the file ",
                                      static_cast<sal_uInt64>(100), nFilePointer);
@@ -2765,20 +2765,20 @@ namespace osl_File
             sal_uInt64 nFilePointer;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // enlarge the file to size of 100;
             nError1 = testFile.setSize(10);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // get the file size;
             nError1 = testFile.setPos(osl_Pos_End, 0);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for setSize function: truncate the file ",
                                      static_cast<sal_uInt64>(10), nFilePointer);
@@ -2817,11 +2817,11 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.write(pBuffer_Char, sizeof(pBuffer_Char), nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -2839,15 +2839,15 @@ namespace osl_File
             sal_Char buffer_read[10];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.read(buffer_read, 10, nCount_read);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for read function: read whole content in the file to a buffer",
                                      sal_uInt64(10), nFilePointer);
@@ -2862,17 +2862,17 @@ namespace osl_File
             sal_Char buffer_read[26];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.setPos(osl_Pos_Absolut, 26);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.read(buffer_read, 26, nCount_read);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for read function: read from a special position in the file",
                                      sal_uInt64(52), nFilePointer);
@@ -2925,22 +2925,22 @@ namespace osl_File
             sal_Char buffer_read[10];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // write chars into the file.
             nError1 = testFile.write(pBuffer_Char, 10, nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // get the current pointer;
              nError1 = testFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // reset pointer to the beginning;
              nError1 = testFile.setPos(osl_Pos_Absolut, 0);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.read(buffer_read, 10, nCount_read);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for write function: read whole content in the file to a buffer. Note, buffer size can not smaller than the read size",
                                      sal_uInt64(10), nFilePointer);
@@ -2984,16 +2984,16 @@ namespace osl_File
                                       };
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             for (int nCount = 0; nCount < 3; nCount++)
             {
                 nError1 = testFile.write(ppStrSeq[nCount], strlen(ppStrSeq[nCount]), nCount_write);
-                CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             }
 
              nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -3008,9 +3008,9 @@ namespace osl_File
             File testFile(aTmpName6);
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.readLine(aSequence);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for readLine function: read the first line of the file.",
                                     osl::FileBase::E_None, nError1);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for readLine function: read the first line of the file.",
@@ -3024,14 +3024,14 @@ namespace osl_File
             sal_Bool *pEOF = &bEOF;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             for (int nCount = 0; nCount < 3; nCount++)
             {
                 nError1 = testFile.readLine(aSequence);
-                CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             }
             nError1 = testFile.isEndOfFile(pEOF);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_MESSAGE("test for readLine function: read three lines of the file and check the file pointer moving.",
                                      *pEOF);
@@ -3069,11 +3069,11 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.write(pBuffer_Char, sizeof(pBuffer_Char), nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
              nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -3089,13 +3089,13 @@ namespace osl_File
 
             // copy $TEMP/tmpdir/tmpname to $TEMP/tmpname.
             nError1 = File::copy(aTmpName4, aTmpName6);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // check
             nError1 = testFile.open(osl_File_OpenFlag_Create);
             deleteTestFile(aTmpName6);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for copy function: copy file to upper directory",
-                                     nError1, osl::FileBase::E_EXIST);
+                                     osl::FileBase::E_EXIST, nError1);
         }
 
         void copy_002()
@@ -3116,7 +3116,7 @@ namespace osl_File
             deleteTestFile(aTmpName7);
 #endif
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for copy function: copy to an illegal place",
-                                     nError1, osl::FileBase::E_ACCES);
+                                     osl::FileBase::E_ACCES, nError1);
         }
 
         void copy_004()
@@ -3125,7 +3125,7 @@ namespace osl_File
             nError1 = File::copy(aTmpName6, aTmpName4);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for copy function: copy a not exist file",
-                                     nError1, osl::FileBase::E_NOENT);
+                                     osl::FileBase::E_NOENT, nError1);
         }
 
         void copy_005()
@@ -3134,7 +3134,7 @@ namespace osl_File
             nError1 = File::copy(aTmpName6, aSysPath1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for copy function: copy a file using system file path",
-                                     nError1, osl::FileBase::E_INVAL);
+                                     osl::FileBase::E_INVAL, nError1);
         }
 
         void copy_006()
@@ -3152,11 +3152,11 @@ namespace osl_File
             File newFile(aTmpName4);
             newFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read);
             nError1 = newFile.setPos(osl_Pos_End, 0);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             sal_uInt64 nFilePointer;
             nError1 = newFile.getPos(nFilePointer);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             newFile.close();
             deleteTestFile(aTmpName6);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for copy function: the dest file exist",
@@ -3199,11 +3199,11 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.write(pBuffer_Char, sizeof(pBuffer_Char), nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -3218,14 +3218,14 @@ namespace osl_File
         {
             // rename $TEMP/tmpdir/tmpname to $TEMP/canonical.name.
             nError1 = File::move(aTmpName4, aCanURL1);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // check
             File  testFile(aCanURL1);
             nError2 = testFile.open(osl_File_OpenFlag_Create);
             deleteTestFile(aCanURL1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for move function: rename file to another directory",
-                                     nError2, osl::FileBase::E_EXIST);
+                                     osl::FileBase::E_EXIST, nError2);
         }
 
         void move_002()
@@ -3247,7 +3247,7 @@ namespace osl_File
 #endif
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for move function: move to an illegal place",
-                                     nError1, osl::FileBase::E_ACCES);
+                                     osl::FileBase::E_ACCES, nError1);
         }
 
         void move_004()
@@ -3256,7 +3256,7 @@ namespace osl_File
             nError1 = File::move(aTmpName6, aTmpName4);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for move function: move a not exist file",
-                                     nError1, osl::FileBase::E_NOENT);
+                                     osl::FileBase::E_NOENT, nError1);
         }
 
         void move_005()
@@ -3265,7 +3265,7 @@ namespace osl_File
             nError1 = File::move(aTmpName6, aSysPath1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for move function: move a file using system file",
-                                     nError1, osl::FileBase::E_INVAL);
+                                     osl::FileBase::E_INVAL, nError1);
         }
 
         void move_006()
@@ -3344,11 +3344,11 @@ namespace osl_File
             File testFile(aTmpName4);
 
             nError1 = testFile.open(osl_File_OpenFlag_Write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.write(pBuffer_Char, sizeof(pBuffer_Char), nCount_write);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             nError1 = testFile.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
         }
 
         void tearDown() override
@@ -3702,7 +3702,7 @@ namespace osl_DirectoryItem
 
              // get the DirectoryItem.
             nError1 = DirectoryItem::get(aTmpName6, rItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for ctors function: initialize a new instance of DirectoryItem and get an item to check.",
                                       osl::FileBase::E_None, nError1);
@@ -3742,7 +3742,7 @@ namespace osl_DirectoryItem
             DirectoryItem rItem;  // constructor
              // get the DirectoryItem.
             nError1 = DirectoryItem::get(aTmpName6, rItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             DirectoryItem copyItem(rItem); // copy constructor
             FileStatus rFileStatus(osl_FileStatus_Mask_FileName);
@@ -3758,7 +3758,7 @@ namespace osl_DirectoryItem
             DirectoryItem rItem;  // constructor
              // get the DirectoryItem.
             nError1 = DirectoryItem::get(aTmpName6, rItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             DirectoryItem copyItem;
             copyItem = rItem;               // assinment operator
@@ -3812,7 +3812,7 @@ namespace osl_DirectoryItem
             DirectoryItem    rItem;  // constructor
              // get the DirectoryItem.
             nError1 = DirectoryItem::get(aTmpName6, rItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_MESSAGE("test for is function: use an uninitialized instance.",
                                     rItem.is());
@@ -3870,7 +3870,7 @@ namespace osl_DirectoryItem
             nError1 = DirectoryItem::get(aSysPath1, rItem);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for get function: use a system name instead of a URL.",
-                                    nError1, osl::FileBase::E_INVAL);
+                                    osl::FileBase::E_INVAL, nError1);
         }
 
         void get_003()
@@ -3880,7 +3880,7 @@ namespace osl_DirectoryItem
             nError1 = DirectoryItem::get(aTmpName3, rItem);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for get function: use a non existed file URL.",
-                                    nError1, osl::FileBase::E_NOENT);
+                                    osl::FileBase::E_NOENT, nError1);
         }
 
         CPPUNIT_TEST_SUITE(get);
@@ -3921,7 +3921,7 @@ namespace osl_DirectoryItem
             DirectoryItem rItem;
              // get the DirectoryItem.
             nError1 = DirectoryItem::get(aTmpName4, rItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // check the file name
             FileStatus rFileStatus(osl_FileStatus_Mask_FileName);
@@ -3952,7 +3952,7 @@ namespace osl_DirectoryItem
             DirectoryItem    rItem;  // constructor
              // get the DirectoryItem.
             nError1 = DirectoryItem::get(aTmpName3, rItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // check the file name
             FileStatus rFileStatus(osl_FileStatus_Mask_FileName);
@@ -4015,10 +4015,10 @@ namespace osl_Directory
 
             // open a directory
             nError1 = testDirectory.open();
-             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // close a directory
             nError2 = testDirectory.close();
-            CPPUNIT_ASSERT_EQUAL(nError2, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for ctors function: create an instance and check open and close",
                                      osl::FileBase::E_None, nError1);
@@ -4032,10 +4032,10 @@ namespace osl_Directory
 
             // open a directory
             nError1 = testDirectory.open();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // close a directory
             nError2 = testDirectory.close();
-            CPPUNIT_ASSERT_EQUAL(nError2, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for ctors function: relative URL, :-), it is also worked",
                                      osl::FileBase::E_None, nError1);
@@ -4101,7 +4101,7 @@ namespace osl_Directory
              if (nError1 == osl::FileBase::E_None)
             {
                 nError2 = testDirectory.close();
-                CPPUNIT_ASSERT_EQUAL(nError2, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
             }
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for open function: open a file that is not existed",
@@ -4116,7 +4116,7 @@ namespace osl_Directory
              if (nError1 == osl::FileBase::E_None)
             {
                 nError2 = testDirectory.close();
-                CPPUNIT_ASSERT_EQUAL(nError2, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
             }
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for open function: using system path",
@@ -4131,7 +4131,7 @@ namespace osl_Directory
              if (nError1 == osl::FileBase::E_None)
             {
                 nError2 = testDirectory.close();
-                CPPUNIT_ASSERT_EQUAL(nError2, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
             }
 
             CPPUNIT_ASSERT_MESSAGE("test for open function: open a file instead of a directory",
@@ -4298,31 +4298,31 @@ namespace osl_Directory
 
             // open a directory
             nError1 = testDirectory.open();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // get first Item
             nError1 = testDirectory.getNextItem(rItem, 1);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // check the file name of first Item
               FileStatus   rFileStatusFirst(osl_FileStatus_Mask_FileName);
             nError1 = rItem.getFileStatus(rFileStatusFirst);
 
             // get second Item
             // mindy: nError1 = testDirectory.getNextItem(rItem, 0);
-            // mindy: CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            // mindy: CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // reset enumeration
             nError2 = testDirectory.reset();
-            CPPUNIT_ASSERT_EQUAL(nError2, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError2);
             // get reset Item, if reset does not work, getNextItem() should return the second Item (aTmpName1)
             nError1 = testDirectory.getNextItem(rItem);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // check the file name again
               FileStatus   rFileStatus(osl_FileStatus_Mask_FileName);
             nError1 = rItem.getFileStatus(rFileStatus);
             // close a directory
             nError1 = testDirectory.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             bool bOK1,bOK2,bOK3;
             bOK1 = compareFileName(rFileStatus.getFileName(), aTmpName2);
@@ -4415,7 +4415,7 @@ namespace osl_Directory
 
             // open a directory
             nError1 = testDirectory.open();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             // check the file name
             bool bOk1 = false;
@@ -4427,9 +4427,9 @@ namespace osl_Directory
             {
                 // get three Items
                 nError1 = testDirectory.getNextItem(rItem, 2);
-                CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
                 nError1 = rItem.getFileStatus(rFileStatus);
-                CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
                 // a special order is not guaranteed. So any file may occur on any time.
                 // But every file name should occur only once.
@@ -4451,7 +4451,7 @@ namespace osl_Directory
 
             // close a directory
             nError1 = testDirectory.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_MESSAGE("test for getNextItem function: retrieve three items and check their names.",
                                     bOk1);
@@ -4476,7 +4476,7 @@ namespace osl_Directory
 
             // open a directory
             nError1 = testDirectory.open();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             for (int nCount = 0; nCount < 4; nCount++)
             {
@@ -4485,7 +4485,7 @@ namespace osl_Directory
 
             // close a directory
             nError1 = testDirectory.close();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getNextItem function: retrieve 4 times in a directory which contain only 3 files.",
                                     osl::FileBase::E_NOENT, nError2);
@@ -4513,7 +4513,7 @@ namespace osl_Directory
 
             // open a directory
             nError1 = testDirectory.open();
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             OUString aFileName ("link.file");
 
             while (true) {
@@ -4827,7 +4827,7 @@ namespace osl_Directory
         {
             // create directory in $TEMP/tmpdir
             nError1 = Directory::create(aTmpName3);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // remove it
             nError1 = Directory::remove(aTmpName3);
             // check for existence
@@ -4844,7 +4844,7 @@ namespace osl_Directory
         {
             // create directory in $TEMP/tmpdir
             nError1 = Directory::create(aTmpName3);
-            CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
             // try to remove it by system path
             nError1 = Directory::remove(aSysPath3);
              // check for existence

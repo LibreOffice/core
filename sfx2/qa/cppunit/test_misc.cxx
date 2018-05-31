@@ -172,7 +172,7 @@ void MiscTest::testHardLinks()
 
     struct stat buf;
     int nRet = stat(aOld.getStr(), &buf);
-    CPPUNIT_ASSERT_EQUAL(nRet, 0);
+    CPPUNIT_ASSERT_EQUAL(0, nRet);
     // This failed: hard link count was 1, the hard link broke on store.
     CPPUNIT_ASSERT(buf.st_nlink > 1);
 

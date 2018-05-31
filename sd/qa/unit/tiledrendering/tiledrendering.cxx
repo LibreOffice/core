@@ -743,7 +743,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
         comphelper::dispatchCommand(".uno:InsertPage", aArgs);
 
     osl::Condition::Result aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+    CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
 
     // Verify inserted slides
     std::vector<OUString> aPageList(getCurrentParts(pXImpressDocument));
@@ -760,7 +760,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
         comphelper::dispatchCommand(".uno:DeletePage", aArgs);
 
     aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+    CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
 
     // Verify deleted slides
     aPageList = getCurrentParts(pXImpressDocument);
@@ -776,7 +776,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
         comphelper::dispatchCommand(".uno:Undo", aArgs);
 
     aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+    CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
 
     // Verify inserted slides
     aPageList = getCurrentParts(pXImpressDocument);
@@ -792,7 +792,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
         comphelper::dispatchCommand(".uno:Redo", aArgs);
 
     aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+    CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
 
     // Verify deleted slides
     aPageList = getCurrentParts(pXImpressDocument);
@@ -1561,7 +1561,7 @@ void SdTiledRenderingTest::testTdf104405()
     OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
                       "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem";
     // the following name has a compiler-dependent part
-    CPPUNIT_ASSERT_EQUAL(getXPath(pXmlDoc, aPrefix, "value"), OUString("2"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), getXPath(pXmlDoc, aPrefix, "value"));
     xmlFreeDoc(pXmlDoc);
 
     comphelper::LibreOfficeKit::setActive(false);

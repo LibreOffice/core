@@ -67,7 +67,7 @@ void Test::testSingleElement()
         aHtml.end();
 
         OString aString = extractFromStream(aStream);
-        CPPUNIT_ASSERT_EQUAL(aString, OString("<abc/>"));
+        CPPUNIT_ASSERT_EQUAL(OString("<abc/>"), aString);
     }
 
     {
@@ -79,7 +79,7 @@ void Test::testSingleElement()
 
         OString aString = extractFromStream(aStream);
 
-        CPPUNIT_ASSERT_EQUAL(aString, OString("<abc/>"));
+        CPPUNIT_ASSERT_EQUAL(OString("<abc/>"), aString);
     }
 }
 
@@ -96,7 +96,7 @@ void Test::testSingleElementWithAttributes()
 
         OString aString = extractFromStream(aStream);
 
-        CPPUNIT_ASSERT_EQUAL(aString, OString("<abc x=\"y\"/>"));
+        CPPUNIT_ASSERT_EQUAL(OString("<abc x=\"y\"/>"), aString);
     }
 
     {
@@ -111,7 +111,7 @@ void Test::testSingleElementWithAttributes()
 
         OString aString = extractFromStream(aStream);
 
-        CPPUNIT_ASSERT_EQUAL(aString, OString("<abc x=\"y\" q=\"w\"/>"));
+        CPPUNIT_ASSERT_EQUAL(OString("<abc x=\"y\" q=\"w\"/>"), aString);
     }
 }
 
@@ -126,7 +126,7 @@ void Test::testSingleElementWithContent()
 
     OString aString = extractFromStream(aStream);
 
-    CPPUNIT_ASSERT_EQUAL(aString, OString("<abc/>"));
+    CPPUNIT_ASSERT_EQUAL(OString("<abc/>"), aString);
 }
 
 void Test::testSingleElementWithContentAndAttributes()
@@ -142,7 +142,7 @@ void Test::testSingleElementWithContentAndAttributes()
 
     OString aString = extractFromStream(aStream);
 
-    CPPUNIT_ASSERT_EQUAL(aString, OString("<abc x=\"y\" q=\"w\"/>"));
+    CPPUNIT_ASSERT_EQUAL(OString("<abc x=\"y\" q=\"w\"/>"), aString);
 }
 
 void Test::testNested()

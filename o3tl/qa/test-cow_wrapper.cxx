@@ -111,25 +111,25 @@ public:
 
         {
             aTestObj1 = cow_wrapper_client1( 1 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj1.queryUnmodified(), 1);
+            CPPUNIT_ASSERT_EQUAL(1, aTestObj1.queryUnmodified());
             aTestObj2.modify( 2 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj2.queryUnmodified(), 2);
+            CPPUNIT_ASSERT_EQUAL(2, aTestObj2.queryUnmodified());
             aTestObj3.modify( 3 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj3.queryUnmodified(), 3);
+            CPPUNIT_ASSERT_EQUAL(3, aTestObj3.queryUnmodified());
 
             aTestObj4 = cow_wrapper_client2( 4 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj4.queryUnmodified(), 4);
+            CPPUNIT_ASSERT_EQUAL(4, aTestObj4.queryUnmodified());
             aTestObj5.modify( 5 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj5.queryUnmodified(), 5);
+            CPPUNIT_ASSERT_EQUAL(5, aTestObj5.queryUnmodified());
             aTestObj6.modify( 6 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj6.queryUnmodified(), 6);
+            CPPUNIT_ASSERT_EQUAL(6, aTestObj6.queryUnmodified());
 
             aTestObj7 = cow_wrapper_client3( 7 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj7.queryUnmodified(), 7);
+            CPPUNIT_ASSERT_EQUAL(7, aTestObj7.queryUnmodified());
             aTestObj8.modify( 8 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj8.queryUnmodified(), 8);
+            CPPUNIT_ASSERT_EQUAL(8, aTestObj8.queryUnmodified());
             aTestObj9.modify( 9 );
-            CPPUNIT_ASSERT_EQUAL(aTestObj9.queryUnmodified(), 9);
+            CPPUNIT_ASSERT_EQUAL(9, aTestObj9.queryUnmodified());
         }
         // all three temporaries are dead now
 

@@ -418,30 +418,30 @@ void Test::testBigStruct() {
         buffer[i] = '\x56';
     }
     Guard guard(buffer.get());
-    CPPUNIT_ASSERT_EQUAL(guard.p->m1, sal_False);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m2, static_cast< sal_Int8 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m3, static_cast< sal_Int16 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m4, static_cast< sal_uInt16 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m5, static_cast< sal_Int32 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m6, static_cast< sal_uInt32 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m7, static_cast< sal_Int64 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m8, static_cast< sal_uInt64 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m9, 0.0f);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m10, 0.0);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m11, u'\0');
-    CPPUNIT_ASSERT_EQUAL(guard.p->m12.getLength(), static_cast< sal_Int32 >(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(guard.p->m13.getTypeClass()), sal_Int32(css::uno::TypeClass_VOID));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m14.hasValue(), false);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m15.getLength(), static_cast< sal_Int32 >(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(guard.p->m16), int(test::codemaker::cppumaker::HelperEnum_ZERO));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m17.m1, sal_False);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m17.m2.is(), false);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m18.is(), false);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m19, static_cast< sal_Int8 >(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(guard.p->m20), sal_Int32(test::codemaker::cppumaker::HelperEnum_ZERO));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m21.getLength(), static_cast< sal_Int32 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m22.getLength(), static_cast< sal_Int32 >(0));
-    CPPUNIT_ASSERT_EQUAL(guard.p->m23.getLength(), static_cast< sal_Int32 >(0));
+    CPPUNIT_ASSERT_EQUAL(sal_False, guard.p->m1);
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int8 >(0), guard.p->m2);
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int16 >(0), guard.p->m3);
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt16 >(0), guard.p->m4);
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m5);
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(0), guard.p->m6);
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int64 >(0), guard.p->m7);
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt64 >(0), guard.p->m8);
+    CPPUNIT_ASSERT_EQUAL(0.0f, guard.p->m9);
+    CPPUNIT_ASSERT_EQUAL(0.0, guard.p->m10);
+    CPPUNIT_ASSERT_EQUAL( u'\0', guard.p->m11);
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m12.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(css::uno::TypeClass_VOID), static_cast<sal_Int32>(guard.p->m13.getTypeClass()));
+    CPPUNIT_ASSERT_EQUAL(false, guard.p->m14.hasValue());
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m15.getLength());
+    CPPUNIT_ASSERT_EQUAL(int(test::codemaker::cppumaker::HelperEnum_ZERO), static_cast<int>(guard.p->m16));
+    CPPUNIT_ASSERT_EQUAL(sal_False, guard.p->m17.m1);
+    CPPUNIT_ASSERT_EQUAL(false, guard.p->m17.m2.is());
+    CPPUNIT_ASSERT_EQUAL(false, guard.p->m18.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int8 >(0), guard.p->m19);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(test::codemaker::cppumaker::HelperEnum_ZERO), static_cast<sal_Int32>(guard.p->m20));
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m21.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m22.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m23.getLength());
 
 //This is a very platform specific test.
 #if defined __GNUC__ && __GNUC__ >= 3 // see CPPU_GCC3_ALIGN
@@ -482,9 +482,9 @@ void Test::testPolyStruct() {
         aEmptySequence;
 
     CPPUNIT_ASSERT_EQUAL(
+        static_cast< sal_uInt32 >(5),
         (test::codemaker::cppumaker::make_Struct< sal_uInt32, sal_Bool >(5,
-            aEmptySequence).member1),
-        static_cast< sal_uInt32 >(5));
+            aEmptySequence).member1));
 }
 
 void Test::testExceptions() {

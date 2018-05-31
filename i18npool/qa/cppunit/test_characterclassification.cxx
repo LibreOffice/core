@@ -80,7 +80,7 @@ void TestCharacterClassification::testStringType()
         //simple case
         OUString sTest("Some text");
         sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_EQUAL(nResult, sal_Int32(230));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(230), nResult);
     }
 
     {
@@ -88,7 +88,7 @@ void TestCharacterClassification::testStringType()
         const sal_Unicode MATHEMATICAL_ITALIC_SMALL_THETA[] = { 0xD835, 0xDF03 };
         OUString sTest(MATHEMATICAL_ITALIC_SMALL_THETA, SAL_N_ELEMENTS(MATHEMATICAL_ITALIC_SMALL_THETA));
         sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_EQUAL(nResult, sal_Int32(228));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(228), nResult);
     }
 
 }
