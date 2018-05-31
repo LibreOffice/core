@@ -21,6 +21,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 class SfxItemSet;
 class SdrMeasureObj;
@@ -32,7 +33,7 @@ class SVX_DLLPUBLIC SvxXMeasurePreview : public Control
 
 private:
     SdrMeasureObj* pMeasureObj;
-    SdrModel* pModel;
+    std::unique_ptr<SdrModel> pModel;
 
 public:
     SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle);
