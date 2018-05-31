@@ -71,8 +71,8 @@ Svx3DPreviewControl::~Svx3DPreviewControl()
 
 void Svx3DPreviewControl::dispose()
 {
-    delete mp3DView;
-    delete mpModel;
+    mp3DView.reset();
+    mpModel.reset();
     Control::dispose();
 }
 
@@ -84,7 +84,7 @@ void Svx3DPreviewControl::Construct()
     SetMapMode(MapMode(MapUnit::Map100thMM));
 
     // Model
-    mpModel = new FmFormModel();
+    mpModel.reset(new FmFormModel());
     mpModel->GetItemPool().FreezeIdRanges();
 
     // Page
@@ -92,7 +92,7 @@ void Svx3DPreviewControl::Construct()
     mpModel->InsertPage( mpFmPage, 0 );
 
     // 3D View
-    mp3DView = new E3dView(*mpModel, this );
+    mp3DView.reset(new E3dView(*mpModel, this ));
     mp3DView->SetBufferedOutputAllowed(true);
     mp3DView->SetBufferedOverlayAllowed(true);
 

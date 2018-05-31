@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svxdllapi.h>
 #include <basegfx/vector/b3dvector.hxx>
+#include <memory>
 
 class FmFormModel;
 class FmFormPage;
@@ -38,9 +39,9 @@ enum class SvxPreviewObjectType { SPHERE, CUBE };
 class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DPreviewControl : public Control
 {
 protected:
-    FmFormModel*            mpModel;
+    std::unique_ptr<FmFormModel> mpModel;
     FmFormPage*             mpFmPage;
-    E3dView*                mp3DView;
+    std::unique_ptr<E3dView> mp3DView;
     E3dScene*               mpScene;
     E3dObject*              mp3DObj;
     SvxPreviewObjectType    mnObjectType;
