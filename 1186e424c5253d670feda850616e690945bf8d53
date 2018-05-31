@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_35086591",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-31T07:30:17Z",
+      "side": 1,
+      "message": "OK. I am quite sure you were not suggesting that GetSymbol() is not needed in this generic case, since the very general function XclExpName::SaveXml uses it. So this branching wasn\u0027t really necessary (except to avoid unnecessary cloning).\n\nHowever, a separate patch COULD probably exclude GetSymbol() for BIFF in this case also, since only SaveXML uses msSymbol.",
+      "range": {
+        "startLine": 602,
+        "startChar": 12,
+        "endLine": 602,
+        "endChar": 32
+      },
+      "revId": "1186e424c5253d670feda850616e690945bf8d53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
