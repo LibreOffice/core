@@ -128,6 +128,18 @@ struct SwApplyTemplate
     }
 };
 
+class SwView;
+
+// manage connection and disconnection of SwView and SwDocShell
+class SwViewGlueDocShell
+{
+private:
+    SwView& m_rView;
+public:
+    SwViewGlueDocShell(SwView& rView, SwDocShell& rDocSh);
+    ~SwViewGlueDocShell();
+};
+
 // view of a document
 class SW_DLLPUBLIC SwView: public SfxViewShell
 {
@@ -167,6 +179,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     VclPtr<SwEditWin>    m_pEditWin;
     std::unique_ptr<SwWrtShell> m_pWrtShell;
+    std::unique_ptr<SwViewGlueDocShell> m_xGlueDocShell;
 
     SfxShell            *m_pShell;        // current SubShell at the dispatcher
     FmFormShell         *m_pFormShell;    // DB-FormShell
