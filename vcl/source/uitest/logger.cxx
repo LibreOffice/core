@@ -164,6 +164,11 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
 
+bool UITestLogger::getLoggerStatus()
+{
+    return mbValid;
+}
+
 UITestLogger& UITestLogger::getInstance()
 {
     ImplSVData *const pSVData = ImplGetSVData();
