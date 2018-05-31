@@ -33,6 +33,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/vclptr.hxx>
+#include <memory>
 
 namespace vcl { class Window; }
 
@@ -121,7 +122,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     VclPtr<MetricField>        m_pSp4;
     VclPtr<SvxColorListBox>    m_pLbColor4;
 
-    MaskData*           pData;
+    std::unique_ptr<MaskData>  pData;
     VclPtr<CheckBox>           m_pCbxTrans;
     VclPtr<SvxColorListBox>    m_pLbColorTrans;
 
