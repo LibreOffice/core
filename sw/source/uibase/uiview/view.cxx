@@ -920,13 +920,11 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     eMetric = pUsrPref->GetVScrollMetric();
     m_pVRuler->SetUnit( eMetric );
 
-        m_pHRuler->SetCharWidth( 371 );  // default character width
-        m_pVRuler->SetLineHeight( 551 );  // default line height
+    m_pHRuler->SetCharWidth( 371 );  // default character width
+    m_pVRuler->SetLineHeight( 551 );  // default line height
 
     // Set DocShell
-    rDocSh.SetView(this);
-    SW_MOD()->SetView( this );
-
+    m_xGlueDocShell.reset(new SwViewGlueDocShell(*this, rDocSh));
     m_pPostItMgr = new SwPostItMgr(this);
 
     // Check and process the DocSize. Via the handler, the shell could not
@@ -1047,6 +1045,23 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
 }
 
+SwViewGlueDocShell::SwViewGlueDocShell(SwView& rView, SwDocShell& rDocSh)
+    : m_rView(rView)
+{
+    // Set DocShell
+    rDocSh.SetView(&m_rView);
+    SW_MOD()->SetView(&m_rView);
+}
+
+SwViewGlueDocShell::~SwViewGlueDocShell()
+{
+    SwDocShell* pDocSh = m_rView.GetDocShell();
+    if (pDocSh && pDocSh->GetView() == &m_rView)
+        pDocSh->SetView(nullptr);
+    if (SW_MOD()->GetView() == &m_rView)
+        SW_MOD()->SetView(nullptr);
+}
+
 SwView::~SwView()
 {
     // Notify other LOK views that we are going away.
@@ -1062,11 +1077,7 @@ SwView::~SwView()
     m_pEditWin->Hide(); // prevent problems with painting
 
     // Set pointer in SwDocShell to the view again
-    SwDocShell* pDocSh = GetDocShell();
-    if( pDocSh && pDocSh->GetView() == this )
-        pDocSh->SetView( nullptr );
-    if ( SW_MOD()->GetView() == this )
-        SW_MOD()->SetView( nullptr );
+    m_xGlueDocShell.reset();
 
     if( m_aTimer.IsActive() && m_bAttrChgNotifiedWithRegistrations )
         GetViewFrame()->GetBindings().LEAVEREGISTRATIONS();
