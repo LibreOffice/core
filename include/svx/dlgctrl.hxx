@@ -165,7 +165,7 @@ protected:
     Point aPtLB, aPtMB, aPtRB;
     Point aPtNew;
     RectPoint eRP, eDefRP;
-    BitmapEx* pBitmap;
+    std::unique_ptr<BitmapEx> pBitmap;
     CTL_STATE m_nState;
 
     bool mbCompleteDisable : 1;
