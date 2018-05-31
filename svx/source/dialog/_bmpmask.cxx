@@ -408,21 +408,21 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pLbColor3->SelectEntry(COL_TRANSPARENT);
     m_pLbColor4->SelectEntry(COL_TRANSPARENT);
 
-    m_pTbxPipette->SetSelectHdl( LINK( pData, MaskData, PipetteHdl ) );
-    m_pBtnExec->SetClickHdl( LINK( pData, MaskData, ExecHdl ) );
+    m_pTbxPipette->SetSelectHdl( LINK( pData.get(), MaskData, PipetteHdl ) );
+    m_pBtnExec->SetClickHdl( LINK( pData.get(), MaskData, ExecHdl ) );
 
-    m_pCbx1->SetClickHdl( LINK( pData, MaskData, CbxHdl ) );
-    m_pCbx2->SetClickHdl( LINK( pData, MaskData, CbxHdl ) );
-    m_pCbx3->SetClickHdl( LINK( pData, MaskData, CbxHdl ) );
-    m_pCbx4->SetClickHdl( LINK( pData, MaskData, CbxHdl ) );
-    m_pCbxTrans->SetClickHdl( LINK( pData, MaskData, CbxTransHdl ) );
+    m_pCbx1->SetClickHdl( LINK( pData.get(), MaskData, CbxHdl ) );
+    m_pCbx2->SetClickHdl( LINK( pData.get(), MaskData, CbxHdl ) );
+    m_pCbx3->SetClickHdl( LINK( pData.get(), MaskData, CbxHdl ) );
+    m_pCbx4->SetClickHdl( LINK( pData.get(), MaskData, CbxHdl ) );
+    m_pCbxTrans->SetClickHdl( LINK( pData.get(), MaskData, CbxTransHdl ) );
 
     SetAccessibleNames ();
 
-    m_pLbColor1->SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
-    m_pLbColor2->SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
-    m_pLbColor3->SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
-    m_pLbColor4->SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
+    m_pLbColor1->SetGetFocusHdl( LINK( pData.get(), MaskData, FocusLbHdl ) );
+    m_pLbColor2->SetGetFocusHdl( LINK( pData.get(), MaskData, FocusLbHdl ) );
+    m_pLbColor3->SetGetFocusHdl( LINK( pData.get(), MaskData, FocusLbHdl ) );
+    m_pLbColor4->SetGetFocusHdl( LINK( pData.get(), MaskData, FocusLbHdl ) );
     m_pLbColorTrans->Disable();
 
     OUString sColorPalette (SvxResId( RID_SVXDLG_BMPMASK_STR_PALETTE));
@@ -474,8 +474,7 @@ void SvxBmpMask::dispose()
     m_pQSet3.disposeAndClear();
     m_pQSet4.disposeAndClear();
     m_pCtlPipette.disposeAndClear();
-    delete pData;
-    pData = nullptr;
+    pData.reset();
     m_pTbxPipette.clear();
     m_pBtnExec.clear();
     m_pCbx1.clear();
