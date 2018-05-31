@@ -192,6 +192,7 @@ private:
     Reference< XDispatchProvider > m_xDispatchProvider;
     Reference< XFrame >            m_xFrame;
     bool            mbEndPreview;
+    bool            mbCheckingUnknownFont;
 
     void            ReleaseFocus_Impl();
     void            EnableControls_Impl();
@@ -970,7 +971,8 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( vcl::Window* pParent, const Reference<
     bRelease           ( true ),
     m_xDispatchProvider( rDispatchProvider ),
     m_xFrame (_xFrame),
-    mbEndPreview(false)
+    mbEndPreview(false),
+    mbCheckingUnknownFont(false)
 {
     SetOptimalSize();
     EnableControls_Impl();
@@ -1002,6 +1004,9 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event,
 {
     if( event.GetId() != VclEventId::EditModify )
         return;
+    if (mbCheckingUnknownFont) //tdf#117537 block rentry
+        return;
+    mbCheckingUnknownFont = true;
     OUString fontname = GetSubEdit()->GetText();
     lcl_GetDocFontList( &pFontList, this );
     // If the font is unknown, show it in italic.
@@ -1024,6 +1029,7 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event,
             SetQuickHelpText( SvxResId( RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE ));
         }
     }
+    mbCheckingUnknownFont = false;
 }
 
 void SvxFontNameBox_Impl::Update( const css::awt::FontDescriptor* pFontDesc )
