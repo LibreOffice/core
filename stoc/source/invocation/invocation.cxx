@@ -18,7 +18,6 @@
  */
 
 #include <osl/mutex.hxx>
-#include <comphelper/automationinvokedzone.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
@@ -100,7 +99,8 @@ class Invocation_Impl
 public:
     Invocation_Impl( const Any & rAdapted, const Reference<XTypeConverter> &,
                                            const Reference<XIntrospection> &,
-                                           const Reference<XIdlReflection> & );
+                                           const Reference<XIdlReflection> &,
+                                           bool bFromOLE );
 
     // XInterface
     virtual Any         SAL_CALL queryInterface( const Type & aType) override;
@@ -214,6 +214,8 @@ private:
 
 
     Reference<XExactName>               _xENDirect, _xENIntrospection;
+
+    bool                                mbFromOLE;
 };
 
 
@@ -222,11 +224,13 @@ Invocation_Impl::Invocation_Impl
     const Any & rAdapted,
     const Reference<XTypeConverter> & rTC,
     const Reference<XIntrospection> & rI,
-    const Reference<XIdlReflection> & rCR
+    const Reference<XIdlReflection> & rCR,
+    bool bFromOLE
 )
     : xTypeConverter( rTC )
     , xIntrospection( rI )
     , xCoreReflection( rCR )
+    , mbFromOLE( bFromOLE )
 {
     setMaterial( rAdapted );
 }
@@ -250,7 +254,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
     {
         // Invocation does not support XExactName, if direct object supports
         // XInvocation, but not XExactName. Except when called from OLE Automation.
-        if (comphelper::Automation::AutomationInvokedZone::isActive() ||
+        if (mbFromOLE ||
             (_xDirect.is() && _xENDirect.is()) ||
             (!_xDirect.is() && _xENIntrospection.is()))
         {
@@ -304,7 +308,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
     {
         // Invocation does not support XInvocation2, if direct object supports
         // XInvocation, but not XInvocation2.
-        if ( comphelper::Automation::AutomationInvokedZone::isActive() ||
+        if ( mbFromOLE ||
              ( _xDirect.is() && _xDirect2.is()) ||
              (!_xDirect.is() && _xIntrospectionAccess.is() ) )
         {
@@ -348,7 +352,7 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
     // First do this outside the guard
     _xDirect.set( rMaterial, UNO_QUERY );
 
-    if( !comphelper::Automation::AutomationInvokedZone::isActive() && _xDirect.is() )
+    if( !mbFromOLE && _xDirect.is() )
     {
         // Consult object directly
         _xElementAccess.set( _xDirect, UNO_QUERY );
@@ -444,7 +448,7 @@ Reference<XIntrospectionAccess> Invocation_Impl::getIntrospection()
 
 sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
 {
-    if (!comphelper::Automation::AutomationInvokedZone::isActive() && _xDirect.is())
+    if (!mbFromOLE && _xDirect.is())
         return _xDirect->hasMethod( Name );
     if( _xIntrospectionAccess.is() )
         return _xIntrospectionAccess->hasMethod( Name, MethodConcept::ALL ^ MethodConcept::DANGEROUS );
@@ -457,7 +461,7 @@ sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
     if (_xDirect.is())
     {
         bool bRet = _xDirect->hasProperty( Name );
-        if (bRet || !comphelper::Automation::AutomationInvokedZone::isActive())
+        if (bRet || !mbFromOLE)
             return bRet;
     }
     // PropertySet
@@ -480,7 +484,7 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
     }
     catch (Exception &)
     {
-        if (!comphelper::Automation::AutomationInvokedZone::isActive())
+        if (!mbFromOLE)
             throw;
     }
     try
@@ -524,7 +528,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
     }
     catch (Exception &)
     {
-        if (!comphelper::Automation::AutomationInvokedZone::isActive())
+        if (!mbFromOLE)
             throw;
     }
     try
@@ -598,7 +602,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
 Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& InParams,
                                 Sequence<sal_Int16>& OutIndices, Sequence<Any>& OutParams )
 {
-    if (!comphelper::Automation::AutomationInvokedZone::isActive() && _xDirect.is())
+    if (!mbFromOLE && _xDirect.is())
         return _xDirect->invoke( FunctionName, InParams, OutIndices, OutParams );
 
     if (_xIntrospectionAccess.is())
@@ -1107,11 +1111,22 @@ Reference<XInterface> InvocationService::createInstance()
 Reference<XInterface> InvocationService::createInstanceWithArguments(
     const Sequence<Any>& rArguments )
 {
+    if (rArguments.getLength() == 2)
+    {
+        OUString aArg1;
+        if ((rArguments[1] >>= aArg1) &&
+            aArg1 == "FromOLE")
+        {
+            return Reference< XInterface >
+                ( *new Invocation_Impl( *rArguments.getConstArray(),
+                                        xTypeConverter, xIntrospection, xCoreReflection, true ) );
+        }
+    }
     if (rArguments.getLength() == 1)
     {
         return Reference< XInterface >
             ( *new Invocation_Impl( *rArguments.getConstArray(),
-                                    xTypeConverter, xIntrospection, xCoreReflection ) );
+                                    xTypeConverter, xIntrospection, xCoreReflection, false ) );
     }
 
     //TODO:throw( Exception("no default construction of invocation adapter possible!", *this) );

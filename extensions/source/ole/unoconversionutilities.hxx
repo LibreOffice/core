@@ -1395,8 +1395,9 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
     Reference<XSingleServiceFactory> xInvFactory= getInvocationFactory(rObj);
     if (xInvFactory.is())
     {
-        Sequence<Any> params(1);
+        Sequence<Any> params(2);
         params.getArray()[0] = rObj;
+        params.getArray()[1] = makeAny(OUString("FromOLE"));
         Reference<XInterface> xInt2 = xInvFactory->createInstanceWithArguments(params);
         xInv.set(xInt2, UNO_QUERY);
     }
