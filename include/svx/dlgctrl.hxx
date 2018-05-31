@@ -351,7 +351,7 @@ class SdrModel;
 class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI SvxPreviewBase : public Control
 {
 private:
-    SdrModel*             mpModel;
+    std::unique_ptr<SdrModel> mpModel;
     VclPtr<VirtualDevice> mpBufferDevice;
 
 protected:
