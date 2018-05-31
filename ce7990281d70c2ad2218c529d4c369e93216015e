@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_95f91183",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-31T07:22:35Z",
+      "side": 1,
+      "message": "Did you try fwd decl here? From code reading it looks it would work.",
+      "revId": "ce7990281d70c2ad2218c529d4c369e93216015e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_b5f45587",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-31T07:22:35Z",
+      "side": 1,
+      "message": "string.h, why is that necessary?",
+      "revId": "ce7990281d70c2ad2218c529d4c369e93216015e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
