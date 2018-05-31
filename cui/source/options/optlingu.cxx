@@ -1491,23 +1491,19 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
     else if (m_pLinguDicsNewPB == pBtn)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
+        ScopedVclPtr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog(GetFrameWeld()));
+        uno::Reference< XDictionary >  xNewDic;
+        if ( aDlg->Execute() == RET_OK )
+            xNewDic.set( aDlg->GetNewDictionary(), UNO_QUERY );
+        if ( xNewDic.is() )
         {
-            ScopedVclPtr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog(GetFrameWeld()));
-            DBG_ASSERT(aDlg, "Dialog creation failed!");
-            uno::Reference< XDictionary >  xNewDic;
-            if ( aDlg->Execute() == RET_OK )
-                xNewDic.set( aDlg->GetNewDictionary(), UNO_QUERY );
-            if ( xNewDic.is() )
-            {
-                // add new dics to the end
-                sal_Int32 nLen = aDics.getLength();
-                aDics.realloc( nLen + 1 );
+            // add new dics to the end
+            sal_Int32 nLen = aDics.getLength();
+            aDics.realloc( nLen + 1 );
 
-                aDics.getArray()[ nLen ] = xNewDic;
+            aDics.getArray()[ nLen ] = xNewDic;
 
-                AddDicBoxEntry( xNewDic, static_cast<sal_uInt16>(nLen) );
-            }
+            AddDicBoxEntry( xNewDic, static_cast<sal_uInt16>(nLen) );
         }
     }
     else if (m_pLinguDicsEditPB == pBtn)
@@ -1525,12 +1521,8 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                 if (xDic.is())
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    if(pFact)
-                    {
-                        ScopedVclPtr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName() ));
-                        DBG_ASSERT(aDlg, "Dialog creation failed!");
-                        aDlg->Execute();
-                    }
+                    ScopedVclPtr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName() ));
+                    aDlg->Execute();
                 }
             }
         }

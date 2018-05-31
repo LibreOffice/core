@@ -1241,7 +1241,6 @@ SwTableTabDlg::SwTableTabDlg(vcl::Window* pParent,
     , pShell(pSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     AddTabPage("table", &SwFormatTablePage::Create, nullptr);
     m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, nullptr);
     AddTabPage("columns", &SwTableColumnPage::Create, nullptr);

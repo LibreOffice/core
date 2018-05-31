@@ -179,7 +179,6 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
     OUString aFilterString( aFilterName );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     if ( !bExport && aFilterString == ScDocShell::GetAsciiFilterName() )
     {
@@ -192,7 +191,6 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
 
         ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(nullptr, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
-        OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             ScAsciiOptions aOptions;

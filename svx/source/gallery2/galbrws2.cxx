@@ -1118,26 +1118,22 @@ void GalleryBrowser2::Execute(const OString &rIdent)
                 const OUString  aOldTitle( GetItemText( *mpCurTheme, *pObj, GalleryItemFlags::Title ) );
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                if(pFact)
+                ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(GetFrameWeld(), aOldTitle));
+                if( aDlg->Execute() == RET_OK )
                 {
-                    ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(GetFrameWeld(), aOldTitle));
-                    DBG_ASSERT(aDlg, "Dialog creation failed!");
-                    if( aDlg->Execute() == RET_OK )
+                    OUString aNewTitle( aDlg->GetTitle() );
+
+                    if( ( aNewTitle.isEmpty() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
                     {
-                        OUString aNewTitle( aDlg->GetTitle() );
+                        if( aNewTitle.isEmpty() )
+                            aNewTitle = "__<empty>__";
 
-                        if( ( aNewTitle.isEmpty() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
-                        {
-                            if( aNewTitle.isEmpty() )
-                                aNewTitle = "__<empty>__";
-
-                            pObj->SetTitle( aNewTitle );
-                            mpCurTheme->InsertObject( *pObj );
-                        }
+                        pObj->SetTitle( aNewTitle );
+                        mpCurTheme->InsertObject( *pObj );
                     }
-
-                    GalleryTheme::ReleaseObject( pObj );
                 }
+
+                GalleryTheme::ReleaseObject( pObj );
             }
         }
         else if (rIdent == "copy")

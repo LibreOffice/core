@@ -671,7 +671,7 @@ void IMapWindow::DoMacroAssign()
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog( this, aSet, mxDocumentFrame ));
 
-    if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
+    if ( pMacroDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
         pIMapObj->SetMacroTable( pOutSet->Get( SID_ATTR_MACROITEM ).GetMacroTable() );
@@ -688,31 +688,27 @@ void IMapWindow::DoPropertyDialog()
     {
         IMapObject* pIMapObj = GetIMapObj( pSdrObj );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
+        ScopedVclPtr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
+                                        pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList ));
+        if ( aDlg->Execute() == RET_OK )
         {
-            ScopedVclPtr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
-                                            pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList ));
-            DBG_ASSERT(aDlg, "Dialog creation failed!");
-            if ( aDlg->Execute() == RET_OK )
+            const OUString aURLText( aDlg->GetURL() );
+
+            if ( !aURLText.isEmpty() )
             {
-                const OUString aURLText( aDlg->GetURL() );
-
-                if ( !aURLText.isEmpty() )
-                {
-                    INetURLObject aObj( aURLText, INetProtocol::File );
-                    DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL" );
-                    pIMapObj->SetURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-                }
-                else
-                    pIMapObj->SetURL( aURLText );
-
-                pIMapObj->SetAltText( aDlg->GetAltText() );
-                pIMapObj->SetDesc( aDlg->GetDesc() );
-                pIMapObj->SetTarget( aDlg->GetTarget() );
-                pIMapObj->SetName( aDlg->GetName() );
-                pModel->SetChanged();
-                UpdateInfo( true );
+                INetURLObject aObj( aURLText, INetProtocol::File );
+                DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL" );
+                pIMapObj->SetURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             }
+            else
+                pIMapObj->SetURL( aURLText );
+
+            pIMapObj->SetAltText( aDlg->GetAltText() );
+            pIMapObj->SetDesc( aDlg->GetDesc() );
+            pIMapObj->SetTarget( aDlg->GetTarget() );
+            pIMapObj->SetName( aDlg->GetName() );
+            pModel->SetChanged();
+            UpdateInfo( true );
         }
     }
 }

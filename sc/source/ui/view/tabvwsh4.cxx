@@ -1052,7 +1052,6 @@ bool ScTabViewShell::HasPrintOptionsPage() const
 VclPtr<SfxTabPage> ScTabViewShell::CreatePrintOptionsPage(weld::Container* pPage, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
     ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_PRINT);
     if ( ScTpPrintOptionsCreate )
         return ScTpPrintOptionsCreate(pPage, &rOptions);

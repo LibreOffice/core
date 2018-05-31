@@ -503,10 +503,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         {
                             bool bSheetProtected = pDoc->IsTabProtected(nTab);
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
                             ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetDialogParent(), aName, false, bSheetProtected));
-                            OSL_ENSURE(pNewDlg, "Dialog create fail!");
                             if ( pNewDlg->Execute() == RET_OK )
                             {
                                 pNewDlg->GetScenarioData( aName, aComment, aColor, nFlags );
@@ -576,13 +573,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetRowHeight( pData->GetCurY(),
                                                               pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
-
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "RowHeightDialog",
                         nCurHeight, ScGlobal::nStdRowHeight,
                         eMetric, 2, MAX_ROW_HEIGHT));
-                    assert(pDlg); //Dialog create fail
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -617,13 +611,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
-
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "OptimalRowHeightDialog",
                         ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT));
-                    assert(pDlg); //Dialog create fail!
-
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
@@ -682,13 +672,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetColWidth( pData->GetCurX(),
                                                              pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
-
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "ColWidthDialog", nCurHeight,
                         STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
-                    assert(pDlg); //Dialog create fail!
-
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
@@ -722,12 +708,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
-
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "OptimalColWidthDialog",
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH));
-                    assert(pDlg); //Dialog create fail!
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
@@ -871,10 +854,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScGlobal::ClearAutoFormat();
                         std::unique_ptr<ScAutoFormatData> pNewEntry(pTabViewShell->CreateAutoFormatData());
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
                         ScopedVclPtr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), GetViewData()));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
                         {

@@ -254,14 +254,11 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            if (pFact)
-            {
-                vcl::Window* pWin = mrSlideSorter.GetContentWindow();
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
-                    pWin ? pWin->GetFrameWeld() : nullptr,
-                    pDocument));
-                pDlg->Execute();
-            }
+            vcl::Window* pWin = mrSlideSorter.GetContentWindow();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
+                pWin ? pWin->GetFrameWeld() : nullptr,
+                pDocument));
+            pDlg->Execute();
             rRequest.Done ();
         }
         break;
@@ -270,12 +267,8 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         {
 #ifdef ENABLE_SDREMOTE
              SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-             if (pFact)
-             {
-                 ScopedVclPtr<VclAbstractDialog> pDlg( pFact->CreateRemoteDialog( mrSlideSorter.GetContentWindow() ) );
-                 if (pDlg)
-                     pDlg->Execute();
-             }
+             ScopedVclPtr<VclAbstractDialog> pDlg( pFact->CreateRemoteDialog( mrSlideSorter.GetContentWindow() ) );
+             pDlg->Execute();
 #endif
         }
         break;
@@ -880,12 +873,10 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
         OUString aPageName = pSelectedPage->GetName();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialog creation failed!");
         vcl::Window* pWin = mrSlideSorter.GetContentWindow();
         ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 pWin ? pWin->GetFrameWeld() : nullptr,
                 aPageName, aDescr));
-        DBG_ASSERT(aNameDlg, "Dialog creation failed!");
         aNameDlg->SetText( aTitle );
         aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
         aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );

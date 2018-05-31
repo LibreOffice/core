@@ -21,9 +21,7 @@ SwWordCountWrapper::SwWordCountWrapper(   vcl::Window *pParentWindow,
         SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert(pFact && "SwAbstractDialogFactory fail!");
     xAbstDlg.reset(pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow, pInfo));
-    assert(xAbstDlg && "Dialog construction failed!");
     SetWindow(xAbstDlg->GetWindow());
 }
 

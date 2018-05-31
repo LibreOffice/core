@@ -331,10 +331,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     vcl::Window* pParent = mpViewShell ? mpViewShell->GetActiveWindow() : nullptr;
-    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg(pParent, mpDoc, pMedium, aFile) : nullptr);
-
-    if( !pDlg )
-        return false;
+    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(pParent, mpDoc, pMedium, aFile) );
 
     sal_uInt16 nRet = pDlg->Execute();
 
@@ -415,9 +412,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg(mpViewShell->GetActiveWindow(), mpDoc, nullptr, aFile) : nullptr);
-    if( !pDlg )
-        return;
+    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(mpViewShell->GetActiveWindow(), mpDoc, nullptr, aFile) );
 
     mpDocSh->SetWaitCursor( false );
 

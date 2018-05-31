@@ -446,18 +446,15 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact ? pFact->CreatSdActionDialog(mpViewShell->GetActiveWindow(), &aSet, mpView) : nullptr);
+        ScopedVclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mpViewShell->GetActiveWindow(), &aSet, mpView) );
 
-        short nResult = pDlg ? pDlg->Execute() : static_cast<short>(RET_CANCEL);
-
-        if( nResult == RET_OK )
-        {
-            rReq.Done( *( pDlg->GetOutputItemSet() ) );
-            pArgs = rReq.GetArgs();
-        }
+        short nResult = pDlg->Execute();
 
         if( nResult != RET_OK )
             return;
+
+        rReq.Done( *( pDlg->GetOutputItemSet() ) );
+        pArgs = rReq.GetArgs();
     }
 
     // evaluation of the ItemSets

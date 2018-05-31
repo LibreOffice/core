@@ -115,34 +115,31 @@ void FuLineEnd::DoExecute( SfxRequest& )
         }
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog( nullptr, aName, aDesc ) : nullptr);
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg( pFact->CreateSvxNameDialog( nullptr, aName, aDesc ) );
 
-        if( pDlg )
+        pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
+
+        if( pDlg->Execute() == RET_OK )
         {
-            pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
+            pDlg->GetName( aName );
+            bDifferent = true;
 
-            if( pDlg->Execute() == RET_OK )
+            for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                pDlg->GetName( aName );
-                bDifferent = true;
+                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
+                    bDifferent = false;
+            }
 
-                for( long i = 0; i < nCount && bDifferent; i++ )
-                {
-                    if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                        bDifferent = false;
-                }
-
-                if( bDifferent )
-                {
-                    pLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aPolyPolygon, aName));
-                }
-                else
-                {
-                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
-                                                               VclMessageType::Warning, VclButtonsType::Ok,
-                                                               SdResId(STR_WARN_NAME_DUPLICATE)));
-                    xWarn->run();
-                }
+            if( bDifferent )
+            {
+                pLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aPolyPolygon, aName));
+            }
+            else
+            {
+                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::Ok,
+                                                           SdResId(STR_WARN_NAME_DUPLICATE)));
+                xWarn->run();
             }
         }
     }

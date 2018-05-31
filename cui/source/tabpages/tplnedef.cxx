@@ -544,9 +544,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialog creation failed!");
     ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    DBG_ASSERT(pDlg, "Dialog creation failed!");
     bool bLoop = true;
 
     while ( bLoop && pDlg->Execute() == RET_OK )
@@ -614,9 +612,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
         OUString aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialog creation failed!");
         ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-        DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pDashList->Count();
         bool bLoop = true;

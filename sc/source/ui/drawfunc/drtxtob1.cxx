@@ -43,12 +43,9 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet , sal_uInt16 nSlot)
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    assert(pFact && "ScAbstractFactory create fail!");
-
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
         pViewData->GetDialogParent(), &rArgs,
         pViewData->GetSfxDocShell()));
-    assert(pDlg && "Dialog create fail!");
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
         pDlg->SetCurPageId("fonteffects");
@@ -87,11 +84,8 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScParagraphDlg(
         pViewData->GetDialogParent(), &aNewAttr));
-    OSL_ENSURE(pDlg, "Dialog create fail!");
     bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )

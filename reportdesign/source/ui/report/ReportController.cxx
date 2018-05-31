@@ -4173,56 +4173,54 @@ OSectionWindow* OReportController::getSectionWindow(const css::uno::Reference< c
 void OReportController::openZoomDialog()
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if ( pFact )
+
+    static SfxItemInfo aItemInfos[] =
     {
-        static SfxItemInfo aItemInfos[] =
-        {
-            { SID_ATTR_ZOOM, true }
-        };
-        std::vector<SfxPoolItem*> pDefaults
-        {
-            new SvxZoomItem()
-        };
-        static const sal_uInt16 pRanges[] =
-        {
-            SID_ATTR_ZOOM,SID_ATTR_ZOOM,
-            0
-        };
-        SfxItemPool* pPool( new SfxItemPool("ZoomProperties", SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, &pDefaults) );
-        pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
-        pPool->FreezeIdRanges();                        // the same
-        try
-        {
-            ::std::unique_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
-            // fill it
-            SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
-            aZoomItem.SetValueSet(SvxZoomEnableFlags::N100|SvxZoomEnableFlags::WHOLEPAGE|SvxZoomEnableFlags::PAGEWIDTH);
-            pDescriptor->Put(aZoomItem);
+        { SID_ATTR_ZOOM, true }
+    };
+    std::vector<SfxPoolItem*> pDefaults
+    {
+        new SvxZoomItem()
+    };
+    static const sal_uInt16 pRanges[] =
+    {
+        SID_ATTR_ZOOM,SID_ATTR_ZOOM,
+        0
+    };
+    SfxItemPool* pPool( new SfxItemPool("ZoomProperties", SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, &pDefaults) );
+    pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
+    pPool->FreezeIdRanges();                        // the same
+    try
+    {
+        ::std::unique_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
+        // fill it
+        SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
+        aZoomItem.SetValueSet(SvxZoomEnableFlags::N100|SvxZoomEnableFlags::WHOLEPAGE|SvxZoomEnableFlags::PAGEWIDTH);
+        pDescriptor->Put(aZoomItem);
 
-            ScopedVclPtr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(nullptr, *pDescriptor.get()) );
-            pDlg->SetLimits( 20, 400 );
-            bool bCancel = ( RET_CANCEL == pDlg->Execute() );
+        ScopedVclPtr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(nullptr, *pDescriptor.get()) );
+        pDlg->SetLimits( 20, 400 );
+        bool bCancel = ( RET_CANCEL == pDlg->Execute() );
 
-            if ( !bCancel )
-            {
-                const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM );
-                m_eZoomType = rZoomItem.GetType();
-                m_nZoomValue = rZoomItem.GetValue();
-                if ( m_eZoomType != SvxZoomType::PERCENT )
-                    m_nZoomValue = getDesignView()->getZoomFactor( m_eZoomType );
+        if ( !bCancel )
+        {
+            const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM );
+            m_eZoomType = rZoomItem.GetType();
+            m_nZoomValue = rZoomItem.GetValue();
+            if ( m_eZoomType != SvxZoomType::PERCENT )
+                m_nZoomValue = getDesignView()->getZoomFactor( m_eZoomType );
 
-                impl_zoom_nothrow();
-            }
+            impl_zoom_nothrow();
         }
-        catch(const uno::Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("reportdesign");
-        }
-        SfxItemPool::Free(pPool);
-
-        for (SfxPoolItem* pDefault : pDefaults)
-            delete pDefault;
     }
+    catch(const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
+    }
+    SfxItemPool::Free(pPool);
+
+    for (SfxPoolItem* pDefault : pDefaults)
+        delete pDefault;
 }
 
 

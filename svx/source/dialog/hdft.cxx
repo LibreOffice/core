@@ -88,23 +88,19 @@ namespace svx {
     {
         bool bRes = false;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, false/*bEnableDrawingLayerFillStyles*/ ));
+        if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, false/*bEnableDrawingLayerFillStyles*/ ));
-            DBG_ASSERT(pDlg, "Dialog creation failed!");
-            if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
-            {
-                SfxItemIter aIter( *pDlg->GetOutputItemSet() );
-                const SfxPoolItem* pItem = aIter.FirstItem();
+            SfxItemIter aIter( *pDlg->GetOutputItemSet() );
+            const SfxPoolItem* pItem = aIter.FirstItem();
 
-                while ( pItem )
-                {
-                    if ( !IsInvalidItem( pItem ) )
-                        pBBSet->Put( *pItem );
-                    pItem = aIter.NextItem();
-                }
-                bRes = true;
+            while ( pItem )
+            {
+                if ( !IsInvalidItem( pItem ) )
+                    pBBSet->Put( *pItem );
+                pItem = aIter.NextItem();
             }
+            bRes = true;
         }
         return bRes;
     }
@@ -669,68 +665,64 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
-    if(pFact)
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
+        this,
+        *pBBSet,
+        mbEnableDrawingLayerFillStyles));
+
+    if(RET_OK == pDlg->Execute() && pDlg->GetOutputItemSet())
     {
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
-            this,
-            *pBBSet,
-            mbEnableDrawingLayerFillStyles));
+        SfxItemIter aIter(*pDlg->GetOutputItemSet());
+        const SfxPoolItem* pItem = aIter.FirstItem();
 
-        DBG_ASSERT(pDlg,"Dialog creation failed!");
-        if(RET_OK == pDlg->Execute() && pDlg->GetOutputItemSet())
+        while(pItem)
         {
-            SfxItemIter aIter(*pDlg->GetOutputItemSet());
-            const SfxPoolItem* pItem = aIter.FirstItem();
-
-            while(pItem)
+            if(!IsInvalidItem(pItem))
             {
-                if(!IsInvalidItem(pItem))
-                {
-                    pBBSet->Put(*pItem);
-                }
-
-                pItem = aIter.NextItem();
+                pBBSet->Put(*pItem);
             }
 
-            {
-                drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
-
-                if(mbEnableDrawingLayerFillStyles)
-                {
-                    // create FillAttributes directly from DrawingLayer FillStyle entries
-                    aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pBBSet));
-                }
-                else
-                {
-                    const sal_uInt16 nWhich = GetWhich(SID_ATTR_BRUSH);
-
-                    if(pBBSet->GetItemState(nWhich) == SfxItemState::SET)
-                    {
-                        // create FillAttributes from SvxBrushItem
-                        const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(pBBSet->Get(nWhich));
-                        SfxItemSet aTempSet(*pBBSet->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-
-                        setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                        aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
-                    }
-                }
-
-                if(SID_ATTR_PAGE_HEADERSET == nId)
-                {
-                    //m_pBspWin->SetHdColor(rItem.GetColor());
-                    m_pBspWin->setHeaderFillAttributes(aFillAttributes);
-                }
-                else
-                {
-                    //m_pBspWin->SetFtColor(rItem.GetColor());
-                    m_pBspWin->setFooterFillAttributes(aFillAttributes);
-                }
-            }
-
+            pItem = aIter.NextItem();
         }
 
-        UpdateExample();
+        {
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
+
+            if(mbEnableDrawingLayerFillStyles)
+            {
+                // create FillAttributes directly from DrawingLayer FillStyle entries
+                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pBBSet));
+            }
+            else
+            {
+                const sal_uInt16 nWhich = GetWhich(SID_ATTR_BRUSH);
+
+                if(pBBSet->GetItemState(nWhich) == SfxItemState::SET)
+                {
+                    // create FillAttributes from SvxBrushItem
+                    const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(pBBSet->Get(nWhich));
+                    SfxItemSet aTempSet(*pBBSet->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                }
+            }
+
+            if(SID_ATTR_PAGE_HEADERSET == nId)
+            {
+                //m_pBspWin->SetHdColor(rItem.GetColor());
+                m_pBspWin->setHeaderFillAttributes(aFillAttributes);
+            }
+            else
+            {
+                //m_pBspWin->SetFtColor(rItem.GetColor());
+                m_pBspWin->setFooterFillAttributes(aFillAttributes);
+            }
+        }
+
     }
+
+    UpdateExample();
 }
 
 void SvxHFPage::UpdateExample()

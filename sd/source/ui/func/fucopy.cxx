@@ -99,27 +99,22 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             }
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            if( pFact )
+            ScopedVclPtr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mpViewShell->GetActiveWindow(), aSet, mpView ));
+
+            sal_uInt16 nResult = pDlg->Execute();
+
+            switch( nResult )
             {
-                ScopedVclPtr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mpViewShell->GetActiveWindow(), aSet, mpView ));
-                if (!pDlg)
-                    return;
+                case RET_OK:
+                    pDlg->GetAttr( aSet );
+                    rReq.Done( aSet );
+                    pArgs = rReq.GetArgs();
+                break;
 
-                sal_uInt16 nResult = pDlg->Execute();
-
-                switch( nResult )
+                default:
                 {
-                    case RET_OK:
-                        pDlg->GetAttr( aSet );
-                        rReq.Done( aSet );
-                        pArgs = rReq.GetArgs();
-                    break;
-
-                    default:
-                    {
-                        pDlg.disposeAndClear();
-                        mpView->EndUndo();
-                    }
+                    pDlg.disposeAndClear();
+                    mpView->EndUndo();
                     return; // Cancel
                 }
             }

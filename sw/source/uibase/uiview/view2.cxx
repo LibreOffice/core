@@ -520,9 +520,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_LINE_NUMBERING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialog creation failed!");
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
         }
@@ -1102,9 +1100,7 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ScopedVclPtr<AbstractMailMergeCreateFromDlg> pDlg( pFact->CreateMailMergeCreateFromDlg(&pTmpFrame->GetWindow()) );
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if(RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
@@ -1674,17 +1670,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    if(pFact)
-                    {
-                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aCoreSet));
-                        OSL_ENSURE(pDlg, "Zooming fail!");
-                        if (pDlg)
-                        {
-                            pDlg->SetLimits( MINZOOM, MAXZOOM );
-                            if( pDlg->Execute() != RET_CANCEL )
-                                pSet = pDlg->GetOutputItemSet();
-                        }
-                    }
+                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aCoreSet));
+                    pDlg->SetLimits( MINZOOM, MAXZOOM );
+                    if( pDlg->Execute() != RET_CANCEL )
+                        pSet = pDlg->GetOutputItemSet();
                 }
 
                 const SfxPoolItem* pViewLayoutItem = nullptr;
@@ -1880,10 +1869,7 @@ void SwView::EditLinkDlg()
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
-    if ( pDlg )
-    {
-        pDlg->Execute();
-    }
+    pDlg->Execute();
 }
 
 bool SwView::JumpToSwMark( const OUString& rMark )
@@ -2307,9 +2293,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             {
                 //take an existing data source or create a new one?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ScopedVclPtr<AbstractMailMergeFieldConnectionsDlg> pConnectionsDlg( pFact->CreateMailMergeFieldConnectionsDlg(&GetViewFrame()->GetWindow()) );
-                OSL_ENSURE(pConnectionsDlg, "Dialog creation failed!");
                 if(RET_OK == pConnectionsDlg->Execute())
                     bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();
                 else
@@ -2351,11 +2335,8 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                 if (RET_OK == xWarning->run())
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    if ( pFact )
-                    {
-                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
-                        pDlg->Execute();
-                    }
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
+                    pDlg->Execute();
                 }
                 return ;
             }

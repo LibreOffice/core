@@ -55,9 +55,7 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
         case FN_EDIT_AUTH_ENTRY_DLG :
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            assert(pFact && "Dialog creation failed!");
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwAutoMarkDialog(pMDI, GetShell()));
-            assert(pDlg && "Dialog creation failed!");
             pDlg->Execute();
         }
         break;
@@ -81,17 +79,13 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
             if(aMgr.GetTOXMarkCount() > 1)
             {   // Several marks, which should it be?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ScopedVclPtr<VclAbstractDialog> pMultDlg(pFact->CreateMultiTOXMarkDlg(GetView().GetFrameWeld(), aMgr));
-                OSL_ENSURE(pMultDlg, "Dialog creation failed!");
                 nRet = pMultDlg->Execute();
             }
             if( nRet == RET_OK)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialog creation failed!");
                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark()));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
             }
             break;
@@ -136,11 +130,9 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
                     aSet.Put(*pSet);
             }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialog creation failed!");
             ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         pMDI, aSet, rSh, const_cast<SwTOXBase*>(pCurTOX),
                                                         bGlobal));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
         }
         break;

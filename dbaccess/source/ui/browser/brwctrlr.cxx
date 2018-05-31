@@ -1829,21 +1829,14 @@ void SbaXDataBrowserController::ExecuteSearch()
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<AbstractFmSearchDialog> pDialog;
-    if ( pFact )
-    {
-        std::vector< OUString > aContextNames;
-        aContextNames.emplace_back("Standard" );
-        pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, aContextNames, 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest));
-    }
-    OSL_ENSURE( pDialog, "SbaXDataBrowserController::ExecuteSearch: could not get the search dialog!" );
-    if ( pDialog )
-    {
-        pDialog->SetActiveField( sActiveField );
-        pDialog->SetFoundHandler( LINK( this, SbaXDataBrowserController, OnFoundData ) );
-        pDialog->SetCanceledNotFoundHdl( LINK( this, SbaXDataBrowserController, OnCanceledNotFound ) );
-        pDialog->Execute();
-        pDialog.disposeAndClear();
-    }
+    std::vector< OUString > aContextNames;
+    aContextNames.emplace_back("Standard" );
+    pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, aContextNames, 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest));
+    pDialog->SetActiveField( sActiveField );
+    pDialog->SetFoundHandler( LINK( this, SbaXDataBrowserController, OnFoundData ) );
+    pDialog->SetCanceledNotFoundHdl( LINK( this, SbaXDataBrowserController, OnCanceledNotFound ) );
+    pDialog->Execute();
+    pDialog.disposeAndClear();
 
     // restore the grid's normal operating state
     xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(true));

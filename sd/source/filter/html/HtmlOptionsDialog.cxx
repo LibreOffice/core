@@ -171,21 +171,15 @@ sal_Int16 SdHtmlOptionsDialog::execute()
     sal_Int16 nRet = ExecutableDialogResults::CANCEL;
 
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    if( pFact )
+    ScopedVclPtr<AbstractSdPublishingDlg> pDlg(pFact->CreateSdPublishingDlg( Application::GetDefDialogParent(), meDocType ));
+    if( pDlg->Execute() )
     {
-        ScopedVclPtr<AbstractSdPublishingDlg> pDlg(pFact->CreateSdPublishingDlg( Application::GetDefDialogParent(), meDocType ));
-        if( pDlg )
-        {
-            if( pDlg->Execute() )
-            {
-                pDlg->GetParameterSequence( maFilterDataSequence );
-                nRet = ExecutableDialogResults::OK;
-            }
-            else
-            {
-                nRet = ExecutableDialogResults::CANCEL;
-            }
-        }
+        pDlg->GetParameterSequence( maFilterDataSequence );
+        nRet = ExecutableDialogResults::OK;
+    }
+    else
+    {
+        nRet = ExecutableDialogResults::CANCEL;
     }
     return nRet;
 }

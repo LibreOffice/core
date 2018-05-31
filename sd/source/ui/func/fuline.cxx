@@ -75,9 +75,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
 
     bool bHasMarked = mpView->AreObjectsMarked();
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(mpViewShell->GetActiveWindow(), pNewAttr.get(), mpDoc, pObj, bHasMarked) : nullptr);
-    if (!pDlg)
-        return;
+    VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSvxLineTabDialog(mpViewShell->GetActiveWindow(), pNewAttr.get(), mpDoc, pObj, bHasMarked) );
 
     pDlg->StartExecuteAsync([=](sal_Int32 nResult){
         if (nResult == RET_OK)

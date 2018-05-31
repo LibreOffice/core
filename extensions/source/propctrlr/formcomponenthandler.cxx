@@ -2644,7 +2644,6 @@ namespace pcr
             ScopedVclPtrInstance< SfxSingleTabDialog > xDialog( impl_getDefaultDialogParent_nothrow(), aCoreSet,
                 "FormatNumberDialog", "cui/ui/formatnumberdialog.ui");
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT( pFact, "CreateFactory fail!" );
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
             if ( !fnCreatePage )
                 throw RuntimeException();   // caught below

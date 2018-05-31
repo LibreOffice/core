@@ -729,17 +729,12 @@ void FmFormShell::Execute(SfxRequest &rReq)
             else
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                DBG_ASSERT( pFact, "no dialog factory!" );
-                if ( pFact )
-                {
-                    ScopedVclPtr<AbstractFmInputRecordNoDialog> dlg(pFact->CreateFmInputRecordNoDialog(rReq.GetFrameWeld()));
-                    assert(dlg.get() && "Dialog creation failed!");
-                    dlg->SetValue( rController->getCursor()->getRow() );
-                    if ( dlg->Execute() == RET_OK )
-                        nRecord = dlg->GetValue();
+                ScopedVclPtr<AbstractFmInputRecordNoDialog> dlg(pFact->CreateFmInputRecordNoDialog(rReq.GetFrameWeld()));
+                dlg->SetValue( rController->getCursor()->getRow() );
+                if ( dlg->Execute() == RET_OK )
+                    nRecord = dlg->GetValue();
 
-                    rReq.AppendItem( SfxInt32Item( FN_PARAM_1, nRecord ) );
-                }
+                rReq.AppendItem( SfxInt32Item( FN_PARAM_1, nRecord ) );
             }
 
             if ( nRecord != -1 )

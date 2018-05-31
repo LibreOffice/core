@@ -402,13 +402,10 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( pWin, rDoc.GetLinkManager() ));
-                if ( pDlg )
-                {
-                    pDlg->Execute();
-                    rBindings.Invalidate( nSlot );
-                    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
-                    rReq.Done();
-                }
+                pDlg->Execute();
+                rBindings.Invalidate( nSlot );
+                SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
+                rReq.Done();
             }
             break;
 

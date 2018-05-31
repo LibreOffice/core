@@ -273,19 +273,16 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 vcl::Window* pWin = pViewData->GetDialogParent();
                 ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pWin ? pWin->GetFrameWeld() : nullptr));
                 SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
-                if ( pDlg )
-                {
-                    pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
-                    pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
-                    pDlg->Insert( SotClipboardFormatId::RICHTEXT,    EMPTY_OUSTRING );
-                    // Do not offer SotClipboardFormatId::STRING_TSVC for
-                    // in-cell paste.
+                pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
+                pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
+                pDlg->Insert( SotClipboardFormatId::RICHTEXT,    EMPTY_OUSTRING );
+                // Do not offer SotClipboardFormatId::STRING_TSVC for
+                // in-cell paste.
 
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
-                    nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
-                }
+                nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
                 pDlg.disposeAndClear();
 
                 // while the dialog was open, edit mode may have been stopped
@@ -464,10 +461,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case FID_INSERT_NAME:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
                 ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pViewData->GetDocShell() ));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -506,11 +500,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 SfxObjectShell* pObjSh = pViewData->GetSfxDocShell();
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
                     pViewData->GetDialogParent(), &aAttrs, pObjSh));
-                OSL_ENSURE(pDlg, "Dialog create fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");

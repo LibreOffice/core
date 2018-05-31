@@ -122,11 +122,8 @@ namespace SwLangHelper
         {
             // open the dialog "Tools/Options/Language Settings - Language"
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            if (pFact)
-            {
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( rView.GetWindow(), SID_LANGUAGE_OPTIONS ));
-                pDlg->Execute();
-            }
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( rView.GetWindow(), SID_LANGUAGE_OPTIONS ));
+            pDlg->Execute();
         }
         else
         {

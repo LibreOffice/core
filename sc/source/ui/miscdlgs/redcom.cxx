@@ -32,19 +32,15 @@ ScRedComDialog::ScRedComDialog( weld::Window* pParent, const SfxItemSet& rCoreSe
     , pDlg(nullptr)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
-    {
-        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext );
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
-        pDocShell=pShell;
-        pDlg->DontChangeAuthor();
-        pDlg->HideAuthor();
+    pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext );
+    pDocShell=pShell;
+    pDlg->DontChangeAuthor();
+    pDlg->HideAuthor();
 
-        pDlg->SetPrevHdl(LINK( this, ScRedComDialog, PrevHdl));
-        pDlg->SetNextHdl(LINK( this, ScRedComDialog, NextHdl));
+    pDlg->SetPrevHdl(LINK( this, ScRedComDialog, PrevHdl));
+    pDlg->SetNextHdl(LINK( this, ScRedComDialog, NextHdl));
 
-        ReInit(pAction);
-    }
+    ReInit(pAction);
 }
 
 ScRedComDialog::~ScRedComDialog()

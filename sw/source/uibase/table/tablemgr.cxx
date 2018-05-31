@@ -54,10 +54,7 @@ void SwTableFUNC::ColWidthDlg(weld::Window *pParent)
 {
     InitTabCols();
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
     ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
 }
 

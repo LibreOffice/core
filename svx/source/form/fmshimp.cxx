@@ -1568,18 +1568,16 @@ void FmXFormShell::ExecuteSearch_Lock()
     // somewhat more fluid. Should be, however, somehow made dependent of the
     // underlying cursor. DAO for example is not thread-safe.
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractFmSearchDialog> pDialog;
-    if ( pFact )
-        pDialog.disposeAndReset(pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, aContextNames, nInitialContext, LINK(this, FmXFormShell, OnSearchContextRequest_Lock) ));
-    DBG_ASSERT( pDialog, "FmXFormShell::ExecuteSearch: could not create the search dialog!" );
-    if ( pDialog )
-    {
-        pDialog->SetActiveField( strActiveField );
-        pDialog->SetFoundHandler(LINK(this, FmXFormShell, OnFoundData_Lock));
-        pDialog->SetCanceledNotFoundHdl(LINK(this, FmXFormShell, OnCanceledNotFound_Lock));
-        pDialog->Execute();
-        pDialog.disposeAndClear();
-    }
+    ScopedVclPtr<AbstractFmSearchDialog> pDialog(
+            pFact->CreateFmSearchDialog(
+                &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(),
+                strInitialText, aContextNames, nInitialContext,
+                LINK(this, FmXFormShell, OnSearchContextRequest_Lock) ));
+    pDialog->SetActiveField( strActiveField );
+    pDialog->SetFoundHandler(LINK(this, FmXFormShell, OnFoundData_Lock));
+    pDialog->SetCanceledNotFoundHdl(LINK(this, FmXFormShell, OnCanceledNotFound_Lock));
+    pDialog->Execute();
+    pDialog.disposeAndClear();
 
     // restore GridControls again
     LoopGrids_Lock(LoopGridsSync::ENABLE_SYNC, LoopGridsFlags::DISABLE_ROCTRLR);

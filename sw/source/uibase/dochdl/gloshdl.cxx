@@ -75,9 +75,7 @@ struct TextBlockInfo_Impl
 void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert(pFact && "Dialog creation failed!");
     ScopedVclPtr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell));
-    assert(pDlg && "Dialog creation failed!");
     OUString sName;
     OUString sShortName;
 
@@ -354,7 +352,6 @@ bool SwGlossaryHdl::ExpandGlossary()
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
     SwTextBlocks *pGlossary;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert(pFact && "Dialog creation failed!");
     ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc();
     assert(fnGetCurrGroup && "Dialog creation failed!");
     OUString sGroupName( (*fnGetCurrGroup)() );
@@ -436,10 +433,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                assert(pFact && "SwAbstractDialogFactory fail!");
-
                 ScopedVclPtr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(aShortName));
-                assert(pDlg && "Dialog creation failed!");
                 for(TextBlockInfo_Impl & i : aFoundArr)
                 {
                     pDlg->InsertGlos(i.sTitle, i.sLongName);

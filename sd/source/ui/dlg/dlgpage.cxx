@@ -52,7 +52,6 @@ SdPageDlg::SdPageDlg( SfxObjectShell const * pDocSh, vcl::Window* pParent, const
     mpPatternList = pPatternListItem->GetPatternList();
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
 
     mnPage = AddTabPage( "RID_SVXPAGE_PAGE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), nullptr );
     mnArea = AddTabPage( "RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), nullptr );

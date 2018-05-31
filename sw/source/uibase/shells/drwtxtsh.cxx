@@ -437,20 +437,17 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool() );
                 pSdrView->GetAttributes( aNewAttr );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                if ( pFact )
-                {
-                    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
-                                GetView().GetViewFrame()->GetWindow().GetFrameWeld(),
-                                &aNewAttr, pSdrView ));
-                    sal_uInt16 nResult = pDlg->Execute();
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
+                            GetView().GetViewFrame()->GetWindow().GetFrameWeld(),
+                            &aNewAttr, pSdrView ));
+                sal_uInt16 nResult = pDlg->Execute();
 
-                    if (nResult == RET_OK)
+                if (nResult == RET_OK)
+                {
+                    if (pSdrView->AreObjectsMarked())
                     {
-                        if (pSdrView->AreObjectsMarked())
-                        {
-                            pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
-                            rReq.Done(*(pDlg->GetOutputItemSet()));
-                        }
+                        pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
+                        rReq.Done(*(pDlg->GetOutputItemSet()));
                     }
                 }
             }

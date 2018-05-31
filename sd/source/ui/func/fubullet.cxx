@@ -189,10 +189,8 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
             aSet.Put( *pFontItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact ? pFact->CreateCharMapDialog(mpView->GetViewShell()->GetFrameWeld(), aSet,
-            true ) : nullptr);
-        if( !pDlg )
-            return;
+        ScopedVclPtr<SfxAbstractDialog> pDlg( pFact->CreateCharMapDialog(mpView->GetViewShell()->GetFrameWeld(), aSet,
+            true ) );
 
         // If a character is selected, it can be shown
         // pDLg->SetFont( );

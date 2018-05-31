@@ -3064,13 +3064,11 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert( pFact && "Factory creation failed!" );
     pImpl->pMergeDialog = pFact->CreateMailMergeDlg( &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                                                      sDataSource,
                                                      sDataTableOrQuery,
                                                      nCmdType,
                                                      xConnection);
-    assert( pImpl->pMergeDialog && "Dialog creation failed!" );
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
         aDescriptor[svx::DataAccessDescriptorProperty::Selection] <<= pImpl->pMergeDialog->GetSelection();
@@ -3171,12 +3169,10 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
     aDBData.nCommandType = nCmdType;
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert( pFact && "Factory creation failed!" );
     ScopedVclPtr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData ));
-    assert( pDlg && "Dialog creation failed!" );
     if( RET_OK == pDlg->Execute() )
     {
         OUString sDummy;

@@ -519,7 +519,6 @@ bool ScPreviewShell::HasPrintOptionsPage() const
 VclPtr<SfxTabPage> ScPreviewShell::CreatePrintOptionsPage(weld::Container* pPage, const SfxItemSet &rOptions)
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
     ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_PRINT);
     if ( ScTpPrintOptionsCreate )
         return ScTpPrintOptionsCreate(pPage, &rOptions);
@@ -620,22 +619,18 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
 
                     aSet.Put( aZoomItem );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    if(pFact)
+                    ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, aSet));
+                    pDlg->SetLimits( 20, 400 );
+                    pDlg->HideButton( ZoomButtonId::OPTIMAL );
+                    bCancel = ( RET_CANCEL == pDlg->Execute() );
+
+                    if ( !bCancel )
                     {
-                        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, aSet));
-                        OSL_ENSURE(pDlg, "Dialog creation failed!");
-                        pDlg->SetLimits( 20, 400 );
-                        pDlg->HideButton( ZoomButtonId::OPTIMAL );
-                        bCancel = ( RET_CANCEL == pDlg->Execute() );
+                        const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->
+                                                    Get( SID_ATTR_ZOOM );
 
-                        if ( !bCancel )
-                        {
-                            const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->
-                                                        Get( SID_ATTR_ZOOM );
-
-                            eZoom = rZoomItem.GetType();
-                            nZoom = rZoomItem.GetValue();
-                        }
+                        eZoom = rZoomItem.GetType();
+                        nZoom = rZoomItem.GetValue();
                     }
                 }
 

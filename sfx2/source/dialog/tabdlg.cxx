@@ -82,11 +82,8 @@ struct Data_Impl
         if ( !fnCreatePage  )
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            if ( pFact )
-            {
-                fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
-                fnGetRanges = pFact->GetTabPageRangesFunc( nId );
-            }
+            fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+            fnGetRanges = pFact->GetTabPageRangesFunc( nId );
         }
     }
 };
@@ -668,7 +665,6 @@ sal_uInt16 SfxTabDialog::AddTabPage
 )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    assert(pFact);
     CreateTabPage pCreateFunc = pFact->GetTabPageCreatorFunc(nPageCreateId);
     assert(pCreateFunc);
     GetTabPageRanges pRangesFunc = pFact->GetTabPageRangesFunc(nPageCreateId);

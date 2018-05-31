@@ -365,10 +365,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             bRowHeaders = aChartPositioner.HasRowHeaders();
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
                         ScopedVclPtr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             bColHeaders = pDlg->IsRow();
@@ -916,10 +913,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 bool bSheetProtected = aDocument.IsTabProtected(nActualTab);
 
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
                                 ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected));
-                                OSL_ENSURE(pNewDlg, "Dialog create fail!");
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
                                 {
@@ -1188,11 +1182,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if ( aLangText == "*" )
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    if (pFact)
-                    {
-                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(GetActiveDialogParent(), SID_LANGUAGE_OPTIONS));
-                        pDlg->Execute();
-                    }
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(GetActiveDialogParent(), SID_LANGUAGE_OPTIONS));
+                    pDlg->Execute();
 
                     rDoc.GetLanguage( eLang, eCjk, eCtl );
                 }
@@ -1697,10 +1688,8 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE, RID_SCDLG_STYLES_PAGE ));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -1852,14 +1841,12 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                         }
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
                                                                                 GetActiveDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,
                                                                                 nResId));
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();

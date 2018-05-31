@@ -871,20 +871,17 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog(mpViewSh->GetFrameWeld(), aNewName, aDesc) : nullptr);
 
-                if (pDlg)
+                pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
+
+                bNameOK = false;
+                pDlg->SetText( aTitle );
+
+                while( !bNameOK && pDlg->Execute() == RET_OK )
                 {
-                    pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
+                    pDlg->GetName( aNewName );
 
-                    bNameOK = false;
-                    pDlg->SetText( aTitle );
-
-                    while( !bNameOK && pDlg->Execute() == RET_OK )
-                    {
-                        pDlg->GetName( aNewName );
-
-                        if( !mrDoc.GetObj( aNewName ) )
-                            bNameOK = true;
-                    }
+                    if( !mrDoc.GetObj( aNewName ) )
+                        bNameOK = true;
                 }
             }
         }

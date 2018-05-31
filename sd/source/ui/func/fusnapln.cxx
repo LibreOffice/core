@@ -110,10 +110,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         vcl::Window* pWin = mpViewShell->GetActiveWindow();
-        ScopedVclPtr<AbstractSdSnapLineDlg> pDlg(pFact ? pFact->CreateSdSnapLineDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, mpView) : nullptr);
-        OSL_ASSERT(pDlg);
-        if (!pDlg)
-            return;
+        ScopedVclPtr<AbstractSdSnapLineDlg> pDlg( pFact->CreateSdSnapLineDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, mpView) );
 
         if ( bLineExist )
         {
