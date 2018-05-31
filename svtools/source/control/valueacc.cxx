@@ -1373,18 +1373,15 @@ awt::Point SAL_CALL SvtValueItemAcc::getLocation()
 awt::Point SAL_CALL SvtValueItemAcc::getLocationOnScreen()
 {
     const SolarMutexGuard aSolarGuard;
-    uno::Reference<accessibility::XAccessible> xParent(getAccessibleParent());
     awt::Point          aRet;
 
-    if (mpParent && xParent)
+    if( mpParent )
     {
-        uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent->getAccessibleContext());
-        uno::Reference<accessibility::XAccessibleComponent> xParentComponent(xParentContext, css::uno::UNO_QUERY_THROW);
-        awt::Point aParentScreenLoc(xParentComponent->getLocationOnScreen());
-        const Point aOwnRelativeLoc = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
+        const Point aPos = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
+        const Point aScreenPos( mpParent->mrParent.GetDrawingArea()->get_accessible_location() );
 
-        aRet.X = aParentScreenLoc.X + aOwnRelativeLoc.X();
-        aRet.X = aParentScreenLoc.Y + aOwnRelativeLoc.Y();
+        aRet.X = aPos.X() + aScreenPos.X();
+        aRet.Y = aPos.Y() + aScreenPos.Y();
     }
 
     return aRet;
