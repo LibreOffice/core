@@ -87,7 +87,7 @@ public:
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
 
-    virtual void InitSvpSalGraphics( SvpSalGraphics* pSvpSalGraphics );
+    virtual void InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics);
     virtual SalGraphics* AcquireGraphics() override;
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 

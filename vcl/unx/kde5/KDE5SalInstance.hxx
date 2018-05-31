@@ -29,13 +29,12 @@ class KDE5SalInstance : public Qt5Instance
 {
 public:
     explicit KDE5SalInstance(SalYieldMutex* pMutex);
-    virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
+    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle);
 
     virtual bool hasNativeFileSelection() const override { return true; }
 
-    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
-        createFilePicker( const css::uno::Reference<
-                              css::uno::XComponentContext >& ) override;
+    virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>
+    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 
     virtual bool IsMainThread() const override;
 };

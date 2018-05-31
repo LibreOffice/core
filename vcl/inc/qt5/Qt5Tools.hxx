@@ -58,7 +58,7 @@ inline Size toSize(const QSize& rSize) { return Size(rSize.width(), rSize.height
 
 inline QColor toQColor(const Color& rColor)
 {
-    return QColor( rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(), rColor.GetTransparency() );
+    return QColor(rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(), rColor.GetTransparency());
 }
 
 static constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
