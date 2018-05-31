@@ -88,8 +88,8 @@ void SwEditShell::StartAllAction()
 {
     for(SwViewShell& rCurrentShell : GetRingContainer())
     {
-        if( dynamic_cast<const SwEditShell *>(&rCurrentShell) != nullptr )
-            static_cast<SwEditShell*>(&rCurrentShell)->StartAction();
+        if (SwEditShell* pEditShell = dynamic_cast<SwEditShell*>(&rCurrentShell))
+            pEditShell->StartAction();
         else
             rCurrentShell.StartAction();
     }
