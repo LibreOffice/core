@@ -133,7 +133,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
             }
             else
             {
-                const long distRight(rRect.Right() - aNewPos.X() + aVisAreaSize.Width());
+                const long distRight(rRect.Right() - aNewPos.X() - aVisAreaSize.Width());
 
                 if(distRight > 0)
                 {
@@ -178,7 +178,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
             }
             else
             {
-                const long distBottom(rRect.Bottom() - aNewPos.Y() + aVisAreaSize.Height());
+                const long distBottom(rRect.Bottom() - aNewPos.Y() - aVisAreaSize.Height());
 
                 if(distBottom > 0)
                 {
