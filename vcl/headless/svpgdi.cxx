@@ -489,12 +489,12 @@ bool SvpSalGraphics::drawTransformedBitmap(
     return true;
 }
 
-void SvpSalGraphics::clipRegion(cairo_t* cr)
+void SvpSalGraphics::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 {
     RectangleVector aRectangles;
-    if (!m_aClipRegion.IsEmpty())
+    if (!rClipRegion.IsEmpty())
     {
-        m_aClipRegion.GetRegionRectangles(aRectangles);
+        rClipRegion.GetRegionRectangles(aRectangles);
     }
     if (!aRectangles.empty())
     {
@@ -504,6 +504,11 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
         }
         cairo_clip(cr);
     }
+}
+
+void SvpSalGraphics::clipRegion(cairo_t* cr)
+{
+    SvpSalGraphics::clipRegion(cr, m_aClipRegion);
 }
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)

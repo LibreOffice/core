@@ -690,20 +690,7 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
 #if ENABLE_CAIRO_CANVAS
 void X11SalGraphics::clipRegion(cairo_t* cr)
 {
-    if(!maClipRegion.IsEmpty())
-    {
-        RectangleVector aRectangles;
-        maClipRegion.GetRegionRectangles(aRectangles);
-
-        if (!aRectangles.empty())
-        {
-            for (auto const& rectangle : aRectangles)
-            {
-                cairo_rectangle(cr, rectangle.Left(), rectangle.Top(), rectangle.GetWidth(), rectangle.GetHeight());
-            }
-            cairo_clip(cr);
-        }
-    }
+    SvpSalGraphics::clipRegion(cr, maClipRegion);
 }
 #endif // ENABLE_CAIRO_CANVAS
 
