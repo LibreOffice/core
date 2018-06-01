@@ -193,12 +193,19 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
 {
-    // This was 2096, the horizontal positioning of the star shape affected the
-    // positioning of the triangle one, so the triangle was outside the page
-    // frame.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
-                         getProperty<sal_Int32>(getShapeByName("triangle"),
-                                                "HoriOrientPosition"));
+    // The horizontal positioning of the star shape affected the positioning of
+    // the triangle one, so the triangle was outside the page frame.
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nPageLeft = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "left").toInt32();
+    sal_Int32 nPageWidth = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "width").toInt32();
+    sal_Int32 nShapeLeft
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "left")
+              .toInt32();
+    sal_Int32 nShapeWidth
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "width")
+              .toInt32();
+    // Make sure the second triangle shape is within the page bounds (with ~1px tolerance).
+    CPPUNIT_ASSERT_GREATEREQUAL(nShapeLeft + nShapeWidth, nPageLeft + nPageWidth + 21);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGraphicObjectFliph, "graphic-object-fliph.docx")

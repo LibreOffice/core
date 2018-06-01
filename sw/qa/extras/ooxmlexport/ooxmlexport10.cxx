@@ -155,8 +155,8 @@ DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
     // Check position, it was 0. This is a shape, so use getPosition(), not a property.
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(671830), xShape->getPosition().X);
 
-    // Left margin was 0, instead of 114300 EMU's.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, "LeftMargin"));
+    // Left margin should be 0, as margins are not relevant for <wp:wrapNone/>.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "LeftMargin"));
     // Wrap type was PARALLEL.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(xShape, "Surround"));
     // Confirm that the deprecated (incorrectly spelled) _THROUGHT also matches
@@ -181,8 +181,20 @@ DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This was a com.sun.star.drawing.CustomShape, due to lack of handling of groupshapes inside groupshapes.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
-    // This was text::RelOrientation::PAGE_FRAME, effectively placing the group shape on the left side of the page instead of the right one.
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_RIGHT, getProperty<sal_Int16>(xGroup, "HoriOrientRelation"));
+
+    // This failed, the right edge of the shape was outside the page
+    // boundaries.
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nPageLeft = getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "left").toInt32();
+    sal_Int32 nPageWidth = getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "width").toInt32();
+    sal_Int32 nShapeLeft
+        = getXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/SwAnchoredDrawObject/bounds", "left")
+              .toInt32();
+    sal_Int32 nShapeWidth
+        = getXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/SwAnchoredDrawObject/bounds", "width")
+              .toInt32();
+    // Make sure the shape is within the page bounds.
+    CPPUNIT_ASSERT_GREATEREQUAL(nShapeLeft + nShapeWidth, nPageLeft + nPageWidth);
 }
 
 DECLARE_OOXMLEXPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")

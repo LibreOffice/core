@@ -1036,15 +1036,6 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                     m_pImpl->nHoriRelation = pHandler->relation();
                     m_pImpl->nHoriOrient = pHandler->orientation();
                     m_pImpl->nLeftPosition = pHandler->position();
-                    if (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME && m_pImpl->nHoriOrient == text::HoriOrientation::RIGHT)
-                    {
-                        // If the shape is relative from page and aligned to
-                        // right, then set the relation to right and clear the
-                        // orientation, that provides the same visual result as
-                        // Word.
-                        m_pImpl->nHoriRelation = text::RelOrientation::PAGE_RIGHT;
-                        m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
-                    }
                 }
             }
         }
@@ -1090,6 +1081,13 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
             //depending on the behindDoc attribute text wraps through behind or in front of the object
             m_pImpl->nWrap = text::WrapTextMode_THROUGH;
+
+            // Wrap though means the margins defined earlier should not be
+            // respected.
+            m_pImpl->nLeftMargin = 0;
+            m_pImpl->nTopMargin = 0;
+            m_pImpl->nRightMargin = 0;
+            m_pImpl->nBottomMargin = 0;
         break;
         case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
             m_pImpl->nWrap = text::WrapTextMode_NONE;
