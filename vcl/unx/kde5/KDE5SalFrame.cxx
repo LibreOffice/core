@@ -39,7 +39,7 @@
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 
-#include "unx/fontmanager.hxx"
+#include <unx/fontmanager.hxx>
 
 #include <svdata.hxx>
 
