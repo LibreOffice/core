@@ -72,7 +72,6 @@ public:
     sal_uInt16 mnId; // Item ID
     MenuItemType mnType; // Item type
     bool mbVisible; // Item visibility.
-    Menu* mpVCLMenu;
     Qt5Menu* mpParentMenu; // The menu into which this menu item is inserted
     Qt5Menu* mpSubMenu; // Submenu of this item (if defined)
 };
