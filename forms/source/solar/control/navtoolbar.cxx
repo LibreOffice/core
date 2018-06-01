@@ -345,8 +345,7 @@ namespace frm
         const ToolBox::ImplToolItems::size_type nItemCount = m_pToolbar->GetItemCount();
 
         // collect the FormFeatures in the toolbar
-        typedef ::std::vector< sal_Int16 >  FormFeatures;
-        FormFeatures aFormFeatures;
+        std::vector<sal_Int16> aFormFeatures;
         aFormFeatures.reserve( nItemCount );
 
         for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )

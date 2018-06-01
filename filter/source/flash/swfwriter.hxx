@@ -381,8 +381,7 @@ private:
     /** holds the information of the objects defined in the movie stream
         while executing defineShape
     */
-    typedef std::vector<sal_uInt16> CharacterIdVector;
-    CharacterIdVector       maShapeIds;
+    std::vector<sal_uInt16> maShapeIds;
 
     std::unique_ptr<Tag> mpTag;
     std::unique_ptr<Sprite> mpSprite;

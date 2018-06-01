@@ -93,8 +93,7 @@ namespace dbaccess
         // of NULLness of key & foreign columns;
         // each subclause is either "colName = ?" or "colName IS NULL"
         // (we avoid the standard "colName IS NOT DISTINCT FROM ?" because it is not widely supported)
-        typedef std::vector< bool > FilterColumnsNULL_t;
-        typedef std::map< FilterColumnsNULL_t,
+        typedef std::map< std::vector<bool>,
                             css::uno::Reference< css::sdbc::XPreparedStatement > >
                 vStatements_t;
         vStatements_t                                           m_vStatements;
