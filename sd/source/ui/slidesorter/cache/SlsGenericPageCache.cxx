@@ -102,13 +102,13 @@ void GenericPageCache::ChangePreviewSize (
     }
 }
 
-Bitmap GenericPageCache::GetPreviewBitmap (
+BitmapEx GenericPageCache::GetPreviewBitmap (
     const CacheKey aKey,
     const bool bResize)
 {
     assert(aKey != nullptr);
 
-    Bitmap aPreview;
+    BitmapEx aPreview;
     bool bMayBeUpToDate = true;
     ProvideCacheAndProcessor();
     const SdrPage* pPage = mpCacheContext->GetPage(aKey);
@@ -140,21 +140,21 @@ Bitmap GenericPageCache::GetPreviewBitmap (
     return aPreview;
 }
 
-Bitmap GenericPageCache::GetMarkedPreviewBitmap (
+BitmapEx GenericPageCache::GetMarkedPreviewBitmap (
     const CacheKey aKey)
 {
     assert(aKey != nullptr);
 
     ProvideCacheAndProcessor();
     const SdrPage* pPage = mpCacheContext->GetPage(aKey);
-    Bitmap aMarkedPreview (mpBitmapCache->GetMarkedBitmap(pPage));
+    BitmapEx aMarkedPreview (mpBitmapCache->GetMarkedBitmap(pPage));
 
     return aMarkedPreview;
 }
 
 void GenericPageCache::SetMarkedPreviewBitmap (
     const CacheKey aKey,
-    const Bitmap& rMarkedBitmap)
+    const BitmapEx& rMarkedBitmap)
 {
     assert(aKey != nullptr);
 
@@ -179,7 +179,7 @@ void GenericPageCache::RequestPreviewBitmap (
         bIsUpToDate = mpBitmapCache->BitmapIsUpToDate (pPage);
     if (bIsUpToDate)
     {
-        const Bitmap aPreview (mpBitmapCache->GetBitmap(pPage));
+        const BitmapEx aPreview (mpBitmapCache->GetBitmap(pPage));
         if (aPreview.IsEmpty() || aPreview.GetSizePixel()!=maPreviewSize)
               bIsUpToDate = false;
     }

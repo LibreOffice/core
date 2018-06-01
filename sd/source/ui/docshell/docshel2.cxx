@@ -262,7 +262,7 @@ BitmapEx DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 
     pVDev->SetMapMode( MapMode() );
 
-    BitmapEx aPreview( pVDev->GetBitmap( aNullPt, pVDev->GetOutputSizePixel() ) );
+    BitmapEx aPreview( pVDev->GetBitmapEx( aNullPt, pVDev->GetOutputSizePixel() ) );
 
     DBG_ASSERT(!!aPreview, "Preview-Bitmap could not be generated");
 

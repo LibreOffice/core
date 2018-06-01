@@ -51,7 +51,7 @@ public:
     // CacheContext
     virtual void NotifyPreviewCreation (
         CacheKey aKey,
-        const Bitmap& rPreview) override;
+        const BitmapEx& rPreview) override;
     virtual bool IsIdle() override;
     virtual bool IsVisible (CacheKey aKey) override;
     virtual const SdrPage* GetPage (CacheKey aKey) override;
@@ -247,7 +247,7 @@ void PresenterPreviewCache::PresenterCacheContext::RemovePreviewCreationNotifyLi
 
 void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
     CacheKey aKey,
-    const Bitmap&)
+    const BitmapEx&)
 {
     if ( ! mxSlides.is())
         return;

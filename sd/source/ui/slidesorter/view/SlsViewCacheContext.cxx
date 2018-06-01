@@ -47,7 +47,7 @@ ViewCacheContext::~ViewCacheContext()
 
 void ViewCacheContext::NotifyPreviewCreation (
     cache::CacheKey aKey,
-    const Bitmap&)
+    const BitmapEx&)
 {
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
     if (pDescriptor.get() != nullptr)

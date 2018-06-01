@@ -542,7 +542,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
                 : sd::OUTPUT_DRAWMODE_COLOR );
             pVD->Erase();
             pObject->SingleObjectPainter( *pVD.get() );
-            aBmp = BitmapEx( pVD->GetBitmap( aObjRect.TopLeft(), aObjSize ) );
+            aBmp = pVD->GetBitmapEx( aObjRect.TopLeft(), aObjSize );
         }
 
         m_pCtlDisplay->SetBitmapEx(&aBmp);

@@ -77,14 +77,14 @@ public:
             Returns a bitmap that is either empty, contains a scaled (up or
             down) version or is the requested bitmap.
     */
-    Bitmap GetPreviewBitmap (
+    BitmapEx GetPreviewBitmap (
         const CacheKey aKey,
         const bool bResize);
-    Bitmap GetMarkedPreviewBitmap (
+    BitmapEx GetMarkedPreviewBitmap (
         const CacheKey aKey);
     void SetMarkedPreviewBitmap (
         const CacheKey aKey,
-        const Bitmap& rMarkedBitmap);
+        const BitmapEx& rMarkedBitmap);
 
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this
