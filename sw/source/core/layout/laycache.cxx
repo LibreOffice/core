@@ -630,9 +630,8 @@ sal_uLong SwLayHelper::CalcPageCount()
 bool SwLayHelper::CheckInsertPage()
 {
     bool bEnd = nullptr == mrpPage->GetNext();
-    const SwAttrSet* pAttr = mrpFrame->GetAttrSet();
-    const SvxFormatBreakItem& rBrk = pAttr->GetBreak();
-    const SwFormatPageDesc& rDesc = pAttr->GetPageDesc();
+    const SvxFormatBreakItem& rBrk = mrpFrame->GetBreakItem();
+    const SwFormatPageDesc& rDesc = mrpFrame->GetPageDescItem();
     // #118195# Do not evaluate page description if frame
     // is a follow frame!
     const SwPageDesc* pDesc = mrpFrame->IsFlowFrame() &&
