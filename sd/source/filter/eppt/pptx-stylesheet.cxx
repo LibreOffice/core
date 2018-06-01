@@ -22,6 +22,7 @@
 #include "text.hxx"
 #include <tools/color.hxx>
 #include <editeng/svxenum.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
 

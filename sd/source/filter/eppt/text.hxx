@@ -21,9 +21,7 @@
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_TEXT_HXX
 
 #include "epptbase.hxx"
-#include "epptdef.hxx"
 
-#include <rtl/textenc.h>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <editeng/svxenum.hxx>

@@ -27,18 +27,26 @@
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <vcl/vclptr.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
 
 #include "grouptable.hxx"
+
+namespace com { namespace sun { namespace star { namespace task { class XStatusIndicator; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XMasterPagesSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPages; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPagesSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+
+class VirtualDevice;
 
 // PLACEMENT_ID
 enum class EppLayout

@@ -22,8 +22,6 @@
 
 #include <com/sun/star/uno/Any.h>
 
-#include <oox/ppt/pptfilterhelpers.hxx>
-
 #include <map>
 #include <sal/types.h>
 

@@ -32,6 +32,7 @@
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XAnimateSet.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
@@ -55,6 +56,7 @@
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <oox/helper/addtosequence.hxx>
+#include <oox/ppt/pptfilterhelpers.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
@@ -62,6 +64,8 @@
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <animations.hxx>
+#include "pptanimations.hxx"
 #include "pptinanimations.hxx"
 #include "pptatom.hxx"
 #include "pptin.hxx"
