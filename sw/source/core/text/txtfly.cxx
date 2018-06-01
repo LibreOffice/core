@@ -327,12 +327,12 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
 SwTextFly::SwTextFly()
     : pPage(nullptr)
     , mpCurrAnchoredObj(nullptr)
-    , pCurrFrame(nullptr)
-    , pMaster(nullptr)
+    , m_pCurrFrame(nullptr)
+    , m_pMaster(nullptr)
     , mpAnchoredObjList(nullptr)
     , nMinBottom(0)
     , nNextTop(0)
-    , nIndex(0)
+    , m_nCurrFrameNodeIndex(0)
     , bOn(false)
     , bTopRule(false)
     , mbIgnoreCurrentFrame(false)
@@ -351,8 +351,8 @@ SwTextFly::SwTextFly( const SwTextFly& rTextFly )
 {
     pPage = rTextFly.pPage;
     mpCurrAnchoredObj = rTextFly.mpCurrAnchoredObj;
-    pCurrFrame = rTextFly.pCurrFrame;
-    pMaster = rTextFly.pMaster;
+    m_pCurrFrame = rTextFly.m_pCurrFrame;
+    m_pMaster = rTextFly.m_pMaster;
     if( rTextFly.mpAnchoredObjList )
     {
         mpAnchoredObjList.reset( new SwAnchoredObjList( *(rTextFly.mpAnchoredObjList) ) );
@@ -362,7 +362,7 @@ SwTextFly::SwTextFly( const SwTextFly& rTextFly )
     bTopRule = rTextFly.bTopRule;
     nMinBottom = rTextFly.nMinBottom;
     nNextTop = rTextFly.nNextTop;
-    nIndex = rTextFly.nIndex;
+    m_nCurrFrameNodeIndex = rTextFly.m_nCurrFrameNodeIndex;
     mbIgnoreCurrentFrame = rTextFly.mbIgnoreCurrentFrame;
     mbIgnoreContour = rTextFly.mbIgnoreContour;
     mbIgnoreObjsInHeaderFooter = rTextFly.mbIgnoreObjsInHeaderFooter;
@@ -381,8 +381,8 @@ void SwTextFly::CtorInitTextFly( const SwTextFrame *pFrame )
     const SwFlyFrame* pTmp = pFrame->FindFlyFrame();
     // #i68520#
     mpCurrAnchoredObj = pTmp;
-    pCurrFrame = pFrame;
-    pMaster = pCurrFrame->IsFollow() ? nullptr : pCurrFrame;
+    m_pCurrFrame = pFrame;
+    m_pMaster = m_pCurrFrame->IsFollow() ? nullptr : m_pCurrFrame;
     // If we're not overlapped by a frame or if a FlyCollection does not exist
     // at all, we switch off forever.
     // It could be, however, that a line is added while formatting, that
@@ -392,7 +392,7 @@ void SwTextFly::CtorInitTextFly( const SwTextFrame *pFrame )
     bTopRule = true;
     nMinBottom = 0;
     nNextTop = 0;
-    nIndex = ULONG_MAX;
+    m_nCurrFrameNodeIndex = ULONG_MAX;
 }
 
 SwRect SwTextFly::GetFrame_( const SwRect &rRect ) const
@@ -400,7 +400,7 @@ SwRect SwTextFly::GetFrame_( const SwRect &rRect ) const
     SwRect aRet;
     if( ForEach( rRect, &aRet, true ) )
     {
-        SwRectFnSet aRectFnSet(pCurrFrame);
+        SwRectFnSet aRectFnSet(m_pCurrFrame);
         aRectFnSet.SetTop( aRet, aRectFnSet.GetTop(rRect) );
 
         // Do not always adapt the bottom
@@ -415,11 +415,11 @@ SwRect SwTextFly::GetFrame_( const SwRect &rRect ) const
 
 bool SwTextFly::IsAnyFrame() const
 {
-    SwSwapIfSwapped swap(const_cast<SwTextFrame *>(pCurrFrame));
+    SwSwapIfSwapped swap(const_cast<SwTextFrame *>(m_pCurrFrame));
 
     OSL_ENSURE( bOn, "IsAnyFrame: Why?" );
-    SwRect aRect( pCurrFrame->getFrameArea().Pos() + pCurrFrame->getFramePrintArea().Pos(),
-        pCurrFrame->getFramePrintArea().SSize() );
+    SwRect aRect(m_pCurrFrame->getFrameArea().Pos() + m_pCurrFrame->getFramePrintArea().Pos(),
+        m_pCurrFrame->getFramePrintArea().SSize());
 
     return ForEach( aRect, nullptr, false );
 }
@@ -430,8 +430,10 @@ bool SwTextFly::IsAnyObj( const SwRect &rRect ) const
 
     SwRect aRect( rRect );
     if ( aRect.IsEmpty() )
-        aRect = SwRect( pCurrFrame->getFrameArea().Pos() + pCurrFrame->getFramePrintArea().Pos(),
-                        pCurrFrame->getFramePrintArea().SSize() );
+    {
+        aRect = SwRect(m_pCurrFrame->getFrameArea().Pos() + m_pCurrFrame->getFramePrintArea().Pos(),
+                        m_pCurrFrame->getFramePrintArea().SSize());
+    }
 
     const SwSortedObjs *pSorted = pPage->GetSortedObjs();
     if( pSorted ) // bOn actually makes sure that we have objects on the side,
@@ -455,12 +457,12 @@ bool SwTextFly::IsAnyObj( const SwRect &rRect ) const
     return false;
 }
 
-const SwContentFrame* SwTextFly::GetMaster_()
+const SwTextFrame* SwTextFly::GetMaster_()
 {
-    pMaster = pCurrFrame;
-    while( pMaster && pMaster->IsFollow() )
-        pMaster = static_cast<SwContentFrame*>(pMaster->FindMaster());
-    return pMaster;
+    m_pMaster = m_pCurrFrame;
+    while (m_pMaster && m_pMaster->IsFollow())
+        m_pMaster = m_pMaster->FindMaster();
+    return m_pMaster;
 }
 
 void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
@@ -650,7 +652,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                        const bool bInFooterOrHeader )
 {
     // #i68520#
-    // <mpCurrAnchoredObj> is set, if <pCurrFrame> is inside a fly frame
+    // <mpCurrAnchoredObj> is set, if <m_pCurrFrame> is inside a fly frame
     if( _pAnchoredObj != mpCurrAnchoredObj )
     {
         // #i26945#
@@ -773,10 +775,10 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // their influence ends at the borders of the FlyCnt!
             // If we are currently formatting the text of the FlyCnt, then
             // it has to get out of the way of the Frame anchored at paragraph!
-            // pCurrFrame is the anchor of pNew?
+            // m_pCurrFrame is the anchor of pNew?
             // #i26945#
             const SwFrame* pTmp = _pAnchoredObj->GetAnchorFrame();
-            if( pTmp == pCurrFrame )
+            if (pTmp == m_pCurrFrame)
                 return true;
             if( pTmp->IsTextFrame() && ( pTmp->IsInFly() || pTmp->IsInFootnote() ) )
             {
@@ -803,22 +805,22 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // object position and former text wrapping is applied.
             // This condition is typically for documents imported from the
             // OpenOffice.org file format.
-            const IDocumentSettingAccess* pIDSA = &pCurrFrame->GetDoc().getIDocumentSettingAccess();
+            const IDocumentSettingAccess* pIDSA = &m_pCurrFrame->GetDoc().getIDocumentSettingAccess();
             if ( (  pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ||
                    !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ) &&
-                 ::FindContext( pTmp, SwFrameType::None ) == ::FindContext( pCurrFrame, SwFrameType::None ) )
+                 ::FindContext( pTmp, SwFrameType::None ) == ::FindContext(m_pCurrFrame, SwFrameType::None))
             {
                 return true;
             }
 
             const SwFrame* pHeader = nullptr;
-            if ( pCurrFrame->GetNext() != pTmp &&
-                 ( IsFrameInSameContext( pTmp, pCurrFrame ) ||
+            if (m_pCurrFrame->GetNext() != pTmp &&
+                 (IsFrameInSameContext( pTmp, m_pCurrFrame ) ||
                    // #i13832#, #i24135# wrap around objects in page header
                    ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
                      nullptr != ( pHeader = pTmp->FindFooterOrHeader() ) &&
                      !pHeader->IsFooterFrame() &&
-                     pCurrFrame->IsInDocBody() ) ) )
+                     m_pCurrFrame->IsInDocBody())))
             {
                 if( pHeader || RndStdIds::FLY_AT_FLY == rNewA.GetAnchorId() )
                     return true;
@@ -831,10 +833,10 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 // get out of its way.
                 // If possible determine Index via SwFormatAnchor because
                 // otherwise it's quite expensive.
-                if( ULONG_MAX == nIndex )
-                    nIndex = pCurrFrame->GetNode()->GetIndex();
+                if (ULONG_MAX == m_nCurrFrameNodeIndex)
+                    m_nCurrFrameNodeIndex = m_pCurrFrame->GetNode()->GetIndex();
 
-                if( nIndex >= nTmpIndex )
+                if (nTmpIndex < m_nCurrFrameNodeIndex)
                     return true;
             }
         }
@@ -845,21 +847,21 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 // #i68520#
 SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
 {
-    OSL_ENSURE( pCurrFrame, "InitFlyList: No Frame, no FlyList" );
+    OSL_ENSURE( m_pCurrFrame, "InitFlyList: No Frame, no FlyList" );
     // #i68520#
     OSL_ENSURE( !mpAnchoredObjList, "InitFlyList: FlyList already initialized" );
 
-    SwSwapIfSwapped swap(const_cast<SwTextFrame *>(pCurrFrame));
+    SwSwapIfSwapped swap(const_cast<SwTextFrame *>(m_pCurrFrame));
 
     const SwSortedObjs *pSorted = pPage->GetSortedObjs();
     const size_t nCount = pSorted ? pSorted->size() : 0;
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
-    const bool bFooterHeader = nullptr != pCurrFrame->FindFooterOrHeader();
-    const IDocumentSettingAccess* pIDSA = &pCurrFrame->GetDoc().getIDocumentSettingAccess();
+    const bool bFooterHeader = nullptr != m_pCurrFrame->FindFooterOrHeader();
+    const IDocumentSettingAccess* pIDSA = &m_pCurrFrame->GetDoc().getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
     const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
-                                    ( !pCurrFrame->IsInFootnote() && !bFooterHeader ) );
+                                    (!m_pCurrFrame->IsInFootnote() && !bFooterHeader));
 
     bOn = false;
 
@@ -873,21 +875,21 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         SwRect aRect;
         if ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) )
         {
-            aRect = pCurrFrame->getFramePrintArea();
-            aRect += pCurrFrame->getFrameArea().Pos();
+            aRect = m_pCurrFrame->getFramePrintArea();
+            aRect += m_pCurrFrame->getFrameArea().Pos();
         }
         else
         {
-            aRect = pCurrFrame->getFrameArea();
+            aRect = m_pCurrFrame->getFrameArea();
         }
         // Make ourselves a little smaller than we are,
         // so that 1-Twip-overlappings are ignored (#49532)
-        SwRectFnSet aRectFnSet(pCurrFrame);
+        SwRectFnSet aRectFnSet(m_pCurrFrame);
         const long nRight = aRectFnSet.GetRight(aRect) - 1;
         const long nLeft = aRectFnSet.GetLeft(aRect) + 1;
-        const bool bR2L = pCurrFrame->IsRightToLeft();
+        const bool bR2L = m_pCurrFrame->IsRightToLeft();
 
-        const IDocumentDrawModelAccess& rIDDMA = pCurrFrame->GetDoc().getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess& rIDDMA = m_pCurrFrame->GetDoc().getIDocumentDrawModelAccess();
 
         for( size_t i = 0; i < nCount; ++i )
         {
@@ -924,7 +926,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
             // #i26945# - pass <pAnchoredObj> to method
             // <GetTop(..)> instead of only the <SdrObject> instance of the
             // anchored object
-            if ( GetTop( pAnchoredObj, pCurrFrame->IsInFootnote(), bFooterHeader ) )
+            if (GetTop(pAnchoredObj, m_pCurrFrame->IsInFootnote(), bFooterHeader))
             {
                 // OD 11.03.2003 #107862# - adjust insert position:
                 // overlapping objects should be sorted from left to right and
@@ -960,7 +962,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         }
         if( nMinBottom )
         {
-            SwTwips nMax = aRectFnSet.GetPrtBottom(*pCurrFrame->GetUpper());
+            SwTwips nMax = aRectFnSet.GetPrtBottom(*m_pCurrFrame->GetUpper());
             if( aRectFnSet.YDiff( nMinBottom, nMax ) > 0 )
                 nMinBottom = nMax;
         }
@@ -984,7 +986,7 @@ SwTwips SwTextFly::CalcMinBottom() const
     const size_t nCount = pDrawObj ? pDrawObj->size() : 0;
     if( nCount )
     {
-        SwTwips nEndOfFrame = pCurrFrame->getFrameArea().Bottom();
+        SwTwips nEndOfFrame = m_pCurrFrame->getFrameArea().Bottom();
         for( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pDrawObj)[ i ];
@@ -1001,8 +1003,8 @@ SwTwips SwTextFly::CalcMinBottom() const
                 }
             }
         }
-        SwTwips nMax = pCurrFrame->GetUpper()->getFrameArea().Top() +
-                       pCurrFrame->GetUpper()->getFramePrintArea().Bottom();
+        SwTwips nMax = m_pCurrFrame->GetUpper()->getFrameArea().Top() +
+                       m_pCurrFrame->GetUpper()->getFramePrintArea().Bottom();
         if( nRet > nMax )
             nRet = nMax;
     }
@@ -1011,7 +1013,7 @@ SwTwips SwTextFly::CalcMinBottom() const
 
 bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 {
-    SwSwapIfSwapped swap(const_cast<SwTextFrame *>(pCurrFrame));
+    SwSwapIfSwapped swap(const_cast<SwTextFrame *>(m_pCurrFrame));
 
     bool bRet = false;
     // #i68520#
@@ -1026,7 +1028,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
             SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
 
             // Optimization
-            SwRectFnSet aRectFnSet(pCurrFrame);
+            SwRectFnSet aRectFnSet(m_pCurrFrame);
             if( aRectFnSet.GetLeft(aRect) > aRectFnSet.GetRight(rRect) )
                 break;
             // #i68520#
@@ -1052,9 +1054,9 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                 }
 
                 // #i58642#
-                // Compare <GetMaster()> instead of <pCurrFrame> with the anchor
-                // frame of the anchored object, because a follow frame have
-                // to ignore the anchored objects of its master frame.
+                // Compare <GetMaster()> instead of <m_pCurrFrame> with the
+                // anchor frame of the anchored object, because a follow frame
+                // has to ignore the anchored objects of its master frame.
                 // Note: Anchored objects are always registered at the master
                 //       frame, exception are as-character anchored objects,
                 //       but these aren't handled here.
@@ -1070,10 +1072,10 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                     if( aFly.IsEmpty() || !aFly.IsOver( rRect ) )
                         continue;
                     if( !bRet || (
-                        ( !pCurrFrame->IsRightToLeft() &&
+                        (!m_pCurrFrame->IsRightToLeft() &&
                           ( aRectFnSet.GetLeft(aFly) <
                             aRectFnSet.GetLeft(*pRect) ) ) ||
-                        ( pCurrFrame->IsRightToLeft() &&
+                        (m_pCurrFrame->IsRightToLeft() &&
                           ( aRectFnSet.GetRight(aFly) >
                             aRectFnSet.GetRight(*pRect) ) ) ) )
                         *pRect = aFly;
@@ -1108,11 +1110,11 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
                                 const SwRect &rLine ) const
 {
     // Usually the right margin is the right margin of the Printarea
-    OSL_ENSURE( ! pCurrFrame->IsVertical() || ! pCurrFrame->IsSwapped(),
+    OSL_ENSURE( !m_pCurrFrame->IsVertical() || !m_pCurrFrame->IsSwapped(),
             "SwTextFly::CalcRightMargin with swapped frame" );
-    SwRectFnSet aRectFnSet(pCurrFrame);
+    SwRectFnSet aRectFnSet(m_pCurrFrame);
     // #118796# - correct determination of right of printing area
-    SwTwips nRight = aRectFnSet.GetPrtRight(*pCurrFrame);
+    SwTwips nRight = aRectFnSet.GetPrtRight(*m_pCurrFrame);
     SwTwips nFlyRight = aRectFnSet.GetRight(rFly);
     SwRect aLine( rLine );
     aRectFnSet.SetRight( aLine, nRight );
@@ -1147,7 +1149,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
             continue;
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
-                ( pNext, aLine, pCurrFrame, nFlyRight, true ) );
+                ( pNext, aLine, m_pCurrFrame, nFlyRight, true ) );
         SwTwips nTmpRight = aRectFnSet.GetRight(aTmp);
 
         // optimization:
@@ -1196,11 +1198,11 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
                                SwAnchoredObjList::size_type nFlyPos,
                                const SwRect &rLine ) const
 {
-    OSL_ENSURE( ! pCurrFrame->IsVertical() || ! pCurrFrame->IsSwapped(),
+    OSL_ENSURE( !m_pCurrFrame->IsVertical() || !m_pCurrFrame->IsSwapped(),
             "SwTextFly::CalcLeftMargin with swapped frame" );
-    SwRectFnSet aRectFnSet(pCurrFrame);
+    SwRectFnSet aRectFnSet(m_pCurrFrame);
     // #118796# - correct determination of left of printing area
-    SwTwips nLeft = aRectFnSet.GetPrtLeft(*pCurrFrame);
+    SwTwips nLeft = aRectFnSet.GetPrtLeft(*m_pCurrFrame);
     const SwTwips nFlyLeft = aRectFnSet.GetLeft(rFly);
 
     if( nLeft > nFlyLeft )
@@ -1239,7 +1241,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
             continue;
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
-                ( pNext, aLine, pCurrFrame, nFlyLeft, false ) );
+                (pNext, aLine, m_pCurrFrame, nFlyLeft, false) );
 
         if( aRectFnSet.GetLeft(aTmp) < nFlyLeft && aTmp.IsOver( aLine ) )
         {
@@ -1259,16 +1261,16 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
 SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
                             const SwRect &rLine ) const
 {
-    SwRectFnSet aRectFnSet(pCurrFrame);
+    SwRectFnSet aRectFnSet(m_pCurrFrame);
 
-    const long nXPos = pCurrFrame->IsRightToLeft() ?
+    const long nXPos = m_pCurrFrame->IsRightToLeft() ?
                        rLine.Right() :
                        aRectFnSet.GetLeft(rLine);
 
     SwRect aFly = mbIgnoreContour ?
                   pAnchoredObj->GetObjRectWithSpaces() :
-                  SwContourCache::CalcBoundRect( pAnchoredObj, rLine, pCurrFrame,
-                                                 nXPos, ! pCurrFrame->IsRightToLeft() );
+                  SwContourCache::CalcBoundRect(pAnchoredObj, rLine, m_pCurrFrame,
+                                                nXPos, !m_pCurrFrame->IsRightToLeft());
 
     if( !aFly.Width() )
         return aFly;
@@ -1343,7 +1345,7 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
         return eSurroundForTextWrap;
 
     // left is left and right is right
-    if ( pCurrFrame->IsRightToLeft() )
+    if (m_pCurrFrame->IsRightToLeft())
     {
         if ( css::text::WrapTextMode_LEFT == eSurroundForTextWrap )
             eSurroundForTextWrap = css::text::WrapTextMode_RIGHT;
@@ -1354,9 +1356,9 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
     // "ideal page wrap":
     if ( css::text::WrapTextMode_DYNAMIC == eSurroundForTextWrap )
     {
-        SwRectFnSet aRectFnSet(pCurrFrame);
-        const long nCurrLeft = aRectFnSet.GetPrtLeft(*pCurrFrame);
-        const long nCurrRight = aRectFnSet.GetPrtRight(*pCurrFrame);
+        SwRectFnSet aRectFnSet(m_pCurrFrame);
+        const long nCurrLeft = aRectFnSet.GetPrtLeft(*m_pCurrFrame);
+        const long nCurrRight = aRectFnSet.GetPrtRight(*m_pCurrFrame);
         const SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
         long nFlyLeft = aRectFnSet.GetLeft(aRect);
         long nFlyRight = aRectFnSet.GetRight(aRect);
@@ -1401,7 +1403,7 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
 bool SwTextFly::IsAnyFrame( const SwRect &rLine ) const
 {
 
-    SwSwapIfSwapped swap(const_cast<SwTextFrame *>(pCurrFrame));
+    SwSwapIfSwapped swap(const_cast<SwTextFrame *>(m_pCurrFrame));
 
     OSL_ENSURE( bOn, "IsAnyFrame: Why?" );
 
