@@ -26,6 +26,8 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
+#include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <pam.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
@@ -96,7 +98,10 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         GetDoc()->SetAttr( aNew, *const_cast<SwFormat*>(static_cast<SwFormat const *>(pFlow->FindTabFrame()->GetFormat())) );
     else
     {
-        SwPaM aPaM( *static_cast<const SwContentFrame*>(pFlow)->GetNode() );
+        assert(pFlow->IsContentFrame());
+        SwPaM aPaM( pFlow->IsTextFrame()
+            ? *static_cast<SwTextFrame const*>(pFlow)->GetTextNodeFirst() // first, for PAGEDESC
+            : *static_cast<const SwNoTextFrame*>(pFlow)->GetNode() );
         GetDoc()->getIDocumentContentOperations().InsertPoolItem( aPaM, aNew );
     }
     EndAllActionAndCall();
