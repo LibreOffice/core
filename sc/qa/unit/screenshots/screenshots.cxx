@@ -77,7 +77,6 @@ public:
 
     CPPUNIT_TEST_SUITE(ScScreenshotTest);
     CPPUNIT_TEST(testOpeningModalDialogs);
-    CPPUNIT_TEST(testMultiViewCopyPaste);
     CPPUNIT_TEST_SUITE_END();
 };
 
