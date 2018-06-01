@@ -1376,8 +1376,8 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
                 else
                     nRight = 0;
             }
-            const int textMin = GetMaster()->GetNode()
-                ->getIDocumentSettingAccess()->get(DocumentSettingId::SURROUND_TEXT_WRAP_SMALL )
+            const int textMin = GetMaster()->GetDoc()
+                .getIDocumentSettingAccess().get(DocumentSettingId::SURROUND_TEXT_WRAP_SMALL )
                 ? TEXT_MIN_SMALL : TEXT_MIN;
 
             // In case there is no space on either side, then css::text::WrapTextMode_PARALLEL

@@ -1368,7 +1368,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
         aSet.Put( *GetTextNodeForParaProps()->GetpSwAttrSet() );
         aSet.SetParent( pSet );
         pSet = &aSet;
-        pFnt = new SwFont( pSet, GetNode()->getIDocumentSettingAccess() );
+        pFnt = new SwFont( pSet, &GetDoc().getIDocumentSettingAccess() );
     }
     else
     {

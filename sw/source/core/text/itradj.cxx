@@ -19,6 +19,7 @@
 
 #include <vcl/outdev.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <doc.hxx>
 
 #include <frame.hxx>
 #include <paratr.hxx>
@@ -281,7 +282,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
     // #i49277#
     const bool bDoNotJustifyLinesWithManualBreak =
-                GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
+        GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
 
     SwLinePortion *pPos = pCurrent->GetPortion();
 
@@ -588,7 +589,7 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 
     // If we only have one line, the text portion is consecutive and we center, then ...
     bool bComplete = TextFrameIndex(0) == m_nStart;
-    const bool bTabCompat = GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
+    const bool bTabCompat = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT);
     bool bMultiTab = false;
 
     while( pPos )
