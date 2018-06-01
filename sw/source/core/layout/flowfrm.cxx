@@ -841,7 +841,7 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
     SwFlowFrame *pFlow = SwFlowFrame::CastFlowFrame( this );
     if ( !pFlow || !pFlow->IsFollow() )
     {
-        const SwFormatPageDesc &rFormatDesc = GetAttrSet()->GetPageDesc();
+        const SwFormatPageDesc &rFormatDesc = GetPageDescItem();
         pDesc = rFormatDesc.GetPageDesc();
         if( pDesc )
         {
@@ -870,7 +870,8 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
     if ( pNewFlow && pNewFlow->GetFrame().IsInTab() )
         pNewFlow = pNewFlow->GetFrame().FindTabFrame();
     const SwPageDesc *pNewDesc= ( pNewFlow && !pNewFlow->IsFollow() )
-            ? pNewFlow->GetFrame().GetAttrSet()->GetPageDesc().GetPageDesc() : nullptr;
+            ? pNewFlow->GetFrame().GetPageDescItem().GetPageDesc()
+            : nullptr;
 
     SAL_INFO( "sw.pageframe", "WrongPageDesc p: " << pNew << " phys: " << pNew->GetPhyPageNum() );
     SAL_INFO( "sw.pageframe", "WrongPageDesc " << pNew->GetPageDesc() << " " << pDesc );
@@ -1130,7 +1131,6 @@ bool SwFlowFrame::IsPageBreak( bool bAct ) const
         const SwViewShell *pSh = m_rThis.getRootFrame()->GetCurrShell();
         if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             return false;
-        const SwAttrSet *pSet = m_rThis.GetAttrSet();
 
         // Determine predecessor
         const SwFrame *pPrev = m_rThis.FindPrev();
@@ -1153,18 +1153,20 @@ bool SwFlowFrame::IsPageBreak( bool bAct ) const
             //for compatibility, also break at column break if no columns exist
             const IDocumentSettingAccess& rIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
             const bool bTreatSingleColumnBreakAsPageBreak = rIDSA.get(DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK);
-            const SvxBreak eBreak = pSet->GetBreak().GetBreak();
+            const SvxBreak eBreak = m_rThis.GetBreakItem().GetBreak();
             if ( eBreak == SvxBreak::PageBefore ||
                  eBreak == SvxBreak::PageBoth ||
                  ( bTreatSingleColumnBreakAsPageBreak && eBreak == SvxBreak::ColumnBefore && !m_rThis.FindColFrame() ))
                 return true;
             else
             {
-                const SvxBreak &ePrB = pPrev->GetAttrSet()->GetBreak().GetBreak();
+                const SvxBreak &ePrB = pPrev->GetBreakItem().GetBreak();
                 if ( ePrB == SvxBreak::PageAfter ||
                      ePrB == SvxBreak::PageBoth  ||
-                     pSet->GetPageDesc().GetPageDesc() )
+                    m_rThis.GetPageDescItem().GetPageDesc())
+                {
                     return true;
+                }
             }
         }
     }
@@ -1208,13 +1210,13 @@ bool SwFlowFrame::IsColBreak( bool bAct ) const
                         return false;
                 }
 
-                const SvxBreak eBreak = m_rThis.GetAttrSet()->GetBreak().GetBreak();
+                const SvxBreak eBreak = m_rThis.GetBreakItem().GetBreak();
                 if ( eBreak == SvxBreak::ColumnBefore ||
                      eBreak == SvxBreak::ColumnBoth )
                     return true;
                 else
                 {
-                    const SvxBreak &ePrB = pPrev->GetAttrSet()->GetBreak().GetBreak();
+                    const SvxBreak &ePrB = pPrev->GetBreakItem().GetBreak();
                     if ( ePrB == SvxBreak::ColumnAfter ||
                          ePrB == SvxBreak::ColumnBoth )
                         return true;
@@ -1998,7 +2000,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             // #i106452#
             // check page description not only in situation with sections.
             if ( !bSamePage &&
-                 ( m_rThis.GetAttrSet()->GetPageDesc().GetPageDesc() ||
+                 ( m_rThis.GetPageDescItem().GetPageDesc() ||
                    pOldPage->GetPageDesc()->GetFollow() != pNewPage->GetPageDesc() ) )
             {
                 SwFrame::CheckPageDescs( pNewPage, false );
@@ -2545,7 +2547,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                                             static_cast<SwPageFrame*>(pNewPage->GetNext());
                     SwFrame::CheckPageDescs( pStartPage, false);
                 }
-                else if ( m_rThis.GetAttrSet()->GetPageDesc().GetPageDesc() )
+                else if (m_rThis.GetPageDescItem().GetPageDesc())
                 {
                     // First page could get empty for example by disabling
                     // a section
