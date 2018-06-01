@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Graphics.hxx"
+#include <Qt5Graphics.hxx>
 
 bool Qt5Graphics::IsNativeControlSupported(ControlType /*nType*/, ControlPart /*nPart*/)
 {

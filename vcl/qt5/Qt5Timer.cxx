@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Timer.hxx"
+#include <Qt5Timer.hxx>
 #include <Qt5Timer.moc>
 
 #include <QtWidgets/QApplication>

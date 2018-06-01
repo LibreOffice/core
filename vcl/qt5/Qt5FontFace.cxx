@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5FontFace.hxx"
+#include <Qt5FontFace.hxx>
 #include "Qt5Font.hxx"
-#include "Qt5Tools.hxx"
+#include <Qt5Tools.hxx>
 
 #include <sft.hxx>
 #include <impfontcharmap.hxx>

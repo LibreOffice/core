@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5FilePicker.hxx"
+#include <Qt5FilePicker.hxx>
 #include <Qt5FilePicker.moc>
 
-#include "Qt5Frame.hxx"
-#include "Qt5Tools.hxx"
-#include "Qt5Widget.hxx"
+#include <Qt5Frame.hxx>
+#include <Qt5Tools.hxx>
+#include <Qt5Widget.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -65,7 +65,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-uno::Sequence<OUString> SAL_CALL FilePicker_getSupportedServiceNames()
+uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(3);
     aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
@@ -750,7 +750,7 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
 
 void SAL_CALL Qt5FilePicker::cancel() {}
 
-void SAL_CALL Qt5FilePicker::disposing(const lang::EventObject& rEvent)
+void Qt5FilePicker::disposing(const lang::EventObject& rEvent)
 {
     uno::Reference<XFilePickerListener> xFilePickerListener(rEvent.Source, uno::UNO_QUERY);
 

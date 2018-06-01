@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Instance.hxx"
+#include <Qt5Instance.hxx>
 #include <Qt5Instance.moc>
 
-#include "Qt5Bitmap.hxx"
-#include "Qt5Data.hxx"
-#include "Qt5FilePicker.hxx"
-#include "Qt5Frame.hxx"
-#include "Qt5Menu.hxx"
-#include "Qt5Object.hxx"
-#include "Qt5Timer.hxx"
-#include "Qt5VirtualDevice.hxx"
+#include <Qt5Bitmap.hxx>
+#include <Qt5Data.hxx>
+#include <Qt5FilePicker.hxx>
+#include <Qt5Frame.hxx>
+#include <Qt5Menu.hxx>
+#include <Qt5Object.hxx>
+#include <Qt5Timer.hxx>
+#include <Qt5VirtualDevice.hxx>
 
 #include <headless/svpvd.hxx>
 

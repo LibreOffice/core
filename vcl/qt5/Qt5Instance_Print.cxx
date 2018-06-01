@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Instance.hxx"
-#include "Qt5Printer.hxx"
+#include <Qt5Instance.hxx>
+#include <Qt5Printer.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Data.hxx"
+#include <Qt5Data.hxx>
 
 #include <QtGui/QCursor>
 #include <QtGui/QBitmap>

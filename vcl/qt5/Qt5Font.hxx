@@ -23,7 +23,7 @@
 
 #include <QtGui/QFont>
 
-#include "Qt5FontFace.hxx"
+#include <Qt5FontFace.hxx>
 
 class Qt5Font final : public QFont, public LogicalFontInstance
 {

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Graphics.hxx"
+#include <Qt5Graphics.hxx>
 
 #include "Qt5Font.hxx"
-#include "Qt5Frame.hxx"
-#include "Qt5Painter.hxx"
+#include <Qt5Frame.hxx>
+#include <Qt5Painter.hxx>
 
 #include <QtGui/QImage>
 #include <QtGui/QPainter>

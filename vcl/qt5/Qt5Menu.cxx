@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "Qt5Frame.hxx"
-#include "Qt5Menu.hxx"
+#include <Qt5Frame.hxx>
+#include <Qt5Menu.hxx>
 #include <Qt5Menu.moc>
 
 #include <QtWidgets/QtWidgets>
@@ -46,7 +46,7 @@ void Qt5Menu::RemoveItem(unsigned nPos)
     maItems.erase(maItems.begin() + nPos);
 }
 
-void Qt5Menu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos)
+void Qt5Menu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned)
 {
     SolarMutexGuard aGuard;
     Qt5MenuItem* pItem = static_cast<Qt5MenuItem*>(pSalMenuItem);
@@ -146,22 +146,19 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
     }
 }
 
-void Qt5Menu::ShowItem(unsigned nPos, bool bCheck) {}
+void Qt5Menu::ShowItem(unsigned, bool) {}
 
-void Qt5Menu::CheckItem(unsigned nPos, bool bCheck) {}
+void Qt5Menu::CheckItem(unsigned, bool) {}
 
-void Qt5Menu::EnableItem(unsigned nPos, bool bEnable) {}
+void Qt5Menu::EnableItem(unsigned, bool) {}
 
-void Qt5Menu::SetItemText(unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText) {}
+void Qt5Menu::SetItemText(unsigned, SalMenuItem*, const rtl::OUString&) {}
 
-void Qt5Menu::SetItemImage(unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) {}
+void Qt5Menu::SetItemImage(unsigned, SalMenuItem*, const Image&) {}
 
-void Qt5Menu::SetAccelerator(unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode,
-                             const OUString& rKeyName)
-{
-}
+void Qt5Menu::SetAccelerator(unsigned, SalMenuItem*, const vcl::KeyCode&, const OUString&) {}
 
-void Qt5Menu::GetSystemMenuData(SystemMenuData* pData) {}
+void Qt5Menu::GetSystemMenuData(SystemMenuData*) {}
 
 Qt5Menu* Qt5Menu::GetTopLevel()
 {
