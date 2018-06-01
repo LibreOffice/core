@@ -901,7 +901,7 @@ namespace vclcanvas
         const Point aEmptyPoint(0,0);
         const Size  aBmpSize( rOutDev.GetOutputSizePixel() );
 
-        Bitmap aBitmap( rOutDev.GetBitmap(aEmptyPoint, aBmpSize) );
+        BitmapEx aBitmap( rOutDev.GetBitmapEx(aEmptyPoint, aBmpSize) );
 
         aBitmap.Scale( vcl::unotools::sizeFromRealSize2D(newSize),
                        beFast ? BmpScaleFlag::Default : BmpScaleFlag::BestQuality );
@@ -927,8 +927,8 @@ namespace vclcanvas
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
 
-        Bitmap aBitmap( rOutDev.GetBitmap(aRect.TopLeft(),
-                                          aRect.GetSize()) );
+        Bitmap aBitmap( rOutDev.GetBitmapEx(aRect.TopLeft(),
+                                          aRect.GetSize()).GetBitmap() );
 
         Bitmap::ScopedReadAccess pReadAccess( aBitmap );
 

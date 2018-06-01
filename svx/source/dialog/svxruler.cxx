@@ -3372,9 +3372,11 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                 sal_uInt16 nStyle = bRTL ? i|RULER_TAB_RTL : i;
                 nStyle |= static_cast<sal_uInt16>(bHorz ? WB_HORZ : WB_VERT);
                 DrawTab(*pDev, aFillColor, aPt, nStyle);
+                BitmapEx aItemBitmapEx(pDev->GetBitmapEx(Point(), aSz));
+                aItemBitmapEx.Replace(COL_WHITE, COL_TRANSPARENT);
                 aMenu->InsertItem(i + 1,
                                  SvxResId(RID_SVXSTR_RULER_TAB[i]),
-                                 Image(BitmapEx(pDev->GetBitmap(Point(), aSz), COL_WHITE)));
+                                 Image(aItemBitmapEx));
                 aMenu->CheckItem(i + 1, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
                 pDev->SetOutputSize(aSz); // delete device
             }

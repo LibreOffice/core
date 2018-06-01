@@ -1241,7 +1241,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                         if( pVirtDev->SetOutputSize( aSz ) )
                         {
                             aGrf.Draw( pVirtDev.get(), Point(), aSz );
-                            rGrf = pVirtDev->GetBitmap( Point(), aSz );
+                            rGrf = pVirtDev->GetBitmapEx( Point(), aSz );
                         }
                         else
                         {
