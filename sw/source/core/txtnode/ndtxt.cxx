@@ -1993,6 +1993,12 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         SetIgnoreDontExpand( bOldExpFlg );
     }
 
+    if ( HasWriterListeners() )
+    {   // send this before messing with hints, which will send RES_UPDATE_ATTR
+        SwInsText aHint( aPos, nLen );
+        NotifyClients( nullptr, &aHint );
+    }
+
     if ( HasHints() )
     {
         bool const bHadHints(!m_pSwpHints->CanBeDeleted());
@@ -2062,12 +2068,6 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         }
         SAL_WARN_IF(bHadHints && m_pSwpHints->CanBeDeleted(), "sw.core",
                 "SwTextNode::InsertText: unexpected loss of hints");
-    }
-
-    if ( HasWriterListeners() )
-    {
-        SwInsText aHint( aPos, nLen );
-        NotifyClients( nullptr, &aHint );
     }
 
     // By inserting a character, the hidden flags
