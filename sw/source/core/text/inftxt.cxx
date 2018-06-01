@@ -1168,7 +1168,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         // for LTR mode only
         if ( !GetTextFrame()->IsRightToLeft() )
         {
-            if ( GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) )
+            if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
             {
                 bool           draw = false;
                 bool           full = false;

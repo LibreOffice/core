@@ -1995,7 +1995,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     } // switch
 
     if( bSetFieldsDirty )
-        GetNode()->getIDocumentFieldsAccess().SetFieldsDirty( true, GetNode(), 1 );
+        GetDoc().getIDocumentFieldsAccess().SetFieldsDirty( true, &rNode, 1 );
 
     if ( bRecalcFootnoteFlag )
         CalcFootnoteFlag();
@@ -2081,7 +2081,7 @@ void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
 
 static bool lcl_ErgoVadis(SwTextFrame* pFrame, TextFrameIndex & rPos, const PrepareHint ePrep)
 {
-    const SwFootnoteInfo &rFootnoteInfo = pFrame->GetNode()->GetDoc()->GetFootnoteInfo();
+    const SwFootnoteInfo &rFootnoteInfo = pFrame->GetDoc().GetFootnoteInfo();
     if( ePrep == PREP_ERGOSUM )
     {
         if( rFootnoteInfo.aErgoSum.isEmpty() )
@@ -2232,7 +2232,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 {
                     // We're the last Footnote; we need to update the
                     // QuoVadis texts now
-                    const SwFootnoteInfo &rFootnoteInfo = GetNode()->GetDoc()->GetFootnoteInfo();
+                    const SwFootnoteInfo &rFootnoteInfo = GetDoc().GetFootnoteInfo();
                     if( !pPara->UpdateQuoVadis( rFootnoteInfo.aQuoVadis ) )
                     {
                         TextFrameIndex nPos = pPara->GetParLen();
@@ -3152,7 +3152,7 @@ void SwTextFrame::ChgThisLines()
 {
     // not necessary to format here (GerFormatted etc.), because we have to come from there!
     sal_uLong nNew = 0;
-    const SwLineNumberInfo &rInf = GetNode()->GetDoc()->GetLineNumberInfo();
+    const SwLineNumberInfo &rInf = GetDoc().GetLineNumberInfo();
     if ( !GetText().isEmpty() && HasPara() )
     {
         SwTextSizeInfo aInf( this );
