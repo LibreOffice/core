@@ -25,7 +25,7 @@ class KDE5SalData : public Qt5Data
 {
 public:
     KDE5SalData(SalInstance* pInstance);
-    virtual ~KDE5SalData();
+    virtual ~KDE5SalData() override;
 
     static void initNWF();
 };

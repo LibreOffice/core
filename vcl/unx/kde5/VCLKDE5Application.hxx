@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLKDE5APPLICATION_HXX_
-#define _VCLKDE5APPLICATION_HXX_
+#ifndef INCLUDED_VCL_UNX_KDE5_VCLKDE5APPLICATION_HXX
+#define INCLUDED_VCL_UNX_KDE5_VCLKDE5APPLICATION_HXX
 
 #pragma once
 
