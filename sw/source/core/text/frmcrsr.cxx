@@ -670,7 +670,7 @@ bool SwTextFrame::GetCursorOfst(SwPosition* pPos, Point& rPoint,
 
 bool SwTextFrame::LeftMargin(SwPaM *pPam) const
 {
-    assert(&pPam->GetNode() == GetNode() || GetMergedPara());
+    assert(GetMergedPara() || &pPam->GetNode() == static_cast<SwContentNode const*>(GetDep()));
 
     SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), *pPam->GetPoint(),
                                      SwTextCursor::IsRightMargin() );
@@ -704,7 +704,7 @@ bool SwTextFrame::LeftMargin(SwPaM *pPam) const
 
 bool SwTextFrame::RightMargin(SwPaM *pPam, bool bAPI) const
 {
-    assert(&pPam->GetNode() == GetNode() || GetMergedPara());
+    assert(GetMergedPara() || &pPam->GetNode() == static_cast<SwContentNode const*>(GetDep()));
 
     SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), *pPam->GetPoint(),
                                      SwTextCursor::IsRightMargin() );
