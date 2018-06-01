@@ -42,6 +42,7 @@
 #include <layfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
+#include <txtfrm.hxx>
 #include <rootfrm.hxx>
 #include <tabfrm.hxx>
 #include <flyfrm.hxx>
@@ -151,9 +152,8 @@ SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
     }
     else if ( !pCFrame->isFrameAreaDefinitionValid() )
     {
-        pTextNode = const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pCFrame->GetNode()));
-        rPos.nNode = *pTextNode;
-        rPos.nContent.Assign( pTextNode, 0 );
+        assert(pCFrame->IsTextFrame());
+        rPos = static_cast<SwTextFrame const*>(pCFrame)->MapViewToModelPos(TextFrameIndex(0));
     }
     else
     {
@@ -240,9 +240,11 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
 
             if( pContentFrame )
             {
-                pTextNode = pContentFrame->GetNode()->GetTextNode();
-                rPos.nNode = *pTextNode;
-                const_cast<SwTextNode*>(pTextNode)->MakeEndIndex( &rPos.nContent );
+                assert(pContentFrame->IsTextFrame());
+                SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pContentFrame));
+                rPos = pFrame->MapViewToModelPos(TextFrameIndex(pFrame->GetText().getLength()));
+                pTextNode = rPos.nNode.GetNode().GetTextNode();
+                assert(pTextNode);
             }
             else
             {
