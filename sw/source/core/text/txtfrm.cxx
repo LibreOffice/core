@@ -2997,7 +2997,8 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
     {
         // former determination of last line height for proprotional line
         // spacing - take height of font set at the paragraph
-        SwFont aFont( GetAttrSet(), pIDSA );
+        // FIXME actually ... must the font match across all nodes?
+        SwFont aFont( &GetTextNodeForParaProps()->GetSwAttrSet(), pIDSA );
 
         // we must ensure that the font is restored correctly on the OutputDevice
         // otherwise Last!=Owner could occur
@@ -3103,8 +3104,7 @@ long SwTextFrame::GetLineSpace( const bool _bNoPropLineSpace ) const
 {
     long nRet = 0;
 
-    const SwAttrSet* pSet = GetAttrSet();
-    const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
+    const SvxLineSpacingItem &rSpace = GetTextNodeForParaProps()->GetSwAttrSet().GetLineSpacing();
 
     switch( rSpace.GetInterLineSpaceRule() )
     {
@@ -3205,7 +3205,7 @@ void SwTextFrame::ChgThisLines()
 
     if ( nNew != mnThisLines )
     {
-        if ( !IsInTab() && GetAttrSet()->GetLineNumber().IsCount() )
+        if (!IsInTab() && GetTextNodeForParaProps()->GetSwAttrSet().GetLineNumber().IsCount())
         {
             mnAllLines -= mnThisLines;
             mnThisLines = nNew;
@@ -3236,12 +3236,10 @@ void SwTextFrame::RecalcAllLines()
 {
     ValidateLineNum();
 
-    const SwAttrSet *pAttrSet = GetAttrSet();
-
     if ( !IsInTab() )
     {
         const sal_uLong nOld = GetAllLines();
-        const SwFormatLineNumber &rLineNum = pAttrSet->GetLineNumber();
+        const SwFormatLineNumber &rLineNum = GetTextNodeForParaProps()->GetSwAttrSet().GetLineNumber();
         sal_uLong nNewNum;
         const bool bRestart = GetDoc().GetLineNumberInfo().IsRestartEachPage();
 
