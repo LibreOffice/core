@@ -184,9 +184,9 @@ gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.sfxlo-SvxCharV
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.foruilo-RefEdit
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-PaperSizeListBox
 # Probably need labelling
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBox
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBoxText
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkMenuItem
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBox
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBoxText
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkMenuItem
 # Possibly need labelling
 #gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeView
 #gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeViewColumn
