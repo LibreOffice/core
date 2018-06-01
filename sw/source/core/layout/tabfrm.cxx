@@ -1859,7 +1859,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     // The beloved keep attribute
     const bool bEmulateTableKeep = AreAllRowsKeepWithNext( GetFirstNonHeadlineRow() );
-    const bool bKeep = IsKeep( pAttrs->GetAttrSet(), bEmulateTableKeep );
+    const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
 
     // All rows should keep together
     const bool bDontSplit = !IsFollow() &&
@@ -2225,9 +2225,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // 6. There is no section change behind the table (see IsKeep)
                     // 7. The last table row wants to keep with its next.
                     const SwRowFrame* pLastRow = static_cast<const SwRowFrame*>(GetLastLower());
-                    if ( pLastRow && IsKeep( pAttrs->GetAttrSet(), true ) &&
-                         pLastRow->ShouldRowKeepWithNext() )
+                    if (pLastRow
+                        && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
+                        && pLastRow->ShouldRowKeepWithNext())
+                    {
                         bFormat = true;
+                    }
                 }
 
                 if ( bFormat )

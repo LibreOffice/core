@@ -1214,7 +1214,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         pNotify->SetBordersJoinedWithPrev();
     }
 
-    const bool bKeep = IsKeep( rAttrs.GetAttrSet() );
+    const bool bKeep = IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem());
 
     SwSaveFootnoteHeight *pSaveFootnote = nullptr;
     if ( bFootnote )
@@ -2092,7 +2092,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
             }
         }
 
-        if ( bRet && !bSplit && pFrame->IsKeep( rAttrs.GetAttrSet() ) )
+        if (bRet && !bSplit && pFrame->IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem()))
         {
             if( bTstMove )
             {

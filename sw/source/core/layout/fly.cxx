@@ -1457,7 +1457,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                                !pTmpFlowFrame->IsJoinLocked() &&
                                !pTmpPrev->isFrameAreaPositionValid() &&
                                 pLay->IsAnLower( pTmpPrev ) &&
-                                pTmpPrevFlowFrame->IsKeep( *pTmpPrev->GetAttrSet() ) &&
+                                pTmpPrevFlowFrame->IsKeep(pTmpPrev->GetAttrSet()->GetKeep(), pTmpPrev->GetBreakItem()) &&
                                 pTmpPrevFlowFrame->IsKeepFwdMoveAllowed();
 
             // format floating screen objects anchored to the frame.
