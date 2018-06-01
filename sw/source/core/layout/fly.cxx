@@ -723,7 +723,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if ( Lower() && Lower()->IsNoTextFrame() &&
                  !GetFormat()->GetSurround().IsContour() )
             {
-                SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwContentFrame*>(Lower())->GetNode());
+                SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(Lower())->GetNode());
                 if ( pNd->HasContour() )
                     pNd->SetContour( nullptr );
             }
@@ -841,7 +841,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 if( Lower()->IsNoTextFrame() &&
                      !GetFormat()->GetSurround().IsContour() )
                 {
-                    SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwContentFrame*>(Lower())->GetNode());
+                    SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(Lower())->GetNode());
                     if ( pNd->HasContour() )
                         pNd->SetContour( nullptr );
                 }
@@ -2469,7 +2469,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
     {
         if(GetFormat()->GetSurround().IsContour())
         {
-            SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwContentFrame*>(Lower())->GetNode()));
+            SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwNoTextFrame*>(Lower())->GetNode()));
             // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
             // in order to avoid load of graphic, if <SwNoTextNode> contains a graphic
             // node and method is called for paint.
