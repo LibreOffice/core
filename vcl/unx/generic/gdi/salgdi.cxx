@@ -349,6 +349,9 @@ long X11SalGraphics::GetGraphicsWidth() const
 
 void X11SalGraphics::ResetClipRegion()
 {
+#if ENABLE_CAIRO_CANVAS
+    maClipRegion.SetNull();
+#endif
     mxImpl->ResetClipRegion();
 }
 
