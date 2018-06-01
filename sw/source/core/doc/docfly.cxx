@@ -42,6 +42,7 @@
 #include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <flyfrms.hxx>
@@ -801,7 +802,10 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
                     else
                     {
-                        SwPosition aPos( *static_cast<const SwContentFrame*>(pNewAnchorFrame)->GetNode() );
+                        SwPosition aPos( pNewAnchorFrame->IsTextFrame()
+                            ? *static_cast<SwTextFrame const*>(pNewAnchorFrame)->GetTextNodeForParaProps()
+                            : *static_cast<SwNoTextFrame const*>(pNewAnchorFrame)->GetNode() );
+
                         aNewAnch.SetType( _eAnchorType );
                         aNewAnch.SetAnchor( &aPos );
                     }
@@ -872,7 +876,10 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     Point aPoint( aPt );
                     aPoint.setX(aPoint.getX() - 1);    // Do not load in the DrawObj!
                     aNewAnch.SetType( RndStdIds::FLY_AS_CHAR );
-                    SwPosition aPos( *static_cast<const SwContentFrame*>(pNewAnchorFrame)->GetNode() );
+                    assert(pNewAnchorFrame->IsTextFrame()); // because AS_CHAR
+                    SwTextFrame const*const pFrame(
+                            static_cast<SwTextFrame const*>(pNewAnchorFrame));
+                    SwPosition aPos( *pFrame->GetTextNodeForParaProps() );
                     if ( pNewAnchorFrame->getFrameArea().IsInside( aPoint ) )
                     {
                     // We need to find a TextNode, because only there we can anchor a
@@ -882,12 +889,15 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
                     else
                     {
-                        SwContentNode &rCNd = const_cast<SwContentNode&>(
-                            *static_cast<const SwContentFrame*>(pNewAnchorFrame)->GetNode());
                         if ( pNewAnchorFrame->getFrameArea().Bottom() < aPt.Y() )
-                            rCNd.MakeStartIndex( &aPos.nContent );
+                        {
+                            aPos = pFrame->MapViewToModelPos(TextFrameIndex(0));
+                        }
                         else
-                            rCNd.MakeEndIndex( &aPos.nContent );
+                        {
+                            aPos = pFrame->MapViewToModelPos(
+                                TextFrameIndex(pFrame->GetText().getLength()));
+                        }
                     }
                     aNewAnch.SetAnchor( &aPos );
                     SetAttr( aNewAnch, *pContact->GetFormat() );
