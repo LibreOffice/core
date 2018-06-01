@@ -41,7 +41,7 @@ class ViewCacheContext : public cache::CacheContext
 public:
     explicit ViewCacheContext (SlideSorter& rSlideSorter);
     virtual ~ViewCacheContext() override;
-    virtual void NotifyPreviewCreation (cache::CacheKey aKey, const Bitmap& rPreview) override;
+    virtual void NotifyPreviewCreation (cache::CacheKey aKey, const BitmapEx& rPreview) override;
     virtual bool IsIdle() override;
     virtual bool IsVisible (cache::CacheKey aKey) override;
     virtual const SdrPage* GetPage (cache::CacheKey aKey) override;

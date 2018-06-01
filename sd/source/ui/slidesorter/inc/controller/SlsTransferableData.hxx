@@ -43,10 +43,10 @@ public:
     class Representative
     {
     public:
-        Representative (const Bitmap& rBitmap, const bool bIsExcluded)
+        Representative (const BitmapEx& rBitmap, const bool bIsExcluded)
             : maBitmap(rBitmap), mbIsExcluded(bIsExcluded) {}
 
-        Bitmap maBitmap;
+        BitmapEx maBitmap;
         bool mbIsExcluded;
     };
 

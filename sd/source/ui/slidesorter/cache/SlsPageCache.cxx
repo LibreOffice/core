@@ -52,14 +52,14 @@ void PageCache::ChangeSize (
     mpImplementation->ChangePreviewSize(rPreviewSize, bDoSuperSampling);
 }
 
-Bitmap PageCache::GetPreviewBitmap (
+BitmapEx PageCache::GetPreviewBitmap (
     const CacheKey aKey,
     const bool bResize)
 {
     return mpImplementation->GetPreviewBitmap(aKey, bResize);
 }
 
-Bitmap PageCache::GetMarkedPreviewBitmap (
+BitmapEx PageCache::GetMarkedPreviewBitmap (
     const CacheKey aKey)
 {
     return mpImplementation->GetMarkedPreviewBitmap(aKey);
@@ -67,7 +67,7 @@ Bitmap PageCache::GetMarkedPreviewBitmap (
 
 void PageCache::SetMarkedPreviewBitmap (
     const CacheKey aKey,
-    const Bitmap& rMarkedBitmap)
+    const BitmapEx& rMarkedBitmap)
 {
     mpImplementation->SetMarkedPreviewBitmap(aKey, rMarkedBitmap);
 }

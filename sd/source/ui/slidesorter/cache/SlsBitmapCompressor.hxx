@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <memory>
 
-class Bitmap;
+class BitmapEx;
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -38,7 +38,7 @@ public:
     /** Compress the given bitmap into a replacement format that is specific
         to the compressor class.
     */
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const = 0;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rBitmap) const = 0;
 
     /** Decompress the given replacement data into a preview bitmap.
         Depending on the compression technique the returned bitmap may
@@ -47,7 +47,7 @@ public:
         task of the caller to create a new preview bitmap if the returned
         one is not as desired.
     */
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData)const=0;
+    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData)const=0;
 
     /** Return whether the compression and decompression is lossless.  This
         value is used by the caller of Decompress() to decide whether to use
@@ -82,8 +82,8 @@ class NoBitmapCompression
     class DummyReplacement;
 public:
     virtual ~NoBitmapCompression() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const override;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rpBitmap) const override;
+    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData) const override;
     virtual bool IsLossless() const override;
 };
 
@@ -97,8 +97,8 @@ class CompressionByDeletion
 {
 public:
     virtual ~CompressionByDeletion() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const override;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rBitmap) const override;
+    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData) const override;
     virtual bool IsLossless() const override;
 };
 
@@ -114,10 +114,10 @@ class ResolutionReduction
     static const sal_Int32 mnWidth = 100;
 public:
     virtual ~ResolutionReduction() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const override;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rpBitmap) const override;
     /** Scale the replacement bitmap up to the original size.
     */
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData) const override;
     virtual bool IsLossless() const override;
 };
 
@@ -130,8 +130,8 @@ class PngCompression
     class PngReplacement;
 public:
     virtual ~PngCompression() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const override;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rBitmap) const override;
+    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData) const override;
     virtual bool IsLossless() const override;
 };
 

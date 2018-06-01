@@ -64,7 +64,7 @@ public:
         @return
             The returned bitmap may have a different size then the preview area.
     */
-    Bitmap GetPreviewBitmap (
+    BitmapEx GetPreviewBitmap (
         const model::SharedPageDescriptor& rpDescriptor,
         const OutputDevice* pReferenceDevice) const;
 
@@ -105,9 +105,9 @@ private:
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
 
-    static Bitmap CreateMarkedPreview(
+    static BitmapEx CreateMarkedPreview(
         const Size& rSize,
-        const Bitmap& rPreview,
+        const BitmapEx& rPreview,
         const BitmapEx& rOverlay,
         const OutputDevice* pReferenceDevice);
 
