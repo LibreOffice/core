@@ -18,6 +18,10 @@ $(eval $(call gb_Module_add_targets,mysqlc,\
 	Extension_mysql-connector-ooo \
 ))
 
+else
+$(eval $(call gb_Module_add_targets,mysqlc,\
+	Library_mysqlc \
+))
 endif
 
 # vim: set noet sw=4 ts=4:
