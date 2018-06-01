@@ -22,9 +22,6 @@
 // https://www.codeproject.com/Articles/9014/Understanding-COM-Event-Handling
 // https://blogs.msdn.microsoft.com/ericlippert/2005/02/15/why-does-wscript-connectobject-not-always-work/
 
-// See https://blogs.msdn.microsoft.com/vcblog/2017/12/08/c17-feature-removals-and-deprecations/
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING 1
-
 #include "ole2uno.hxx"
 
 #include <stdio.h>

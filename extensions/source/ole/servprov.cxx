@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// See https://blogs.msdn.microsoft.com/vcblog/2017/12/08/c17-feature-removals-and-deprecations/
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING 1
-
 #include <vector>
 
 #include "ole2uno.hxx"
