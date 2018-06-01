@@ -1769,10 +1769,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
     {
         SwRect aRect( aTmpFrame );
         aRect.Intersection( rRect );
-        // rNode without const to create SwPaMs
-        SwContentNode &rNode = const_cast<SwContentNode&>( *GetNode() );
-        SwNodeIndex aIdx( rNode );
-        SwPosition aPosL( aIdx, SwIndex( &rNode, 0 ) );
+        SwPosition aPosL( MapViewToModelPos(TextFrameIndex(0)) );
         if( IsEmpty() )
         {
             SwPaM *pPam = new SwPaM( aPosL, aPosL );
@@ -1780,7 +1777,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
         }
         else if( aRect.HasArea() )
         {
-            sal_Int32 nOld = -1;
+            SwPosition aOld(aPosL.nNode.GetNodes().GetEndOfContent());
             SwPosition aPosR( aPosL );
             Point aPoint;
             SwTextInfo aInf( const_cast<SwTextFrame*>(this) );
@@ -1844,11 +1841,11 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                         // which could happen e.g. for field portions or fly frames
                         // a SwPaM will be inserted with these positions
                         if( GetCursorOfst( &aPosR, aPoint, &aState ) &&
-                            nOld != aPosL.nContent.GetIndex() )
+                            aOld != aPosL)
                         {
                             SwPaM *pPam = new SwPaM( aPosL, aPosR );
                             rSelList.insertPaM( pPam );
-                            nOld = aPosL.nContent.GetIndex();
+                            aOld = aPosL;
                         }
                     }
                 }
