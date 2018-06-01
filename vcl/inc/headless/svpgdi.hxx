@@ -96,6 +96,7 @@ public:
     cairo_surface_t* getSurface() const { return m_pSurface; }
     static cairo_user_data_key_t* getDamageKey();
 
+    static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
     static basegfx::B2DRange drawPolyLine(
         cairo_t* cr,
         const Color& rLineColor,
