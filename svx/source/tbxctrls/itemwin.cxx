@@ -608,7 +608,7 @@ namespace
                 }
             }
 
-            rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
+            rBitmapEx = pVirtualDevice->GetBitmapEx(Point(0, 0), rSize);
         }
     }
 } // end of anonymous namespace

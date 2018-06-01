@@ -2202,7 +2202,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             Graphic aGraphic2=aGraphic;
             aGraphic2.Draw(aVirDev.get(),Point(0,0),aSizePixel); // this changes the MapMode
             aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
-            aGraphic=Graphic(aVirDev->GetBitmap(Point(0,0),aSizePixel));
+            aGraphic=Graphic(aVirDev->GetBitmapEx(Point(0,0),aSizePixel));
         }
     }
     if( rOStm.GetError() )

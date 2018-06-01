@@ -141,7 +141,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void            SetBitmap( const BitmapEx& rBitmap );
-    using OutputDevice::GetBitmap;
 };
 
 
