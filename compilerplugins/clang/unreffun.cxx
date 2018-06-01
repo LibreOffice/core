@@ -58,7 +58,18 @@ public:
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
+    bool TraverseFriendDecl(FriendDecl * decl) {
+        auto const old = friendFunction_;
+        friendFunction_ = dyn_cast_or_null<FunctionDecl>(decl->getFriendDecl());
+        auto const ret = RecursiveASTVisitor::TraverseFriendDecl(decl);
+        friendFunction_ = old;
+        return ret;
+    }
+
     bool VisitFunctionDecl(FunctionDecl const * decl);
+
+private:
+    FunctionDecl const * friendFunction_ = nullptr;
 };
 
 bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
@@ -73,6 +84,13 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
             || r->isDependentContext()))
     {
         return true;
+    }
+    if (decl == friendFunction_) {
+        if (auto const lex = dyn_cast<CXXRecordDecl>(decl->getLexicalDeclContext())) {
+            if (lex->isDependentContext()) {
+                return true;
+            }
+        }
     }
 
     if (!(decl->isThisDeclarationADefinition() || isFriendDecl(decl)
