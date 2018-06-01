@@ -71,6 +71,8 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
+#include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <flyfrm.hxx>
 #include <fesh.hxx>
 #include <docsh.hxx>
@@ -580,7 +582,9 @@ SwPosFlyFrames SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
                     }
                     if ( pContentFrame )
                     {
-                        SwNodeIndex aIdx( *pContentFrame->GetNode() );
+                        SwNodeIndex aIdx( pContentFrame->IsTextFrame()
+                            ? *static_cast<SwTextFrame const*>(pContentFrame)->GetTextNodeFirst()
+                            : *static_cast<SwNoTextFrame const*>(pContentFrame)->GetNode() );
                         aRetval.insert(std::make_shared<SwPosFlyFrame>(aIdx, pFly, aRetval.size()));
                     }
                 }
