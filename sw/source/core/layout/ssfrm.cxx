@@ -414,9 +414,14 @@ SwContentFrame::SwContentFrame( SwContentNode * const pContent, SwFrame* pSib ) 
 
 void SwContentFrame::DestroyImpl()
 {
-    const SwContentNode* pCNd;
-    if( nullptr != ( pCNd = dynamic_cast<SwContentNode*>( GetRegisteredIn() ) ) &&
-        !pCNd->GetDoc()->IsInDtor() )
+    const SwContentNode* pCNd(dynamic_cast<SwContentNode*>(GetDep()));
+    if (nullptr == pCNd && IsTextFrame())
+    {
+        pCNd = static_cast<SwTextFrame*>(this)->GetTextNodeFirst();
+    }
+    // IsInDtor shouldn't be happening with ViewShell owning layout
+    assert(nullptr == pCNd || !pCNd->GetDoc()->IsInDtor());
+    if (nullptr != pCNd && !pCNd->GetDoc()->IsInDtor())
     {
         //Unregister from root if I'm still in turbo there.
         SwRootFrame *pRoot = getRootFrame();
