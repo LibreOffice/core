@@ -1726,7 +1726,7 @@ bool SwFrame::WannaRightPage() const
         const SwFlowFrame *pTmp = SwFlowFrame::CastFlowFrame( pFlow );
         if ( !pTmp->IsFollow() )
         {
-            const SwFormatPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
+            const SwFormatPageDesc& rPgDesc = pFlow->GetPageDescItem();
             pDesc = rPgDesc.GetPageDesc();
             oPgNum = rPgDesc.GetNumOffset();
         }
@@ -1852,7 +1852,7 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
     }
     if ( pFrame )
     {
-        ::boost::optional<sal_uInt16> oNumOffset = pFrame->GetAttrSet()->GetPageDesc().GetNumOffset();
+        ::boost::optional<sal_uInt16> oNumOffset = pFrame->GetPageDescItem().GetNumOffset();
         if (oNumOffset)
         {
             return nPhyPage - pFrame->GetPhyPageNum() + oNumOffset.get();
