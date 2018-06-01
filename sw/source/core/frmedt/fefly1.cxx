@@ -132,8 +132,9 @@ static bool lcl_FindAnchorPos(
                 bRet = false;
                 break;
             }
-
-            SwPosition aPos( *static_cast<const SwContentFrame*>(pNewAnch)->GetNode() );
+            SwPosition aPos( pNewAnch->IsTextFrame()
+                ? *static_cast<SwTextFrame const*>(pNewAnch)->GetTextNodeForParaProps()
+                : *static_cast<const SwNoTextFrame*>(pNewAnch)->GetNode() );
             if ((RndStdIds::FLY_AT_CHAR == nNew) || (RndStdIds::FLY_AS_CHAR == nNew))
             {
                 // textnode should be found, as only in those
@@ -142,11 +143,18 @@ static bool lcl_FindAnchorPos(
                 aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
                 if( !pNewAnch->GetCursorOfst( &aPos, aTmpPnt, &aState ) )
                 {
-                    SwContentNode* pCNd = const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(pNewAnch))->GetNode();
+                    assert(pNewAnch->IsTextFrame()); // because AT_CHAR/AS_CHAR
+                    SwTextFrame const*const pTextFrame(
+                            static_cast<SwTextFrame const*>(pNewAnch));
                     if( pNewAnch->getFrameArea().Bottom() < aTmpPnt.Y() )
-                        pCNd->MakeStartIndex( &aPos.nContent );
+                    {
+                        aPos = pTextFrame->MapViewToModelPos(TextFrameIndex(0));
+                    }
                     else
-                        pCNd->MakeEndIndex( &aPos.nContent );
+                    {
+                        aPos = pTextFrame->MapViewToModelPos(
+                            TextFrameIndex(pTextFrame->GetText().getLength()));
+                    }
                 }
                 else
                 {
@@ -521,7 +529,9 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                     case RndStdIds::FLY_AT_PARA:
                     {
                         SwPosition pos = *aAnch.GetContentAnchor();
-                        pos.nNode = *pTextFrame->GetNode();
+                        pos.nNode = pTextFrame->IsTextFrame()
+                            ? *static_cast<SwTextFrame const*>(pTextFrame)->GetTextNodeForParaProps()
+                            : *static_cast<const SwNoTextFrame*>(pTextFrame)->GetNode();
                         pos.nContent.Assign(nullptr,0);
                         aAnch.SetAnchor( &pos );
                         break;
@@ -553,8 +563,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                             }
                             else
                             {
-                                pos.nNode = *pTextFrame->GetNode();
-                                pos.nContent.Assign(nullptr,0);
+                                pos = static_cast<SwTextFrame const*>(pTextFrame)->MapViewToModelPos(TextFrameIndex(0));
                             }
                             aAnch.SetAnchor( &pos );
                             break;
@@ -725,10 +734,14 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
                 pRet->DelFrames();
 
                 const SwFrame* pAnch = ::FindAnchor( GetLayout(), aPt );
-                SwPosition aPos( *static_cast<const SwContentFrame*>(pAnch)->GetNode() );
+                SwPosition aPos( pAnch->IsTextFrame()
+                    ? *static_cast<SwTextFrame const*>(pAnch)->GetTextNodeForParaProps()
+                    : *static_cast<const SwNoTextFrame*>(pAnch)->GetNode() );
+
                 if ( RndStdIds::FLY_AS_CHAR == eRndId )
                 {
-                    aPos.nContent.Assign( const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(pAnch))->GetNode(), 0 );
+                    assert(pAnch->IsTextFrame());
+                    aPos = static_cast<SwTextFrame const*>(pAnch)->MapViewToModelPos(TextFrameIndex(0));
                 }
                 pOldAnchor->SetAnchor( &aPos );
 
@@ -1290,23 +1303,19 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         //JP 28.02.2001: Task 74707 - ask for fly in fly with automatic size
 
         const SwFrame* pAnchor;
-        const SwTextNode* pTNd;
-        const SwpHints* pHts;
         const SwFormatFrameSize& rFrameSz = pFly->GetFormat()->GetFrameSize();
         if (m_bCheckForOLEInCaption &&
             0 != rFrameSz.GetWidthPercent() &&
             nullptr != (pAnchor = pFly->GetAnchorFrame()) &&
             pAnchor->IsTextFrame() &&
             !pAnchor->GetNext() && !pAnchor->GetPrev() &&
-            pAnchor->GetUpper()->IsFlyFrame() &&
-            nullptr != ( pTNd = static_cast<const SwTextFrame*>(pAnchor)->GetNode()->GetTextNode()) &&
-            nullptr != ( pHts = pTNd->GetpSwpHints() ))
+            pAnchor->GetUpper()->IsFlyFrame())
         {
             // search for a sequence field:
-            const size_t nEnd = pHts->Count();
-            for( size_t n = 0; n < nEnd; ++n )
+            sw::MergedAttrIter iter(*static_cast<SwTextFrame const*>(pAnchor));
+            for (SwTextAttr const* pHint = iter.NextAttr(); pHint; pHint = iter.NextAttr())
             {
-                const SfxPoolItem* pItem = &pHts->Get(n)->GetAttr();
+                const SfxPoolItem* pItem = &pHint->GetAttr();
                 if( RES_TXTATR_FIELD == pItem->Which()
                     && TYP_SEQFLD == static_cast<const SwFormatField*>(pItem)->GetField()->GetTypeId() )
                 {
@@ -1343,9 +1352,9 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         aResult = pFly->ChgSize( aSz );
 
         // if the object changes, the contour is outside the object
-        OSL_ENSURE( pFly->Lower()->IsNoTextFrame(), "Request without NoText" );
-        SwNoTextNode *pNd = static_cast<SwContentFrame*>(pFly->Lower())->GetNode()->GetNoTextNode();
-        OSL_ENSURE( pNd, "Request without Node" );
+        assert(pFly->Lower()->IsNoTextFrame());
+        SwNoTextNode *pNd = static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetNoTextNode();
+        assert(pNd);
         pNd->SetContour( nullptr );
         ClrContourCache();
     }
@@ -1544,7 +1553,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
         SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
         if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
         {
-            SwGrfNode *pNd = static_cast<SwContentFrame*>(pFly->Lower())->GetNode()->GetGrfNode();
+            SwGrfNode *const pNd = static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetGrfNode();
             if ( pNd )
             {
                 if ( pNd->IsGrfLink() )
@@ -1653,7 +1662,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj )
         const SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
         if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
         {
-            if ( static_cast<const SwContentFrame*>(pFly->Lower())->GetNode()->GetGrfNode() )
+            if (static_cast<const SwNoTextFrame*>(pFly->Lower())->GetNode()->GetGrfNode())
                 eType = OBJCNT_GRF;
             else
                 eType = OBJCNT_OLE;
