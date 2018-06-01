@@ -436,7 +436,7 @@ SwContentFrame::~SwContentFrame()
 
 void SwTextFrame::RegisterToNode(SwTextNode & rNode)
 {
-    assert(&rNode != GetRegisteredIn());
+    assert(&rNode != GetDep());
     m_pMergedPara = sw::CheckParaRedlineMerge(*this, rNode);
     rNode.Add( this );
 }
