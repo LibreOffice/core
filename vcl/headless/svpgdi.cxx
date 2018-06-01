@@ -875,7 +875,10 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     releaseCairoContext(cr, false, extents);
 }
 
-bool SvpSalGraphics::drawPolyLine(
+basegfx::B2DRange SvpSalGraphics::drawPolyLine(
+    cairo_t* cr,
+    const Color& rLineColor,
+    bool bAntiAliasB2DDraw,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
@@ -883,17 +886,7 @@ bool SvpSalGraphics::drawPolyLine(
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle)
 {
-    // short circuit if there is nothing to do
-    const int nPointCount = rPolyLine.count();
-    if (nPointCount <= 0)
-    {
-        return true;
-    }
-
     const bool bNoJoin = (basegfx::B2DLineJoin::NONE == eLineJoin && basegfx::fTools::more(rLineWidths.getX(), 0.0));
-
-    cairo_t* cr = getCairoContext(false);
-    clipRegion(cr);
 
     // setup line attributes
     cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
@@ -936,9 +929,9 @@ bool SvpSalGraphics::drawPolyLine(
         }
     }
 
-    cairo_set_source_rgba(cr, m_aLineColor.GetRed()/255.0,
-                              m_aLineColor.GetGreen()/255.0,
-                              m_aLineColor.GetBlue()/255.0,
+    cairo_set_source_rgba(cr, rLineColor.GetRed()/255.0,
+                              rLineColor.GetGreen()/255.0,
+                              rLineColor.GetBlue()/255.0,
                               1.0-fTransparency);
 
     cairo_set_line_join(cr, eCairoLineJoin);
@@ -951,12 +944,13 @@ bool SvpSalGraphics::drawPolyLine(
 
     if (!bNoJoin)
     {
-        AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
+        AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !bAntiAliasB2DDraw, true);
         extents = getClippedStrokeDamage(cr);
         cairo_stroke(cr);
     }
     else
     {
+        const int nPointCount = rPolyLine.count();
         // emulate rendering::PathJoinType::NONE by painting single edges
         const sal_uInt32 nEdgeCount(rPolyLine.isClosed() ? nPointCount : nPointCount - 1);
         basegfx::B2DPolygon aEdge;
@@ -970,7 +964,7 @@ bool SvpSalGraphics::drawPolyLine(
             aEdge.setNextControlPoint(0, rPolyLine.getNextControlPoint(i % nPointCount));
             aEdge.setPrevControlPoint(1, rPolyLine.getPrevControlPoint(nNextIndex));
 
-            AddPolygonToPath(cr, aEdge, false, !getAntiAliasB2DDraw(), true);
+            AddPolygonToPath(cr, aEdge, false, !bAntiAliasB2DDraw, true);
 
             extents.expand(getStrokeDamage(cr));
 
@@ -982,6 +976,27 @@ bool SvpSalGraphics::drawPolyLine(
 
         extents.intersect(getClipBox(cr));
     }
+
+    return extents;
+}
+
+bool SvpSalGraphics::drawPolyLine(
+    const basegfx::B2DPolygon& rPolyLine,
+    double fTransparency,
+    const basegfx::B2DVector& rLineWidths,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle)
+{
+    // short circuit if there is nothing to do
+    if (rPolyLine.count() <= 0)
+        return true;
+
+    cairo_t* cr = getCairoContext(false);
+    clipRegion(cr);
+
+    basegfx::B2DRange extents = drawPolyLine(cr, m_aLineColor, getAntiAliasB2DDraw(), rPolyLine,
+                                             fTransparency, rLineWidths, eLineJoin, eLineCap, fMiterMinimumAngle);
 
     releaseCairoContext(cr, false, extents);
 
