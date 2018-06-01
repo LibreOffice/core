@@ -41,6 +41,7 @@
 #include <paratr.hxx>
 #include <ftnfrm.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <tabfrm.hxx>
 #include <pagedesc.hxx>
 #include <layact.hxx>
@@ -169,7 +170,9 @@ void SwFlowFrame::CheckKeep()
         pPre->InvalidatePos();
 }
 
-bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep ) const
+bool SwFlowFrame::IsKeep(SvxFormatKeepItem const& rKeep,
+        SvxFormatBreakItem const& rBreak,
+        bool const bCheckIfLastRowShouldKeep) const
 {
     // 1. The keep attribute is ignored inside footnotes
     // 2. For compatibility reasons, the keep attribute is
@@ -180,7 +183,7 @@ bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKee
     bool bKeep = bCheckIfLastRowShouldKeep ||
                  (  !m_rThis.IsInFootnote() &&
                     ( !m_rThis.IsInTab() || m_rThis.IsTabFrame() ) &&
-                    rAttrs.GetKeep().GetValue() );
+                    rKeep.GetValue() );
 
     OSL_ENSURE( !bCheckIfLastRowShouldKeep || m_rThis.IsTabFrame(),
             "IsKeep with bCheckIfLastRowShouldKeep should only be used for tabfrms" );
@@ -188,7 +191,7 @@ bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKee
     // Ignore keep attribute if there are break situations:
     if ( bKeep )
     {
-        switch ( rAttrs.GetBreak().GetBreak() )
+        switch (rBreak.GetBreak())
         {
             case SvxBreak::ColumnAfter:
             case SvxBreak::ColumnBoth:
@@ -227,23 +230,24 @@ bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKee
 
                 if ( bKeep )
                 {
-                    const SwAttrSet* pSet = nullptr;
-
+                    SvxFormatBreakItem const* pBreak;
+                    SwFormatPageDesc const* pPageDesc;
                     SwTabFrame* pTab = pNxt->IsInTab() ? pNxt->FindTabFrame() : nullptr;
-                    if (pTab)
+                    if (pTab && (!m_rThis.IsInTab() || m_rThis.FindTabFrame() != pTab))
                     {
-                        if ( ! m_rThis.IsInTab() || m_rThis.FindTabFrame() != pTab )
-                            pSet = &pTab->GetFormat()->GetAttrSet();
+                        const SwAttrSet *const pSet = &pTab->GetFormat()->GetAttrSet();
+                        pBreak = &pSet->GetBreak();
+                        pPageDesc = &pSet->GetPageDesc();
+                    }
+                    else
+                    {
+                        pBreak = &pNxt->GetBreakItem();
+                        pPageDesc = &pNxt->GetPageDescItem();
                     }
 
-                    if ( ! pSet )
-                        pSet = pNxt->GetAttrSet();
-
-                    assert(pSet && "No AttrSet to check keep attribute");
-
-                    if ( pSet->GetPageDesc().GetPageDesc() )
+                    if (pPageDesc->GetPageDesc())
                         bKeep = false;
-                    else switch ( pSet->GetBreak().GetBreak() )
+                    else switch (pBreak->GetBreak())
                     {
                         case SvxBreak::ColumnBefore:
                         case SvxBreak::ColumnBoth:
