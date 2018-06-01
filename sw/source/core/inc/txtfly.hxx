@@ -119,13 +119,13 @@ class SwTextFly
 {
     const SwPageFrame                * pPage;
     const SwAnchoredObject           * mpCurrAnchoredObj;
-    const SwTextFrame                * pCurrFrame;
-    const SwContentFrame             * pMaster;
+    const SwTextFrame                * m_pCurrFrame;
+    const SwTextFrame                * m_pMaster;
     std::unique_ptr<SwAnchoredObjList> mpAnchoredObjList;
 
     long nMinBottom;
     long nNextTop;  /// Stores the upper edge of the "next" frame
-    sal_uLong nIndex;
+    sal_uLong m_nCurrFrameNodeIndex;
 
     bool bOn : 1;
     bool bTopRule: 1;
@@ -200,7 +200,7 @@ class SwTextFly
 
     SwTwips CalcMinBottom() const;
 
-    const SwContentFrame* GetMaster_();
+    const SwTextFrame* GetMaster_();
 
 public:
 
@@ -226,7 +226,7 @@ public:
     bool Relax();
 
     SwTwips GetMinBottom() const;
-    const SwContentFrame* GetMaster() const;
+    const SwTextFrame* GetMaster() const;
 
     // This temporary variable needs to be manipulated in const methods
     long GetNextTop() const;
@@ -337,9 +337,9 @@ inline SwTwips SwTextFly::GetMinBottom() const
     return mpAnchoredObjList ? nMinBottom : CalcMinBottom();
 }
 
-inline const SwContentFrame* SwTextFly::GetMaster() const
+inline const SwTextFrame* SwTextFly::GetMaster() const
 {
-    return pMaster ? pMaster : const_cast<SwTextFly*>(this)->GetMaster_();
+    return m_pMaster ? m_pMaster : const_cast<SwTextFly*>(this)->GetMaster_();
 }
 
 inline long SwTextFly::GetNextTop() const
