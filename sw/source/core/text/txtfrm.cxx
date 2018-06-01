@@ -59,6 +59,7 @@
 #include <ftninfo.hxx>
 #include <fmtline.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <sectfrm.hxx>
 #include "itrform2.hxx"
 #include "widorp.hxx"
@@ -279,6 +280,34 @@ namespace sw {
                 }
             }
             return nullptr;
+        }
+    }
+
+    bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong const nNodeIndex)
+    {
+        if (rFrame.IsTextFrame())
+        {
+            SwTextFrame const& rTextFrame(static_cast<SwTextFrame const&>(rFrame));
+            if (sw::MergedPara const*const pMerged = rTextFrame.GetMergedPara())
+            {
+                sal_uLong const nFirst(pMerged->pFirstNode->GetIndex());
+                sal_uLong nLast(nFirst);
+                // FIXME is this actually the last one? what about delete RL that dels last node until end, what happens to its anchored objs?
+                if (!pMerged->extents.empty())
+                {
+                    nLast = pMerged->extents.back().pNode->GetIndex();
+                }
+                return (nFirst <= nNodeIndex && nNodeIndex <= nLast);
+            }
+            else
+            {
+                return rTextFrame.GetTextNodeFirst()->GetIndex() == nNodeIndex;
+            }
+        }
+        else
+        {
+            assert(rFrame.IsNoTextFrame());
+            return static_cast<SwNoTextFrame const&>(rFrame).GetNode()->GetIndex() == nNodeIndex;
         }
     }
 
@@ -1083,7 +1112,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
              _rFrame.IsInDocBody() && !_rFrame.FindNextCnt() )
         {
             SwTextNode const& rNode(*rAnchorPos.nNode.GetNode().GetTextNode());
-//            assert(_rFrame.GetMergedPara() || &rNode == _rFrame.GetDep()); // simple consistency check
+            assert(FrameContainsNode(_rFrame, rNode.GetIndex()));
             sal_Int32 const nObjAnchorPos(rAnchorPos.nContent.GetIndex());
             const sal_Unicode cAnchorChar = nObjAnchorPos < rNode.Len()
                 ? rNode.GetText()[nObjAnchorPos]
