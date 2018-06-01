@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_45be8a00",
+        "filename": "vcl/source/font/fontcache.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-06-01T12:33:16Z",
+      "side": 1,
+      "message": "I think this should have been || not \u0026\u0026\n\nhttps://gerrit.libreoffice.org/#/c/55183/",
+      "revId": "083b7ca26bbf4b9bad2922520caaf5c0227dac5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
