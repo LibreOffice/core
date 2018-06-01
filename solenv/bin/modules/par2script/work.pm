@@ -79,8 +79,6 @@ sub setparfiles
     my ($filename) = @_;
 
     # input is the name of the list file
-    $filename =~ s/\@//;    # removing the leading \@
-
     my $filecontent = par2script::files::read_file($filename);
 
     my @parfiles = ();
