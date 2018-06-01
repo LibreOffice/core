@@ -79,8 +79,8 @@ public:
     SwTextFrame* FindMaster() const;
 
     // layout dependent cursor travelling
-    virtual bool LeftMargin( SwPaM * ) const;
-    virtual bool RightMargin( SwPaM *, bool bAPI = false ) const;
+    virtual bool LeftMargin(SwPaM *) const = 0;
+    virtual bool RightMargin(SwPaM *, bool bAPI = false) const = 0;
     virtual bool UnitUp( SwPaM *, const SwTwips nOffset,
                          bool bSetInReadOnly ) const;
     virtual bool UnitDown( SwPaM *, const SwTwips nOffset,
