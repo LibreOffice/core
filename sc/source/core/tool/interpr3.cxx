@@ -2560,6 +2560,11 @@ void ScInterpreter::ScZTest()
         if (nParamCount != 3)
         {
             sigma = (fSumSqr - fSum*fSum/rValCount)/(rValCount-1.0);
+            if (sigma == 0.0)
+            {
+                PushError(FormulaError::DivisionByZero);
+                return;
+            }
             PushDouble(0.5 - gauss((mue-x)/sqrt(sigma/rValCount)));
         }
         else
