@@ -1287,11 +1287,11 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
 
     // An example: incoming parameters: <12, 13, "foo/bar.tem">
     //
-    // Expected paramters: (string filename, int something, int somethingElse, Any whatever, Any
+    // Expected parameters: (string filename, int something, int somethingElse, Any whatever, Any
     // whateverElse)
     //
     // Here the existing incoming parameters are placed in reverse order in the first three outgoing
-    // parameters, and the rest of the outgoing paramters are kept as empty Anys.
+    // parameters, and the rest of the outgoing parameters are kept as empty Anys.
     //
     // Another example: incoming parameters: <EMPTY, TRUE>
     //
@@ -2072,7 +2072,7 @@ public:
 
     DECLARE_NOT_AGGREGATABLE(CXEnumVariant)
 
-    // Creates and intializes the enumerator
+    // Creates and initializes the enumerator
     void Init(InterfaceOleWrapper* pInterfaceOleWrapper,
               const Reference< XEnumeration > xEnumeration)
     {
