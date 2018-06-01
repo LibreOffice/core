@@ -193,7 +193,6 @@ void Qt5Menu::NativeItemText(OUString& rItemText) { rItemText = rItemText.replac
 Qt5MenuItem::Qt5MenuItem(const SalItemParams* pItemData)
     : mnId(pItemData->nId)
     , mnType(pItemData->eType)
-    , mpVCLMenu(pItemData->pMenu)
     , mpParentMenu(nullptr)
     , mpSubMenu(nullptr)
 {
