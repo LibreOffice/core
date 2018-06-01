@@ -22,6 +22,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 
 #include <algorithm>
+#include <iterator>
 
 namespace chart
 {
