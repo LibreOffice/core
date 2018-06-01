@@ -269,6 +269,9 @@ protected:
 
 public:
 
+    virtual const SvxFormatBreakItem& GetBreakItem() const override;
+    virtual const SwFormatPageDesc& GetPageDescItem() const override;
+
     css::uno::Sequence< css::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos ) override;
 
     /**
