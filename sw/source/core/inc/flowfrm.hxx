@@ -22,6 +22,8 @@
 
 #include "frmtool.hxx"
 
+class SvxFormatKeepItem;
+class SvxFormatBreakItem;
 class SwPageFrame;
 class SwRect;
 class SwBorderAttrs;
@@ -177,7 +179,9 @@ public:
     bool IsColBreak( bool bAct ) const;
 
     /** method to determine if a Keep needs to be considered (Breaks!) */
-    bool IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck = false ) const;
+    bool IsKeep(SvxFormatKeepItem const& rKeep,
+                SvxFormatBreakItem const& rBreak,
+                bool bBreakCheck = false ) const;
 
     bool HasLockedFollow() const;
 
