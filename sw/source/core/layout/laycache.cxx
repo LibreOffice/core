@@ -187,7 +187,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 {
                     if( pTmp->IsTextFrame() )
                     {
-                        sal_uLong nNdIdx = static_cast<SwTextFrame*>(pTmp)->GetNode()->GetIndex();
+                        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTmp));
+                        assert(!pFrame->GetMergedPara());
+                        sal_uLong nNdIdx = pFrame->GetTextNodeFirst()->GetIndex();
                         if( nNdIdx > nStartOfContent )
                         {
                             /*  Open Paragraph Record */
@@ -343,7 +345,10 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
             {
                 if( pTmp->IsTextFrame() )
                 {
-                    sal_uLong nNdIdx = static_cast<const SwTextFrame*>(pTmp)->GetNode()->GetIndex();
+
+                    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTmp));
+                    assert(!pFrame->GetMergedPara());
+                    sal_uLong nNdIdx = pFrame->GetTextNodeFirst()->GetIndex();
                     if( nNdIdx > nStartOfContent )
                     {
                         bool bFollow = static_cast<const SwTextFrame*>(pTmp)->IsFollow();
