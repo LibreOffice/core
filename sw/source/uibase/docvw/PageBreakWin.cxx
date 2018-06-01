@@ -12,6 +12,8 @@
 
 #include <cmdid.h>
 #include <cntfrm.hxx>
+#include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <DashedLine.hxx>
 #include <doc.hxx>
 #include <edtwin.hxx>
@@ -240,7 +242,9 @@ void SwPageBreakWin::Select()
                 rSh.ClearMark();
 
                 SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
-                SwContentNode* pNd = pCnt->GetNode();
+                SwContentNode* pNd = pCnt->IsTextFrame()
+                    ? static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
+                    : static_cast<SwNoTextFrame*>(pCnt)->GetNode();
                 rSh.SetSelection( *pNd );
 
                 SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
@@ -254,7 +258,9 @@ void SwPageBreakWin::Select()
             else
             {
                 SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
-                SwContentNode* pNd = pCnt->GetNode();
+                SwContentNode* pNd = pCnt->IsTextFrame()
+                    ? static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
+                    : static_cast<SwNoTextFrame*>(pCnt)->GetNode();
 
                 SwPaM aPaM( *pNd );
                 SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
@@ -276,8 +282,11 @@ void SwPageBreakWin::Select()
 
         if ( pBodyFrame )
         {
+
             SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
-            SwContentNode* pNd = pCnt->GetNode();
+            SwContentNode* pNd = pCnt->IsTextFrame()
+                ? static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
+                : static_cast<SwNoTextFrame*>(pCnt)->GetNode();
 
             pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
 
