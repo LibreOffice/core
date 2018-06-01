@@ -34,6 +34,7 @@
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <viewopt.hxx>
 #include <DocumentSettingManager.hxx>
 #include <viscrs.hxx>
@@ -228,7 +229,15 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
             {
                 // Set point to pCnt, delete mark
                 // this may happen, if pCnt is hidden
-                aTextPos = SwPosition( *pCnt->GetNode(), SwIndex( const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pCnt->GetNode())), 0 ) );
+                if (pCnt->IsTextFrame())
+                {
+                    aTextPos = static_cast<SwTextFrame const*>(pCnt)->MapViewToModelPos(TextFrameIndex(0));
+                }
+                else
+                {
+                    assert(pCnt->IsNoTextFrame());
+                    aTextPos = SwPosition( *static_cast<SwNoTextFrame const*>(pCnt)->GetNode() );
+                }
                 bTextRet = true;
             }
         }
@@ -930,9 +939,23 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
     } while ( !bEnd ||
               (pCnt && pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow()));
 
-    if( pCnt )
+    if (pCnt == nullptr)
+    {
+        return false;
+    }
+    if (pCnt->IsTextFrame())
+    {
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pCnt));
+        *pPam->GetPoint() = pFrame->MapViewToModelPos(TextFrameIndex(
+                fnNxtPrv == lcl_GetPrvCnt
+                    ? pFrame->GetText().getLength()
+                    : 0));
+        return true;
+    }
+    else
     {   // set the Point on the Content-Node
-        SwContentNode *pCNd = const_cast<SwContentNode*>(pCnt->GetNode());
+        assert(pCnt->IsNoTextFrame());
+        SwContentNode *const pCNd = const_cast<SwContentNode*>(static_cast<SwNoTextFrame const*>(pCnt)->GetNode());
         pPam->GetPoint()->nNode = *pCNd;
         if ( fnNxtPrv == lcl_GetPrvCnt )
             pCNd->MakeEndIndex( &pPam->GetPoint()->nContent );
@@ -1437,10 +1460,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
         // ContentFrame not formatted -> always on node-beginning
         // tdf#100635 also if the SwTextFrame would require reformatting,
         // which is unwanted in case this is called from text formatting code
-        SwContentNode* pCNd = const_cast<SwContentNode*>(pAct->GetNode());
-        OSL_ENSURE( pCNd, "Where is my ContentNode?" );
-        rPos.nNode = *pCNd;
-        rPos.nContent.Assign( pCNd, 0 );
+        rPos = static_cast<SwTextFrame const*>(pAct)->MapViewToModelPos(TextFrameIndex(0));
     }
     else
     {
@@ -1610,9 +1630,9 @@ bool SwRootFrame::IsDummyPage( sal_uInt16 nPageNum ) const
  */
 bool SwFrame::IsProtected() const
 {
-    if (IsContentFrame() && static_cast<const SwContentFrame*>(this)->GetNode())
+    if (IsTextFrame())
     {
-        const SwDoc *pDoc=static_cast<const SwContentFrame*>(this)->GetNode()->GetDoc();
+        const SwDoc *pDoc = &static_cast<const SwTextFrame*>(this)->GetDoc();
         bool isFormProtected=pDoc->GetDocumentSettingManager().get(DocumentSettingId::PROTECT_FORM );
         if (isFormProtected)
         {
@@ -1624,11 +1644,21 @@ bool SwFrame::IsProtected() const
     const SwFrame *pFrame = this;
     do
     {
-        if ( pFrame->IsContentFrame() )
-        {
-            if ( static_cast<const SwContentFrame*>(pFrame)->GetNode() &&
-                 static_cast<const SwContentFrame*>(pFrame)->GetNode()->IsInProtectSect() )
+        if (pFrame->IsTextFrame())
+        {   // sw_redlinehide: redlines can't overlap section nodes, so any node will do
+            if (static_cast<SwTextFrame const*>(pFrame)->GetTextNodeFirst()->IsInProtectSect())
+            {
                 return true;
+            }
+        }
+        else if ( pFrame->IsContentFrame() )
+        {
+            assert(pFrame->IsNoTextFrame());
+            if (static_cast<const SwNoTextFrame*>(pFrame)->GetNode() &&
+                static_cast<const SwNoTextFrame*>(pFrame)->GetNode()->IsInProtectSect())
+            {
+                return true;
+            }
         }
         else
         {
