@@ -1,0 +1,6 @@
+extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkLabel[@id='label6'] orphan-label
+extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkComboBox[@id='editorCombobox'] no-labelled-by
+extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkLabel[@id='label15'] orphan-label
+extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkComboBox[@id='volumeCombobox'] no-labelled-by
+extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkLabel[@id='label27'] orphan-label
+extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkComboBox[@id='URLCombobox'] no-labelled-by
