@@ -688,7 +688,7 @@ void SwPageFrame::PrepareHeader()
     if ( !pLay )
         return;
 
-    const SwFormatHeader &rH = static_cast<SwFrameFormat*>(GetRegisteredIn())->GetHeader();
+    const SwFormatHeader &rH = static_cast<SwFrameFormat*>(GetDep())->GetHeader();
 
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bOn = !(pSh && (pSh->GetViewOptions()->getBrowseMode() ||
@@ -729,7 +729,7 @@ void SwPageFrame::PrepareFooter()
     if ( !pLay )
         return;
 
-    const SwFormatFooter &rF = static_cast<SwFrameFormat*>(GetRegisteredIn())->GetFooter();
+    const SwFormatFooter &rF = static_cast<SwFrameFormat*>(GetDep())->GetFooter();
     while ( pLay->GetNext() )
         pLay = static_cast<SwLayoutFrame*>(pLay->GetNext());
 

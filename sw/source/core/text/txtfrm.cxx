@@ -651,7 +651,7 @@ void SwTextFrame::DestroyImpl()
         }
         else
         {
-            SwTextNode *const pNode(static_cast<SwTextNode*>(GetRegisteredIn()));
+            SwTextNode *const pNode(static_cast<SwTextNode*>(GetDep()));
             if (pNode)
             {
                 RemoveFootnotesForNode(*this, *pNode);
