@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_2bd72624",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1001886
+      },
+      "writtenOn": "2018-06-01T05:49:41Z",
+      "side": 1,
+      "message": "I just take the code from \"Ok\" button handler and save behaviour of it. I don\u0027t see any  clear reason, why it should be removed.",
+      "parentUuid": "9a30ddce_4b7d3a6d",
+      "revId": "c29330815f20cd1bd84f94669ffa4831e63107e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_cbe84a13",
         "filename": "cui/source/options/treeopt.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_4bde1a40",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1001886
+      },
+      "writtenOn": "2018-06-01T05:49:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_cbe84a13",
+      "revId": "c29330815f20cd1bd84f94669ffa4831e63107e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_6b803e47",
         "filename": "cui/source/options/treeopt.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2018-06-01T02:26:11Z",
       "side": 1,
       "message": "which then would make the need for this slightly unclear bool parameter go away",
+      "revId": "c29330815f20cd1bd84f94669ffa4831e63107e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6be11efe",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1001886
+      },
+      "writtenOn": "2018-06-01T05:49:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_6b803e47",
       "revId": "c29330815f20cd1bd84f94669ffa4831e63107e5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
