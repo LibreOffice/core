@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_2548ae2d",
+        "filename": "sc/IwyuFilter_sc.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-01T13:04:49Z",
+      "side": 1,
+      "message": "I don\u0027t think anything derives from uno::Any. Either the reason is different or please try to use fwd decls there.",
+      "revId": "3b7ef1fbe942b987ae2360fc57c742cff7a3dd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_4555aac4",
+        "filename": "sc/IwyuFilter_sc.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-01T13:04:49Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "3b7ef1fbe942b987ae2360fc57c742cff7a3dd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
