@@ -692,7 +692,7 @@ static const SwContentFrame * lcl_MissProtectedFrames( const SwContentFrame *pCn
 static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                     GetNxtPrvCnt fnNxtPrv, bool bInReadOnly )
 {
-    OSL_ENSURE( &pPam->GetNode() == pStart->GetNode(),
+    OSL_ENSURE( FrameContainsNode(*pStart, pPam->GetNode().GetIndex()),
             "lcl_UpDown doesn't work for others." );
 
     const SwContentFrame *pCnt = nullptr;
