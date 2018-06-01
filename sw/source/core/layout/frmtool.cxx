@@ -973,38 +973,9 @@ SwContentNotify::~SwContentNotify()
     }
 }
 
-void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
-                        SwFrame *pFrame, SwPageFrame *pPage, SwDoc* doc )
+// note this *cannot* be static because it's a friend
+void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *const pFormat, const SwFormatAnchor & rAnch)
 {
-#if OSL_DEBUG_LEVEL > 0
-    std::vector<SwFrameFormat*> checkFormats;
-    for ( size_t i = 0; i < pTable->size(); ++i )
-    {
-        SwFrameFormat *pFormat = (*pTable)[i];
-        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        if ( rAnch.GetContentAnchor() &&
-             (rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex) )
-        {
-            checkFormats.push_back( pFormat );
-        }
-    }
-#else
-    (void)pTable;
-#endif
-    SwNode const& rNode(*doc->GetNodes()[nIndex]);
-    std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
-    for (size_t it = 0; pFlys && it != pFlys->size(); )
-    {
-        SwFrameFormat *const pFormat = (*pFlys)[it];
-        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        if ( rAnch.GetContentAnchor() &&
-             (rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex) )
-        {
-#if OSL_DEBUG_LEVEL > 0
-            std::vector<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
-            assert( checkPos != checkFormats.end());
-            checkFormats.erase( checkPos );
-#endif
             const bool bFlyAtFly = rAnch.GetAnchorId() == RndStdIds::FLY_AT_FLY; // LAYER_IMPL
             //Is a frame or a SdrObject described?
             const bool bSdrObj = RES_DRAWFRMFMT == pFormat->Which();
@@ -1022,9 +993,8 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
                 if ( bSdrObj && nullptr == (pSdrObj = pFormat->FindSdrObject()) )
                 {
                     OSL_ENSURE( !bSdrObj, "DrawObject not found." );
-                    ++it;
                     pFormat->GetDoc()->DelFrameFormat( pFormat );
-                    continue;
+                    return;
                 }
                 if ( pSdrObj )
                 {
@@ -1051,7 +1021,6 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
 
                         pDrawVirtObj->ActionChanged();
                     }
-
                 }
                 else
                 {
@@ -1067,12 +1036,131 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
                         ::RegistFlys( pPage, pFly );
                 }
             }
+}
+
+static bool IsShown(sal_uLong const nIndex,
+    const SwFormatAnchor & rAnch,
+    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pEnd)
+{
+    SwPosition const& rAnchor(*rAnch.GetContentAnchor());
+    if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA)
+    {
+        // TODO are frames sorted by anchor positions perhaps?
+        assert(pEnd);
+        assert(rAnch.GetAnchorId() != RndStdIds::FLY_AT_FLY);
+        for ( ; *pIter != *pEnd; ++*pIter)
+        {
+            assert((**pIter).pNode->GetIndex() == nIndex);
+            if ((**pIter).nStart <= rAnchor.nContent.GetIndex())
+            {
+                // TODO off by one? need < for AS_CHAR but what for AT_CHAR?
+                if (rAnchor.nContent.GetIndex() < (**pIter).nEnd)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+    else
+    {
+        return rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex;
+    }
+}
+
+void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
+    SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
+    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pEnd)
+{
+#if OSL_DEBUG_LEVEL > 0
+    std::vector<SwFrameFormat*> checkFormats;
+    for ( size_t i = 0; i < pTable->size(); ++i )
+    {
+        SwFrameFormat *pFormat = (*pTable)[i];
+        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
+        if ( rAnch.GetContentAnchor() &&
+            IsShown(nIndex, rAnch, pIter, pEnd))
+        {
+            checkFormats.push_back( pFormat );
+        }
+    }
+#else
+    (void)pTable;
+#endif
+
+    SwNode const& rNode(*pDoc->GetNodes()[nIndex]);
+    std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
+    for (size_t it = 0; pFlys && it != pFlys->size(); )
+    {
+        SwFrameFormat *const pFormat = (*pFlys)[it];
+        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
+        if ( rAnch.GetContentAnchor() &&
+            IsShown(nIndex, rAnch, pIter, pEnd))
+        {
+#if OSL_DEBUG_LEVEL > 0
+            std::vector<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
+            assert( checkPos != checkFormats.end());
+            checkFormats.erase( checkPos );
+#endif
+            AppendObj(pFrame, pPage, pFormat, rAnch);
         }
         ++it;
     }
+
 #if OSL_DEBUG_LEVEL > 0
     assert( checkFormats.empty());
 #endif
+}
+
+
+void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
+        SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc)
+{
+    if (pFrame->IsTextFrame())
+    {
+        SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(pFrame));
+        if (sw::MergedPara const*const pMerged = pTextFrame->GetMergedPara())
+        {
+            std::vector<sw::Extent>::const_iterator iterFirst(pMerged->extents.begin());
+            std::vector<sw::Extent>::const_iterator iter(iterFirst);
+            SwTextNode const* pNode(nullptr);
+            for ( ; iter != pMerged->extents.end(); ++iter)
+            {
+                if (iter->pNode != pNode)
+                {
+                    if (pNode)
+                    {
+                        AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
+                    }
+                    else
+                    {
+                        assert(nIndex == iter->pNode->GetIndex()); // first iteration
+                    }
+                    pNode = iter->pNode;
+                    iterFirst = iter;
+                }
+            }
+            if (!pNode)
+            {   // no extents?
+                pNode = pMerged->pFirstNode;
+            }
+            AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
+        }
+        else
+        {
+            return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr);
+        }
+    }
+    else
+    {
+        return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr);
+    }
 }
 
 void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
