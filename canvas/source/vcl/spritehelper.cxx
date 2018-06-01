@@ -129,7 +129,7 @@ namespace vclcanvas
 
             if( bNeedBitmapUpdate )
             {
-                Bitmap aBmp( mpBackBuffer->getOutDev().GetBitmap( aEmptyPoint,
+                BitmapEx aBmp( mpBackBuffer->getOutDev().GetBitmapEx( aEmptyPoint,
                                                                   aOutputSize ) );
 
                 if( isContentFullyOpaque() )
@@ -144,7 +144,7 @@ namespace vclcanvas
                 {
                     // sprite content might contain alpha, create
                     // BmpEx, then.
-                    Bitmap aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint,
+                    BitmapEx aMask( mpBackBufferMask->getOutDev().GetBitmapEx( aEmptyPoint,
                                                                            aOutputSize ) );
 
                     // bitmasks are much faster than alphamasks on some platforms
@@ -163,7 +163,7 @@ namespace vclcanvas
                     // Note: since we retrieved aBmp and aMask
                     // directly from an OutDev, it's already a
                     // 'display bitmap' on windows.
-                    maContent = BitmapEx( aBmp, aMask );
+                    maContent = BitmapEx( aBmp.GetBitmap(), aMask.GetBitmap() );
                 }
             }
 
