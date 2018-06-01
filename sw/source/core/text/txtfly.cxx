@@ -834,9 +834,9 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 // If possible determine Index via SwFormatAnchor because
                 // otherwise it's quite expensive.
                 if (ULONG_MAX == m_nCurrFrameNodeIndex)
-                    m_nCurrFrameNodeIndex = m_pCurrFrame->GetNode()->GetIndex();
+                    m_nCurrFrameNodeIndex = m_pCurrFrame->GetTextNodeFirst()->GetIndex();
 
-                if (nTmpIndex < m_nCurrFrameNodeIndex)
+                if (FrameContainsNode(*m_pCurrFrame, nTmpIndex) || nTmpIndex < m_nCurrFrameNodeIndex)
                     return true;
             }
         }
