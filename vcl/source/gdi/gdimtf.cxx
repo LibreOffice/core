@@ -2687,9 +2687,8 @@ SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaRe
         }
         else
         {
-            // to avoid possible compiler optimizations => new/delete
             rIStm.Seek( nStmPos );
-            delete new SVMConverter( rIStm, rGDIMetaFile, CONVERT_FROM_SVM1 );
+            SVMConverter( rIStm, rGDIMetaFile );
         }
     }
     catch (...)
@@ -2713,28 +2712,8 @@ SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile )
 {
     if( !rOStm.GetError() )
     {
-        static const char*  pEnableSVM1 = getenv( "SAL_ENABLE_SVM1" );
-        static const bool   bNoSVM1 = (nullptr == pEnableSVM1 ) || ( '0' == *pEnableSVM1 );
-
-        if( bNoSVM1 || rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50  )
-        {
-            const_cast< GDIMetaFile& >( rGDIMetaFile ).Write( rOStm );
-        }
-        else
-        {
-            delete new SVMConverter( rOStm, const_cast< GDIMetaFile& >( rGDIMetaFile ), CONVERT_TO_SVM1 );
-        }
-
-#ifdef DEBUG
-        if( !bNoSVM1 && rOStm.GetVersion() < SOFFICE_FILEFORMAT_50 )
-        {
-            SAL_WARN( "vcl", "GDIMetaFile would normally be written in old SVM1 format by this call. "
-                "The current implementation always writes in VCLMTF format. "
-                "Please set environment variable SAL_ENABLE_SVM1 to '1' to reenable old behavior" );
-        }
-#endif // DEBUG
+        const_cast< GDIMetaFile& >( rGDIMetaFile ).Write( rOStm );
     }
-
     return rOStm;
 }
 

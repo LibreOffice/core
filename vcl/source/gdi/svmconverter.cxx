@@ -484,14 +484,11 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPol
     }
 }
 
-SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uLong nConvertMode )
+SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf )
 {
     if( !rStm.GetError() )
     {
-        if( CONVERT_FROM_SVM1 == nConvertMode )
-            ImplConvertFromSVM1( rStm, rMtf );
-        else if( CONVERT_TO_SVM1 == nConvertMode )
-            ImplConvertToSVM1( rStm, rMtf );
+        ImplConvertFromSVM1( rStm, rMtf );
     }
 }
 
@@ -1477,48 +1474,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     }
 
     rIStm.SetEndian( nOldFormat );
-}
-
-void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile const & rMtf )
-{
-    sal_uLong           nCountPos;
-    vcl::Font           aSaveFont;
-    const SvStreamEndian nOldFormat = rOStm.GetEndian();
-    rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
-    const Size          aPrefSize( rMtf.GetPrefSize() );
-    bool                bRop_0_1 = false;
-    ScopedVclPtrInstance< VirtualDevice > aSaveVDev;
-    Color               aLineCol( COL_BLACK );
-    ::std::stack< Color* >  aLineColStack;
-
-    rOStm.SetEndian( SvStreamEndian::LITTLE );
-
-    // Write MagicCode
-    rOStm.WriteCharPtr( "SVGDI" );                                   // Identifier
-    rOStm.WriteInt16( 42 );                            // HeaderSize
-    rOStm.WriteInt16( 200 );                           // VERSION
-    rOStm.WriteInt32( aPrefSize.Width() );
-    rOStm.WriteInt32( aPrefSize.Height() );
-    ImplWriteMapMode( rOStm, rMtf.GetPrefMapMode() );
-
-    // ActionCount will be written later
-    nCountPos = rOStm.Tell();
-    rOStm.SeekRel( 4 );
-
-    const sal_Int32 nActCount = ImplWriteActions( rOStm, rMtf, *aSaveVDev.get(), bRop_0_1, aLineCol, aLineColStack, eActualCharSet );
-    const sal_uLong nActPos = rOStm.Tell();
-
-    rOStm.Seek( nCountPos );
-    rOStm.WriteInt32( nActCount );
-    rOStm.Seek( nActPos );
-    rOStm.SetEndian( nOldFormat );
-
-    // cleanup push-pop stack if necessary
-    while ( !aLineColStack.empty() )
-    {
-        delete aLineColStack.top();
-        aLineColStack.pop();
-    }
 }
 
 sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & rMtf,
