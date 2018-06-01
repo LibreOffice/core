@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_cbe84a13",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-06-01T02:57:37Z",
+      "side": 1,
+      "message": "btw - if this needs retaining - a way to make this more self-documenting is adding the bool parameter variable name, like so:\n\nApplyOptions(/*deactivate\u003d*/false);",
+      "revId": "c29330815f20cd1bd84f94669ffa4831e63107e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_6b803e47",
         "filename": "cui/source/options/treeopt.cxx",
         "patchSetId": 2
