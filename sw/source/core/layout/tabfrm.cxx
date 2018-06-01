@@ -47,6 +47,7 @@
 #include <cellfrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <htmltbl.hxx>
 #include <sectfrm.hxx>
 #include <fmtfollowtextflow.hxx>
@@ -1178,7 +1179,11 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
                 SwContentFrame* pFrame = pHeadline->ContainsContent();
                 while( pFrame )
                 {
-                    nIndex = pFrame->GetNode()->GetIndex();
+                    // sw_redlinehide: the implementation of AppendObjs
+                    // takes care of iterating merged SwTextFrame
+                    nIndex = pFrame->IsTextFrame()
+                        ? static_cast<SwTextFrame*>(pFrame)->GetTextNodeFirst()->GetIndex()
+                        : static_cast<SwNoTextFrame*>(pFrame)->GetNode()->GetIndex();
                     AppendObjs( pTable, nIndex, pFrame, pPage, GetFormat()->GetDoc());
                     pFrame = pFrame->GetNextContentFrame();
                     if( !pHeadline->IsAnLower( pFrame ) )
