@@ -29,7 +29,7 @@ class KDE5SalInstance : public Qt5Instance
 {
 public:
     explicit KDE5SalInstance(SalYieldMutex* pMutex);
-    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle);
+    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
 
     virtual bool hasNativeFileSelection() const override { return true; }
 
