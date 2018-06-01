@@ -209,11 +209,11 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,WPS,WPS_TARBALL) \
 		$(call fetch_Optional,XSLTML,XSLTML_TARBALL) \
 		$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
+	,$(call fetch_Download_item,https://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional,DBGHELP,DBGHELP_DLL) \
 		$(call fetch_Optional,ODK,UNOWINREG_DLL) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
+	,$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional_pack,BARCODE_EXTENSION_PACK) \
 		$(call fetch_Optional_pack,DIAGRAM_EXTENSION_PACK) \
@@ -233,7 +233,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional_pack,WATCH_WINDOW_EXTENSION_PACK) \
 	,$(call fetch_Download_item,http://ooo.itc.hu/oxygenoffice/download/libreoffice,$(item)))
 	$(if $(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
-	, $(call fetch_Download_item,http://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
+	, $(call fetch_Download_item,https://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
 	@mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4 ts=4:
