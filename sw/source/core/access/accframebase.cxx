@@ -36,6 +36,7 @@
 
 #include <crsrsh.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <ndtxt.hxx>
 #include <dcontact.hxx>
 #include <fmtanchr.hxx>
@@ -100,8 +101,8 @@ SwNodeType SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )
     {
          if( pFlyFrame->Lower()->IsNoTextFrame() )
         {
-            const SwContentFrame *pContentFrame =
-                static_cast<const SwContentFrame *>( pFlyFrame->Lower() );
+            const SwNoTextFrame *const pContentFrame =
+                static_cast<const SwNoTextFrame *>(pFlyFrame->Lower());
             nType = pContentFrame->GetNode()->GetNodeType();
         }
     }
