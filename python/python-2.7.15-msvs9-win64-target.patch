@@ -1,5 +1,5 @@
---- misc/build/Python-2.7.14/PC/VS9.0/pcbuild.sln	2018-03-08 04:58:56.323391400 +0200
-+++ misc/build/Python-2.7.14/PC/VS9.0/pcbuild.sln	2018-03-08 05:14:36.079035700 +0200
+--- misc/build/Python-2.7.15/PC/VS9.0/pcbuild.sln	2018-03-08 04:58:56.323391400 +0200
++++ misc/build/Python-2.7.15/PC/VS9.0/pcbuild.sln	2018-03-08 05:14:36.079035700 +0200
 @@ -162,20 +162,20 @@
  		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9}.Release|x64.Build.0 = Release|x64
  		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Debug|Win32.ActiveCfg = Debug|Win32

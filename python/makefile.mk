@@ -42,7 +42,7 @@ all:
 
 
 TARFILE_NAME=Python-$(PYVERSION)
-TARFILE_MD5=cee2e4b33ad3750da77b2e85f2f8b724
+TARFILE_MD5=045fb3440219a1f6923fefdabde63342
 PATCH_FILES=\
     python-solaris.patch \
     python-freebsd.patch \
@@ -96,7 +96,7 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) && $(GNUMAKE) install &&
 # WINDOWS
 # ----------------------------------
 .IF "$(COM)"=="GCC"
-PATCH_FILES=python-$(PYVERSION)-mingw.patch
+#PATCH_FILES=python-$(PYVERSION)-mingw.patch
 BUILD_DIR=
 MYCWD=$(shell cygpath -m $(shell @pwd))/$(INPATH)/misc/build
 python_CFLAGS=-mno-cygwin -mthreads
