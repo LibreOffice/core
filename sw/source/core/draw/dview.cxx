@@ -31,6 +31,7 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
+#include <notxtfrm.hxx>
 #include <flyfrm.hxx>
 #include <frmfmt.hxx>
 #include <dflyobj.hxx>
@@ -832,9 +833,9 @@ void SwDrawView::CheckPossibilities()
                 pFrame = pFly->GetAnchorFrame();
                 if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
                 {
-                    const SwContentFrame* pCntFr(static_cast<const SwContentFrame*>(pFly->Lower()));
-                    const SwOLENode* pOLENd = pCntFr->GetNode()->GetOLENode();
-                    const SwGrfNode* pGrfNd = pCntFr->GetNode()->GetGrfNode();
+                    const SwNoTextFrame *const pNTF(static_cast<const SwNoTextFrame*>(pFly->Lower()));
+                    const SwOLENode *const pOLENd = pNTF->GetNode()->GetOLENode();
+                    const SwGrfNode *const pGrfNd = pNTF->GetNode()->GetGrfNode();
 
                     if ( pOLENd )
                     {
