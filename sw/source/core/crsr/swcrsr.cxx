@@ -39,6 +39,7 @@
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <scriptinfo.hxx>
 #include <crstate.hxx>
 #include <docsh.hxx>
@@ -351,18 +352,31 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                 }
             }
 
-            SwContentNode* pCNd = (pFrame != nullptr) ? const_cast<SwContentNode*>(pFrame->GetNode()) : nullptr;
-            if ( pCNd != nullptr )
+            if (pFrame != nullptr)
             {
-                // set this ContentNode as new position
-                rPtIdx = *pCNd;
+                if (pFrame->IsTextFrame())
+                {
+                    SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(pFrame));
+                    *GetPoint() = pTextFrame->MapViewToModelPos(TextFrameIndex(
+                            bGoNxt ? 0 : pTextFrame->GetText().getLength()));
+                }
+                else
+                {
+                    assert(pFrame->IsNoTextFrame());
+                    SwContentNode *const pCNd = const_cast<SwContentNode*>(
+                        static_cast<SwNoTextFrame const*>(pFrame)->GetNode());
+                    assert(pCNd);
 
-                // assign corresponding ContentIndex
-                const sal_Int32 nTmpPos = bGoNxt ? 0 : pCNd->Len();
-                GetPoint()->nContent.Assign( pCNd, nTmpPos );
+                    // set this ContentNode as new position
+                    rPtIdx = *pCNd;
+                    // assign corresponding ContentIndex
+                    const sal_Int32 nTmpPos = bGoNxt ? 0 : pCNd->Len();
+                    GetPoint()->nContent.Assign( pCNd, nTmpPos );
+                }
+
 
                 if (rPtIdx.GetIndex() == m_vSavePos.back().nNode
-                    && nTmpPos == m_vSavePos.back().nContent)
+                    && GetPoint()->nContent.GetIndex() == m_vSavePos.back().nContent)
                 {
                     // new position equals saved one
                     // --> trigger restore of saved pos by setting <pFrame> to NULL - see below
