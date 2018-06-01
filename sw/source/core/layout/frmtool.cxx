@@ -738,8 +738,7 @@ SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
         SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pContentFrame);
         if (!pTextFrame->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::OLD_LINE_SPACING))
         {
-            const SwAttrSet* pSet = pTextFrame->GetAttrSet();
-            const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
+            const SvxLineSpacingItem &rSpace = pTextFrame->GetAttrSet()->GetLineSpacing();
             if ( rSpace.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
                 mbChkHeightOfLastLine = true;
