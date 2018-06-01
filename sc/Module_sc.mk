@@ -185,6 +185,9 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_autofilter \
 	UITest_search_replace \
 	UITest_calc_tests \
+	UITest_calc_tests2 \
+	UITest_calc_tests3 \
+	UITest_calc_tests4 \
 ))
 endif
 
