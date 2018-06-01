@@ -132,7 +132,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
 
                 aTransMap.SetOrigin( Point() );
                 pVDev->SetMapMode( aTransMap );
-                aBmp = pVDev->GetBitmap( Point(), rSizePix );
+                aBmp = pVDev->GetBitmapEx( Point(), rSizePix ).GetBitmap();
                 aBmp.Convert( BmpConversion::N1BitThreshold );
             }
         }
@@ -170,7 +170,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
         {
             const Point aPt;
             aTmpGrf.Draw( pVDev, aPt, aSizePix );
-            aBmp = pVDev->GetBitmap( aPt, aSizePix );
+            aBmp = pVDev->GetBitmapEx( aPt, aSizePix ).GetBitmap();
         }
 
         nContourFlags |= XOutFlags::ContourEdgeDetect;

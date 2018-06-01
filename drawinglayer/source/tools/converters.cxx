@@ -94,14 +94,13 @@ namespace drawinglayer
 
                 // get content
                 pContent->EnableMapMode(false);
-                const Bitmap aContent(pContent->GetBitmap(aEmptyPoint, aSizePixel));
+                const BitmapEx aContent(pContent->GetBitmapEx(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
                 if(bDoSaveForVisualControl)
                 {
                     SvFileStream aNew("c:\\test_content.png", StreamMode::WRITE|StreamMode::TRUNC);
-                    BitmapEx aContentEx = BitmapEx(aContent);
-                    vcl::PNGWriter aPNGWriter(aContentEx);
+                    vcl::PNGWriter aPNGWriter(aContent);
                     aPNGWriter.Write(aNew);
                 }
 #endif
@@ -126,19 +125,18 @@ namespace drawinglayer
 
                 // get alpha channel from vdev
                 pContent->EnableMapMode(false);
-                const Bitmap aAlpha(pContent->GetBitmap(aEmptyPoint, aSizePixel));
+                const BitmapEx aAlpha(pContent->GetBitmapEx(aEmptyPoint, aSizePixel));
 #ifdef DBG_UTIL
                 if(bDoSaveForVisualControl)
                 {
                     SvFileStream aNew("c:\\test_alpha.png", StreamMode::WRITE|StreamMode::TRUNC);
-                    BitmapEx aAlphaEx = BitmapEx(aAlpha);
-                    vcl::PNGWriter aPNGWriter(aAlphaEx);
+                    vcl::PNGWriter aPNGWriter(aAlpha);
                     aPNGWriter.Write(aNew);
                 }
 #endif
 
                 // create BitmapEx result
-                aRetval = BitmapEx(aContent, AlphaMask(aAlpha));
+                aRetval = BitmapEx(aContent.GetBitmap(), AlphaMask(aAlpha.GetBitmap()));
 #ifdef DBG_UTIL
                 if(bDoSaveForVisualControl)
                 {

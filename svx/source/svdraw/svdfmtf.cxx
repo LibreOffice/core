@@ -1609,7 +1609,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
         pVDev->SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
         pVDev->DrawGradient(tools::Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
 
-        aNewMask = AlphaMask(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
+        aNewMask = AlphaMask(pVDev->GetBitmapEx(Point(0, 0), pVDev->GetOutputSizePixel()).GetBitmap());
         bHasNewMask = true;
     }
 

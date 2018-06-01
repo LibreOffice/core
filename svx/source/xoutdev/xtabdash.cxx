@@ -168,7 +168,7 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
     }
 
     // get result bitmap and scale
-    BitmapEx aRetval(pVirtualDevice->GetBitmap(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));
+    BitmapEx aRetval(pVirtualDevice->GetBitmapEx(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));
 
     if(1 != nFactor)
     {

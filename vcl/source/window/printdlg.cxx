@@ -165,14 +165,14 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
     }
     else
     {
-        Bitmap aPreviewBitmap(maPreviewBitmap);
+        BitmapEx aPreviewBitmap(maPreviewBitmap);
 
         // This explicit force-to-scale allows us to get the
         // mentioned best quality here. Unfortunately this is
         // currently not sure when using just ::DrawBitmap with
         // a defined size or ::DrawOutDev
         aPreviewBitmap.Scale(maPreviewSize, BmpScaleFlag::BestQuality);
-        rRenderContext.DrawBitmap(aOffset, aPreviewBitmap);
+        rRenderContext.DrawBitmapEx(aOffset, aPreviewBitmap);
     }
 
     tools::Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));
@@ -377,7 +377,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     SetMapMode(MapMode(MapUnit::MapPixel));
     pPrerenderVDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
-    maPreviewBitmap = pPrerenderVDev->GetBitmap(Point(0, 0), aVDevSize);
+    maPreviewBitmap = pPrerenderVDev->GetBitmapEx(Point(0, 0), aVDevSize);
 
     pPrerenderVDev->SetDrawMode( nOldDrawMode );
 }

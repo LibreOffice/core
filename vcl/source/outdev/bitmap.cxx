@@ -454,7 +454,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                             OSL_ENSURE(false, "CopyBits with zero or negative width or height");
                         }
 
-                        aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
+                        aBmp = aVDev->GetBitmapEx( Point(), aVDev->GetOutputSizePixel() ).GetBitmap();
                      }
                      else
                         bClipped = false;
@@ -485,13 +485,13 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
     // #110958# Extract alpha value from VDev, if any
     if( mpAlphaVDev )
     {
-        Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( rSrcPt, rSize ) );
+        BitmapEx aAlphaBitmap( mpAlphaVDev->GetBitmapEx( rSrcPt, rSize ) );
 
         // ensure 8 bit alpha
         if( aAlphaBitmap.GetBitCount() > 8 )
             aAlphaBitmap.Convert( BmpConversion::N8BitGreys );
 
-        return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap ) );
+        return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap.GetBitmap() ) );
     }
     else
         return BitmapEx(GetBitmap( rSrcPt, rSize ));
@@ -673,10 +673,10 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             // try to blend the alpha bitmap with the alpha virtual device
             if (mpAlphaVDev)
             {
-                Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
-                if (aAlphaBitmap.ImplGetSalBitmap())
+                BitmapEx aAlphaBitmap( mpAlphaVDev->GetBitmapEx( aRelPt, aOutSz ) );
+                if (aAlphaBitmap.GetBitmap().ImplGetSalBitmap())
                 {
-                    SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetSalBitmap().get();
+                    SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.GetBitmap().ImplGetSalBitmap().get();
                     if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, this))
                     {
                         mpAlphaVDev->BlendBitmap(aTR, rAlpha);
@@ -943,7 +943,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     mpMetaFile = nullptr; // fdo#55044 reset before GetBitmap!
     mbMap = false;
 
-    Bitmap aBmp(GetBitmap(aDstRect.TopLeft(), aDstRect.GetSize()));
+    Bitmap aBmp(GetBitmapEx(aDstRect.TopLeft(), aDstRect.GetSize()).GetBitmap());
 
     // #109044# The generated bitmap need not necessarily be
     // of aDstRect dimensions, it's internally clipped to
@@ -1409,7 +1409,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
     bool bOldMapMode( mpAlphaVDev->IsMapModeEnabled() );
     mpAlphaVDev->EnableMapMode(false);
 
-    Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
+    Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmapEx( aDstRect.TopLeft(), aDstRect.GetSize() ).GetBitmap() );
     BitmapScopedWriteAccess pAlphaW(aAlphaBitmap);
 
     if( GetBitCount() <= 8 )

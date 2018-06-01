@@ -332,7 +332,7 @@ namespace drawinglayer
 
             mrOutDev.EnableMapMode(false);
             mpContent->EnableMapMode(false);
-            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
             if(bDoSaveForVisualControl)
@@ -344,7 +344,7 @@ namespace drawinglayer
                     "~/content.bmp",
 #endif
                     StreamMode::WRITE|StreamMode::TRUNC);
-                WriteDIB(aContent, aNew, false, true);
+                WriteDIB(aContent, aNew, false);
             }
 #endif
 
@@ -355,7 +355,7 @@ namespace drawinglayer
             if(mpAlpha)
             {
                 mpAlpha->EnableMapMode(false);
-                const AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
+                const AlphaMask aAlphaMask(mpAlpha->GetBitmapEx(aEmptyPoint, aSizePixel).GetBitmap());
 
 #ifdef DBG_UTIL
                 if(bDoSaveForVisualControl)
@@ -371,12 +371,12 @@ namespace drawinglayer
                 }
 #endif
 
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
             }
             else if(mpMask)
             {
                 mpMask->EnableMapMode(false);
-                const Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
+                const BitmapEx aMask(mpMask->GetBitmapEx(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
                 if(bDoSaveForVisualControl)
@@ -388,21 +388,21 @@ namespace drawinglayer
                         "~/mask.bmp",
 #endif
                         StreamMode::WRITE|StreamMode::TRUNC);
-                    WriteDIB(aMask, aNew, false, true);
+                    WriteDIB(aMask, aNew, false);
                 }
 #endif
 
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
+                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aMask.GetBitmap()));
             }
             else if(0.0 != fTrans)
             {
                 sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
                 const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
             }
             else
             {
-                mrOutDev.DrawBitmap(maDestPixel.TopLeft(), aContent);
+                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), aContent);
             }
 
             mrOutDev.SetRasterOp(aOrigRasterOp);

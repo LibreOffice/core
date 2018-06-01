@@ -358,12 +358,12 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         pMtf->AddAction(
             new MetaBmpExAction( aEmptyPoint,
                                  BitmapEx(
-                                     pVDev->GetBitmap(
+                                     pVDev->GetBitmapEx(
                                          aEmptyPoint,
-                                         aAnimSize ),
-                                     pVDevMask->GetBitmap(
+                                         aAnimSize ).GetBitmap(),
+                                     pVDevMask->GetBitmapEx(
                                          aEmptyPoint,
-                                         aAnimSize ))));
+                                         aAnimSize ).GetBitmap())));
 
         // setup mtf dimensions and pref map mode (for
         // simplicity, keep it all in pixel. the metafile

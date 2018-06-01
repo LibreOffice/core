@@ -281,15 +281,15 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                 pVDev->Erase();
                                 rGraphic.Draw( pVDev.get(), aPt, aSize );
 
-                                const Bitmap aBitmap( pVDev->GetBitmap( aPt, aSize ) );
+                                const BitmapEx aBitmap( pVDev->GetBitmapEx( aPt, aSize ) );
 
                                 pVDev->SetBackground( aWallpaper );
                                 pVDev->Erase();
                                 rGraphic.Draw( pVDev.get(), aPt, aSize );
 
                                 pVDev->SetRasterOp( RasterOp::Xor );
-                                pVDev->DrawBitmap( aPt, aSize, aBitmap );
-                                aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
+                                pVDev->DrawBitmapEx( aPt, aSize, aBitmap );
+                                aGraphic = BitmapEx( aBitmap.GetBitmap(), pVDev->GetBitmapEx( aPt, aSize ).GetBitmap() );
                             }
                             else
                                 aGraphic = rGraphic.GetBitmapEx();
@@ -308,7 +308,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                         if( pVDev->SetOutputSizePixel( aSize ) )
                         {
                             rGraphic.Draw( pVDev.get(), Point(), aSize );
-                            aGraphic = pVDev->GetBitmap( Point(), aSize );
+                            aGraphic = pVDev->GetBitmapEx( Point(), aSize );
                         }
                         else
                             aGraphic = rGraphic.GetBitmapEx();
@@ -487,7 +487,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
             pReadAcc.reset();
 
             if( bRet )
-                aRetBmp = pVirDev->GetBitmap(Point(0,0), aSize);
+                aRetBmp = pVirDev->GetBitmapEx(Point(0,0), aSize).GetBitmap();
         }
     }
 

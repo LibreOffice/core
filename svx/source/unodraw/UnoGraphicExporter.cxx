@@ -705,7 +705,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
                 if( pVDev )
                 {
-                    aGraphic = pVDev->GetBitmap( Point(), pVDev->GetOutputSize() );
+                    aGraphic = pVDev->GetBitmapEx( Point(), pVDev->GetOutputSize() );
                     aGraphic.SetPrefMapMode( aMap );
                     aGraphic.SetPrefSize( aSize );
                 }

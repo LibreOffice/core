@@ -187,7 +187,7 @@ namespace drawinglayer
                                 xControlView->draw(0, 0);
 
                                 // get bitmap
-                                const Bitmap aContent(aVirtualDevice->GetBitmap(Point(), aSizePixel));
+                                const BitmapEx aContent(aVirtualDevice->GetBitmapEx(Point(), aSizePixel));
 
                                 // to avoid scaling, use the Bitmap pixel size as primitive size
                                 const Size aBitmapSize(aContent.GetSizePixel());

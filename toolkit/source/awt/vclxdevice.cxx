@@ -194,10 +194,10 @@ css::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX,
     css::uno::Reference< css::awt::XBitmap >  xBmp;
     if( mpOutputDevice )
     {
-        Bitmap aBmp = mpOutputDevice->GetBitmap( Point( nX, nY ), Size( nWidth, nHeight ) );
+        BitmapEx aBmp = mpOutputDevice->GetBitmapEx( Point( nX, nY ), Size( nWidth, nHeight ) );
 
         VCLXBitmap* pBmp = new VCLXBitmap;
-        pBmp->SetBitmap( BitmapEx( aBmp ) );
+        pBmp->SetBitmap( aBmp );
         xBmp = pBmp;
     }
     return xBmp;

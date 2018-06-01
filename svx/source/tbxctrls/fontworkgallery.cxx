@@ -137,7 +137,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
             pVDev->DrawCheckered(aNull, aSize, nLen, aW, aG);
 
             pVDev->DrawBitmapEx(aNull, aThumb);
-            maFavoritesHorizontal.emplace_back(pVDev->GetBitmap(aNull, aSize));
+            maFavoritesHorizontal.emplace_back(pVDev->GetBitmapEx(aNull, aSize));
         }
     }
 

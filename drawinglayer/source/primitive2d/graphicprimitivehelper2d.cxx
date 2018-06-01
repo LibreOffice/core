@@ -158,16 +158,16 @@ namespace drawinglayer
             Primitive2DReference createFromBuffer() const
             {
                 // create BitmapEx by extracting from VirtualDevices
-                const Bitmap aMainBitmap(maVirtualDevice->GetBitmap(Point(), maVirtualDevice->GetOutputSizePixel()));
+                const BitmapEx aMainBitmap(maVirtualDevice->GetBitmapEx(Point(), maVirtualDevice->GetOutputSizePixel()));
 #if defined(MACOSX) || defined(IOS)
-                const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmapEx(Point(), maVirtualDeviceMask->GetOutputSizePixel()).GetBitmap());
 #else
-                const Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                const BitmapEx aMaskBitmap(maVirtualDeviceMask->GetBitmapEx(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
 #endif
 
                 return Primitive2DReference(
                     new BitmapPrimitive2D(
-                        BitmapEx(aMainBitmap, aMaskBitmap),
+                        BitmapEx(aMainBitmap.GetBitmap(), aMaskBitmap.GetBitmap()),
                         getTransform()));
             }
 

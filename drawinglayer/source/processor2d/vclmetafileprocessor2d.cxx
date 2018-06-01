@@ -2044,18 +2044,18 @@ namespace drawinglayer
 
                                 // draw content using pixel renderer
                                 aBufferProcessor.process(rContent);
-                                const Bitmap aBmContent(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
+                                const BitmapEx aBmContent(aBufferDevice->GetBitmapEx(aEmptyPoint, aSizePixel));
 
                                 // draw transparence using pixel renderer
                                 aBufferDevice->Erase();
                                 aBufferProcessor.process(rTransparence);
-                                const AlphaMask aBmAlpha(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
+                                const AlphaMask aBmAlpha(aBufferDevice->GetBitmapEx(aEmptyPoint, aSizePixel).GetBitmap());
 
                                 // paint
                                 mpOutputDevice->DrawBitmapEx(
                                     aRectLogic.TopLeft(),
                                     aRectLogic.GetSize(),
-                                    BitmapEx(aBmContent, aBmAlpha));
+                                    BitmapEx(aBmContent.GetBitmap(), aBmAlpha));
                             }
                         }
                     }
