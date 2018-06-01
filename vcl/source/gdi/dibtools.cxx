@@ -1727,10 +1727,12 @@ bool ReadDIB(
 
 bool ReadDIBBitmapEx(
     BitmapEx& rTarget,
-    SvStream& rIStm)
+    SvStream& rIStm,
+    bool bFileHeader,
+    bool bMSOFormat)
 {
     Bitmap aBmp;
-    bool bRetval(ImplReadDIB(aBmp, nullptr, rIStm, true) && !rIStm.GetError());
+    bool bRetval(ImplReadDIB(aBmp, nullptr, rIStm, bFileHeader, /*bMask*/false, bMSOFormat) && !rIStm.GetError());
 
     if(bRetval)
     {
