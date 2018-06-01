@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_4b7d3a6d",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-06-01T02:26:11Z",
+      "side": 1,
+      "message": "I seriously wonder if we need this call here",
+      "revId": "c29330815f20cd1bd84f94669ffa4831e63107e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6b803e47",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-06-01T02:26:11Z",
+      "side": 1,
+      "message": "which then would make the need for this slightly unclear bool parameter go away",
+      "revId": "c29330815f20cd1bd84f94669ffa4831e63107e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
