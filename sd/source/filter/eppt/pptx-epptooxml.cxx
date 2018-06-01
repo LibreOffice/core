@@ -62,6 +62,8 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
@@ -72,10 +74,13 @@
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <oox/export/utils.hxx>
 
 #include "pptexanimations.hxx"
+#include "../ppt/pptanimations.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

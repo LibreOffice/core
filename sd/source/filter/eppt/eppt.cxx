@@ -19,6 +19,7 @@
 
 #include "eppt.hxx"
 #include "epptdef.hxx"
+#include "pptexanimations.hxx"
 #include <o3tl/any.hxx>
 #include <tools/globname.hxx>
 #include <tools/poly.hxx>
@@ -36,6 +37,7 @@
 #include <svx/svdpage.hxx>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/view/PaperFormat.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>

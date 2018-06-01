@@ -83,6 +83,8 @@
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 
+#include <animations.hxx>
+#include "pptanimations.hxx"
 #include "pptinanimations.hxx"
 #include "ppt97animations.hxx"
 
@@ -94,6 +96,7 @@
 
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
+#include <oox/ppt/pptfilterhelpers.hxx>
 
 #include <boost/optional.hpp>
 

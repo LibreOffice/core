@@ -19,6 +19,8 @@
 
 #include "eppt.hxx"
 #include "epptdef.hxx"
+#include "pptexanimations.hxx"
+#include "../ppt/pptanimations.hxx"
 
 #include <o3tl/any.hxx>
 #include <tools/globname.hxx>
@@ -43,6 +45,10 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/view/PaperFormat.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
