@@ -44,6 +44,32 @@ make_unique(std::size_t n)
     return std::unique_ptr<T>(new RT[n]);
 }
 
+
+/**
+ * Equivalent of std::static_pointer_cast, but for std::unique_ptr.
+ */
+template <class R, class T>
+std::unique_ptr<R> static_pointer_cast(std::unique_ptr<T> t)
+{
+    auto r = static_cast<R*>(t.get());
+    t.release();
+    return std::unique_ptr<R>(r);
+}
+
+/**
+ * Equivalent of std::dynamic_pointer_cast, but for std::unique_ptr.
+ * If the dynamic cast fails, the pointed to object is freed.
+ */
+template <class R, class T>
+std::unique_ptr<R> dynamic_pointer_cast(std::unique_ptr<T> t)
+{
+    R* r = dynamic_cast<R*>(t.get());
+    if (!r)
+        return std::unique_ptr<R>();
+    t.release();
+    return std::unique_ptr<R>(r);
+}
+
 }
 
 #endif

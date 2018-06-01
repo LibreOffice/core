@@ -60,6 +60,7 @@
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <SwUndoField.hxx>
 #include <calbck.hxx>
 
@@ -1134,7 +1135,7 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
         {
             if( aFieldTypeTable[ n ].get() == pFnd )
             {
-                aFieldTypeTable[ n ].reset(static_cast<SwCalcFieldType*>(pFnd->pNext.release()));
+                aFieldTypeTable[ n ] = o3tl::static_pointer_cast<SwCalcFieldType>(std::move(pFnd->pNext));
             }
             else
             {

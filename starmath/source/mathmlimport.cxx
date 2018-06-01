@@ -2741,7 +2741,7 @@ void SmXMLTableContext_Impl::EndElement()
     size_t j=0;
     for (auto & elem : aReverseStack)
     {
-        std::unique_ptr<SmStructureNode> xArray(static_cast<SmStructureNode*>(elem.release()));
+        std::unique_ptr<SmStructureNode> xArray(o3tl::static_pointer_cast<SmStructureNode>(std::move(elem)));
         for (size_t i = 0; i < xArray->GetNumSubNodes(); ++i)
             aExpressionArray[j++] = xArray->GetSubNode(i);
         xArray->ClearSubNodes();
