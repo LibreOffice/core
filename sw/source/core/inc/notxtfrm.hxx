@@ -54,6 +54,11 @@ protected:
 public:
     SwNoTextFrame( SwNoTextNode * const, SwFrame* );
 
+    const SwContentNode *GetNode() const
+        { return static_cast<SwContentNode const*>(GetDep()); }
+          SwContentNode *GetNode()
+        { return static_cast<SwContentNode      *>(GetDep()); }
+
     virtual bool LeftMargin(SwPaM *) const override;
     virtual bool RightMargin(SwPaM *, bool bAPI = false) const override;
 
