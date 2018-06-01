@@ -343,21 +343,28 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
                         if( ULONG_MAX == nIndex )
                         {
                             const SwNode *pNode;
-                            if ( m_rThis.IsContentFrame() )
-                                pNode = static_cast<SwContentFrame&>(m_rThis).GetNode();
+                            if (m_rThis.IsTextFrame())
+                                pNode = static_cast<SwTextFrame&>(m_rThis).GetTextNodeFirst();
+                            else if (m_rThis.IsNoTextFrame())
+                                pNode = static_cast<SwNoTextFrame&>(m_rThis).GetNode();
                             else if( m_rThis.IsSctFrame() )
                                 pNode = static_cast<SwSectionFormat*>(static_cast<SwSectionFrame&>(m_rThis).
                                         GetFormat())->GetSectionNode();
                             else
                             {
+                                assert(!m_rThis.IsContentFrame());
                                 OSL_ENSURE( m_rThis.IsTabFrame(), "new FowFrame?" );
                                 pNode = static_cast<SwTabFrame&>(m_rThis).GetTable()->
                                     GetTabSortBoxes()[0]->GetSttNd()->FindTableNode();
                             }
                             nIndex = pNode->GetIndex();
                         }
-                        if( nIndex < nTmpIndex )
+                        if (nIndex < nTmpIndex &&
+                            (!m_rThis.IsTextFrame() ||
+                             !FrameContainsNode(static_cast<SwTextFrame&>(m_rThis), nTmpIndex)))
+                        {
                             continue;
+                        }
                     }
                 }
                 else
