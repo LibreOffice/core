@@ -391,6 +391,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	mtfrenderer \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
 	odbc \
+	mysqlc \
 	odfflatxml \
 	offacc \
 	oox \
@@ -707,7 +708,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOVERLIBS,ure, \
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 	active_native \
-	mysqlc \
 	passive_native \
 ))
 
