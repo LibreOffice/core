@@ -134,12 +134,19 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
         return true;
     }
     auto loc = decl->getLocation();
-    if (compiler.getSourceManager().isMacroBodyExpansion(loc)
-        && (Lexer::getImmediateMacroName(
-                loc, compiler.getSourceManager(), compiler.getLangOpts())
-            == "MDDS_MTV_DEFINE_ELEMENT_CALLBACKS"))
+    while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
+        loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+    }
+    for (; compiler.getSourceManager().isMacroBodyExpansion(loc);
+         loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc))
     {
-        return true;
+        auto const macro = Lexer::getImmediateMacroName(
+            loc, compiler.getSourceManager(), compiler.getLangOpts());
+        if (macro == "BEGIN_COM_MAP" || macro == "END_COM_MAP"
+            || macro == "MDDS_MTV_DEFINE_ELEMENT_CALLBACKS")
+        {
+            return true;
+        }
     }
     report(
         DiagnosticsEngine::Warning,
