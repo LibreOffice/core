@@ -39,6 +39,8 @@
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 
+#include <headless/svpgdi.hxx>
+
 #include <vcl/jobdata.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
@@ -732,129 +734,10 @@ bool X11SalGraphics::drawPolyLine(
     {
         cairo_t* cr = getCairoContext();
         clipRegion(cr);
-        cairo_line_join_t eCairoLineJoin(CAIRO_LINE_JOIN_MITER);
-        bool bNoJoin(false);
 
-        switch(eLineJoin)
-        {
-            case basegfx::B2DLineJoin::Bevel:
-                eCairoLineJoin = CAIRO_LINE_JOIN_BEVEL;
-                break;
-            case basegfx::B2DLineJoin::Round:
-                eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
-                break;
-            case basegfx::B2DLineJoin::NONE:
-                bNoJoin = true;
-                SAL_FALLTHROUGH;
-            case basegfx::B2DLineJoin::Miter:
-                eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
-                break;
-        }
-
-        // setup cap attribute
-        cairo_line_cap_t eCairoLineCap(CAIRO_LINE_CAP_BUTT);
-        switch(eLineCap)
-        {
-            default: // css::drawing::LineCap_BUTT:
-            {
-                eCairoLineCap = CAIRO_LINE_CAP_BUTT;
-                break;
-            }
-            case css::drawing::LineCap_ROUND:
-            {
-                eCairoLineCap = CAIRO_LINE_CAP_ROUND;
-                break;
-            }
-            case css::drawing::LineCap_SQUARE:
-            {
-                eCairoLineCap = CAIRO_LINE_CAP_SQUARE;
-                break;
-            }
-        }
-
-        cairo_set_source_rgba(cr,
-            mnPenColor.GetRed()/255.0,
-            mnPenColor.GetGreen()/255.0,
-            mnPenColor.GetBlue()/255.0,
-            1.0 - fTransparency);
-        cairo_set_line_join(cr, eCairoLineJoin);
-        cairo_set_line_cap(cr, eCairoLineCap);
-        cairo_set_line_width(cr, (fabs(rLineWidth.getX()) + fabs(rLineWidth.getY())) * 0.5);
-
-        if(CAIRO_LINE_JOIN_MITER == eCairoLineJoin)
-        {
-            cairo_set_miter_limit(cr, 15.0);
-        }
-
-        const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nPointCount : nPointCount - 1);
-
-        if(nEdgeCount)
-        {
-            const bool bSnapPoints(!getAntiAliasB2DDraw());
-            static basegfx::B2DHomMatrix aHalfPointTransform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
-            basegfx::B2DCubicBezier aEdge;
-            basegfx::B2DPoint aStart;
-
-            for(sal_uInt32 i = 0; i < nEdgeCount; ++i)
-            {
-                rPolygon.getBezierSegment(i, aEdge);
-
-                aEdge.transform(aHalfPointTransform);
-
-                if(bSnapPoints)
-                {
-                    aEdge.fround();
-                }
-
-                if(!i || bNoJoin)
-                {
-                    aStart = aEdge.getStartPoint();
-                    cairo_move_to(cr, aStart.getX(), aStart.getY());
-                }
-
-                const basegfx::B2DPoint aEnd(aEdge.getEndPoint());
-
-                if(aEdge.isBezier())
-                {
-                    basegfx::B2DPoint aCP1(aEdge.getControlPointA());
-                    basegfx::B2DPoint aCP2(aEdge.getControlPointB());
-
-                    // tdf#99165 cairo has problems in creating the evtl. needed
-                    // miter graphics (and maybe others) when empty control points
-                    // are used, so fallback to the mathematical 'default' control
-                    // points in that case
-                    // tdf#101026 The 1st attempt to create a mathematically correct replacement control
-                    // vector was wrong. Best alternative is one as close as possible which means short.
-                    if (aStart.equal(aCP1))
-                    {
-                        aCP1 = aStart + ((aCP2 - aStart) * 0.0005);
-                    }
-
-                    if(aEnd.equal(aCP2))
-                    {
-                        aCP2 = aEnd + ((aCP1 - aEnd) * 0.0005);
-                    }
-
-                    cairo_curve_to(cr,
-                        aCP1.getX(), aCP1.getY(),
-                        aCP2.getX(), aCP2.getY(),
-                        aEnd.getX(), aEnd.getY());
-                }
-                else
-                {
-                    cairo_line_to(cr, aEnd.getX(), aEnd.getY());
-                }
-
-                aStart = aEnd;
-            }
-
-            if(rPolygon.isClosed() && !bNoJoin)
-            {
-                cairo_close_path(cr);
-            }
-
-            cairo_stroke(cr);
-        }
+        SvpSalGraphics::drawPolyLine(cr, mnPenColor, getAntiAliasB2DDraw(),
+                                     rPolygon, fTransparency, rLineWidth,
+                                     eLineJoin, eLineCap, fMiterMinimumAngle);
 
         releaseCairoContext(cr);
         return true;
