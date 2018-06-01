@@ -125,7 +125,8 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
                     if ( pPre && pPre->IsFlowFrame() )
                     {
                         // 1. pPre wants to keep with me:
-                        bool bInvalidPrePos = SwFlowFrame::CastFlowFrame( pPre )->IsKeep( *pPre->GetAttrSet() ) && pPre->GetIndPrev();
+                        bool bInvalidPrePos = SwFlowFrame::CastFlowFrame(pPre)->IsKeep(pPre->GetAttrSet()->GetKeep(), pPre->GetBreakItem())
+                            && pPre->GetIndPrev();
 
                         // 2. pPre is a table and the last row wants to keep with me:
                         if ( !bInvalidPrePos && pPre->IsTabFrame() )
