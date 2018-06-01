@@ -313,6 +313,10 @@ class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, publ
     SwFrame       *mpNext;
     SwFrame       *mpPrev;
 
+    // sw_redlinehide: hide these dangerous SwClient functions
+    using SwClient::GetRegisteredInNonConst;
+    using SwClient::GetRegisteredIn;
+
     SwFrame *FindNext_();
     SwFrame *FindPrev_();
 
@@ -441,6 +445,8 @@ protected:
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
 
+    /// use these so we can grep for SwFrame's GetRegisteredIn accesses
+    /// beware that SwTextFrame may return sw::WriterMultiListener
     SwModify        *GetDep()       { return GetRegisteredInNonConst(); }
     const SwModify  *GetDep() const { return GetRegisteredIn(); }
 
