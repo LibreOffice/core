@@ -95,6 +95,8 @@ TextFrameIndex MapModelToView(MergedPara const&, SwTextNode const* pNode, sal_In
 
 std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode);
 
+bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong nNodeIndex);
+
 } // namespace sw
 
 /// Represents the visualization of a paragraph. Typical upper is an
