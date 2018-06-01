@@ -25,7 +25,6 @@
 #include <tools/color.hxx>
 
 class SdrObject;
-class Ppt97Animation;
 class SvStream;
 
 /// helper class for reading PPT AnimationInfoAtom

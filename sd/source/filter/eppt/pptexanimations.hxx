@@ -20,22 +20,26 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_PPTEXANIMATIONS_HXX
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_PPTEXANIMATIONS_HXX
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/animations/XAnimate.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include "../ppt/pptanimations.hxx"
-#include "pptexsoundcollection.hxx"
-#include <filter/msfilter/escherex.hxx>
-
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>
 #endif
 
-#include <memory>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.h>
 
+#include <memory>
 #include <vector>
 
+namespace com { namespace sun { namespace star { namespace animations { class XAnimate; } } } }
+namespace com { namespace sun { namespace star { namespace animations { class XAnimationNode; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace ppt { class ExSoundCollection; }
+
 class SvStream;
+class EscherSolverContainer;
 
 namespace ppt
 {

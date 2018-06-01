@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTOOXML_HXX
 
 #include <oox/core/xmlfilterbase.hxx>
-#include <oox/helper/zipstorage.hxx>
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/export/shapes.hxx>
 #include "epptbase.hxx"

@@ -20,17 +20,15 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPTINANIMATIONS_HXX
 #define INCLUDED_SD_SOURCE_FILTER_PPT_PPTINANIMATIONS_HXX
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-
-#include "pptanimations.hxx"
-#include <animations.hxx>
+#include <oox/ppt/pptfilterhelpers.hxx>
 
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>
 #endif
-#include <filter/msfilter/svdfppt.hxx>
 
-#include <list>
+namespace com { namespace sun { namespace star { namespace animations { class XAnimationNode; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace ppt { struct AnimationNode; }
 
 class DffRecordHeader;
 class SvStream;

@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -37,6 +38,7 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <editeng/svxenum.hxx>

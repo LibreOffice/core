@@ -57,6 +57,9 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include "pptexanimations.hxx"
+#include "pptexsoundcollection.hxx"
+#include "../ppt/pptanimations.hxx"
+#include <filter/msfilter/escherex.hxx>
 #include <osl/endian.h>
 
 #include <algorithm>

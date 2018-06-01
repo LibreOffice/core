@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_FILTER_PPT_PPTIN_HXX
 
 #include <filter/msfilter/svdfppt.hxx>
-#include <svx/msdffdef.hxx>
 #include <diadef.h>
 #include <svx/svdtypes.hxx>
 #include <memory>
@@ -37,7 +36,6 @@ class SfxMedium;
 
 class SdPage;
 class SdAnimationInfo;
-struct PptInteractiveInfoAtom;
 class Ppt97Animation;
 
 typedef std::shared_ptr< Ppt97Animation > Ppt97AnimationPtr;

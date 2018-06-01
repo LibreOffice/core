@@ -75,6 +75,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 #include "htmlpublishmode.hxx"
 #include <Outliner.hxx>
 #include <sdpage.hxx>

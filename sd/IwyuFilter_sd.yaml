@@ -77,3 +77,9 @@ blacklist:
     sd/inc/undo/undoobjects.hxx:
     # base class has to be a complete type
     - tools/weakbase.hxx
+    sd/source/filter/eppt/eppt.hxx:
+    # base class has to be a complete type
+    - escherex.hxx
+    sd/source/filter/eppt/pptexanimations.hxx:
+    # base class has to be a complete type
+    - memory
