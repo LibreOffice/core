@@ -96,6 +96,17 @@ public:
     cairo_surface_t* getSurface() const { return m_pSurface; }
     static cairo_user_data_key_t* getDamageKey();
 
+    static basegfx::B2DRange drawPolyLine(
+        cairo_t* cr,
+        const Color& rLineColor,
+        bool bAntiAliasB2DDraw,
+        const basegfx::B2DPolygon& rPolyLine,
+        double fTransparency,
+        const basegfx::B2DVector& rLineWidths,
+        basegfx::B2DLineJoin eLineJoin,
+        css::drawing::LineCap eLineCap,
+        double fMiterMinimumAngle);
+
 private:
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
