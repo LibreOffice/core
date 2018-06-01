@@ -60,7 +60,7 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
 
     // Symbol fonts may recode from one type to another So they are only
     // safely equivalent for equal targets
-    if (rA.IsSymbolFont() && rB.IsSymbolFont())
+    if (rA.IsSymbolFont() || rB.IsSymbolFont())
     {
         if (rA.maTargetName != rB.maTargetName)
             return false;
