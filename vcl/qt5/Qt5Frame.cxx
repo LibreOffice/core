@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Frame.hxx"
+#include <Qt5Frame.hxx>
 
-#include "Qt5Tools.hxx"
-#include "Qt5Instance.hxx"
-#include "Qt5Graphics.hxx"
-#include "Qt5Widget.hxx"
-#include "Qt5Data.hxx"
+#include <Qt5Tools.hxx>
+#include <Qt5Instance.hxx>
+#include <Qt5Graphics.hxx>
+#include <Qt5Widget.hxx>
+#include <Qt5Data.hxx>
 #include <Qt5Menu.hxx>
 
 #include <QtCore/QPoint>

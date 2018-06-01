@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Bitmap.hxx"
-#include "Qt5Tools.hxx"
-#include "Qt5Graphics.hxx"
+#include <Qt5Bitmap.hxx>
+#include <Qt5Tools.hxx>
+#include <Qt5Graphics.hxx>
 
 #include <QtGui/QImage>
 #include <QtCore/QVector>
