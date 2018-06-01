@@ -19,7 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/stream.hxx>
-#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
@@ -156,7 +156,7 @@ class MSFILTER_DLLPUBLIC TBCBitMap : public TBBase
 {
 friend class TBCBSpecific; // #FIXME hacky access, need to fix
     sal_Int32 cbDIB;
-    Bitmap mBitMap;
+    BitmapEx mBitMap;
 public:
     TBCBitMap();
     virtual ~TBCBitMap() override;
@@ -165,7 +165,7 @@ public:
     virtual void Print( FILE* ) override;
 #endif
    // #FIXME Const-ness
-    Bitmap& getBitMap() { return mBitMap;}
+    BitmapEx& getBitMap() { return mBitMap;}
 };
 
 class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
