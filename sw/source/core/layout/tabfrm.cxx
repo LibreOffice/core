@@ -1480,12 +1480,14 @@ bool SwContentFrame::CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDont
                 if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                           *(pCnt->FindPageFrame()) ) )
                 {
-                    if ( pCnt->GetRegisteredIn() == pLoopControlCond )
+                    SwTextNode const*const pTextNode(
+                        static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst());
+                    if (pTextNode == pLoopControlCond)
                         ++nLoopControlRuns;
                     else
                     {
                         nLoopControlRuns = 0;
-                        pLoopControlCond = pCnt->GetRegisteredIn();
+                        pLoopControlCond = pTextNode;
                     }
 
                     if ( nLoopControlRuns < nLoopControlMax )

@@ -472,7 +472,7 @@ void SwRootFrame::DestroyImpl()
 
     if(pBlink)
         pBlink->FrameDelete( this );
-    SwFrameFormat *pRegisteredInNonConst = static_cast<SwFrameFormat*>(GetRegisteredInNonConst());
+    SwFrameFormat *pRegisteredInNonConst = static_cast<SwFrameFormat*>(GetDep());
     if ( pRegisteredInNonConst )
     {
         SwDoc *pDoc = pRegisteredInNonConst->GetDoc();
