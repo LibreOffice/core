@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_05ce5283",
+        "filename": "extensions/source/ole/unoobjw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-01T14:15:29Z",
+      "side": 0,
+      "message": "the documentation pointers and the include of ole2uno.hxx have been removed in error",
+      "revId": "8729e89765d548a2d3520f4b5a0fa9a51d33426b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
