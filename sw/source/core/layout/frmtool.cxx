@@ -823,8 +823,8 @@ SwContentNotify::~SwContentNotify()
         SwViewShell *pSh  = pCnt->getRootFrame()->GetCurrShell();
         if ( pSh )
         {
-            SwOLENode *pNd;
-            if ( nullptr != (pNd = pCnt->GetNode()->GetOLENode()) &&
+            SwOLENode *const pNd(static_cast<SwNoTextFrame*>(pCnt)->GetNode()->GetOLENode());
+            if (nullptr != pNd &&
                  (pNd->GetOLEObj().IsOleRef() ||
                   pNd->IsOLESizeInvalid()) )
             {
@@ -882,7 +882,9 @@ SwContentNotify::~SwContentNotify()
     {
         pCnt->SetRetouche();    //fix(13870)
 
-        SwDoc *pDoc = pCnt->GetNode()->GetDoc();
+        SwDoc *const pDoc = pCnt->IsTextFrame()
+            ? &static_cast<SwTextFrame*>(pCnt)->GetDoc()
+            : static_cast<SwNoTextFrame*>(pCnt)->GetNode()->GetDoc();
         if ( !pDoc->GetSpzFrameFormats()->empty() &&
              pDoc->DoesContainAtPageObjWithContentAnchor() && !pDoc->getIDocumentState().IsNewDoc() )
         {
@@ -895,7 +897,6 @@ SwContentNotify::~SwContentNotify()
             // the page is known. Thus, this data can be corrected now.
 
             const SwPageFrame *pPage = nullptr;
-            SwNodeIndex *pIdx  = nullptr;
             SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
 
             for ( size_t i = 0; i < pTable->size(); ++i )
@@ -908,11 +909,7 @@ SwContentNotify::~SwContentNotify()
                     continue;
                 }
 
-                if ( !pIdx )
-                {
-                    pIdx = new SwNodeIndex( *pCnt->GetNode() );
-                }
-                if ( rAnch.GetContentAnchor()->nNode == *pIdx )
+                if (FrameContainsNode(*pCnt, rAnch.GetContentAnchor()->nNode.GetIndex()))
                 {
                     OSL_FAIL( "<SwContentNotify::~SwContentNotify()> - to page anchored object with content position." );
                     if ( !pPage )
@@ -929,7 +926,6 @@ SwContentNotify::~SwContentNotify()
                     }
                 }
             }
-            delete pIdx;
         }
     }
 
@@ -1829,7 +1825,9 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     : SwCacheObj(pMod)
     , m_rAttrSet(pConstructor->IsContentFrame()
-                    ? static_cast<const SwContentFrame*>(pConstructor)->GetNode()->GetSwAttrSet()
+                    ? pConstructor->IsTextFrame()
+                        ? static_cast<const SwTextFrame*>(pConstructor)->GetTextNodeForParaProps()->GetSwAttrSet()
+                        : static_cast<const SwNoTextFrame*>(pConstructor)->GetNode()->GetSwAttrSet()
                     : static_cast<const SwLayoutFrame*>(pConstructor)->GetFormat()->GetAttrSet())
     , m_rUL(m_rAttrSet.GetULSpace())
     // #i96772#
@@ -2206,14 +2204,20 @@ void SwBorderAttrs::GetBottomLine_( const SwFrame& _rFrame )
     m_nGetBottomLine = nRet;
 }
 
+static SwModify const* GetCacheOwner(SwFrame const& rFrame)
+{
+    return rFrame.IsContentFrame()
+        ? static_cast<SwModify const*>(rFrame.IsTextFrame()
+        // sw_redlinehide: presumably this caches the border attrs at the model level and can be shared across different layouts so we want the ParaProps node here
+            ? static_cast<const SwTextFrame&>(rFrame).GetTextNodeForParaProps()
+            : static_cast<const SwNoTextFrame&>(rFrame).GetNode())
+        : static_cast<SwModify const*>(static_cast<const SwLayoutFrame&>(rFrame).GetFormat());
+}
+
 SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrame *pFrame ) :
     SwCacheAccess( rCach,
-                   (pFrame->IsContentFrame() ?
-                      const_cast<void*>(static_cast<void const *>(static_cast<const SwContentFrame*>(pFrame)->GetNode())) :
-                      const_cast<void*>(static_cast<void const *>(static_cast<const SwLayoutFrame*>(pFrame)->GetFormat()))),
-                   (pFrame->IsContentFrame() ?
-                      static_cast<SwModify const *>(static_cast<const SwContentFrame*>(pFrame)->GetNode())->IsInCache() :
-                      static_cast<SwModify const *>(static_cast<const SwLayoutFrame*>(pFrame)->GetFormat())->IsInCache()) ),
+        static_cast<void const *>(GetCacheOwner(*pFrame)),
+        GetCacheOwner(*pFrame)->IsInCache()),
     m_pConstructor( pFrame )
 {
 }
