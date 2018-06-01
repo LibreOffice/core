@@ -39,6 +39,7 @@
 #include <unotextrange.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
+#include <txtfrm.hxx>
 #include <rootfrm.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
@@ -396,16 +397,46 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 
                 while( pCnt && pCurrentPage->IsAnLower( pCnt ) )
                 {
-                    SwTextNode* pTextNode = pCnt->GetNode()->GetTextNode();
-
-                    if ( pTextNode &&
-                        ((mnType == text::TextMarkupType::SPELLCHECK &&
-                                pTextNode->IsWrongDirty()) ||
-                         (mnType == text::TextMarkupType::PROOFREADING &&
-                                pTextNode->IsGrammarCheckDirty())) )
+                    if (pCnt->IsTextFrame())
                     {
-                        pRet = pTextNode;
-                        break;
+                        SwTextFrame const*const pText(static_cast<SwTextFrame const*>(pCnt));
+                        if (sw::MergedPara const*const pMergedPara = pText->GetMergedPara()
+            )
+                        {
+                            SwTextNode * pTextNode(nullptr);
+                            for (auto const& e : pMergedPara->extents)
+                            {
+                                if (e.pNode != pTextNode)
+                                {
+                                    pTextNode = e.pNode;
+                                    if ((mnType == text::TextMarkupType::SPELLCHECK
+                                            && pTextNode->IsWrongDirty()) ||
+                                        (mnType == text::TextMarkupType::PROOFREADING
+                                             && pTextNode->IsGrammarCheckDirty()))
+                                    {
+                                        pRet = pTextNode;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            SwTextNode const*const pTextNode(pText->GetTextNodeFirst());
+                            if ((mnType == text::TextMarkupType::SPELLCHECK
+                                    && pTextNode->IsWrongDirty()) ||
+                                (mnType == text::TextMarkupType::PROOFREADING
+                                     && pTextNode->IsGrammarCheckDirty()))
+
+                            {
+                                pRet = const_cast<SwTextNode*>(pTextNode);
+                            }
+                        }
+
+                        if (pRet)
+                        {
+                            break;
+                        }
                     }
 
                     pCnt = pCnt->GetNextContentFrame();
