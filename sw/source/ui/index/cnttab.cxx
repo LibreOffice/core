@@ -299,7 +299,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
     m_nSelectId = AddTabPage("index", SwTOXSelectTabPage::Create, nullptr);
     AddTabPage("styles", SwTOXStylesTabPage::Create, nullptr);
     m_nColumnId = AddTabPage("columns", SwColumnPage::Create, nullptr);
-    m_nBackGroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
+    m_nBackGroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
     m_nEntriesId = AddTabPage("entries", SwTOXEntryTabPage::Create, nullptr);
     if(!pCurTOX)
         SetCurPageId(m_nSelectId);

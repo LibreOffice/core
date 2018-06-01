@@ -110,6 +110,7 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
                     RES_LR_SPACE, RES_LR_SPACE,
                     RES_BACKGROUND, RES_BACKGROUND,
                     RES_COL, RES_COL,
+                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
                     SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                     FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>{});
             SwWrtShell& rSh = GetShell();
