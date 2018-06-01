@@ -1847,19 +1847,50 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
     if( !pCnt->IsTextFrame() )
         return false;
 
-    const SwTextNode* pTextNode = pCnt->GetNode()->GetTextNode();
+    SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(pCnt));
+    // sw_redlinehide: spell check only the nodes with visible content?
+    const SwTextNode* pTextNode = pTextFrame->GetTextNodeForParaProps();
 
     bool bProcess = false;
-    switch ( eJob )
+    for (size_t i = 0; pTextNode; )
     {
-        case ONLINE_SPELLING :
-            bProcess = pTextNode->IsWrongDirty(); break;
-        case AUTOCOMPLETE_WORDS :
-            bProcess = pTextNode->IsAutoCompleteWordDirty(); break;
-        case WORD_COUNT :
-            bProcess = pTextNode->IsWordCountDirty(); break;
-        case SMART_TAGS :
-            bProcess = pTextNode->IsSmartTagDirty(); break;
+        switch ( eJob )
+        {
+            case ONLINE_SPELLING :
+                bProcess = pTextNode->IsWrongDirty(); break;
+            case AUTOCOMPLETE_WORDS :
+                bProcess = pTextNode->IsAutoCompleteWordDirty(); break;
+            case WORD_COUNT :
+                bProcess = pTextNode->IsWordCountDirty(); break;
+            case SMART_TAGS :
+                bProcess = pTextNode->IsSmartTagDirty(); break;
+        }
+        if (bProcess)
+        {
+            break;
+        }
+        if (sw::MergedPara const* pMerged = pTextFrame->GetMergedPara())
+        {
+            while (true)
+            {
+                ++i;
+                if (i < pMerged->extents.size())
+                {
+                    if (pMerged->extents[i].pNode != pTextNode)
+                    {
+                        pTextNode = pMerged->extents[i].pNode;
+                        break;
+                    }
+                }
+                else
+                {
+                    pTextNode = nullptr;
+                    break;
+                }
+            }
+        }
+        else
+            pTextNode = nullptr;
     }
 
     if( bProcess )
