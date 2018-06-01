@@ -161,7 +161,7 @@ void OComponentEventThread::run()
             Reference<XAdapter> xControlAdapter = *firstControl;
             m_aControls.erase( firstControl );
 
-            ThreadBools::iterator firstFlag( m_aFlags.begin() );
+            auto firstFlag( m_aFlags.begin() );
             bool bFlag = *firstFlag;
             m_aFlags.erase( firstFlag );
 

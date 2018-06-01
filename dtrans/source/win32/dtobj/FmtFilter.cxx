@@ -336,12 +336,11 @@ std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
     return target;
 }
 
-typedef std::vector<std::wstring> FileList_t;
 typedef Sequence<sal_Int8> ByteSequence_t;
 
 /* Calculate the size required for turning a string list into
    a double '\0' terminated string buffer */
-size_t CalcSizeForStringListBuffer(const FileList_t& fileList)
+size_t CalcSizeForStringListBuffer(const std::vector<std::wstring>& fileList)
 {
     if ( fileList.empty() )
         return 0;
@@ -351,10 +350,10 @@ size_t CalcSizeForStringListBuffer(const FileList_t& fileList)
     {
         size += elem.length() + 1; // length including terminating '\0'
     }
-    return (size * sizeof(FileList_t::value_type::value_type));
+    return (size * sizeof(std::vector<std::wstring>::value_type::value_type));
 }
 
-ByteSequence_t FileListToByteSequence(const FileList_t& fileList)
+ByteSequence_t FileListToByteSequence(const std::vector<std::wstring>& fileList)
 {
     ByteSequence_t bseq;
     size_t size = CalcSizeForStringListBuffer(fileList);
@@ -377,7 +376,7 @@ ByteSequence_t FileListToByteSequence(const FileList_t& fileList)
 ByteSequence_t CF_HDROPToFileList(HGLOBAL hGlobal)
 {
     UINT nFiles = DragQueryFileW(static_cast<HDROP>(hGlobal), 0xFFFFFFFF, nullptr, 0);
-    FileList_t files;
+    std::vector<std::wstring> files;
 
     for (UINT i = 0; i < nFiles; i++)
     {

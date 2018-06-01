@@ -333,7 +333,7 @@ void OKeySet::ensureStatement( )
 {
     // do we already have a statement for the current combination of NULLness
     // of key & foreign columns?
-    FilterColumnsNULL_t FilterColumnsNULL;
+    std::vector<bool> FilterColumnsNULL;
     FilterColumnsNULL.reserve(m_aKeyIter->second.first->get().size());
     for (auto const& elem : m_aKeyIter->second.first->get())
         FilterColumnsNULL.push_back(elem.isNull());

@@ -50,13 +50,12 @@ class OComponentEventThread
 {
     typedef std::vector<css::lang::EventObject*> ThreadEvents;
     typedef std::vector< css::uno::Reference< css::uno::XAdapter> > ThreadObjects;
-    typedef std::vector<bool> ThreadBools;
 
     ::osl::Mutex                    m_aMutex;
     ::osl::Condition                m_aCond;            // Queue filled?
     ThreadEvents                    m_aEvents;          // EventQueue
     ThreadObjects                   m_aControls;        // Control for Submit
-    ThreadBools                     m_aFlags;           // Flags for Submit/Reset
+    std::vector<bool>               m_aFlags;           // Flags for Submit/Reset
 
     rtl::Reference<::cppu::OComponentHelper>      m_xComp;    // Implementation of the Control
 
