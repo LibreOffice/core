@@ -3418,6 +3418,17 @@ const SwContentFrame* GetCellContent( const SwLayoutFrame& rCell )
     return pContent;
 }
 
+SwDeletionChecker::SwDeletionChecker(const SwFrame* pFrame)
+    : mpFrame( pFrame )
+    , mpRegIn( pFrame
+        ? pFrame->IsTextFrame()
+            // sw_redlinehide: GetDep() may be a member of SwTextFrame!
+            ? static_cast<SwTextFrame const*>(pFrame)->GetTextNodeFirst()
+            : const_cast<SwFrame*>(pFrame)->GetDep()
+        : nullptr )
+{
+}
+
 /// Can be used to check if a frame has been deleted
 bool SwDeletionChecker::HasBeenDeleted()
 {
