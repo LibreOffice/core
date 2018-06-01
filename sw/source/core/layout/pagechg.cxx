@@ -49,6 +49,7 @@
 #include <ftnfrm.hxx>
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <layact.hxx>
 #include <flyfrms.hxx>
 #include <htmltbl.hxx>
@@ -1975,7 +1976,7 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
                     SwViewShell *pSh = pRoot ? pRoot->GetCurrShell() : nullptr;
                     if ( pSh )
                     {
-                        SwContentFrame* pContentFrame = static_cast<SwContentFrame*>(pLower);
+                        SwNoTextFrame *const pContentFrame = static_cast<SwNoTextFrame*>(pLower);
                         SwOLENode* pNode = pContentFrame->GetNode()->GetOLENode();
                         if ( pNode )
                         {

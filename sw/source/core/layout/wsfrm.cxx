@@ -456,8 +456,8 @@ void SwTextFrame::CheckDirection( bool bVert )
 {
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-    CheckDir( GetNode()->GetSwAttrSet().GetFrameDir().GetValue(), bVert,
-              true, bBrowseMode );
+    CheckDir(GetTextNodeForParaProps()->GetSwAttrSet().GetFrameDir().GetValue(),
+             bVert, true, bBrowseMode);
 }
 
 void SwFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
