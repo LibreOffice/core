@@ -2451,7 +2451,7 @@ bool SwPageFrame::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rC
     const bool bHideWhitespaceMode = pViewShell->GetViewOptions()->IsHideWhitespaceMode();
     if ( aHeaderArea.IsInside( rPt ) )
     {
-        if (!bHideWhitespaceMode || static_cast<const SwFrameFormat*>(GetRegisteredIn())->GetHeader().IsActive())
+        if (!bHideWhitespaceMode || static_cast<const SwFrameFormat*>(GetDep())->GetHeader().IsActive())
         {
             rControl = Header;
             return true;
@@ -2463,7 +2463,7 @@ bool SwPageFrame::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rC
                 Size( getFrameArea().Width(), getFrameArea().Bottom() - nLowerLimit ) );
 
         if ( aFooterArea.IsInside( rPt ) &&
-             (!bHideWhitespaceMode || static_cast<const SwFrameFormat*>(GetRegisteredIn())->GetFooter().IsActive()) )
+             (!bHideWhitespaceMode || static_cast<const SwFrameFormat*>(GetDep())->GetFooter().IsActive()) )
         {
             rControl = Footer;
             return true;
@@ -2488,7 +2488,7 @@ bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
         if (nDiff < 0)
         {
             // Content frame doesn't fit the actual size, check if it fits the nominal one.
-            const SwFrameFormat* pPageFormat = static_cast<const SwFrameFormat*>(GetRegisteredIn());
+            const SwFrameFormat* pPageFormat = static_cast<const SwFrameFormat*>(GetDep());
             const Size& rPageSize = pPageFormat->GetFrameSize().GetSize();
             long nWhitespace = rPageSize.getHeight() - getFrameArea().Height();
             if (nWhitespace > -nDiff)
