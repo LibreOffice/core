@@ -770,7 +770,7 @@ SwPageDesc *SwPageFrame::FindPageDesc()
             SwFrame *pFlow = pFrame;
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrame();
-            pRet = const_cast<SwPageDesc*>(pFlow->GetAttrSet()->GetPageDesc().GetPageDesc());
+            pRet = const_cast<SwPageDesc*>(pFlow->GetPageDescItem().GetPageDesc());
         }
         if ( !pRet )
             pRet = &GetFormat()->GetDoc()->GetPageDesc( 0 );
@@ -786,7 +786,7 @@ SwPageDesc *SwPageFrame::FindPageDesc()
     {
         SwFlowFrame *pTmp = SwFlowFrame::CastFlowFrame( pFlow );
         if ( !pTmp->IsFollow() )
-            pRet = const_cast<SwPageDesc*>(pFlow->GetAttrSet()->GetPageDesc().GetPageDesc());
+            pRet = const_cast<SwPageDesc*>(pFlow->GetPageDescItem().GetPageDesc());
     }
 
     //3. and 3.1
@@ -1288,7 +1288,8 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
     // For ContentFrame take the one from format if provided,
     // otherwise from the Follow of the PrevPage
     if ( IsFlowFrame() && !SwFlowFrame::CastFlowFrame( this )->IsFollow() )
-    {   SwFormatPageDesc &rDesc = const_cast<SwFormatPageDesc&>(GetAttrSet()->GetPageDesc());
+    {
+        SwFormatPageDesc &rDesc = const_cast<SwFormatPageDesc&>(GetPageDescItem());
         pDesc = rDesc.GetPageDesc();
         if ( rDesc.GetNumOffset() )
         {

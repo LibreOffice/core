@@ -68,7 +68,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         {
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrame();
-            const SwFormatPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
+            const SwFormatPageDesc& rPgDesc = pFlow->GetPageDescItem();
             if( rPgDesc.GetPageDesc() )
             {
                 // we found the culprit
