@@ -1083,7 +1083,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
              _rFrame.IsInDocBody() && !_rFrame.FindNextCnt() )
         {
             SwTextNode const& rNode(*rAnchorPos.nNode.GetNode().GetTextNode());
-            assert(_rFrame.GetMergedPara() || &rNode == _rFrame.GetRegisteredIn()); // simple consistency check
+//            assert(_rFrame.GetMergedPara() || &rNode == _rFrame.GetDep()); // simple consistency check
             sal_Int32 const nObjAnchorPos(rAnchorPos.nContent.GetIndex());
             const sal_Unicode cAnchorChar = nObjAnchorPos < rNode.Len()
                 ? rNode.GetText()[nObjAnchorPos]
