@@ -615,7 +615,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 }
 
 /** Layout dependent cursor travelling */
-bool SwContentFrame::LeftMargin(SwPaM *pPam) const
+bool SwNoTextFrame::LeftMargin(SwPaM *pPam) const
 {
     if( &pPam->GetNode() != GetNode() )
         return false;
@@ -624,7 +624,7 @@ bool SwContentFrame::LeftMargin(SwPaM *pPam) const
     return true;
 }
 
-bool SwContentFrame::RightMargin(SwPaM *pPam, bool) const
+bool SwNoTextFrame::RightMargin(SwPaM *pPam, bool) const
 {
     if( &pPam->GetNode() != GetNode() )
         return false;
