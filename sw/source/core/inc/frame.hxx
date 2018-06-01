@@ -287,6 +287,7 @@ class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, publ
     friend class SwFlowFrame;
     friend class SwLayoutFrame;
     friend class SwLooping;
+    friend class SwDeletionChecker; // for GetDep()
 
     // voids lower during creation of a column
     friend SwFrame *SaveContent( SwLayoutFrame *, SwFrame* pStart );
