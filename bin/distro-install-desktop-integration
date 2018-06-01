@@ -7,34 +7,33 @@ fi
 
 PRODUCTVERSION_NODOT=`echo $PRODUCTVERSION | sed -e "s/\.//"`
 
-mkdir -p $DESTDIR$PREFIXDIR/bin
-
+mkdir -p "$DESTDIR$BINDIR"
 
 create_wrapper()
 {
-    echo "Install $PREFIXDIR/bin/$1"
+    echo "Install $BINDIR/$1"
 
-    if test -L "$DESTDIR$PREFIXDIR/bin/$1" ; then
-        # do not overwrite $PREFIXDIR/bin/libreoffice symlink created by create_tree.sh
+    if test -L "$DESTDIR$BINDIR/$1" ; then
+        # do not overwrite $BINDIR/libreoffice symlink created by create_tree.sh
         # the symlink is necessary by java UNO components to find
         # the UNO installation using $PATH; this function used to be provided
-        # by $PREFIXDIR/bin/soffice symlink, see
+        # by $BINDIR/soffice symlink, see
         # http://udk.openoffice.org/common/man/spec/transparentofficecomponents.html
         # Note: if you want to support parallel installation of more OOo versions
         #       you cannot include this link directly into the package
         #       For example, the Novell package mark this symlink as %ghost
         #	and update it in %post and %postun
-        echo "     skip already existing symlink $PREFIXDIR/bin/$1"
+        echo "     skip already existing symlink $BINDIR/$1"
     else
-        mkdir -p $DESTDIR$PREFIXDIR/bin
-        cat <<EOT >$DESTDIR$PREFIXDIR/bin/$1
+        mkdir -p "$DESTDIR$BINDIR"
+        cat <<EOT >"$DESTDIR$BINDIR/$1"
 #!/bin/sh
 $INSTALLDIR/program/$2 $3 "\$@"
 EOT
-        chmod 755 $DESTDIR$PREFIXDIR/bin/$1
+        chmod 755 "$DESTDIR$BINDIR/$1"
     fi
     # put into file list
-    test -f "$DESTDIR/$4" && echo "$PREFIXDIR/bin/$1" >>$DESTDIR/$4
+    test -f "$DESTDIR/$4" && echo "$BINDIR/$1" >>$DESTDIR/$4
 }
 
 create_man_link()
@@ -165,15 +164,15 @@ add_wrapper unopkg         unopkg  ""            "unopkg"      ""               
 # there are two more desktop files for optional filters
 test -f $DESTDIR/gid_Module_Optional_Xsltfiltersamples && echo "$PREFIXDIR/share/applications/libreoffice-xsltfilter.desktop" >>"$DESTDIR/gid_Module_Optional_Xsltfiltersamples"
 
-# $PREFIXDIR/bin/ooffice symlink is necessary by java UNO components to find
+# $BINDIR/ooffice symlink is necessary by java UNO components to find
 # the UNO installation using $PATH, see
 # http://udk.openoffice.org/common/man/spec/transparentofficecomponents.html
 # Note: if you want to support parallel installation of more OOo versions
 #       you cannot include this link directly into the package
 #       For example, the Novell package mark this symlink as %ghost
 #	and update it in %post and %postun
-ln -sf $INSTALLDIR/program/soffice $DESTDIR$PREFIXDIR/bin/soffice
-test -f $DESTDIR/gid_Module_Root_Brand && echo "$PREFIXDIR/bin/soffice" >>$DESTDIR/gid_Module_Root_Brand
+ln -sf "$INSTALLDIR/program/soffice" "$DESTDIR$BINDIR/soffice"
+test -f $DESTDIR/gid_Module_Root_Brand && echo "$BINDIR/soffice" >>$DESTDIR/gid_Module_Root_Brand
 
 # create bash completion
 mkdir -p $DESTDIR/usr/share/bash-completion/completions

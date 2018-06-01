@@ -12216,6 +12216,9 @@ AC_SUBST(MANDIR)
 DOCDIR=[$(eval echo $(eval echo $docdir))]
 AC_SUBST(DOCDIR)
 
+BINDIR=[$(eval echo $(eval echo $bindir))]
+AC_SUBST(BINDIR)
+
 INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
 AC_SUBST(INSTALLDIR)
 
