@@ -35,6 +35,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include "charttoolsdllapi.hxx"
 
+#include <iterator>
 #include <vector>
 
 namespace chart
