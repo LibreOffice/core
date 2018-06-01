@@ -52,13 +52,13 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
         std::wstring(pRiid));
 
     DWORD nSize;
-    if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"CLSID\\").append(pRiid).data(), NULL,
-                     RRF_RT_REG_SZ, NULL, NULL, &nSize)
+    if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"CLSID\\").append(pRiid).data(), nullptr,
+                     RRF_RT_REG_SZ, nullptr, nullptr, &nSize)
         == ERROR_SUCCESS)
     {
         std::vector<wchar_t> sValue(nSize / 2);
-        if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"CLSID\\").append(pRiid).data(), NULL,
-                         RRF_RT_REG_SZ, NULL, sValue.data(), &nSize)
+        if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"CLSID\\").append(pRiid).data(), nullptr,
+                         RRF_RT_REG_SZ, nullptr, sValue.data(), &nSize)
             == ERROR_SUCCESS)
         {
             stream << "=\""
@@ -68,12 +68,12 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
         }
     }
     else if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"Interface\\").append(pRiid).data(),
-                          NULL, RRF_RT_REG_SZ, NULL, NULL, &nSize)
+                          nullptr, RRF_RT_REG_SZ, nullptr, nullptr, &nSize)
              == ERROR_SUCCESS)
     {
         std::vector<wchar_t> sValue(nSize / 2);
-        if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"Interface\\").append(pRiid).data(), NULL,
-                         RRF_RT_REG_SZ, NULL, sValue.data(), &nSize)
+        if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"Interface\\").append(pRiid).data(),
+                         nullptr, RRF_RT_REG_SZ, nullptr, sValue.data(), &nSize)
             == ERROR_SUCCESS)
         {
             stream << "=\""
