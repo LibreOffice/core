@@ -28,6 +28,11 @@
 #
 
 root="$PWD"
+algo="RSA"
+
+if [ -n "$1" ]; then
+    algo="$1"
+fi
 
 if [ -d "$root/ca" ]; then
     echo "'ca' directory already exists in $root, please remove it before running this script."
@@ -63,7 +68,7 @@ openssl req -config openssl.cnf \
     -new -x509 -days 7300 -sha256 -extensions v3_ca \
     -out certs/ca.cert.pem \
     -passin env:SSLPASS \
-    -subj '/C=UK/ST=England/O=Xmlsecurity Test/CN=Xmlsecurity Test Root CA'
+    -subj "/C=UK/ST=England/O=Xmlsecurity ${algo} Test/CN=Xmlsecurity ${algo} Test Root CA"
 chmod 444 certs/ca.cert.pem
 
 # 2) Create the intermediate pair.
@@ -98,7 +103,7 @@ openssl req -config intermediate/openssl.cnf -new -sha256 \
     -key intermediate/private/intermediate.key.pem \
     -out intermediate/csr/intermediate.csr.pem \
     -passin env:SSLPASS \
-    -subj '/C=UK/ST=England/O=Xmlsecurity Test/CN=Xmlsecurity Intermediate Root CA'
+    -subj "/C=UK/ST=England/O=Xmlsecurity ${algo} Test/CN=Xmlsecurity Intermediate Root CA"
 
 # The certificate itself.
 openssl ca -batch -config openssl.cnf -extensions v3_intermediate_ca \
@@ -119,9 +124,14 @@ for i in Alice Bob
 do
     # Create a key.
     cd "$root/ca"
-    openssl genrsa -aes256 \
-        -out intermediate/private/example-xmlsecurity-${i}.key.pem \
-        -passout env:SSLPASS 2048
+    if [ "$algo" == "ECDSA" ]; then
+        openssl ecparam -name secp256r1 -genkey \
+            -out intermediate/private/example-xmlsecurity-${i}.key.pem
+    else
+        openssl genrsa -aes256 \
+            -out intermediate/private/example-xmlsecurity-${i}.key.pem \
+            -passout env:SSLPASS 2048
+    fi
     chmod 400 intermediate/private/example-xmlsecurity-${i}.key.pem
 
     # Create a certificate signing request (CSR).
@@ -131,7 +141,7 @@ do
         -key intermediate/private/example-xmlsecurity-${i}.key.pem \
         -new -sha256 -out intermediate/csr/example-xmlsecurity-${i}.csr.pem \
         -passin env:SSLPASS \
-        -subj "/C=UK/ST=England/O=Xmlsecurity Test/CN=Xmlsecurity Test example ${i}"
+        -subj "/C=UK/ST=England/O=Xmlsecurity ${algo} Test/CN=Xmlsecurity ${algo} Test example ${i}"
 
     # To create a certificate, use the intermediate CA to sign the CSR.
     cd "$root/ca"
@@ -144,14 +154,24 @@ do
     chmod 444 intermediate/certs/example-xmlsecurity-${i}.cert.pem
 
     # Export it in PKCS#12 format.
-    openssl pkcs12 -export \
-        -out ./intermediate/private/example-xmlsecurity-${i}.cert.p12 \
-        -passout env:SSLPASS \
-        -inkey intermediate/private/example-xmlsecurity-${i}.key.pem \
-        -passin env:SSLPASS \
-        -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
-        -certfile intermediate/certs/ca-chain.cert.pem \
-        -CSP "Microsoft Enhanced RSA and AES Cryptographic Provider"
+    if [ "$algo" == "ECDSA" ]; then
+        openssl pkcs12 -export \
+            -out ./intermediate/private/example-xmlsecurity-${i}.cert.p12 \
+            -passout env:SSLPASS \
+            -inkey intermediate/private/example-xmlsecurity-${i}.key.pem \
+            -passin env:SSLPASS \
+            -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
+            -certfile intermediate/certs/ca-chain.cert.pem
+    else
+        openssl pkcs12 -export \
+            -out ./intermediate/private/example-xmlsecurity-${i}.cert.p12 \
+            -passout env:SSLPASS \
+            -inkey intermediate/private/example-xmlsecurity-${i}.key.pem \
+            -passin env:SSLPASS \
+            -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
+            -certfile intermediate/certs/ca-chain.cert.pem \
+            -CSP "Microsoft Enhanced RSA and AES Cryptographic Provider"
+    fi
 done
 
 echo
