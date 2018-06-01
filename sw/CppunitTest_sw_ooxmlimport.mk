@@ -15,6 +15,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlimport, \
     sw/qa/extras/ooxmlimport/ooxmlimport \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_add_cxxflags,sw_ooxmlimport,\
+	-bigobj \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport, \
     basegfx \
     comphelper \
