@@ -80,7 +80,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     // for LTR mode only
     if ( !rInf.GetTextFrame()->IsRightToLeft() )
     {
-        if ( rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) )
+        if (rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                    DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
         {
             if ( rAdjust == SvxAdjust::Right || rAdjust == SvxAdjust::Center )
             {
@@ -380,7 +381,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         }
 
         const ForbiddenCharacters aForbidden(
-                *rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess()->getForbiddenCharacters( aLang, true ) );
+            *rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().getForbiddenCharacters(aLang, true));
 
         const bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
                                       ! rInf.GetTextFrame()->IsInTab() &&

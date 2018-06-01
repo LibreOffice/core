@@ -382,8 +382,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
 
-    const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
-    const sal_uInt16 nGridWidth = bHasGrid ? GetGridWidth(*pGrid, *pDoc) : 0;
+    const SwDoc & rDoc = rInf.GetTextFrame()->GetDoc();
+    const sal_uInt16 nGridWidth = bHasGrid ? GetGridWidth(*pGrid, rDoc) : 0;
 
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
@@ -1392,7 +1392,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
             if ( pTextFootnote )
             {
                 SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(pTextFootnote->GetFootnote());
-                const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
+                const SwDoc *const pDoc = &rInf.GetTextFrame()->GetDoc();
                 const SwEndNoteInfo* pInfo;
                 if( rFootnote.IsEndNote() )
                     pInfo = &pDoc->GetEndNoteInfo();
@@ -2432,8 +2432,8 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
                             aRectFnSet.GetPrtLeft(*pBody) :
                             aRectFnSet.GetPrtLeft(*pPageFrame);
 
-    const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
-    const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
+    const SwDoc & rDoc = rInf.GetTextFrame()->GetDoc();
+    const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, rDoc);
 
     SwTwips nStartX = GetLeftMargin();
     if ( aRectFnSet.IsVert() )
