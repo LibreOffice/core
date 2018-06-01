@@ -272,8 +272,7 @@ SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
     rClass.maFillRule = SvtGraphicFill::FillRule( nTmp );
     rIStm.ReadUInt16( nTmp );
     rClass.maFillType = SvtGraphicFill::FillType( nTmp );
-    int i;
-    for(i=0; i<SvtGraphicFill::Transform::MatrixSize; ++i)
+    for (int i = 0; i < SvtGraphicFill::Transform::MatrixSize; ++i)
         rIStm.ReadDouble( rClass.maFillTransform.matrix[i] );
     rIStm.ReadUInt16( nTmp );
     rClass.mbTiling = nTmp;

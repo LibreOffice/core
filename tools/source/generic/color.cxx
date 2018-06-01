@@ -206,7 +206,7 @@ OUString Color::AsRGBHexString() const
 
 SvStream& ReadColor( SvStream& rIStream, Color& rColor )
 {
-    sal_uInt16      nColorName;
+    sal_uInt16 nColorName(0);
 
     rIStream.ReadUInt16( nColorName );
 
