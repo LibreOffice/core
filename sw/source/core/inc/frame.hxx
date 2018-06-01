@@ -51,6 +51,8 @@ class Color;
 class SwBorderAttrs;
 class SwCache;
 class SvxBrushItem;
+class SvxFormatBreakItem;
+class SwFormatPageDesc;
 class SwSelectionList;
 struct SwPosition;
 struct SwCursorMoveState;
@@ -631,7 +633,11 @@ public:
 
     void ReinitializeFrameSizeAttrFlags();
 
+    /// WARNING: this may not return correct RES_PAGEDESC/RES_BREAK items for
+    /// SwTextFrame, use GetBreakItem()/GetPageDescItem() instead
     const SwAttrSet *GetAttrSet() const;
+    virtual const SvxFormatBreakItem& GetBreakItem() const;
+    virtual const SwFormatPageDesc& GetPageDescItem() const;
 
     bool HasFixSize() const { return mbFixSize; }
 
