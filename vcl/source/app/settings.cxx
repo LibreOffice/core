@@ -1898,7 +1898,7 @@ sal_Bool AllSettings::GetLayoutRTL() const
         nUIMirroring = 0; // ask configuration only once
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "org.openoffice.Office.Common/I18N/CTL" ) );    // note: case sensisitive !
+            OUString::createFromAscii( "org.openoffice.Office.Common/I18N/CTL" ) );    // note: case sensitive !
         if ( aNode.isValid() )
         {
             sal_Bool bTmp = sal_Bool();

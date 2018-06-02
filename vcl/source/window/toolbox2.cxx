@@ -2367,7 +2367,7 @@ sal_Bool ToolBox::AlwaysLocked()
 
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars" ) );    // note: case sensisitive !
+            OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars" ) );    // note: case sensitive !
         if ( aNode.isValid() )
         {
             // feature enabled ?
@@ -2380,7 +2380,7 @@ sal_Bool ToolBox::AlwaysLocked()
                     // now read the locking state
                     utl::OConfigurationNode aNode2 = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                         vcl::unohelper::GetMultiServiceFactory(),
-                        OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" ) );    // note: case sensisitive !
+                        OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" ) );    // note: case sensitive !
 
                     sal_Bool bLocked = sal_Bool();
                     ::com::sun::star::uno::Any aValue2 = aNode2.getNodeValue( OUString::createFromAscii( "Locked" ) );
