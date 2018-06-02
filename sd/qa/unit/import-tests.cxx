@@ -916,7 +916,7 @@ void SdImportTest::testBnc480256()
 
     xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(util::Color(-1), aBorderLine.Color);
 
     xDocShRef->DoClose();
 }
