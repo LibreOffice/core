@@ -41,14 +41,14 @@ namespace o3tl {
 
 struct SwNumberingTypeListBox_Impl;
 
-class SW_DLLPUBLIC NumberingTypeListBox
+class SW_DLLPUBLIC SwNumberingTypeListBox
 {
     std::unique_ptr<weld::ComboBoxText> m_xWidget;
     std::unique_ptr<SwNumberingTypeListBox_Impl> m_xImpl;
 
 public:
-    NumberingTypeListBox(weld::ComboBoxText* pWidget);
-    ~NumberingTypeListBox();
+    SwNumberingTypeListBox(weld::ComboBoxText* pWidget);
+    ~SwNumberingTypeListBox();
 
     void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xWidget->connect_changed(rLink); }
 

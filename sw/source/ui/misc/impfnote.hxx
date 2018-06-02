@@ -35,7 +35,7 @@ class SwEndNoteOptionPage : public SfxTabPage
     bool    bPosDoc;
     bool    bEndNote;
 
-    std::unique_ptr<NumberingTypeListBox> m_xNumViewBox;
+    std::unique_ptr<SwNumberingTypeListBox> m_xNumViewBox;
     std::unique_ptr<weld::Label> m_xOffsetLbl;
     std::unique_ptr<weld::SpinButton> m_xOffsetField;
     std::unique_ptr<weld::ComboBoxText> m_xNumCountBox;
