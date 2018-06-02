@@ -88,7 +88,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::ComboBoxText> m_xCollBox;
-    std::unique_ptr<NumberingTypeListBox> m_xNumberBox;
+    std::unique_ptr<SwNumberingTypeListBox> m_xNumberBox;
     std::unique_ptr<weld::ComboBoxText> m_xCharFormatLB;
     std::unique_ptr<weld::Label> m_xAllLevelFT;
     std::unique_ptr<weld::SpinButton>  m_xAllLevelNF;

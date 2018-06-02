@@ -1836,7 +1836,7 @@ SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(TabPageParent pParent, 
     , m_xFootnoteNtNumFormatCB(m_xBuilder->weld_check_button("ftnntnumfmt"))
     , m_xFootnotePrefixFT(m_xBuilder->weld_label("ftnprefix_label"))
     , m_xFootnotePrefixED(m_xBuilder->weld_entry("ftnprefix"))
-    , m_xFootnoteNumViewBox(new NumberingTypeListBox(m_xBuilder->weld_combo_box_text("ftnnumviewbox")))
+    , m_xFootnoteNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box_text("ftnnumviewbox")))
     , m_xFootnoteSuffixFT(m_xBuilder->weld_label("ftnsuffix_label"))
     , m_xFootnoteSuffixED(m_xBuilder->weld_entry("ftnsuffix"))
     , m_xEndNtAtTextEndCB(m_xBuilder->weld_check_button("endntattextend"))
@@ -1846,7 +1846,7 @@ SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(TabPageParent pParent, 
     , m_xEndNtNumFormatCB(m_xBuilder->weld_check_button("endntnumfmt"))
     , m_xEndPrefixFT(m_xBuilder->weld_label("endprefix_label"))
     , m_xEndPrefixED(m_xBuilder->weld_entry("endprefix"))
-    , m_xEndNumViewBox(new NumberingTypeListBox(m_xBuilder->weld_combo_box_text("endnumviewbox")))
+    , m_xEndNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box_text("endnumviewbox")))
     , m_xEndSuffixFT(m_xBuilder->weld_label("endsuffix_label"))
     , m_xEndSuffixED(m_xBuilder->weld_entry("endsuffix"))
 {
@@ -1924,7 +1924,7 @@ void SwSectionFootnoteEndTabPage::ResetState( bool bFootnote,
     weld::CheckButton *pNtAtTextEndCB, *pNtNumCB, *pNtNumFormatCB;
     weld::Label *pPrefixFT, *pSuffixFT;
     weld::Entry *pPrefixED, *pSuffixED;
-    NumberingTypeListBox *pNumViewBox;
+    SwNumberingTypeListBox *pNumViewBox;
     weld::Label *pOffsetText;
     weld::SpinButton *pOffsetField;
 
@@ -2016,7 +2016,7 @@ IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, weld::ToggleButton&, rBox, v
                     m_xFootnoteNtNumFormatCB.get() == &rBox ;
 
     weld::CheckButton *pNumBox, *pNumFormatBox, *pEndBox;
-    NumberingTypeListBox* pNumViewBox;
+    SwNumberingTypeListBox* pNumViewBox;
     weld::Label *pOffsetText;
     weld::SpinButton *pOffsetField;
     weld::Label *pPrefixFT, *pSuffixFT;

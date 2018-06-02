@@ -72,7 +72,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(TabPageParent pParent, bool bEN,
     , pSh(nullptr)
     , bPosDoc(false)
     , bEndNote(bEN)
-    , m_xNumViewBox(new NumberingTypeListBox(m_xBuilder->weld_combo_box_text("numberinglb")))
+    , m_xNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box_text("numberinglb")))
     , m_xOffsetLbl(m_xBuilder->weld_label("offset"))
     , m_xOffsetField(m_xBuilder->weld_spin_button("offsetnf"))
     , m_xNumCountBox(m_xBuilder->weld_combo_box_text("countinglb"))
