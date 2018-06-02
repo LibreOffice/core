@@ -23,7 +23,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>MS Word 2003 XML</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Microsoft Word 2003 XML</value>
+            <value xml:lang="en-US">Word 2003 XML</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>doctype:wordDocument</value></prop>
     </node>

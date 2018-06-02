@@ -112,7 +112,7 @@
       </prop>
       <prop oor:name="MsWordCompTrailingBlanks" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>MS Word-compatible trailing blanks</desc>
+          <desc>Word-compatible trailing blanks</desc>
         </info>
         <value>false</value>
       </prop>
@@ -124,7 +124,7 @@
       </prop>
       <prop oor:name="EmptyDbFieldHidesPara" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>A database field (e.g., MailMerge) with empty value hides its paragraph</desc>
+          <desc>Hide paragraphs of database fields (e.g., mail merge) with an empty value</desc>
         </info>
         <value>true</value>
       </prop>

@@ -25,6 +25,6 @@
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Microsoft Word 2003 XML</value>
+            <value xml:lang="en-US">Word 2003 XML</value>
         </prop>
     </node>

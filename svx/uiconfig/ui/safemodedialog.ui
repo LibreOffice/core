@@ -429,7 +429,7 @@ The proposed changes get more radical from top down so it is recommended to try 
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="btn_create_zip">
-                        <property name="label" translatable="yes" context="safemodedialog|btn_create_zip">Create Zip Archive from User Profile</property>
+                        <property name="label" translatable="yes" context="safemodedialog|btn_create_zip">Archive User Profile</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
