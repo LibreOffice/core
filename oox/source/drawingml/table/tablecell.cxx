@@ -85,8 +85,7 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
     }
     else if ( rLineProperties.moLineWidth.get(0)!=0 )
     {
-        // Default color of Line is black.
-        rLineProperties.maLineFill.maFillColor.setSrgbClr( 0 );
+        aBorderLine.Color = sal_Int32( COL_AUTO );
         aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
