@@ -213,6 +213,7 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 // SalObject Implementation
 X11SalObject::X11SalObject()
     : mpParent(nullptr)
+    , maParentWin(0)
     , maPrimary(0)
     , maSecondary(0)
     , maColormap(0)
