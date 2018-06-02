@@ -41,23 +41,6 @@ namespace o3tl {
 
 struct SwNumberingTypeListBox_Impl;
 
-class SW_DLLPUBLIC SwNumberingTypeListBox : public ListBox
-{
-    std::unique_ptr<SwNumberingTypeListBox_Impl> pImpl;
-
-public:
-    SwNumberingTypeListBox( vcl::Window* pWin, WinBits nStyle );
-    virtual ~SwNumberingTypeListBox() override;
-    virtual void dispose() override;
-
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-
-    void          Reload(SwInsertNumTypes nTypeFlags);
-
-    SvxNumType    GetSelectedNumberingType();
-    bool          SelectNumberingType(SvxNumType nType);
-};
-
 class SW_DLLPUBLIC NumberingTypeListBox
 {
     std::unique_ptr<weld::ComboBoxText> m_xWidget;
@@ -73,6 +56,7 @@ public:
     SvxNumType    GetSelectedNumberingType();
     bool          SelectNumberingType(SvxNumType nType);
     void          SetNoSelection() { m_xWidget->set_active(-1); }
+    void          Enable(bool bEnable) { m_xWidget->set_sensitive(bEnable); }
 };
 
 #endif
