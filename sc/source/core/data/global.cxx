@@ -133,7 +133,7 @@ bool ScGlobal::bThreadedGroupCalcInProgress = false;
 template< typename Type, typename Function = std::function< Type*() >,
           typename Guard = osl::MutexGuard, typename GuardCtor = osl::GetGlobalMutex >
 static inline
-Type* doubleCheckedInit( Type* pointer, Function function, GuardCtor guardCtor = osl::GetGlobalMutex())
+Type* doubleCheckedInit( Type*& pointer, Function function, GuardCtor guardCtor = osl::GetGlobalMutex())
 {
     Type* p = pointer;
     if (!p)
