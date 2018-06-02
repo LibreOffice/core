@@ -165,7 +165,7 @@ namespace drawinglayer
                 else
                 {
                     // this texture is a color bitmap used as transparence map
-                    const ::Color aColor(maBitmapEx.GetPixelColor(nY, nX));
+                    const ::Color aColor(maBitmapEx.GetPixelColor(nX, nY));
 
                     rfOpacity = (static_cast<double>(0xff - aColor.GetLuminance()) * (1.0 / 255.0));
                 }
