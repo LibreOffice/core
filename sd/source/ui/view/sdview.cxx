@@ -699,7 +699,7 @@ bool View::SdrBeginTextEdit(
     {
         mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
 
-        if (pObj->GetObjIdentifier() == OBJ_TABLE)
+        if (pObj && pObj->GetObjIdentifier() == OBJ_TABLE)
             mpViewSh->UpdateScrollBars();
 
         if (comphelper::LibreOfficeKit::isActive())
