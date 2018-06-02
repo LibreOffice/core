@@ -1,0 +1,2 @@
+tx stax : solenv NULL
+tx stax nmake - all tx_stax NULL

@@ -2007,6 +2007,7 @@ ToFile( "RAT_JAR_HOME",      "@RAT_JAR_HOME@",     "e" );
 ToFile( "DMAKE_URL",         "@DMAKE_URL@",        "e" );
 ToFile( "DMAKE_PATH",        "@DMAKE_PATH@",       "e" );
 ToFile( "IS_SYSTEM_DMAKE",   "@IS_SYSTEM_DMAKE@",  "e" );
+ToFile( "BUILD_STAX",        "@BUILD_STAX@",       "e" );
 ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );

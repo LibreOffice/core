@@ -1,6 +1,6 @@
 --- misc/src/build.xml	2008-07-11 12:11:50.079281000 +0200
 +++ misc/build/src/build.xml	2008-07-11 12:17:29.848740000 +0200
-@@ -1 +1,1020 @@
+@@ -1 +1,1027 @@
 -dummy
 +<?xml version="1.0" encoding="UTF-8"?>
 +
@@ -170,6 +170,13 @@
 +    <property name="source-samples-n.dir" value="${vss-n.dir}"/>        
 +    -->    
 +    
++    <property name="solar.bin" value="${solarbindir}"/>
++    <path id="classpath-j">
++        <fileset dir="${solar.bin}">
++            <include name="stax-1.2.0.jar"/>
++        </fileset>
++    </path>
++        
 +    <path id="classpath-n">
 +        <fileset dir="${lib.dir}">
 +            <include name="*.jar"/>
