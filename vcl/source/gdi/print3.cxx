@@ -491,11 +491,11 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                 xController->setValue( "LocalFileName",
                                        css::uno::makeAny( aFile ) );
             }
-            else if( aDlg->isSingleJobs() )
-            {
-                xController->setValue( "PrintCollateAsSingleJobs",
-                                       css::uno::makeAny( true ) );
-            }
+            // else if( aDlg->isSingleJobs() )
+            // {
+            //     xController->setValue( "PrintCollateAsSingleJobs",
+            //                            css::uno::makeAny( true ) );
+            // }
         }
         catch (const std::bad_alloc&)
         {
