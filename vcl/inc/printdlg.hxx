@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PRINTDLG_HXX
-#define INCLUDED_VCL_INC_PRINTDLG_HXX
+#ifndef VCL_INC_NEWPRINTDLG_HXX
+#define VCL_INC_NEWPRINTDLG_HXX
 
 #include <vcl/dllapi.h>
 
@@ -91,101 +91,44 @@ namespace vcl
             }
         };
 
+        PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
+        virtual ~PrintDialog() override;
+        virtual void dispose() override;
+
+        bool isPrintToFile();
+        bool isCollate();
+        bool hasPreview();
+
+        void previewForward();
+        void previewBackward();
+
     private:
 
-        class NUpTabPage
-        {
-        public:
-            VclPtr<RadioButton>                     mpPagesBtn;
-            VclPtr<RadioButton>                     mpBrochureBtn;
-            VclPtr<FixedText>                       mpPagesBoxTitleTxt;
-            VclPtr<ListBox>                         mpNupPagesBox;
-
-            // controls for "Custom" page mode
-            VclPtr<FixedText>                       mpNupNumPagesTxt;
-            VclPtr<NumericField>                    mpNupColEdt;
-            VclPtr<FixedText>                       mpNupTimesTxt;
-            VclPtr<NumericField>                    mpNupRowsEdt;
-            VclPtr<FixedText>                       mpPageMarginTxt1;
-            VclPtr<MetricField>                     mpPageMarginEdt;
-            VclPtr<FixedText>                       mpPageMarginTxt2;
-            VclPtr<FixedText>                       mpSheetMarginTxt1;
-            VclPtr<MetricField>                     mpSheetMarginEdt;
-            VclPtr<FixedText>                       mpSheetMarginTxt2;
-            VclPtr<FixedText>                       mpNupOrientationTxt;
-            VclPtr<ListBox>                         mpNupOrientationBox;
-
-            // page order ("left to right, then down")
-            VclPtr<FixedText>                       mpNupOrderTxt;
-            VclPtr<ListBox>                         mpNupOrderBox;
-            VclPtr<ShowNupOrderWindow>              mpNupOrderWin;
-            /// border around each page
-            VclPtr<CheckBox>                        mpBorderCB;
-
-            NUpTabPage( VclBuilder* );
-
-            void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
-            void enableNupControls( bool bEnable );
-
-            void showAdvancedControls( bool );
-        };
-
-        class JobTabPage
-        {
-        public:
-            VclPtr<ListBox>                         mpPrinters;
-            VclPtr<FixedText>                       mpStatusTxt;
-            VclPtr<FixedText>                       mpLocationTxt;
-            VclPtr<FixedText>                       mpCommentTxt;
-
-            VclPtr<PushButton>                      mpSetupButton;
-
-            VclPtr<NumericField>                    mpCopyCountField;
-            VclPtr<CheckBox>                        mpCollateBox;
-            VclPtr<FixedImage>                      mpCollateImage;
-            VclPtr<CheckBox>                        mpReverseOrderBox;
-
-            BitmapEx const                          maCollateBmp;
-            BitmapEx const                          maNoCollateBmp;
-
-            long                                    mnCollateUIMode;
-
-            JobTabPage( VclBuilder* );
-
-            void readFromSettings();
-            void storeToSettings();
-        };
-
-        class OutputOptPage
-        {
-        public:
-            VclPtr<CheckBox>                    mpCollateSingleJobsBox;
-            VclPtr<CheckBox>                    mpPapersizeFromSetup;
-
-            OutputOptPage( VclBuilder* );
-
-            void readFromSettings();
-            void storeToSettings();
-        };
-
-        std::unique_ptr<VclBuilder>             mpCustomOptionsUIBuilder;
-
         std::shared_ptr<PrinterController>      maPController;
-        VclPtr<TabControl>                      mpTabCtrl;
-        NUpTabPage                              maNUpPage;
-        JobTabPage                              maJobPage;
-        OutputOptPage                           maOptionsPage;
-        VclPtr<PrintPreviewWindow>              mpPreviewWindow;
-        VclPtr<NumericField>                    mpPageEdit;
 
-        VclPtr<FixedText>                       mpNumPagesText;
-        VclPtr<PushButton>                      mpBackwardBtn;
-        VclPtr<PushButton>                      mpForwardBtn;
-        VclPtr<CheckBox>                        mpPreviewBox;
+        VclPtr<TabControl>                      mpTabCtrl;
+        VclPtr<ListBox>                         mpPrinters;
+        VclPtr<FixedText>                       mpStatusTxt;
+        VclPtr<PushButton>                      mpSetupButton;
+        OUString const                          maPrintToFileText;
+        OUString                                maPrintText;
+        OUString const                          maDefPrtText;
+
+        VclPtr<NumericField>                    mpCopyCountField;
+        VclPtr<CheckBox>                        mpCollateBox;
+        VclPtr<FixedImage>                      mpCollateImage;
+        VclPtr<CheckBox>                        mpReverseOrderBox;
 
         VclPtr<OKButton>                        mpOKButton;
         VclPtr<CancelButton>                    mpCancelButton;
         VclPtr<HelpButton>                      mpHelpButton;
+
+        VclPtr<PushButton>                      mpBackwardBtn;
+        VclPtr<PushButton>                      mpForwardBtn;
+        VclPtr<CheckBox>                        mpPreviewBox;
+        VclPtr<FixedText>                       mpNumPagesText;
+        VclPtr<PrintPreviewWindow>              mpPreviewWindow;
+        VclPtr<NumericField>                    mpPageEdit;
 
         OUString                                maPageStr;
         OUString                                maNoPageStr;
@@ -193,66 +136,61 @@ namespace vcl
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
+        BitmapEx const                          maCollateBmp;
+        BitmapEx const                          maNoCollateBmp;
+
+        long                                    mnCollateUIMode;
+
+        VclPtr<RadioButton>                     mpPagesBtn;
+        VclPtr<RadioButton>                     mpBrochureBtn;
+        VclPtr<FixedText>                       mpPagesBoxTitleTxt;
+        VclPtr<ListBox>                         mpNupPagesBox;
+
+        // controls for "Custom" page mode
+        VclPtr<FixedText>                       mpNupNumPagesTxt;
+        VclPtr<NumericField>                    mpNupColEdt;
+        VclPtr<FixedText>                       mpNupTimesTxt;
+        VclPtr<NumericField>                    mpNupRowsEdt;
+        VclPtr<FixedText>                       mpPageMarginTxt1;
+        VclPtr<MetricField>                     mpPageMarginEdt;
+        VclPtr<FixedText>                       mpPageMarginTxt2;
+        VclPtr<FixedText>                       mpSheetMarginTxt1;
+        VclPtr<MetricField>                     mpSheetMarginEdt;
+        VclPtr<FixedText>                       mpSheetMarginTxt2;
+        VclPtr<ListBox>                         mpNupOrientationBox;
+
+        // page order ("left to right, then down")
+        VclPtr<ListBox>                         mpNupOrderBox;
+        VclPtr<ShowNupOrderWindow>              mpNupOrderWin;
+        /// border around each page
+        VclPtr<CheckBox>                        mpBorderCB;
+
         std::map< VclPtr<vcl::Window>, OUString >      maControlToPropertyMap;
-        std::map< OUString, std::vector< VclPtr<vcl::Window> > >
-                                                maPropertyToWindowMap;
-        std::map< VclPtr<vcl::Window>, sal_Int32 >          maControlToNumValMap;
 
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
-
         /// internal, used for automatic Nup-Portrait/landscape
         Size                                    maFirstPageSize;
 
-        OUString const                          maPrintToFileText;
-        OUString                                maPrintText;
-        OUString const                          maDefPrtText;
+        DECL_LINK( ClickHdl, Button*, void );
+        DECL_LINK( SelectHdl, ListBox&, void );
+        DECL_LINK( ModifyHdl, Edit&, void );
+        DECL_LINK( ToggleHdl, CheckBox&, void );
+        DECL_LINK( ToggleRadioHdl, RadioButton&, void );
 
-        bool                                mbShowLayoutPage;
+        css::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
-        Size const & getJobPageSize();
-        void updateNup();
-        void updateNupFromPages();
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
         void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();
-        void checkOptionalControlDependencies();
-        void makeEnabled( vcl::Window* );
-        void updateWindowFromProperty( const OUString& );
-        void setupOptionalUI();
-        void readFromSettings();
-        void storeToSettings();
-        css::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
+        void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
+        void showAdvancedControls( bool );
+        void updateNup();
+        void updateNupFromPages();
+        void enableNupControls( bool bEnable );
+        Size const & getJobPageSize();
 
-        virtual void Resize() override;
-        virtual void Command( const CommandEvent& ) override;
-        virtual void DataChanged( const DataChangedEvent& ) override;
-
-        DECL_LINK( SelectHdl, ListBox&, void );
-        DECL_LINK( ClickHdl, Button*, void );
-        DECL_LINK( ToggleHdl, CheckBox&, void );
-        DECL_LINK( ToggleRadioHdl, RadioButton&, void );
-        DECL_LINK( ModifyHdl, Edit&, void );
-        DECL_LINK( ActivatePageHdl, TabControl *, void);
-
-        DECL_LINK( UIOption_CheckHdl, CheckBox&, void );
-        DECL_LINK( UIOption_RadioHdl, RadioButton&, void );
-        DECL_LINK( UIOption_SelectHdl, ListBox&, void );
-        DECL_LINK( UIOption_ModifyHdl, Edit&, void );
-
-    public:
-        PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
-        virtual ~PrintDialog() override;
-        virtual void dispose() override;
-
-        bool isPrintToFile();
-        bool isCollate();
-        bool isSingleJobs();
-        bool hasPreview();
-
-        void previewForward();
-        void previewBackward();
     };
 
     class PrintProgressDialog : public ModelessDialog
@@ -279,6 +217,4 @@ namespace vcl
     };
 }
 
-#endif // INCLUDED_VCL_INC_PRINTDLG_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+#endif // VCL_INC_NEWPRINTDLG_HXX
