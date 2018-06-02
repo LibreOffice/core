@@ -198,7 +198,7 @@ class SwSectionFootnoteEndTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xFootnoteNtNumFormatCB;
     std::unique_ptr<weld::Label> m_xFootnotePrefixFT;
     std::unique_ptr<weld::Entry> m_xFootnotePrefixED;
-    std::unique_ptr<NumberingTypeListBox> m_xFootnoteNumViewBox;
+    std::unique_ptr<SwNumberingTypeListBox> m_xFootnoteNumViewBox;
     std::unique_ptr<weld::Label> m_xFootnoteSuffixFT;
     std::unique_ptr<weld::Entry> m_xFootnoteSuffixED;
     std::unique_ptr<weld::CheckButton> m_xEndNtAtTextEndCB;
@@ -208,7 +208,7 @@ class SwSectionFootnoteEndTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xEndNtNumFormatCB;
     std::unique_ptr<weld::Label> m_xEndPrefixFT;
     std::unique_ptr<weld::Entry> m_xEndPrefixED;
-    std::unique_ptr<NumberingTypeListBox> m_xEndNumViewBox;
+    std::unique_ptr<SwNumberingTypeListBox> m_xEndNumViewBox;
     std::unique_ptr<weld::Label> m_xEndSuffixFT;
     std::unique_ptr<weld::Entry> m_xEndSuffixED;
 

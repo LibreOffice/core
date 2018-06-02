@@ -38,7 +38,7 @@ struct SwNumberingTypeListBox_Impl
     uno::Reference<text::XNumberingTypeInfo> xInfo;
 };
 
-NumberingTypeListBox::NumberingTypeListBox(weld::ComboBoxText* pWidget)
+SwNumberingTypeListBox::SwNumberingTypeListBox(weld::ComboBoxText* pWidget)
     : m_xWidget(pWidget)
     , m_xImpl(new SwNumberingTypeListBox_Impl)
 {
@@ -47,11 +47,11 @@ NumberingTypeListBox::NumberingTypeListBox(weld::ComboBoxText* pWidget)
     m_xImpl->xInfo.set(xDefNum, uno::UNO_QUERY);
 }
 
-NumberingTypeListBox::~NumberingTypeListBox()
+SwNumberingTypeListBox::~SwNumberingTypeListBox()
 {
 }
 
-void NumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
+void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
 {
     m_xWidget->clear();
     uno::Sequence<sal_Int16> aTypes;
@@ -136,7 +136,7 @@ void NumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
     }
 }
 
-SvxNumType NumberingTypeListBox::GetSelectedNumberingType()
+SvxNumType SwNumberingTypeListBox::GetSelectedNumberingType()
 {
     SvxNumType nRet = SVX_NUM_CHARS_UPPER_LETTER;
     int nSelPos = m_xWidget->get_active();
@@ -149,7 +149,7 @@ SvxNumType NumberingTypeListBox::GetSelectedNumberingType()
     return nRet;
 }
 
-bool NumberingTypeListBox::SelectNumberingType(SvxNumType nType)
+bool SwNumberingTypeListBox::SelectNumberingType(SvxNumType nType)
 {
     int nPos = m_xWidget->find_id(OUString::number(nType));
     m_xWidget->set_active(nPos);
