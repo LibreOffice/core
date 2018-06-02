@@ -393,7 +393,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(TabPageParent pPage,
     , nActLevel(1)
     , m_xLevelLB(m_xBuilder->weld_tree_view("level"))
     , m_xCollBox(m_xBuilder->weld_combo_box_text("style"))
-    , m_xNumberBox(new NumberingTypeListBox(m_xBuilder->weld_combo_box_text("numbering")))
+    , m_xNumberBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box_text("numbering")))
     , m_xCharFormatLB(m_xBuilder->weld_combo_box_text("charstyle"))
     , m_xAllLevelFT(m_xBuilder->weld_label("sublevelsft"))
     , m_xAllLevelNF(m_xBuilder->weld_spin_button("sublevelsnf"))
