@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_c53a7ae7",
+        "filename": "icon-themes/karasa_jaga/res/sx16670.png",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-06-02T06:53:51Z",
+      "side": 1,
+      "message": "This file looks like an oversight",
+      "revId": "7d54fef616795e68b9fec35e0f82c8d3f922b3d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
