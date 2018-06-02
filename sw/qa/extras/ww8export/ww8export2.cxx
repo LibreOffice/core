@@ -25,6 +25,8 @@
 
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
+#include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
 #include <editeng/unoprnms.hxx>
 
 class Test : public SwModelTestBase
@@ -289,6 +291,15 @@ DECLARE_WW8EXPORT_TEST(testTdf111480, "tdf111480.doc")
 
     CPPUNIT_ASSERT(xText->getSize().Height > 11000);
     CPPUNIT_ASSERT(xText->getSize().Width  > 11000);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    tools::Rectangle aRect = pPage->GetObj(0)->GetSnapRect();
+    CPPUNIT_ASSERT( aRect.GetHeight() > aRect.GetWidth() );
 }
 
 DECLARE_WW8EXPORT_TEST( testActiveXCheckbox, "checkbox_control.odt" )
