@@ -233,9 +233,9 @@ static lang::Locale lcl_GetPrimaryLanguageOfSentence(
 }
 
 
-SwXStringKeyMap::SwXStringKeyMap() {}
+LngXStringKeyMap::LngXStringKeyMap() {}
 
-void SAL_CALL SwXStringKeyMap::insertValue(const OUString& aKey, const css::uno::Any& aValue)
+void SAL_CALL LngXStringKeyMap::insertValue(const OUString& aKey, const css::uno::Any& aValue)
 {
     std::map<OUString, css::uno::Any>::const_iterator aIter = maMap.find(aKey);
     if (aIter != maMap.end())
@@ -244,7 +244,7 @@ void SAL_CALL SwXStringKeyMap::insertValue(const OUString& aKey, const css::uno:
     maMap[aKey] = aValue;
 }
 
-css::uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString& aKey)
+css::uno::Any SAL_CALL LngXStringKeyMap::getValue(const OUString& aKey)
 {
     std::map<OUString, css::uno::Any>::const_iterator aIter = maMap.find(aKey);
     if (aIter == maMap.end())
@@ -253,14 +253,14 @@ css::uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString& aKey)
     return (*aIter).second;
 }
 
-sal_Bool SAL_CALL SwXStringKeyMap::hasValue(const OUString& aKey)
+sal_Bool SAL_CALL LngXStringKeyMap::hasValue(const OUString& aKey)
 {
     return maMap.find(aKey) != maMap.end();
 }
 
-::sal_Int32 SAL_CALL SwXStringKeyMap::getCount() { return maMap.size(); }
+::sal_Int32 SAL_CALL LngXStringKeyMap::getCount() { return maMap.size(); }
 
-OUString SAL_CALL SwXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
+OUString SAL_CALL LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
 {
     if (static_cast<sal_uInt32>(nIndex) >= maMap.size())
         throw css::lang::IndexOutOfBoundsException();
@@ -268,7 +268,7 @@ OUString SAL_CALL SwXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
     return OUString();
 }
 
-css::uno::Any SAL_CALL SwXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
+css::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 {
     if (static_cast<sal_uInt32>(nIndex) >= maMap.size())
         throw css::lang::IndexOutOfBoundsException();
@@ -428,7 +428,7 @@ void GrammarCheckingIterator::ProcessResult(
                         rDesc.nType = text::TextMarkupType::PROOFREADING;
 
                     uno::Reference< container::XStringKeyMap > xKeyMap(
-                        new SwXStringKeyMap());
+                        new LngXStringKeyMap());
                     for( const beans::PropertyValue& rProperty : rError.aProperties )
                     {
                         if ( rProperty.Name == "LineColor" )

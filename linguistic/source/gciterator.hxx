@@ -186,10 +186,10 @@ public:
 
 /** Implementation of the css::container::XStringKeyMap interface
  */
-class SwXStringKeyMap : public ::cppu::WeakImplHelper<css::container::XStringKeyMap>
+class LngXStringKeyMap : public ::cppu::WeakImplHelper<css::container::XStringKeyMap>
 {
 public:
-    SwXStringKeyMap();
+    LngXStringKeyMap();
 
     virtual css::uno::Any SAL_CALL getValue(const OUString& aKey) override;
     virtual sal_Bool SAL_CALL hasValue(const OUString& aKey) override;
@@ -199,10 +199,10 @@ public:
     virtual css::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
 
 private:
-    SwXStringKeyMap(SwXStringKeyMap&) = delete;
-    void operator=(SwXStringKeyMap&) = delete;
+    LngXStringKeyMap(LngXStringKeyMap&) = delete;
+    void operator=(LngXStringKeyMap&) = delete;
 
-    ~SwXStringKeyMap() override{};
+    ~LngXStringKeyMap() override{};
 
     std::map<OUString, css::uno::Any> maMap;
 };
