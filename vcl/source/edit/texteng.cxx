@@ -219,7 +219,7 @@ void TextEngine::SetMaxTextLen( sal_Int32 nLen )
 
 void TextEngine::SetMaxTextWidth( long nMaxWidth )
 {
-    if ( nMaxWidth != mnMaxTextWidth )
+    if ( nMaxWidth>=0 && nMaxWidth != mnMaxTextWidth )
     {
         mnMaxTextWidth = nMaxWidth;
         FormatFullDoc();
