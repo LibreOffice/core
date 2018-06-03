@@ -76,6 +76,47 @@ class consolidate(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 4, 3).getValue(), 312)
         self.assertEqual(get_cell_by_position(document, 0, 4, 4).getValue(), 315)
         self.assertEqual(get_cell_by_position(document, 0, 4, 5).getValue(), 318)
+        #verify dialog
+        self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xfunc = xDialog.getChild("func")
+        xlbdataarea = xDialog.getChild("lbdataarea")
+        xdelete = xDialog.getChild("delete")
+        xbyrow = xDialog.getChild("byrow")
+        xbycol = xDialog.getChild("bycol")
+        xeddestarea = xDialog.getChild("eddestarea")
+        xconsareas = xDialog.getChild("consareas")
+        self.assertEqual(get_state_as_dict(xfunc)["SelectEntryText"], "Sum")
+        self.assertEqual(get_state_as_dict(xconsareas)["EntryCount"], "3")
+        self.assertEqual(get_state_as_dict(xeddestarea)["Text"], "$Total.$A$2")
+        self.assertEqual(get_state_as_dict(xbyrow)["Selected"], "true")
+        self.assertEqual(get_state_as_dict(xbycol)["Selected"], "true")
+        #delete first range
+        select_pos(xconsareas, "0")
+        xdelete.executeAction("CLICK", tuple())
+        self.assertEqual(get_state_as_dict(xconsareas)["EntryCount"], "2")
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.assertEqual(get_cell_by_position(document, 0, 1, 2).getValue(), 200)
+        self.assertEqual(get_cell_by_position(document, 0, 1, 3).getValue(), 202)
+        self.assertEqual(get_cell_by_position(document, 0, 1, 4).getValue(), 204)
+        self.assertEqual(get_cell_by_position(document, 0, 1, 5).getValue(), 206)
+
+        self.assertEqual(get_cell_by_position(document, 0, 2, 2).getValue(), 202)
+        self.assertEqual(get_cell_by_position(document, 0, 2, 3).getValue(), 204)
+        self.assertEqual(get_cell_by_position(document, 0, 2, 4).getValue(), 206)
+        self.assertEqual(get_cell_by_position(document, 0, 2, 5).getValue(), 208)
+
+        self.assertEqual(get_cell_by_position(document, 0, 3, 2).getValue(), 204)
+        self.assertEqual(get_cell_by_position(document, 0, 3, 3).getValue(), 206)
+        self.assertEqual(get_cell_by_position(document, 0, 3, 4).getValue(), 208)
+        self.assertEqual(get_cell_by_position(document, 0, 3, 5).getValue(), 210)
+
+        self.assertEqual(get_cell_by_position(document, 0, 4, 2).getValue(), 206)
+        self.assertEqual(get_cell_by_position(document, 0, 4, 3).getValue(), 208)
+        self.assertEqual(get_cell_by_position(document, 0, 4, 4).getValue(), 210)
+        self.assertEqual(get_cell_by_position(document, 0, 4, 5).getValue(), 212)
 
         self.ui_test.close_doc()
 
