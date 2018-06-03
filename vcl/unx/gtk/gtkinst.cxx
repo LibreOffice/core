@@ -203,7 +203,7 @@ GtkInstance::~GtkInstance()
     while( !m_aTimers.empty() )
         delete *m_aTimers.begin();
     DeInitAtkBridge();
-    ResetLastSeenCairoFontOptions();
+    ResetLastSeenCairoFontOptions(nullptr);
 }
 
 SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
@@ -504,13 +504,14 @@ const cairo_font_options_t* GtkInstance::GetLastSeenCairoFontOptions()
     return m_pLastCairoFontOptions;
 }
 
-void GtkInstance::ResetLastSeenCairoFontOptions()
+void GtkInstance::ResetLastSeenCairoFontOptions(const cairo_font_options_t* pCairoFontOptions)
 {
     if (m_pLastCairoFontOptions)
-    {
         cairo_font_options_destroy(m_pLastCairoFontOptions);
+    if (pCairoFontOptions)
+        m_pLastCairoFontOptions = cairo_font_options_copy(pCairoFontOptions);
+    else
         m_pLastCairoFontOptions = nullptr;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
