@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_cb1fe959",
+        "filename": "include/vcl/uitest/swevents.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-06-03T05:23:26Z",
+      "side": 1,
+      "message": "Trailing empty line.",
+      "revId": "1ba80bfd08baec0e5dcd488e5ad7148d49038f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_eb24a5b0",
+        "filename": "sw/source/uibase/inc/logger.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-06-03T05:23:26Z",
+      "side": 1,
+      "message": "Trailing empty line.",
+      "revId": "1ba80bfd08baec0e5dcd488e5ad7148d49038f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_ab2aad7c",
+        "filename": "sw/source/uibase/uitest/logger.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-06-03T05:23:26Z",
+      "side": 1,
+      "message": "Trailing empty line",
+      "revId": "1ba80bfd08baec0e5dcd488e5ad7148d49038f30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
