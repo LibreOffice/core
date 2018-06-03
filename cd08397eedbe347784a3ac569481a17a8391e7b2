@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_4b4bf959",
+        "filename": "cui/source/tabpages/textattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-06-03T09:34:11Z",
+      "side": 1,
+      "message": "Were these left intentionally?",
+      "revId": "cd08397eedbe347784a3ac569481a17a8391e7b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
