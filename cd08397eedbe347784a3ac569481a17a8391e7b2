@@ -34,6 +34,24 @@
       "revId": "cd08397eedbe347784a3ac569481a17a8391e7b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_8b87b111",
+        "filename": "cui/source/tabpages/textattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-06-03T22:49:30Z",
+      "side": 1,
+      "message": "SAL_DEBUG is rather helpful here as the commit hooks will warn when one tries to commit code using them.",
+      "parentUuid": "5a22e58a_cb0e09e5",
+      "revId": "cd08397eedbe347784a3ac569481a17a8391e7b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
