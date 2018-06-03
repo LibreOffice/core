@@ -27,14 +27,15 @@
 namespace ucbhelper
 {
 
+// workaround for incremental linking bugs in MSVC2015
+class SAL_DLLPUBLIC_TEMPLATE ActiveDataSink_Base : public cppu::WeakImplHelper< css::io::XActiveDataSink > {};
+
 /**
   * This class implements the interface css::io::XActiveDataSink.
   * Instances of this class can be passed with the parameters of an
   * "open" command.
   */
-
-class UCBHELPER_DLLPUBLIC ActiveDataSink :
-        public cppu::WeakImplHelper< css::io::XActiveDataSink >
+class UCBHELPER_DLLPUBLIC ActiveDataSink : public ActiveDataSink_Base
 {
     css::uno::Reference< css::io::XInputStream > m_xStream;
 

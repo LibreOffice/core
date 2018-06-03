@@ -92,6 +92,10 @@ SvParserState ORTFReader::CallParser()
     return m_bFoundTable ? eParseState : SvParserState::Error;
 }
 
+#if defined _MSC_VER
+#pragma warning(disable: 4702) // unreachable code, bug in MSVC2015
+#endif
+
 void ORTFReader::NextToken( int nToken )
 {
     if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediately

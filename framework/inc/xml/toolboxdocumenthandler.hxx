@@ -34,8 +34,10 @@ namespace framework{
 
 // Hash code function for using in all hash maps of follow implementation.
 
-class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
-                                    public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
+// workaround for incremental linking bugs in MSVC2015
+class SAL_DLLPUBLIC_TEMPLATE OReadToolBoxDocumentHandler_Base : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > {};
+
+class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : public OReadToolBoxDocumentHandler_Base
 {
     public:
         enum ToolBox_XML_Entry

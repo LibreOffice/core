@@ -64,8 +64,10 @@ namespace comphelper
         void setAdapter(OContainerListenerAdapter* _pAdapter);
     };
 
-    class COMPHELPER_DLLPUBLIC OContainerListenerAdapter
-        : public cppu::WeakImplHelper<css::container::XContainerListener>
+    // workaround for incremental linking bugs in MSVC2015
+    class SAL_DLLPUBLIC_TEMPLATE OContainerListenerAdapter_Base : public cppu::WeakImplHelper< css::container::XContainerListener > {};
+
+    class COMPHELPER_DLLPUBLIC OContainerListenerAdapter : public OContainerListenerAdapter_Base
     {
         friend class OContainerListener;
 

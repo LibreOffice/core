@@ -158,6 +158,9 @@ void CfgParser::AddText(
     pStackData->sText[ rIsoLang ] = rText;
 }
 
+#if defined _MSC_VER
+#pragma warning(disable: 4702) // unreachable code, bug in MSVC2015, it thinks the std::exit is unreachable
+#endif
 void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 {
     OString sToken( pToken );

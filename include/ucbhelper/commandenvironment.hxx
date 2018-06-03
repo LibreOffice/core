@@ -29,13 +29,15 @@ namespace ucbhelper
 {
 struct CommandEnvironment_Impl;
 
+// workaround for incremental linking bugs in MSVC2015
+class SAL_DLLPUBLIC_TEMPLATE CommandEnvironment_Base : public cppu::WeakImplHelper< css::ucb::XCommandEnvironment > {};
+
 /**
   * This class implements the interface
   * css::ucb::XCommandEnvironment. Instances of this class can
   * be used to supply environments to commands executed by UCB contents.
   */
-class UCBHELPER_DLLPUBLIC CommandEnvironment :
-            public cppu::WeakImplHelper< css::ucb::XCommandEnvironment >
+class UCBHELPER_DLLPUBLIC CommandEnvironment : public CommandEnvironment_Base
 {
     std::unique_ptr<CommandEnvironment_Impl> m_pImpl;
 

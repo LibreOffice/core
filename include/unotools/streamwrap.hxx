@@ -35,11 +35,11 @@ class SvStream;
 namespace utl
 {
 
-//= OInputStreamWrapper
+// workaround for incremental linking bugs in MSVC2015
+class SAL_DLLPUBLIC_TEMPLATE OInputStreamWrapper_Base : public cppu::WeakImplHelper< css::io::XInputStream > {};
 
 /// helper class for wrapping an SvStream into an com.sun.star.io::XInputStream
-class UNOTOOLS_DLLPUBLIC OInputStreamWrapper
-        : public cppu::WeakImplHelper<css::io::XInputStream>
+class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_Base
 {
 protected:
     ::osl::Mutex    m_aMutex;

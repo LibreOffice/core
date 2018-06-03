@@ -33,8 +33,10 @@
  */
 namespace comphelper
 {
-    class COMPHELPER_DLLPUBLIC ChainablePropertySetInfo:
-        public ::cppu::WeakImplHelper< css::beans::XPropertySetInfo >
+    // workaround for incremental linking bugs in MSVC2015
+    class SAL_DLLPUBLIC_TEMPLATE ChainablePropertySetInfo_Base : public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {};
+
+    class COMPHELPER_DLLPUBLIC ChainablePropertySetInfo : public ChainablePropertySetInfo_Base
     {
     public:
         ChainablePropertySetInfo( PropertyInfo const * pMap );
