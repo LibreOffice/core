@@ -382,7 +382,7 @@ void HelpLinker::link()
             // add once this as its own id.
             addBookmark( pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
 
-            const HashSet *hidlist = streamTable.appl_hidlist.get();
+            const std::vector<std::string> *hidlist = streamTable.appl_hidlist.get();
             if (hidlist && !hidlist->empty())
             {
                 // now iterate over all elements of the hidlist
