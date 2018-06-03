@@ -68,6 +68,7 @@ ScDataProviderBaseControl::ScDataProviderBaseControl(vcl::Window* pParent,
     get(maProviderList, "provider_lst");
     get(maEditURL, "ed_url");
     get(maEditID, "ed_id");
+    get(mpApplyBtn,"next");
 
     auto aDataProvider = sc::DataProviderFactory::getDataProviders();
     for (auto& rDataProvider : aDataProvider)
@@ -79,17 +80,8 @@ ScDataProviderBaseControl::ScDataProviderBaseControl(vcl::Window* pParent,
     maEditID->SetModifyHdl(LINK(this, ScDataProviderBaseControl, IDEditHdl));
     maEditURL->SetModifyHdl(LINK(this, ScDataProviderBaseControl, URLEditHdl));
 
-    mpApplyBtn = VclPtr<PushButton>::Create(maGrid, WB_FLATBUTTON);
-    mpApplyBtn->set_grid_top_attach(1);
-    mpApplyBtn->set_grid_left_attach(5);
-    mpApplyBtn->SetQuickHelpText("Apply Changes");
-    mpApplyBtn->SetControlForeground(COL_GREEN);
-    mpApplyBtn->SetControlBackground(COL_GREEN);
-    mpApplyBtn->SetBackground(Wallpaper(COL_LIGHTGREEN));
-    mpApplyBtn->SetModeImage(Image(BitmapEx("sc/res/xml_element.png")));
-    mpApplyBtn->Show();
-    mpApplyBtn->SetClickHdl(LINK(this, ScDataProviderBaseControl, ApplyBtnHdl));
     SetSizePixel(GetOptimalSize());
+    mpApplyBtn->SetClickHdl(LINK(this, ScDataProviderBaseControl, ApplyBtnHdl));
     isValid();
 }
 
@@ -103,7 +95,7 @@ void ScDataProviderBaseControl::dispose()
     maEditID.clear();
     maEditURL.clear();
     maProviderList.clear();
-    mpApplyBtn.disposeAndClear();
+    mpApplyBtn.clear();
     maGrid.clear();
     disposeBuilder();
     VclContainer::dispose();
@@ -126,16 +118,11 @@ void ScDataProviderBaseControl::isValid()
 
     if (bValid)
     {
-        Color aColor = GetSettings().GetStyleSettings().GetDialogColor();
-        SetBackground(aColor);
-        maGrid->SetBackground(aColor);
         Invalidate();
         updateApplyBtn(true);
     }
     else
     {
-        SetBackground(Wallpaper(COL_RED));
-        maGrid->SetBackground(Wallpaper(COL_RED));
         Invalidate();
         updateApplyBtn(false);
     }
@@ -157,21 +144,16 @@ void ScDataProviderBaseControl::updateApplyBtn(bool bValidConfig)
     if (!bValidConfig)
     {
         mpApplyBtn->Disable();
-        mpApplyBtn->SetBackground(Wallpaper(COL_RED));
-        mpApplyBtn->SetQuickHelpText("");
         return;
     }
 
     if (mbDirty)
     {
         mpApplyBtn->Enable();
-        mpApplyBtn->SetBackground(Wallpaper(COL_YELLOW));
-        mpApplyBtn->SetQuickHelpText("Apply Changes");
     }
     else
     {
         mpApplyBtn->Disable();
-        mpApplyBtn->SetBackground(Wallpaper(COL_GREEN));
         mpApplyBtn->SetQuickHelpText("Current Config Applied");
     }
 }
@@ -228,6 +210,10 @@ class ScDataTransformationBaseControl : public VclContainer,
                                     public VclBuilderContainer
 {
     VclPtr<VclContainer> maGrid;
+    VclPtr<ListBox> maProviderList;
+
+    DECL_LINK(ProviderSelectHdl, ListBox&, void);
+    DECL_LINK(ApplyBtnHdl, Button*, void);
 
 public:
     ScDataTransformationBaseControl(vcl::Window* pParent, const OUString& rUIFile);
@@ -243,10 +229,15 @@ public:
 ScDataTransformationBaseControl::ScDataTransformationBaseControl(vcl::Window* pParent, const OUString& rUIFile):
     VclContainer(pParent, WB_BORDER | WB_CLIPCHILDREN)
 {
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIFile));
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "modules/scalc/ui/datatransformationentry.ui"));
 
     get(maGrid, "grid");
+    get(maProviderList,"transformationlist");
     SetSizePixel(GetOptimalSize());
+
+    maProviderList->InsertEntry("Delete Column");
+    maProviderList->InsertEntry("Split Column");
+    maProviderList->InsertEntry("Merge COlumns");
 }
 
 ScDataTransformationBaseControl::~ScDataTransformationBaseControl()
@@ -257,6 +248,7 @@ ScDataTransformationBaseControl::~ScDataTransformationBaseControl()
 void ScDataTransformationBaseControl::dispose()
 {
     maGrid.clear();
+    maProviderList.clear();
 
     VclContainer::dispose();
 }
