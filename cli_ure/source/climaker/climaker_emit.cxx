@@ -722,9 +722,8 @@ Assembly ^ TypeEmitter::type_resolve(
             array< ::System::Type^>^ base_interfaces =
                   gcnew array< ::System::Type^>( vecBaseTypes.size() );
 
-            typedef std::vector<Reference<reflection::XInterfaceTypeDescription2> >::const_iterator it;
             int index = 0;
-            for (it i = vecBaseTypes.begin(); i != vecBaseTypes.end(); ++i, ++index)
+            for (auto i = vecBaseTypes.begin(); i != vecBaseTypes.end(); ++i, ++index)
                 base_interfaces[ index ] = get_type( *i );
             type_builder = m_module_builder->DefineType(
                 cts_name, attr, nullptr, base_interfaces );

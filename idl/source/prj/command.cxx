@@ -132,7 +132,7 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
     return true;
 }
 
-static bool ResponseFile( StringList * pList, int argc, char ** argv )
+static bool ResponseFile( std::vector<OUString> * pList, int argc, char ** argv )
 {
     // program name
     pList->push_back( OUString::createFromAscii(*argv) );
@@ -174,7 +174,7 @@ static bool ResponseFile( StringList * pList, int argc, char ** argv )
 SvCommand::SvCommand( int argc, char ** argv )
     : nVerbosity(1)
 {
-    StringList aList;
+    std::vector<OUString> aList;
 
     if( ResponseFile( &aList, argc, argv ) )
     {

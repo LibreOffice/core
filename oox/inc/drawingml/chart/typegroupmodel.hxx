@@ -41,13 +41,13 @@ struct UpDownBarsModel
 struct TypeGroupModel
 {
     typedef ModelVector< SeriesModel >  SeriesVector;
-    typedef ::std::vector< sal_Int32 >  AxisIdVector;
     typedef ModelRef< DataLabelsModel > DataLabelsRef;
     typedef ModelRef< UpDownBarsModel > UpDownBarsRef;
     typedef ModelRef< Shape >           ShapeRef;
 
     SeriesVector        maSeries;           /// Series attached to this chart type group.
-    AxisIdVector        maAxisIds;          /// List of axis identifiers used by this chart type.
+    std::vector<sal_Int32>
+                        maAxisIds;          /// List of axis identifiers used by this chart type.
     DataLabelsRef       mxLabels;           /// Data point label settings for all series.
     UpDownBarsRef       mxUpDownBars;       /// Up/down bars in stock charts.
     ShapeRef            mxSerLines;         /// Connector lines in stacked bar charts.

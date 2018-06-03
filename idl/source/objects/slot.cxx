@@ -354,7 +354,7 @@ static OString MakeSlotName( SvStringHashEntry const * pEntry )
 };
 
 void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
-                                ByteStringList & rList,
+                                std::vector<OString*> & rList,
                                 SvStream & rOutStm ) const
 {
     if ( !GetExport() && !GetHidden() )

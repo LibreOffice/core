@@ -153,7 +153,6 @@ struct joaat_hash
 
 typedef std::unordered_map<std::string, std::string, pref_hash> Stringtable;
 typedef std::deque<std::string> LinkedList;
-typedef std::vector<std::string> HashSet;
 
 typedef std::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
 
@@ -165,7 +164,7 @@ public:
     std::string document_module;
     std::string document_title;
 
-    std::unique_ptr<HashSet> appl_hidlist;
+    std::unique_ptr< std::vector<std::string> > appl_hidlist;
     std::unique_ptr<Hashtable> appl_keywords;
     std::unique_ptr<Stringtable> appl_helptexts;
     xmlDocPtr appl_doc;

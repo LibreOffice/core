@@ -246,17 +246,17 @@ public:
     std::string documentId;
     std::string fileName;
     std::string title;
-    std::unique_ptr<HashSet> hidlist;
+    std::unique_ptr< std::vector<std::string> > hidlist;
     std::unique_ptr<Hashtable> keywords;
     std::unique_ptr<Stringtable> helptexts;
 private:
-    HashSet extendedHelpText;
+    std::vector<std::string> extendedHelpText;
 public:
     myparser(const std::string &indocumentId, const std::string &infileName,
         const std::string &intitle) : documentId(indocumentId), fileName(infileName),
         title(intitle)
     {
-        hidlist.reset(new HashSet);
+        hidlist.reset(new std::vector<std::string>);
         keywords.reset(new Hashtable);
         helptexts.reset(new Stringtable);
     }

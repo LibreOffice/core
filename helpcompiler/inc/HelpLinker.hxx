@@ -63,7 +63,7 @@ public:
 
 private:
     Stringtable additionalFiles;
-    HashSet helpFiles;
+    std::vector<std::string> helpFiles;
     fs::path sourceRoot;
     fs::path compactStylesheet;
     fs::path embeddStylesheet;
