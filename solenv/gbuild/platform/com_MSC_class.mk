@@ -215,7 +215,7 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 	-release \
 	-opt:noref \
 	-incremental:no \
-	-debug \
+	$(if $(filter $(true),$(gb_SYMBOL)),-debug) \
 	$(if $(filter NO,$(LIBRARY_X64)), -safeseh) \
 	-nxcompat \
 	-dynamicbase \
