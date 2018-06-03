@@ -460,19 +460,28 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         break;
 
         case NID_POSTIT:
+        {
+            if ( m_pPostItMgr->HasNotes() )
             {
                 rSh.EnterStdMode();
                 sw::annotation::SwAnnotationWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
                 if (pPostIt)
                     GetPostItMgr()->SetActiveSidebarWin(nullptr);
                 SwFieldType* pFieldType = rSh.GetFieldType(0, SwFieldIds::Postit);
-                if ( rSh.MoveFieldType( pFieldType, bNext ) )
-                    GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+                if ( !rSh.MoveFieldType( pFieldType, bNext ) )
+                {
+                    bNext ? (*(m_pPostItMgr->begin()))->pPostIt->GotoPos() :
+                        (*(m_pPostItMgr->end()-1))->pPostIt->GotoPos();
+                    SvxSearchDialogWrapper::SetSearchLabel( bNext ? SearchLabel::EndWrapped : SearchLabel::StartWrapped );
+                }
                 else
-                    //first/last item
-                    GetPostItMgr()->SetActiveSidebarWin(pPostIt);
+                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+                GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
             }
-            break;
+            else
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+        }
+        break;
 
         case NID_SRCH_REP:
         if(m_pSrchItem)
