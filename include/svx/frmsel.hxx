@@ -44,7 +44,7 @@ enum class FrameSelFlags
     /** If set, the top frame border is enabled. */
     Top             = 0x0004,
     /** If set, the bottom frame border is enabled. */
-    Bottom          = 0x0008,
+    Bottom       = 0x0008,
     /** If set, the inner horizontal frame border is enabled. */
     InnerHorizontal = 0x0010,
     /** If set, the inner vertical frame border is enabled. */
