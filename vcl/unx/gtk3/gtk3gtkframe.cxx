@@ -3216,7 +3216,7 @@ void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
     // fire off font-changed when the system cairo font hints change
     GtkInstance *pInstance = static_cast<GtkInstance*>(GetSalData()->m_pInstance);
     const cairo_font_options_t* pLastCairoFontOptions = pInstance->GetLastSeenCairoFontOptions();
-    const cairo_font_options_t* pCurrentCairoFontOptions = gdk_screen_get_font_options(gdk_screen_get_default());
+    const cairo_font_options_t* pCurrentCairoFontOptions = pInstance->GetCairoFontOptions(); // Updates LastSeenCairoFontOptions
     bool bFontSettingsChanged = true;
     if (pLastCairoFontOptions && pCurrentCairoFontOptions)
         bFontSettingsChanged = !cairo_font_options_equal(pLastCairoFontOptions, pCurrentCairoFontOptions);
