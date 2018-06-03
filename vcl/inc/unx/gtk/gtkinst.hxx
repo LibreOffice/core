@@ -231,7 +231,7 @@ public:
 
     virtual const cairo_font_options_t* GetCairoFontOptions() override;
             const cairo_font_options_t* GetLastSeenCairoFontOptions();
-                                   void ResetLastSeenCairoFontOptions();
+                                   void ResetLastSeenCairoFontOptions(const cairo_font_options_t* pOptions);
 
     void                        RemoveTimer ();
 

@@ -3203,7 +3203,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
             bFontSettingsChanged = false;
         if (bFontSettingsChanged)
         {
-            pInstance->ResetLastSeenCairoFontOptions();
+            pInstance->ResetLastSeenCairoFontOptions(pCurrentCairoFontOptions);
             GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
         }
     }
