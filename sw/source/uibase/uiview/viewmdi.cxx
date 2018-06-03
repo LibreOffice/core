@@ -51,6 +51,8 @@
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
 
+#include <svx/srchdlg.hxx>
+
 sal_uInt16  SwView::m_nMoveType = NID_PGE;
 sal_Int32 SwView::m_nActMark = 0;
 
@@ -414,20 +416,30 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             // move
             if(!vNavMarks.empty())
             {
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
                 if(bNext)
                 {
                     m_nActMark++;
                     if (m_nActMark >= MAX_MARKS || m_nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
+                    {
                         m_nActMark = 0;
+                        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
+                    }
                 }
                 else
                 {
                     m_nActMark--;
                     if (m_nActMark < 0 || m_nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
+                    {
                         m_nActMark = vNavMarks.size()-1;
+                        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+                    }
                 }
                 rSh.GotoMark(vNavMarks[m_nActMark]);
             }
+            else
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         }
         break;
 
