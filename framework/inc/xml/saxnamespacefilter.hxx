@@ -32,8 +32,10 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC SaxNamespaceFilter final :
-                           public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
+// workaround for incremental linking bugs in MSVC2015
+class SAL_DLLPUBLIC_TEMPLATE SaxNamespaceFilter_Base : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > {};
+
+class FWE_DLLPUBLIC SaxNamespaceFilter final : public SaxNamespaceFilter_Base
 {
     public:
         SaxNamespaceFilter( css::uno::Reference< css::xml::sax::XDocumentHandler > const & rSax1DocumentHandler );

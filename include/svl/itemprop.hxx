@@ -182,7 +182,11 @@ public:
 };
 
 struct SfxItemPropertySetInfo_Impl;
-class SVL_DLLPUBLIC SfxItemPropertySetInfo : public cppu::WeakImplHelper<css::beans::XPropertySetInfo>
+
+// workaround for incremental linking bugs in MSVC2015
+class SAL_DLLPUBLIC_TEMPLATE SfxItemPropertySetInfo_Base : public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {};
+
+class SVL_DLLPUBLIC SfxItemPropertySetInfo : public SfxItemPropertySetInfo_Base
 {
     std::unique_ptr<SfxItemPropertySetInfo_Impl> m_pImpl;
 
@@ -202,7 +206,10 @@ public:
 
 };
 
-class SVL_DLLPUBLIC SfxExtItemPropertySetInfo: public cppu::WeakImplHelper<css::beans::XPropertySetInfo>
+// workaround for incremental linking bugs in MSVC2015
+class SAL_DLLPUBLIC_TEMPLATE SfxExtItemPropertySetInfo_Base : public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {};
+
+class SVL_DLLPUBLIC SfxExtItemPropertySetInfo: public SfxExtItemPropertySetInfo_Base
 {
     SfxItemPropertyMap aExtMap;
 public:

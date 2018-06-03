@@ -35,8 +35,10 @@ namespace framework{
 
 // Hash code function for using in all hash maps of follow implementation.
 
-class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
-                                        public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
+// workaround for incremental linking bugs in MSVC2015
+class SAL_DLLPUBLIC_TEMPLATE OReadStatusBarDocumentHandler_Base : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > {};
+
+class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : public OReadStatusBarDocumentHandler_Base
 {
     public:
         enum StatusBar_XML_Entry
