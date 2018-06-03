@@ -23,6 +23,8 @@
 export MAX_CONCURRENCY=4
 # Disable searching for certificates by default
 export MOZILLA_CERTIFICATE_FOLDER=0
+# Avoid hanging if the cups daemon requests a password.
+export SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
 
 gb_CppunitTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(SYSTEM_PYTHON),,$(call gb_Package_get_target,python3))
