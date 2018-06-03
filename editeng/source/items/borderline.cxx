@@ -243,8 +243,8 @@ ConvertBorderWidthFromWord(SvxBorderLineStyle const eStyle, double const i_fWidt
 
         default:
             assert(false); // should only be called for known border style
-            return 0;
     }
+    return 0;
 }
 
 double
