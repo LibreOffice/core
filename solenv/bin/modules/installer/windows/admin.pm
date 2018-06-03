@@ -289,6 +289,7 @@ sub create_directory_structure
     }
     # FIXME why is this hack needed? ERROR: Did not find full directory path for dir: "ystemFolder_x86_VC.194841A2_D0F2_3B96_9F71_05BA91BEA0FA"
     $fullpathhash{"SystemFolder_x86_VC.194841A2_D0F2_3B96_9F71_05BA91BEA0FA"} = $targetdir . $installer::globals::separator . "System";
+    $fullpathhash{"System64Folder_amd64_VC.AF4EABEE_4589_3789_BA0A_C83A71662E1D"} = $targetdir . $installer::globals::separator . "System64";
 
     return \%fullpathhash;
 }
