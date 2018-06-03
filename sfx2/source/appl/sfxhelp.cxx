@@ -82,7 +82,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
-
 class NoHelpErrorBox
 {
 private:
@@ -728,6 +727,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
 
 bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
 {
+    SvtHelpOptions aHelpOptions;
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
     AppendConfigToken(aHelpRootURL, true);
     SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
@@ -822,6 +822,18 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     if ( !impl_hasHelpInstalled() )
     {
+      if(!(aHelpOptions.IsPopUp()))
+      {
+            if ( impl_showOnlineHelp( aHelpURL ) )
+                return true;
+            else
+            {
+                NoHelpErrorBox aErrBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
+                aErrBox.run();
+                return false;
+            }
+      }
+      else{
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWindow ? pWindow->GetFrameWeld() : nullptr, "sfx/ui/helpmanual.ui"));
         std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
 
@@ -847,6 +859,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
             return false;
         }
 
+      }
     }
     // old-help to display
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );

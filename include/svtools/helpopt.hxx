@@ -40,6 +40,8 @@ public:
     bool            IsExtendedHelp() const;
     void            SetHelpTips( bool b );
     bool            IsHelpTips() const;
+    void            SetPopUp( bool b);
+    bool            IsPopUp() const;
 
     const OUString& GetHelpStyleSheet()const;
     void            SetHelpStyleSheet(const OUString& rStyleSheet);
