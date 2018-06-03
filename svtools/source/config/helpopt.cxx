@@ -47,13 +47,15 @@ enum class HelpProperty
     HelpTips        = 1,
     Locale          = 2,
     System          = 3,
-    StyleSheet      = 4
+    StyleSheet      = 4,
+    PopUpHelp       = 5
 };
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
 {
     bool            bExtendedHelp;
     bool            bHelpTips;
+    bool            bPopUpHelp;
     OUString        aLocale;
     OUString        aSystem;
     OUString        sHelpStyleSheet;
@@ -73,7 +75,8 @@ public:
     bool            IsExtendedHelp() const                  { return bExtendedHelp; }
     void            SetHelpTips( bool b )               { bHelpTips = b; SetModified(); }
     bool            IsHelpTips() const                      { return bHelpTips; }
-
+    void            SetPopUp(bool b)                    { bPopUpHelp = b; SetModified();}
+    bool            IsPopUp() const                         { return bPopUpHelp;}
     const OUString& GetSystem() const                       { return aSystem; }
 
     const OUString& GetHelpStyleSheet()const{return sHelpStyleSheet;}
@@ -90,7 +93,8 @@ Sequence< OUString > const & SvtHelpOptions_Impl::GetPropertyNames()
         "Tip",
         "Locale",
         "System",
-        "HelpStyleSheet"
+        "HelpStyleSheet",
+        "PopUpHelp"
     };
 
     return aNames;
@@ -107,6 +111,7 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( "Office.Common/Help" )
     , bExtendedHelp( false )
     , bHelpTips( true )
+    , bPopUpHelp( true)
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Load( aNames );
@@ -148,7 +153,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
             OUString aTmpStr;
             sal_Int32 nTmpInt = 0;
             if ( pValues[nProp] >>= bTmp )
-            {
+              {
                 switch ( static_cast< HelpProperty >(
                     lcl_MapPropertyName(rPropertyNames[nProp], aInternalPropertyNames) ) )
                 {
@@ -157,6 +162,9 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
                         break;
                     case HelpProperty::HelpTips:
                         bHelpTips = bTmp;
+                        break;
+                    case HelpProperty::PopUpHelp:
+                        bPopUpHelp = bTmp;
                         break;
                     default:
                         SAL_WARN( "svtools.config", "Wrong Member!" );
@@ -225,6 +233,9 @@ void SvtHelpOptions_Impl::ImplCommit()
             case HelpProperty::StyleSheet:
                 pValues[nProp] <<= sHelpStyleSheet;
             break;
+            case HelpProperty::PopUpHelp:
+              pValues[nProp] <<= bPopUpHelp;
+              break;
 
         }
     }
@@ -268,7 +279,15 @@ bool SvtHelpOptions::IsExtendedHelp() const
 {
     return pImpl->IsExtendedHelp();
 }
+void SvtHelpOptions::SetPopUp (bool b )
+{
+    pImpl->SetPopUp( b );
+}
 
+bool SvtHelpOptions::IsPopUp() const
+{
+    return pImpl->IsPopUp();
+}
 void SvtHelpOptions::SetHelpTips( bool b )
 {
     pImpl->SetHelpTips( b );
