@@ -15,6 +15,7 @@
 #include <rtl/strbuf.hxx>
 
 #include "htmldataprovider.hxx"
+#include "jsondataprovider.hxx"
 #include <datatransformation.hxx>
 
 using namespace com::sun::star;
@@ -274,6 +275,8 @@ std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* p
             return std::shared_ptr<DataProvider>(new CSVDataProvider(pDoc, rDataSource));
         else if (rDataProvider == "org.libreoffice.calc.html")
             return std::shared_ptr<DataProvider>(new HTMLDataProvider(pDoc, rDataSource));
+        else if (rDataProvider == "org.libreoffice.calc.json")
+            return std::shared_ptr<DataProvider>(new JSONDataProvider(pDoc, rDataSource));
     }
     else
     {
@@ -289,6 +292,7 @@ std::vector<OUString> DataProviderFactory::getDataProviders()
     std::vector<OUString> aDataProviders;
     aDataProviders.emplace_back("org.libreoffice.calc.csv");
     aDataProviders.emplace_back("org.libreoffice.calc.html");
+    aDataProviders.emplace_back("org.libreoffice.calc.json");
 
     return aDataProviders;
 }
