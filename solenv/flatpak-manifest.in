@@ -428,10 +428,10 @@
                     "dest-filename": "external/tarballs/ReemKufi-0.7.zip"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libepubgen-0.1.0.tar.bz2",
-                    "sha256": "730bd1cbeee166334faadbc06c953a67b145c3c4754a3b503482066dae4cd633",
+                    "url": "https://dev-www.libreoffice.org/src/libepubgen-0.1.1.tar.xz",
+                    "sha256": "03e084b994cbeffc8c3dd13303b2cb805f44d8f2c3b79f7690d7e3fc7f6215ad",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libepubgen-0.1.0.tar.bz2"
+                    "dest-filename": "external/tarballs/libepubgen-0.1.1.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libqxp-0.0.1.tar.xz",
