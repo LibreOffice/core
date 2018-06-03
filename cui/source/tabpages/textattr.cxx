@@ -322,28 +322,24 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 
     if( m_xMtrFldLeft->get_value_changed_from_saved() )
     {
-        fprintf(stderr, "a one\n");
         nValue = GetCoreValue( *m_xMtrFldLeft, eUnit );
         rAttrs->Put( makeSdrTextLeftDistItem( nValue ) );
     }
 
     if( m_xMtrFldRight->get_value_changed_from_saved() )
     {
-        fprintf(stderr, "b one\n");
         nValue = GetCoreValue( *m_xMtrFldRight, eUnit );
         rAttrs->Put( makeSdrTextRightDistItem( nValue ) );
     }
 
     if( m_xMtrFldTop->get_value_changed_from_saved() )
     {
-        fprintf(stderr, "c one\n");
         nValue = GetCoreValue( *m_xMtrFldTop, eUnit );
         rAttrs->Put( makeSdrTextUpperDistItem( nValue ) );
     }
 
     if( m_xMtrFldBottom->get_value_changed_from_saved() )
     {
-        fprintf(stderr, "d one\n");
         nValue = GetCoreValue( *m_xMtrFldBottom, eUnit );
         rAttrs->Put( makeSdrTextLowerDistItem( nValue ) );
     }
@@ -351,28 +347,24 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_xTsbAutoGrowHeight->get_state();
     if( m_xTsbAutoGrowHeight->get_state_changed_from_saved() )
     {
-        fprintf(stderr, "one %d\n", TRISTATE_TRUE == eState);
         rAttrs->Put( makeSdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_xTsbAutoGrowWidth->get_state();
     if( m_xTsbAutoGrowWidth->get_state_changed_from_saved() )
     {
-        fprintf(stderr, "e one\n");
         rAttrs->Put( makeSdrTextAutoGrowWidthItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_xTsbAutoGrowSize->get_state();
     if( m_xTsbAutoGrowSize->get_state_changed_from_saved() )
     {
-        fprintf(stderr, "two %d\n", TRISTATE_TRUE == eState);
         rAttrs->Put( makeSdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_xTsbWordWrapText->get_state();
     if( m_xTsbWordWrapText->get_state_changed_from_saved() )
     {
-        fprintf(stderr, "f one\n");
         rAttrs->Put( makeSdrTextWordWrapItem( TRISTATE_TRUE == eState ) );
     }
 
