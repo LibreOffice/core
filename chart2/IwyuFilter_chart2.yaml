@@ -1,6 +1,35 @@
 ---
 assumeFilename: chart2/source/controller/main/ChartWindow.cxx
 blacklist:
+    chart2/inc/ChartModel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/X3DChartWindowProvider.hpp
+    - com/sun/star/chart2/XChartDocument.hpp
+    - com/sun/star/chart2/XTitled.hpp
+    - com/sun/star/chart2/data/XDataReceiver.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/container/XChild.hpp
+    - com/sun/star/datatransfer/XTransferable.hpp
+    - com/sun/star/document/XDocumentPropertiesSupplier.hpp
+    - com/sun/star/document/XStorageBasedDocument.hpp
+    - com/sun/star/document/XUndoManagerSupplier.hpp
+    - com/sun/star/embed/XVisualObject.hpp
+    - com/sun/star/frame/XLoadable.hpp
+    - com/sun/star/frame/XStorable2.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/qa/XDumper.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XCloseable.hpp
+    - com/sun/star/util/XModifiable.hpp
+    - com/sun/star/util/XNumberFormatsSupplier.hpp
+    - com/sun/star/util/XUpdatable.hpp
+    chart2/inc/ChartView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XModeChangeBroadcaster.hpp
+    - com/sun/star/util/XUpdatable2.hpp
     chart2/source/inc/BaseGFXHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/Rectangle.hpp

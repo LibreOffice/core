@@ -23,18 +23,15 @@
 
 #include <LifeTime.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -42,13 +39,9 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
-#include <com/sun/star/awt/XRequestCallback.hpp>
 
 // public API
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -56,8 +49,6 @@
 #include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
 
 #include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 #include <osl/mutex.hxx>
@@ -67,6 +58,14 @@
 #include <vcl/GraphicObject.hxx>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace awt { class XRequestCallback; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartTypeTemplate; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataProvider; } } } } }
+namespace com { namespace sun { namespace star { namespace document { class XFilter; } } } }
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 class SvNumberFormatter;
 class OpenGLWindow;
