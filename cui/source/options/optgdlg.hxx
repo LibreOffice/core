@@ -41,6 +41,7 @@ class OfaMiscTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 private:
+    VclPtr<CheckBox>     m_pPopUpNoHelpCB;
     VclPtr<CheckBox>     m_pExtHelpCB;
 
     VclPtr<FixedImage>   m_pFileDlgROImage;

@@ -258,6 +258,7 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", &rSet)
 {
     get(m_pExtHelpCB, "exthelp");
+    get(m_pPopUpNoHelpCB,"popupnohelp");
     if (!lcl_HasSystemFilePicker())
         get<VclContainer>("filedlgframe")->Hide();
 #if ! ENABLE_GTK
@@ -322,6 +323,7 @@ void OfaMiscTabPage::dispose()
     m_pCollectUsageInfo.clear();
     m_pQuickStarterFrame.clear();
     m_pQuickLaunchCB.clear();
+    m_pPopUpNoHelpCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -336,7 +338,10 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     SvtHelpOptions aHelpOptions;
-    if ( m_pExtHelpCB->IsChecked() != (m_pExtHelpCB->GetSavedValue() == TRISTATE_TRUE) )
+    if ( m_pPopUpNoHelpCB->IsValueChangedFromSaved() )
+        aHelpOptions.SetOfflineHelpPopUp( m_pPopUpNoHelpCB->IsChecked() );
+
+    if ( m_pExtHelpCB->IsValueChangedFromSaved() )
         aHelpOptions.SetExtendedHelp( m_pExtHelpCB->IsChecked() );
 
     if ( m_pFileDlgCB->IsValueChangedFromSaved() )
@@ -390,7 +395,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     SvtHelpOptions aHelpOptions;
     m_pExtHelpCB->Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
     m_pExtHelpCB->SaveValue();
-
+    m_pPopUpNoHelpCB->Check( aHelpOptions.IsOfflineHelpPopUp() );
+    m_pPopUpNoHelpCB->SaveValue();
     SvtMiscOptions aMiscOpt;
     m_pFileDlgCB->Check( !aMiscOpt.UseSystemFileDialog() );
     m_pFileDlgCB->SaveValue();
