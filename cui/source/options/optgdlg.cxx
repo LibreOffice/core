@@ -260,6 +260,7 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", &rSet)
 {
     get(m_pExtHelpCB, "exthelp");
+    get(m_pPopUpHelpCB,"popuphelp");
     if (!lcl_HasSystemFilePicker())
         get<VclContainer>("filedlgframe")->Hide();
 #if ! ENABLE_GTK
@@ -274,6 +275,7 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pFileDlgROImage, "lockimage");
     get(m_pPrintDlgCB, "printdlg");
     get(m_pDocStatusCB, "docstatus");
+
     get(m_pYearFrame, "yearframe");
     get(m_pYearValueField, "year");
     get(m_pToYearFT, "toyear");
@@ -324,6 +326,7 @@ void OfaMiscTabPage::dispose()
     m_pCollectUsageInfo.clear();
     m_pQuickStarterFrame.clear();
     m_pQuickLaunchCB.clear();
+    m_pPopUpHelpCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -338,6 +341,8 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     SvtHelpOptions aHelpOptions;
+    if ( m_pPopUpHelpCB->IsChecked() != (m_pPopUpHelpCB->GetSavedValue() == TRISTATE_TRUE))
+        aHelpOptions.SetOfflineHelpPopUp( m_pPopUpHelpCB->IsChecked());
     if ( m_pExtHelpCB->IsChecked() != (m_pExtHelpCB->GetSavedValue() == TRISTATE_TRUE) )
         aHelpOptions.SetExtendedHelp( m_pExtHelpCB->IsChecked() );
 
@@ -392,7 +397,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     SvtHelpOptions aHelpOptions;
     m_pExtHelpCB->Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
     m_pExtHelpCB->SaveValue();
-
+    m_pPopUpHelpCB->Check( aHelpOptions.IsOfflineHelpPopUp());
+    m_pPopUpHelpCB->SaveValue();
     SvtMiscOptions aMiscOpt;
     m_pFileDlgCB->Check( !aMiscOpt.UseSystemFileDialog() );
     m_pFileDlgCB->SaveValue();
