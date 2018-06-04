@@ -911,7 +911,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
         if ( !sFilterExt.isEmpty() )
             sFilterExt += ";";
 
-        sFilterExt += "*.ots;*.stc;*xltx;*.xlt";
+        sFilterExt += "*.ots;*.stc;*.xltx;*.xlt";
     }
 
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
