@@ -273,9 +273,7 @@ def readprops(buff):
 #   It's a simple command line tool, which can merge different XML fragments
 #   together. Such fragments must exist as files on disk, will be moved into
 #   one file together on disk.
-# 
-#  @author  Andreas Schluens
-# 
+
 def run(sCmdLine):
     aCfg = ConfigHelper(CFGFILE, sCmdLine)
     if aCfg.getValueWithDefault(PROP_VERBOSE,None) == None:
@@ -339,8 +337,7 @@ def StringTokenizer(mstring, separators, isSepIncluded = 0):
 # and merge it together with might existing config
 # files. That provides the possibility to overwrite
 # config values via command line parameter.
-# 
-# @author Andreas Schluens
+
 class ConfigHelper:
     def __init__(self, sPropFile, lCommandLineArgs):
         self.m_bEmpty = 1
@@ -444,7 +441,7 @@ def generateFooter():
     return "</oor:component-data>\n"
 
 # Can merge different xml fragments together.
-#   @author Caolan McNamara converted from the original java by Andreas Schluens
+
 class Merger:
     def __init__(self, aCfg):
         self.m_aCfg = aCfg

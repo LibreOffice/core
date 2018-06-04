@@ -71,11 +71,7 @@ struct TestDataElements : test::TestElement
 
 typedef TestDataElements TestData;
 
-/**
- * Monster test interface to test language binding calls.
- *
- * @author Daniel Boelzle
- */
+/** Monster test interface to test language binding calls. */
 interface XLBTestBase : com::sun::star::uno::XInterface
 {
     /**
@@ -136,11 +132,7 @@ interface XLBTestBase : com::sun::star::uno::XInterface
 };
 
 
-/**
- * Inherting from monster; adds raiseException().
- *
- * @author Daniel Boelzle
- */
+/** Inherting from monster; adds raiseException(). */
 interface XLanguageBindingTest : test::XLBTestBase
 {
     /**

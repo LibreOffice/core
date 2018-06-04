@@ -140,38 +140,25 @@ class SwXShape : public SwXShapeBaseClass,
 
     SvxShape*               GetSvxShape();
 
-    /** method to determine top group object
-
-        @author OD
-    */
+    /** method to determine top group object */
     SdrObject* GetTopGroupObj( SvxShape* _pSvxShape = nullptr );
 
-    /** method to determine position according to the positioning attributes
-
-        @author OD
-    */
+    /** method to determine position according to the positioning attributes */
     css::awt::Point GetAttrPosition();
 
     /** method to convert the position (translation) of the drawing object to
-        the layout direction horizontal left-to-right.
-
-        @author OD
-    */
+        the layout direction horizontal left-to-right. */
     css::awt::Point ConvertPositionToHoriL2R(
                                     const css::awt::Point& rObjPos,
                                     const css::awt::Size& rObjSize );
 
     /** method to convert the transformation of the drawing object to the layout
         direction, the drawing object is in
-
-        @author OD
     */
     css::drawing::HomogenMatrix3 ConvertTransformationToLayoutDir(
                 const css::drawing::HomogenMatrix3& rMatrixInHoriL2R );
 
     /** method to adjust the positioning properties
-
-        @author OD
 
         @param _aPosition
         input parameter - point representing the new shape position. The position
@@ -182,23 +169,17 @@ class SwXShape : public SwXShapeBaseClass,
 
     /** method to convert start or end position of the drawing object to the
         Writer specific position, which is the attribute position in layout direction
-
-        @author OD
     */
     css::awt::Point ConvertStartOrEndPosToLayoutDir(
                             const css::awt::Point& aStartOrEndPos );
 
     /** method to convert PolyPolygonBezier of the drawing object to the
         Writer specific position, which is the attribute position in layout direction
-
-        @author OD
     */
     css::drawing::PolyPolygonBezierCoords ConvertPolyPolygonBezierToLayoutDir(
                     const css::drawing::PolyPolygonBezierCoords& aPath );
 
     /** method to get property from aggregation object
-
-        @author OD
 
         @throws css::beans::UnknownPropertyException
         @throws css::lang::WrappedTargetException
