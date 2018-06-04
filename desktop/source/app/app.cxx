@@ -1315,7 +1315,8 @@ int Desktop::Main()
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
 
-        bool bMustLockProfile = ( getenv( "SAL_NOLOCK_PROFILE" ) == nullptr );
+        // bool bMustLockProfile = ( getenv( "SAL_NOLOCK_PROFILE" ) == nullptr );
+        bool bMustLockProfile = false;
         if ( bMustLockProfile )
         {
             m_xLockfile.reset(new Lockfile);
