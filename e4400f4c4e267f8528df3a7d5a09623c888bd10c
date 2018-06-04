@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_2e096b32",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T21:23:47Z",
+      "side": 1,
+      "message": "What does this line do? I must be missing something obvious, because AFAICS the variable is assigned here, and only used in the OSL_ENSURE in the line below, so I fail to see how does it handle the case mentioned in the comment above.",
+      "range": {
+        "startLine": 1594,
+        "startChar": 12,
+        "endLine": 1594,
+        "endChar": 44
+      },
+      "revId": "e4400f4c4e267f8528df3a7d5a09623c888bd10c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
