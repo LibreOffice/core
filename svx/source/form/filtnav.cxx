@@ -1084,7 +1084,7 @@ FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
         Image(BitmapEx(RID_SVXBMP_EXPANDEDNODE))
     );
 
-    m_pModel = new FmFilterModel();
+    m_pModel.reset( new FmFilterModel() );
     StartListening( *m_pModel );
 
     EnableInplaceEditing( true );
@@ -1104,7 +1104,7 @@ FmFilterNavigator::~FmFilterNavigator()
 void FmFilterNavigator::dispose()
 {
     EndListening( *m_pModel );
-    delete m_pModel;
+    m_pModel.reset();
     SvTreeListBox::dispose();
 }
 
