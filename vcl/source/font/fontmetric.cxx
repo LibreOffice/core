@@ -19,6 +19,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/metric.hxx>
 
@@ -403,6 +404,9 @@ void ImplFontMetricData::ImplInitFlags( const OutputDevice* pDev )
 
 bool ImplFontMetricData::ShouldUseWinMetrics(vcl::TTGlobalFontInfo& rInfo)
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return false;
+
     OUString aFontIdentifier(
         GetFamilyName() + ","
         + OUString::number(rInfo.ascender) + "," + OUString::number(rInfo.descender) + ","
