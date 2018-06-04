@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_f95b9f2c",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T22:31:26Z",
+      "side": 1,
+      "message": "This feels odd - I must be missing something: it looks like you only do the old processing if the style is *not* what is in the ODF standard?",
+      "range": {
+        "startLine": 1209,
+        "startChar": 12,
+        "endLine": 1210,
+        "endChar": 64
+      },
+      "revId": "e76c31f9400eb2337874bc045b15abd1c98530ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_19415b3a",
+        "filename": "xmloff/source/token/tokens.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 3082,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T22:31:26Z",
+      "side": 1,
+      "message": "Has this got here by mistake? (at least it looks like it\u0027s not referenced?)",
+      "range": {
+        "startLine": 3082,
+        "startChar": 0,
+        "endLine": 3082,
+        "endChar": 16
+      },
+      "revId": "e76c31f9400eb2337874bc045b15abd1c98530ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
