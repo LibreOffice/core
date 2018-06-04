@@ -105,6 +105,24 @@
       "revId": "45aefcf77233ae01ff71e6649e8df396a2a7e7f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_8b309109",
+        "filename": "svx/uiconfig/ui/safemodedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-06-04T08:51:49Z",
+      "side": 1,
+      "message": "I thought about using “zip” as a verb instead, but decided against it.\nThis dialog’s copy is notoriously bad; I need to revisit it as a whole in the future.",
+      "parentUuid": "5a22e58a_2b74fdcd",
+      "revId": "45aefcf77233ae01ff71e6649e8df396a2a7e7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
