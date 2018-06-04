@@ -743,7 +743,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         else
         {
             m_pFilterListBox->addFilterEntry( pFilterEntry );
-            maFilterVector.push_back( pFilterEntry );
+            maFilterVector.push_back( std::unique_ptr<filter_info_impl>(pFilterEntry) );
         }
     }
 
@@ -841,9 +841,9 @@ void XMLFilterSettingsDialog::onDelete()
                     m_pFilterListBox->RemoveSelection();
 
                     // and delete the filter entry
-                    maFilterVector.erase(std::find( maFilterVector.begin(), maFilterVector.end(), pInfo ));
-
-                    delete pInfo;
+                    maFilterVector.erase(std::find_if( maFilterVector.begin(), maFilterVector.end(),
+                                            [&] (std::unique_ptr<filter_info_impl> const & p)
+                                            { return p.get() == pInfo; }));
                 }
             }
             catch( const Exception& )
@@ -1002,12 +1002,7 @@ bool XMLFilterSettingsDialog::EventNotify( NotifyEvent& rNEvt )
 
 void XMLFilterSettingsDialog::disposeFilterList()
 {
-    for (auto const& filter : maFilterVector)
-    {
-        delete filter;
-    }
     maFilterVector.clear();
-
     m_pFilterListBox->Clear();
 }
 
@@ -1166,7 +1161,7 @@ void XMLFilterSettingsDialog::initFilterList()
                 }
 
                 // add entry to internal container and to ui filter list box
-                maFilterVector.push_back( pTempFilter.get() );
+                maFilterVector.push_back( std::unique_ptr<filter_info_impl>(pTempFilter.get()) );
                 m_pFilterListBox->addFilterEntry( pTempFilter.release() );
 
 
