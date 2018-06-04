@@ -64,8 +64,6 @@ public:
     /** determines the <SwNodeNum> instance, which is preceding the given text node
 
         #i81002#
-
-        @author OD
     */
     const SwNodeNum* GetPrecedingNodeNumOf( const SwTextNode& rTextNode ) const;
 

@@ -29,7 +29,6 @@ module com { module sun { module star { module ucb {
     identifier already was registered with a content provider manager.
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        XContentProviderManager
 */
 published exception DuplicateProviderException: com::sun::star::uno::Exception

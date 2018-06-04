@@ -28,7 +28,6 @@ module com { module sun { module star { module ucb {
 /** This exception is thrown to indicate an illegal content identifier.
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        XContent
     @see        XContentIdentifier
 */
