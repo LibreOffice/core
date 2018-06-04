@@ -34,32 +34,6 @@
 
 // KDE5FilePicker
 
-KDE5FilePicker::KDE5FilePicker(QObject* parent)
-    : QObject(parent)
-    , _dialog(new QFileDialog(nullptr, {}, QDir::homePath()))
-    , _extraControls(new QWidget)
-    , _layout(new QGridLayout(_extraControls))
-    , _winId(0)
-    , allowRemoteUrls(false)
-{
-    _dialog->setSupportedSchemes({
-        QStringLiteral("file"),
-        QStringLiteral("ftp"),
-        QStringLiteral("http"),
-        QStringLiteral("https"),
-        QStringLiteral("webdav"),
-        QStringLiteral("webdavs"),
-        QStringLiteral("smb"),
-    });
-
-    setMultiSelectionMode(false);
-
-    connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
-    connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
-
-    qApp->installEventFilter(this);
-}
-
 void KDE5FilePicker::enableFolderMode()
 {
     _dialog->setOption(QFileDialog::ShowDirsOnly, true);
@@ -72,9 +46,9 @@ KDE5FilePicker::~KDE5FilePicker()
     delete _dialog;
 }
 
-void KDE5FilePicker::setTitle(const QString& title) { _dialog->setWindowTitle(title); }
+//void KDE5FilePicker::setTitle(const QString& title) { _dialog->setWindowTitle(title); }
 
-bool KDE5FilePicker::execute()
+/*bool KDE5FilePicker::execute()
 {
     if (!_filters.isEmpty())
         _dialog->setNameFilters(_filters);
@@ -133,7 +107,7 @@ QString KDE5FilePicker::getCurrentFilter() const
     return filter;
 }
 
-void KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/, bool value)
+void KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction, bool value)
 {
     if (_customWidgets.contains(controlId))
     {
@@ -145,7 +119,7 @@ void KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/,
         qWarning() << "set value on unknown control" << controlId;
 }
 
-bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/) const
+bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) const
 {
     bool ret = false;
     if (_customWidgets.contains(controlId))
@@ -193,9 +167,9 @@ QString KDE5FilePicker::getLabel(sal_Int16 controlId) const
         qWarning() << "get label on unknown control" << controlId;
 
     return label;
-}
+}*/
 
-void KDE5FilePicker::addCheckBox(sal_Int16 controlId, const QString& label, bool hidden)
+/*void KDE5FilePicker::addCheckBox(sal_Int16 controlId, const QString& label, bool hidden)
 {
     auto resString = label;
     resString.replace('~', '&');
@@ -207,9 +181,9 @@ void KDE5FilePicker::addCheckBox(sal_Int16 controlId, const QString& label, bool
         _layout->addWidget(widget);
     }
     _customWidgets.insert(controlId, widget);
-}
+}*/
 
-void KDE5FilePicker::initialize(bool saveDialog)
+/*void KDE5FilePicker::initialize(bool saveDialog)
 {
     //default is opening
     QFileDialog::AcceptMode operationMode
@@ -222,7 +196,7 @@ void KDE5FilePicker::initialize(bool saveDialog)
         _dialog->setConfirmOverwrite(true);
         _dialog->setFileMode(QFileDialog::AnyFile);
     }
-}
+}*/
 
 void KDE5FilePicker::setWinId(sal_uIntPtr winId) { _winId = winId; }
 
