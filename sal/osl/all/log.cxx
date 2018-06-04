@@ -155,14 +155,19 @@ char const * getLogLevel() {
 std::ofstream * getLogFile() {
     // First check the environment variable, then the setting in logging.ini
     static char const * logFile = getEnvironmentVariable("SAL_LOG_FILE");
-    if (!logFile)
-        return nullptr;
 
+    if (!logFile)
+    {
 #ifdef WNT
-    static char logFilePath[INI_STRINGBUF_SIZE];
-    if (getValueFromLoggingIniFile("LogFilePath", logFilePath))
-        logFile = logFilePath;
+        static char logFilePath[INI_STRINGBUF_SIZE];
+        if (getValueFromLoggingIniFile("LogFilePath", logFilePath))
+            logFile = logFilePath;
+        else
+            return nullptr;
+#else
+        return nullptr;
 #endif
+    }
 
     // stays until process exits
     static std::ofstream file(logFile, std::ios::app | std::ios::out);
