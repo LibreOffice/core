@@ -1447,6 +1447,8 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
     bool bChanged = false;
     bool bPainted = false;
 
+    pTab->SetIgnoreHeadlines(false);
+
     const SwPageFrame *pOldPage = pTab->FindPageFrame();
 
     // vertical layout support
