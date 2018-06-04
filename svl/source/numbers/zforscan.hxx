@@ -247,8 +247,15 @@ private: // Private section
     short PreviousType( sal_uInt16 i ) const;   // Returns type before position skips EMPTY
     bool IsLastBlankBeforeFrac(sal_uInt16 i) const; // True <=> there won't be a ' ' until the '/'
     void Reset();                               // Reset all variables before starting the analysis
-    short GetKeyWord( const OUString& sSymbol,  // Determine keyword at nPos
-                      sal_Int32 nPos ) const;   // Return 0 <=> not found
+
+    /** Determine keyword at nPos.
+        @param  rbFoundEnglish set if English instead of locale's keyword
+                found, never cleared, thus init with false.
+        @return 0 if not found, else keyword enumeration.
+     */
+    short GetKeyWord( const OUString& sSymbol,
+                      sal_Int32 nPos,
+                      bool& rbFoundEnglish ) const;
 
     bool IsAmbiguousE( short nKey ) const  // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
         {
