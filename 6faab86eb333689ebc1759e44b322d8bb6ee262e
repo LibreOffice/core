@@ -22,6 +22,167 @@
       "revId": "6faab86eb333689ebc1759e44b322d8bb6ee262e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_cb98c96d",
+        "filename": "cui/uiconfig/ui/optgeneralpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T00:30:00Z",
+      "side": 1,
+      "message": "I suppose that these relocations happened because of Glade used. But these automatic changes add noise to the git log, and make blame less useful (one needs to search the history several levels deep to find where a line like this was actually added).\n\nSo please do a manual cleanup for noise like that, to avoid unnecessary changes.",
+      "range": {
+        "startLine": 365,
+        "startChar": 20,
+        "endLine": 365,
+        "endChar": 66
+      },
+      "revId": "6faab86eb333689ebc1759e44b322d8bb6ee262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_eb9d855a",
+        "filename": "cui/uiconfig/ui/optgeneralpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T00:30:00Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 380,
+        "startChar": 20,
+        "endLine": 380,
+        "endChar": 66
+      },
+      "revId": "6faab86eb333689ebc1759e44b322d8bb6ee262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_abbaadbe",
+        "filename": "include/svtools/helpopt.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T00:30:00Z",
+      "side": 1,
+      "message": "The names are not clear, just as the option name is. It\u0027s unclear that this setting is about the specific popup for \"local help not installed\" event.",
+      "range": {
+        "startLine": 43,
+        "startChar": 20,
+        "endLine": 43,
+        "endChar": 28
+      },
+      "revId": "6faab86eb333689ebc1759e44b322d8bb6ee262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_0ba3c19f",
+        "filename": "include/svtools/helpopt.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T00:30:00Z",
+      "side": 1,
+      "message": "For consistency, either use spaces at both sides, or (better) don\u0027t use at both sides (better because currently clangformat plugin enforces the latter style).",
+      "range": {
+        "startLine": 43,
+        "startChar": 29,
+        "endLine": 43,
+        "endChar": 30
+      },
+      "revId": "6faab86eb333689ebc1759e44b322d8bb6ee262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_2ba07d90",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T00:30:00Z",
+      "side": 1,
+      "message": "We use 4-spaces indents. If required to add another indentation level, just increase indent for the existing code, despite that changes these lines \"unnecessarily\".",
+      "range": {
+        "startLine": 825,
+        "startChar": 4,
+        "endLine": 825,
+        "endChar": 6
+      },
+      "revId": "6faab86eb333689ebc1759e44b322d8bb6ee262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_6baa7572",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T00:30:00Z",
+      "side": 1,
+      "message": "This code is redundant: it is repeated later. Better use pattern like\n\n  bool bShowOnlineHelp \u003d !aHelpOptions.IsPopUp();\n  if (!bShowOnlineHelp)\n  {\n      std::unique_ptr\u003cweld::Builder\u003e xBuilder(...\n      ...\n      bShowOnlineHelp \u003d xQueryBox-\u003erun() \u003d\u003d RET_OK;\n  }\n  if (bShowOnlineHelp)\n  {\n      if ( impl_showOnlineHelp( aHelpURL ) )\n      ...\n  }",
+      "range": {
+        "startLine": 826,
+        "startChar": 6,
+        "endLine": 835,
+        "endChar": 7
+      },
+      "revId": "6faab86eb333689ebc1759e44b322d8bb6ee262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_8bb5f1d1",
+        "filename": "sfx2/uiconfig/ui/helpmanual.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-04T00:30:00Z",
+      "side": 1,
+      "message": "AFAICS it is named \"Show \"Help is not installed\" popup\" in the Options dialog page. So wording here will mislead.\n\nAnd it would be better to have the checkbox also here, which would do the same, so that no need to go to some address to deactivate the popup. The checkbox in Options would temporarily be necessary, until there is a dedicated list with all silenced popups in some centralized place.",
+      "range": {
+        "startLine": 15,
+        "startChar": 62,
+        "endLine": 15,
+        "endChar": 81
+      },
+      "revId": "6faab86eb333689ebc1759e44b322d8bb6ee262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
