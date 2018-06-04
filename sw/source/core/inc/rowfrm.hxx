@@ -87,7 +87,7 @@ public:
     void   SetBottomLineSize( sal_uInt16 nNew ) { mnBottomLineSize = nNew; }
     // <-- collapsing
 
-    bool IsRepeatedHeadline() const { return m_bIsRepeatedHeadline; }
+    bool IsRepeatedHeadline() const;
     void SetRepeatedHeadline( bool bNew ) { m_bIsRepeatedHeadline = bNew; }
 
     // --> split table rows
