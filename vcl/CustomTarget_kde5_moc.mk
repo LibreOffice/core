@@ -10,6 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde5))
 
 $(call gb_CustomTarget_get_target,vcl/unx/kde5) : \
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kde5)/KDE5FilePicker.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/unx/kde5)/tst_exclude_socket_notifiers.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/unx/kde5)/tst_exclude_posted_events.moc
 

@@ -32,8 +32,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include "gtk3_kde5_filepicker_ipc.hxx"
-
 #include <functional>
 
 typedef ::cppu::WeakComponentImplHelper<css::ui::dialogs::XFilePicker3,
@@ -49,7 +47,6 @@ protected:
     css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
 
     osl::Mutex _helperMutex;
-    KDE5FilePicker2Ipc m_ipc;
 
 public:
     explicit KDE5FilePicker2(const css::uno::Reference<css::uno::XComponentContext>&);
