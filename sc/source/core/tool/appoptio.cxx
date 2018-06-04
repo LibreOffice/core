@@ -29,6 +29,7 @@
 #include <formula/compiler.hxx>
 #include <miscuno.hxx>
 #include <memory>
+#include <osl/diagnose.h>
 
 using namespace utl;
 using namespace com::sun::star::uno;

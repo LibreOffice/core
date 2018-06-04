@@ -43,6 +43,7 @@
 #include <validat.hxx>
 #include <attrib.hxx>
 #include <global.hxx>
+#include <scmod.hxx>
 
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>

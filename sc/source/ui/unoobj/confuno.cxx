@@ -32,6 +32,7 @@
 #include <viewopti.hxx>
 #include <docpool.hxx>
 #include <sc.hrc>
+#include <scmod.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/LinkUpdateModes.hpp>

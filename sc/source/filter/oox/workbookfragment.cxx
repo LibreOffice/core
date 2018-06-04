@@ -55,6 +55,7 @@
 #include <calcconfig.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <scmod.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>

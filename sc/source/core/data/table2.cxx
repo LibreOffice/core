@@ -55,6 +55,7 @@
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
 #include <listenercontext.hxx>
+#include <token.hxx>
 
 #include <scitems.hxx>
 #include <editeng/boxitem.hxx>

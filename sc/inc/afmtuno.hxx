@@ -22,9 +22,8 @@
 
 #include <svl/itemprop.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

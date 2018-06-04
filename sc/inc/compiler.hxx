@@ -29,14 +29,16 @@
 #include "token.hxx"
 #include <formula/token.hxx>
 #include <formula/grammar.hxx>
-#include <unotools/charclass.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
 #include <vector>
 #include <memory>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <formula/FormulaCompiler.hxx>
-#include <o3tl/typed_flags_set.hxx>
+
+namespace o3tl { template <typename T> struct typed_flags; }
 
 // constants and data types also for external modules (ScInterpreter et al)
 
@@ -83,6 +85,7 @@ class ScMatrix;
 class ScRangeData;
 class ScTokenArray;
 struct ScInterpreterContext;
+class CharClass;
 
 namespace sc {
 

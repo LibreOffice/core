@@ -22,7 +22,6 @@
 
 #include <svl/itemprop.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XRecentFunctions.hpp>
 #include <com/sun/star/sheet/XFunctionDescriptions.hpp>
@@ -32,6 +31,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 css::uno::Reference<css::uno::XInterface>
     ScSpreadsheetSettings_CreateInstance(

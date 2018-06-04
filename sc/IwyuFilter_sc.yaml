@@ -19,20 +19,18 @@ blacklist:
     - com/sun/star/lang/XServiceInfo.hpp
     sc/inc/afmtuno.hxx:
     # base class has to be a complete type
-    - com/sun/star/beans/XPropertySet.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
-    - com/sun/star/container/XIndexReplace.hpp
     - com/sun/star/container/XNameContainer.hpp
-    - com/sun/star/container/XNameReplace.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/container/XNamed.hpp
-    - com/sun/star/container/XSet.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
     sc/inc/appluno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/container/XEnumerationAccess.hpp
     - com/sun/star/container/XNameAccess.hpp
-    - com/sun/star/lang/XMultiServiceFactory.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XFunctionDescriptions.hpp
     - com/sun/star/sheet/XGlobalSheetSettings.hpp
@@ -52,6 +50,20 @@ blacklist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/table/XTableChart.hpp
     - com/sun/star/table/XTableCharts.hpp
+    sc/inc/chart2uno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XDataProvider.hpp
+    - com/sun/star/chart2/data/XSheetDataProvider.hpp
+    - com/sun/star/chart2/data/XRangeXMLConversion.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XTextualDataSequence.hpp
+    - com/sun/star/chart2/data/XNumericalDataSequence.hpp
+    - com/sun/star/chart2/XTimeBased.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
     sc/inc/chgviset.hxx:
     # base class has to be a complete type
     - unotools/textsearch.hxx
@@ -59,14 +71,10 @@ blacklist:
     # base class has to be a complete type
     - mdds/flat_segment_tree.hpp
     - svx/svdobj.hxx
-    sc/inc/columnset.hxx:
-    # contains macro definitions
-    - address.hxx
     sc/inc/compiler.hxx:
     # base class has to be a complete type
     - com/sun/star/sheet/ExternalLinkInfo.hpp
-    - o3tl/typed_flags_set.hxx
-    - unotools/charclass.hxx
+    - com/sun/star/i18n/ParseResult.hpp
     sc/inc/confuno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -74,9 +82,6 @@ blacklist:
     sc/inc/conditio.hxx:
     # base class has to be a complete type
     - tools/link.hxx
-    sc/inc/convuno.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/Locale.hpp
     sc/inc/dbdocutl.hxx:
     # base class has to be a complete type
     - com/sun/star/uno/Reference.hxx

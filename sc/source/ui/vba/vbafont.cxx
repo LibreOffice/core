@@ -27,6 +27,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <ooo/vba/excel/XlColorIndex.hpp>
 #include <ooo/vba/excel/XlUnderlineStyle.hpp>
+#include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include "excelvbahelper.hxx"
 #include "vbafont.hxx"

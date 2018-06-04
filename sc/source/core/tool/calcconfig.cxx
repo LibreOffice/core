@@ -22,6 +22,7 @@
 #include <docsh.hxx>
 
 #include <comphelper/configurationlistener.hxx>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 using comphelper::ConfigurationListener;
 
