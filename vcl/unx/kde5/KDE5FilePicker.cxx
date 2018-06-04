@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "kde5_filepicker.hxx"
+#include "KDE5FilePicker.hxx"
 
 #include <KWindowSystem>
 #include <KFileWidget>
@@ -241,6 +241,6 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
     return QObject::eventFilter(o, e);
 }
 
-#include <kde5_filepicker.moc>
+#include <KDE5FilePicker.moc>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
