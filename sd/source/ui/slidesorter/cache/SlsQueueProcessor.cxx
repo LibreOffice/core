@@ -155,7 +155,7 @@ void QueueProcessor::ProcessOneRequest (
                 mpCache->SetBitmap (pSdPage, aPreview, ePriorityClass!=NOT_VISIBLE);
 
                 // Initiate a repaint of the new preview.
-                mpCacheContext->NotifyPreviewCreation(aKey, aPreview);
+                mpCacheContext->NotifyPreviewCreation(aKey);
             }
         }
     }

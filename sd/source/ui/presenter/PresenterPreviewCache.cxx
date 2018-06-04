@@ -49,9 +49,7 @@ public:
     void RemovePreviewCreationNotifyListener (const Reference<drawing::XSlidePreviewCacheListener>& rxListener);
 
     // CacheContext
-    virtual void NotifyPreviewCreation (
-        CacheKey aKey,
-        const BitmapEx& rPreview) override;
+    virtual void NotifyPreviewCreation (CacheKey aKey) override;
     virtual bool IsIdle() override;
     virtual bool IsVisible (CacheKey aKey) override;
     virtual const SdrPage* GetPage (CacheKey aKey) override;
@@ -246,8 +244,7 @@ void PresenterPreviewCache::PresenterCacheContext::RemovePreviewCreationNotifyLi
 //----- CacheContext ----------------------------------------------------------
 
 void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
-    CacheKey aKey,
-    const BitmapEx&)
+    CacheKey aKey)
 {
     if ( ! mxSlides.is())
         return;
