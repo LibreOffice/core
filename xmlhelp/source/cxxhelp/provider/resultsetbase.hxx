@@ -386,7 +386,7 @@ namespace chelp {
 
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;
-        PathSet                             m_aPath;
+        std::vector<OUString>               m_aPath;
 
         css::uno::Sequence< css::beans::Property >           m_sProperty;
 

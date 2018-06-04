@@ -48,6 +48,7 @@
 #include <CustomAnimationPreset.hxx>
 
 #include <algorithm>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -157,9 +158,9 @@ void CustomAnimationPreset::add( const CustomAnimationEffectPtr& pEffect )
     maSubTypes[ pEffect->getPresetSubType() ] = pEffect;
 }
 
-UStringList CustomAnimationPreset::getSubTypes()
+std::vector<OUString> CustomAnimationPreset::getSubTypes()
 {
-    UStringList aSubTypes;
+    std::vector<OUString> aSubTypes;
 
     if( maSubTypes.size() > 1 )
     {
@@ -197,9 +198,9 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const OUString& rstrS
     return xNode;
 }
 
-UStringList CustomAnimationPreset::getProperties() const
+std::vector<OUString> CustomAnimationPreset::getProperties() const
 {
-    UStringList aPropertyList;
+    std::vector<OUString> aPropertyList;
     if (!maProperty.isEmpty())
     {
         sal_Int32 nPos = 0;
@@ -572,7 +573,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
             CustomAnimationPresetPtr pPreset = pCategory->maEffects[nDescriptor];
             if( pPreset.get() )
             {
-                UStringList aSubTypes = pPreset->getSubTypes();
+                std::vector<OUString> aSubTypes = pPreset->getSubTypes();
 
                 OUString aSubType;
                 if( !aSubTypes.empty() )

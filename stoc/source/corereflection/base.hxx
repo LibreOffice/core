@@ -59,8 +59,7 @@ namespace stoc_corefl
 {
 
 #ifdef TEST_LIST_CLASSES
-typedef std::vector< OUString > ClassNameVector;
-extern ClassNameVector g_aClassNames;
+extern std::vector<OUString> g_aClassNames;
 #endif
 
 
