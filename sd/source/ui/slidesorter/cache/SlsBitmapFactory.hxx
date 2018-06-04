@@ -37,7 +37,7 @@ public:
     BitmapFactory();
     ~BitmapFactory();
 
-    Bitmap CreateBitmap (
+    BitmapEx CreateBitmap (
         const SdPage& rPage,
         const Size& rPixelSize,
         const bool bDoSuperSampling);
