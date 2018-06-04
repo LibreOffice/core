@@ -94,7 +94,6 @@ struct ColumnInfo{
  * to use @ref Open(), @ref InfoRead(), @ref FontRead(), @ref StyleRead(), @ref ParaListRead(), @ref TagsRead(),
  *
  * @short HWP file management object
- * @author Mizi Reserach
  */
 class DLLEXPORT HWPFile
 {

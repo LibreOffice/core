@@ -533,28 +533,19 @@ void SwPagePreviewWin::SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol )
     }
 }
 
-/** get selected page in document preview
-
-    @author OD
-*/
+/** get selected page in document preview */
 sal_uInt16 SwPagePreviewWin::SelectedPage() const
 {
     return mpPgPreviewLayout->SelectedPage();
 }
 
-/** set selected page number in document preview
-
-    @author OD
-*/
+/** set selected page number in document preview */
 void SwPagePreviewWin::SetSelectedPage( sal_uInt16 _nSelectedPageNum )
 {
     mpPgPreviewLayout->SetSelectedPage( _nSelectedPageNum );
 }
 
-/** method to enable/disable book preview
-
-    @author OD
-*/
+/** method to enable/disable book preview */
 bool SwPagePreviewWin::SetBookPreviewMode( const bool _bBookPreview )
 {
     return mpPgPreviewLayout->SetBookPreviewMode( _bBookPreview,
@@ -592,10 +583,7 @@ void SwPagePreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-/** help method to execute SfxRequest FN_PAGEUP and FN_PAGEDOWN
-
-    @author OD
-*/
+/** help method to execute SfxRequest FN_PAGEUP and FN_PAGEDOWN */
 void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
                                         SfxRequest* _pReq )
 {
@@ -1886,10 +1874,7 @@ void SwPagePreview::SetZoom(SvxZoomType eType, sal_uInt16 nFactor)
     }
 }
 
-/** adjust position of vertical scrollbar
-
-    @author OD
-*/
+/** adjust position of vertical scrollbar */
 void SwPagePreview::SetVScrollbarThumbPos( const sal_uInt16 _nNewThumbPos )
 {
     if ( m_pVScrollbar )

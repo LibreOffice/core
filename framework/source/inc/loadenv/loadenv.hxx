@@ -68,8 +68,6 @@ class QuietInteraction;
     @descr  An instance of this class can be used inside the API calls
             XComponentLoader::loadComponentFromURL() and
             XDispatch::dispatch().
-
-    @author as96863
  */
 class LoadEnv
 {
