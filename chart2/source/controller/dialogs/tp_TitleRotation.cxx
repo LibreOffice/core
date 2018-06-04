@@ -41,7 +41,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(vcl::Window* pWindow,
     get(m_pLbTextDirection,"textdirLB");
     get(m_pFtABCD,"labelABCD");
     m_pCtrlDial->SetText(m_pFtABCD->GetText());
-    m_pOrientHlp = new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
+    m_pOrientHlp.reset( new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked) );
 
     m_pCbStacked->EnableTriState( false );
     m_pOrientHlp->Enable();
@@ -60,8 +60,7 @@ SchAlignmentTabPage::~SchAlignmentTabPage()
 
 void SchAlignmentTabPage::dispose()
 {
-    delete m_pOrientHlp;
-    m_pOrientHlp = nullptr;
+    m_pOrientHlp.reset();
     m_pCtrlDial.clear();
     m_pFtRotate.clear();
     m_pNfRotate.clear();
