@@ -119,7 +119,7 @@ protected:
     sal_Int32 mnIndexInParent;
 
     /// The accessible text engine.  May be NULL if it can not be created.
-    AccessibleTextHelper* mpText;
+    std::unique_ptr<AccessibleTextHelper> mpText;
 
     sdr::table::CellRef mxCell;
 
