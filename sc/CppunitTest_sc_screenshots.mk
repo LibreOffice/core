@@ -47,6 +47,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_screenshots,\
 
 $(eval $(call gb_CppunitTest_use_api,sc_screenshots,\
     offapi \
+    oovbaapi \
     udkapi \
 ))
 
