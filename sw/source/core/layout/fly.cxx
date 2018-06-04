@@ -1173,7 +1173,13 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
  */
 void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
-    OSL_ENSURE( pAttrs, "FlyFrame::Format, pAttrs is 0." );
+    if (IsHidden())
+    {
+        ShrinkTo0();
+        return;
+    }
+
+    OSL_ENSURE(pAttrs, "FlyFrame::Format, pAttrs is 0.");
 
     ColLock();
 

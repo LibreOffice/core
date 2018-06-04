@@ -2184,18 +2184,16 @@ void FndBox_::DelFrames( SwTable &rTable )
                                             static_cast<SwTabFrame*>(pFrame->GetUpper()) : nullptr;
                     if ( !pUp )
                     {
-                        const sal_uInt16 nRepeat =
-                                static_cast<SwTabFrame*>(pFrame->GetUpper())->GetTable()->GetRowsToRepeat();
-                        if ( nRepeat > 0 &&
-                             static_cast<SwTabFrame*>(pFrame->GetUpper())->IsFollow() )
+                        SwTabFrame* pMyUp = static_cast<SwTabFrame*>(pFrame->GetUpper());
+                        const sal_uInt16 nRepeat = pMyUp->GetTable()->GetRowsToRepeat();
+                        if (nRepeat > 0 && pMyUp->IsFollow())
                         {
                             if ( !pFrame->GetNext() )
                             {
-                                SwRowFrame* pFirstNonHeadline =
-                                    static_cast<SwTabFrame*>(pFrame->GetUpper())->GetFirstNonHeadlineRow();
+                                SwRowFrame* pFirstNonHeadline = pMyUp->GetFirstNonHeadlineRow();
                                 if ( pFirstNonHeadline == pFrame )
                                 {
-                                    pUp = static_cast<SwTabFrame*>(pFrame->GetUpper());
+                                    pUp = pMyUp;
                                 }
                             }
                         }
@@ -2274,34 +2272,6 @@ static bool lcl_IsLineOfTableFrame( const SwTabFrame& rTable, const SwFrame& rCh
     return &rTable == pTableFrame;
 }
 
-static void lcl_UpdateRepeatedHeadlines( SwTabFrame& rTabFrame, bool bCalcLowers )
-{
-    OSL_ENSURE( rTabFrame.IsFollow(), "lcl_UpdateRepeatedHeadlines called for non-follow tab" );
-
-    // Delete remaining headlines:
-    SwRowFrame* pLower = nullptr;
-    while ( nullptr != ( pLower = static_cast<SwRowFrame*>(rTabFrame.Lower()) ) && pLower->IsRepeatedHeadline() )
-    {
-        pLower->Cut();
-        SwFrame::DestroyFrame(pLower);
-    }
-
-    // Insert fresh set of headlines:
-    pLower = static_cast<SwRowFrame*>(rTabFrame.Lower());
-    SwTable& rTable = *rTabFrame.GetTable();
-    const sal_uInt16 nRepeat = rTable.GetRowsToRepeat();
-    for ( sal_uInt16 nIdx = 0; nIdx < nRepeat; ++nIdx )
-    {
-        SwRowFrame* pHeadline = new SwRowFrame( *rTable.GetTabLines()[ nIdx ], &rTabFrame );
-        pHeadline->SetRepeatedHeadline( true );
-        pHeadline->Paste( &rTabFrame, pLower );
-        pHeadline->RegistFlys();
-    }
-
-    if ( bCalcLowers )
-        rTabFrame.SetCalcLowers();
-}
-
 void FndBox_::MakeFrames( SwTable &rTable )
 {
     // All lines between pLineBefore and pLineBehind should be re-generated in layout.
@@ -2370,7 +2340,7 @@ void FndBox_::MakeFrames( SwTable &rTable )
         else if ( rTable.GetRowsToRepeat() > 0 )
         {
             // Insert new headlines:
-            lcl_UpdateRepeatedHeadlines( *pTable, true );
+            pTable->UpdateHeadlines(true);
         }
     }
 }
@@ -2505,7 +2475,7 @@ void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
             {
                 if ( pTable->IsFollow() )
                 {
-                    lcl_UpdateRepeatedHeadlines( *pTable, true );
+                    pTable->UpdateHeadlines(true);
                 }
 
                 OSL_ENSURE( static_cast<SwRowFrame*>(pTable->Lower())->GetTabLine() ==
@@ -2555,7 +2525,7 @@ bool FndBox_::AreLinesToRestore( const SwTable &rTable ) const
             if( pTable->IsFollow() )
             {
                 // Insert new headlines:
-                lcl_UpdateRepeatedHeadlines( *pTable, false );
+                pTable->UpdateHeadlines(false);
             }
         }
     }

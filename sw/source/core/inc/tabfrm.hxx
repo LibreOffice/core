@@ -85,6 +85,12 @@ class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
 
     bool m_bInRecalcLowerRow : 1;
 
+    // tdf#58944: When too many heading rows had been specified which don't fit to page,
+    // just ignore the heading flags of rows. This flag must persist with the frame, so
+    // that following interaction (e.g., selection) is possible with heading rows that
+    // are treated as normal rows.
+    bool m_bIgnoreHeadlines : 1;
+
     /**
      * Split() splits the Frame at the specified position: a Follow is
      * created and constructed and inserted directly after this.
@@ -174,6 +180,11 @@ public:
     {
         m_bInRecalcLowerRow = bNew;
     }
+
+    bool IsIgnoreHeadlines() const;
+    void SetIgnoreHeadlines(bool bNew);
+    // Returns the last inserted headline
+    SwRowFrame* UpdateHeadlines(bool bCalcLowers);
 
     // #i26945#
     bool IsConsiderObjsForMinCellHeight() const

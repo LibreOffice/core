@@ -32,6 +32,7 @@
 #include <fmtanchr.hxx>
 #include <fmtclbl.hxx>
 
+#include <rowfrm.hxx>
 #include <tabfrm.hxx>
 #include <ftnfrm.hxx>
 #include <txtfrm.hxx>
@@ -366,6 +367,44 @@ void SwFrame::OptPrepareMake()
         StackHack aHack;
         MakeAll(IsRootFrame() ? nullptr : getRootFrame()->GetCurrShell()->GetOut());
     }
+}
+
+bool SwFrame::IsHidden() const
+{
+    const SwFrame* pFrame = this;
+    const SwRowFrame* pRow = nullptr;
+    while (pFrame)
+    {
+        if (pFrame->IsRowFrame())
+            pRow = static_cast<const SwRowFrame*>(pFrame); // current candidate
+
+        if (pFrame->IsFlyFrame())
+            pFrame = static_cast<const SwFlyFrame*>(pFrame)->GetAnchorFrame();
+        else
+            pFrame = pFrame->GetUpper();
+    }
+
+    if (pRow)
+    {
+        return pRow->IsRepeatedHeadline() && pRow->FindTabFrame()->IsIgnoreHeadlines();
+    }
+    return false;
+}
+
+void SwFrame::ShrinkTo0()
+{
+    SwRectFnSet aRectFnSet(this);
+
+    setFrameAreaSizeValid(true);
+    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+    aRectFnSet.SetHeight(aFrm, 0);
+
+    setFramePrintAreaValid(true);
+    SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+    aPrt.Left(0);
+    aPrt.Top(0);
+    aPrt.Width(getFrameArea().Width());
+    aPrt.Height(getFrameArea().Height());
 }
 
 void SwFrame::PrepareCursor()

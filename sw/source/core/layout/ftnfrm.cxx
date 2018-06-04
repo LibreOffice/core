@@ -184,6 +184,12 @@ static long lcl_Undersize( const SwFrame* pFrame )
 /// "format" the frame (Fixsize is not set here).
 void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
+    if (IsHidden())
+    {
+        ShrinkTo0();
+        return;
+    }
+
     // calculate total border, only one distance to the top
     const SwPageFrame* pPage = FindPageFrame();
     const SwPageFootnoteInfo &rInf = pPage->GetPageDesc()->GetFootnoteInfo();

@@ -135,7 +135,13 @@ void SwFlyInContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
 /// Here the content gets formatted initially.
 void SwFlyInContentFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs )
 {
-    if ( !getFrameArea().Height() )
+    if (IsHidden())
+    {
+        ShrinkTo0();
+        return;
+    }
+
+    if (!getFrameArea().Height())
     {
         Lock(); //don't format the anchor on the crook.
         SwContentFrame *pContent = ContainsContent();

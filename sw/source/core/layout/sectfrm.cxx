@@ -1291,7 +1291,13 @@ class ExtraFormatToPositionObjs
 /// "formats" the frame; Frame and PrtArea
 void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttr )
 {
-    if( !m_pSection ) // via DelEmpty
+    if (IsHidden())
+    {
+        ShrinkTo0();
+        return;
+    }
+
+    if (!m_pSection) // via DelEmpty
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( getRootFrame()->IsInDelList( this ), "SectionFrame without Section" );

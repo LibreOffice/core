@@ -2004,6 +2004,89 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
     }
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf58944, "tdf58944.odt")
+{
+    xmlDocPtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(12, getPages());
+
+    // Test 1
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY_THROW);
+    auto xRows = xTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(36), xRows->getCount());
+    // First table must wholly fit to page 2
+    assertXPath(pDump, "/root/page[1]/body/tab", 0);
+    assertXPath(pDump, "/root/page[2]/body/tab/row", 36);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 1 Headline 36"),
+                         parseDump("/root/page[2]/body/tab/row[36]/cell[1]/txt/text()"));
+
+    // Test 2
+    xTable.set(getParagraphOrTable(4), uno::UNO_QUERY_THROW);
+    xRows = xTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(37), xRows->getCount());
+    // Second table must start on page 3, right after paragraph
+    assertXPath(pDump, "/root/page[3]/body/tab/row", 34);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 2 Headline 34"),
+                         parseDump("/root/page[3]/body/tab/row[34]/cell[1]/txt/text()"));
+    // Only 3 rows of second table must flow to page 4 (headlines are ignored)
+    assertXPath(pDump, "/root/page[4]/body/tab/row", 3);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 2 Headline 35"),
+                         parseDump("/root/page[4]/body/tab/row[1]/cell[1]/txt/text()"));
+
+    // Test 3
+    xTable.set(getParagraphOrTable(6), uno::UNO_QUERY_THROW);
+    xRows = xTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(40), xRows->getCount());
+    // Third table must start on page 5, right after paragraph
+    assertXPath(pDump, "/root/page[5]/body/tab/row", 34);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 3 Headline 34"),
+                         parseDump("/root/page[5]/body/tab/row[34]/cell[1]/txt/text()"));
+    // Only 6 rows of third table must flow to page 6 (headlines are ignored)
+    assertXPath(pDump, "/root/page[6]/body/tab/row", 6);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 3 Headline 35"),
+                         parseDump("/root/page[6]/body/tab/row[1]/cell[1]/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 3 Normal 38"),
+                         parseDump("/root/page[6]/body/tab/row[4]/cell[1]/txt/text()"));
+
+    // Test 4
+    xTable.set(getParagraphOrTable(8), uno::UNO_QUERY_THROW);
+    xRows = xTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(40), xRows->getCount());
+    // Fourth table must start on page 7, right after paragraph
+    assertXPath(pDump, "/root/page[7]/body/tab/row", 34);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 4 Headline 34"),
+                         parseDump("/root/page[7]/body/tab/row[34]/cell[1]/txt/text()"));
+    // Only 6 rows of fourth table must flow to page 6 (headlines are ignored)
+    assertXPath(pDump, "/root/page[8]/body/tab/row", 6);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 4 Headline 35"),
+                         parseDump("/root/page[8]/body/tab/row[1]/cell[1]/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 4 Normal 37"),
+                         parseDump("/root/page[8]/body/tab/row[3]/cell[1]/txt/text()"));
+
+    // Test 5
+    xTable.set(getParagraphOrTable(10), uno::UNO_QUERY_THROW);
+    xRows = xTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(40), xRows->getCount());
+    // Fifth table must start on page 10 (its headlines don't fit to page 9's free space)
+    assertXPath(pDump, "/root/page[9]/body/tab", 0);
+    assertXPath(pDump, "/root/page[10]/body/tab/row", 36);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 5 Headline 35"),
+                         parseDump("/root/page[10]/body/tab/row[35]/cell[1]/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 5 Normal 36"),
+                         parseDump("/root/page[10]/body/tab/row[36]/cell[1]/txt/text()"));
+    // Only first line of 37th row's first cell fits to 11th page
+    assertXPath(pDump, "/root/page[11]/body/tab/row", 36);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 5 Headline 35"),
+                         parseDump("/root/page[11]/body/tab/row[35]/cell[1]/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 5 Normal 37 Line 1"),
+                         parseDump("/root/page[11]/body/tab/row[36]/cell[1]/txt/text()"));
+    // Second line of 37th row is high -> start ignoring headlines from now on
+    assertXPath(pDump, "/root/page[12]/body/tab/row", 4);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 5 Normal 37 Line 2"),
+                         parseDump("/root/page[12]/body/tab/row[1]/cell[1]/txt/text()"));
+
+    xmlFreeDoc(pDump);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

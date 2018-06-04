@@ -415,7 +415,13 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
 void SwHeadFootFrame::Format(vcl::RenderContext* pRenderContext, const SwBorderAttrs * pAttrs)
 {
-    OSL_ENSURE( pAttrs, "SwFooterFrame::Format, pAttrs is 0." );
+    if (IsHidden())
+    {
+        ShrinkTo0();
+        return;
+    }
+
+    OSL_ENSURE(pAttrs, "SwFooterFrame::Format, pAttrs is 0.");
 
     if ( isFramePrintAreaValid() && isFrameAreaSizeValid() )
         return;
