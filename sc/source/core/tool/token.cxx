@@ -51,6 +51,7 @@
 #include <dbdata.hxx>
 #include <reordermap.hxx>
 #include <svl/sharedstring.hxx>
+#include <scmatrix.hxx>
 
 using ::std::vector;
 

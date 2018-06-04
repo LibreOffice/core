@@ -21,6 +21,7 @@
 #include <editeng/memberids.h>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -45,6 +46,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>

@@ -23,9 +23,11 @@
 #include <vcl/timer.hxx>
 
 #include <cppuhelper/weakref.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <memory>
+#include <vector>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class ScDocument;
 

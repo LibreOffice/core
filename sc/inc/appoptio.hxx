@@ -20,14 +20,13 @@
 #ifndef INCLUDED_SC_INC_APPOPTIO_HXX
 #define INCLUDED_SC_INC_APPOPTIO_HXX
 
-#include <memory>
-#include <vcl/field.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <unotools/configitem.hxx>
 #include "scdllapi.h"
-#include "scmod.hxx"
 #include "global.hxx"
 #include "optutil.hxx"
+#include <tools/fldunit.hxx>
+#include <tools/color.hxx>
+#include <tools/link.hxx>
 
 class SC_DLLPUBLIC ScAppOptions
 {

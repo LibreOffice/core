@@ -24,8 +24,9 @@
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include "address.hxx"
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 
 class ScUnoConversion
 {

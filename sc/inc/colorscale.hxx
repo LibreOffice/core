@@ -12,7 +12,6 @@
 
 #include <formula/grammar.hxx>
 #include <tools/color.hxx>
-#include "rangelst.hxx"
 #include "conditio.hxx"
 #include "document.hxx"
 
@@ -21,7 +20,6 @@
 
 //TODO: merge this with conditio.hxx
 
-class ScDocument;
 class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;

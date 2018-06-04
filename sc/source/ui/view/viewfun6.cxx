@@ -44,6 +44,7 @@
 #include <globalnames.hxx>
 #include <inputhdl.hxx>
 #include <tabvwsh.hxx>
+#include <scmod.hxx>
 
 #include <vector>
 

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_COLUMNSET_HXX
 #define INCLUDED_SC_INC_COLUMNSET_HXX
 
-#include "address.hxx"
+#include "types.hxx"
 
 #include <unordered_set>
 #include <unordered_map>
