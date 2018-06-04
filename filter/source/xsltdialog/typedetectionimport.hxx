@@ -56,8 +56,6 @@ struct Node
     PropertyMap maPropertyMap;
 };
 
-typedef std::vector< Node* > NodeVector;
-
 class TypeDetectionImporter : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
 public:
@@ -83,8 +81,8 @@ private:
     std::stack< ImportState > maStack;
     PropertyMap maPropertyMap;
 
-    NodeVector maFilterNodes;
-    NodeVector maTypeNodes;
+    std::vector< std::unique_ptr<Node> > maFilterNodes;
+    std::vector< std::unique_ptr<Node> > maTypeNodes;
 
     OUString maValue;
     OUString maNodeName;

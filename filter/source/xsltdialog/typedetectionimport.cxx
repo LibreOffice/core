@@ -70,16 +70,14 @@ void TypeDetectionImporter::fillFilterVector(  XMLFilterVector& rFilters )
     // create filter infos from imported filter nodes
     for (auto const& filterNode : maFilterNodes)
     {
-        filter_info_impl* pFilter = createFilterForNode(filterNode);
+        filter_info_impl* pFilter = createFilterForNode(filterNode.get());
         if( pFilter )
             rFilters.push_back( pFilter );
-
-        delete filterNode;
     }
+    maFilterNodes.clear();
 
     // now delete type nodes
-    for (auto const& typeNode : maTypeNodes)
-        delete typeNode;
+    maTypeNodes.clear();
 }
 
 static OUString getSubdata( int index, sal_Unicode delimiter, const OUString& rData )
@@ -115,11 +113,10 @@ static OUString getSubdata( int index, sal_Unicode delimiter, const OUString& rD
 
 Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
 {
-    // now delete type nodes
-    for (NodeVector::const_iterator aIter(maTypeNodes.begin()), aEnd(maTypeNodes.end()); aIter != aEnd; ++aIter)
+    for (auto aIter(maTypeNodes.begin()), aEnd(maTypeNodes.end()); aIter != aEnd; ++aIter)
     {
         if( (*aIter)->maName == rType )
-            return (*aIter);
+            return aIter->get();
     }
 
     return nullptr;
@@ -277,18 +274,18 @@ void SAL_CALL TypeDetectionImporter::endElement( const OUString& /* aName */ )
         case e_Filter:
         case e_Type:
             {
-                Node* pNode = new Node;
+                std::unique_ptr<Node> pNode(new Node);
                 pNode->maName = maNodeName;
                 pNode->maPropertyMap = maPropertyMap;
                 maPropertyMap.clear();
 
                 if( eCurrentState == e_Filter )
                 {
-                    maFilterNodes.push_back( pNode );
+                    maFilterNodes.push_back( std::move(pNode) );
                 }
                 else
                 {
-                    maTypeNodes.push_back( pNode );
+                    maTypeNodes.push_back( std::move(pNode) );
                 }
             }
             break;
