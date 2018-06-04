@@ -85,12 +85,12 @@ class FmSearchDialog final : public ModalDialog
     /// memorize the currently selected field for every context
     std::vector<OUString> m_arrContextFields;
 
-    FmSearchEngine* m_pSearchEngine;
+    std::unique_ptr<FmSearchEngine> m_pSearchEngine;
 
     Timer           m_aDelayedPaint;
     // see EnableSearchUI
 
-    ::svxform::FmSearchConfigItem*      m_pConfig;
+    std::unique_ptr<::svxform::FmSearchConfigItem>      m_pConfig;
 public:
     /** This can search in different sets of fields. There is a number of contexts; their names are in strContexts (separated
         by ';'), the user can choose one of them.
