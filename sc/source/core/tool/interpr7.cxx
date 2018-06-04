@@ -429,10 +429,7 @@ void ScInterpreter::ScDebugVar()
     }
 
     if (!MustHaveParamCount(GetByte(), 1))
-    {
-        PushIllegalParameter();
         return;
-    }
 
     rtl_uString* p = GetString().getDataIgnoreCase();
     if (!p)
