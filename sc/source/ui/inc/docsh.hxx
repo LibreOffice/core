@@ -25,6 +25,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 #include <scdllapi.h>
 #include <scdll.hxx>

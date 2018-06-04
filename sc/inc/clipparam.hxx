@@ -21,10 +21,7 @@
 #define INCLUDED_SC_INC_CLIPPARAM_HXX
 
 #include "rangelst.hxx"
-#include "rangenam.hxx"
 #include "charthelper.hxx"
-
-#include <vector>
 
 /**
  * This struct stores general clipboard parameters associated with a

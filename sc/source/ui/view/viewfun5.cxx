@@ -61,6 +61,7 @@
 #include <scextopt.hxx>
 #include <tabvwsh.hxx>
 #include <compiler.hxx>
+#include <scmod.hxx>
 
 #include <asciiopt.hxx>
 #include <scabstdlg.hxx>

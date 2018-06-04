@@ -50,6 +50,7 @@
 #include <progress.hxx>
 #include <undosort.hxx>
 #include <inputopt.hxx>
+#include <scmod.hxx>
 
 #include <chartlis.hxx>
 #include <ChartTools.hxx>
