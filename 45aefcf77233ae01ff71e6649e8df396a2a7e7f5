@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a22e58a_4b81398f",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-04T08:17:54Z",
+      "side": 1,
+      "message": "to be honest, at least to me that still sounds less clear than the original",
+      "parentUuid": "5a22e58a_ebbae56d",
+      "revId": "45aefcf77233ae01ff71e6649e8df396a2a7e7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a22e58a_6b90b5ed",
         "filename": "svx/uiconfig/ui/safemodedialog.ui",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I don’t think those things are crucial for UI copy — the corresponding help page should be the place where that gets clarified.\nI also considered “Create User Profile Archive”, but that’s longer and it doesn’t really add any meaning (just the verb “archive” conveys that)",
       "parentUuid": "5a22e58a_6b90b5ed",
+      "revId": "45aefcf77233ae01ff71e6649e8df396a2a7e7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_2b74fdcd",
+        "filename": "svx/uiconfig/ui/safemodedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-04T08:17:54Z",
+      "side": 1,
+      "message": "it may be subtle, but at least to me, \"archive X\" (using \"to archive\" as a verb) conveys a different meaning than \"create a zip archive of X\" (where the stress is on the resulting zip file, which happens to be called an \"archive\" format, not on the act of archiving, which to me would bring up questions like those I mentioned)",
+      "parentUuid": "5a22e58a_8b625115",
       "revId": "45aefcf77233ae01ff71e6649e8df396a2a7e7f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
