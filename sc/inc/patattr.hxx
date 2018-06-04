@@ -62,7 +62,7 @@ public:
 
                             virtual ~ScPatternAttr() override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            operator==(const SfxPoolItem& rCmp) const override;
 

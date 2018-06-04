@@ -32,11 +32,12 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <svx/rotmodit.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxRotateModeItem::CreateDefault() { return new  SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0);}
+std::unique_ptr<SfxPoolItem> SvxRotateModeItem::CreateDefault() { return o3tl::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, 0);}
 
 
 //  SvxRotateModeItem - orientation with turned text
@@ -56,11 +57,11 @@ SvxRotateModeItem::~SvxRotateModeItem()
 {
 }
 
-SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxRotateModeItem::CreateInternal( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStream.ReadUInt16( nVal );
-    return new SvxRotateModeItem( static_cast<SvxRotateMode>(nVal),Which() );
+    return o3tl::make_unique<SvxRotateModeItem>( static_cast<SvxRotateMode>(nVal),Which() );
 }
 
 bool SvxRotateModeItem::GetPresentation(
@@ -91,9 +92,9 @@ sal_uInt16 SvxRotateModeItem::GetValueCount() const
     return 4;       // STANDARD, TOP, CENTER, BOTTOM
 }
 
-SfxPoolItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxRotateModeItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxRotateModeItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxRotateModeItem( *this ));
 }
 
 sal_uInt16 SvxRotateModeItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const

@@ -35,13 +35,13 @@ private:
     bool bAuto;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit inline SvxPageModelItem( sal_uInt16 nWh  );
     inline SvxPageModelItem( const OUString& rModel, bool bA /*= false*/,
                              sal_uInt16 nWh  );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

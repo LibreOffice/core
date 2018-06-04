@@ -371,7 +371,7 @@ EditUndoInsertFeature::EditUndoInsertFeature(
     EditEngine* pEE, const EPaM& rEPaM, const SfxPoolItem& rFeature) :
     EditUndo(EDITUNDO_INSERTFEATURE, pEE),
     aEPaM(rEPaM),
-    pFeature(rFeature.Clone())
+    pFeature(Clone(rFeature))
 {
     DBG_ASSERT( pFeature, "Feature could not be duplicated: EditUndoInsertFeature" );
 }

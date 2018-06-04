@@ -1126,7 +1126,7 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
             || aNewText == "DEFAULT" );
 
         if (!bDel) {
-            std::unique_ptr<SfxPoolItem> pNewItem(aSet.Get(pEntry->nWhichId).Clone());
+            std::unique_ptr<SfxPoolItem> pNewItem = Clone(aSet.Get(pEntry->nWhichId));
             sal_Int32 nLongVal = aNewText.toInt32();
             if (pEntry->bCanNum) {
                 if (nLongVal>pEntry->nMax) nLongVal=pEntry->nMax;

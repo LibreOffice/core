@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-SfxPoolItem* SfxImageItem::CreateDefault() { return new SfxImageItem; }
+std::unique_ptr<SfxPoolItem> SfxImageItem::CreateDefault() { return o3tl::make_unique<SfxImageItem>(); }
 
 struct SfxImageItem_Impl
 {
@@ -53,9 +53,9 @@ SfxImageItem::~SfxImageItem()
 }
 
 
-SfxPoolItem* SfxImageItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SfxImageItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SfxImageItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxImageItem( *this ));
 }
 
 

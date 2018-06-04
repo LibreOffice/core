@@ -145,23 +145,23 @@ namespace
 }
 
 
-SfxPoolItem* SvxPaperBinItem::CreateDefault() { return new  SvxPaperBinItem(0);}
-SfxPoolItem* SvxSizeItem::CreateDefault() { return new  SvxSizeItem(0);}
-SfxPoolItem* SvxLRSpaceItem::CreateDefault() { return new  SvxLRSpaceItem(0);}
-SfxPoolItem* SvxULSpaceItem::CreateDefault() { return new  SvxULSpaceItem(0);}
-SfxPoolItem* SvxProtectItem::CreateDefault() { return new  SvxProtectItem(0);}
-SfxPoolItem* SvxBrushItem::CreateDefault() { return new  SvxBrushItem(0);}
-SfxPoolItem* SvxShadowItem::CreateDefault() { return new  SvxShadowItem(0);}
-SfxPoolItem* SvxBoxItem::CreateDefault() { return new  SvxBoxItem(0);}
-SfxPoolItem* SvxBoxInfoItem::CreateDefault() { return new  SvxBoxInfoItem(0);}
-SfxPoolItem* SvxFormatBreakItem::CreateDefault() { return new  SvxFormatBreakItem(SvxBreak::NONE, 0);}
-SfxPoolItem* SvxFormatKeepItem::CreateDefault() { return new  SvxFormatKeepItem(false, 0);}
-SfxPoolItem* SvxLineItem::CreateDefault() { return new  SvxLineItem(0);}
+std::unique_ptr<SfxPoolItem> SvxPaperBinItem::CreateDefault() { return o3tl::make_unique<SvxPaperBinItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxSizeItem::CreateDefault() { return o3tl::make_unique<SvxSizeItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxLRSpaceItem::CreateDefault() { return o3tl::make_unique<SvxLRSpaceItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxULSpaceItem::CreateDefault() { return o3tl::make_unique<SvxULSpaceItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxProtectItem::CreateDefault() { return o3tl::make_unique<SvxProtectItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxBrushItem::CreateDefault() { return o3tl::make_unique<SvxBrushItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxShadowItem::CreateDefault() { return o3tl::make_unique<SvxShadowItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxBoxItem::CreateDefault() { return o3tl::make_unique<SvxBoxItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxBoxInfoItem::CreateDefault() { return o3tl::make_unique<SvxBoxInfoItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxFormatBreakItem::CreateDefault() { return o3tl::make_unique<SvxFormatBreakItem>(SvxBreak::NONE, 0);}
+std::unique_ptr<SfxPoolItem> SvxFormatKeepItem::CreateDefault() { return o3tl::make_unique<SvxFormatKeepItem>(false, 0);}
+std::unique_ptr<SfxPoolItem> SvxLineItem::CreateDefault() { return o3tl::make_unique<SvxLineItem>(0);}
 
 
-SfxPoolItem* SvxPaperBinItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxPaperBinItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxPaperBinItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxPaperBinItem( *this ));
 }
 
 
@@ -297,9 +297,9 @@ bool SvxSizeItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxSizeItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxSizeItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxSizeItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxSizeItem( *this ));
 }
 
 
@@ -551,9 +551,9 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxLRSpaceItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxLRSpaceItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxLRSpaceItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxLRSpaceItem( *this ));
 }
 
 
@@ -810,9 +810,9 @@ bool SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxULSpaceItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxULSpaceItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxULSpaceItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxULSpaceItem( *this ));
 }
 
 
@@ -912,9 +912,9 @@ void SvxULSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 
-SfxPoolItem* SvxPrintItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxPrintItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxPrintItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxPrintItem( *this ));
 }
 
 
@@ -935,9 +935,9 @@ bool SvxPrintItem::GetPresentation
 }
 
 
-SfxPoolItem* SvxOpaqueItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxOpaqueItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxOpaqueItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxOpaqueItem( *this ));
 }
 
 
@@ -1005,9 +1005,9 @@ bool SvxProtectItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-SfxPoolItem* SvxProtectItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxProtectItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxProtectItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxProtectItem( *this ));
 }
 
 
@@ -1171,9 +1171,9 @@ bool SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxShadowItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxShadowItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxShadowItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxShadowItem( *this ));
 }
 
 
@@ -1295,7 +1295,7 @@ bool SvxShadowItem::HasMetrics() const
 }
 
 
-SfxPoolItem* SvxShadowItem::Create( SvStream& rStrm, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxShadowItem::CreateInternal( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_Int8 cLoc;
     sal_uInt16 _nWidth;
@@ -1308,7 +1308,7 @@ SfxPoolItem* SvxShadowItem::Create( SvStream& rStrm, sal_uInt16 ) const
     ReadColor( rStrm, aColor );
     ReadColor( rStrm, aFillColor ).ReadSChar( nStyle );
     aColor.SetTransparency(bTrans ? 0xff : 0);
-    return new SvxShadowItem( Which(), &aColor, _nWidth, static_cast<SvxShadowLocation>(cLoc) );
+    return o3tl::make_unique<SvxShadowItem>( Which(), &aColor, _nWidth, static_cast<SvxShadowLocation>(cLoc) );
 }
 
 
@@ -1799,9 +1799,9 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-SfxPoolItem* SvxBoxItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxBoxItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxBoxItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxBoxItem( *this ));
 }
 
 
@@ -2014,11 +2014,11 @@ bool SvxBoxItem::HasMetrics() const
 }
 
 
-SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
+std::unique_ptr<SfxPoolItem> SvxBoxItem::CreateInternal( SvStream& rStrm, sal_uInt16 nIVersion ) const
 {
     sal_uInt16 nDistance;
     rStrm.ReadUInt16( nDistance );
-    SvxBoxItem* pAttr = new SvxBoxItem( Which() );
+    std::unique_ptr<SvxBoxItem> pAttr(new SvxBoxItem( Which() ));
 
     SvxBoxItemLine aLineMap[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                            SvxBoxItemLine::RIGHT, SvxBoxItemLine::BOTTOM };
@@ -2319,9 +2319,9 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, SvxBoxInfoItemLine nLin
 }
 
 
-SfxPoolItem* SvxBoxInfoItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxBoxInfoItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxBoxInfoItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxBoxInfoItem( *this ));
 }
 
 
@@ -2793,9 +2793,9 @@ bool SvxFormatBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 
-SfxPoolItem* SvxFormatBreakItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxFormatBreakItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxFormatBreakItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxFormatBreakItem( *this ));
 }
 
 
@@ -2819,13 +2819,13 @@ sal_uInt16 SvxFormatBreakItem::GetVersion( sal_uInt16 nFFVer ) const
 }
 
 
-SfxPoolItem* SvxFormatBreakItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
+std::unique_ptr<SfxPoolItem> SvxFormatBreakItem::CreateInternal( SvStream& rStrm, sal_uInt16 nVersion ) const
 {
     sal_Int8 eBreak, bDummy;
     rStrm.ReadSChar( eBreak );
     if( FMTBREAK_NOAUTO > nVersion )
         rStrm.ReadSChar( bDummy );
-    return new SvxFormatBreakItem( static_cast<SvxBreak>(eBreak), Which() );
+    return o3tl::make_unique<SvxFormatBreakItem>( static_cast<SvxBreak>(eBreak), Which() );
 }
 
 
@@ -2835,9 +2835,9 @@ sal_uInt16 SvxFormatBreakItem::GetValueCount() const
 }
 
 
-SfxPoolItem* SvxFormatKeepItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxFormatKeepItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxFormatKeepItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxFormatKeepItem( *this ));
 }
 
 
@@ -2848,11 +2848,11 @@ SvStream& SvxFormatKeepItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*
 }
 
 
-SfxPoolItem* SvxFormatKeepItem::Create( SvStream& rStrm, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxFormatKeepItem::CreateInternal( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_Int8 bIsKeep;
     rStrm.ReadSChar( bIsKeep );
-    return new SvxFormatKeepItem( bIsKeep != 0, Which() );
+    return o3tl::make_unique<SvxFormatKeepItem>( bIsKeep != 0, Which() );
 }
 
 
@@ -2907,9 +2907,9 @@ bool SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxLineItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxLineItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxLineItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxLineItem( *this ));
 }
 
 
@@ -3028,9 +3028,9 @@ bool SvxLineItem::HasMetrics() const
 }
 
 
-SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxLineItem::CreateInternal( SvStream& rStrm, sal_uInt16 ) const
 {
-    SvxLineItem* _pLine = new SvxLineItem( Which() );
+    std::unique_ptr<SvxLineItem> _pLine(new SvxLineItem( Which() ));
     short        nOutline, nInline, nDistance;
     Color        aColor;
 
@@ -3563,15 +3563,15 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxBrushItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxBrushItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxBrushItem( *this );
+    return o3tl::make_unique<SvxBrushItem>( *this );
 }
 
 
-SfxPoolItem* SvxBrushItem::Create( SvStream& rStream, sal_uInt16 nVersion ) const
+std::unique_ptr<SfxPoolItem> SvxBrushItem::CreateInternal( SvStream& rStream, sal_uInt16 nVersion ) const
 {
-    return new SvxBrushItem( rStream, nVersion, Which() );
+    return o3tl::make_unique<SvxBrushItem>( rStream, nVersion, Which() );
 }
 
 
@@ -3803,17 +3803,17 @@ SvxFrameDirectionItem::~SvxFrameDirectionItem()
 }
 
 
-SfxPoolItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxFrameDirectionItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxFrameDirectionItem( *this );
+    return o3tl::make_unique<SvxFrameDirectionItem>( *this );
 }
 
 
-SfxPoolItem* SvxFrameDirectionItem::Create( SvStream & rStrm, sal_uInt16 /*nVer*/ ) const
+std::unique_ptr<SfxPoolItem> SvxFrameDirectionItem::CreateInternal( SvStream & rStrm, sal_uInt16 /*nVer*/ ) const
 {
     sal_uInt16 nValue;
     rStrm.ReadUInt16( nValue );
-    return new SvxFrameDirectionItem( static_cast<SvxFrameDirection>(nValue), Which() );
+    return o3tl::make_unique<SvxFrameDirectionItem>( static_cast<SvxFrameDirection>(nValue), Which() );
 }
 
 sal_uInt16 SvxFrameDirectionItem::GetVersion( sal_uInt16 nFVer ) const

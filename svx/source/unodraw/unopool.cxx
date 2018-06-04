@@ -181,7 +181,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 
     default:
         {
-            std::unique_ptr<SfxPoolItem> pNewItem( pPool->GetDefaultItem( nWhich ).Clone() );
+            std::unique_ptr<SfxPoolItem> pNewItem( Clone(pPool->GetDefaultItem( nWhich )) );
             sal_uInt8 nMemberId = pEntry->mnMemberId;
             if( pPool->GetMetric(nWhich) == MapUnit::Map100thMM )
                 nMemberId &= (~CONVERT_TWIPS);

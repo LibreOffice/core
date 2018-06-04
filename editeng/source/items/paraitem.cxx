@@ -55,15 +55,15 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxLineSpacingItem::CreateDefault() { return new  SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0);}
-SfxPoolItem* SvxAdjustItem::CreateDefault() { return new  SvxAdjustItem(SvxAdjust::Left, 0);}
-SfxPoolItem* SvxWidowsItem::CreateDefault() { return new  SvxWidowsItem(0, 0);}
-SfxPoolItem* SvxOrphansItem::CreateDefault() { return new  SvxOrphansItem(0, 0);}
-SfxPoolItem* SvxHyphenZoneItem::CreateDefault() { return new  SvxHyphenZoneItem(false, 0);}
-SfxPoolItem* SvxTabStopItem::CreateDefault() { return new  SvxTabStopItem(0);}
-SfxPoolItem* SvxFormatSplitItem::CreateDefault() { return new  SvxFormatSplitItem(false, 0);}
-SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(0);}
-SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(Align::Automatic, 0);}
+std::unique_ptr<SfxPoolItem> SvxLineSpacingItem::CreateDefault() { return o3tl::make_unique<SvxLineSpacingItem>(LINE_SPACE_DEFAULT_HEIGHT, 0);}
+std::unique_ptr<SfxPoolItem> SvxAdjustItem::CreateDefault() { return o3tl::make_unique<SvxAdjustItem>(SvxAdjust::Left, 0);}
+std::unique_ptr<SfxPoolItem> SvxWidowsItem::CreateDefault() { return o3tl::make_unique<SvxWidowsItem>(0, 0);}
+std::unique_ptr<SfxPoolItem> SvxOrphansItem::CreateDefault() { return o3tl::make_unique<SvxOrphansItem>(0, 0);}
+std::unique_ptr<SfxPoolItem> SvxHyphenZoneItem::CreateDefault() { return o3tl::make_unique<SvxHyphenZoneItem>(false, 0);}
+std::unique_ptr<SfxPoolItem> SvxTabStopItem::CreateDefault() { return o3tl::make_unique<SvxTabStopItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxFormatSplitItem::CreateDefault() { return o3tl::make_unique<SvxFormatSplitItem>(false, 0);}
+std::unique_ptr<SfxPoolItem> SvxPageModelItem::CreateDefault() { return o3tl::make_unique<SvxPageModelItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxParaVertAlignItem::CreateDefault() { return o3tl::make_unique<SvxParaVertAlignItem>(Align::Automatic, 0);}
 
 
 enum class SvxSpecialLineSpace
@@ -219,9 +219,9 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-SfxPoolItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxLineSpacingItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxLineSpacingItem( *this );
+    return o3tl::make_unique<SvxLineSpacingItem>( *this );
 }
 
 
@@ -341,9 +341,9 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxAdjustItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxAdjustItem( *this );
+    return o3tl::make_unique<SvxAdjustItem>( *this );
 }
 
 
@@ -406,11 +406,11 @@ sal_uInt16 SvxAdjustItem::GetVersion( sal_uInt16 nFileVersion ) const
 }
 
 
-SfxPoolItem* SvxAdjustItem::Create(SvStream& rStrm, sal_uInt16 nVersion) const
+std::unique_ptr<SfxPoolItem> SvxAdjustItem::CreateInternal(SvStream& rStrm, sal_uInt16 nVersion) const
 {
     char eAdjustment;
     rStrm.ReadChar( eAdjustment );
-    SvxAdjustItem *pRet = new SvxAdjustItem( static_cast<SvxAdjust>(eAdjustment), Which() );
+    std::unique_ptr<SvxAdjustItem> pRet(new SvxAdjustItem( static_cast<SvxAdjust>(eAdjustment), Which() ));
     if( nVersion >= ADJUST_LASTBLOCK_VERSION )
     {
         sal_Int8 nFlags;
@@ -448,9 +448,9 @@ SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
 }
 
 
-SfxPoolItem* SvxWidowsItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxWidowsItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxWidowsItem( *this );
+    return o3tl::make_unique<SvxWidowsItem>( *this );
 }
 
 
@@ -494,9 +494,9 @@ SvxOrphansItem::SvxOrphansItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
 }
 
 
-SfxPoolItem* SvxOrphansItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxOrphansItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxOrphansItem( *this );
+    return o3tl::make_unique<SvxOrphansItem>( *this );
 }
 
 
@@ -607,9 +607,9 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxHyphenZoneItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxHyphenZoneItem( *this );
+    return o3tl::make_unique<SvxHyphenZoneItem>( *this );
 }
 
 
@@ -909,9 +909,9 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxTabStopItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxTabStopItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxTabStopItem( *this );
+    return o3tl::make_unique<SvxTabStopItem>( *this );
 }
 
 
@@ -982,9 +982,9 @@ SvxFormatSplitItem::~SvxFormatSplitItem()
 {
 }
 
-SfxPoolItem* SvxFormatSplitItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxFormatSplitItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxFormatSplitItem( *this );
+    return o3tl::make_unique<SvxFormatSplitItem>( *this );
 }
 
 
@@ -1005,9 +1005,9 @@ bool SvxFormatSplitItem::GetPresentation
 }
 
 
-SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxPageModelItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxPageModelItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxPageModelItem( *this ));
 }
 
 
@@ -1083,9 +1083,9 @@ SvxScriptSpaceItem::SvxScriptSpaceItem( bool bOn, const sal_uInt16 nId )
 {
 }
 
-SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxScriptSpaceItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxScriptSpaceItem( *this );
+    return o3tl::make_unique<SvxScriptSpaceItem>( *this );
 }
 
 sal_uInt16  SvxScriptSpaceItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1116,9 +1116,9 @@ SvxHangingPunctuationItem::SvxHangingPunctuationItem(
 {
 }
 
-SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxHangingPunctuationItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxHangingPunctuationItem( *this );
+    return o3tl::make_unique<SvxHangingPunctuationItem>( *this );
 }
 
 sal_uInt16 SvxHangingPunctuationItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1149,9 +1149,9 @@ SvxForbiddenRuleItem::SvxForbiddenRuleItem(
 {
 }
 
-SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxForbiddenRuleItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxForbiddenRuleItem( *this );
+    return o3tl::make_unique<SvxForbiddenRuleItem>( *this );
 }
 
 sal_uInt16 SvxForbiddenRuleItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1185,9 +1185,9 @@ SvxParaVertAlignItem::SvxParaVertAlignItem( Align nValue,
 {
 }
 
-SfxPoolItem* SvxParaVertAlignItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxParaVertAlignItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxParaVertAlignItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxParaVertAlignItem( *this ));
 }
 
 sal_uInt16 SvxParaVertAlignItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1245,9 +1245,9 @@ SvxParaGridItem::SvxParaGridItem( bool bOn, const sal_uInt16 nId )
 {
 }
 
-SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxParaGridItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxParaGridItem( *this );
+    return o3tl::make_unique<SvxParaGridItem>( *this );
 }
 
 sal_uInt16  SvxParaGridItem::GetVersion( sal_uInt16 nFFVer ) const

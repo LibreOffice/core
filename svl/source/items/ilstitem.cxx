@@ -24,9 +24,10 @@
 #include <comphelper/sequence.hxx>
 
 #include <svl/ilstitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 
-SfxPoolItem* SfxIntegerListItem::CreateDefault() { return new SfxIntegerListItem; }
+std::unique_ptr<SfxPoolItem> SfxIntegerListItem::CreateDefault() { return o3tl::make_unique<SfxIntegerListItem>(); }
 
 SfxIntegerListItem::SfxIntegerListItem()
 {
@@ -59,9 +60,9 @@ bool SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
     return rItem.m_aList == m_aList;
 }
 
-SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SfxIntegerListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SfxIntegerListItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxIntegerListItem( *this ));
 }
 
 bool SfxIntegerListItem::PutValue  ( const css::uno::Any& rVal, sal_uInt8 )

@@ -35,7 +35,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxPostureItem : public SfxEnumItem<FontItalic>
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxPostureItem( const FontItalic ePost /*= ITALIC_NONE*/,
                     const sal_uInt16 nId  );
@@ -46,8 +46,8 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem>    CreateInternal(SvStream &, sal_uInt16) const override;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const override;
     OUString                GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetValueCount() const override;

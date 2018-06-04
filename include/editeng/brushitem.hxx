@@ -57,12 +57,13 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     mutable bool        bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
+
+public:
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
+
     // only used by Create
     SvxBrushItem( SvStream& rStrm,
                   sal_uInt16 nVersion, sal_uInt16 nWhich  );
-
-public:
-    static SfxPoolItem* CreateDefault();
 
     explicit SvxBrushItem( sal_uInt16 nWhich );
     SvxBrushItem( const Color& rColor, sal_uInt16 nWhich  );
@@ -78,7 +79,6 @@ public:
 
     virtual ~SvxBrushItem() override;
 
-public:
     // check if it's used
     bool isUsed() const;
 
@@ -91,8 +91,8 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nVersion ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal( SvStream&, sal_uInt16 nVersion ) const override;
     virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const override;
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const override;
 

@@ -942,11 +942,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         pTargetFrame = &SfxViewFrame::Current()->GetFrame();
 
     // check if caller has set a callback
-    std::unique_ptr<SfxLinkItem> pLinkItem;
+    const SfxLinkItem* pLinkOldItem = rReq.GetArg<SfxLinkItem>(SID_DONELINK);
 
     // remove from Itemset, because it confuses the parameter transformation
-    if (auto pParamLinkItem = rReq.GetArg<SfxLinkItem>(SID_DONELINK))
-        pLinkItem.reset( static_cast<SfxLinkItem*>( pParamLinkItem->Clone() ) );
+    std::unique_ptr<SfxLinkItem> pLinkItem;
+    if ( pLinkOldItem )
+        pLinkItem = Clone(*pLinkOldItem);
 
     rReq.RemoveItem( SID_DONELINK );
 

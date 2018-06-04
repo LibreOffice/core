@@ -10,6 +10,7 @@
 #include <sfx2/watermarkitem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <comphelper/propertysequence.hxx>
+#include <o3tl/make_unique.hxx>
 
 SfxWatermarkItem::SfxWatermarkItem()
 : SfxPoolItem( SID_WATERMARK )
@@ -21,9 +22,9 @@ SfxWatermarkItem::SfxWatermarkItem()
 {
 }
 
-SfxPoolItem* SfxWatermarkItem::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxWatermarkItem::CreateDefault()
 {
-    return new SfxWatermarkItem();
+    return o3tl::make_unique<SfxWatermarkItem>();
 }
 
 bool SfxWatermarkItem::operator==( const SfxPoolItem& rCmp ) const
@@ -36,9 +37,9 @@ bool SfxWatermarkItem::operator==( const SfxPoolItem& rCmp ) const
              m_nColor == static_cast<const SfxWatermarkItem&>(rCmp).m_nColor );
 }
 
-SfxPoolItem* SfxWatermarkItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxWatermarkItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxWatermarkItem(*this);
+    return o3tl::make_unique<SfxWatermarkItem>(*this);
 }
 
 bool SfxWatermarkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const

@@ -29,9 +29,9 @@
 class SdrCaptionGapItem: public SdrMetricItem {
 public:
     SdrCaptionGapItem(long nGap=0)  : SdrMetricItem(SDRATTR_CAPTIONGAP,nGap) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrCaptionGapItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrCaptionGapItem(*this));
     }
 };
 

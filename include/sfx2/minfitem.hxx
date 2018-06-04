@@ -35,7 +35,7 @@ class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
     OUString const          aCommentText;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SfxMacroInfoItem( sal_uInt16 nWhich,
                     const BasicManager* pMgr,
                     const OUString &rLibName,
@@ -43,7 +43,7 @@ public:
                     const OUString &rMethodName,
                     const OUString &rComment);
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     const OUString&         GetMethod() const
                                 { return aMethodName; }

@@ -43,7 +43,7 @@ using namespace utl;
 using namespace ::com::sun::star::uno;
 
 
-SfxPoolItem* SwEnvItem::CreateDefault() { return new SwEnvItem; }
+std::unique_ptr<SfxPoolItem> SwEnvItem::CreateDefault() { return o3tl::make_unique<SwEnvItem>(); }
 
 OUString MakeSender()
 {
@@ -147,9 +147,9 @@ bool SwEnvItem::operator ==(const SfxPoolItem& rItem) const
            m_nShiftDown      == rEnv.m_nShiftDown;
 }
 
-SfxPoolItem* SwEnvItem::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SwEnvItem::CloneInternal(SfxItemPool*) const
 {
-    return new SwEnvItem(*this);
+    return o3tl::make_unique<SwEnvItem>(*this);
 }
 
 SwEnvCfgItem::SwEnvCfgItem() :

@@ -34,7 +34,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxFormatSplitItem : public SfxBoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     virtual ~SvxFormatSplitItem() override;
 
     inline SvxFormatSplitItem( const bool bSplit /*= true*/,
@@ -46,7 +46,7 @@ public:
     SvxFormatSplitItem & operator =(SvxFormatSplitItem &&) = delete; // due to SfxBoolItem
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

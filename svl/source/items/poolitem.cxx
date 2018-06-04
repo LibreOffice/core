@@ -24,6 +24,7 @@
 #include <unotools/syslocale.hxx>
 #include <osl/diagnose.h>
 #include <libxml/xmlwriter.h>
+#include <o3tl/make_unique.hxx>
 #include <typeinfo>
 
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
@@ -48,10 +49,10 @@ bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SfxPoolItem::CreateInternal(SvStream &, sal_uInt16) const
 {
     assert(!"this item is not serialisable");
-    return Clone();
+    return CloneInternal();
 }
 
 
@@ -129,7 +130,7 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 std::unique_ptr<SfxPoolItem> SfxPoolItem::CloneSetWhich( sal_uInt16 nNewWhich ) const
 {
-    std::unique_ptr<SfxPoolItem> pItem(Clone());
+    std::unique_ptr<SfxPoolItem> pItem = CloneInternal();
     pItem->SetWhich(nNewWhich);
     return pItem;
 }
@@ -139,9 +140,9 @@ bool SfxPoolItem::IsVoidItem() const
     return false;
 }
 
-SfxPoolItem* SfxVoidItem::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxVoidItem::CreateDefault()
 {
-    return new SfxVoidItem(0);
+    return o3tl::make_unique<SfxVoidItem>(0);
 }
 
 SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
@@ -177,9 +178,9 @@ void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxVoidItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxVoidItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SfxVoidItem(*this));
 }
 
 bool SfxVoidItem::IsVoidItem() const

@@ -867,7 +867,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 const SfxPoolItem* pItem = GetItem( rOldSet, SID_SW_FOLLOW_TEXT_FLOW);
                 if(pItem)
                 {
-                    std::unique_ptr<SfxBoolItem> pFollow(static_cast<SfxBoolItem*>(pItem->Clone()));
+                    std::unique_ptr<SfxBoolItem> pFollow(Clone(*static_cast<const SfxBoolItem*>(pItem)));
                     pFollow->SetValue(m_xFollowCB->get_active());
                     bModified |= nullptr != rSet->Put(*pFollow);
                 }

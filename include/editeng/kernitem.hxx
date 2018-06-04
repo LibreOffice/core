@@ -37,12 +37,12 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxKerningItem : public SfxInt16Item
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxKerningItem( const short nKern /*= 0*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual void            ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool            HasMetrics() const override;
 

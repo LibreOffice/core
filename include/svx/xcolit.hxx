@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC XColorItem : public NameOrIndex
     Color   aColor;
 
 public:
-            static SfxPoolItem* CreateDefault();
+            static std::unique_ptr<SfxPoolItem> CreateDefault();
             XColorItem() {}
             XColorItem(sal_uInt16 nWhich, sal_Int32 nIndex, const Color& rTheColor);
 
@@ -47,7 +47,7 @@ public:
             XColorItem(const XColorItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 
     const Color&    GetColorValue() const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }

@@ -63,7 +63,7 @@ enum class MediaState
 class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit                MediaItem( sal_uInt16 i_nWhich = 0,
                                        AVMediaSetMask nMaskSet = AVMediaSetMask::NONE );
@@ -71,7 +71,7 @@ public:
     virtual                 ~MediaItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
     virtual bool            GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreUnit,
                                                  MapUnit ePresUnit,

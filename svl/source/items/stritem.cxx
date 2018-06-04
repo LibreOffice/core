@@ -20,6 +20,7 @@
 #include <svl/stritem.hxx>
 #include <stringio.hxx>
 #include <libxml/xmlwriter.h>
+#include <o3tl/make_unique.hxx>
 
 //  class SfxStringItem
 
@@ -33,9 +34,9 @@ SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
 
 
 // virtual
-SfxPoolItem * SfxStringItem::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SfxStringItem::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
-    return new SfxStringItem(Which(), rStream);
+    return o3tl::make_unique<SfxStringItem>(Which(), rStream);
 }
 
 // virtual
@@ -46,9 +47,9 @@ SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
 }
 
 // virtual
-SfxPoolItem * SfxStringItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxStringItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxStringItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SfxStringItem(*this));
 }
 
 void SfxStringItem::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -59,8 +60,8 @@ void SfxStringItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* SfxStringItem::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxStringItem::CreateDefault()
 {
-    return new SfxStringItem();
+    return o3tl::make_unique<SfxStringItem>();
 };
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -91,7 +91,7 @@ struct CustomProperty
         m_sName( sName ), m_aValue( rValue ) {}
 };
 
-SfxPoolItem* SfxDocumentInfoItem::CreateDefault() { return new SfxDocumentInfoItem; }
+std::unique_ptr<SfxPoolItem> SfxDocumentInfoItem::CreateDefault() { return o3tl::make_unique<SfxDocumentInfoItem>(); }
 
 const sal_uInt16 HI_NAME = 1;
 const sal_uInt16 HI_TYPE = 2;
@@ -301,9 +301,9 @@ SfxDocumentInfoItem::~SfxDocumentInfoItem()
 }
 
 
-SfxPoolItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SfxDocumentInfoItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SfxDocumentInfoItem( *this );
+    return o3tl::make_unique<SfxDocumentInfoItem>( *this );
 }
 
 

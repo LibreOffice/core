@@ -898,7 +898,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
                 bNotify = typeid(*pState) != typeid(*pLastState) || *pState != *pLastState;
                 delete pLastState;
             }
-            pLastState = !IsInvalidItem(pState) ? pState->Clone() : pState;
+            pLastState = !IsInvalidItem(pState) ? Clone(*pState).release() : pState;
             bVisible = true;
         }
         else

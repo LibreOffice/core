@@ -37,14 +37,14 @@ private:
     GraphicObject   maGraphicObject;
 
 public:
-            static SfxPoolItem* CreateDefault();
+            static std::unique_ptr<SfxPoolItem> CreateDefault();
             XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) {}
             XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject);
             XFillBitmapItem( const GraphicObject& rGraphicObject );
             XFillBitmapItem( const XFillBitmapItem& rItem );
 
     virtual bool            operator==( const SfxPoolItem& rItem ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

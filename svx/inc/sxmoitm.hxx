@@ -27,9 +27,9 @@
 class SdrMeasureOverhangItem: public SdrMetricItem {
 public:
     SdrMeasureOverhangItem(long nVal): SdrMetricItem(SDRATTR_MEASUREOVERHANG,nVal)  {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrMeasureOverhangItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrMeasureOverhangItem(*this));
     }
 };
 

@@ -21,6 +21,7 @@
 #include <unomid.h>
 #include <osl/diagnose.h>
 #include <libxml/xmlwriter.h>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -44,9 +45,9 @@ bool SwFormatWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
                                                 GetWrapInfluenceOnObjPos() );
 }
 
-SfxPoolItem* SwFormatWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwFormatWrapInfluenceOnObjPos::CloneInternal( SfxItemPool * ) const
 {
-    return new SwFormatWrapInfluenceOnObjPos(*this);
+    return o3tl::make_unique<SwFormatWrapInfluenceOnObjPos>(*this);
 }
 
 bool SwFormatWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const

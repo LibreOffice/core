@@ -135,14 +135,14 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         // from now on this descriptor is responsible for the content nodes!
         const SfxPoolItem* pItem;
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
-        std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+        std::unique_ptr<SfxPoolItem> pNewItem = Clone(*pItem);
         SwFrameFormat* pNewFormat = static_cast<SwFormatHeader*>(pNewItem.get())->GetHeaderFormat();
         pNewFormat->SetFormatAttr( rSourceHead.GetHeaderFormat()->GetContent() );
 
         // Let the source page description point to zero node position,
         // it loses the responsible and can be destroyed without removing the content nodes.
         rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
-        pNewItem.reset(pItem->Clone());
+        pNewItem = Clone(*pItem);
         pNewFormat = static_cast<SwFormatHeader*>(pNewItem.get())->GetHeaderFormat();
         pNewFormat->SetFormatAttr( SwFormatContent() );
 
@@ -151,11 +151,11 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             // Same procedure for unshared header..
             const SwFormatHeader& rSourceLeftHead = rSource.GetLeft().GetHeader();
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
-            pNewItem.reset(pItem->Clone());
+            pNewItem = Clone(*pItem);
             pNewFormat = static_cast<SwFormatHeader*>(pNewItem.get())->GetHeaderFormat();
             pNewFormat->SetFormatAttr( rSourceLeftHead.GetHeaderFormat()->GetContent() );
             rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
-            pNewItem.reset(pItem->Clone());
+            pNewItem = Clone(*pItem);
             pNewFormat = static_cast<SwFormatHeader*>(pNewItem.get())->GetHeaderFormat();
             pNewFormat->SetFormatAttr( SwFormatContent() );
         }
@@ -164,11 +164,11 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             // Same procedure for unshared header..
             const SwFormatHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
-            pNewItem.reset(pItem->Clone());
+            pNewItem = Clone(*pItem);
             pNewFormat = static_cast<SwFormatHeader*>(pNewItem.get())->GetHeaderFormat();
             pNewFormat->SetFormatAttr( rSourceFirstMasterHead.GetHeaderFormat()->GetContent() );
             rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
-            pNewItem.reset(pItem->Clone());
+            pNewItem = Clone(*pItem);
             pNewFormat = static_cast<SwFormatHeader*>(pNewItem.get())->GetHeaderFormat();
             pNewFormat->SetFormatAttr( SwFormatContent() );
         }
@@ -181,12 +181,12 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
     const SfxPoolItem* pItem;
     rDest.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
-    std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+    std::unique_ptr<SfxPoolItem> pNewItem = Clone(*pItem);
     SwFrameFormat *pNewFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
     pNewFormat->SetFormatAttr( rSourceFoot.GetFooterFormat()->GetContent() );
 
     rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
-    pNewItem.reset(pItem->Clone());
+    pNewItem = Clone(*pItem);
     pNewFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
     pNewFormat->SetFormatAttr( SwFormatContent() );
 
@@ -194,11 +194,11 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     {
         const SwFormatFooter& rSourceLeftFoot = rSource.GetLeft().GetFooter();
         rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
-        pNewItem.reset(pItem->Clone());
+        pNewItem = Clone(*pItem);
         pNewFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
         pNewFormat->SetFormatAttr( rSourceLeftFoot.GetFooterFormat()->GetContent() );
         rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
-        pNewItem.reset(pItem->Clone());
+        pNewItem = Clone(*pItem);
         pNewFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
         pNewFormat->SetFormatAttr( SwFormatContent() );
     }
@@ -207,11 +207,11 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
     const SwFormatFooter& rSourceFirstMasterFoot = rSource.GetFirstMaster().GetFooter();
     rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
-    pNewItem.reset(pItem->Clone());
+    pNewItem = Clone(*pItem);
     pNewFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
     pNewFormat->SetFormatAttr( rSourceFirstMasterFoot.GetFooterFormat()->GetContent() );
     rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
-    pNewItem.reset(pItem->Clone());
+    pNewItem = Clone(*pItem);
     pNewFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
     pNewFormat->SetFormatAttr( SwFormatContent() );
 }

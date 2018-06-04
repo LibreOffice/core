@@ -21,6 +21,7 @@
 #include <tools/stream.hxx>
 #include <svl/cintitem.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 // virtual
@@ -62,11 +63,11 @@ bool CntByteItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> CntByteItem::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
     short nTheValue = 0;
     rStream.ReadInt16( nTheValue );
-    return new CntByteItem(Which(), sal_uInt8(nTheValue));
+    return o3tl::make_unique<CntByteItem>(Which(), sal_uInt8(nTheValue));
 }
 
 // virtual
@@ -77,9 +78,9 @@ SvStream & CntByteItem::Store(SvStream & rStream, sal_uInt16) const
 }
 
 // virtual
-SfxPoolItem * CntByteItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> CntByteItem::CloneInternal(SfxItemPool *) const
 {
-    return new CntByteItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new CntByteItem(*this));
 }
 
 
@@ -133,9 +134,9 @@ bool CntUInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> CntUInt16Item::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
-    return new CntUInt16Item(Which(), rStream);
+    return o3tl::make_unique<CntUInt16Item>(Which(), rStream);
 }
 
 // virtual
@@ -146,9 +147,9 @@ SvStream & CntUInt16Item::Store(SvStream &rStream, sal_uInt16) const
 }
 
 // virtual
-SfxPoolItem * CntUInt16Item::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> CntUInt16Item::CloneInternal(SfxItemPool *) const
 {
-    return new CntUInt16Item(*this);
+    return std::unique_ptr<SfxPoolItem>(new CntUInt16Item(*this));
 }
 
 
@@ -199,9 +200,9 @@ bool CntInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> CntInt32Item::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
-    return new CntInt32Item(Which(), rStream);
+    return o3tl::make_unique<CntInt32Item>(Which(), rStream);
 }
 
 // virtual
@@ -212,9 +213,9 @@ SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
 }
 
 // virtual
-SfxPoolItem * CntInt32Item::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> CntInt32Item::CloneInternal(SfxItemPool *) const
 {
-    return new CntInt32Item(*this);
+    return std::unique_ptr<SfxPoolItem>(new CntInt32Item(*this));
 }
 
 
@@ -269,9 +270,9 @@ bool CntUInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> CntUInt32Item::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
-    return new CntUInt32Item(Which(), rStream);
+    return o3tl::make_unique<CntUInt32Item>(Which(), rStream);
 }
 
 // virtual
@@ -282,9 +283,9 @@ SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
 }
 
 // virtual
-SfxPoolItem * CntUInt32Item::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> CntUInt32Item::CloneInternal(SfxItemPool *) const
 {
-    return new CntUInt32Item(*this);
+    return std::unique_ptr<SfxPoolItem>(new CntUInt32Item(*this));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,13 +36,13 @@
 class EDITENG_DLLPUBLIC SvxPaperBinItem : public SfxByteItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit inline SvxPaperBinItem( const sal_uInt16 nId ,
                             const sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

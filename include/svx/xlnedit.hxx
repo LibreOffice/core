@@ -34,14 +34,14 @@ class SVX_DLLPUBLIC XLineEndItem : public NameOrIndex
     basegfx::B2DPolyPolygon         maPolyPolygon;
 
 public:
-            static SfxPoolItem* CreateDefault();
+            static std::unique_ptr<SfxPoolItem> CreateDefault();
             XLineEndItem(sal_Int32 nIndex = -1);
             XLineEndItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineEndItem(const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineEndItem(const XLineEndItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

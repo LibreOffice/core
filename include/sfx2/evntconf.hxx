@@ -80,7 +80,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     const SfxEventNamesList& GetEvents() const { return aEventsList;}

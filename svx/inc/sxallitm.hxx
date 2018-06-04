@@ -25,27 +25,27 @@
 class SdrAllPositionXItem: public SdrMetricItem {
 public:
     SdrAllPositionXItem(long nPosX=0): SdrMetricItem(SDRATTR_ALLPOSITIONX,nPosX) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrAllPositionXItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrAllPositionXItem(*this));
     }
 };
 
 class SdrAllPositionYItem: public SdrMetricItem {
 public:
     SdrAllPositionYItem(long nPosY=0): SdrMetricItem(SDRATTR_ALLPOSITIONY,nPosY) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrAllPositionYItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrAllPositionYItem(*this));
     }
 };
 
 class SdrAllSizeWidthItem: public SdrMetricItem {
 public:
     SdrAllSizeWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_ALLSIZEWIDTH,nWdt)  {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrAllSizeWidthItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrAllSizeWidthItem(*this));
     }
 };
 
@@ -55,9 +55,9 @@ public:
 class SdrAllSizeHeightItem: public SdrMetricItem {
 public:
     SdrAllSizeHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_ALLSIZEHEIGHT,nHgt)  {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrAllSizeHeightItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrAllSizeHeightItem(*this));
     }
 };
 

@@ -28,7 +28,7 @@
 class EDITENG_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem<SvxCellHorJustify>
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxHorJustifyItem( const sal_uInt16 nId );
 
@@ -46,8 +46,8 @@ public:
 
     virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( sal_uInt16 nVal );
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal( SvStream& rStream, sal_uInt16 nVer ) const override;
 
     SvxHorJustifyItem& operator=(const SvxHorJustifyItem& rHorJustify)
             {
@@ -61,7 +61,7 @@ public:
 class EDITENG_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem<SvxCellVerJustify>
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxVerJustifyItem( const sal_uInt16 nId  );
 
@@ -79,8 +79,8 @@ public:
 
     virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellVerJustify nVal );
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal( SvStream& rStream, sal_uInt16 nVer ) const override;
 
     SvxVerJustifyItem& operator=(const SvxVerJustifyItem& rVerJustify)
             {
@@ -108,7 +108,7 @@ public:
 
     virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellJustifyMethod nVal );
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 
 #endif

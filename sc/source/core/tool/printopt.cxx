@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 
 #include <printopt.hxx>
 #include <miscuno.hxx>
@@ -66,9 +67,9 @@ bool ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpPrintItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScTpPrintItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScTpPrintItem( *this );
+    return o3tl::make_unique<ScTpPrintItem>( *this );
 }
 
 #define CFGPATH_PRINT           "Office.Calc/Print"

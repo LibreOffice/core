@@ -28,9 +28,9 @@
 class SdrMeasureTextAutoAngleItem: public SdrYesNoItem {
 public:
     SdrMeasureTextAutoAngleItem(bool bOn=true): SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,bOn) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrMeasureTextAutoAngleItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrMeasureTextAutoAngleItem(*this));
     }
 };
 
@@ -39,9 +39,9 @@ public:
 class SdrMeasureTextAutoAngleViewItem: public SdrAngleItem {
 public:
     SdrMeasureTextAutoAngleViewItem(long nVal=31500): SdrAngleItem(SDRATTR_MEASURETEXTAUTOANGLEVIEW,nVal)  {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrMeasureTextAutoAngleViewItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrMeasureTextAutoAngleViewItem(*this));
     }
 };
 

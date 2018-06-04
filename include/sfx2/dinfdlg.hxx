@@ -86,7 +86,7 @@ private:
     css::uno::Sequence< css::document::CmisProperty > m_aCmisProperties;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SfxDocumentInfoItem();
     SfxDocumentInfoItem( const OUString &rFileName,
         const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
@@ -160,7 +160,7 @@ public:
                         GetCmisProperties() const { return m_aCmisProperties;}
 
     void        SetCmisProperties(const css::uno::Sequence< css::document::CmisProperty >& cmisProps );
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

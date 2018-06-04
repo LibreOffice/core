@@ -135,9 +135,9 @@ bool SwFormatFootnote::operator==( const SfxPoolItem& rAttr ) const
            m_bEndNote == static_cast<const SwFormatFootnote&>(rAttr).m_bEndNote;
 }
 
-SfxPoolItem* SwFormatFootnote::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatFootnote::CloneInternal( SfxItemPool* ) const
 {
-    SwFormatFootnote* pNew  = new SwFormatFootnote;
+    std::unique_ptr<SwFormatFootnote> pNew(new SwFormatFootnote);
     pNew->m_aNumber = m_aNumber;
     pNew->m_nNumber = m_nNumber;
     pNew->m_bEndNote = m_bEndNote;

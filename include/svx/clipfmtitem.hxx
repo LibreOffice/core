@@ -36,10 +36,10 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipboardFormatItem : public SfxPoolItem
 {
 protected:
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SvxClipboardFormatItem( sal_uInt16 nId );
     SvxClipboardFormatItem( const SvxClipboardFormatItem& );
     virtual ~SvxClipboardFormatItem() override;

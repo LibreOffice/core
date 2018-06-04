@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <svl/rngitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
@@ -54,18 +55,18 @@ bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SfxRangeItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxRangeItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxRangeItem( Which(), nFrom, nTo );
+    return std::unique_ptr<SfxPoolItem>(new SfxRangeItem( Which(), nFrom, nTo ));
 }
 
 
-SfxPoolItem* SfxRangeItem::Create(SvStream &rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SfxRangeItem::CreateInternal(SvStream &rStream, sal_uInt16) const
 {
     sal_uInt16 nVon(0), nBis(0);
     rStream.ReadUInt16( nVon );
     rStream.ReadUInt16( nBis );
-    return new SfxRangeItem( Which(), nVon, nBis );
+    return o3tl::make_unique<SfxRangeItem>( Which(), nVon, nBis );
 }
 
 

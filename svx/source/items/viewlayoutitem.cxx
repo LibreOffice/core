@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 
 
-SfxPoolItem* SvxViewLayoutItem::CreateDefault() { return new SvxViewLayoutItem; }
+std::unique_ptr<SfxPoolItem> SvxViewLayoutItem::CreateDefault() { return o3tl::make_unique<SvxViewLayoutItem>(); }
 
 #define VIEWLAYOUT_PARAM_COLUMNS    "Columns"
 #define VIEWLAYOUT_PARAM_BOOKMODE   "BookMode"
@@ -57,9 +57,9 @@ SvxViewLayoutItem::~SvxViewLayoutItem()
 }
 
 
-SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SvxViewLayoutItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SvxViewLayoutItem( *this );
+    return o3tl::make_unique<SvxViewLayoutItem>( *this );
 }
 
 

@@ -32,10 +32,10 @@
 class SVX_DLLPUBLIC XFormTextStartItem : public SfxMetricItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             XFormTextStartItem(long nStart = 0);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

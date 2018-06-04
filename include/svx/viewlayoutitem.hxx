@@ -29,7 +29,7 @@ class SVX_DLLPUBLIC SvxViewLayoutItem: public SfxUInt16Item
     bool                    mbBookMode;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxViewLayoutItem( sal_uInt16 nColumns = 0, bool bBookMode = false, sal_uInt16 nWhich = SID_ATTR_VIEWLAYOUT );
     SvxViewLayoutItem( const SvxViewLayoutItem& );
@@ -40,7 +40,7 @@ public:
 
     // "purely virtual methods" from the SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override; // empty
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;   // empty
 };

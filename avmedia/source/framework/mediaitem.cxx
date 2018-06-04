@@ -37,6 +37,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <o3tl/make_unique.hxx>
 #include <mediamisc.hxx>
 
 using namespace ::com::sun::star;
@@ -44,7 +45,7 @@ using namespace ::com::sun::star;
 namespace avmedia
 {
 
-SfxPoolItem* MediaItem::CreateDefault() { return new MediaItem; }
+std::unique_ptr<SfxPoolItem> MediaItem::CreateDefault() { return o3tl::make_unique<MediaItem>(); }
 
 struct MediaItem::Impl
 {
@@ -111,9 +112,9 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
         && m_pImpl->m_eZoom == rOther.m_pImpl->m_eZoom;
 }
 
-SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> MediaItem::CloneInternal( SfxItemPool* ) const
 {
-    return new MediaItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new MediaItem( *this ));
 }
 
 bool MediaItem::GetPresentation( SfxItemPresentation,

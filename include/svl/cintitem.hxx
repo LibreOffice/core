@@ -47,11 +47,11 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream & rStream, sal_uInt16) const override;
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override;
 
     sal_uInt8 GetValue() const { return m_nValue; }
 
@@ -90,11 +90,11 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream & rStream, sal_uInt16) const override;
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override;
 
     sal_uInt16 GetValue() const { return m_nValue; }
 
@@ -133,11 +133,11 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream & rStream, sal_uInt16) const override;
 
     virtual SvStream & Store(SvStream &, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override;
 
     sal_Int32 GetValue() const { return m_nValue; }
 
@@ -176,11 +176,11 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream & rStream, sal_uInt16) const override;
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override;
 
     sal_uInt32 GetValue() const { return m_nValue; }
 

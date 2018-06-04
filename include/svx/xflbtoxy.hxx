@@ -28,7 +28,7 @@ class SVX_DLLPUBLIC XFillBmpTileOffsetXItem : public SfxUInt16Item
 public:
                             XFillBmpTileOffsetXItem( sal_uInt16 nOffX = 0 );
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    SVX_DLLPRIVATE virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreMetric,
@@ -41,7 +41,7 @@ class SVX_DLLPUBLIC XFillBmpTileOffsetYItem : public SfxUInt16Item
 public:
                             XFillBmpTileOffsetYItem( sal_uInt16 nOffX = 0 );
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    SVX_DLLPRIVATE virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreMetric,

@@ -55,13 +55,13 @@ public:
 
     SwEnvItem();
 
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SwEnvItem& operator =(const SwEnvItem& rItem);
     SwEnvItem(SwEnvItem const &) = default; // SfxPoolItem copy function dichotomy
 
     virtual bool operator ==(const SfxPoolItem& rItem) const override;
 
-    virtual SfxPoolItem*     Clone(SfxItemPool* = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* = nullptr) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };

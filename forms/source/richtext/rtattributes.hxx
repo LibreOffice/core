@@ -94,7 +94,7 @@ namespace frm
     inline void AttributeState::setItem( const SfxPoolItem* _pItem )
     {
         if ( _pItem )
-            pItemHandleItem.reset(_pItem->Clone());
+            pItemHandleItem = Clone(*_pItem);
         else
             pItemHandleItem.reset();
     }

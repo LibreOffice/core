@@ -104,17 +104,16 @@ private:
     void DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
         SwTextNode & i_rTargetTextNode);
 
-    explicit SwFormatMeta( const sal_uInt16 i_nWhich );
-
 public:
     /// takes ownership
     explicit SwFormatMeta( std::shared_ptr< ::sw::Meta > const & i_pMeta,
                         const sal_uInt16 i_nWhich );
+    explicit SwFormatMeta( const sal_uInt16 i_nWhich );
     virtual ~SwFormatMeta() override;
 
     /// SfxPoolItem
     virtual bool             operator==( const SfxPoolItem & ) const override;
-    virtual SfxPoolItem *    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     /// notify clients registered at m_pMeta that this meta is being (re-)moved
     void NotifyChangeTextNode(SwTextNode *const pTextNode);

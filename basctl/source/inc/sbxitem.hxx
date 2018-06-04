@@ -44,11 +44,11 @@ class SbxItem : public SfxPoolItem
     ItemType                m_eType;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, ItemType);
     SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType);
 
-    virtual SfxPoolItem* Clone(SfxItemPool *pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool *pPool = nullptr) const override;
     virtual bool operator==(const SfxPoolItem&) const override;
 
     ScriptDocument const& GetDocument () const { return m_aDocument; }

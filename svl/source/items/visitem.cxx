@@ -21,6 +21,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
@@ -68,9 +69,9 @@ bool SfxVisibilityItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SfxVisibilityItem::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
-    return new SfxVisibilityItem(Which(), rStream);
+    return o3tl::make_unique<SfxVisibilityItem>(Which(), rStream);
 }
 
 // virtual
@@ -81,9 +82,9 @@ SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
 }
 
 // virtual
-SfxPoolItem * SfxVisibilityItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxVisibilityItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxVisibilityItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SfxVisibilityItem(*this));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

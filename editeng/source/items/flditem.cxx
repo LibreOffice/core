@@ -299,9 +299,9 @@ SvxFieldItem::~SvxFieldItem()
 }
 
 
-SfxPoolItem* SvxFieldItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxFieldItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxFieldItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SvxFieldItem(*this));
 }
 
 

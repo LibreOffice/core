@@ -99,28 +99,28 @@ using namespace ::com::sun::star::text;
 
 bool SvxFontItem::bEnableStoreUnicodeNames = false;
 
-SfxPoolItem* SvxFontItem::CreateDefault() {return new SvxFontItem(0);}
-SfxPoolItem* SvxPostureItem::CreateDefault() { return new SvxPostureItem(ITALIC_NONE, 0);}
-SfxPoolItem* SvxWeightItem::CreateDefault() {return new SvxWeightItem(WEIGHT_NORMAL, 0);}
-SfxPoolItem* SvxFontHeightItem::CreateDefault() {return new SvxFontHeightItem(240, 100, 0);}
-SfxPoolItem* SvxUnderlineItem::CreateDefault() {return new SvxUnderlineItem(LINESTYLE_NONE, 0);}
-SfxPoolItem* SvxOverlineItem::CreateDefault() {return new SvxOverlineItem(LINESTYLE_NONE, 0);}
-SfxPoolItem* SvxCrossedOutItem::CreateDefault() {return new SvxCrossedOutItem(STRIKEOUT_NONE, 0);}
-SfxPoolItem* SvxShadowedItem::CreateDefault() {return new SvxShadowedItem(false, 0);}
-SfxPoolItem* SvxAutoKernItem::CreateDefault() {return new SvxAutoKernItem(false, 0);}
-SfxPoolItem* SvxWordLineModeItem::CreateDefault() {return new SvxWordLineModeItem(false, 0);}
-SfxPoolItem* SvxContourItem::CreateDefault() {return new SvxContourItem(false, 0);}
-SfxPoolItem* SvxColorItem::CreateDefault() {return new SvxColorItem(0);}
-SfxPoolItem* SvxBackgroundColorItem::CreateDefault() {return new SvxBackgroundColorItem(0);}
-SfxPoolItem* SvxKerningItem::CreateDefault() {return new SvxKerningItem(0, 0);}
-SfxPoolItem* SvxCaseMapItem::CreateDefault() {return new SvxCaseMapItem(SvxCaseMap::NotMapped, 0);}
-SfxPoolItem* SvxEscapementItem::CreateDefault() {return new SvxEscapementItem(0);}
-SfxPoolItem* SvxLanguageItem::CreateDefault() {return new SvxLanguageItem(LANGUAGE_GERMAN, 0);}
-SfxPoolItem* SvxBlinkItem::CreateDefault() {return new SvxBlinkItem(false, 0);}
-SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkItem(FontEmphasisMark::NONE, 0);}
-SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0, false, 0);}
-SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, 0);}
-SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
+std::unique_ptr<SfxPoolItem> SvxFontItem::CreateDefault() {return o3tl::make_unique<SvxFontItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxPostureItem::CreateDefault() { return o3tl::make_unique<SvxPostureItem>(ITALIC_NONE, 0);}
+std::unique_ptr<SfxPoolItem> SvxWeightItem::CreateDefault() {return o3tl::make_unique<SvxWeightItem>(WEIGHT_NORMAL, 0);}
+std::unique_ptr<SfxPoolItem> SvxFontHeightItem::CreateDefault() {return o3tl::make_unique<SvxFontHeightItem>(240, 100, 0);}
+std::unique_ptr<SfxPoolItem> SvxUnderlineItem::CreateDefault() {return o3tl::make_unique<SvxUnderlineItem>(LINESTYLE_NONE, 0);}
+std::unique_ptr<SfxPoolItem> SvxOverlineItem::CreateDefault() {return o3tl::make_unique<SvxOverlineItem>(LINESTYLE_NONE, 0);}
+std::unique_ptr<SfxPoolItem> SvxCrossedOutItem::CreateDefault() {return o3tl::make_unique<SvxCrossedOutItem>(STRIKEOUT_NONE, 0);}
+std::unique_ptr<SfxPoolItem> SvxShadowedItem::CreateDefault() {return o3tl::make_unique<SvxShadowedItem>(false, 0);}
+std::unique_ptr<SfxPoolItem> SvxAutoKernItem::CreateDefault() {return o3tl::make_unique<SvxAutoKernItem>(false, 0);}
+std::unique_ptr<SfxPoolItem> SvxWordLineModeItem::CreateDefault() {return o3tl::make_unique<SvxWordLineModeItem>(false, 0);}
+std::unique_ptr<SfxPoolItem> SvxContourItem::CreateDefault() {return o3tl::make_unique<SvxContourItem>(false, 0);}
+std::unique_ptr<SfxPoolItem> SvxColorItem::CreateDefault() {return o3tl::make_unique<SvxColorItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxBackgroundColorItem::CreateDefault() {return o3tl::make_unique<SvxBackgroundColorItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxKerningItem::CreateDefault() {return o3tl::make_unique<SvxKerningItem>(0, 0);}
+std::unique_ptr<SfxPoolItem> SvxCaseMapItem::CreateDefault() {return o3tl::make_unique<SvxCaseMapItem>(SvxCaseMap::NotMapped, 0);}
+std::unique_ptr<SfxPoolItem> SvxEscapementItem::CreateDefault() {return o3tl::make_unique<SvxEscapementItem>(0);}
+std::unique_ptr<SfxPoolItem> SvxLanguageItem::CreateDefault() {return o3tl::make_unique<SvxLanguageItem>(LANGUAGE_GERMAN, 0);}
+std::unique_ptr<SfxPoolItem> SvxBlinkItem::CreateDefault() {return o3tl::make_unique<SvxBlinkItem>(false, 0);}
+std::unique_ptr<SfxPoolItem> SvxEmphasisMarkItem::CreateDefault() {return o3tl::make_unique<SvxEmphasisMarkItem>(FontEmphasisMark::NONE, 0);}
+std::unique_ptr<SfxPoolItem> SvxCharRotateItem::CreateDefault() {return o3tl::make_unique<SvxCharRotateItem>(0, false, 0);}
+std::unique_ptr<SfxPoolItem> SvxCharScaleWidthItem::CreateDefault() {return o3tl::make_unique<SvxCharScaleWidthItem>(100, 0);}
+std::unique_ptr<SfxPoolItem> SvxCharReliefItem::CreateDefault() {return o3tl::make_unique<SvxCharReliefItem>(FontRelief::NONE, 0);}
 
 
 // class SvxFontListItem -------------------------------------------------
@@ -141,9 +141,9 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
 }
 
 
-SfxPoolItem* SvxFontListItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxFontListItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxFontListItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxFontListItem( *this ));
 }
 
 
@@ -324,9 +324,9 @@ bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxFontItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxFontItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxFontItem( *this );
+    return o3tl::make_unique<SvxFontItem>( *this );
 }
 
 
@@ -355,7 +355,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 }
 
 
-SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxFontItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 _eFamily, eFontPitch, eFontTextEncoding;
     OUString aName, aStyle;
@@ -391,7 +391,7 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     }
 
 
-    return new SvxFontItem( static_cast<FontFamily>(_eFamily), aName, aStyle,
+    return o3tl::make_unique<SvxFontItem>( static_cast<FontFamily>(_eFamily), aName, aStyle,
                             static_cast<FontPitch>(eFontPitch), static_cast<rtl_TextEncoding>(eFontTextEncoding), Which() );
 }
 
@@ -429,9 +429,9 @@ SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const sal_uInt16 nId 
 }
 
 
-SfxPoolItem* SvxPostureItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxPostureItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxPostureItem( *this );
+    return o3tl::make_unique<SvxPostureItem>( *this );
 }
 
 
@@ -448,11 +448,11 @@ SvStream& SvxPostureItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 }
 
 
-SfxPoolItem* SvxPostureItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxPostureItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nPosture;
     rStrm.ReadUChar( nPosture );
-    return new SvxPostureItem( static_cast<FontItalic>(nPosture), Which() );
+    return o3tl::make_unique<SvxPostureItem>( static_cast<FontItalic>(nPosture), Which() );
 }
 
 
@@ -583,9 +583,9 @@ sal_uInt16 SvxWeightItem::GetValueCount() const
 }
 
 
-SfxPoolItem* SvxWeightItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxWeightItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxWeightItem( *this );
+    return o3tl::make_unique<SvxWeightItem>( *this );
 }
 
 
@@ -596,11 +596,11 @@ SvStream& SvxWeightItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) 
 }
 
 
-SfxPoolItem* SvxWeightItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxWeightItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nWeight;
     rStrm.ReadUChar( nWeight );
-    return new SvxWeightItem( static_cast<FontWeight>(nWeight), Which() );
+    return o3tl::make_unique<SvxWeightItem>( static_cast<FontWeight>(nWeight), Which() );
 }
 
 bool SvxWeightItem::GetPresentation
@@ -699,9 +699,9 @@ SvxFontHeightItem::SvxFontHeightItem( const sal_uLong nSz,
 }
 
 
-SfxPoolItem* SvxFontHeightItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxFontHeightItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxFontHeightItem( *this );
+    return o3tl::make_unique<SvxFontHeightItem>( *this );
 }
 
 
@@ -724,7 +724,7 @@ SvStream& SvxFontHeightItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) 
 }
 
 
-SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
+std::unique_ptr<SfxPoolItem> SvxFontHeightItem::CreateInternal( SvStream& rStrm,
                                                  sal_uInt16 nVersion ) const
 {
     sal_uInt16 nsize, nprop = 0;
@@ -748,7 +748,7 @@ SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
         nPropUnit = static_cast<MapUnit>(nTmp);
     }
 
-    SvxFontHeightItem* pItem = new SvxFontHeightItem( nsize, 100, Which() );
+    std::unique_ptr<SvxFontHeightItem> pItem(new SvxFontHeightItem( nsize, 100, Which() ));
     pItem->SetProp( nprop, nPropUnit );
     return pItem;
 }
@@ -1108,9 +1108,9 @@ void SvxTextLineItem::SetBoolValue( bool bVal )
 }
 
 
-SfxPoolItem* SvxTextLineItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxTextLineItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxTextLineItem( *this );
+    return o3tl::make_unique<SvxTextLineItem>( *this );
 }
 
 
@@ -1127,11 +1127,11 @@ SvStream& SvxTextLineItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ 
 }
 
 
-SfxPoolItem* SvxTextLineItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxTextLineItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxTextLineItem(  static_cast<FontLineStyle>(nState), Which() );
+    return o3tl::make_unique<SvxTextLineItem>(  static_cast<FontLineStyle>(nState), Which() );
 }
 
 
@@ -1234,17 +1234,17 @@ SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nI
 }
 
 
-SfxPoolItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxUnderlineItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxUnderlineItem( *this );
+    return o3tl::make_unique<SvxUnderlineItem>( *this );
 }
 
 
-SfxPoolItem* SvxUnderlineItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxUnderlineItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxUnderlineItem(  static_cast<FontLineStyle>(nState), Which() );
+    return o3tl::make_unique<SvxUnderlineItem>(  static_cast<FontLineStyle>(nState), Which() );
 }
 
 
@@ -1285,17 +1285,17 @@ SvxOverlineItem::SvxOverlineItem( const FontLineStyle eSt, const sal_uInt16 nId 
 }
 
 
-SfxPoolItem* SvxOverlineItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxOverlineItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxOverlineItem( *this );
+    return o3tl::make_unique<SvxOverlineItem>( *this );
 }
 
 
-SfxPoolItem* SvxOverlineItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxOverlineItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxOverlineItem(  static_cast<FontLineStyle>(nState), Which() );
+    return o3tl::make_unique<SvxOverlineItem>(  static_cast<FontLineStyle>(nState), Which() );
 }
 
 
@@ -1360,9 +1360,9 @@ sal_uInt16 SvxCrossedOutItem::GetValueCount() const
 }
 
 
-SfxPoolItem* SvxCrossedOutItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxCrossedOutItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxCrossedOutItem( *this );
+    return o3tl::make_unique<SvxCrossedOutItem>( *this );
 }
 
 
@@ -1373,11 +1373,11 @@ SvStream& SvxCrossedOutItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*
 }
 
 
-SfxPoolItem* SvxCrossedOutItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxCrossedOutItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 eCross;
     rStrm.ReadUChar( eCross );
-    return new SvxCrossedOutItem(  static_cast<FontStrikeout>(eCross), Which() );
+    return o3tl::make_unique<SvxCrossedOutItem>(  static_cast<FontStrikeout>(eCross), Which() );
 }
 
 
@@ -1452,9 +1452,9 @@ SvxShadowedItem::SvxShadowedItem( const bool bShadowed, const sal_uInt16 nId ) :
 }
 
 
-SfxPoolItem* SvxShadowedItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxShadowedItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxShadowedItem( *this );
+    return o3tl::make_unique<SvxShadowedItem>( *this );
 }
 
 
@@ -1465,11 +1465,11 @@ SvStream& SvxShadowedItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ 
 }
 
 
-SfxPoolItem* SvxShadowedItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxShadowedItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxShadowedItem( nState, Which() );
+    return o3tl::make_unique<SvxShadowedItem>( nState, Which() );
 }
 
 
@@ -1497,9 +1497,9 @@ SvxAutoKernItem::SvxAutoKernItem( const bool bAutoKern, const sal_uInt16 nId ) :
 }
 
 
-SfxPoolItem* SvxAutoKernItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxAutoKernItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxAutoKernItem( *this );
+    return o3tl::make_unique<SvxAutoKernItem>( *this );
 }
 
 
@@ -1528,9 +1528,9 @@ SvxWordLineModeItem::SvxWordLineModeItem( const bool bWordLineMode,
 }
 
 
-SfxPoolItem* SvxWordLineModeItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxWordLineModeItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxWordLineModeItem( *this );
+    return o3tl::make_unique<SvxWordLineModeItem>( *this );
 }
 
 
@@ -1558,9 +1558,9 @@ SvxContourItem::SvxContourItem( const bool bContoured, const sal_uInt16 nId ) :
 }
 
 
-SfxPoolItem* SvxContourItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxContourItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxContourItem( *this );
+    return o3tl::make_unique<SvxContourItem>( *this );
 }
 
 
@@ -1571,11 +1571,11 @@ SvStream& SvxContourItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 }
 
 
-SfxPoolItem* SvxContourItem::Create(SvStream& rStrm, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SvxContourItem::CreateInternal(SvStream& rStrm, sal_uInt16) const
 {
     bool bValue;
     rStrm.ReadCharAsBool( bValue );
-    return new SvxContourItem( bValue, Which() );
+    return o3tl::make_unique<SvxContourItem>( bValue, Which() );
 }
 
 
@@ -1609,9 +1609,9 @@ SvxBackgroundColorItem::SvxBackgroundColorItem( const Color& rCol,
 {
 }
 
-SfxPoolItem* SvxBackgroundColorItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxBackgroundColorItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxBackgroundColorItem(*this);
+    return o3tl::make_unique<SvxBackgroundColorItem>(*this);
 }
 
 bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1712,9 +1712,9 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     return (rVal >>= mColor);
 }
 
-SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxColorItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxColorItem( *this );
+    return o3tl::make_unique<SvxColorItem>( *this );
 }
 
 SvStream& SvxColorItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
@@ -1727,9 +1727,9 @@ SvStream& SvxColorItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
     return rStrm;
 }
 
-SfxPoolItem* SvxColorItem::Create(SvStream& rStrm, sal_uInt16 /*nVer*/ ) const
+std::unique_ptr<SfxPoolItem> SvxColorItem::CreateInternal(SvStream& rStrm, sal_uInt16 /*nVer*/ ) const
 {
-    return new SvxColorItem( rStrm, Which() );
+    return o3tl::make_unique<SvxColorItem>( rStrm, Which() );
 }
 
 bool SvxColorItem::GetPresentation
@@ -1758,9 +1758,9 @@ SvxKerningItem::SvxKerningItem( const short nKern, const sal_uInt16 nId ) :
 }
 
 
-SfxPoolItem* SvxKerningItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxKerningItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxKerningItem( *this );
+    return o3tl::make_unique<SvxKerningItem>( *this );
 }
 
 
@@ -1846,9 +1846,9 @@ sal_uInt16 SvxCaseMapItem::GetValueCount() const
 }
 
 
-SfxPoolItem* SvxCaseMapItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxCaseMapItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxCaseMapItem( *this );
+    return o3tl::make_unique<SvxCaseMapItem>( *this );
 }
 
 
@@ -1956,9 +1956,9 @@ bool SvxEscapementItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxEscapementItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxEscapementItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxEscapementItem( *this );
+    return o3tl::make_unique<SvxEscapementItem>( *this );
 }
 
 
@@ -2097,9 +2097,9 @@ sal_uInt16 SvxLanguageItem::GetValueCount() const
 }
 
 
-SfxPoolItem* SvxLanguageItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxLanguageItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxLanguageItem( *this );
+    return o3tl::make_unique<SvxLanguageItem>( *this );
 }
 
 
@@ -2166,9 +2166,9 @@ SvxNoHyphenItem::SvxNoHyphenItem( const sal_uInt16 nId ) :
 }
 
 
-SfxPoolItem* SvxNoHyphenItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxNoHyphenItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxNoHyphenItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxNoHyphenItem( *this ));
 }
 
 
@@ -2199,9 +2199,9 @@ SvxBlinkItem::SvxBlinkItem( const bool bBlink, const sal_uInt16 nId ) :
 }
 
 
-SfxPoolItem* SvxBlinkItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxBlinkItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxBlinkItem( *this );
+    return o3tl::make_unique<SvxBlinkItem>( *this );
 }
 
 
@@ -2230,9 +2230,9 @@ SvxEmphasisMarkItem::SvxEmphasisMarkItem( const FontEmphasisMark nValue,
 }
 
 
-SfxPoolItem* SvxEmphasisMarkItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxEmphasisMarkItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxEmphasisMarkItem( *this );
+    return o3tl::make_unique<SvxEmphasisMarkItem>( *this );
 }
 
 
@@ -2358,9 +2358,9 @@ bool SvxTwoLinesItem::operator==( const SfxPoolItem& rAttr ) const
            cEndBracket == static_cast<const SvxTwoLinesItem&>(rAttr).cEndBracket;
 }
 
-SfxPoolItem* SvxTwoLinesItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxTwoLinesItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxTwoLinesItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxTwoLinesItem( *this ));
 }
 
 bool SvxTwoLinesItem::QueryValue( css::uno::Any& rVal,
@@ -2464,9 +2464,9 @@ SvxTextRotateItem::SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nW)
 {
 }
 
-SfxPoolItem* SvxTextRotateItem::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SvxTextRotateItem::CloneInternal(SfxItemPool*) const
 {
-    return new SvxTextRotateItem(*this);
+    return o3tl::make_unique<SvxTextRotateItem>(*this);
 }
 
 sal_uInt16 SvxTextRotateItem::GetVersion(sal_uInt16 nFFVer) const
@@ -2554,9 +2554,9 @@ SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
 {
 }
 
-SfxPoolItem* SvxCharRotateItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxCharRotateItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxCharRotateItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxCharRotateItem( *this ));
 }
 
 sal_uInt16 SvxCharRotateItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -2648,9 +2648,9 @@ SvxCharScaleWidthItem::SvxCharScaleWidthItem( sal_uInt16 nValue,
 {
 }
 
-SfxPoolItem* SvxCharScaleWidthItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxCharScaleWidthItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxCharScaleWidthItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxCharScaleWidthItem( *this ));
 }
 
 
@@ -2708,9 +2708,9 @@ SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,
 {
 }
 
-SfxPoolItem* SvxCharReliefItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxCharReliefItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxCharReliefItem( *this );
+    return o3tl::make_unique<SvxCharReliefItem>( *this );
 }
 
 sal_uInt16 SvxCharReliefItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -2804,14 +2804,14 @@ SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
     GetItemSet().MergeRange( nComplex, nComplex );
 }
 
-SfxPoolItem* SvxScriptSetItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxScriptSetItem::CloneInternal( SfxItemPool * ) const
 {
-    SvxScriptSetItem* p = new SvxScriptSetItem( Which(), *GetItemSet().GetPool() );
+    std::unique_ptr<SvxScriptSetItem> p(new SvxScriptSetItem( Which(), *GetItemSet().GetPool() ));
     p->GetItemSet().Put( GetItemSet(), false );
     return p;
 }
 
-SfxPoolItem* SvxScriptSetItem::Create( SvStream &, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxScriptSetItem::CreateInternal( SvStream &, sal_uInt16 ) const
 {
     return nullptr;
 }
@@ -2881,7 +2881,7 @@ void SvxScriptSetItem::PutItemForScriptType( SvtScriptType nScriptType,
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );
 
-    std::unique_ptr<SfxPoolItem> pCpy(rItem.Clone());
+    std::unique_ptr<SfxPoolItem> pCpy(Clone(rItem));
     if( SvtScriptType::LATIN & nScriptType )
     {
         pCpy->SetWhich( nLatin );
@@ -3010,9 +3010,9 @@ bool SvxRsidItem::PutValue( const uno::Any& rVal, sal_uInt8 )
     return true;
 }
 
-SfxPoolItem* SvxRsidItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxRsidItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxRsidItem( *this );
+    return o3tl::make_unique<SvxRsidItem>( *this );
 }
 
 bool SvxRsidItem::GetPresentation

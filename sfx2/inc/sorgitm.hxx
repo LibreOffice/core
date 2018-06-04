@@ -29,10 +29,10 @@ private:
     OUString aLanguage;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SfxScriptOrganizerItem();
 
-    virtual SfxPoolItem*  Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
     virtual bool          operator==( const SfxPoolItem& ) const override;
     virtual bool          QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool          PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

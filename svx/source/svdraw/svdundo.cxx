@@ -1477,7 +1477,7 @@ void SdrUndoDelPage::queryFillBitmap(const SfxItemSet& rItemSet)
 {
     const SfxPoolItem *pItem = nullptr;
     if (rItemSet.GetItemState(XATTR_FILLBITMAP, false, &pItem) == SfxItemState::SET)
-        mpFillBitmapItem.reset(pItem->Clone());
+        mpFillBitmapItem = Clone(*pItem);
     if (rItemSet.GetItemState(XATTR_FILLSTYLE, false, &pItem) == SfxItemState::SET)
         mbHasFillBitmap = static_cast<const XFillStyleItem*>(pItem)->GetValue() == css::drawing::FillStyle_BITMAP;
 }

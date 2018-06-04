@@ -29,14 +29,14 @@ class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 {
     OUString aStyle;
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
                      const OUString &rStyle );
 
     const OUString&         GetStyleName() const { return aStyle; }
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual sal_uInt8       GetFlagCount() const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

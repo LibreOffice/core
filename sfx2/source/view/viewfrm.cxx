@@ -1612,9 +1612,9 @@ bool SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
     return dynamic_cast<const SfxViewFrameItem&>(rItem).pFrame == pFrame;
 }
 
-SfxPoolItem* SfxViewFrameItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxViewFrameItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxViewFrameItem( *this );
+    return o3tl::make_unique<SfxViewFrameItem>( *this );
 }
 
 void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )

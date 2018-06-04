@@ -28,7 +28,7 @@
 class SVX_DLLPUBLIC SdrAngleItem: public SfxInt32Item {
 public:
     SdrAngleItem(sal_uInt16 nId, sal_Int32 nAngle): SfxInt32Item(nId,nAngle) {}
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool=nullptr) const override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                  MapUnit eCoreMetric,

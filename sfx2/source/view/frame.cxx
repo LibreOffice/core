@@ -73,14 +73,14 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-SfxPoolItem* SfxUnoAnyItem::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxUnoAnyItem::CreateDefault()
 {
-    return new SfxUnoAnyItem();
+    return o3tl::make_unique<SfxUnoAnyItem>();
 }
 
-SfxPoolItem* SfxUnoFrameItem::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxUnoFrameItem::CreateDefault()
 {
-    return new SfxUnoFrameItem();
+    return o3tl::make_unique<SfxUnoFrameItem>();
 }
 
 void SfxFrame::Construct_Impl()
@@ -416,9 +416,9 @@ bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
          static_cast<const SfxFrameItem&>(rItem).wFrame == wFrame;
 }
 
-SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxFrameItem::CloneInternal( SfxItemPool *) const
 {
-    SfxFrameItem* pNew = new SfxFrameItem( wFrame);
+    std::unique_ptr<SfxFrameItem> pNew(new SfxFrameItem( wFrame));
     pNew->pFrame = pFrame;
     return pNew;
 }
@@ -472,9 +472,9 @@ bool SfxUnoAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
     return false;
 }
 
-SfxPoolItem* SfxUnoAnyItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxUnoAnyItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxUnoAnyItem( *this );
+    return o3tl::make_unique<SfxUnoAnyItem>( *this );
 }
 
 bool SfxUnoAnyItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -506,9 +506,9 @@ bool SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
     return dynamic_cast< const SfxUnoFrameItem* >(&i_rItem)  !=  nullptr && static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
 }
 
-SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SfxUnoFrameItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SfxUnoFrameItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxUnoFrameItem( *this ));
 }
 
 bool SfxUnoFrameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const

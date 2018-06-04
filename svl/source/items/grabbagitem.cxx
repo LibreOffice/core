@@ -32,9 +32,9 @@ bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
     return m_aMap == pItem->m_aMap;
 }
 
-SfxPoolItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SfxGrabBagItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SfxGrabBagItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SfxGrabBagItem(*this));
 }
 
 bool SfxGrabBagItem::PutValue(const uno::Any& rVal, sal_uInt8 /*nMemberId*/)

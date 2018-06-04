@@ -1237,7 +1237,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                             pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *(rX.GetItem()), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                         else
                         {
-                            std::unique_ptr<SfxPoolItem> pNew(rX.GetItem()->Clone());
+                            std::unique_ptr<SfxPoolItem> pNew = Clone(*rX.GetItem());
                             ConvertItem( *pNew, eSourceUnit, eDestUnit );
                             pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *pNew, rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                         }

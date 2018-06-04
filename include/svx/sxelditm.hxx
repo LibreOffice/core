@@ -26,9 +26,9 @@
 class SdrEdgeLineDeltaCountItem: public SfxUInt16Item {
 public:
     SdrEdgeLineDeltaCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_EDGELINEDELTACOUNT,nVal) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrEdgeLineDeltaCountItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrEdgeLineDeltaCountItem(*this));
     }
 };
 

@@ -283,7 +283,7 @@ ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& po
             pItem->Which() == RES_CHRATR_POSTURE ||
             pItem->Which() == RES_CHRATR_CJK_POSTURE ||
             pItem->Which() == RES_CHRATR_CTL_POSTURE) {
-            std::unique_ptr<SfxPoolItem> clonedItem(pItem->Clone());
+            std::unique_ptr<SfxPoolItem> clonedItem = Clone(*pItem);
             retval->Put(*clonedItem);
         }
         if (aIter.IsAtEnd()) {
@@ -315,7 +315,7 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
         if (attributesToClone->Count() <= 0) {
             continue;
         }
-        std::unique_ptr<SwFormatAutoFormat> clone(static_cast<SwFormatAutoFormat*>(hint->GetAutoFormat().Clone()));
+        std::unique_ptr<SwFormatAutoFormat> clone(Clone(hint->GetAutoFormat()));
         clone->SetStyleHandle(attributesToClone);
 
         result.autoFormats.push_back(std::move(clone));

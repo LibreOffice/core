@@ -25,9 +25,9 @@
 class SdrShearAngleItem: public SdrAngleItem {
 public:
     SdrShearAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_SHEARANGLE,nAngle) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrShearAngleItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrShearAngleItem(*this));
     }
 };
 

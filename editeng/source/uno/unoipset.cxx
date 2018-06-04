@@ -171,7 +171,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
                 SvxUnoConvertFromMM( eMapUnit, aValue );
         }
 
-        std::unique_ptr<SfxPoolItem> pNewItem( pItem->Clone() );
+        std::unique_ptr<SfxPoolItem> pNewItem = Clone(*pItem);
 
         sal_uInt8 nMemberId = pMap->nMemberId;
         if( eMapUnit == MapUnit::Map100thMM )

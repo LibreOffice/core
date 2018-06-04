@@ -1018,17 +1018,17 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 {
                     // we can toggle Bools
                     bool bOldValue = pOldBoolItem->GetValue();
-                    std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(pOldItem->Clone()));
+                    std::unique_ptr<SfxBoolItem> pNewItem(Clone(*pOldBoolItem));
                     pNewItem->SetValue( !bOldValue );
                     aReq.AppendItem( *pNewItem );
                 }
                 else if ( dynamic_cast< const SfxEnumItemInterface *>( pOldItem ) !=  nullptr &&
                         static_cast<const SfxEnumItemInterface *>(pOldItem)->HasBoolValue())
                 {
+                    auto pOldEnumItem = static_cast<const SfxEnumItemInterface *>(pOldItem);
                     // and Enums with Bool-Interface
-                    std::unique_ptr<SfxEnumItemInterface> pNewItem(
-                        static_cast<SfxEnumItemInterface*>(pOldItem->Clone()));
-                    pNewItem->SetBoolValue(!static_cast<const SfxEnumItemInterface *>(pOldItem)->GetBoolValue());
+                    std::unique_ptr<SfxEnumItemInterface> pNewItem(Clone(*pOldEnumItem));
+                    pNewItem->SetBoolValue(!pOldEnumItem->GetBoolValue());
                     aReq.AppendItem( *pNewItem );
                 }
                 else {
@@ -1617,11 +1617,11 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
     {
         DBG_ASSERT( pItem, "SfxItemState::SET but no item!" );
         if ( pItem )
-            rpState.reset(pItem->Clone());
+            rpState = Clone(*pItem);
     }
     else if ( eState == SfxItemState::DEFAULT && pItem )
     {
-        rpState.reset(pItem->Clone());
+        rpState = Clone(*pItem);
     }
 
     return eState;

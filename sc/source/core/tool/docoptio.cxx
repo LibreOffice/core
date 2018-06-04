@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -129,9 +130,9 @@ bool ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScTpCalcItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScTpCalcItem( *this );
+    return o3tl::make_unique<ScTpCalcItem>( *this );
 }
 
 //  Config Item containing document options

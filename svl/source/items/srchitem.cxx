@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <svl/memberid.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -57,7 +58,7 @@ using namespace com::sun::star::util;
 #define SRCH_PARA_CONTENT   "Content"
 #define SRCH_PARA_ASIANOPT  "AsianOptions"
 
-SfxPoolItem* SvxSearchItem::CreateDefault() { return new  SvxSearchItem(0);}
+std::unique_ptr<SfxPoolItem> SvxSearchItem::CreateDefault() { return o3tl::make_unique<SvxSearchItem>(0);}
 
 
 static Sequence< OUString > lcl_GetNotifyNames()
@@ -234,9 +235,9 @@ SvxSearchItem::~SvxSearchItem()
 }
 
 
-SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SvxSearchItem::CloneInternal( SfxItemPool *) const
 {
-    return new SvxSearchItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SvxSearchItem(*this));
 }
 
 

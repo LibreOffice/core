@@ -239,7 +239,7 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
 
     if( nEEWhich )
     {
-        std::unique_ptr<SfxPoolItem> pEEItem(rSwItem.Clone());
+        std::unique_ptr<SfxPoolItem> pEEItem = Clone(rSwItem);
         pEEItem->SetWhich( nEEWhich );
         rEEItemSet.Put( *pEEItem );
     }

@@ -35,7 +35,7 @@ private:
     Color mColor;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxColorItem(const sal_uInt16 nId);
     SvxColorItem(const Color& aColor, const sal_uInt16 nId);
@@ -52,8 +52,8 @@ public:
                                  MapUnit eCoreMetric, MapUnit ePresMetric,
                                  OUString &rText, const IntlWrapper& rIntlWrapper) const override;
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16 nVersion) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream& rStream, sal_uInt16 nVersion) const override;
     virtual SvStream& Store(SvStream& rStream, sal_uInt16 nVersion) const override;
 
     SvxColorItem& operator=(const SvxColorItem& rColor)
@@ -74,12 +74,12 @@ public:
 class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
 {
     public:
-        static SfxPoolItem* CreateDefault();
+        static std::unique_ptr<SfxPoolItem> CreateDefault();
 
         SvxBackgroundColorItem(const sal_uInt16 nId);
         SvxBackgroundColorItem(const Color& rCol, const sal_uInt16 nId);
 
-        virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+        virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
         virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
         virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 };

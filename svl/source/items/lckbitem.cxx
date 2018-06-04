@@ -23,9 +23,9 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <o3tl/make_unique.hxx>
 
-
-SfxPoolItem* SfxLockBytesItem::CreateDefault() { return new SfxLockBytesItem; }
+std::unique_ptr<SfxPoolItem> SfxLockBytesItem::CreateDefault() { return o3tl::make_unique<SfxLockBytesItem>(); }
 
 
 SfxLockBytesItem::SfxLockBytesItem()
@@ -55,15 +55,15 @@ bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxLockBytesItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxLockBytesItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxLockBytesItem( *this ));
 }
 
 
 #define MAX_BUF 32000
 
-SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SfxLockBytesItem::CreateInternal( SvStream &rStream, sal_uInt16 ) const
 {
     sal_uInt32 nSize = 0;
     sal_uLong nActRead = 0;
@@ -81,7 +81,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
         aNewStream.WriteBytes( cTmpBuf, nToRead );
     } while( nSize > nActRead );
 
-    return new SfxLockBytesItem( Which(), aNewStream );
+    return o3tl::make_unique<SfxLockBytesItem>( Which(), aNewStream );
 }
 
 

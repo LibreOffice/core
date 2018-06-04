@@ -41,7 +41,7 @@ namespace
                 if (oNumOffset)
                     rPageNo = oNumOffset.get();
                 if (ppPageFormatDesc)
-                    ppPageFormatDesc->reset(static_cast<const SwFormatPageDesc *>(pItem->Clone()));
+                    *ppPageFormatDesc = Clone(*static_cast<const SwFormatPageDesc *>(pItem));
                 bRet = true;
             }
         }

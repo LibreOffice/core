@@ -178,9 +178,9 @@ bool SwLabItem::operator ==(const SfxPoolItem& rItem) const
             m_sGlossaryBlockName ==    rLab.m_sGlossaryBlockName;
 }
 
-SfxPoolItem* SwLabItem::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SwLabItem::CloneInternal(SfxItemPool*) const
 {
-    return new SwLabItem(*this);
+    return o3tl::make_unique<SwLabItem>(*this);
 }
 
 Sequence<OUString> SwLabCfgItem::GetPropertyNames()

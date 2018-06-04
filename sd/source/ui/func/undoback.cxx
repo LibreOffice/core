@@ -29,6 +29,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <svl/itemset.hxx>
+#include <svl/poolitem.hxx>
 
 #include <svx/xfillit0.hxx>
 
@@ -76,7 +77,7 @@ SdUndoAction* SdBackgroundObjUndoAction::Clone() const
 {
     std::unique_ptr<SdBackgroundObjUndoAction> pCopy = o3tl::make_unique<SdBackgroundObjUndoAction>(*mpDoc, mrPage, *mpItemSet);
     if (mpFillBitmapItem)
-        pCopy->mpFillBitmapItem.reset(mpFillBitmapItem->Clone());
+        pCopy->mpFillBitmapItem = ::Clone(*mpFillBitmapItem);
     pCopy->mbHasFillBitmap = mbHasFillBitmap;
     return pCopy.release();
 }
@@ -85,7 +86,7 @@ void SdBackgroundObjUndoAction::saveFillBitmap(SfxItemSet &rItemSet)
 {
     const SfxPoolItem *pItem = nullptr;
     if (rItemSet.GetItemState(XATTR_FILLBITMAP, false, &pItem) == SfxItemState::SET)
-        mpFillBitmapItem.reset(pItem->Clone());
+        mpFillBitmapItem = ::Clone(*pItem);
     if (bool(mpFillBitmapItem))
     {
         if (rItemSet.GetItemState(XATTR_FILLSTYLE, false, &pItem) == SfxItemState::SET)

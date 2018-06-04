@@ -31,7 +31,7 @@ enum class SdrCaptionType { Type1, Type2, Type3, Type4 };
 class SVX_DLLPUBLIC SdrCaptionTypeItem: public SfxEnumItem<SdrCaptionType> {
 public:
     SdrCaptionTypeItem(SdrCaptionType eStyle=SdrCaptionType::Type3): SfxEnumItem(SDRATTR_CAPTIONTYPE, eStyle) {}
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16      GetValueCount() const override; // { return 4; }
     OUString                GetValueTextByPos(sal_uInt16 nPos) const;
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;

@@ -34,12 +34,12 @@
 class EDITENG_DLLPUBLIC SvxCharReliefItem : public SfxEnumItem<FontRelief>
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxCharReliefItem( FontRelief eValue /*= FontRelief::NONE*/,
                        const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const override;
 
     OUString                GetValueTextByPos( sal_uInt16 nPos ) const;

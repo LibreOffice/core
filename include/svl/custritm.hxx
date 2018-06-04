@@ -49,7 +49,7 @@ public:
 
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override;
 
     const OUString & GetValue() const { return m_aValue; }
 

@@ -57,7 +57,7 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SwFormatINetFormat::CreateDefault() { return new SwFormatINetFormat; }
+std::unique_ptr<SfxPoolItem> SwFormatINetFormat::CreateDefault() { return o3tl::make_unique<SwFormatINetFormat>(); }
 
 SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
@@ -81,9 +81,9 @@ bool SwFormatCharFormat::operator==( const SfxPoolItem& rAttr ) const
     return GetCharFormat() == static_cast<const SwFormatCharFormat&>(rAttr).GetCharFormat();
 }
 
-SfxPoolItem* SwFormatCharFormat::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatCharFormat::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatCharFormat( *this );
+    return o3tl::make_unique<SwFormatCharFormat>( *this );
 }
 
 // forward to the TextAttribute
@@ -123,9 +123,9 @@ bool SwFormatAutoFormat::operator==( const SfxPoolItem& rAttr ) const
     return mpHandle == static_cast<const SwFormatAutoFormat&>(rAttr).mpHandle;
 }
 
-SfxPoolItem* SwFormatAutoFormat::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatAutoFormat::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatAutoFormat( *this );
+    return o3tl::make_unique<SwFormatAutoFormat>( *this );
 }
 
 bool SwFormatAutoFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
@@ -222,9 +222,9 @@ bool SwFormatINetFormat::operator==( const SfxPoolItem& rAttr ) const
     return rOwn == rOther;
 }
 
-SfxPoolItem* SwFormatINetFormat::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatINetFormat::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatINetFormat( *this );
+    return o3tl::make_unique<SwFormatINetFormat>( *this );
 }
 
 void SwFormatINetFormat::SetMacroTable( const SvxMacroTableDtor* pNewTable )
@@ -429,9 +429,9 @@ bool SwFormatRuby::operator==( const SfxPoolItem& rAttr ) const
            m_eAdjustment == static_cast<const SwFormatRuby&>(rAttr).m_eAdjustment;
 }
 
-SfxPoolItem* SwFormatRuby::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatRuby::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatRuby( *this );
+    return o3tl::make_unique<SwFormatRuby>( *this );
 }
 
 bool SwFormatRuby::QueryValue( uno::Any& rVal,
@@ -561,11 +561,11 @@ bool SwFormatMeta::operator==( const SfxPoolItem & i_rOther ) const
         && (m_pMeta == static_cast<SwFormatMeta const &>( i_rOther ).m_pMeta);
 }
 
-SfxPoolItem * SwFormatMeta::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SwFormatMeta::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
     // if this is indeed a copy, then DoCopy must be called later!
     return m_pMeta // #i105148# pool default may be cloned also!
-        ? new SwFormatMeta( m_pMeta, Which() ) : new SwFormatMeta( Which() );
+        ? o3tl::make_unique<SwFormatMeta>( m_pMeta, Which() ) : o3tl::make_unique<SwFormatMeta>( Which() );
 }
 
 void SwFormatMeta::SetTextAttr(SwTextMeta * const i_pTextAttr)

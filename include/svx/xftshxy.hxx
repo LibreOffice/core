@@ -32,10 +32,10 @@
 class SVX_DLLPUBLIC XFormTextShadowXValItem : public SfxMetricItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             XFormTextShadowXValItem(long nVal = 0);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 };
 
 /*************************************************************************
@@ -47,9 +47,9 @@ public:
 class SVX_DLLPUBLIC XFormTextShadowYValItem : public SfxMetricItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
                             XFormTextShadowYValItem(long nVal = 0);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

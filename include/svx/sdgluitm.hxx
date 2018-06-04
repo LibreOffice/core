@@ -36,7 +36,7 @@ public:
                             SdrGrafLuminanceItem( short nLuminancePercent = 0 ) : SdrSignedPercentItem(
                             SDRATTR_GRAFLUMINANCE, nLuminancePercent ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
 };
 
 
@@ -50,7 +50,7 @@ public:
 
                             SdrGrafContrastItem( short nContrastPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFCONTRAST, nContrastPercent ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
 };
 
 #endif // INCLUDED_SVX_SDGLUITM_HXX

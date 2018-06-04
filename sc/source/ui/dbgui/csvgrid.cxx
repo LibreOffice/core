@@ -254,19 +254,19 @@ void ScCsvGrid::InitFonts()
 
     // copy other items from default font
     const SfxPoolItem& rWeightItem = aDefSet.Get( EE_CHAR_WEIGHT );
-    std::unique_ptr<SfxPoolItem> pNewItem(rWeightItem.Clone());
+    std::unique_ptr<SfxPoolItem> pNewItem(Clone(rWeightItem));
     pNewItem->SetWhich(EE_CHAR_WEIGHT_CJK);
     aDefSet.Put( *pNewItem );
     pNewItem->SetWhich(EE_CHAR_WEIGHT_CTL);
     aDefSet.Put( *pNewItem );
     const SfxPoolItem& rItalicItem = aDefSet.Get( EE_CHAR_ITALIC );
-    pNewItem.reset(rItalicItem.Clone());
+    pNewItem = Clone(rItalicItem);
     pNewItem->SetWhich(EE_CHAR_ITALIC_CJK);
     aDefSet.Put( *pNewItem );
     pNewItem->SetWhich(EE_CHAR_ITALIC_CTL);
     aDefSet.Put( *pNewItem );
     const SfxPoolItem& rLangItem = aDefSet.Get( EE_CHAR_LANGUAGE );
-    pNewItem.reset(rLangItem.Clone());
+    pNewItem = Clone(rLangItem);
     pNewItem->SetWhich(EE_CHAR_LANGUAGE_CJK);
     aDefSet.Put( *pNewItem );
     pNewItem->SetWhich(EE_CHAR_LANGUAGE_CTL);

@@ -138,7 +138,7 @@ bool SwMsgPoolItem::operator==( const SfxPoolItem& ) const
     return false;
 }
 
-SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwMsgPoolItem::CloneInternal( SfxItemPool* ) const
 {
     OSL_FAIL( "SwMsgPoolItem knows no Clone" );
     return nullptr;

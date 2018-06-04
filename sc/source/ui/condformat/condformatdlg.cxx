@@ -500,7 +500,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
                         "modules/scalc/ui/conditionalformatdialog.ui")
     , mpViewData(pViewData)
     , mpLastEdit(nullptr)
-    , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))
+    , mpDlgItem(Clone(*pItem))
 {
     get(mpBtnOk, "ok");
     get(mpBtnAdd, "add");

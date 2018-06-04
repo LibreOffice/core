@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
     SvxInterLineSpaceRule eInterLineSpaceRule;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     // The writer relies on a default height of 200! Actually, I would
     // initialize all values to 0, but who can ignore the consequences in
@@ -60,7 +60,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     // Methods to query and edit. InterlineSpace is added to the height.
     short GetInterLineSpace() const { return nInterLineSpace; }

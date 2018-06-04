@@ -20,6 +20,7 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 SvxCharHiddenItem::SvxCharHiddenItem( const bool bHidden, const sal_uInt16 nId ) :
@@ -27,9 +28,9 @@ SvxCharHiddenItem::SvxCharHiddenItem( const bool bHidden, const sal_uInt16 nId )
 {
 }
 
-SfxPoolItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxCharHiddenItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxCharHiddenItem( *this );
+    return o3tl::make_unique<SvxCharHiddenItem>( *this );
 }
 
 bool SvxCharHiddenItem::GetPresentation

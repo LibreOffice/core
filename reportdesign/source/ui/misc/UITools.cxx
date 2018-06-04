@@ -273,7 +273,7 @@ namespace
                 const SfxPoolItem* pItem = _rItemSet.GetItem(aIt->nWID);
                 if ( pItem )
                 {
-                    ::std::unique_ptr<SfxPoolItem> pClone(pItem->Clone());
+                    ::std::unique_ptr<SfxPoolItem> pClone(Clone(*pItem));
                     pClone->PutValue(_xShape->getPropertyValue(aIt->sName), aIt->nMemberId);
                     pClone->SetWhich(aIt->nWID);
                     _rItemSet.Put(*pClone);

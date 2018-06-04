@@ -215,9 +215,9 @@ bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxMacroItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxMacroItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxMacroItem( *this ));
 }
 
 

@@ -169,9 +169,10 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    virtual SfxPoolItem*     Create( SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const = 0;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const = 0;
+
     // clone and call SetWhich
     std::unique_ptr<SfxPoolItem> CloneSetWhich( sal_uInt16 nNewWhich ) const;
     template<class T> std::unique_ptr<T> CloneSetWhich( TypedWhichId<T> nId ) const
@@ -193,6 +194,42 @@ public:
 private:
     SfxPoolItem&             operator=( const SfxPoolItem& ) = delete;
 };
+
+/**
+ * Helper method so we get type-safe clone results.
+ */
+template<class T>
+inline
+typename std::enable_if<
+    std::is_base_of<SfxPoolItem, T>::value,
+    typename std::unique_ptr<typename std::remove_const<T>::type>>::type
+Clone( T const & rItem, SfxItemPool *pPool = nullptr )
+{
+    std::unique_ptr<SfxPoolItem> p(rItem.CloneInternal(pPool));
+    return std::unique_ptr<T>(static_cast<T*>(p.release()));
+}
+
+template<class T>
+inline
+typename std::enable_if<
+    std::is_base_of<SfxPoolItem, T>::value,
+    typename std::unique_ptr<typename std::remove_const<T>::type>>::type
+Create( T const & rItem, SfxItemPool *pPool = nullptr )
+{
+    std::unique_ptr<SfxPoolItem> p(rItem.CreateInternal(pPool));
+    return std::unique_ptr<T>(static_cast<T*>(p.release()));
+}
+
+template<class T>
+inline
+typename std::enable_if<
+    std::is_base_of<SfxPoolItem, T>::value,
+    typename std::unique_ptr<typename std::remove_const<T>::type>>::type
+Create( T const & rItem, SvStream & rStream, sal_uInt16 nItemVersion )
+{
+    std::unique_ptr<SfxPoolItem> p(rItem.CreateInternal(rStream, nItemVersion));
+    return std::unique_ptr<T>(static_cast<T*>(p.release()));
+}
 
 inline void SfxPoolItem::SetRefCount(sal_uInt32 n)
 {
@@ -249,7 +286,7 @@ inline bool IsInvalidItem(const SfxPoolItem *pItem)
 class SVL_DLLPUBLIC SfxVoidItem final: public SfxPoolItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
                             explicit SfxVoidItem( sal_uInt16 nWhich );
                             virtual ~SfxVoidItem() override;
 
@@ -268,7 +305,7 @@ public:
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 
     // create a copy of itself
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     /** Always returns true as this is an SfxVoidItem. */
     virtual bool            IsVoidItem() const override;
@@ -295,7 +332,7 @@ public:
                                     const IntlWrapper& ) const override;
 
     // create a copy of itself
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override = 0;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override = 0;
 
     const SfxItemSet&       GetItemSet() const
                             { return *pSet; }

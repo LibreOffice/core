@@ -29,7 +29,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxColorListItem: public SfxPoolItem
     XColorListRef     pColorList;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             SvxColorListItem();
                             SvxColorListItem( XColorListRef const & pTable,
@@ -42,7 +42,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -54,7 +54,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxGradientListItem : public SfxPoolItem
     XGradientListRef  pGradientList;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             SvxGradientListItem();
                             SvxGradientListItem( XGradientListRef const & pList,
@@ -67,7 +67,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -79,7 +79,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxHatchListItem : public SfxPoolItem
     XHatchListRef     pHatchList;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
                             SvxHatchListItem();
                             SvxHatchListItem( XHatchListRef const & pList,
                                     sal_uInt16 nWhich  );
@@ -91,7 +91,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -103,7 +103,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapListItem : public SfxPoolItem
     XBitmapListRef    pBitmapList;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             SvxBitmapListItem();
                             SvxBitmapListItem( XBitmapListRef const & pBL,
@@ -116,7 +116,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -128,7 +128,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPatternListItem : public SfxPoolItem
     XPatternListRef    pPatternList;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             SvxPatternListItem();
                             SvxPatternListItem( XPatternListRef const & pBL,
@@ -140,7 +140,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -152,7 +152,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDashListItem : public SfxPoolItem
     XDashListRef      pDashList;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             SvxDashListItem();
                             SvxDashListItem( XDashListRef const & pList,
@@ -165,7 +165,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -177,7 +177,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineEndListItem : public SfxPoolItem
     XLineEndListRef   pLineEndList;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             SvxLineEndListItem();
                             SvxLineEndListItem( XLineEndListRef const & pList,
@@ -190,7 +190,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 

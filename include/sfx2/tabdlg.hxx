@@ -55,8 +55,8 @@ class SFX2_DLLPUBLIC SfxTabDialogItem: public SfxSetItem
 public:
                             SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );
                             SfxTabDialogItem(const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pToPool = nullptr) const override;
-    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pToPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem>    CreateInternal(SvStream& rStream, sal_uInt16 nVersion) const override;
 };
 
 class SFX2_DLLPUBLIC SfxTabDialog : public TabDialog

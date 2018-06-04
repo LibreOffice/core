@@ -25,18 +25,18 @@
 class SdrObjPrintableItem: public SdrYesNoItem {
 public:
     SdrObjPrintableItem(bool bOn=false): SdrYesNoItem(SDRATTR_OBJPRINTABLE,bOn) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrObjPrintableItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrObjPrintableItem(*this));
     }
 };
 
 class SdrObjVisibleItem: public SdrYesNoItem {
 public:
     SdrObjVisibleItem(bool bOn=true): SdrYesNoItem(SDRATTR_OBJVISIBLE,bOn) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrObjVisibleItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrObjVisibleItem(*this));
     }
 };
 

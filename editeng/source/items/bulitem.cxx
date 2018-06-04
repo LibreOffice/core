@@ -24,6 +24,7 @@
 
 #include <tools/tenccvt.hxx>
 #include <vcl/dibtools.hxx>
+#include <o3tl/make_unique.hxx>
 
 #define BULITEM_VERSION     (sal_uInt16(2))
 
@@ -62,9 +63,9 @@ SvxBulletItem::~SvxBulletItem()
 }
 
 
-SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SvxBulletItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SvxBulletItem( *this );
+    return o3tl::make_unique<SvxBulletItem>( *this );
 }
 
 

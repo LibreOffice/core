@@ -130,7 +130,7 @@ void XOBitmap::Array2Bitmap()
 }
 
 
-SfxPoolItem* XFillBitmapItem::CreateDefault() { return new XFillBitmapItem; }
+std::unique_ptr<SfxPoolItem> XFillBitmapItem::CreateDefault() { return o3tl::make_unique<XFillBitmapItem>(); }
 
 XFillBitmapItem::XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject)
 :   NameOrIndex(XATTR_FILLBITMAP, rName),
@@ -150,9 +150,9 @@ XFillBitmapItem::XFillBitmapItem(const GraphicObject& rGraphicObject)
 {
 }
 
-SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFillBitmapItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFillBitmapItem(*this);
+    return o3tl::make_unique<XFillBitmapItem>(*this);
 }
 
 bool XFillBitmapItem::operator==(const SfxPoolItem& rItem) const

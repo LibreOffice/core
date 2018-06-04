@@ -1104,7 +1104,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
         sal_uInt8 nMId = RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0;
         if(GetProperty(nIDs[nIndex], nMId, pAny ))
         {
-            std::unique_ptr<SfxPoolItem> pItem(::GetDfltAttr( nIDs[nIndex] )->Clone());
+            std::unique_ptr<SfxPoolItem> pItem = Clone(*::GetDfltAttr( nIDs[nIndex] ));
             bRet &= pItem->PutValue(*pAny, nMId );
             rGrSet.Put(*pItem);
         }
@@ -2709,7 +2709,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
             if (eAnchorId != RndStdIds::FLY_AT_PAGE)
             {
-                pAnchorItem.reset(static_cast<SwFormatAnchor*>(aFrameSet.Get(RES_ANCHOR).Clone()));
+                pAnchorItem = Clone(static_cast<const SwFormatAnchor&>(aFrameSet.Get(RES_ANCHOR)));
                 aFrameSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, 1 ));
             }
 

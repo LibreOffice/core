@@ -512,7 +512,7 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
                     ( SfxItemState::SET != rS.GetItemState(nWhich, false) )
                    )
                 {
-                    std::unique_ptr<SfxPoolItem> pCopy(pItem->Clone());
+                    std::unique_ptr<SfxPoolItem> pCopy = Clone(*pItem);
                     pCopy->SetWhich( nWhich );
                     rS.Put( *pCopy );
                 }
@@ -727,7 +727,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                             nWhich != nSlotId
                         )
                         {
-                            std::unique_ptr<SfxPoolItem> pCopy(pItem->Clone());
+                            std::unique_ptr<SfxPoolItem> pCopy = Clone(*pItem);
                             pCopy->SetWhich( nWhich );
                             pS->Put( *pCopy );
                         }

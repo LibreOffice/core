@@ -53,7 +53,7 @@ namespace {
         Node( const SfxPoolItem& rItem, Node* pParent, const bool bIgnorable ) // child node Ctor
             : mChildren(),
               maItemSet(),
-              mpItem( rItem.Clone() ),
+              mpItem( Clone(rItem) ),
               mpUpper( pParent ),
               mbIsItemIgnorable( bIgnorable )
         {}

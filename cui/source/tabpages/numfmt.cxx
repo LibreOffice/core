@@ -391,7 +391,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         if(pNumItem==nullptr)
         {
             bNumItemFlag=true;
-            pNumItem.reset( static_cast<SvxNumberInfoItem *>(pItem->Clone()) );
+            pNumItem = Clone(*static_cast<const SvxNumberInfoItem *>(pItem));
         }
         else
         {
@@ -1733,7 +1733,7 @@ void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SvxNumberInfoItem* pNumberInfoItem = aSet.GetItem<SvxNumberInfoItem>(SID_ATTR_NUMBERFORMAT_INFO, false);
     if (pNumberInfoItem && !pNumItem)
-        pNumItem.reset( static_cast<SvxNumberInfoItem*>(pNumberInfoItem->Clone()) );
+        pNumItem = Clone(*pNumberInfoItem);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

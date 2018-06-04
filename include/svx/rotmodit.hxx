@@ -37,15 +37,15 @@ enum SvxRotateMode
 class SVX_DLLPUBLIC SvxRotateModeItem: public SfxEnumItem<SvxRotateMode>
 {
 public:
-                static SfxPoolItem* CreateDefault();
+                static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                 SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 nWhich);
                 SvxRotateModeItem( const SvxRotateModeItem& rItem );
                 virtual ~SvxRotateModeItem() override;
 
     virtual sal_uInt16          GetValueCount() const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream &, sal_uInt16) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

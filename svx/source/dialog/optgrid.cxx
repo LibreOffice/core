@@ -52,9 +52,9 @@ SvxOptionsGrid::SvxOptionsGrid() :
 {
 }
 
-SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxGridItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxGridItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxGridItem( *this ));
 }
 
 bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const

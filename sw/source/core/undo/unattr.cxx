@@ -525,7 +525,7 @@ SwUndoFormatResetAttr::SwUndoFormatResetAttr( SwFormat& rChangedFormat,
 {
     const SfxPoolItem* pItem = nullptr;
     if (rChangedFormat.GetItemState(nWhichId, false, &pItem ) == SfxItemState::SET && pItem) {
-        m_pOldItem.reset( pItem->Clone() );
+        m_pOldItem = Clone(*pItem);
     }
 }
 
@@ -836,7 +836,7 @@ SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet, const SwDoc* pDoc 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) ) {
         // store separately, because it may change!
-        m_pTabStop.reset( static_cast<SvxTabStopItem*>(pItem->Clone()) );
+        m_pTabStop = Clone(*static_cast<const SvxTabStopItem*>(pItem));
         if ( 1 != rSet.Count() ) { // are there more attributes?
             m_pOldSet.reset( new SfxItemSet( rSet ) );
         }
@@ -865,8 +865,8 @@ void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     if (m_pTabStop)
     {
-        std::unique_ptr<SvxTabStopItem> pOld(static_cast<SvxTabStopItem*>(
-                                   rDoc.GetDefault( RES_PARATR_TABSTOP ).Clone() ));
+        std::unique_ptr<SvxTabStopItem> pOld = Clone(static_cast<const SvxTabStopItem&>(
+                                   rDoc.GetDefault( RES_PARATR_TABSTOP )));
         rDoc.SetDefault( *m_pTabStop );
         m_pTabStop = std::move( pOld );
     }

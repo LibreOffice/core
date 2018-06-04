@@ -20,23 +20,24 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/objitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <tools/globname.hxx>
 
 
-SfxPoolItem* SfxObjectShellItem::CreateDefault() { return new SfxObjectShellItem; }
+std::unique_ptr<SfxPoolItem> SfxObjectShellItem::CreateDefault() { return o3tl::make_unique<SfxObjectShellItem>(); }
 
-SfxPoolItem* SfxObjectItem::CreateDefault() { return new SfxObjectItem; }
+std::unique_ptr<SfxPoolItem> SfxObjectItem::CreateDefault() { return o3tl::make_unique<SfxObjectItem>(); }
 
 bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 {
      return dynamic_cast<const SfxObjectShellItem&>(rItem).pObjSh == pObjSh;
 }
 
-SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxObjectShellItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxObjectShellItem( *this );
+    return o3tl::make_unique<SfxObjectShellItem>( *this );
 }
 
 bool SfxObjectShellItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -95,9 +96,9 @@ bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
      return rOther._pSh == _pSh;
 }
 
-SfxPoolItem* SfxObjectItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxObjectItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxObjectItem( *this );
+    return o3tl::make_unique<SfxObjectItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -111,13 +111,13 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
 
     const SfxPoolItem* pItem;
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pItem);
-    mpPageSizeItem.reset( static_cast<SvxSizeItem*>(pItem->Clone()) );
+    mpPageSizeItem = Clone(*static_cast<const SvxSizeItem*>(pItem));
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pItem);
-    mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pItem->Clone()) );
+    mpPageLRMarginItem = Clone(*static_cast<const SvxLongLRSpaceItem*>(pItem));
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pItem);
-    mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pItem->Clone()) );
+    mpPageULMarginItem = Clone(*static_cast<const SvxLongULSpaceItem*>(pItem));
 
     {
         // set new page orientation

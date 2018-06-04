@@ -180,7 +180,7 @@ void PageFormatPanel::NotifyItemUpdate(
             if ( eState >= SfxItemState::DEFAULT &&
                  dynamic_cast< const SvxPageItem *>( pState ) )
             {
-                mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
+                mpPageItem = Clone(*static_cast<const SvxPageItem*>(pState));
                 if ( mpPageItem->IsLandscape() )
                     mpPaperOrientation->SelectEntryPos(1);
                 else
@@ -193,7 +193,7 @@ void PageFormatPanel::NotifyItemUpdate(
             if ( eState >= SfxItemState::DEFAULT &&
                  dynamic_cast< const SvxLongLRSpaceItem *>( pState ) )
             {
-                mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                mpPageLRMarginItem = Clone(*static_cast<const SvxLongLRSpaceItem*>(pState));
                 UpdateMarginBox();
             }
         }
@@ -203,7 +203,7 @@ void PageFormatPanel::NotifyItemUpdate(
             if ( eState >= SfxItemState::DEFAULT &&
                 dynamic_cast< const SvxLongULSpaceItem *>( pState ) )
             {
-                mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                mpPageULMarginItem = Clone(*static_cast<const SvxLongULSpaceItem*>(pState));
                 UpdateMarginBox();
             }
         }

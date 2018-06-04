@@ -46,9 +46,9 @@ namespace svx
     }
 
 
-    SfxPoolItem* DatabaseMapItem::Clone( SfxItemPool* ) const
+    std::unique_ptr<SfxPoolItem> DatabaseMapItem::CloneInternal( SfxItemPool* ) const
     {
-        return new DatabaseMapItem( *this );
+        return std::unique_ptr<SfxPoolItem>(new DatabaseMapItem( *this ));
     }
 
 

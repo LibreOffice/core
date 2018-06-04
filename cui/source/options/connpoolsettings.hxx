@@ -74,7 +74,7 @@ namespace offapp
         DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings );
 
         virtual bool             operator==( const SfxPoolItem& ) const override;
-        virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+        virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
         const DriverPoolingSettings& getSettings() const    { return m_aSettings; }
     };

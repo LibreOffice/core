@@ -27,11 +27,12 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/memberid.h>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SfxPointItem::CreateDefault() { return new SfxPointItem; }
+std::unique_ptr<SfxPoolItem> SfxPointItem::CreateDefault() { return o3tl::make_unique<SfxPointItem>(); }
 
 
 SfxPointItem::SfxPointItem()
@@ -67,17 +68,17 @@ bool SfxPointItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxPointItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxPointItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxPointItem( *this ));
 }
 
 
-SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SfxPointItem::CreateInternal(SvStream &rStream, sal_uInt16 ) const
 {
     Point aStr;
     ReadPair( rStream, aStr );
-    return new SfxPointItem(Which(), aStr);
+    return o3tl::make_unique<SfxPointItem>(Which(), aStr);
 }
 
 

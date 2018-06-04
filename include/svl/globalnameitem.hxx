@@ -28,7 +28,7 @@ class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
     SvGlobalName            m_aName;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             SfxGlobalNameItem();
                             SfxGlobalNameItem( sal_uInt16 nWhich, const SvGlobalName& );
@@ -40,7 +40,7 @@ public:
     SfxGlobalNameItem & operator =(SfxGlobalNameItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     const SvGlobalName&     GetValue() const { return m_aName; }
 
     virtual bool            PutValue  ( const css::uno::Any& rVal,

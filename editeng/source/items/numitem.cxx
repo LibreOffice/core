@@ -25,6 +25,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/brushitem.hxx>
 #include <o3tl/clamp.hxx>
+#include <o3tl/make_unique.hxx>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/editids.hrc>
@@ -212,9 +213,8 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     if ( hasGraphicBrush )
     {
         std::unique_ptr<SvxBrushItem> pTmp( new SvxBrushItem( SID_ATTR_BRUSH ) );
-        pGraphicBrush.reset( static_cast<SvxBrushItem*>(pTmp->Create( rStream, BRUSH_GRAPHIC_VERSION )) );
+        pGraphicBrush = Create(*pTmp, rStream, BRUSH_GRAPHIC_VERSION );
     }
-    else pGraphicBrush = nullptr;
     rStream.ReadUInt16( nTmp16 ); eVertOrient = nTmp16;
 
     sal_uInt16 hasBulletFont = 0;
@@ -402,7 +402,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
     }
     else if ( !pGraphicBrush || (*pBrushItem != *pGraphicBrush) )
     {
-        pGraphicBrush.reset( static_cast<SvxBrushItem*>(pBrushItem->Clone()) );
+        pGraphicBrush = Clone(*pBrushItem);
    }
 
     if(pOrient)
@@ -928,9 +928,9 @@ bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
     return *pNumRule == *static_cast<const SvxNumBulletItem&>(rCopy).pNumRule;
 }
 
-SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxNumBulletItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxNumBulletItem(*this);
+    return o3tl::make_unique<SvxNumBulletItem>(*this);
 }
 
 sal_uInt16  SvxNumBulletItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const

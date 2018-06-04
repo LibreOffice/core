@@ -601,7 +601,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                 0 != (nEdtWhich = pSdrPool->GetWhich( nSlotId )) &&
                 nSlotId != nEdtWhich )
             {
-                std::unique_ptr<SfxPoolItem> pCpy(pItem->Clone());
+                std::unique_ptr<SfxPoolItem> pCpy = Clone(*pItem);
                 pCpy->SetWhich( nEdtWhich );
                 pSdrPool->SetPoolDefaultItem( *pCpy );
             }
@@ -1351,7 +1351,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
         return ;
 
     // The header only contains the reference to the format from the other document!
-    std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+    std::unique_ptr<SfxPoolItem> pNewItem(Clone(*pItem));
 
     SwFrameFormat* pOldFormat;
     if( bCpyHeader )

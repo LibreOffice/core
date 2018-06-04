@@ -25,6 +25,7 @@
 
 #include <osl/diagnose.h>
 #include <editeng/editobj.hxx>
+#include <o3tl/make_unique.hxx>
 
 /**
  * Status update for entry field
@@ -68,9 +69,9 @@ bool ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
              //TODO: Compare Edit data!
 }
 
-SfxPoolItem* ScInputStatusItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScInputStatusItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScInputStatusItem( *this );
+    return o3tl::make_unique<ScInputStatusItem>( *this );
 }
 
 void ScInputStatusItem::SetMisspellRanges( const std::vector<editeng::MisspellRanges>* pRanges )
@@ -147,9 +148,9 @@ bool ScSortItem::operator==( const SfxPoolItem& rItem ) const
             && (theSortData == rOther.theSortData) );
 }
 
-SfxPoolItem* ScSortItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScSortItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScSortItem( *this );
+    return o3tl::make_unique<ScSortItem>( *this );
 }
 
 bool ScSortItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
@@ -234,9 +235,9 @@ bool ScQueryItem::operator==( const SfxPoolItem& rItem ) const
             && (*mpQueryData == *rQueryItem.mpQueryData) );
 }
 
-SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScQueryItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScQueryItem( *this );
+    return o3tl::make_unique<ScQueryItem>( *this );
 }
 
 /**
@@ -269,9 +270,9 @@ bool ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
             && (theSubTotalData == rSTItem.theSubTotalData) );
 }
 
-SfxPoolItem* ScSubTotalItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScSubTotalItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScSubTotalItem( *this );
+    return o3tl::make_unique<ScSubTotalItem>( *this );
 }
 
 bool ScSubTotalItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
@@ -315,9 +316,9 @@ bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
     return bEqual;
 }
 
-SfxPoolItem* ScUserListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScUserListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScUserListItem( *this );
+    return o3tl::make_unique<ScUserListItem>( *this );
 }
 
 void ScUserListItem::SetUserList( const ScUserList& rUserList )
@@ -345,9 +346,9 @@ bool ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
     return ( theConsData == rCItem.theConsData);
 }
 
-SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScConsolidateItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScConsolidateItem( *this );
+    return o3tl::make_unique<ScConsolidateItem>( *this );
 }
 
 /**
@@ -390,9 +391,9 @@ bool ScPivotItem::operator==( const SfxPoolItem& rItem ) const
              bNewSheet  == rPItem.bNewSheet );
 }
 
-SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScPivotItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScPivotItem( *this );
+    return o3tl::make_unique<ScPivotItem>( *this );
 }
 
 /**
@@ -414,9 +415,9 @@ bool ScSolveItem::operator==( const SfxPoolItem& rItem ) const
     return ( theSolveData == rPItem.theSolveData );
 }
 
-SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScSolveItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScSolveItem( *this );
+    return o3tl::make_unique<ScSolveItem>( *this );
 }
 
 /**
@@ -438,9 +439,9 @@ bool ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
     return ( theTabOpData == rPItem.theTabOpData );
 }
 
-SfxPoolItem* ScTabOpItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScTabOpItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScTabOpItem( *this );
+    return o3tl::make_unique<ScTabOpItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

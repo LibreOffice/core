@@ -31,7 +31,7 @@ class SVL_DLLPUBLIC SfxStringListItem : public SfxPoolItem
     std::shared_ptr<std::vector<OUString>> mpList;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SfxStringListItem();
     SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=nullptr );
@@ -60,8 +60,8 @@ public:
                                              MapUnit ePresMetric,
                                              OUString &rText,
                                              const IntlWrapper& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 nVersion ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem>    CreateInternal( SvStream &, sal_uInt16 nVersion ) const override;
     virtual SvStream&       Store( SvStream &, sal_uInt16 nItemVersion ) const override;
 
     virtual bool            PutValue  ( const css::uno::Any& rVal,

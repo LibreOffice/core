@@ -30,9 +30,9 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwMirrorGrf::CloneInternal( SfxItemPool* ) const
 {
-    return new SwMirrorGrf( *this );
+    return o3tl::make_unique<SwMirrorGrf>( *this );
 }
 
 sal_uInt16 SwMirrorGrf::GetValueCount() const
@@ -142,9 +142,9 @@ SwCropGrf::SwCropGrf(sal_Int32 nL, sal_Int32 nR, sal_Int32 nT, sal_Int32 nB )
     : SvxGrfCrop( nL, nR, nT, nB, RES_GRFATR_CROPGRF )
 {}
 
-SfxPoolItem* SwCropGrf::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwCropGrf::CloneInternal( SfxItemPool* ) const
 {
-    return new SwCropGrf( *this );
+    return o3tl::make_unique<SwCropGrf>( *this );
 }
 
 sal_Int16 SwRotationGrf::checkAndCorrectValue(sal_Int16 nValue)
@@ -172,9 +172,9 @@ SwRotationGrf::SwRotationGrf( sal_Int16 nVal, const Size& rSz )
 {
 }
 
-SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwRotationGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwRotationGrf( *this );
+    return o3tl::make_unique<SwRotationGrf>( *this );
 }
 
 bool SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
@@ -210,34 +210,34 @@ bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 
 // Sw___Grf::Clone(..)
 
-SfxPoolItem* SwLuminanceGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwLuminanceGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwLuminanceGrf( *this );
+    return o3tl::make_unique<SwLuminanceGrf>( *this );
 }
 
-SfxPoolItem* SwContrastGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwContrastGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwContrastGrf( *this );
+    return o3tl::make_unique<SwContrastGrf>( *this );
 }
 
-SfxPoolItem* SwChannelRGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwChannelRGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwChannelRGrf( *this );
+    return o3tl::make_unique<SwChannelRGrf>( *this );
 }
 
-SfxPoolItem* SwChannelGGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwChannelGGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwChannelGGrf( *this );
+    return o3tl::make_unique<SwChannelGGrf>( *this );
 }
 
-SfxPoolItem* SwChannelBGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwChannelBGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwChannelBGrf( *this );
+    return o3tl::make_unique<SwChannelBGrf>( *this );
 }
 
-SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwGammaGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwGammaGrf( *this );
+    return o3tl::make_unique<SwGammaGrf>( *this );
 }
 
 // SwGammaGrf
@@ -261,14 +261,14 @@ bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 
 // Sw___Grf::Clone(..) cont'd
 
-SfxPoolItem* SwInvertGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwInvertGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwInvertGrf( *this );
+    return o3tl::make_unique<SwInvertGrf>( *this );
 }
 
-SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwTransparencyGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwTransparencyGrf( *this );
+    return o3tl::make_unique<SwTransparencyGrf>( *this );
 }
 
 // SwTransparencyGrf
@@ -305,9 +305,9 @@ bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
 
 // Sw___Grf::Clone(..) cont'd
 
-SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwDrawModeGrf::CloneInternal( SfxItemPool * ) const
 {
-    return new SwDrawModeGrf( *this );
+    return o3tl::make_unique<SwDrawModeGrf>( *this );
 }
 
 // SwDrawModeGrf

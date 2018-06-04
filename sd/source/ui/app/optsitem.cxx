@@ -309,9 +309,9 @@ SdOptionsLayoutItem::SdOptionsLayoutItem( SdOptions const * pOpts, ::sd::FrameVi
     }
 }
 
-SfxPoolItem* SdOptionsLayoutItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdOptionsLayoutItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SdOptionsLayoutItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SdOptionsLayoutItem( *this ));
 }
 
 bool SdOptionsLayoutItem::operator==( const SfxPoolItem& rAttr ) const
@@ -680,9 +680,9 @@ SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView c
     }
 }
 
-SfxPoolItem* SdOptionsMiscItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdOptionsMiscItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SdOptionsMiscItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SdOptionsMiscItem( *this ));
 }
 
 bool SdOptionsMiscItem::operator==( const SfxPoolItem& rAttr ) const
@@ -865,9 +865,9 @@ SdOptionsSnapItem::SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView c
     }
 }
 
-SfxPoolItem* SdOptionsSnapItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdOptionsSnapItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SdOptionsSnapItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SdOptionsSnapItem( *this ));
 }
 
 bool SdOptionsSnapItem::operator==( const SfxPoolItem& rAttr ) const
@@ -1318,9 +1318,9 @@ SdOptionsPrintItem::SdOptionsPrintItem( SdOptions const * pOpts )
     }
 }
 
-SfxPoolItem* SdOptionsPrintItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdOptionsPrintItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SdOptionsPrintItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SdOptionsPrintItem( *this ));
 }
 
 bool SdOptionsPrintItem::operator==( const SfxPoolItem& rAttr ) const

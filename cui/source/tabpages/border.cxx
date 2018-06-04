@@ -857,7 +857,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             rCoreAttrs->ClearItem(nMergeAdjacentBordersId);
         else
         {
-            std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(rCoreAttrs->Get(nMergeAdjacentBordersId).Clone()));
+            std::unique_ptr<SfxBoolItem> xNewItem(Clone(static_cast<const SfxBoolItem&>(rCoreAttrs->Get(nMergeAdjacentBordersId))));
             xNewItem->SetValue(static_cast<bool>(nState));
             rCoreAttrs->Put(*xNewItem);
         }
@@ -872,7 +872,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             rCoreAttrs->ClearItem(nMergeWithNextId);
         else
         {
-            std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(rCoreAttrs->Get(nMergeWithNextId).Clone()));
+            std::unique_ptr<SfxBoolItem> xNewItem(Clone(static_cast<const SfxBoolItem&>(rCoreAttrs->Get(nMergeWithNextId))));
             xNewItem->SetValue(static_cast<bool>(nState));
             rCoreAttrs->Put(*xNewItem);
         }

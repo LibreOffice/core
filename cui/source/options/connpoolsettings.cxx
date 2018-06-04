@@ -18,7 +18,7 @@
  */
 
 #include "connpoolsettings.hxx"
-
+#include <o3tl/make_unique.hxx>
 
 namespace offapp
 {
@@ -72,9 +72,9 @@ namespace offapp
     }
 
 
-    SfxPoolItem* DriverPoolingSettingsItem::Clone( SfxItemPool * ) const
+    std::unique_ptr<SfxPoolItem> DriverPoolingSettingsItem::CloneInternal( SfxItemPool * ) const
     {
-        return new DriverPoolingSettingsItem(*this);
+        return o3tl::make_unique<DriverPoolingSettingsItem>(*this);
     }
 
 

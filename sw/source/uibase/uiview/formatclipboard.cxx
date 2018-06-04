@@ -432,7 +432,7 @@ static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyl
             const SfxPoolItem* pItem;
             if( SfxItemState::SET == rStyleAttrSet.GetItemState( nWhich, false, &pItem ) )
             {
-                rItemVector.push_back( SfxPoolItemSharedPtr( pItem->Clone() ) );
+                rItemVector.push_back( SfxPoolItemSharedPtr( Clone(*pItem).release() ) );
             }
         }
         pRanges += 2;

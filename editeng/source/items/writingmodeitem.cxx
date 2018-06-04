@@ -43,9 +43,9 @@ bool SvxWritingModeItem::operator==( const SfxPoolItem& rCmp ) const
     return GetValue() == static_cast<const SvxWritingModeItem&>(rCmp).GetValue();
 }
 
-SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxWritingModeItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxWritingModeItem( *this );
+    return o3tl::make_unique<SvxWritingModeItem>( *this );
 }
 
 sal_uInt16 SvxWritingModeItem::GetVersion( sal_uInt16 /*nFVer*/ ) const

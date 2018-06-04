@@ -45,7 +45,7 @@ class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
     css::uno::Reference< css::graphic::XGraphic > m_xGraphic;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxGalleryItem();
     SvxGalleryItem( const SvxGalleryItem& );
@@ -57,7 +57,7 @@ public:
 
     // pure virtual methods from SfxPoolItem
     virtual bool         operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     // bridge to UNO
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

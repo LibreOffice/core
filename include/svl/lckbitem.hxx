@@ -28,7 +28,7 @@ class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
     SvLockBytesRef          _xVal;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
                             SfxLockBytesItem();
                             SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             virtual ~SfxLockBytesItem() override;
@@ -39,8 +39,8 @@ public:
     SfxLockBytesItem & operator =(SfxLockBytesItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nItemVersion) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream &, sal_uInt16 nItemVersion) const override;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 
     SvLockBytes*            GetValue() const { return _xVal.get(); }

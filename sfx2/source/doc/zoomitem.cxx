@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 
 
-SfxPoolItem* SvxZoomItem::CreateDefault() { return new SvxZoomItem; }
+std::unique_ptr<SfxPoolItem> SvxZoomItem::CreateDefault() { return o3tl::make_unique<SvxZoomItem>(); }
 
 #define ZOOM_PARAM_VALUE    "Value"
 #define ZOOM_PARAM_VALUESET "ValueSet"
@@ -47,9 +47,9 @@ SvxZoomItem::SvxZoomItem
 }
 
 
-SfxPoolItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SvxZoomItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SvxZoomItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxZoomItem( *this ));
 }
 
 

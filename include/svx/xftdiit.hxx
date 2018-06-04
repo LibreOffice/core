@@ -32,9 +32,9 @@
 class SVX_DLLPUBLIC XFormTextDistanceItem : public SfxMetricItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
                             XFormTextDistanceItem(long nDist = 0);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

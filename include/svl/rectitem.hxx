@@ -31,7 +31,7 @@ class SVL_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
     tools::Rectangle                aVal;
 
 public:
-                             static SfxPoolItem* CreateDefault();
+                             static std::unique_ptr<SfxPoolItem> CreateDefault();
                              SfxRectangleItem();
                              SfxRectangleItem( sal_uInt16 nWhich, const tools::Rectangle& rVal );
 
@@ -42,8 +42,8 @@ public:
                                   const IntlWrapper& ) const override;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream &, sal_uInt16 nItemVersion) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override;
 
     const tools::Rectangle&         GetValue() const { return aVal; }

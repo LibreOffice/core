@@ -63,7 +63,7 @@ OUString SwHistoryHint::GetDescription() const
 
 SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNd )
     :  SwHistoryHint( HSTRY_SETFMTHNT )
-    ,  m_pAttr( pFormatHt->Clone() )
+    ,  m_pAttr( Clone(*pFormatHt) )
     ,  m_nNodeIndex( nNd )
 {
     switch ( m_pAttr->Which() )
@@ -210,7 +210,7 @@ SwHistorySetText::SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNodePos )
     }
     else
     {
-        m_pAttr.reset( pTextHt->GetAttr().Clone() );
+        m_pAttr = Clone(pTextHt->GetAttr());
     }
 }
 

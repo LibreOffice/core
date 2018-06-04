@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
     sal_uInt8 nMaxHyphens;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxHyphenZoneItem( const bool bHyph /*= false*/,
                        const sal_uInt16 nId  );
@@ -56,7 +56,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     void SetHyphen( const bool bNew ) { bHyphen = bNew; }
     bool IsHyphen() const { return bHyphen; }

@@ -35,7 +35,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxCaseMapItem : public SfxEnumItem<SvxCaseMap>
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxCaseMapItem( const SvxCaseMap eMap /*= SvxCaseMap::NotMapped*/,
                     const sal_uInt16 nId );
@@ -46,7 +46,7 @@ public:
                                     MapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     OUString                GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetValueCount() const override;
 

@@ -40,9 +40,9 @@ sal_uInt16 Svx3DReducedLineGeometryItem::GetVersion(sal_uInt16 /*nFileFormatVers
     return 1;
 }
 
-SfxPoolItem * Svx3DReducedLineGeometryItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> Svx3DReducedLineGeometryItem::CloneInternal(SfxItemPool *) const
 {
-    return new Svx3DReducedLineGeometryItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new Svx3DReducedLineGeometryItem(*this));
 }
 
 Svx3DNormalsKindItem::Svx3DNormalsKindItem(sal_uInt16 nVal)
@@ -83,9 +83,9 @@ sal_uInt16 Svx3DSmoothNormalsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/)
     return 1;
 }
 
-SfxPoolItem * Svx3DSmoothNormalsItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> Svx3DSmoothNormalsItem::CloneInternal(SfxItemPool *) const
 {
-    return new Svx3DSmoothNormalsItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new Svx3DSmoothNormalsItem(*this));
 }
 
 
@@ -98,9 +98,9 @@ sal_uInt16 Svx3DSmoothLidsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) co
     return 1;
 }
 
-SfxPoolItem * Svx3DSmoothLidsItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> Svx3DSmoothLidsItem::CloneInternal(SfxItemPool *) const
 {
-    return new Svx3DSmoothLidsItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new Svx3DSmoothLidsItem(*this));
 }
 
 
@@ -113,9 +113,9 @@ sal_uInt16 Svx3DCharacterModeItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/)
     return 1;
 }
 
-SfxPoolItem * Svx3DCharacterModeItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> Svx3DCharacterModeItem::CloneInternal(SfxItemPool *) const
 {
-    return new Svx3DCharacterModeItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new Svx3DCharacterModeItem(*this));
 }
 
 
@@ -128,9 +128,9 @@ sal_uInt16 Svx3DCloseFrontItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) co
     return 1;
 }
 
-SfxPoolItem * Svx3DCloseFrontItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> Svx3DCloseFrontItem::CloneInternal(SfxItemPool *) const
 {
-    return new Svx3DCloseFrontItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new Svx3DCloseFrontItem(*this));
 }
 
 
@@ -143,9 +143,9 @@ sal_uInt16 Svx3DCloseBackItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) con
     return 1;
 }
 
-SfxPoolItem * Svx3DCloseBackItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> Svx3DCloseBackItem::CloneInternal(SfxItemPool *) const
 {
-    return new Svx3DCloseBackItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new Svx3DCloseBackItem(*this));
 }
 
 // Svx3DNormalsKindItem: use drawing::NormalsKind
@@ -164,9 +164,9 @@ bool Svx3DNormalsKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-SfxPoolItem* Svx3DNormalsKindItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> Svx3DNormalsKindItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new Svx3DNormalsKindItem(*this);
+    return o3tl::make_unique<Svx3DNormalsKindItem>(*this);
 }
 
 // Svx3DTextureProjectionXItem: use drawing::TextureProjectionMode
@@ -185,9 +185,9 @@ bool Svx3DTextureProjectionXItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nM
     return true;
 }
 
-SfxPoolItem* Svx3DTextureProjectionXItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> Svx3DTextureProjectionXItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new Svx3DTextureProjectionXItem(*this);
+    return o3tl::make_unique<Svx3DTextureProjectionXItem>(*this);
 }
 
 // Svx3DTextureProjectionYItem: use drawing::TextureProjectionMode
@@ -206,9 +206,9 @@ bool Svx3DTextureProjectionYItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nM
     return true;
 }
 
-SfxPoolItem* Svx3DTextureProjectionYItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> Svx3DTextureProjectionYItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new Svx3DTextureProjectionYItem(*this);
+    return o3tl::make_unique<Svx3DTextureProjectionYItem>(*this);
 }
 
 // Svx3DTextureKindItem: use drawing::TextureKind
@@ -227,9 +227,9 @@ bool Svx3DTextureKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-SfxPoolItem* Svx3DTextureKindItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> Svx3DTextureKindItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new Svx3DTextureKindItem(*this);
+    return o3tl::make_unique<Svx3DTextureKindItem>(*this);
 }
 
 // Svx3DTextureModeItem: use drawing:TextureMode
@@ -248,9 +248,9 @@ bool Svx3DTextureModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-SfxPoolItem* Svx3DTextureModeItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> Svx3DTextureModeItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new Svx3DTextureModeItem(*this);
+    return o3tl::make_unique<Svx3DTextureModeItem>(*this);
 }
 
 // Svx3DPerspectiveItem: use drawing::ProjectionMode
@@ -269,9 +269,9 @@ bool Svx3DPerspectiveItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-SfxPoolItem* Svx3DPerspectiveItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> Svx3DPerspectiveItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new Svx3DPerspectiveItem(*this);
+    return o3tl::make_unique<Svx3DPerspectiveItem>(*this);
 }
 
 // Svx3DShadeModeItem: use drawing::ShadeMode
@@ -290,9 +290,9 @@ bool Svx3DShadeModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     return true;
 }
 
-SfxPoolItem* Svx3DShadeModeItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> Svx3DShadeModeItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new Svx3DShadeModeItem(*this);
+    return o3tl::make_unique<Svx3DShadeModeItem>(*this);
 }
 
 // EOF

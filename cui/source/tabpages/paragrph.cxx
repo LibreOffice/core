@@ -393,7 +393,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                             *rOutSet, SID_ATTR_PARA_REGISTER));
         if (!pBoolItem)
             return bModified;
-        std::unique_ptr<SfxBoolItem> pRegItem(static_cast<SfxBoolItem*>(pBoolItem->Clone()));
+        std::unique_ptr<SfxBoolItem> pRegItem(Clone(*pBoolItem));
         sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_REGISTER );
         bool bSet = pRegItem->GetValue();
 
@@ -2162,24 +2162,24 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
     SfxItemPool* pPool = rSet->GetPool();
     if (m_xScriptSpaceCB->get_sensitive() && m_xScriptSpaceCB->get_state_changed_from_saved())
     {
-        std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone()));
+        std::unique_ptr<SfxBoolItem> pNewItem(Clone(static_cast<const SfxBoolItem&>(rSet->Get(
+            pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)))));
         pNewItem->SetValue(m_xScriptSpaceCB->get_active());
         rSet->Put(*pNewItem);
         bRet = true;
     }
     if (m_xHangingPunctCB->get_sensitive() && m_xHangingPunctCB->get_state_changed_from_saved())
     {
-        std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone()));
+        std::unique_ptr<SfxBoolItem> pNewItem(Clone(static_cast<const SfxBoolItem&>(rSet->Get(
+            pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)))));
         pNewItem->SetValue(m_xHangingPunctCB->get_active());
         rSet->Put(*pNewItem);
         bRet = true;
     }
     if (m_xForbiddenRulesCB->get_sensitive() && m_xForbiddenRulesCB->get_state_changed_from_saved())
     {
-        std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone()));
+        std::unique_ptr<SfxBoolItem> pNewItem(Clone(static_cast<const SfxBoolItem&>(rSet->Get(
+            pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)))));
         pNewItem->SetValue(m_xForbiddenRulesCB->get_active());
         rSet->Put(*pNewItem);
         bRet = true;

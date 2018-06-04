@@ -102,7 +102,7 @@ void MediaPlaybackPanel::NotifyItemUpdate(
     {
         if(eState >= SfxItemState::DEFAULT)
         {
-            mpMediaItem.reset(pState ? static_cast< MediaItem* >(pState->Clone()) : nullptr);
+            mpMediaItem.reset(pState ? Clone(*static_cast< MediaItem const * >(pState)).release() : nullptr);
             Update();
         }
     }

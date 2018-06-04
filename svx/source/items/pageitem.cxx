@@ -33,10 +33,11 @@
 #include <svx/strings.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
-SfxPoolItem* SvxPageItem::CreateDefault() { return new   SvxPageItem(0);}
+std::unique_ptr<SfxPoolItem> SvxPageItem::CreateDefault() { return o3tl::make_unique<SvxPageItem>(0);}
 
 SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 
@@ -58,9 +59,9 @@ SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
 SvxPageItem::~SvxPageItem() {}
 
 // Clone
-SfxPoolItem* SvxPageItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxPageItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxPageItem( *this );
+    return o3tl::make_unique<SvxPageItem>( *this );
 }
 
 // Test for equality
@@ -248,9 +249,9 @@ SvxSetItem::SvxSetItem( const sal_uInt16 nId, std::unique_ptr<SfxItemSet>&& _pSe
 {
 }
 
-SfxPoolItem* SvxSetItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxSetItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxSetItem(*this);
+    return o3tl::make_unique<SvxSetItem>(*this);
 }
 
 

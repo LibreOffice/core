@@ -28,11 +28,11 @@ public:
     SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
     SdrTextAniCountItem(SvStream& rIn): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,rIn) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
-    { return new SdrTextAniCountItem(rStream); }
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream & rStream, sal_uInt16) const override
+    { return o3tl::make_unique<SdrTextAniCountItem>(rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
-    { return new SdrTextAniCountItem(*this); }
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override
+    { return o3tl::make_unique<SdrTextAniCountItem>(*this); }
 };
 
 #endif

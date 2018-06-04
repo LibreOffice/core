@@ -751,7 +751,7 @@ void SlideBackground::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(SOLID));
-                mpColorItem.reset(pState ? static_cast< XFillColorItem* >(pState->Clone()) : nullptr);
+                mpColorItem.reset(pState ? Clone(*static_cast< const XFillColorItem* >(pState)).release() : nullptr);
                 Update();
             }
         }
@@ -762,7 +762,7 @@ void SlideBackground::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(HATCH));
-                mpHatchItem.reset(pState ? static_cast < XFillHatchItem* >(pState->Clone()) : nullptr);
+                mpHatchItem.reset(pState ? Clone(*static_cast < const XFillHatchItem* >(pState)).release() : nullptr);
                 Update();
             }
         }
@@ -773,7 +773,7 @@ void SlideBackground::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpFillStyle->SelectEntryPos(static_cast< sal_Int32>(GRADIENT));
-                mpGradientItem.reset(pState ? static_cast< XFillGradientItem* >(pState->Clone()) : nullptr);
+                mpGradientItem.reset(pState ? Clone(*static_cast< const XFillGradientItem* >(pState)).release() : nullptr);
                 Update();
             }
         }
@@ -782,7 +782,7 @@ void SlideBackground::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mpBitmapItem.reset(pState ? static_cast< XFillBitmapItem* >(pState->Clone()) : nullptr);
+                mpBitmapItem.reset(pState ? Clone(*static_cast< const XFillBitmapItem* >(pState)).release() : nullptr);
                 if(mpBitmapItem)
                 {
                     if(mpBitmapItem->isPattern())
@@ -859,7 +859,7 @@ void SlideBackground::NotifyItemUpdate(
                 pPageItem = dynamic_cast<const SvxPageItem*>(pState);
             if (pPageItem)
             {
-                mpPageItem.reset(static_cast<SvxPageItem*>(pPageItem->Clone()));
+                mpPageItem = Clone(*pPageItem);
                 bool bIsLandscape = mpPageItem->IsLandscape();
                 mpPaperOrientation->SelectEntryPos( bIsLandscape ? 0 : 1 );
             }
@@ -873,7 +873,7 @@ void SlideBackground::NotifyItemUpdate(
                 pLRItem = dynamic_cast<const SvxLongLRSpaceItem*>(pState);
             if (pLRItem)
             {
-                mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                mpPageLRMarginItem = Clone(*pLRItem);
                 UpdateMarginBox();
             }
         }
@@ -886,7 +886,7 @@ void SlideBackground::NotifyItemUpdate(
                 pULItem = dynamic_cast<const SvxLongULSpaceItem*>(pState);
             if (pULItem)
             {
-                mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                mpPageULMarginItem = Clone(*pULItem);
                 UpdateMarginBox();
             }
         }

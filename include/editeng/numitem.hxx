@@ -302,7 +302,7 @@ public:
     SvxNumBulletItem(const SvxNumBulletItem& rCopy);
     virtual ~SvxNumBulletItem() override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
 

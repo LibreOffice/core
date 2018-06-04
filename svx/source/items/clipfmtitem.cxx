@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <svx/clipfmtitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 
 struct SvxClipboardFormatItem_Impl
@@ -32,7 +33,7 @@ struct SvxClipboardFormatItem_Impl
     SvxClipboardFormatItem_Impl() {}
 };
 
-SfxPoolItem* SvxClipboardFormatItem::CreateDefault() { return new  SvxClipboardFormatItem(0); };
+std::unique_ptr<SfxPoolItem> SvxClipboardFormatItem::CreateDefault() { return o3tl::make_unique<SvxClipboardFormatItem>(0); };
 
 SvxClipboardFormatItem::SvxClipboardFormatItem( sal_uInt16 nId )
     : SfxPoolItem( nId ), pImpl( new SvxClipboardFormatItem_Impl )
@@ -105,9 +106,9 @@ bool SvxClipboardFormatItem::operator==( const SfxPoolItem& rComp ) const
     return nRet;
 }
 
-SfxPoolItem* SvxClipboardFormatItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SvxClipboardFormatItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SvxClipboardFormatItem( *this );
+    return o3tl::make_unique<SvxClipboardFormatItem>( *this );
 }
 
 void SvxClipboardFormatItem::AddClipbrdFormat( SotClipboardFormatId nId )

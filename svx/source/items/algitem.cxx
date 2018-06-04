@@ -40,11 +40,12 @@
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 #include <svx/unomid.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxMarginItem::CreateDefault() { return new  SvxMarginItem(0) ;}
+std::unique_ptr<SfxPoolItem> SvxMarginItem::CreateDefault() { return o3tl::make_unique<SvxMarginItem>(0) ;}
 
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
                                         const sal_uInt16 nId):
@@ -125,17 +126,17 @@ OUString SvxOrientationItem::GetValueText( SvxCellOrientation nVal )
 }
 
 
-SfxPoolItem* SvxOrientationItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxOrientationItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxOrientationItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxOrientationItem( *this ));
 }
 
 
-SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxOrientationItem::CreateInternal( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStream.ReadUInt16( nVal );
-    return new SvxOrientationItem( static_cast<SvxCellOrientation>(nVal), Which() );
+    return o3tl::make_unique<SvxOrientationItem>( static_cast<SvxCellOrientation>(nVal), Which() );
 }
 
 
@@ -248,13 +249,13 @@ bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SvxMarginItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxMarginItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxMarginItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SvxMarginItem(*this));
 }
 
 
-SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxMarginItem::CreateInternal( SvStream& rStream, sal_uInt16 ) const
 {
     sal_Int16   nLeft;
     sal_Int16   nTop;
@@ -264,7 +265,7 @@ SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
     rStream.ReadInt16( nTop );
     rStream.ReadInt16( nRight );
     rStream.ReadInt16( nBottom );
-    return new SvxMarginItem( nLeft, nTop, nRight, nBottom, Which() );
+    return o3tl::make_unique<SvxMarginItem>( nLeft, nTop, nRight, nBottom, Which() );
 }
 
 

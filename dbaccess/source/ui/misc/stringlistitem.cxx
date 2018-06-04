@@ -18,6 +18,7 @@
  */
 
 #include <stringlistitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace dbaui
 {
@@ -51,9 +52,9 @@ bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
     return true;
 }
 
-SfxPoolItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const
+std::unique_ptr<SfxPoolItem> OStringListItem::CloneInternal(SfxItemPool* /* _pPool */) const
 {
-    return new OStringListItem(*this);
+    return o3tl::make_unique<OStringListItem>(*this);
 }
 
 }   // namespace dbaui

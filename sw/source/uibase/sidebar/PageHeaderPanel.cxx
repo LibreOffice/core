@@ -182,7 +182,7 @@ void PageHeaderPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT &&
                 dynamic_cast<const SfxBoolItem*>( pState) )
             {
-                mpHeaderItem.reset( static_cast<SfxBoolItem*>(pState->Clone()) );
+                mpHeaderItem = Clone(*static_cast<const SfxBoolItem*>(pState));
                 mpHeaderToggle->Check(mpHeaderItem->GetValue());
                 UpdateHeaderCheck();
             }
@@ -193,7 +193,7 @@ void PageHeaderPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT &&
                 dynamic_cast<const SvxLongLRSpaceItem*>( pState) )
             {
-                mpHeaderLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                mpHeaderLRMarginItem = Clone(*static_cast<const SvxLongLRSpaceItem*>(pState));
                 UpdateMarginControl();
             }
         }
@@ -203,7 +203,7 @@ void PageHeaderPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT &&
                 dynamic_cast<const SvxLongULSpaceItem*>( pState) )
             {
-                mpHeaderSpacingItem.reset(static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                mpHeaderSpacingItem = Clone(*static_cast<const SvxLongULSpaceItem*>(pState));
                 UpdateSpacingControl();
             }
         }
@@ -213,7 +213,7 @@ void PageHeaderPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT &&
                 dynamic_cast<const SfxInt16Item*>( pState) )
             {
-                mpHeaderLayoutItem.reset(static_cast<SfxInt16Item*>(pState->Clone()) );
+                mpHeaderLayoutItem = Clone(*static_cast<const SfxInt16Item*>(pState));
                 UpdateLayoutControl();
             }
         }

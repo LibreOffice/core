@@ -23,9 +23,10 @@
 #include <basic/sbxvar.hxx>
 #include <sfx2/event.hxx>
 #include <svx/hlnkitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 
-SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(0);}
+std::unique_ptr<SfxPoolItem> SvxHyperlinkItem::CreateDefault() { return o3tl::make_unique<SvxHyperlinkItem>(0);}
 
 SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
             SfxPoolItem(rHyperlinkItem)
@@ -57,9 +58,9 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, c
         pMacroTable.reset( new SvxMacroTableDtor ( *pMacroTbl ) );
 }
 
-SfxPoolItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxHyperlinkItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxHyperlinkItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxHyperlinkItem( *this ));
 }
 
 bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const

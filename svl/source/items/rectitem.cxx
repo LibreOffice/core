@@ -26,9 +26,9 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/memberid.h>
+#include <o3tl/make_unique.hxx>
 
-
-SfxPoolItem* SfxRectangleItem::CreateDefault() { return new SfxRectangleItem; }
+std::unique_ptr<SfxPoolItem> SfxRectangleItem::CreateDefault() { return o3tl::make_unique<SfxRectangleItem>(); }
 
 
 SfxRectangleItem::SfxRectangleItem()
@@ -67,17 +67,17 @@ bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxRectangleItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxRectangleItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxRectangleItem( *this ));
 }
 
 
-SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SfxRectangleItem::CreateInternal(SvStream &rStream, sal_uInt16 ) const
 {
     tools::Rectangle aStr;
     ReadRectangle( rStream, aStr );
-    return new SfxRectangleItem(Which(), aStr);
+    return o3tl::make_unique<SfxRectangleItem>(Which(), aStr);
 }
 
 

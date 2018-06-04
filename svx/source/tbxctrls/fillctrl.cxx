@@ -109,7 +109,7 @@ void SvxFillToolBoxControl::StateChanged(
 
                 if(pItem)
                 {
-                    mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
+                    mpStyleItem = Clone(*pItem);
                     mpLbFillType->Enable();
                     drawing::FillStyle eXFS = mpStyleItem->GetValue();
                     meLastXFS = eXFS;
@@ -139,7 +139,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpColorItem.reset(pState ? static_cast<XFillColorItem*>(pState->Clone()) : nullptr);
+                mpColorItem.reset(pState ? Clone(*static_cast<const XFillColorItem*>(pState)).release() : nullptr);
             }
 
             if(mpStyleItem && drawing::FillStyle_SOLID == mpStyleItem->GetValue())
@@ -155,7 +155,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpFillGradientItem.reset(pState ? static_cast<XFillGradientItem*>(pState->Clone()) : nullptr);
+                mpFillGradientItem.reset(pState ? Clone(*static_cast<const XFillGradientItem*>(pState)).release() : nullptr);
             }
 
             if(mpStyleItem && drawing::FillStyle_GRADIENT == mpStyleItem->GetValue())
@@ -184,7 +184,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpHatchItem.reset(pState ? static_cast<XFillHatchItem*>(pState->Clone()) : nullptr);
+                mpHatchItem.reset(pState ? Clone(*static_cast<const XFillHatchItem*>(pState)).release() : nullptr);
             }
 
             if(mpStyleItem && drawing::FillStyle_HATCH == mpStyleItem->GetValue())
@@ -213,7 +213,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpBitmapItem.reset(pState ? static_cast<XFillBitmapItem*>(pState->Clone()) : nullptr);
+                mpBitmapItem.reset(pState ? Clone(*static_cast<const XFillBitmapItem*>(pState)).release() : nullptr);
             }
 
             if(mpStyleItem && drawing::FillStyle_BITMAP == mpStyleItem->GetValue())

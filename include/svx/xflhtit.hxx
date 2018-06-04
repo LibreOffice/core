@@ -34,14 +34,14 @@ class SVX_DLLPUBLIC XFillHatchItem : public NameOrIndex
     XHatch  aHatch;
 
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
                             XFillHatchItem() : NameOrIndex(XATTR_FILLHATCH, -1) {}
                             XFillHatchItem(const OUString& rName, const XHatch& rTheHatch);
                             XFillHatchItem(const XHatch& rTheHatch);
                             XFillHatchItem(const XFillHatchItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

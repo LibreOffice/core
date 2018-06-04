@@ -23,6 +23,7 @@
 #include <rtl/math.hxx>
 
 #include <svx/e3ditem.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -53,9 +54,9 @@ bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 }
 
 
-SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SvxB3DVectorItem::CloneInternal( SfxItemPool* /*pPool*/ ) const
 {
-    return new SvxB3DVectorItem( *this );
+    return o3tl::make_unique<SvxB3DVectorItem>( *this );
 }
 
 

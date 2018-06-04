@@ -210,7 +210,7 @@ SfxItemPool::SfxItemPool
         std::vector<SfxPoolItem *>* ppDefaults = new std::vector<SfxPoolItem*>(pImpl->mnEnd-pImpl->mnStart+1);
         for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
         {
-            (*ppDefaults)[n] = (*rPool.pImpl->mpStaticDefaults)[n]->Clone(this);
+            (*ppDefaults)[n] = (*rPool.pImpl->mpStaticDefaults)[n]->CloneInternal(this).release();
             (*ppDefaults)[n]->SetKind(SfxItemKind::StaticDefault);
         }
 
@@ -223,7 +223,7 @@ SfxItemPool::SfxItemPool
     for (size_t n = 0; n < pImpl->maPoolDefaults.size(); ++n )
         if (rPool.pImpl->maPoolDefaults[n])
         {
-            pImpl->maPoolDefaults[n] = rPool.pImpl->maPoolDefaults[n]->Clone(this); //resets kind
+            pImpl->maPoolDefaults[n] = rPool.pImpl->maPoolDefaults[n]->CloneInternal(this).release(); //resets kind
             pImpl->maPoolDefaults[n]->SetKind(SfxItemKind::PoolDefault);
         }
 
@@ -548,14 +548,14 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
     {
         auto& rOldDefault =
             pImpl->maPoolDefaults[GetIndex_Impl(rItem.Which())];
-        SfxPoolItem *pNewDefault = rItem.Clone(this);
+        std::unique_ptr<SfxPoolItem> pNewDefault = ::Clone(rItem,this);
         pNewDefault->SetKind(SfxItemKind::PoolDefault);
         if (rOldDefault)
         {
             rOldDefault->SetRefCount(0);
             DELETEZ(rOldDefault);
         }
-        rOldDefault = pNewDefault;
+        rOldDefault = pNewDefault.release();
     }
     else if ( pImpl->mpSecondary )
         pImpl->mpSecondary->SetPoolDefaultItem(rItem);
@@ -610,7 +610,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         assert((rItem.Which() != nWhich ||
             !IsDefaultItem(&rItem) || rItem.GetKind() == SfxItemKind::DeleteOnIdle)
                 && "a non Pool Item is Default?!");
-        SfxPoolItem *pPoolItem = rItem.Clone(pImpl->mpMaster);
+        SfxPoolItem *pPoolItem = ::Clone(rItem, pImpl->mpMaster).release();
         pPoolItem->SetWhich(nWhich);
         AddRef( *pPoolItem );
         return *pPoolItem;
@@ -686,7 +686,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     }
 
     // 3. not found, so clone to insert into the pointer array.
-    SfxPoolItem* pNewItem = rItem.Clone(pImpl->mpMaster);
+    SfxPoolItem* pNewItem = ::Clone(rItem, pImpl->mpMaster).release();
     pNewItem->SetWhich(nWhich);
     assert(typeid(rItem) == typeid(*pNewItem) && "SfxItemPool::Put(): unequal types, no Clone() override?");
     if (dynamic_cast<const SfxSetItem*>(&rItem) == nullptr)

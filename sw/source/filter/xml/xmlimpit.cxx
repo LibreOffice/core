@@ -117,7 +117,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 // do we have an item?
                 if(eState >= SfxItemState::DEFAULT && pItem)
                 {
-                    std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+                    std::unique_ptr<SfxPoolItem> pNewItem = Clone(*pItem);
                     bool bPut = false;
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
@@ -156,7 +156,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 if( SfxItemState::SET == rSet.GetItemState( nUnknownWhich, true,
                                                        &pItem ) )
                 {
-                    pUnknownItem.reset( static_cast<SvXMLAttrContainerItem*>( pItem->Clone() ) );
+                    pUnknownItem = Clone(*static_cast<const SvXMLAttrContainerItem*>(pItem));
                 }
                 else
                 {

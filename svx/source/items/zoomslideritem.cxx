@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 
-SfxPoolItem* SvxZoomSliderItem::CreateDefault() { return new SvxZoomSliderItem; }
+std::unique_ptr<SfxPoolItem> SvxZoomSliderItem::CreateDefault() { return o3tl::make_unique<SvxZoomSliderItem>(); }
 
 #define ZOOMSLIDER_PARAM_CURRENTZOOM    "Columns"
 #define ZOOMSLIDER_PARAM_SNAPPINGPOINTS "SnappingPoints"
@@ -40,9 +40,9 @@ SvxZoomSliderItem::SvxZoomSliderItem( sal_uInt16 nCurrentZoom, sal_uInt16 nMinZo
 }
 
 
-SfxPoolItem* SvxZoomSliderItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SvxZoomSliderItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SvxZoomSliderItem( *this );
+    return o3tl::make_unique<SvxZoomSliderItem>( *this );
 }
 
 

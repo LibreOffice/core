@@ -39,7 +39,7 @@ class EDITENG_DLLPUBLIC SvxShadowItem : public SfxEnumItemInterface
     sal_uInt16              nWidth;
     SvxShadowLocation   eLocation;
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxShadowItem( const sal_uInt16 nId ,
                  const Color *pColor = nullptr, const sal_uInt16 nWidth = 100 /*5pt*/,
@@ -58,8 +58,8 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream &, sal_uInt16) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;

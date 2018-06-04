@@ -61,7 +61,7 @@ sal_uInt8 SfxFlagItem::GetFlagCount() const
 }
 
 
-SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SfxFlagItem::CreateInternal(SvStream &, sal_uInt16) const
 {
     SAL_INFO("svl", "calling Create() on SfxFlagItem -- override!");
     return nullptr;
@@ -75,9 +75,9 @@ bool SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SfxFlagItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxFlagItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxFlagItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxFlagItem( *this ));
 }
 
 

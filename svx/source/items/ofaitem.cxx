@@ -19,6 +19,7 @@
 
 
 #include <svx/ofaitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 OfaPtrItem::OfaPtrItem( sal_uInt16 _nWhich, void *_pPtr )
     : SfxPoolItem( _nWhich ), pPtr( _pPtr )
@@ -31,9 +32,9 @@ bool OfaPtrItem::operator==( const SfxPoolItem& rItem) const
     return static_cast<const OfaPtrItem&>(rItem).pPtr == pPtr;
 }
 
-SfxPoolItem* OfaPtrItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> OfaPtrItem::CloneInternal( SfxItemPool * ) const
 {
-    return new OfaPtrItem( *this );
+    return o3tl::make_unique<OfaPtrItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

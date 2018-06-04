@@ -99,9 +99,9 @@ bool SfxEventNamesItem::GetPresentation( SfxItemPresentation,
     return false;
 }
 
-SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxEventNamesItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxEventNamesItem(*this);
+    return o3tl::make_unique<SfxEventNamesItem>(*this);
 }
 
 sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const

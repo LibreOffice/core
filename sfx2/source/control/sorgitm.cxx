@@ -21,9 +21,10 @@
 #include <sfx2/sfxsids.hrc>
 #include <sorgitm.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 #include <typeinfo>
 
-SfxPoolItem* SfxScriptOrganizerItem::CreateDefault() { return new SfxScriptOrganizerItem; }
+std::unique_ptr<SfxPoolItem> SfxScriptOrganizerItem::CreateDefault() { return o3tl::make_unique<SfxScriptOrganizerItem>(); }
 
 
 SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
@@ -34,9 +35,9 @@ SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
 }
 
 
-SfxPoolItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SfxScriptOrganizerItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SfxScriptOrganizerItem( *this );
+    return o3tl::make_unique<SfxScriptOrganizerItem>( *this );
 }
 
 

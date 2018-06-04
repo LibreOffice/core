@@ -82,7 +82,7 @@ namespace sdr
                 {
                     if(pItem->HasMetrics())
                     {
-                        std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+                        std::unique_ptr<SfxPoolItem> pNewItem(Clone(*pItem));
                         pNewItem->ScaleMetrics(nMul, nDiv);
                         rSet.Put(*pNewItem);
                     }

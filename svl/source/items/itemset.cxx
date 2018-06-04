@@ -211,7 +211,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
             (*ppDst)->AddRef();
         }
         else if ( !(*ppSrc)->Which() )
-            *ppDst = (*ppSrc)->Clone();
+            *ppDst = (*ppSrc)->CloneInternal().release();
         else
             // !IsPoolable() => assign via Pool
             *ppDst = &m_pPool->Put( **ppSrc );
@@ -462,7 +462,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                 if( !rItem.Which() )
                 {
                     if (IsInvalidItem(*ppFnd) || (*ppFnd)->Which() != 0) {
-                        *ppFnd = rItem.Clone(m_pPool);
+                        *ppFnd = rItem.CloneInternal(m_pPool).release();
                     }
                     return nullptr;
                 }
@@ -485,7 +485,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
             {
                 ++m_nCount;
                 if( !rItem.Which() )
-                    *ppFnd = rItem.Clone(m_pPool);
+                    *ppFnd = rItem.CloneInternal(m_pPool).release();
                 else {
                     const SfxPoolItem& rNew = m_pPool->Put( rItem, nWhich );
                     *ppFnd = &rNew;

@@ -33,9 +33,9 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SwFormatDrop::CreateDefault() { return new SwFormatDrop; }
-SfxPoolItem* SwRegisterItem::CreateDefault() { return new SwRegisterItem; }
-SfxPoolItem* SwNumRuleItem::CreateDefault() { return new SwNumRuleItem; }
+std::unique_ptr<SfxPoolItem> SwFormatDrop::CreateDefault() { return o3tl::make_unique<SwFormatDrop>(); }
+std::unique_ptr<SfxPoolItem> SwRegisterItem::CreateDefault() { return o3tl::make_unique<SwRegisterItem>(); }
+std::unique_ptr<SfxPoolItem> SwNumRuleItem::CreateDefault() { return o3tl::make_unique<SwNumRuleItem>(); }
 
 SwFormatDrop::SwFormatDrop()
     : SfxPoolItem( RES_PARATR_DROP ),
@@ -104,9 +104,9 @@ bool SwFormatDrop::operator==( const SfxPoolItem& rAttr ) const
              m_pDefinedIn == static_cast<const SwFormatDrop&>(rAttr).m_pDefinedIn );
 }
 
-SfxPoolItem* SwFormatDrop::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatDrop::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatDrop( *this );
+    return o3tl::make_unique<SwFormatDrop>( *this );
 }
 
 bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -191,14 +191,14 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-SfxPoolItem* SwRegisterItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwRegisterItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SwRegisterItem( *this );
+    return o3tl::make_unique<SwRegisterItem>( *this );
 }
 
-SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwNumRuleItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SwNumRuleItem( *this );
+    return o3tl::make_unique<SwNumRuleItem>( *this );
 }
 bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -230,9 +230,9 @@ void SwNumRuleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwParaConnectBorderItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SwParaConnectBorderItem( *this );
+    return o3tl::make_unique<SwParaConnectBorderItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

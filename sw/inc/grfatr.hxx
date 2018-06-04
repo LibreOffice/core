@@ -46,7 +46,7 @@ public:
     {}
 
     // pure virtual methods of SfxPoolItem
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     // pure virtual methods of SfxEnumItem
     virtual sal_uInt16      GetValueCount() const override;
@@ -74,7 +74,7 @@ public:
                 sal_Int32 nTop,     sal_Int32 nBottom );
 
     // "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 
 class SwRotationGrf : public SfxUInt16Item
@@ -93,7 +93,7 @@ public:
     SwRotationGrf( sal_Int16 nVal, const Size& rSz );
 
     // pure virtual methods from SfxInt16Item
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -116,7 +116,7 @@ public:
     {}
 
     // pure virtual methods from SfxInt16Item
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -132,7 +132,7 @@ public:
     {}
 
     // pure virtual methods from SfxInt16Item
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -162,7 +162,7 @@ public:
     SwChannelRGrf( sal_Int16 nVal = 0 )
         : SwChannelGrf( nVal, RES_GRFATR_CHANNELR )
     {}
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 class SwChannelGGrf : public SwChannelGrf
 {
@@ -170,7 +170,7 @@ public:
     SwChannelGGrf( sal_Int16 nVal = 0 )
         : SwChannelGrf( nVal, RES_GRFATR_CHANNELG )
     {}
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 class SwChannelBGrf : public SwChannelGrf
 {
@@ -178,7 +178,7 @@ public:
     SwChannelBGrf( sal_Int16 nVal = 0 )
         : SwChannelGrf( nVal, RES_GRFATR_CHANNELB )
     {}
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 
 class SW_DLLPUBLIC SwGammaGrf : public SfxPoolItem
@@ -193,7 +193,7 @@ public:
     {}
 
     // pure virtual methods from SfxEnumItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -217,7 +217,7 @@ public:
     {}
 
     // pure virtual methods from SfxInt16Item
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -233,7 +233,7 @@ public:
     {}
 
     // pure virtual methods from SfxInt16Item
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -260,7 +260,7 @@ public:
     {}
 
     // pure virtual methods of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     // pure virtual methods of SfxEnumItem
     virtual sal_uInt16      GetValueCount() const override;

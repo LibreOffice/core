@@ -51,11 +51,11 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal,
                            sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream & rStream, sal_uInt16) const override;
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override;
 
     bool GetValue() const { return m_nValue.bVisible; }
 };

@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC XFillGradientItem : public NameOrIndex
     XGradient   aGradient;
 
 public:
-            static SfxPoolItem* CreateDefault();
+            static std::unique_ptr<SfxPoolItem> CreateDefault();
             XFillGradientItem() : NameOrIndex(XATTR_FILLGRADIENT, -1) {}
             XFillGradientItem(sal_Int32 nIndex, const XGradient& rTheGradient);
             XFillGradientItem(const OUString& rName, const XGradient& rTheGradient, sal_uInt16 nWhich = XATTR_FILLGRADIENT);
@@ -42,7 +42,7 @@ public:
             XFillGradientItem(const XFillGradientItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

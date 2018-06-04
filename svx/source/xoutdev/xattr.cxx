@@ -105,10 +105,9 @@ bool NameOrIndex::operator==(const SfxPoolItem& rItem) const
             static_cast<const NameOrIndex&>(rItem).nPalIndex == nPalIndex );
 }
 
-SfxPoolItem* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> NameOrIndex::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-
-    return new NameOrIndex(*this);
+    return o3tl::make_unique<NameOrIndex>(*this);
 }
 
 /** this static checks if the given NameOrIndex item has a unique name for its value.
@@ -250,7 +249,7 @@ void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem; }
+std::unique_ptr<SfxPoolItem> XColorItem::CreateDefault() { return o3tl::make_unique<XColorItem>(); }
 
 XColorItem::XColorItem(sal_uInt16 _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
     NameOrIndex(_nWhich, nIndex),
@@ -276,9 +275,9 @@ XColorItem::XColorItem(const XColorItem& rItem) :
 {
 }
 
-SfxPoolItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XColorItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XColorItem(*this);
+    return o3tl::make_unique<XColorItem>(*this);
 }
 
 bool XColorItem::operator==(const SfxPoolItem& rItem) const
@@ -312,16 +311,16 @@ bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 // --- line attributes ---
 
 
-SfxPoolItem* XLineStyleItem::CreateDefault() { return new XLineStyleItem; }
+std::unique_ptr<SfxPoolItem> XLineStyleItem::CreateDefault() { return o3tl::make_unique<XLineStyleItem>(); }
 
 XLineStyleItem::XLineStyleItem(css::drawing::LineStyle eTheLineStyle) :
     SfxEnumItem(XATTR_LINESTYLE, eTheLineStyle)
 {
 }
 
-SfxPoolItem* XLineStyleItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineStyleItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineStyleItem( *this );
+    return o3tl::make_unique<XLineStyleItem>( *this );
 }
 
 bool XLineStyleItem::GetPresentation
@@ -549,7 +548,7 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
     return fFullDotDashLen;
 }
 
-SfxPoolItem* XLineDashItem::CreateDefault() {return new XLineDashItem;}
+std::unique_ptr<SfxPoolItem> XLineDashItem::CreateDefault() {return o3tl::make_unique<XLineDashItem>();}
 
 XLineDashItem::XLineDashItem(const OUString& rName, const XDash& rTheDash) :
     NameOrIndex(XATTR_LINEDASH, rName),
@@ -569,9 +568,9 @@ XLineDashItem::XLineDashItem(const XDash& rTheDash)
 {
 }
 
-SfxPoolItem* XLineDashItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineDashItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineDashItem(*this);
+    return o3tl::make_unique<XLineDashItem>(*this);
 }
 
 bool XLineDashItem::operator==(const SfxPoolItem& rItem) const
@@ -870,16 +869,16 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
     return nullptr;
 }
 
-SfxPoolItem* XLineWidthItem::CreateDefault() {return new XLineWidthItem;}
+std::unique_ptr<SfxPoolItem> XLineWidthItem::CreateDefault() {return o3tl::make_unique<XLineWidthItem>();}
 
 XLineWidthItem::XLineWidthItem(long nWidth) :
     SfxMetricItem(XATTR_LINEWIDTH, nWidth)
 {
 }
 
-SfxPoolItem* XLineWidthItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineWidthItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineWidthItem(*this);
+    return o3tl::make_unique<XLineWidthItem>(*this);
 }
 
 bool XLineWidthItem::GetPresentation
@@ -917,7 +916,7 @@ bool XLineWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-SfxPoolItem* XLineColorItem::CreateDefault() { return new XLineColorItem; }
+std::unique_ptr<SfxPoolItem> XLineColorItem::CreateDefault() { return o3tl::make_unique<XLineColorItem>(); }
 
 XLineColorItem::XLineColorItem(sal_Int32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_LINECOLOR, nIndex, rTheColor)
@@ -929,9 +928,9 @@ XLineColorItem::XLineColorItem(const OUString& rName, const Color& rTheColor) :
 {
 }
 
-SfxPoolItem* XLineColorItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineColorItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineColorItem(*this);
+    return o3tl::make_unique<XLineColorItem>(*this);
 }
 
 bool XLineColorItem::GetPresentation
@@ -963,7 +962,7 @@ bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
 }
 
 
-SfxPoolItem* XLineStartItem::CreateDefault() {return new XLineStartItem;}
+std::unique_ptr<SfxPoolItem> XLineStartItem::CreateDefault() {return o3tl::make_unique<XLineStartItem>();}
 
 XLineStartItem::XLineStartItem(sal_Int32 nIndex)
 :   NameOrIndex(XATTR_LINESTART, nIndex)
@@ -988,9 +987,9 @@ XLineStartItem::XLineStartItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
 }
 
-SfxPoolItem* XLineStartItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineStartItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineStartItem(*this);
+    return o3tl::make_unique<XLineStartItem>(*this);
 }
 
 bool XLineStartItem::operator==(const SfxPoolItem& rItem) const
@@ -1275,7 +1274,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
     return nullptr;
 }
 
-SfxPoolItem* XLineEndItem::CreateDefault() {return new XLineEndItem;}
+std::unique_ptr<SfxPoolItem> XLineEndItem::CreateDefault() {return o3tl::make_unique<XLineEndItem>();}
 
 XLineEndItem::XLineEndItem(sal_Int32 nIndex)
 :   NameOrIndex(XATTR_LINEEND, nIndex)
@@ -1300,9 +1299,9 @@ XLineEndItem::XLineEndItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
 }
 
-SfxPoolItem* XLineEndItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineEndItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineEndItem(*this);
+    return o3tl::make_unique<XLineEndItem>(*this);
 }
 
 bool XLineEndItem::operator==(const SfxPoolItem& rItem) const
@@ -1592,9 +1591,9 @@ XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
 {
 }
 
-SfxPoolItem* XLineStartWidthItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineStartWidthItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineStartWidthItem(*this);
+    return o3tl::make_unique<XLineStartWidthItem>(*this);
 }
 
 bool XLineStartWidthItem::GetPresentation
@@ -1630,9 +1629,9 @@ XLineEndWidthItem::XLineEndWidthItem(long nWidth) :
 {
 }
 
-SfxPoolItem* XLineEndWidthItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineEndWidthItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineEndWidthItem(*this);
+    return o3tl::make_unique<XLineEndWidthItem>(*this);
 }
 
 bool XLineEndWidthItem::GetPresentation
@@ -1668,9 +1667,9 @@ XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
 {
 }
 
-SfxPoolItem* XLineStartCenterItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineStartCenterItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineStartCenterItem(*this);
+    return o3tl::make_unique<XLineStartCenterItem>(*this);
 }
 
 bool XLineStartCenterItem::GetPresentation
@@ -1707,9 +1706,9 @@ XLineEndCenterItem::XLineEndCenterItem(bool bEndCenter) :
 {
 }
 
-SfxPoolItem* XLineEndCenterItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XLineEndCenterItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XLineEndCenterItem(*this);
+    return o3tl::make_unique<XLineEndCenterItem>(*this);
 }
 
 bool XLineEndCenterItem::GetPresentation
@@ -1744,16 +1743,16 @@ bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMembe
 // --- fill attributes ---
 
 
-SfxPoolItem* XFillStyleItem::CreateDefault() { return new XFillStyleItem; }
+std::unique_ptr<SfxPoolItem> XFillStyleItem::CreateDefault() { return o3tl::make_unique<XFillStyleItem>(); }
 
 XFillStyleItem::XFillStyleItem(drawing::FillStyle eFillStyle) :
     SfxEnumItem(XATTR_FILLSTYLE, eFillStyle)
 {
 }
 
-SfxPoolItem* XFillStyleItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFillStyleItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFillStyleItem( *this );
+    return o3tl::make_unique<XFillStyleItem>( *this );
 }
 
 bool XFillStyleItem::GetPresentation
@@ -1839,7 +1838,7 @@ void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 
-SfxPoolItem* XFillColorItem::CreateDefault() { return new XFillColorItem; }
+std::unique_ptr<SfxPoolItem> XFillColorItem::CreateDefault() { return o3tl::make_unique<XFillColorItem>(); }
 
 XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
@@ -1851,9 +1850,9 @@ XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor) :
 {
 }
 
-SfxPoolItem* XFillColorItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFillColorItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFillColorItem(*this);
+    return o3tl::make_unique<XFillColorItem>(*this);
 }
 
 bool XFillColorItem::GetPresentation
@@ -1898,9 +1897,9 @@ XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Co
 {
 }
 
-SfxPoolItem* XSecondaryFillColorItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XSecondaryFillColorItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XSecondaryFillColorItem(*this);
+    return o3tl::make_unique<XSecondaryFillColorItem>(*this);
 }
 
 sal_uInt16 XSecondaryFillColorItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
@@ -1967,7 +1966,7 @@ bool XGradient::operator==(const XGradient& rGradient) const
 }
 
 
-SfxPoolItem* XFillGradientItem::CreateDefault() { return new XFillGradientItem; }
+std::unique_ptr<SfxPoolItem> XFillGradientItem::CreateDefault() { return o3tl::make_unique<XFillGradientItem>(); }
 
 XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
                                    const XGradient& rTheGradient) :
@@ -1995,9 +1994,9 @@ XFillGradientItem::XFillGradientItem( const XGradient& rTheGradient )
 {
 }
 
-SfxPoolItem* XFillGradientItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFillGradientItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFillGradientItem(*this);
+    return o3tl::make_unique<XFillGradientItem>(*this);
 }
 
 bool XFillGradientItem::operator==(const SfxPoolItem& rItem) const
@@ -2275,7 +2274,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
 }
 
 
-SfxPoolItem* XFillFloatTransparenceItem::CreateDefault() { return new XFillFloatTransparenceItem; }
+std::unique_ptr<SfxPoolItem> XFillFloatTransparenceItem::CreateDefault() { return o3tl::make_unique<XFillFloatTransparenceItem>(); }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
     bEnabled( false )
@@ -2311,9 +2310,9 @@ bool XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
            ( bEnabled == static_cast<const XFillFloatTransparenceItem&>(rItem).bEnabled );
 }
 
-SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFillFloatTransparenceItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new XFillFloatTransparenceItem( *this );
+    return o3tl::make_unique<XFillFloatTransparenceItem>( *this );
 }
 
 sal_uInt16 XFillFloatTransparenceItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
@@ -2398,7 +2397,7 @@ bool XHatch::operator==(const XHatch& rHatch) const
 }
 
 
-SfxPoolItem* XFillHatchItem::CreateDefault() { return new XFillHatchItem; }
+std::unique_ptr<SfxPoolItem> XFillHatchItem::CreateDefault() { return o3tl::make_unique<XFillHatchItem>(); }
 
 XFillHatchItem::XFillHatchItem(const OUString& rName,
                              const XHatch& rTheHatch) :
@@ -2419,9 +2418,9 @@ XFillHatchItem::XFillHatchItem(const XHatch& rTheHatch)
 {
 }
 
-SfxPoolItem* XFillHatchItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFillHatchItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFillHatchItem(*this);
+    return o3tl::make_unique<XFillHatchItem>(*this);
 }
 
 bool XFillHatchItem::operator==(const SfxPoolItem& rItem) const
@@ -2629,16 +2628,16 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 // --- form text attributes ---
 
 
-SfxPoolItem* XFormTextStyleItem::CreateDefault() { return new XFormTextStyleItem; }
+std::unique_ptr<SfxPoolItem> XFormTextStyleItem::CreateDefault() { return o3tl::make_unique<XFormTextStyleItem>(); }
 
 XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
     SfxEnumItem(XATTR_FORMTXTSTYLE, eTheStyle)
 {
 }
 
-SfxPoolItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextStyleItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextStyleItem( *this );
+    return o3tl::make_unique<XFormTextStyleItem>( *this );
 }
 
 sal_uInt16 XFormTextStyleItem::GetValueCount() const
@@ -2662,16 +2661,16 @@ bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 
-SfxPoolItem* XFormTextAdjustItem::CreateDefault() { return new XFormTextAdjustItem; }
+std::unique_ptr<SfxPoolItem> XFormTextAdjustItem::CreateDefault() { return o3tl::make_unique<XFormTextAdjustItem>(); }
 
 XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
     SfxEnumItem(XATTR_FORMTXTADJUST, eTheAdjust)
 {
 }
 
-SfxPoolItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextAdjustItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextAdjustItem( *this );
+    return o3tl::make_unique<XFormTextAdjustItem>( *this );
 }
 
 sal_uInt16 XFormTextAdjustItem::GetValueCount() const
@@ -2695,67 +2694,67 @@ bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 }
 
 
-SfxPoolItem* XFormTextDistanceItem::CreateDefault() { return new XFormTextDistanceItem; }
+std::unique_ptr<SfxPoolItem> XFormTextDistanceItem::CreateDefault() { return o3tl::make_unique<XFormTextDistanceItem>(); }
 
 XFormTextDistanceItem::XFormTextDistanceItem(long nDist) :
     SfxMetricItem(XATTR_FORMTXTDISTANCE, nDist)
 {
 }
 
-SfxPoolItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextDistanceItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextDistanceItem(*this);
+    return o3tl::make_unique<XFormTextDistanceItem>(*this);
 }
 
-SfxPoolItem* XFormTextStartItem::CreateDefault() { return new XFormTextStartItem; }
+std::unique_ptr<SfxPoolItem> XFormTextStartItem::CreateDefault() { return o3tl::make_unique<XFormTextStartItem>(); }
 
 XFormTextStartItem::XFormTextStartItem(long nStart) :
     SfxMetricItem(XATTR_FORMTXTSTART, nStart)
 {
 }
 
-SfxPoolItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextStartItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextStartItem(*this);
+    return o3tl::make_unique<XFormTextStartItem>(*this);
 }
 
 
-SfxPoolItem* XFormTextMirrorItem::CreateDefault() { return new XFormTextMirrorItem; }
+std::unique_ptr<SfxPoolItem> XFormTextMirrorItem::CreateDefault() { return o3tl::make_unique<XFormTextMirrorItem>(); }
 
 XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
     SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror)
 {
 }
 
-SfxPoolItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextMirrorItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextMirrorItem(*this);
+    return o3tl::make_unique<XFormTextMirrorItem>(*this);
 }
 
 
-SfxPoolItem* XFormTextOutlineItem::CreateDefault() { return new XFormTextOutlineItem; }
+std::unique_ptr<SfxPoolItem> XFormTextOutlineItem::CreateDefault() { return o3tl::make_unique<XFormTextOutlineItem>(); }
 
 XFormTextOutlineItem::XFormTextOutlineItem(bool bOutline) :
     SfxBoolItem(XATTR_FORMTXTOUTLINE, bOutline)
 {
 }
 
-SfxPoolItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextOutlineItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextOutlineItem(*this);
+    return o3tl::make_unique<XFormTextOutlineItem>(*this);
 }
 
 
-SfxPoolItem* XFormTextShadowItem::CreateDefault() { return new XFormTextShadowItem; }
+std::unique_ptr<SfxPoolItem> XFormTextShadowItem::CreateDefault() { return o3tl::make_unique<XFormTextShadowItem>(); }
 
 XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
     SfxEnumItem(XATTR_FORMTXTSHADOW, eFormTextShadow)
 {
 }
 
-SfxPoolItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextShadowItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextShadowItem( *this );
+    return o3tl::make_unique<XFormTextShadowItem>( *this );
 }
 
 sal_uInt16 XFormTextShadowItem::GetValueCount() const
@@ -2779,7 +2778,7 @@ bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 }
 
 
-SfxPoolItem* XFormTextShadowColorItem::CreateDefault() { return new XFormTextShadowColorItem; }
+std::unique_ptr<SfxPoolItem> XFormTextShadowColorItem::CreateDefault() { return o3tl::make_unique<XFormTextShadowColorItem>(); }
 
 XFormTextShadowColorItem::XFormTextShadowColorItem(const OUString& rName,
                                                      const Color& rTheColor) :
@@ -2787,47 +2786,47 @@ XFormTextShadowColorItem::XFormTextShadowColorItem(const OUString& rName,
 {
 }
 
-SfxPoolItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextShadowColorItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextShadowColorItem(*this);
+    return o3tl::make_unique<XFormTextShadowColorItem>(*this);
 }
 
-SfxPoolItem* XFormTextShadowXValItem::CreateDefault() { return new XFormTextShadowXValItem; }
+std::unique_ptr<SfxPoolItem> XFormTextShadowXValItem::CreateDefault() { return o3tl::make_unique<XFormTextShadowXValItem>(); }
 
 XFormTextShadowXValItem::XFormTextShadowXValItem(long nVal) :
     SfxMetricItem(XATTR_FORMTXTSHDWXVAL, nVal)
 {
 }
 
-SfxPoolItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextShadowXValItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextShadowXValItem(*this);
+    return o3tl::make_unique<XFormTextShadowXValItem>(*this);
 }
 
 
-SfxPoolItem* XFormTextShadowYValItem::CreateDefault() { return new XFormTextShadowYValItem; }
+std::unique_ptr<SfxPoolItem> XFormTextShadowYValItem::CreateDefault() { return o3tl::make_unique<XFormTextShadowYValItem>(); }
 
 XFormTextShadowYValItem::XFormTextShadowYValItem(long nVal) :
     SfxMetricItem(XATTR_FORMTXTSHDWYVAL, nVal)
 {
 }
 
-SfxPoolItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextShadowYValItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextShadowYValItem(*this);
+    return o3tl::make_unique<XFormTextShadowYValItem>(*this);
 }
 
 
-SfxPoolItem* XFormTextHideFormItem::CreateDefault() { return new XFormTextHideFormItem; }
+std::unique_ptr<SfxPoolItem> XFormTextHideFormItem::CreateDefault() { return o3tl::make_unique<XFormTextHideFormItem>(); }
 
 XFormTextHideFormItem::XFormTextHideFormItem(bool bHide) :
     SfxBoolItem(XATTR_FORMTXTHIDEFORM, bHide)
 {
 }
 
-SfxPoolItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> XFormTextHideFormItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new XFormTextHideFormItem(*this);
+    return o3tl::make_unique<XFormTextHideFormItem>(*this);
 }
 
 // --- SetItems ---
@@ -2856,9 +2855,9 @@ XLineAttrSetItem::XLineAttrSetItem( const XLineAttrSetItem& rLineAttr,
 {
 }
 
-SfxPoolItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
+std::unique_ptr<SfxPoolItem> XLineAttrSetItem::CloneInternal( SfxItemPool* pPool ) const
 {
-    return new XLineAttrSetItem( *this, pPool );
+    return o3tl::make_unique<XLineAttrSetItem>( *this, pPool );
 }
 
 /// fill attribute set item
@@ -2884,9 +2883,9 @@ XFillAttrSetItem::XFillAttrSetItem( const XFillAttrSetItem& rFillAttr,
 {
 }
 
-SfxPoolItem* XFillAttrSetItem::Clone( SfxItemPool* pPool ) const
+std::unique_ptr<SfxPoolItem> XFillAttrSetItem::CloneInternal( SfxItemPool* pPool ) const
 {
-    return new XFillAttrSetItem( *this, pPool );
+    return o3tl::make_unique<XFillAttrSetItem>( *this, pPool );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

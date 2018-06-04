@@ -291,7 +291,7 @@ namespace frm
     {
         if ( _pAdditionalArg )
         {
-            std::unique_ptr<SfxPoolItem> pCorrectWich(_pAdditionalArg->Clone());
+            std::unique_ptr<SfxPoolItem> pCorrectWich = ::Clone(*_pAdditionalArg);
             pCorrectWich->SetWhich( getWhich() );
 
             if ( m_bScriptDependent )
@@ -433,7 +433,7 @@ namespace frm
         OSL_ENSURE( dynamic_cast<const SfxBoolItem*>( _pAdditionalArg) !=  nullptr, "BooleanHandler::executeAttribute: invalid argument!" );
         if ( _pAdditionalArg )
         {
-            std::unique_ptr<SfxPoolItem> pCorrectWich(_pAdditionalArg->Clone());
+            std::unique_ptr<SfxPoolItem> pCorrectWich = ::Clone(*_pAdditionalArg);
             pCorrectWich->SetWhich( getWhich() );
             _rNewAttribs.Put( *pCorrectWich );
         }

@@ -34,7 +34,7 @@
 #include <utility>
 
 XFillExchangeData::XFillExchangeData( const XFillAttrSetItem& rXFillAttrSetItem ) :
-    pXFillAttrSetItem( static_cast<XFillAttrSetItem*>( rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) ) ),
+    pXFillAttrSetItem( Clone(rXFillAttrSetItem, rXFillAttrSetItem.GetItemSet().GetPool() ) ),
     pPool( rXFillAttrSetItem.GetItemSet().GetPool() )
 {
 }
@@ -103,7 +103,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 
         if( nWhich )
         {
-            std::unique_ptr<SfxPoolItem> pNewItem(rData.pPool->GetDefaultItem( nWhich ).Create( rIStm, nItemVersion ));
+            std::unique_ptr<SfxPoolItem> pNewItem(Create(rData.pPool->GetDefaultItem( nWhich ), rIStm, nItemVersion ));
 
             if( pNewItem )
             {
@@ -123,7 +123,10 @@ XFillExchangeData& XFillExchangeData::operator=( const XFillExchangeData& rData 
     if (this != &rData)
     {
         if( rData.pXFillAttrSetItem )
-            pXFillAttrSetItem.reset( static_cast<XFillAttrSetItem*>( rData.pXFillAttrSetItem->Clone( pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool() ) ) );
+        {
+            pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool();
+            pXFillAttrSetItem = Clone( *rData.pXFillAttrSetItem, pPool );
+        }
         else
         {
             pPool = nullptr;

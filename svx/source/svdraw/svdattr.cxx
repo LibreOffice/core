@@ -640,9 +640,9 @@ bool SdrFractionItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SdrFractionItem::Clone(SfxItemPool * /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrFractionItem::CloneInternal(SfxItemPool * /*pPool*/) const
 {
-    return new SdrFractionItem(Which(),GetValue());
+    return o3tl::make_unique<SdrFractionItem>(Which(),GetValue());
 }
 
 
@@ -675,18 +675,18 @@ bool SdrScaleItem::GetPresentation(
     return true;
 }
 
-SfxPoolItem* SdrScaleItem::Clone(SfxItemPool * /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrScaleItem::CloneInternal(SfxItemPool * /*pPool*/) const
 {
-    return new SdrScaleItem(Which(),GetValue());
+    return o3tl::make_unique<SdrScaleItem>(Which(),GetValue());
 }
 
 
 // OnOffItem
 
 
-SfxPoolItem* SdrOnOffItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrOnOffItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrOnOffItem(Which(),GetValue());
+    return o3tl::make_unique<SdrOnOffItem>(Which(),GetValue());
 }
 
 OUString SdrOnOffItem::GetValueTextByVal(bool bVal) const
@@ -710,9 +710,9 @@ bool SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
 }
 
 
-SfxPoolItem* SdrYesNoItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrYesNoItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrYesNoItem(Which(),GetValue());
+    return o3tl::make_unique<SdrYesNoItem>(Which(),GetValue());
 }
 
 OUString SdrYesNoItem::GetValueTextByVal(bool bVal) const
@@ -739,9 +739,9 @@ bool SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
 // class SdrPercentItem
 
 
-SfxPoolItem* SdrPercentItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrPercentItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrPercentItem(Which(),GetValue());
+    return o3tl::make_unique<SdrPercentItem>(Which(),GetValue());
 }
 
 bool SdrPercentItem::GetPresentation(
@@ -766,9 +766,9 @@ bool SdrPercentItem::GetPresentation(
 // class SdrAngleItem
 
 
-SfxPoolItem* SdrAngleItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrAngleItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrAngleItem(Which(),GetValue());
+    return o3tl::make_unique<SdrAngleItem>(Which(),GetValue());
 }
 
 bool SdrAngleItem::GetPresentation(
@@ -837,9 +837,9 @@ bool SdrAngleItem::GetPresentation(
 // class SdrMetricItem
 
 
-SfxPoolItem* SdrMetricItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrMetricItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrMetricItem(Which(),GetValue());
+    return o3tl::make_unique<SdrMetricItem>(Which(),GetValue());
 }
 
 bool SdrMetricItem::HasMetrics() const
@@ -880,7 +880,10 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
 // items of the legend object
 
 
-SfxPoolItem* SdrCaptionTypeItem::Clone(SfxItemPool* /*pPool*/) const                { return new SdrCaptionTypeItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrCaptionTypeItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrCaptionTypeItem>(*this);
+}
 
 sal_uInt16 SdrCaptionTypeItem::GetValueCount() const { return 4; }
 
@@ -911,7 +914,10 @@ bool SdrCaptionTypeItem::GetPresentation(SfxItemPresentation ePres,
 }
 
 
-SfxPoolItem* SdrCaptionEscDirItem::Clone(SfxItemPool* /*pPool*/) const              { return new SdrCaptionEscDirItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrCaptionEscDirItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrCaptionEscDirItem>(*this);
+}
 
 sal_uInt16 SdrCaptionEscDirItem::GetValueCount() const { return 3; }
 
@@ -946,9 +952,12 @@ bool SdrCaptionEscDirItem::GetPresentation(SfxItemPresentation ePres,
 
 // FitToSize
 
-SfxPoolItem* SdrTextFitToSizeTypeItem::CreateDefault() { return new SdrTextFitToSizeTypeItem; }
+std::unique_ptr<SfxPoolItem> SdrTextFitToSizeTypeItem::CreateDefault() { return o3tl::make_unique<SdrTextFitToSizeTypeItem>(); }
 
-SfxPoolItem* SdrTextFitToSizeTypeItem::Clone(SfxItemPool* /*pPool*/) const         { return new SdrTextFitToSizeTypeItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrTextFitToSizeTypeItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrTextFitToSizeTypeItem>(*this);
+}
 
 sal_uInt16 SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }
 
@@ -1013,7 +1022,10 @@ bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
 }
 
 
-SfxPoolItem* SdrTextVertAdjustItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextVertAdjustItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrTextVertAdjustItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrTextVertAdjustItem>(*this);
+}
 
 sal_uInt16 SdrTextVertAdjustItem::GetValueCount() const { return 5; }
 
@@ -1075,7 +1087,10 @@ void SdrTextVertAdjustItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* SdrTextHorzAdjustItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextHorzAdjustItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrTextHorzAdjustItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrTextHorzAdjustItem>(*this);
+}
 
 sal_uInt16 SdrTextHorzAdjustItem::GetValueCount() const { return 5; }
 
@@ -1130,7 +1145,10 @@ bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
 }
 
 
-SfxPoolItem* SdrTextAniKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextAniKindItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrTextAniKindItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrTextAniKindItem>(*this);
+}
 
 sal_uInt16 SdrTextAniKindItem::GetValueCount() const { return 5; }
 
@@ -1184,7 +1202,10 @@ bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 
-SfxPoolItem* SdrTextAniDirectionItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextAniDirectionItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrTextAniDirectionItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrTextAniDirectionItem>(*this);
+}
 
 sal_uInt16 SdrTextAniDirectionItem::GetValueCount() const { return 4; }
 
@@ -1238,7 +1259,10 @@ bool SdrTextAniDirectionItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMembe
 }
 
 
-SfxPoolItem* SdrTextAniDelayItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextAniDelayItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrTextAniDelayItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrTextAniDelayItem>(*this);
+}
 
 bool SdrTextAniDelayItem::GetPresentation(
     SfxItemPresentation ePres, MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
@@ -1258,7 +1282,10 @@ bool SdrTextAniDelayItem::GetPresentation(
 }
 
 
-SfxPoolItem* SdrTextAniAmountItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextAniAmountItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrTextAniAmountItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrTextAniAmountItem>(*this);
+}
 
 bool SdrTextAniAmountItem::HasMetrics() const
 {
@@ -1328,9 +1355,9 @@ bool SdrTextFixedCellHeightItem::GetPresentation( SfxItemPresentation ePres,
     }
     return true;
 }
-SfxPoolItem* SdrTextFixedCellHeightItem::Clone( SfxItemPool * /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrTextFixedCellHeightItem::CloneInternal( SfxItemPool * /*pPool*/) const
 {
-    return new SdrTextFixedCellHeightItem( GetValue() );
+    return o3tl::make_unique<SdrTextFixedCellHeightItem>( GetValue() );
 }
 sal_uInt16 SdrTextFixedCellHeightItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
 {
@@ -1353,7 +1380,10 @@ bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
 
 // EdgeKind
 
-SfxPoolItem* SdrEdgeKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrEdgeKindItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrEdgeKindItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrEdgeKindItem>(*this);
+}
 
 sal_uInt16 SdrEdgeKindItem::GetValueCount() const { return 4; }
 
@@ -1446,9 +1476,9 @@ bool SdrEdgeNode1HorzDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
-SfxPoolItem* SdrEdgeNode1HorzDistItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrEdgeNode1HorzDistItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrEdgeNode1HorzDistItem(*this);
+    return o3tl::make_unique<SdrEdgeNode1HorzDistItem>(*this);
 }
 
 bool SdrEdgeNode1VertDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1467,9 +1497,9 @@ bool SdrEdgeNode1VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
-SfxPoolItem* SdrEdgeNode1VertDistItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrEdgeNode1VertDistItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrEdgeNode1VertDistItem(*this);
+    return o3tl::make_unique<SdrEdgeNode1VertDistItem>(*this);
 }
 
 bool SdrEdgeNode2HorzDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1488,9 +1518,9 @@ bool SdrEdgeNode2HorzDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
-SfxPoolItem* SdrEdgeNode2HorzDistItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrEdgeNode2HorzDistItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrEdgeNode2HorzDistItem(*this);
+    return o3tl::make_unique<SdrEdgeNode2HorzDistItem>(*this);
 }
 
 bool SdrEdgeNode2VertDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1509,22 +1539,25 @@ bool SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
-SfxPoolItem* SdrEdgeNode2VertDistItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrEdgeNode2VertDistItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrEdgeNode2VertDistItem(*this);
+    return o3tl::make_unique<SdrEdgeNode2VertDistItem>(*this);
 }
 
-SfxPoolItem* SdrEdgeNode1GlueDistItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrEdgeNode1GlueDistItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrEdgeNode1GlueDistItem(*this);
+    return o3tl::make_unique<SdrEdgeNode1GlueDistItem>(*this);
 }
 
-SfxPoolItem* SdrEdgeNode2GlueDistItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrEdgeNode2GlueDistItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrEdgeNode2GlueDistItem(*this);
+    return o3tl::make_unique<SdrEdgeNode2GlueDistItem>(*this);
 }
 
-SfxPoolItem* SdrMeasureKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureKindItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrMeasureKindItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrMeasureKindItem>(*this);
+}
 
 sal_uInt16 SdrMeasureKindItem::GetValueCount() const { return 2; }
 
@@ -1575,7 +1608,10 @@ bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 
-SfxPoolItem* SdrMeasureTextHPosItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureTextHPosItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrMeasureTextHPosItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrMeasureTextHPosItem>(*this);
+}
 
 sal_uInt16 SdrMeasureTextHPosItem::GetValueCount() const { return 4; }
 
@@ -1628,7 +1664,10 @@ bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMember
 }
 
 
-SfxPoolItem* SdrMeasureTextVPosItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureTextVPosItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrMeasureTextVPosItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrMeasureTextVPosItem>(*this);
+}
 
 sal_uInt16 SdrMeasureTextVPosItem::GetValueCount() const { return 5; }
 
@@ -1681,7 +1720,10 @@ bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMember
     return true;
 }
 
-SfxPoolItem* SdrMeasureUnitItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureUnitItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrMeasureUnitItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrMeasureUnitItem>(*this);
+}
 
 sal_uInt16 SdrMeasureUnitItem::GetValueCount() const { return 14; }
 
@@ -1727,7 +1769,10 @@ bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 
-SfxPoolItem* SdrCircKindItem::Clone(SfxItemPool* /*pPool*/) const          { return new SdrCircKindItem(*this); }
+std::unique_ptr<SfxPoolItem> SdrCircKindItem::CloneInternal(SfxItemPool* /*pPool*/) const
+{
+    return o3tl::make_unique<SdrCircKindItem>(*this);
+}
 
 sal_uInt16 SdrCircKindItem::GetValueCount() const { return 4; }
 
@@ -1783,9 +1828,9 @@ bool SdrCircKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 // class SdrSignedPercentItem
 
 
-SfxPoolItem* SdrSignedPercentItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrSignedPercentItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrSignedPercentItem( Which(), GetValue() );
+    return o3tl::make_unique<SdrSignedPercentItem>( Which(), GetValue() );
 }
 
 bool SdrSignedPercentItem::GetPresentation(
@@ -1807,39 +1852,39 @@ bool SdrSignedPercentItem::GetPresentation(
 }
 
 
-SfxPoolItem* SdrGrafRedItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafRedItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafRedItem( *this );
+    return o3tl::make_unique<SdrGrafRedItem>( *this );
 }
 
 
-SfxPoolItem* SdrGrafGreenItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafGreenItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafGreenItem( *this );
+    return o3tl::make_unique<SdrGrafGreenItem>( *this );
 }
 
 
-SfxPoolItem* SdrGrafBlueItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafBlueItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafBlueItem( *this );
+    return o3tl::make_unique<SdrGrafBlueItem>( *this );
 }
 
 
-SfxPoolItem* SdrGrafLuminanceItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafLuminanceItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafLuminanceItem( *this );
+    return o3tl::make_unique<SdrGrafLuminanceItem>( *this );
 }
 
 
-SfxPoolItem* SdrGrafContrastItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafContrastItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafContrastItem( *this );
+    return o3tl::make_unique<SdrGrafContrastItem>( *this );
 }
 
 
-SfxPoolItem* SdrGrafGamma100Item::Clone( SfxItemPool* /*pPool */) const
+std::unique_ptr<SfxPoolItem> SdrGrafGamma100Item::CloneInternal( SfxItemPool* /*pPool */) const
 {
-    return new SdrGrafGamma100Item( *this );
+    return o3tl::make_unique<SdrGrafGamma100Item>( *this );
 }
 
 bool SdrGrafGamma100Item::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1859,21 +1904,21 @@ bool SdrGrafGamma100Item::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 }
 
 
-SfxPoolItem* SdrGrafInvertItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafInvertItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafInvertItem( *this );
+    return o3tl::make_unique<SdrGrafInvertItem>( *this );
 }
 
 
-SfxPoolItem* SdrGrafTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafTransparenceItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafTransparenceItem( *this );
+    return o3tl::make_unique<SdrGrafTransparenceItem>( *this );
 }
 
 
-SfxPoolItem* SdrGrafModeItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafModeItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafModeItem( *this );
+    return o3tl::make_unique<SdrGrafModeItem>( *this );
 }
 
 sal_uInt16 SdrGrafModeItem::GetValueCount() const
@@ -1930,9 +1975,9 @@ bool SdrGrafModeItem::GetPresentation( SfxItemPresentation ePres,
 }
 
 
-SfxPoolItem* SdrGrafCropItem::Clone( SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrGrafCropItem::CloneInternal( SfxItemPool* /*pPool*/) const
 {
-    return new SdrGrafCropItem( *this );
+    return o3tl::make_unique<SdrGrafCropItem>( *this );
 }
 
 sal_uInt16 SdrGrafCropItem::GetVersion( sal_uInt16 /*nFileVersion*/) const
@@ -1943,96 +1988,96 @@ sal_uInt16 SdrGrafCropItem::GetVersion( sal_uInt16 /*nFileVersion*/) const
 SdrTextAniStartInsideItem::~SdrTextAniStartInsideItem()
 {
 }
-SfxPoolItem* SdrTextAniStartInsideItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrTextAniStartInsideItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrTextAniStartInsideItem(*this);
+    return o3tl::make_unique<SdrTextAniStartInsideItem>(*this);
 }
 SdrTextAniStopInsideItem::~SdrTextAniStopInsideItem()
 {
 }
-SfxPoolItem* SdrTextAniStopInsideItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrTextAniStopInsideItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrTextAniStopInsideItem(*this);
+    return o3tl::make_unique<SdrTextAniStopInsideItem>(*this);
 }
 SdrCaptionEscIsRelItem::~SdrCaptionEscIsRelItem()
 {
 }
-SfxPoolItem* SdrCaptionEscIsRelItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrCaptionEscIsRelItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrCaptionEscIsRelItem(*this);
+    return o3tl::make_unique<SdrCaptionEscIsRelItem>(*this);
 }
 SdrCaptionEscRelItem::~SdrCaptionEscRelItem()
 {
 }
-SfxPoolItem* SdrCaptionEscRelItem::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SdrCaptionEscRelItem::CloneInternal(SfxItemPool*) const
 {
-    return new SdrCaptionEscRelItem(*this);
+    return o3tl::make_unique<SdrCaptionEscRelItem>(*this);
 }
 SdrCaptionFitLineLenItem::~SdrCaptionFitLineLenItem()
 {
 }
-SfxPoolItem* SdrCaptionFitLineLenItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrCaptionFitLineLenItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrCaptionFitLineLenItem(*this);
+    return o3tl::make_unique<SdrCaptionFitLineLenItem>(*this);
 }
 SdrCaptionLineLenItem::~SdrCaptionLineLenItem()
 {
 }
-SfxPoolItem* SdrCaptionLineLenItem::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SdrCaptionLineLenItem::CloneInternal(SfxItemPool*) const
 {
-    return new SdrCaptionLineLenItem(*this);
+    return o3tl::make_unique<SdrCaptionLineLenItem>(*this);
 }
 SdrMeasureBelowRefEdgeItem::~SdrMeasureBelowRefEdgeItem()
 {
 }
-SfxPoolItem* SdrMeasureBelowRefEdgeItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrMeasureBelowRefEdgeItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrMeasureBelowRefEdgeItem(*this);
+    return o3tl::make_unique<SdrMeasureBelowRefEdgeItem>(*this);
 }
 SdrMeasureTextIsFixedAngleItem::~SdrMeasureTextIsFixedAngleItem()
 {
 }
-SfxPoolItem* SdrMeasureTextIsFixedAngleItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrMeasureTextIsFixedAngleItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrMeasureTextIsFixedAngleItem(*this);
+    return o3tl::make_unique<SdrMeasureTextIsFixedAngleItem>(*this);
 }
 SdrMeasureTextFixedAngleItem::~SdrMeasureTextFixedAngleItem()
 {
 }
-SfxPoolItem* SdrMeasureTextFixedAngleItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrMeasureTextFixedAngleItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrMeasureTextFixedAngleItem(*this);
+    return o3tl::make_unique<SdrMeasureTextFixedAngleItem>(*this);
 }
 SdrMeasureDecimalPlacesItem::~SdrMeasureDecimalPlacesItem()
 {
 }
-SfxPoolItem* SdrMeasureDecimalPlacesItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrMeasureDecimalPlacesItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrMeasureDecimalPlacesItem(*this);
+    return o3tl::make_unique<SdrMeasureDecimalPlacesItem>(*this);
 }
 SdrMeasureTextRota90Item::~SdrMeasureTextRota90Item()
 {
 }
-SfxPoolItem* SdrMeasureTextRota90Item::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrMeasureTextRota90Item::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrMeasureTextRota90Item(*this);
+    return o3tl::make_unique<SdrMeasureTextRota90Item>(*this);
 }
 SdrMeasureTextUpsideDownItem::~SdrMeasureTextUpsideDownItem()
 {
 }
-SfxPoolItem* SdrMeasureTextUpsideDownItem::Clone(SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SdrMeasureTextUpsideDownItem::CloneInternal(SfxItemPool* ) const
 {
-    return new SdrMeasureTextUpsideDownItem(*this);
+    return o3tl::make_unique<SdrMeasureTextUpsideDownItem>(*this);
 }
 
-SfxPoolItem* SdrLayerIdItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrLayerIdItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrLayerIdItem(*this);
+    return o3tl::make_unique<SdrLayerIdItem>(*this);
 }
 
-SfxPoolItem* SdrLayerNameItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SdrLayerNameItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SdrLayerNameItem(*this);
+    return o3tl::make_unique<SdrLayerNameItem>(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

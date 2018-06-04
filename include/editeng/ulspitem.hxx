@@ -39,7 +39,7 @@ class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
     bool       bContext; // Contextual spacing?
     sal_uInt16 nPropUpper, nPropLower;      // relative or absolute (=100%)
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxULSpaceItem( const sal_uInt16 nId  );
     SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
@@ -58,7 +58,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual void                 ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool                 HasMetrics() const override;

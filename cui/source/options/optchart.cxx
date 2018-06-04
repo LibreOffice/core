@@ -141,7 +141,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(vcl::Window* pParent, const SfxIt
     const SfxPoolItem* pItem = nullptr;
     if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, false, &pItem ) == SfxItemState::SET )
     {
-        pColorConfig.reset(static_cast< SvxChartColorTableItem* >(pItem->Clone()));
+        pColorConfig = Clone(*static_cast< const SvxChartColorTableItem* >(pItem));
     }
     else
     {

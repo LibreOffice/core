@@ -1069,9 +1069,9 @@ bool DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
     return pCompare && (pCompare->getCollection() == getCollection());
 }
 
-SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
+std::unique_ptr<SfxPoolItem> DbuTypeCollectionItem::CloneInternal(SfxItemPool* /*_pPool*/) const
 {
-    return new DbuTypeCollectionItem(*this);
+    return o3tl::make_unique<DbuTypeCollectionItem>(*this);
 }
 
 }   // namespace dbaui

@@ -19,6 +19,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svl/aeitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <cstddef>
 #include <vector>
@@ -77,14 +78,14 @@ sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
     return (*pValues)[nPos].nValue;
 }
 
-SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SfxAllEnumItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SfxAllEnumItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SfxAllEnumItem(*this));
 }
 
-SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SfxAllEnumItem::CreateInternal( SvStream & rStream, sal_uInt16 ) const
 {
-    return new SfxAllEnumItem( Which(), rStream );
+    return o3tl::make_unique<SfxAllEnumItem>( Which(), rStream );
 }
 
 /**

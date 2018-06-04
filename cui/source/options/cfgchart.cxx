@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 #include "cfgchart.hxx"
 #include <dialmgr.hxx>
 #include <strings.hrc>
@@ -266,9 +267,9 @@ SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, const SvxCha
 {
 }
 
-SfxPoolItem* SvxChartColorTableItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxChartColorTableItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxChartColorTableItem( *this );
+    return o3tl::make_unique<SvxChartColorTableItem>( *this );
 }
 
 bool SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const

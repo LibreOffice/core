@@ -23,10 +23,10 @@
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
 
-SfxPoolItem* SvxPostItAuthorItem::CreateDefault() { return new SvxPostItAuthorItem(0); }
-SfxPoolItem* SvxPostItDateItem::CreateDefault() { return new SvxPostItDateItem(0); }
-SfxPoolItem* SvxPostItTextItem::CreateDefault() { return new SvxPostItTextItem(0); }
-SfxPoolItem* SvxPostItIdItem::CreateDefault() { return new SvxPostItIdItem(0); }
+std::unique_ptr<SfxPoolItem> SvxPostItAuthorItem::CreateDefault() { return o3tl::make_unique<SvxPostItAuthorItem>(0); }
+std::unique_ptr<SfxPoolItem> SvxPostItDateItem::CreateDefault() { return o3tl::make_unique<SvxPostItDateItem>(0); }
+std::unique_ptr<SfxPoolItem> SvxPostItTextItem::CreateDefault() { return o3tl::make_unique<SvxPostItTextItem>(0); }
+std::unique_ptr<SfxPoolItem> SvxPostItIdItem::CreateDefault() { return o3tl::make_unique<SvxPostItIdItem>(0); }
 
 SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
 {
@@ -63,9 +63,9 @@ bool SvxPostItAuthorItem::GetPresentation
 }
 
 
-SfxPoolItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxPostItAuthorItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxPostItAuthorItem( *this );
+    return o3tl::make_unique<SvxPostItAuthorItem>( *this );
 }
 
 SvxPostItDateItem::SvxPostItDateItem( sal_uInt16 _nWhich )
@@ -103,9 +103,9 @@ bool SvxPostItDateItem::GetPresentation
 }
 
 
-SfxPoolItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxPostItDateItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxPostItDateItem( *this );
+    return o3tl::make_unique<SvxPostItDateItem>( *this );
 }
 
 SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 _nWhich )
@@ -140,9 +140,9 @@ bool SvxPostItTextItem::GetPresentation
     return false;
 }
 
-SfxPoolItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxPostItTextItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxPostItTextItem( *this );
+    return o3tl::make_unique<SvxPostItTextItem>( *this );
 }
 
 
@@ -151,9 +151,9 @@ SvxPostItIdItem::SvxPostItIdItem( sal_uInt16 _nWhich )
     SetWhich( _nWhich );
 }
 
-SfxPoolItem* SvxPostItIdItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxPostItIdItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxPostItIdItem( *this );
+    return o3tl::make_unique<SvxPostItIdItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,6 +19,7 @@
 
 #include <swwrtshitem.hxx>
 #include <globals.hrc>
+#include <o3tl/make_unique.hxx>
 
 SwWrtShellItem::SwWrtShellItem( SwWrtShell* pSh )
     : SfxPoolItem( SID_WRT_SHELL ), pWrtSh( pSh )
@@ -31,9 +32,9 @@ bool SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
     return static_cast<const SwWrtShellItem&>(rItem).pWrtSh == pWrtSh;
 }
 
-SfxPoolItem* SwWrtShellItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SwWrtShellItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SwWrtShellItem( *this );
+    return o3tl::make_unique<SwWrtShellItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,18 +26,18 @@
 class SdrResizeXOneItem: public SdrFractionItem {
 public:
     SdrResizeXOneItem(): SdrFractionItem(SDRATTR_RESIZEXONE,Fraction(1,1)) {}
-    SfxPoolItem* Clone(SfxItemPool*) const override
+    std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrResizeXOneItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrResizeXOneItem(*this));
     }
 };
 
 class SdrResizeYOneItem: public SdrFractionItem {
 public:
     SdrResizeYOneItem(): SdrFractionItem(SDRATTR_RESIZEYONE,Fraction(1,1)) {}
-  SfxPoolItem* Clone(SfxItemPool*) const override
+    std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrResizeYOneItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrResizeYOneItem(*this));
     }
 };
 

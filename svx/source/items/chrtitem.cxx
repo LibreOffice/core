@@ -28,11 +28,12 @@
 #include <float.h>
 
 #include <svx/chrtitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxDoubleItem::CreateDefault() { return new  SvxDoubleItem(0.0, 0);}
+std::unique_ptr<SfxPoolItem> SvxDoubleItem::CreateDefault() { return o3tl::make_unique<SvxDoubleItem>(0.0, 0);}
 
 SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
                                              sal_uInt16 nId) :
@@ -41,9 +42,9 @@ SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
 }
 
 
-SfxPoolItem* SvxChartTextOrderItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SvxChartTextOrderItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SvxChartTextOrderItem(*this);
+    return o3tl::make_unique<SvxChartTextOrderItem>(*this);
 }
 
 
@@ -132,9 +133,9 @@ bool SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
     return static_cast<const SvxDoubleItem&>(rItem).fVal == fVal;
 }
 
-SfxPoolItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SvxDoubleItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SvxDoubleItem(*this);
+    return o3tl::make_unique<SvxDoubleItem>(*this);
 }
 
 bool SvxDoubleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -155,9 +156,9 @@ SvxChartKindErrorItem::SvxChartKindErrorItem(SvxChartKindError eOrient,
 }
 
 
-SfxPoolItem* SvxChartKindErrorItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SvxChartKindErrorItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SvxChartKindErrorItem(*this);
+    return o3tl::make_unique<SvxChartKindErrorItem>(*this);
 }
 
 
@@ -175,9 +176,9 @@ SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
 }
 
 
-SfxPoolItem* SvxChartIndicateItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SvxChartIndicateItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SvxChartIndicateItem(*this);
+    return o3tl::make_unique<SvxChartIndicateItem>(*this);
 }
 
 
@@ -195,9 +196,9 @@ SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
 }
 
 
-SfxPoolItem* SvxChartRegressItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SvxChartRegressItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SvxChartRegressItem(*this);
+    return o3tl::make_unique<SvxChartRegressItem>(*this);
 }
 
 

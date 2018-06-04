@@ -19,10 +19,13 @@
 
 #include <sbxitem.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace basctl
 {
-SfxPoolItem* SbxItem::CreateDefault() { SAL_WARN( "basctl.basicide", "No SbxItem factory available"); return nullptr; }
+
+std::unique_ptr<SfxPoolItem> SbxItem::CreateDefault() { SAL_WARN( "basctl.basicide", "No SbxItem factory available"); return nullptr; }
+
 SbxItem::SbxItem (
     sal_uInt16 nWhichItem,
     ScriptDocument const& rDocument,
@@ -53,9 +56,9 @@ SbxItem::SbxItem (
     m_eType(eType)
 { }
 
-SfxPoolItem *SbxItem::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SbxItem::CloneInternal(SfxItemPool*) const
 {
-    return new SbxItem(*this);
+    return o3tl::make_unique<SbxItem>(*this);
 }
 
 bool SbxItem::operator==(const SfxPoolItem& rCmp) const

@@ -35,12 +35,12 @@ class EDITENG_DLLPUBLIC SvxParaVertAlignItem : public SfxUInt16Item
 {
 public:
     enum class Align { Automatic, Baseline, Top, Center, Bottom };
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxParaVertAlignItem( Align nValue /*= 0*/,
                        const sal_uInt16 nId  );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,

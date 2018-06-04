@@ -31,7 +31,7 @@ public:
                                                 MapUnit eCoreMetric, MapUnit ePresentationMetric,
                                                 OUString &rText, const IntlWrapper&) const override;
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*     Clone( SfxItemPool* pPool = nullptr ) const override;
+    SVX_DLLPRIVATE virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
     SVX_DLLPRIVATE virtual  sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

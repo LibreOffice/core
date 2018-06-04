@@ -32,10 +32,10 @@
 class SVX_DLLPUBLIC XFormTextOutlineItem : public SfxBoolItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
 
                             XFormTextOutlineItem(bool bOutline = false);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

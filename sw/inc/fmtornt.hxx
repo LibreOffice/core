@@ -43,7 +43,7 @@ public:
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -53,7 +53,7 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const override;
-    SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const override;
+    std::unique_ptr<SfxPoolItem> CreateInternal(SvStream &rStream, sal_uInt16 itemVersion) const override;
 
     sal_Int16 GetVertOrient() const { return m_eOrient; }
     sal_Int16 GetRelationOrient() const { return m_eRelation; }
@@ -80,7 +80,7 @@ public:
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

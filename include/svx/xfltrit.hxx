@@ -33,7 +33,7 @@ class SVX_DLLPUBLIC XFillTransparenceItem: public SfxUInt16Item
 {
 public:
                             XFillTransparenceItem(sal_uInt16 nFillTransparence = 0);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

@@ -1053,7 +1053,7 @@ HTMLStartEndPos::HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt,
                                                         sal_Int32 nE ) :
     nStart( nStt ),
     nEnd( nE ),
-    pItem( rItem.Clone() )
+    pItem( Clone(rItem) )
 {}
 
 typedef std::vector<HTMLStartEndPos *> HTMLStartEndPositions;

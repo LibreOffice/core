@@ -28,8 +28,9 @@
 #include <comphelper/processfactory.hxx>
 
 #include <svl/globalnameitem.hxx>
+#include <o3tl/make_unique.hxx>
 
-SfxPoolItem* SfxGlobalNameItem::CreateDefault() { return new SfxGlobalNameItem; }
+std::unique_ptr<SfxPoolItem> SfxGlobalNameItem::CreateDefault() { return o3tl::make_unique<SfxGlobalNameItem>(); }
 
 
 SfxGlobalNameItem::SfxGlobalNameItem()
@@ -55,9 +56,9 @@ bool SfxGlobalNameItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxGlobalNameItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxGlobalNameItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxGlobalNameItem( *this ));
 }
 
 // virtual

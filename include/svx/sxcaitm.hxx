@@ -36,9 +36,9 @@
 class SdrCaptionAngleItem: public SdrAngleItem {
 public:
     SdrCaptionAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_CAPTIONANGLE,nAngle) {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrCaptionAngleItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrCaptionAngleItem(*this));
     }
 };
 

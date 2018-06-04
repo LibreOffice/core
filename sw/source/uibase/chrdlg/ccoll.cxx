@@ -140,9 +140,9 @@ SwCondCollItem::~SwCondCollItem()
 {
 }
 
-SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SwCondCollItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SwCondCollItem(*this);
+    return o3tl::make_unique<SwCondCollItem>(*this);
 }
 
 bool SwCondCollItem::operator==( const SfxPoolItem& rItem) const

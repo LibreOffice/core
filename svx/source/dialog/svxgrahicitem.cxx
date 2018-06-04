@@ -19,6 +19,7 @@
 
 #include <svx/svxgrahicitem.hxx>
 #include <svx/svxids.hrc>
+#include <o3tl/make_unique.hxx>
 
 SvxGraphicItem::SvxGraphicItem( const Graphic& rGraphic )
     : SfxPoolItem( SID_GRAPHIC ), aGraphic( rGraphic )
@@ -31,9 +32,9 @@ bool SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
     return static_cast<const SvxGraphicItem&>(rItem).aGraphic == aGraphic;
 }
 
-SfxPoolItem* SvxGraphicItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxGraphicItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxGraphicItem( *this );
+    return o3tl::make_unique<SvxGraphicItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

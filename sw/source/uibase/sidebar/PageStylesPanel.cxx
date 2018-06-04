@@ -333,7 +333,7 @@ void PageStylesPanel::NotifyItemUpdate(
             if ( eState >= SfxItemState::DEFAULT &&
                  dynamic_cast< const SfxInt16Item *>( pState ) )
             {
-                mpPageColumnItem.reset( static_cast<SfxInt16Item*>(pState->Clone()) );
+                mpPageColumnItem = Clone(*static_cast<const SfxInt16Item*>(pState));
                 if(mpPageColumnItem->GetValue() <= 5)
                 {
                     mpColumnCount->SelectEntryPos(mpPageColumnItem->GetValue() - 1);
@@ -354,7 +354,7 @@ void PageStylesPanel::NotifyItemUpdate(
             if( eState >= SfxItemState::DEFAULT &&
                 dynamic_cast< const SvxPageItem*>( pState ) )
             {
-                mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
+                mpPageItem = Clone(*static_cast<const SvxPageItem*>(pState));
                 SvxNumType eNumType = mpPageItem->GetNumType();
                 mpNumberSelectLB->SetSelection(eNumType);
 
@@ -369,7 +369,7 @@ void PageStylesPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(SOLID) );
-                mpBgColorItem.reset(pState ? static_cast< XFillColorItem* >(pState->Clone()) : nullptr);
+                mpBgColorItem.reset(pState ? Clone(*static_cast< const XFillColorItem* >(pState)).release() : nullptr);
                 Update();
             }
         }
@@ -380,7 +380,7 @@ void PageStylesPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(HATCH) );
-                mpBgHatchItem.reset(pState ? static_cast < XFillHatchItem* >(pState->Clone()) : nullptr);
+                mpBgHatchItem.reset(pState ? Clone(*static_cast < const XFillHatchItem* >(pState)).release() : nullptr);
                 Update();
             }
         }
@@ -391,7 +391,7 @@ void PageStylesPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(GRADIENT) );
-                mpBgGradientItem.reset(pState ? static_cast< XFillGradientItem* >(pState->Clone()) : nullptr);
+                mpBgGradientItem.reset(pState ? Clone(*static_cast< const XFillGradientItem* >(pState)).release() : nullptr);
                 Update();
             }
         }
@@ -400,7 +400,7 @@ void PageStylesPanel::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mpBgBitmapItem.reset(pState ? static_cast< XFillBitmapItem* >(pState->Clone()) : nullptr);
+                mpBgBitmapItem.reset(pState ? Clone(*static_cast< const XFillBitmapItem* >(pState)).release() : nullptr);
                 if (mpBgBitmapItem)
                 {
                     if (mpBgBitmapItem->isPattern())

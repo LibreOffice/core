@@ -27,9 +27,9 @@
 class SdrMeasureFormatStringItem: public SfxStringItem {
 public:
     SdrMeasureFormatStringItem()                   : SfxStringItem() { SetWhich(SDRATTR_MEASUREFORMATSTRING); }
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrMeasureFormatStringItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrMeasureFormatStringItem(*this));
     }
 };
 

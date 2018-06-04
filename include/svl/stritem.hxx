@@ -27,7 +27,7 @@
 class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SfxStringItem(sal_uInt16 which = 0): CntUnencodedStringItem(which) {}
 
@@ -36,11 +36,11 @@ public:
 
     SfxStringItem(sal_uInt16 nWhich, SvStream & rStream);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream & rStream, sal_uInt16) const override;
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 

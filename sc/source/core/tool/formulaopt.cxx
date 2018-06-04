@@ -10,6 +10,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <formulaopt.hxx>
@@ -142,9 +143,9 @@ bool ScTpFormulaItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScTpFormulaItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScTpFormulaItem( *this );
+    return o3tl::make_unique<ScTpFormulaItem>( *this );
 }
 
 #define CFGPATH_FORMULA           "Office.Calc/Formula"

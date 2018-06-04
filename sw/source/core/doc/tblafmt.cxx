@@ -401,13 +401,12 @@ bool SwBoxAutoFormat::operator==(const SwBoxAutoFormat& rRight)
 }
 
 #define READ( aItem, aItemType, nVers )\
-    pNew = aItem.Create(rStream, nVers ); \
-    aItem = *static_cast<aItemType*>(pNew); \
-    delete pNew;
+    pNew = Create(aItem, rStream, nVers ); \
+    aItem = *static_cast<aItemType*>(pNew.get()); \
 
 bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
 {
-    SfxPoolItem* pNew;
+    std::unique_ptr<SfxPoolItem> pNew;
     SvxOrientationItem aOrientation( SvxCellOrientation::Standard, 0);
 
     READ( m_aFont,        SvxFontItem            , rVersions.nFontVersion)
@@ -451,9 +450,8 @@ bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sa
 
     READ( m_aBackground,  SvxBrushItem        , rVersions.nBrushVersion)
 
-    pNew = m_aAdjust.Create(rStream, rVersions.nAdjustVersion );
-    SetAdjust( *static_cast<SvxAdjustItem*>(pNew) );
-    delete pNew;
+    pNew = Create(m_aAdjust, rStream, rVersions.nAdjustVersion );
+    SetAdjust( *static_cast<SvxAdjustItem*>(pNew.get()) );
 
     if (nVer >= AUTOFORMAT_DATA_ID_31005)
     {
@@ -472,18 +470,15 @@ bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sa
     READ( aOrientation, SvxOrientationItem  , rVersions.nOrientationVersion)
     READ( m_aMargin, SvxMarginItem       , rVersions.nMarginVersion)
 
-    pNew = m_aLinebreak.Create(rStream, rVersions.nBoolVersion );
-    m_aLinebreak.SetValue( static_cast<SfxBoolItem*>(pNew)->GetValue() );
-    delete pNew;
+    pNew = Create(m_aLinebreak, rStream, rVersions.nBoolVersion );
+    m_aLinebreak.SetValue( static_cast<SfxBoolItem*>(pNew.get())->GetValue() );
 
     if ( nVer >= AUTOFORMAT_DATA_ID_504 )
     {
-        pNew = m_aRotateAngle.Create( rStream, rVersions.nInt32Version );
-        m_aRotateAngle.SetValue( static_cast<SfxInt32Item*>(pNew)->GetValue() );
-        delete pNew;
-        pNew = m_aRotateMode.Create( rStream, rVersions.nRotateModeVersion );
-        m_aRotateMode.SetValue( static_cast<SvxRotateModeItem*>(pNew)->GetValue() );
-        delete pNew;
+        pNew = Create(m_aRotateAngle, rStream, rVersions.nInt32Version );
+        m_aRotateAngle.SetValue( static_cast<SfxInt32Item*>(pNew.get())->GetValue() );
+        pNew = Create(m_aRotateMode, rStream, rVersions.nRotateModeVersion );
+        m_aRotateMode.SetValue( static_cast<SvxRotateModeItem*>(pNew.get())->GetValue() );
     }
 
     if( 0 == rVersions.nNumFormatVersion )
@@ -1001,7 +996,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
 
         if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
         {
-            SfxPoolItem* pNew = nullptr;
+            std::unique_ptr<SfxPoolItem> pNew;
 
             READ(m_aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION);
 //unimplemented            READ(m_aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION);

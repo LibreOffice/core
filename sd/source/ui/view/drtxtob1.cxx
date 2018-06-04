@@ -155,7 +155,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
                         aAttr.Put( aTmpSet, false ); // sal_False= InvalidItems is not default, handle it as "holes"
                         const SvxULSpaceItem& rItem = aAttr.Get( EE_PARA_ULSPACE );
-                        std::unique_ptr<SvxULSpaceItem> pNewItem(static_cast<SvxULSpaceItem*>(rItem.Clone()));
+                        std::unique_ptr<SvxULSpaceItem> pNewItem(Clone(rItem));
 
                         long nUpper = pNewItem->GetUpper();
                         if( nSlot == SID_PARASPACE_INCREASE )
@@ -196,7 +196,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 {
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
                     const SvxULSpaceItem& rItem = aEditAttr.Get( EE_PARA_ULSPACE );
-                    std::unique_ptr<SvxULSpaceItem> pNewItem(static_cast<SvxULSpaceItem*>( rItem.Clone() ));
+                    std::unique_ptr<SvxULSpaceItem> pNewItem(Clone(rItem));
                     long nUpper = pNewItem->GetUpper();
 
                     if( nSlot == SID_PARASPACE_INCREASE )

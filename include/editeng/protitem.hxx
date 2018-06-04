@@ -39,7 +39,7 @@ class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
     bool bPos   :1;     // Position protected
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit inline SvxProtectItem( const sal_uInt16 nId  );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
@@ -54,7 +54,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     bool IsContentProtected() const { return bCntnt; }
     bool IsSizeProtected()  const { return bSize;  }

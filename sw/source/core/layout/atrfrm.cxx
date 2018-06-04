@@ -96,7 +96,7 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SwFormatLineNumber::CreateDefault() { return new SwFormatLineNumber; }
+std::unique_ptr<SfxPoolItem> SwFormatLineNumber::CreateDefault() { return o3tl::make_unique<SwFormatLineNumber>(); }
 
 static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
 {
@@ -211,9 +211,9 @@ bool SwFormatFrameSize::operator==( const SfxPoolItem& rAttr ) const
             m_eHeightPercentRelation == static_cast<const SwFormatFrameSize&>(rAttr).GetHeightPercentRelation() );
 }
 
-SfxPoolItem*  SwFormatFrameSize::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatFrameSize::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatFrameSize( *this );
+    return o3tl::make_unique<SwFormatFrameSize>( *this );
 }
 
 bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -434,9 +434,9 @@ void SwFormatFrameSize::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwFormatFillOrder::SwFormatFillOrder( SwFillOrder nFO )
     : SfxEnumItem( RES_FILL_ORDER, nFO )
 {}
-SfxPoolItem*  SwFormatFillOrder::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatFillOrder::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatFillOrder( GetValue() );
+    return o3tl::make_unique<SwFormatFillOrder>( GetValue() );
 }
 
 sal_uInt16  SwFormatFillOrder::GetValueCount() const
@@ -479,9 +479,9 @@ bool SwFormatHeader::operator==( const SfxPoolItem& rAttr ) const
              bActive == static_cast<const SwFormatHeader&>(rAttr).IsActive() );
 }
 
-SfxPoolItem*  SwFormatHeader::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatHeader::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatHeader( *this );
+    return o3tl::make_unique<SwFormatHeader>( *this );
 }
 
 void SwFormatHeader::RegisterToFormat( SwFormat& rFormat )
@@ -529,9 +529,9 @@ bool SwFormatFooter::operator==( const SfxPoolItem& rAttr ) const
              bActive == static_cast<const SwFormatFooter&>(rAttr).IsActive() );
 }
 
-SfxPoolItem*  SwFormatFooter::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatFooter::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatFooter( *this );
+    return o3tl::make_unique<SwFormatFooter>( *this );
 }
 
 // Partially implemented inline in hxx
@@ -567,9 +567,9 @@ bool SwFormatContent::operator==( const SfxPoolItem& rAttr ) const
     return true;
 }
 
-SfxPoolItem*  SwFormatContent::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatContent::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatContent( *this );
+    return o3tl::make_unique<SwFormatContent>( *this );
 }
 
 void SwFormatContent::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -621,9 +621,9 @@ bool SwFormatPageDesc::operator==( const SfxPoolItem& rAttr ) const
             ( GetPageDesc() == static_cast<const SwFormatPageDesc&>(rAttr).GetPageDesc() );
 }
 
-SfxPoolItem*  SwFormatPageDesc::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatPageDesc::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatPageDesc( *this );
+    return o3tl::make_unique<SwFormatPageDesc>( *this );
 }
 
 void SwFormatPageDesc::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
@@ -883,9 +883,9 @@ bool SwFormatCol::operator==( const SfxPoolItem& rAttr ) const
     return true;
 }
 
-SfxPoolItem*  SwFormatCol::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatCol::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatCol( *this );
+    return o3tl::make_unique<SwFormatCol>( *this );
 }
 
 sal_uInt16 SwFormatCol::GetGutterWidth( bool bMin ) const
@@ -1171,9 +1171,9 @@ bool SwFormatSurround::operator==( const SfxPoolItem& rAttr ) const
              bOutside== static_cast<const SwFormatSurround&>(rAttr).bOutside );
 }
 
-SfxPoolItem*  SwFormatSurround::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatSurround::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatSurround( *this );
+    return o3tl::make_unique<SwFormatSurround>( *this );
 }
 
 sal_uInt16  SwFormatSurround::GetValueCount() const
@@ -1271,7 +1271,7 @@ SvStream& SwFormatVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) c
     return rStream;
 }
 
-SfxPoolItem* SwFormatVertOrient::Create(SvStream &rStream, sal_uInt16 nVersionAbusedAsSize) const
+std::unique_ptr<SfxPoolItem> SwFormatVertOrient::CreateInternal(SvStream &rStream, sal_uInt16 nVersionAbusedAsSize) const
 {
     SwTwips yPos(0);
     sal_Int16 orient(0);
@@ -1299,7 +1299,7 @@ SfxPoolItem* SwFormatVertOrient::Create(SvStream &rStream, sal_uInt16 nVersionAb
     }
     rStream.ReadInt16( orient ).ReadInt16( relation );
 
-    return new SwFormatVertOrient(yPos, orient, relation);
+    return o3tl::make_unique<SwFormatVertOrient>(yPos, orient, relation);
 }
 
 // Partially implemented inline in hxx
@@ -1319,9 +1319,9 @@ bool SwFormatVertOrient::operator==( const SfxPoolItem& rAttr ) const
              m_eRelation == static_cast<const SwFormatVertOrient&>(rAttr).m_eRelation );
 }
 
-SfxPoolItem*  SwFormatVertOrient::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatVertOrient::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatVertOrient( *this );
+    return o3tl::make_unique<SwFormatVertOrient>( *this );
 }
 
 bool SwFormatVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1413,9 +1413,9 @@ bool SwFormatHoriOrient::operator==( const SfxPoolItem& rAttr ) const
              m_bPosToggle == static_cast<const SwFormatHoriOrient&>(rAttr).m_bPosToggle );
 }
 
-SfxPoolItem*  SwFormatHoriOrient::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatHoriOrient::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatHoriOrient( *this );
+    return o3tl::make_unique<SwFormatHoriOrient>( *this );
 }
 
 bool SwFormatHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1568,9 +1568,9 @@ bool SwFormatAnchor::operator==( const SfxPoolItem& rAttr ) const
                (*m_pContentAnchor == *rFormatAnchor.GetContentAnchor()))));
 }
 
-SfxPoolItem*  SwFormatAnchor::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatAnchor::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatAnchor( *this );
+    return o3tl::make_unique<SwFormatAnchor>( *this );
 }
 
 // OD 2004-05-05 #i28701#
@@ -1765,9 +1765,9 @@ bool SwFormatURL::operator==( const SfxPoolItem &rAttr ) const
     return bRet;
 }
 
-SfxPoolItem* SwFormatURL::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatURL::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatURL( *this );
+    return o3tl::make_unique<SwFormatURL>( *this );
 }
 
 void SwFormatURL::SetURL(const OUString &rURL, bool bServerMap)
@@ -1876,24 +1876,24 @@ bool SwFormatURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-SfxPoolItem* SwFormatEditInReadonly::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatEditInReadonly::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatEditInReadonly( *this );
+    return o3tl::make_unique<SwFormatEditInReadonly>( *this );
 }
 
-SfxPoolItem* SwFormatLayoutSplit::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatLayoutSplit::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatLayoutSplit( *this );
+    return o3tl::make_unique<SwFormatLayoutSplit>( *this );
 }
 
-SfxPoolItem* SwFormatRowSplit::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatRowSplit::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatRowSplit( *this );
+    return o3tl::make_unique<SwFormatRowSplit>( *this );
 }
 
-SfxPoolItem* SwFormatNoBalancedColumns::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatNoBalancedColumns::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatNoBalancedColumns( *this );
+    return o3tl::make_unique<SwFormatNoBalancedColumns>( *this );
 }
 
 void SwFormatNoBalancedColumns::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -2030,16 +2030,16 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
 
 // class SwFormatFootnoteAtTextEnd
 
-SfxPoolItem* SwFormatFootnoteAtTextEnd::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatFootnoteAtTextEnd::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatFootnoteAtTextEnd(*this);
+    return o3tl::make_unique<SwFormatFootnoteAtTextEnd>(*this);
 }
 
 // class SwFormatEndAtTextEnd
 
-SfxPoolItem* SwFormatEndAtTextEnd::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatEndAtTextEnd::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatEndAtTextEnd(*this);
+    return o3tl::make_unique<SwFormatEndAtTextEnd>(*this);
 }
 
 //class SwFormatChain
@@ -2059,9 +2059,9 @@ SwFormatChain::SwFormatChain( const SwFormatChain &rCpy ) :
     SetNext( rCpy.GetNext() );
 }
 
-SfxPoolItem* SwFormatChain::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatChain::CloneInternal( SfxItemPool* ) const
 {
-    SwFormatChain *pRet = new SwFormatChain;
+    std::unique_ptr<SwFormatChain> pRet(new SwFormatChain);
     pRet->SetPrev( GetPrev() );
     pRet->SetNext( GetNext() );
     return pRet;
@@ -2126,9 +2126,9 @@ bool SwFormatLineNumber::operator==( const SfxPoolItem &rAttr ) const
            bCountLines  == static_cast<const SwFormatLineNumber&>(rAttr).IsCount();
 }
 
-SfxPoolItem* SwFormatLineNumber::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatLineNumber::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatLineNumber( *this );
+    return o3tl::make_unique<SwFormatLineNumber>( *this );
 }
 
 bool SwFormatLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2206,9 +2206,9 @@ bool SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
         && m_bSquaredMode == rOther.GetSquaredMode();
 }
 
-SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwTextGridItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SwTextGridItem( *this );
+    return o3tl::make_unique<SwTextGridItem>( *this );
 }
 
 bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2446,9 +2446,9 @@ void SwTextGridItem::Init()
     }
 }
 
-SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwHeaderAndFooterEatSpacingItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SwHeaderAndFooterEatSpacingItem( Which(), GetValue() );
+    return o3tl::make_unique<SwHeaderAndFooterEatSpacingItem>( Which(), GetValue() );
 }
 
 

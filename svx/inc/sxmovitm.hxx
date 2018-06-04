@@ -25,18 +25,18 @@
 class SdrMoveXItem: public SdrMetricItem {
 public:
     SdrMoveXItem(): SdrMetricItem(SDRATTR_MOVEX,0)        {}
-    SfxPoolItem* Clone(SfxItemPool*) const override
+    std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrMoveXItem(*this);
+        return o3tl::make_unique<SdrMoveXItem>(*this);
     }
 };
 
 class SdrMoveYItem: public SdrMetricItem {
 public:
     SdrMoveYItem(): SdrMetricItem(SDRATTR_MOVEY,0)        {}
-    SfxPoolItem* Clone(SfxItemPool*) const override
+    std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrMoveYItem(*this);
+        return o3tl::make_unique<SdrMoveYItem>(*this);
     }
 };
 

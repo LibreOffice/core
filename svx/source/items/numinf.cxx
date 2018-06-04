@@ -18,6 +18,7 @@
  */
 
 #include <svx/numinf.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 #define INIT(pNum,eVal,nDouble,rStr)    \
@@ -118,9 +119,9 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxNumberInfoItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxNumberInfoItem( *this );
+    return o3tl::make_unique<SvxNumberInfoItem>( *this );
 }
 
 

@@ -266,9 +266,9 @@ bool SdrCustomShapeGeometryItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SdrCustomShapeGeometryItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SdrCustomShapeGeometryItem( aPropSeq );
+    return o3tl::make_unique<SdrCustomShapeGeometryItem>( aPropSeq );
 }
 
 sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const

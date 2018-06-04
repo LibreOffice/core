@@ -200,7 +200,7 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFo
             const SfxPoolItem *pCurr = aIter.GetCurItem();
             while( true )
             {
-                m_Items.push_back(std::unique_ptr<SfxPoolItem>(pCurr->Clone()));
+                m_Items.push_back(Clone(*pCurr));
                 if( aIter.IsAtEnd() )
                     break;
                 pCurr = aIter.NextItem();
@@ -219,7 +219,7 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormatGloba
 {
     for (size_t n = rFormat.m_Items.size(); n; )
     {
-        m_Items.push_back(std::unique_ptr<SfxPoolItem>(rFormat.m_Items[ --n ]->Clone()));
+        m_Items.push_back(Clone(*rFormat.m_Items[ --n ]));
     }
 }
 

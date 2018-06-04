@@ -30,7 +30,7 @@ class SVL_DLLPUBLIC SfxIntegerListItem : public SfxPoolItem
     std::vector < sal_Int32 > m_aList;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SfxIntegerListItem();
     SfxIntegerListItem( sal_uInt16 nWhich, const ::std::vector < sal_Int32 >& rList );
     SfxIntegerListItem( sal_uInt16 nWhich, const css::uno::Sequence < sal_Int32 >& rList );
@@ -44,7 +44,7 @@ public:
     const std::vector< sal_Int32 >& GetList() const { return m_aList; }
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            PutValue  ( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 };

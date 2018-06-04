@@ -25,18 +25,18 @@
 class SdrHorzShearOneItem: public SdrAngleItem {
 public:
     SdrHorzShearOneItem(): SdrAngleItem(SDRATTR_HORZSHEARONE,0) {}
-    SfxPoolItem* Clone(SfxItemPool*) const override
+    std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrHorzShearOneItem(*this);
+        return o3tl::make_unique<SdrHorzShearOneItem>(*this);
     }
 };
 
 class SdrVertShearOneItem: public SdrAngleItem {
 public:
     SdrVertShearOneItem(): SdrAngleItem(SDRATTR_VERTSHEARONE,0) {}
-    SfxPoolItem* Clone(SfxItemPool*) const override
+    std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrVertShearOneItem(*this);
+        return o3tl::make_unique<SdrVertShearOneItem>(*this);
     }
 };
 

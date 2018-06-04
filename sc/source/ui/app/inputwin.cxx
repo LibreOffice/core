@@ -1117,31 +1117,31 @@ void ScTextWnd::StartEditEngine()
 static void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
 {
     const SfxPoolItem& rFontItem = rSet.Get( EE_CHAR_FONTINFO );
-    std::unique_ptr<SfxPoolItem> pNewItem(rFontItem.Clone());
+    std::unique_ptr<SfxPoolItem> pNewItem(Clone(rFontItem));
     pNewItem->SetWhich(EE_CHAR_FONTINFO_CJK);
     rSet.Put( *pNewItem );
     pNewItem->SetWhich(EE_CHAR_FONTINFO_CTL);
     rSet.Put( *pNewItem );
     const SfxPoolItem& rHeightItem = rSet.Get( EE_CHAR_FONTHEIGHT );
-    pNewItem.reset(rHeightItem.Clone());
+    pNewItem = Clone(rHeightItem);
     pNewItem->SetWhich(EE_CHAR_FONTHEIGHT_CJK);
     rSet.Put( *pNewItem );
     pNewItem->SetWhich(EE_CHAR_FONTHEIGHT_CTL);
     rSet.Put( *pNewItem );
     const SfxPoolItem& rWeightItem = rSet.Get( EE_CHAR_WEIGHT );
-    pNewItem.reset(rWeightItem.Clone());
+    pNewItem = Clone(rWeightItem);
     pNewItem->SetWhich(EE_CHAR_WEIGHT_CJK);
     rSet.Put( *pNewItem );
     pNewItem->SetWhich(EE_CHAR_WEIGHT_CTL);
     rSet.Put( *pNewItem );
     const SfxPoolItem& rItalicItem = rSet.Get( EE_CHAR_ITALIC );
-    pNewItem.reset(rItalicItem.Clone());
+    pNewItem = Clone(rItalicItem);
     pNewItem->SetWhich(EE_CHAR_ITALIC_CJK);
     rSet.Put( *pNewItem );
     pNewItem->SetWhich(EE_CHAR_ITALIC_CTL);
     rSet.Put( *pNewItem );
     const SfxPoolItem& rLangItem = rSet.Get( EE_CHAR_LANGUAGE );
-    pNewItem.reset(rLangItem.Clone());
+    pNewItem = Clone(rLangItem);
     pNewItem->SetWhich(EE_CHAR_LANGUAGE_CJK);
     rSet.Put( *pNewItem );
     pNewItem->SetWhich(EE_CHAR_LANGUAGE_CTL);

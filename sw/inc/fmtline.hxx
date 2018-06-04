@@ -40,11 +40,11 @@ public:
     SwFormatLineNumber & operator =(SwFormatLineNumber const &) = delete; // due to SfxPoolItem
     SwFormatLineNumber & operator =(SwFormatLineNumber &&) = delete; // due to SfxPoolItem
 
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

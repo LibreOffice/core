@@ -63,7 +63,7 @@ public:
                             virtual ~ScInputStatusItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     const ScAddress&        GetPos() const      { return aCursorPos; }
 
@@ -136,7 +136,7 @@ public:
                                         const ScSortParam*  pSortData );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     ScViewData*         GetViewData () const { return pViewData; }
@@ -159,7 +159,7 @@ public:
                             virtual ~ScQueryItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     ScViewData*         GetViewData () const { return pViewData; }
     const ScQueryParam& GetQueryData() const;
@@ -184,7 +184,7 @@ public:
                                 const ScSubTotalParam*  pSubTotalData );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     ScViewData*             GetViewData () const { return pViewData; }
@@ -203,7 +203,7 @@ public:
                 virtual ~ScUserListItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     void        SetUserList ( const ScUserList& rUserList );
     ScUserList* GetUserList () const { return pUserList.get(); }
@@ -219,7 +219,7 @@ public:
                                    const ScConsolidateParam* pParam );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     const ScConsolidateParam& GetData() const { return theConsData; }
 
@@ -236,7 +236,7 @@ public:
                 virtual ~ScPivotItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     const ScDPSaveData& GetData() const         { return *pSaveData; }
     const ScRange&      GetDestRange() const    { return aDestRange; }
@@ -255,7 +255,7 @@ public:
                              const ScSolveParam* pParam );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     const ScSolveParam& GetData() const { return theSolveData; }
 
@@ -270,7 +270,7 @@ public:
                              const ScTabOpParam* pParam );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     const ScTabOpParam& GetData() const { return theTabOpData; }
 

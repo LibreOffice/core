@@ -10,6 +10,7 @@
 
 #include <utility>
 
+#include <o3tl/make_unique.hxx>
 #include <scitems.hxx>
 #include <condformatdlgitem.hxx>
 
@@ -32,9 +33,9 @@ bool ScCondFormatDlgItem::operator==(const SfxPoolItem& /*rItem*/) const
     return false;
 }
 
-SfxPoolItem* ScCondFormatDlgItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> ScCondFormatDlgItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new ScCondFormatDlgItem(*this);
+    return o3tl::make_unique<ScCondFormatDlgItem>(*this);
 }
 
 bool ScCondFormatDlgItem::IsManaged() const

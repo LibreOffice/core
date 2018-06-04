@@ -3543,8 +3543,8 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
                 if (nLen >= 4)
                 {
                     const SwAttrSet& aSet = m_pCurrentColl->GetAttrSet();
-                    std::unique_ptr<SvxUnderlineItem> pUnderline(
-                            static_cast<SvxUnderlineItem *>(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone()));
+                    std::unique_ptr<SvxUnderlineItem> pUnderline =
+                            Clone(static_cast<const SvxUnderlineItem &>(aSet.Get( RES_CHRATR_UNDERLINE, false )));
                     pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
                     m_pCurrentColl->SetFormatAttr( *pUnderline );
                 }
@@ -3556,7 +3556,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
             {
                 if (nLen >= 4)
                 {
-                    std::unique_ptr<SvxUnderlineItem> pUnderline(static_cast<SvxUnderlineItem*>(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone()));
+                    std::unique_ptr<SvxUnderlineItem> pUnderline = Clone(static_cast<const SvxUnderlineItem&>(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false)));
                     pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
                     m_xCurrentItemSet->Put( *pUnderline );
                 }
@@ -4538,7 +4538,7 @@ void SwWW8ImplReader::Read_BoolItem( sal_uInt16 nId, const sal_uInt8* pData, sho
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
     else
     {
-        std::unique_ptr<SfxBoolItem> pI(static_cast<SfxBoolItem*>(GetDfltAttr( nId )->Clone()));
+        std::unique_ptr<SfxBoolItem> pI = Clone(*static_cast<const SfxBoolItem*>(GetDfltAttr( nId )));
         pI->SetValue( 0 != *pData );
         NewAttr( *pI );
     }

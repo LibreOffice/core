@@ -77,7 +77,7 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
                     0 != (nEdtWhich = pSdrPool->GetWhich( nSlotId )) &&
                     nSlotId != nEdtWhich )
                 {
-                    std::unique_ptr<SfxPoolItem> pCpy(pItem->Clone());
+                    std::unique_ptr<SfxPoolItem> pCpy = Clone(*pItem);
                     pCpy->SetWhich( nEdtWhich );
                     pSdrPool->SetPoolDefaultItem( *pCpy );
                 }

@@ -290,13 +290,12 @@ void ScAutoFormatDataField::SetAdjust( const SvxAdjustItem& rAdjust )
 }
 
 #define READ( aItem, ItemType, nVers )      \
-    pNew = aItem.Create( rStream, nVers );  \
-    aItem = *static_cast<ItemType*>(pNew);  \
-    delete pNew;
+    pNew = Create(aItem, rStream, nVers );  \
+    aItem = *static_cast<ItemType*>(pNew.get());  \
 
 bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer )
 {
-    SfxPoolItem* pNew;
+    std::unique_ptr<SfxPoolItem> pNew;
     SvxOrientationItem aOrientation( SvxCellOrientation::Standard, 0 );
 
     READ( aFont,        SvxFontItem,        rVersions.nFontVersion)
@@ -335,9 +334,8 @@ bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
 
     READ( aBackground,  SvxBrushItem,       rVersions.nBrushVersion)
 
-    pNew = aAdjust.Create( rStream, rVersions.nAdjustVersion );
-    SetAdjust( *static_cast<SvxAdjustItem*>(pNew) );
-    delete pNew;
+    pNew = Create(aAdjust, rStream, rVersions.nAdjustVersion );
+    SetAdjust( *static_cast<SvxAdjustItem*>(pNew.get()) );
 
     if (nVer >= AUTOFORMAT_DATA_ID_31005)
         rStream >> m_swFields;
@@ -347,18 +345,15 @@ bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     READ( aOrientation,  SvxOrientationItem, rVersions.nOrientationVersion)
     READ( aMargin,       SvxMarginItem,      rVersions.nMarginVersion)
 
-    pNew = aLinebreak.Create( rStream, rVersions.nBoolVersion );
-    SetLinebreak( *static_cast<SfxBoolItem*>(pNew) );
-    delete pNew;
+    pNew = Create(aLinebreak, rStream, rVersions.nBoolVersion );
+    SetLinebreak( *static_cast<SfxBoolItem*>(pNew.get()) );
 
     if ( nVer >= AUTOFORMAT_DATA_ID_504 )
     {
-        pNew = aRotateAngle.Create( rStream, rVersions.nInt32Version );
-        SetRotateAngle( *static_cast<SfxInt32Item*>(pNew) );
-        delete pNew;
-        pNew = aRotateMode.Create( rStream, rVersions.nRotateModeVersion );
-        SetRotateMode( *static_cast<SvxRotateModeItem*>(pNew) );
-        delete pNew;
+        pNew = Create(aRotateAngle, rStream, rVersions.nInt32Version );
+        SetRotateAngle( *static_cast<SfxInt32Item*>(pNew.get()) );
+        pNew = Create(aRotateMode, rStream, rVersions.nRotateModeVersion );
+        SetRotateMode( *static_cast<SvxRotateModeItem*>(pNew.get()) );
     }
 
     if( 0 == rVersions.nNumFmtVersion )

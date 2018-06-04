@@ -1155,7 +1155,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
                         m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
                     {
                         // use always the SW-Which Id !
-                        std::unique_ptr<SfxPoolItem> pI(i->pAttr->Clone());
+                        std::unique_ptr<SfxPoolItem> pI = Clone(*i->pAttr);
                         pI->SetWhich( nWhich );
                         // Will this item produce a <w:sz> element?
                         bool bFontSizeItem = nWhich == RES_CHRATR_FONTSIZE || nWhich == RES_CHRATR_CJK_FONTSIZE;
@@ -1289,7 +1289,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
                              : ( nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END ) ) )
             {
                 // use always the SW-Which Id !
-                std::unique_ptr<SfxPoolItem> pI(pItem->Clone());
+                std::unique_ptr<SfxPoolItem> pI(Clone(*pItem));
                 pI->SetWhich( nWhich );
                 if (m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
                     m_rExport.AttrOutput().OutputItem(*pI);

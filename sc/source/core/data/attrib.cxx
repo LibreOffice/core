@@ -44,7 +44,7 @@
 using namespace com::sun::star;
 
 
-SfxPoolItem* ScProtectionAttr::CreateDefault() { return new ScProtectionAttr; }
+std::unique_ptr<SfxPoolItem> ScProtectionAttr::CreateDefault() { return o3tl::make_unique<ScProtectionAttr>(); }
 
 /**
  * General Help Function
@@ -113,9 +113,9 @@ bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
              && (nRowMerge == static_cast<const ScMergeAttr&>(rItem).nRowMerge);
 }
 
-SfxPoolItem* ScMergeAttr::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScMergeAttr::CloneInternal( SfxItemPool * ) const
 {
-    return new ScMergeAttr(*this);
+    return o3tl::make_unique<ScMergeAttr>(*this);
 }
 
 void ScMergeAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -144,9 +144,9 @@ ScMergeFlagAttr::~ScMergeFlagAttr()
 {
 }
 
-SfxPoolItem * ScMergeFlagAttr::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> ScMergeFlagAttr::CloneInternal(SfxItemPool *) const
 {
-    return new ScMergeFlagAttr(*this);
+    return std::unique_ptr<SfxPoolItem>(new ScMergeFlagAttr(*this));
 }
 
 bool ScMergeFlagAttr::HasPivotButton() const
@@ -347,9 +347,9 @@ bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
              && (bHidePrint == static_cast<const ScProtectionAttr&>(rItem).bHidePrint);
 }
 
-SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScProtectionAttr::CloneInternal( SfxItemPool * ) const
 {
-    return new ScProtectionAttr(*this);
+    return o3tl::make_unique<ScProtectionAttr>(*this);
 }
 
 void ScProtectionAttr::SetProtection( bool bProtect)
@@ -470,9 +470,9 @@ bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
            && ScGlobal::EETextObjEqual(pRightArea.get(),  r.pRightArea.get());
 }
 
-SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> ScPageHFItem::CloneInternal( SfxItemPool* ) const
 {
-    return new ScPageHFItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new ScPageHFItem( *this ));
 }
 
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
@@ -559,9 +559,9 @@ sal_uInt16 ScViewObjectModeItem::GetValueCount() const
     return 2;
 }
 
-SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> ScViewObjectModeItem::CloneInternal( SfxItemPool* ) const
 {
-    return new ScViewObjectModeItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new ScViewObjectModeItem( *this ));
 }
 
 sal_uInt16 ScViewObjectModeItem::GetVersion( sal_uInt16 /* nFileVersion */ ) const
@@ -587,9 +587,9 @@ ScPageScaleToItem::~ScPageScaleToItem()
 {
 }
 
-ScPageScaleToItem* ScPageScaleToItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> ScPageScaleToItem::CloneInternal( SfxItemPool* ) const
 {
-    return new ScPageScaleToItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new ScPageScaleToItem( *this ));
 }
 
 bool ScPageScaleToItem::operator==( const SfxPoolItem& rCmp ) const
@@ -691,9 +691,9 @@ bool ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
     return maIndex == static_cast<const ScCondFormatItem&>(rCmp).maIndex;
 }
 
-ScCondFormatItem* ScCondFormatItem::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> ScCondFormatItem::CloneInternal(SfxItemPool*) const
 {
-    return new ScCondFormatItem(maIndex);
+    return o3tl::make_unique<ScCondFormatItem>(maIndex);
 }
 
 void ScCondFormatItem::AddCondFormatData( sal_uInt32 nIndex )

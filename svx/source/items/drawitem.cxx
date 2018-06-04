@@ -20,17 +20,18 @@
 #include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxColorListItem::CreateDefault() { return new  SvxColorListItem ;}
-SfxPoolItem* SvxGradientListItem::CreateDefault() { return new   SvxGradientListItem ;}
-SfxPoolItem* SvxHatchListItem::CreateDefault() { return new   SvxHatchListItem ;}
-SfxPoolItem* SvxBitmapListItem::CreateDefault() { return new   SvxBitmapListItem ;}
-SfxPoolItem* SvxPatternListItem::CreateDefault() { return new SvxPatternListItem ;}
-SfxPoolItem* SvxDashListItem::CreateDefault() { return new   SvxDashListItem ;}
-SfxPoolItem* SvxLineEndListItem::CreateDefault() { return new   SvxLineEndListItem ;}
+std::unique_ptr<SfxPoolItem> SvxColorListItem::CreateDefault() { return o3tl::make_unique<SvxColorListItem>();}
+std::unique_ptr<SfxPoolItem> SvxGradientListItem::CreateDefault() { return o3tl::make_unique<SvxGradientListItem>();}
+std::unique_ptr<SfxPoolItem> SvxHatchListItem::CreateDefault() { return o3tl::make_unique<SvxHatchListItem>();}
+std::unique_ptr<SfxPoolItem> SvxBitmapListItem::CreateDefault() { return o3tl::make_unique<SvxBitmapListItem>();}
+std::unique_ptr<SfxPoolItem> SvxPatternListItem::CreateDefault() { return o3tl::make_unique<SvxPatternListItem>();}
+std::unique_ptr<SfxPoolItem> SvxDashListItem::CreateDefault() { return o3tl::make_unique<SvxDashListItem>();}
+std::unique_ptr<SfxPoolItem> SvxLineEndListItem::CreateDefault() { return o3tl::make_unique<SvxLineEndListItem>();}
 
 SvxColorListItem::SvxColorListItem()
 {
@@ -68,9 +69,9 @@ bool SvxColorListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxColorListItem&>(rItem).pColorList == pColorList;
 }
 
-SfxPoolItem* SvxColorListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxColorListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxColorListItem( *this );
+    return o3tl::make_unique<SvxColorListItem>( *this );
 }
 
 
@@ -132,9 +133,9 @@ bool SvxGradientListItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SvxGradientListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxGradientListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxGradientListItem( *this );
+    return o3tl::make_unique<SvxGradientListItem>( *this );
 }
 
 
@@ -179,9 +180,9 @@ bool SvxHatchListItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxPoolItem* SvxHatchListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxHatchListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxHatchListItem( *this );
+    return o3tl::make_unique<SvxHatchListItem>( *this );
 }
 
 QUERY_PUT_IMPL( SvxHatchListItem, HatchList )
@@ -220,9 +221,9 @@ bool SvxBitmapListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxBitmapListItem&>(rItem).pBitmapList == pBitmapList;
 }
 
-SfxPoolItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxBitmapListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxBitmapListItem( *this );
+    return o3tl::make_unique<SvxBitmapListItem>( *this );
 }
 
 QUERY_PUT_IMPL( SvxBitmapListItem, BitmapList )
@@ -261,9 +262,9 @@ bool SvxPatternListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxPatternListItem&>(rItem).pPatternList == pPatternList;
 }
 
-SfxPoolItem* SvxPatternListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxPatternListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxPatternListItem( *this );
+    return o3tl::make_unique<SvxPatternListItem>( *this );
 }
 
 QUERY_PUT_IMPL( SvxPatternListItem, PatternList )
@@ -302,9 +303,9 @@ bool SvxDashListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxDashListItem&>(rItem).pDashList == pDashList;
 }
 
-SfxPoolItem* SvxDashListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxDashListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxDashListItem( *this );
+    return o3tl::make_unique<SvxDashListItem>( *this );
 }
 
 QUERY_PUT_IMPL( SvxDashListItem, DashList )
@@ -343,9 +344,9 @@ bool SvxLineEndListItem::operator==( const SfxPoolItem& rItem ) const
     return static_cast<const SvxLineEndListItem&>(rItem).pLineEndList == pLineEndList;
 }
 
-SfxPoolItem* SvxLineEndListItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxLineEndListItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxLineEndListItem( *this );
+    return o3tl::make_unique<SvxLineEndListItem>( *this );
 }
 
 QUERY_PUT_IMPL( SvxLineEndListItem, LineEndList )

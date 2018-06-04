@@ -29,10 +29,11 @@
 #include <com/sun/star/table/CellJustifyMethod.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <o3tl/make_unique.hxx>
 
 
-SfxPoolItem* SvxHorJustifyItem::CreateDefault() { return new  SvxHorJustifyItem(SvxCellHorJustify::Standard, 0) ;}
-SfxPoolItem* SvxVerJustifyItem::CreateDefault() { return new  SvxVerJustifyItem(SvxCellVerJustify::Standard, 0) ;}
+std::unique_ptr<SfxPoolItem> SvxHorJustifyItem::CreateDefault() { return o3tl::make_unique<SvxHorJustifyItem>(SvxCellHorJustify::Standard, 0) ;}
+std::unique_ptr<SfxPoolItem> SvxVerJustifyItem::CreateDefault() { return o3tl::make_unique<SvxVerJustifyItem>(SvxCellVerJustify::Standard, 0) ;}
 
 using namespace ::com::sun::star;
 
@@ -165,17 +166,17 @@ OUString SvxHorJustifyItem::GetValueText( sal_uInt16 nVal )
 }
 
 
-SfxPoolItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxHorJustifyItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxHorJustifyItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxHorJustifyItem( *this ));
 }
 
 
-SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxHorJustifyItem::CreateInternal( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStream.ReadUInt16( nVal );
-    return new SvxHorJustifyItem( static_cast<SvxCellHorJustify>(nVal), Which() );
+    return o3tl::make_unique<SvxHorJustifyItem>( static_cast<SvxCellHorJustify>(nVal), Which() );
 }
 
 
@@ -301,17 +302,17 @@ OUString SvxVerJustifyItem::GetValueText( SvxCellVerJustify nVal )
 }
 
 
-SfxPoolItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxVerJustifyItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxVerJustifyItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxVerJustifyItem( *this ));
 }
 
 
-SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SvxVerJustifyItem::CreateInternal( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStream.ReadUInt16( nVal );
-    return new SvxVerJustifyItem( static_cast<SvxCellVerJustify>(nVal), Which() );
+    return o3tl::make_unique<SvxVerJustifyItem>( static_cast<SvxCellVerJustify>(nVal), Which() );
 }
 
 
@@ -382,9 +383,9 @@ OUString SvxJustifyMethodItem::GetValueText( SvxCellJustifyMethod nVal )
 }
 
 
-SfxPoolItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SvxJustifyMethodItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SvxJustifyMethodItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SvxJustifyMethodItem( *this ));
 }
 
 

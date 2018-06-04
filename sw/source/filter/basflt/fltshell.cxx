@@ -295,7 +295,7 @@ void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr
     }
     else
     {
-        SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, std::unique_ptr<SfxPoolItem>(rAttr.Clone()) );
+        SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, Clone(rAttr) );
         pTmp->SetStartCP(GetCurrAttrCP());
         m_Entries.push_back(std::unique_ptr<SwFltStackEntry>(pTmp));
     }
@@ -969,9 +969,9 @@ bool SwFltAnchor::operator==(const SfxPoolItem& rItem) const
     return pFrameFormat == static_cast<const SwFltAnchor&>(rItem).pFrameFormat;
 }
 
-SfxPoolItem* SwFltAnchor::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SwFltAnchor::CloneInternal(SfxItemPool*) const
 {
-    return new SwFltAnchor(*this);
+    return o3tl::make_unique<SwFltAnchor>(*this);
 }
 
 SwFltAnchorClient::SwFltAnchorClient(SwFltAnchor * pFltAnchor)
@@ -1001,9 +1001,9 @@ bool SwFltRedline::operator==(const SfxPoolItem& rItem) const
     return this == &rItem;
 }
 
-SfxPoolItem* SwFltRedline::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFltRedline::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFltRedline(*this);
+    return o3tl::make_unique<SwFltRedline>(*this);
 }
 
 // methods of SwFltBookmark follow
@@ -1034,9 +1034,9 @@ bool SwFltBookmark::operator==(const SfxPoolItem& rItem) const
             && (mnHandle == static_cast<const SwFltBookmark&>(rItem).mnHandle);
 }
 
-SfxPoolItem* SwFltBookmark::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SwFltBookmark::CloneInternal(SfxItemPool*) const
 {
-    return new SwFltBookmark(*this);
+    return o3tl::make_unique<SwFltBookmark>(*this);
 }
 
 SwFltRDFMark::SwFltRDFMark()
@@ -1055,9 +1055,9 @@ bool SwFltRDFMark::operator==(const SfxPoolItem& rItem) const
     return m_nHandle == rMark.m_nHandle && m_aAttributes == rMark.m_aAttributes;
 }
 
-SfxPoolItem* SwFltRDFMark::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SwFltRDFMark::CloneInternal(SfxItemPool*) const
 {
-    return new SwFltRDFMark(*this);
+    return o3tl::make_unique<SwFltRDFMark>(*this);
 }
 
 void SwFltRDFMark::SetHandle(long nHandle)
@@ -1092,9 +1092,9 @@ bool SwFltTOX::operator==(const SfxPoolItem& rItem) const
     return pTOXBase == static_cast<const SwFltTOX&>(rItem).pTOXBase;
 }
 
-SfxPoolItem* SwFltTOX::Clone(SfxItemPool*) const
+std::unique_ptr<SfxPoolItem> SwFltTOX::CloneInternal(SfxItemPool*) const
 {
-    return new SwFltTOX(*this);
+    return o3tl::make_unique<SwFltTOX>(*this);
 }
 
 // UpdatePageDescs needs to be called at end of parsing to make Writer actually

@@ -246,7 +246,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
         aSet.Put(SfxBoolItem(nWSharedFirst,  m_xCntSharedFirstBox->get_active()));
     if (m_xDynSpacingCB->get_visible() && SfxItemPool::IsWhich(nWDynSpacing))
     {
-        std::unique_ptr<SfxBoolItem> pBoolItem(static_cast<SfxBoolItem*>(pPool->GetDefaultItem(nWDynSpacing).Clone()));
+        std::unique_ptr<SfxBoolItem> pBoolItem(Clone(static_cast<SfxBoolItem const &>(pPool->GetDefaultItem(nWDynSpacing))));
         pBoolItem->SetValue(m_xDynSpacingCB->get_active());
         aSet.Put(*pBoolItem);
     }

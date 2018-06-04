@@ -184,7 +184,7 @@ public:
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -196,13 +196,13 @@ class SFX2_DLLPUBLIC SfxUnoAnyItem : public SfxPoolItem
 {
     css::uno::Any  aValue;
 public:
-                                static SfxPoolItem* CreateDefault();
+                                static std::unique_ptr<SfxPoolItem> CreateDefault();
                                 SfxUnoAnyItem();
                                 SfxUnoAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
     const css::uno::Any&        GetValue() const
                                 { return aValue; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
@@ -213,14 +213,14 @@ class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
                                 m_xFrame;
 
 public:
-                                static SfxPoolItem* CreateDefault();
+                                static std::unique_ptr<SfxPoolItem> CreateDefault();
                                 SfxUnoFrameItem();
                                 SfxUnoFrameItem( sal_uInt16 nWhich, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
     const css::uno::Reference< css::frame::XFrame >&
                                 GetFrame() const
                                 { return m_xFrame; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };

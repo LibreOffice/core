@@ -34,11 +34,11 @@ class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem
     : public SfxEnumItem<css::drawing::TextFitToSizeType>
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SdrTextFitToSizeTypeItem(
             css::drawing::TextFitToSizeType const eFit = css::drawing::TextFitToSizeType_NONE)
         : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, eFit) {}
-    virtual SfxPoolItem*     Clone(SfxItemPool* pPool=nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16       GetValueCount() const override;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

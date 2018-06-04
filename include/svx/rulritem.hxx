@@ -40,15 +40,15 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-
 private:
     const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &) = delete;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId);
     SvxLongLRSpaceItem();
+
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     long GetLeft() const { return mlLeft;}
     long GetRight() const { return mlRight;}
@@ -72,15 +72,15 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-
 private:
     const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &) = delete;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SvxLongULSpaceItem(long lUpper, long lLower, sal_uInt16 nId);
     SvxLongULSpaceItem();
+
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     long GetUpper() const { return mlLeft;}
     long GetLower() const { return mlRight;}
@@ -103,12 +103,12 @@ protected:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
 private:
     const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &) = delete;
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
     SvxPagePosSizeItem();
 
@@ -166,12 +166,12 @@ protected:
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     // right edge of the surrounding frame
     // nLeft, nRight each the distance to the surrounding frame
     SvxColumnItem(sal_uInt16 nAct = 0);
@@ -214,7 +214,7 @@ protected:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -222,7 +222,7 @@ private:
     const SvxObjectItem &operator=(const SvxObjectItem &) = delete;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SvxObjectItem(long nStartX, long nEndX,
                   long nStartY, long nEndY);
 

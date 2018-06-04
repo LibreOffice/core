@@ -193,9 +193,9 @@ bool SwFormatField::operator==( const SfxPoolItem& rAttr ) const
            ( !mpField && !static_cast<const SwFormatField&>(rAttr).mpField );
 }
 
-SfxPoolItem* SwFormatField::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatField::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatField( *this );
+    return o3tl::make_unique<SwFormatField>( *this );
 }
 
 void SwFormatField::InvalidateField()

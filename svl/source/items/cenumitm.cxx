@@ -25,6 +25,7 @@
 #include <comphelper/extract.hxx>
 #include <libxml/xmlwriter.h>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 // virtual
@@ -84,9 +85,9 @@ bool SfxEnumItemInterface::GetBoolValue() const
 void SfxEnumItemInterface::SetBoolValue(bool)
 {}
 
-SfxPoolItem* SfxBoolItem::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxBoolItem::CreateDefault()
 {
-    return new SfxBoolItem();
+    return o3tl::make_unique<SfxBoolItem>();
 }
 
 SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
@@ -143,9 +144,9 @@ bool SfxBoolItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * SfxBoolItem::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SfxBoolItem::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
-    return new SfxBoolItem(Which(), rStream);
+    return o3tl::make_unique<SfxBoolItem>(Which(), rStream);
 }
 
 // virtual
@@ -156,9 +157,9 @@ SvStream & SfxBoolItem::Store(SvStream & rStream, sal_uInt16) const
 }
 
 // virtual
-SfxPoolItem * SfxBoolItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxBoolItem::CloneInternal(SfxItemPool *) const
 {
-    return new SfxBoolItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SfxBoolItem(*this));
 }
 
 // virtual

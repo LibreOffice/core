@@ -43,7 +43,7 @@ class EDITENG_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
     short nEsc;
     sal_uInt8  nProp;
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxEscapementItem( const sal_uInt16 nId  );
     SvxEscapementItem( const SvxEscapement eEscape,
@@ -61,7 +61,7 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     void SetEscapement( const SvxEscapement eNew )
     {

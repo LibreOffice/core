@@ -85,7 +85,7 @@ public:
     SvxChartRegressItem(SvxChartRegress eRegress /*= SvxChartRegress::Linear*/,
                         sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 
     sal_uInt16 GetValueCount() const override { return CHREGRESS_COUNT; }
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const override;
@@ -97,7 +97,7 @@ public:
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= SvxChartTextOrder::SideBySide*/,
                           sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -111,7 +111,7 @@ public:
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = SvxChartKindError::NONE*/,
                            sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 
     sal_uInt16 GetValueCount() const override { return CHERROR_COUNT; }
 
@@ -124,7 +124,7 @@ public:
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= SvxChartIndicate::NONE*/,
                            sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 
     sal_uInt16 GetValueCount() const override { return CHINDICATE_COUNT; }
 
@@ -136,7 +136,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
     double fVal;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SvxDoubleItem(double fValue /*= 0.0*/, sal_uInt16 nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
@@ -149,7 +149,7 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     virtual bool             operator == (const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool *pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool *pPool = nullptr) const override;
 
     double GetValue() const { return fVal; }
 };

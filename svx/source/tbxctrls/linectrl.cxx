@@ -91,11 +91,11 @@ void SvxLineStyleToolBoxControl::StateChanged (
         {
             if( nSID == SID_ATTR_LINE_STYLE )
             {
-                pStyleItem.reset( static_cast<XLineStyleItem*>(pState->Clone()) );
+                pStyleItem = Clone(*static_cast<const XLineStyleItem*>(pState));
             }
             else if( nSID == SID_ATTR_LINE_DASH )
             {
-                pDashItem.reset( static_cast<XLineDashItem*>(pState->Clone()) );
+                pDashItem = Clone(*static_cast<const XLineDashItem*>(pState));
             }
 
             bUpdate = true;

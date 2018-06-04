@@ -85,7 +85,7 @@ class SVL_DLLPUBLIC SfxBoolItem
     bool m_bValue;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SfxBoolItem(sal_uInt16 const nWhich = 0, bool const bValue = false)
         : SfxPoolItem(nWhich)
@@ -114,12 +114,12 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8) override;
 
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream & rStream, sal_uInt16) const
         override;
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * = nullptr) const override;
 
     virtual OUString GetValueTextByVal(bool bTheValue) const;
 };

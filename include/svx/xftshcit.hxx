@@ -32,11 +32,11 @@
 class SVX_DLLPUBLIC XFormTextShadowColorItem : public XColorItem
 {
 public:
-            static SfxPoolItem* CreateDefault();
+            static std::unique_ptr<SfxPoolItem> CreateDefault();
             XFormTextShadowColorItem() {}
             XFormTextShadowColorItem(const OUString& rName, const Color& rTheColor);
 
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* pPool = nullptr) const override;
 };
 
 #endif

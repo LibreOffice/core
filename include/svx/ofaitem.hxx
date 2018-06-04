@@ -32,7 +32,7 @@ public:
                              OfaPtrItem( sal_uInt16 nWhich, void *pPtr );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     void*                    GetValue() const { return pPtr; }
 };
@@ -50,9 +50,9 @@ public:
     {
         return mxRef == static_cast<OfaRefItem<reference_type> const &>(rItem).mxRef;
     }
-    virtual SfxPoolItem* Clone( SfxItemPool* /*pPool = 0*/ ) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* /*pPool = 0*/ ) const override
     {
-        return new OfaRefItem( *this );
+        return std::unique_ptr<SfxPoolItem>(new OfaRefItem( *this ));
     }
 };
 

@@ -50,9 +50,9 @@ bool SwFormatFlyCnt::operator==( const SfxPoolItem& rAttr ) const
             m_pFormat == static_cast<const SwFormatFlyCnt&>(rAttr).GetFrameFormat() );
 }
 
-SfxPoolItem* SwFormatFlyCnt::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatFlyCnt::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatFlyCnt( m_pFormat );
+    return o3tl::make_unique<SwFormatFlyCnt>( m_pFormat );
 }
 
 SwTextFlyCnt::SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStartPos )

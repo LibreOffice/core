@@ -112,7 +112,7 @@ void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
         pClipboardFmtItem.reset();
         if ( eState >= SfxItemState::DEFAULT )
         {
-            pClipboardFmtItem.reset( pState->Clone() );
+            pClipboardFmtItem = Clone(*pState);
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | ToolBoxItemBits::DROPDOWN );
         }
         else if ( !bDisabled )

@@ -99,20 +99,20 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
 
         if (RES_PARATR_DROP == pMap->nWID)
         {
-            pDrop.reset(static_cast<SwFormatDrop*>(rItem.Clone()));   // because rItem is const...
+            pDrop = Clone(static_cast<const SwFormatDrop &>(rItem));   // because rItem is const...
             pDrop->SetCharFormat(xStyle->GetCharFormat());
             m_pDoc->SetDefault(*pDrop);
         }
         else // RES_TXTATR_CHARFMT == pMap->nWID
         {
-            pCharFormat.reset(static_cast<SwFormatCharFormat*>(rItem.Clone()));   // because rItem is const...
+            pCharFormat = Clone(static_cast<const SwFormatCharFormat&>(rItem));   // because rItem is const...
             pCharFormat->SetCharFormat(xStyle->GetCharFormat());
             m_pDoc->SetDefault(*pCharFormat);
         }
     }
     else
     {
-        std::unique_ptr<SfxPoolItem> pNewItem(rItem.Clone());
+        std::unique_ptr<SfxPoolItem> pNewItem = Clone(rItem);
         pNewItem->PutValue( aValue, pMap->nMemberId);
         m_pDoc->SetDefault(*pNewItem);
     }

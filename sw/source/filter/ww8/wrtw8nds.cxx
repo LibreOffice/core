@@ -470,8 +470,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bWriteCombChars)
     {
         if (const SfxGrabBagItem *pCharFmtGrabBag = aExportSet.GetItem<SfxGrabBagItem>(RES_CHRATR_GRABBAG, false))
         {
-            std::unique_ptr<SfxPoolItem> pNewItem(pCharFmtGrabBag->Clone());
-            SfxGrabBagItem* pNewCharFmtGrabBag = dynamic_cast<SfxGrabBagItem*>(pNewItem.get());
+            std::unique_ptr<SfxGrabBagItem> pNewCharFmtGrabBag(Clone(*pCharFmtGrabBag));
             assert(pNewCharFmtGrabBag);
             auto & rNewFmtMap = pNewCharFmtGrabBag->GetGrabBag();
             for (auto const & item : pAutoFmtGrabBag->GetGrabBag())

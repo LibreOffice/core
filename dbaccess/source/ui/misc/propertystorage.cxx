@@ -52,13 +52,9 @@ namespace dbaui
                 // TODO: one could throw an IllegalArgumentException here - finally, this method
                 // is (to be) used from within an XPropertySet::setPropertyValue implementation,
                 // where this would be the appropriate reaction on wrong value types
-                ITEMTYPE* pCloneItem = dynamic_cast< ITEMTYPE* >( pTypedItem->Clone() );
-                if(!pCloneItem)
-                {
+                std::unique_ptr<ITEMTYPE> pClone( Clone(*pTypedItem) );
+                if(!pClone)
                     return false;
-                }
-                std::unique_ptr< ITEMTYPE > pClone( pCloneItem);
-                assert(pClone.get());
                 pClone->SetValue( aValue );
                 _rSet.Put( *pClone );
                 return true;

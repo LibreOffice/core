@@ -96,12 +96,12 @@ SfxTabDialogItem::SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet )
 {
 }
 
-SfxPoolItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
+std::unique_ptr<SfxPoolItem> SfxTabDialogItem::CloneInternal(SfxItemPool* pToPool) const
 {
-    return new SfxTabDialogItem( *this, pToPool );
+    return std::unique_ptr<SfxPoolItem>(new SfxTabDialogItem( *this, pToPool ));
 }
 
-SfxPoolItem* SfxTabDialogItem::Create(SvStream& /*rStream*/, sal_uInt16 /*nVersion*/) const
+std::unique_ptr<SfxPoolItem> SfxTabDialogItem::CreateInternal(SvStream& /*rStream*/, sal_uInt16 /*nVersion*/) const
 {
     OSL_FAIL( "Use it only in UI!" );
     return nullptr;

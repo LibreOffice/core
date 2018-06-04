@@ -36,7 +36,7 @@ public:
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr);
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr,
                                              SfxItemPool* pItemPool);
-    virtual SfxPoolItem*    Clone( SfxItemPool* pToPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* pToPool = nullptr ) const override;
 };
 
 #endif

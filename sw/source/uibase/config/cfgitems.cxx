@@ -60,9 +60,9 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
 }
 
-SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
+std::unique_ptr<SfxPoolItem> SwDocDisplayItem::CloneInternal( SfxItemPool*  ) const
 {
-    return new SwDocDisplayItem( *this );
+    return o3tl::make_unique<SwDocDisplayItem>( *this );
 }
 
 bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
@@ -126,9 +126,9 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
 
 }
 
-SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwElemItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SwElemItem( *this );
+    return o3tl::make_unique<SwElemItem>( *this );
 }
 
 bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
@@ -177,9 +177,9 @@ SwAddPrinterItem::SwAddPrinterItem( const SwPrintData& rPrtData ) :
     SwPrintData::operator=(rPrtData);
 }
 
-SfxPoolItem* SwAddPrinterItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwAddPrinterItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SwAddPrinterItem( *this );
+    return o3tl::make_unique<SwAddPrinterItem>( *this );
 }
 
 bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
@@ -207,9 +207,9 @@ SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt )
 {
 }
 
-SfxPoolItem* SwShadowCursorItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwShadowCursorItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SwShadowCursorItem( *this );
+    return o3tl::make_unique<SwShadowCursorItem>( *this );
 }
 
 bool SwShadowCursorItem::operator==( const SfxPoolItem& rCmp ) const
@@ -225,7 +225,7 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 }
 
 #ifdef DBG_UTIL
-SfxPoolItem* SwTestItem::Clone( SfxItemPool* ) const
+SfxPoolItem* SwTestItem::CloneInternal( SfxItemPool* ) const
 {
     return new SwTestItem( *this );
 }

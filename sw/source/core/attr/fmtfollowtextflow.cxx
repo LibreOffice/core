@@ -18,11 +18,12 @@
  */
 
 #include <fmtfollowtextflow.hxx>
+#include <o3tl/make_unique.hxx>
 
 
-SfxPoolItem*    SwFormatFollowTextFlow::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SwFormatFollowTextFlow::CloneInternal( SfxItemPool * ) const
 {
-    return new SwFormatFollowTextFlow(*this);
+    return o3tl::make_unique<SwFormatFollowTextFlow>(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

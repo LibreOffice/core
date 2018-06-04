@@ -194,9 +194,9 @@ bool ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScTpViewItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScTpViewItem( *this );
+    return o3tl::make_unique<ScTpViewItem>( *this );
 }
 
 //  Config Item containing view options

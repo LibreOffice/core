@@ -170,7 +170,7 @@ SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
 {
     for ( size_t i = 0; i < size(); ++i )
         if ( !IsInvalidItem( (*this)[i].pItem ) )
-            (*this)[i].pItem = (*this)[i].pItem->Clone();
+            (*this)[i].pItem = Clone(*(*this)[i].pItem).release();
 }
 
 
@@ -202,7 +202,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
         else
         {
             nWhich = pItem->Which();
-            aItem.pItem = pItem->Clone();
+            aItem.pItem = Clone(*pItem).release();
         }
 
         aItem.nSlot = pPool->GetSlotId( nWhich );
@@ -1919,7 +1919,7 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 {
     if ( pItem )
     {
-        pSearchItem.reset(static_cast<SvxSearchItem*>(pItem->Clone()));
+        pSearchItem = Clone(*pItem);
         Init_Impl( pSearchItem->GetPattern() &&
                    ( !pSearchList || !pSearchList->Count() ) );
     }
@@ -2056,8 +2056,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
                 SfxItemState::SET == aOutSet.GetItemState(
                     pAItem->pItem->Which(), false, &pItem ) )
             {
-                delete pAItem->pItem;
-                pAItem->pItem = pItem->Clone();
+                pAItem->pItem = Clone(*pItem).release();
                 aOutSet.ClearItem( pAItem->pItem->Which() );
             }
         }

@@ -278,7 +278,7 @@ void LinePropertyPanelBase::updateLineStyle(bool bDisabled, bool bSetOrDefault, 
     {
         if(pItem)
         {
-            mpStyleItem.reset(static_cast<XLineStyleItem*>(pItem->Clone()));
+            mpStyleItem = Clone(*static_cast<XLineStyleItem const *>(pItem));
         }
     }
     else
@@ -304,7 +304,7 @@ void LinePropertyPanelBase::updateLineDash(bool bDisabled, bool bSetOrDefault, c
     {
         if(pItem)
         {
-            mpDashItem.reset(static_cast<XLineDashItem*>(pItem->Clone()));
+            mpDashItem = Clone(*static_cast<XLineDashItem const *>(pItem));
         }
     }
     else
@@ -389,7 +389,7 @@ void LinePropertyPanelBase::updateLineStart(bool bDisabled, bool bSetOrDefault,
     {
         if(pItem)
         {
-            mpStartItem.reset(static_cast<XLineStartItem*>(pItem->Clone()));
+            mpStartItem = Clone(*static_cast<XLineStartItem const *>(pItem));
             SelectEndStyle(true);
             return;
         }
@@ -416,7 +416,7 @@ void LinePropertyPanelBase::updateLineEnd(bool bDisabled, bool bSetOrDefault,
     {
         if(pItem)
         {
-            mpEndItem.reset(static_cast<XLineEndItem*>(pItem->Clone()));
+            mpEndItem = Clone(*static_cast<XLineEndItem const *>(pItem));
             SelectEndStyle(false);
             return;
         }

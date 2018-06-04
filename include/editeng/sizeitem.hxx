@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxSizeItem : public SfxPoolItem
     Size m_aSize;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxSizeItem( const sal_uInt16 nId );
     SvxSizeItem( const sal_uInt16 nId, const Size& rSize);
@@ -54,7 +54,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;
 

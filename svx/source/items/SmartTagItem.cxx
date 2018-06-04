@@ -20,6 +20,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <svx/SmartTagItem.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/container/XStringKeyMap.hpp>
 
@@ -27,7 +28,7 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxSmartTagItem::CreateDefault() { SAL_WARN( "svx", "No SvxSmartTagItem factory available"); return nullptr; }
+std::unique_ptr<SfxPoolItem> SvxSmartTagItem::CreateDefault() { SAL_WARN( "svx", "No SvxSmartTagItem factory available"); return nullptr; }
 
 SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
                                   const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
@@ -88,9 +89,9 @@ bool SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxSmartTagItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxSmartTagItem( *this );
+    return o3tl::make_unique<SvxSmartTagItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

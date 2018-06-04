@@ -30,22 +30,22 @@
 //  class SfxByteItem
 
 
-SfxPoolItem* SfxByteItem::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxByteItem::CreateDefault()
 {
-    return new SfxByteItem();
+    return o3tl::make_unique<SfxByteItem>();
 };
 
 // virtual
-SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SfxByteItem::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
     short nValue = 0;
     rStream.ReadInt16( nValue );
-    return new SfxByteItem(Which(), sal_uInt8(nValue));
+    return o3tl::make_unique<SfxByteItem>(Which(), sal_uInt8(nValue));
 }
 
-SfxPoolItem* SfxInt16Item::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxInt16Item::CreateDefault()
 {
-    return new SfxInt16Item();
+    return o3tl::make_unique<SfxInt16Item>();
 };
 
 SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
@@ -98,9 +98,9 @@ bool SfxInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8 )
 }
 
 // virtual
-SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
+std::unique_ptr<SfxPoolItem> SfxInt16Item::CreateInternal(SvStream & rStream, sal_uInt16) const
 {
-    return new SfxInt16Item(Which(), rStream);
+    return o3tl::make_unique<SfxInt16Item>(Which(), rStream);
 }
 
 // virtual
@@ -110,15 +110,15 @@ SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
     return rStream;
 }
 
-SfxPoolItem * SfxInt16Item::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxInt16Item::CloneInternal(SfxItemPool *) const
 {
-    return new SfxInt16Item(*this);
+    return std::unique_ptr<SfxPoolItem>(new SfxInt16Item(*this));
 }
 
 //  class SfxUInt16Item
-SfxPoolItem* SfxUInt16Item::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxUInt16Item::CreateDefault()
 {
-    return new SfxUInt16Item();
+    return o3tl::make_unique<SfxUInt16Item>();
 };
 
 void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -133,18 +133,18 @@ void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const
 //  class SfxInt32Item
 
 
-SfxPoolItem* SfxInt32Item::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxInt32Item::CreateDefault()
 {
-    return new SfxInt32Item();
+    return o3tl::make_unique<SfxInt32Item>();
 };
 
 
 //  class SfxUInt32Item
 
 
-SfxPoolItem* SfxUInt32Item::CreateDefault()
+std::unique_ptr<SfxPoolItem> SfxUInt32Item::CreateDefault()
 {
-    return new SfxUInt32Item();
+    return o3tl::make_unique<SfxUInt32Item>();
 };
 
 

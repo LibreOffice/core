@@ -1022,7 +1022,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
 
     pGrabBagItem.reset();
     if (rObj.pGrabBagItem!=nullptr)
-        pGrabBagItem.reset(static_cast< SfxGrabBagItem* >( rObj.pGrabBagItem->Clone() ));
+        pGrabBagItem = Clone(*rObj.pGrabBagItem);
 
     aGridOffset = rObj.aGridOffset;
     return *this;

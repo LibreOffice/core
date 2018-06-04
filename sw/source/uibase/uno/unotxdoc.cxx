@@ -2027,7 +2027,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pEntry->nWID);
-            std::unique_ptr<SfxPoolItem> pNewItem(rItem.Clone());
+            std::unique_ptr<SfxPoolItem> pNewItem(Clone(rItem));
             pNewItem->PutValue(aValue, pEntry->nMemberId);
             pDocShell->GetDoc()->SetDefault(*pNewItem);
         }

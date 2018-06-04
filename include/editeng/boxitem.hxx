@@ -65,7 +65,7 @@ class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
     bool            bRemoveAdjCellBorder;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxBoxItem( const sal_uInt16 nId );
     SvxBoxItem( const SvxBoxItem &rCpy );
@@ -82,8 +82,8 @@ public:
                                     MapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream &, sal_uInt16) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const override;
 
@@ -183,7 +183,7 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
     sal_uInt16  nDefDist;       // The default or minimum distance.
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxBoxInfoItem( const sal_uInt16 nId );
     SvxBoxInfoItem( const SvxBoxInfoItem &rCpy );
@@ -199,7 +199,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual void            ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool            HasMetrics() const override;
 

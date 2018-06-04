@@ -22,15 +22,16 @@
 #include <tools/mapunit.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #include <com/sun/star/frame/status/UpperLowerMargin.hpp>
 
-SfxPoolItem* SvxPagePosSizeItem::CreateDefault() { return new SvxPagePosSizeItem; }
-SfxPoolItem* SvxLongLRSpaceItem::CreateDefault() { return new SvxLongLRSpaceItem; }
-SfxPoolItem* SvxLongULSpaceItem::CreateDefault() { return new SvxLongULSpaceItem; }
-SfxPoolItem* SvxColumnItem::CreateDefault() { return new SvxColumnItem; }
-SfxPoolItem* SvxObjectItem::CreateDefault() { SAL_WARN( "svx", "No SvxObjectItem factory available"); return nullptr; }
+std::unique_ptr<SfxPoolItem> SvxPagePosSizeItem::CreateDefault() { return o3tl::make_unique<SvxPagePosSizeItem>(); }
+std::unique_ptr<SfxPoolItem> SvxLongLRSpaceItem::CreateDefault() { return o3tl::make_unique<SvxLongLRSpaceItem>(); }
+std::unique_ptr<SfxPoolItem> SvxLongULSpaceItem::CreateDefault() { return o3tl::make_unique<SvxLongULSpaceItem>(); }
+std::unique_ptr<SfxPoolItem> SvxColumnItem::CreateDefault() { return o3tl::make_unique<SvxColumnItem>(); }
+std::unique_ptr<SfxPoolItem> SvxObjectItem::CreateDefault() { SAL_WARN( "svx", "No SvxObjectItem factory available"); return nullptr; }
 
 /* SvxLongLRSpaceItem */
 
@@ -126,9 +127,9 @@ bool SvxLongLRSpaceItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SvxLongLRSpaceItem::CloneInternal(SfxItemPool *) const
 {
-    return new SvxLongLRSpaceItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SvxLongLRSpaceItem(*this));
 }
 
 SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId) :
@@ -245,9 +246,9 @@ bool SvxLongULSpaceItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SvxLongULSpaceItem::CloneInternal(SfxItemPool *) const
 {
-    return new SvxLongULSpaceItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SvxLongULSpaceItem(*this));
 }
 
 SvxLongULSpaceItem::SvxLongULSpaceItem(long lLeft, long lRight, sal_uInt16 nId) :
@@ -360,9 +361,9 @@ bool SvxPagePosSizeItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxPagePosSizeItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SvxPagePosSizeItem::CloneInternal(SfxItemPool *) const
 {
-    return new SvxPagePosSizeItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SvxPagePosSizeItem(*this));
 }
 
 SvxPagePosSizeItem::SvxPagePosSizeItem(const Point &rP, long lW, long lH) :
@@ -429,9 +430,9 @@ bool SvxColumnItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxColumnItem::Clone(SfxItemPool* /*pPool*/) const
+std::unique_ptr<SfxPoolItem> SvxColumnItem::CloneInternal(SfxItemPool* /*pPool*/) const
 {
-    return new SvxColumnItem(*this);
+    return o3tl::make_unique<SvxColumnItem>(*this);
 }
 
 bool SvxColumnItem::CalcOrtho() const
@@ -635,9 +636,9 @@ bool SvxObjectItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SvxObjectItem::CloneInternal(SfxItemPool *) const
 {
-    return new SvxObjectItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new SvxObjectItem(*this));
 }
 
 SvxObjectItem::SvxObjectItem( long nSX, long nEX,

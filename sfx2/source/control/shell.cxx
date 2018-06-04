@@ -160,16 +160,16 @@ void SfxShell::PutItem
                 "items with Which-Ids aren't allowed here" );
 
     // MSC made a mess here of WNT/W95, beware of changes
-    SfxPoolItem *pItem = rItem.Clone();
-    SfxPoolItemHint aItemHint( pItem );
+    std::unique_ptr<SfxPoolItem> pItem = Clone(rItem);
+    SfxPoolItemHint aItemHint( pItem.get() );
     sal_uInt16 nWhich = rItem.Which();
 
     auto const it = pImpl->m_Items.find(nWhich);
     if (it != pImpl->m_Items.end())
     {
+        auto pItemTemp = pItem.get();
         // Replace Item
-        pImpl->m_Items.erase( it );
-        pImpl->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
+        it->second = std::move(pItem);
 
         // if active, notify Bindings
         SfxDispatcher *pDispat = GetDispatcher();
@@ -181,7 +181,7 @@ void SfxShell::PutItem
             SfxStateCache* pCache = pBindings->GetStateCache( nSlotId );
             if ( pCache )
             {
-                pCache->SetState( SfxItemState::DEFAULT, pItem, true );
+                pCache->SetState( SfxItemState::DEFAULT, pItemTemp, true );
                 pCache->SetCachedState( true );
             }
         }
@@ -190,7 +190,7 @@ void SfxShell::PutItem
     else
     {
         Broadcast( aItemHint );
-        pImpl->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
+        pImpl->m_Items.insert(std::make_pair(nWhich, std::move(pItem)));
     }
 }
 
@@ -506,7 +506,7 @@ const SfxPoolItem* SfxShell::GetSlotState
     {
         if ( pStateSet && pStateSet->Put( *pItem ) )
             return &pStateSet->Get( pItem->Which() );
-        pRetItem.reset(pItem->Clone());
+        pRetItem = Clone(*pItem);
     }
     auto pTemp = pRetItem.get();
     DeleteItemOnIdle(std::move(pRetItem));

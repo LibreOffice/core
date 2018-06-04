@@ -262,7 +262,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
-        std::unique_ptr<SvxGrfCrop> pNew(static_cast<SvxGrfCrop*>(rSet->Get( nW ).Clone()));
+        std::unique_ptr<SvxGrfCrop> pNew(Clone(static_cast<const SvxGrfCrop&>(rSet->Get( nW ))));
 
         pNew->SetLeft( lcl_GetValue( *m_xLeftMF, eUnit ) );
         pNew->SetRight( lcl_GetValue( *m_xRightMF, eUnit ) );

@@ -34,6 +34,7 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/shell.hxx>
+#include <o3tl/make_unique.hxx>
 
 class Timer;
 class WorkWindow;
@@ -104,8 +105,8 @@ public:
     SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem const *, void>& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
 
-    virtual SfxPoolItem*     Clone( SfxItemPool* = nullptr ) const override
-    {   return new SfxLinkItem( *this ); }
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* = nullptr ) const override
+    {   return o3tl::make_unique<SfxLinkItem>( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const override
     {   return static_cast<const SfxLinkItem&>(rL).aLink == aLink; }
     const Link<SfxPoolItem const *, void>&

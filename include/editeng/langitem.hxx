@@ -43,7 +43,7 @@ protected:
 class EDITENG_DLLPUBLIC SvxLanguageItem : public SvxLanguageItem_Base
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxLanguageItem( const LanguageType eLang /*= LANGUAGE_GERMAN*/,
                      const sal_uInt16 nId  );
@@ -54,7 +54,7 @@ public:
                                  MapUnit ePresMetric,
                                  OUString &rText, const IntlWrapper&) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetValueCount() const override;
 
     SvxLanguageItem& operator=(const SvxLanguageItem& rLang)

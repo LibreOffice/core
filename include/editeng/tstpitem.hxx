@@ -94,7 +94,7 @@ class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem
     SvxTabStopArr maTabStops;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxTabStopItem( sal_uInt16 nWhich  );
     SvxTabStopItem( const sal_uInt16 nTabs,
@@ -141,7 +141,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

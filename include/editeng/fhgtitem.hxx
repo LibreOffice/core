@@ -42,7 +42,7 @@ class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
     sal_uInt16  nProp;       // default 100%
     MapUnit ePropUnit;       // Percent, Twip, ...
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxFontHeightItem( const sal_uLong nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
                        const sal_uInt16 nId  );
@@ -57,8 +57,8 @@ public:
                                     MapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream &, sal_uInt16) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override;
     virtual sal_uInt16           GetVersion( sal_uInt16 nItemVersion) const override;
     virtual void                 ScaleMetrics( long nMult, long nDiv ) override;

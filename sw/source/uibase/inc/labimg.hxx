@@ -38,7 +38,7 @@ public:
 
     virtual bool operator ==(const SfxPoolItem& rItem) const override;
 
-    virtual SfxPoolItem*     Clone(SfxItemPool* = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool* = nullptr) const override;
 
     OUString   m_aLstMake; // remember last selection
     OUString   m_aLstType;

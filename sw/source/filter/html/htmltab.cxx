@@ -3015,7 +3015,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
             SfxPoolItem const* pItem;
             if (SfxItemState::SET == aItemSet.GetItemState(RES_BOX, false, &pItem))
             {   // fdo#41796: steal box item to set it in FixFrameFormat later!
-                m_xBoxItem.reset(dynamic_cast<SvxBoxItem *>(pItem->Clone()));
+                m_xBoxItem = Clone(*static_cast<const SvxBoxItem *>(pItem));
                 aItemSet.ClearItem(RES_BOX);
             }
             rParser.InsertAttrs(aItemSet, aPropInfo, xCntxt.get());

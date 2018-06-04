@@ -96,32 +96,32 @@ struct SfxTypeAttrib
     const char* pName;
 };
 
-template<class T> SfxPoolItem* createSfxPoolItem()
+template<class T> std::unique_ptr<SfxPoolItem> createSfxPoolItem()
 {
     return T::CreateDefault();
 }
 struct SfxType
 {
-    std::function<SfxPoolItem* ()> const createSfxPoolItemFunc;
+    std::function<std::unique_ptr<SfxPoolItem> ()> const createSfxPoolItemFunc;
     const std::type_info*   pType;
     sal_uInt16 const        nAttribs;
     SfxTypeAttrib   aAttrib[1]; // variable length
 
     const std::type_info* Type() const{return pType;}
     std::unique_ptr<SfxPoolItem> CreateItem() const
-                    { return std::unique_ptr<SfxPoolItem>(createSfxPoolItemFunc()); }
+                    { return createSfxPoolItemFunc(); }
 };
 
 struct SfxType0
 {
-    std::function<SfxPoolItem* ()> const createSfxPoolItemFunc;
+    std::function<std::unique_ptr<SfxPoolItem> ()> const createSfxPoolItemFunc;
     const std::type_info*    pType;
     sal_uInt16 const         nAttribs;
     const std::type_info*    Type() const { return pType;}
 };
 #define SFX_DECL_TYPE(n)    struct SfxType##n                   \
                             {                                   \
-                                std::function<SfxPoolItem* ()> createSfxPoolItemFunc; \
+                                std::function<std::unique_ptr<SfxPoolItem> ()> createSfxPoolItemFunc; \
                                 const std::type_info* pType; \
                                 sal_uInt16          nAttribs;       \
                                 SfxTypeAttrib   aAttrib[n];     \

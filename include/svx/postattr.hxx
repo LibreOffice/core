@@ -29,7 +29,7 @@
 class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxPostItAuthorItem( sal_uInt16 nWhich  );
 
@@ -39,7 +39,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 
 
@@ -49,7 +49,7 @@ public:
 class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxPostItDateItem( sal_uInt16 nWhich  );
 
@@ -59,7 +59,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 
 /** The text of a note
@@ -68,7 +68,7 @@ public:
 class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxPostItTextItem( sal_uInt16 nWhich  );
 
@@ -79,7 +79,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 
 
@@ -89,11 +89,11 @@ public:
 class SVX_DLLPUBLIC SvxPostItIdItem: public SfxStringItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxPostItIdItem( sal_uInt16 nWhich );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 };
 
 #endif

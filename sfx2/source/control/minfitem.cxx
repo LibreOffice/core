@@ -19,8 +19,9 @@
 
 #include <sfx2/minfitem.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
-SfxPoolItem* SfxMacroInfoItem::CreateDefault() { SAL_WARN( "sfx", "No SfxMacroInfItem factory available"); return nullptr; }
+std::unique_ptr<SfxPoolItem> SfxMacroInfoItem::CreateDefault() { SAL_WARN( "sfx", "No SfxMacroInfItem factory available"); return nullptr; }
 
 
 SfxMacroInfoItem::SfxMacroInfoItem(
@@ -53,9 +54,9 @@ bool SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
 }
 
 
-SfxPoolItem *SfxMacroInfoItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxMacroInfoItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxMacroInfoItem(*this);
+    return o3tl::make_unique<SfxMacroInfoItem>(*this);
 }
 
 

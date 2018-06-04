@@ -63,7 +63,7 @@ public:
                 virtual ~ScMergeAttr() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
             SCCOL          GetColMerge() const {return nColMerge; }
             SCROW          GetRowMerge() const {return nRowMerge; }
@@ -92,7 +92,7 @@ public:
     ScMergeFlagAttr & operator =(ScMergeFlagAttr const &) = delete; // due to SfxInt16Item
     ScMergeFlagAttr & operator =(ScMergeFlagAttr &&) = delete; // due to SfxInt16Item
 
-    SfxPoolItem * Clone(SfxItemPool * pPool = nullptr) const override;
+    std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool * pPool = nullptr) const override;
 
     ScMF    GetValue() const { return static_cast<ScMF>(SfxInt16Item::GetValue()); }
 
@@ -117,7 +117,7 @@ class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
     bool        bHideCell;      ///< hide cell
     bool        bHidePrint;     ///< don't print cell
 public:
-                            static SfxPoolItem* CreateDefault();
+                            static std::unique_ptr<SfxPoolItem> CreateDefault();
                             ScProtectionAttr();
                             ScProtectionAttr(   bool bProtect,
                                                 bool bHFormula = false,
@@ -135,7 +135,7 @@ public:
                                     const IntlWrapper& rIntl ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -176,7 +176,7 @@ public:
                 virtual ~ScPageHFItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -205,7 +205,7 @@ public:
     ScViewObjectModeItem & operator =(ScViewObjectModeItem &&) = delete; // due to SfxEnumItem<ScVObjMode>
 
     virtual sal_uInt16          GetValueCount() const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -234,7 +234,7 @@ public:
     ScPageScaleToItem & operator =(ScPageScaleToItem const &) = delete; // due to SfxPoolItem
     ScPageScaleToItem & operator =(ScPageScaleToItem &&) = delete; // due to SfxPoolItem
 
-    virtual ScPageScaleToItem*  Clone( SfxItemPool* = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* = nullptr ) const override;
 
     virtual bool                operator==( const SfxPoolItem& rCmp ) const override;
 
@@ -269,7 +269,7 @@ public:
     virtual ~ScCondFormatItem() override;
 
     virtual bool operator==(const SfxPoolItem& rCmp ) const override;
-    virtual ScCondFormatItem*  Clone( SfxItemPool* = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool* = nullptr ) const override;
 
     const std::vector<sal_uInt32>& GetCondFormatData() const { return maIndex;}
     void AddCondFormatData( sal_uInt32 nIndex );

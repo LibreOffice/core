@@ -25,9 +25,9 @@
 class SdrRotateOneItem: public SdrAngleItem {
 public:
     SdrRotateOneItem(): SdrAngleItem(SDRATTR_ROTATEONE,0) {}
-    SfxPoolItem* Clone(SfxItemPool*) const override
+    std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrRotateOneItem(*this);
+        return o3tl::make_unique<SdrRotateOneItem>(*this);
     }
 };
 

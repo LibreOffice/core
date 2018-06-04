@@ -50,9 +50,9 @@ bool SwTableBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
     return GetValue() == static_cast<const SwTableBoxNumFormat&>(rAttr).GetValue();
 }
 
-SfxPoolItem* SwTableBoxNumFormat::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwTableBoxNumFormat::CloneInternal( SfxItemPool* ) const
 {
-    return new SwTableBoxNumFormat( GetValue() );
+    return o3tl::make_unique<SwTableBoxNumFormat>( GetValue() );
 }
 
 SwTableBoxFormula::SwTableBoxFormula( const OUString& rFormula )
@@ -69,12 +69,12 @@ bool SwTableBoxFormula::operator==( const SfxPoolItem& rAttr ) const
            m_pDefinedIn == static_cast<const SwTableBoxFormula&>(rAttr).m_pDefinedIn;
 }
 
-SfxPoolItem* SwTableBoxFormula::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwTableBoxFormula::CloneInternal( SfxItemPool* ) const
 {
     // switch to external rendering
     SwTableBoxFormula* pNew = new SwTableBoxFormula( GetFormula() );
     pNew->SwTableFormula::operator=( *this );
-    return pNew;
+    return std::unique_ptr<SfxPoolItem>(pNew);
 }
 
 /** Get node type of the node containing this formula
@@ -219,9 +219,9 @@ bool SwTableBoxValue::operator==( const SfxPoolItem& rAttr ) const
         :   ( m_nValue == rOther.m_nValue );
 }
 
-SfxPoolItem* SwTableBoxValue::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwTableBoxValue::CloneInternal( SfxItemPool* ) const
 {
-    return new SwTableBoxValue( m_nValue );
+    return std::unique_ptr<SfxPoolItem>(new SwTableBoxValue( m_nValue ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,9 +43,9 @@ SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo const & rInfo
 {
 }
 
-SfxPoolItem*  SwPageFootnoteInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SwPageFootnoteInfoItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SwPageFootnoteInfoItem( *this );
+    return o3tl::make_unique<SwPageFootnoteInfoItem>( *this );
 }
 
 bool SwPageFootnoteInfoItem::operator==( const SfxPoolItem& rAttr ) const
@@ -196,9 +196,9 @@ SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
 
 // Cloning
 
-SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SwPtrItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SwPtrItem( *this );
+    return o3tl::make_unique<SwPtrItem>( *this );
 }
 
 bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
@@ -225,9 +225,9 @@ SwUINumRuleItem::~SwUINumRuleItem()
 {
 }
 
-SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SwUINumRuleItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SwUINumRuleItem( *this );
+    return o3tl::make_unique<SwUINumRuleItem>( *this );
 }
 
 bool SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
@@ -264,9 +264,9 @@ SwPaMItem::SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM ) :
 {
 }
 
-SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
+std::unique_ptr<SfxPoolItem> SwPaMItem::CloneInternal( SfxItemPool * /*pPool*/ ) const
 {
-    return new SwPaMItem( *this );
+    return o3tl::make_unique<SwPaMItem>( *this );
 }
 
 bool SwPaMItem::operator==( const SfxPoolItem& rAttr ) const

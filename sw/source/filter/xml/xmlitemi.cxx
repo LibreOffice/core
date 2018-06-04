@@ -214,7 +214,7 @@ void SwXMLImportTableItemMapper_Impl::finished(
             // do we have an item?
             if (eState >= SfxItemState::DEFAULT && pItem)
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+                std::unique_ptr<SfxPoolItem> pNewItem(Clone(*pItem));
                 bool const bPut = PutXMLValue(
                         *pNewItem, m_FoMarginValue, Ids[i][1], rUnitConverter);
                 if (bPut)

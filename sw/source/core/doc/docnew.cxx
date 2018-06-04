@@ -1180,7 +1180,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             // we just need to set the new page description and reset numbering
             // this keeps all other settings as in the pasted document
             if ( nStartPageNumber || pTargetPageDesc ) {
-                std::unique_ptr<SfxPoolItem> pNewItem;
+                std::unique_ptr<SwFormatPageDesc> pDesc;
                 SwTextNode *aTextNd = nullptr;
                 SwFormat *pFormat = nullptr;
 
@@ -1192,12 +1192,12 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                     if ( node.IsTextNode() ) {
                         // every document contains at least one text node!
                         aTextNd = node.GetTextNode();
-                        pNewItem.reset(aTextNd->GetAttr( RES_PAGEDESC ).Clone());
+                        pDesc = Clone(static_cast<const SwFormatPageDesc &>(aTextNd->GetAttr( RES_PAGEDESC )));
                         break;
                     }
                     else if ( node.IsTableNode() ) {
                         pFormat = node.GetTableNode()->GetTable().GetFrameFormat();
-                        pNewItem.reset(pFormat->GetFormatAttr( RES_PAGEDESC ).Clone());
+                        pDesc = Clone(static_cast<const SwFormatPageDesc &>(pFormat->GetFormatAttr( RES_PAGEDESC )));
                         break;
                     }
                 }
@@ -1207,21 +1207,20 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
     SAL_INFO( "sw.docappend", "Idx Fix " << CNTNT_IDX( aFixupIdx ) );
 #endif
                 // just update the original instead of overwriting
-                SwFormatPageDesc *aDesc = static_cast< SwFormatPageDesc* >( pNewItem.get() );
 #ifdef DBG_UTIL
-if ( aDesc->GetPageDesc() )
-    SAL_INFO( "sw.docappend", "PD Update " << aDesc->GetPageDesc()->GetName() );
+if ( pDesc->GetPageDesc() )
+    SAL_INFO( "sw.docappend", "PD Update " << pDesc->GetPageDesc()->GetName() );
 else
     SAL_INFO( "sw.docappend", "PD New" );
 #endif
                 if ( nStartPageNumber )
-                    aDesc->SetNumOffset( nStartPageNumber );
+                    pDesc->SetNumOffset( nStartPageNumber );
                 if ( pTargetPageDesc )
-                    aDesc->RegisterToPageDesc( *pTargetPageDesc );
+                    pDesc->RegisterToPageDesc( *pTargetPageDesc );
                 if ( aTextNd )
-                    aTextNd->SetAttr( *aDesc );
+                    aTextNd->SetAttr( *pDesc );
                 else
-                    pFormat->SetFormatAttr( *aDesc );
+                    pFormat->SetFormatAttr( *pDesc );
 
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "Idx " << CNTNT_IDX( aDelIdx ) );

@@ -41,9 +41,9 @@ bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SfxHyphenRegionItem::CloneInternal( SfxItemPool* ) const
 {
-    return new SfxHyphenRegionItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxHyphenRegionItem( *this ));
 }
 
 

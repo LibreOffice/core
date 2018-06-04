@@ -18,12 +18,13 @@
  */
 
 #include <svx/galleryitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-SfxPoolItem* SvxGalleryItem::CreateDefault() { return new SvxGalleryItem; }
+std::unique_ptr<SfxPoolItem> SvxGalleryItem::CreateDefault() { return o3tl::make_unique<SvxGalleryItem>(); }
 
 SvxGalleryItem::SvxGalleryItem()
     : m_nType( css::gallery::GalleryItemType::EMPTY )
@@ -133,9 +134,9 @@ bool SvxGalleryItem::operator==( const SfxPoolItem& rAttr ) const
             m_xGraphic  == rItem.m_xGraphic;
 }
 
-SfxPoolItem* SvxGalleryItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> SvxGalleryItem::CloneInternal( SfxItemPool * ) const
 {
-    return new SvxGalleryItem( *this );
+    return o3tl::make_unique<SvxGalleryItem>( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

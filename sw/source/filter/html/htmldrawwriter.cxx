@@ -114,7 +114,7 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                 pEEItem = &rObjItemSet.GetPool()->GetDefaultItem(nEEWhich);
 
             // now we clone the item with the which id of the writer
-            std::unique_ptr<SfxPoolItem> pSwItem(pEEItem->Clone());
+            std::unique_ptr<SfxPoolItem> pSwItem = Clone(*pEEItem);
             pSwItem->SetWhich( nSwWhich );
             rItemSet.Put( *pSwItem );
         }

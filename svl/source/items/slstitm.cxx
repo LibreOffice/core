@@ -26,8 +26,9 @@
 #include <tools/stream.hxx>
 #include <stringio.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/make_unique.hxx>
 
-SfxPoolItem* SfxStringListItem::CreateDefault() { return new SfxStringListItem; }
+std::unique_ptr<SfxPoolItem> SfxStringListItem::CreateDefault() { return o3tl::make_unique<SfxStringListItem>(); }
 
 SfxStringListItem::SfxStringListItem()
 {
@@ -107,15 +108,15 @@ bool SfxStringListItem::GetPresentation
 }
 
 
-SfxPoolItem* SfxStringListItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxStringListItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxStringListItem( *this );
+    return std::unique_ptr<SfxPoolItem>(new SfxStringListItem( *this ));
 }
 
 
-SfxPoolItem* SfxStringListItem::Create( SvStream & rStream, sal_uInt16 ) const
+std::unique_ptr<SfxPoolItem> SfxStringListItem::CreateInternal( SvStream & rStream, sal_uInt16 ) const
 {
-    return new SfxStringListItem( Which(), rStream );
+    return o3tl::make_unique<SfxStringListItem>( Which(), rStream );
 }
 
 

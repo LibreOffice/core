@@ -25,9 +25,9 @@
 class SdrLogicSizeWidthItem: public SdrMetricItem {
 public:
     SdrLogicSizeWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_LOGICSIZEWIDTH,nWdt)  {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrLogicSizeWidthItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrLogicSizeWidthItem(*this));
     }
 };
 
@@ -37,9 +37,9 @@ public:
 class SdrLogicSizeHeightItem: public SdrMetricItem {
 public:
     SdrLogicSizeHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_LOGICSIZEHEIGHT,nHgt)  {}
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool*) const override
     {
-        return new SdrLogicSizeHeightItem(*this);
+        return std::unique_ptr<SfxPoolItem>(new SdrLogicSizeHeightItem(*this));
     }
 };
 

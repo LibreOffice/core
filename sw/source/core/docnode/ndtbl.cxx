@@ -4215,7 +4215,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition const & rPos )
                 aRegH.RegisterInModify( pTextNode , *pTextNode );
                 if ( pUndo )
                     pUndo->AddNode( *pTextNode );
-                std::unique_ptr<SfxStringItem> pNewItem(static_cast<SfxStringItem*>(pFormatItem->Clone()));
+                std::unique_ptr<SfxStringItem> pNewItem = Clone(*static_cast<const SfxStringItem*>(pFormatItem));
                 pNewItem->SetValue(OUString());
                 rSet.Put( *pNewItem );
                 pTextNode->SetAttr( rSet );

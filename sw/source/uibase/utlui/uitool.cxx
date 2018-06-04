@@ -142,7 +142,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet)
     std::unique_ptr<SfxGrabBagItem> pGrabBag;
     const SfxPoolItem *pTmpItem;
     if (SfxItemState::SET == rSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
-        pGrabBag.reset(static_cast<SfxGrabBagItem*>(pTmpItem->Clone()));
+        pGrabBag = Clone(*static_cast<const SfxGrabBagItem*>(pTmpItem));
     else
         pGrabBag.reset(new SfxGrabBagItem(RES_CHRATR_GRABBAG));
     pGrabBag->GetGrabBag()["DialogUseCharAttr"] <<= true;

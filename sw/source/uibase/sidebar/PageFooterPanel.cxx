@@ -179,7 +179,7 @@ void PageFooterPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT &&
                 dynamic_cast<const SfxBoolItem*>( pState) )
             {
-                mpFooterItem.reset( static_cast<SfxBoolItem*>(pState->Clone()) );
+                mpFooterItem = Clone(*static_cast<const SfxBoolItem*>(pState));
                 mpFooterToggle->Check(mpFooterItem->GetValue());
                 UpdateFooterCheck();
             }
@@ -190,7 +190,7 @@ void PageFooterPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT &&
                 dynamic_cast<const SvxLongLRSpaceItem*>( pState) )
             {
-                mpFooterLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                mpFooterLRMarginItem = Clone(*static_cast<const SvxLongLRSpaceItem*>(pState));
                 UpdateMarginControl();
             }
         }
@@ -200,7 +200,7 @@ void PageFooterPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT &&
                 dynamic_cast<const SvxLongULSpaceItem*>( pState) )
             {
-                mpFooterSpacingItem.reset(static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                mpFooterSpacingItem = Clone(*static_cast<const SvxLongULSpaceItem*>(pState));
                 UpdateSpacingControl();
             }
         }
@@ -210,7 +210,7 @@ void PageFooterPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT &&
                 dynamic_cast<const SfxInt16Item*>( pState) )
             {
-                mpFooterLayoutItem.reset(static_cast<SfxInt16Item*>(pState->Clone()) );
+                mpFooterLayoutItem = Clone(*static_cast<const SfxInt16Item*>(pState));
                 UpdateLayoutControl();
             }
         }

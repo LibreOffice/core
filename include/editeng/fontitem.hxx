@@ -39,7 +39,7 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
     static bool bEnableStoreUnicodeNames;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     explicit SvxFontItem(const sal_uInt16 nId);
     SvxFontItem(const FontFamily eFam, const OUString& rFamilyName,
@@ -50,8 +50,8 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool *pPool = nullptr) const override;
-    virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool *pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal(SvStream& rStream, sal_uInt16) const override;
     virtual SvStream& Store(SvStream& rStream, sal_uInt16 nItemVersion) const override;
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;

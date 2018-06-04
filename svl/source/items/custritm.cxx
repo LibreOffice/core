@@ -66,9 +66,9 @@ bool CntUnencodedStringItem::PutValue(const css::uno::Any& rVal,
 }
 
 // virtual
-SfxPoolItem * CntUnencodedStringItem::Clone(SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> CntUnencodedStringItem::CloneInternal(SfxItemPool *) const
 {
-    return new CntUnencodedStringItem(*this);
+    return std::unique_ptr<SfxPoolItem>(new CntUnencodedStringItem(*this));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

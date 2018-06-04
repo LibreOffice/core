@@ -18,9 +18,10 @@
  */
 
 #include <sfx2/tplpitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/frame/status/Template.hpp>
 
-SfxPoolItem* SfxTemplateItem::CreateDefault() { return new SfxTemplateItem; }
+std::unique_ptr<SfxPoolItem> SfxTemplateItem::CreateDefault() { return o3tl::make_unique<SfxTemplateItem>(); }
 
 
 SfxTemplateItem::SfxTemplateItem() :
@@ -46,9 +47,9 @@ bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
+std::unique_ptr<SfxPoolItem> SfxTemplateItem::CloneInternal( SfxItemPool *) const
 {
-    return new SfxTemplateItem(*this);
+    return o3tl::make_unique<SfxTemplateItem>(*this);
 }
 
 

@@ -51,9 +51,9 @@ bool SwFormatRefMark::operator==( const SfxPoolItem& rAttr ) const
     return m_aRefName == static_cast<const SwFormatRefMark&>(rAttr).m_aRefName;
 }
 
-SfxPoolItem* SwFormatRefMark::Clone( SfxItemPool* ) const
+std::unique_ptr<SfxPoolItem> SwFormatRefMark::CloneInternal( SfxItemPool* ) const
 {
-    return new SwFormatRefMark( *this );
+    return o3tl::make_unique<SwFormatRefMark>( *this );
 }
 
 void SwFormatRefMark::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)

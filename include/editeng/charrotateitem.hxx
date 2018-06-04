@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxTextRotateItem : public SfxUInt16Item
 public:
     SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nId);
 
-    virtual SfxPoolItem*    Clone(SfxItemPool *pPool = nullptr) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal(SfxItemPool *pPool = nullptr) const override;
     virtual sal_uInt16      GetVersion(sal_uInt16 nFileVersion) const override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
@@ -76,13 +76,13 @@ class EDITENG_DLLPUBLIC SvxCharRotateItem : public SvxTextRotateItem
 {
     bool bFitToLine;
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
 
     SvxCharRotateItem( sal_uInt16 nValue /*= 0*/,
                        bool bFitIntoLine /*= false*/,
                        const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,

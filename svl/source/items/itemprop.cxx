@@ -220,7 +220,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     if (pItem)
     {
-        pNewItem.reset(pItem->Clone());
+        pNewItem = Clone(*pItem);
     }
     if(pNewItem)
     {

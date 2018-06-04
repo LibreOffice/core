@@ -58,9 +58,9 @@ bool ScTpDefaultsItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-SfxPoolItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
+std::unique_ptr<SfxPoolItem> ScTpDefaultsItem::CloneInternal( SfxItemPool * ) const
 {
-    return new ScTpDefaultsItem( *this );
+    return o3tl::make_unique<ScTpDefaultsItem>( *this );
 }
 
 #define CFGPATH_FORMULA          "Office.Calc/Defaults"

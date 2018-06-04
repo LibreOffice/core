@@ -52,8 +52,8 @@ public:
 
     virtual sal_uInt16      GetValueCount() const override;
     static OUString         GetValueText( SvxCellOrientation nVal );
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem>    CreateInternal( SvStream& rStream, sal_uInt16 nVer ) const override;
 
     SvxOrientationItem& operator=(const SvxOrientationItem& rOrientation)
             {
@@ -75,7 +75,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
     sal_Int16       nRightMargin;
     sal_Int16       nBottomMargin;
 public:
-    static SfxPoolItem* CreateDefault();
+    static std::unique_ptr<SfxPoolItem> CreateDefault();
     SvxMarginItem( const sal_uInt16 nId  );
     SvxMarginItem( sal_Int16 nLeft, sal_Int16 nTop /*= 0*/,
                    sal_Int16 nRight /*= 0*/, sal_Int16 nBottom /*= 0*/,
@@ -87,8 +87,8 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CloneInternal( SfxItemPool *pPool = nullptr ) const override;
+    virtual std::unique_ptr<SfxPoolItem> CreateInternal( SvStream& rStream, sal_uInt16 nVer ) const override;
     virtual SvStream&        Store( SvStream&, sal_uInt16 nItemVersion ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

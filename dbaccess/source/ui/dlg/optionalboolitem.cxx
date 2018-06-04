@@ -18,6 +18,7 @@
  */
 
 #include "optionalboolitem.hxx"
+#include <o3tl/make_unique.hxx>
 
 namespace dbaui
 {
@@ -38,9 +39,9 @@ namespace dbaui
         return m_aValue == pCompare->m_aValue;
     }
 
-    SfxPoolItem* OptionalBoolItem::Clone( SfxItemPool* /*_pPool*/ ) const
+    std::unique_ptr<SfxPoolItem> OptionalBoolItem::CloneInternal( SfxItemPool* /*_pPool*/ ) const
     {
-        return new OptionalBoolItem( *this );
+        return o3tl::make_unique<OptionalBoolItem>( *this );
     }
 
 } // namespace dbaui

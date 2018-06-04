@@ -2805,7 +2805,7 @@ SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh)
 void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
 {
     // create a new SvxSetItem and get it's ItemSet as new target
-    const std::unique_ptr<SvxSetItem> pNewSetItem(static_cast<SvxSetItem*>(pSetItem->Clone()));
+    const std::unique_ptr<SvxSetItem> pNewSetItem(Clone(*pSetItem));
     SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
 
     // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
@@ -2954,7 +2954,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     if(SfxItemState::SET == aBaseImpl.GetItemSet().GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
                     {
                         // create a new SvxSetItem and get it's ItemSet as new target
-                        std::unique_ptr<SvxSetItem> pNewSetItem(static_cast<SvxSetItem*>(pSetItem->Clone()));
+                        std::unique_ptr<SvxSetItem> pNewSetItem(Clone(*pSetItem));
                         SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
 
                         // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
@@ -2999,7 +2999,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
             case FN_PARAM_FTN_INFO:
             {
                 const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
-                const std::unique_ptr<SfxPoolItem> pNewFootnoteItem(rItem.Clone());
+                const std::unique_ptr<SfxPoolItem> pNewFootnoteItem(Clone(rItem));
                 if(!pNewFootnoteItem->PutValue(rValues[nProp], pEntry->nMemberId))
                     throw lang::IllegalArgumentException();
                 aBaseImpl.GetItemSet().Put(*pNewFootnoteItem);
