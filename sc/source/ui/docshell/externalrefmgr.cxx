@@ -34,6 +34,7 @@
 #include <scresid.hxx>
 #include <cellvalue.hxx>
 #include <defaultsoptions.hxx>
+#include <scmod.hxx>
 
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>

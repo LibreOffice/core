@@ -27,7 +27,6 @@
 #include "chartlis.hxx"
 
 #include <svl/lstner.hxx>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XSheetDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
@@ -35,7 +34,6 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/DataSequenceRole.hpp>
 #include <com/sun/star/chart2/XTimeBased.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -49,6 +47,8 @@
 #include <memory>
 #include <unordered_set>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
 
 class ScDocument;
 

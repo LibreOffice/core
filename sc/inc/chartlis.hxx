@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SC_INC_CHARTLIS_HXX
 #define INCLUDED_SC_INC_CHARTLIS_HXX
 
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <svl/listener.hxx>
 #include "rangelst.hxx"
-#include "token.hxx"
 #include "externalrefmgr.hxx"
 
 #include <memory>
@@ -33,10 +31,12 @@
 #include <unordered_set>
 #include <vector>
 
+namespace com { namespace sun { namespace star { namespace chart { class XChartData; } } } }
+namespace com { namespace sun { namespace star { namespace chart { class XChartDataChangeEventListener; } } } }
+
+class Timer;
 class ScDocument;
 class ScChartUnoData;
-#include <com/sun/star/chart/XChartData.hpp>
-#include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
 class SC_DLLPUBLIC ScChartListener : public SvtListener
 {

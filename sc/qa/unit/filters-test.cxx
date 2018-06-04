@@ -38,6 +38,7 @@
 #include <dbdata.hxx>
 #include <sortparam.hxx>
 #include <scopetools.hxx>
+#include <scmod.hxx>
 
 #include <svx/svdpage.hxx>
 

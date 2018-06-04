@@ -21,22 +21,22 @@
 #define INCLUDED_SC_INC_ADDINCOL_HXX
 
 #include <memory>
-#include "global.hxx"
-#include <com/sun/star/sheet/XVolatileResult.hpp>
-#include <com/sun/star/sheet/XAddIn.hpp>
-#include <com/sun/star/sheet/XResultListener.hpp>
-#include <com/sun/star/sheet/ResultEvent.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
+#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.h>
+#include <formula/errorcodes.hxx>
 #include <i18nlangtag/lang.h>
-#include <rtl/ustring.h>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
-#include "scmatrix.hxx"
 
 #include "types.hxx"
 
+#include <vector>
 #include <unordered_map>
+
+namespace com { namespace sun { namespace star { namespace reflection { class XIdlMethod; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XVolatileResult; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
 class SfxObjectShell;
 class ScUnoAddInFuncData;
