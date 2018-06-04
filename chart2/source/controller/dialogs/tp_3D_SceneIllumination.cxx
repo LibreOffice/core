@@ -230,7 +230,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window*
 
     get(m_pCtl_Preview, "CTL_LIGHT_PREVIEW");
 
-    m_pLightSourceInfoList = new LightSourceInfo[8];
+    m_pLightSourceInfoList.reset(new LightSourceInfo[8]);
     m_pLightSourceInfoList[0].pButton = m_pBtn_Light1;
     m_pLightSourceInfoList[1].pButton = m_pBtn_Light2;
     m_pLightSourceInfoList[2].pButton = m_pBtn_Light3;
@@ -270,8 +270,7 @@ ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
 
 void ThreeD_SceneIllumination_TabPage::dispose()
 {
-    delete[] m_pLightSourceInfoList;
-    m_pLightSourceInfoList = nullptr;
+    m_pLightSourceInfoList.reset();
     m_pBtn_Light1.clear();
     m_pBtn_Light2.clear();
     m_pBtn_Light3.clear();
