@@ -33,7 +33,7 @@ SchLayoutTabPage::SchLayoutTabPage(vcl::Window* pWindow,const SfxItemSet& rInAtt
      : SfxTabPage(pWindow, "tp_ChartType", "modules/schart/ui/tp_ChartType.ui", &rInAttrs)
      , m_pGeometryResources(nullptr)
 {
-    m_pGeometryResources = new BarGeometryResources( this );
+    m_pGeometryResources.reset(new BarGeometryResources( this ));
 }
 
 SchLayoutTabPage::~SchLayoutTabPage()
@@ -43,8 +43,7 @@ SchLayoutTabPage::~SchLayoutTabPage()
 
 void SchLayoutTabPage::dispose()
 {
-    delete m_pGeometryResources;
-    m_pGeometryResources = nullptr;
+    m_pGeometryResources.reset();
     SfxTabPage::dispose();
 }
 

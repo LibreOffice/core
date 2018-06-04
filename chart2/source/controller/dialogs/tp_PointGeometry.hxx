@@ -37,7 +37,7 @@ public:
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 
 private:
-    BarGeometryResources*   m_pGeometryResources;
+    std::unique_ptr<BarGeometryResources> m_pGeometryResources;
 };
 
 } //namespace chart
