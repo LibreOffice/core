@@ -132,41 +132,34 @@ FmEntryDataList::~FmEntryDataList()
 }
 
 
-FmEntryData* FmEntryDataList::remove( FmEntryData* pItem )
+void FmEntryDataList::remove( FmEntryData* pItem )
 {
-    FmEntryDataBaseList::const_iterator aEnd = maEntryDataList.end();
-    for ( FmEntryDataBaseList::iterator it = maEntryDataList.begin();
-          it != aEnd;
-          ++it
-        )
+    auto aEnd = maEntryDataList.end();
+    for ( auto it = maEntryDataList.begin(); it != aEnd; ++it )
     {
-        if ( *it == pItem )
+        if ( it->get() == pItem )
         {
             maEntryDataList.erase( it );
-            break;
+            return;
         }
     }
-    return pItem;
+    assert(false);
 }
 
 
-void FmEntryDataList::insert( FmEntryData* pItem, size_t Index )
+void FmEntryDataList::insert( std::unique_ptr<FmEntryData> pItem, size_t Index )
 {
     if ( Index < maEntryDataList.size() )
     {
-        FmEntryDataBaseList::iterator it = maEntryDataList.begin();
-        ::std::advance( it, Index );
-        maEntryDataList.insert( it, pItem );
+        maEntryDataList.insert( maEntryDataList.begin() + Index, std::move(pItem) );
     }
     else
-        maEntryDataList.push_back( pItem );
+        maEntryDataList.push_back( std::move(pItem) );
 }
 
 
 void FmEntryDataList::clear()
 {
-    for (FmEntryData* p : maEntryDataList)
-        delete p;
     maEntryDataList.clear();
 }
 
@@ -207,8 +200,8 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
     for( size_t i = 0; i < nEntryCount; i++ )
     {
         pChildData = rEntryData.GetChildList()->at( i );
-        FmEntryData* pNewChildData = pChildData->Clone();
-        pChildList->insert( pNewChildData, size_t(-1) );
+        std::unique_ptr<FmEntryData> pNewChildData = pChildData->Clone();
+        pChildList->insert( std::move(pNewChildData), size_t(-1) );
     }
 
     m_xNormalizedIFace = rEntryData.m_xNormalizedIFace;
@@ -276,9 +269,9 @@ FmFormData::FmFormData( const FmFormData& rFormData )
 }
 
 
-FmEntryData* FmFormData::Clone()
+std::unique_ptr<FmEntryData> FmFormData::Clone()
 {
-    return new FmFormData( *this );
+    return std::unique_ptr<FmEntryData>(new FmFormData( *this ));
 }
 
 
@@ -325,9 +318,9 @@ FmControlData::FmControlData( const FmControlData& rControlData )
 }
 
 
-FmEntryData* FmControlData::Clone()
+std::unique_ptr<FmEntryData> FmControlData::Clone()
 {
-    return new FmControlData( *this );
+    return std::unique_ptr<FmEntryData>(new FmControlData( *this ));
 }
 
 

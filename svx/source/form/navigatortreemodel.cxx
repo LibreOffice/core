@@ -333,9 +333,9 @@ namespace svxform
         }
 
         if (pFolder)
-            pFolder->GetChildList()->insert( pEntry, nRelPos );
+            pFolder->GetChildList()->insert( std::unique_ptr<FmEntryData>(pEntry), nRelPos );
         else
-            GetRootList()->insert( pEntry, nRelPos );
+            GetRootList()->insert( std::unique_ptr<FmEntryData>(pEntry), nRelPos );
 
 
         // notify UI
