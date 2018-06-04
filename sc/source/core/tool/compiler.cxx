@@ -4579,7 +4579,14 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             }
         }
         FormulaToken* pNewToken = static_cast<ScTokenArray*>(pArr)->Add( maRawToken.CreateToken());
-        if (!pNewToken)
+        if (!pNewToken && eOp == ocArrayClose && pArr->OpCodeBefore( pArr->GetLen()) == ocArrayClose)
+        {
+            // Nested inline array or non-value/non-string in array. The
+            // original tokens are still in the ScTokenArray and not merged
+            // into an ScMatrixToken. Set error but keep on tokenizing.
+            SetError( FormulaError::NestedArray);
+        }
+        else if (!pNewToken)
         {
             SetError(FormulaError::CodeOverflow);
             break;
