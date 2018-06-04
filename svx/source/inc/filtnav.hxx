@@ -231,7 +231,7 @@ class FmFilterNavigator final : public SvTreeListBox, public SfxListener
 {
     enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
 
-    FmFilterModel*          m_pModel;
+    std::unique_ptr<FmFilterModel> m_pModel;
     SvTreeListEntry*            m_pEditingCurrently;
     OFilterExchangeHelper   m_aControlExchange;
 
@@ -250,7 +250,7 @@ public:
             const css::uno::Reference< css::container::XIndexAccess > & xControllers,
             const css::uno::Reference< css::form::runtime::XFormController > & xCurrent
         );
-    const FmFilterModel* GetFilterModel() const {return m_pModel;}
+    const FmFilterModel* GetFilterModel() const {return m_pModel.get();}
 
 private:
 
