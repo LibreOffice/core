@@ -73,10 +73,15 @@ public:
     ScScreenshotTest();
 
     void testOpeningModalDialogs();
+#if 0
     void testMultiViewCopyPaste();
+#endif
 
     CPPUNIT_TEST_SUITE(ScScreenshotTest);
     CPPUNIT_TEST(testOpeningModalDialogs);
+#if 0
+    CPPUNIT_TEST(testMultiViewCopyPaste);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -288,6 +293,7 @@ void ScScreenshotTest::testOpeningModalDialogs()
     mxComponent.clear();
 }
 
+#if 0
 void ScScreenshotTest::testMultiViewCopyPaste()
 {
     initialize();
@@ -334,6 +340,7 @@ void ScScreenshotTest::testMultiViewCopyPaste()
     mxComponent->dispose();
     mxComponent.clear();
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScScreenshotTest);
 
