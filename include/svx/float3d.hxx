@@ -170,14 +170,14 @@ private:
     ViewType3D          eViewType;
 
     // Model, Page, View etc. for favourites
-    FmFormModel*        pModel;
+    std::unique_ptr<FmFormModel>         pModel;
     VclPtr<VirtualDevice> pVDev;
 
     SfxBindings*                pBindings;
-    Svx3DCtrlItem*              pControllerItem;
+    std::unique_ptr<Svx3DCtrlItem>       pControllerItem;
 
-    SvxConvertTo3DItem*         pConvertTo3DItem;
-    SvxConvertTo3DItem*         pConvertTo3DLatheItem;
+    std::unique_ptr<SvxConvertTo3DItem>  pConvertTo3DItem;
+    std::unique_ptr<SvxConvertTo3DItem>  pConvertTo3DLatheItem;
 
     std::unique_ptr<Svx3DWinImpl>        mpImpl;
     MapUnit             ePoolUnit;
