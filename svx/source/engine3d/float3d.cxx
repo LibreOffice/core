@@ -212,9 +212,9 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     m_pMtrDistance->SetUnit( eFUnit );
     m_pMtrFocalLength->SetUnit( eFUnit );
 
-    pControllerItem = new Svx3DCtrlItem(SID_3D_STATE, pBindings);
-    pConvertTo3DItem = new SvxConvertTo3DItem(SID_CONVERT_TO_3D, pBindings);
-    pConvertTo3DLatheItem = new SvxConvertTo3DItem(SID_CONVERT_TO_3D_LATHE_FAST, pBindings);
+    pControllerItem.reset( new Svx3DCtrlItem(SID_3D_STATE, pBindings) );
+    pConvertTo3DItem.reset( new SvxConvertTo3DItem(SID_CONVERT_TO_3D, pBindings) );
+    pConvertTo3DLatheItem.reset( new SvxConvertTo3DItem(SID_CONVERT_TO_3D_LATHE_FAST, pBindings) );
 
     m_pBtnAssign->SetClickHdl( LINK( this, Svx3DWin, ClickAssignHdl ) );
     m_pBtnUpdate->SetClickHdl( LINK( this, Svx3DWin, ClickUpdateHdl ) );
@@ -330,11 +330,11 @@ Svx3DWin::~Svx3DWin()
 void Svx3DWin::dispose()
 {
     pVDev.disposeAndClear();
-    delete pModel;
+    pModel.reset();
 
-    DELETEZ( pControllerItem );
-    DELETEZ( pConvertTo3DItem );
-    DELETEZ( pConvertTo3DLatheItem );
+    pControllerItem.reset();
+    pConvertTo3DItem.reset();
+    pConvertTo3DLatheItem.reset();
 
     mpImpl.reset();
 
@@ -2786,9 +2786,9 @@ void Svx3DWin::LBSelectColor( SvxColorListBox* pLb, const Color& rColor )
 
 void Svx3DWin::UpdatePreview()
 {
-    if(nullptr == pModel)
+    if(!pModel)
     {
-        pModel = new FmFormModel();
+        pModel.reset(new FmFormModel());
     }
 
     // Get Itemset
