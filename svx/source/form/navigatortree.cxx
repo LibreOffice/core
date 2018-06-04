@@ -1127,9 +1127,9 @@ namespace svxform
 
             // give parent the new child
             if (pTargetData)
-                pTargetData->GetChildList()->insert( pCurrentUserData, nIndex );
+                pTargetData->GetChildList()->insert( std::unique_ptr<FmEntryData>(pCurrentUserData), nIndex );
             else
-                GetNavModel()->GetRootList()->insert( pCurrentUserData, nIndex );
+                GetNavModel()->GetRootList()->insert( std::unique_ptr<FmEntryData>(pCurrentUserData), nIndex );
 
             // announce to myself and reselect
             SvTreeListEntry* pNew = Insert( pCurrentUserData, nIndex );
