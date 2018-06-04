@@ -1663,7 +1663,7 @@ namespace svx
             if( nCnt )
             {
                 if( !m_pSuggestions )
-                    m_pSuggestions = new SuggestionList;
+                    m_pSuggestions.reset(new SuggestionList);
 
                 const OUString* pSugg = aEntries.getConstArray();
                 sal_uInt32 n = 0;
@@ -1710,7 +1710,7 @@ namespace svx
         {
             //set suggestion
             if( !m_pSuggestions )
-                m_pSuggestions = new SuggestionList;
+                m_pSuggestions.reset(new SuggestionList);
             m_pSuggestions->Set( aTxt, nEntryNum );
         }
 
@@ -1787,8 +1787,7 @@ namespace svx
 
     void HangulHanjaEditDictDialog::dispose()
     {
-        delete m_pSuggestions;
-        m_pSuggestions = nullptr;
+        m_pSuggestions.reset();
         m_aBookLB.clear();
         m_aOriginalLB.clear();
         m_aEdit1.clear();
