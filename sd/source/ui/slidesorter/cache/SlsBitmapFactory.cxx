@@ -46,7 +46,7 @@ BitmapFactory::~BitmapFactory()
 {
 }
 
-Bitmap BitmapFactory::CreateBitmap (
+BitmapEx BitmapFactory::CreateBitmap (
     const SdPage& rPage,
     const Size& rPixelSize,
     const bool bDoSuperSampling)
@@ -60,11 +60,11 @@ Bitmap BitmapFactory::CreateBitmap (
         aSize.setHeight( aSize.Height() * aSuperSamplingFactor );
     }
 
-    Bitmap aPreview (maRenderer.RenderPage (
+    BitmapEx aPreview (maRenderer.RenderPage (
         &rPage,
         aSize,
         true,
-        false).GetBitmapEx().GetBitmap());
+        false).GetBitmapEx());
     if (bDoSuperSampling)
     {
         aPreview.Scale(rPixelSize, BmpScaleFlag::BestQuality);
