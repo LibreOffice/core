@@ -1233,7 +1233,7 @@ void SVGTextWriter::startTextShape()
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
             }
 
-        mpTextShapeElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, true, mbIWS );
+        mpTextShapeElem.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, true, mbIWS ));
         startTextParagraph();
     }
 }
@@ -1242,17 +1242,10 @@ void SVGTextWriter::startTextShape()
 void SVGTextWriter::endTextShape()
 {
     endTextParagraph();
-    if( mrTextShape.is() )
-        mrTextShape.clear();
-    if( mrParagraphEnumeration.is() )
-        mrParagraphEnumeration.clear();
-    if( mrCurrentTextParagraph.is() )
-        mrCurrentTextParagraph.clear();
-    if( mpTextShapeElem )
-    {
-        delete mpTextShapeElem;
-        mpTextShapeElem = nullptr;
-    }
+    mrTextShape.clear();
+    mrParagraphEnumeration.clear();
+    mrCurrentTextParagraph.clear();
+    mpTextShapeElem.reset();
     mbIsTextShapeStarted = false;
     // these need to be invoked after the <text> element has been closed
     implExportHyperlinkIds();
@@ -1290,7 +1283,7 @@ void SVGTextWriter::startTextParagraph()
     }
     maParentFont = vcl::Font();
     addFontAttributes( /* isTexTContainer: */ true );
-    mpTextParagraphElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+    mpTextParagraphElem.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS ));
 
     if( !mbIsListLevelStyleImage )
     {
@@ -1306,13 +1299,7 @@ void SVGTextWriter::endTextParagraph()
     mbIsNewListItem = false;
     mbIsListLevelStyleImage = false;
     mbPositioningNeeded = false;
-
-    if( mpTextParagraphElem )
-    {
-        delete mpTextParagraphElem;
-        mpTextParagraphElem = nullptr;
-    }
-
+    mpTextParagraphElem.reset();
 }
 
 
@@ -1326,17 +1313,13 @@ void SVGTextWriter::startTextPosition( bool bExportX, bool bExportY )
     if( bExportY )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( maTextPos.Y() ) );
 
-    mpTextPositionElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+    mpTextPositionElem.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS ) );
 }
 
 
 void SVGTextWriter::endTextPosition()
 {
-    if( mpTextPositionElem )
-    {
-        delete mpTextPositionElem;
-        mpTextPositionElem = nullptr;
-    }
+    mpTextPositionElem.reset();
 }
 
 
