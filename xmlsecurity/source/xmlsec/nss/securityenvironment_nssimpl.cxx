@@ -877,48 +877,12 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     for (CIT_SLOTS islots = m_Slots.begin();islots != m_Slots.end(); ++islots, ++count)
         slots[count] = *islots;
 
-#ifndef SYSTEM_XMLSEC
-    xmlSecKeysMngrPtr pKeysMngr = xmlSecNssAppliedKeysMngrCreate(slots, cSlots, m_pHandler ) ;
-    if( pKeysMngr == nullptr )
-        throw RuntimeException() ;
-
-    /*-
-     * Adopt symmetric key into keys manager
-     */
-    PK11SymKey* symKey = nullptr ;
-    for( unsigned int i = 0 ; ( symKey = getSymKey( i ) ) != nullptr ; i ++ ) {
-        if( xmlSecNssAppliedKeysMngrSymKeyLoad( pKeysMngr, symKey ) < 0 ) {
-            throw RuntimeException() ;
-        }
-    }
-
-    /*-
-     * Adopt asymmetric public key into keys manager
-     */
-    SECKEYPublicKey* pubKey = nullptr ;
-    for( unsigned int i = 0 ; ( pubKey = getPubKey( i ) ) != nullptr ; i ++ ) {
-        if( xmlSecNssAppliedKeysMngrPubKeyLoad( pKeysMngr, pubKey ) < 0 ) {
-            throw RuntimeException() ;
-        }
-    }
-
-    /*-
-     * Adopt asymmetric private key into keys manager
-     */
-    SECKEYPrivateKey* priKey = nullptr ;
-    for( unsigned int i = 0 ; ( priKey = getPriKey( i ) ) != nullptr ; i ++ ) {
-        if( xmlSecNssAppliedKeysMngrPriKeyLoad( pKeysMngr, priKey ) < 0 ) {
-            throw RuntimeException() ;
-        }
-    }
-#else // SYSTEM_XMLSEC
     xmlSecKeysMngrPtr pKeysMngr = xmlSecKeysMngrCreate();
     if (!pKeysMngr)
         throw RuntimeException();
 
     if (xmlSecNssAppDefaultKeysMngrInit(pKeysMngr) < 0)
         throw RuntimeException();
-#endif // SYSTEM_XMLSEC
 
     // Adopt the private key of the signing certificate, if it has any.
     if (auto pCertificate = dynamic_cast<X509Certificate_NssImpl*>(m_xSigningCertificate.get()))
