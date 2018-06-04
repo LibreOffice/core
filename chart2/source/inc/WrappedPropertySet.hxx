@@ -30,6 +30,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 
+#include <memory>
 #include <vector>
 
 namespace chart
@@ -105,9 +106,9 @@ protected: //methods
 protected: //member
     css::uno::Reference< css::beans::XPropertySetInfo >     m_xInfo;//outer PropertySetInfo
 
-    ::cppu::OPropertyArrayHelper*                       m_pPropertyArrayHelper;//holds all possible outer properties
+    std::unique_ptr<::cppu::OPropertyArrayHelper>       m_pPropertyArrayHelper;//holds all possible outer properties
 
-    tWrappedPropertyMap*                                m_pWrappedPropertyMap;//holds all wrapped properties (containing the special mapping from inner to outer properties)
+    std::unique_ptr<tWrappedPropertyMap>                m_pWrappedPropertyMap;//holds all wrapped properties (containing the special mapping from inner to outer properties)
 
     //Container for the XProperyChangedListener. The listeners are inserted by handle.
     //OMultiTypeInterfaceContainerHelperInt32             m_aBoundListenerContainer;
