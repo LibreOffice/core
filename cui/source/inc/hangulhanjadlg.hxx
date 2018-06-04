@@ -271,7 +271,7 @@ namespace svx
         sal_uInt32      m_nCurrentDict;
 
         OUString        m_aOriginal;
-        SuggestionList* m_pSuggestions;
+        std::unique_ptr<SuggestionList> m_pSuggestions;
 
         VclPtr<ListBox>        m_aBookLB;
         VclPtr<ComboBox>       m_aOriginalLB;
