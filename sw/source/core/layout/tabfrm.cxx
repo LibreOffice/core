@@ -78,6 +78,7 @@ SwTabFrame::SwTabFrame( SwTable &rTab, SwFrame* pSib )
     , m_bConsiderObjsForMinCellHeight(true)
     , m_bObjsDoesFit(true)
     , m_bInRecalcLowerRow(false)
+    , m_bIgnoreHeadlines(false)
 {
     mbFixSize = false;     //Don't fall for import filter again.
     mnFrameType = SwFrameType::Tab;
@@ -116,6 +117,7 @@ SwTabFrame::SwTabFrame( SwTabFrame &rTab )
     , m_bConsiderObjsForMinCellHeight(true)
     , m_bObjsDoesFit(true)
     , m_bInRecalcLowerRow(false)
+    , m_bIgnoreHeadlines(false)
 {
     mbFixSize = false;     //Don't fall for import filter again.
     mnFrameType = SwFrameType::Tab;
@@ -983,7 +985,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     if( !pRow )
         return bRet;
 
-    const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
+    sal_uInt16 nRepeat = GetRowsToRepeat();
     sal_uInt16 nRowCount = 0;           // pRow currently points to the first row
 
     SwTwips nRemainingSpaceForLastRow =
@@ -1025,22 +1027,22 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
 
     // #i29771#
     // To avoid loops, we do some checks before actually trying to split
-    // the row. Maybe we should keep the next row in this table.
+    // the row.
     // Note: This is only done if we are at the beginning of our upper
-    bool bKeepNextRow = false;
+    // tdf#58944: ignore headlines if they prevent splitting the frame
     if ( nRowCount < nRepeat )
     {
         // First case: One of the repeated headline does not fit to the page anymore.
-        // At least one more non-heading row has to stay in this table in
-        // order to avoid loops:
+        // Do not repeat headlines!
         OSL_ENSURE( !GetIndPrev(), "Table is supposed to be at beginning" );
-        bKeepNextRow = true;
+        SetIgnoreHeadlines(true);
+        nRepeat = 0; // continue splitting normally
     }
-    else if ( !GetIndPrev() && nRepeat == nRowCount )
+    else if (nRepeat && nRepeat == nRowCount && !GetIndPrev())
     {
         // Second case: The first non-headline row does not fit to the page.
         // If it is not allowed to be split, or it contains a sub-row that
-        // is not allowed to be split, we keep the row in this table:
+        // is not allowed to be split, we start ignoring headlines:
         if ( bTryToSplit && bSplitRowAllowed )
         {
             // Check if there are (first) rows inside this row,
@@ -1054,33 +1056,19 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
                     if ( !pLowerRow->IsRowSplitAllowed() &&
                         aRectFnSet.GetHeight(pLowerRow->getFrameArea()) > nRemainingSpaceForLastRow )
                     {
-                        bKeepNextRow = true;
-                        break;
+                        SetIgnoreHeadlines(true);
+                        return false; // We need to start over!
                     }
                 }
                 pLowerCell = static_cast<SwCellFrame*>(pLowerCell->GetNext());
             }
         }
         else
-            bKeepNextRow = true;
-    }
-
-    // Better keep the next row in this table:
-    if ( bKeepNextRow )
-    {
-        pRow = GetFirstNonHeadlineRow();
-        if ( pRow && pRow->IsRowSpanLine() && 0 == aRectFnSet.GetHeight(pRow->getFrameArea()) )
-            pRow = static_cast<SwRowFrame*>(pRow->GetNext());
-        if ( pRow )
         {
-            pRow = static_cast<SwRowFrame*>(pRow->GetNext());
-            ++nRowCount;
+            SetIgnoreHeadlines(true);
+            return false; // We need to start over!
         }
     }
-
-    // No more row to split or to move to follow table:
-    if ( !pRow )
-        return bRet;
 
     // We try to split the row if
     // - the attributes of the row are set accordingly and
@@ -1111,23 +1099,25 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     }
 
     // If we do not intend to split pRow, we check if we are
-    // allowed to move pRow to a follow. Otherwise we return
-    // false, indicating an error
+    // allowed to move pRow to a follow. Otherwise we start ignoring headlines, if applicable;
+    // and return false, indicating an error
     if ( !bSplitRowAllowed )
     {
-        SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
-        if ( pRow == pFirstNonHeadlineRow )
-            return false;
+        const SwRowFrame* pTmpRow = GetFirstNonHeadlineRow();
+        if (pRow == pTmpRow)
+            pTmpRow = nullptr;
 
         // #i91764#
         // Ignore row span lines
-        SwRowFrame* pTmpRow = pFirstNonHeadlineRow;
-        while ( pTmpRow && pTmpRow->IsRowSpanLine() )
+        while (pTmpRow && pTmpRow->IsRowSpanLine())
         {
-            pTmpRow = static_cast<SwRowFrame*>(pTmpRow->GetNext());
+            pTmpRow = static_cast<const SwRowFrame*>(pTmpRow->GetNext());
         }
-        if ( !pTmpRow || pRow == pTmpRow )
+        if (!pTmpRow || pRow == pTmpRow)
         {
+            if (nRepeat && !GetIndPrev())
+                SetIgnoreHeadlines(true);
+
             return false;
         }
     }
@@ -1294,6 +1284,12 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         if ( !bRet && !bSplitRowAllowed )
         {
             bRet = true;
+        }
+
+        if (!bRet && nRepeat && pLastRow == GetFirstNonHeadlineRow() && !GetIndPrev())
+        {
+            // Couldn't split the row right after headlines => ignore headlines
+            SetIgnoreHeadlines(true);
         }
     }
 
@@ -1814,6 +1810,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // Otherwise the keep attribute would not work in front of a table.
     const bool bOldValidPos = isFrameAreaPositionValid();
 
+    SetIgnoreHeadlines(false);
+
     //If my neighbour is my Follow at the same time, I'll swallow it up.
     // OD 09.04.2003 #108698# - join all follows, which are placed on the
     // same page/column.
@@ -1871,7 +1869,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             ( !GetFormat()->GetLayoutSplit().GetValue() );
 
     // The number of repeated headlines
-    const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
+    sal_uInt16 nRepeat = GetRowsToRepeat();
 
     // This flag indicates that we are allowed to try to split the
     // table rows.
@@ -2315,12 +2313,24 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 continue;
         }
 
+        const SwFrame* pIndPrev = GetIndPrev();
+        const SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
+
+        if (!pFirstNonHeadlineRow && nRepeat && !IsIgnoreHeadlines() && !pIndPrev)
+        {
+            SetIgnoreHeadlines(true);
+            pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
+            nRepeat = 0;
+            // Allow the master to move backwards, since it now may fit to the rest of previous
+            // page; it will happen only once, so no oscillations may result.
+            if (!IsFollow())
+                bMovedFwd = false;
+        }
+
         // First try to split the table. Condition:
         // 1. We have at least one non headline row
         // 2. If this row wants to keep, we need an additional row
         // 3. The table is allowed to split or we do not have an pIndPrev:
-        SwFrame* pIndPrev = GetIndPrev();
-        const SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
         // #i120016# if this row wants to keep, allow split in case that all rows want to keep with next,
         // the table can not move forward as it is the first one and a split is in general allowed.
         const bool bAllowSplitOfRow = ( bTableRowKeep &&
@@ -2439,8 +2449,26 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         }
                     }
 
+                    const bool bWasIgnoringHeadlines = m_bIgnoreHeadlines;
                     const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || !bEmulateTableKeepFwdMoveAllowed) ) );
-                    if( !bTryToSplit && !bSplitError && nUnSplitted > 0 )
+
+                    if (bWasIgnoringHeadlines != m_bIgnoreHeadlines)
+                    {
+                        // We have just started to ignore headlines
+                        nRepeat = 0;
+                        if (!IsFollow())
+                        {
+                            // Allow master to move backwards, since it now may fit to the rest of
+                            // previous page; it will happen only once, no oscillations may result.
+                            bMovedFwd = false;
+                        }
+                        // We have removed headlines from the follow frame, or let master move
+                        // => start over
+                        lcl_RecalcRow(static_cast<SwRowFrame*>(Lower()), LONG_MAX);
+                        continue;
+                    }
+
+                    if (!bTryToSplit && !bSplitError && nUnSplitted > 0)
                     {
                         --nUnSplitted;
                     }
@@ -3205,24 +3233,7 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_TBLHEADLINECHG:
             if ( IsFollow() )
             {
-                // Delete remaining headlines:
-                SwRowFrame* pLowerRow = nullptr;
-                while ( nullptr != ( pLowerRow = static_cast<SwRowFrame*>(Lower()) ) && pLowerRow->IsRepeatedHeadline() )
-                {
-                    pLowerRow->Cut();
-                    SwFrame::DestroyFrame(pLowerRow);
-                }
-
-                // insert new headlines
-                const sal_uInt16 nNewRepeat = GetTable()->GetRowsToRepeat();
-                for ( sal_uInt16 nIdx = 0; nIdx < nNewRepeat; ++nIdx )
-                {
-                    bDontCreateObjects = true;          //frmtool
-                    SwRowFrame* pHeadline = new SwRowFrame( *GetTable()->GetTabLines()[ nIdx ], this );
-                    pHeadline->SetRepeatedHeadline( true );
-                    bDontCreateObjects = false;
-                    pHeadline->Paste( this, pLowerRow );
-                }
+                UpdateHeadlines(false);
             }
             rInvFlags |= 0x02;
             break;
@@ -4592,6 +4603,11 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     return nReal;
 }
 
+bool SwRowFrame::IsRepeatedHeadline() const
+{
+    return m_bIsRepeatedHeadline;
+}
+
 bool SwRowFrame::IsRowSplitAllowed() const
 {
     // Fixed size rows are never allowed to split:
@@ -4603,7 +4619,7 @@ bool SwRowFrame::IsRowSplitAllowed() const
 
     // Repeated headlines are never allowed to split:
     const SwTabFrame* pTabFrame = FindTabFrame();
-    if ( pTabFrame->GetTable()->GetRowsToRepeat() > 0 &&
+    if ( pTabFrame->GetRowsToRepeat() > 0 &&
          pTabFrame->IsInHeadline( *this ) )
         return false;
 
@@ -5296,6 +5312,9 @@ bool SwTabFrame::IsInHeadline( const SwFrame& rFrame ) const
     OSL_ENSURE( IsAnLower( &rFrame ) && rFrame.IsInTab(),
              "SwTabFrame::IsInHeadline called for frame not lower of table" );
 
+    if (IsIgnoreHeadlines())
+        return false;
+
     const SwFrame* pTmp = &rFrame;
     while ( !pTmp->GetUpper()->IsTabFrame() )
         pTmp = pTmp->GetUpper();
@@ -5313,7 +5332,7 @@ bool SwTabFrame::IsInHeadline( const SwFrame& rFrame ) const
 SwRowFrame* SwTabFrame::GetFirstNonHeadlineRow() const
 {
     SwRowFrame* pRet = const_cast<SwRowFrame*>(static_cast<const SwRowFrame*>(Lower()));
-    if ( pRet )
+    if (pRet && !IsIgnoreHeadlines())
     {
         if ( IsFollow() )
         {
@@ -5341,6 +5360,92 @@ bool SwTable::IsHeadline( const SwTableLine& rLine ) const
             return true;
 
     return false;
+}
+
+sal_uInt16 SwTabFrame::GetRowsToRepeat() const
+{
+    return IsIgnoreHeadlines() ? 0 : GetTable()->GetRowsToRepeat();
+}
+
+bool SwTabFrame::IsIgnoreHeadlines() const
+{
+    // Several heading SwTabFrames may honour headlines; when any (follow) SwTabFrame starts to
+    // ignore headlines, all follows also do.
+    return m_bIgnoreHeadlines || (IsFollow() && FindMaster()->IsIgnoreHeadlines());
+}
+
+void SwTabFrame::SetIgnoreHeadlines(bool bNew)
+{
+    if (m_bIgnoreHeadlines != bNew)
+    {
+        bool bInvalidate = false;
+        // Only perform modifications/invalidations, if we are actually changing mode
+        if (!IsFollow() || FindMaster()->IsIgnoreHeadlines() != bNew)
+        {
+            // Cleanup before changing Ignore Headlines flag!
+            if (HasFollowFlowLine())
+            {
+                RemoveFollowFlowLine();
+                bInvalidate = true;
+            }
+
+            // All follow frames will need to be rebuilt!
+            while (GetFollow() && !GetFollow()->IsJoinLocked())
+            {
+                Join();
+                bInvalidate = true;
+            }
+
+            if (IsFollow())
+            {
+                bInvalidate |= GetTable()->GetRowsToRepeat() != 0;
+                UpdateHeadlines(false);
+            }
+        }
+
+        m_bIgnoreHeadlines = bNew;
+        if (bInvalidate)
+        {
+            setFrameAreaSizeValid(false);
+            setFrameAreaPositionValid(false);
+            setFramePrintAreaValid(false);
+        }
+    }
+}
+
+SwRowFrame* SwTabFrame::UpdateHeadlines(bool bCalcLowers)
+{
+    SAL_WARN_IF(!IsFollow(), "sw.layout", "SwTabFrame::UpdateHeadlines called for non-follow tab");
+
+    // Delete remaining headlines:
+    SwRowFrame* pLower;
+    while (nullptr != (pLower = static_cast<SwRowFrame*>(Lower()))
+           && pLower->IsRepeatedHeadline())
+    {
+        pLower->Cut();
+        SwFrame::DestroyFrame(pLower);
+    }
+
+    // Insert fresh set of headlines:
+    pLower = static_cast<SwRowFrame*>(Lower());
+    SwTable& rTable = *GetTable();
+    const sal_uInt16 nRepeat = GetRowsToRepeat();
+    SwRowFrame* pHeadline = nullptr;
+    bDontCreateObjects = true; //frmtool
+    for (sal_uInt16 nIdx = 0; nIdx < nRepeat; ++nIdx)
+    {
+        SAL_WARN_IF(!rTable.GetTabLines()[nIdx], "sw.layout", "Table without rows?");
+        pHeadline = new SwRowFrame(*rTable.GetTabLines()[nIdx], this);
+        pHeadline->SetRepeatedHeadline(true);
+        pHeadline->Paste(this, pLower);
+        pHeadline->RegistFlys();
+    }
+    bDontCreateObjects = false;
+
+    if (bCalcLowers)
+        SetCalcLowers();
+
+    return pHeadline;
 }
 
 bool SwTabFrame::IsLayoutSplitAllowed() const
@@ -5539,7 +5644,7 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
         pFirstRow = static_cast<const SwRowFrame*>(pFirstRow->GetNext());
 
     // Calculate the height of the headlines:
-    const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
+    const sal_uInt16 nRepeat = GetRowsToRepeat();
     SwTwips nRepeatHeight = nRepeat ? lcl_GetHeightOfRows( GetLower(), nRepeat ) : 0;
 
     // Calculate the height of the keeping lines
