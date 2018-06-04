@@ -60,7 +60,7 @@ private:
 
     OUString m_sImportRecentFile;
     OUString m_sExportRecentFile;
-    filter_info_impl* m_xFilterInfo;
+    std::unique_ptr<filter_info_impl> m_xFilterInfo;
     OUString m_sDialogTitle;
 
     std::unique_ptr<weld::Widget> m_xExport;
