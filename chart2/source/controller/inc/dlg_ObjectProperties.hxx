@@ -112,8 +112,8 @@ private:
     const ViewElementListProvider* const                 m_pViewElementListProvider;
     SvNumberFormatter* m_pNumberFormatter;
 
-    SfxItemSet*     m_pSymbolShapeProperties;
-    Graphic*        m_pAutoSymbolGraphic;
+    std::unique_ptr<SfxItemSet>     m_pSymbolShapeProperties;
+    std::unique_ptr<Graphic>        m_pAutoSymbolGraphic;
 
     double          m_fAxisMinorStepWidthForErrorBarDecimals;
     bool            m_bOKPressed;
@@ -133,8 +133,7 @@ public:
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes
     //pAutoSymbolGraphic: Graphic to be shown if AutoSymbol gets selected
-    //this class takes ownership over both parameter
-    void setSymbolInformation( SfxItemSet* pSymbolShapeProperties, Graphic* pAutoSymbolGraphic );
+    void setSymbolInformation( std::unique_ptr<SfxItemSet> pSymbolShapeProperties, std::unique_ptr<Graphic> pAutoSymbolGraphic );
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
 
