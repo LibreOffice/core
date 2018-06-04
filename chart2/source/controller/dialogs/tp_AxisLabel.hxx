@@ -49,7 +49,7 @@ private:
     VclPtr<FixedText>           m_pFtRotate;
     VclPtr<NumericField>        m_pNfRotate;
     VclPtr<TriStateBox>         m_pCbStacked;
-    svx::OrientationHelper* m_pOrientHlp;
+    std::unique_ptr<svx::OrientationHelper> m_pOrientHlp;
 
     VclPtr<FixedText>               m_pFtTextDirection;
     VclPtr<TextDirectionListBox>    m_pLbTextDirection;
