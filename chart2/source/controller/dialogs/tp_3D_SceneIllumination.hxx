@@ -90,7 +90,7 @@ private:
 
     VclPtr<SvxLightCtl3D>   m_pCtl_Preview;
 
-    LightSourceInfo* m_pLightSourceInfoList;
+    std::unique_ptr<LightSourceInfo[]> m_pLightSourceInfoList;
 
     css::uno::Reference< css::beans::XPropertySet > m_xSceneProperties;
 
