@@ -181,14 +181,11 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
     {
         OSL_FAIL( "XMLFilterTestDialog::~XMLFilterTestDialog exception caught!" );
     }
-
-    delete m_xFilterInfo;
 }
 
 void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )
 {
-    delete m_xFilterInfo;
-    m_xFilterInfo = new filter_info_impl( rFilterInfo );
+    m_xFilterInfo.reset(new filter_info_impl( rFilterInfo ));
 
     m_sImportRecentFile.clear();
 
