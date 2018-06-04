@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a22e58a_0ec4af90",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-04T18:11:40Z",
+      "side": 1,
+      "message": "pTokenCopy needs to be deleted, not just cleared.\n\nBest assign the pScTokArr-\u003eClone() above to a std::unique_ptr so that happens automatically when going out of scope.",
+      "range": {
+        "startLine": 597,
+        "startChar": 0,
+        "endLine": 597,
+        "endChar": 32
+      },
+      "revId": "1186e424c5253d670feda850616e690945bf8d53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_35086591",
         "filename": "sc/source/filter/excel/xename.cxx",
         "patchSetId": 4
@@ -13,6 +36,30 @@
       "writtenOn": "2018-05-31T07:30:17Z",
       "side": 1,
       "message": "OK. I am quite sure you were not suggesting that GetSymbol() is not needed in this generic case, since the very general function XclExpName::SaveXml uses it. So this branching wasn\u0027t really necessary (except to avoid unnecessary cloning).\n\nHowever, a separate patch COULD probably exclude GetSymbol() for BIFF in this case also, since only SaveXML uses msSymbol.",
+      "range": {
+        "startLine": 602,
+        "startChar": 12,
+        "endLine": 602,
+        "endChar": 32
+      },
+      "revId": "1186e424c5253d670feda850616e690945bf8d53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_4ebea700",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-04T18:11:40Z",
+      "side": 1,
+      "message": "Keep as is, differentiating between BIFF/OOXML again would unnecessarily complicate things.\n\nAnd yes, of course I didn\u0027t mean to not obtain the needed GetSymbol() at all ;-)",
+      "parentUuid": "9a30ddce_35086591",
       "range": {
         "startLine": 602,
         "startChar": 12,
