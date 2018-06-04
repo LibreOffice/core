@@ -383,9 +383,9 @@ void PieChart::createTextLabelShape(
     m_aLabelInfoList.push_back(aPieLabelInfo);
 }
 
-void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, sal_Int32 /* xSlot */, sal_Int32 /* ySlot */ )
+void PieChart::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 /* zSlot */, sal_Int32 /* xSlot */, sal_Int32 /* ySlot */ )
 {
-    VSeriesPlotter::addSeries( pSeries, 0, -1, 0 );
+    VSeriesPlotter::addSeries( std::move(pSeries), 0, -1, 0 );
 }
 
 double PieChart::getMinimumX()
@@ -404,11 +404,11 @@ double PieChart::getMaxOffset()
     if( m_aZSlots.front().empty() )
         return m_fMaxOffset;
 
-    const std::vector< VDataSeries* >& rSeriesList( m_aZSlots.front().front().m_aSeriesVector );
+    const std::vector< std::unique_ptr<VDataSeries> >& rSeriesList( m_aZSlots.front().front().m_aSeriesVector );
     if(rSeriesList.empty())
         return m_fMaxOffset;
 
-    VDataSeries* pSeries = rSeriesList.front();
+    VDataSeries* pSeries = rSeriesList.front().get();
     uno::Reference< beans::XPropertySet > xSeriesProp( pSeries->getPropertiesOfSeries() );
     if( !xSeriesProp.is() )
         return m_fMaxOffset;
@@ -562,10 +562,10 @@ void PieChart::createShapes()
     {
         ShapeParam aParam;
 
-        std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+        std::vector< std::unique_ptr<VDataSeries> >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
         if(pSeriesList->empty())//there should be only one series in each x slot
             continue;
-        VDataSeries* pSeries = pSeriesList->front();
+        VDataSeries* pSeries = pSeriesList->front().get();
         if(!pSeries)
             continue;
 

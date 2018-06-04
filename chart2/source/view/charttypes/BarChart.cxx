@@ -361,7 +361,7 @@ bool lcl_hasGeometry3DVariableWidth( sal_Int32 nGeometry3D )
 }
 }// end anonymous namespace
 
-void BarChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
+void BarChart::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
     if( !pSeries )
         return;
@@ -378,7 +378,7 @@ void BarChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot
         if(zSlot>=static_cast<sal_Int32>(m_aZSlots.size()))
             m_aZSlots.resize(zSlot+1);
     }
-    VSeriesPlotter::addSeries( pSeries, zSlot, xSlot, ySlot );
+    VSeriesPlotter::addSeries( std::move(pSeries), zSlot, xSlot, ySlot );
 }
 
 //better performance for big data
@@ -601,7 +601,7 @@ void BarChart::createShapes()
                 double fNegativeLogicYForNextSeries = fBaseValue;
 
                 //iterate through all series in this x slot
-                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
+                for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
                 {
                     if(!pSeries)
                         continue;
@@ -629,7 +629,7 @@ void BarChart::createShapes()
                         bDrawConnectionLinesInited = true;
                     }
 
-                    uno::Reference<drawing::XShapes> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries, xSeriesTarget));
+                    uno::Reference<drawing::XShapes> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
                     uno::Reference<drawing::XShape>  xSeriesGroupShape(xSeriesGroupShape_Shapes, uno::UNO_QUERY);
                     // Suspend setting rects dirty for the duration of this call
                     aShapeSet.insert(xSeriesGroupShape);
@@ -749,7 +749,7 @@ void BarChart::createShapes()
                         }
 
                         //better performance for big data
-                        FormerBarPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
+                        FormerBarPoint aFormerPoint( aSeriesFormerPointMap[pSeries.get()] );
                         pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                         if( !pSeries->isAttributedDataPoint(nPointIndex)
                             &&
@@ -764,7 +764,7 @@ void BarChart::createShapes()
                             m_bPointsWereSkipped = true;
                             continue;
                         }
-                        aSeriesFormerPointMap[pSeries] = FormerBarPoint(fLogicX,fUpperYValue,fLowerYValue,fLogicZ);
+                        aSeriesFormerPointMap[pSeries.get()] = FormerBarPoint(fLogicX,fUpperYValue,fLowerYValue,fLogicZ);
 
                         if( bDrawConnectionLines )
                         {
@@ -930,7 +930,7 @@ void BarChart::createShapes()
             for( auto const& rXSlot : rZSlot )
             {
                 //iterate through all series in this x slot
-                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
+                for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
                 {
                     if(!pSeries)
                         continue;
@@ -948,7 +948,7 @@ void BarChart::createShapes()
                     pPosHelper->transformScaledLogicToScene( aPoly );
 
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
-                        getSeriesGroupShape(pSeries, xSeriesTarget) );
+                        getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
                     uno::Reference< drawing::XShape > xShape( m_pShapeFactory->createLine2D(
                         xSeriesGroupShape_Shapes, PolyToPointSequence( aPoly ) ) );
                     setMappedProperties( xShape, pSeries->getPropertiesOfSeries()

@@ -564,7 +564,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 if( !bIncludeHiddenCells && !DataSeriesHelper::hasUnhiddenData(xDataSeries) )
                     continue;
 
-                VDataSeries* pSeries = new VDataSeries( xDataSeries );
+                std::unique_ptr<VDataSeries> pSeries(new VDataSeries( xDataSeries ));
 
                 pSeries->setGlobalSeriesIndex(nGlobalSeriesIndex);
                 nGlobalSeriesIndex++;
@@ -613,7 +613,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                         // UNO enums have one additional auto-generated case
                         break;
                 }
-                pPlotter->addSeries( pSeries, zSlot, xSlot, ySlot );
+                pPlotter->addSeries( std::move(pSeries), zSlot, xSlot, ySlot );
             }
         }
     }

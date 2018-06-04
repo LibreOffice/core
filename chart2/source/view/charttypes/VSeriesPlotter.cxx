@@ -106,11 +106,20 @@ VDataSeriesGroup::CachedYValues::CachedYValues()
 {
 }
 
-VDataSeriesGroup::VDataSeriesGroup( VDataSeries* pSeries )
-        : m_aSeriesVector(1,pSeries)
+VDataSeriesGroup::VDataSeriesGroup( std::unique_ptr<VDataSeries> pSeries )
+        : m_aSeriesVector(1)
         , m_bMaxPointCountDirty(true)
         , m_nMaxPointCount(0)
         , m_aListOfCachedYValues()
+{
+    m_aSeriesVector[0] = std::move(pSeries);
+}
+
+VDataSeriesGroup::VDataSeriesGroup( VDataSeriesGroup&& other )
+        : m_aSeriesVector( std::move(other.m_aSeriesVector) )
+        , m_bMaxPointCountDirty( other.m_bMaxPointCountDirty )
+        , m_nMaxPointCount( std::move(other.m_nMaxPointCount) )
+        , m_aListOfCachedYValues( std::move(other.m_aListOfCachedYValues) )
 {
 }
 
@@ -121,16 +130,12 @@ VDataSeriesGroup::~VDataSeriesGroup()
 void VDataSeriesGroup::deleteSeries()
 {
     //delete all data series help objects:
-    for (VDataSeries* pSeries : m_aSeriesVector)
-    {
-        delete pSeries;
-    }
     m_aSeriesVector.clear();
 }
 
-void VDataSeriesGroup::addSeries( VDataSeries* pSeries )
+void VDataSeriesGroup::addSeries( std::unique_ptr<VDataSeries> pSeries )
 {
-    m_aSeriesVector.push_back(pSeries);
+    m_aSeriesVector.push_back(std::move(pSeries));
     m_bMaxPointCountDirty=true;
 }
 
@@ -179,7 +184,7 @@ VSeriesPlotter::~VSeriesPlotter()
     m_aSecondaryValueScales.clear();
 }
 
-void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
+void VSeriesPlotter::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
     //take ownership of pSeries
 
@@ -204,8 +209,8 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
     {
         //new z slot
         std::vector< VDataSeriesGroup > aZSlot;
-        aZSlot.emplace_back(pSeries );
-        m_aZSlots.push_back( aZSlot );
+        aZSlot.emplace_back( std::move(pSeries) );
+        m_aZSlots.push_back( std::move(aZSlot) );
     }
     else
     {
@@ -215,7 +220,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
         if(xSlot<0 || xSlot>=static_cast<sal_Int32>(rXSlots.size()))
         {
             //append the series to already existing x series
-            rXSlots.emplace_back(pSeries );
+            rXSlots.emplace_back( std::move(pSeries) );
         }
         else
         {
@@ -234,7 +239,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
             else if( ySlot == -1 || ySlot >= nYSlotCount)
             {
                 //append the series to already existing y series
-                rYSlots.addSeries(pSeries);
+                rYSlots.addSeries( std::move(pSeries) );
             }
             else
             {
@@ -270,7 +275,7 @@ void VSeriesPlotter::releaseShapes()
         for (VDataSeriesGroup const & rGroup : rGroupVector)
         {
             //iterate through all series in this x slot
-            for (VDataSeries* pSeries : rGroup.m_aSeriesVector)
+            for (std::unique_ptr<VDataSeries> const & pSeries : rGroup.m_aSeriesVector)
             {
                 pSeries->releaseShapes();
             }
@@ -1700,7 +1705,7 @@ sal_Int32 VDataSeriesGroup::getPointCount() const
 
     sal_Int32 nRet = 0;
 
-    for (VDataSeries* pSeries : m_aSeriesVector)
+    for (std::unique_ptr<VDataSeries> const & pSeries : m_aSeriesVector)
     {
         sal_Int32 nPointCount = pSeries->getTotalPointCount();
         if( nPointCount>nRet )
@@ -1729,7 +1734,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
     ::rtl::math::setInf(&rfMinimum, false);
     ::rtl::math::setInf(&rfMaximum, true);
 
-    for (VDataSeries* pSeries : m_aSeriesVector)
+    for (std::unique_ptr<VDataSeries> const & pSeries : m_aSeriesVector)
     {
         sal_Int32 nPointCount = pSeries->getTotalPointCount();
         for(sal_Int32 nN=0;nN<nPointCount;nN++)
@@ -1893,7 +1898,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange(
         return;
 
     PerXMinMaxCalculator aRangeCalc;
-    for (const VDataSeries* pSeries : m_aSeriesVector)
+    for (const std::unique_ptr<VDataSeries> & pSeries : m_aSeriesVector)
     {
         if (!pSeries)
             continue;
@@ -1954,7 +1959,7 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
 
     if( bSeparateStackingForDifferentSigns )
     {
-        for (const VDataSeries* pSeries: m_aSeriesVector)
+        for (const std::unique_ptr<VDataSeries> & pSeries: m_aSeriesVector)
         {
             if( nAxisIndex != pSeries->getAttachedAxisIndex() )
                 continue;
@@ -1982,7 +1987,7 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
     }
     else
     {
-        for (const VDataSeries* pSeries: m_aSeriesVector)
+        for (const std::unique_ptr<VDataSeries> & pSeries: m_aSeriesVector)
         {
             if( nAxisIndex != pSeries->getAttachedAxisIndex() )
                 continue;
@@ -2102,7 +2107,7 @@ VDataSeries* VSeriesPlotter::getFirstSeries() const
         {
             if (!rGroup[0].m_aSeriesVector.empty())
             {
-                VDataSeries* pSeries = rGroup[0].m_aSeriesVector[0];
+                VDataSeries* pSeries = rGroup[0].m_aSeriesVector[0].get();
                 if (pSeries)
                     return pSeries;
             }
@@ -2136,10 +2141,10 @@ uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
     {
         if (!rGroup.empty())
         {
-            VDataSeriesGroup aSeriesGroup(rGroup[0]);
-            if (!aSeriesGroup.m_aSeriesVector.empty())
+            VDataSeriesGroup const & rSeriesGroup(rGroup[0]);
+            if (!rSeriesGroup.m_aSeriesVector.empty())
             {
-                VDataSeries* pSeries = aSeriesGroup.m_aSeriesVector[0];
+                VDataSeries const * pSeries = rSeriesGroup.m_aSeriesVector[0].get();
                 uno::Reference< XDataSeries > xSeries( pSeries ? pSeries->getModel() : nullptr );
                 if( xSeries.is() )
                 {
@@ -2158,14 +2163,14 @@ void VSeriesPlotter::setPageReferenceSize( const css::awt::Size & rPageRefSize )
 
     // set reference size also at all data series
 
-    std::vector<VDataSeriesGroup> aSeriesGroups(FlattenVector(m_aZSlots));
-    for (VDataSeriesGroup const & rGroup : aSeriesGroups)
-    {
-        for (VDataSeries* pSeries : rGroup.m_aSeriesVector)
+    for (auto const & outer : m_aZSlots)
+        for (VDataSeriesGroup const & rGroup : outer)
         {
-            pSeries->setPageReferenceSize(m_aPageReferenceSize);
+            for (std::unique_ptr<VDataSeries> const & pSeries : rGroup.m_aSeriesVector)
+            {
+                pSeries->setPageReferenceSize(m_aPageReferenceSize);
+            }
         }
-    }
 }
 
 //better performance for big data
@@ -2206,7 +2211,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
         {
             for (VDataSeriesGroup const & rGroup : rGroupVector)
             {
-                for (VDataSeries* pSeries : rGroup.m_aSeriesVector)
+                for (std::unique_ptr<VDataSeries> const & pSeries : rGroup.m_aSeriesVector)
                 {
                     if (!pSeries)
                         continue;
@@ -2256,8 +2261,8 @@ std::vector<VDataSeries*> VSeriesPlotter::getAllSeries()
     {
         for(VDataSeriesGroup const & rGroup : rXSlot)
         {
-            std::vector<VDataSeries*> aSeriesList = rGroup.m_aSeriesVector;
-            aAllSeries.insert(aAllSeries.end(), aSeriesList.begin(), aSeriesList.end());
+            for (std::unique_ptr<VDataSeries> const & p : rGroup.m_aSeriesVector)
+                aAllSeries.push_back(p.get());
         }
     }
     return aAllSeries;
