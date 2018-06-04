@@ -58,7 +58,7 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     MapMode             aMap100;
     Size                aGraphSize;
     Point               aMousePos;
-    GraphCtrlUserCall*  pUserCall;
+    std::unique_ptr<GraphCtrlUserCall> pUserCall;
     SdrObjKind          eObjKind;
     sal_uInt16          nPolyEdit;
     bool                bEditMode;
@@ -71,8 +71,8 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
 
 protected:
 
-    SdrModel*           pModel;
-    SdrView*            pView;
+    std::unique_ptr<SdrModel>  pModel;
+    std::unique_ptr<SdrView>   pView;
 
     virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
@@ -87,7 +87,7 @@ protected:
     virtual void        SdrObjChanged( const SdrObject& rObj );
     virtual void        MarkListHasChanged();
 
-    SdrObjUserCall* GetSdrUserCall() { return pUserCall; }
+    SdrObjUserCall* GetSdrUserCall() { return pUserCall.get(); }
 
 public:
 
@@ -108,8 +108,8 @@ public:
 
     void                SetObjKind( const SdrObjKind eObjKind );
 
-    SdrModel*           GetSdrModel() const { return pModel; }
-    SdrView*            GetSdrView() const { return pView; }
+    SdrModel*           GetSdrModel() const { return pModel.get(); }
+    SdrView*            GetSdrView() const { return pView.get(); }
     SdrObject*          GetSelectedSdrObject() const;
     bool                IsChanged() const { return mbSdrMode && pModel->IsChanged(); }
 

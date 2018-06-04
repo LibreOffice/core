@@ -65,7 +65,7 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             pModel          ( nullptr ),
             pView           ( nullptr )
 {
-    pUserCall = new GraphCtrlUserCall( *this );
+    pUserCall.reset(new GraphCtrlUserCall( *this ));
     aUpdateIdle.SetPriority( TaskPriority::LOWEST );
     aUpdateIdle.SetInvokeHandler( LINK( this, GraphCtrl, UpdateHdl ) );
     aUpdateIdle.Start();
@@ -88,12 +88,9 @@ void GraphCtrl::dispose()
         mpAccContext->disposing();
         mpAccContext.clear();
     }
-    delete pView;
-    pView = nullptr;
-    delete pModel;
-    pModel = nullptr;
-    delete pUserCall;
-    pUserCall = nullptr;
+    pView.reset();
+    pModel.reset();
+    pUserCall.reset();
     Control::dispose();
 }
 
@@ -105,11 +102,8 @@ void GraphCtrl::SetSdrMode(bool bSdrMode)
     SetBackground( Wallpaper( rStyleSettings.GetWindowColor() ) );
     SetMapMode( aMap100 );
 
-    delete pView;
-    pView = nullptr;
-
-    delete pModel;
-    pModel = nullptr;
+    pView.reset();
+    pModel.reset();
 
     if ( mbSdrMode )
         InitSdrModel();
@@ -124,11 +118,11 @@ void GraphCtrl::InitSdrModel()
     SdrPage* pPage;
 
     // destroy old junk
-    delete pView;
-    delete pModel;
+    pView.reset();
+    pModel.reset();
 
     // Creating a Model
-    pModel = new SdrModel();
+    pModel.reset(new SdrModel());
     pModel->GetItemPool().FreezeIdRanges();
     pModel->SetScaleUnit( aMap100.GetMapUnit() );
     pModel->SetScaleFraction( Fraction( 1, 1 ) );
@@ -142,7 +136,7 @@ void GraphCtrl::InitSdrModel()
     pModel->SetChanged( false );
 
     // Creating a View
-    pView = new GraphCtrlView(*pModel, this);
+    pView.reset(new GraphCtrlView(*pModel, this));
     pView->SetWorkArea( tools::Rectangle( Point(), aGraphSize ) );
     pView->EnableExtendedMouseEventDispatcher( true );
     pView->ShowSdrPage(pView->GetModel()->GetPage(0));
@@ -157,7 +151,7 @@ void GraphCtrl::InitSdrModel()
 
     // Tell the accessibility object about the changes.
     if (mpAccContext.is())
-        mpAccContext->setModelAndView (pModel, pView);
+        mpAccContext->setModelAndView (pModel.get(), pView.get());
 }
 
 void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
@@ -614,7 +608,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 
         // We want to realize the insert
         if ( pCreateObj && !pCreateObj->GetUserCall() )
-            pCreateObj->SetUserCall( pUserCall );
+            pCreateObj->SetUserCall( pUserCall.get() );
 
         SetPointer( pView->GetPreferredPointer( aLogPt, this ) );
     }
