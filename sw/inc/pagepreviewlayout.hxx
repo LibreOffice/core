@@ -35,10 +35,7 @@ class SwPageFrame;
 class Fraction;
 struct PreviewPage;
 
-/** page preview functionality in the writer
-
-    @author OD
-*/
+/** page preview functionality in the writer */
 class SwPagePreviewLayout
 {
 private:
@@ -102,33 +99,19 @@ private:
 
     bool mbPrintEmptyPages;
 
-    /** clear internal data about current page preview
-
-        @author OD
-    */
+    /** clear internal data about current page preview */
     void Clear_();
 
-    /** helper method to clear preview page layout sizes
-
-        @author OD
-    */
+    /** helper method to clear preview page layout sizes */
     void ClearPreviewLayoutSizes();
 
-    /** helper method to clear data in preview page vectors
-
-        @author OD
-    */
+    /** helper method to clear data in preview page vectors */
     void ClearPreviewPageData();
 
-    /** calculate page preview layout sizes
-
-        @author OD
-    */
+    /** calculate page preview layout sizes */
     void CalcPreviewLayoutSizes();
 
     /** apply new zoom at given view shell
-
-        @author OD
 
         @param _aNewZoom
         input parameter - new zoom percentage
@@ -146,8 +129,6 @@ private:
         (2) window size is given.
         (3) height of row and width of column are calculated.
         (4) paint offset of start page is calculated.
-
-        @author OD
     */
     void CalcAdditionalPaintOffset();
 
@@ -160,14 +141,10 @@ private:
         (1) paint offset of document preview is calculated.
         (2) size of document preview is calculated.
         (3) additional paint offset is calculated - see <CalcAdditionalPaintOffset>.
-
-        @author OD
     */
     void CalcDocPreviewPaintRect();
 
     /** determines preview data for a given page and a given preview offset
-
-        @author OD
 
         @param _rPage
         input parameter - constant reference to page frame, for which the
@@ -191,14 +168,10 @@ private:
         will be visible in the current preview and calculate the data needed
         to paint these pages. Also the accessible pages with its needed data
         are determined.
-
-        @author OD
     */
     void CalcPreviewPages();
 
     /** get preview page by physical page number
-
-        @author OD
 
         @param _nPageNum
         input parameter - physical page number of page, for which the preview
@@ -209,16 +182,11 @@ private:
     */
     const PreviewPage* GetPreviewPageByPageNum( const sal_uInt16 _nPageNum ) const;
 
-    /** paint selection mark at page
-
-        @author OD
-    */
+    /** paint selection mark at page */
     void PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext, const PreviewPage* _aSelectedPreviewPage) const;
 
 public:
     /** constructor of <SwPagePreviewLayout>
-
-        @author OD
 
         @param _rParentViewShell
         input parameter - reference to the view shell the page preview
@@ -236,10 +204,7 @@ public:
     SwPagePreviewLayout( SwViewShell& _rParentViewShell,
                          const SwRootFrame&    _rLayoutRootFrame );
 
-    /** destructor of <SwPagePreviewLayout>
-
-        @author
-    */
+    /** destructor of <SwPagePreviewLayout> */
     ~SwPagePreviewLayout()
     {
         ClearPreviewPageData();
@@ -252,8 +217,6 @@ public:
         (1) If parameter <_bCalcScale> is true, mapping mode with calculated
         scaling is set at the output device and the zoom at the view options of
         the given view shell is set with the calculated scaling.
-
-        @author OD
 
         @param _nCols
         input parameter - initial number of page columns in the preview.
@@ -270,10 +233,7 @@ public:
                const Size&      _rPxWinSize
               );
 
-    /** method to adjust page preview layout to document changes
-
-        @author OD
-    */
+    /** method to adjust page preview layout to document changes */
     void ReInit();
 
     /** prepare paint of page preview
@@ -285,8 +245,6 @@ public:
         (parameter <_aProposedStartPoint>).
         The accessibility preview will also be updated via a corresponding
         method call.
-
-        @author OD
 
         @param _nProposedStartPageNum [0..<number of document pages>]
         input parameter - proposed number of page, which should be painted in
@@ -323,27 +281,19 @@ public:
                   const bool       _bStartWithPageAtFirstCol = true
                 );
 
-    /** get selected page number
-
-        @author OD
-    */
+    /** get selected page number */
     sal_uInt16 SelectedPage()
     {
         return mnSelectedPageNum;
     }
 
-    /** set selected page number
-
-        @author OD
-    */
+    /** set selected page number */
     void SetSelectedPage( sal_uInt16 _nSelectedPageNum )
     {
         mnSelectedPageNum = _nSelectedPageNum;
     }
 
     /** paint prepared preview
-
-        @author OD
 
         @param _aOutRect
         input parameter - Twip rectangle of window, which should be painted.
@@ -356,8 +306,6 @@ public:
 
         method to invalidate visible pages due to changes in a different
         view shell.
-
-        @author OD
     */
     void Repaint(const tools::Rectangle& rInvalidCoreRect) const;
 
@@ -365,8 +313,6 @@ public:
 
         Perform paint for current selected page in order to unmark it.
         Set new selected page and perform paint to mark this page.
-
-        @author OD
 
         @param _nNewSelectedPage
         input parameter - physical number of page, which will be marked as selected.
@@ -380,8 +326,6 @@ public:
         preconditions:
         (1) new scaling is already set at the given output device.
 
-        @author OD
-
         @return Point, start position for new scale
     */
     Point GetPreviewStartPosForNewScale( const Fraction& _aNewScale,
@@ -389,8 +333,6 @@ public:
                                          const Size&     _aNewWinSize ) const;
 
     /** determines, if page with given page number is visible in preview
-
-        @author OD
 
         @param _nPageNum
         input parameter - physical number of page, for which it will be
@@ -402,8 +344,6 @@ public:
     bool IsPageVisible( const sal_uInt16 _nPageNum ) const;
 
     /** calculate data to bring new selected page into view.
-
-        @author OD
 
         @param _nHoriMove
         input parameter - positive/negative number of columns the current
@@ -429,8 +369,6 @@ public:
                                              Point&           _orNewStartPos ) const;
 
     /** checks, if given position is inside a shown document page
-
-        @author OD
 
         @param _aPreviewPos
         input parameter - position inside the visible preview window.
@@ -474,8 +412,6 @@ public:
 
     /** determine preview window page scroll amount
 
-        @author OD
-
         @param _nWinPagesToScroll
         input parameter - number of preview window pages the scroll amount has
         to be calculated for. Negative values for preview window page up
@@ -487,8 +423,6 @@ public:
 
     /** determine row the page with the given number is in
 
-        @author OD
-
         @param _nPageNum
         input parameter - physical page number of page, for which the row in
         preview layout has to be calculated.
@@ -498,8 +432,6 @@ public:
     sal_uInt16 GetRowOfPage( sal_uInt16 _nPageNum ) const;
 
     /** determine column the page with the given number is in
-
-        @author OD
 
         @param _nPageNum
         input parameter - physical page number of page, for which the column in
@@ -513,8 +445,6 @@ public:
 
     /** get size of a preview page by its physical page number
 
-        @author OD
-
         @param _nPageNum
         input parameter - physical page number of preview page, for which the
         page size has to be returned.
@@ -525,8 +455,6 @@ public:
 
     /** get virtual page number by its physical page number
 
-        @author OD
-
         @param _nPageNum
         input parameter - physical page number of preview page, for which the
         virtual page number has to be determined.
@@ -536,24 +464,15 @@ public:
     */
     sal_uInt16 GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) const;
 
-    /** enable/disable book preview
-
-        @author OD
-    */
+    /** enable/disable book preview */
     bool SetBookPreviewMode( const bool  _bEnableBookPreview,
                              sal_uInt16& _onStartPageNum,
                              tools::Rectangle&  _orDocPreviewPaintRect );
 
-    /** Convert relative to absolute page numbers (see PrintEmptyPages)
-
-        @author FME
-    */
+    /** Convert relative to absolute page numbers (see PrintEmptyPages) */
     sal_uInt16 ConvertRelativeToAbsolutePageNum( sal_uInt16 _nRelPageNum ) const;
 
-    /** Convert absolute to relative page numbers (see PrintEmptyPages)
-
-        @author FME
-    */
+    /** Convert absolute to relative page numbers (see PrintEmptyPages) */
     sal_uInt16 ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const;
 
     SwViewShell& GetParentViewShell()

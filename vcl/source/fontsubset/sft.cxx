@@ -1038,9 +1038,7 @@ enum cmapType {
 
 /*
  * getGlyph[0246]() functions and friends are implemented by:
- * @author Manpreet Singh
  * getGlyph12() function and friends by:
- * @author HDU
  */
 static sal_uInt32 getGlyph0(const sal_uInt8* cmap, sal_uInt32, sal_uInt32 c) {
     if (c <= 255) {

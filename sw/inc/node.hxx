@@ -247,10 +247,7 @@ public:
      */
           IStyleAccess& getIDocumentStyleAccess();
 
-    /** Provides access to the document's numbered items interface
-
-        @author OD
-    */
+    /** Provides access to the document's numbered items interface */
     IDocumentListItems& getIDocumentListItems();
 
     /// Is node in the visible area of the Shell?

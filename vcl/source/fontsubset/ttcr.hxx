@@ -18,10 +18,8 @@
  */
 
 /**
- *
  * @file ttcr.hxx
  * @brief TrueType font creator
- * @author Alexander Gelfenbain
  */
 
 #ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX

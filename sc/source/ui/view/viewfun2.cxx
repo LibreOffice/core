@@ -1606,8 +1606,6 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
     uses a left-adjoining non-empty column as a guide if such is available,
     otherwise a right-adjoining non-empty column is used.
 
-    @author Kohei Yoshida (kohei@openoffice.org)
-
     @return No return value
 
     @see #i12313#

@@ -35,8 +35,6 @@ public:
     /** checks, if re-creation of fly frames for an anchor node change at the
         given fly frame format is necessary, and performs the first part.
 
-        @author OD
-
         @param _rFlyFrameFormat
         reference to the fly frame format instance, which is handled.
 
@@ -51,10 +49,7 @@ public:
                            const SwFormatAnchor& _rNewAnchorFormat,
                            SwFlyFrame const * _pKeepThisFlyFrame = nullptr );
 
-    /** calls <SwFlyFrameFormat::MakeFrames>, if re-creation of fly frames is necessary.
-
-        @author OD
-    */
+    /** calls <SwFlyFrameFormat::MakeFrames>, if re-creation of fly frames is necessary. */
     ~SwHandleAnchorNodeChg();
 
 private:

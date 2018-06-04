@@ -25,8 +25,6 @@
     of this class
 
     #i73788#
-
-    @author OD
 */
 class SwPauseThreadStarting
 {

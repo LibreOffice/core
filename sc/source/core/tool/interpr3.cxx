@@ -1834,8 +1834,6 @@ static void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower
 
 /** Calculates a value of the hypergeometric distribution.
 
-    @author Kohei Yoshida <kohei@openoffice.org>
-
     @see #i47296#
 
     This function has an extra argument bCumulative,
@@ -1883,10 +1881,7 @@ void ScInterpreter::ScHypGeomDist( int nMinParamCount )
     for a fast calculation for large values which would otherwise cause an overflow
     in the intermediate values.
 
-    @author Kohei Yoshida <kohei@openoffice.org>
-
     @see #i47296#
-
  */
 double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
 {
