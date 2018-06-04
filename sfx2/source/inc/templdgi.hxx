@@ -85,7 +85,6 @@ public:
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 };
 
-typedef std::vector<OUString> ExpandedEntries_t;
 
 /** TreeListBox class for displaying the hierarchical view of the templates
 */
@@ -130,7 +129,7 @@ public:
     {
         return aStyle;
     }
-    void MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
+    void MakeExpanded_Impl(std::vector<OUString>& rEntries) const;
 
     virtual VclPtr<PopupMenu> CreateContextMenu() override;
 };

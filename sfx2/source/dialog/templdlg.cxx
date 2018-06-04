@@ -382,7 +382,7 @@ void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
     Window::StateChanged( nStateChange );
 }
 
-void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries_t& rEntries) const
+void StyleTreeListBox_Impl::MakeExpanded_Impl(std::vector<OUString>& rEntries) const
 {
     SvTreeListEntry* pEntry;
     for (pEntry = FirstVisible(); pEntry; pEntry = NextVisible(pEntry))
@@ -563,7 +563,7 @@ void MakeTree_Impl(StyleTreeArr_Impl& rArr)
         });
 }
 
-inline bool IsExpanded_Impl( const ExpandedEntries_t& rEntries,
+inline bool IsExpanded_Impl( const std::vector<OUString>& rEntries,
                              const OUString &rStr)
 {
     for (const auto & rEntry : rEntries)
@@ -576,7 +576,7 @@ inline bool IsExpanded_Impl( const ExpandedEntries_t& rEntries,
 
 SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
                               StyleTree_Impl* pEntry,
-                              const ExpandedEntries_t& rEntries,
+                              const std::vector<OUString>& rEntries,
                               SfxStyleFamily eStyleFamily,
                               SvTreeListEntry* pParent)
 {
@@ -1033,7 +1033,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         }
 
         MakeTree_Impl(aArr);
-        ExpandedEntries_t aEntries;
+        std::vector<OUString> aEntries;
         pTreeBox->MakeExpanded_Impl(aEntries);
         pTreeBox->SetUpdateMode( false );
         pTreeBox->Clear();

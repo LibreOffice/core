@@ -130,7 +130,6 @@ void IndexerPreProcessor::processDocument
 struct Data
 {
     std::vector<std::string> _idList;
-    typedef std::vector<std::string>::const_iterator cIter;
 
     void append(const std::string &id)
     {
