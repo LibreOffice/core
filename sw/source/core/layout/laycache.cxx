@@ -803,8 +803,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     else if( mrpFrame->IsTabFrame() && nRowCount < nOfst &&
                              ( bLongTab || SW_LAYCACHE_IO_REC_TABLE == nType ) )
                     {
-                        nRepeat = static_cast<SwTabFrame*>(mrpFrame)->
-                                  GetTable()->GetRowsToRepeat();
+                        nRepeat = static_cast<SwTabFrame*>(mrpFrame)->GetTable()->GetRowsToRepeat();
                         bSplit = nOfst < nRows && nRowCount + nRepeat < nOfst;
                         bLongTab = bLongTab && bSplit;
                     }
@@ -833,22 +832,9 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                                 bDontCreateObjects = true; //frmtool
 
                                 // Insert new headlines:
-                                sal_uInt16 nRowIdx = 0;
-                                SwRowFrame* pHeadline = nullptr;
-                                while( nRowIdx < nRepeat )
-                                {
-                                    OSL_ENSURE( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table without rows?" );
-                                    pHeadline =
-                                        new SwRowFrame( *pTab->GetTable()->GetTabLines()[ nRowIdx ], pTab );
-                                    pHeadline->SetRepeatedHeadline( true );
-                                    pHeadline->InsertBefore( pFoll, nullptr );
-                                    pHeadline->RegistFlys();
-
-                                    ++nRowIdx;
-                                }
+                                pPrv = pFoll->UpdateHeadlines(false);
 
                                 bDontCreateObjects = false;
-                                pPrv = pHeadline;
                                 nRows = nRows + nRepeat;
                             }
                             else

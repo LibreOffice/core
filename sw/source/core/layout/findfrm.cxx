@@ -1723,8 +1723,7 @@ const SwRowFrame* SwFrame::IsInSplitTableRow() const
     // If most upper row frame is a headline row, the current frame
     // can't be in a splitted table row. Thus, add corresponding condition.
     if ( pRow->GetNext() ||
-         pTab->GetTable()->IsHeadline(
-                    *(static_cast<const SwRowFrame*>(pRow)->GetTabLine()) ) ||
+         pTab->IsInHeadline(*pRow) ||
          !pTab->HasFollowFlowLine() ||
          !pTab->GetFollow() )
         return nullptr;

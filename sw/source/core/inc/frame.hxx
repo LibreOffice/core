@@ -483,6 +483,9 @@ protected:
 
     virtual const IDocumentDrawModelAccess& getIDocumentDrawModelAccess( );
 
+    bool IsHidden() const;
+    void ShrinkTo0();
+
 public:
     virtual css::uno::Sequence< css::style::TabStop > GetTabStopInfo( SwTwips )
     {

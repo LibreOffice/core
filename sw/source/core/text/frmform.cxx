@@ -1755,6 +1755,12 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
 // Shrink() or Grow() to adjust the frame's size to the changed required space.
 void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs * )
 {
+    if (IsHidden())
+    {
+        ShrinkTo0();
+        return;
+    }
+
     SwRectFnSet aRectFnSet(this);
 
     CalcAdditionalFirstLineOffset();

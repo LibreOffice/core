@@ -653,6 +653,12 @@ double SwNoTextFrame::getLocalFrameRotation() const
 /** Calculate the Bitmap's site, if needed */
 void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
+    if (IsHidden())
+    {
+        ShrinkTo0();
+        return;
+    }
+
     const Size aNewSize( GetSize() );
 
     // Did the height change?
