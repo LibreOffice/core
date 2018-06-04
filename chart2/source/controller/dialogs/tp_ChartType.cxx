@@ -709,26 +709,26 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         }
     }
 
-    m_aChartTypeDialogControllerList.push_back(new ColumnChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new BarChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new PieChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new AreaChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new LineChartDialogController() );
+    m_aChartTypeDialogControllerList.emplace_back(new ColumnChartDialogController() );
+    m_aChartTypeDialogControllerList.emplace_back(new BarChartDialogController() );
+    m_aChartTypeDialogControllerList.emplace_back(new PieChartDialogController() );
+    m_aChartTypeDialogControllerList.emplace_back(new AreaChartDialogController() );
+    m_aChartTypeDialogControllerList.emplace_back(new LineChartDialogController() );
     if (bEnableComplexChartTypes)
     {
-        m_aChartTypeDialogControllerList.push_back(new XYChartDialogController() );
-        m_aChartTypeDialogControllerList.push_back(new BubbleChartDialogController() );
+        m_aChartTypeDialogControllerList.emplace_back(new XYChartDialogController() );
+        m_aChartTypeDialogControllerList.emplace_back(new BubbleChartDialogController() );
     }
-    m_aChartTypeDialogControllerList.push_back(new NetChartDialogController() );
+    m_aChartTypeDialogControllerList.emplace_back(new NetChartDialogController() );
     if (bEnableComplexChartTypes)
     {
-        m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
+        m_aChartTypeDialogControllerList.emplace_back(new StockChartDialogController() );
     }
-    m_aChartTypeDialogControllerList.push_back(new CombiColumnLineChartDialogController() );
+    m_aChartTypeDialogControllerList.emplace_back(new CombiColumnLineChartDialogController() );
 
     SvtMiscOptions aOpts;
     if ( aOpts.IsExperimentalMode() )
-        m_aChartTypeDialogControllerList.push_back(new GL3DBarChartDialogController());
+        m_aChartTypeDialogControllerList.emplace_back(new GL3DBarChartDialogController());
 
     for (auto const& elem : m_aChartTypeDialogControllerList)
     {
@@ -752,25 +752,15 @@ ChartTypeTabPage::~ChartTypeTabPage()
 void ChartTypeTabPage::dispose()
 {
     //delete all dialog controller
-    for (auto const& elem : m_aChartTypeDialogControllerList)
-    {
-        delete elem;
-    }
     m_aChartTypeDialogControllerList.clear();
 
     //delete all resource helper
-    delete m_pDim3DLookResourceGroup;
-    m_pDim3DLookResourceGroup = nullptr;
-    delete m_pStackingResourceGroup;
-    m_pStackingResourceGroup = nullptr;
-    delete m_pSplineResourceGroup;
-    m_pSplineResourceGroup = nullptr;
-    delete m_pGeometryResourceGroup;
-    m_pGeometryResourceGroup = nullptr;
-    delete m_pSortByXValuesResourceGroup;
-    m_pSortByXValuesResourceGroup = nullptr;
-    delete m_pGL3DResourceGroup;
-    m_pGL3DResourceGroup = nullptr;
+    m_pDim3DLookResourceGroup.reset();
+    m_pStackingResourceGroup.reset();
+    m_pSplineResourceGroup.reset();
+    m_pGeometryResourceGroup.reset();
+    m_pSortByXValuesResourceGroup.reset();
+    m_pGL3DResourceGroup.reset();
     m_pFT_ChooseType.clear();
     m_pMainTypeList.clear();
     m_pSubTypeList.clear();
@@ -834,10 +824,10 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
 ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
 {
     ChartTypeDialogController* pTypeController = nullptr;
-    std::vector< ChartTypeDialogController* >::size_type nM = static_cast< std::vector< ChartTypeDialogController* >::size_type >(
+    auto nM = static_cast< std::vector< ChartTypeDialogController* >::size_type >(
         m_pMainTypeList->GetSelectedEntryPos() );
     if( nM<m_aChartTypeDialogControllerList.size() )
-        pTypeController = m_aChartTypeDialogControllerList[nM];
+        pTypeController = m_aChartTypeDialogControllerList[nM].get();
     return pTypeController;
 }
 
