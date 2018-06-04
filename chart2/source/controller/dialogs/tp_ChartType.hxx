@@ -77,16 +77,16 @@ private:
     VclPtr<ListBox>    m_pMainTypeList;
     VclPtr<ValueSet>   m_pSubTypeList;
 
-    Dim3DLookResourceGroup*     m_pDim3DLookResourceGroup;
-    StackingResourceGroup*      m_pStackingResourceGroup;
-    SplineResourceGroup*        m_pSplineResourceGroup;
-    GeometryResourceGroup*      m_pGeometryResourceGroup;
-    SortByXValuesResourceGroup* m_pSortByXValuesResourceGroup;
-    GL3DResourceGroup* m_pGL3DResourceGroup;
+    std::unique_ptr<Dim3DLookResourceGroup>     m_pDim3DLookResourceGroup;
+    std::unique_ptr<StackingResourceGroup>      m_pStackingResourceGroup;
+    std::unique_ptr<SplineResourceGroup>        m_pSplineResourceGroup;
+    std::unique_ptr<GeometryResourceGroup>      m_pGeometryResourceGroup;
+    std::unique_ptr<SortByXValuesResourceGroup> m_pSortByXValuesResourceGroup;
+    std::unique_ptr<GL3DResourceGroup>          m_pGL3DResourceGroup;
 
     css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
 
-    std::vector< ChartTypeDialogController* > m_aChartTypeDialogControllerList;
+    std::vector< std::unique_ptr<ChartTypeDialogController> > m_aChartTypeDialogControllerList;
     ChartTypeDialogController*                  m_pCurrentMainType;
 
     sal_Int32 m_nChangingCalls;
