@@ -19,21 +19,43 @@
 
 #pragma once
 
+#include <cppuhelper/compbase.hxx>
+
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ustrbuf.hxx>
+
+#include <functional>
+
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QHash>
 
-#include <sal/types.h>
-
 class QFileDialog;
-class QWidget;
 class QGridLayout;
+class QWidget;
 
-class KDE5FilePicker : public QObject
+typedef ::cppu::WeakComponentImplHelper<css::ui::dialogs::XFilePicker3,
+                                        css::ui::dialogs::XFilePickerControlAccess
+                                        // TODO css::ui::dialogs::XFilePreview
+                                        ,
+                                        css::lang::XInitialization, css::lang::XServiceInfo>
+    KDE5FilePicker_Base;
+
+class KDE5FilePicker : public QObject, public KDE5FilePicker_Base
 {
     Q_OBJECT
 protected:
+    css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
+    osl::Mutex _helperMutex;
+
     //the dialog to display
     QFileDialog* _dialog;
 
@@ -58,53 +80,89 @@ protected:
     bool allowRemoteUrls;
 
 public:
-    explicit KDE5FilePicker(QObject* parent = nullptr);
-    ~KDE5FilePicker() override;
+    explicit KDE5FilePicker(const css::uno::Reference<css::uno::XComponentContext>&);
+    virtual ~KDE5FilePicker() override;
 
     void enableFolderMode();
 
+    // XFilePickerNotifier
+    virtual void SAL_CALL addFilePickerListener(
+        const css::uno::Reference<css::ui::dialogs::XFilePickerListener>& xListener) override;
+    virtual void SAL_CALL removeFilePickerListener(
+        const css::uno::Reference<css::ui::dialogs::XFilePickerListener>& xListener) override;
+
     // XExecutableDialog functions
-    void setTitle(const QString& rTitle);
-    bool execute();
+    virtual void SAL_CALL setTitle(const OUString& rTitle) override;
+    virtual sal_Int16 SAL_CALL execute() override;
 
     // XFilePicker functions
-    void setMultiSelectionMode(bool bMode);
-    void setDefaultName(const QString& rName);
-    void setDisplayDirectory(const QString& rDirectory);
-    QString getDisplayDirectory() const;
+    virtual void SAL_CALL setMultiSelectionMode(sal_Bool bMode) override;
+    virtual void SAL_CALL setDefaultName(const OUString& rName) override;
+    virtual void SAL_CALL setDisplayDirectory(const OUString& rDirectory) override;
+    virtual OUString SAL_CALL getDisplayDirectory() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getFiles() override;
 
     // XFilterManager functions
-    void appendFilter(const QString& rTitle, const QString& rFilter);
-    void setCurrentFilter(const QString& rTitle);
-    QString getCurrentFilter() const;
+    virtual void SAL_CALL appendFilter(const OUString& rTitle, const OUString& rFilter) override;
+    virtual void SAL_CALL setCurrentFilter(const OUString& rTitle) override;
+    virtual OUString SAL_CALL getCurrentFilter() override;
+
+    // XFilterGroupManager functions
+    virtual void SAL_CALL
+    appendFilterGroup(const OUString& rGroupTitle,
+                      const css::uno::Sequence<css::beans::StringPair>& rFilters) override;
 
     // XFilePickerControlAccess functions
-    void setValue(sal_Int16 nControlId, sal_Int16 nControlAction, bool rValue);
-    bool getValue(sal_Int16 nControlId, sal_Int16 nControlAction) const;
-    void enableControl(sal_Int16 nControlId, bool bEnable);
-    void setLabel(sal_Int16 nControlId, const QString& rLabel);
-    QString getLabel(sal_Int16 nControlId) const;
+    virtual void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction,
+                                   const css::uno::Any& rValue) override;
+    virtual css::uno::Any SAL_CALL getValue(sal_Int16 nControlId,
+                                            sal_Int16 nControlAction) override;
+    virtual void SAL_CALL enableControl(sal_Int16 nControlId, sal_Bool bEnable) override;
+    virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
+    virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
+
+    /* TODO XFilePreview
+
+    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  );
+    virtual sal_Int32 SAL_CALL  getTargetColorDepth(  );
+    virtual sal_Int32 SAL_CALL  getAvailableWidth(  );
+    virtual sal_Int32 SAL_CALL  getAvailableHeight(  );
+    virtual void SAL_CALL       setImage( sal_Int16 aImageFormat, const css::uno::Any &rImage );
+    virtual sal_Bool SAL_CALL   setShowState( sal_Bool bShowState );
+    virtual sal_Bool SAL_CALL   getShowState(  );
+    */
 
     // XFilePicker2 functions
-    QList<QUrl> getSelectedFiles() const;
-
-    // XInitialization
-    void initialize(bool saveDialog);
-
-    //add a custom control widget to the file dialog
-    void addCheckBox(sal_Int16 nControlId, const QString& label, bool hidden);
+    virtual css::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
 
     void setWinId(sal_uIntPtr winId);
 
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+
+    // XCancellable
+    virtual void SAL_CALL cancel() override;
+
+    // XEventListener
+    virtual void disposing(const css::lang::EventObject& rEvent);
+    using cppu::WeakComponentImplHelperBase::disposing;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
 private:
-    Q_DISABLE_COPY(KDE5FilePicker)
+    //add a custom control widget to the file dialog
+    void addCustomControl(sal_Int16 controlId);
+
+    // emit XFilePickerListener controlStateChanged event
+    void filterChanged();
+    // emit XFilePickerListener fileSelectionChanged event
+    void selectionChanged();
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
-
-Q_SIGNALS:
-    void filterChanged();
-    void selectionChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
