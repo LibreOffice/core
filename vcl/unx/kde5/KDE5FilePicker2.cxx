@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "gtk3_kde5_filepicker.hxx"
+#include "KDE5FilePicker2.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -88,33 +88,19 @@ void SAL_CALL KDE5FilePicker2::removeFilePickerListener(const uno::Reference<XFi
     m_xListener.clear();
 }
 
-void SAL_CALL KDE5FilePicker2::setTitle(const OUString& title)
-{
-    m_ipc.sendCommand(Commands::SetTitle, title);
-}
+void SAL_CALL KDE5FilePicker2::setTitle(const OUString& title) {}
 
-sal_Int16 SAL_CALL KDE5FilePicker2::execute() { return m_ipc.execute(); }
+sal_Int16 SAL_CALL KDE5FilePicker2::execute() { return 0; }
 
-void SAL_CALL KDE5FilePicker2::setMultiSelectionMode(sal_Bool multiSelect)
-{
-    m_ipc.sendCommand(Commands::SetMultiSelectionMode, bool(multiSelect));
-}
+void SAL_CALL KDE5FilePicker2::setMultiSelectionMode(sal_Bool multiSelect) {}
 
-void SAL_CALL KDE5FilePicker2::setDefaultName(const OUString& name)
-{
-    m_ipc.sendCommand(Commands::SetDefaultName, name);
-}
+void SAL_CALL KDE5FilePicker2::setDefaultName(const OUString& name) {}
 
-void SAL_CALL KDE5FilePicker2::setDisplayDirectory(const OUString& dir)
-{
-    m_ipc.sendCommand(Commands::SetDisplayDirectory, dir);
-}
+void SAL_CALL KDE5FilePicker2::setDisplayDirectory(const OUString& dir) {}
 
 OUString SAL_CALL KDE5FilePicker2::getDisplayDirectory()
 {
-    auto id = m_ipc.sendCommand(Commands::GetDisplayDirectory);
     OUString dir;
-    m_ipc.readResponse(id, dir);
     return dir;
 }
 
@@ -128,27 +114,17 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker2::getFiles()
 
 uno::Sequence<OUString> SAL_CALL KDE5FilePicker2::getSelectedFiles()
 {
-    auto id = m_ipc.sendCommand(Commands::GetSelectedFiles);
     uno::Sequence<OUString> seq;
-    m_ipc.readResponse(id, seq);
     return seq;
 }
 
-void SAL_CALL KDE5FilePicker2::appendFilter(const OUString& title, const OUString& filter)
-{
-    m_ipc.sendCommand(Commands::AppendFilter, title, filter);
-}
+void SAL_CALL KDE5FilePicker2::appendFilter(const OUString& title, const OUString& filter) {}
 
-void SAL_CALL KDE5FilePicker2::setCurrentFilter(const OUString& title)
-{
-    m_ipc.sendCommand(Commands::SetCurrentFilter, title);
-}
+void SAL_CALL KDE5FilePicker2::setCurrentFilter(const OUString& title) {}
 
 OUString SAL_CALL KDE5FilePicker2::getCurrentFilter()
 {
-    auto id = m_ipc.sendCommand(Commands::GetCurrentFilter);
     OUString filter;
-    m_ipc.readResponse(id, filter);
     return filter;
 }
 
@@ -166,14 +142,6 @@ void SAL_CALL KDE5FilePicker2::appendFilterGroup(const OUString& /*rGroupTitle*/
 void SAL_CALL KDE5FilePicker2::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                         const uno::Any& value)
 {
-    if (value.has<bool>())
-    {
-        m_ipc.sendCommand(Commands::SetValue, controlId, nControlAction, value.get<bool>());
-    }
-    else
-    {
-        OSL_TRACE("set value of unhandled type %d", controlId);
-    }
 }
 
 uno::Any SAL_CALL KDE5FilePicker2::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
@@ -186,29 +154,18 @@ uno::Any SAL_CALL KDE5FilePicker2::getValue(sal_Int16 controlId, sal_Int16 nCont
         // saves the value of the setting, so LO core is not needed for that either.
         return uno::Any(false);
 
-    auto id = m_ipc.sendCommand(Commands::GetValue, controlId, nControlAction);
-
     bool value = false;
-    m_ipc.readResponse(id, value);
 
     return uno::Any(value);
 }
 
-void SAL_CALL KDE5FilePicker2::enableControl(sal_Int16 controlId, sal_Bool enable)
-{
-    m_ipc.sendCommand(Commands::EnableControl, controlId, bool(enable));
-}
+void SAL_CALL KDE5FilePicker2::enableControl(sal_Int16 controlId, sal_Bool enable) {}
 
-void SAL_CALL KDE5FilePicker2::setLabel(sal_Int16 controlId, const OUString& label)
-{
-    m_ipc.sendCommand(Commands::SetLabel, controlId, label);
-}
+void SAL_CALL KDE5FilePicker2::setLabel(sal_Int16 controlId, const OUString& label) {}
 
 OUString SAL_CALL KDE5FilePicker2::getLabel(sal_Int16 controlId)
 {
-    auto id = m_ipc.sendCommand(Commands::GetLabel, controlId);
     OUString label;
-    m_ipc.readResponse(id, label);
     return label;
 }
 
@@ -279,9 +236,6 @@ void KDE5FilePicker2::addCustomControl(sal_Int16 controlId)
             // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
             // code, but the checkbox is hidden and ignored
             bool hidden = controlId == CHECKBOX_AUTOEXTENSION;
-
-            m_ipc.sendCommand(Commands::AddCheckBox, controlId, hidden, getResString(resId));
-
             break;
         }
         case PUSHBUTTON_PLAY:
@@ -402,9 +356,7 @@ void SAL_CALL KDE5FilePicker2::initialize(const uno::Sequence<uno::Any>& args)
             return;
     }
 
-    setTitle(getResString(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));
-
-    m_ipc.sendCommand(Commands::Initialize, saveDialog);
+    setTitle(VclResId(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));
 }
 
 void SAL_CALL KDE5FilePicker2::cancel()

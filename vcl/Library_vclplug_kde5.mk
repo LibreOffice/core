@@ -87,6 +87,8 @@ $(eval $(call gb_Library_add_libs,vclplug_kde5,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde5,\
+    vcl/unx/kde5/KDE5FilePicker \
+    vcl/unx/kde5/KDE5FilePicker2 \
     vcl/unx/kde5/KDE5SalData \
     vcl/unx/kde5/KDE5SalDisplay \
     vcl/unx/kde5/KDE5SalFrame \
