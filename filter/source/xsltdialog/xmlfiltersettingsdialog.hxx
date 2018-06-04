@@ -123,7 +123,7 @@ private:
     css::uno::Reference< css::container::XNameContainer > mxTypeDetection;
     css::uno::Reference< css::container::XNameContainer > mxExtendedTypeDetection;
 
-    std::vector< filter_info_impl* > maFilterVector;
+    std::vector< std::unique_ptr<filter_info_impl> > maFilterVector;
 
     VclPtr<XMLFilterListBox>   m_pFilterListBox;
     VclPtr<SvxPathControl> m_pCtrlFilterList;
