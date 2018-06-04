@@ -778,13 +778,15 @@ void SearchAndParseThread::execute()
                 continue;
             }
             INetURLObject aURLObj( sPreviewFile );
+
+            // Stop the thread if requested -- before taking the solar mutex.
+            if( !m_bExecute )
+                return;
+
             // for VCL to be able to create bitmaps / do visual changes in the thread
             SolarMutexGuard aGuard;
             aFilter.ImportGraphic( aGraphic, aURLObj );
             BitmapEx aBmp = aGraphic.GetBitmapEx();
-
-            if( !m_bExecute )
-                return;
 
             m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
             m_pPersonaDialog->setOptimalLayoutSize();
