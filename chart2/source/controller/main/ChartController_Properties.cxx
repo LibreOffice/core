@@ -763,7 +763,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         if(aDialogParameter.HasSymbolProperties())
         {
-            SfxItemSet* pSymbolShapeProperties=nullptr;
             uno::Reference< beans::XPropertySet > xObjectProperties =
                 ObjectIdentifier::getObjectPropertySet( rObjectCID, getModel() );
             wrapper::DataPointItemConverter aSymbolItemConverter( getModel(), m_xCC
@@ -773,13 +772,13 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
                                         , uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY )
                                         , wrapper::GraphicObjectType::FilledDataPoint );
 
-            pSymbolShapeProperties = new SfxItemSet( aSymbolItemConverter.CreateEmptyItemSet() );
+            std::unique_ptr<SfxItemSet> pSymbolShapeProperties(new SfxItemSet( aSymbolItemConverter.CreateEmptyItemSet() ));
             aSymbolItemConverter.FillItemSet( *pSymbolShapeProperties );
 
             sal_Int32 const nStandardSymbol=0;//@todo get from somewhere
-            Graphic*    pAutoSymbolGraphic = new Graphic( aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, pSymbolShapeProperties ) );
+            std::unique_ptr<Graphic> pAutoSymbolGraphic(new Graphic( aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, pSymbolShapeProperties.get() ) ));
             // note: the dialog takes the ownership of pSymbolShapeProperties and pAutoSymbolGraphic
-            aDlg->setSymbolInformation( pSymbolShapeProperties, pAutoSymbolGraphic );
+            aDlg->setSymbolInformation( std::move(pSymbolShapeProperties), std::move(pAutoSymbolGraphic) );
         }
         if( aDialogParameter.HasStatisticProperties() )
         {
