@@ -168,46 +168,46 @@ SwEnvCfgItem::SwEnvCfgItem() :
             {
                 switch(nProp)
                 {
-                    case  0: pValues[nProp] >>= aEnvItem.m_aAddrText; break;// "Inscription/Addressee",
-                    case  1: pValues[nProp] >>= aEnvItem.m_aSendText; break;// "Inscription/Sender",
-                    case  2: aEnvItem.m_bSend = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Inscription/UseSender",
+                    case  0: pValues[nProp] >>= m_aEnvItem.m_aAddrText; break;// "Inscription/Addressee",
+                    case  1: pValues[nProp] >>= m_aEnvItem.m_aSendText; break;// "Inscription/Sender",
+                    case  2: m_aEnvItem.m_bSend = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Inscription/UseSender",
                     case  3:
-                        pValues[nProp] >>= aEnvItem.m_nAddrFromLeft;// "Format/AddresseeFromLeft",
-                        aEnvItem.m_nAddrFromLeft = convertMm100ToTwip(aEnvItem.m_nAddrFromLeft);
+                        pValues[nProp] >>= m_aEnvItem.m_nAddrFromLeft;// "Format/AddresseeFromLeft",
+                        m_aEnvItem.m_nAddrFromLeft = convertMm100ToTwip(m_aEnvItem.m_nAddrFromLeft);
                     break;
                     case  4:
-                        pValues[nProp] >>= aEnvItem.m_nAddrFromTop;  // "Format/AddresseeFromTop",
-                        aEnvItem.m_nAddrFromTop = convertMm100ToTwip(aEnvItem.m_nAddrFromTop);
+                        pValues[nProp] >>= m_aEnvItem.m_nAddrFromTop;  // "Format/AddresseeFromTop",
+                        m_aEnvItem.m_nAddrFromTop = convertMm100ToTwip(m_aEnvItem.m_nAddrFromTop);
                     break;
                     case  5:
-                        pValues[nProp] >>= aEnvItem.m_nSendFromLeft; // "Format/SenderFromLeft",
-                        aEnvItem.m_nSendFromLeft = convertMm100ToTwip(aEnvItem.m_nSendFromLeft);
+                        pValues[nProp] >>= m_aEnvItem.m_nSendFromLeft; // "Format/SenderFromLeft",
+                        m_aEnvItem.m_nSendFromLeft = convertMm100ToTwip(m_aEnvItem.m_nSendFromLeft);
                     break;
                     case  6:
-                        pValues[nProp] >>= aEnvItem.m_nSendFromTop;// "Format/SenderFromTop",
-                        aEnvItem.m_nSendFromTop = convertMm100ToTwip(aEnvItem.m_nSendFromTop);
+                        pValues[nProp] >>= m_aEnvItem.m_nSendFromTop;// "Format/SenderFromTop",
+                        m_aEnvItem.m_nSendFromTop = convertMm100ToTwip(m_aEnvItem.m_nSendFromTop);
                     break;
                     case  7:
-                        pValues[nProp] >>= aEnvItem.m_nWidth; // "Format/Width",
-                        aEnvItem.m_nWidth = convertMm100ToTwip(aEnvItem.m_nWidth);
+                        pValues[nProp] >>= m_aEnvItem.m_nWidth; // "Format/Width",
+                        m_aEnvItem.m_nWidth = convertMm100ToTwip(m_aEnvItem.m_nWidth);
                     break;
                     case  8:
-                        pValues[nProp] >>= aEnvItem.m_nHeight; // "Format/Height",
-                        aEnvItem.m_nHeight = convertMm100ToTwip(aEnvItem.m_nHeight);
+                        pValues[nProp] >>= m_aEnvItem.m_nHeight; // "Format/Height",
+                        m_aEnvItem.m_nHeight = convertMm100ToTwip(m_aEnvItem.m_nHeight);
                     break;
                     case  9:
                     {
                         sal_Int32 nTemp = 0;
-                        pValues[nProp] >>= nTemp; aEnvItem.m_eAlign = static_cast<SwEnvAlign>(nTemp); break;// "Print/Alignment",
+                        pValues[nProp] >>= nTemp; m_aEnvItem.m_eAlign = static_cast<SwEnvAlign>(nTemp); break;// "Print/Alignment",
                     }
-                    case 10: aEnvItem.m_bPrintFromAbove = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Print/FromAbove",
+                    case 10: m_aEnvItem.m_bPrintFromAbove = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Print/FromAbove",
                     case 11:
-                        pValues[nProp] >>= aEnvItem.m_nShiftRight;
-                        aEnvItem.m_nShiftRight = convertMm100ToTwip(aEnvItem.m_nShiftRight);// "Print/Right",
+                        pValues[nProp] >>= m_aEnvItem.m_nShiftRight;
+                        m_aEnvItem.m_nShiftRight = convertMm100ToTwip(m_aEnvItem.m_nShiftRight);// "Print/Right",
                     break;
                     case 12:
-                        pValues[nProp] >>= aEnvItem.m_nShiftDown;
-                        aEnvItem.m_nShiftDown = convertMm100ToTwip(aEnvItem.m_nShiftDown);
+                        pValues[nProp] >>= m_aEnvItem.m_nShiftDown;
+                        m_aEnvItem.m_nShiftDown = convertMm100ToTwip(m_aEnvItem.m_nShiftDown);
                     break;// "Print/Down"
                 }
             }
@@ -229,19 +229,19 @@ void SwEnvCfgItem::ImplCommit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= aEnvItem.m_aAddrText; break;// "Inscription/Addressee",
-            case  1: pValues[nProp] <<= aEnvItem.m_aSendText; break;// "Inscription/Sender",
-            case  2: pValues[nProp] <<= aEnvItem.m_bSend; break;// "Inscription/UseSender",
-            case  3: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nAddrFromLeft)) ; break;// "Format/AddresseeFromLeft",
-            case  4: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nAddrFromTop))  ; break;// "Format/AddresseeFromTop",
-            case  5: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nSendFromLeft)) ; break;// "Format/SenderFromLeft",
-            case  6: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nSendFromTop))  ; break;// "Format/SenderFromTop",
-            case  7: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nWidth))  ; break;// "Format/Width",
-            case  8: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nHeight)) ; break;// "Format/Height",
-            case  9: pValues[nProp] <<= sal_Int32(aEnvItem.m_eAlign); break;// "Print/Alignment",
-            case 10: pValues[nProp] <<= aEnvItem.m_bPrintFromAbove; break;// "Print/FromAbove",
-            case 11: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nShiftRight));break; // "Print/Right",
-            case 12: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.m_nShiftDown)); break;// "Print/Down"
+            case  0: pValues[nProp] <<= m_aEnvItem.m_aAddrText; break;// "Inscription/Addressee",
+            case  1: pValues[nProp] <<= m_aEnvItem.m_aSendText; break;// "Inscription/Sender",
+            case  2: pValues[nProp] <<= m_aEnvItem.m_bSend; break;// "Inscription/UseSender",
+            case  3: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(m_aEnvItem.m_nAddrFromLeft)) ; break;// "Format/AddresseeFromLeft",
+            case  4: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(m_aEnvItem.m_nAddrFromTop))  ; break;// "Format/AddresseeFromTop",
+            case  5: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(m_aEnvItem.m_nSendFromLeft)) ; break;// "Format/SenderFromLeft",
+            case  6: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(m_aEnvItem.m_nSendFromTop))  ; break;// "Format/SenderFromTop",
+            case  7: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(m_aEnvItem.m_nWidth))  ; break;// "Format/Width",
+            case  8: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(m_aEnvItem.m_nHeight)) ; break;// "Format/Height",
+            case  9: pValues[nProp] <<= sal_Int32(m_aEnvItem.m_eAlign); break;// "Print/Alignment",
+            case 10: pValues[nProp] <<= m_aEnvItem.m_bPrintFromAbove; break;// "Print/FromAbove",
+            case 11: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(m_aEnvItem.m_nShiftRight));break; // "Print/Right",
+            case 12: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(m_aEnvItem.m_nShiftDown)); break;// "Print/Down"
         }
     }
     PutProperties(aNames, aValues);
