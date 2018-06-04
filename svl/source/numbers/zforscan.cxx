@@ -667,15 +667,19 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     return pResult;
 }
 
-short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos ) const
+short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos, bool& rbFoundEnglish ) const
 {
     OUString sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.getLength() - nPos );
     const NfKeywordTable & rKeyword = GetKeywords();
     // #77026# for the Xcl perverts: the GENERAL keyword is recognized anywhere
-    if ( sString.startsWith( rKeyword[NF_KEY_GENERAL] ) ||
-            ((meKeywordLocalization == KeywordLocalization::AllowEnglish) &&
-             sString.startsWith( sEnglishKeyword[NF_KEY_GENERAL])))
+    if (sString.startsWith( rKeyword[NF_KEY_GENERAL] ))
     {
+        return NF_KEY_GENERAL;
+    }
+    if ((meKeywordLocalization == KeywordLocalization::AllowEnglish) &&
+            sString.startsWith( sEnglishKeyword[NF_KEY_GENERAL]))
+    {
+        rbFoundEnglish = true;
         return NF_KEY_GENERAL;
     }
     //! MUST be a reverse search to find longer strings first
@@ -733,6 +737,7 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
                 }
                 if ( j && sEnglishKeyword[j].getLength() > sEnglishKeyword[i].getLength() )
                 {
+                    rbFoundEnglish = true;
                     return j;
                 }
             }
@@ -898,7 +903,8 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 }
                 else if ( pChrCls->isLetter( rStr, nPos-1 ) )
                 {
-                    short nTmpType = GetKeyWord( rStr, nPos-1 );
+                    bool bFoundEnglish = false;
+                    short nTmpType = GetKeyWord( rStr, nPos-1, bFoundEnglish);
                     if ( nTmpType )
                     {
                         bool bCurrency = false;
@@ -906,7 +912,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                         // like "R" (Rand) and 'R' (era)
                         if ( nCurrPos >= 0 &&
                              nPos-1 + sCurString.getLength() <= rStr.getLength() &&
-                             sCurString.startsWith( sKeyword[nTmpType] ) )
+                             sCurString.startsWith( bFoundEnglish ? sEnglishKeyword[nTmpType] : sKeyword[nTmpType]))
                         {
                             OUString aTest = pChrCls->uppercase( rStr.copy( nPos-1, sCurString.getLength() ) );
                             if ( aTest == sCurString )
@@ -922,8 +928,22 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                         else
                         {
                             eType = nTmpType;
-                            sal_Int32 nLen = sKeyword[eType].getLength();
-                            sSymbol = rStr.copy( nPos-1, nLen );
+                            // The code to be advanced is the detected keyword,
+                            // not necessarily the locale's keyword, but the
+                            // symbol is to be the locale's keyword.
+                            sal_Int32 nLen;
+                            if (bFoundEnglish)
+                            {
+                                nLen = sEnglishKeyword[eType].getLength();
+                                // Use the locale's General keyword name, not uppercase.
+                                sSymbol = (eType == NF_KEY_GENERAL ? sNameStandardFormat : sKeyword[eType]);
+                            }
+                            else
+                            {
+                                nLen = sKeyword[eType].getLength();
+                                // Preserve a locale's keyword's case as entered.
+                                sSymbol = rStr.copy( nPos-1, nLen);
+                            }
                             if ((eType == NF_KEY_E || IsAmbiguousE(eType)) && nPos < rStr.getLength())
                             {
                                 sal_Unicode cNext = rStr[nPos];
@@ -975,7 +995,8 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
         case SsGetWord:
             if ( pChrCls->isLetter( rStr, nPos-1 ) )
             {
-                short nTmpType = GetKeyWord( rStr, nPos-1 );
+                bool bFoundEnglish = false;
+                short nTmpType = GetKeyWord( rStr, nPos-1, bFoundEnglish);
                 if ( nTmpType )
                 {
                     // beginning of keyword, stop scan and put back
@@ -3070,7 +3091,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 sal_Int32 nLen = rStr.getLength();
                 for ( sal_Int32 j = 0; j < nLen; j++ )
                 {
-                    if ( (j == 0 || rStr[j - 1] != '\\') && GetKeyWord( rStr, j ) )
+                    bool bFoundEnglish = false;
+                    if ( (j == 0 || rStr[j - 1] != '\\') && GetKeyWord( rStr, j, bFoundEnglish) )
                     {
                         rStr = "\"" + rStr + "\"";
                         break; // for
