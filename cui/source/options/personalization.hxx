@@ -16,6 +16,7 @@
 #include <vcl/prgsbar.hxx>
 #include <vector>
 #include <array>
+#include <atomic>
 
 #define CATEGORYCOUNT 6    // Number of persona categories
 
@@ -119,7 +120,8 @@ private:
 
     VclPtr<SelectPersonaDialog> m_pPersonaDialog;
     OUString m_aURL;
-    bool m_bExecute, m_bDirectURL;
+    std::atomic<bool> m_bExecute;
+    bool m_bDirectURL;
 
     virtual ~SearchAndParseThread() override;
     virtual void execute() override;
