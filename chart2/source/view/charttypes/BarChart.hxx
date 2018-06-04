@@ -38,7 +38,7 @@ public:
     virtual ~BarChart() override;
 
     virtual void createShapes() override;
-    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot ) override;
+    virtual void addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot ) override;
 
     virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
 

@@ -74,7 +74,7 @@ void BubbleChart::calculateMaximumLogicBubbleSize()
         {
             for( auto const& rXSlot : rZSlot )
             {
-                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
+                for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
                 {
                     if(!pSeries)
                         continue;
@@ -205,7 +205,7 @@ void BubbleChart::createShapes()
             for( auto const& rXSlot : rZSlot )
             {
                 //iterate through all series
-                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
+                for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
                 {
                     if(!pSeries)
                         continue;
@@ -213,7 +213,7 @@ void BubbleChart::createShapes()
                     bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
                     bool bHasBorderColorMapping = pSeries->hasPropertyMapping("LineColor");
 
-                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
+                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries.get(), xSeriesTarget);
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                     PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
@@ -246,7 +246,7 @@ void BubbleChart::createShapes()
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
                     //better performance for big data
-                    FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
+                    FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries.get()] );
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
                             &&
@@ -257,7 +257,7 @@ void BubbleChart::createShapes()
                         m_bPointsWereSkipped = true;
                         continue;
                     }
-                    aSeriesFormerPointMap[pSeries] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
+                    aSeriesFormerPointMap[pSeries.get()] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
 
                     //create a single datapoint if point is visible
                     if( !bIsVisible )

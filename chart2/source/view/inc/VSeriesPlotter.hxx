@@ -83,10 +83,11 @@ class VDataSeriesGroup final
 {
 public:
     VDataSeriesGroup() = delete;
-    VDataSeriesGroup( VDataSeries* pSeries );
+    VDataSeriesGroup( std::unique_ptr<VDataSeries> pSeries );
+    VDataSeriesGroup( VDataSeriesGroup&& );
     ~VDataSeriesGroup();
 
-    void addSeries( VDataSeries* pSeries );//takes ownership of pSeries
+    void addSeries( std::unique_ptr<VDataSeries> pSeries );//takes ownership of pSeries
     sal_Int32 getSeriesCount() const;
     void deleteSeries();
 
@@ -103,7 +104,7 @@ public:
                                                 , bool bSeparateStackingForDifferentSigns
                                                 , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex );
 
-    std::vector< VDataSeries* >   m_aSeriesVector;
+    std::vector< std::unique_ptr<VDataSeries> >   m_aSeriesVector;
 
 private:
     //cached values
@@ -144,7 +145,7 @@ public:
     * ySlot == already occupied     : insert at given y and x position
     * ySlot > occupied              : stack on top at given x position
     */
-    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot );
+    virtual void addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot );
 
     /** a value <= 0 for a directions means that this direction can be stretched arbitrary
     */

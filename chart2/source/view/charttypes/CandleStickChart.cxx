@@ -67,10 +67,10 @@ drawing::Direction3D CandleStickChart::getPreferredDiagramAspectRatio() const
     return drawing::Direction3D(-1,-1,-1);
 }
 
-void CandleStickChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, sal_Int32 xSlot, sal_Int32 ySlot )
+void CandleStickChart::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 /* zSlot */, sal_Int32 xSlot, sal_Int32 ySlot )
 {
     //ignore y stacking for candle stick chart
-    VSeriesPlotter::addSeries( pSeries, 0, xSlot, ySlot );
+    VSeriesPlotter::addSeries( std::move(pSeries), 0, xSlot, ySlot );
 }
 
 void CandleStickChart::createShapes()
@@ -159,7 +159,7 @@ void CandleStickChart::createShapes()
             for( auto const& rXSlot : rZSlot )
             {
                 //iterate through all series in this x slot
-                for( VDataSeries* const pSeries : rXSlot.m_aSeriesVector )
+                for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
                 {
                     //collect data point information (logic coordinates, style ):
                     double fUnscaledX = pSeries->getXValue( nIndex );
@@ -213,7 +213,7 @@ void CandleStickChart::createShapes()
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(nullptr);
                     {
                         OUString aPointCID = ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nIndex );
-                        uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes( getSeriesGroupShape(pSeries, xSeriesTarget) );
+                        uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes( getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
                         xPointGroupShape_Shapes = createGroupShape(xSeriesGroupShape_Shapes,aPointCID);
                     }
 

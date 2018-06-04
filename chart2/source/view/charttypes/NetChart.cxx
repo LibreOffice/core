@@ -253,7 +253,7 @@ void NetChart::impl_createSeriesShapes()
             drawing::PolyPolygonShape3D* pSeriesPoly = nullptr;
 
             //iterate through all series
-            for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
+            for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
             {
                 sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                 PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
@@ -264,12 +264,12 @@ void NetChart::impl_createSeriesShapes()
                 pSeriesPoly = &pSeries->m_aPolyPolygonShape3D;
                 if( m_bArea )
                 {
-                    if( !impl_createArea( pSeries, pSeriesPoly, aPreviousSeriesPolyMap[nAttachedAxisIndex], pPosHelper ) )
+                    if( !impl_createArea( pSeries.get(), pSeriesPoly, aPreviousSeriesPolyMap[nAttachedAxisIndex], pPosHelper ) )
                         continue;
                 }
                 if( m_bLine )
                 {
-                    if( !impl_createLine( pSeries, pSeriesPoly, pPosHelper ) )
+                    if( !impl_createLine( pSeries.get(), pSeriesPoly, pPosHelper ) )
                         continue;
                 }
                 aPreviousSeriesPolyMap[nAttachedAxisIndex] = pSeriesPoly;
@@ -291,18 +291,16 @@ void lcl_reorderSeries( std::vector< std::vector< VDataSeriesGroup > >&  rZSlots
     for( ; aZIt != aZEnd; ++aZIt )
     {
         std::vector< VDataSeriesGroup > aXSlot;
-        aXSlot.reserve( aZIt->size() );
 
         std::vector< VDataSeriesGroup >::reverse_iterator aXIt( aZIt->rbegin() );
         std::vector< VDataSeriesGroup >::reverse_iterator aXEnd( aZIt->rend() );
         for( ; aXIt != aXEnd; ++aXIt )
-            aXSlot.push_back(*aXIt);
+            aXSlot.push_back(std::move(*aXIt));
 
-        aRet.push_back(aXSlot);
+        aRet.push_back(std::move(aXSlot));
     }
 
-    rZSlots.clear();
-    rZSlots = aRet;
+    rZSlots = std::move(aRet);
 }
 
 }//anonymous namespace
@@ -372,7 +370,7 @@ void NetChart::createShapes()
             //iterate through all x slots in this category to get 100percent sum
             for( auto const& rXSlot : rZSlot )
             {
-                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
+                for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
                 {
                     if(!pSeries)
                         continue;
@@ -404,7 +402,7 @@ void NetChart::createShapes()
             {
                 std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
                 //iterate through all series
-                for( VDataSeries* pSeries : rXSlot.m_aSeriesVector )
+                for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
                 {
                     if(!pSeries)
                         continue;
@@ -415,7 +413,7 @@ void NetChart::createShapes()
                     if( m_bArea && (rXSlot.m_aSeriesVector.size() == 1) && (nIndex >= pSeries->getTotalPointCount()) )
                         continue;
 
-                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(pSeries, m_xSeriesTarget);
+                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(pSeries.get(), m_xSeriesTarget);
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                     PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
@@ -497,7 +495,7 @@ void NetChart::createShapes()
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
                     //better performance for big data
-                    FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
+                    FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries.get()] );
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
                             &&
@@ -508,7 +506,7 @@ void NetChart::createShapes()
                         m_bPointsWereSkipped = true;
                         continue;
                     }
-                    aSeriesFormerPointMap[pSeries] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
+                    aSeriesFormerPointMap[pSeries.get()] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
 
                     //store point information for series polygon
                     //for area and/or line (symbols only do not need this)
