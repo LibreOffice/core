@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "KDE5FilePicker2.hxx"
+#include "KDE5FilePicker.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -40,6 +40,16 @@
 
 #include <unx/geninst.h>
 
+#include <QtCore/QDebug>
+#include <QtCore/QUrl>
+#include <QtGui/QClipboard>
+#include <QtGui/QWindow>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QApplication>
+
 #include <strings.hrc>
 
 using namespace ::com::sun::star;
@@ -60,51 +70,70 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
     uno::Sequence<OUString> aRet(3);
     aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
     aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
-    aRet[2] = "com.sun.star.ui.dialogs.KDE5FilePicker2";
+    aRet[2] = "com.sun.star.ui.dialogs.KDE5FilePicker";
     return aRet;
 }
 }
 
-// KDE5FilePicker2
+// KDE5FilePicker
 
-KDE5FilePicker2::KDE5FilePicker2(const uno::Reference<uno::XComponentContext>&)
-    : KDE5FilePicker2_Base(_helperMutex)
+KDE5FilePicker::KDE5FilePicker(const uno::Reference<uno::XComponentContext>&)
+    : KDE5FilePicker_Base(_helperMutex)
+    , _dialog(new QFileDialog(nullptr, {}, QDir::homePath()))
+    , _extraControls(new QWidget)
+    , _layout(new QGridLayout(_extraControls))
+    , _winId(0)
+    , allowRemoteUrls(false)
 {
+    _dialog->setSupportedSchemes({
+        QStringLiteral("file"),
+        QStringLiteral("ftp"),
+        QStringLiteral("http"),
+        QStringLiteral("https"),
+        QStringLiteral("webdav"),
+        QStringLiteral("webdavs"),
+        QStringLiteral("smb"),
+    });
+
+    setMultiSelectionMode(false);
+
+    connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
+    connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
+
+    qApp->installEventFilter(this);
     setMultiSelectionMode(false);
 }
 
-KDE5FilePicker2::~KDE5FilePicker2() = default;
-
 void SAL_CALL
-KDE5FilePicker2::addFilePickerListener(const uno::Reference<XFilePickerListener>& xListener)
+KDE5FilePicker::addFilePickerListener(const uno::Reference<XFilePickerListener>& xListener)
 {
     SolarMutexGuard aGuard;
     m_xListener = xListener;
 }
 
-void SAL_CALL KDE5FilePicker2::removeFilePickerListener(const uno::Reference<XFilePickerListener>&)
+void SAL_CALL KDE5FilePicker::removeFilePickerListener(const uno::Reference<XFilePickerListener>&)
 {
     SolarMutexGuard aGuard;
     m_xListener.clear();
 }
 
-void SAL_CALL KDE5FilePicker2::setTitle(const OUString& title) {}
+void SAL_CALL KDE5FilePicker::setTitle(const OUString& title) {}
 
-sal_Int16 SAL_CALL KDE5FilePicker2::execute() { return 0; }
+sal_Int16 SAL_CALL KDE5FilePicker::execute() { return 0; }
 
-void SAL_CALL KDE5FilePicker2::setMultiSelectionMode(sal_Bool multiSelect) {}
+void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect) {}
 
-void SAL_CALL KDE5FilePicker2::setDefaultName(const OUString& name) {}
+void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name) {}
 
-void SAL_CALL KDE5FilePicker2::setDisplayDirectory(const OUString& dir) {}
+void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir) {}
 
-OUString SAL_CALL KDE5FilePicker2::getDisplayDirectory()
+OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
 {
     OUString dir;
     return dir;
 }
 
-uno::Sequence<OUString> SAL_CALL KDE5FilePicker2::getFiles()
+uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getFiles()
 {
     uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
@@ -112,24 +141,24 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker2::getFiles()
     return seq;
 }
 
-uno::Sequence<OUString> SAL_CALL KDE5FilePicker2::getSelectedFiles()
+uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
 {
     uno::Sequence<OUString> seq;
     return seq;
 }
 
-void SAL_CALL KDE5FilePicker2::appendFilter(const OUString& title, const OUString& filter) {}
+void SAL_CALL KDE5FilePicker::appendFilter(const OUString& title, const OUString& filter) {}
 
-void SAL_CALL KDE5FilePicker2::setCurrentFilter(const OUString& title) {}
+void SAL_CALL KDE5FilePicker::setCurrentFilter(const OUString& title) {}
 
-OUString SAL_CALL KDE5FilePicker2::getCurrentFilter()
+OUString SAL_CALL KDE5FilePicker::getCurrentFilter()
 {
     OUString filter;
     return filter;
 }
 
-void SAL_CALL KDE5FilePicker2::appendFilterGroup(const OUString& /*rGroupTitle*/,
-                                                 const uno::Sequence<beans::StringPair>& filters)
+void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitle*/,
+                                                const uno::Sequence<beans::StringPair>& filters)
 {
     const sal_uInt16 length = filters.getLength();
     for (sal_uInt16 i = 0; i < length; ++i)
@@ -139,12 +168,12 @@ void SAL_CALL KDE5FilePicker2::appendFilterGroup(const OUString& /*rGroupTitle*/
     }
 }
 
-void SAL_CALL KDE5FilePicker2::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
-                                        const uno::Any& value)
+void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
+                                       const uno::Any& value)
 {
 }
 
-uno::Any SAL_CALL KDE5FilePicker2::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
+uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the function.
@@ -159,17 +188,17 @@ uno::Any SAL_CALL KDE5FilePicker2::getValue(sal_Int16 controlId, sal_Int16 nCont
     return uno::Any(value);
 }
 
-void SAL_CALL KDE5FilePicker2::enableControl(sal_Int16 controlId, sal_Bool enable) {}
+void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable) {}
 
-void SAL_CALL KDE5FilePicker2::setLabel(sal_Int16 controlId, const OUString& label) {}
+void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label) {}
 
-OUString SAL_CALL KDE5FilePicker2::getLabel(sal_Int16 controlId)
+OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
 {
     OUString label;
     return label;
 }
 
-void KDE5FilePicker2::addCustomControl(sal_Int16 controlId)
+void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 {
     const char* resId = nullptr;
 
@@ -252,7 +281,7 @@ void KDE5FilePicker2::addCustomControl(sal_Int16 controlId)
     }
 }
 
-void SAL_CALL KDE5FilePicker2::initialize(const uno::Sequence<uno::Any>& args)
+void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
 {
     // parameter checking
     uno::Any arg;
@@ -359,12 +388,12 @@ void SAL_CALL KDE5FilePicker2::initialize(const uno::Sequence<uno::Any>& args)
     setTitle(VclResId(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));
 }
 
-void SAL_CALL KDE5FilePicker2::cancel()
+void SAL_CALL KDE5FilePicker::cancel()
 {
     // TODO
 }
 
-void KDE5FilePicker2::disposing(const lang::EventObject& rEvent)
+void KDE5FilePicker::disposing(const lang::EventObject& rEvent)
 {
     uno::Reference<XFilePickerListener> xFilePickerListener(rEvent.Source, uno::UNO_QUERY);
 
@@ -374,22 +403,22 @@ void KDE5FilePicker2::disposing(const lang::EventObject& rEvent)
     }
 }
 
-OUString SAL_CALL KDE5FilePicker2::getImplementationName()
+OUString SAL_CALL KDE5FilePicker::getImplementationName()
 {
     return OUString(FILE_PICKER_IMPL_NAME);
 }
 
-sal_Bool SAL_CALL KDE5FilePicker2::supportsService(const OUString& ServiceName)
+sal_Bool SAL_CALL KDE5FilePicker::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL KDE5FilePicker2::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSupportedServiceNames()
 {
     return FilePicker_getSupportedServiceNames();
 }
 
-void KDE5FilePicker2::filterChanged()
+void KDE5FilePicker::filterChanged()
 {
     FilePickerEvent aEvent;
     aEvent.ElementId = LISTBOX_FILTER;
@@ -398,7 +427,7 @@ void KDE5FilePicker2::filterChanged()
         m_xListener->controlStateChanged(aEvent);
 }
 
-void KDE5FilePicker2::selectionChanged()
+void KDE5FilePicker::selectionChanged()
 {
     FilePickerEvent aEvent;
     OSL_TRACE("file selection changed");
