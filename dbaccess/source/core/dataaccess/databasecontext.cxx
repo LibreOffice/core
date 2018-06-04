@@ -45,6 +45,7 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -58,6 +59,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <rtl/uri.hxx>
 #include <svl/filenotation.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -363,8 +365,26 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
         if (bEmbeddedDataSource)
         {
             // In this case the host contains the real path, and the path is the embedded stream name.
-            OUString sBaseURI = aURL.GetHost(INetURLObject::DecodeMechanism::WithCharset) + aURL.GetURLPath(INetURLObject::DecodeMechanism::WithCharset);
-            aArgs.put("BaseURI", sBaseURI);
+            auto const uri = css::uri::UriReferenceFactory::create(m_aContext)->parse(_sURL);
+            if (uri.is() && uri->isAbsolute() && uri->isHierarchical()
+                && uri->hasAuthority() && !uri->hasQuery() && !uri->hasFragment())
+            {
+                auto const auth = uri->getAuthority();
+                auto const decAuth = rtl::Uri::decode(
+                    auth, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8);
+                if (auth.isEmpty() == decAuth.isEmpty()) {
+                    // Decoding of auth to UTF-8 succeeded:
+                    OUString sBaseURI = decAuth + uri->getPath();
+                    aArgs.put("BaseURI", sBaseURI);
+                } else {
+                    SAL_WARN(
+                        "dbaccess.core",
+                        "<" << _sURL << "> cannot be parse as vnd.sun.star.pkg URL");
+                }
+            } else {
+                SAL_WARN(
+                    "dbaccess.core", "<" << _sURL << "> cannot be parse as vnd.sun.star.pkg URL");
+            }
         }
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
