@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <vcl/errinf.hxx>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
@@ -61,6 +62,7 @@
 #include <connectivity/DriversConfig.hxx>
 #include <dsntypes.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/uri.hxx>
 
 using namespace ::com::sun::star;
 
@@ -308,12 +310,38 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             OUString sStreamRelPath;
             if (sFileName.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
             {
-                // In this case the host contains the real path, and the path is the embedded stream name.
-                INetURLObject aURL(sFileName);
-                sFileName = aURL.GetHost(INetURLObject::DecodeMechanism::WithCharset);
-                sStreamRelPath = aURL.GetURLPath(INetURLObject::DecodeMechanism::WithCharset);
-                if (sStreamRelPath.startsWith("/"))
-                    sStreamRelPath = sStreamRelPath.copy(1);
+                // In this case the authority contains the real path, and the path is the embedded stream name.
+                auto const uri = css::uri::UriReferenceFactory::create(GetComponentContext())
+                    ->parse(sFileName);
+                if (uri.is() && uri->isAbsolute() && uri->isHierarchical()
+                    && uri->hasAuthority() && !uri->hasQuery() && !uri->hasFragment())
+                {
+                    auto const auth = uri->getAuthority();
+                    auto const decAuth = rtl::Uri::decode(
+                        auth, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8);
+                    auto path = uri->getPath();
+                    if (!path.isEmpty()) {
+                        assert(path[0] == '/');
+                        path = path.copy(1);
+                    }
+                    auto const decPath = rtl::Uri::decode(
+                        path, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8);
+                        //TODO: really decode path?
+                    if (auth.isEmpty() == decAuth.isEmpty() && path.isEmpty() == decPath.isEmpty())
+                    {
+                        // Decoding of auth and path to UTF-8 succeeded:
+                        sFileName = decAuth;
+                        sStreamRelPath = decPath;
+                    } else {
+                        SAL_WARN(
+                            "dbaccess",
+                            "<" << sFileName << "> cannot be parse as vnd.sun.star.pkg URL");
+                    }
+                } else {
+                    SAL_WARN(
+                        "dbaccess",
+                        "<" << sFileName << "> cannot be parse as vnd.sun.star.pkg URL");
+                }
             }
 
             pMedium = new SfxMedium(sFileName, (StreamMode::READ | StreamMode::NOCREATE));
