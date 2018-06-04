@@ -46,7 +46,7 @@ XMLFilterTabDialog::XMLFilterTabDialog(weld::Window *pParent,
     , mpXSLTPage(new XMLFilterTabPageXSLT(m_xTabCtrl->get_page("transformation"), m_xDialog.get()))
 {
     mpOldInfo = pInfo;
-    mpNewInfo = new filter_info_impl( *mpOldInfo );
+    mpNewInfo.reset( new filter_info_impl( *mpOldInfo ) );
 
     OUString aTitle(m_xDialog->get_title());
     aTitle = aTitle.replaceAll("%s", mpNewInfo->maFilterName);
@@ -54,19 +54,18 @@ XMLFilterTabDialog::XMLFilterTabDialog(weld::Window *pParent,
 
     m_xOKBtn->connect_clicked( LINK( this, XMLFilterTabDialog, OkHdl ) );
 
-    mpBasicPage->SetInfo( mpNewInfo );
-    mpXSLTPage->SetInfo( mpNewInfo );
+    mpBasicPage->SetInfo( mpNewInfo.get() );
+    mpXSLTPage->SetInfo( mpNewInfo.get() );
 }
 
 XMLFilterTabDialog::~XMLFilterTabDialog()
 {
-    delete mpNewInfo;
 }
 
 bool XMLFilterTabDialog::onOk()
 {
-    mpXSLTPage->FillInfo( mpNewInfo );
-    mpBasicPage->FillInfo( mpNewInfo );
+    mpXSLTPage->FillInfo( mpNewInfo.get() );
+    mpBasicPage->FillInfo( mpNewInfo.get() );
 
     OString sErrorPage;
     const char* pErrorId = nullptr;

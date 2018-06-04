@@ -34,7 +34,7 @@ public:
 
     bool onOk();
 
-    filter_info_impl* getNewFilterInfo() const { return mpNewInfo;}
+    filter_info_impl* getNewFilterInfo() const { return mpNewInfo.get(); }
 
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
@@ -42,7 +42,7 @@ private:
     DECL_LINK(OkHdl, weld::Button&, void);
 
     const filter_info_impl* mpOldInfo;
-    filter_info_impl* mpNewInfo;
+    std::unique_ptr<filter_info_impl>   mpNewInfo;
 
     std::unique_ptr<weld::Notebook>     m_xTabCtrl;
     std::unique_ptr<weld::Button>       m_xOKBtn;
