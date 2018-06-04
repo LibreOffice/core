@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_4b93f9fa",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-04T07:40:17Z",
+      "side": 1,
+      "message": "sounds confusing to me (I read it as \"Hide Xs with Y\", not as \"Hide those Xs that match Y\"); and what is a \"paragraph of a database filed\"",
+      "revId": "45aefcf77233ae01ff71e6649e8df396a2a7e7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_6b90b5ed",
+        "filename": "svx/uiconfig/ui/safemodedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-04T07:40:17Z",
+      "side": 1,
+      "message": "at least to me, the original makes it obvious what will happen (create a .zip file), while the new one leaves me puzzled (archive it to where? if it archives the current one, does it also create a fresh new one?)",
+      "revId": "45aefcf77233ae01ff71e6649e8df396a2a7e7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
