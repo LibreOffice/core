@@ -64,8 +64,6 @@ namespace {
             class provides full access to the configuration data and following
             implementations will support some special query modes.
 
-    @author     as96863
-
     @docdate    10.03.2003 by as96863
 
     @todo       <ul>
