@@ -142,8 +142,8 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
         m_plbForm->Hide();
     }
 
-    m_pSearchEngine = new FmSearchEngine(
-        ::comphelper::getProcessComponentContext(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields );
+    m_pSearchEngine.reset( new FmSearchEngine(
+        ::comphelper::getProcessComponentContext(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields ) );
     initCommon( fmscInitial.xCursor );
 
     if ( !fmscInitial.sFieldDisplayNames.isEmpty() )
@@ -168,11 +168,9 @@ void FmSearchDialog::dispose()
 
     SaveParams();
 
-    delete m_pConfig;
-    m_pConfig = nullptr;
+    m_pConfig.reset();
 
-    delete m_pSearchEngine;
-    m_pSearchEngine = nullptr;
+    m_pSearchEngine.reset();
 
     m_prbSearchForText.clear();
     m_prbSearchForNull.clear();
@@ -258,7 +256,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     }
 
 
-    m_pConfig = new FmSearchConfigItem;
+    m_pConfig.reset( new FmSearchConfigItem );
     LoadParams();
 
     m_pcmbSearchText->SetText(sInitialText);
