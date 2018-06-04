@@ -83,7 +83,7 @@ void AccessibleCell::Init()
         {
             // non-empty text -> use full-fledged edit source right away
 
-            mpText = new AccessibleTextHelper( o3tl::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
+            mpText.reset( new AccessibleTextHelper( o3tl::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow) ) );
             if( mxCell.is() && mxCell.get()->IsActiveCell() )
                 mpText->SetFocus();
             mpText->SetEventSource(this);
@@ -520,8 +520,7 @@ void AccessibleCell::disposing()
     if (mpText != nullptr)
     {
         mpText->Dispose();
-        delete mpText;
-        mpText = nullptr;
+        mpText.reset();
     }
 
     // Cleanup.  Remove references to objects to allow them to be
