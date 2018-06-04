@@ -99,7 +99,13 @@ SelectPersonaDialog::~SelectPersonaDialog()
 void SelectPersonaDialog::dispose()
 {
     if (m_pSearchThread.is())
+    {
+        // Release the solar mutex, so the thread is not affected by the race
+        // when it's after the m_bExecute check but before taking the solar
+        // mutex.
+        SolarMutexReleaser aReleaser;
         m_pSearchThread->join();
+    }
 
     m_pEdit.clear();
     m_pSearchButton.clear();
@@ -772,13 +778,15 @@ void SearchAndParseThread::execute()
                 continue;
             }
             INetURLObject aURLObj( sPreviewFile );
+
+            // Stop the thread if requested -- before taking the solar mutex.
+            if( !m_bExecute )
+                return;
+
             // for VCL to be able to create bitmaps / do visual changes in the thread
             SolarMutexGuard aGuard;
             aFilter.ImportGraphic( aGraphic, aURLObj );
             Bitmap aBmp = aGraphic.GetBitmap();
-
-            if( !m_bExecute )
-                return;
 
             m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
             m_pPersonaDialog->setOptimalLayoutSize();
