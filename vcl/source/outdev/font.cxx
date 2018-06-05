@@ -168,7 +168,7 @@ FontMetric OutputDevice::GetFontMetric() const
     if( mbNewFont && !ImplNewFont() )
         return aMetric;
 
-    LogicalFontInstance* pFontInstance = mpFontInstance;
+    LogicalFontInstance* pFontInstance = mpFontInstance.get();
     ImplFontMetricDataRef xFontMetric = pFontInstance->mxFontMetric;
 
     // prepare metric
@@ -475,11 +475,7 @@ long OutputDevice::GetFontExtLeading() const
 void OutputDevice::ImplClearFontData( const bool bNewFontLists )
 {
     // the currently selected logical font is no longer needed
-    if ( mpFontInstance )
-    {
-        mpFontInstance->Release();
-        mpFontInstance = nullptr;
-    }
+    mpFontInstance.clear();
 
     mbInitFont = true;
     mbNewFont = true;
@@ -884,12 +880,11 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
 
                     // get the name of the first available font
                     float fExactHeight = static_cast<float>(aSize.Height());
-                    LogicalFontInstance* pFontInstance = pOutDev->mpFontCache->GetFontInstance( pOutDev->mpFontCollection, aFont, aSize, fExactHeight );
+                    rtl::Reference<LogicalFontInstance> pFontInstance = pOutDev->mpFontCache->GetFontInstance( pOutDev->mpFontCollection, aFont, aSize, fExactHeight );
                     if (pFontInstance)
                     {
                         assert(pFontInstance->GetFontFace());
                         aFont.SetFamilyName(pFontInstance->GetFontFace()->GetFamilyName());
-                        pFontInstance->Release();
                     }
                 }
             }
@@ -1034,12 +1029,12 @@ bool OutputDevice::ImplNewFont() const
         aSize.setWidth( 1 );
 
     // get font entry
-    LogicalFontInstance* pOldFontInstance = mpFontInstance;
+    rtl::Reference<LogicalFontInstance> pOldFontInstance = mpFontInstance;
     mpFontInstance = mpFontCache->GetFontInstance( mpFontCollection, maFont, aSize, fExactHeight );
-    if( pOldFontInstance )
-        pOldFontInstance->Release();
+    bool bNewFontInstance = pOldFontInstance.get() != mpFontInstance.get();
+    pOldFontInstance.clear();
 
-    LogicalFontInstance* pFontInstance = mpFontInstance;
+    LogicalFontInstance* pFontInstance = mpFontInstance.get();
 
     if (!pFontInstance)
     {
@@ -1049,7 +1044,7 @@ bool OutputDevice::ImplNewFont() const
 
     // mark when lower layers need to get involved
     mbNewFont = false;
-    if( pFontInstance != pOldFontInstance )
+    if( bNewFontInstance )
         mbInitFont = true;
 
     // select font when it has not been initialized yet
@@ -1350,7 +1345,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         // if the system-specific glyph fallback is active
         aFontSelData.mpFontInstance = mpFontInstance; // reset the fontinstance to base-level
 
-        LogicalFontInstance* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontCollection,
+        rtl::Reference<LogicalFontInstance> pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontCollection,
             aFontSelData, nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
             break;
@@ -1364,7 +1359,6 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
             if( mpFontInstance->GetFontFace() == pFallbackFont->GetFontFace() &&
                 aMissingCodes.indexOf(0x202F) == -1 )
             {
-                pFallbackFont->Release();
                 continue;
             }
         }
@@ -1381,8 +1375,6 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
             if (nFallbackLevel == MAX_FALLBACK-1)
                 pMultiSalLayout->SetIncomplete(true);
         }
-
-        pFallbackFont->Release();
 
         // break when this fallback was sufficient
         if( !rLayoutArgs.PrepareFallback() )

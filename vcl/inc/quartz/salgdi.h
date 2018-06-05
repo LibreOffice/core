@@ -71,7 +71,7 @@ public:
     bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
-    LogicalFontInstance*            CreateFontInstance(const FontSelectPattern&) const override;
+    rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const override;
 
 protected:
                                     CoreTextFontFace( const CoreTextFontFace& );
@@ -85,7 +85,7 @@ private:
 
 class CoreTextStyle : public LogicalFontInstance
 {
-    friend LogicalFontInstance* CoreTextFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
 public:
     ~CoreTextStyle();
@@ -159,7 +159,7 @@ class AquaSalGraphics : public SalGraphics
     RGBAColor                               maFillColor;
 
     // Device Font settings
-    CoreTextStyle*                          mpTextStyle[MAX_FALLBACK];
+    rtl::Reference<CoreTextStyle>           mpTextStyle[MAX_FALLBACK];
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;
