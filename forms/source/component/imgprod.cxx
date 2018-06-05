@@ -329,71 +329,27 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 
 void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 {
-    Bitmap              aBmp( rGraphic.GetBitmapEx().GetBitmap() );
-    BitmapReadAccess*   pBmpAcc = aBmp.AcquireReadAccess();
+    sal_uInt32 nRMask = 0;
+    sal_uInt32 nGMask = 0;
+    sal_uInt32 nBMask = 0;
+    sal_uInt32 nAMask = 0;
+    sal_uInt32 nWidth = 0;
+    sal_uInt32 nHeight = 0;
+    sal_uInt8 nBitCount = 0;
+    css::uno::Sequence< sal_Int32 > aRGBPal;
+    rGraphic.GetBitmapEx().GetColorModel(aRGBPal, nRMask, nGMask, nBMask, nAMask, mnTransIndex, nWidth, nHeight, nBitCount);
 
-    if( pBmpAcc )
+    // create temporary list to hold interfaces
+    ConsumerList_t aTmp = maConsList;
+
+    // iterate through interfaces
+    for (auto const& elem : aTmp)
     {
-        sal_uInt16       nPalCount = 0;
-        sal_uInt32       nRMask = 0;
-        sal_uInt32       nGMask = 0;
-        sal_uInt32       nBMask = 0;
-        sal_uInt32       nAMask = 0;
-        css::uno::Sequence< sal_Int32 >    aRGBPal;
-
-        if( pBmpAcc->HasPalette() )
-        {
-            nPalCount = pBmpAcc->GetPaletteEntryCount();
-
-            if( nPalCount )
-            {
-                aRGBPal = css::uno::Sequence< sal_Int32 >( nPalCount + 1 );
-
-                sal_Int32* pTmp = aRGBPal.getArray();
-
-                for( sal_uInt32 i = 0; i < nPalCount; i++, pTmp++ )
-                {
-                    const BitmapColor& rCol = pBmpAcc->GetPaletteColor( static_cast<sal_uInt16>(i) );
-
-                    *pTmp = static_cast<sal_Int32>(rCol.GetRed()) << sal_Int32(24);
-                    *pTmp |= static_cast<sal_Int32>(rCol.GetGreen()) << sal_Int32(16);
-                    *pTmp |= static_cast<sal_Int32>(rCol.GetBlue()) << sal_Int32(8);
-                    *pTmp |= sal_Int32(0x000000ffL);
-                }
-
-                if( rGraphic.IsTransparent() )
-                {
-                    // append transparent entry
-                    *pTmp = sal_Int32(0xffffff00L);
-                    mnTransIndex = nPalCount;
-                    nPalCount++;
-                }
-                else
-                    mnTransIndex = 0;
-
-            }
-        }
-        else
-        {
-            nRMask = 0xff000000UL;
-            nGMask = 0x00ff0000UL;
-            nBMask = 0x0000ff00UL;
-            nAMask = 0x000000ffUL;
-        }
-
-        // create temporary list to hold interfaces
-        ConsumerList_t aTmp = maConsList;
-
-        // iterate through interfaces
-        for (auto const& elem : aTmp)
-        {
-            elem->init( pBmpAcc->Width(), pBmpAcc->Height() );
-            elem->setColorModel( pBmpAcc->GetBitCount(),aRGBPal, nRMask, nGMask, nBMask, nAMask );
-        }
-
-        Bitmap::ReleaseAccess( pBmpAcc );
-        mbConsInit = true;
+        elem->init( nWidth, nHeight );
+        elem->setColorModel( nBitCount,aRGBPal, nRMask, nGMask, nBMask, nAMask );
     }
+
+    mbConsInit = true;
 }
 
 
