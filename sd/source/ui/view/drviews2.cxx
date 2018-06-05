@@ -1650,6 +1650,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_TEXTATTR_DLG:
         {
+            if (mpDrawView->IsTextEdit())
+                mpDrawView->SdrEndTextEdit();
             SetCurrentFunction( FuTextAttrDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
