@@ -79,32 +79,12 @@ $(foreach lang,$(gb_HELP_LANGS),\
 
 endef
 
-# Add a help file.
-#
-# gb_AllLangHelp_add_helpfile module file
-define gb_AllLangHelp_add_helpfile
-$(foreach lang,$(gb_HELP_LANGS),\
-	$(call gb_HelpTarget_add_helpfile,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)) \
-)
-
-endef
-
 # Add one or more help files.
 #
 # gb_AllLangHelp_add_helpfiles module file(s)
 define gb_AllLangHelp_add_helpfiles
 $(foreach lang,$(gb_HELP_LANGS),\
 	$(call gb_HelpTarget_add_helpfiles,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)) \
-)
-
-endef
-
-# Add additional localized file to the help pack.
-#
-# gb_AllLangHelp_add_localized_file module basedir file
-define gb_AllLangHelp_add_localized_file
-$(foreach lang,$(gb_HELP_LANGS),\
-	$(call gb_HelpTarget_add_file,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)/$(lang)/$(3)) \
 )
 
 endef
