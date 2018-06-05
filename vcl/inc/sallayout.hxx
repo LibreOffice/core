@@ -352,7 +352,7 @@ private:
 
     void            ParseFeatures(const OUString& name);
 
-    LogicalFontInstance* const mpFont;
+    rtl::Reference<LogicalFontInstance> const mpFont;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
     std::vector<GlyphItem> m_GlyphItems;

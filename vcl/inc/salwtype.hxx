@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_SALWTYPE_HXX
 
 #include <i18nlangtag/lang.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 
@@ -238,7 +239,7 @@ struct SalFrameState
 
 struct SalInputContext
 {
-    LogicalFontInstance* mpFont;
+    rtl::Reference<LogicalFontInstance> mpFont;
     LanguageType           meLanguage;
     InputContextFlags      mnOptions;
 };
