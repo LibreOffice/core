@@ -1608,6 +1608,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf116486, "tdf116486.docx")
     CPPUNIT_ASSERT_EQUAL( OUString("4006"), aTop );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf117843, "tdf117843.docx")
+{
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
+    uno::Reference<text::XText> xHeaderText
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
+    // This was 4025, increased top paragraph margin was unexpected.
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getParagraphOfText(1, xHeaderText), "ParaTopMargin"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
