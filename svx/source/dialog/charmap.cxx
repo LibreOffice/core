@@ -758,7 +758,8 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
     // restore last selected unicode
     int nMapIndex = mxFontCharMap->GetIndexFromChar(getSelectedChar());
-    SelectIndex(nMapIndex);
+    if (nMapIndex != nSelectedIndex)
+        SelectIndex(nMapIndex);
 
     aVscrollSB->Show();
 
