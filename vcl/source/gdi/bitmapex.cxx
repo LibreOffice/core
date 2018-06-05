@@ -250,17 +250,12 @@ Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
 
 Bitmap BitmapEx::GetMask() const
 {
-    Bitmap aRet( maMask );
+    if (!IsAlpha())
+        return maMask;
 
-    if (IsAlpha())
-    {
-
-        BitmapEx aMaskEx(aRet);
-        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
-        aRet = aMaskEx.GetBitmap();
-    }
-
-    return aRet;
+    BitmapEx aMaskEx(maMask);
+    BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
+    return aMaskEx.GetBitmap();
 }
 
 AlphaMask BitmapEx::GetAlpha() const
@@ -748,22 +743,19 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 
 Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
 {
-        Bitmap aAlpha( GetAlpha().GetBitmap() );
+    Bitmap::ScopedReadAccess pReadAccess( const_cast<Bitmap&>(maBitmap) );
+    assert( pReadAccess );
 
-        Bitmap aTestBitmap(maBitmap);
-        Bitmap::ScopedReadAccess pReadAccess( aTestBitmap );
-        assert( pReadAccess );
+    Color aColor = pReadAccess->GetColor( nY, nX ).GetColor();
 
-        Color aColor = pReadAccess->GetColor( nY, nX ).GetColor();
-
-        if (!aAlpha.IsEmpty())
-        {
-            Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.AcquireReadAccess(), aAlpha );
-            aColor.SetTransparency( pAlphaReadAccess->GetPixel( nY, nX ).GetIndex() );
-        }
-        else
-            aColor.SetTransparency(255);
-        return aColor;
+    if( IsAlpha() )
+    {
+        Bitmap::ScopedReadAccess pAlphaReadAccess( const_cast<Bitmap&>(maMask).AcquireReadAccess(), const_cast<Bitmap&>(maMask) );
+        aColor.SetTransparency( pAlphaReadAccess->GetPixel( nY, nX ).GetIndex() );
+    }
+    else
+        aColor.SetTransparency(255);
+    return aColor;
 }
 
 // Shift alpha transparent pixels between cppcanvas/ implementations
@@ -883,7 +875,7 @@ BitmapEx BitmapEx::TransformBitmapEx(
 
     // force destination to 24 bit, we want to smooth output
     const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
-    const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bSmooth));
+    const Bitmap aDestination(impTransformBitmap(GetBitmapRef(), aDestinationSize, rTransformation, bSmooth));
 
     // create mask
     if(IsTransparent())
@@ -987,7 +979,7 @@ BitmapEx BitmapEx::getTransformed(
 
 BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const
 {
-    Bitmap aChangedBitmap(GetBitmap());
+    Bitmap aChangedBitmap(GetBitmapRef());
     bool bDone(false);
 
     for(sal_uInt32 a(rBColorModifierStack.count()); a && !bDone; )
@@ -1375,7 +1367,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
             }
         }
     }
-    *this = BitmapEx( GetBitmap(), aAlpha );
+    *this = BitmapEx( GetBitmapRef(), aAlpha );
 }
 
 // AS: Because JPEGs require the alpha channel provided separately (JPEG does not
@@ -1386,8 +1378,7 @@ void BitmapEx::GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sa
     if( IsEmpty() )
         return;
 
-    Bitmap aBmp( GetBitmap() );
-    Bitmap::ScopedReadAccess pRAcc(aBmp);
+    Bitmap::ScopedReadAccess pRAcc(const_cast<Bitmap&>(maBitmap));
 
     assert( pRAcc );
 
@@ -1410,7 +1401,7 @@ void BitmapEx::GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sa
     else
     {
         sal_uInt8 cAlphaVal = 0;
-        aAlpha = AlphaMask(aBmp.GetSizePixel(), &cAlphaVal);
+        aAlpha = AlphaMask(maBitmap.GetSizePixel(), &cAlphaVal);
     }
 
     AlphaMask::ScopedReadAccess pAAcc(aAlpha);
