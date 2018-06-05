@@ -159,7 +159,7 @@ class AquaSalGraphics : public SalGraphics
     RGBAColor                               maFillColor;
 
     // Device Font settings
-    CoreTextStyle*                          mpTextStyle[MAX_FALLBACK];
+    rtl::Reference<CoreTextStyle>           mpTextStyle[MAX_FALLBACK];
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;
