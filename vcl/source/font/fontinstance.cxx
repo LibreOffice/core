@@ -52,7 +52,7 @@ LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, cons
     , m_aFontSelData(rFontSelData)
     , m_pHbFont(nullptr)
     , m_nAveWidthFactor(1.0f)
-    , m_pFontFace(&rFontFace)
+    , m_pFontFace(&const_cast<PhysicalFontFace&>(rFontFace))
 {
     const_cast<FontSelectPattern*>(&m_aFontSelData)->mpFontInstance = this;
 }
