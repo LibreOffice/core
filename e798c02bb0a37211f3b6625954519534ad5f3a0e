@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_b9f2076e",
+        "filename": "offapi/com/sun/star/i18n/NativeNumberSupplier2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-05T11:55:12Z",
+      "side": 1,
+      "message": "Please write out LibreOffice instead of LO.",
+      "range": {
+        "startLine": 31,
+        "startChar": 12,
+        "endLine": 31,
+        "endChar": 14
+      },
+      "revId": "e798c02bb0a37211f3b6625954519534ad5f3a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_39d8d7ef",
+        "filename": "offapi/com/sun/star/i18n/NativeNumberSupplier2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-05T11:55:12Z",
+      "side": 1,
+      "message": "If possible I\u0027d rather not publish this, so we could modify if needed.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 9
+      },
+      "revId": "e798c02bb0a37211f3b6625954519534ad5f3a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_d9e7c3aa",
+        "filename": "offapi/com/sun/star/i18n/XNativeNumberSupplier2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-05T11:55:12Z",
+      "side": 1,
+      "message": "Please write out LibreOffice instead of LO.",
+      "range": {
+        "startLine": 32,
+        "startChar": 12,
+        "endLine": 32,
+        "endChar": 14
+      },
+      "revId": "e798c02bb0a37211f3b6625954519534ad5f3a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_59e593a6",
+        "filename": "offapi/com/sun/star/i18n/XNativeNumberSupplier2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-05T11:55:12Z",
+      "side": 1,
+      "message": "If possible I\u0027d rather not publish this, so we could modify if needed.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 9
+      },
+      "revId": "e798c02bb0a37211f3b6625954519534ad5f3a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f9ec7f91",
+        "filename": "offapi/com/sun/star/i18n/XNativeNumberSupplier2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-05T11:55:12Z",
+      "side": 1,
+      "message": "In .idl definitions please don\u0027t use the \"Hungarian\" prefixes; so NumberString, Locale, NativeNumberMode, NativeNumberParams (or even NativeNumberParameters).",
+      "revId": "e798c02bb0a37211f3b6625954519534ad5f3a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_39fff735",
+        "filename": "unotools/source/i18n/nativenumberwrapper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-05T11:55:12Z",
+      "side": 1,
+      "message": "Here rather rNativeNumberParams (for reference).",
+      "range": {
+        "startLine": 62,
+        "startChar": 36,
+        "endLine": 62,
+        "endChar": 55
+      },
+      "revId": "e798c02bb0a37211f3b6625954519534ad5f3a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
