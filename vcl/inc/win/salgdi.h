@@ -63,7 +63,7 @@ public:
                                 BYTE nPitchAndFamily  );
     virtual                 ~WinFontFace() override;
 
-    virtual PhysicalFontFace* Clone() const override;
+    virtual rtl::Reference<PhysicalFontFace> Clone() const override;
     virtual LogicalFontInstance* CreateFontInstance( const FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
