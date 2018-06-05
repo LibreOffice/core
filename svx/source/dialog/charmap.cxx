@@ -679,7 +679,8 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
     // restore last selected unicode
     int nMapIndex = mxFontCharMap->GetIndexFromChar(getSelectedChar());
-    SelectIndex(nMapIndex);
+    if (nMapIndex != nSelectedIndex)
+        SelectIndex(nMapIndex);
 
     // rearrange CharSet element in sync with nX- and nY-multiples
     Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
