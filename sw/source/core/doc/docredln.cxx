@@ -1269,12 +1269,22 @@ void SwRangeRedline::InvalidateRange()       // trigger the Layout
         if (pNode && pNode->IsTextNode())
         {
             SwTextNode* pNd = pNode->GetTextNode();
+
             SwUpdateAttr aHt(
                 n == nSttNd ? nSttCnt : 0,
                 n == nEndNd ? nEndCnt : pNd->GetText().getLength(),
                 RES_FMT_CHG);
 
             pNd->ModifyNotification(&aHt, &aHt);
+
+            // SwUpdateAttr must be handled first, otherwise indexes are off
+            if (GetType() == nsRedlineType_t::REDLINE_DELETE)
+            {
+                sal_Int32 const nStart(n == nSttNd ? nSttCnt : 0);
+                sw::RedlineDelText const hint(nStart,
+                    (n == nEndNd ? nEndCnt : pNd->GetText().getLength()) - nStart);
+                pNd->CallSwClientNotify(hint);
+            }
         }
     }
 }
