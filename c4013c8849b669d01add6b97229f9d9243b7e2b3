@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_b9992722",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-05T12:17:01Z",
+      "side": 1,
+      "message": "Here a transliteration-style attribute, if present, can overwrite an already set transliteration-spellout attribute.",
+      "revId": "c4013c8849b669d01add6b97229f9d9243b7e2b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
