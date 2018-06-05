@@ -33,36 +33,24 @@ class PhysicalFontCollection;
 
 class ImplFontCache
 {
-    // For access to Acquire and Release
-    friend class LogicalFontInstance;
-
 private:
     LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
-    int mnRef0Count; ///< number of unreferenced LogicalFontInstances
 
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
-    typedef std::unordered_map<FontSelectPattern,LogicalFontInstance*,IFSD_Hash,IFSD_Equal > FontInstanceList;
+    typedef std::unordered_map<FontSelectPattern, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
-    int                 CountUnreferencedEntries() const;
-    bool                IsFontInList(const LogicalFontInstance* pFont) const;
-
-    /// Increase the refcount of the given LogicalFontInstance.
-    void                Acquire(LogicalFontInstance*);
-    /// Decrease the refcount and potentially cleanup the entries with zero refcount from the cache.
-    void                Release(LogicalFontInstance*);
-
-    LogicalFontInstance* GetFontInstance(PhysicalFontCollection const*, FontSelectPattern&);
+    rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const*, FontSelectPattern&);
 
 public:
                         ImplFontCache();
                         ~ImplFontCache();
 
-    LogicalFontInstance* GetFontInstance( PhysicalFontCollection const *,
+    rtl::Reference<LogicalFontInstance> GetFontInstance( PhysicalFontCollection const *,
                              const vcl::Font&, const Size& rPixelSize, float fExactHeight);
-    LogicalFontInstance* GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPattern&,
+    rtl::Reference<LogicalFontInstance> GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
 
     void                Invalidate();

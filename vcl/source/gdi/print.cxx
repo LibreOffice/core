@@ -579,12 +579,7 @@ void Printer::ImplReleaseFonts()
     mbNewFont = true;
     mbInitFont = true;
 
-    if ( mpFontInstance )
-    {
-        mpFontInstance->Release();
-        mpFontInstance = nullptr;
-    }
-
+    mpFontInstance.clear();
     mpDeviceFontList.reset();
     mpDeviceFontSizeList.reset();
 }
@@ -945,11 +940,7 @@ void Printer::dispose()
         // OutputDevice Dtor is trying the same thing; that why we need to set
         // the FontEntry to NULL here
         // TODO: consolidate duplicate cleanup by Printer and OutputDevice
-        if ( mpFontInstance )
-        {
-            mpFontInstance->Release();
-            mpFontInstance = nullptr;
-        }
+        mpFontInstance.clear();
         mpDeviceFontList.reset();
         mpDeviceFontSizeList.reset();
         delete mpFontCache;
@@ -1086,11 +1077,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         {
             ReleaseGraphics();
             pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
-            if ( mpFontInstance )
-            {
-                mpFontInstance->Release();
-                mpFontInstance = nullptr;
-            }
+            mpFontInstance.clear();
             mpDeviceFontList.reset();
             mpDeviceFontSizeList.reset();
             // clean up font list
@@ -1121,11 +1108,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         {
             pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
 
-            if ( mpFontInstance )
-            {
-                mpFontInstance->Release();
-                mpFontInstance = nullptr;
-            }
+            mpFontInstance.clear();
             mpDeviceFontList.reset();
             mpDeviceFontSizeList.reset();
             delete mpFontCache;
