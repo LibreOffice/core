@@ -4584,7 +4584,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             // Nested inline array or non-value/non-string in array. The
             // original tokens are still in the ScTokenArray and not merged
             // into an ScMatrixToken. Set error but keep on tokenizing.
-            SetError( FormulaError::NestedArray);
+            SetError( FormulaError::BadArrayContent);
         }
         else if (!pNewToken)
         {

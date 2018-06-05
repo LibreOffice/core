@@ -81,6 +81,8 @@ enum class FormulaError : sal_uInt16
     RetryCircular        = 537,
 // If matrix could not be allocated.
     MatrixSize           = 538,
+// Bad inline array content, non-value/non-string.
+    BadArrayContent      = 539,
 
 // Interpreter: NA() not available condition, not a real error
     NotAvailable         = 0x7fff
@@ -159,6 +161,7 @@ inline bool isPublishedFormulaError( FormulaError nErr )
         case FormulaError::NoMacro:
         case FormulaError::DivisionByZero:
         case FormulaError::NestedArray:
+        case FormulaError::BadArrayContent:
             return true;
 
         case FormulaError::NotNumericString:
