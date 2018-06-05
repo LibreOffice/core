@@ -151,7 +151,15 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
         SCSIZE nCount = pDoc->GetEmptyLinesInBlock( rSortParam.nCol1, rSortParam.nRow1, nTab,
                                                     rSortParam.nCol2, rSortParam.nRow2, nTab, eFillDir );
         aExternalRange = ScRange( rSortParam.nCol1,
-                ::std::min( rSortParam.nRow1 + sal::static_int_cast<SCROW>( nCount ), MAXROW), nTab );
+                ::std::min( rSortParam.nRow1 + sal::static_int_cast<SCROW>( nCount ), MAXROW), nTab,
+                rSortParam.nCol2, rSortParam.nRow2, nTab);
+        aExternalRange.PutInOrder();
+    }
+    else if (rSortParam.nCol1 != rSortParam.nCol2 || rSortParam.nRow1 != rSortParam.nRow2)
+    {
+        // Preserve a preselected area.
+        aExternalRange = ScRange( rSortParam.nCol1, rSortParam.nRow1, nTab, rSortParam.nCol2, rSortParam.nRow2, nTab);
+        aExternalRange.PutInOrder();
     }
     else
         aExternalRange = ScRange( pData->GetCurX(), pData->GetCurY(), nTab );
