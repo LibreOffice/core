@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_b90927e0",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-05T07:27:22Z",
+      "side": 1,
+      "message": "Isn\u0027t this set too early? SetLowersFormatted() is a similar call, and we only set it if the frame is not valid.",
+      "revId": "35b277fcc6bd97af815e8a8678319ce759cea1e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
