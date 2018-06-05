@@ -23,6 +23,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/metaact.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -835,6 +836,14 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
         return false;
 
     if (rGraphic.GetLink().GetDataSize() == 0)
+        return false;
+
+    GfxLink aLink = rGraphic.GetLink();
+    SvMemoryStream aMemoryStream(const_cast<sal_uInt8*>(aLink.GetData()), aLink.GetDataSize(),
+                                 StreamMode::READ | StreamMode::WRITE);
+    GraphicDescriptor aDescriptor(aMemoryStream, nullptr);
+    if (aDescriptor.Detect(true) && aDescriptor.GetNumberOfImageComponents() == 4)
+        // 4 means CMYK, which is not handled.
         return false;
 
     Size aSize = rGraphic.GetSizePixel();
