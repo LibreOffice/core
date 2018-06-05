@@ -546,7 +546,7 @@ Separators getLocaleSeparators(const Locale& rLocale, const OUString& rLocStr)
 {
     // Guard the static variable below.
     osl::MutexGuard aGuard(theNatNumMutex::get());
-    // Maximum a couple hunderd of pairs with 4-byte structs - so no need for smart managing
+    // Maximum a couple hundred of pairs with 4-byte structs - so no need for smart managing
     static std::unordered_map<OUString, Separators> aLocaleSeparatorsBuf;
     auto it = aLocaleSeparatorsBuf.find(rLocStr);
     if (it == aLocaleSeparatorsBuf.end())
