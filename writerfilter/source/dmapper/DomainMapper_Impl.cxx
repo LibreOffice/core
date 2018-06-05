@@ -1258,9 +1258,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
                     m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
 
-                    if (!rAppendContext.m_aAnchoredObjects.empty())
+                    if (!rAppendContext.m_aAnchoredObjects.empty() && !IsInHeaderFooter())
                     {
                         // Remember what objects are anchored to this paragraph.
+                        // That list is only used for Word compat purposes, and
+                        // it is only relevant for body text.
                         AnchoredObjectInfo aInfo;
                         aInfo.m_xParagraph = xTextRange;
                         aInfo.m_aAnchoredObjects = rAppendContext.m_aAnchoredObjects;
