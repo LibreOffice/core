@@ -283,7 +283,7 @@ hb_font_t* CoreTextStyle::ImplInitHbFont()
     return InitHbFont(pHbFace);
 }
 
-PhysicalFontFace* CoreTextFontFace::Clone() const
+rtl::Reference<PhysicalFontFace> CoreTextFontFace::Clone() const
 {
     return new CoreTextFontFace( *this);
 }
@@ -504,7 +504,7 @@ static void fontEnumCallBack( const void* pValue, void* pContext )
     if( bFontEnabled)
     {
         const sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>(pValue);
-        CoreTextFontFace* pFontData = new CoreTextFontFace( rDFA, nFontId );
+        rtl::Reference<CoreTextFontFace> pFontData = new CoreTextFontFace( rDFA, nFontId );
         SystemFontList* pFontList = static_cast<SystemFontList*>(pContext);
         pFontList->AddFont( pFontData );
     }

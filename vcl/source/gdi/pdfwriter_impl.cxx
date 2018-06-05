@@ -3470,8 +3470,8 @@ bool PDFWriterImpl::emitFonts()
     // emit builtin font for widget appearances / variable text
     for (auto & item : m_aBuiltinFontToObjectMap)
     {
-        PdfBuiltinFontFace aData(m_aBuiltinFonts[item.first]);
-        item.second = emitBuiltinFont( &aData, item.second );
+        rtl::Reference<PdfBuiltinFontFace> aData(new PdfBuiltinFontFace(m_aBuiltinFonts[item.first]));
+        item.second = emitBuiltinFont( aData.get(), item.second );
     }
     appendBuiltinFontsToDict( aFontDict );
     aFontDict.append( "\n>>\nendobj\n\n" );

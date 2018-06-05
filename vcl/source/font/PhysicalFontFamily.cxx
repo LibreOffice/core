@@ -169,7 +169,7 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
             return false;
 
         // replace existing font face with a better one
-        it->reset(pNewFontFace); // insert at sort position
+        *it = pNewFontFace; // insert at sort position
         return true;
     }
 
@@ -265,7 +265,7 @@ void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollec
             pFamily = rFontCollection.FindOrCreateFontFamily(aFamilyName);
         }
         assert(pFamily);
-        PhysicalFontFace* pClonedFace = pFoundFontFace->Clone();
+        rtl::Reference<PhysicalFontFace> pClonedFace = pFoundFontFace->Clone();
 
 #if OSL_DEBUG_LEVEL > 0
         OUString aClonedFamilyName = GetEnglishSearchFontName( pClonedFace->GetFamilyName() );
@@ -273,8 +273,7 @@ void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollec
         assert( rFontCollection.FindOrCreateFontFamily( aClonedFamilyName ) == pFamily );
 #endif
 
-        if (! pFamily->AddFontFace( pClonedFace ) )
-            delete pClonedFace;
+        pFamily->AddFontFace( pClonedFace.get() );
     }
 }
 
