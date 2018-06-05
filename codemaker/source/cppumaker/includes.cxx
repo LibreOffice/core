@@ -161,7 +161,10 @@ void Includes::dump(
             if (m_hpp || pair.second == Dependencies::KIND_BASE
                 || !isInterfaceType(u2b(pair.first)))
             {
-                dumpInclude(out, u2b(pair.first), m_hpp);
+                // If we know our name, then avoid including ourselves.
+                if (!companionHdl || *companionHdl != pair.first) {
+                    dumpInclude(out, u2b(pair.first), m_hpp);
+                }
             } else {
                 bool ns = dumpNamespaceOpen(out, pair.first, false);
                 if (ns) {
