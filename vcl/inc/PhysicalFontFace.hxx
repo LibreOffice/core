@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 #define INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 
+#include <salhelper/simplereferenceobject.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/dllapi.h>
 
 #include "fontattributes.hxx"
@@ -40,7 +42,6 @@ public:
 
 
 // TODO: no more direct access to members
-// TODO: add reference counting
 // TODO: get rid of height/width for scalable fonts
 // TODO: make cloning cheaper
 
@@ -50,13 +51,11 @@ public:
  * It acts as a factory for its corresponding LogicalFontInstances and
  * can be extended to cache device and font instance specific data.
  */
-class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes
+class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes, public salhelper::SimpleReferenceObject
 {
 public:
-    virtual                ~PhysicalFontFace() {}
-
     virtual LogicalFontInstance* CreateFontInstance(const FontSelectPattern&) const;
-    virtual PhysicalFontFace* Clone() const = 0;
+    virtual rtl::Reference<PhysicalFontFace> Clone() const = 0;
 
     int                     GetHeight() const           { return mnHeight; }
     int                     GetWidth() const            { return mnWidth; }
@@ -68,6 +67,7 @@ public:
 
 protected:
     explicit PhysicalFontFace(const FontAttributes&);
+    PhysicalFontFace(const PhysicalFontFace&);
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)

@@ -41,12 +41,12 @@ enum class AddFontSubstituteFlags;
 class ImplDeviceFontList
 {
 private:
-    std::vector<PhysicalFontFace*> maDevFontVector;
+    std::vector<rtl::Reference<PhysicalFontFace>> maDevFontVector;
 
 public:
                         ImplDeviceFontList()        { maDevFontVector.reserve(1024); }
     void                Add( PhysicalFontFace* pFace )  { maDevFontVector.push_back( pFace ); }
-    PhysicalFontFace*   Get( int nIndex ) const     { return maDevFontVector[ nIndex ]; }
+    PhysicalFontFace*   Get( int nIndex ) const     { return maDevFontVector[ nIndex ].get(); }
     int                 Count() const               { return maDevFontVector.size(); }
 };
 

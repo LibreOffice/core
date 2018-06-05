@@ -23,6 +23,7 @@
 #include "fontselect.hxx"
 #include "impfontmetricdata.hxx"
 
+#include <rtl/ref.hxx>
 #include <unordered_map>
 #include <memory>
 
@@ -64,7 +65,7 @@ public: // TODO: make data members private
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
-    const PhysicalFontFace* GetFontFace() const { return m_pFontFace; }
+    const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
     int GetKashidaWidth();
@@ -91,7 +92,7 @@ private:
     const FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
-    const PhysicalFontFace* m_pFontFace;
+    rtl::Reference<PhysicalFontFace> m_pFontFace;
 };
 
 inline hb_font_t* LogicalFontInstance::GetHbFont()

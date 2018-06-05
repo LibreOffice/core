@@ -283,10 +283,7 @@ void PhysicalFontCollection::Add( PhysicalFontFace* pNewData )
 
     PhysicalFontFamily* pFoundData = FindOrCreateFontFamily( aSearchName );
 
-    bool bKeepNewData = pFoundData->AddFontFace( pNewData );
-
-    if( !bKeepNewData )
-        delete pNewData;
+    pFoundData->AddFontFace( pNewData );
 }
 
 // find the font from the normalized font family name
