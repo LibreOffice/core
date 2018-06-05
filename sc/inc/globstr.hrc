@@ -387,6 +387,7 @@
 #define STR_RECALC_MANUAL                       NC_("STR_RECALC_MANUAL", "Manual")
 #define STR_RECALC_AUTO                         NC_("STR_RECALC_AUTO", "Automatic")
 #define STR_ERR_LONG_NESTED_ARRAY               NC_("STR_ERR_LONG_NESTED_ARRAY", "Nested arrays are not supported.")
+#define STR_ERR_LONG_BAD_ARRAY_CONTENT          NC_("STR_ERR_LONG_BAD_ARRAY_CONTENT", "Unsupported inline array content.")
 #define STR_UNDO_TEXTTOCOLUMNS                  NC_("STR_UNDO_TEXTTOCOLUMNS", "Text to Columns")
 #define STR_DOC_UPDATED                         NC_("STR_DOC_UPDATED", "Your spreadsheet has been updated with changes saved by other users.")
 #define STR_DOC_WILLBESAVED                     NC_("STR_DOC_WILLBESAVED", "The spreadsheet must be saved now to activate sharing mode.\n\nDo you want to continue?")
