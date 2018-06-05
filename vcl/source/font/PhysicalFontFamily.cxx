@@ -100,7 +100,7 @@ PhysicalFontFamily::~PhysicalFontFamily()
 {
 }
 
-bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
+void PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
 {
     if( maFontFaces.empty() )
     {
@@ -162,19 +162,18 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
 
         // ignore duplicate if its quality is worse
         if( pNewFontFace->GetQuality() < pFoundFontFace->GetQuality() )
-            return false;
+            return;
 
         // keep the device font if its quality is good enough
         if( pNewFontFace->GetQuality() == pFoundFontFace->GetQuality() )
-            return false;
+            return;
 
         // replace existing font face with a better one
-        it->reset(pNewFontFace); // insert at sort position
-        return true;
+        *it = pNewFontFace; // insert at sort position
+        return;
     }
 
     maFontFaces.emplace(it, pNewFontFace); // insert at sort position
-    return true;
 }
 
 // get font attributes using the normalized font family name
@@ -265,7 +264,7 @@ void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollec
             pFamily = rFontCollection.FindOrCreateFontFamily(aFamilyName);
         }
         assert(pFamily);
-        PhysicalFontFace* pClonedFace = pFoundFontFace->Clone();
+        rtl::Reference<PhysicalFontFace> pClonedFace = pFoundFontFace->Clone();
 
 #if OSL_DEBUG_LEVEL > 0
         OUString aClonedFamilyName = GetEnglishSearchFontName( pClonedFace->GetFamilyName() );
@@ -273,8 +272,7 @@ void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollec
         assert( rFontCollection.FindOrCreateFontFamily( aClonedFamilyName ) == pFamily );
 #endif
 
-        if (! pFamily->AddFontFace( pClonedFace ) )
-            delete pClonedFace;
+        pFamily->AddFontFace( pClonedFace.get() );
     }
 }
 

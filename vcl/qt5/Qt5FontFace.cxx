@@ -114,6 +114,6 @@ bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) 
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
-PhysicalFontFace* Qt5FontFace::Clone() const { return new Qt5FontFace(*this); }
+rtl::Reference<PhysicalFontFace> Qt5FontFace::Clone() const { return new Qt5FontFace(*this); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

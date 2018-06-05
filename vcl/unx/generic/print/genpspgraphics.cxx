@@ -521,7 +521,7 @@ private:
 public:
     explicit ImplPspFontData( const psp::FastPrintFontInfo& );
     virtual sal_IntPtr      GetFontId() const override { return mnFontId; }
-    virtual PhysicalFontFace*   Clone() const override { return new ImplPspFontData( *this ); }
+    virtual rtl::Reference<PhysicalFontFace> Clone() const override { return new ImplPspFontData( *this ); }
 };
 
 ImplPspFontData::ImplPspFontData(const psp::FastPrintFontInfo& rInfo)
@@ -887,9 +887,9 @@ void GenPspGraphics::AnnounceFonts( PhysicalFontCollection* pFontCollection, con
                 nQuality += 10;
     }
 
-    ImplPspFontData* pFD = new ImplPspFontData( aInfo );
+    rtl::Reference<ImplPspFontData> pFD(new ImplPspFontData( aInfo ));
     pFD->IncreaseQualityBy( nQuality );
-    pFontCollection->Add( pFD );
+    pFontCollection->Add( pFD.get() );
 }
 
 bool GenPspGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& )

@@ -554,7 +554,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
 }
 
 
-static WinFontFace* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
+static rtl::Reference<WinFontFace> ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
                                          const NEWTEXTMETRICW* pMetric,
                                          DWORD nFontType )
 {
@@ -562,7 +562,7 @@ static WinFontFace* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
     if ( nFontType & RASTER_FONTTYPE )
         nHeight = pMetric->tmHeight - pMetric->tmInternalLeading;
 
-    WinFontFace* pData = new WinFontFace(
+    rtl::Reference<WinFontFace> pData = new WinFontFace(
         WinFont2DevFontAttributes(*pLogFont, *pMetric),
         nHeight,
         pLogFont->elfLogFont.lfCharSet,
@@ -653,7 +653,7 @@ sal_IntPtr WinFontFace::GetFontId() const
     return mnId;
 }
 
-PhysicalFontFace* WinFontFace::Clone() const
+rtl::Reference<PhysicalFontFace> WinFontFace::Clone() const
 {
     return new WinFontFace(*this);
 }
@@ -1108,10 +1108,10 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
             return 1;
         }
 
-        WinFontFace* pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
+        rtl::Reference<WinFontFace> pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
         pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
 
-        pInfo->mpList->Add( pData );
+        pInfo->mpList->Add( pData.get() );
     }
 
     return 1;
@@ -1312,11 +1312,11 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
         aDFS.maMapName = aFontName;
     */
 
-    WinFontFace* pFontData = new WinFontFace( aDFA, 0,
+    rtl::Reference<WinFontFace> pFontData = new WinFontFace( aDFA, 0,
         sal::static_int_cast<BYTE>(DEFAULT_CHARSET),
         sal::static_int_cast<BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
-    pFontData->SetFontId( reinterpret_cast<sal_IntPtr>(pFontData) );
-    pFontCollection->Add( pFontData );
+    pFontData->SetFontId( reinterpret_cast<sal_IntPtr>(pFontData.get()) );
+    pFontCollection->Add( pFontData.get() );
     return true;
 }
 

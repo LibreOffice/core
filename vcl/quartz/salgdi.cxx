@@ -801,8 +801,8 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
             free( const_cast<TTSimpleGlyphMetrics *>(pGlyphMetrics) );
         }
 
-        CoreTextFontFace rCTFontData(*pFontData, pFontData->GetFontId());
-        FontCharMapRef xFCMap = rCTFontData.GetFontCharMap();
+        rtl::Reference<CoreTextFontFace> rCTFontData(new CoreTextFontFace(*pFontData, pFontData->GetFontId()));
+        FontCharMapRef xFCMap = rCTFontData->GetFontCharMap();
         SAL_WARN_IF( !xFCMap.is() || !xFCMap->GetCharCount(), "vcl", "no charmap" );
 
         // get unicode<->glyph encoding
