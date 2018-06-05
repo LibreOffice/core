@@ -151,6 +151,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
     getCell(innerTable, "A1", "[outer:A2]\n[inner:A1]");
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf117843, "tdf117843.docx")
+{
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
+    uno::Reference<text::XText> xHeaderText
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
+    // This was 4025, increased top paragraph margin was unexpected.
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getParagraphOfText(1, xHeaderText), "ParaTopMargin"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf43017, "tdf43017.docx")
 {
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
