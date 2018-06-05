@@ -5105,7 +5105,7 @@ namespace osl_Directory
                 rc != osl::FileBase::E_None
           );
         }
-#endif /* WNT */
+#endif /* _WIN32 */
 
     CPPUNIT_TEST_SUITE(createPath);
         CPPUNIT_TEST(with_relative_path);

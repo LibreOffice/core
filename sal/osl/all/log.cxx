@@ -32,7 +32,7 @@
 
 #if defined ANDROID
 #include <android/log.h>
-#elif defined WNT
+#elif defined _WIN32
 #include <process.h>
 #include <windows.h>
 #define OSL_DETAIL_GETPID _getpid()
@@ -101,7 +101,7 @@ char const * getEnvironmentVariable(const char* env) {
     return p2;
 }
 
-#ifdef WNT
+#ifdef _WIN32
 # define INI_STRINGBUF_SIZE 1024
 
 bool getValueFromLoggingIniFile(const char* key, char* value) {
@@ -144,7 +144,7 @@ char const * getLogLevel() {
     if (env != nullptr)
         return env;
 
-#ifdef WNT
+#ifdef _WIN32
     static char logLevel[INI_STRINGBUF_SIZE];
     if (getValueFromLoggingIniFile("LogLevel", logLevel))
         return logLevel;
@@ -159,7 +159,7 @@ std::ofstream * getLogFile() {
 
     if (!logFile)
     {
-#ifdef WNT
+#ifdef _WIN32
         static char logFilePath[INI_STRINGBUF_SIZE];
         if (getValueFromLoggingIniFile("LogFilePath", logFilePath))
             logFile = logFilePath;
@@ -331,7 +331,7 @@ void sal_detail_log(
             *logFile << s.str() << std::endl;
         }
         else {
-#ifdef WNT
+#ifdef _WIN32
             // write to Windows debugger console, too
             OutputDebugStringA(s.str().c_str());
 #endif
