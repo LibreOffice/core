@@ -2612,11 +2612,28 @@ void GtkSalFrame::closePopup()
     pSVData->maWinData.mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
 }
 
+namespace
+{
+    //tdf#117981 translate embedded video window mouse events to parent coordinates
+    void translate_coords(GdkWindow* pSourceWindow, GtkWidget* pTargetWidget, int& rEventX, int& rEventY)
+    {
+        gpointer user_data=nullptr;
+        gdk_window_get_user_data(pSourceWindow, &user_data);
+        GtkWidget* pRealEventWidget = static_cast<GtkWidget*>(user_data);
+        if (pRealEventWidget)
+        {
+            gtk_widget_translate_coordinates(pRealEventWidget, pTargetWidget, rEventX, rEventY, &rEventX, &rEventY);
+        }
+    }
+}
+
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
     UpdateLastInputEventTime(pEvent->time);
 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    GtkWidget* pEventWidget = pThis->getMouseEventWidget();
+    bool bDifferentEventWindow = pEvent->window != widget_get_window(pEventWidget);
 
     SalMouseEvent aEvent;
     SalEvent nEventType = SalEvent::NONE;
@@ -2645,7 +2662,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     {
         //rhbz#1505379 if the window that got the event isn't our one, or there's none
         //of our windows under the mouse then close this popup window
-        if (pEvent->window != widget_get_window(pThis->getMouseEventWidget()) ||
+        if (bDifferentEventWindow ||
             gdk_device_get_window_at_position(pEvent->device, nullptr, nullptr) == nullptr)
         {
             if (pEvent->type == GDK_BUTTON_PRESS)
@@ -2655,10 +2672,16 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         }
     }
 
+    int nEventX = pEvent->x;
+    int nEventY = pEvent->y;
+
+    if (bDifferentEventWindow)
+        translate_coords(pEvent->window, pEventWidget, nEventX, nEventY);
+
     if (!aDel.isDeleted())
     {
-        int frame_x = (int)(pEvent->x_root - pEvent->x);
-        int frame_y = (int)(pEvent->y_root - pEvent->y);
+        int frame_x = static_cast<int>(pEvent->x_root - nEventX);
+        int frame_y = static_cast<int>(pEvent->y_root - nEventY);
         if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
         {
             pThis->m_bGeometryIsProvisional = false;
@@ -2872,18 +2895,27 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     UpdateLastInputEventTime(pEvent->time);
 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    GtkWidget* pEventWidget = pThis->getMouseEventWidget();
+    bool bDifferentEventWindow = pEvent->window != widget_get_window(pEventWidget);
 
     //If a menu, e.g. font name dropdown, is open, then under wayland moving the
     //mouse in the top left corner of the toplevel window in a
     //0,0,float-width,float-height area generates motion events which are
     //delivered to the dropdown
-    if (pThis->isFloatGrabWindow() && pEvent->window != widget_get_window(pThis->getMouseEventWidget()))
+    if (pThis->isFloatGrabWindow() && bDifferentEventWindow)
         return true;
 
     vcl::DeletionListener aDel( pThis );
 
-    int frame_x = (int)(pEvent->x_root - pEvent->x);
-    int frame_y = (int)(pEvent->y_root - pEvent->y);
+    int nEventX = pEvent->x;
+    int nEventY = pEvent->y;
+
+    if (bDifferentEventWindow)
+        translate_coords(pEvent->window, pEventWidget, nEventX, nEventY);
+
+    int frame_x = static_cast<int>(pEvent->x_root - nEventX);
+    int frame_y = static_cast<int>(pEvent->y_root - nEventY);
+
     if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
     {
         pThis->m_bGeometryIsProvisional = false;
