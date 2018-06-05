@@ -1186,6 +1186,8 @@ namespace
 {
     bool isDeleteForbidden(const SwPageFrame *pDel)
     {
+        if (pDel->IsDeleteForbidden())
+            return true;
         const SwLayoutFrame* pBody = pDel->FindBodyCont();
         const SwFrame* pBodyContent = pBody ? pBody->Lower() : nullptr;
         return pBodyContent && pBodyContent->IsDeleteForbidden();
@@ -1213,8 +1215,6 @@ namespace
              !pSibling->FindFirstBodyContent() &&
              (!pRefPage || !isDeleteForbidden(pSibling)) )
         {
-            if (pSibling->IsDeleteForbidden())
-                throw uno::RuntimeException("bad layout");
             pRoot->RemovePage( pRefSibling, SwRemoveResult::Next ) ;
             return false;
         }
