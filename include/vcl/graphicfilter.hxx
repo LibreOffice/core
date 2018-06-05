@@ -146,6 +146,7 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     GraphicFileFormat   nFormat;
     bool                bCompressed;
     bool                bOwnStream;
+    sal_uInt8 mnNumberOfImageComponents;
 
     void                ImpConstruct();
 
@@ -213,6 +214,9 @@ public:
 
     /** @return bits/pixel or 0 **/
     sal_uInt16          GetBitsPerPixel() const { return nBitsPerPixel; }
+
+    /** @return number of color channels */
+    sal_uInt8 GetNumberOfImageComponents() const { return mnNumberOfImageComponents; }
 
     /** @return filter number that is needed by the GraphFilter to read this format */
     static OUString GetImportFormatShortName( GraphicFileFormat nFormat );

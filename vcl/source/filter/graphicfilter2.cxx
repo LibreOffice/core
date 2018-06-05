@@ -99,6 +99,7 @@ void GraphicDescriptor::ImpConstruct()
     nBitsPerPixel = 0;
     nPlanes = 0;
     bCompressed = false;
+    mnNumberOfImageComponents = 0;
 }
 
 bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
@@ -374,6 +375,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                         .ReadUChar( nComponentsIdentifier )
                                         .ReadUChar( nSamplingFactor )
                                         .ReadUChar( nQuantizationTableDestinationSelector );
+                                    mnNumberOfImageComponents = nNumberOfImageComponents;
 
                                     // nSamplingFactor (lower nibble: vertical,
                                     // upper nibble: horizontal) is unused

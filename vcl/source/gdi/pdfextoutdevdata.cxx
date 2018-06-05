@@ -24,6 +24,7 @@
 #include "vcl/dllapi.h"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
+#include <vcl/graphicfilter.hxx>
 
 #include <set>
 #include <memory>
@@ -822,6 +823,14 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
         return false;
 
     // FIXME: ideally we'd also pre-empt the DPI related scaling too.
+
+    GfxLink aLink = rGraphic.GetLink();
+    SvMemoryStream aMemoryStream(const_cast<sal_uInt8*>(aLink.GetData()), aLink.GetDataSize(),
+                                 StreamMode::READ | StreamMode::WRITE);
+    GraphicDescriptor aDescriptor(aMemoryStream, nullptr);
+    if (aDescriptor.Detect(true) && aDescriptor.GetNumberOfImageComponents() == 4)
+        // 4 means CMYK, which is not handled.
+        return false;
 
     Size aSize = rGraphic.GetSizePixel();
     if (rGraphic.GetLink().GetDataSize() == 0)
