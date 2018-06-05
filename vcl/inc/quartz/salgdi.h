@@ -61,7 +61,7 @@ public:
                                     CoreTextFontFace( const FontAttributes&, sal_IntPtr nFontID );
     virtual                         ~CoreTextFontFace() override;
 
-    PhysicalFontFace*               Clone() const override;
+    rtl::Reference<PhysicalFontFace> Clone() const override;
     sal_IntPtr                      GetFontId() const override;
 
     int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
@@ -128,7 +128,7 @@ private:
     CTFontCollectionRef mpCTFontCollection;
     CFArrayRef mpCTFontArray;
 
-    std::unordered_map<sal_IntPtr,CoreTextFontFace*> maFontContainer;
+    std::unordered_map<sal_IntPtr, rtl::Reference<CoreTextFontFace>> maFontContainer;
 };
 
 
