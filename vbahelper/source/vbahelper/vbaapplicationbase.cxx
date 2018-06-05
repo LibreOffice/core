@@ -184,7 +184,7 @@ VbaApplicationBase::getScreenUpdating()
 {
     uno::Reference< frame::XModel > xModel = getCurrentDocument();
     if (!xModel.is())
-        return false;
+        return true;
     return !xModel->hasControllersLocked();
 }
 
