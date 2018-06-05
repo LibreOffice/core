@@ -10,7 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 
 #include <rtl/ustring.hxx>
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
@@ -43,9 +43,9 @@
 
 #include <test/callgrind.hxx>
 
-#include "calcconfig.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
+#include <calcconfig.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
 
 using namespace css;
 using namespace css::uno;
