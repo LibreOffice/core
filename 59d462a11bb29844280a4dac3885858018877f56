@@ -16,6 +16,24 @@
       "revId": "59d462a11bb29844280a4dac3885858018877f56",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_d9fd0370",
+        "filename": "sw/source/core/inc/TextFrameIndex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-05T10:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a22e58a_59c4b33f",
+      "revId": "59d462a11bb29844280a4dac3885858018877f56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
