@@ -3080,11 +3080,18 @@ private:
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
 
+    DECL_LINK(async_signal_changed, void*, void);
+
     static void signalChanged(GtkTreeView*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
-        SolarMutexGuard aGuard;
-        pThis->signal_changed();
+        //tdf#117991 selection change is sent before the focus change, and focus change
+        //is what will cause a spinbutton that currently has the focus to set its contents
+        //as the spin button value. So any LibreOffice callbacks on
+        //signal-change would happen before the spinbutton value-change occurs.
+        //To avoid this, send the signal-change to LibreOffice to occur after focus-change
+        //has been processed
+        Application::PostUserEvent(LINK(pThis, GtkInstanceTreeView, async_signal_changed));
     }
 
     static void signalRowActivated(GtkTreeView*, GtkTreePath*, GtkTreeViewColumn*, gpointer widget)
@@ -3390,6 +3397,10 @@ public:
     }
 };
 
+IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
+{
+    signal_changed();
+}
 
 class GtkInstanceSpinButton : public GtkInstanceEntry, public virtual weld::SpinButton
 {
