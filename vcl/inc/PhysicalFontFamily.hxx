@@ -67,7 +67,7 @@ public:
     void                InitMatchData( const utl::FontSubstConfiguration&,
                                        const OUString& rSearchName );
 
-    bool                AddFontFace( PhysicalFontFace* );
+    void                AddFontFace( PhysicalFontFace* );
 
     PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
@@ -78,7 +78,7 @@ static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, Fon
                                   FontFamily eFamily, const utl::FontNameAttr* pFontAttr );
 
 private:
-    std::vector< std::unique_ptr<PhysicalFontFace> > maFontFaces;
+    std::vector< rtl::Reference<PhysicalFontFace> > maFontFaces;
 
     OUString            maFamilyName;       // original font family name
     OUString            maSearchName;       // normalized font family name
