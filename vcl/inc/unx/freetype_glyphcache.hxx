@@ -114,7 +114,7 @@ private:
 public:
                             FreetypeFontFace( FreetypeFontInfo*, const FontAttributes& );
 
-    virtual LogicalFontInstance* CreateFontInstance( const FontSelectPattern& ) const override;
+    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const FontSelectPattern& ) const override;
     virtual rtl::Reference<PhysicalFontFace> Clone() const override   { return new FreetypeFontFace( *this ); }
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 };
@@ -122,7 +122,7 @@ public:
 // a class for cache entries for physical font instances that are based on serverfonts
 class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
 {
-    friend LogicalFontInstance* FreetypeFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
     FreetypeFont* mpFreetypeFont;
 
