@@ -454,7 +454,7 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
             pErrNumber = STR_LONG_ERR_NV;
         break;
         default:
-            pErrNumber = STR_ERROR_STR;
+            return ScResId(STR_ERROR_STR) + OUString::number( static_cast<int>(nErr) );
         break;
     }
     return ScResId(pErrNumber);
