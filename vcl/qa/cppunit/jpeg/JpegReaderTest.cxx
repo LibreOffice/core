@@ -23,7 +23,7 @@ class JpegReaderTest : public test::BootstrapFixtureBase
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
 
-    Bitmap loadJPG(const OUString& aURL);
+    Graphic loadJPG(const OUString& aURL);
 
 public:
     JpegReaderTest() :
@@ -92,19 +92,30 @@ bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long nAreaWi
     return true;
 }
 
-Bitmap JpegReaderTest::loadJPG(const OUString& aURL)
+int getNumberOfImageComponents(const Graphic& rGraphic)
+{
+    GfxLink aLink = rGraphic.GetGfxLink();
+    SvMemoryStream aMemoryStream(const_cast<sal_uInt8*>(aLink.GetData()), aLink.GetDataSize(),
+                                 StreamMode::READ | StreamMode::WRITE);
+    GraphicDescriptor aDescriptor(aMemoryStream, nullptr);
+    CPPUNIT_ASSERT(aDescriptor.Detect(true));
+    return aDescriptor.GetNumberOfImageComponents();
+}
+
+Graphic JpegReaderTest::loadJPG(const OUString& aURL)
 {
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     SvFileStream aFileStream(aURL, StreamMode::READ);
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
-    return aGraphic.GetBitmapEx().GetBitmap();
+    return aGraphic;
 }
 
 void JpegReaderTest::testReadRGB()
 {
-    Bitmap aBitmap = loadJPG(getFullUrl("JPEGTestRGB.jpeg"));
+    Graphic aGraphic = loadJPG(getFullUrl("JPEGTestRGB.jpeg"));
+    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
     CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
@@ -114,11 +125,14 @@ void JpegReaderTest::testReadRGB()
     CPPUNIT_ASSERT(checkRect(aBitmap, 1, 8, 8, Color(0xff, 0x00, 0x00), nMaxDelta));
     CPPUNIT_ASSERT(checkRect(aBitmap, 2, 8, 8, Color(0x00, 0xff, 0x00), nMaxDelta));
     CPPUNIT_ASSERT(checkRect(aBitmap, 3, 8, 8, Color(0x00, 0x00, 0xff), nMaxDelta));
+
+    CPPUNIT_ASSERT_EQUAL(3, getNumberOfImageComponents(aGraphic));
 }
 
 void JpegReaderTest::testReadGray()
 {
-    Bitmap aBitmap = loadJPG(getFullUrl("JPEGTestGray.jpeg"));
+    Graphic aGraphic = loadJPG(getFullUrl("JPEGTestGray.jpeg"));
+    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
     CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
@@ -130,11 +144,14 @@ void JpegReaderTest::testReadGray()
     CPPUNIT_ASSERT(checkRect(aBitmap, 1, 8, 8, Color(0x36, 0x36, 0x36), nMaxDelta));
     CPPUNIT_ASSERT(checkRect(aBitmap, 2, 8, 8, Color(0xb6, 0xb6, 0xb6), nMaxDelta));
     CPPUNIT_ASSERT(checkRect(aBitmap, 3, 8, 8, Color(0x12, 0x12, 0x12), nMaxDelta));
+
+    CPPUNIT_ASSERT_EQUAL(1, getNumberOfImageComponents(aGraphic));
 }
 
 void JpegReaderTest::testReadCMYK()
 {
-    Bitmap aBitmap = loadJPG(getFullUrl("JPEGTestCMYK.jpeg"));
+    Graphic aGraphic = loadJPG(getFullUrl("JPEGTestCMYK.jpeg"));
+    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
     CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
@@ -144,6 +161,8 @@ void JpegReaderTest::testReadCMYK()
     CPPUNIT_ASSERT(checkRect(aBitmap, 1, 8, 8, Color(0xff, 0x00, 0x00), maxDelta));
     CPPUNIT_ASSERT(checkRect(aBitmap, 2, 8, 8, Color(0x00, 0xff, 0x00), maxDelta));
     CPPUNIT_ASSERT(checkRect(aBitmap, 3, 8, 8, Color(0x00, 0x00, 0xff), maxDelta));
+
+    CPPUNIT_ASSERT_EQUAL(4, getNumberOfImageComponents(aGraphic));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JpegReaderTest);
