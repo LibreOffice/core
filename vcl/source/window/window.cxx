@@ -1738,7 +1738,7 @@ void Window::ImplNewInputContext()
     SalInputContext         aNewContext;
     const vcl::Font&        rFont = rInputContext.GetFont();
     const OUString&         rFontName = rFont.GetFamilyName();
-    LogicalFontInstance*    pFontInstance = nullptr;
+    rtl::Reference<LogicalFontInstance> pFontInstance;
     aNewContext.mpFont = nullptr;
     if (!rFontName.isEmpty())
     {
@@ -1761,9 +1761,6 @@ void Window::ImplNewInputContext()
     aNewContext.meLanguage  = rFont.GetLanguage();
     aNewContext.mnOptions   = rInputContext.GetOptions();
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
-
-    if ( pFontInstance )
-        pFontInstance->Release();
 }
 
 void Window::doLazyDelete()

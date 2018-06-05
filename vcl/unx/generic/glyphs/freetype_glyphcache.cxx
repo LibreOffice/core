@@ -357,7 +357,7 @@ FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes&
 {
 }
 
-LogicalFontInstance* FreetypeFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new FreetypeFontInstance(*this, rFSD);
 }
@@ -366,7 +366,7 @@ LogicalFontInstance* FreetypeFontFace::CreateFontInstance(const FontSelectPatter
 
 FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI )
 :   maGlyphList( 0),
-    mpFontInstance(rFSD.mpFontInstance),
+    mpFontInstance(static_cast<FreetypeFontInstance*>(rFSD.mpFontInstance.get())),
     mnRefCount(1),
     mnBytesUsed( sizeof(FreetypeFont) ),
     mpPrevGCFont( nullptr ),
@@ -385,8 +385,7 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     int nPrioEmbedded = nDefaultPrioEmbedded;
     // TODO: move update of mpFontInstance into FontEntry class when
     // it becomes responsible for the FreetypeFont instantiation
-    static_cast<FreetypeFontInstance*>(mpFontInstance)->SetFreetypeFont( this );
-    mpFontInstance->Acquire();
+    mpFontInstance->SetFreetypeFont( this );
 
     maFaceFT = pFI->GetFaceFT();
 
@@ -485,7 +484,7 @@ FreetypeFont::~FreetypeFont()
 
     mpFontInfo->ReleaseFaceFT();
 
-    mpFontInstance->Release();
+    mpFontInstance.clear();
 
     ReleaseFromGarbageCollect();
 }

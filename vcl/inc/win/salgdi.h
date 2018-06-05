@@ -64,7 +64,7 @@ public:
     virtual                 ~WinFontFace() override;
 
     virtual rtl::Reference<PhysicalFontFace> Clone() const override;
-    virtual LogicalFontInstance* CreateFontInstance( const FontSelectPattern& ) const override;
+    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;
@@ -170,7 +170,8 @@ private:
      **/
 
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
-    WinFontInstance*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
+    rtl::Reference<WinFontInstance>
+                            mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
     float                   mfFontScale[ MAX_FALLBACK ];        // allows metrics emulation of huge font sizes
     HRGN                    mhRegion;           // vcl::Region Handle
     HPEN                    mhDefPen;           // DefaultPen
@@ -181,8 +182,6 @@ private:
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     int                     mnPenWidth;         // line width
-
-    LogicalFontInstance* GetWinFontEntry(int nFallbackLevel);
 
     bool CacheGlyphs(const GenericSalLayout& rLayout);
     bool DrawCachedGlyphs(const GenericSalLayout& rLayout);

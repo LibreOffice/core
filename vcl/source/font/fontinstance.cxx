@@ -48,7 +48,6 @@ LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, cons
     , mnOrientation( 0 )
     , mbInit( false )
     , mpFontCache( nullptr )
-    , mnRefCount( 1 )
     , m_aFontSelData(rFontSelData)
     , m_pHbFont(nullptr)
     , m_nAveWidthFactor(1.0f)
@@ -113,27 +112,6 @@ void LogicalFontInstance::GetScale(double* nXScale, double* nYScale)
 
     if (nXScale)
         *nXScale = nWidth / nUPEM;
-}
-
-void LogicalFontInstance::Acquire()
-{
-    assert(mnRefCount < std::numeric_limits<decltype(mnRefCount)>::max()
-        && "LogicalFontInstance::Release() - refcount overflow");
-    if (mpFontCache)
-        mpFontCache->Acquire(this);
-    else
-        ++mnRefCount;
-}
-
-void LogicalFontInstance::Release()
-{
-    assert(mnRefCount > 0 && "LogicalFontInstance::Release() - refcount underflow");
-
-    if (mpFontCache)
-        mpFontCache->Release(this);
-    else
-        if (--mnRefCount == 0)
-            delete this;
 }
 
 void LogicalFontInstance::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )

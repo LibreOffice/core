@@ -310,11 +310,6 @@ std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs
     return std::unique_ptr<SalLayout>(aLayout);
 }
 
-LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
-{
-    return mpWinFontEntry[nFallbackLevel];
-}
-
 WinFontInstance::WinFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , m_hFont(nullptr)

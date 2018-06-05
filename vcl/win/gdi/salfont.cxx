@@ -658,7 +658,7 @@ rtl::Reference<PhysicalFontFace> WinFontFace::Clone() const
     return new WinFontFace(*this);
 }
 
-LogicalFontInstance* WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new WinFontInstance(*this, rFSD);
 }
@@ -922,33 +922,16 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
         {
             if( mhFonts[i] )
-            {
                 ::DeleteFont( mhFonts[i] );
-                mhFonts[ i ] = nullptr;
-            }
-            if (mpWinFontEntry[i])
-            {
-                GetWinFontEntry(i)->Release();
-                mpWinFontEntry[i] = nullptr;
-            }
-            mfFontScale[i] = 1.0;
+            mhFonts[ i ] = nullptr;
+            mpWinFontEntry[i] = nullptr;
         }
         return;
     }
 
-    if (mpWinFontEntry[nFallbackLevel])
-    {
-        GetWinFontEntry(nFallbackLevel)->Release();
-    }
     // WinSalGraphics::GetEmbedFontData does not set mpFontInstance
     // since it is interested in font file data only.
-    if (pFont->mpFontInstance)
-    {
-        pFont->mpFontInstance->Acquire();
-    }
-
-    WinFontInstance *pFontInstance = static_cast<WinFontInstance*>(pFont->mpFontInstance);
-    mpWinFontEntry[ nFallbackLevel ] = pFontInstance;
+    mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>( pFont->mpFontInstance.get() );
 
     HFONT hOldFont = nullptr;
     HFONT hNewFont = pFontInstance ? pFontInstance->GetHFONT() : nullptr;
