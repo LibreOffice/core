@@ -6779,7 +6779,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // This includes ascent / descent.
         aRectangle.setHeight(aRefDevFontMetric.GetLineHeight());
 
-        LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance;
+        LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance.get();
         if (pFontInstance->mnOrientation)
         {
             // Adapt rectangle for rotated text.
@@ -7269,7 +7269,7 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
 void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {
     // note: units in pFontInstance are ref device pixel
-    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance;
+    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance.get();
     long            nLineHeight = 0;
     long            nLinePos = 0;
 
@@ -7339,7 +7339,7 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLin
 void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {
     // note: units in pFontInstance are ref device pixel
-    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance;
+    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance.get();
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
@@ -7510,7 +7510,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
 void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontStrikeout eStrikeout, Color aColor )
 {
     // note: units in pFontInstance are ref device pixel
-    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance;
+    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance.get();
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
@@ -7607,7 +7607,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     aRect.SetBottom( rPos.Y()+aRefDevFontMetric.GetDescent() );
     aRect.SetTop( rPos.Y()-aRefDevFontMetric.GetAscent() );
 
-    LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance;
+    LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance.get();
     if (pFontInstance->mnOrientation)
     {
         tools::Polygon aPoly( aRect );
@@ -7642,7 +7642,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     updateGraphicsState();
 
     // note: units in pFontInstance are ref device pixel
-    LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance;
+    LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance.get();
     Color           aUnderlineColor = m_aCurrentPDFState.m_aTextLineColor;
     Color           aOverlineColor  = m_aCurrentPDFState.m_aOverlineColor;
     Color           aStrikeoutColor = m_aCurrentPDFState.m_aFont.GetColor();

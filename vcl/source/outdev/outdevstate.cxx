@@ -615,12 +615,7 @@ void OutputDevice::ImplReleaseFonts()
     mbNewFont = true;
     mbInitFont = true;
 
-    if ( mpFontInstance )
-    {
-        mpFontInstance->Release();
-        mpFontInstance = nullptr;
-    }
-
+    mpFontInstance.clear();
     mpDeviceFontList.reset();
     mpDeviceFontSizeList.reset();
 }

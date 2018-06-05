@@ -332,7 +332,7 @@ private:
     mutable VclPtr<OutputDevice>    mpPrevGraphics;     ///< Previous output device in list
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
-    mutable LogicalFontInstance*    mpFontInstance;
+    mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
     mutable ImplFontCache*          mpFontCache;
     mutable PhysicalFontCollection* mpFontCollection;
     mutable std::unique_ptr<ImplDeviceFontList>     mpDeviceFontList;

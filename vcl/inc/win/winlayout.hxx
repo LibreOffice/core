@@ -145,7 +145,7 @@ public:
 // win32 specific physical font instance
 class WinFontInstance : public LogicalFontInstance
 {
-    friend LogicalFontInstance* WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
 public:
     virtual ~WinFontInstance() override;
