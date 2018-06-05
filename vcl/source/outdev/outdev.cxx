@@ -171,8 +171,7 @@ void OutputDevice::dispose()
     mpOutDevStateStack.reset();
 
     // release the active font instance
-    if( mpFontInstance )
-        mpFontInstance->Release();
+    mpFontInstance.clear();
 
     // remove cached results of GetDevFontList/GetDevSizeList
     mpDeviceFontList.reset();

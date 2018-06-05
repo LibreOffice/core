@@ -45,7 +45,7 @@ PhysicalFontFace::PhysicalFontFace( const PhysicalFontFace& other )
 {
 }
 
-LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance> PhysicalFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new LogicalFontInstance(*this, rFSD);
 }
