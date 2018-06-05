@@ -283,7 +283,7 @@ hb_font_t* CoreTextStyle::ImplInitHbFont()
     return InitHbFont(pHbFace);
 }
 
-PhysicalFontFace* CoreTextFontFace::Clone() const
+rtl::Reference<PhysicalFontFace> CoreTextFontFace::Clone() const
 {
     return new CoreTextFontFace( *this);
 }
@@ -504,9 +504,9 @@ static void fontEnumCallBack( const void* pValue, void* pContext )
     if( bFontEnabled)
     {
         const sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>(pValue);
-        CoreTextFontFace* pFontData = new CoreTextFontFace( rDFA, nFontId );
+        rtl::Reference<CoreTextFontFace> pFontData = new CoreTextFontFace( rDFA, nFontId );
         SystemFontList* pFontList = static_cast<SystemFontList*>(pContext);
-        pFontList->AddFont( pFontData );
+        pFontList->AddFont( pFontData.get() );
     }
 }
 
@@ -517,11 +517,6 @@ SystemFontList::SystemFontList()
 
 SystemFontList::~SystemFontList()
 {
-    auto it = maFontContainer.cbegin();
-    for(; it != maFontContainer.cend(); ++it )
-    {
-        delete (*it).second;
-    }
     maFontContainer.clear();
 
     if( mpCTFontArray )
@@ -545,7 +540,7 @@ void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) co
     auto it = maFontContainer.cbegin();
     for(; it != maFontContainer.cend(); ++it )
     {
-        rFontCollection.Add( (*it).second->Clone() );
+        rFontCollection.Add( (*it).second->Clone().get() );
     }
 }
 
@@ -556,7 +551,7 @@ CoreTextFontFace* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
     {
         return nullptr;
     }
-    return (*it).second;
+    return (*it).second.get();
 }
 
 bool SystemFontList::Init()
