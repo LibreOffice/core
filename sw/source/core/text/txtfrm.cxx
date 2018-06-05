@@ -1543,18 +1543,30 @@ static bool isA11yRelevantAttribute(sal_uInt16 nWhich)
 // SwContentFrame::Modify() when appropriate.
 void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 {
-    auto const pHint(dynamic_cast<sw::LegacyModifyHint const*>(&rHint));
-    assert(pHint); // TODO this is the only type expected here for now
+    SfxPoolItem const* pOld(nullptr);
+    SfxPoolItem const* pNew(nullptr);
+    sw::RedlineDelText const* pRedlineDelText(nullptr);
 
-    SfxPoolItem const*const pOld(pHint->m_pOld);
-    SfxPoolItem const*const pNew(pHint->m_pNew);
-    SwTextNode const& rNode(static_cast<SwTextNode const&>(rModify));
+    if (auto const pHint = dynamic_cast<sw::LegacyModifyHint const*>(&rHint))
+    {
+        pOld = pHint->m_pOld;
+        pNew = pHint->m_pNew;
+    }
+    else if (auto const pHynt = dynamic_cast<sw::RedlineDelText const*>(&rHint))
+    {
+        pRedlineDelText = pHynt;
+    }
+    else
+    {
+        assert(!"unexpected hint");
+    }
 
     if (m_pMergedPara)
     {
         assert(m_pMergedPara->listener.IsListeningTo(&rModify));
     }
 
+    SwTextNode const& rNode(static_cast<SwTextNode const&>(rModify));
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
     // modifications concerning frame attributes are processed by the base class
@@ -1606,7 +1618,34 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     bool bSetFieldsDirty = false;
     bool bRecalcFootnoteFlag = false;
 
-    switch( nWhich )
+    if (pRedlineDelText)
+    {
+        if (m_pMergedPara)
+        {
+            sal_Int32 const nNPos = pRedlineDelText->nStart;
+            sal_Int32 const nNLen = pRedlineDelText->nLen;
+            nPos = MapModelToView(&rNode, nNPos);
+            // update merged before doing anything else
+            nLen = UpdateMergedParaForDelete(*m_pMergedPara, false, rNode, nNPos, nNLen);
+            const sal_Int32 m = -nNLen;
+            if (nLen && IsIdxInside(nPos, nLen))
+            {
+                if (!nLen)
+                    InvalidateSize();
+                else
+                    InvalidateRange( SwCharRange(nPos, TextFrameIndex(1)), m );
+            }
+            lcl_SetWrong( *this, rNode, nNPos, m, true );
+            if (nLen)
+            {
+                lcl_SetScriptInval( *this, nPos );
+                bSetFieldsDirty = bRecalcFootnoteFlag = true;
+                if (HasFollow())
+                    lcl_ModifyOfst( this, nPos, nLen );
+            }
+        }
+    }
+    else switch (nWhich)
     {
         case RES_LINENUMBER:
         {
