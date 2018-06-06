@@ -242,7 +242,8 @@ ImpGraphic::ImpGraphic(GraphicExternalLink const & rGraphicExternalLink) :
         mbDummyContext  ( false ),
         maGraphicExternalLink(rGraphicExternalLink),
         maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+        mbPrepared (false),
+        mnPageNumber(-1)
 {
 }
 
