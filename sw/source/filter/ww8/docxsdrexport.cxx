@@ -31,7 +31,6 @@
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <fmtfsize.hxx>
-#include <drawdoc.hxx>
 #include <frmatr.hxx>
 #include "docxattributeoutput.hxx"
 #include "docxexportfilter.hxx"

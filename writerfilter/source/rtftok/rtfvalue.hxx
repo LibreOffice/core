@@ -11,8 +11,24 @@
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFVALUE_HXX
 
 #include <dmapper/resourcemodel.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace embed
+{
+class XEmbeddedObject;
+}
+namespace io
+{
+class XInputStream;
+}
+}
+}
+}
 
 namespace writerfilter
 {

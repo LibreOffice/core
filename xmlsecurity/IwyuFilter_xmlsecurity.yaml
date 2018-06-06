@@ -1,0 +1,5 @@
+---
+blacklist:
+    xmlsecurity/qa/unit/pdfsigning/pdfsigning.cxx:
+    # complete type is needed
+    - com/sun/star/security/DocumentSignatureInformation.hpp

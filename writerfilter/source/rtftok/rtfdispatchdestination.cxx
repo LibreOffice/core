@@ -12,6 +12,7 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <filter/msfilter/escherex.hxx>
 #include <rtl/character.hxx>

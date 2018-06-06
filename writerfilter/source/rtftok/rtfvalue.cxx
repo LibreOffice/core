@@ -9,6 +9,7 @@
 
 #include "rtfreferenceproperties.hxx"
 #include "rtfdocumentimpl.hxx"
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 using namespace com::sun::star;
 

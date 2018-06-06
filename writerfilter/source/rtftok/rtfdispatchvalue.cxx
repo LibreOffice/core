@@ -9,8 +9,9 @@
 
 #include "rtfdocumentimpl.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/thread.h>
