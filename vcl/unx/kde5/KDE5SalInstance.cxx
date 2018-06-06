@@ -26,6 +26,7 @@
 
 #include <osl/process.h>
 
+#include "KDE5FilePicker.hxx"
 #include "KDE5SalData.hxx"
 #include "KDE5SalInstance.hxx"
 #include "KDE5SalFrame.hxx"
@@ -51,7 +52,7 @@ SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nSt
 uno::Reference<ui::dialogs::XFilePicker2>
 KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& xMSF)
 {
-    return SalInstance::createFilePicker(xMSF);
+    return uno::Reference<ui::dialogs::XFilePicker2>(new KDE5FilePicker(xMSF));
 }
 
 bool KDE5SalInstance::IsMainThread() const { return qApp->thread() == QThread::currentThread(); }
