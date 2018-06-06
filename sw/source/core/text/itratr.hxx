@@ -71,7 +71,7 @@ private:
 protected:
     void Chg( SwTextAttr const *pHt );
     void Rst( SwTextAttr const *pHt );
-    void CtorInitAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame * pFrame = nullptr);
+    void CtorInitAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const* pFrame = nullptr);
     explicit SwAttrIter(SwTextNode const * pTextNode)
         : m_pViewShell(nullptr)
         , m_pFont(nullptr)
@@ -93,7 +93,7 @@ public:
     /// All subclasses of this always have a SwTextFrame passed to the
     /// constructor, but SwAttrIter itself may be created without a
     /// SwTextFrame in certain special cases via this ctor here
-    SwAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf )
+    SwAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const*const pFrame = nullptr)
         : m_pViewShell(nullptr)
         , m_pFont(nullptr)
         , m_pScriptInfo(nullptr)
@@ -103,7 +103,9 @@ public:
         , m_nPropFont(0)
         , m_pTextNode(&rTextNode)
         , m_pMergedPara(nullptr)
-        { CtorInitAttrIter( rTextNode, rScrInf ); }
+    {
+        CtorInitAttrIter(rTextNode, rScrInf, pFrame);
+    }
 
     virtual ~SwAttrIter();
 
