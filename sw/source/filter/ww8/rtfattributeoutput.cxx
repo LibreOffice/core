@@ -65,7 +65,6 @@
 #include <filter/msfilter/rtfutil.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/xflgrit.hxx>
-#include <drawdoc.hxx>
 #include <docufld.hxx>
 #include <fmtclds.hxx>
 #include <fmtrowsplt.hxx>
@@ -82,7 +81,6 @@
 #include <ndole.hxx>
 #include <lineinfo.hxx>
 #include <rtf.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/export.hxx>

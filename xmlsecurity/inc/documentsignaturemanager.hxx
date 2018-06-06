@@ -26,12 +26,33 @@
 
 #include <svl/sigstruct.hxx>
 #include "xmlsignaturehelper.hxx"
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include "documentsignaturehelper.hxx"
-#include <com/sun/star/beans/PropertyValue.hpp>
 
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+struct PropertyValue;
+}
+namespace embed
+{
+class XStorage;
+}
+namespace graphic
+{
+class XGraphic;
+}
+namespace uno
+{
+class XComponentContext;
+}
+}
+}
+}
 class PDFSignatureHelper;
 
 /// Manages signatures (addition, removal), used by DigitalSignaturesDialog.

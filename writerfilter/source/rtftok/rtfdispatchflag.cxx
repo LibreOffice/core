@@ -13,6 +13,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <filter/msfilter/escherex.hxx>
 

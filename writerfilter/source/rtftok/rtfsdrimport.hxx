@@ -14,10 +14,30 @@
 #include <vector>
 
 #include <dmapper/GraphicZOrderHelper.hxx>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+class XPropertySet;
+struct PropertyValue;
+}
+namespace drawing
+{
+class XShape;
+class XShapes;
+}
+namespace lang
+{
+class XComponent;
+}
+}
+}
+}
 
 namespace writerfilter
 {

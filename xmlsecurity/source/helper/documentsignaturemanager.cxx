@@ -29,12 +29,11 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/base64.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sax/tools/converter.hxx>
 #include <tools/datetime.hxx>
 #include <o3tl/make_unique.hxx>
 

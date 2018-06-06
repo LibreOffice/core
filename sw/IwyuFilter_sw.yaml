@@ -250,4 +250,5 @@ blacklist:
     - com/sun/star/text/XDocumentIndexMark.hpp
     sw/qa/extras/rtfexport/rtfexport.cxx:
     # complete type is wanted
+    - com/sun/star/awt/XBitmap.hpp
     - com/sun/star/text/XTextColumns.hpp

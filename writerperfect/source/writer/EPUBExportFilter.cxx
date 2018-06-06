@@ -19,7 +19,6 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>

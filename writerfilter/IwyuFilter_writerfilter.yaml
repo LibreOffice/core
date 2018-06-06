@@ -6,3 +6,6 @@ blacklist:
     # the case for all of LO's supported platforms.
     # See <https://github.com/include-what-you-use/include-what-you-use/issues/175>.
     - dmapper/GraphicZOrderHelper.hxx
+    writerfilter/source/rtftok/rtfvalue.cxx:
+    # complete type is needed
+    - com/sun/star/embed/XEmbeddedObject.hpp

@@ -10,7 +10,6 @@
 #include "rtfdocumentimpl.hxx"
 #include <memory>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -21,7 +20,6 @@
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <comphelper/string.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <tools/globname.hxx>
 #include <tools/datetimeutils.hxx>
 #include <comphelper/classids.hxx>
@@ -35,6 +33,8 @@
 #include <rtl/uri.hxx>
 #include <rtl/tencinfo.h>
 #include <oox/helper/graphichelper.hxx>
+#include <vcl/wmfexternal.hxx>
+#include <vcl/graph.hxx>
 #include "rtfsdrimport.hxx"
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"

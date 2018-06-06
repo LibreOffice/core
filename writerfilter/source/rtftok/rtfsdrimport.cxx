@@ -27,6 +27,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>

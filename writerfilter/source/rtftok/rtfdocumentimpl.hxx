@@ -15,9 +15,6 @@
 #include <vector>
 #include <boost/optional.hpp>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
@@ -33,6 +30,27 @@ class SvStream;
 namespace oox
 {
 class GraphicHelper;
+}
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+class XPropertySet;
+}
+namespace document
+{
+class XDocumentProperties;
+}
+namespace lang
+{
+class XMultiServiceFactory;
+}
+}
+}
 }
 
 namespace writerfilter
