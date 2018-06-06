@@ -30,7 +30,6 @@
 #include "KDE5SalData.hxx"
 #include "KDE5SalInstance.hxx"
 #include "KDE5SalFrame.hxx"
-#include "KDE5SalDisplay.hxx"
 
 using namespace com::sun::star;
 

@@ -21,8 +21,7 @@
 
 #include <QtGui/QClipboard>
 #include <QtCore/QEvent>
-
-#include "KDE5SalDisplay.hxx"
+#include <assert.h>
 
 VCLKDE5Application::VCLKDE5Application(int argc, char** argv)
     : QApplication(argc, argv)
