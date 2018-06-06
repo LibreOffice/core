@@ -17,6 +17,7 @@
 class DateTime;
 class LocaleDataWrapper;
 namespace vcl { class Window; }
+class OutputDevice;
 class VclBuilderContainer;
 
 //when two tab pages both have the same basic layout with a preview on the
@@ -28,7 +29,7 @@ class VclBuilderContainer;
 //except for the preview widget
 void SFX2_DLLPUBLIC setPreviewsToSamePlace(vcl::Window const *pParent, VclBuilderContainer *pPage);
 
-Size SFX2_DLLPUBLIC getParagraphPreviewOptimalSize(const vcl::Window *pReference);
+Size SFX2_DLLPUBLIC getParagraphPreviewOptimalSize(const OutputDevice& rReference);
 
 Size SFX2_DLLPUBLIC getDrawPreviewOptimalSize(const vcl::Window *pReference);
 
