@@ -35,7 +35,7 @@ ifeq ($(ENABLE_HTMLHELP),)
 	$(call gb_Output_announce,$*,$(false),ALH,5)
 endif
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_AllLangHelp_get_target,$*) \
+		rm -f $(call gb_AllLangHelp_get_target,$*) $(call gb_AllLangHelp_get_helpfiles_target,$*) \
 	)
 
 # gb_AllLangHelp_AllLangHelp__one_lang module lang helpname
@@ -86,8 +86,17 @@ define gb_AllLangHelp_add_helpfiles
 $(foreach lang,$(gb_HELP_LANGS),\
 	$(call gb_HelpTarget_add_helpfiles,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)) \
 )
+ifneq ($(ENABLE_HTMLHELP),)
+gb_AllLangHelp_$(1)_HELPFILES += $(addsuffix .xhp,$(2))
+$(call gb_AllLangHelp_get_helpfiles_target,$(1)): $(addprefix $(SRCDIR)/,$(addsuffix .xhp,$(2)))
+endif
 
 endef
+
+ifneq ($(ENABLE_HTMLHELP),)
+$(call gb_AllLangHelp_get_helpfiles_target,%):
+	touch $@
+endif
 
 # Add additional localized file(s) to the help pack.
 #
