@@ -756,10 +756,9 @@ void SwRubyPortion::CalcRubyOffset()
 // no 2-line-format reference is passed. If there is a 2-line-format reference,
 // then the rValue is set only, if the 2-line-attribute's value is set _and_
 // the 2-line-formats has the same brackets.
-static bool lcl_Has2Lines( const SwTextAttr& rAttr, const SvxTwoLinesItem* &rpRef,
-    bool &rValue )
+static bool lcl_Check2Lines(const SfxPoolItem *const pItem,
+        const SvxTwoLinesItem* &rpRef, bool &rValue)
 {
-    const SfxPoolItem* pItem = CharFormat::GetItem( rAttr, RES_CHRATR_TWO_LINES );
     if( pItem )
     {
         rValue = static_cast<const SvxTwoLinesItem*>(pItem)->GetValue();
@@ -775,6 +774,13 @@ static bool lcl_Has2Lines( const SwTextAttr& rAttr, const SvxTwoLinesItem* &rpRe
     return false;
 }
 
+static bool lcl_Has2Lines(const SwTextAttr& rAttr,
+        const SvxTwoLinesItem* &rpRef, bool &rValue)
+{
+    const SfxPoolItem* pItem = CharFormat::GetItem(rAttr, RES_CHRATR_TWO_LINES);
+    return lcl_Check2Lines(pItem, rpRef, rValue);
+}
+
 // is a little help function for GetMultiCreator(..)
 // It extracts the charrotation from a charrotate-attribute or a character style.
 // The rValue is set to true, if the charrotate-attribute's value is set and
@@ -782,10 +788,9 @@ static bool lcl_Has2Lines( const SwTextAttr& rAttr, const SvxTwoLinesItem* &rpRe
 // If there is a charrotate-format reference, then the rValue is set only,
 // if the charrotate-attribute's value is set _and_ identical
 // to the charrotate-format's value.
-static bool lcl_HasRotation( const SwTextAttr& rAttr,
-    const SvxCharRotateItem* &rpRef, bool &rValue )
+static bool lcl_CheckRotation(const SfxPoolItem *const pItem,
+        const SvxCharRotateItem* &rpRef, bool &rValue)
 {
-    const SfxPoolItem* pItem = CharFormat::GetItem( rAttr, RES_CHRATR_ROTATE );
     if ( pItem )
     {
         rValue = static_cast<const SvxCharRotateItem*>(pItem)->GetValue();
@@ -798,6 +803,100 @@ static bool lcl_HasRotation( const SwTextAttr& rAttr,
     }
 
     return false;
+}
+
+static bool lcl_HasRotation(const SwTextAttr& rAttr,
+        const SvxCharRotateItem* &rpRef, bool &rValue)
+{
+    const SfxPoolItem* pItem = CharFormat::GetItem( rAttr, RES_CHRATR_ROTATE );
+    return lcl_CheckRotation(pItem, rpRef, rValue);
+}
+
+namespace sw {
+
+    // need to use a very special attribute iterator here that returns
+    // both the hints and the nodes, so that GetMultiCreator() can handle
+    // items in the nodes' set properly
+    class MergedAttrIterMulti
+        : public MergedAttrIterBase
+    {
+    private:
+        bool m_First = true;
+    public:
+        MergedAttrIterMulti(SwTextFrame const& rFrame) : MergedAttrIterBase(rFrame) {}
+        SwTextAttr const* NextAttr(SwTextNode const*& rpNode);
+        // can't have operator= because m_pMerged/m_pNode const
+        void Assign(MergedAttrIterMulti const& rOther)
+        {
+            assert(m_pMerged == rOther.m_pMerged);
+            assert(m_pNode == rOther.m_pNode);
+            m_CurrentExtent = rOther.m_CurrentExtent;
+            m_CurrentHint = rOther.m_CurrentHint;
+            m_First = rOther.m_First;
+        }
+    };
+
+    SwTextAttr const* MergedAttrIterMulti::NextAttr(SwTextNode const*& rpNode)
+    {
+        if (m_First)
+        {
+            m_First = false;
+            rpNode = m_pMerged
+                ? m_pMerged->extents.size()
+                    ? m_pMerged->extents[0].pNode
+                    : m_pMerged->pFirstNode
+                : m_pNode;
+            return nullptr;
+        }
+        if (m_pMerged)
+        {
+            while (m_CurrentExtent < m_pMerged->extents.size())
+            {
+                sw::Extent const& rExtent(m_pMerged->extents[m_CurrentExtent]);
+                if (SwpHints const*const pHints = rExtent.pNode->GetpSwpHints())
+                {
+                    while (m_CurrentHint < pHints->Count())
+                    {
+                        SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
+                        if (rExtent.nEnd < pHint->GetStart())
+                        {
+                            break;
+                        }
+                        ++m_CurrentHint;
+                        if (rExtent.nStart <= pHint->GetStart())
+                        {
+                            rpNode = rExtent.pNode;
+                            return pHint;
+                        }
+                    }
+                }
+                ++m_CurrentExtent;
+                if (m_CurrentExtent < m_pMerged->extents.size() &&
+                    rExtent.pNode != m_pMerged->extents[m_CurrentExtent].pNode)
+                {
+                    m_CurrentHint = 0; // reset
+                    rpNode = rExtent.pNode;
+                    return nullptr;
+                }
+            }
+            return nullptr;
+        }
+        else
+        {
+            SwpHints const*const pHints(m_pNode->GetpSwpHints());
+            if (pHints)
+            {
+                while (m_CurrentHint < pHints->Count())
+                {
+                    SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
+                    ++m_CurrentHint;
+                    rpNode = m_pNode;
+                    return pHint;
+                }
+            }
+            return nullptr;
+        }
+    }
 }
 
 // If we (e.g. the position rPos) are inside a two-line-attribute or
@@ -854,66 +953,99 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
     if ( pMulti )
         return nullptr;
 
-    const SvxCharRotateItem* pRotate = nullptr;
-    const SfxPoolItem* pRotItem;
-    if( SfxItemState::SET == m_pFrame->GetTextNode()->GetSwAttrSet().
-        GetItemState( RES_CHRATR_ROTATE, true, &pRotItem ) &&
-        static_cast<const SvxCharRotateItem*>(pRotItem)->GetValue() )
-        pRotate = static_cast<const SvxCharRotateItem*>(pRotItem);
-    else
-        pRotItem = nullptr;
-    const SvxTwoLinesItem* p2Lines = nullptr;
-    const SwTextNode *pLclTextNode = m_pFrame->GetTextNode();
-    if( !pLclTextNode )
-        return nullptr;
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == pLclTextNode->GetSwAttrSet().
-        GetItemState( RES_CHRATR_TWO_LINES, true, &pItem ) &&
-        static_cast<const SvxTwoLinesItem*>(pItem)->GetValue() )
-        p2Lines = static_cast<const SvxTwoLinesItem*>(pItem);
-    else
-        pItem = nullptr;
-
-    const SwpHints *pHints = pLclTextNode->GetpSwpHints();
-    if( !pHints && !p2Lines && !pRotate )
-        return nullptr;
+    // need the node that contains input rPos
+    std::pair<SwTextNode const*, sal_Int32> startPos(m_pFrame->MapViewToModel(rPos));
+    const SvxCharRotateItem* pActiveRotateItem(nullptr);
+    const SfxPoolItem* pNodeRotateItem(nullptr);
+    const SvxTwoLinesItem* pActiveTwoLinesItem(nullptr);
+    const SfxPoolItem* pNodeTwoLinesItem(nullptr);
+    SwTextAttr const* pActiveTwoLinesHint(nullptr);
+    SwTextAttr const* pActiveRotateHint(nullptr);
     const SwTextAttr *pRuby = nullptr;
+    sw::MergedAttrIterMulti iterAtStartOfNode(*m_pFrame);
     bool bTwo = false;
     bool bRot = false;
-    size_t n2Lines = SAL_MAX_SIZE;
-    size_t nRotate = SAL_MAX_SIZE;
-    const size_t nCount = pHints ? pHints->Count() : 0;
-    for( size_t i = 0; i < nCount; ++i )
+
+    for (sw::MergedAttrIterMulti iter = *m_pFrame; ; )
     {
-        const SwTextAttr *pTmp = pHints->Get(i);
-        sal_Int32 nStart = pTmp->GetStart();
-        if( rPos < nStart )
-            break;
-        if( *pTmp->GetAnyEnd() > rPos )
+        SwTextNode const* pNode(nullptr);
+        SwTextAttr const*const pAttr = iter.NextAttr(pNode);
+        if (!pNode)
         {
-            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
-                pRuby = pTmp;
-            else
+            break;
+        }
+        if (pAttr)
+        {
+            assert(pNode->GetIndex() <= startPos.first->GetIndex()); // should break earlier
+            if (startPos.first->GetIndex() <= pNode->GetIndex())
             {
-                const SvxCharRotateItem* pRoTmp = nullptr;
-                if( lcl_HasRotation( *pTmp, pRoTmp, bRot ) )
+                if (startPos.first->GetIndex() != pNode->GetIndex()
+                    || startPos.second < pAttr->GetStart())
                 {
-                    nRotate = bRot ? i : nCount;
-                    pRotate = pRoTmp;
+                    break;
                 }
-                const SvxTwoLinesItem* p2Tmp = nullptr;
-                if( lcl_Has2Lines( *pTmp, p2Tmp, bTwo ) )
+                if (startPos.second < *pAttr->GetAnyEnd())
                 {
-                    n2Lines = bTwo ? i : nCount;
-                    p2Lines = p2Tmp;
+                    // sw_redlinehide: ruby *always* splits
+                    if (RES_TXTATR_CJK_RUBY == pAttr->Which())
+                        pRuby = pAttr;
+                    else
+                    {
+                        const SvxCharRotateItem* pRoTmp = nullptr;
+                        if (lcl_HasRotation( *pAttr, pRoTmp, bRot ))
+                        {
+                            pActiveRotateHint = bRot ? pAttr : nullptr;
+                            pActiveRotateItem = pRoTmp;
+                        }
+                        const SvxTwoLinesItem* p2Tmp = nullptr;
+                        if (lcl_Has2Lines( *pAttr, p2Tmp, bTwo ))
+                        {
+                            pActiveTwoLinesHint = bTwo ? pAttr : nullptr;
+                            pActiveTwoLinesItem = p2Tmp;
+                        }
+                    }
+                }
+            }
+        }
+        else if (pNode) // !pAttr && pNode means the node changed
+        {
+            if (startPos.first->GetIndex() < pNode->GetIndex())
+            {
+                break; // only one node initially
+            }
+            if (startPos.first->GetIndex() == pNode->GetIndex())
+            {
+                iterAtStartOfNode.Assign(iter);
+                if (SfxItemState::SET == pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_ROTATE, true, &pNodeRotateItem) &&
+                    static_cast<const SvxCharRotateItem*>(pNodeRotateItem)->GetValue())
+                {
+                    pActiveRotateItem = static_cast<const SvxCharRotateItem*>(pNodeRotateItem);
+                }
+                else
+                {
+                    pNodeRotateItem = nullptr;
+                }
+                if (SfxItemState::SET == startPos.first->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem) &&
+                    static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetValue())
+                {
+                    pActiveTwoLinesItem = static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem);
+                }
+                else
+                {
+                    pNodeTwoLinesItem = nullptr;
                 }
             }
         }
     }
+    if (!pRuby && !pActiveTwoLinesItem && !pActiveRotateItem)
+        return nullptr;
+
     if( pRuby )
     {   // The winner is ... a ruby attribute and so
         // the end of the multiportion is the end of the ruby attribute.
-        rPos = *pRuby->End();
+        rPos = m_pFrame->MapModelToView(startPos.first, *pRuby->End());
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = nullptr;
         pRet->pAttr = pRuby;
@@ -921,44 +1053,48 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
         pRet->nLevel = GetTextFrame()->IsRightToLeft() ? 1 : 0;
         return pRet;
     }
-    if( n2Lines < nCount || ( pItem && pItem == p2Lines &&
-        rPos < TextFrameIndex(GetText().getLength())))
+    if (pActiveTwoLinesHint ||
+        (pNodeTwoLinesItem && pNodeTwoLinesItem == pActiveTwoLinesItem &&
+         rPos < TextFrameIndex(GetText().getLength())))
     {   // The winner is a 2-line-attribute,
         // the end of the multiportion depends on the following attributes...
         SwMultiCreator *pRet = new SwMultiCreator;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
-        std::deque< sal_Int32 > aEnd;
+        std::deque<TextFrameIndex> aEnd;
 
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, it is compatible with the winner-attribute or
         // it interrupts the other attribute.
         bool bOn = true;
 
-        if( n2Lines < nCount )
+        if (pActiveTwoLinesHint)
         {
             pRet->pItem = nullptr;
-            pRet->pAttr = pHints->Get(n2Lines);
-            aEnd.push_front( *pRet->pAttr->End() );
-            if( pItem )
+            pRet->pAttr = pActiveTwoLinesHint;
+            if (pNodeTwoLinesItem)
             {
-                aEnd.front() = GetText().getLength();
-                bOn = static_cast<const SvxTwoLinesItem*>(pItem)->GetEndBracket() ==
-                        p2Lines->GetEndBracket() &&
-                      static_cast<const SvxTwoLinesItem*>(pItem)->GetStartBracket() ==
-                        p2Lines->GetStartBracket();
+                aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
+                bOn = static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetEndBracket() ==
+                        pActiveTwoLinesItem->GetEndBracket() &&
+                      static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetStartBracket() ==
+                        pActiveTwoLinesItem->GetStartBracket();
+            }
+            else
+            {
+                aEnd.push_front(m_pFrame->MapModelToView(startPos.first, *pRet->pAttr->End()));
             }
         }
         else
         {
-            pRet->pItem = pItem;
+            pRet->pItem = pNodeTwoLinesItem;
             pRet->pAttr = nullptr;
-            aEnd.push_front( GetText().getLength() );
+            aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
         }
         pRet->nId = SwMultiCreatorId::Double;
         pRet->nLevel = GetTextFrame()->IsRightToLeft() ? 1 : 0;
 
-        // n2Lines is the index of the last 2-line-attribute, which contains
+        // pActiveTwoLinesHint is the last 2-line-attribute, which contains
         // the actual position.
 
         // At this moment we know that at position rPos the "winner"-attribute
@@ -975,23 +1111,49 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
         // In the following loop rPos is the critical position and it will be
         // evaluated, if at rPos starts a interrupting or a maintaining
         // continuity attribute.
-        for( size_t i = 0; i < nCount; ++i )
+
+        // iterAtStartOfNode is positioned to the first hint of the node
+        // (if any); the node item itself has already been handled above
+        for (sw::MergedAttrIterMulti iter = iterAtStartOfNode; ; )
         {
-            const SwTextAttr *pTmp = pHints->Get(i);
-            if( *pTmp->GetAnyEnd() <= rPos )
-                continue;
-            if( rPos < pTmp->GetStart() )
+            SwTextNode const* pNode(nullptr);
+            SwTextAttr const*const pTmp = iter.NextAttr(pNode);
+            if (!pNode)
+            {
+                break;
+            }
+            assert(startPos.first->GetIndex() <= pNode->GetIndex());
+            TextFrameIndex nTmpStart;
+            TextFrameIndex nTmpEnd;
+            if (pTmp)
+            {
+                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                if (nTmpEnd <= rPos)
+                    continue;
+                nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
+            }
+            else
+            {
+                pNodeTwoLinesItem = nullptr;
+                pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem);
+                nTmpStart = m_pFrame->MapModelToView(pNode, 0);
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
+                assert(rPos <= nTmpEnd); // next node must not have smaller index
+            }
+
+            if (rPos < nTmpStart)
             {
                 // If bOn is false and the next attribute starts later than rPos
                 // the winner attribute is interrupted at rPos.
                 // If the start of the next attribute is behind the end of
                 // the last attribute on the aEnd-stack, this is the endposition
                 // on the stack is the end of the 2-line portion.
-                if( !bOn || aEnd.back() < pTmp->GetStart() )
+                if (!bOn || aEnd.back() < nTmpStart)
                     break;
                 // At this moment, bOn is true and the next attribute starts
                 // behind rPos, so we could move rPos to the next startpoint
-                rPos = pTmp->GetStart();
+                rPos = nTmpStart;
                 // We clean up the aEnd-stack, endpositions equal to rPos are
                 // superfluous.
                 while( !aEnd.empty() && aEnd.back() <= rPos )
@@ -1008,15 +1170,16 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
                 }
             }
             // A ruby attribute stops the 2-line immediately
-            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
+            if (pTmp && RES_TXTATR_CJK_RUBY == pTmp->Which())
                 return pRet;
-            if( lcl_Has2Lines( *pTmp, p2Lines, bTwo ) )
+            if (pTmp ? lcl_Has2Lines(*pTmp, pActiveTwoLinesItem, bTwo)
+                     : lcl_Check2Lines(pNodeTwoLinesItem, pActiveTwoLinesItem, bTwo))
             {   // We have an interesting attribute..
                 if( bTwo == bOn )
                 {   // .. with the same state, so the last attribute could
                     // be continued.
-                    if( aEnd.back() < *pTmp->End() )
-                        aEnd.back() = *pTmp->End();
+                    if (aEnd.back() < nTmpEnd)
+                        aEnd.back() = nTmpEnd;
                 }
                 else
                 {   // .. with a different state.
@@ -1024,12 +1187,12 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
                     // If this is smaller than the last on the stack, we put
                     // it on the stack. If it has the same endposition, the last
                     // could be removed.
-                    if( aEnd.back() > *pTmp->End() )
-                        aEnd.push_back( *pTmp->End() );
+                    if (nTmpEnd < aEnd.back())
+                        aEnd.push_back( nTmpEnd );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->End();
+                        aEnd.back() = nTmpEnd;
                 }
             }
         }
@@ -1037,32 +1200,58 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
             rPos = aEnd.back();
         return pRet;
     }
-    if (nRotate < nCount || ( pRotItem && pRotItem == pRotate &&
-        rPos < TextFrameIndex(GetText().getLength())))
+    if (pActiveRotateHint ||
+        (pNodeRotateItem && pNodeRotateItem == pActiveRotateItem &&
+         rPos < TextFrameIndex(GetText().getLength())))
     {   // The winner is a rotate-attribute,
         // the end of the multiportion depends on the following attributes...
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->nId = SwMultiCreatorId::Rotate;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
-        std::deque< sal_Int32 > aEnd;
+        std::deque<TextFrameIndex> aEnd;
 
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, which could interrupts the winning rotation attribute.
-        bool bOn = pItem;
-        aEnd.push_front( GetText().getLength() );
+        bool bOn = pNodeTwoLinesItem != nullptr;
+        aEnd.push_front(TextFrameIndex(GetText().getLength()));
 
-        sal_Int32 n2Start = rPos;
-        for( size_t i = 0; i < nCount; ++i )
+        // first, search for the start position of the next TWOLINE portion
+        // because the ROTATE portion must end there at the latest
+        TextFrameIndex n2Start = rPos;
+        for (sw::MergedAttrIterMulti iter = iterAtStartOfNode; ; )
         {
-            const SwTextAttr *pTmp = pHints->Get(i);
-            if( *pTmp->GetAnyEnd() <= n2Start )
-                continue;
-            if( n2Start < pTmp->GetStart() )
+            SwTextNode const* pNode(nullptr);
+            SwTextAttr const*const pTmp = iter.NextAttr(pNode);
+            if (!pNode)
             {
-                if( bOn || aEnd.back() < pTmp->GetStart() )
+                break;
+            }
+            assert(startPos.first->GetIndex() <= pNode->GetIndex());
+            TextFrameIndex nTmpStart;
+            TextFrameIndex nTmpEnd;
+            if (pTmp)
+            {
+                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                if (nTmpEnd <= n2Start)
+                    continue;
+                nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
+            }
+            else
+            {
+                pNodeTwoLinesItem = nullptr;
+                pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem);
+                nTmpStart = m_pFrame->MapModelToView(pNode, 0);
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
+                assert(n2Start <= nTmpEnd); // next node must not have smaller index
+            }
+
+            if (n2Start < nTmpStart)
+            {
+                if (bOn || aEnd.back() < nTmpStart)
                     break;
-                n2Start = pTmp->GetStart();
+                n2Start = nTmpStart;
                 while( !aEnd.empty() && aEnd.back() <= n2Start )
                 {
                     bOn = !bOn;
@@ -1075,28 +1264,29 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
                 }
             }
             // A ruby attribute stops immediately
-            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
+            if (pTmp && RES_TXTATR_CJK_RUBY == pTmp->Which())
             {
                 bOn = true;
                 break;
             }
-            p2Lines = nullptr;
-            if( lcl_Has2Lines( *pTmp, p2Lines, bTwo ) )
+            const SvxTwoLinesItem* p2Lines = nullptr;
+            if (pTmp ? lcl_Has2Lines(*pTmp, p2Lines, bTwo)
+                     : lcl_Check2Lines(pNodeTwoLinesItem, p2Lines, bTwo))
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd.back() < *pTmp->End() )
-                        aEnd.back() = *pTmp->End();
+                    if (aEnd.back() < nTmpEnd)
+                        aEnd.back() = nTmpEnd;
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd.back() > *pTmp->End() )
-                        aEnd.push_back( *pTmp->End() );
+                    if (nTmpEnd < aEnd.back())
+                        aEnd.push_back( nTmpEnd );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->End();
+                        aEnd.back() = nTmpEnd;
                 }
             }
         }
@@ -1106,35 +1296,62 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
         if( !aEnd.empty() )
             aEnd.clear();
 
+        // now, search for the end of the ROTATE portion, similar to above
         bOn = true;
-        if( nRotate < nCount )
+        if (pActiveRotateHint)
         {
             pRet->pItem = nullptr;
-            pRet->pAttr = pHints->Get(nRotate);
-            aEnd.push_front( *pRet->pAttr->End() );
-            if( pRotItem )
+            pRet->pAttr = pActiveRotateHint;
+            if (pNodeRotateItem)
             {
-                aEnd.front() = GetText().getLength();
-                bOn = static_cast<const SvxCharRotateItem*>(pRotItem)->GetValue() ==
-                        pRotate->GetValue();
+                aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
+                bOn = static_cast<const SvxCharRotateItem*>(pNodeRotateItem)->GetValue() ==
+                        pActiveRotateItem->GetValue();
+            }
+            else
+            {
+                aEnd.push_front(m_pFrame->MapModelToView(startPos.first, *pRet->pAttr->End()));
             }
         }
         else
         {
-            pRet->pItem = pRotItem;
+            pRet->pItem = pNodeRotateItem;
             pRet->pAttr = nullptr;
-            aEnd.push_front( GetText().getLength() );
+            aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
         }
-        for( size_t i = 0; i < nCount; ++i )
+        for (sw::MergedAttrIterMulti iter = iterAtStartOfNode; ; )
         {
-            const SwTextAttr *pTmp = pHints->Get(i);
-            if( *pTmp->GetAnyEnd() <= rPos )
-                continue;
-            if( rPos < pTmp->GetStart() )
+            SwTextNode const* pNode(nullptr);
+            SwTextAttr const*const pTmp = iter.NextAttr(pNode);
+            if (!pNode)
             {
-                if( !bOn || aEnd.back() < pTmp->GetStart() )
+                break;
+            }
+            assert(startPos.first->GetIndex() <= pNode->GetIndex());
+            TextFrameIndex nTmpStart;
+            TextFrameIndex nTmpEnd;
+            if (pTmp)
+            {
+                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                if (nTmpEnd <= rPos)
+                    continue;
+                nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
+            }
+            else
+            {
+                pNodeRotateItem = nullptr;
+                pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_ROTATE, true, &pNodeRotateItem);
+                nTmpStart = m_pFrame->MapModelToView(pNode, 0);
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
+                assert(rPos <= nTmpEnd); // next node must not have smaller index
+            }
+
+            if (rPos < nTmpStart)
+            {
+                if (!bOn || aEnd.back() < nTmpStart)
                     break;
-                rPos = pTmp->GetStart();
+                rPos = nTmpStart;
                 while( !aEnd.empty() && aEnd.back() <= rPos )
                 {
                     bOn = !bOn;
@@ -1146,27 +1363,29 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
                     bOn = true;
                 }
             }
-            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
+            if (pTmp && RES_TXTATR_CJK_RUBY == pTmp->Which())
             {
                 bOn = false;
                 break;
             }
-            if( lcl_HasRotation( *pTmp, pRotate, bTwo ) )
+            // TODO why does this use bTwo, not bRot ???
+            if (pTmp ? lcl_HasRotation(*pTmp, pActiveRotateItem, bTwo)
+                     : lcl_CheckRotation(pNodeRotateItem, pActiveRotateItem, bTwo))
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd.back() < *pTmp->End() )
-                        aEnd.back() = *pTmp->End();
+                    if (aEnd.back() < nTmpEnd)
+                        aEnd.back() = nTmpEnd;
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd.back() > *pTmp->End() )
-                        aEnd.push_back( *pTmp->End() );
+                    if (nTmpEnd < aEnd.back())
+                        aEnd.push_back( nTmpEnd );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->End();
+                        aEnd.back() = nTmpEnd;
                 }
             }
         }
