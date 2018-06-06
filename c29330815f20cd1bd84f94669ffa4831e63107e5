@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a22e58a_3f6517e1",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-06T10:54:19Z",
+      "side": 1,
+      "message": "Removing it could break options tabpages supplied by extensions (e.g. mediawiki) so I\u0027d be all for keeping it",
+      "parentUuid": "9a30ddce_2bd72624",
+      "revId": "c29330815f20cd1bd84f94669ffa4831e63107e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_cbe84a13",
         "filename": "cui/source/options/treeopt.cxx",
         "patchSetId": 2
