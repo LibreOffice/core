@@ -71,6 +71,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
                             ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable) :
     ScAnyRefDlg           (pSfxBindings, pChildWindow, pParent, "PivotTableLayout", "modules/scalc/ui/pivottablelayoutdialog.ui"),
     maPivotTableObject    (*pPivotTableObject),
+    mpPreviouslyFocusedListBox(nullptr),
     mpViewData            (pViewData),
     mpDocument            (pViewData->GetDocument()),
     mbNewPivotTable       (bNewPivotTable),
@@ -188,6 +189,7 @@ ScPivotLayoutDialog::~ScPivotLayoutDialog()
 
 void ScPivotLayoutDialog::dispose()
 {
+    mpPreviouslyFocusedListBox.clear();
     mpListBoxField.clear();
     mpListBoxPage.clear();
     mpListBoxColumn.clear();
