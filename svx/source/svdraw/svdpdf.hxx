@@ -60,13 +60,13 @@ class ImpSdrPdfImport final
         {
         }
 
-        Matrix(double a, double b, double c, double d, double e, double f)
-            : ma(a)
-            , mb(b)
-            , mc(c)
-            , md(d)
-            , me(e)
-            , mf(f)
+        Matrix(double da, double db, double dc, double dd, double de, double df)
+            : ma(da)
+            , mb(db)
+            , mc(dc)
+            , md(dd)
+            , me(de)
+            , mf(df)
         {
         }
 
