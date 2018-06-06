@@ -6853,7 +6853,7 @@ you must use the "--with-jdk-home" configure option explicitly])
             JDK=sun
 
             dnl Sun JDK specific tests
-            _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
+            _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED '/^$/d' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
             if test "$_jdk_ver" -lt 10600; then
