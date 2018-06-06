@@ -192,8 +192,8 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
             SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
             if (SvStream* pOutStream = aMedium.GetOutStream())
             {
-                std::shared_ptr<uno::Sequence<sal_Int8>> pPdfData = rGraphic.getPdfData();
-                pOutStream->WriteBytes(pPdfData->getConstArray(), pPdfData->getLength());
+                const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData = rGraphic.getPdfData();
+                pOutStream->WriteBytes(rPdfData->getConstArray(), rPdfData->getLength());
                 aMedium.Commit();
                 if (!aMedium.GetError())
                     nErr = ERRCODE_NONE;

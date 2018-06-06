@@ -10,15 +10,14 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
 
+#include <vector>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 
 namespace vcl
 {
-
 /// Imports a PDF stream into rGraphic as a GDIMetaFile.
-VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
-                             size_t nPageIndex,
+VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, size_t nPageIndex,
                              css::uno::Sequence<sal_Int8>& rPdfData,
                              sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN,
                              sal_uInt64 nSize = STREAM_SEEK_TO_END,
@@ -27,8 +26,7 @@ VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic,
                              const double fResolutionDPI = 96.);
 
-VCL_DLLPUBLIC size_t ImportPDF(const OUString& rURL,
-                               std::vector<Bitmap>& rBitmaps,
+VCL_DLLPUBLIC size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
                                css::uno::Sequence<sal_Int8>& rPdfData,
                                const double fResolutionDPI = 96.);
 }
