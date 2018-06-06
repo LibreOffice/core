@@ -3586,13 +3586,6 @@
           </info>
           <value/>
         </prop>
-        <prop oor:name="StartCenterHideExternalLinks" oor:type="xs:int" oor:nillable="false">
-          <info>
-            <desc>Contains a number deciding whether to show or hide buttons
-            with external links</desc>
-          </info>
-          <value>0</value>
-        </prop>
         <prop oor:name="StartCenterBackgroundColor" oor:type="xs:int" oor:nillable="false">
           <!-- Default 14540253 = 0xdddddd as specified in tdf#90452, comment 45 -->
           <info>
