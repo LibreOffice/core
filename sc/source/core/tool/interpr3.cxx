@@ -3375,7 +3375,7 @@ double ScInterpreter::GetMedian( vector<double> & rArray )
         double fUp = *iMid;
         // Lower median.
         iMid = rArray.begin() + nMid - 1;
-        ::std::nth_element( rArray.begin(), iMid, rArray.end());
+        ::std::nth_element( rArray.begin(), iMid, rArray.begin() + nMid);
         return (fUp + *iMid) / 2;
     }
 }
