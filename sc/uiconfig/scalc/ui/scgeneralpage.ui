@@ -343,7 +343,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="legacy_cell_selection_cb">
-                    <property name="label" translatable="yes" context="scgeneralpage|legacy_cell_selection_cb">Use legacy cursor movement behavior when selecting</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|legacy_cell_selection_cb">Position cell reference with selection</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
