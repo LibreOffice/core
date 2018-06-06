@@ -22,8 +22,6 @@
 #include <memory>
 
 #include <rtl/string.hxx>
-#include <unx/saldisp.hxx>
-#include <unx/salgdi.h>
 #include <headless/svpgdi.hxx>
 
 #include <QtGui/QImage>
