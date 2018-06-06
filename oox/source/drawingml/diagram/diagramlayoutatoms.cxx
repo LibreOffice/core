@@ -544,8 +544,25 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
             }
 
-            if (rShape->getRotation())
-                pTextBody->getTextProperties().moRotation = -rShape->getRotation();
+            const sal_Int32 nautoTxRot = maMap.count(XML_autoTxRot) ? maMap.find(XML_autoTxRot)->second : XML_upr;
+
+            switch(nautoTxRot)
+            {
+                case XML_upr:
+                {
+                    if (rShape->getRotation())
+                        pTextBody->getTextProperties().moRotation = -F_PI180*90*rShape->getRotation();
+                }
+                break;
+                case XML_grav:
+                {
+                    if (rShape->getRotation()==90*F_PI180 || rShape->getRotation()==180*F_PI180)
+                        pTextBody->getTextProperties().moRotation = 180*F_PI180;
+                }
+                break;
+                case XML_none:
+                break;
+            }
 
             // text centered vertically by default
             pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_CENTER;
