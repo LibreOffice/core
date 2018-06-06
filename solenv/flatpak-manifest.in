@@ -5,7 +5,7 @@
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.gcc7",
-        "org.freedesktop.Sdk.Extension.openjdk9"
+        "org.freedesktop.Sdk.Extension.openjdk10"
     ],
     "build-options": {
         "append-ld-library-path": "/usr/lib/sdk/gcc7/lib",
@@ -28,7 +28,7 @@
             "name": "openjdk",
             "buildsystem": "simple",
             "build-commands": [
-                "/usr/lib/sdk/openjdk9/install.sh"
+                "/usr/lib/sdk/openjdk10/install.sh"
             ]
         },
         {
