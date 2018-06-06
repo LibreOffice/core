@@ -1612,26 +1612,27 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 ;
         }
     }
-    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP &&
-        ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
-        ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())
+    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
     {
-        SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
-        meVectorState = FormulaVectorDisabledNotInSubSet;
-        mbOpenCLEnabled = false;
-        CheckForThreading(eOp);
-    }
-    // only when openCL interpreter is not enabled - the assumption is that
-    // the S/W interpreter blacklist is more strict
-    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP &&
-        ScCalcConfig::isSwInterpreterEnabled() &&
-        (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) &&
-        ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
-    {
-        SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables S/W interpreter for formula group");
-        meVectorState = FormulaVectorDisabledNotInSoftwareSubset;
-        mbOpenCLEnabled = false;
-        CheckForThreading(eOp);
+        if (ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
+            ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())
+        {
+            SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
+            meVectorState = FormulaVectorDisabledNotInSubSet;
+            mbOpenCLEnabled = false;
+            CheckForThreading(eOp);
+        }
+        // only when openCL interpreter is not enabled - the assumption is that
+        // the S/W interpreter blacklist is more strict
+        else if (ScCalcConfig::isSwInterpreterEnabled() &&
+                 (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) &&
+                 ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
+        {
+            SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables S/W interpreter for formula group");
+            meVectorState = FormulaVectorDisabledNotInSoftwareSubset;
+            mbOpenCLEnabled = false;
+            CheckForThreading(eOp);
+        }
     }
     else
     {
