@@ -228,21 +228,20 @@ public:
 
 class SwSectionIndentTabPage : public SfxTabPage
 {
-    VclPtr<MetricField>       m_pBeforeMF;
-    VclPtr<MetricField>       m_pAfterMF;
-    VclPtr<SvxParaPrevWindow> m_pPreviewWin;
+    ParaPrevWindow m_aPreviewWin;
+    std::unique_ptr<weld::MetricSpinButton> m_xBeforeMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xAfterMF;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
 
-    DECL_LINK(IndentModifyHdl, Edit&, void);
+    DECL_LINK(IndentModifyHdl, weld::MetricSpinButton&, void);
 public:
-    SwSectionIndentTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
+    SwSectionIndentTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
     virtual ~SwSectionIndentTabPage() override;
-    virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
-                                const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     void    SetWrtShell(SwWrtShell const & rSh);
 };
