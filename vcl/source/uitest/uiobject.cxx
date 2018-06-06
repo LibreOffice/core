@@ -1014,6 +1014,19 @@ OUString ComboBoxUIObject::get_name() const
     return OUString("ComboBoxUIObject");
 }
 
+OUString ComboBoxUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::ComboboxSelect)
+    {
+        sal_Int32 nPos = mxComboBox->GetSelectedEntryPos();
+        return this->get_type() + " Action:SELECT Id:" +
+                mxComboBox->get_id() + " POS:" + OUString::number(nPos) +
+                " Parent:" + get_top_parent(mxComboBox)->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
+}
+
 std::unique_ptr<UIObject> ComboBoxUIObject::create(vcl::Window* pWindow)
 {
     ComboBox* pComboBox = dynamic_cast<ComboBox*>(pWindow);
@@ -1143,8 +1156,26 @@ void TabControlUIObject::execute(const OUString& rAction,
 StringMap TabControlUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
+    aMap["PageCount"] = OUString::number(mxTabControl->GetPageCount());
+
+    sal_uInt16 nPageId = mxTabControl->GetCurPageId();
+    aMap["CurrPageId"] = OUString::number(nPageId);
+    aMap["CurrPagePos"] = OUString::number(mxTabControl->GetPagePos(nPageId));
 
     return aMap;
+}
+
+OUString TabControlUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::TabpageActivate)
+    {
+        sal_Int32 nPageId = mxTabControl->GetCurPageId();
+        return this->get_type() + " Action:SELECT Id:" + mxTabControl->get_id() +
+            " POS:" + OUString::number(mxTabControl->GetPagePos(nPageId)) +
+            " Parent:" + get_top_parent(mxTabControl)->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
 }
 
 OUString TabControlUIObject::get_name() const
