@@ -189,7 +189,7 @@ void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
 }
 
 void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
-        SwScriptInfo & rScriptInfo, SwTextFrame *const pFrame)
+        SwScriptInfo & rScriptInfo, SwTextFrame const*const pFrame)
 {
     // during HTML-Import it can happen, that no layout exists
     SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
