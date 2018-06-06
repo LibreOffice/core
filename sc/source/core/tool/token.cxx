@@ -1388,12 +1388,6 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         // We support vectorization for the following opcodes.
         switch (eOp)
         {
-            case ocIf:
-            case ocIfError:
-            case ocIfNA:
-            case ocChoose:
-                // Jump commands are now supported.
-            break;
             case ocAverage:
             case ocMin:
             case ocMinA:
@@ -1696,6 +1690,12 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocErrName:
             case ocErrNum:
             case ocErrNA:
+            break;
+            case ocIf:
+            case ocIfError:
+            case ocIfNA:
+            case ocChoose:
+                // Jump commands are now supported.
             break;
         }
     }
