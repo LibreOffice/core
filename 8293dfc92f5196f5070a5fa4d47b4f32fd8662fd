@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_d4e78aaa",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-06T07:44:31Z",
+      "side": 1,
+      "message": "Sorry, I missed this one in the previous round, I assume this is bogus, you don\u0027t derive from awt::Size. Did you try to use an fwd decl here?",
+      "revId": "8293dfc92f5196f5070a5fa4d47b4f32fd8662fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
