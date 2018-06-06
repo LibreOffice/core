@@ -119,7 +119,17 @@ void SAL_CALL KDE5FilePicker::removeFilePickerListener(const uno::Reference<XFil
 
 void SAL_CALL KDE5FilePicker::setTitle(const OUString& title) {}
 
-sal_Int16 SAL_CALL KDE5FilePicker::execute() { return 0; }
+sal_Int16 SAL_CALL KDE5FilePicker::execute()
+{
+    if (!_filters.isEmpty())
+        _dialog->setNameFilters(_filters);
+    if (!_currentFilter.isEmpty())
+        _dialog->selectNameFilter(_currentFilter);
+
+    _dialog->show();
+    //block and wait for user input
+    return _dialog->exec() == QFileDialog::Accepted;
+}
 
 void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect) {}
 

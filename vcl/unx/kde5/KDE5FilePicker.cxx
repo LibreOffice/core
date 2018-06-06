@@ -48,19 +48,7 @@ KDE5FilePicker::~KDE5FilePicker()
 
 //void KDE5FilePicker::setTitle(const QString& title) { _dialog->setWindowTitle(title); }
 
-/*bool KDE5FilePicker::execute()
-{
-    if (!_filters.isEmpty())
-        _dialog->setNameFilters(_filters);
-    if (!_currentFilter.isEmpty())
-        _dialog->selectNameFilter(_currentFilter);
-
-    _dialog->show();
-    //block and wait for user input
-    return _dialog->exec() == QFileDialog::Accepted;
-}
-
-void KDE5FilePicker::setMultiSelectionMode(bool multiSelect)
+/*void KDE5FilePicker::setMultiSelectionMode(bool multiSelect)
 {
     _dialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles : QFileDialog::ExistingFile);
 }
