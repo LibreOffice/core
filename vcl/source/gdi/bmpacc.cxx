@@ -38,7 +38,7 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 
     if( xImpBmp )
     {
-        if( mnAccessMode == BitmapAccessMode::Write && !maBitmap.ImplGetSalBitmap() )
+        if( mnAccessMode == BitmapAccessMode::Write && xImpBmp.use_count() > 2)
         {
             xImpBmp.reset();
             rBitmap.ImplMakeUnique();
@@ -64,17 +64,15 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             }
         }
 
-        maBitmap = rBitmap;
+        mxSalBmp = xImpBmp;
     }
 }
 
 BitmapInfoAccess::~BitmapInfoAccess()
 {
-    std::shared_ptr<SalBitmap> xImpBmp = maBitmap.ImplGetSalBitmap();
-
-    if (mpBuffer && xImpBmp)
+    if (mpBuffer && mxSalBmp)
     {
-        xImpBmp->ReleaseBuffer( mpBuffer, mnAccessMode );
+        mxSalBmp->ReleaseBuffer( mpBuffer, mnAccessMode );
         mpBuffer = nullptr;
     }
 }

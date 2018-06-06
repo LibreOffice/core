@@ -142,7 +142,7 @@ private:
     BitmapInfoAccess& operator=(const BitmapInfoAccess&) = delete;
 
 protected:
-    Bitmap maBitmap;
+    std::shared_ptr<SalBitmap> mxSalBmp;
     BitmapBuffer* mpBuffer;
     ColorMask maColorMask;
     BitmapAccessMode mnAccessMode;
