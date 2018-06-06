@@ -34,6 +34,7 @@ gb_UnoApi_get_target = $(INSTROOT)/$(if $(filter udkapi,$(1)),$(LIBO_URE_MISC_FO
 
 gb_AutoInstall_get_target = $(WORKDIR)/AutoInstall/$(1)
 gb_AllLangHelp_get_target = $(WORKDIR)/AllLangHelp/$(1)
+gb_AllLangHelp_get_helpfiles_target = $(WORKDIR)/AllLangHelp/$(1).helpfiles
 gb_AllLangPackage_get_target = $(WORKDIR)/AllLangPackage/$(1)
 gb_AllLangMoTarget_get_target = $(WORKDIR)/AllLangMo/$(1)
 gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
