@@ -23,6 +23,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/region.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <salbmp.hxx>
 
 #include <bmpfast.hxx>
 #include <bitmapwriteaccess.hxx>
@@ -86,7 +87,7 @@ void BitmapWriteAccess::Erase( const Color& rColor )
     // use the canonical method to clear the bitmap
     boost::optional<BitmapColor> pOldFillColor(mpFillColor);
     const Point aPoint;
-    const tools::Rectangle aRect(aPoint, maBitmap.GetSizePixel());
+    const tools::Rectangle aRect(aPoint, mxSalBmp->GetSize());
 
     SetFillColor(rColor);
     FillRect(aRect);
@@ -235,7 +236,7 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
     if (mpFillColor)
     {
         const BitmapColor& rFillColor = *mpFillColor;
-        tools::Rectangle aRect(Point(), maBitmap.GetSizePixel());
+        tools::Rectangle aRect(Point(), mxSalBmp->GetSize());
 
         aRect.Intersection(rRect);
 
