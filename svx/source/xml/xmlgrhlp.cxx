@@ -764,10 +764,11 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
             if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
             {
-                if (aGraphic.hasPdfData())
+                const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData = aGraphic.getPdfData();
+                if (rPdfData && rPdfData->hasElements())
                 {
                     // See if we have this PDF already, and avoid duplicate storage.
-                    auto aIt = maExportPdf.find(aGraphic.getPdfData().get());
+                    auto aIt = maExportPdf.find(rPdfData.get());
                     if (aIt != maExportPdf.end())
                     {
                         auto const& aURLAndMimePair = aIt->second;
@@ -779,8 +780,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
-                    std::shared_ptr<uno::Sequence<sal_Int8>> pPdfData = aGraphic.getPdfData();
-                    pStream->WriteBytes(pPdfData->getConstArray(), pPdfData->getLength());
+                    pStream->WriteBytes(rPdfData->getConstArray(), rPdfData->getLength());
                 }
                 else
                 {

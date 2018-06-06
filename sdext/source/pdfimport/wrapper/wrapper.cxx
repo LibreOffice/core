@@ -1009,7 +1009,7 @@ public:
 };
 
 bool xpdf_ImportFromFile(const OUString& rURL,
-                             const ContentSinkSharedPtr& rSink,
+                         const ContentSinkSharedPtr& rSink,
                          const uno::Reference<task::XInteractionHandler>& xIHdl,
                          const OUString& rPwd,
                          const uno::Reference<uno::XComponentContext>& xContext,
