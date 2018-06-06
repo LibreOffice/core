@@ -216,13 +216,13 @@ EditDLL::~EditDLL()
     delete pGlobalData;
 }
 
-static ResMgr* pResMgr=nullptr;
-
 ResMgr* EditDLL::GetResMgr()
 {
-    if (!pResMgr)
-        pResMgr = ResMgr::CreateResMgr("editeng", Application::GetSettings().GetUILanguageTag());
-    return pResMgr;
+    static std::unique_ptr<ResMgr> pResourceManager;
+    const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
+    if (!pResourceManager || pResourceManager->GetLocale() != rLocale)
+        pResourceManager.reset(ResMgr::CreateResMgr("editeng", Application::GetSettings().GetUILanguageTag()));
+    return pResourceManager.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
