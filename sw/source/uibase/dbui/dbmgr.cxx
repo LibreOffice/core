@@ -100,6 +100,7 @@
 #include <com/sun/star/mail/MailAttachment.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <mailmergehelper.hxx>
@@ -2995,11 +2996,30 @@ OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUSt
     return LoadAndRegisterDataSource_Impl( DBConnURIType::UNKNOWN, nullptr, INetURLObject(rURI), pDestDir, nullptr );
 }
 
+namespace
+{
+    // tdf#117824 switch the embedded database away from using its current storage and point it to temporary storage
+    // which allows the original storage to be deleted
+    void switchEmbeddedDatabaseStorage(uno::Reference<sdb::XDatabaseContext>& rDatabaseContext, const OUString& rName)
+    {
+        uno::Reference<sdb::XDocumentDataSource> xDS(rDatabaseContext->getByName(rName), uno::UNO_QUERY);
+        if (!xDS)
+            return;
+        uno::Reference<document::XStorageBasedDocument> xStorageDoc(xDS->getDatabaseDocument(), uno::UNO_QUERY);
+        if (!xStorageDoc)
+            return;
+        xStorageDoc->switchToStorage(comphelper::OStorageHelper::GetTemporaryStorage());
+    }
+}
+
 void SwDBManager::RevokeDataSource(const OUString& rName)
 {
     uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
     if (xDatabaseContext->hasByName(rName))
+    {
+        switchEmbeddedDatabaseStorage(xDatabaseContext, rName);
         xDatabaseContext->revokeObject(rName);
+    }
 }
 
 void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell)
