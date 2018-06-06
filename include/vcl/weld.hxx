@@ -661,6 +661,7 @@ public:
     void show(bool bShow = true) { m_xSpinButton->show(bShow); }
     void hide() { m_xSpinButton->hide(); }
     void set_digits(unsigned int digits) { m_xSpinButton->set_digits(digits); }
+    void set_accessible_name(const OUString& rName) { m_xSpinButton->set_accessible_name(rName); }
     unsigned int get_digits() const { return m_xSpinButton->get_digits(); }
     void save_value() { m_xSpinButton->save_value(); }
     bool get_value_changed_from_saved() const

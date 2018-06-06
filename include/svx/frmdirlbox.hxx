@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_FRMDIRLBOX_HXX
 
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/itemconnect.hxx>
 #include <editeng/frmdir.hxx>
 #include <svx/svxdllapi.h>
@@ -53,6 +54,28 @@ public:
     SvxFrameDirection   GetSelectEntryValue() const;
 };
 
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFrameDirectionListBox
+{
+private:
+    std::unique_ptr<weld::ComboBoxText> m_xControl;
+public:
+    explicit            SvxFrameDirectionListBox(weld::ComboBoxText* pControl)
+        : m_xControl(pControl)
+    {
+    }
+
+    bool get_visible() const { return m_xControl->get_visible(); }
+    bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
+    SvxFrameDirection get_active_id() const { return static_cast<SvxFrameDirection>(m_xControl->get_active_id().toUInt32()); }
+    void set_active_id(SvxFrameDirection eDir) { m_xControl->set_active_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
+    void save_value() { m_xControl->save_value(); }
+    /** Inserts a string with corresponding direction enum into the listbox. */
+    void append(SvxFrameDirection eDirection, const OUString& rString)
+    {
+        m_xControl->append(OUString::number(static_cast<sal_uInt32>(eDirection)), rString);
+    }
+};
 
 /** Wrapper for usage of a FrameDirectionListBox in item connections. */
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameDirectionListBoxWrapper : public sfx::SingleControlWrapper< FrameDirectionListBox, SvxFrameDirection >
