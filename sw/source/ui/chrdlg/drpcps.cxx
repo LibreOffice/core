@@ -142,7 +142,7 @@ void SwDropCapsPict::SetText( const OUString& rT )
 
 Size SwDropCapsPict::GetOptimalSize() const
 {
-    return getParagraphPreviewOptimalSize(this);
+    return getParagraphPreviewOptimalSize(*this);
 }
 
 void SwDropCapsPict::Resize()
