@@ -34,7 +34,6 @@ $(eval $(call gb_Library_add_defs,vclplug_kde5,\
 $(eval $(call gb_Library_use_sdk_api,vclplug_kde5))
 
 $(eval $(call gb_Library_use_libraries,vclplug_kde5,\
-    vclplug_gen \
     vclplug_qt5 \
     vcl \
     tl \
@@ -90,7 +89,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde5,\
     vcl/unx/kde5/KDE5FilePicker \
     vcl/unx/kde5/KDE5FilePicker2 \
     vcl/unx/kde5/KDE5SalData \
-    vcl/unx/kde5/KDE5SalDisplay \
     vcl/unx/kde5/KDE5SalFrame \
     vcl/unx/kde5/KDE5SalGraphics \
     vcl/unx/kde5/KDE5SalInstance \
