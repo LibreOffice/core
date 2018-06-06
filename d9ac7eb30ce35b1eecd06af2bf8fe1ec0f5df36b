@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_df0b237c",
+        "filename": "vcl/source/gdi/print3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-06T16:31:23Z",
+      "side": 1,
+      "message": "Uhm, if this really needs to be commented out (the func is temporarily unimplemented), please add some FIXME here",
+      "revId": "d9ac7eb30ce35b1eecd06af2bf8fe1ec0f5df36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_ff10dfaa",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-06T16:31:23Z",
+      "side": 1,
+      "message": "Mildly better C++ coding style would be to use an enum here",
+      "revId": "d9ac7eb30ce35b1eecd06af2bf8fe1ec0f5df36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_bf7d87e9",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-06T16:31:23Z",
+      "side": 1,
+      "message": "I wonder (given that this code is about 10 years old and some OUString convenience functions didn\u0027t exist back then) if we can perhaps kill it with fire and simply use OUString::replaceFirst(\"%p\", newExpression) where appropriate",
+      "revId": "d9ac7eb30ce35b1eecd06af2bf8fe1ec0f5df36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_9f78cbfa",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-06T16:31:23Z",
+      "side": 1,
+      "message": "Why not keep the ids as they were?",
+      "revId": "d9ac7eb30ce35b1eecd06af2bf8fe1ec0f5df36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
