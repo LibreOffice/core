@@ -19,11 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_PRCNTFLD_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_PRCNTFLD_HXX
 
+#include <svtools/unitconv.hxx>
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <swdllapi.h>
 #include "uitool.hxx"
 
-//Wraps a MetricField with extra features, preferred to PercentField
 class SW_DLLPUBLIC PercentField
 {
     VclPtr<MetricField> m_pField;
@@ -99,6 +100,73 @@ public:
 
     void LockAutoCalculation(bool bLock) {bLockAutoCalculation = bLock;}
 };
+
+class SW_DLLPUBLIC SwPercentField
+{
+    std::unique_ptr<weld::MetricSpinButton> m_pField;
+
+    int nRefValue;      // 100% value for conversion (in Twips)
+    int nOldMax;
+    int nOldMin;
+    int nOldSpinSize;
+    int nOldPageSize;
+    int nLastPercent;
+    int nLastValue;
+    sal_uInt16  nOldDigits;
+    FieldUnit   eOldUnit;
+    bool bLockAutoCalculation; //prevent recalculation of percent values when the
+                               //reference value is changed
+
+    SAL_DLLPRIVATE static int ImpPower10(sal_uInt16 n);
+
+public:
+
+    SwPercentField(weld::MetricSpinButton* pControl);
+    const weld::MetricSpinButton* get() const { return m_pField.get(); }
+    weld::MetricSpinButton* get() { return m_pField.get(); }
+    void connect_value_changed(const Link<weld::MetricSpinButton&, void>& rLink) { m_pField->connect_value_changed(rLink); }
+    void SetMetric(FieldUnit eUnit) { ::SetFieldUnit(*m_pField, eUnit); }
+    void set_sensitive(bool bEnable) { m_pField->set_sensitive(bEnable); }
+    bool has_focus() const { return m_pField->has_focus(); }
+    void set_accessible_name(const OUString& rName) { m_pField->set_accessible_name(rName); }
+    void set_text(const OUString& rStr) { m_pField->set_text(rStr); }
+    void save_value() { m_pField->save_value(); }
+    bool get_value_changed_from_saved() const { return m_pField->get_value_changed_from_saved(); }
+    OUString get_text() const { return m_pField->get_text(); }
+    void SetMetricFieldMin(int nNewMin) { m_pField->set_min(nNewMin, FUNIT_NONE); }
+    void SetMetricFieldMax(int nNewMax) { m_pField->set_max(nNewMax, FUNIT_NONE); }
+    int GetMetrixFieldMin() const { int nMin, nMax; m_pField->get_range(nMin, nMax, FUNIT_NONE); return nMin; }
+
+    void set_value(int nNewValue) { m_pField->set_value(nNewValue, FUNIT_NONE); }
+
+    void SetPrcntValue(int nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+
+    void SetUserValue(int nNewValue, FieldUnit eInUnit);
+
+    void SetBaseValue(int nNewValue, FieldUnit eInUnit);
+
+    int get_value(FieldUnit eOutUnit = FUNIT_NONE);
+
+    bool IsValueModified();
+
+    void set_min(int nNewMin, FieldUnit eInUnit);
+    void set_max(int nNewMax, FieldUnit eInUnit);
+
+    int NormalizePercent(int nValue);
+    int DenormalizePercent(int nValue);
+
+    int normalize(int nValue) const { return m_pField->normalize(nValue); }
+
+    void SetRefValue(int nValue);
+    int GetRealValue(FieldUnit eOutUnit);
+
+    int Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
+
+    void ShowPercent(bool bPercent);
+
+    void LockAutoCalculation(bool bLock) {bLockAutoCalculation = bLock;}
+};
+
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_PRCNTFLD_HXX
 
