@@ -55,6 +55,7 @@
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/script/MemberType.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XConnectable.hpp>
 #include <ooo/vba/XConnectionPoint.hpp>
 #include <ooo/vba/XSink.hpp>
@@ -1214,6 +1215,7 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
             if (iter == m_nameToDispIdMap.end())
             {
                 ret = DISP_E_UNKNOWNNAME;
+                SAL_INFO("extensions.olebridge", "  " << name << ": UNKNOWN");
             }
             else
             {
@@ -2059,6 +2061,7 @@ class CXEnumVariant : public IEnumVARIANT,
 {
 public:
     CXEnumVariant()
+        : mnIndex(1)            // ooo::vba::XCollection index starts at one
     {
     }
 
@@ -2074,10 +2077,10 @@ public:
 
     // Creates and intializes the enumerator
     void Init(InterfaceOleWrapper* pInterfaceOleWrapper,
-              const Reference< XEnumeration > xEnumeration)
+              const Reference<ooo::vba::XCollection > xCollection)
     {
         mpInterfaceOleWrapper = pInterfaceOleWrapper;
-        mxEnumeration = xEnumeration;
+        mxCollection = xCollection;
     }
 
     // IEnumVARIANT
@@ -2107,14 +2110,18 @@ public:
 
         while (celt > 0)
         {
-           if (!mxEnumeration->hasMoreElements())
+            if (mnIndex >= mxCollection->getCount())
                 return S_FALSE;
-            Any aElement = mxEnumeration->nextElement();
+
+            Any aIndex;
+            aIndex <<= mnIndex;
+            Any aElement = mxCollection->Item(aIndex, Any());
             mpInterfaceOleWrapper->anyToVariant(rgVar, aElement);
             // rgVar->pdispVal->AddRef(); ??
             if (pCeltFetched)
                 (*pCeltFetched)++;
             rgVar++;
+            mnIndex++;
             celt--;
         }
         return S_OK;
@@ -2122,7 +2129,8 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE Reset() override
     {
-        return E_NOTIMPL;
+        mnIndex = 1;
+        return S_OK;
     }
 
     virtual HRESULT STDMETHODCALLTYPE STDMETHODCALLTYPE Skip(ULONG celt) override
@@ -2131,9 +2139,9 @@ public:
 
         while (celt > 0)
         {
-            if (!mxEnumeration->hasMoreElements())
+            if (mnIndex >= mxCollection->getCount())
                 return S_FALSE;
-            mxEnumeration->nextElement();
+            mnIndex++;
             celt--;
         }
         return S_OK;
@@ -2141,7 +2149,8 @@ public:
 
 private:
     InterfaceOleWrapper* mpInterfaceOleWrapper;
-    Reference<XEnumeration> mxEnumeration;
+    Reference<ooo::vba::XCollection> mxCollection;
+    sal_Int32 mnIndex;
 };
 
 class Sink : public cppu::WeakImplHelper<ooo::vba::XSink>
@@ -2682,11 +2691,9 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
             if( !pvarResult)
                 return E_POINTER;
 
-            Reference< XEnumerationAccess > xEnumerationAccess(m_xOrigin, UNO_QUERY_THROW);
-            if (!xEnumerationAccess.is())
+            Reference< ooo::vba::XCollection> xCollection(m_xOrigin, UNO_QUERY);
+            if (!xCollection.is())
                 return DISP_E_MEMBERNOTFOUND;
-
-            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
 
             CComObject<CXEnumVariant>* pEnumVar;
 
@@ -2696,7 +2703,7 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
 
             pEnumVar->AddRef();
 
-            pEnumVar->Init(this, xEnumeration);
+            pEnumVar->Init(this, xCollection);
 
             pvarResult->vt = VT_UNKNOWN;
             pvarResult->punkVal = NULL;
