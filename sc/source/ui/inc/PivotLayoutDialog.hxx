@@ -42,6 +42,8 @@ class ScPivotLayoutDialog : public ScAnyRefDlg
 public:
     ScDPObject maPivotTableObject;
 
+    VclPtr<ScPivotLayoutTreeListBase> mpPreviouslyFocusedListBox;
+
 private:
     ScViewData* mpViewData;
     ScDocument* mpDocument;
