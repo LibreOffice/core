@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_PARAPREV_HXX
 #define INCLUDED_SVX_PARAPREV_HXX
 
+#include <vcl/customweld.hxx>
 #include <vcl/window.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/svxdllapi.h>
@@ -110,6 +111,81 @@ public:
         return aText;
     }
 };
+
+class SVX_DLLPUBLIC ParaPrevWindow final : public weld::CustomWidgetController
+{
+    Size                aSize;
+
+    // indentation
+    long                nLeftMargin;
+    long                nRightMargin;
+    short               nFirstLineOfst;
+    // distances
+    sal_uInt16          nUpper;
+    sal_uInt16          nLower;
+    // adjustment
+    SvxAdjust           eAdjust;
+    // last line in justification
+    SvxAdjust           eLastLine;
+    // line distance
+    SvxPrevLineSpace    eLine;
+
+    OUString            aText;
+    tools::Rectangle    Lines[9];
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    void DrawParagraph(vcl::RenderContext& rRenderContext);
+
+public:
+    ParaPrevWindow();
+
+    void SetFirstLineOfst( short nNew )
+    {
+        nFirstLineOfst = nNew;
+    }
+    void SetLeftMargin( long nNew )
+    {
+        nLeftMargin = nNew;
+    }
+    void SetRightMargin( long nNew )
+    {
+        nRightMargin = nNew;
+    }
+    void SetUpper( sal_uInt16 nNew )
+    {
+        nUpper = nNew;
+    }
+    void SetLower( sal_uInt16 nNew )
+    {
+        nLower = nNew;
+    }
+    void SetAdjust( SvxAdjust eNew )
+    {
+        eAdjust = eNew;
+    }
+    void SetLastLine( SvxAdjust eNew )
+    {
+        eLastLine = eNew;
+    }
+    void SetLineSpace( SvxPrevLineSpace eNew )
+    {
+        eLine = eNew;
+    }
+    void SetText( const OUString& rStr )
+    {
+        aText = rStr;
+    }
+    void SetSize( Size aNew )
+    {
+        aSize = aNew;
+    }
+    OUString GetText() const
+    {
+        return aText;
+    }
+};
+
 
 #endif
 
