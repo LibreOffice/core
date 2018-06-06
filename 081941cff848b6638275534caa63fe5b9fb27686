@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_dfe7a3aa",
+        "filename": "cui/source/customize/SvxToolbarConfigPage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-06T18:31:58Z",
+      "side": 1,
+      "message": "for example, is there a better way to do this?",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_ffec5f91",
+        "filename": "drawinglayer/source/primitive2d/graphicprimitivehelper2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-06T18:31:58Z",
+      "side": 1,
+      "message": "and this",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_1f021b3f",
+        "filename": "drawinglayer/source/processor2d/vclhelperbufferdevice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-06T18:31:58Z",
+      "side": 1,
+      "message": "and all of the above",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_3fffd735",
+        "filename": "drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2058,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-06T18:31:58Z",
+      "side": 1,
+      "message": "and this",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_5ffc933e",
+        "filename": "drawinglayer/source/tools/converters.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-06T18:31:58Z",
+      "side": 1,
+      "message": "and this",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_7ff94f4d",
+        "filename": "svx/source/dialog/svxruler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3378,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-06T18:31:58Z",
+      "side": 1,
+      "message": "and this",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
