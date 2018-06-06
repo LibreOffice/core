@@ -57,8 +57,8 @@ ScAttrDlg::ScAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs)
         RemoveTabPage( "asiantypography" );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
     AddTabPage( "borders",      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     nullptr );
-    OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+    OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), "GetTabPageCreatorFunc fail!");
+    AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
     AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    nullptr );
 }
 
