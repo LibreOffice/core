@@ -24,8 +24,6 @@
 #undef Status
 
 #include <qt5/Qt5Frame.hxx>
-#include <unx/saldisp.hxx>
-#include <unx/salgdi.h>
 
 #include "KDE5SalGraphics.hxx"
 
