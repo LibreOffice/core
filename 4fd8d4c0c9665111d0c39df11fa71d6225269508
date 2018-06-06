@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_94499291",
+        "filename": "sc/inc/rangenam.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-06T08:32:59Z",
+      "side": 1,
+      "message": "This isn\u0027t used (unless I\u0027m blind ;-) please remove.",
+      "revId": "4fd8d4c0c9665111d0c39df11fa71d6225269508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
