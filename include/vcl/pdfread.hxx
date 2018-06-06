@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
 
+#include <vector>
 #include <tools/stream.hxx>
 
 namespace com

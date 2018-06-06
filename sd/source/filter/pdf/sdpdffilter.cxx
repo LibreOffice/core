@@ -144,7 +144,7 @@ bool SdPdfFilter::Import()
         Point aPos(0, 0);
 
         pPage->InsertObject(new SdrGrafObj(pPage->getSdrModelFromSdrPage(), aGraphic,
-                                           ::tools::Rectangle(aPos, aGrfSize)));
+                                           tools::Rectangle(aPos, aGrfSize)));
     }
 
     return true;

@@ -971,7 +971,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     Size aSize(FRound(rSize.Width() * mfScaleX), FRound(rSize.Height() * mfScaleY));
 
     if (eAlg == ALIGN_BASELINE)
-        aPos.AdjustY(-(FRound(aFontMetric.GetAscent() * mfScaleY)));
+        aPos.AdjustY(-FRound(aFontMetric.GetAscent() * mfScaleY));
     else if (eAlg == ALIGN_BOTTOM)
         aPos.AdjustY(-nTextHeight);
 
