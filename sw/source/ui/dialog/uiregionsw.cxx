@@ -2109,38 +2109,28 @@ void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage 
         static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
 }
 
-SwSectionIndentTabPage::SwSectionIndentTabPage(vcl::Window *pParent, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pParent, "IndentPage", "modules/swriter/ui/indentpage.ui", &rAttrSet)
+SwSectionIndentTabPage::SwSectionIndentTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/indentpage.ui", "IndentPage", &rAttrSet)
+    , m_xBeforeMF(m_xBuilder->weld_metric_spin_button("before", FUNIT_CM))
+    , m_xAfterMF(m_xBuilder->weld_metric_spin_button("after", FUNIT_CM))
+    , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin))
 {
-    get(m_pBeforeMF, "before");
-    get(m_pAfterMF, "after");
-    get(m_pPreviewWin, "preview");
-    Link<Edit&,void> aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
-    m_pBeforeMF->SetModifyHdl(aLk);
-    m_pAfterMF->SetModifyHdl(aLk);
+    Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
+    m_xBeforeMF->connect_value_changed(aLk);
+    m_xAfterMF->connect_value_changed(aLk);
 }
 
 SwSectionIndentTabPage::~SwSectionIndentTabPage()
 {
-    disposeOnce();
 }
 
-void SwSectionIndentTabPage::dispose()
+bool SwSectionIndentTabPage::FillItemSet(SfxItemSet* rSet)
 {
-    m_pBeforeMF.clear();
-    m_pAfterMF.clear();
-    m_pPreviewWin.clear();
-    SfxTabPage::dispose();
-}
-
-bool SwSectionIndentTabPage::FillItemSet( SfxItemSet* rSet)
-{
-    if(m_pBeforeMF->IsValueModified() ||
-            m_pAfterMF->IsValueModified())
+    if (m_xBeforeMF->get_value_changed_from_saved() || m_xAfterMF->get_value_changed_from_saved())
     {
         SvxLRSpaceItem aLRSpace(
-                static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) ,
-                static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))), 0, 0, RES_LR_SPACE);
+                m_xBeforeMF->denormalize(m_xBeforeMF->get_value(FUNIT_TWIP)) ,
+                m_xAfterMF->denormalize(m_xAfterMF->get_value(FUNIT_TWIP)), 0, 0, RES_LR_SPACE);
         rSet->Put(aLRSpace);
     }
     return true;
@@ -2150,8 +2140,8 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
 {
     //this page doesn't show up in HTML mode
     FieldUnit aMetric = ::GetDfltMetric(false);
-    SetMetric(*m_pBeforeMF, aMetric);
-    SetMetric(*m_pAfterMF , aMetric);
+    SetFieldUnit(*m_xBeforeMF, aMetric);
+    SetFieldUnit(*m_xAfterMF , aMetric);
 
     SfxItemState eItemState = rSet->GetItemState( RES_LR_SPACE );
     if ( eItemState >= SfxItemState::DEFAULT )
@@ -2159,39 +2149,39 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
         const SvxLRSpaceItem& rSpace =
             rSet->Get( RES_LR_SPACE );
 
-        m_pBeforeMF->SetValue( m_pBeforeMF->Normalize(rSpace.GetLeft()), FUNIT_TWIP );
-        m_pAfterMF->SetValue( m_pAfterMF->Normalize(rSpace.GetRight()), FUNIT_TWIP );
+        m_xBeforeMF->set_value(m_xBeforeMF->normalize(rSpace.GetLeft()), FUNIT_TWIP);
+        m_xAfterMF->set_value(m_xAfterMF->normalize(rSpace.GetRight()), FUNIT_TWIP);
     }
     else
     {
-        m_pBeforeMF->SetEmptyFieldValue();
-        m_pAfterMF->SetEmptyFieldValue();
+        m_xBeforeMF->set_text("");
+        m_xAfterMF->set_text("");
     }
-    m_pBeforeMF->SaveValue();
-    m_pAfterMF->SaveValue();
-    IndentModifyHdl(*m_pBeforeMF);
+    m_xBeforeMF->save_value();
+    m_xAfterMF->save_value();
+    IndentModifyHdl(*m_xBeforeMF);
 }
 
-VclPtr<SfxTabPage> SwSectionIndentTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwSectionIndentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwSectionIndentTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SwSectionIndentTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell const & rSh)
 {
     //set sensible values at the preview
-    m_pPreviewWin->SetAdjust(SvxAdjust::Block);
-    m_pPreviewWin->SetLastLine(SvxAdjust::Block);
+    m_aPreviewWin.SetAdjust(SvxAdjust::Block);
+    m_aPreviewWin.SetLastLine(SvxAdjust::Block);
     const SwRect& rPageRect = rSh.GetAnyCurRect( CurRectType::Page );
     Size aPageSize(rPageRect.Width(), rPageRect.Height());
-    m_pPreviewWin->SetSize(aPageSize);
+    m_aPreviewWin.SetSize(aPageSize);
 }
 
-IMPL_LINK_NOARG(SwSectionIndentTabPage, IndentModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwSectionIndentTabPage, IndentModifyHdl, weld::MetricSpinButton&, void)
 {
-    m_pPreviewWin->SetLeftMargin( static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) );
-    m_pPreviewWin->SetRightMargin( static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))) );
-    m_pPreviewWin->Invalidate();
+    m_aPreviewWin.SetLeftMargin(m_xBeforeMF->denormalize(m_xBeforeMF->get_value(FUNIT_TWIP)));
+    m_aPreviewWin.SetRightMargin(m_xAfterMF->denormalize(m_xAfterMF->get_value(FUNIT_TWIP)));
+    m_aPreviewWin.Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

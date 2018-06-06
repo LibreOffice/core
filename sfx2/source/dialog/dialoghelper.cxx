@@ -52,9 +52,9 @@ void setPreviewsToSamePlace(vcl::Window const *pParent, VclBuilderContainer *pPa
     }
 }
 
-Size getParagraphPreviewOptimalSize(const vcl::Window *pReference)
+Size getParagraphPreviewOptimalSize(const OutputDevice& rReference)
 {
-    return pReference->LogicToPixel(Size(68 , 112), MapMode(MapUnit::MapAppFont));
+    return rReference.LogicToPixel(Size(68 , 112), MapMode(MapUnit::MapAppFont));
 }
 
 Size getDrawPreviewOptimalSize(const vcl::Window *pReference)
