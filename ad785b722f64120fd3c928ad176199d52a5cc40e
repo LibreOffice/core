@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "5a22e58a_7fe4ef3a",
+        "filename": "include/svx/svdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-06-06T11:37:45Z",
+      "side": 1,
+      "message": "Correct. No need to change the var names, I\u0027ll go over it with continued AW080 changes one day.",
+      "parentUuid": "9a30ddce_ec59b15b",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 418,
+        "endChar": 50
+      },
+      "revId": "ad785b722f64120fd3c928ad176199d52a5cc40e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_ac26d9cb",
         "filename": "sc/source/ui/docshell/docsh3.cxx",
         "patchSetId": 1
