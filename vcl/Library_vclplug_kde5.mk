@@ -61,13 +61,6 @@ $(eval $(call gb_Library_use_externals,vclplug_kde5,\
 	epoxy \
 ))
 
-$(eval $(call gb_Library_add_libs,vclplug_kde5,\
-	-lX11 \
-	-lXext \
-	-lSM \
-	-lICE \
-))
-
 ifneq ($(QT5_HAVE_GLIB),)
 $(eval $(call gb_Library_add_defs,vclplug_kde5,\
     $(QT5_GLIB_CFLAGS) \
