@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <osl/conditn.hxx>
@@ -37,13 +38,15 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QHash>
+#include <QtWidgets/QFileDialog>
 
 class QFileDialog;
 class QGridLayout;
 class QWidget;
 
 typedef ::cppu::WeakComponentImplHelper<css::ui::dialogs::XFilePicker3,
-                                        css::ui::dialogs::XFilePickerControlAccess
+                                        css::ui::dialogs::XFilePickerControlAccess,
+                                        css::ui::dialogs::XFolderPicker2
                                         // TODO css::ui::dialogs::XFilePreview
                                         ,
                                         css::lang::XInitialization, css::lang::XServiceInfo>
@@ -80,7 +83,7 @@ protected:
     bool allowRemoteUrls;
 
 public:
-    explicit KDE5FilePicker(const css::uno::Reference<css::uno::XComponentContext>&);
+    explicit KDE5FilePicker(QFileDialog::FileMode);
     virtual ~KDE5FilePicker() override;
 
     void enableFolderMode();
@@ -120,6 +123,10 @@ public:
     virtual void SAL_CALL enableControl(sal_Int16 nControlId, sal_Bool bEnable) override;
     virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
     virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
+
+    // XFolderPicker stuff
+    virtual OUString SAL_CALL getDirectory() override;
+    virtual void SAL_CALL setDescription(const OUString& rDescription) override;
 
     /* TODO XFilePreview
 
