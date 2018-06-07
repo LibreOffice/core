@@ -166,9 +166,11 @@ protected:
 
 Q_SIGNALS:
     void setTitleSignal(const OUString& rTitle);
+    void setDisplayDirectorySignal(const OUString& rDir);
 
 private Q_SLOTS:
     void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
+    void setDisplayDirectorySlot(const OUString& rDir) { return setDisplayDirectory(rDir); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
