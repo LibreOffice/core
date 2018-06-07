@@ -55,7 +55,7 @@ class SwViewShell;
 class SwAttrIter;
 struct SwMultiCreator;
 class SwMultiPortion;
-class SwWrongList;
+namespace sw { class WrongListIterator; }
 
 #define ARROW_WIDTH 200
 #define DIR_LEFT2RIGHT 0
@@ -351,9 +351,9 @@ public:
 
 class SwTextPaintInfo : public SwTextSizeInfo
 {
-    const SwWrongList *pWrongList;
-    const SwWrongList *pGrammarCheckList;
-    const SwWrongList *pSmartTags;
+    sw::WrongListIterator *m_pWrongList;
+    sw::WrongListIterator *m_pGrammarCheckList;
+    sw::WrongListIterator *m_pSmartTags;
     std::vector<long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // For the background
     SwTextFly    aTextFly;    // Calculate the FlyFrame
@@ -371,9 +371,9 @@ class SwTextPaintInfo : public SwTextSizeInfo
 
 protected:
     SwTextPaintInfo()
-        : pWrongList(nullptr)
-        , pGrammarCheckList(nullptr)
-        , pSmartTags(nullptr)
+        : m_pWrongList(nullptr)
+        , m_pGrammarCheckList(nullptr)
+        , m_pSmartTags(nullptr)
         , pSpaceAdd(nullptr)
         , pBrushItem(nullptr)
         , nSpaceIdx(0)
@@ -458,14 +458,14 @@ public:
     void SetpSpaceAdd( std::vector<long>* pNew ){ pSpaceAdd = pNew; }
     std::vector<long>* GetpSpaceAdd() const { return pSpaceAdd; }
 
-    void SetWrongList( const SwWrongList *pNew ){ pWrongList = pNew; }
-    const SwWrongList* GetpWrongList() const { return pWrongList; }
+    void SetWrongList(sw::WrongListIterator *const pNew) { m_pWrongList = pNew; }
+    sw::WrongListIterator* GetpWrongList() const { return m_pWrongList; }
 
-    void SetGrammarCheckList( const SwWrongList *pNew ){ pGrammarCheckList = pNew; }
-    const SwWrongList* GetGrammarCheckList() const { return pGrammarCheckList; }
+    void SetGrammarCheckList(sw::WrongListIterator *const pNew) { m_pGrammarCheckList = pNew; }
+    sw::WrongListIterator* GetGrammarCheckList() const { return m_pGrammarCheckList; }
 
-    void SetSmartTags( const SwWrongList *pNew ){ pSmartTags = pNew; }
-    const SwWrongList* GetSmartTags() const { return pSmartTags; }
+    void SetSmartTags(sw::WrongListIterator *const pNew) { m_pSmartTags = pNew; }
+    sw::WrongListIterator* GetSmartTags() const { return m_pSmartTags; }
 };
 
 class SwTextFormatInfo : public SwTextPaintInfo
@@ -683,9 +683,10 @@ class SwTextSlot final
     OUString aText;
     std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldText;
-    const SwWrongList* pOldSmartTagList;
-    const SwWrongList* pOldGrammarCheckList;
-    SwWrongList* pTempList;
+    sw::WrongListIterator * m_pOldSmartTagList;
+    sw::WrongListIterator * m_pOldGrammarCheckList;
+    std::unique_ptr<SwWrongList> m_pTempList;
+    std::unique_ptr<sw::WrongListIterator> m_pTempIter;
     TextFrameIndex nIdx;
     TextFrameIndex nLen;
     bool bOn;

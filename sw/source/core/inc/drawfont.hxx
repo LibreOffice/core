@@ -30,7 +30,7 @@ class SwTextFrame;
 class SwViewShell;
 class SwScriptInfo;
 class Point;
-class SwWrongList;
+namespace sw { class WrongListIterator; }
 class Size;
 class SwFont;
 namespace vcl {
@@ -50,9 +50,9 @@ class SW_DLLPUBLIC SwDrawTextInfo
     Point m_aPos;
     vcl::TextLayoutCache const* m_pCachedVclData;
     OUString m_aText;
-    const SwWrongList* m_pWrong;
-    const SwWrongList* m_pGrammarCheck;
-    const SwWrongList* m_pSmartTags;
+    sw::WrongListIterator* m_pWrong;
+    sw::WrongListIterator* m_pGrammarCheck;
+    sw::WrongListIterator* m_pSmartTags;
     Size m_aSize;
     SwFont *m_pFnt;
     SwUnderlineFont* m_pUnderFnt;
@@ -220,7 +220,7 @@ public:
         return m_aText;
     }
 
-    const SwWrongList* GetWrong() const
+    sw::WrongListIterator* GetWrong() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bWrong, "DrawTextInfo: Undefined WrongList" );
@@ -228,7 +228,7 @@ public:
         return m_pWrong;
     }
 
-    const SwWrongList* GetGrammarCheck() const
+    sw::WrongListIterator* GetGrammarCheck() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bGrammarCheck, "DrawTextInfo: Undefined GrammarCheck List" );
@@ -236,7 +236,7 @@ public:
         return m_pGrammarCheck;
     }
 
-    const SwWrongList* GetSmartTags() const
+    sw::WrongListIterator* GetSmartTags() const
     {
         return m_pSmartTags;
     }
@@ -418,7 +418,7 @@ public:
         m_pCachedVclData = nullptr; // would any case benefit from save/restore?
     }
 
-    void SetWrong( const SwWrongList* pNew )
+    void SetWrong(sw::WrongListIterator *const pNew)
     {
         m_pWrong = pNew;
 #ifdef DBG_UTIL
@@ -426,7 +426,7 @@ public:
 #endif
     }
 
-    void SetGrammarCheck( const SwWrongList* pNew )
+    void SetGrammarCheck(sw::WrongListIterator *const pNew)
     {
         m_pGrammarCheck = pNew;
 #ifdef DBG_UTIL
@@ -434,7 +434,7 @@ public:
 #endif
     }
 
-    void SetSmartTags( const SwWrongList* pNew )
+    void SetSmartTags(sw::WrongListIterator *const pNew)
     {
         m_pSmartTags = pNew;
     }
