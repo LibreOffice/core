@@ -64,6 +64,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
+    static const char constFilterNameDraw[] = "svg_Scalable_Vector_Graphics_Draw";
     static const char constFilterName[] = "svg_Scalable_Vector_Graphics";
 }
 
@@ -254,19 +255,22 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             //      pTargetSdrPage->SetBorder(...) and
             //      pTargetSdrPage->SetSize(...),
             // but ::adaptSizeAndBorderForAllPages
+            // Do use original Size and borders to get as close to original
+            // as possible for better turn-arounds.
             pTargetSdrPage->getSdrModelFromSdrPage().adaptSizeAndBorderForAllPages(
                 Size(
-                    aGraphicSize.Width() + nAllBorder + nAllBorder,
-                    aGraphicSize.Height() + nAllBorder + nAllBorder),
+                    aGraphicSize.Width(),
+                    aGraphicSize.Height()),
                 nAllBorder,
                 nAllBorder,
                 nAllBorder,
                 nAllBorder);
 
-            // set pos/size at SdrGraphicObj - add offset to PageBorder
+            // set pos/size at SdrGraphicObj - use zero position for
+            // better turn-around results
             aNewSdrGrafObj->SetSnapRect(
                 tools::Rectangle(
-                    Point(nAllBorder, nAllBorder),
+                    Point(0, 0),
                     aGraphicSize));
 
             // insert to page (owner change of SdrGrafObj)
@@ -472,86 +476,220 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
     mxDstDoc = xDoc;
 }
 
-bool SVGFilter::isStreamGZip(const uno::Reference<io::XInputStream>& xInput)
+// There is already another SVG-Type_Detector, see
+// vcl/source/filter/graphicfilter.cxx ("DOCTYPE svg"),
+// but since these start from different preconditions it is not
+// easy to unify these. For now, use this local helper.
+class SVGFileInfo
 {
-    uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
-    if(xSeek.is())
-        xSeek->seek(0);
+private:
+    const uno::Reference<io::XInputStream>&     mxInput;
+    uno::Sequence< sal_Int8 >                   mnFirstBytes;
+    sal_Int32                                   mnFirstBytesSize;
+    sal_uInt64                                  mnFirstRead;
+    bool                                        mbProcessed;
+    bool                                        mbIsSVG;
 
-    uno::Sequence<sal_Int8> aBuffer(2);
-    const sal_uInt64 nBytes = xInput->readBytes(aBuffer, 2);
-    if (nBytes == 2)
+    bool impCheckForMagic(
+        const sal_Int8* pMagic,
+        const sal_Int32 nMagicSize)
     {
-        const sal_Int8* pBuffer = aBuffer.getConstArray();
-        if (pBuffer[0] == 0x1F && static_cast<sal_uInt8>(pBuffer[1]) == 0x8B)
-            return true;
+        const sal_Int8* pBuffer(mnFirstBytes.getConstArray());
+        return std::search(
+            pBuffer,
+            pBuffer + mnFirstRead,
+            pMagic,
+            pMagic + nMagicSize) != pBuffer + mnFirstRead;
     }
-    return false;
-}
 
-bool SVGFilter::isStreamSvg(const uno::Reference<io::XInputStream>& xInput)
-{
-    uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
-    if(xSeek.is())
-        xSeek->seek(0);
+    void impEnsureProcessed()
+    {
+        if(mbProcessed)
+        {
+            return;
+        }
 
-    const sal_Int32 nLookAhead = 1024;
-    uno::Sequence<sal_Int8> aBuffer(nLookAhead);
-    const sal_uInt64 nBytes = xInput->readBytes(aBuffer, nLookAhead);
-    const sal_Int8* pBuffer = aBuffer.getConstArray();
+        mbProcessed = true;
 
-    sal_Int8 aMagic1[] = {'<', 's', 'v', 'g'};
-    sal_Int32 const aMagic1Size = SAL_N_ELEMENTS(aMagic1);
+        if(!mxInput.is())
+        {
+            return;
+        }
 
-    if (std::search(pBuffer, pBuffer + nBytes, aMagic1, aMagic1 + aMagic1Size) != pBuffer + nBytes )
-        return true;
+        if(0 == mnFirstBytesSize)
+        {
+            return;
+        }
 
-    sal_Int8 aMagic2[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
-    sal_Int32 const aMagic2Size = SAL_N_ELEMENTS(aMagic2);
+        mnFirstBytes.realloc(mnFirstBytesSize);
 
-    return std::search(pBuffer, pBuffer + nBytes, aMagic2, aMagic2 + aMagic2Size) != pBuffer + nBytes;
-}
+        if(mnFirstBytesSize != mnFirstBytes.getLength())
+        {
+            return;
+        }
+
+        std::unique_ptr< SvStream > aStream(utl::UcbStreamHelper::CreateStream(mxInput, true));
+
+        if(!aStream.get())
+        {
+            return;
+        }
+
+        const sal_uLong nStreamPos(aStream->Tell());
+        aStream->Seek(STREAM_SEEK_TO_END);
+        const sal_uLong nStreamLen(aStream->Tell() - nStreamPos);
+        aStream->Seek(nStreamPos);
+
+        if(aStream->GetError())
+        {
+            return;
+        }
+
+        mnFirstRead = aStream->ReadBytes(
+            &mnFirstBytes[0],
+            std::min(nStreamLen, sal_uLong(mnFirstBytesSize)));
+
+        if(aStream->GetError())
+        {
+            return;
+        }
+
+        // check if it is gzipped -> svgz
+        if(mnFirstBytes[0] == 0x1F && static_cast<sal_uInt8>(mnFirstBytes[1]) == 0x8B)
+        {
+            ZCodec aCodec;
+
+            aCodec.BeginCompression(
+                ZCODEC_DEFAULT_COMPRESSION,
+                false,
+                true);
+            mnFirstRead = aCodec.Read(
+                *aStream,
+                reinterpret_cast< sal_uInt8* >(mnFirstBytes.getArray()),
+                mnFirstBytesSize);
+            aCodec.EndCompression();
+        }
+
+        if(!mbIsSVG)
+        {
+            const sal_Int8 aMagic[] = {'<', 's', 'v', 'g'};
+            const sal_Int32 nMagicSize(SAL_N_ELEMENTS(aMagic));
+
+            mbIsSVG = impCheckForMagic(aMagic, nMagicSize);
+        }
+
+        if(!mbIsSVG)
+        {
+            const sal_Int8 aMagic[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
+            const sal_Int32 nMagicSize(SAL_N_ELEMENTS(aMagic));
+
+            mbIsSVG = impCheckForMagic(aMagic, nMagicSize);
+        }
+
+        return;
+    }
+
+public:
+    SVGFileInfo(
+        const uno::Reference<io::XInputStream>& xInput,
+        sal_Int32 nFirstBytesSize = 4096)
+    :   mxInput(xInput),
+        mnFirstBytes(),
+        mnFirstBytesSize(nFirstBytesSize),
+        mnFirstRead(0),
+        mbProcessed(false),
+        mbIsSVG(false)
+    {
+        // For the default buffer size: Use not too big
+        // (not more than 16K), but also not too small
+        // (not less than 1/2K), see comments at
+        // ImpPeekGraphicFormat, SVG section.
+        // I remember these cases and it *can* happen
+        // that SVGs have quite massive comments in their
+        // headings (!)
+        // Limit to plausible sizes, also for security reasons
+        mnFirstBytesSize = std::min(sal_Int32(512), mnFirstBytesSize);
+        mnFirstBytesSize = std::max(sal_Int32(16384), mnFirstBytesSize);
+    }
+
+    bool isSVG()
+    {
+        impEnsureProcessed();
+
+        return mbIsSVG;
+    }
+
+    bool isOwnFormat()
+    {
+        impEnsureProcessed();
+
+        if(mbIsSVG)
+        {
+            // xmlns:ooo
+            const sal_Int8 aMagic[] = {'x', 'm', 'l', 'n', 's', ':', 'o', 'o', 'o'};
+            const sal_Int32 nMagicSize(SAL_N_ELEMENTS(aMagic));
+
+            return impCheckForMagic(aMagic, nMagicSize);
+        }
+
+        return false;
+    }
+
+    bool isImpress()
+    {
+        impEnsureProcessed();
+
+        if(mbIsSVG)
+        {
+            // ooo:meta_slides
+            const sal_Int8 aMagic[] = {'o', 'o', 'o', ':', 'm', 'e', 't', 'a', '_', 's', 'l', 'i', 'd', 'e', 's'};
+            const sal_Int32 nMagicSize(SAL_N_ELEMENTS(aMagic));
+
+            return impCheckForMagic(aMagic, nMagicSize);
+        }
+
+        return false;
+    }
+};
 
 OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 {
     utl::MediaDescriptor aMediaDescriptor(rDescriptor);
     uno::Reference<io::XInputStream> xInput(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+    OUString aRetval;
 
     if (!xInput.is())
-        return OUString();
+    {
+        return aRetval;
+    }
 
-    try {
-        if (isStreamGZip(xInput))
+    try
+    {
+        SVGFileInfo aSVGFileInfo(xInput, 2048);
+
+        if(aSVGFileInfo.isSVG())
         {
-            std::unique_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInput, true ));
-            if(!aStream.get())
-                return OUString();
+            // We have SVG - set default document format to Draw
+            aRetval = OUString(constFilterNameDraw);
 
-            SvStream* pMemoryStream = new SvMemoryStream;
-            uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
-            if (!xSeek.is())
-                return OUString();
-            xSeek->seek(0);
-
-            ZCodec aCodec;
-            aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
-            aCodec.Decompress(*aStream.get(), *pMemoryStream);
-            aCodec.EndCompression();
-            pMemoryStream->Seek(STREAM_SEEK_TO_BEGIN);
-            uno::Reference<io::XInputStream> xDecompressedInput(new utl::OSeekableInputStreamWrapper(pMemoryStream, true));
-
-            if (xDecompressedInput.is() && isStreamSvg(xDecompressedInput))
-                return OUString(constFilterName);
+            if(aSVGFileInfo.isOwnFormat())
+            {
+                // it's a file that was written/exported by LO
+                if(aSVGFileInfo.isImpress())
+                {
+                    // it was written by Impress export. Set document
+                    // format for import to Impress
+                    aRetval = OUString(constFilterName);
+                }
+            }
         }
-        else
-        {
-            if (isStreamSvg(xInput))
-                return OUString(constFilterName);
-        }
-    } catch (css::io::IOException & e) {
+    }
+    catch (css::io::IOException & e)
+    {
         SAL_WARN("filter.svg", "caught " << e);
     }
-    return OUString();
+
+    return aRetval;
 }
 
 #define SVG_FILTER_IMPL_NAME "com.sun.star.comp.Draw.SVGFilter"

@@ -3941,6 +3941,7 @@ drawinglayer/source/primitive2d/textdecoratedprimitive2d.cxx
 drawinglayer/source/primitive2d/texteffectprimitive2d.cxx
 drawinglayer/source/primitive2d/textenumsprimitive2d.cxx
 drawinglayer/source/primitive2d/texthierarchyprimitive2d.cxx
+drawinglayer/source/primitive2d/pagehierarchyprimitive2d.cxx
 drawinglayer/source/primitive2d/textlayoutdevice.cxx
 drawinglayer/source/primitive2d/textlineprimitive2d.cxx
 drawinglayer/source/primitive2d/textprimitive2d.cxx
@@ -6281,6 +6282,7 @@ include/drawinglayer/primitive2d/textdecoratedprimitive2d.hxx
 include/drawinglayer/primitive2d/texteffectprimitive2d.hxx
 include/drawinglayer/primitive2d/textenumsprimitive2d.hxx
 include/drawinglayer/primitive2d/texthierarchyprimitive2d.hxx
+include/drawinglayer/primitive2d/pagehierarchyprimitive2d.hxx
 include/drawinglayer/primitive2d/textlayoutdevice.hxx
 include/drawinglayer/primitive2d/textlineprimitive2d.hxx
 include/drawinglayer/primitive2d/textprimitive2d.hxx

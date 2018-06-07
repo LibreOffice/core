@@ -1,4 +1,5 @@
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,16 +15,26 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
--->
-    <node oor:name="svg_Scalable_Vector_Graphics" oor:op="replace" >
-        <prop oor:name="DetectService"><value>com.sun.star.comp.Draw.SVGFilter</value></prop>
-        <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>svg svgz</value></prop>
-        <prop oor:name="MediaType"><value>image/svg+xml</value></prop>
-        <prop oor:name="Preferred"><value>false</value></prop>
-        <prop oor:name="PreferredFilter"><value>SVG - Scalable Vector Graphics</value></prop>
-        <prop oor:name="UIName">
-            <value>SVG - Scalable Vector Graphics</value>
-        </prop>
-        <prop oor:name="ClipboardFormat"/>
-    </node>
+ */
+
+#include <drawinglayer/primitive2d/pagehierarchyprimitive2d.hxx>
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+
+using namespace com::sun::star;
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        PageHierarchyPrimitive2D::PageHierarchyPrimitive2D(const Primitive2DContainer& rChildren)
+        :   GroupPrimitive2D(rChildren)
+        {
+        }
+
+        // provide unique ID
+        ImplPrimitive2DIDBlock(PageHierarchyPrimitive2D, PRIMITIVE2D_ID_PAGEHIERARCHYPRIMITIVE2D)
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
