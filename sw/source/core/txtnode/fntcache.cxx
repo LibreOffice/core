@@ -639,7 +639,7 @@ static bool lcl_IsFullstopCentered( const vcl::RenderContext& rOut )
 /* This helper structure (SwForbidden) contains the already marked parts of the string
     to avoid double lines (e.g grammar + spell check error) */
 
-typedef std::vector< std::pair< sal_Int32, sal_Int32 > > SwForbidden;
+typedef std::vector<std::pair<TextFrameIndex, TextFrameIndex>> SwForbidden;
 
 static void lcl_DrawLineForWrongListData(
     SwForbidden &rForbidden,
@@ -679,23 +679,20 @@ static void lcl_DrawLineForWrongListData(
     {
         nStart -= rInf.GetIdx();
 
-        const sal_Int32 nEnd = nStart + nWrLen;
-        sal_Int32 nNext = nStart;
+        const TextFrameIndex nEnd = nStart + nWrLen;
+        TextFrameIndex nNext = nStart;
         while( nNext < nEnd )
         {
             while( pIter != rForbidden.end() && pIter->second <= nNext )
                 ++pIter;
 
-            const sal_Int32 nNextStart = nNext;
-            sal_Int32 nNextEnd = nEnd;
+            const TextFrameIndex nNextStart = nNext;
+            TextFrameIndex nNextEnd = nEnd;
 
             if( pIter == rForbidden.end() || nNextEnd <= pIter->first )
             {
                 // No overlapping mark up found
-                std::pair< sal_Int32, sal_Int32 > aNew;
-                aNew.first = nNextStart;
-                aNew.second = nNextEnd;
-                rForbidden.insert( pIter, aNew );
+                rForbidden.insert(pIter, std::make_pair(nNextStart, nNextEnd));
                 pIter = rForbidden.begin();
                 nNext = nEnd;
             }
