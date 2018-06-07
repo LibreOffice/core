@@ -38,6 +38,7 @@
 #include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pagehierarchyprimitive2d.hxx>
 
 namespace svgio
 {
@@ -1196,12 +1197,47 @@ namespace svgio
                         // #i124852# transform may be needed when userSpaceOnUse
                         pMask->apply(aSource, pTransform);
                     }
+                }
 
-                    if(!aSource.empty()) // test again, applied mask may have lead to empty geometry
+                // This is part of the SVG import of self-written SVGs from
+                // Draw/Impress containing multiple Slides/Pages. To be able
+                // to later 'break' these to multiple Pages if wanted, embed
+                // each Page-Content in a identifiable Primitive Grouping
+                // Object.
+                // This is the case when the current Node is a GroupNode, has
+                // class="Page" set, has a parent that also is a GroupNode
+                // at which class="Slide" is set.
+                // Multiple Slides/Pages are possible for Draw and Impress.
+                if(SVGTokenG == mrOwner.getType() && mrOwner.getClass())
+                {
+                    const OUString aOwnerClass(*mrOwner.getClass());
+
+                    if("Page" == aOwnerClass)
                     {
-                        // append to current target
-                        rTarget.append(aSource);
+                        const SvgNode* pParent(mrOwner.getParent());
+
+                        if(nullptr != pParent && SVGTokenG == pParent->getType() && pParent->getClass())
+                        {
+                            const OUString aParentClass(*pParent->getClass());
+
+                            if("Slide" == aParentClass)
+                            {
+                                // embed to grouping primitive to identify the
+                                // Slide/Page information
+                                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                                    new drawinglayer::primitive2d::PageHierarchyPrimitive2D(
+                                        aSource));
+
+                                aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+                            }
+                        }
                     }
+                }
+
+                if(!aSource.empty()) // test again, applied mask may have lead to empty geometry
+                {
+                    // append to current target
+                    rTarget.append(aSource);
                 }
             }
         }
@@ -2214,6 +2250,36 @@ namespace svgio
                 }
                 //default is Visible
                 return Visibility_visible;
+            }
+
+            // Visibility correction/exception for self-exported SVGs:
+            // When Impress exports single or multi-page SVGs, it puts the
+            // single slides into <g visibility="hidden">. Not sure why
+            // whis happens, but this leads (correctly) to empty imported
+            // Graphics.
+            // Thus, if Visibility_hidden is active and owner is a SVGTokenG
+            // and it's parent is also a SVGTokenG and it has a Class 'SlideGroup'
+            // set, check if we are an Impress export.
+            // We are an Impress export if an SVG-Node titled 'ooo:meta_slides'
+            // exists.
+            // All togehter gives:
+            if(Visibility_hidden == maVisibility
+                && SVGTokenG == mrOwner.getType()
+                && nullptr != mrOwner.getDocument().findSvgNodeById("ooo:meta_slides"))
+            {
+                const SvgNode* pParent(mrOwner.getParent());
+
+                if(nullptr != pParent && SVGTokenG == pParent->getType() && pParent->getClass())
+                {
+                    const OUString aClass(*pParent->getClass());
+
+                    if("SlideGroup" == aClass)
+                    {
+                        // if we detect this exception,
+                        // ovverride Visibility_hidden -> Visibility_visible
+                        return Visibility_visible;
+                    }
+                }
             }
 
             return maVisibility;
