@@ -32,7 +32,6 @@
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <svx/svxdllapi.h>
-#include <unordered_map>
 
 enum class SvXMLGraphicHelperMode
 {
