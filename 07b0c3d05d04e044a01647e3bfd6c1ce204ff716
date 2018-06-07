@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_1aaf89e4",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2018-06-07T06:39:15Z",
+      "side": 1,
+      "message": "Isn\u0027t it just enough to compute a plain std::max_element(rArray.begin(), rArray.begin()+nMid). Of course, no change in asymptotic time complexity, but I believe max_element() has smaller constants involved.",
+      "revId": "07b0c3d05d04e044a01647e3bfd6c1ce204ff716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
