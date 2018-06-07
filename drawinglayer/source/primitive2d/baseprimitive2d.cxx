@@ -367,6 +367,7 @@ namespace drawinglayer
             case PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D: return OUString("PATTERNFILL");
             case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D: return OUString("OBJECTINFO");
             case PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D: return OUString("POLYPOLYGONSELECTION");
+            case PRIMITIVE2D_ID_PAGEHIERARCHYPRIMITIVE2D: return OUString("PAGEHIERARCHY");
             default: return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
             }
         }
