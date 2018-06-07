@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_8ebb3a0e",
+        "filename": "forms/source/component/ListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-06-07T17:23:42Z",
+      "side": 1,
+      "message": "This looks like it shares a structure with convertBoundValues, except it works writes to m_aConvertedVisibleBoundValues by reading from m_aVisibleBoundValues instead of writing to m_aConvertedBoundValues by reading from m_aBoundValues.\n\nThis looks like it will be better factorised into a utility function that takes the source and destination as parameters and does the work, and these two functions just call the utility function, rather than code copy/paste.",
+      "revId": "7daf408fceb5b925e882c191ad84d7a71019d472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
