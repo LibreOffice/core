@@ -163,6 +163,12 @@ private:
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
+
+Q_SIGNALS:
+    void setTitleSignal(const OUString& rTitle);
+
+private Q_SLOTS:
+    void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
