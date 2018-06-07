@@ -36,6 +36,9 @@ public:
     virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>
     createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 
+    virtual css::uno::Reference<css::ui::dialogs::XFolderPicker2>
+    createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
+
     virtual bool IsMainThread() const override;
 };
 
