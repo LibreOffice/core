@@ -101,6 +101,9 @@ KDE5FilePicker::KDE5FilePicker(const uno::Reference<uno::XComponentContext>&)
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
     connect(this, &KDE5FilePicker::setTitleSignal /*(const OUString&)*/, this,
             &KDE5FilePicker::setTitleSlot /*(const OUString&)*/, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::setDisplayDirectorySignal /*(const OUString&)*/, this,
+            &KDE5FilePicker::setDisplayDirectorySlot /*(const OUString&)*/,
+            Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
     setMultiSelectionMode(false);
@@ -146,7 +149,16 @@ void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect) {}
 
 void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name) {}
 
-void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir) {}
+void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
+{
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT setDisplayDirectorySignal(dir);
+    }
+
+    _dialog->selectUrl(QUrl(toQString(dir)));
+}
 
 OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
 {
