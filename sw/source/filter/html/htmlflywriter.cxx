@@ -64,6 +64,7 @@
 #include "css1kywd.hxx"
 #include "htmlatr.hxx"
 #include "htmlfly.hxx"
+#include "htmlreqifreader.hxx"
 
 using namespace css;
 
@@ -1425,10 +1426,16 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, "#" + aIMapName);
     }
 
-    if (bReplacement && !rAlternateText.isEmpty())
+    if (bReplacement)
+    {
         // XHTML object replacement image's alternate text doesn't use the
         // "alt" attribute.
-        aHtml.characters(rAlternateText.toUtf8());
+        if (rAlternateText.isEmpty())
+            // Empty alternate text is not valid.
+            aHtml.characters(" ");
+        else
+            aHtml.characters(rAlternateText.toUtf8());
+    }
 
     aHtml.flushStack();
 
@@ -1855,8 +1862,41 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
     uno::Reference<beans::XPropertySet> xGraphic(aGraphic.GetXGraphic(), uno::UNO_QUERY);
     if (xGraphic.is() && aMimeType.isEmpty())
         xGraphic->getPropertyValue("MimeType") >>= aMimeType;
+
+    if (rHTMLWrt.mbReqIF)
+    {
+        // Write the original image as an RTF fragment.
+        OUString aFileName;
+        if (rHTMLWrt.GetOrigFileName())
+            aFileName = *rHTMLWrt.GetOrigFileName();
+        INetURLObject aURL(aFileName);
+        OUString aName(aURL.getBase());
+        aName += "_";
+        aName += aURL.getExtension();
+        aName += "_";
+        aName += OUString::number(aGraphic.GetChecksum(), 16);
+        aURL.setBase(aName);
+        aURL.setExtension("ole");
+        aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+        SvFileStream aOutStream(aFileName, StreamMode::WRITE);
+        if (!SwReqIfReader::WrapGraphicInRtf(aGraphic, pGrfNd->GetTwipSize(), aOutStream))
+            SAL_WARN("sw.html", "SwReqIfReader::WrapGraphicInRtf() failed");
+
+        // Refer to this data.
+        aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
+        rWrt.Strm().WriteOString("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object);
+        rWrt.Strm().WriteOString(" data=\"" + aFileName.toUtf8() + "\"");
+        rWrt.Strm().WriteOString(" type=\"text/rtf\"");
+        rWrt.Strm().WriteOString(">");
+        rHTMLWrt.OutNewLine();
+    }
+
     OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
                   pGrfNd->GetTwipSize(), nFrameFlags, "graphic", nullptr, aMimeType );
+
+    if (rHTMLWrt.mbReqIF)
+        rWrt.Strm().WriteOString("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">");
 
     return rWrt;
 }
