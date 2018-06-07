@@ -2108,12 +2108,13 @@ public:
         return S_OK;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE STDMETHODCALLTYPE Skip(ULONG celt) override
+    virtual HRESULT STDMETHODCALLTYPE STDMETHODCALLTYPE Skip(ULONG const celt) override
     {
         comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
+        ULONG nLeft = celt;
         ULONG nSkipped = 0;
-        while (celt > 0)
+        while (nLeft > 0)
         {
             if (mnIndex > mxCollection->getCount())
             {
@@ -2121,7 +2122,7 @@ public:
                 return S_FALSE;
             }
             mnIndex++;
-            celt--;
+            nLeft--;
         }
         SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Skip(" << celt << "): S_OK");
         return S_OK;
