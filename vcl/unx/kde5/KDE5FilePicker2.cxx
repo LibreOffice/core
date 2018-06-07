@@ -303,6 +303,17 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
             // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
             // code, but the checkbox is hidden and ignored
             bool hidden = controlId == CHECKBOX_AUTOEXTENSION;
+            auto resString = toQString(VclResId(resId));
+            resString.replace('~', '&');
+
+            auto widget = new QCheckBox(resString, _extraControls);
+            widget->setHidden(hidden);
+            if (!hidden)
+            {
+                _layout->addWidget(widget);
+            }
+            _customWidgets.insert(controlId, widget);
+
             break;
         }
         case PUSHBUTTON_PLAY:
