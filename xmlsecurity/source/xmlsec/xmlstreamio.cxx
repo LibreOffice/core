@@ -157,21 +157,44 @@ XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks()
         //Notes: all none default callbacks will lose.
         xmlSecIOCleanupCallbacks() ;
 
-        //Register my classbacks.
-        int cbs = xmlSecIORegisterCallbacks(
-                    xmlStreamMatch,
-                    xmlStreamOpen,
-                    xmlStreamRead,
-                    xmlStreamClose ) ;
-        if( cbs < 0 ) {
-            return -1 ;
-        }
+        // Newer xmlsec wants the callback order in the opposite direction.
+        if (xmlSecCheckVersionExt(1, 2, 26, xmlSecCheckVersionABICompatible))
+        {
+            //Register the default callbacks.
+            //Notes: the error will cause xmlsec working problems.
+            int cbs = xmlSecIORegisterDefaultCallbacks() ;
+            if( cbs < 0 ) {
+                return -1 ;
+            }
 
-        //Register the default callbacks.
-        //Notes: the error will cause xmlsec working problems.
-        cbs = xmlSecIORegisterDefaultCallbacks() ;
-        if( cbs < 0 ) {
-            return -1 ;
+            //Register my classbacks.
+            cbs = xmlSecIORegisterCallbacks(
+                        xmlStreamMatch,
+                        xmlStreamOpen,
+                        xmlStreamRead,
+                        xmlStreamClose ) ;
+            if( cbs < 0 ) {
+                return -1 ;
+            }
+        }
+        else
+        {
+            //Register my classbacks.
+            int cbs = xmlSecIORegisterCallbacks(
+                        xmlStreamMatch,
+                        xmlStreamOpen,
+                        xmlStreamRead,
+                        xmlStreamClose ) ;
+            if( cbs < 0 ) {
+                return -1 ;
+            }
+
+            //Register the default callbacks.
+            //Notes: the error will cause xmlsec working problems.
+            cbs = xmlSecIORegisterDefaultCallbacks() ;
+            if( cbs < 0 ) {
+                return -1 ;
+            }
         }
 
         enableXmlStreamIO |= XMLSTREAMIO_INITIALIZED ;
