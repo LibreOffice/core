@@ -683,7 +683,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aLinkTargetMap_Impl[] =
                 {
-                    { OUString(UNO_LINK_DISPLAY_BITMAP), 0,     cppu::UnoType<css::awt::XBitmap>::get(), PropertyAttribute::READONLY, 0xff},
+                    { OUString(UNO_LINK_DISPLAY_BITMAP), 0,     cppu::UnoType<css::awt::XBitmap>::get(), PropertyAttribute::READONLY, 0xbf},
                     { OUString(UNO_LINK_DISPLAY_NAME), 0,   cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xbf},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
