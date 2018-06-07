@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Interfer for all Drawing object.
+ * Interface for all Drawing object.
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWOBJ_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWOBJ_HXX

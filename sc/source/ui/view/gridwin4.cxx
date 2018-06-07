@@ -772,7 +772,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.DrawClipMarks();
 
-    // In any case, Szenario / ChangeTracking must happen after DrawGrid, also for !bGridFirst
+    // In any case, Scenario / ChangeTracking must happen after DrawGrid, also for !bGridFirst
 
     //! test if ChangeTrack display is active
     //! Disable scenario frame via view option?
