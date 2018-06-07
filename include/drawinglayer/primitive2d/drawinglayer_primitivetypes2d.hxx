@@ -102,6 +102,7 @@
 #define PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D               (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 67)
 #define PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D                (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 68)
 #define PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D      (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 69)
+#define PRIMITIVE2D_ID_PAGEHIERARCHYPRIMITIVE2D             (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 70)
 // When you add a new primitive, please update the drawinglayer::primitive2d::idToString() function
 // in drawinglayer/source/primitive2d/baseprimitive2d.cxx.
 
