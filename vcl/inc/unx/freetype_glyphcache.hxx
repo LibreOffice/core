@@ -115,7 +115,6 @@ public:
                             FreetypeFontFace( FreetypeFontInfo*, const FontAttributes& );
 
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const FontSelectPattern& ) const override;
-    virtual rtl::Reference<PhysicalFontFace> Clone() const override   { return new FreetypeFontFace( *this ); }
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 };
 

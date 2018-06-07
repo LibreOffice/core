@@ -55,7 +55,6 @@ class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes, public salhelp
 {
 public:
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const;
-    virtual rtl::Reference<PhysicalFontFace> Clone() const = 0;
 
     int                     GetHeight() const           { return mnHeight; }
     int                     GetWidth() const            { return mnWidth; }
@@ -67,7 +66,6 @@ public:
 
 protected:
     explicit PhysicalFontFace(const FontAttributes&);
-    PhysicalFontFace(const PhysicalFontFace&);
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
