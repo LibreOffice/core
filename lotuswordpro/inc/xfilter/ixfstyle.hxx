@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Interfer for all style object.
+ * Interface for all style object.
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_IXFSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_IXFSTYLE_HXX

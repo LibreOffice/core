@@ -55,7 +55,7 @@ enum class SdrEndTextEditKind
 
 // - general edit for objectspecific properties
 // - textedit for all drawobjects, inherited from SdrTextObj
-// - macromod
+// - macromode
 
 
 class SVX_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditViewCallbacks
@@ -162,7 +162,7 @@ public:
     // outliner will be displayed on the overlay in edit mode.
     void TextEditDrawing(SdrPaintWindow& rPaintWindow) const;
 
-    // Actionhandling for macromod
+    // Actionhandling for macromode
     virtual bool IsAction() const override;
     virtual void MovAction(const Point& rPnt) override;
     virtual void EndAction() override;
