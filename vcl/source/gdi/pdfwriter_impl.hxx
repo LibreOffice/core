@@ -1290,7 +1290,6 @@ public:
     explicit                            PdfBuiltinFontFace( const PDFWriterImpl::BuiltinFont& );
     const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
 
-    virtual rtl::Reference<PhysicalFontFace> Clone() const override { return new PdfBuiltinFontFace(*this); }
     virtual sal_IntPtr                  GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
 };
 

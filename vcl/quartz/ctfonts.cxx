@@ -283,10 +283,6 @@ hb_font_t* CoreTextStyle::ImplInitHbFont()
     return InitHbFont(pHbFace);
 }
 
-rtl::Reference<PhysicalFontFace> CoreTextFontFace::Clone() const
-{
-    return new CoreTextFontFace( *this);
-}
 
 rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
@@ -540,7 +536,7 @@ void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) co
     auto it = maFontContainer.cbegin();
     for(; it != maFontContainer.cend(); ++it )
     {
-        rFontCollection.Add( (*it).second->Clone().get() );
+        rFontCollection.Add( (*it).second.get() );
     }
 }
 

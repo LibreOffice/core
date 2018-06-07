@@ -103,14 +103,6 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
     return bFound;
 }
 
-CoreTextFontFace::CoreTextFontFace( const CoreTextFontFace& rSrc )
-  : PhysicalFontFace( rSrc )
-  , mnFontId( rSrc.mnFontId )
-{
-    if( rSrc.mxCharMap.is() )
-        mxCharMap = rSrc.mxCharMap;
-}
-
 CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFontId )
   : PhysicalFontFace( rDFA )
   , mnFontId( nFontId )
