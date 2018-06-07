@@ -77,7 +77,7 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 
 // KDE5FilePicker
 
-KDE5FilePicker::KDE5FilePicker(const uno::Reference<uno::XComponentContext>&)
+KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     : KDE5FilePicker_Base(_helperMutex)
     , _dialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , _extraControls(new QWidget)
@@ -94,6 +94,7 @@ KDE5FilePicker::KDE5FilePicker(const uno::Reference<uno::XComponentContext>&)
         QStringLiteral("webdavs"),
         QStringLiteral("smb"),
     });
+    _dialog->setFileMode(eMode);
 
     setMultiSelectionMode(false);
 
@@ -230,6 +231,10 @@ OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
     OUString label;
     return label;
 }
+
+OUString SAL_CALL KDE5FilePicker::getDirectory() { return OUString(); }
+
+void SAL_CALL KDE5FilePicker::setDescription(const OUString&) {}
 
 void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 {
