@@ -31,16 +31,15 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <osl/mutex.hxx>
-
-#include <fpicker/strings.hrc>
-
 #include "FPServiceInfo.hxx"
 
 #undef Region
 
 #include <unx/geninst.h>
+#include <qt5/Qt5Tools.hxx>
 
 #include <QtCore/QDebug>
+#include <QtCore/QThread>
 #include <QtCore/QUrl>
 #include <QtGui/QClipboard>
 #include <QtGui/QWindow>
@@ -50,6 +49,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QApplication>
 
+#include <fpicker/strings.hrc>
 #include <strings.hrc>
 
 using namespace ::com::sun::star;
@@ -99,6 +99,8 @@ KDE5FilePicker::KDE5FilePicker(const uno::Reference<uno::XComponentContext>&)
 
     connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
+    connect(this, &KDE5FilePicker::setTitleSignal /*(const OUString&)*/, this,
+            &KDE5FilePicker::setTitleSlot /*(const OUString&)*/, Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
     setMultiSelectionMode(false);
@@ -117,7 +119,16 @@ void SAL_CALL KDE5FilePicker::removeFilePickerListener(const uno::Reference<XFil
     m_xListener.clear();
 }
 
-void SAL_CALL KDE5FilePicker::setTitle(const OUString& title) {}
+void SAL_CALL KDE5FilePicker::setTitle(const OUString& title)
+{
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT setTitleSignal(title);
+    }
+
+    _dialog->setWindowTitle(toQString(title));
+}
 
 sal_Int16 SAL_CALL KDE5FilePicker::execute()
 {
