@@ -357,18 +357,11 @@ void FreetypeFontInstance::SetFreetypeFont(FreetypeFont* p)
 {
     if (p == mpFreetypeFont)
         return;
-    if (mpFreetypeFont)
-        mpFreetypeFont->Release();
     mpFreetypeFont = p;
-    if (mpFreetypeFont)
-        mpFreetypeFont->AddRef();
 }
 
 FreetypeFontInstance::~FreetypeFontInstance()
 {
-    // TODO: remove the FreetypeFont here instead of in the GlyphCache
-    if (mpFreetypeFont)
-        mpFreetypeFont->Release();
 }
 
 static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
