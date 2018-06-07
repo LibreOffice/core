@@ -406,7 +406,6 @@ void SwMacrosTest::testFdo68983()
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo68983.odt", xComponent.is());
 
     Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDocStorable.is());
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -459,8 +458,6 @@ void SwMacrosTest::testFdo87530()
         xBasLibPwd->changeLibraryPassword("BarLibrary", "", "foo");
 
         Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xDocStorable.is());
-
         xDocStorable->storeAsURL(aTempFile.GetURL(), desc);
     }
 
@@ -491,8 +488,6 @@ void SwMacrosTest::testFdo87530()
 
         // store again
         Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xDocStorable.is());
-
         xDocStorable->store();
     }
 

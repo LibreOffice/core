@@ -1857,7 +1857,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
     if( mxTable.is() ) try
     {
         Reference< XMergeableCell > xCell( mxTable->getCellByPosition( rPos.mnCol, rPos.mnRow ), UNO_QUERY_THROW );
-        if( xCell.is() && xCell->isMerged() )
+        if( xCell->isMerged() )
         {
             ::findMergeOrigin( mxTable, rPos.mnCol, rPos.mnRow, rPos.mnCol, rPos.mnRow );
         }

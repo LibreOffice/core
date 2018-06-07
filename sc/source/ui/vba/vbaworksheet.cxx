@@ -128,18 +128,12 @@ static void removeAllSheets( const uno::Reference <sheet::XSpreadsheetDocument>&
         {
             uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(i), uno::UNO_QUERY);
             uno::Reference< container::XNamed > xNamed( xSheet, uno::UNO_QUERY_THROW );
-            if (xNamed.is())
-            {
-                xNameContainer->removeByName(xNamed->getName());
-            }
+            xNameContainer->removeByName(xNamed->getName());
         }
 
         uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY);
         uno::Reference< container::XNamed > xNamed( xSheet, uno::UNO_QUERY_THROW );
-        if (xNamed.is())
-        {
-            xNamed->setName(aSheetName);
-        }
+        xNamed->setName(aSheetName);
     }
 }
 
@@ -159,10 +153,7 @@ openNewDoc(const OUString& aSheetName )
                 "_blank", 0,
                 uno::Sequence < css::beans::PropertyValue >() ) );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xComponent, uno::UNO_QUERY_THROW );
-        if ( xSpreadDoc.is() )
-        {
-            removeAllSheets(xSpreadDoc,aSheetName);
-        }
+        removeAllSheets(xSpreadDoc,aSheetName);
         xModel.set(xSpreadDoc,uno::UNO_QUERY_THROW);
     }
     catch ( uno::Exception & /*e*/ )
@@ -604,18 +595,15 @@ ScVbaWorksheet::Delete()
 {
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
     OUString aSheetName = getName();
-    if ( xSpreadDoc.is() )
+    SCTAB nTab = 0;
+    if (!ScVbaWorksheets::nameExists(xSpreadDoc, aSheetName, nTab ))
     {
-        SCTAB nTab = 0;
-        if (!ScVbaWorksheets::nameExists(xSpreadDoc, aSheetName, nTab ))
-        {
-            return;
-        }
-        uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-        uno::Reference<container::XNameContainer> xNameContainer(xSheets,uno::UNO_QUERY_THROW);
-        xNameContainer->removeByName(aSheetName);
-        mxSheet.clear();
+        return;
     }
+    uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+    uno::Reference<container::XNameContainer> xNameContainer(xSheets,uno::UNO_QUERY_THROW);
+    xNameContainer->removeByName(aSheetName);
+    mxSheet.clear();
 }
 
 uno::Reference< excel::XWorksheet >

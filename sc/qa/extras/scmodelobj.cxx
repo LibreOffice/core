@@ -75,7 +75,6 @@ ScModelObj::ScModelObj()
 uno::Reference< uno::XInterface > ScModelObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<frame::XModel> xModel(xDoc, UNO_QUERY_THROW);
 

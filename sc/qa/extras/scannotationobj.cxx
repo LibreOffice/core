@@ -75,8 +75,6 @@ uno::Reference< sheet::XSheetAnnotation> ScAnnontationObj::getAnnotation(table::
     uno::Reference< sheet::XSheetAnnotationAnchor > xAnnotationAnchor(xCell, UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetAnnotation > xSheetAnnotation( xAnnotationAnchor->getAnnotation(), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xSheetAnnotation.is());
-
     return xSheetAnnotation;
 }
 

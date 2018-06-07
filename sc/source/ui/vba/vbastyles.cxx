@@ -137,14 +137,7 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn )
             if ( _aBasedOn >>= oRange)
             {
                 uno::Reference< excel::XStyle > oStyle( oRange->getStyle(), uno::UNO_QUERY_THROW );
-                if ( oStyle.is() )
-                {
-                    sParentCellStyleName = oStyle->getName();
-                }
-                else
-                {
-                    DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString() );
-                }
+                sParentCellStyleName = oStyle->getName();
             }
             else
             {

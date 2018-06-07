@@ -247,8 +247,7 @@ namespace connectivity { namespace hsqldb
         try
         {
             Reference< XNameAccess > xTables( impl_getTableContainer_throw(), UNO_QUERY_THROW );
-            if ( xTables.is() )
-                bDoesExist = xTables->hasByName( _rTableName );
+            bDoesExist = xTables->hasByName( _rTableName );
         }
         catch( const Exception& )
         {

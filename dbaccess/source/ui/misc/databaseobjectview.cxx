@@ -232,16 +232,9 @@ namespace dbaui
 
         // try whether the designer is a dialog
         Reference< XExecutableDialog > xDialog( xDesigner, UNO_QUERY_THROW );
-        if ( xDialog.is() )
-        {
-            try { AsyncDialogExecutor::executeModalDialogAsync( xDialog ); }
-            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
-            return nullptr;
-        }
-
-        Reference< XComponent > xDesignerComponent( xDesigner, UNO_QUERY );
-        OSL_ENSURE( xDesignerComponent.is(), "TableDesigner::doCreateView: a designer which is no dialog and no component?" );
-        return xDesignerComponent;
+        try { AsyncDialogExecutor::executeModalDialogAsync( xDialog ); }
+        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
+        return nullptr;
     }
 
     Reference< XInterface > TableDesigner::impl_getConnectionProvidedDesigner_nothrow( const OUString& _rTableName )

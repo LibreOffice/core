@@ -2351,30 +2351,26 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
     if (pSdrObj)
     {
         uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
-        if( xShape.is() )
+        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+        if( xPropSet.is() )
         {
-            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-            uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-            if( xPropSet.is() )
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+            uno::Sequence< beans::PropertyValue > aGrabBag;
+            if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
             {
-                xPropSetInfo = xPropSet->getPropertySetInfo();
-                uno::Sequence< beans::PropertyValue > aGrabBag;
-                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
-                {
-                    xPropSet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
-                }
-                else if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
-                {
-                    xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                }
+                xPropSet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+            }
+            else if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+            {
+                xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+            }
 
-                for (sal_Int32 nProp=0; nProp < aGrabBag.getLength(); ++nProp)
+            for (sal_Int32 nProp=0; nProp < aGrabBag.getLength(); ++nProp)
+            {
+                if ("SdtEndBefore" == aGrabBag[nProp].Name && m_bStartedCharSdt && !m_bEndCharSdt)
                 {
-                    if ("SdtEndBefore" == aGrabBag[nProp].Name && m_bStartedCharSdt && !m_bEndCharSdt)
-                    {
-                        aGrabBag[nProp].Value >>= m_bEndCharSdt;
-                        break;
-                    }
+                    aGrabBag[nProp].Value >>= m_bEndCharSdt;
+                    break;
                 }
             }
         }

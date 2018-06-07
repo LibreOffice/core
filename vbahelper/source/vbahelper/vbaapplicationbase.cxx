@@ -202,11 +202,9 @@ VbaApplicationBase::getDisplayStatusBar()
     uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
 
-    if( xProps.is() ){
-        uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( "LayoutManager"), uno::UNO_QUERY_THROW );
-        if( xLayoutManager.is() && xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" ) ){
-            return true;
-        }
+    uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( "LayoutManager"), uno::UNO_QUERY_THROW );
+    if( xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" ) ){
+        return true;
     }
     return false;
 }
@@ -218,20 +216,16 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar)
     uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
 
-    if( xProps.is() ){
-        uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( "LayoutManager" ), uno::UNO_QUERY_THROW );
-        OUString url( "private:resource/statusbar/statusbar" );
-        if( xLayoutManager.is() ){
-            if( bDisplayStatusBar && !xLayoutManager->isElementVisible( url ) ){
-                if( !xLayoutManager->showElement( url ) )
-                    xLayoutManager->createElement( url );
-                return;
-            }
-            else if( !bDisplayStatusBar && xLayoutManager->isElementVisible( url ) ){
-                xLayoutManager->hideElement( url );
-                return;
-            }
-        }
+    uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( "LayoutManager" ), uno::UNO_QUERY_THROW );
+    OUString url( "private:resource/statusbar/statusbar" );
+    if( bDisplayStatusBar && !xLayoutManager->isElementVisible( url ) ){
+        if( !xLayoutManager->showElement( url ) )
+            xLayoutManager->createElement( url );
+        return;
+    }
+    else if( !bDisplayStatusBar && xLayoutManager->isElementVisible( url ) ){
+        xLayoutManager->hideElement( url );
+        return;
     }
 }
 

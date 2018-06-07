@@ -248,8 +248,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     {
         bool bDonut = false;
         uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY_THROW );
-        if(xChartTypeProp.is())
-            xChartTypeProp->getPropertyValue( "UseRings") >>= bDonut;
+        xChartTypeProp->getPropertyValue( "UseRings") >>= bDonut;
 
         if(!bDonut)
         {

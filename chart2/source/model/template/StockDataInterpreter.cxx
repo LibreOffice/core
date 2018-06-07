@@ -240,7 +240,6 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
                     xSeries.set( new DataSeries );
                 OSL_ASSERT( xSeries.is() );
                 Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY_THROW );
-                OSL_ASSERT( xSink.is() );
                 xSink->setData( aSequences[nGroupIndex][nSeriesIdx] );
                 aResultSeries[nGroupIndex][nSeriesIdx].set( xSeries );
             }

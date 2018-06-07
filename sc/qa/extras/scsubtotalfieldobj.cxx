@@ -61,7 +61,6 @@ ScSubTotalFieldObj::ScSubTotalFieldObj()
 uno::Reference< uno::XInterface > ScSubTotalFieldObj::init()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference< container::XIndexAccess > xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -78,7 +77,6 @@ uno::Reference< uno::XInterface > ScSubTotalFieldObj::init()
     uno::Reference< container::XIndexAccess > xDescIndex(xSubTotalDesc, uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XSubTotalField > xSTF(xDescIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xSTF.is());
     return xSTF;
 }
 

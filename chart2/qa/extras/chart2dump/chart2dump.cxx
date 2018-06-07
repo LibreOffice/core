@@ -295,7 +295,6 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
         setTestFileName(aTestFile);
         load(getTestFileDirName(), getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc (getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xChartDoc.is());
 
         // Check title
         uno::Reference< chart2::XChartDocument > xChartDoc2(xChartDoc, UNO_QUERY_THROW);
@@ -344,7 +343,6 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
 
         // Check column labels
         uno::Reference< chart::XChartDataArray > xChartData(xChartDoc->getData(), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xChartData.is());
         uno::Sequence < OUString > aColumnLabels = xChartData->getColumnDescriptions();
         CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aColumnLabels.getLength());
         OUString sColumnLabels = sequenceToOneLineString(aColumnLabels);
@@ -410,7 +408,6 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
         setTestFileName(aTestFile);
         load(getTestFileDirName(), getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -451,7 +448,6 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
             // Check transformation
             Reference< beans::XPropertySet > xLegendEntryPropSet(xLegendEntry, UNO_QUERY_THROW);
-            CPPUNIT_ASSERT(xLegendEntryPropSet.is());
             drawing::HomogenMatrix3 aLegendEntryTransformation;
             xLegendEntryPropSet->getPropertyValue("Transformation") >>= aLegendEntryTransformation;
             CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLegendEntryTransformation, INT_EPS);*/
@@ -469,7 +465,6 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
                 // Check display color
                 Reference< beans::XPropertySet > xPropSet(xLegendEntryGeom, UNO_QUERY_THROW);
-                CPPUNIT_ASSERT(xPropSet.is());
                 util::Color aEntryGeomColor = 0;
                 xPropSet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= aEntryGeomColor;
                 CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aEntryGeomColor));
@@ -536,7 +531,6 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xGrid, UNO_QUERY_THROW);
-                CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aGridTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aGridTransformation;
                 CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aGridTransformation, INT_EPS);
@@ -545,7 +539,6 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
                 uno::Reference<container::XIndexAccess> xIndexAccess(xGrid, UNO_QUERY_THROW);
                 uno::Reference<drawing::XShape> xGridLine(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
                 Reference< beans::XPropertySet > xGridLinePropSet(xGridLine, UNO_QUERY_THROW);
-                CPPUNIT_ASSERT(xGridLinePropSet.is());
                 // Line type
                 drawing::LineDash aLineDash;
                 xGridLinePropSet->getPropertyValue("LineDash") >>= aLineDash;
@@ -581,7 +574,6 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
         setTestFileName(sTestFile);
         load(getTestFileDirName(), getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -609,7 +601,6 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 
             // Check transformation
             Reference< beans::XPropertySet > xPropSet(xXAxis, UNO_QUERY_THROW);
-            CPPUNIT_ASSERT(xPropSet.is());
             drawing::HomogenMatrix3 aAxisTransformation;
             xPropSet->getPropertyValue("Transformation") >>= aAxisTransformation;
             CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAxisTransformation, INT_EPS);
@@ -620,7 +611,6 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
             CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nAxisGeometriesCount);
             uno::Reference<drawing::XShape> xAxisLine(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
             Reference< beans::XPropertySet > xAxisLinePropSet(xAxisLine, UNO_QUERY_THROW);
-            CPPUNIT_ASSERT(xAxisLinePropSet.is());
             // Line type
             drawing::LineDash aLineDash;
             xAxisLinePropSet->getPropertyValue("LineDash") >>= aLineDash;
@@ -655,7 +645,6 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
         setTestFileName(sTestFile);
         load(getTestFileDirName(), getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -705,7 +694,6 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xLabelShape, UNO_QUERY_THROW);
-                CPPUNIT_ASSERT(xPropSet.is());
                 /*drawing::HomogenMatrix3 aLabelTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aLabelTransformation;
                 CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLabelTransformation, INT_EPS);*/
@@ -788,7 +776,6 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xColumnOrBar, UNO_QUERY_THROW);
-                CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aColumnOrBarTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aColumnOrBarTransformation;
                 CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aColumnOrBarTransformation, INT_EPS);
@@ -811,7 +798,6 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
         setTestFileName(sTestFile);
         load(getTestFileDirName(), getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -830,7 +816,6 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 
         // Check transformation
         Reference< beans::XPropertySet > xPropSet(xChartWall, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xPropSet.is());
         /*drawing::HomogenMatrix3 aChartWallTransformation;
         xPropSet->getPropertyValue("Transformation") >>= aChartWallTransformation;
         CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aChartWallTransformation, INT_EPS);*/
@@ -922,7 +907,6 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xSlice, UNO_QUERY_THROW);
-                CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aSliceTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aSliceTransformation;
                 CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aSliceTransformation, INT_EPS);
@@ -987,7 +971,6 @@ DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
 
             // Check transformation
             Reference< beans::XPropertySet > xPropSet(xArea, UNO_QUERY_THROW);
-            CPPUNIT_ASSERT(xPropSet.is());
             drawing::HomogenMatrix3 aAreaTransformation;
             xPropSet->getPropertyValue("Transformation") >>= aAreaTransformation;
             CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAreaTransformation, INT_EPS);
@@ -1083,7 +1066,6 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
                 {
                     uno::Reference<container::XIndexAccess> XPointContainer (
                         getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=" + OUString::number(nSeries) + ":Point=" + OUString::number(nPoint)), UNO_QUERY_THROW);
-                    CPPUNIT_ASSERT(XPointContainer.is());
                     uno::Reference<drawing::XShape> XPoint(XPointContainer->getByIndex(0), UNO_QUERY_THROW);
                     uno::Reference<container::XNamed> xNamedShape(XPointContainer, uno::UNO_QUERY);
                     CPPUNIT_DUMP_ASSERT_NOTE(xNamedShape->getName());
@@ -1098,7 +1080,6 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
 
                     // Check transformation
                     Reference< beans::XPropertySet > xPointPropSet(XPoint, UNO_QUERY_THROW);
-                    CPPUNIT_ASSERT(xPointPropSet.is());
                     drawing::HomogenMatrix3 aPointTransformation;
                     xPointPropSet->getPropertyValue("Transformation") >>= aPointTransformation;
                     CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aPointTransformation, INT_EPS);

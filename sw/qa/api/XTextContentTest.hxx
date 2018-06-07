@@ -41,10 +41,7 @@ public:
         css::uno::Reference<css::text::XTextRange> xTextRange(map["text::XTextRange"],
                                                               css::uno::UNO_QUERY_THROW);
 
-        if (xTextContent.is())
-        {
-            xTextContent->attach(xTextRange);
-        }
+        xTextContent->attach(xTextRange);
     }
 
     void testGetAnchor()

@@ -2809,29 +2809,26 @@ void SdMasterPage::setBackground( const Any& rValue )
         {
             Reference< container::XNameAccess >  xFamilies( GetModel()->getStyleFamilies(), UNO_QUERY_THROW );
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW ) ;
-            if( xFamily.is() )
+            OUString aStyleName(sUNO_PseudoSheet_Background);
+
+            Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
+
+            Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
+            Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
+
+            PropertyEntryVector_t aBackgroundProperties = ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries();
+            PropertyEntryVector_t::const_iterator aIt = aBackgroundProperties.begin();
+            while( aIt != aBackgroundProperties.end() )
             {
-                OUString aStyleName(sUNO_PseudoSheet_Background);
-
-                Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
-
-                Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
-                Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
-
-                PropertyEntryVector_t aBackgroundProperties = ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries();
-                PropertyEntryVector_t::const_iterator aIt = aBackgroundProperties.begin();
-                while( aIt != aBackgroundProperties.end() )
+                if( xSetInfo->hasPropertyByName( aIt->sName ) )
                 {
-                    if( xSetInfo->hasPropertyByName( aIt->sName ) )
-                    {
-                        if( !xSetStates.is() || xSetStates->getPropertyState( aIt->sName ) == beans::PropertyState_DIRECT_VALUE )
-                            xStyleSet->setPropertyValue( aIt->sName,    xInputSet->getPropertyValue( aIt->sName ) );
-                        else
-                            xSetStates->setPropertyToDefault( aIt->sName );
-                    }
-
-                    ++aIt;
+                    if( !xSetStates.is() || xSetStates->getPropertyState( aIt->sName ) == beans::PropertyState_DIRECT_VALUE )
+                        xStyleSet->setPropertyValue( aIt->sName,    xInputSet->getPropertyValue( aIt->sName ) );
+                    else
+                        xSetStates->setPropertyToDefault( aIt->sName );
                 }
+
+                ++aIt;
             }
         }
         else

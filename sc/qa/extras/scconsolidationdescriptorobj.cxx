@@ -62,7 +62,6 @@ ScConsolidationDescriptorObj::ScConsolidationDescriptorObj()
 uno::Reference<uno::XInterface> ScConsolidationDescriptorObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XConsolidatable> xConsolidatable(xDoc, UNO_QUERY_THROW);
     return xConsolidatable->createConsolidationDescriptor(true);

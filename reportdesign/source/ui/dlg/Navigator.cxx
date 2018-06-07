@@ -537,7 +537,6 @@ void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xS
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         uno::Reference< report::XReportComponent> xElement(_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
-        OSL_ENSURE(xElement.is(),"Found report element which is NULL!");
         insertEntry(lcl_getName(xElement.get()),pSection,lcl_getImageId(xElement),TREELIST_APPEND,new UserData(this,xElement));
         uno::Reference< report::XReportDefinition> xSubReport(xElement,uno::UNO_QUERY);
         if ( xSubReport.is() )

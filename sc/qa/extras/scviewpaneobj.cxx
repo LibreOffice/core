@@ -53,7 +53,6 @@ ScViewPaneObj::ScViewPaneObj()
 uno::Reference< uno::XInterface > ScViewPaneObj::init()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document!", xSheetDoc.is());
 
     uno::Reference< frame::XModel > xModel(xSheetDoc, uno::UNO_QUERY_THROW);
     uno::Reference< frame::XController > xController = xModel->getCurrentController();

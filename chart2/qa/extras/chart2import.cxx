@@ -218,7 +218,6 @@ void Chart2ImportTest::Fdo60083()
     CPPUNIT_ASSERT( xDataSeries.is() );
 
     Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
-    CPPUNIT_ASSERT( xPropSet.is() );
 
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;
@@ -268,7 +267,6 @@ void Chart2ImportTest::testErrorBarRange()
     CPPUNIT_ASSERT( xDataSeries.is() );
 
     Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
-    CPPUNIT_ASSERT( xPropSet.is() );
 
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;
@@ -298,7 +296,6 @@ void Chart2ImportTest::testErrorBarFormatting()
     CPPUNIT_ASSERT( xDataSeries.is() );
 
     Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
-    CPPUNIT_ASSERT( xPropSet.is() );
 
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;
@@ -354,7 +351,6 @@ uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XC
 {
     CPPUNIT_ASSERT(xChart1Doc.is());
     uno::Reference< chart::XChartDataArray > xChartData ( xChart1Doc->getData(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xChartData.is());
     uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     return seriesList;
 }
@@ -690,7 +686,6 @@ void Chart2ImportTest::testBnc889755()
 {
     load("/chart2/qa/extras/data/pptx/", "bnc889755.pptx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 6), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xChartDoc.is());
     CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
 
     uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
@@ -926,7 +921,6 @@ void Chart2ImportTest::testTextCanOverlapXLSX()
     uno::Reference< beans::XPropertySet > xAxisProp;
     bool bTextCanOverlap = false;
     uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xChartDoc.is());
     mxDiagram.set(xChartDoc->getDiagram());
     CPPUNIT_ASSERT(mxDiagram.is());
     uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
@@ -1161,7 +1155,6 @@ void Chart2ImportTest::testPlotVisOnlyDefaultValue2013XLSX()
 {
     load("/chart2/qa/extras/data/xlsx/", "plotVisOnly.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChart1Doc.is());
     Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("IncludeHiddenCells");
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -1174,7 +1167,6 @@ void Chart2ImportTest::testRAngAxDefaultValue2013XLSX()
 {
     load("/chart2/qa/extras/data/xlsx/", "rAngAx.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChart1Doc.is());
     Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("RightAngledAxes");
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -1328,7 +1320,6 @@ void Chart2ImportTest::testTdf90510()
 {
     load("/chart2/qa/extras/data/xls/", "piechart_outside.xls");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChart1Doc.is() );
     Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_QUERY_THROW );
     uno::Any aAny = xPropSet->getPropertyValue( "LabelPlacement" );
     CPPUNIT_ASSERT( aAny.hasValue() );
@@ -1341,7 +1332,6 @@ void Chart2ImportTest::testTdf109858()
 {
     load("/chart2/qa/extras/data/xlsx/", "piechart_outside.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChart1Doc.is() );
     Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_QUERY_THROW );
     uno::Any aAny = xPropSet->getPropertyValue( "LabelPlacement" );
     CPPUNIT_ASSERT( aAny.hasValue() );
@@ -1354,7 +1344,6 @@ void Chart2ImportTest::testTdf111173()
 {
     load("/chart2/qa/extras/data/xlsx/", "tdf111173.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChart1Doc.is() );
 }
 
 void Chart2ImportTest::testTdf115107()
@@ -1556,7 +1545,6 @@ void Chart2ImportTest::testTdf116163()
     CPPUNIT_ASSERT(xXAxis.is());
 
     uno::Reference<container::XIndexAccess> xIndexAccess(xXAxis, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xIndexAccess.is());
 
     // Check text
     uno::Reference<text::XTextRange> xLabel0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);

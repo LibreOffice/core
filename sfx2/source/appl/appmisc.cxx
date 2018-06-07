@@ -183,12 +183,8 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
         if(xBitmap.is())
         {
             const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-
-            if(xIntBmp.is())
-            {
-                rBitmap = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-                return true;
-            }
+            rBitmap = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+            return true;
         }
     }
     catch(const uno::Exception&)

@@ -72,17 +72,13 @@ void DialogSaveTest::test()
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
         CPPUNIT_ASSERT(xComponent.is());
         uno::Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xDocStorable.is());
         uno::Reference< document::XEmbeddedScripts > xDocScr(xComponent, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xDocScr.is());
         uno::Reference< script::XStorageBasedLibraryContainer > xStorBasLib(xDocScr->getBasicLibraries());
         CPPUNIT_ASSERT(xStorBasLib.is());
         uno::Reference< script::XLibraryContainer > xBasLib(xStorBasLib, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xBasLib.is());
         uno::Reference< script::XStorageBasedLibraryContainer > xStorDlgLib(xDocScr->getDialogLibraries());
         CPPUNIT_ASSERT(xStorDlgLib.is());
         uno::Reference< script::XLibraryContainer > xDlgLib(xStorDlgLib, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xDlgLib.is());
         xBasLib->loadLibrary(sStandard);
         CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(sStandard));
         // the whole point of this test is to test the "save" operation
@@ -91,12 +87,10 @@ void DialogSaveTest::test()
 
         // make some change to enable a save
         // uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSuppl(xComponent, UNO_QUERY_THROW);
-        // CPPUNIT_ASSERT(xDocPropSuppl.is());
         // uno::Reference< document::XDocumentPropertiesSupplier > xDocProps(xDocPropSuppl->getDocumentProperties());
         // CPPUNIT_ASSERT(xDocProps.is());
         // xDocProps.setTitle(xDocProps.getTitle() + " suffix");
         uno::Reference< util::XModifiable > xDocMod(xComponent, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xDocMod.is());
         xDocMod->setModified(true);
 
         // now save; the code path to exercise in this test is the "store to same location"
@@ -105,7 +99,6 @@ void DialogSaveTest::test()
 
         // close
         uno::Reference< util::XCloseable > xDocCloseable(xComponent, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xDocCloseable.is());
         xDocCloseable->close(false);
 
         // All our uno::References are (should?) be invalid now -> let them go out of scope
@@ -114,9 +107,7 @@ void DialogSaveTest::test()
         uno::Sequence<uno::Any> args(1);
         args[0] <<= aFileName;
         Reference<container::XHierarchicalNameAccess> xHNA(getMultiServiceFactory()->createInstanceWithArguments("com.sun.star.packages.Package", args), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xHNA.is());
         Reference< beans::XPropertySet > xPS(xHNA->getByHierarchicalName("Dialogs/Standard/Dialog1.xml"), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xPS.is());
         sal_Int64 nSize = 0;
         CPPUNIT_ASSERT(xPS->getPropertyValue("Size") >>= nSize);
         CPPUNIT_ASSERT(nSize != 0);

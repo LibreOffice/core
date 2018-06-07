@@ -122,10 +122,7 @@ PresenterScrollBar::PresenterScrollBar (
 
         // Make the background transparent.  The slide show paints its own background.
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY_THROW);
-        if (xPeer.is())
-        {
-            xPeer->setBackground(0xff000000);
-        }
+        xPeer->setBackground(0xff000000);
 
         mxWindow->setVisible(true);
         mxWindow->addWindowListener(this);

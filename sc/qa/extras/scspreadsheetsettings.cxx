@@ -51,8 +51,6 @@ ScSpreadsheetSettings::ScSpreadsheetSettings()
 uno::Reference<uno::XInterface> ScSpreadsheetSettings::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
-
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);
     return xMSF->createInstance("com.sun.star.sheet.GlobalSheetSettings");
 }

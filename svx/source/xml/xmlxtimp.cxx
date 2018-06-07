@@ -324,13 +324,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
                                rtl::Reference<SvXMLGraphicHelper>& rxGraphicHelper,
                                const uno::Reference < embed::XStorage >& xStorage )
 {
-    uno::Reference < io::XStream > xIStm;
-    xIStm.set( xStorage->openStreamElement( "Content.xml", embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
-    if( !xIStm.is() )
-    {
-        OSL_FAIL( "could not open Content stream" );
-        return;
-    }
+    uno::Reference < io::XStream > xIStm( xStorage->openStreamElement( "Content.xml", embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
     pParserInput->aInputStream = xIStm->getInputStream();
     rxGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Read );
 }

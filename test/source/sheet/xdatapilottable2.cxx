@@ -161,7 +161,6 @@ void XDataPilotTable2::testInsertDrillDownSheet()
         {
             CPPUNIT_ASSERT(aData.getLength() >= 2);
             uno::Reference< sheet::XSpreadsheet > xSheet(xIA->getByIndex(aAddr.Sheet),UNO_QUERY_THROW);
-            CPPUNIT_ASSERT(xSheet.is());
 
             checkDrillDownSheetContent(xSheet, aData);
 

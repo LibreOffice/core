@@ -129,7 +129,6 @@ Reference< embed::XStorage > lcl_createStorage(
         aStorageArgs[2] <<= rMediaDescriptor;
         xStorage.set(
             xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
-        OSL_ENSURE( xStorage.is(), "No Storage" );
     }
     catch(const css::ucb::ContentCreationException&)
     {

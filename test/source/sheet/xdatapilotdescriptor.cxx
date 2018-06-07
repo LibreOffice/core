@@ -70,7 +70,6 @@ void XDataPilotDescriptor::testGetFilterDescriptor()
 void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > const & xDescr)
 {
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getDataPilotFields(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT( xIndex.is());
 
     sal_Int32 nCount = xIndex->getCount();
 
@@ -78,13 +77,11 @@ void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::X
     for (sal_Int32 i = 0; i < nCount && i < 5; ++i)
     {
         uno::Reference< container::XNamed > xNamed( xIndex->getByIndex( i ), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xNamed.is());
         OUString aName = xNamed->getName();
         maFieldNames.push_back(aName);
         CPPUNIT_ASSERT( aName != "Data" );
 
         uno::Reference< beans::XPropertySet > xPropSet( xNamed, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT( xPropSet.is() );
 
         switch ( i % 5 )
         {

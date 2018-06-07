@@ -948,143 +948,140 @@ bool SVGTextWriter::nextParagraph()
         if( xTextContent.is() )
         {
             Reference< XServiceInfo > xServiceInfo( xTextContent, UNO_QUERY_THROW );
-            if( xServiceInfo.is() )
+#if OSL_DEBUG_LEVEL > 0
+            OUString sInfo;
+#endif
+            if( xServiceInfo->supportsService( "com.sun.star.text.Paragraph" ) )
             {
-#if OSL_DEBUG_LEVEL > 0
-                OUString sInfo;
-#endif
-                if( xServiceInfo->supportsService( "com.sun.star.text.Paragraph" ) )
+                mrCurrentTextParagraph.set( xTextContent );
+                Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY_THROW );
+                Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+                if( xPropSetInfo->hasPropertyByName( "NumberingLevel" ) )
                 {
-                    mrCurrentTextParagraph.set( xTextContent );
-                    Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY_THROW );
-                    Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-                    if( xPropSetInfo->hasPropertyByName( "NumberingLevel" ) )
+                    sal_Int16 nListLevel = 0;
+                    if( xPropSet->getPropertyValue( "NumberingLevel" ) >>= nListLevel )
                     {
-                        sal_Int16 nListLevel = 0;
-                        if( xPropSet->getPropertyValue( "NumberingLevel" ) >>= nListLevel )
+                        mbIsNewListItem = true;
+#if OSL_DEBUG_LEVEL > 0
+                        sInfo = "NumberingLevel: " + OUString::number( nListLevel );
+                        mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", sInfo );
+#endif
+                        Reference< XIndexReplace > xNumRules;
+                        if( xPropSetInfo->hasPropertyByName( "NumberingRules" ) )
                         {
-                            mbIsNewListItem = true;
-#if OSL_DEBUG_LEVEL > 0
-                            sInfo = "NumberingLevel: " + OUString::number( nListLevel );
-                            mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", sInfo );
-#endif
-                            Reference< XIndexReplace > xNumRules;
-                            if( xPropSetInfo->hasPropertyByName( "NumberingRules" ) )
+                            xPropSet->getPropertyValue( "NumberingRules" ) >>= xNumRules;
+                        }
+                        if( xNumRules.is() && ( nListLevel < xNumRules->getCount() ) )
+                        {
+                            bool bIsNumbered = true;
+                            OUString sNumberingIsNumber("NumberingIsNumber");
+                            if( xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
                             {
-                                xPropSet->getPropertyValue( "NumberingRules" ) >>= xNumRules;
-                            }
-                            if( xNumRules.is() && ( nListLevel < xNumRules->getCount() ) )
-                            {
-                                bool bIsNumbered = true;
-                                OUString sNumberingIsNumber("NumberingIsNumber");
-                                if( xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
+                                if( !(xPropSet->getPropertyValue( sNumberingIsNumber ) >>= bIsNumbered ) )
                                 {
-                                    if( !(xPropSet->getPropertyValue( sNumberingIsNumber ) >>= bIsNumbered ) )
-                                    {
-                                        OSL_FAIL( "numbered paragraph without number info" );
-                                        bIsNumbered = false;
-                                    }
-#if OSL_DEBUG_LEVEL > 0
-                                    if( bIsNumbered )
-                                    {
-                                        sInfo = "true";
-                                        mrExport.AddAttribute( XML_NAMESPACE_NONE, "is-numbered", sInfo );
-                                    }
-#endif
+                                    OSL_FAIL( "numbered paragraph without number info" );
+                                    bIsNumbered = false;
                                 }
-                                mbIsNewListItem = bIsNumbered;
-
+#if OSL_DEBUG_LEVEL > 0
                                 if( bIsNumbered )
                                 {
-                                    Sequence<PropertyValue> aProps;
-                                    if( xNumRules->getByIndex( nListLevel ) >>= aProps )
-                                    {
-                                        sal_Int16 eType = NumberingType::CHAR_SPECIAL;
-                                        sal_Unicode cBullet = 0xf095;
-                                        const sal_Int32 nCount = aProps.getLength();
-                                        const PropertyValue* pPropArray = aProps.getConstArray();
-                                        for( sal_Int32 i = 0; i < nCount; ++i )
-                                        {
-                                            const PropertyValue& rProp = pPropArray[i];
-                                            if( rProp.Name == "NumberingType" )
-                                            {
-                                                rProp.Value >>= eType;
-                                            }
-                                            else if( rProp.Name == "BulletChar" )
-                                            {
-                                                OUString sValue;
-                                                rProp.Value >>= sValue;
-                                                if( !sValue.isEmpty() )
-                                                {
-                                                    cBullet = sValue[0];
-                                                }
-                                            }
-                                        }
-                                        meNumberingType = eType;
-                                        mbIsListLevelStyleImage = ( NumberingType::BITMAP == meNumberingType );
-                                        if( NumberingType::CHAR_SPECIAL == meNumberingType )
-                                        {
-                                            if( cBullet )
-                                            {
-                                                if( cBullet < ' ' )
-                                                {
-                                                    cBullet = 0xF000 + 149;
-                                                }
-                                                mcBulletChar = cBullet;
-#if OSL_DEBUG_LEVEL > 0
-                                                sInfo = OUString::number( static_cast<sal_Int32>(cBullet) );
-                                                mrExport.AddAttribute( XML_NAMESPACE_NONE, "bullet-char", sInfo );
+                                    sInfo = "true";
+                                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "is-numbered", sInfo );
+                                }
 #endif
-                                            }
+                            }
+                            mbIsNewListItem = bIsNumbered;
 
+                            if( bIsNumbered )
+                            {
+                                Sequence<PropertyValue> aProps;
+                                if( xNumRules->getByIndex( nListLevel ) >>= aProps )
+                                {
+                                    sal_Int16 eType = NumberingType::CHAR_SPECIAL;
+                                    sal_Unicode cBullet = 0xf095;
+                                    const sal_Int32 nCount = aProps.getLength();
+                                    const PropertyValue* pPropArray = aProps.getConstArray();
+                                    for( sal_Int32 i = 0; i < nCount; ++i )
+                                    {
+                                        const PropertyValue& rProp = pPropArray[i];
+                                        if( rProp.Name == "NumberingType" )
+                                        {
+                                            rProp.Value >>= eType;
                                         }
+                                        else if( rProp.Name == "BulletChar" )
+                                        {
+                                            OUString sValue;
+                                            rProp.Value >>= sValue;
+                                            if( !sValue.isEmpty() )
+                                            {
+                                                cBullet = sValue[0];
+                                            }
+                                        }
+                                    }
+                                    meNumberingType = eType;
+                                    mbIsListLevelStyleImage = ( NumberingType::BITMAP == meNumberingType );
+                                    if( NumberingType::CHAR_SPECIAL == meNumberingType )
+                                    {
+                                        if( cBullet )
+                                        {
+                                            if( cBullet < ' ' )
+                                            {
+                                                cBullet = 0xF000 + 149;
+                                            }
+                                            mcBulletChar = cBullet;
+#if OSL_DEBUG_LEVEL > 0
+                                            sInfo = OUString::number( static_cast<sal_Int32>(cBullet) );
+                                            mrExport.AddAttribute( XML_NAMESPACE_NONE, "bullet-char", sInfo );
+#endif
+                                        }
+
                                     }
                                 }
                             }
-
                         }
-                    }
 
-                    Reference< XEnumerationAccess > xEnumerationAccess( xTextContent, UNO_QUERY_THROW );
-                    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
-                    if( xEnumeration.is() && xEnumeration->hasMoreElements() )
-                    {
-                        mrTextPortionEnumeration.set( xEnumeration );
                     }
-#if OSL_DEBUG_LEVEL > 0
-                    sInfo = "Paragraph";
-#endif
                 }
-                else if( xServiceInfo->supportsService( "com.sun.star.text.Table" ) )
+
+                Reference< XEnumerationAccess > xEnumerationAccess( xTextContent, UNO_QUERY_THROW );
+                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                if( xEnumeration.is() && xEnumeration->hasMoreElements() )
                 {
-                    OSL_FAIL( "SVGTextWriter::nextParagraph: text tables are not handled." );
+                    mrTextPortionEnumeration.set( xEnumeration );
+                }
 #if OSL_DEBUG_LEVEL > 0
-                    sInfo = "Table";
+                sInfo = "Paragraph";
 #endif
-                }
-                else
-                {
-                    OSL_FAIL( "SVGTextWriter::nextParagraph: Unknown text content." );
-                    return false;
-                }
+            }
+            else if( xServiceInfo->supportsService( "com.sun.star.text.Table" ) )
+            {
+                OSL_FAIL( "SVGTextWriter::nextParagraph: text tables are not handled." );
 #if OSL_DEBUG_LEVEL > 0
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", sInfo );
-                SvXMLElementExport aParaElem( mrExport, XML_NAMESPACE_NONE, "desc", mbIWS, mbIWS );
+                sInfo = "Table";
 #endif
             }
             else
             {
-                OSL_FAIL( "SVGTextWriter::nextParagraph: no XServiceInfo interface available for text content." );
+                OSL_FAIL( "SVGTextWriter::nextParagraph: Unknown text content." );
                 return false;
             }
-
-            const OUString& rParagraphId = implGetValidIDFromInterface( Reference<XInterface>(xTextContent, UNO_QUERY) );
-            if( !rParagraphId.isEmpty() )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
-            }
-            return true;
+#if OSL_DEBUG_LEVEL > 0
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", sInfo );
+            SvXMLElementExport aParaElem( mrExport, XML_NAMESPACE_NONE, "desc", mbIWS, mbIWS );
+#endif
         }
+        else
+        {
+            OSL_FAIL( "SVGTextWriter::nextParagraph: no XServiceInfo interface available for text content." );
+            return false;
+        }
+
+        const OUString& rParagraphId = implGetValidIDFromInterface( Reference<XInterface>(xTextContent, UNO_QUERY) );
+        if( !rParagraphId.isEmpty() )
+        {
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
+        }
+        return true;
     }
 
     return false;

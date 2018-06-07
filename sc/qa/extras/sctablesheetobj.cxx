@@ -221,7 +221,6 @@ ScTableSheetObj::ScTableSheetObj():
 uno::Reference< uno::XInterface > ScTableSheetObj::init()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
@@ -249,14 +248,12 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
 uno::Reference<uno::XInterface> ScTableSheetObj::getXSpreadsheetDocument()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
     return xDoc;
 }
 
 uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
@@ -284,7 +281,6 @@ uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
 uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);

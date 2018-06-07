@@ -79,32 +79,24 @@ void ScChartRegressionTest::test()
     CPPUNIT_ASSERT(xComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDoc.is());
 
     uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xIA.is());
 
     uno::Reference< table::XTableChartsSupplier > xChartSupplier( xIA->getByIndex(0), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xChartSupplier.is());
 
     uno::Reference< table::XTableCharts > xCharts = xChartSupplier->getCharts();
     CPPUNIT_ASSERT(xCharts.is());
 
     uno::Reference< container::XIndexAccess > xIACharts(xCharts, UNO_QUERY_THROW);
     uno::Reference< table::XTableChart > xChart( xIACharts->getByIndex(0), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xChart.is());
 
     uno::Reference< document::XEmbeddedObjectSupplier > xEmbObjectSupplier(xChart, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xEmbObjectSupplier.is());
 
     uno::Reference< lang::XComponent > xChartComp( xEmbObjectSupplier->getEmbeddedObject(), UNO_QUERY_THROW );
-    CPPUNIT_ASSERT(xChartComp.is());
 
     uno::Reference< chart2::XChartDocument > xChartDoc ( xChartComp, UNO_QUERY_THROW );
-    CPPUNIT_ASSERT(xChartDoc.is());
 
     uno::Reference< qa::XDumper > xDumper( xChartDoc, UNO_QUERY_THROW );
-    CPPUNIT_ASSERT(xDumper.is());
 
     OUString aDump = xDumper->dump();
     std::cout << aDump;

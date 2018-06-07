@@ -26,7 +26,6 @@ void XSheetAnnotationsSupplier::testGetAnnotations()
 
     uno::Reference<sheet::XSheetAnnotations> xAnnotations(xSupplier->getAnnotations(),
                                                           UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Unable to get XSheetAnnotations", xAnnotations.is());
 }
 }
 

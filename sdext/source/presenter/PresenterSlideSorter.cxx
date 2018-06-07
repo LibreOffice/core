@@ -701,8 +701,7 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
     mpLayout->Update(rUpperBox, GetSlideAspectRatio());
     bool bIsScrollBarNeeded (false);
     Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY_THROW);
-    if (xSlides.is())
-        bIsScrollBarNeeded = mpLayout->IsScrollBarNeeded(xSlides->getCount());
+    bIsScrollBarNeeded = mpLayout->IsScrollBarNeeded(xSlides->getCount());
     if (mpVerticalScrollBar.get() != nullptr)
         {
             if (bIsScrollBarNeeded)

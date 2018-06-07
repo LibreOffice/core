@@ -101,7 +101,6 @@ namespace comphelper {
             {
                 Reference< XDocumentProperties > xDocProps (
                     xDPS->getDocumentProperties(), UNO_QUERY_THROW );
-                OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
                 sTitle = xDocProps->getTitle();
                 if ( !sTitle.isEmpty() )
                     return sTitle;

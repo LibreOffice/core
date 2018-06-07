@@ -163,8 +163,7 @@ public:
         , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW )
         , XMLNS_DIALOGS_UID( 0 )
         , XMLNS_SCRIPT_UID( 0 )
-        { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
-                      _xContext.is() ); }
+        { OSL_ASSERT( _xDialogModel.is() && _xContext.is() ); }
     DialogImport( const DialogImport& rOther ) :
         ::cppu::WeakImplHelper< css::xml::input::XRoot >()
         , _xContext( rOther._xContext )

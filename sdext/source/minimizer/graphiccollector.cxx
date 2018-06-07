@@ -135,54 +135,51 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                 if ( rxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
                 {
                     Reference< XGraphic > xGraphic( xFillBitmap, UNO_QUERY_THROW );
-                    if ( xGraphic.is() )
+                    awt::Size aLogicalSize( rLogicalSize );
+                    Reference< XPropertySetInfo > axPropSetInfo( rxPropertySet->getPropertySetInfo() );
+                    if ( axPropSetInfo.is() )
                     {
-                        awt::Size aLogicalSize( rLogicalSize );
-                        Reference< XPropertySetInfo > axPropSetInfo( rxPropertySet->getPropertySetInfo() );
-                        if ( axPropSetInfo.is() )
+                        if ( axPropSetInfo->hasPropertyByName( "FillBitmapMode" ) )
                         {
-                            if ( axPropSetInfo->hasPropertyByName( "FillBitmapMode" ) )
+                            BitmapMode eBitmapMode;
+                            if ( rxPropertySet->getPropertyValue( "FillBitmapMode" ) >>= eBitmapMode )
                             {
-                                BitmapMode eBitmapMode;
-                                if ( rxPropertySet->getPropertyValue( "FillBitmapMode" ) >>= eBitmapMode )
+                                if ( ( eBitmapMode == BitmapMode_REPEAT ) || ( eBitmapMode == BitmapMode_NO_REPEAT ) )
                                 {
-                                    if ( ( eBitmapMode == BitmapMode_REPEAT ) || ( eBitmapMode == BitmapMode_NO_REPEAT ) )
+                                    bool bLogicalSize = false;
+                                    awt::Size aSize( 0, 0 );
+                                    if ( ( rxPropertySet->getPropertyValue( "FillBitmapLogicalSize" ) >>= bLogicalSize )
+                                      && ( rxPropertySet->getPropertyValue( "FillBitmapSizeX" ) >>= aSize.Width )
+                                      && ( rxPropertySet->getPropertyValue( "FillBitmapSizeY" ) >>= aSize.Height ) )
                                     {
-                                        bool bLogicalSize = false;
-                                        awt::Size aSize( 0, 0 );
-                                        if ( ( rxPropertySet->getPropertyValue( "FillBitmapLogicalSize" ) >>= bLogicalSize )
-                                          && ( rxPropertySet->getPropertyValue( "FillBitmapSizeX" ) >>= aSize.Width )
-                                          && ( rxPropertySet->getPropertyValue( "FillBitmapSizeY" ) >>= aSize.Height ) )
+                                        if ( bLogicalSize )
                                         {
-                                            if ( bLogicalSize )
+                                            if ( !aSize.Width || !aSize.Height )
                                             {
-                                                if ( !aSize.Width || !aSize.Height )
-                                                {
-                                                    awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
-                                                    if ( aSize100thMM.Width && aSize100thMM.Height )
-                                                        aLogicalSize = aSize100thMM;
-                                                }
-                                                else
-                                                    aLogicalSize = aSize;
+                                                awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
+                                                if ( aSize100thMM.Width && aSize100thMM.Height )
+                                                    aLogicalSize = aSize100thMM;
                                             }
                                             else
-                                            {
-                                                aLogicalSize.Width = sal::static_int_cast< sal_Int32 >( ( static_cast< double >( aLogicalSize.Width ) * aSize.Width ) / -100.0 );
-                                                aLogicalSize.Height = sal::static_int_cast< sal_Int32 >( ( static_cast< double >( aLogicalSize.Height ) * aSize.Height ) / -100.0 );
-                                            }
+                                                aLogicalSize = aSize;
+                                        }
+                                        else
+                                        {
+                                            aLogicalSize.Width = sal::static_int_cast< sal_Int32 >( ( static_cast< double >( aLogicalSize.Width ) * aSize.Width ) / -100.0 );
+                                            aLogicalSize.Height = sal::static_int_cast< sal_Int32 >( ( static_cast< double >( aLogicalSize.Height ) * aSize.Height ) / -100.0 );
                                         }
                                     }
                                 }
                             }
                         }
-                        GraphicCollector::GraphicUser aUser;
-                        aUser.mxPropertySet = rxPropertySet;
-                        aUser.mxGraphic = xGraphic;
-                        aUser.mbFillBitmap = true;
-                        aUser.maLogicalSize = aLogicalSize;
-                        aUser.mxPagePropertySet = rxPagePropertySet;
-                        ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
                     }
+                    GraphicCollector::GraphicUser aUser;
+                    aUser.mxPropertySet = rxPropertySet;
+                    aUser.mxGraphic = xGraphic;
+                    aUser.mbFillBitmap = true;
+                    aUser.maLogicalSize = aLogicalSize;
+                    aUser.mxPagePropertySet = rxPagePropertySet;
+                    ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
                 }
             }
         }

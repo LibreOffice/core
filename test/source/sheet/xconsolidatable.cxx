@@ -27,8 +27,6 @@ void XConsolidatable::testCreateConsolidationDescriptor()
 
     uno::Reference<sheet::XConsolidationDescriptor> xConsolidationDescriptor(
         xConsolidatable->createConsolidationDescriptor(true), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Unable to create ConsolidationDescriptor",
-                           xConsolidationDescriptor.is());
 }
 
 void XConsolidatable::testConsolidate()

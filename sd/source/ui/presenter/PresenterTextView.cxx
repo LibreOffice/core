@@ -123,12 +123,8 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
     }
 
     Reference<rendering::XCanvas> xCanvas (rArguments[0], UNO_QUERY_THROW);
-    if (xCanvas.is())
-    {
-        mpImplementation->SetCanvas(
-            cppcanvas::VCLFactory::createCanvas(xCanvas));
-    }
-
+    mpImplementation->SetCanvas(
+        cppcanvas::VCLFactory::createCanvas(xCanvas));
 }
 
 Any PresenterTextView::GetPropertyValue (const OUString& rsPropertyName)

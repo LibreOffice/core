@@ -522,7 +522,6 @@ namespace frm
             // No control...  do what we can with the models
             bool shouldCommit(true);
             Reference< XIndexAccess > xFormComps(xFrm, UNO_QUERY_THROW);
-            assert( xFormComps.is() );
 
             const sal_Int32 cnt = xFormComps->getCount();
             for(int i=0; i < cnt; ++i)

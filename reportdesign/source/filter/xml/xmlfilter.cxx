@@ -443,9 +443,6 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     if ( bRet )
     {
         m_xReportDefinition.set(GetModel(),UNO_QUERY_THROW);
-        OSL_ENSURE(m_xReportDefinition.is(),"ReportDefinition is NULL!");
-        if ( !m_xReportDefinition.is() )
-            return false;
 
 #if OSL_DEBUG_LEVEL > 1
         uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
@@ -1077,14 +1074,10 @@ const OUString& ORptFilter::convertFormula(const OUString& _sFormula)
 void SAL_CALL ORptFilter::startDocument()
 {
     m_xReportDefinition.set(GetModel(),UNO_QUERY_THROW);
-    OSL_ENSURE(m_xReportDefinition.is(),"ReportDefinition is NULL!");
-    if ( m_xReportDefinition.is() )
-    {
-        m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
-        OSL_ENSURE(m_pReportModel,"Report model is NULL!");
+    m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
+    OSL_ENSURE(m_pReportModel,"Report model is NULL!");
 
-        SvXMLImport::startDocument();
-    }
+    SvXMLImport::startDocument();
 }
 
 void ORptFilter::endDocument()

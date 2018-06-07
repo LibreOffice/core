@@ -578,8 +578,6 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
     //set property at axis
     Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
-    if( !xProp.is() )
-        return bChanged;
 
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
     sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);

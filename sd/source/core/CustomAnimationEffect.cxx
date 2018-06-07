@@ -2021,12 +2021,8 @@ void stl_process_after_effect_node_func(AfterEffectNode const & rNode)
 
                     xNextContainer.set( ParallelTimeContainer::create( xContext ), UNO_QUERY_THROW );
 
-                    DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not create container!" );
-                    if( xNextContainer.is() )
-                    {
-                        xNextContainer->setBegin( makeAny( 0.0 ) );
-                        xNewClickContainer->appendChild( xNextContainer );
-                    }
+                    xNextContainer->setBegin( makeAny( 0.0 ) );
+                    xNewClickContainer->appendChild( xNextContainer );
                 }
 
                 if( xNextContainer.is() )
