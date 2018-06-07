@@ -55,7 +55,6 @@ class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes, public salhelp
 {
 public:
     virtual LogicalFontInstance* CreateFontInstance(const FontSelectPattern&) const;
-    virtual rtl::Reference<PhysicalFontFace> Clone() const = 0;
 
     int                     GetHeight() const           { return mnHeight; }
     int                     GetWidth() const            { return mnWidth; }
