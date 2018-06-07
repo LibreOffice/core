@@ -2216,6 +2216,11 @@ SwGrammarMarkUp* SwTextNode::GetGrammarCheck()
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pGrammarCheck : nullptr;
 }
 
+SwWrongList const* SwTextNode::GetGrammarCheck() const
+{
+    return static_cast<SwWrongList const*>(const_cast<SwTextNode*>(this)->GetGrammarCheck());
+}
+
 void SwTextNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
 {
     OSL_ENSURE( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
@@ -2234,6 +2239,11 @@ void SwTextNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
 SwWrongList* SwTextNode::GetSmartTags()
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pSmartTags : nullptr;
+}
+
+SwWrongList const* SwTextNode::GetSmartTags() const
+{
+    return const_cast<SwWrongList const*>(const_cast<SwTextNode*>(this)->GetSmartTags());
 }
 
 void SwTextNode::SetWordCountDirty( bool bNew ) const
