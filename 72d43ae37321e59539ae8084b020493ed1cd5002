@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_fad54db9",
+        "filename": "reportdesign/source/filter/xml/xmlImportDocumentHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-07T12:35:21Z",
+      "side": 1,
+      "message": "Just a nitpick: since we enforse the clangformat, at least I myself now modify those lines I touch, to conform to the new format - so that as I\u0027ll be blamed for the line anyway, it will not need another change in the future.",
+      "range": {
+        "startLine": 111,
+        "startChar": 8,
+        "endLine": 111,
+        "endChar": 9
+      },
+      "revId": "72d43ae37321e59539ae8084b020493ed1cd5002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
