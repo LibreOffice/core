@@ -200,14 +200,16 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
 /**
  * Used for spell checking. Calculates a rectangle for repaint.
  */
-static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgStart, sal_Int32 nChgEnd )
+static SwRect lcl_CalculateRepaintRect(
+        SwTextFrame & rTextFrame, SwTextNode & rNode,
+        sal_Int32 const nChgStart, sal_Int32 const nChgEnd)
 {
     SwRect aRect;
 
-    SwTextNode *pNode = rTextFrame.GetTextNode();
+    TextFrameIndex const iChgStart(rTextFrame.MapModelToView(&rNode, nChgStart));
+    TextFrameIndex const iChgEnd(rTextFrame.MapModelToView(&rNode, nChgEnd));
 
-    SwNodeIndex aNdIdx( *pNode );
-    SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
+    SwPosition aPos( rNode, nChgEnd );
     SwCursorMoveState aTmpState( MV_NONE );
     aTmpState.m_b2Lines = true;
     rTextFrame.GetCharRect( aRect, aPos, &aTmpState );
@@ -217,7 +219,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     const SwTextFrame *pEndFrame = &rTextFrame;
 
     while( pEndFrame->HasFollow() &&
-           nChgEnd >= pEndFrame->GetFollow()->GetOfst() )
+           iChgEnd >= pEndFrame->GetFollow()->GetOfst())
         pEndFrame = pEndFrame->GetFollow();
 
     if ( pEnd2Pos )
@@ -236,7 +238,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
 
     aTmpState.m_p2Lines = nullptr;
     SwRect aTmp;
-    aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
+    aPos = SwPosition( rNode, nChgStart );
     rTextFrame.GetCharRect( aTmp, aPos, &aTmpState );
 
     // i63141: GetCharRect(..) could cause a formatting,
@@ -244,11 +246,11 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     // => we have to reinit pStartFrame and pEndFrame after the formatting
     const SwTextFrame* pStartFrame = &rTextFrame;
     while( pStartFrame->HasFollow() &&
-           nChgStart >= pStartFrame->GetFollow()->GetOfst() )
+           iChgStart >= pStartFrame->GetFollow()->GetOfst())
         pStartFrame = pStartFrame->GetFollow();
     pEndFrame = pStartFrame;
     while( pEndFrame->HasFollow() &&
-           nChgEnd >= pEndFrame->GetFollow()->GetOfst() )
+           iChgEnd >= pEndFrame->GetFollow()->GetOfst())
         pEndFrame = pEndFrame->GetFollow();
 
     // information about start of repaint area
@@ -1266,11 +1268,12 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
 }
 
 // Note: this is a clone of SwTextNode::Spell, so keep them in sync when fixing things!
-SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos )
+SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
 {
     SwRect aRect;
-    SwTextNode *pNode = GetTextNode();
-    if( pNode != pActNode || !nActPos )
+    assert(sw::FrameContainsNode(*this, rNode.GetIndex()));
+    SwTextNode *const pNode(&rNode);
+    if (!nActPos)
         nActPos = COMPLETE_STRING;
 
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
@@ -1281,7 +1284,7 @@ SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos
     const bool bRestoreString =
         lcl_MaskRedlinesAndHiddenText(*pNode, buf, 0, pNode->GetText().getLength());
     if (bRestoreString)
-    {   // ??? UGLY: is it really necessary to modify m_Text here?
+    {   // ??? UGLY: is it really necessary to modify m_Text here? just for GetLang()?
         pNode->m_Text = buf.makeStringAndClear();
     }
 
@@ -1415,7 +1418,7 @@ SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos
 
         if( nChgStart < nChgEnd )
         {
-            aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
+            aRect = lcl_CalculateRepaintRect(*this, rNode, nChgStart, nChgEnd);
 
             // fdo#71558 notify misspelled word to accessibility
             SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
@@ -1451,10 +1454,12 @@ SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos
 
     @return SwRect Repaint area
 */
-SwRect SwTextFrame::SmartTagScan()
+SwRect SwTextFrame::SmartTagScan(SwTextNode & rNode)
 {
     SwRect aRet;
-    SwTextNode *pNode = GetTextNode();
+
+    assert(sw::FrameContainsNode(*this, rNode.GetIndex()));
+    SwTextNode *const pNode = &rNode;
     const OUString& rText = pNode->GetText();
 
     // Iterate over language portions
@@ -1556,7 +1561,7 @@ SwRect SwTextFrame::SmartTagScan()
         if ( nBegin < nEnd && ( 0 != nNumberOfRemovedEntries ||
                                 0 != nNumberOfInsertedEntries ) )
         {
-            aRet = lcl_CalculateRepaintRect( *this, nBegin, nEnd );
+            aRet = lcl_CalculateRepaintRect(*this, rNode, nBegin, nEnd);
         }
     }
     else
@@ -1565,10 +1570,11 @@ SwRect SwTextFrame::SmartTagScan()
     return aRet;
 }
 
-void SwTextFrame::CollectAutoCmplWrds( SwContentNode const * pActNode, sal_Int32 nActPos )
+void SwTextFrame::CollectAutoCmplWrds(SwTextNode & rNode, sal_Int32 nActPos)
 {
-    SwTextNode *pNode = GetTextNode();
-    if( pNode != pActNode || !nActPos )
+    assert(sw::FrameContainsNode(*this, rNode.GetIndex()));
+    SwTextNode *const pNode(&rNode);
+    if (!nActPos)
         nActPos = COMPLETE_STRING;
 
     SwDoc* pDoc = pNode->GetDoc();
