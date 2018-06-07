@@ -859,12 +859,9 @@ void CustomAnimationPane::onSelectionChanged()
         if( mxView.is() ) try
         {
             Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
-            if (xSel.is())
-            {
-                maViewSelection = xSel->getSelection();
-                mpCustomAnimationList->onSelectionChanged( maViewSelection );
-                updateControls();
-            }
+            maViewSelection = xSel->getSelection();
+            mpCustomAnimationList->onSelectionChanged( maViewSelection );
+            updateControls();
         }
         catch( Exception& )
         {

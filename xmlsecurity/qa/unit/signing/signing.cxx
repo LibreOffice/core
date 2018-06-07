@@ -656,7 +656,6 @@ void SigningTest::test96097Calc()
 
 
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDocStorable.is());
 
     // Save a copy
     utl::TempFile aTempFileSaveCopy;
@@ -705,7 +704,6 @@ void SigningTest::test96097Doc()
 
 
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDocStorable.is());
 
     // Save a copy
     utl::TempFile aTempFileSaveCopy;

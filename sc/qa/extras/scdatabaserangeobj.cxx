@@ -67,7 +67,6 @@ ScDatabaseRangeObj::ScDatabaseRangeObj()
 uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBName )
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference< beans::XPropertySet > xPropSet(xDoc, UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xNameAccess( xPropSet->getPropertyValue("DatabaseRanges"), UNO_QUERY_THROW);

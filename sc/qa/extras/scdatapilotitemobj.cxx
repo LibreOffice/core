@@ -65,7 +65,6 @@ uno::Reference< uno::XInterface > ScDataPilotItemObj::init()
     table::CellAddress sCellAddress(0, 7, 8);
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     // we need to sheets
     uno::Reference< sheet::XSpreadsheets > xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);

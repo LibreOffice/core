@@ -75,7 +75,6 @@ ScTabViewObj::ScTabViewObj()
 uno::Reference< uno::XInterface > ScTabViewObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY_THROW);
 
@@ -85,7 +84,6 @@ uno::Reference< uno::XInterface > ScTabViewObj::init()
 uno::Reference<uno::XInterface> ScTabViewObj::getXSpreadsheet(const sal_Int16 nNumber)
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     xSheets->insertNewByName("Sheet2", 2);

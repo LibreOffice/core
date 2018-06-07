@@ -285,7 +285,6 @@ uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUStri
     CPPUNIT_ASSERT(xComp.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComp, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDoc.is());
     return xDoc;
 }
 
@@ -293,8 +292,6 @@ uno::Reference< sheet::XNamedRanges> XSpreadsheets2::getNamedRanges(uno::Referen
 {
     uno::Reference< beans::XPropertySet > xPropSet (xDoc, UNO_QUERY_THROW);
     uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue("NamedRanges"), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xNamedRanges.is());
-
     return xNamedRanges;
 }
 

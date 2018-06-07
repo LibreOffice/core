@@ -139,8 +139,6 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
         }
         uno::Reference< document::XExporter > xExprtr(xIfc, uno::UNO_QUERY_THROW);
         uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
-        if (!xExprtr.is() || !xFltr.is())
-            return false;
         xExprtr->setSourceDocument(m_xSrcDoc);
         return xFltr->filter(rDescriptor);
     }

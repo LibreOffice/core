@@ -485,16 +485,13 @@ Reference< XNameAccess> getPrimaryKeyColumns_throw(const Reference< XPropertySet
             for(sal_Int32 i = 0;i< nCount;++i)
             {
                 xProp.set(xKeys->getByIndex(i),UNO_QUERY_THROW);
-                if ( xProp.is() )
+                sal_Int32 nKeyType = 0;
+                xProp->getPropertyValue(sPropName) >>= nKeyType;
+                if(KeyType::PRIMARY == nKeyType)
                 {
-                    sal_Int32 nKeyType = 0;
-                    xProp->getPropertyValue(sPropName) >>= nKeyType;
-                    if(KeyType::PRIMARY == nKeyType)
-                    {
-                        const Reference<XColumnsSupplier> xKeyColsSup(xProp,UNO_QUERY_THROW);
-                        xKeyColumns = xKeyColsSup->getColumns();
-                        break;
-                    }
+                    const Reference<XColumnsSupplier> xKeyColsSup(xProp,UNO_QUERY_THROW);
+                    xKeyColumns = xKeyColsSup->getColumns();
+                    break;
                 }
             }
         }

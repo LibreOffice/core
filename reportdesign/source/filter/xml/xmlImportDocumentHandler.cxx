@@ -108,7 +108,7 @@ void SAL_CALL ImportDocumentHandler::endDocument()
 {
     m_xDelegatee->endDocument();
     uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
-    if ( xReceiver.is() && m_bImportedChart )
+    if ( m_bImportedChart )
     {
         // this fills the chart again
         ::comphelper::NamedValueCollection aArgs;

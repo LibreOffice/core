@@ -86,7 +86,6 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
         return mxObject;
 
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document!", xSheetDoc.is());
 
     // the cell range
     table::CellRangeAddress sCellRangeAdress;

@@ -3331,23 +3331,17 @@ void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportCon
         {
             uno::Reference< container::XChild > xChild(pSdXMLGraphicObjectShapeContext->getShape(), uno::UNO_QUERY_THROW);
 
-            if(xChild.is())
+            uno::Reference< drawing::XShapes > xParent(xChild->getParent(), uno::UNO_QUERY_THROW);
+
+            // remove from parent
+            xParent->remove(pSdXMLGraphicObjectShapeContext->getShape());
+
+            // dispose
+            uno::Reference< lang::XComponent > xComp(pSdXMLGraphicObjectShapeContext->getShape(), UNO_QUERY);
+
+            if(xComp.is())
             {
-                uno::Reference< drawing::XShapes > xParent(xChild->getParent(), uno::UNO_QUERY_THROW);
-
-                if(xParent.is())
-                {
-                    // remove from parent
-                    xParent->remove(pSdXMLGraphicObjectShapeContext->getShape());
-
-                    // dispose
-                    uno::Reference< lang::XComponent > xComp(pSdXMLGraphicObjectShapeContext->getShape(), UNO_QUERY);
-
-                    if(xComp.is())
-                    {
-                        xComp->dispose();
-                    }
-                }
+                xComp->dispose();
             }
         }
         catch( uno::Exception& )
@@ -3403,10 +3397,7 @@ OUString SdXMLFrameShapeContext::getGraphicPackageURLFromImportContext(const SvX
         {
             const uno::Reference< beans::XPropertySet > xPropSet(pSdXMLGraphicObjectShapeContext->getShape(), uno::UNO_QUERY_THROW);
 
-            if (xPropSet.is())
-            {
-                xPropSet->getPropertyValue("GraphicStreamURL") >>= aRetval;
-            }
+            xPropSet->getPropertyValue("GraphicStreamURL") >>= aRetval;
         }
         catch( uno::Exception& )
         {

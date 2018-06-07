@@ -82,7 +82,6 @@ ScDataPilotTableObj::ScDataPilotTableObj()
 uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
@@ -95,13 +94,11 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 
     CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
     uno::Reference< sheet::XDataPilotTablesSupplier > xDPTS(xSheet, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDPTS.is());
     uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
     CPPUNIT_ASSERT(xDPT.is());
 
     uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName("DataPilotTable"),UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xDPTable.is());
     return xDPTable;
 }
 
@@ -126,13 +123,11 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
 
     CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
     uno::Reference< sheet::XDataPilotTablesSupplier > xDPTS(xSheet, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDPTS.is());
     uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
     CPPUNIT_ASSERT(xDPT.is());
 
     uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName("DataPilotTable2"),UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xDPTable.is());
     return xDPTable;
 }
 

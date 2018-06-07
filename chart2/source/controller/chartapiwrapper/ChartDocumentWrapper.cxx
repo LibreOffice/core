@@ -1253,25 +1253,22 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         {
             Reference< lang::XMultiServiceFactory > xFact(
                 m_spChart2ModelContact->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-            if( xFact.is() )
+            Reference< lang::XInitialization > xViewInit( xFact->createInstance(
+                    CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+            if(xViewInit.is())
             {
-                Reference< lang::XInitialization > xViewInit( xFact->createInstance(
-                        CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
-                if(xViewInit.is())
+                try
                 {
-                    try
-                    {
-                        m_xChartView = xViewInit;
+                    m_xChartView = xViewInit;
 
-                        Sequence< Any > aArguments(2);
-                        aArguments[0] <<= Reference<frame::XModel>(this);
-                        aArguments[1] <<= true; // bRefreshAddIn
-                        xViewInit->initialize(aArguments);
-                    }
-                    catch (const uno::Exception&)
-                    {
-                        DBG_UNHANDLED_EXCEPTION("chart2");
-                    }
+                    Sequence< Any > aArguments(2);
+                    aArguments[0] <<= Reference<frame::XModel>(this);
+                    aArguments[1] <<= true; // bRefreshAddIn
+                    xViewInit->initialize(aArguments);
+                }
+                catch (const uno::Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
             }
         }
@@ -1316,14 +1313,11 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         {
             Reference< lang::XMultiServiceFactory > xFact(
                 m_spChart2ModelContact->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-            if( xFact.is() )
+            uno::Reference< util::XRefreshable > xAddIn(
+                xFact->createInstance( aServiceSpecifier ), uno::UNO_QUERY );
+            if( xAddIn.is() )
             {
-                uno::Reference< util::XRefreshable > xAddIn(
-                    xFact->createInstance( aServiceSpecifier ), uno::UNO_QUERY );
-                if( xAddIn.is() )
-                {
-                    xResult = xAddIn;
-                }
+                xResult = xAddIn;
             }
         }
         catch (const uno::Exception&)

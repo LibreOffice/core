@@ -22,7 +22,6 @@ void XNameReplace::testReplaceByName()
     xNameReplace->replaceByName(maTestReplacementName, getAnyElementForNameReplace());
     Any aAny = xNameReplace->getByName( maTestReplacementName );
     uno::Reference< uno::XInterface > xElement(aAny, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xElement.is());
 }
 
 }

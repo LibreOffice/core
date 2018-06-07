@@ -102,10 +102,7 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
         return  Open( sFileName, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any());
     }
     uno::Reference <text::XTextDocument> xTextDoc( createDocument() , uno::UNO_QUERY_THROW );
-
-    if( xTextDoc.is() )
-        return getDocument( mxContext, xTextDoc, Application() );
-    return uno::Any();
+    return getDocument( mxContext, xTextDoc, Application() );
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?

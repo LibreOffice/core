@@ -30,7 +30,6 @@ void XDataPilotTables::testXDataPilotTables()
 
     uno::Reference<sheet::XDataPilotDescriptor> xDPD(xDPT->createDataPilotDescriptor(),
                                                      UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Unable to create DataPilotDescriptor", xDPD.is());
 
     xDPT->insertNewByName("XDataPilotTables", table::CellAddress(0, 9, 8), xDPD);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to insert new DataPilotTable", OUString("Filter"),

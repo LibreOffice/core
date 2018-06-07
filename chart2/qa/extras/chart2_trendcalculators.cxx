@@ -84,7 +84,6 @@ void Chart2TrendCalculators::loadCalculatorFromSheet(sal_Int32 nSheet)
     CPPUNIT_ASSERT(xDataSeries.is());
 
     Reference<chart2::XRegressionCurveContainer> xRegressionCurveContainer(xDataSeries, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT( xRegressionCurveContainer.is() );
 
     Sequence< Reference< chart2::XRegressionCurve > > xRegressionCurveSequence = xRegressionCurveContainer->getRegressionCurves();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xRegressionCurveSequence.getLength());

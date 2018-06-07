@@ -142,15 +142,12 @@ void ScMacroManager::InitUserFuncData()
         Reference< script::XLibraryContainer > xLibraries( pShell->GetBasicContainer(), uno::UNO_QUERY_THROW );
         xModuleContainer.set( xLibraries->getByName( sProjectName ), uno::UNO_QUERY_THROW );
 
-        if ( xModuleContainer.is() )
-        {
-            // remove old listener ( if there was one )
-            if ( mxContainerListener.is() )
-                xModuleContainer->removeContainerListener( mxContainerListener );
-            // Create listener
-            mxContainerListener = new VBAProjectListener( this );
-            xModuleContainer->addContainerListener( mxContainerListener );
-        }
+        // remove old listener ( if there was one )
+        if ( mxContainerListener.is() )
+            xModuleContainer->removeContainerListener( mxContainerListener );
+        // Create listener
+        mxContainerListener = new VBAProjectListener( this );
+        xModuleContainer->addContainerListener( mxContainerListener );
     }
     catch (const uno::Exception&)
     {

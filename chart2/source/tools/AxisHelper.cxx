@@ -239,52 +239,49 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             try
             {
                 Reference< XChartTypeContainer > xCTCnt( xCorrespondingCoordinateSystem, uno::UNO_QUERY_THROW );
-                if( xCTCnt.is() )
+                OUString aRoleToMatch;
+                if( nDimensionIndex == 0 )
+                    aRoleToMatch = "values-x";
+                Sequence< Reference< XChartType > > aChartTypes( xCTCnt->getChartTypes());
+                for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
                 {
-                    OUString aRoleToMatch;
-                    if( nDimensionIndex == 0 )
-                        aRoleToMatch = "values-x";
-                    Sequence< Reference< XChartType > > aChartTypes( xCTCnt->getChartTypes());
-                    for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+                    if( nDimensionIndex != 0 )
+                        aRoleToMatch = ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( aChartTypes[nCTIdx] );
+                    Reference< XDataSeriesContainer > xDSCnt( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
+                    Sequence< Reference< XDataSeries > > aDataSeriesSeq( xDSCnt->getDataSeries());
+                    for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aDataSeriesSeq.getLength(); ++nSeriesIdx )
                     {
-                        if( nDimensionIndex != 0 )
-                            aRoleToMatch = ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( aChartTypes[nCTIdx] );
-                        Reference< XDataSeriesContainer > xDSCnt( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
-                        Sequence< Reference< XDataSeries > > aDataSeriesSeq( xDSCnt->getDataSeries());
-                        for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aDataSeriesSeq.getLength(); ++nSeriesIdx )
+                        Reference< chart2::XDataSeries > xDataSeries(aDataSeriesSeq[nSeriesIdx]);
+                        Reference< data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY_THROW );
+
+                        if( nDimensionIndex == 1 )
                         {
-                            Reference< chart2::XDataSeries > xDataSeries(aDataSeriesSeq[nSeriesIdx]);
-                            Reference< data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY_THROW );
+                            //only take those series into account that are attached to this axis
+                            sal_Int32 nAttachedAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+                            if( nAttachedAxisIndex != nAxisIndex )
+                                continue;
+                        }
 
-                            if( nDimensionIndex == 1 )
+                        Reference< data::XLabeledDataSequence > xLabeledSeq(
+                            DataSeriesHelper::getDataSequenceByRole( xSource, aRoleToMatch ) );
+
+                        if( !xLabeledSeq.is() && nDimensionIndex==0 )
+                        {
+                            ScaleData aData = xAxis->getScaleData();
+                            xLabeledSeq = aData.Categories;
+                        }
+
+                        if( xLabeledSeq.is() )
+                        {
+                            Reference< data::XDataSequence > xSeq( xLabeledSeq->getValues());
+                            if( xSeq.is() )
                             {
-                                //only take those series into account that are attached to this axis
-                                sal_Int32 nAttachedAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
-                                if( nAttachedAxisIndex != nAxisIndex )
-                                    continue;
-                            }
-
-                            Reference< data::XLabeledDataSequence > xLabeledSeq(
-                                DataSeriesHelper::getDataSequenceByRole( xSource, aRoleToMatch ) );
-
-                            if( !xLabeledSeq.is() && nDimensionIndex==0 )
-                            {
-                                ScaleData aData = xAxis->getScaleData();
-                                xLabeledSeq = aData.Categories;
-                            }
-
-                            if( xLabeledSeq.is() )
-                            {
-                                Reference< data::XDataSequence > xSeq( xLabeledSeq->getValues());
-                                if( xSeq.is() )
-                                {
-                                    sal_Int32 nKey = xSeq->getNumberFormatKeyByIndex( -1 );
-                                    // initialize the value
-                                    if( aKeyMap.find( nKey ) == aKeyMap.end())
-                                        aKeyMap[ nKey ] = 0;
-                                    // increase frequency
-                                    aKeyMap[ nKey ] = (aKeyMap[ nKey ] + 1);
-                                }
+                                sal_Int32 nKey = xSeq->getNumberFormatKeyByIndex( -1 );
+                                // initialize the value
+                                if( aKeyMap.find( nKey ) == aKeyMap.end())
+                                    aKeyMap[ nKey ] = 0;
+                                // increase frequency
+                                aKeyMap[ nKey ] = (aKeyMap[ nKey ] + 1);
                             }
                         }
                     }

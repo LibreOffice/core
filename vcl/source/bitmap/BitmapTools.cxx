@@ -102,11 +102,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     if (xBitmap.is())
     {
         const css::uno::Reference<css::rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-
-        if (xIntBmp.is())
-        {
-            rBitmapEx = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-        }
+        rBitmapEx = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
     }
 
 }

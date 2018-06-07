@@ -1743,8 +1743,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
             if ( m_xRelStorage->hasElements() )
             {
                 uno::Reference< embed::XTransactedObject > xTrans( m_xRelStorage, uno::UNO_QUERY_THROW );
-                if ( xTrans.is() )
-                    xTrans->commit();
+                xTrans->commit();
             }
 
             if ( xNewPackageFolder.is() && xNewPackageFolder->hasByName( aRelsStorName ) )

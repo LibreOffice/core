@@ -372,8 +372,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
             uno::UNO_QUERY_THROW );
 
     uno::Reference< io::XSeekable > xCachedSeek( xCachedVisualRepresentation, uno::UNO_QUERY_THROW );
-    if ( xCachedSeek.is() )
-        xCachedSeek->seek( 0 );
+    xCachedSeek->seek( 0 );
 
     uno::Reference < io::XStream > xTempFile(
             io::TempFile::create(comphelper::getComponentContext(m_xFactory)),

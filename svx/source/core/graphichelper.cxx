@@ -410,11 +410,8 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< 
                 aDescriptor[1].Value <<= sPath;
 
                 Reference< XComponent > xSourceDocument( xShape, UNO_QUERY_THROW );
-                if ( xSourceDocument.is() )
-                {
-                    xGraphicExporter->setSourceDocument( xSourceDocument );
-                    xGraphicExporter->filter( aDescriptor );
-                }
+                xGraphicExporter->setSourceDocument( xSourceDocument );
+                xGraphicExporter->filter( aDescriptor );
             }
         }
     }

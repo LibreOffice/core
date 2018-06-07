@@ -381,13 +381,10 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
         try
         {
             css::uno::Reference< css::beans::XFastPropertySet > xSet( xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_QUICKLAUNCHER, xContext), css::uno::UNO_QUERY_THROW );
-            if( xSet.is() )
-            {
-                css::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
-                bool bState = false;
-                if( aVal >>= bState )
-                    bQuickstarterRunning = bState;
-            }
+            css::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
+            bool bState = false;
+            if( aVal >>= bState )
+                bQuickstarterRunning = bState;
         }
         catch( const css::uno::Exception& )
         {

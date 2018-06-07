@@ -270,7 +270,6 @@ bool SaveOlePropertySet(
 
     uno::Reference<beans::XPropertySet> xUserDefinedProps(
         i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-    DBG_ASSERT(xUserDefinedProps.is(), "UserDefinedProperties is null");
     uno::Reference<beans::XPropertySetInfo> xPropInfo =
         xUserDefinedProps->getPropertySetInfo();
     DBG_ASSERT(xPropInfo.is(), "UserDefinedProperties Info is null");

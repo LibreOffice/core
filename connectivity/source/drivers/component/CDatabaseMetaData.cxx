@@ -152,7 +152,6 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
         if(match(tableNamePattern,*pTabIter,'\0'))
         {
             const Reference< XColumnsSupplier> xTable(xNames->getByName(*pTabIter),UNO_QUERY_THROW);
-            OSL_ENSURE(xTable.is(),"Table not found! Normally a exception had to be thrown here!");
             aRow[3] = new ORowSetValueDecorator(*pTabIter);
 
             const Reference< XNameAccess> xColumns = xTable->getColumns();

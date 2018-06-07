@@ -432,7 +432,6 @@ void Chart2ExportTest::testErrorBarXLSX()
         CPPUNIT_ASSERT( xDataSeries.is() );
 
         Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
-        CPPUNIT_ASSERT( xPropSet.is() );
 
         // test that y error bars are there
         Reference< beans::XPropertySet > xErrorBarYProps;
@@ -449,7 +448,6 @@ void Chart2ExportTest::testErrorBarXLSX()
         CPPUNIT_ASSERT( xDataSeries.is() );
 
         Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
-        CPPUNIT_ASSERT( xPropSet.is() );
 
         // test that y error bars are there
         Reference< beans::XPropertySet > xErrorBarYProps;
@@ -1143,7 +1141,6 @@ void Chart2ExportTest::testErrorBarDataRangeODS()
     CPPUNIT_ASSERT( xDataSeries.is() );
 
     Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
-    CPPUNIT_ASSERT( xPropSet.is() );
 
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;

@@ -1628,7 +1628,6 @@ void ScFiltersTest::testControlImport()
     uno::Reference< container::XIndexAccess > xIA_DrawPage(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
     uno::Reference< drawing::XControlShape > xControlShape(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xControlShape.is());
     xDocSh->DoClose();
 }
 
@@ -3493,7 +3492,6 @@ void ScFiltersTest::testTdf83672XLSX()
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XShape > xShape(
         xPage->getByIndex(0), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
     uno::Reference< beans::XPropertySet > xShapeProperties(
         xShape, uno::UNO_QUERY );
     sal_Int32 nRotate = 0;
@@ -3989,7 +3987,6 @@ void ScFiltersTest::testActiveXCheckboxXLSX()
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier(xIA->getByIndex(0), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIA_DrawPage(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
     uno::Reference< drawing::XControlShape > xControlShape(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xControlShape.is());
 
     // Check control type
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);

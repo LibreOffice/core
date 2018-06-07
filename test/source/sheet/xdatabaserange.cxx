@@ -130,7 +130,6 @@ void XDatabaseRange::testGetFilterDescriptor()
 {
     uno::Reference< sheet::XDatabaseRange > xDBRange( init("FilterDescriptor"), UNO_QUERY_THROW);
     uno::Reference< uno::XInterface > xFilterDescr( xDBRange->getFilterDescriptor(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xFilterDescr.is());
 }
 
 void XDatabaseRange::testGetImportDescriptor()

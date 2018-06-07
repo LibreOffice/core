@@ -1764,10 +1764,6 @@ SfxDocumentMetaData::loadFromStorage(
         xMsf->createInstanceWithArgumentsAndContext(
             OUString::createFromAscii(pServiceName), args, m_xContext),
         css::uno::UNO_QUERY_THROW);
-    if (!xDocHandler.is())
-        throw css::uno::RuntimeException(
-                "SfxDocumentMetaData::loadFromStorage:"
-                " cannot create XMLOasisMetaImporter service", *this);
     css::uno::Reference<css::document::XImporter> xImp (xDocHandler,
         css::uno::UNO_QUERY_THROW);
     xImp->setTargetDocument(css::uno::Reference<css::lang::XComponent>(this));

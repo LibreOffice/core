@@ -909,14 +909,11 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                 Reference< chart2::XRegressionCurve > xRegCurve( xMSF->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
                 Reference< chart2::XRegressionCurveContainer > xRegCurveCont( regressionStyle.m_xSeries, uno::UNO_QUERY_THROW );
 
-                if( xRegCurve.is())
-                {
-                    Reference< beans::XPropertySet > xCurveProperties( xRegCurve, uno::UNO_QUERY );
-                    if( pPropStyleContext != nullptr)
-                        pPropStyleContext->FillPropertySet( xCurveProperties );
+                Reference< beans::XPropertySet > xCurveProperties( xRegCurve, uno::UNO_QUERY );
+                if( pPropStyleContext != nullptr)
+                    pPropStyleContext->FillPropertySet( xCurveProperties );
 
-                    xRegCurve->setEquationProperties( regressionStyle.m_xEquationProperties );
-                }
+                xRegCurve->setEquationProperties( regressionStyle.m_xEquationProperties );
 
                 xRegCurveCont->addRegressionCurve( xRegCurve );
             }

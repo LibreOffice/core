@@ -205,7 +205,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
             Reference< container::XNameAccess > aXNameAccess( aXStyleFamiliesSupplier->getStyleFamilies() );
             Reference< container::XNamed > aXNamed( mxPage, UNO_QUERY_THROW );
 
-            if ( aXNameAccess.is() && aXNamed.is() )
+            if ( aXNameAccess.is() )
             {
                 oox::drawingml::TextListStylePtr pTextListStylePtr;
                 OUString aStyle;

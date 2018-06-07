@@ -336,7 +336,6 @@ static PyObject* initTestEnvironment(
         Reference<XMultiServiceFactory> const xMSF(
             xContext->getServiceManager(),
             css::uno::UNO_QUERY_THROW);
-        if (!xMSF.is()) { abort(); }
         char *const testlib = getenv("TEST_LIB");
         if (!testlib) { abort(); }
         OString const libname = OString(testlib, strlen(testlib))

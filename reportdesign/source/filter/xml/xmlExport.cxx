@@ -328,7 +328,6 @@ void ORptExport::exportFunctions(const Reference<XIndexAccess>& _xFunctions)
     for (sal_Int32 i = 0; i< nCount; ++i)
     {
         uno::Reference< report::XFunction> xFunction(_xFunctions->getByIndex(i),uno::UNO_QUERY_THROW);
-        OSL_ENSURE(xFunction.is(),"Function object is NULL!");
         exportFunction(xFunction);
     }
 }
@@ -1346,8 +1345,6 @@ SvXMLAutoStylePoolP* ORptExport::CreateAutoStylePool()
 void SAL_CALL ORptExport::setSourceDocument( const Reference< XComponent >& xDoc )
 {
     m_xReportDefinition.set(xDoc,UNO_QUERY_THROW);
-    OSL_ENSURE(m_xReportDefinition.is(),"DataSource is NULL!");
-
     SvXMLExport::setSourceDocument(xDoc);
 }
 

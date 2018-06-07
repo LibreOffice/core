@@ -237,9 +237,7 @@ protected:
         CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
         uno::Reference<frame::XModel> xTempModel(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xTempModel.is());
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier (xTempModel, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xDrawPagesSupplier.is());
         uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
         CPPUNIT_ASSERT(xDrawPages.is());
 
@@ -282,7 +280,6 @@ protected:
     {
         uno::Reference< drawing::XDrawPagesSupplier > xDoc (
             xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-        CPPUNIT_ASSERT_MESSAGE( "no document", xDoc.is() );
         return xDoc;
     }
 
@@ -290,7 +287,6 @@ protected:
     {
         uno::Reference< drawing::XDrawPagesSupplier > xDoc( getDoc( xDocShRef ) );
         uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex( nPage ), uno::UNO_QUERY_THROW );
-        CPPUNIT_ASSERT_MESSAGE( "no page", xPage.is() );
         return xPage;
     }
 

@@ -54,7 +54,6 @@ ScLabelRangesObj::ScLabelRangesObj()
 uno::Reference<uno::XInterface> ScLabelRangesObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<beans::XPropertySet> xProp(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XLabelRanges> xLabelRanges(xProp->getPropertyValue("ColumnLabelRanges"),

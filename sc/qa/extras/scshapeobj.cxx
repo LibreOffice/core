@@ -59,7 +59,6 @@ ScShapeObj::ScShapeObj()
 uno::Reference<uno::XInterface> ScShapeObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(
@@ -86,8 +85,6 @@ uno::Reference<uno::XInterface> ScShapeObj::init()
 uno::Reference<uno::XInterface> ScShapeObj::getXSheetDocument()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
-
     return xDoc;
 }
 

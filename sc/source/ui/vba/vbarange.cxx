@@ -1954,7 +1954,7 @@ ScVbaRange::getFormulaArray()
     // that is what the doc says ( but I am not even sure how to detect that )
     // for the moment any tests we have pass
     uno::Reference< sheet::XArrayFormulaRange> xFormulaArray( mxRange, uno::UNO_QUERY_THROW );
-    if ( xFormulaArray.is() && !xFormulaArray->getArrayFormula().isEmpty() )
+    if ( !xFormulaArray->getArrayFormula().isEmpty() )
         return uno::makeAny( xFormulaArray->getArrayFormula() );
 
     uno::Reference< sheet::XCellRangeFormula> xCellRangeFormula( mxRange, uno::UNO_QUERY_THROW );
@@ -4939,21 +4939,18 @@ ScVbaRange::MergeArea()
     {
         xMergeSheetCursor->collapseToMergedArea();
         uno::Reference<sheet::XCellRangeAddressable> xMergeCellAddress(xMergeSheetCursor, uno::UNO_QUERY_THROW);
-        if( xMergeCellAddress.is() )
+        table::CellRangeAddress aCellAddress = xMergeCellAddress->getRangeAddress();
+        if( aCellAddress.StartColumn ==0 && aCellAddress.EndColumn==0 &&
+            aCellAddress.StartRow==0 && aCellAddress.EndRow==0)
         {
-            table::CellRangeAddress aCellAddress = xMergeCellAddress->getRangeAddress();
-            if( aCellAddress.StartColumn ==0 && aCellAddress.EndColumn==0 &&
-                aCellAddress.StartRow==0 && aCellAddress.EndRow==0)
-            {
-                return new ScVbaRange( mxParent,mxContext,mxRange );
-            }
-            else
-            {
-                ScRange refRange( static_cast< SCCOL >( aCellAddress.StartColumn ), static_cast< SCROW >( aCellAddress.StartRow ), static_cast< SCTAB >( aCellAddress.Sheet ),
-                                  static_cast< SCCOL >( aCellAddress.EndColumn ), static_cast< SCROW >( aCellAddress.EndRow ), static_cast< SCTAB >( aCellAddress.Sheet ) );
-                uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( getScDocShell() , refRange ) );
-                return new ScVbaRange( mxParent, mxContext,xRange );
-            }
+            return new ScVbaRange( mxParent,mxContext,mxRange );
+        }
+        else
+        {
+            ScRange refRange( static_cast< SCCOL >( aCellAddress.StartColumn ), static_cast< SCROW >( aCellAddress.StartRow ), static_cast< SCTAB >( aCellAddress.Sheet ),
+                              static_cast< SCCOL >( aCellAddress.EndColumn ), static_cast< SCROW >( aCellAddress.EndRow ), static_cast< SCTAB >( aCellAddress.Sheet ) );
+            uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( getScDocShell() , refRange ) );
+            return new ScVbaRange( mxParent, mxContext,xRange );
         }
     }
     return new ScVbaRange( mxParent, mxContext, mxRange );
@@ -5308,7 +5305,7 @@ ScVbaRange::setStyle( const uno::Any& _style )
     uno::Reference< beans::XPropertySet > xProps( mxRange, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XStyle > xStyle;
     _style >>= xStyle;
-    if ( xProps.is() && xStyle.is() )
+    if ( xStyle.is() )
         xProps->setPropertyValue( CELLSTYLE, uno::makeAny( xStyle->getName() ) );
 }
 

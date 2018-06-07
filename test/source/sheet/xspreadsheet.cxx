@@ -27,7 +27,6 @@ void XSpreadsheet::testCreateCursor()
     uno::Reference< sheet::XSpreadsheet > xSheet(init(), UNO_QUERY_THROW);
 
     uno::Reference< sheet::XSheetCellCursor > xCursor(xSheet->createCursor(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Unable to create XSheetCellCursor", xCursor.is());
 }
 
 void XSpreadsheet::testCreateCursorByRange()
@@ -36,7 +35,6 @@ void XSpreadsheet::testCreateCursorByRange()
 
     uno::Reference< sheet::XSheetCellRange > xCellRange(xSheet->getCellRangeByPosition(1, 1, 2, 3), UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetCellCursor > xCursor(xSheet->createCursorByRange(xCellRange), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Unable to create XSheetCellCursor", xCursor.is());
 }
 
 }

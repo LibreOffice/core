@@ -1393,7 +1393,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         nRotation = nRotation * -1 + 36000;
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(rXShape, uno::UNO_QUERY_THROW);
-    bool bIsGroupShape = (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"));
+    bool bIsGroupShape = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
 
     WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
             bFlipHWrite, bFlipVWrite, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), bIsGroupShape);

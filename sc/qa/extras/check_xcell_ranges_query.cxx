@@ -64,7 +64,6 @@ uno::Reference< uno::XInterface > CheckXCellRangesQuery::init()
             mxComponent = loadFromDesktop("private:factory/scalc");
 
         uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_MESSAGE("no calc document!", xSheetDoc.is());
 
         // Getting spreadsheet
         uno::Reference< sheet::XSpreadsheets > oSheets = xSheetDoc->getSheets();

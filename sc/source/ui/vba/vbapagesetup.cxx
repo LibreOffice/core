@@ -236,11 +236,8 @@ OUString SAL_CALL ScVbaPageSetup::getLeftHeader()
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
-        if( xHeaderContent.is() )
-        {
-            uno::Reference< text::XText > xText = xHeaderContent->getLeftText();
-            leftHeader = xText->getString();
-        }
+        uno::Reference< text::XText > xText = xHeaderContent->getLeftText();
+        leftHeader = xText->getString();
     }
     catch( uno::Exception& )
     {
@@ -254,12 +251,9 @@ void SAL_CALL ScVbaPageSetup::setLeftHeader( const OUString& leftHeader)
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
-        if( xHeaderContent.is() )
-        {
-            uno::Reference< text::XText > xText = xHeaderContent->getLeftText();
-            xText->setString( leftHeader );
-            mxPageProps->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent) );
-        }
+        uno::Reference< text::XText > xText = xHeaderContent->getLeftText();
+        xText->setString( leftHeader );
+        mxPageProps->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent) );
     }
     catch( uno::Exception& )
     {
@@ -272,11 +266,8 @@ OUString SAL_CALL ScVbaPageSetup::getCenterHeader()
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
-        if( xHeaderContent.is() )
-        {
-            uno::Reference< text::XText > xText = xHeaderContent->getCenterText();
-            centerHeader = xText->getString();
-        }
+        uno::Reference< text::XText > xText = xHeaderContent->getCenterText();
+        centerHeader = xText->getString();
     }
     catch( uno::Exception& )
     {
@@ -290,12 +281,9 @@ void SAL_CALL ScVbaPageSetup::setCenterHeader( const OUString& centerHeader)
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
-        if( xHeaderContent.is() )
-        {
-            uno::Reference< text::XText > xText = xHeaderContent->getCenterText();
-            xText->setString( centerHeader );
-            mxPageProps->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent) );
-        }
+        uno::Reference< text::XText > xText = xHeaderContent->getCenterText();
+        xText->setString( centerHeader );
+        mxPageProps->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent) );
     }
     catch( uno::Exception& )
     {
@@ -308,11 +296,8 @@ OUString SAL_CALL ScVbaPageSetup::getRightHeader()
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
-        if( xHeaderContent.is() )
-        {
-            uno::Reference< text::XText > xText = xHeaderContent->getRightText();
-            rightHeader = xText->getString();
-        }
+        uno::Reference< text::XText > xText = xHeaderContent->getRightText();
+        rightHeader = xText->getString();
     }
     catch( uno::Exception& )
     {
@@ -326,12 +311,9 @@ void SAL_CALL ScVbaPageSetup::setRightHeader( const OUString& rightHeader)
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
-        if( xHeaderContent.is() )
-        {
-            uno::Reference< text::XText > xText = xHeaderContent->getRightText();
-            xText->setString( rightHeader );
-            mxPageProps->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent) );
-        }
+        uno::Reference< text::XText > xText = xHeaderContent->getRightText();
+        xText->setString( rightHeader );
+        mxPageProps->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent) );
     }
     catch( uno::Exception& )
     {
@@ -344,11 +326,8 @@ OUString SAL_CALL ScVbaPageSetup::getLeftFooter()
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue("RightPageFooterContent"), uno::UNO_QUERY_THROW);
-        if( xFooterContent.is() )
-        {
-            uno::Reference< text::XText > xText = xFooterContent->getLeftText();
-            leftFooter = xText->getString();
-        }
+        uno::Reference< text::XText > xText = xFooterContent->getLeftText();
+        leftFooter = xText->getString();
     }
     catch( uno::Exception& )
     {
@@ -362,12 +341,9 @@ void SAL_CALL ScVbaPageSetup::setLeftFooter( const OUString& leftFooter)
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue("RightPageFooterContent"), uno::UNO_QUERY_THROW);
-        if( xFooterContent.is() )
-        {
-            uno::Reference< text::XText > xText = xFooterContent->getLeftText();
-            xText->setString( leftFooter );
-            mxPageProps->setPropertyValue("RightPageFooterContent", uno::makeAny(xFooterContent) );
-        }
+        uno::Reference< text::XText > xText = xFooterContent->getLeftText();
+        xText->setString( leftFooter );
+        mxPageProps->setPropertyValue("RightPageFooterContent", uno::makeAny(xFooterContent) );
     }
     catch( uno::Exception& )
     {
@@ -380,11 +356,8 @@ OUString SAL_CALL ScVbaPageSetup::getCenterFooter()
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue("RightPageFooterContent"), uno::UNO_QUERY_THROW);
-        if( xFooterContent.is() )
-        {
-            uno::Reference< text::XText > xText = xFooterContent->getCenterText();
-            centerFooter = xText->getString();
-        }
+        uno::Reference< text::XText > xText = xFooterContent->getCenterText();
+        centerFooter = xText->getString();
     }
     catch( uno::Exception& )
     {
@@ -398,12 +371,9 @@ void SAL_CALL ScVbaPageSetup::setCenterFooter( const OUString& centerFooter)
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue("RightPageFooterContent"), uno::UNO_QUERY_THROW);
-        if( xFooterContent.is() )
-        {
-            uno::Reference< text::XText > xText = xFooterContent->getCenterText();
-            xText->setString( centerFooter );
-            mxPageProps->setPropertyValue("RightPageFooterContent", uno::makeAny(xFooterContent) );
-        }
+        uno::Reference< text::XText > xText = xFooterContent->getCenterText();
+        xText->setString( centerFooter );
+        mxPageProps->setPropertyValue("RightPageFooterContent", uno::makeAny(xFooterContent) );
     }
     catch( uno::Exception& )
     {
@@ -417,11 +387,8 @@ OUString SAL_CALL ScVbaPageSetup::getRightFooter()
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue("RightPageFooterContent"), uno::UNO_QUERY_THROW);
-        if( xFooterContent.is() )
-        {
-            uno::Reference< text::XText > xText = xFooterContent->getRightText();
-            rightFooter = xText->getString();
-        }
+        uno::Reference< text::XText > xText = xFooterContent->getRightText();
+        rightFooter = xText->getString();
     }
     catch( uno::Exception& )
     {
@@ -435,12 +402,9 @@ void SAL_CALL ScVbaPageSetup::setRightFooter( const OUString& rightFooter)
     try
     {
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue("RightPageFooterContent"), uno::UNO_QUERY_THROW);
-        if( xFooterContent.is() )
-        {
-            uno::Reference< text::XText > xText = xFooterContent->getRightText();
-            xText->setString( rightFooter );
-            mxPageProps->setPropertyValue("RightPageFooterContent", uno::makeAny(xFooterContent) );
-        }
+        uno::Reference< text::XText > xText = xFooterContent->getRightText();
+        xText->setString( rightFooter );
+        mxPageProps->setPropertyValue("RightPageFooterContent", uno::makeAny(xFooterContent) );
     }
     catch( uno::Exception& )
     {

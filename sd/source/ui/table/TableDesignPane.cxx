@@ -246,27 +246,24 @@ void TableDesignWidget::onSelectionChanged()
     if( mxView.is() ) try
     {
         Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
-        if (xSel.is())
+        Any aSel( xSel->getSelection() );
+        Sequence< XShape > xShapeSeq;
+        if( aSel >>= xShapeSeq )
         {
-            Any aSel( xSel->getSelection() );
-            Sequence< XShape > xShapeSeq;
-            if( aSel >>= xShapeSeq )
-            {
-                if( xShapeSeq.getLength() == 1 )
-                    aSel <<= xShapeSeq[0];
-            }
-            else
-            {
-                Reference< XShapes > xShapes( aSel, UNO_QUERY );
-                if( xShapes.is() && (xShapes->getCount() == 1) )
-                    aSel = xShapes->getByIndex(0);
-            }
+            if( xShapeSeq.getLength() == 1 )
+                aSel <<= xShapeSeq[0];
+        }
+        else
+        {
+            Reference< XShapes > xShapes( aSel, UNO_QUERY );
+            if( xShapes.is() && (xShapes->getCount() == 1) )
+                aSel = xShapes->getByIndex(0);
+        }
 
-            Reference< XShapeDescriptor > xDesc( aSel, UNO_QUERY );
-            if( xDesc.is() && ( xDesc->getShapeType() == "com.sun.star.drawing.TableShape" || xDesc->getShapeType() == "com.sun.star.presentation.TableShape" ) )
-            {
-                xNewSelection.set( xDesc, UNO_QUERY );
-            }
+        Reference< XShapeDescriptor > xDesc( aSel, UNO_QUERY );
+        if( xDesc.is() && ( xDesc->getShapeType() == "com.sun.star.drawing.TableShape" || xDesc->getShapeType() == "com.sun.star.presentation.TableShape" ) )
+        {
+            xNewSelection.set( xDesc, UNO_QUERY );
         }
     }
     catch( Exception& )

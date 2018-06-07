@@ -48,8 +48,6 @@ void XIndexAccess::testGetByIndex()
 void XIndexAccess::testGetByIndexException()
 {
     uno::Reference< container::XIndexAccess > xIndexAccess(init(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xIndexAccess.is());
-
     xIndexAccess->getByIndex(mnItems);
 }
 

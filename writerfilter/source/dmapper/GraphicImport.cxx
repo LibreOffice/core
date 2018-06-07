@@ -453,8 +453,6 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
         return;
 
     uno::Reference< beans::XPropertySet > xSet(m_xShape, uno::UNO_QUERY_THROW);
-    if (!xSet.is())
-        return;
 
     uno::Reference< beans::XPropertySetInfo > xSetInfo(xSet->getPropertySetInfo());
     if (!xSetInfo.is())

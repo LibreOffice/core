@@ -51,8 +51,6 @@ ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj()
 uno::Reference<uno::XInterface> ScSpreadsheetSettingsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
-
     return xDoc;
 }
 

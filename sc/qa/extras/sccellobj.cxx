@@ -63,7 +63,6 @@ ScCellObj::ScCellObj()
 uno::Reference< uno::XInterface > ScCellObj::init()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xSheetDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets (xSheetDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xSheets, UNO_QUERY_THROW);

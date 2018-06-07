@@ -78,13 +78,10 @@ void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel,
         const uno::Reference< lang::XUnoTunnel > xChartView(xChartFact->createInstance("com.sun.star.chart2.ChartView"), uno::UNO_QUERY_THROW);
         const uno::Reference<util::XUpdatable2> xUpdatable(xChartView, uno::UNO_QUERY_THROW);
 
-        if (xUpdatable.is())
-        {
-            if (bHardUpdate)
-                xUpdatable->updateHard();
-            else
-                xUpdatable->updateSoft();
-        }
+        if (bHardUpdate)
+            xUpdatable->updateHard();
+        else
+            xUpdatable->updateSoft();
     }
     catch(uno::Exception&)
     {
@@ -108,7 +105,7 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
         const uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier(rXModel, uno::UNO_QUERY_THROW);
         const uno::Reference< container::XIndexAccess > xShapeAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW);
 
-        if(xShapeAccess.is() && xShapeAccess->getCount())
+        if(xShapeAccess->getCount())
         {
             const sal_Int32 nShapeCount(xShapeAccess->getCount());
             const uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());

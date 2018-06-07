@@ -245,11 +245,8 @@ void ScPerfObj::testSheetFindAll()
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigFile.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
-
     // get sheet
     uno::Reference< container::XIndexAccess > xSheetIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Problem in xSheetIndex" , xSheetIndex.is());
 
     uno::Reference< sheet::XSpreadsheet > xSheet( xSheetIndex->getByIndex(0), UNO_QUERY_THROW);
 
@@ -310,7 +307,6 @@ void ScPerfObj::testSheetNamedRanges()
 
     // get sheet - named ranges are defined in sheet #1
     uno::Reference< container::XIndexAccess > xSheetIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Problem in xSheetIndex" , xSheetIndex.is());
     uno::Reference< sheet::XSpreadsheet > xSheet( xSheetIndex->getByIndex(1), UNO_QUERY_THROW);
 
     // test removeByName
@@ -348,8 +344,6 @@ void ScPerfObj::testSheets()
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigFile.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
-
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
 
@@ -378,7 +372,6 @@ void ScPerfObj::testSum()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -417,7 +410,6 @@ void ScPerfObj::testFTest()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -441,7 +433,6 @@ void ScPerfObj::testChiTest()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -465,7 +456,6 @@ void ScPerfObj::testSumX2PY2Test()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions2.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -489,7 +479,6 @@ void ScPerfObj::testTTest()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions2.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -513,7 +502,6 @@ void ScPerfObj::testLcm()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions2.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -537,7 +525,6 @@ void ScPerfObj::testGcd()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions2.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -561,7 +548,6 @@ void ScPerfObj::testPearson()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions2.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -585,7 +571,6 @@ void ScPerfObj::testSubTotalWithFormulas()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigSingleSheet200.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -622,7 +607,6 @@ void ScPerfObj::testSubTotalWithoutFormulas()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigSingleSheet200.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -659,7 +643,6 @@ void ScPerfObj::testLoadingFileWithSingleBigSheet()
 {
     callgrindStart();
     uno::Reference< sheet::XSpreadsheetDocument > xDoc1(init("scBigSingleSheet2000.ods"), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc1.is());
     uno::Reference< sheet::XCalculatable > xCalculatable1(xDoc1, UNO_QUERY_THROW);
     callgrindDump("sc:loadingFileWithSingleBigSheetdoSubTotal_2000lines");
 }
@@ -694,8 +677,6 @@ namespace {
 void ScPerfObj::testFixedSum()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions3.ods"), UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -750,7 +731,6 @@ void ScPerfObj::testMatConcatSmall()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("empty.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
@@ -778,7 +758,6 @@ void ScPerfObj::testMatConcatLarge()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("empty.ods"), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
     // get getSheets
