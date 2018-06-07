@@ -94,7 +94,8 @@ endif
 endef
 
 ifneq ($(ENABLE_HTMLHELP),)
-$(call gb_AllLangHelp_get_helpfiles_target,%):
+$(call gb_AllLangHelp_get_helpfiles_target,%): | \
+        $(dir $(call gb_AllLangHelp_get_helpfiles_target,%)).dir
 	touch $@
 endif
 
