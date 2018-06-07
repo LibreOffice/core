@@ -26,7 +26,6 @@
 #include <fpdf_edit.h>
 #include <fpdf_save.h>
 #include <fpdf_text.h>
-#endif
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
@@ -207,7 +206,7 @@ ImpSdrPdfImport::~ImpSdrPdfImport()
 }
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
-                                    int nPageIndex)
+                                int nPageIndex)
 {
     const int nPageCount = FPDF_GetPageCount(mpPdfDocument);
     if (nPageCount > 0 && nPageIndex >= 0 && nPageIndex < nPageCount)
@@ -232,19 +231,19 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
         {
             FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage, nPageObjectIndex);
             ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
-        if (pProgrInfo && pActionsToReport)
-        {
-            (*pActionsToReport)++;
+            if (pProgrInfo && pActionsToReport)
+            {
+                (*pActionsToReport)++;
 
                 if (*pActionsToReport >= 16)
-            {
-                if (!pProgrInfo->ReportActions(*pActionsToReport))
-                    break;
+                {
+                    if (!pProgrInfo->ReportActions(*pActionsToReport))
+                        break;
 
-                *pActionsToReport = 0;
+                    *pActionsToReport = 0;
+                }
             }
         }
-    }
 
         FPDFText_ClosePage(pTextPage);
         FPDF_ClosePage(pPdfPage);
@@ -1041,8 +1040,8 @@ void ImpSdrPdfImport::MapScaling()
 
 void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
-    std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter>
-                        bitmap(FPDFImageObj_GetBitmapBgra(pPageObject));
+    std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter> bitmap(
+        FPDFImageObj_GetBitmapBgra(pPageObject));
     if (!bitmap)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE");
@@ -1220,7 +1219,8 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     else
         mpVD->SetLineColor(COL_TRANSPARENT);
 
-    if (!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aPolyPoly)))
+    if (!mbLastObjWasPolyWithoutLine
+        || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aPolyPoly)))
     {
         SdrPathObj* pPath = new SdrPathObj(*mpModel, OBJ_POLY, aPolyPoly);
         SetAttributes(pPath);
@@ -1238,7 +1238,8 @@ Point ImpSdrPdfImport::PointsToLogic(double x, double y) const
     return aPos;
 }
 
-tools::Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, double top, double bottom) const
+tools::Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, double top,
+                                                double bottom) const
 {
     top = correctVertOrigin(top);
     bottom = correctVertOrigin(bottom);
@@ -1253,5 +1254,7 @@ tools::Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, doubl
     tools::Rectangle aRect(aPos, aSize);
     return aRect;
 }
+
+#endif // HAVE_FEATURE_PDFIUM
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
