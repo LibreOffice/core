@@ -20,9 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_ANNOTATIONMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_ANNOTATIONMANAGER_HXX
 
-#include <com/sun/star/office/XAnnotationAccess.hpp>
-
 #include <rtl/ref.hxx>
+
+class SfxRequest;
+class SfxItemSet;
 
 namespace sd
 {

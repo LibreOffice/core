@@ -23,20 +23,16 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/fixed.hxx>
 #include <tools/fract.hxx>
-#include <vcl/group.hxx>
 #include <sfx2/ctrlitem.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <svx/dlgctrl.hxx>
-#include <sfx2/progress.hxx>
 
 #include <vcl/lstbox.hxx>
 
 #include <misc/scopelock.hxx>
 
 class SdDrawDocument;
-class BitmapEx;
 
 namespace sd {
 

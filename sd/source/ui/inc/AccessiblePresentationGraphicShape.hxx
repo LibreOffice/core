@@ -22,7 +22,9 @@
 
 #include <svx/AccessibleGraphicShape.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
+namespace accessibility { class AccessibleShapeInfo; }
+namespace accessibility { class AccessibleShapeTreeInfo; }
+
 namespace accessibility {
 
 /** This class makes Impress shapes accessible.

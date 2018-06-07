@@ -31,6 +31,7 @@
 #include <rtl/ustring.h>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <sfx2/objsh.hxx>
 #include <svx/AccessibleShape.hxx>
 
@@ -48,6 +49,11 @@
 #include <svtools/colorcfg.hxx>
 #include <ViewShell.hxx>
 #include <View.hxx>
+#include <drawdoc.hxx>
+#include <editeng/outlobj.hxx>
+#include <sdpage.hxx>
+#include <DrawViewShell.hxx>
+#include <PresentationViewShell.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

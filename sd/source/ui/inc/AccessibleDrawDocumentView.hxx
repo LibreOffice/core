@@ -24,6 +24,9 @@
 
 #include <com/sun/star/accessibility/XAccessibleGroupPosition.hpp>
 
+namespace accessibility { class AccessiblePageShape; }
+namespace accessibility { class ChildrenManager; }
+
 namespace accessibility {
 
 /** This class makes draw documents in the general view modes

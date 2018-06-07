@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_COPYDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_COPYDLG_HXX
 
-#include <vcl/group.hxx>
 #include <vcl/button.hxx>
-#include <svx/dlgctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>

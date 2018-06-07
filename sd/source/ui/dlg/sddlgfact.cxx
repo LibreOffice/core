@@ -21,6 +21,7 @@
 #include "sddlgfact.hxx"
 #include <BreakDlg.hxx>
 #include <copydlg.hxx>
+#include <svx/xtable.hxx>
 #include <custsdlg.hxx>
 #include <dlg_char.hxx>
 #include <dlgpage.hxx>

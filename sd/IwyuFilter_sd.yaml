@@ -83,3 +83,31 @@ blacklist:
     sd/source/filter/eppt/pptexanimations.hxx:
     # base class has to be a complete type
     - memory
+    sd/source/ui/inc/AccessibleDocumentViewBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
+    - com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp
+    - com/sun/star/awt/XFocusListener.hpp
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    sd/source/ui/inc/AccessibleDrawDocumentView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleGroupPosition.hpp
+    sd/source/ui/inc/AccessibleSlideSorterObject.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/AccessibleSlideSorterView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessibleSelection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/BezierObjectBar.hxx:
+    # Used via macro, really needed to compile
+    - class SfxModule
