@@ -3652,21 +3652,6 @@ void RtfAttributeOutput::FontPitchType(FontPitch ePitch) const
     m_rExport.OutULong(nVal);
 }
 
-static bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, unsigned long& rSize)
-{
-    if (rpGraphicAry && (rSize > 0x22))
-    {
-        if ((rpGraphicAry[0] == 0xd7) && (rpGraphicAry[1] == 0xcd) && (rpGraphicAry[2] == 0xc6) && (rpGraphicAry[3] == 0x9a))
-        {
-            // we have to get rid of the metafileheader
-            rpGraphicAry += 22;
-            rSize -= 22;
-            return true;
-        }
-    }
-    return false;
-}
-
 static void lcl_AppendSP(OStringBuffer& rBuffer,
                          const char cName[],
                          const OUString& rValue,
@@ -3683,7 +3668,7 @@ static void lcl_AppendSP(OStringBuffer& rBuffer,
 
 static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& rOrig, const Size& rRendered, const Size& rMapped,
                           const SwCropGrf& rCr, const char* pBLIPType, const sal_uInt8* pGraphicAry,
-                          unsigned long nSize, const RtfExport& rExport, SvStream* pStream = nullptr, bool bWritePicProp = true)
+                          sal_uInt64 nSize, const RtfExport& rExport, SvStream* pStream = nullptr, bool bWritePicProp = true)
 {
     OStringBuffer aRet;
     if (pBLIPType && nSize && pGraphicAry)
@@ -3743,7 +3728,7 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
         if (bIsWMF)
         {
             aRet.append((sal_Int32)8);
-            StripMetafileHeader(pGraphicAry, nSize);
+            msfilter::rtfutil::StripMetafileHeader(pGraphicAry, nSize);
         }
         aRet.append(SAL_NEWLINE_STRING);
         if (pStream)

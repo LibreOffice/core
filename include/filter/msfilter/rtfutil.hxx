@@ -66,6 +66,9 @@ MSFILTER_DLLPUBLIC OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize,
  * Extract OLE2 data from an \objdata hex dump.
  */
 MSFILTER_DLLPUBLIC bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2);
+
+/// Strips the header of a WMF file.
+MSFILTER_DLLPUBLIC bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, sal_uInt64& rSize);
 }
 }
 

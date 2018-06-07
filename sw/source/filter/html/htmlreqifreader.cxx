@@ -210,6 +210,70 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf)
 
     return true;
 }
+
+bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream& rRtf)
+{
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PICT);
+
+    GfxLink aLink = rGraphic.GetLink();
+    const sal_uInt8* pGraphicAry = aLink.GetData();
+    sal_uInt64 nSize = aLink.GetDataSize();
+    OString aBlipType;
+    bool bIsWMF = false;
+    switch (aLink.GetType())
+    {
+        case GfxLinkType::NativeBmp:
+            aBlipType = OOO_STRING_SVTOOLS_RTF_WBITMAP;
+            break;
+        case GfxLinkType::NativeJpg:
+            aBlipType = OOO_STRING_SVTOOLS_RTF_JPEGBLIP;
+            break;
+        case GfxLinkType::NativePng:
+            aBlipType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
+            break;
+        case GfxLinkType::NativeWmf:
+            if (aLink.IsEMF())
+                aBlipType = OOO_STRING_SVTOOLS_RTF_EMFBLIP;
+            else
+            {
+                aBlipType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+                bIsWMF = true;
+            }
+            break;
+        default:
+            break;
+    }
+
+    if (aBlipType.isEmpty())
+        return false;
+
+    rRtf.WriteOString(aBlipType);
+
+    Size aMapped(rGraphic.GetPrefSize());
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICW);
+    rRtf.WriteOString(OString::number(aMapped.Width()));
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICH);
+    rRtf.WriteOString(OString::number(aMapped.Height()));
+
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICWGOAL);
+    rRtf.WriteOString(OString::number(rLogicSize.Width()));
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
+    rRtf.WriteOString(OString::number(rLogicSize.Height()));
+
+    if (bIsWMF)
+    {
+        rRtf.WriteOString(OString::number(8));
+        msfilter::rtfutil::StripMetafileHeader(pGraphicAry, nSize);
+    }
+    rRtf.WriteOString(SAL_NEWLINE_STRING);
+
+    msfilter::rtfutil::WriteHex(pGraphicAry, nSize, &rRtf);
+    rRtf.WriteOString(SAL_NEWLINE_STRING);
+
+    // End pict.
+    rRtf.WriteCharPtr("}");
+    return true;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

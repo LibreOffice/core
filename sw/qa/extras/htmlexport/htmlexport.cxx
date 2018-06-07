@@ -434,11 +434,15 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfPngImg, "reqif-png-img.xhtml")
     uno::Reference<container::XNamed> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
 
-    // This was Object1, PNG without fallback was imported as OLE object.
-    CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xShape->getName());
-
     if (!mbExported)
+    {
+        // Imported PNG image is not an object.
+        CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xShape->getName());
         return;
+    }
+
+    // All images are exported as objects in ReqIF mode.
+    CPPUNIT_ASSERT_EQUAL(OUString("Object1"), xShape->getName());
 
     // This was <img>, not <object>, which is not valid in the reqif-xhtml
     // subset.
@@ -449,6 +453,10 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfPngImg, "reqif-png-img.xhtml")
     pStream->Seek(0);
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:object") != -1);
+
+    // Make sure that both RTF and PNG versions are written.
+    CPPUNIT_ASSERT(aStream.indexOf("text/rtf") != -1);
+    CPPUNIT_ASSERT(aStream.indexOf("image/png") != -1);
 }
 
 DECLARE_HTMLEXPORT_TEST(testReqIfJpgImg, "reqif-jpg-img.xhtml")

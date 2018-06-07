@@ -283,6 +283,22 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
 
     return true;
 }
+
+bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, sal_uInt64& rSize)
+{
+    if (rpGraphicAry && (rSize > 0x22))
+    {
+        if ((rpGraphicAry[0] == 0xd7) && (rpGraphicAry[1] == 0xcd) && (rpGraphicAry[2] == 0xc6)
+            && (rpGraphicAry[3] == 0x9a))
+        {
+            // we have to get rid of the metafileheader
+            rpGraphicAry += 22;
+            rSize -= 22;
+            return true;
+        }
+    }
+    return false;
+}
 }
 }
 
