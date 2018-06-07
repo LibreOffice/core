@@ -22,6 +22,30 @@
       "revId": "72d43ae37321e59539ae8084b020493ed1cd5002",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_7ae23da1",
+        "filename": "reportdesign/source/filter/xml/xmlImportDocumentHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-07T12:48:52Z",
+      "side": 1,
+      "message": "there\u0027s a tension between minimal changes and changes causing \"pleasant\" results; both have their pros and cons",
+      "parentUuid": "5a22e58a_fad54db9",
+      "range": {
+        "startLine": 111,
+        "startChar": 8,
+        "endLine": 111,
+        "endChar": 9
+      },
+      "revId": "72d43ae37321e59539ae8084b020493ed1cd5002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
