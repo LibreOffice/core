@@ -658,11 +658,6 @@ sal_IntPtr WinFontFace::GetFontId() const
     return mnId;
 }
 
-rtl::Reference<PhysicalFontFace> WinFontFace::Clone() const
-{
-    return new WinFontFace(*this);
-}
-
 rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new WinFontInstance(*this, rFSD);

@@ -38,7 +38,6 @@ public:
 
     static Qt5FontFace* fromQFont(const QFont& rFont);
 
-    rtl::Reference<PhysicalFontFace> Clone() const override;
     sal_IntPtr GetFontId() const override;
 
     int GetFontTable(const char pTagName[5], unsigned char*) const;
