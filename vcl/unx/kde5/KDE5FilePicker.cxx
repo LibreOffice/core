@@ -153,20 +153,6 @@ QString KDE5FilePicker::getLabel(sal_Int16 controlId) const
     return label;
 }*/
 
-/*void KDE5FilePicker::addCheckBox(sal_Int16 controlId, const QString& label, bool hidden)
-{
-    auto resString = label;
-    resString.replace('~', '&');
-
-    auto widget = new QCheckBox(resString, _extraControls);
-    widget->setHidden(hidden);
-    if (!hidden)
-    {
-        _layout->addWidget(widget);
-    }
-    _customWidgets.insert(controlId, widget);
-}*/
-
 /*void KDE5FilePicker::initialize(bool saveDialog)
 {
     //default is opening
