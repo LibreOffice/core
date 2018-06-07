@@ -59,6 +59,19 @@
             ]
         },
         {
+            "name": "gvfs",
+            "cleanup": [ "/libexec/*", "/share/dbus-1/services/*", "/share/gvfs/mounts" ],
+            "config-opts": [ "--disable-hal", "--disable-gdu", "--disable-gcr", "--disable-obexftp",
+                             "--disable-avahi", "--disable-documentation", "--disable-admin" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/gvfs/1.36/gvfs-1.36.1.tar.xz",
+                    "sha256": "3840dff386c2c8a445337bea4ade0eb71339efaff8602767659fa2896792f026"
+                }
+            ]
+        },
+        {
             "name": "libreoffice",
             "sources": [
                 {
@@ -591,7 +604,9 @@
         "--socket=pulseaudio",
         "--device=dri",
         "--filesystem=host",
+        "--filesystem=xdg-run/dconf",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules",
         "--env=JAVA_HOME=/app/jre",
         "--env=LIBO_FLATPAK=1",
         "--own-name=org.libreoffice.LibreOfficeIpc0",
