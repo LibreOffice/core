@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SVX_SOURCE_SVDRAW_SVDPDF_HXX
 #define INCLUDED_SVX_SOURCE_SVDRAW_SVDPDF_HXX
 
+#include <config_features.h>
+
+#if HAVE_FEATURE_PDFIUM
 #include <sal/config.h>
 
 #include <memory>
@@ -32,6 +35,8 @@
 #include <svx/xdash.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <fpdfview.h>
+
 // Forward Declarations
 
 class SfxItemSet;
@@ -40,9 +45,6 @@ class SdrModel;
 class SdrPage;
 class SdrObject;
 class SvdProgressInfo;
-typedef struct fpdf_document_t__* FPDF_DOCUMENT;
-typedef struct fpdf_pageobject_t__* FPDF_PAGEOBJECT; // (text, path, etc.)
-typedef struct fpdf_textpage_t__* FPDF_TEXTPAGE;
 
 // Helper Class to import PDF
 class ImpSdrPdfImport final
@@ -237,6 +239,8 @@ public:
     size_t DoImport(SdrObjList& rDestList, size_t nInsPos, int nPageNumber,
                     SvdProgressInfo* pProgrInfo = nullptr);
 };
+
+#endif // HAVE_FEATURE_PDFIUM
 
 #endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
 
