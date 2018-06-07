@@ -587,10 +587,8 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
             break;
     }
 
-    if (count == 0)
-        return rNumberString;
-
-    OUString aNumberStr = sBuf.makeStringAndClear();
+    // Handle also month and day names for NatNum12 date formatting
+    const OUString& aNumberStr = (count == 0) ? rNumberString : sBuf.makeStringAndClear();
 
     // Guard the static variables below.
     osl::MutexGuard aGuard( theNatNumMutex::get());
@@ -615,7 +613,7 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
             rItem = aNumberStr;
     }
     OUString sResult = rItem;
-    if (i < len)
+    if (i != 0 && i < len)
         sResult += rNumberString.copy(i);
     return sResult;
 }
