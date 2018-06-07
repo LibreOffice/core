@@ -22,6 +22,30 @@
       "revId": "4bae332bdd30537555b03bab508c388ae8f227c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_7a007dab",
+        "filename": "cui/source/tabpages/border.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-06-07T08:09:48Z",
+      "side": 1,
+      "message": "It might become invisible on dark themes. So yes, this color should depend on the theme.\n\nA \"GetTextColor()\" should do the trick.",
+      "parentUuid": "5a22e58a_7ae4fd3a",
+      "range": {
+        "startLine": 583,
+        "startChar": 33,
+        "endLine": 583,
+        "endChar": 42
+      },
+      "revId": "4bae332bdd30537555b03bab508c388ae8f227c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
