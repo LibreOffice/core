@@ -93,9 +93,9 @@ namespace
 /// dimensions are in inches, with 72 points / inch.
 /// Here we effectively render at 96 DPI (to match
 /// the image rendered in vcl::ImportPDF in pdfread.cxx).
-static inline double lcl_PointToPixel(double fPoint) { return fPoint * 96. / 72.; }
+inline double lcl_PointToPixel(double fPoint) { return fPoint * 96. / 72.; }
 /// Convert from pixels to logic (twips).
-static inline long lcl_ToLogic(double value)
+inline long lcl_ToLogic(double value)
 {
     // Convert to integral preserving two dp.
     const long in = static_cast<long>(value * 100.);
@@ -103,12 +103,12 @@ static inline long lcl_ToLogic(double value)
     return out / 100;
 }
 
-static inline double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
+inline double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
 }
 
 struct FPDFBitmapDeleter
 {
-    inline void operator()(FPDF_BITMAP bitmap) { FPDFBitmap_Destroy(bitmap); }
+    void operator()(FPDF_BITMAP bitmap) { FPDFBitmap_Destroy(bitmap); }
 };
 
 using namespace com::sun::star;
@@ -1194,7 +1194,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     mnLineWidth = lcl_ToLogic(lcl_PointToPixel(dWidth));
 
     int nFillMode = FPDF_FILLMODE_ALTERNATE;
-    FPDF_BOOL bStroke = true;
+    FPDF_BOOL bStroke = 1; // Assume we have to draw, unless told otherwise.
     if (FPDFPath_GetDrawMode(pPageObject, &nFillMode, &bStroke))
     {
         if (nFillMode == FPDF_FILLMODE_ALTERNATE)
@@ -1220,8 +1220,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     else
         mpVD->SetLineColor(COL_TRANSPARENT);
 
-    if (!mbLastObjWasPolyWithoutLine
-        || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aPolyPoly)))
+    if (!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aPolyPoly))
     {
         SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aPolyPoly);
         pPath->SetModel(mpModel);
