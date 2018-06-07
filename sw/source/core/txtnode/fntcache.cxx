@@ -644,7 +644,7 @@ typedef std::vector< std::pair< sal_Int32, sal_Int32 > > SwForbidden;
 static void lcl_DrawLineForWrongListData(
     SwForbidden &rForbidden,
     const SwDrawTextInfo    &rInf,
-    const SwWrongList       *pWList,
+    sw::WrongListIterator *pWList,
     const CalcLinePosData   &rCalcLinePosData,
     const Size              &rPrtFontSize )
 {
@@ -715,10 +715,7 @@ static void lcl_DrawLineForWrongListData(
             Point aEnd;
             lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nNextStart, nNextEnd - nNextStart );
 
-            const sal_uInt16 wrongPos = pWList->GetWrongPos(nNextStart + rInf.GetIdx());
-
-            const SwWrongArea* wrongArea = pWList->GetElement(wrongPos);
-
+            SwWrongArea const*const wrongArea = pWList->GetWrongElement(nNextStart + rInf.GetIdx());
             if (wrongArea != nullptr)
             {
                 if (WRONGAREA_DASHED == wrongArea->mLineType)

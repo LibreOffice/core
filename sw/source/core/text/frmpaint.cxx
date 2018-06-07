@@ -45,6 +45,7 @@
 #include <tabfrm.hxx>
 #include <numrule.hxx>
 #include <SwGrammarMarkUp.hxx>
+#include <wrong.hxx>
 
 #include <EnhancedPDFExportHelper.hxx>
 
@@ -651,9 +652,21 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
             SwitchRTLtoLTR( const_cast<SwRect&>(rRect) );
 
         SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
-        aInf.SetWrongList( const_cast<SwTextNode*>(GetTextNode())->GetWrong() );
-        aInf.SetGrammarCheckList( const_cast<SwTextNode*>(GetTextNode())->GetGrammarCheck() );
-        aInf.SetSmartTags( const_cast<SwTextNode*>(GetTextNode())->GetSmartTags() );
+        sw::WrongListIterator iterWrong(*this, &SwTextNode::GetWrong);
+        sw::WrongListIterator iterGrammar(*this, &SwTextNode::GetGrammarCheck);
+        sw::WrongListIterator iterSmartTags(*this, &SwTextNode::GetSmartTags);
+        if (iterWrong.LooksUseful())
+        {
+            aInf.SetWrongList( &iterWrong );
+        }
+        if (iterGrammar.LooksUseful())
+        {
+            aInf.SetGrammarCheckList( &iterGrammar );
+        }
+        if (iterSmartTags.LooksUseful())
+        {
+            aInf.SetSmartTags( &iterSmartTags );
+        }
         aInf.GetTextFly().SetTopRule();
 
         SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
