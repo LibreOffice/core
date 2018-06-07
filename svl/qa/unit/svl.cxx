@@ -1403,6 +1403,15 @@ void Test::testUserDefinedNumberFormats()
         sCode = "[NatNum12 upper ordinal-number]0";
         sExpected = "12345TH";
         checkPreviewString(aFormatter, sCode, 12345, eLang, sExpected);
+        sCode = "[NatNum12 D=ordinal-number]D\" of \"MMMM";
+        sExpected = "2nd of January";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode = "[NatNum12 D=ordinal-number,YYYY=year]D\" of \"MMMM\", \"YYYY";
+        sExpected = "2nd of January, nineteen hundred";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode = "[NatNum12 YYYY=year, D=ordinal]D\" of \"MMMM\", \"YYYY";
+        sExpected = "second of January, nineteen hundred";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
 #endif
     }
     {  // tdf#105968 engineering format with value rounded up to next magnitude
