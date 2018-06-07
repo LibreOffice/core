@@ -206,7 +206,7 @@ ImpSdrPdfImport::~ImpSdrPdfImport()
 }
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
-                                    int nPageIndex)
+                                int nPageIndex)
 {
     const int nPageCount = FPDF_GetPageCount(mpPdfDocument);
     if (nPageCount > 0 && nPageIndex >= 0 && nPageIndex < nPageCount)
@@ -231,19 +231,19 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
         {
             FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage, nPageObjectIndex);
             ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
-        if (pProgrInfo && pActionsToReport)
-        {
-            (*pActionsToReport)++;
+            if (pProgrInfo && pActionsToReport)
+            {
+                (*pActionsToReport)++;
 
                 if (*pActionsToReport >= 16)
-            {
-                if (!pProgrInfo->ReportActions(*pActionsToReport))
-                    break;
+                {
+                    if (!pProgrInfo->ReportActions(*pActionsToReport))
+                        break;
 
-                *pActionsToReport = 0;
+                    *pActionsToReport = 0;
+                }
             }
         }
-    }
 
         FPDFText_ClosePage(pTextPage);
         FPDF_ClosePage(pPdfPage);
@@ -1040,8 +1040,8 @@ void ImpSdrPdfImport::MapScaling()
 
 void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
-    std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter>
-                        bitmap(FPDFImageObj_GetBitmapBgra(pPageObject));
+    std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter> bitmap(
+        FPDFImageObj_GetBitmapBgra(pPageObject));
     if (!bitmap)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE");
@@ -1220,9 +1220,10 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     else
         mpVD->SetLineColor(COL_TRANSPARENT);
 
-    if (!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aPolyPoly)))
+    if (!mbLastObjWasPolyWithoutLine
+        || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aPolyPoly)))
     {
-        SdrPathObj *pPath = new SdrPathObj(OBJ_POLY, aPolyPoly);
+        SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aPolyPoly);
         pPath->SetModel(mpModel);
         SetAttributes(pPath);
         InsertObj(pPath, false);
