@@ -288,6 +288,23 @@ void SAL_CALL SwVbaApplication::setTop( sal_Int32 _top )
     pWindow->setTop( _top );
 }
 
+OUString SAL_CALL SwVbaApplication::getStatusBar()
+{
+    return OUString("");
+}
+
+void SAL_CALL SwVbaApplication::setStatusBar( const OUString& _statusbar )
+{
+    // Yes, we intentionally use the "extensions.olebridge" tag here even if this is sw. We
+    // interpret setting the StatusBar property as a request from an Automation client to display
+    // the string in LibreOffice's debug output, and all other generic Automation support debug
+    // output (in extensions/source/ole) uses that tag. If the check for "cross-module" or mixed log
+    // areas in compilerplugins/clang/sallogareas.cxx is re-activated, this will have to be added as
+    // a special case.
+
+    SAL_INFO("extensions.olebridge", "Client debug output: " << _statusbar);
+}
+
 float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters )
 {
     return VbaApplicationBase::CentimetersToPoints( Centimeters );

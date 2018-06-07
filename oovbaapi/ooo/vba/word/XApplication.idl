@@ -40,6 +40,16 @@ interface XApplication : XConnectable
     [attribute] long Height;
     [attribute] long Left;
     [attribute] long Top;
+    // Setting this displays the string in a SAL_INFO message with tag
+    // extensions.olebridge. Provides a way to get a message from an
+    // Automation client into LibreOffice's debug output. Less
+    // disruptive than a MessageBox() in a VB6 client, for instance.
+    // And makes it possible to get merged debug output from both the client
+    // and LibreOffice in proper synchronized order.
+    //
+    // Actually write-only but there is no way to say that in UNO IDL.
+    // The getter just returns an empty string.
+    [attribute] string StatusBar;
 
     any CommandBars( [in] any Index );
     any Documents( [in] any Index );
