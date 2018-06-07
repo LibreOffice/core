@@ -57,7 +57,7 @@ sub select_language_items
             # Files with style "LANGUAGEPACK" and "FORCELANGUAGEPACK" also have to be included into the language pack.
             # Files with style "LANGUAGEPACK" are only included into language packs.
             # Files with style "FORCELANGUAGEPACK" are included into language packs and non language packs. They are
-            # forced, because otherwise they not not be included into languagepacks.
+            # forced, because otherwise they will not be included into languagepacks.
 
             my $styles = "";
             if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
@@ -510,7 +510,7 @@ sub build_installer_for_languagepack
     if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "build_installer_for_languagepack"); }
     my $scriptfile = installer::files::read_file($$scriptref);
 
-    my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
+    my $infoline = "Found script file $scriptfilename: $$scriptref \n";
     $installer::logger::Lang->print($infoline);
 
     # find and read english license file
