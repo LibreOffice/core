@@ -2069,7 +2069,7 @@ public:
         ULONG nReturned = 0;
         while (nLeft > 0)
         {
-            if (mnIndex >= mxCollection->getCount())
+            if (mnIndex > mxCollection->getCount())
             {
                 SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Next(" << celt << "): got " << nReturned << ": S_FALSE");
                 return S_FALSE;
@@ -2104,7 +2104,7 @@ public:
         ULONG nSkipped = 0;
         while (celt > 0)
         {
-            if (mnIndex >= mxCollection->getCount())
+            if (mnIndex > mxCollection->getCount())
             {
                 SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Skip(" << celt << "): skipped " << nSkipped << ": S_FALSE");
                 return S_FALSE;
