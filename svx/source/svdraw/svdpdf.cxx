@@ -1121,7 +1121,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
             float fx, fy;
             if (!FPDFPathSegment_GetPoint(pPathSegment, &fx, &fy))
             {
-                SAL_WARN("sd.filter", "Failed to get PDF path segement point");
+                SAL_WARN("sd.filter", "Failed to get PDF path segment point");
                 continue;
             }
 

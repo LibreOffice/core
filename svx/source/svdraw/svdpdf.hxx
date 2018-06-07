@@ -90,7 +90,7 @@ class ImpSdrPdfImport final
         double e() const { return me; }
         double f() const { return mf; }
 
-        /// Mutliply this * other.
+        /// Multiply this * other.
         void Concatinate(const Matrix& other)
         {
             ma = ma * other.ma + mb * other.mc;
@@ -198,7 +198,7 @@ class ImpSdrPdfImport final
     Matrix mCurMatrix;
 
     /// Correct the vertical coordinate to start at the top.
-    /// PDF coordinate system has orign at the bottom right.
+    /// PDF coordinate system has origin at the bottom right.
     double correctVertOrigin(double offsetPts) const { return mdPageHeightPts - offsetPts; }
     /// Convert PDF points to logic (twips).
     tools::Rectangle PointsToLogic(double left, double right, double top, double bottom) const;
