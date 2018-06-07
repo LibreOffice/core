@@ -264,15 +264,7 @@ void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollec
             pFamily = rFontCollection.FindOrCreateFontFamily(aFamilyName);
         }
         assert(pFamily);
-        rtl::Reference<PhysicalFontFace> pClonedFace = pFoundFontFace->Clone();
-
-#if OSL_DEBUG_LEVEL > 0
-        OUString aClonedFamilyName = GetEnglishSearchFontName( pClonedFace->GetFamilyName() );
-        assert( aClonedFamilyName == aFamilyName );
-        assert( rFontCollection.FindOrCreateFontFamily( aClonedFamilyName ) == pFamily );
-#endif
-
-        pFamily->AddFontFace( pClonedFace.get() );
+        pFamily->AddFontFace( pFoundFontFace );
     }
 }
 

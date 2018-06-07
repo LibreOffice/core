@@ -61,7 +61,6 @@ public:
                                     CoreTextFontFace( const FontAttributes&, sal_IntPtr nFontID );
     virtual                         ~CoreTextFontFace() override;
 
-    rtl::Reference<PhysicalFontFace> Clone() const override;
     sal_IntPtr                      GetFontId() const override;
 
     int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;

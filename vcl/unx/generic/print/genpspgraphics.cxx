@@ -520,7 +520,6 @@ private:
 public:
     explicit ImplPspFontData( const psp::FastPrintFontInfo& );
     virtual sal_IntPtr      GetFontId() const override { return mnFontId; }
-    virtual rtl::Reference<PhysicalFontFace> Clone() const override { return new ImplPspFontData( *this ); }
 };
 
 ImplPspFontData::ImplPspFontData(const psp::FastPrintFontInfo& rInfo)
