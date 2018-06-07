@@ -49,9 +49,15 @@ SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nSt
 }
 
 uno::Reference<ui::dialogs::XFilePicker2>
-KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& xMSF)
+KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& /*xMSF*/)
 {
-    return uno::Reference<ui::dialogs::XFilePicker2>(new KDE5FilePicker(xMSF));
+    return uno::Reference<ui::dialogs::XFilePicker2>(new KDE5FilePicker(QFileDialog::ExistingFile));
+}
+
+uno::Reference<ui::dialogs::XFolderPicker2>
+KDE5SalInstance::createFolderPicker(const uno::Reference<uno::XComponentContext>& /*xMSF*/)
+{
+    return uno::Reference<ui::dialogs::XFolderPicker2>(new KDE5FilePicker(QFileDialog::Directory));
 }
 
 bool KDE5SalInstance::IsMainThread() const { return qApp->thread() == QThread::currentThread(); }
