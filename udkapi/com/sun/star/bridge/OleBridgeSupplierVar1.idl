@@ -26,7 +26,7 @@
 
 
 /** maps UNO types to COM types and vice versa. It is optimized for use in a
-     remote szenario. <p>
+     remote scenario. <p>
 The functionality is basically the same as
 com::sun::star::bridge::OleBridgeSupplier2.
 However, the implementation should be optimized for remote access. For example, it could
