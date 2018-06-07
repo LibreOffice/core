@@ -670,21 +670,39 @@ namespace svgio
 
                         if(!aSequence.empty())
                         {
-                            // embed in transform primitive to scale to 1/100th mm
-                            // where 1 inch == 25.4 mm to get from Svg coordinates (px) to
-                            // drawinglayer coordinates
-                            const double fScaleTo100thmm(25.4 * 100.0 / F_SVG_PIXEL_PER_INCH);
-                            const basegfx::B2DHomMatrix aTransform(
-                                basegfx::utils::createScaleB2DHomMatrix(
-                                    fScaleTo100thmm,
-                                    fScaleTo100thmm));
+                            // Another correction:
+                            // If no Width/Height is set (usually done in
+                            // <svg ... width="215.9mm" height="279.4mm" >) which
+                            // is the case for own-Impress-exports, assume that
+                            // the Units are alrteady 100ThMM.
+                            // Maybe only for own-Impress-exports, thus may need to be
+                            // &&ed with getDocument().findSvgNodeById("ooo:meta_slides"),
+                            // but does not need to be.
+                            bool bEmbedInFinalTransformPxTo100ThMM(true);
 
-                            const drawinglayer::primitive2d::Primitive2DReference xTransform(
-                                new drawinglayer::primitive2d::TransformPrimitive2D(
-                                    aTransform,
-                                    aSequence));
+                            if(!getWidth().isSet() && !getHeight().isSet())
+                            {
+                                bEmbedInFinalTransformPxTo100ThMM = false;
+                            }
 
-                            aSequence = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
+                            if(bEmbedInFinalTransformPxTo100ThMM)
+                            {
+                                // embed in transform primitive to scale to 1/100th mm
+                                // where 1 inch == 25.4 mm to get from Svg coordinates (px) to
+                                // drawinglayer coordinates
+                                const double fScaleTo100thmm(25.4 * 100.0 / F_SVG_PIXEL_PER_INCH);
+                                const basegfx::B2DHomMatrix aTransform(
+                                    basegfx::utils::createScaleB2DHomMatrix(
+                                        fScaleTo100thmm,
+                                        fScaleTo100thmm));
+
+                                const drawinglayer::primitive2d::Primitive2DReference xTransform(
+                                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                                        aTransform,
+                                        aSequence));
+
+                                aSequence = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
+                            }
 
                             // append to result
                             rTarget.append(aSequence);
