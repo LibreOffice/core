@@ -18,6 +18,7 @@
  */
 
 #include <AccessiblePresentationGraphicShape.hxx>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 #include <SdShapeTypes.hxx>
 

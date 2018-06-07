@@ -24,31 +24,27 @@
 #include <editeng/AccessibleComponentBase.hxx>
 #include <editeng/AccessibleSelectionBase.hxx>
 #include "AccessibleViewForwarder.hxx"
-#include "AccessiblePageShape.hxx"
-#include <svx/ChildrenManager.hxx>
-#include <com/sun/star/frame/XModel.hpp>
+#include <svx/AccessibleShapeTreeInfo.hxx>
+#include <svx/IAccessibleViewForwarderListener.hxx>
+
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <tools/link.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
-#include "DrawViewShell.hxx"
-#include <sdpage.hxx>
-#include <drawdoc.hxx>
-#include "FrameView.hxx"
-#include "PresentationViewShell.hxx"
-#include <editeng/outlobj.hxx>
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
-class SdViewShell;
+
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+
+class VclWindowEvent;
+
 namespace sd {
 class ViewShell;
 class Window;
 }
-
-class VclSimpleEvent;
 
 namespace accessibility {
 

@@ -29,13 +29,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.h>
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/AccessibleShape.hxx>
-
+#include <svx/ChildrenManager.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
@@ -50,6 +51,7 @@
 #include <sdpage.hxx>
 #include <slideshow.hxx>
 #include <anminfo.hxx>
+#include <AccessiblePageShape.hxx>
 
 #include <strings.hrc>
 #include <sdresid.hxx>

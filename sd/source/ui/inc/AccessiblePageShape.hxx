@@ -21,15 +21,10 @@
 #define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEPAGESHAPE_HXX
 
 #include <svx/AccessibleShape.hxx>
-#include <svx/AccessibleShapeTreeInfo.hxx>
-#include <svx/IAccessibleViewForwarderListener.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 
-#include <svx/AccessibleTextHelper.hxx>
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace accessibility { class AccessibleShapeTreeInfo; }
 
 namespace accessibility {
 

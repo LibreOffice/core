@@ -22,7 +22,6 @@
 
 #include <svx/AccessibleOLEShape.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 namespace accessibility {
 
 /** This class makes Impress shapes accessible.
