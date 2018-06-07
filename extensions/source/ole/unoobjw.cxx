@@ -2037,10 +2037,11 @@ public:
     // IEnumVARIANT
     virtual HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT **) override
     {
+        SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Clone: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Next(ULONG celt,
+    virtual HRESULT STDMETHODCALLTYPE Next(ULONG const celt,
                                            VARIANT *rgVar,
                                            ULONG *pCeltFetched) override
     {
@@ -2050,19 +2051,29 @@ public:
             *pCeltFetched = 0;
 
         if (celt == 0)
+        {
+            SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Next(" << celt << "): E_INVALIDARG");
             return E_INVALIDARG;
+        }
 
         if (rgVar == nullptr || (celt != 1 && pCeltFetched == nullptr))
+        {
+            SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Next(" << celt << "): E_FAIL");
             return E_FAIL;
+        }
 
         for (ULONG i = 0; i < celt; i++)
             VariantInit(&rgVar[i]);
 
-        while (celt > 0)
+        ULONG nLeft = celt;
+        ULONG nReturned = 0;
+        while (nLeft > 0)
         {
             if (mnIndex >= mxCollection->getCount())
+            {
+                SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Next(" << celt << "): got " << nReturned << ": S_FALSE");
                 return S_FALSE;
-
+            }
             Any aIndex;
             aIndex <<= mnIndex;
             Any aElement = mxCollection->Item(aIndex, Any());
@@ -2071,14 +2082,17 @@ public:
             if (pCeltFetched)
                 (*pCeltFetched)++;
             rgVar++;
+            nReturned++;
             mnIndex++;
-            celt--;
+            nLeft--;
         }
+        SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Next(" << celt << "): S_OK");
         return S_OK;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Reset() override
     {
+        SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Reset: S_OK");
         mnIndex = 1;
         return S_OK;
     }
@@ -2087,13 +2101,18 @@ public:
     {
         comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
+        ULONG nSkipped = 0;
         while (celt > 0)
         {
             if (mnIndex >= mxCollection->getCount())
+            {
+                SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Skip(" << celt << "): skipped " << nSkipped << ": S_FALSE");
                 return S_FALSE;
+            }
             mnIndex++;
             celt--;
         }
+        SAL_INFO("extensions.olebridge", this << "@CXEnumVariant::Skip(" << celt << "): S_OK");
         return S_OK;
     }
 
@@ -2234,6 +2253,8 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
             SAL_INFO("extensions.olebridge", "Sink::Call(" << Method << "): Calling Invoke(" << nMemId << ")");
 
             nResult = pDispatch->Invoke(nMemId, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &aDispParams, &aVarResult, nullptr, &uArgErr);
+            SAL_INFO("extensions.olebridge", "Sink::Call(" << Method << "): Invoke() returned");
+
             SAL_WARN_IF(!SUCCEEDED(nResult), "extensions.olebridge", "Call to " << Method << " failed: " << WindowsErrorStringFromHRESULT(nResult));
 
             // Undo VT_BYREF magic done above. Copy out parameters back to the Anys in Arguments
@@ -2358,7 +2379,7 @@ public:
         if (pcFetched && cConnections != 1)
         {
             SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Next(" << cConnections << "): E_INVALIDARG");
-            return E_POINTER;
+            return E_INVALIDARG;
         }
 
         ULONG nFetched = 0;
