@@ -34,38 +34,35 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 {
     std::shared_ptr<SalBitmap> xImpBmp = rBitmap.ImplGetSalBitmap();
 
-    SAL_WARN_IF( !xImpBmp, "vcl", "Forbidden Access to empty bitmap!" );
+    assert( xImpBmp && "Forbidden Access to empty bitmap!" );
 
-    if( xImpBmp )
+    if( !xImpBmp )
+        return;
+
+    if( mnAccessMode == BitmapAccessMode::Write && xImpBmp.use_count() > 2 )
     {
-        if( mnAccessMode == BitmapAccessMode::Write && !maBitmap.ImplGetSalBitmap() )
-        {
-            xImpBmp.reset();
-            rBitmap.ImplMakeUnique();
-            xImpBmp = rBitmap.ImplGetSalBitmap();
-        }
-        else
-        {
-            DBG_ASSERT( mnAccessMode != BitmapAccessMode::Write ||
-                        xImpBmp.use_count() == 2,
-                        "Unpredictable results: bitmap is referenced more than once!" );
-        }
-
-        mpBuffer = xImpBmp->AcquireBuffer( mnAccessMode );
-
-        if( !mpBuffer )
-        {
-            std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-            if (xNewImpBmp->Create(*xImpBmp, rBitmap.GetBitCount()))
-            {
-                xImpBmp = xNewImpBmp;
-                rBitmap.ImplSetSalBitmap( xImpBmp );
-                mpBuffer = xImpBmp->AcquireBuffer( mnAccessMode );
-            }
-        }
-
-        maBitmap = rBitmap;
+        SAL_WARN( "vcl", "two code paths trying to write to same underlying Bitmap" );
+        xImpBmp.reset();
+        rBitmap.ImplMakeUnique();
+        xImpBmp = rBitmap.ImplGetSalBitmap();
     }
+
+    mpBuffer = xImpBmp->AcquireBuffer( mnAccessMode );
+
+    if( !mpBuffer )
+    {
+        std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        if (xNewImpBmp->Create(*xImpBmp, rBitmap.GetBitCount()))
+        {
+            xImpBmp = xNewImpBmp;
+            rBitmap.ImplSetSalBitmap( xImpBmp );
+            mpBuffer = xImpBmp->AcquireBuffer( mnAccessMode );
+        }
+    }
+
+    assert(mpBuffer);
+
+    maBitmap = rBitmap;
 }
 
 BitmapInfoAccess::~BitmapInfoAccess()
@@ -75,7 +72,6 @@ BitmapInfoAccess::~BitmapInfoAccess()
     if (mpBuffer && xImpBmp)
     {
         xImpBmp->ReleaseBuffer( mpBuffer, mnAccessMode );
-        mpBuffer = nullptr;
     }
 }
 

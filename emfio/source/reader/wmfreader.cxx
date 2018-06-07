@@ -805,9 +805,9 @@ namespace emfio
                 mpInputStream->ReadUInt16( nFunction ).ReadUInt16( nFunction );
 
                 ReadDIB(aBmp, *mpInputStream, false);
-                Bitmap::ScopedReadAccess pBmp(aBmp);
-                if ( pBmp )
+                if ( !!aBmp )
                 {
+                    Bitmap::ScopedReadAccess pBmp(aBmp);
                     for ( long y = 0; y < pBmp->Height(); y++ )
                     {
                         for ( long x = 0; x < pBmp->Width(); x++ )
@@ -822,7 +822,6 @@ namespace emfio
                     nCount = pBmp->Height() * pBmp->Width();
                     if ( !nCount )
                         nCount++;
-                    pBmp.reset();
                 }
                 Color aColor( static_cast<sal_uInt8>( nRed / nCount ), static_cast<sal_uInt8>( nGreen / nCount ), static_cast<sal_uInt8>( nBlue / nCount ) );
                 CreateObject(o3tl::make_unique<WinMtfFillStyle>( aColor, false ));
