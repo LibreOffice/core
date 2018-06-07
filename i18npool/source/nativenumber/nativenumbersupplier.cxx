@@ -588,10 +588,8 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
             break;
     }
 
-    if (count == 0)
-        return rNumberString;
-
-    OUString aNumberStr = sBuf.makeStringAndClear();
+    // Handle also month and day names for NatNum12 date formatting
+    const OUString& rNumberStr = (count == 0) ? rNumberString : sBuf.makeStringAndClear();
 
     // Guard the static variables below.
     osl::MutexGuard aGuard( theNatNumMutex::get());
@@ -606,17 +604,17 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
     // of the continuous update of the multiple number names during typing.
     // We fix this by buffering the result of the conversion.
     static std::unordered_map<OUString, std::map<OUString, OUString>> aBuff;
-    auto& rItems = aBuff[aNumberStr];
+    auto& rItems = aBuff[rNumberStr];
     auto& rItem = rItems[numbertext_prefix + aLoc];
     if (rItem.isEmpty())
     {
-        rItem = xNumberText->getNumberText(numbertext_prefix + aNumberStr, rLocale);
+        rItem = xNumberText->getNumberText(numbertext_prefix + rNumberStr, rLocale);
         // use number at missing number to text conversion
         if (rItem.isEmpty())
-            rItem = aNumberStr;
+            rItem = rNumberStr;
     }
     OUString sResult = rItem;
-    if (i < len)
+    if (i != 0 && i < len)
         sResult += rNumberString.copy(i);
     return sResult;
 }

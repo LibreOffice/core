@@ -3560,7 +3560,23 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const sal_uInt16 nCnt = NumFor[nIx].GetCount();
     sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
-    OUString aYear;
+    OUString aStr;
+
+    // NatNum12: if the date format contains more than a date
+    // field, it needs to specify in NatNum12 argument
+    // which date element needs special formatting:
+    //
+    // '[NatNum12 ordinal-number]D'              -> "1st"
+    // '[NatNum12 D=ordinal-number]D" of "MMMM'  -> "1st of April"
+    // '[NatNum12 D=ordinal]D" of "MMMM'         -> "first of April"
+    // '[NatNum12 YYYY=year,D=ordinal]D" of "MMMM", "YYYY' -> "first of April, nineteen ninety"
+    //
+    // Note: set only for YYYY, MMMM, M, DDDD, D and NNN/AAAA in date formats.
+    // XXX It's possible to extend this for other keywords and date + time
+    // combinations, as required.
+
+    bool bUseSpellout = NatNumTakesParameters(nNatNum) &&
+            (nCnt == 1 || NumFor[nIx].GetNatNum().GetParams().indexOf('=') > -1);
 
     for (sal_uInt16 i = 0; i < nCnt; i++)
     {
@@ -3594,7 +3610,14 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             sBuff.append(rInfo.sStrArray[i]);
             break;
         case NF_KEY_M:                  // M
-            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_MONTH, nNatNum ));
+            aStr = rCal.getDisplayString( CalendarDisplayCode::SHORT_MONTH, nNatNum );
+            // NatNum12: support variants of preposition, suffixation or article
+            // for example, Catalan "de març", but "d'abril" etc.
+            if ( bUseSpellout )
+            {
+                aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
+            }
+            sBuff.append(aStr);
             break;
         case NF_KEY_MM:                 // MM
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_MONTH, nNatNum ));
@@ -3605,9 +3628,19 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                                 nNatNum));
             break;
         case NF_KEY_MMMM:               // MMMM
-            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
+            // NatNum12: support variants of preposition, suffixation or article
+            // Note: result of the "spell out" conversion can depend from the optional
+            // PartitiveMonths or GenitiveMonths defined in the locale data,
+            // see description of ImpUseMonthCase(), and locale data in
+            // i18npool/source/localedata/data/ and libnumbertext
+            aStr = rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
                                                                  static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum));
+                                                nNatNum);
+            if ( bUseSpellout )
+            {
+                aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
+            }
+            sBuff.append(aStr);
             break;
         case NF_KEY_MMMMM:              // MMMMM
             sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
@@ -3621,7 +3654,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_QUARTER, nNatNum ));
             break;
         case NF_KEY_D:                  // D
-            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY, nNatNum ));
+            aStr = rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY, nNatNum );
+            // NatNum12: support variants of preposition, suffixation or article
+            if ( bUseSpellout )
+            {
+                aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
+            }
+            sBuff.append(aStr);
             break;
         case NF_KEY_DD:                 // DD
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY, nNatNum ));
@@ -3642,7 +3681,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
-            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
+            aStr = rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
+            // NatNum12: support variants of preposition, suffixation or article
+            if ( bUseSpellout )
+            {
+                aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
+            }
+            sBuff.append(aStr);
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
@@ -3674,23 +3719,25 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             {
                 sBuff.append('-');
             }
-            aYear = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
-            if (aYear.getLength() < 4)
+            aStr = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
+            if (aStr.getLength() < 4)
             {
                 using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
                 OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aYear.getLength(), '0');
+                padToLength(aBuf, 4 - aStr.getLength(), '0');
                 impTransliterate(aBuf, NumFor[nIx].GetNatNum());
-                aBuf.append(aYear);
-                sBuff.append(aBuf);
+                aBuf.append(aStr);
+                aStr = aBuf.makeStringAndClear();
             }
-            else
+            // NatNum12: support variants of preposition, suffixation or article
+            if ( bUseSpellout )
             {
-                sBuff.append(aYear);
+                aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
             }
+            sBuff.append(aStr);
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
@@ -3709,7 +3756,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
         case NF_KEY_NNN:                // NNN
         case NF_KEY_AAAA:               // AAAA
-            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
+            aStr = rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
+            // NatNum12: support variants of preposition, suffixation or article
+            if ( bUseSpellout )
+            {
+                aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
+            }
+            sBuff.append(aStr);
             break;
         case NF_KEY_NNNN:               // NNNN
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
@@ -5384,6 +5437,44 @@ void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
     sTemp = GetFormatter().GetNatNum()->getNativeNumberStringParams(
         sTemp, aLocale, rNum.GetNatNum(), rNum.GetParams());
     rStr.append(sTemp);
+}
+
+OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
+                                              const SvNumberNatNum& rNum,
+                                              const sal_uInt16 nDateKey) const
+{
+    // no KEYWORD=argument list in NatNum12
+    if (rNum.GetParams().indexOf('=') == -1)
+        return impTransliterateImpl( rStr, rNum);
+
+    const NfKeywordTable & rKeywords = rScan.GetKeywords();
+
+    // Format: KEYWORD=numbertext_prefix, ..., for example:
+    // [NatNum12 YYYY=title ordinal,MMMM=article, D=ordinal-number]
+    sal_Int32 nField = -1;
+    do
+    {
+        nField = rNum.GetParams().indexOf(rKeywords[nDateKey] + "=", ++nField);
+    }
+    while (nField != -1 && nField != 0 &&
+            !(rNum.GetParams()[nField - 1] == ',' ||
+              rNum.GetParams()[nField - 1] == ' '));
+
+    // no format specified for actual keyword
+    if (nField == -1)
+        return rStr;
+
+    sal_Int32 nKeywordLen = rKeywords[nDateKey].getLength() + 1;
+    sal_Int32 nFieldEnd = rNum.GetParams().indexOf(',', nField);
+
+    if (nFieldEnd == -1)
+        nFieldEnd = rNum.GetParams().getLength();
+
+    css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
+
+    return GetFormatter().GetNatNum()->getNativeNumberStringParams(
+        rStr, aLocale, rNum.GetNatNum(),
+        rNum.GetParams().copy(nField + nKeywordLen, nFieldEnd - nField - nKeywordLen));
 }
 
 void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes2& rAttr,

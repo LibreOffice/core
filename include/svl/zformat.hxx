@@ -699,6 +699,7 @@ private:
     // transliterate according to NativeNumber
     SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum) const;
     SVL_DLLPRIVATE void impTransliterateImpl(OUStringBuffer& rStr, const SvNumberNatNum& rNum) const;
+    SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum, sal_uInt16 nDateKey) const;
 
     OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum) const
     {
@@ -712,6 +713,12 @@ private:
             impTransliterateImpl(rStr, rNum);
         }
     }
+
+    OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum, sal_uInt16 nDateKey) const
+    {
+        return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum, nDateKey) : rStr;
+    }
+
 };
 
 #endif // INCLUDED_SVL_ZFORMAT_HXX
