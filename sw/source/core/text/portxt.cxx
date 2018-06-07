@@ -550,9 +550,9 @@ void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
             pPortion->PrePaint( rInf, this );
 
-        const SwWrongList *pWrongList = rInf.GetpWrongList();
-        const SwWrongList *pGrammarCheckList = rInf.GetGrammarCheckList();
-        const SwWrongList *pSmarttags = rInf.GetSmartTags();
+        auto const* pWrongList = rInf.GetpWrongList();
+        auto const* pGrammarCheckList = rInf.GetGrammarCheckList();
+        auto const* pSmarttags = rInf.GetSmartTags();
 
         const bool bWrong = nullptr != pWrongList;
         const bool bGrammarCheck = nullptr != pGrammarCheckList;

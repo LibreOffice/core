@@ -487,18 +487,18 @@ void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTex
     aPaintRect = rPaint;
     nSpaceIdx = 0;
     pSpaceAdd = nullptr;
-    pWrongList = nullptr;
-    pGrammarCheckList = nullptr;
-    pSmartTags = nullptr;
+    m_pWrongList = nullptr;
+    m_pGrammarCheckList = nullptr;
+    m_pSmartTags = nullptr;
     pBrushItem = nullptr;
 }
 
 SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* pText )
-    : SwTextSizeInfo( rInf, pText ),
-      pWrongList( rInf.GetpWrongList() ),
-      pGrammarCheckList( rInf.GetGrammarCheckList() ),
-      pSmartTags( rInf.GetSmartTags() ),
-      pSpaceAdd( rInf.GetpSpaceAdd() ),
+    : SwTextSizeInfo( rInf, pText )
+    , m_pWrongList( rInf.GetpWrongList() )
+    , m_pGrammarCheckList( rInf.GetGrammarCheckList() )
+    , m_pSmartTags( rInf.GetSmartTags() )
+    , pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
       aTextFly( rInf.GetTextFly() ),
       aPos( rInf.GetPos() ),
@@ -507,11 +507,11 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* p
 { }
 
 SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
-    : SwTextSizeInfo( rInf ),
-      pWrongList( rInf.GetpWrongList() ),
-      pGrammarCheckList( rInf.GetGrammarCheckList() ),
-      pSmartTags( rInf.GetSmartTags() ),
-      pSpaceAdd( rInf.GetpSpaceAdd() ),
+    : SwTextSizeInfo( rInf )
+    , m_pWrongList( rInf.GetpWrongList() )
+    , m_pGrammarCheckList( rInf.GetGrammarCheckList() )
+    , m_pSmartTags( rInf.GetSmartTags() )
+    , pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
       aTextFly( rInf.GetTextFly() ),
       aPos( rInf.GetPos() ),
@@ -693,9 +693,9 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
         aDrawInf.SetSize( aSize );
         aDrawInf.SetAscent( rPor.GetAscent() );
         aDrawInf.SetKern( bKern ? rPor.Width() : 0 );
-        aDrawInf.SetWrong( bTmpWrong ? pWrongList : nullptr );
-        aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : nullptr );
-        aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : nullptr );
+        aDrawInf.SetWrong( bTmpWrong ? m_pWrongList : nullptr );
+        aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? m_pGrammarCheckList : nullptr );
+        aDrawInf.SetSmartTags( bTmpSmart ? m_pSmartTags : nullptr );
         GetTextFly().DrawTextOpaque( aDrawInf );
     }
     else
@@ -705,9 +705,9 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
             m_pFnt->DrawStretchText_( aDrawInf );
         else
         {
-            aDrawInf.SetWrong( bTmpWrong ? pWrongList : nullptr );
-            aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : nullptr );
-            aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : nullptr );
+            aDrawInf.SetWrong( bTmpWrong ? m_pWrongList : nullptr );
+            aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? m_pGrammarCheckList : nullptr );
+            aDrawInf.SetSmartTags( bTmpSmart ? m_pSmartTags : nullptr );
             m_pFnt->DrawText_( aDrawInf );
         }
     }
@@ -1718,9 +1718,8 @@ SwTextSlot::SwTextSlot(
     bool bExgLists,
     OUString const & rCh )
     : pOldText(nullptr)
-    , pOldSmartTagList(nullptr)
-    , pOldGrammarCheckList(nullptr)
-    , pTempList(nullptr)
+    , m_pOldSmartTagList(nullptr)
+    , m_pOldGrammarCheckList(nullptr)
     , nIdx(0)
     , nLen(0)
     , pInf(nullptr)
@@ -1751,37 +1750,63 @@ SwTextSlot::SwTextSlot(
         // ST2
         if ( bExgLists )
         {
-            pOldSmartTagList = static_cast<SwTextPaintInfo*>(pInf)->GetSmartTags();
-            if ( pOldSmartTagList )
+            m_pOldSmartTagList = static_cast<SwTextPaintInfo*>(pInf)->GetSmartTags();
+            if (m_pOldSmartTagList)
             {
-                const sal_uInt16 nPos = pOldSmartTagList->GetWrongPos(nIdx);
-                const sal_Int32 nListPos = pOldSmartTagList->Pos(nPos);
-                if( nListPos == nIdx )
-                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
-                else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && !aText.isEmpty() )
+                std::pair<SwTextNode const*, sal_Int32> pos(pNew->GetTextFrame()->MapViewToModel(nIdx));
+                SwWrongList const*const pSmartTags(pos.first->GetSmartTags());
+                assert(m_pOldSmartTagList->MergedOrSame(pSmartTags));
+                if (pSmartTags)
                 {
-                    pTempList = new SwWrongList( WRONGLIST_SMARTTAG );
-                    pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
-                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( pTempList );
+                    const sal_uInt16 nPos = pSmartTags->GetWrongPos(pos.second);
+                    const sal_Int32 nListPos = pSmartTags->Pos(nPos);
+                    if (nListPos == pos.second)
+                    {
+                        m_pTempIter.reset(new sw::WrongListIterator(*pSmartTags->SubList(nPos)));
+                        static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pTempIter.get());
+                    }
+                    else if (!m_pTempList && nPos < pSmartTags->Count()
+                                && nListPos < pos.second && !aText.isEmpty())
+                    {
+                        m_pTempList.reset(new SwWrongList( WRONGLIST_SMARTTAG ));
+                        m_pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
+                        m_pTempIter.reset(new sw::WrongListIterator(*m_pTempList));
+                        static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pTempIter.get());
+                    }
+                    else
+                        static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(nullptr);
                 }
                 else
-                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( nullptr);
+                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(nullptr);
             }
-            pOldGrammarCheckList = static_cast<SwTextPaintInfo*>(pInf)->GetGrammarCheckList();
-            if ( pOldGrammarCheckList )
+            m_pOldGrammarCheckList = static_cast<SwTextPaintInfo*>(pInf)->GetGrammarCheckList();
+            if (m_pOldGrammarCheckList)
             {
-                const sal_uInt16 nPos = pOldGrammarCheckList->GetWrongPos(nIdx);
-                const sal_Int32 nListPos = pOldGrammarCheckList->Pos(nPos);
-                if( nListPos == nIdx )
-                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
-                else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && !aText.isEmpty() )
+                std::pair<SwTextNode const*, sal_Int32> pos(pNew->GetTextFrame()->MapViewToModel(nIdx));
+                SwWrongList const*const pGrammar(pos.first->GetGrammarCheck());
+                assert(m_pOldGrammarCheckList->MergedOrSame(pGrammar));
+                if (pGrammar)
                 {
-                    pTempList = new SwWrongList( WRONGLIST_GRAMMAR );
-                    pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
-                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( pTempList );
+                    const sal_uInt16 nPos = pGrammar->GetWrongPos(pos.second);
+                    const sal_Int32 nListPos = pGrammar->Pos(nPos);
+                    if (nListPos == pos.second)
+                    {
+                        m_pTempIter.reset(new sw::WrongListIterator(*pGrammar->SubList(nPos)));
+                        static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pTempIter.get());
+                    }
+                    else if (!m_pTempList && nPos < pGrammar->Count()
+                                && nListPos < pos.second && !aText.isEmpty())
+                    {
+                        m_pTempList.reset(new SwWrongList( WRONGLIST_GRAMMAR ));
+                        m_pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
+                        m_pTempIter.reset(new sw::WrongListIterator(*m_pTempList));
+                        static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pTempIter.get());
+                    }
+                    else
+                        static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(nullptr);
                 }
                 else
-                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( nullptr);
+                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(nullptr);
             }
         }
     }
@@ -1798,11 +1823,10 @@ SwTextSlot::~SwTextSlot()
 
         // ST2
         // Restore old smart tag list
-        if ( pOldSmartTagList )
-            static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( pOldSmartTagList );
-        if ( pOldGrammarCheckList )
-            static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( pOldGrammarCheckList );
-        delete pTempList;
+        if (m_pOldSmartTagList)
+            static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pOldSmartTagList);
+        if (m_pOldGrammarCheckList)
+            static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pOldGrammarCheckList);
     }
 }
 
