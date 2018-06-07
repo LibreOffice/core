@@ -280,14 +280,14 @@ public:
      */
     void Init();
 
-    /// Is called by FormatSpelling()
-    SwRect AutoSpell_( const SwContentNode*, sal_Int32 );
+    /// Is called by DoIdleJob_() and ExecSpellPopup()
+    SwRect AutoSpell_(SwTextNode &, sal_Int32);
 
-    /// Is called by FormatSpelling()
-    SwRect SmartTagScan();
+    /// Is called by DoIdleJob_()
+    SwRect SmartTagScan(SwTextNode &);
 
-    /// Is called by CollectAutoCmplWords()
-    void CollectAutoCmplWrds( SwContentNode const * , sal_Int32 );
+    /// Is called by DoIdleJob_()
+    void CollectAutoCmplWrds(SwTextNode &, sal_Int32);
 
     /**
      * Returns the screen position of rPos. The values are relative to the upper
