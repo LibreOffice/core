@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+
 #include "vbaapplication.hxx"
 #include "vbadocument.hxx"
 #include <osl/file.hxx>
@@ -295,6 +299,19 @@ OUString SAL_CALL SwVbaApplication::getStatusBar()
 
 void SAL_CALL SwVbaApplication::setStatusBar( const OUString& _statusbar )
 {
+    // ScVbaAppSettings::setStatusBar() also uses the XStatusIndicator to show this, so maybe that is OK?
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY );
+    if (xModel.is())
+    {
+        uno::Reference< task::XStatusIndicatorSupplier > xStatusIndicatorSupplier( xModel->getCurrentController(), uno::UNO_QUERY );
+        if (xStatusIndicatorSupplier.is())
+        {
+            uno::Reference< task::XStatusIndicator > xStatusIndicator( xStatusIndicatorSupplier->getStatusIndicator(), uno::UNO_QUERY );
+            if (xStatusIndicator.is())
+                xStatusIndicator->start( _statusbar, 100 );
+        }
+    }
+
     // Yes, we intentionally use the "extensions.olebridge" tag here even if this is sw. We
     // interpret setting the StatusBar property as a request from an Automation client to display
     // the string in LibreOffice's debug output, and all other generic Automation support debug
