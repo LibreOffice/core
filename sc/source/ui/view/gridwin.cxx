@@ -781,10 +781,42 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
 
+    bool isAllSelected = (eMode == Normal && mpAutoFilterPopup->isAllSelected());
+    if (isAllSelected)
+    {
+        // tdf#117276 additional check: we should not reset filter in current column
+        // - if all available strings in the list are ckecked
+        // - and some of the strings were hidden due to filters from other columns
+
+        // 1. get all strings available for selection in the list
+        std::unordered_set<OUString> aSelected;
+        {
+            std::vector<ScQueryEntry*> aEntries = aParam.FindAllEntriesByField(rPos.Col());
+            for (ScQueryEntry* pEntry : aEntries)
+            {
+                if (pEntry && pEntry->bDoQuery && pEntry->eOp == SC_EQUAL)
+                {
+                    ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
+                    std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelected));
+                }
+            }
+        }
+
+        // 2. get all strings from the column
+        std::vector<ScTypedStrData> aAllStrings; // case sensitive
+        pDoc->GetDataEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aAllStrings);
+
+        // 3. if aAllStrings != aSelected => some strings were hidden by filter(s) from other columns
+        if (aAllStrings.size() != aSelected.size())
+        {
+            isAllSelected = false;
+        }
+    }
+
     // Remove old entries.
     aParam.RemoveAllEntriesByField(rPos.Col());
 
-    if( !(eMode == Normal && mpAutoFilterPopup->isAllSelected() ) )
+    if( !isAllSelected )
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
