@@ -157,6 +157,25 @@ XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks()
         //Notes: all none default callbacks will lose.
         xmlSecIOCleanupCallbacks() ;
 
+        // Newer xmlsec wants the callback order in the opposite direction.
+#if XMLSEC_VERSION_MAJOR > 1 || (XMLSEC_VERSION_MAJOR == 1 && XMLSEC_VERSION_MINOR > 2) || (XMLSEC_VERSION_MAJOR == 1 && XMLSEC_VERSION_MINOR == 2 && XMLSEC_VERSION_SUBMINOR >= 26)
+        //Register the default callbacks.
+        //Notes: the error will cause xmlsec working problems.
+        int cbs = xmlSecIORegisterDefaultCallbacks() ;
+        if( cbs < 0 ) {
+            return -1 ;
+        }
+
+        //Register my classbacks.
+        cbs = xmlSecIORegisterCallbacks(
+                    xmlStreamMatch,
+                    xmlStreamOpen,
+                    xmlStreamRead,
+                    xmlStreamClose ) ;
+        if( cbs < 0 ) {
+            return -1 ;
+        }
+#else
         //Register my classbacks.
         int cbs = xmlSecIORegisterCallbacks(
                     xmlStreamMatch,
@@ -173,6 +192,7 @@ XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks()
         if( cbs < 0 ) {
             return -1 ;
         }
+#endif
 
         enableXmlStreamIO |= XMLSTREAMIO_INITIALIZED ;
     }
