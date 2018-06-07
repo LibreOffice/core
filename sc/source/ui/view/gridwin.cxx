@@ -840,12 +840,9 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
 
-    if (eMode == Normal && mpAutoFilterPopup->isAllSelected())
-    {
-        // Remove this entry.
-        aParam.RemoveEntryByField(rPos.Col());
-    }
-    else
+    // Remove old entries.
+    aParam.RemoveEntryByField(rPos.Col());
+
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
@@ -877,6 +874,19 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
                 rItems.clear();
                 std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems, rPool));
+
+                if (mpAutoFilterPopup->isAllSelected())
+                {
+                    // get all strings from the column
+                    std::vector<ScTypedStrData> aAllStrings; // case sensitive
+                    pDoc->GetDataEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aAllStrings, true);
+
+                    if (rItems.size() == aAllStrings.size() || aAllStrings.empty())
+                    {
+                        // all selected => Remove filter entries
+                        aParam.RemoveEntryByField(rPos.Col());
+                    }
+                }
             }
             break;
             case Top10:
