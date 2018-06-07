@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_fab46dd2",
+        "filename": "cui/source/tabpages/border.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-06-07T10:48:28Z",
+      "side": 1,
+      "message": "This changes the default color of the border lines unpredictably. (Sets to the same color as the font color.)\n\nWe only intend to change the color of the lines in the line style box, not the actual border lines.\n\nLet\u0027s leave this part as it is.",
+      "range": {
+        "startLine": 580,
+        "startChar": 12,
+        "endLine": 580,
+        "endChar": 36
+      },
+      "revId": "a9425079df501d8d9e26f8da0461312c7fa9bf6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
