@@ -3682,37 +3682,6 @@ void RtfAttributeOutput::FontPitchType(FontPitch ePitch) const
     m_rExport.OutULong(nVal);
 }
 
-static bool IsEMF(const sal_uInt8* pGraphicAry, unsigned long nSize)
-{
-    if (pGraphicAry && (nSize > 0x2c))
-    {
-        // check the magic number
-        if ((pGraphicAry[0x28] == 0x20) && (pGraphicAry[0x29] == 0x45)
-            && (pGraphicAry[0x2a] == 0x4d) && (pGraphicAry[0x2b] == 0x46))
-        {
-            //emf detected
-            return true;
-        }
-    }
-    return false;
-}
-
-static bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, unsigned long& rSize)
-{
-    if (rpGraphicAry && (rSize > 0x22))
-    {
-        if ((rpGraphicAry[0] == 0xd7) && (rpGraphicAry[1] == 0xcd) && (rpGraphicAry[2] == 0xc6)
-            && (rpGraphicAry[3] == 0x9a))
-        {
-            // we have to get rid of the metafileheader
-            rpGraphicAry += 22;
-            rSize -= 22;
-            return true;
-        }
-    }
-    return false;
-}
-
 static void lcl_AppendSP(OStringBuffer& rBuffer, const char cName[], const OUString& rValue,
                          const RtfExport& rExport)
 {
@@ -3727,7 +3696,7 @@ static void lcl_AppendSP(OStringBuffer& rBuffer, const char cName[], const OUStr
 
 static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& rOrig,
                           const Size& rRendered, const Size& rMapped, const SwCropGrf& rCr,
-                          const char* pBLIPType, const sal_uInt8* pGraphicAry, unsigned long nSize,
+                          const char* pBLIPType, const sal_uInt8* pGraphicAry, sal_uInt64 nSize,
                           const RtfExport& rExport, SvStream* pStream = nullptr,
                           bool bWritePicProp = true, const SwAttrSet* pAttrSet = nullptr)
 {
@@ -3799,7 +3768,7 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
         if (bIsWMF)
         {
             aRet.append(sal_Int32(8));
-            StripMetafileHeader(pGraphicAry, nSize);
+            msfilter::rtfutil::StripMetafileHeader(pGraphicAry, nSize);
         }
         aRet.append(SAL_NEWLINE_STRING);
         if (pStream)
@@ -3938,8 +3907,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
                 pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
                 break;
             case GfxLinkType::NativeWmf:
-                pBLIPType = IsEMF(pGraphicAry, nSize) ? OOO_STRING_SVTOOLS_RTF_EMFBLIP
-                                                      : OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+                pBLIPType = msfilter::rtfutil::IsEMF(pGraphicAry, nSize)
+                                ? OOO_STRING_SVTOOLS_RTF_EMFBLIP
+                                : OOO_STRING_SVTOOLS_RTF_WMETAFILE;
                 break;
             case GfxLinkType::NativeGif:
                 // GIF is not supported by RTF, but we override default conversion to WMF, PNG seems fits better here.

@@ -285,6 +285,37 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
 
     return true;
 }
+
+bool IsEMF(const sal_uInt8* pGraphicAry, unsigned long nSize)
+{
+    if (pGraphicAry && (nSize > 0x2c))
+    {
+        // check the magic number
+        if ((pGraphicAry[0x28] == 0x20) && (pGraphicAry[0x29] == 0x45)
+            && (pGraphicAry[0x2a] == 0x4d) && (pGraphicAry[0x2b] == 0x46))
+        {
+            //emf detected
+            return true;
+        }
+    }
+    return false;
+}
+
+bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, sal_uInt64& rSize)
+{
+    if (rpGraphicAry && (rSize > 0x22))
+    {
+        if ((rpGraphicAry[0] == 0xd7) && (rpGraphicAry[1] == 0xcd) && (rpGraphicAry[2] == 0xc6)
+            && (rpGraphicAry[3] == 0x9a))
+        {
+            // we have to get rid of the metafileheader
+            rpGraphicAry += 22;
+            rSize -= 22;
+            return true;
+        }
+    }
+    return false;
+}
 }
 }
 

@@ -9,6 +9,8 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
 
+class Graphic;
+class Size;
 class SvStream;
 
 namespace SwReqIfReader
@@ -22,6 +24,13 @@ bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle, bool& bOwnFormat);
 
 /// Wraps an OLE2 container binary in an RTF fragment.
 bool WrapOleInRtf(SvStream& rOle, SvStream& rRtf);
+
+/**
+ * Wraps an image in an RTF fragment.
+ *
+ * @param rLogicSize the size used in the document model (not pixel size)
+ */
+bool WrapGraphicInRtf(const Graphic& rGraphic, const Size& rLogicSize, SvStream& rRtf);
 }
 
 #endif // INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
