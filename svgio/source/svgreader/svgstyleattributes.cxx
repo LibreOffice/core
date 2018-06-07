@@ -2216,6 +2216,36 @@ namespace svgio
                 return Visibility_visible;
             }
 
+            // Visibility correction/exception for self-exported SVGs:
+            // When Impress exports single or multi-page SVGs, it puts the
+            // single slides into <g visibility="hidden">. Not sure why
+            // whis happens, but this leads (correctly) to empty imported
+            // Graphics.
+            // Thus, if Visibility_hidden is active and owner is a SVGTokenG
+            // and it's parent is also a SVGTokenG and it has a Class 'SlideGroup'
+            // set, check if we are an Impress export.
+            // We are an Impress export if an SVG-Node titled 'ooo:meta_slides'
+            // exists.
+            // All togehter gives:
+            if(Visibility_hidden == maVisibility
+                && SVGTokenG == mrOwner.getType()
+                && nullptr != mrOwner.getDocument().findSvgNodeById("ooo:meta_slides"))
+            {
+                const SvgNode* pParent(mrOwner.getParent());
+
+                if(nullptr != pParent && SVGTokenG == pParent->getType() && pParent->getClass())
+                {
+                    const OUString aClass(*pParent->getClass());
+
+                    if("SlideGroup" == aClass)
+                    {
+                        // if we detect this exception,
+                        // ovverride Visibility_hidden -> Visibility_visible
+                        return Visibility_visible;
+                    }
+                }
+            }
+
             return maVisibility;
         }
 

@@ -695,6 +695,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	ppm_Portable_Pixelmap \
 	psd_Adobe_Photoshop \
 	ras_Sun_Rasterfile \
+	svg_Scalable_Vector_Graphics_Draw \
 	svg_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
@@ -721,6 +722,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	PPM___Portable_Pixelmap \
 	PSD___Adobe_Photoshop \
 	RAS___Sun_Rasterfile \
+	SVG___Scalable_Vector_Graphics_Draw \
 	SVG___Scalable_Vector_Graphics \
 	SVM___StarView_Metafile \
 	TGA___Truevision_TARGA \
@@ -761,6 +763,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_
 	png_Portable_Network_Graphic \
 	ppm_Portable_Pixelmap \
 	ras_Sun_Rasterfile \
+	svg_Scalable_Vector_Graphics_Draw \
 	svg_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tif_Tag_Image_File \
