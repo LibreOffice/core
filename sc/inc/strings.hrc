@@ -252,7 +252,7 @@
 #define STRID_CALC_MAX                              NC_("STRID_CALC_MAX", "Maximum")
 #define STRID_CALC_SUM                              NC_("STRID_CALC_SUM", "Sum")
 #define STRID_CALC_COUNT                            NC_("STRID_CALC_COUNT", "Count")
-#define STRID_CALC_FIRST_QUARTILE                   NC_("STRID_CALC_FIRST_QUARTILE", "First Quartile ")
+#define STRID_CALC_FIRST_QUARTILE                   NC_("STRID_CALC_FIRST_QUARTILE", "First Quartile")
 #define STRID_CALC_THIRD_QUARTILE                   NC_("STRID_CALC_THIRD_QUARTILE", "Third Quartile")
 /* RandomNumberGeneratorDialog */
 #define STR_UNDO_DISTRIBUTION_TEMPLATE              NC_("STR_UNDO_DISTRIBUTION_TEMPLATE", "Random ($(DISTRIBUTION))")
