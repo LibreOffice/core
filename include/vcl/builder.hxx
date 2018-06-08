@@ -49,6 +49,17 @@ class VclExpander;
 class VclMultiLineEdit;
 namespace xmlreader { class XmlReader; }
 
+struct ComboBoxTextItem
+{
+    OUString m_sItem;
+    OString m_sId;
+    ComboBoxTextItem(const OUString& rItem, const OString& rId)
+        : m_sItem(rItem)
+        , m_sId(rId)
+    {
+    }
+};
+
 class VCL_DLLPUBLIC VclBuilder
 {
 public:
@@ -361,7 +372,7 @@ private:
     void        handleRow(xmlreader::XmlReader &reader, const OString &rID);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handleMenu(xmlreader::XmlReader &reader, const OString &rID);
-    std::vector<OUString> handleItems(xmlreader::XmlReader &reader) const;
+    std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader &reader) const;
 
     void        handleSizeGroup(xmlreader::XmlReader &reader);
 
