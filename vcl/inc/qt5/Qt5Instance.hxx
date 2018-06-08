@@ -93,8 +93,6 @@ public:
     virtual bool DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool AnyInput(VclInputFlags nType) override;
 
-    virtual SalSession* CreateSalSession() override;
-
     virtual OpenGLContext* CreateOpenGLContext() override;
 
     virtual OUString GetConnectionIdentifier() override;

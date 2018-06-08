@@ -24,6 +24,7 @@
 #include <salprn.hxx>
 #include <saltimer.hxx>
 #include <salimestatus.hxx>
+#include <salsession.hxx>
 #include <salsys.hxx>
 #include <salbmp.hxx>
 #include <salobj.hxx>
@@ -79,6 +80,11 @@ void SalFrame::SetRepresentedURL( const OUString& )
 
 SalInstance::~SalInstance()
 {
+}
+
+std::unique_ptr<SalSession> SalInstance::CreateSalSession()
+{
+    return nullptr;
 }
 
 SalMenu* SalInstance::CreateMenu( bool, Menu* )
