@@ -112,7 +112,7 @@ public:
     virtual OUString        GetDefaultPrinter() override;
     virtual SalTimer*       CreateSalTimer() override;
     virtual SalSystem*      CreateSalSystem() override;
-    virtual SalBitmap*      CreateSalBitmap() override;
+    virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
     virtual comphelper::SolarMutex* GetYieldMutex() override;
     virtual sal_uInt32      ReleaseYieldMutexAll() override;
     virtual void            AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;

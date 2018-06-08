@@ -495,7 +495,7 @@ void GenPspGraphics::drawMask( const SalTwoRect&,
     OSL_FAIL("Error: PrinterGfx::DrawMask() not implemented");
 }
 
-SalBitmap* GenPspGraphics::getBitmap( long, long, long, long )
+std::shared_ptr<SalBitmap> GenPspGraphics::getBitmap( long, long, long, long )
 {
     SAL_INFO("vcl", "Warning: PrinterGfx::GetBitmap() not implemented");
     return nullptr;

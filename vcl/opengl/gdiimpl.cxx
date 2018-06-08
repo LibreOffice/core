@@ -1722,20 +1722,19 @@ void OpenGLSalGraphicsImpl::drawMask(
     PostBatchDraw();
 }
 
-SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
+std::shared_ptr<SalBitmap> OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     FlushDeferredDrawing();
 
     OpenGLZone aZone;
 
-    OpenGLSalBitmap* pBitmap = new OpenGLSalBitmap;
+    std::shared_ptr<OpenGLSalBitmap> pBitmap(std::make_shared<OpenGLSalBitmap>());
     VCL_GL_INFO( "::getBitmap " << nX << "," << nY <<
               " " << nWidth << "x" << nHeight );
     //TODO really needed?
     PreDraw();
     if( !pBitmap->Create( maOffscreenTex, nX, nY, nWidth, nHeight ) )
     {
-        delete pBitmap;
         pBitmap = nullptr;
     }
     PostDraw();
