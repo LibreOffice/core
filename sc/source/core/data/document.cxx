@@ -99,6 +99,7 @@
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 #include <compressedarray.hxx>
+#include <docsh.hxx>
 
 #include <formula/vectortoken.hxx>
 
@@ -2183,7 +2184,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     if (!pClipDoc)
     {
         SAL_WARN("sc", "CopyToClip: no ClipDoc");
-        pClipDoc = ScModule::GetClipDoc();
+        pClipDoc = static_cast<ScDocShell*>(mpShell)->GetClipDoc();
     }
 
     if (mpShell->GetMedium())
@@ -2283,7 +2284,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         if (!pClipDoc)
         {
             SAL_WARN("sc", "CopyTabToClip: no ClipDoc");
-            pClipDoc = ScModule::GetClipDoc();
+            pClipDoc = static_cast<ScDocShell*>(mpShell)->GetClipDoc();
         }
 
         if (mpShell->GetMedium())
@@ -2570,7 +2571,7 @@ bool ScDocument::IsClipboardSource() const
     if (bIsClip)
         return false;
 
-    ScDocument* pClipDoc = ScModule::GetClipDoc();
+    ScDocument* pClipDoc = static_cast<ScDocShell*>(mpShell)->GetClipDoc();
     return pClipDoc && pClipDoc->bIsClip && pClipDoc->mxPoolHelper.is() && mxPoolHelper.is() &&
             mxPoolHelper->GetDocPool() == pClipDoc->mxPoolHelper->GetDocPool();
 }
@@ -2807,7 +2808,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     if (!pClipDoc)
     {
         OSL_FAIL("CopyFromClip: no ClipDoc");
-        pClipDoc = ScModule::GetClipDoc();
+        pClipDoc = static_cast<ScDocShell*>(mpShell)->GetClipDoc();
     }
 
     if (!pClipDoc->bIsClip || !pClipDoc->GetTableCount())
