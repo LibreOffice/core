@@ -33,7 +33,7 @@ module com { module sun { module star { module i18n {
 
     @internal
 
-    ATTENTION: This service is marked <em>internal</em> and does not
+    ATTENTION: This interface is marked <em>internal</em> and does not
     have the <em>published</em> flag, which means it is subject to
     change without notice and should not be used outside the LibreOffice core.
  */
