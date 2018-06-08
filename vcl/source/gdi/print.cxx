@@ -1593,8 +1593,7 @@ void Printer::EndJob()
         // FIXME: Do not destroy the printer asynchronously as Win95
         // can't handle destroying a printer object and printing
         // at the same time
-        ImplGetSVData()->mpDefInst->DestroyPrinter( mpPrinter );
-        mpPrinter = nullptr;
+        mpPrinter.reset();
     }
 }
 

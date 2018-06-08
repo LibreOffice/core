@@ -616,9 +616,8 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
             mnError = ImplSalPrinterErrorCodeToVCL(mpPrinter->GetErrorCode());
             if ( !mnError )
                 mnError = PRINTER_GENERALERROR;
-            pSVData->mpDefInst->DestroyPrinter( mpPrinter );
-            mbPrinting          = false;
-            mpPrinter = nullptr;
+            mbPrinting = false;
+            mpPrinter.reset();
             mbJobActive = false;
 
             GDIMetaFile aDummyFile;
@@ -726,10 +725,8 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
                 i_xController->setJobState( mnError == PRINTER_ABORT
                                             ? css::view::PrintableState_JOB_ABORTED
                                             : css::view::PrintableState_JOB_FAILED );
-                if( mpPrinter )
-                    pSVData->mpDefInst->DestroyPrinter( mpPrinter );
-                mbPrinting          = false;
-                mpPrinter = nullptr;
+                mbPrinting = false;
+                mpPrinter.reset();
 
                 return false;
             }

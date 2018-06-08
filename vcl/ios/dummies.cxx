@@ -24,9 +24,9 @@
 #include "unx/gendata.hxx"
 
 
-SalPrinter* SvpSalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
+std::unique_ptr<SalPrinter> SvpSalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
-    return NULL;
+    return nullptr;
 }
 
 OUString SvpSalInstance::GetDefaultPrinter()
@@ -37,11 +37,6 @@ OUString SvpSalInstance::GetDefaultPrinter()
 GenPspGraphics *SvpSalInstance::CreatePrintGraphics()
 {
     return NULL;
-}
-
-void SvpSalInstance::DestroyPrinter( SalPrinter* pPrinter )
-{
-    delete pPrinter;
 }
 
 void SvpSalInstance::PostPrintersChanged()
@@ -72,19 +67,14 @@ void SvpSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
     delete pInfo;
 }
 
-SalPrinter* SalGenericInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
+std::unique_ptr<SalPrinter> SalGenericInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
-    return NULL;
+    return nullptr;
 }
 
 OUString SalGenericInstance::GetDefaultPrinter()
 {
     return OUString();
-}
-
-void SalGenericInstance::DestroyPrinter( SalPrinter* pPrinter )
-{
-    delete pPrinter;
 }
 
 void SalGenericInstance::PostPrintersChanged()
