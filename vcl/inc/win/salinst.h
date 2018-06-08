@@ -72,8 +72,7 @@ public:
 
     virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;
-    virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* ) override;
-    virtual void                DestroyMenu( SalMenu* ) override;
+    virtual std::unique_ptr<SalMenu>     CreateMenu( bool bMenuBar, Menu* ) override;
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem( const SalItemParams & rItemData ) override;
     virtual OpenGLContext*      CreateOpenGLContext() override;
     virtual OUString            GetConnectionIdentifier() override;

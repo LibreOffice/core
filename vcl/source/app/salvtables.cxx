@@ -87,15 +87,10 @@ std::unique_ptr<SalSession> SalInstance::CreateSalSession()
     return nullptr;
 }
 
-SalMenu* SalInstance::CreateMenu( bool, Menu* )
+std::unique_ptr<SalMenu> SalInstance::CreateMenu( bool, Menu* )
 {
     // default: no native menus
     return nullptr;
-}
-
-void SalInstance::DestroyMenu( SalMenu* pMenu )
-{
-    OSL_ENSURE( pMenu == nullptr, "DestroyMenu called with non-native menus" );
 }
 
 std::unique_ptr<SalMenuItem> SalInstance::CreateMenuItem( const SalItemParams & )
