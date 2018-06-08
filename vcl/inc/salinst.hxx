@@ -152,8 +152,7 @@ public:
     virtual bool           AnyInput( VclInputFlags nType ) = 0;
 
     // menus
-    virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pMenu );
-    virtual void            DestroyMenu( SalMenu* pMenu);
+    virtual std::unique_ptr<SalMenu>     CreateMenu( bool bMenuBar, Menu* pMenu );
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem( const SalItemParams& pItemData );
 
     // may return NULL to disable session management, only used by X11 backend

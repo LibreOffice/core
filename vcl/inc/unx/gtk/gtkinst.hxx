@@ -198,8 +198,7 @@ public:
     virtual SalSystem*          CreateSalSystem() override;
     virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup) override;
     virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
-    virtual SalMenu*            CreateMenu( bool, Menu* ) override;
-    virtual void                DestroyMenu( SalMenu* pMenu ) override;
+    virtual std::unique_ptr<SalMenu>     CreateMenu( bool, Menu* ) override;
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem( const SalItemParams& ) override;
     virtual SalTimer*           CreateSalTimer() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
