@@ -45,7 +45,7 @@ namespace sw
                     m_pToTell->SwClientNotify(rModify, *pModifyChanged);
             }
             else if (m_pToTell)
-                m_pToTell->ModifyNotification(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+                m_pToTell->SwClientNotifyCall(rModify, rHint);
         }
         else if (m_pToTell)
             m_pToTell->SwClientNotifyCall(rModify, rHint);
