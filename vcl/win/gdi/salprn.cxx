@@ -166,7 +166,6 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
                 pInfo->maPrinterName = o3tl::toU(pWinInfo4[i].pPrinterName);
                 pInfo->mnStatus      = PrintQueueFlags::NONE;
                 pInfo->mnJobs        = 0;
-                pInfo->mpSysData     = nullptr;
                 pList->Add( pInfo );
             }
         }
@@ -202,8 +201,8 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
                     pInfo->maComment = o3tl::toU(pWinInfo2->pComment);
                 pInfo->mnStatus      = ImplWinQueueStatusToSal( pWinInfo2->Status );
                 pInfo->mnJobs        = pWinInfo2->cJobs;
-                if( ! pInfo->mpSysData )
-                    pInfo->mpSysData = new OUString(aPortName);
+                if( ! pInfo->mpPortName )
+                    pInfo->mpPortName.reset(new OUString(aPortName));
             }
             rtl_freeMemory(pWinInfo2);
         }
@@ -213,7 +212,6 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
 
 void WinSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
-    delete pInfo->mpSysData;
     delete pInfo;
 }
 
@@ -1060,13 +1058,11 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
                                                    ImplJobSetup* pSetupData )
 {
     WinSalInfoPrinter* pPrinter = new WinSalInfoPrinter;
-    if( ! pQueueInfo->mpSysData )
+    if( ! pQueueInfo->mpPortName )
         GetPrinterQueueState( pQueueInfo );
     pPrinter->maDriverName  = pQueueInfo->maDriver;
     pPrinter->maDeviceName  = pQueueInfo->maPrinterName;
-    pPrinter->maPortName    = pQueueInfo->mpSysData ?
-                                *pQueueInfo->mpSysData
-                              : OUString();
+    pPrinter->maPortName    = pQueueInfo->mpPortName ? *pQueueInfo->mpPortName : OUString();
 
     // check if the provided setup data match the actual printer
     ImplTestSalJobSetup( pPrinter, pSetupData, true );
