@@ -435,9 +435,9 @@ void Qt5Graphics::drawMask(const SalTwoRect& rPosAry, const SalBitmap& /*rSalBit
     assert(rPosAry.mnSrcHeight == rPosAry.mnDestHeight);
 }
 
-SalBitmap* Qt5Graphics::getBitmap(long nX, long nY, long nWidth, long nHeight)
+std::shared_ptr<SalBitmap> Qt5Graphics::getBitmap(long nX, long nY, long nWidth, long nHeight)
 {
-    return new Qt5Bitmap(m_pQImage->copy(nX, nY, nWidth, nHeight));
+    return std::make_shared<Qt5Bitmap>(m_pQImage->copy(nX, nY, nWidth, nHeight));
 }
 
 Color Qt5Graphics::getPixel(long nX, long nY) { return m_pQImage->pixel(nX, nY); }

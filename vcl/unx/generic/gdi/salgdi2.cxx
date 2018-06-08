@@ -233,7 +233,7 @@ void X11SalGraphics::drawMask( const SalTwoRect& rPosAry,
     mxImpl->drawMask( rPosAry, rSalBitmap, nMaskColor );
 }
 
-SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
+std::shared_ptr<SalBitmap> X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
     return mxImpl->getBitmap( nX, nY, nDX, nDY );
 }

@@ -41,7 +41,7 @@ Bitmap::Bitmap(const Bitmap& rBitmap)
 {
 }
 
-Bitmap::Bitmap(SalBitmap* pSalBitmap)
+Bitmap::Bitmap(std::shared_ptr<SalBitmap> const & pSalBitmap)
     : mxSalBmp(pSalBitmap)
     , maPrefMapMode(MapMode(MapUnit::MapPixel))
     , maPrefSize(mxSalBmp->GetSize())
@@ -104,7 +104,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                 pRealPal = const_cast<BitmapPalette*>(pPal);
         }
 
-        mxSalBmp.reset(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
         mxSalBmp->Create( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
     }
 }
@@ -311,7 +311,7 @@ void Bitmap::ImplMakeUnique()
     if (mxSalBmp && mxSalBmp.use_count() > 1)
     {
         std::shared_ptr<SalBitmap> xOldImpBmp = mxSalBmp;
-        mxSalBmp.reset(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
         mxSalBmp->Create(*xOldImpBmp);
     }
 }

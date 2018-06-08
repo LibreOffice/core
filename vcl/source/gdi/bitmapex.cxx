@@ -784,8 +784,8 @@ bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas 
         }
     }
 
-    SalBitmap* pSalBmp = nullptr;
-    SalBitmap* pSalMask = nullptr;
+    std::shared_ptr<SalBitmap> pSalBmp;
+    std::shared_ptr<SalBitmap> pSalMask;
 
     pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
 
@@ -800,14 +800,10 @@ bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas 
         }
         else
         {
-            delete pSalMask;
             *this = BitmapEx(Bitmap(pSalBmp));
             return true;
         }
     }
-
-    delete pSalBmp;
-    delete pSalMask;
 
     return false;
 }
