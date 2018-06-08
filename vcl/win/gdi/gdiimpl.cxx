@@ -851,11 +851,11 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
     DeleteBrush( hMaskBrush );
 }
 
-SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
+std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
 {
     SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No ::GetBitmap() from printer possible!" );
 
-    WinSalBitmap* pSalBitmap = nullptr;
+    std::shared_ptr<WinSalBitmap> pSalBitmap;
 
     nDX = labs( nDX );
     nDY = labs( nDY );
@@ -870,12 +870,11 @@ SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
 
     if( bRet )
     {
-        pSalBitmap = new WinSalBitmap;
+        pSalBitmap = std::make_shared<WinSalBitmap>();
 
         if( !pSalBitmap->Create( hBmpBitmap, FALSE, FALSE ) )
         {
-            delete pSalBitmap;
-            pSalBitmap = nullptr;
+            pSalBitmap.reset();
         }
     }
     else
