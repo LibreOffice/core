@@ -1278,11 +1278,9 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
         LINK( this, SwTextFlowPage, SplitRowHdl_Impl));
     m_pHeadLineCB->SetClickHdl( LINK( this, SwTextFlowPage, HeadLineCBClickHdl ) );
 
-#ifndef SW_FILEFORMAT_40
     const SfxPoolItem *pItem;
     if(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
-#endif
     {
         m_pKeepCB->Hide();
         m_pSplitCB->Hide();
