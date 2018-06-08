@@ -1550,7 +1550,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         else
             xCheckBox = VclPtr<CheckBox>::Create(pParent, nBits);
         if (bIsTriState)
+        {
+            xCheckBox->EnableTriState(true);
             xCheckBox->SetState(TRISTATE_INDET);
+        }
         xCheckBox->SetImageAlign(ImageAlign::Left); //default to left
 
         xWindow = xCheckBox;
