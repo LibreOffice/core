@@ -452,6 +452,19 @@ void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
             OSL_TRACE("Unknown templates %d", templateId);
             return;
     }
+
+    //default is opening
+    QFileDialog::AcceptMode operationMode
+        = saveDialog ? QFileDialog::AcceptSave : QFileDialog::AcceptOpen;
+
+    _dialog->setAcceptMode(operationMode);
+
+    if (saveDialog)
+    {
+        _dialog->setConfirmOverwrite(true);
+        _dialog->setFileMode(QFileDialog::AnyFile);
+    }
+
     setTitle(VclResId(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));
 }
 
