@@ -182,7 +182,7 @@ class VCL_DLLPUBLIC Printer : public OutputDevice
 
 private:
     SalInfoPrinter*             mpInfoPrinter;
-    SalPrinter*                 mpPrinter;
+    std::unique_ptr<SalPrinter> mpPrinter;
     SalGraphics*                mpJobGraphics;
     VclPtr<Printer>             mpPrev;
     VclPtr<Printer>             mpNext;
