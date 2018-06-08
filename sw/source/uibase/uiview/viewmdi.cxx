@@ -51,6 +51,8 @@
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
 
+#include <vcl/uitest/logger.hxx>
+
 sal_uInt16  SwView::m_nMoveType = NID_PGE;
 sal_Int32 SwView::m_nActMark = 0;
 
@@ -63,6 +65,9 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
     // fdo#40465 force the cursor to stay in view whilst zooming
     if (bCursorIsVisible)
         m_pWrtShell->ShowCursor();
+    OUString aAction= "SwEditWinUIObject Action:SET Id:writer_edit {\"ZOOM\":"
+        + OUString::number(nFactor) + "}";
+    UITestLogger::getInstance().log(aAction);
 }
 
 void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
