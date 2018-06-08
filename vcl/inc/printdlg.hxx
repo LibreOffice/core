@@ -28,6 +28,7 @@
 #include <vcl/button.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/virdev.hxx>
@@ -104,9 +105,12 @@ namespace vcl
 
     private:
 
+        std::unique_ptr<VclBuilder>             mpCustomOptionsUIBuilder;
+
         std::shared_ptr<PrinterController>      maPController;
 
         VclPtr<TabControl>                      mpTabCtrl;
+        VclPtr<VclFrame>                        mpPageLayoutFrame;
         VclPtr<ListBox>                         mpPrinters;
         VclPtr<FixedText>                       mpStatusTxt;
         VclPtr<PushButton>                      mpSetupButton;
@@ -165,12 +169,20 @@ namespace vcl
         /// border around each page
         VclPtr<CheckBox>                        mpBorderCB;
 
-        std::map< VclPtr<vcl::Window>, OUString >      maControlToPropertyMap;
+        std::map< VclPtr<vcl::Window>, OUString >
+                                                maControlToPropertyMap;
+        std::map< OUString, std::vector< VclPtr<vcl::Window> > >
+                                                maPropertyToWindowMap;
+        std::map< VclPtr<vcl::Window>, sal_Int32 >
+                                                maControlToNumValMap;
+        std::set< OUString >                    maReverseDependencySet;
 
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
         /// internal, used for automatic Nup-Portrait/landscape
         Size                                    maFirstPageSize;
+
+        bool                                    mbShowLayoutFrame;
 
         DECL_LINK( ClickHdl, Button*, void );
         DECL_LINK( SelectHdl, ListBox&, void );
@@ -178,17 +190,26 @@ namespace vcl
         DECL_LINK( ToggleHdl, CheckBox&, void );
         DECL_LINK( ToggleRadioHdl, RadioButton&, void );
 
+        DECL_LINK( UIOption_CheckHdl, CheckBox&, void );
+        DECL_LINK( UIOption_RadioHdl, RadioButton&, void );
+        DECL_LINK( UIOption_SelectHdl, ListBox&, void );
+        DECL_LINK( UIOption_ModifyHdl, Edit&, void );
+
         css::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
         void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();
+        void checkOptionalControlDependencies();
+        void makeEnabled( vcl::Window* );
+        void updateWindowFromProperty( const OUString& );
         void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
         void showAdvancedControls( bool );
         void updateNup();
         void updateNupFromPages();
         void enableNupControls( bool bEnable );
+        void setupOptionalUI();
         Size const & getJobPageSize();
 
     };

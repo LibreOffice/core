@@ -354,8 +354,7 @@
                   <object class="GtkNotebook" id="tabcontrol">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="show_tabs">False</property>
-                    <property name="show_border">False</property>
+                    <property name="vexpand">True</property>
                     <child>
                       <object class="GtkBox" id="box11">
                         <property name="visible">True</property>
@@ -690,7 +689,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkFrame" id="frame3">
+                          <object class="GtkFrame" id="layoutframe">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label_xalign">0</property>
@@ -877,7 +876,7 @@
                                             <property name="receives_default">False</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
-                                            <property name="group">brochurebtn</property>
+                                            <property name="group">brochure</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -896,8 +895,8 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkRadioButton" id="brochurebtn">
-                                            <property name="label" translatable="yes" context="printdialog|brochurebtn">Brochure</property>
+                                          <object class="GtkRadioButton" id="brochure">
+                                            <property name="label" translatable="yes" context="printdialog|brochure">Brochure</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
@@ -1001,7 +1000,11 @@
                       <object class="GtkBox" id="customcontents">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="border_width">6</property>
                         <property name="orientation">vertical</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">1</property>

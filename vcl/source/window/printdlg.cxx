@@ -483,8 +483,8 @@ Size const & PrintDialog::getJobPageSize()
 }
 
 PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterController>& i_rController)
-
 : ModalDialog(i_pWindow, "PrintDialog", "vcl/ui/printdialog.ui")
+, mpCustomOptionsUIBuilder(nullptr)
 , maPController( i_rController )
 , maPrintToFileText( VclResId( SV_PRINT_TOFILE_TXT ) )
 , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ) )
@@ -495,11 +495,14 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
 , maCollateBmp(SV_PRINT_COLLATE_BMP)
 , maNoCollateBmp(SV_PRINT_NOCOLLATE_BMP)
 , mnCollateUIMode(0)
+, mbShowLayoutFrame( true )
 {
 
     get(mpOKButton, "ok");
     get(mpCancelButton, "cancel");
     get(mpHelpButton, "help");
+    get(mpTabCtrl, "tabcontrol");
+    get(mpPageLayoutFrame, "layoutframe");
     get(mpForwardBtn, "forward");
     get(mpBackwardBtn, "backward");
     get(mpNumPagesText, "totalnumpages");
@@ -518,7 +521,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     get(mpNupOrientationBox, "pageorientationbox");
     get(mpNupOrderBox, "orderbox");
     get(mpPagesBtn, "pagespersheetbtn");
-    get(mpBrochureBtn, "brochurebtn");
+    get(mpBrochureBtn, "brochure");
     get(mpPagesBoxTitleTxt, "pagespersheettxt");
     get(mpNupNumPagesTxt, "pagestxt");
     get(mpNupColEdt, "pagecols");
@@ -605,6 +608,12 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
 
     initFromMultiPageSetup( maPController->getMultipage() );
 
+    // setup optional UI options set by application
+    setupOptionalUI();
+
+    // hide layout frame if unwanted
+    mpPageLayoutFrame->Show( mbShowLayoutFrame );
+
     // setup click hdl
     mpOKButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpCancelButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
@@ -619,7 +628,6 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     mpCollateBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleRadioHdl ) );
-    mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleRadioHdl ) );
 
     // setup select hdl
     mpPrinters->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
@@ -644,8 +652,9 @@ PrintDialog::~PrintDialog()
 
 void PrintDialog::dispose()
 {
-    // mpCustomOptionsUIBuilder.reset();
+    mpCustomOptionsUIBuilder.reset();
     mpTabCtrl.clear();
+    mpPageLayoutFrame.clear();
     mpPreviewWindow.clear();
     mpPageEdit.clear();
     mpNumPagesText.clear();
@@ -657,7 +666,7 @@ void PrintDialog::dispose()
     mpHelpButton.clear();
     maPController.reset();
     maControlToPropertyMap.clear();
-    // maControlToNumValMap.clear();
+    maControlToNumValMap.clear();
     mpPrinters.clear();
     mpStatusTxt.clear();
     mpSetupButton.clear();
@@ -792,6 +801,46 @@ void PrintDialog::checkControlDependencies()
     // enable setup button only for printers that can be setup
     bool bHaveSetup = maPController->getPrinter()->HasSupport( PrinterSupport::SetupDialog );
     mpSetupButton->Enable(bHaveSetup);
+}
+
+void PrintDialog::checkOptionalControlDependencies()
+{
+    for( auto it = maControlToPropertyMap.begin();
+         it != maControlToPropertyMap.end(); ++it )
+    {
+        bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
+        if( ! bShouldbeEnabled )
+        {
+            // enable controls that are directly attached to a dependency anyway
+            // if the normally disabled controls get modified, change the dependency
+            // so the control would be enabled
+            // example: in print range "Print All" is selected, "Page Range" is then of course
+            // not selected and the Edit for the Page Range would be disabled
+            // as a convenience we should enable the Edit anyway and automatically select
+            // "Page Range" instead of "Print All" if the Edit gets modified
+            if( maReverseDependencySet.find( it->second ) != maReverseDependencySet.end() )
+            {
+                OUString aDep( maPController->getDependency( it->second ) );
+                // if the dependency is at least enabled, then enable this control anyway
+                if( !aDep.isEmpty() && maPController->isUIOptionEnabled( aDep ) )
+                    bShouldbeEnabled = true;
+            }
+        }
+
+        if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first.get()) )
+        {
+            auto r_it = maControlToNumValMap.find( it->first );
+            if( r_it != maControlToNumValMap.end() )
+            {
+                bShouldbeEnabled = maPController->isUIChoiceEnabled( it->second, r_it->second );
+            }
+        }
+
+        bool bIsEnabled = it->first->IsEnabled();
+        // Enable does not do a change check first, so can be less cheap than expected
+        if( bShouldbeEnabled != bIsEnabled )
+            it->first->Enable( bShouldbeEnabled );
+    }
 }
 
 void PrintDialog::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
@@ -994,6 +1043,459 @@ void PrintDialog::showAdvancedControls( bool i_bShow )
     mpSheetMarginTxt2->Show( i_bShow );
 }
 
+namespace
+{
+    void setHelpId( vcl::Window* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_Int32 i_nIndex )
+    {
+        if( i_nIndex >= 0 && i_nIndex < i_rHelpIds.getLength() )
+            i_pWindow->SetHelpId( OUStringToOString( i_rHelpIds.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8 ) );
+    }
+
+    void setHelpText( vcl::Window* i_pWindow, const Sequence< OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
+    {
+        // without a help text set and the correct smartID,
+        // help texts will be retrieved from the online help system
+        if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
+            i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
+    }
+}
+
+void PrintDialog::setupOptionalUI()
+{
+    const Sequence< PropertyValue >& rOptions( maPController->getUIOptions() );
+    for( int i = 0; i < rOptions.getLength(); i++ )
+    {
+        if (rOptions[i].Name == "OptionsUIFile")
+        {
+            OUString sOptionsUIFile;
+            rOptions[i].Value >>= sOptionsUIFile;
+
+            vcl::Window *pCustom = get<vcl::Window>("customcontents");
+
+            mpCustomOptionsUIBuilder.reset(new VclBuilder(pCustom, getUIRootDir(), sOptionsUIFile));
+            vcl::Window *pWindow = mpCustomOptionsUIBuilder->get_widget_root();
+            pWindow->Show();
+            continue;
+        }
+
+        Sequence< beans::PropertyValue > aOptProp;
+        rOptions[i].Value >>= aOptProp;
+
+        // extract ui element
+        OUString aCtrlType;
+        OString aID;
+        OUString aText;
+        OUString aPropertyName;
+        Sequence< OUString > aChoices;
+        Sequence< sal_Bool > aChoicesDisabled;
+        Sequence< OUString > aHelpTexts;
+        Sequence< OUString > aIDs;
+        Sequence< OUString > aHelpIds;
+        sal_Int64 nMinValue = 0, nMaxValue = 0;
+        OUString aGroupingHint;
+        OUString aDependsOnName;
+        sal_Int32 nDependsOnValue = 0;
+        bool bUseDependencyRow = false;
+
+        for( int n = 0; n < aOptProp.getLength(); n++ )
+        {
+            const beans::PropertyValue& rEntry( aOptProp[ n ] );
+            if ( rEntry.Name == "ID" )
+            {
+                rEntry.Value >>= aIDs;
+                aID = OUStringToOString(aIDs[0], RTL_TEXTENCODING_UTF8);
+            }
+            if ( rEntry.Name == "Text" )
+            {
+                rEntry.Value >>= aText;
+            }
+            else if ( rEntry.Name == "ControlType" )
+            {
+                rEntry.Value >>= aCtrlType;
+            }
+            else if ( rEntry.Name == "Choices" )
+            {
+                rEntry.Value >>= aChoices;
+            }
+            else if ( rEntry.Name == "ChoicesDisabled" )
+            {
+                rEntry.Value >>= aChoicesDisabled;
+            }
+            else if ( rEntry.Name == "Property" )
+            {
+                PropertyValue aVal;
+                rEntry.Value >>= aVal;
+                aPropertyName = aVal.Name;
+            }
+            else if ( rEntry.Name == "Enabled" )
+            {
+                bool bValue = true;
+                rEntry.Value >>= bValue;
+            }
+            else if ( rEntry.Name == "GroupingHint" )
+            {
+                rEntry.Value >>= aGroupingHint;
+            }
+            else if ( rEntry.Name == "DependsOnName" )
+            {
+                rEntry.Value >>= aDependsOnName;
+            }
+            else if ( rEntry.Name == "DependsOnEntry" )
+            {
+                rEntry.Value >>= nDependsOnValue;
+            }
+            else if ( rEntry.Name == "AttachToDependency" )
+            {
+                rEntry.Value >>= bUseDependencyRow;
+            }
+            else if ( rEntry.Name == "MinValue" )
+            {
+                rEntry.Value >>= nMinValue;
+            }
+            else if ( rEntry.Name == "MaxValue" )
+            {
+                rEntry.Value >>= nMaxValue;
+            }
+            else if ( rEntry.Name == "HelpText" )
+            {
+                if( ! (rEntry.Value >>= aHelpTexts) )
+                {
+                    OUString aHelpText;
+                    if( rEntry.Value >>= aHelpText )
+                    {
+                        aHelpTexts.realloc( 1 );
+                        *aHelpTexts.getArray() = aHelpText;
+                    }
+                }
+            }
+            else if ( rEntry.Name == "HelpId" )
+            {
+                if( ! (rEntry.Value >>= aHelpIds ) )
+                {
+                    OUString aHelpId;
+                    if( rEntry.Value >>= aHelpId )
+                    {
+                        aHelpIds.realloc( 1 );
+                        *aHelpIds.getArray() = aHelpId;
+                    }
+                }
+            }
+            else if ( rEntry.Name == "HintNoLayoutPage" )
+            {
+                bool bHasLayoutFrame = false;
+                rEntry.Value >>= bHasLayoutFrame;
+                mbShowLayoutFrame = !bHasLayoutFrame;
+            }
+        }
+
+        if (aCtrlType == "Group" && !aID.isEmpty())
+        {
+            TabPage *pPage = get<TabPage>(aID);
+            if (!pPage && mpCustomOptionsUIBuilder)
+                pPage = mpCustomOptionsUIBuilder->get<TabPage>(aID);
+
+            if (!pPage)
+                continue;
+
+            sal_uInt16 nPageId = mpTabCtrl->GetPageId(*pPage);
+
+            mpTabCtrl->SetPageText(nPageId, aText);
+
+            // set help id
+            if (aHelpIds.getLength() > 0)
+                mpTabCtrl->SetHelpId(nPageId, OUStringToOString(aHelpIds.getConstArray()[0], RTL_TEXTENCODING_UTF8));
+
+            // set help text
+            if (aHelpTexts.getLength() > 0)
+                mpTabCtrl->SetHelpText(nPageId, aHelpTexts.getConstArray()[0]);
+
+            pPage->Show();
+        }
+        else if (aCtrlType == "Subgroup" && !aID.isEmpty())
+        {
+            vcl::Window *pFrame = get<vcl::Window>(aID);
+            if (!pFrame && mpCustomOptionsUIBuilder)
+                pFrame = mpCustomOptionsUIBuilder->get<vcl::Window>(aID);
+
+            if (!pFrame)
+                continue;
+
+            pFrame->SetText(aText);
+
+            // set help id
+            setHelpId(pFrame, aHelpIds, 0);
+            // set help text
+            setHelpText(pFrame, aHelpTexts, 0);
+
+            pFrame->Show();
+        }
+        // EVIL
+        else if( aCtrlType == "Bool" && aGroupingHint == "LayoutPage" && aPropertyName == "PrintProspect" )
+        {
+            mpBrochureBtn->SetText( aText );
+            // FIXME: Brochure button is still not working, so it is hidden for now
+            // mpBrochureBtn->Show();
+
+            bool bVal = false;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal )
+                pVal->Value >>= bVal;
+            mpBrochureBtn->Check( bVal );
+            mpBrochureBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != nullptr );
+            mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleRadioHdl ) );
+
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(mpBrochureBtn );
+            maControlToPropertyMap[mpBrochureBtn] = aPropertyName;
+
+            // set help id
+            setHelpId( mpBrochureBtn, aHelpIds, 0 );
+            // set help text
+            setHelpText( mpBrochureBtn, aHelpTexts, 0 );
+        }
+        else if (aCtrlType == "Bool")
+        {
+            // add a check box
+            CheckBox* pNewBox = get<CheckBox>(aID);
+            if (!pNewBox && mpCustomOptionsUIBuilder)
+                pNewBox = mpCustomOptionsUIBuilder->get<CheckBox>(aID);
+
+            if (!pNewBox)
+                continue;
+
+            pNewBox->SetText( aText );
+            pNewBox->Show();
+
+            bool bVal = false;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal )
+                pVal->Value >>= bVal;
+            pNewBox->Check( bVal );
+            pNewBox->SetToggleHdl( LINK( this, PrintDialog, UIOption_CheckHdl ) );
+
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pNewBox );
+            maControlToPropertyMap[pNewBox] = aPropertyName;
+
+            // set help id
+            setHelpId( pNewBox, aHelpIds, 0 );
+            // set help text
+            setHelpText( pNewBox, aHelpTexts, 0 );
+        }
+        else if (aCtrlType == "Radio")
+        {
+            sal_Int32 nCurHelpText = 0;
+
+            // iterate options
+            sal_Int32 nSelectVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nSelectVal;
+            for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+            {
+                aID = OUStringToOString(aIDs[m], RTL_TEXTENCODING_UTF8);
+                RadioButton* pBtn = get<RadioButton>(aID);
+                if (!pBtn && mpCustomOptionsUIBuilder)
+                    pBtn = mpCustomOptionsUIBuilder->get<RadioButton>(aID);
+
+                if (!pBtn)
+                    continue;
+
+                pBtn->SetText( aChoices[m] );
+                pBtn->Check( m == nSelectVal );
+                pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
+                if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] )
+                    pBtn->Enable( false );
+                pBtn->Show();
+                maPropertyToWindowMap[ aPropertyName ].emplace_back(pBtn );
+                maControlToPropertyMap[pBtn] = aPropertyName;
+                maControlToNumValMap[pBtn] = m;
+
+                // set help id
+                setHelpId( pBtn, aHelpIds, nCurHelpText );
+                // set help text
+                setHelpText( pBtn, aHelpTexts, nCurHelpText );
+                nCurHelpText++;
+            }
+        }
+        else if ( aCtrlType == "List" )
+        {
+            ListBox* pList = get<ListBox>(aID);
+            if (!pList && mpCustomOptionsUIBuilder)
+                pList = mpCustomOptionsUIBuilder->get<ListBox>(aID);
+
+            if (!pList)
+                continue;
+
+            // iterate options
+            for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+            {
+                pList->InsertEntry( aChoices[m] );
+            }
+            sal_Int32 nSelectVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nSelectVal;
+            pList->SelectEntryPos( static_cast<sal_uInt16>(nSelectVal) );
+            pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
+            pList->SetDropDownLineCount( static_cast<sal_uInt16>(aChoices.getLength()) );
+            pList->Show();
+
+            // set help id
+            setHelpId( pList, aHelpIds, 0 );
+            // set help text
+            setHelpText( pList, aHelpTexts, 0 );
+
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pList );
+            maControlToPropertyMap[pList] = aPropertyName;
+        }
+        else if ( aCtrlType == "Range" )
+        {
+            NumericField* pField = get<NumericField>(aID);
+            if (!pField && mpCustomOptionsUIBuilder)
+                pField = mpCustomOptionsUIBuilder->get<NumericField>(aID);
+
+            if (!pField)
+                continue;
+
+            // set min/max and current value
+            if( nMinValue != nMaxValue )
+            {
+                pField->SetMin( nMinValue );
+                pField->SetMax( nMaxValue );
+            }
+            sal_Int64 nCurVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nCurVal;
+            pField->SetValue( nCurVal );
+            pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
+            pField->Show();
+
+            // set help id
+            setHelpId( pField, aHelpIds, 0 );
+            // set help text
+            setHelpText( pField, aHelpTexts, 0 );
+
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pField );
+            maControlToPropertyMap[pField] = aPropertyName;
+        }
+        else if (aCtrlType == "Edit")
+        {
+            Edit *pField = get<Edit>(aID);
+            if (!pField && mpCustomOptionsUIBuilder)
+                pField = mpCustomOptionsUIBuilder->get<Edit>(aID);
+
+            if (!pField)
+                continue;
+
+            OUString aCurVal;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= aCurVal;
+            pField->SetText( aCurVal );
+            pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
+            pField->Show();
+
+            // set help id
+            setHelpId( pField, aHelpIds, 0 );
+            // set help text
+            setHelpText( pField, aHelpTexts, 0 );
+
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pField );
+            maControlToPropertyMap[pField] = aPropertyName;
+        }
+        else
+        {
+            SAL_WARN( "vcl", "Unsupported UI option: \"" << aCtrlType << '"');
+        }
+    }
+
+    // #i106506# if no brochure button, then the singular Pages radio button
+    // makes no sense, so replace it by a FixedText label
+    if (!mpBrochureBtn->IsVisible() && mpPagesBtn->IsVisible())
+    {
+        mpPagesBoxTitleTxt->SetText( mpPagesBtn->GetText() );
+        mpPagesBoxTitleTxt->Show();
+        mpPagesBtn->Show( false );
+    }
+
+    // update enable states
+    checkOptionalControlDependencies();
+
+    vcl::Window *pPageRange = get<vcl::Window>("pagerange");
+
+    // print range not shown (currently math only) -> hide spacer line and reverse order
+    if (!pPageRange || !pPageRange->IsVisible())
+    {
+        mpReverseOrderBox->Show( false );
+    }
+
+    if (!mpCustomOptionsUIBuilder)
+        mpTabCtrl->RemovePage(mpTabCtrl->GetPageId(1));
+}
+
+void PrintDialog::makeEnabled( vcl::Window* i_pWindow )
+{
+    auto it = maControlToPropertyMap.find( i_pWindow );
+    if( it != maControlToPropertyMap.end() )
+    {
+        OUString aDependency( maPController->makeEnabled( it->second ) );
+        if( !aDependency.isEmpty() )
+            updateWindowFromProperty( aDependency );
+    }
+}
+
+void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
+{
+    beans::PropertyValue* pValue = maPController->getValue( i_rProperty );
+    auto it = maPropertyToWindowMap.find( i_rProperty );
+    if( pValue && it != maPropertyToWindowMap.end() )
+    {
+        const std::vector< VclPtr<vcl::Window> >& rWindows( it->second );
+        if( ! rWindows.empty() )
+        {
+            bool bVal = false;
+            sal_Int32 nVal = -1;
+            if( pValue->Value >>= bVal )
+            {
+                // we should have a CheckBox for this one
+                CheckBox* pBox = dynamic_cast< CheckBox* >( rWindows.front().get() );
+                if( pBox )
+                {
+                    pBox->Check( bVal );
+                }
+                else if ( i_rProperty == "PrintProspect" )
+                {
+                    // EVIL special case
+                    if( bVal )
+                        mpBrochureBtn->Check();
+                    else
+                        mpPagesBtn->Check();
+                }
+                else
+                {
+                    SAL_WARN( "vcl", "missing a checkbox" );
+                }
+            }
+            else if( pValue->Value >>= nVal )
+            {
+                // this could be a ListBox or a RadioButtonGroup
+                ListBox* pList = dynamic_cast< ListBox* >( rWindows.front().get() );
+                if( pList )
+                {
+                    pList->SelectEntryPos( static_cast< sal_uInt16 >(nVal) );
+                }
+                else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
+                {
+                    RadioButton* pBtn = dynamic_cast< RadioButton* >( rWindows[nVal].get() );
+                    SAL_WARN_IF( !pBtn, "vcl", "unexpected control for property" );
+                    if( pBtn )
+                        pBtn->Check();
+                }
+            }
+        }
+    }
+}
+
 bool PrintDialog::isPrintToFile()
 {
     return ( mpPrinters->GetSelectedEntryPos() == 0 );
@@ -1071,7 +1573,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
             bool bVal = mpBrochureBtn->IsChecked();
             pVal->Value <<= bVal;
 
-            //checkOptionalControlDependencies();
+            checkOptionalControlDependencies();
 
             // update preview and page settings
             preparePreview();
@@ -1178,6 +1680,108 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit&, rEdit, void )
                                makeAny( sal_Int32(mpCopyCountField->GetValue()) ) );
         maPController->setValue( "Collate",
                                makeAny( isCollate() ) );
+    }
+}
+
+IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox&, i_rBox, void )
+{
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
+    if( pVal )
+    {
+        makeEnabled( &i_rBox );
+
+        bool bVal = i_rBox.IsChecked();
+        pVal->Value <<= bVal;
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        preparePreview();
+    }
+}
+
+IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
+{
+    // this handler gets called for all radiobuttons that get unchecked, too
+    // however we only want one notification for the new value (that is for
+    // the button that gets checked)
+    if( i_rBtn.IsChecked() )
+    {
+        PropertyValue* pVal = getValueForWindow( &i_rBtn );
+        auto it = maControlToNumValMap.find( &i_rBtn );
+        if( pVal && it != maControlToNumValMap.end() )
+        {
+            makeEnabled( &i_rBtn );
+
+            sal_Int32 nVal = it->second;
+            pVal->Value <<= nVal;
+
+            // tdf#63905 use paper size set in printer properties
+            if (pVal->Name == "PageOptions")
+                maPController->resetPaperToLastConfigured();
+
+            checkOptionalControlDependencies();
+
+            // update preview and page settings
+            preparePreview();
+        }
+    }
+}
+
+IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
+{
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
+    if( pVal )
+    {
+        makeEnabled( &i_rBox );
+
+        sal_Int32 nVal( i_rBox.GetSelectedEntryPos() );
+        pVal->Value <<= nVal;
+
+        //If we are in impress we start in print slides mode and get a
+        //maFirstPageSize for slides which are usually landscape mode, if we
+        //change to notes which are usually in portrait mode, and then visit
+        //n-up print, we will assume notes are in landscape unless we throw
+        //away maFirstPageSize when we change page content type
+        if (pVal->Name == "PageContentType")
+            maFirstPageSize = Size();
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        preparePreview();
+    }
+}
+
+IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit&, i_rBox, void )
+{
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
+    if( pVal )
+    {
+        makeEnabled( &i_rBox );
+
+        NumericField* pNum = dynamic_cast<NumericField*>(&i_rBox);
+        MetricField* pMetric = dynamic_cast<MetricField*>(&i_rBox);
+        if( pNum )
+        {
+            sal_Int64 nVal = pNum->GetValue();
+            pVal->Value <<= nVal;
+        }
+        else if( pMetric )
+        {
+            sal_Int64 nVal = pMetric->GetValue();
+            pVal->Value <<= nVal;
+        }
+        else
+        {
+            OUString aVal( i_rBox.GetText() );
+            pVal->Value <<= aVal;
+        }
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        preparePreview();
     }
 }
 
