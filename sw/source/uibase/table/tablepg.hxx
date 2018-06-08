@@ -145,46 +145,39 @@ public:
 
 class SwTextFlowPage : public SfxTabPage
 {
-    VclPtr<CheckBox>       m_pPgBrkCB;
-
-    VclPtr<RadioButton>    m_pPgBrkRB;
-    VclPtr<RadioButton>    m_pColBrkRB;
-
-    VclPtr<RadioButton>    m_pPgBrkBeforeRB;
-    VclPtr<RadioButton>    m_pPgBrkAfterRB;
-
-    VclPtr<CheckBox>       m_pPageCollCB;
-    VclPtr<ListBox>        m_pPageCollLB;
-    VclPtr<CheckBox>       m_pPageNoCB;
-    VclPtr<NumericField>   m_pPageNoNF;
-    VclPtr<CheckBox>       m_pSplitCB;
-    VclPtr<TriStateBox>    m_pSplitRowCB;
-    VclPtr<CheckBox>       m_pKeepCB;
-    VclPtr<CheckBox>       m_pHeadLineCB;
-    VclPtr<NumericField>   m_pRepeatHeaderNF;
-    VclPtr<VclContainer>   m_pRepeatHeaderCombo;
-    VclPtr<ListBox>        m_pTextDirectionLB;
-
-    VclPtr<ListBox>        m_pVertOrientLB;
-
     SwWrtShell*     pShell;
-
     bool            bPageBreak;
     bool            bHtmlMode;
 
-    DECL_LINK(PageBreakHdl_Impl, Button*, void);
-    DECL_LINK(ApplyCollClickHdl_Impl, Button*, void);
-    DECL_LINK( PageBreakPosHdl_Impl, Button*, void );
-    DECL_LINK( PageBreakTypeHdl_Impl, Button*, void );
-    DECL_LINK(PageNoClickHdl_Impl, Button*, void);
-    DECL_LINK( SplitHdl_Impl, Button*, void );
-    DECL_STATIC_LINK( SwTextFlowPage, SplitRowHdl_Impl, Button*, void );
-    DECL_LINK( HeadLineCBClickHdl, Button*, void );
+    std::unique_ptr<weld::CheckButton> m_xPgBrkCB;
+    std::unique_ptr<weld::RadioButton> m_xPgBrkRB;
+    std::unique_ptr<weld::RadioButton> m_xColBrkRB;
+    std::unique_ptr<weld::RadioButton> m_xPgBrkBeforeRB;
+    std::unique_ptr<weld::RadioButton> m_xPgBrkAfterRB;
+    std::unique_ptr<weld::CheckButton> m_xPageCollCB;
+    std::unique_ptr<weld::ComboBoxText> m_xPageCollLB;
+    std::unique_ptr<weld::CheckButton> m_xPageNoCB;
+    std::unique_ptr<weld::SpinButton> m_xPageNoNF;
+    std::unique_ptr<weld::CheckButton> m_xSplitCB;
+    std::unique_ptr<weld::CheckButton> m_xSplitRowCB;
+    std::unique_ptr<weld::CheckButton> m_xKeepCB;
+    std::unique_ptr<weld::CheckButton> m_xHeadLineCB;
+    std::unique_ptr<weld::Widget> m_xRepeatHeaderCombo;
+    std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
+    std::unique_ptr<weld::ComboBoxText> m_xTextDirectionLB;
+    std::unique_ptr<weld::ComboBoxText> m_xVertOrientLB;
+
+    DECL_LINK(PageBreakHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ApplyCollClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PageBreakPosHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PageBreakTypeHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PageNoClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(SplitHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(HeadLineCBClickHdl, weld::ToggleButton&, void);
 
 public:
-    SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwTextFlowPage() override;
-    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
