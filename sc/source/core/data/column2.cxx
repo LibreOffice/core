@@ -2841,7 +2841,7 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
                     // Loop inside the formula block.
                     (*itCell)->MaybeInterpret();
                 }
-                nRow += nEnd;
+                nRow += nEnd - nOffset;
                 break;
             }
             default:
