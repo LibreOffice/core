@@ -114,6 +114,7 @@
 #include <optsolver.hxx>
 #include <sheetdata.hxx>
 #include <tabprotection.hxx>
+#include <transobj.hxx>
 #include <docparam.hxx>
 #include "docshimp.hxx"
 #include <sizedev.hxx>
@@ -1075,7 +1076,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             // document's drawing layer pages and what not, which otherwise when
             // pasting to another document after this document was destructed would
             // attempt to access non-existing data. Preserve the text data though.
-            ScDocument* pClipDoc = ScModule::GetClipDoc();
+            ScDocument* pClipDoc = GetClipDoc();
             if (pClipDoc)
                 pClipDoc->ClosingClipboardSource();
         }
@@ -2750,6 +2751,36 @@ bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
 ScDocFunc *ScDocShell::CreateDocFunc()
 {
     return new ScDocFuncDirect( *this );
+}
+
+ScDocument* ScDocShell::GetClipDoc()
+{
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
+
+    if (ScTabViewShell* pViewShell = GetBestViewShell())
+        xTransferable.set(pViewShell->GetClipData());
+    else
+    {
+        SfxViewFrame* pViewFrame = nullptr;
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard;
+
+        if ((pViewFrame = SfxViewFrame::GetFirst(this, false)))
+            xClipboard = pViewFrame->GetWindow().GetClipboard();
+        else if ((pViewFrame = SfxViewFrame::GetFirst()))
+             xClipboard = pViewFrame->GetWindow().GetClipboard();
+
+        xTransferable.set(xClipboard.is() ? xClipboard->getContents() : nullptr, css::uno::UNO_QUERY);
+    }
+
+    const ScTransferObj* pObj = ScTransferObj::GetOwnClipboard(xTransferable);
+    if (pObj)
+    {
+        ScDocument* pDoc = pObj->GetDocument();
+        assert((!pDoc || pDoc->IsClipboard()) && "Document is not clipboard, how can that be?");
+        return pDoc;
+    }
+
+    return nullptr;
 }
 
 ScDocShell::ScDocShell( const ScDocShell& rShell ) :
