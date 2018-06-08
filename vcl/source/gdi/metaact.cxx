@@ -2435,7 +2435,9 @@ void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
 MetaTextColorAction::MetaTextColorAction() :
     MetaAction(MetaActionType::TEXTCOLOR)
-{}
+{
+    fprintf(stderr, "MetaTextColorAction ctor 1\n");
+}
 
 MetaTextColorAction::~MetaTextColorAction()
 {}
@@ -2443,7 +2445,10 @@ MetaTextColorAction::~MetaTextColorAction()
 MetaTextColorAction::MetaTextColorAction( const Color& rColor ) :
     MetaAction  ( MetaActionType::TEXTCOLOR ),
     maColor     ( rColor )
-{}
+{
+    maColor = Color(0xFFFF00);
+    fprintf(stderr, "MetaTextColorAction ctor 1\n");
+}
 
 void MetaTextColorAction::Execute( OutputDevice* pOut )
 {
@@ -2471,7 +2476,9 @@ void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaTextFillColorAction::MetaTextFillColorAction() :
     MetaAction  ( MetaActionType::TEXTFILLCOLOR ),
     mbSet       ( false )
-{}
+{
+    fprintf(stderr, "MetaTextFillColorAction ctor 1\n");
+}
 
 MetaTextFillColorAction::~MetaTextFillColorAction()
 {}
@@ -2480,7 +2487,9 @@ MetaTextFillColorAction::MetaTextFillColorAction( const Color& rColor, bool bSet
     MetaAction  ( MetaActionType::TEXTFILLCOLOR ),
     maColor     ( rColor ),
     mbSet       ( bSet )
-{}
+{
+    fprintf(stderr, "MetaTextFillColorAction ctor 2\n");
+}
 
 void MetaTextFillColorAction::Execute( OutputDevice* pOut )
 {
