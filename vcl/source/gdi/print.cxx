@@ -344,7 +344,6 @@ SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
     mnStatus    = PrintQueueFlags::NONE;
     mnJobs      = QUEUE_JOBS_DONTKNOW;
-    mpSysData   = nullptr;
 }
 
 SalPrinterQueueInfo::~SalPrinterQueueInfo()
