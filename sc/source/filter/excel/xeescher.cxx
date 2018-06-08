@@ -1196,7 +1196,7 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
             // TODO: additional text
             if( pScNote )
             {
-                if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
+                if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ).get() )
                 {
                     lcl_GetFromTo( rRoot, pCaption->GetLogicRect(), maScPos.Tab(), maCommentFrom, maCommentTo );
                     if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
