@@ -358,7 +358,7 @@ static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScVie
     ScDocument& rDoc = *pViewData->GetDocument();
     ScAddress aCellPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
     ScPostIt* pNote = rDoc.GetNote( aCellPos );
-    SdrObject* pObj = pNote ? pNote->GetCaption() : nullptr;
+    SdrObject* pObj = pNote ? pNote->GetCaption().get() : nullptr;
     if( pObj && pObj->GetLogicRect().IsInside( rPos ) && ScDrawLayer::IsNoteCaption( pObj ) )
     {
         const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* > (rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION ) );
