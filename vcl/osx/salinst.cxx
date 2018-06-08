@@ -795,14 +795,9 @@ void AquaSalInstance::DestroyObject( SalObject* pObject )
     delete pObject;
 }
 
-SalPrinter* AquaSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+std::unique_ptr<SalPrinter> AquaSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
-    return new AquaSalPrinter( dynamic_cast<AquaSalInfoPrinter*>(pInfoPrinter) );
-}
-
-void AquaSalInstance::DestroyPrinter( SalPrinter* pPrinter )
-{
-    delete pPrinter;
+    return std::unique_ptr<SalPrinter>(new AquaSalPrinter( dynamic_cast<AquaSalInfoPrinter*>(pInfoPrinter) ));
 }
 
 void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )

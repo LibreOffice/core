@@ -280,12 +280,12 @@ SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
 #endif
 }
 
-SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+std::unique_ptr<SalPrinter> GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     EnsureInit();
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
     mbPrinterInit = true;
-    return new GtkSalPrinter( pInfoPrinter );
+    return std::unique_ptr<SalPrinter>(new GtkSalPrinter( pInfoPrinter ));
 #else
     return Superclass_t::CreatePrinter( pInfoPrinter );
 #endif
