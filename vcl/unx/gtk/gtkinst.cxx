@@ -356,18 +356,12 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 
 #ifdef ENABLE_GMENU_INTEGRATION
 
-SalMenu* GtkInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
+std::unique_ptr<SalMenu> GtkInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
 {
     EnsureInit();
     GtkSalMenu* pSalMenu = new GtkSalMenu( bMenuBar );
     pSalMenu->SetMenu( pVCLMenu );
-    return pSalMenu;
-}
-
-void GtkInstance::DestroyMenu( SalMenu* pMenu )
-{
-    EnsureInit();
-    delete pMenu;
+    return std::unique_ptr<SalMenu>(pSalMenu);
 }
 
 std::unique_ptr<SalMenuItem> GtkInstance::CreateMenuItem( const SalItemParams & rItemData )
@@ -378,8 +372,7 @@ std::unique_ptr<SalMenuItem> GtkInstance::CreateMenuItem( const SalItemParams & 
 
 #else // not ENABLE_GMENU_INTEGRATION
 
-SalMenu*     GtkInstance::CreateMenu( bool, Menu* )          { return nullptr; }
-void         GtkInstance::DestroyMenu( SalMenu* )                {}
+std::unique_ptr<SalMenu>     GtkInstance::CreateMenu( bool, Menu* )          { return nullptr; }
 std::unique_ptr<SalMenuItem> GtkInstance::CreateMenuItem( const SalItemParams & ) { return nullptr; }
 
 #endif

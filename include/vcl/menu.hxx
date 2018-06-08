@@ -157,7 +157,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessible > mxAccessible;
     mutable std::unique_ptr<vcl::MenuLayoutData> mpLayoutData;
-    SalMenu* mpSalMenu;
+    std::unique_ptr<SalMenu> mpSalMenu;
 
 protected:
     SAL_DLLPRIVATE Menu* ImplGetStartMenu();
@@ -181,7 +181,7 @@ protected:
     DECL_DLLPRIVATE_LINK(ImplCallSelect, void*, void );
 
     SAL_DLLPRIVATE void ImplFillLayoutData() const;
-    SAL_DLLPRIVATE SalMenu* ImplGetSalMenu() { return mpSalMenu; }
+    SAL_DLLPRIVATE SalMenu* ImplGetSalMenu() { return mpSalMenu.get(); }
     SAL_DLLPRIVATE void ImplClearSalMenu();
     SAL_DLLPRIVATE OUString ImplGetHelpText( sal_uInt16 nItemId ) const;
 

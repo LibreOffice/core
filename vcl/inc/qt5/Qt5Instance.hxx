@@ -80,8 +80,7 @@ public:
     virtual OUString GetDefaultPrinter() override;
     virtual void PostPrintersChanged() override;
 
-    virtual SalMenu* CreateMenu(bool, Menu*) override;
-    virtual void DestroyMenu(SalMenu* pMenu) override;
+    virtual std::unique_ptr<SalMenu> CreateMenu(bool, Menu*) override;
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem(const SalItemParams&) override;
 
     virtual SalTimer* CreateSalTimer() override;
