@@ -216,7 +216,6 @@ void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
         pInfo->maDriver = rInfo.m_aDriverName;
         pInfo->maLocation = rInfo.m_aLocation;
         pInfo->maComment = rInfo.m_aComment;
-        pInfo->mpSysData = nullptr;
 
         sal_Int32 nIndex = 0;
         while (nIndex != -1)
