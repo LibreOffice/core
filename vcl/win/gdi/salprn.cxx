@@ -1279,16 +1279,11 @@ void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
 }
 
 
-SalPrinter* WinSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+std::unique_ptr<SalPrinter> WinSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     WinSalPrinter* pPrinter = new WinSalPrinter;
     pPrinter->mpInfoPrinter = static_cast<WinSalInfoPrinter*>(pInfoPrinter);
-    return pPrinter;
-}
-
-void WinSalInstance::DestroyPrinter( SalPrinter* pPrinter )
-{
-    delete pPrinter;
+    return std::unique_ptr<SalPrinter>(pPrinter);
 }
 
 BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )

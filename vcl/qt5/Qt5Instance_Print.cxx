@@ -186,16 +186,14 @@ SalInfoPrinter* Qt5Instance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
 
 void Qt5Instance::DestroyInfoPrinter(SalInfoPrinter* pPrinter) { delete pPrinter; }
 
-SalPrinter* Qt5Instance::CreatePrinter(SalInfoPrinter* pInfoPrinter)
+std::unique_ptr<SalPrinter> Qt5Instance::CreatePrinter(SalInfoPrinter* pInfoPrinter)
 {
     // create and initialize SalPrinter
     Qt5Printer* pPrinter = new Qt5Printer(pInfoPrinter);
     pPrinter->m_aJobData = static_cast<Qt5InfoPrinter*>(pInfoPrinter)->m_aJobData;
 
-    return pPrinter;
+    return std::unique_ptr<SalPrinter>(pPrinter);
 }
-
-void Qt5Instance::DestroyPrinter(SalPrinter* pPrinter) { delete pPrinter; }
 
 void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
 {
