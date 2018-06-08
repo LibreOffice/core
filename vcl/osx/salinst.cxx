@@ -819,7 +819,6 @@ void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
                 pInfo->maDriver     = GetOUString( pType );
             pInfo->mnStatus         = PrintQueueFlags::NONE;
             pInfo->mnJobs           = 0;
-            pInfo->mpSysData        = nullptr;
 
             pList->Add( pInfo );
         }
