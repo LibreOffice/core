@@ -72,7 +72,7 @@ public:
     virtual std::unique_ptr<SalI18NImeStatus> CreateI18NImeStatus() override;
     virtual SalSystem*          CreateSalSystem() override;
     virtual SalBitmap*          CreateSalBitmap() override;
-    virtual SalSession*         CreateSalSession() override;
+    virtual std::unique_ptr<SalSession> CreateSalSession() override;
     virtual OpenGLContext*      CreateOpenGLContext() override;
 
     virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents) override;

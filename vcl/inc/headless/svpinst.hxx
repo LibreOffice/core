@@ -175,9 +175,6 @@ public:
     virtual bool            IsMainThread() const override;
     virtual void            updateMainThread() override;
 
-    // may return NULL to disable session management
-    virtual SalSession*     CreateSalSession() override;
-
     virtual OpenGLContext*  CreateOpenGLContext() override;
 
     virtual OUString        GetConnectionIdentifier() override;

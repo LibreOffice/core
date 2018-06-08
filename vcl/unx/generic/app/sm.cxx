@@ -65,12 +65,12 @@ private:
 
 }
 
-SalSession* X11SalInstance::CreateSalSession()
+std::unique_ptr<SalSession> X11SalInstance::CreateSalSession()
 {
     SAL_INFO("vcl.sm", "X11SalInstance::CreateSalSession");
 
-    SalSession * p = new IceSalSession;
-    SessionManagerClient::open(p);
+    std::unique_ptr<SalSession> p(new IceSalSession);
+    SessionManagerClient::open(p.get());
     return p;
 }
 

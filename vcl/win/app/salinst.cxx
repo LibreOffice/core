@@ -1000,11 +1000,6 @@ const OUString& SalGetDesktopEnvironment()
     return aDesktopEnvironment;
 }
 
-SalSession* WinSalInstance::CreateSalSession()
-{
-    return nullptr;
-}
-
 int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)
 {
     // Decide if an exception is a c++ (mostly UNO) exception or a process violation.

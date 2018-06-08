@@ -971,11 +971,6 @@ SalBitmap* AquaSalInstance::CreateSalBitmap()
     return new QuartzSalBitmap();
 }
 
-SalSession* AquaSalInstance::CreateSalSession()
-{
-    return nullptr;
-}
-
 OUString AquaSalInstance::getOSVersion()
 {
     NSString * versionString = nullptr;
