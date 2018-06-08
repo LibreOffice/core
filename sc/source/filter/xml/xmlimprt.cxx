@@ -3262,7 +3262,7 @@ void SAL_CALL ScXMLImport::endDocument()
         // There are rows with optimal height which need to be updated
         if (!maRecalcRowRanges.empty())
         {
-            bool bLockHeight = pDoc->IsAdjustHeightEnabled();
+            bool bLockHeight = !pDoc->IsAdjustHeightEnabled();
             if (bLockHeight)
             {
                 pDoc->EnableAdjustHeight(true);
