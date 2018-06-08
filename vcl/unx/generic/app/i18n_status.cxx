@@ -431,9 +431,9 @@ void X11ImeStatus::toggle()
     vcl::I18NStatus::get().toggleStatusWindow();
 }
 
-SalI18NImeStatus* X11SalInstance::CreateI18NImeStatus()
+std::unique_ptr<SalI18NImeStatus> X11SalInstance::CreateI18NImeStatus()
 {
-    return new X11ImeStatus();
+    return std::unique_ptr<SalI18NImeStatus>(new X11ImeStatus());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

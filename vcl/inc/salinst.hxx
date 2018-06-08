@@ -127,8 +127,8 @@ public:
 
     // SalTimer
     virtual SalTimer*       CreateSalTimer() = 0;
-    // SalI18NImeStatus
-    virtual SalI18NImeStatus*
+    // interface to ime status window, only used by the X11 backend
+    virtual std::unique_ptr<SalI18NImeStatus>
                             CreateI18NImeStatus();
     // SalSystem
     virtual SalSystem*      CreateSalSystem() = 0;

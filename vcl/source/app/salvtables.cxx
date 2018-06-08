@@ -107,9 +107,9 @@ bool SalInstance::CallEventCallback( void const * pEvent, int nBytes )
     return m_pEventInst.is() && m_pEventInst->dispatchEvent( pEvent, nBytes );
 }
 
-SalI18NImeStatus* SalInstance::CreateI18NImeStatus()
+std::unique_ptr<SalI18NImeStatus> SalInstance::CreateI18NImeStatus()
 {
-    return new SalI18NImeStatus;
+    return std::unique_ptr<SalI18NImeStatus>(new SalI18NImeStatus);
 }
 
 SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE

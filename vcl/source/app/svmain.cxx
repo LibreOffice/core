@@ -433,8 +433,7 @@ void DeInitVCL()
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 
     // give ime status a chance to destroy its own windows
-    delete pSVData->mpImeStatus;
-    pSVData->mpImeStatus = nullptr;
+    pSVData->mpImeStatus.reset();
 
 #if OSL_DEBUG_LEVEL > 0
     OStringBuffer aBuf( 256 );
