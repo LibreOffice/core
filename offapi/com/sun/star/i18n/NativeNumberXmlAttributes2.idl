@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_i18n_NativeNumberXmlAttributes_idl__
 #define __com_sun_star_i18n_NativeNumberXmlAttributes_idl__
 
-#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.idl>
 
 
 module com { module sun { module star { module i18n {
@@ -39,16 +39,13 @@ module com { module sun { module star { module i18n {
 
     @internal
 
-    ATTENTION: This service is marked <em>internal</em> and does not
+    ATTENTION: This struct is marked <em>internal</em> and does not
     have the <em>published</em> flag, which means it is subject to
     change without notice and should not be used outside the LibreOffice core.
  */
 
-struct NativeNumberXmlAttributes2
+struct NativeNumberXmlAttributes2 : com::sun::star::i18n::NativeNumberXmlAttributes
 {
-    /// The locale of the native number representation
-    ::com::sun::star::lang::Locale  Locale;
-
     /** The format of the number string, for example, "cardinal",
         "ordinal" or "ordinal-number". */
     string  Spellout;
