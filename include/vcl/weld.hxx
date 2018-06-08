@@ -405,10 +405,6 @@ public:
         return TRISTATE_FALSE;
     }
 
-    void save_state() { m_eSavedValue = get_state(); }
-
-    TriState get_saved_state() const { return m_eSavedValue; }
-
     void set_state(TriState eState)
     {
         switch (eState)
@@ -427,6 +423,8 @@ public:
         }
     }
 
+    void save_state() { m_eSavedValue = get_state(); }
+    TriState get_saved_state() const { return m_eSavedValue; }
     bool get_state_changed_from_saved() const { return m_eSavedValue != get_state(); }
 
     virtual void connect_toggled(const Link<ToggleButton&, void>& rLink) { m_aToggleHdl = rLink; }
