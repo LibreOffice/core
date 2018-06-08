@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_2e6de632",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "at least \"popupnohelp\"!",
+      "range": {
+        "startLine": 263,
+        "startChar": 24,
+        "endLine": 263,
+        "endChar": 33
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_6e20bef8",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "Interesting, why don\u0027t we just use IsValueChangedFromSaved here (as well as below, where the code is apparently taken from)?",
+      "range": {
+        "startLine": 343,
+        "startChar": 9,
+        "endLine": 343,
+        "endChar": 89
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_4e230206",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "Inconsistent (and unnecessary) space again...",
+      "range": {
+        "startLine": 343,
+        "startChar": 8,
+        "endLine": 343,
+        "endChar": 9
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_8e1dfabf",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "Space again...",
+      "range": {
+        "startLine": 399,
+        "startChar": 26,
+        "endLine": 399,
+        "endChar": 27
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_8e741afe",
+        "filename": "cui/source/options/optgdlg.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "m_pPopupNoHelpCB?",
+      "range": {
+        "startLine": 44,
+        "startChar": 25,
+        "endLine": 44,
+        "endChar": 39
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_4e6a221c",
+        "filename": "cui/uiconfig/ui/optgeneralpage.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "again...",
+      "range": {
+        "startLine": 49,
+        "startChar": 53,
+        "endLine": 49,
+        "endChar": 62
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_6e77de02",
+        "filename": "cui/uiconfig/ui/optgeneralpage.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "and again...",
+      "range": {
+        "startLine": 50,
+        "startChar": 86,
+        "endLine": 50,
+        "endChar": 95
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_ae5f1674",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 7
+      },
+      "lineNbr": 3559,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "Quote should close before:\n\n\" pop-up",
+      "range": {
+        "startLine": 3559,
+        "startChar": 57,
+        "endLine": 3559,
+        "endChar": 65
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_ce64524b",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "Why this is declared/defined at the top of the function? It is only needed in one block below.",
+      "range": {
+        "startLine": 731,
+        "startChar": 4,
+        "endLine": 731,
+        "endChar": 32
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_ee590e90",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "... same here",
+      "range": {
+        "startLine": 894,
+        "startChar": 4,
+        "endLine": 894,
+        "endChar": 31
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_8e4b3ab0",
+        "filename": "svtools/source/config/helpopt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "In this file, there are:\n\nOfflinePopUpHelp;\nOffilneHelpPopUp;\nOfflineHelpPopUpHelp...\n\nWhat are their relations?",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 20
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_2e540653",
+        "filename": "svtools/source/config/helpopt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "please remove this whitespace (it will also move the code into the 100-character right margin limit)",
+      "range": {
+        "startLine": 78,
+        "startChar": 47,
+        "endLine": 78,
+        "endChar": 67
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_4e514262",
+        "filename": "svtools/source/config/helpopt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-08T07:45:03Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 79,
+        "startChar": 46,
+        "endLine": 79,
+        "endChar": 71
+      },
+      "revId": "147b45b98119780c13daae08ea9a87e7ff05c712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
