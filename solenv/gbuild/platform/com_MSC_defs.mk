@@ -140,6 +140,7 @@ gb_CFLAGS := \
 	-GR \
 	-Gs \
 	-GS \
+	-Gm \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
