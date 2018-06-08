@@ -140,6 +140,7 @@ gb_CFLAGS := \
 	-GR \
 	-Gs \
 	-GS \
+	-Gm \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
@@ -172,6 +173,7 @@ gb_CXXFLAGS := \
 	-Gs \
 	-GS \
 	-Gy \
+	-Gm \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
@@ -252,7 +254,7 @@ gb_LinkTarget_LDFLAGS += \
 
 gb_DEBUGINFO_FLAGS := \
 	-FS \
-	-Zi \
+	-Z7 \
 
 gb_DEBUG_CFLAGS :=
 
