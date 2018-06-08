@@ -46,7 +46,7 @@ private:
 
     tools::Rectangle       m_aRect;
     SdrModel*       m_pModel;
-    ScCaptionPtr    m_xObject;
+    std::shared_ptr< SdrCaptionObj >    m_xObject;
     bool            m_bVisible;
     Point           m_aGridOff;
     DECL_LINK( TimeHdl, Timer*, void );
