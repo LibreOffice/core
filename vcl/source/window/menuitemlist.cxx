@@ -34,8 +34,7 @@ MenuItemData::~MenuItemData()
 {
     if (aUserValueReleaseFunc)
         aUserValueReleaseFunc(nUserValue);
-    if( pSalMenuItem )
-        ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );
+    pSalMenuItem.reset();
     pSubMenu.disposeAndClear();
 }
 
@@ -73,7 +72,7 @@ MenuItemData* MenuItemList::Insert(
     aSalMIData.aText = rStr;
 
     // Native-support: returns NULL if not supported
-    pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
+    pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( aSalMIData );
 
     if( nPos < maItemList.size() ) {
         maItemList.insert( maItemList.begin() + nPos, std::unique_ptr<MenuItemData>(pData) );
@@ -106,7 +105,7 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     aSalMIData.aImage = Image();
 
     // Native-support: returns NULL if not supported
-    pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
+    pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( aSalMIData );
 
     if( nPos < maItemList.size() ) {
         maItemList.insert( maItemList.begin() + nPos, std::unique_ptr<MenuItemData>(pData) );

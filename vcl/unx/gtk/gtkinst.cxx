@@ -371,24 +371,17 @@ void GtkInstance::DestroyMenu( SalMenu* pMenu )
     delete pMenu;
 }
 
-SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* pItemData )
+std::unique_ptr<SalMenuItem> GtkInstance::CreateMenuItem( const SalItemParams & rItemData )
 {
     EnsureInit();
-    return new GtkSalMenuItem( pItemData );
-}
-
-void GtkInstance::DestroyMenuItem( SalMenuItem* pItem )
-{
-    EnsureInit();
-    delete pItem;
+    return std::unique_ptr<SalMenuItem>(new GtkSalMenuItem( &rItemData ));
 }
 
 #else // not ENABLE_GMENU_INTEGRATION
 
 SalMenu*     GtkInstance::CreateMenu( bool, Menu* )          { return nullptr; }
 void         GtkInstance::DestroyMenu( SalMenu* )                {}
-SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* ) { return nullptr; }
-void         GtkInstance::DestroyMenuItem( SalMenuItem* )        {}
+std::unique_ptr<SalMenuItem> GtkInstance::CreateMenuItem( const SalItemParams & ) { return nullptr; }
 
 #endif
 
