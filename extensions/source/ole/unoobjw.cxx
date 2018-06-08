@@ -1071,9 +1071,17 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
-    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetIDsOfNames("
-             << OUString(o3tl::toU(rgszNames[0]))
-             << (cNames > 1 ? "...!" : "") << "," << cNames << ")");
+    OUString sNames;
+    sNames += "[";
+    for (unsigned int i = 0; i < cNames; ++i)
+    {
+        if (i > 0)
+            sNames += ",";
+        sNames += "\"" + OUString(o3tl::toU(rgszNames[i])) + "\"";
+    }
+    sNames += "]";
+
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetIDsOfNames(" << sNames);
 
     HRESULT ret = DISP_E_UNKNOWNNAME;
     try
