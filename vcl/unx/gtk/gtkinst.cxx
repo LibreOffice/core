@@ -345,7 +345,7 @@ std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics 
 #endif
 }
 
-SalBitmap* GtkInstance::CreateSalBitmap()
+std::shared_ptr<SalBitmap> GtkInstance::CreateSalBitmap()
 {
     EnsureInit();
 #if GTK_CHECK_VERSION(3,0,0)

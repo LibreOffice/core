@@ -306,7 +306,7 @@ public:
                                     Color nMaskColor,
                                     const OutputDevice *pOutDev );
 
-    SalBitmap*                  GetBitmap(
+    std::shared_ptr<SalBitmap>  GetBitmap(
                                     long nX, long nY,
                                     long nWidth, long nHeight,
                                     const OutputDevice *pOutDev );
@@ -508,7 +508,7 @@ protected:
                                     const SalBitmap& rSalBitmap,
                                     Color nMaskColor ) = 0;
 
-    virtual SalBitmap*          getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual std::shared_ptr<SalBitmap> getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
 
     virtual Color               getPixel( long nX, long nY ) = 0;
 
