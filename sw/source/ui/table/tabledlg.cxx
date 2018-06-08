@@ -1227,99 +1227,66 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
 }
 
-SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "TableTextFlowPage",
-        "modules/swriter/ui/tabletextflowpage.ui", &rSet)
+SwTextFlowPage::SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/tabletextflowpage.ui", "TableTextFlowPage", &rSet)
     , pShell(nullptr)
     , bPageBreak(true)
     , bHtmlMode(false)
+    , m_xPgBrkCB(m_xBuilder->weld_check_button("break"))
+    , m_xPgBrkRB(m_xBuilder->weld_radio_button("page"))
+    , m_xColBrkRB(m_xBuilder->weld_radio_button("column"))
+    , m_xPgBrkBeforeRB(m_xBuilder->weld_radio_button("before"))
+    , m_xPgBrkAfterRB(m_xBuilder->weld_radio_button("after"))
+    , m_xPageCollCB(m_xBuilder->weld_check_button("pagestyle"))
+    , m_xPageCollLB(m_xBuilder->weld_combo_box_text("pagestylelb"))
+    , m_xPageNoCB(m_xBuilder->weld_check_button("pagenoft"))
+    , m_xPageNoNF(m_xBuilder->weld_spin_button("pagenonf"))
+    , m_xSplitCB(m_xBuilder->weld_check_button("split"))
+    , m_xSplitRowCB(m_xBuilder->weld_check_button("splitrow"))
+    , m_xKeepCB(m_xBuilder->weld_check_button("keep"))
+    , m_xHeadLineCB(m_xBuilder->weld_check_button("headline"))
+    , m_xRepeatHeaderCombo(m_xBuilder->weld_widget("repeatheader"))
+    , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadernf"))
+    , m_xTextDirectionLB(m_xBuilder->weld_combo_box_text("textdirection"))
+    , m_xVertOrientLB(m_xBuilder->weld_combo_box_text("vertorient"))
 {
-    get(m_pPgBrkCB, "break");
-
-    get(m_pPgBrkRB, "page");
-    get(m_pColBrkRB, "column");
-
-    get(m_pPgBrkBeforeRB, "before");
-    get(m_pPgBrkAfterRB, "after");
-
-    get(m_pPageCollCB, "pagestyle");
-    get(m_pPageCollLB, "pagestylelb");
-    get(m_pPageNoCB, "pagenoft");
-    get(m_pPageNoNF, "pagenonf");
-
-    get(m_pSplitCB, "split");
-    get(m_pSplitRowCB, "splitrow");
-    get(m_pKeepCB, "keep");
-    get(m_pHeadLineCB, "headline");
-
-    get(m_pRepeatHeaderCombo, "repeatheader");
-    get(m_pRepeatHeaderNF, "repeatheadernf");
-
-    get(m_pTextDirectionLB, "textdirection");
-    get(m_pVertOrientLB, "vertorient");
-
-    m_pPgBrkCB->SetClickHdl(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
-    m_pPgBrkBeforeRB->SetClickHdl(
-        LINK( this, SwTextFlowPage, PageBreakPosHdl_Impl ) );
-    m_pPgBrkAfterRB->SetClickHdl(
-        LINK( this, SwTextFlowPage, PageBreakPosHdl_Impl ) );
-    m_pPageCollCB->SetClickHdl(
-        LINK( this, SwTextFlowPage, ApplyCollClickHdl_Impl ) );
-    m_pColBrkRB->SetClickHdl(
-        LINK( this, SwTextFlowPage, PageBreakTypeHdl_Impl ) );
-    m_pPgBrkRB->SetClickHdl(
-        LINK( this, SwTextFlowPage, PageBreakTypeHdl_Impl ) );
-    m_pPageNoCB->SetClickHdl(
+    m_xPgBrkCB->connect_toggled(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
+    m_xPgBrkBeforeRB->connect_toggled(
+        LINK(this, SwTextFlowPage, PageBreakPosHdl_Impl));
+    m_xPgBrkAfterRB->connect_toggled(
+        LINK(this, SwTextFlowPage, PageBreakPosHdl_Impl));
+    m_xPageCollCB->connect_toggled(
+        LINK(this, SwTextFlowPage, ApplyCollClickHdl_Impl));
+    m_xColBrkRB->connect_toggled(
+        LINK(this, SwTextFlowPage, PageBreakTypeHdl_Impl));
+    m_xPgBrkRB->connect_toggled(
+        LINK(this, SwTextFlowPage, PageBreakTypeHdl_Impl));
+    m_xPageNoCB->connect_toggled(
         LINK(this, SwTextFlowPage, PageNoClickHdl_Impl));
-    m_pSplitCB->SetClickHdl(
-        LINK( this, SwTextFlowPage, SplitHdl_Impl));
-    m_pSplitRowCB->SetClickHdl(
-        LINK( this, SwTextFlowPage, SplitRowHdl_Impl));
-    m_pHeadLineCB->SetClickHdl( LINK( this, SwTextFlowPage, HeadLineCBClickHdl ) );
+    m_xSplitCB->connect_toggled(
+        LINK(this, SwTextFlowPage, SplitHdl_Impl));
+    m_xHeadLineCB->connect_toggled(LINK(this, SwTextFlowPage, HeadLineCBClickHdl));
 
     const SfxPoolItem *pItem;
     if(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
     {
-        m_pKeepCB->Hide();
-        m_pSplitCB->Hide();
-        m_pSplitRowCB->Hide();
+        m_xKeepCB->hide();
+        m_xSplitCB->hide();
+        m_xSplitRowCB->hide();
     }
 
-    HeadLineCBClickHdl(nullptr);
+    HeadLineCBClickHdl(*m_xHeadLineCB);
 }
 
 SwTextFlowPage::~SwTextFlowPage()
 {
-    disposeOnce();
-}
-
-void SwTextFlowPage::dispose()
-{
-    m_pPgBrkCB.clear();
-    m_pPgBrkRB.clear();
-    m_pColBrkRB.clear();
-    m_pPgBrkBeforeRB.clear();
-    m_pPgBrkAfterRB.clear();
-    m_pPageCollCB.clear();
-    m_pPageCollLB.clear();
-    m_pPageNoCB.clear();
-    m_pPageNoNF.clear();
-    m_pSplitCB.clear();
-    m_pSplitRowCB.clear();
-    m_pKeepCB.clear();
-    m_pHeadLineCB.clear();
-    m_pRepeatHeaderNF.clear();
-    m_pRepeatHeaderCombo.clear();
-    m_pTextDirectionLB.clear();
-    m_pVertOrientLB.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwTextFlowPage::Create( TabPageParent pParent,
                                            const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTextFlowPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SwTextFlowPage>::Create(pParent, *rAttrSet);
 }
 
 bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
@@ -1327,41 +1294,41 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     bool bModified = false;
 
     //Repeat Heading
-    if(m_pHeadLineCB->IsValueChangedFromSaved() ||
-       m_pRepeatHeaderNF->IsValueChangedFromSaved() )
+    if (m_xHeadLineCB->get_state_changed_from_saved() ||
+        m_xRepeatHeaderNF->get_value_changed_from_saved() )
     {
         bModified |= nullptr != rSet->Put(
-            SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_pHeadLineCB->IsChecked()? sal_uInt16(m_pRepeatHeaderNF->GetValue()) : 0 ));
+            SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_xHeadLineCB->get_active() ? sal_uInt16(m_xRepeatHeaderNF->get_value()) : 0));
     }
-    if(m_pKeepCB->IsValueChangedFromSaved())
-        bModified |= nullptr != rSet->Put( SvxFormatKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
+    if (m_xKeepCB->get_state_changed_from_saved())
+        bModified |= nullptr != rSet->Put( SvxFormatKeepItem( m_xKeepCB->get_active(), RES_KEEP));
 
-    if(m_pSplitCB->IsValueChangedFromSaved())
-        bModified |= nullptr != rSet->Put( SwFormatLayoutSplit( m_pSplitCB->IsChecked()));
+    if (m_xSplitCB->get_state_changed_from_saved())
+        bModified |= nullptr != rSet->Put( SwFormatLayoutSplit( m_xSplitCB->get_active()));
 
-    if(m_pSplitRowCB->IsValueChangedFromSaved())
-        bModified |= nullptr != rSet->Put( SwFormatRowSplit( m_pSplitRowCB->IsChecked()));
+    if (m_xSplitRowCB->get_state_changed_from_saved())
+        bModified |= nullptr != rSet->Put( SwFormatRowSplit( m_xSplitRowCB->get_active()));
 
     const SvxFormatBreakItem* pBreak = GetOldItem( *rSet, RES_BREAK );
     const SwFormatPageDesc* pDesc = GetOldItem( *rSet, RES_PAGEDESC );
 
-    bool bState = m_pPageCollCB->IsChecked();
+    bool bState = m_xPageCollCB->get_active();
 
     //If we have a page style, then there's no break
     bool bPageItemPut = false;
-    if (   bState != (m_pPageCollCB->GetSavedValue() == TRISTATE_TRUE)
-        || (bState && m_pPageCollLB->IsValueChangedFromSaved())
-        || (m_pPageNoCB->IsEnabled() && m_pPageNoCB->IsValueChangedFromSaved())
-        || (m_pPageNoNF->IsEnabled() && m_pPageNoNF->IsValueModified()))
+    if (   bState != (m_xPageCollCB->get_saved_state() == TRISTATE_TRUE)
+        || (bState && m_xPageCollLB->get_value_changed_from_saved())
+        || (m_xPageNoCB->get_sensitive() && m_xPageNoCB->get_state_changed_from_saved())
+        || (m_xPageNoNF->get_sensitive() && m_xPageNoNF->get_value_changed_from_saved()))
     {
         OUString sPage;
 
         if ( bState )
         {
-            sPage = m_pPageCollLB->GetSelectedEntry();
+            sPage = m_xPageCollLB->get_active_text();
         }
-        sal_uInt16 nPgNum = static_cast< sal_uInt16 >(m_pPageNoNF->GetValue());
-        bool const usePageNo(bState && m_pPageNoCB->IsChecked());
+        sal_uInt16 nPgNum = static_cast<sal_uInt16>(m_xPageNoNF->get_value());
+        bool const usePageNo(bState && m_xPageNoCB->get_active());
         boost::optional<sal_uInt16> const oPageNum(
                 usePageNo ? nPgNum : boost::optional<sal_Int16>());
         if (!pDesc || !pDesc->GetPageDesc()
@@ -1374,20 +1341,20 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             bPageItemPut = bState;
         }
     }
-    bool bIsChecked = m_pPgBrkCB->IsChecked();
+    bool bIsChecked = m_xPgBrkCB->get_active();
     if ( !bPageItemPut &&
-        (   bState != (m_pPageCollCB->GetSavedValue() == TRISTATE_TRUE) ||
-            bIsChecked != (m_pPgBrkCB->GetSavedValue() == TRISTATE_TRUE) ||
-            m_pPgBrkBeforeRB->IsValueChangedFromSaved()    ||
-            m_pPgBrkRB->IsValueChangedFromSaved() ))
+        (   bState != (m_xPageCollCB->get_saved_state() == TRISTATE_TRUE) ||
+            bIsChecked != (m_xPgBrkCB->get_saved_state() == TRISTATE_TRUE) ||
+            m_xPgBrkBeforeRB->get_state_changed_from_saved()    ||
+            m_xPgBrkRB->get_state_changed_from_saved() ))
     {
         SvxFormatBreakItem aBreak( GetItemSet().Get( RES_BREAK ) );
 
         if(bIsChecked)
         {
-            bool bBefore = m_pPgBrkBeforeRB->IsChecked();
+            bool bBefore = m_xPgBrkBeforeRB->get_active();
 
-            if ( m_pPgBrkRB->IsChecked() )
+            if (m_xPgBrkRB->get_active())
             {
                 if ( bBefore )
                     aBreak.SetValue( SvxBreak::PageBefore );
@@ -1413,24 +1380,22 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
-    if(m_pTextDirectionLB->IsValueChangedFromSaved())
+    if (m_xTextDirectionLB->get_value_changed_from_saved())
     {
-          bModified |= nullptr != rSet->Put(
-                    SvxFrameDirectionItem( static_cast<SvxFrameDirection>(
-                        reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetSelectedEntryData()))
-                        , FN_TABLE_BOX_TEXTORIENTATION));
+          OUString sId = m_xTextDirectionLB->get_active_id();
+          bModified |= nullptr != rSet->Put(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(sId.toUInt32()), FN_TABLE_BOX_TEXTORIENTATION));
     }
 
-    if(m_pVertOrientLB->IsValueChangedFromSaved())
+    if (m_xVertOrientLB->get_value_changed_from_saved())
     {
         sal_uInt16 nOrient = USHRT_MAX;
-        switch(m_pVertOrientLB->GetSelectedEntryPos())
+        switch (m_xVertOrientLB->get_active())
         {
             case 0 : nOrient = text::VertOrientation::NONE; break;
             case 1 : nOrient = text::VertOrientation::CENTER; break;
             case 2 : nOrient = text::VertOrientation::BOTTOM; break;
         }
-        if(nOrient != USHRT_MAX)
+        if (nOrient != USHRT_MAX)
             bModified |= nullptr != rSet->Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, nOrient));
     }
 
@@ -1451,37 +1416,39 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         for( size_t i = 0; i < nCount; ++i)
         {
             const SwPageDesc &rPageDesc = pShell->GetPageDesc(i);
-            m_pPageCollLB->InsertEntry(rPageDesc.GetName());
+            m_xPageCollLB->append_text(rPageDesc.GetName());
         }
 
         OUString aFormatName;
-        for(sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
-            if( LISTBOX_ENTRY_NOTFOUND == m_pPageCollLB->GetEntryPos(
-                    aFormatName = SwStyleNameMapper::GetUIName( i, aFormatName ) ))
-                m_pPageCollLB->InsertEntry( aFormatName );
+        for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+        {
+            aFormatName = SwStyleNameMapper::GetUIName(i, aFormatName);
+            if (m_xPageCollLB->find_text(aFormatName) == -1)
+                m_xPageCollLB->append_text(aFormatName);
+        }
 
         if(SfxItemState::SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
         {
-            m_pKeepCB->Check( static_cast<const SvxFormatKeepItem*>(pItem)->GetValue() );
-            m_pKeepCB->SaveValue();
+            m_xKeepCB->set_active( static_cast<const SvxFormatKeepItem*>(pItem)->GetValue() );
+            m_xKeepCB->save_state();
         }
         if(SfxItemState::SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
         {
-            m_pSplitCB->Check( static_cast<const SwFormatLayoutSplit*>(pItem)->GetValue() );
+            m_xSplitCB->set_active( static_cast<const SwFormatLayoutSplit*>(pItem)->GetValue() );
         }
         else
-            m_pSplitCB->Check();
+            m_xSplitCB->set_active(true);
 
-        m_pSplitCB->SaveValue();
-        SplitHdl_Impl(m_pSplitCB);
+        m_xSplitCB->save_state();
+        SplitHdl_Impl(*m_xSplitCB);
 
         if(SfxItemState::SET == rSet->GetItemState( RES_ROW_SPLIT, false, &pItem ))
         {
-            m_pSplitRowCB->Check( static_cast<const SwFormatRowSplit*>(pItem)->GetValue() );
+            m_xSplitRowCB->set_active( static_cast<const SwFormatRowSplit*>(pItem)->GetValue() );
         }
         else
-            m_pSplitRowCB->SetState(TRISTATE_INDET);
-        m_pSplitRowCB->SaveValue();
+            m_xSplitRowCB->set_state(TRISTATE_INDET);
+        m_xSplitRowCB->save_state();
 
         if(bPageBreak)
         {
@@ -1493,41 +1460,40 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
                 if (oNumOffset)
                 {
-                    m_pPageNoCB->Check();
-                    m_pPageNoNF->Enable(true);
-                    m_pPageNoNF->SetValue(oNumOffset.get());
+                    m_xPageNoCB->set_active(true);
+                    m_xPageNoNF->set_sensitive(true);
+                    m_xPageNoNF->set_value(oNumOffset.get());
                 }
                 else
                 {
-                    m_pPageNoCB->Check(false);
-                    m_pPageNoNF->Enable(false);
+                    m_xPageNoCB->set_active(false);
+                    m_xPageNoNF->set_sensitive(false);
                 }
 
                 if(pDesc)
                     sPageDesc = pDesc->GetName();
-                if ( !sPageDesc.isEmpty() &&
-                        m_pPageCollLB->GetEntryPos( sPageDesc ) != LISTBOX_ENTRY_NOTFOUND )
+                if (!sPageDesc.isEmpty() && m_xPageCollLB->find_text(sPageDesc) != -1)
                 {
-                    m_pPageCollLB->SelectEntry( sPageDesc );
-                    m_pPageCollCB->Check();
+                    m_xPageCollLB->set_active_text(sPageDesc);
+                    m_xPageCollCB->set_active(true);
 
-                    m_pPgBrkCB->Enable();
-                    m_pPgBrkRB->Enable();
-                    m_pColBrkRB->Enable();
-                    m_pPgBrkBeforeRB->Enable();
-                    m_pPgBrkAfterRB->Enable();
-                    m_pPageCollCB->Enable();
-                    m_pPgBrkCB->Check();
+                    m_xPgBrkCB->set_sensitive(true);
+                    m_xPgBrkRB->set_sensitive(true);
+                    m_xColBrkRB->set_sensitive(true);
+                    m_xPgBrkBeforeRB->set_sensitive(true);
+                    m_xPgBrkAfterRB->set_sensitive(true);
+                    m_xPageCollCB->set_sensitive(true);
+                    m_xPgBrkCB->set_active(true);
 
-                    m_pPgBrkCB->Check();
-                    m_pColBrkRB->Check( false );
-                    m_pPgBrkBeforeRB->Check();
-                    m_pPgBrkAfterRB->Check( false );
+                    m_xPgBrkCB->set_active(true);
+                    m_xColBrkRB->set_active( false );
+                    m_xPgBrkBeforeRB->set_active(true);
+                    m_xPgBrkAfterRB->set_active( false );
                 }
                 else
                 {
-                    m_pPageCollLB->SetNoSelection();
-                    m_pPageCollCB->Check(false);
+                    m_xPageCollLB->set_active(-1);
+                    m_xPageCollCB->set_active(false);
                 }
             }
 
@@ -1538,76 +1504,76 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
                 if ( eBreak != SvxBreak::NONE )
                 {
-                    m_pPgBrkCB->Check();
-                    m_pPageCollCB->Enable(false);
-                    m_pPageCollLB->Enable(false);
-                    m_pPageNoCB->Enable(false);
-                    m_pPageNoNF->Enable(false);
+                    m_xPgBrkCB->set_active(true);
+                    m_xPageCollCB->set_sensitive(false);
+                    m_xPageCollLB->set_sensitive(false);
+                    m_xPageNoCB->set_sensitive(false);
+                    m_xPageNoNF->set_sensitive(false);
                 }
                 switch ( eBreak )
                 {
                     case SvxBreak::PageBefore:
-                        m_pPgBrkRB->Check();
-                        m_pColBrkRB->Check( false );
-                        m_pPgBrkBeforeRB->Check();
-                        m_pPgBrkAfterRB->Check( false );
+                        m_xPgBrkRB->set_active(true);
+                        m_xColBrkRB->set_active( false );
+                        m_xPgBrkBeforeRB->set_active(true);
+                        m_xPgBrkAfterRB->set_active( false );
                         break;
                     case SvxBreak::PageAfter:
-                        m_pPgBrkRB->Check();
-                        m_pColBrkRB->Check( false );
-                        m_pPgBrkBeforeRB->Check( false );
-                        m_pPgBrkAfterRB->Check();
+                        m_xPgBrkRB->set_active(true);
+                        m_xColBrkRB->set_active( false );
+                        m_xPgBrkBeforeRB->set_active( false );
+                        m_xPgBrkAfterRB->set_active(true);
                         break;
                     case SvxBreak::ColumnBefore:
-                        m_pPgBrkRB->Check( false );
-                        m_pColBrkRB->Check();
-                        m_pPgBrkBeforeRB->Check();
-                        m_pPgBrkAfterRB->Check( false );
+                        m_xPgBrkRB->set_active( false );
+                        m_xColBrkRB->set_active(true);
+                        m_xPgBrkBeforeRB->set_active(true);
+                        m_xPgBrkAfterRB->set_active( false );
                         break;
                     case SvxBreak::ColumnAfter:
-                        m_pPgBrkRB->Check( false );
-                        m_pColBrkRB->Check();
-                        m_pPgBrkBeforeRB->Check( false );
-                        m_pPgBrkAfterRB->Check();
+                        m_xPgBrkRB->set_active( false );
+                        m_xColBrkRB->set_active(true);
+                        m_xPgBrkBeforeRB->set_active( false );
+                        m_xPgBrkAfterRB->set_active(true);
                         break;
                     default:; //prevent warning
                 }
 
             }
-            if ( m_pPgBrkBeforeRB->IsChecked() )
-                PageBreakPosHdl_Impl(m_pPgBrkBeforeRB);
-            else if ( m_pPgBrkAfterRB->IsChecked() )
-                PageBreakPosHdl_Impl(m_pPgBrkAfterRB);
-            PageBreakHdl_Impl( m_pPgBrkCB );
+            if (m_xPgBrkBeforeRB->get_active())
+                PageBreakPosHdl_Impl(*m_xPgBrkBeforeRB);
+            else if (m_xPgBrkAfterRB->get_active())
+                PageBreakPosHdl_Impl(*m_xPgBrkAfterRB);
+            PageBreakHdl_Impl(*m_xPgBrkCB);
         }
     }
     else
     {
-        m_pPgBrkRB->Enable(false);
-        m_pColBrkRB->Enable(false);
-        m_pPgBrkBeforeRB->Enable(false);
-        m_pPgBrkAfterRB->Enable(false);
-        m_pKeepCB->Enable(false);
-        m_pSplitCB->Enable(false);
-        m_pPgBrkCB->Enable(false);
-        m_pPageCollCB->Enable(false);
-        m_pPageCollLB->Enable(false);
+        m_xPgBrkRB->set_sensitive(false);
+        m_xColBrkRB->set_sensitive(false);
+        m_xPgBrkBeforeRB->set_sensitive(false);
+        m_xPgBrkAfterRB->set_sensitive(false);
+        m_xKeepCB->set_sensitive(false);
+        m_xSplitCB->set_sensitive(false);
+        m_xPgBrkCB->set_sensitive(false);
+        m_xPageCollCB->set_sensitive(false);
+        m_xPageCollLB->set_sensitive(false);
     }
 
     if(SfxItemState::SET == rSet->GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ))
     {
         sal_uInt16 nRep = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        m_pHeadLineCB->Check( nRep > 0 );
-        m_pHeadLineCB->SaveValue();
-        m_pRepeatHeaderNF->SetValue( nRep );
-        m_pRepeatHeaderNF->SetMin( 1 );
-        m_pRepeatHeaderNF->SaveValue();
+        m_xHeadLineCB->set_active(nRep > 0);
+        m_xHeadLineCB->save_state();
+        m_xRepeatHeaderNF->set_value(nRep);
+        m_xRepeatHeaderNF->set_min(1);
+        m_xRepeatHeaderNF->save_value();
     }
     if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT )
     {
         SvxFrameDirection nDirection =
                 static_cast<const SvxFrameDirectionItem&>(rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
-        m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nDirection) ));
+        m_xTextDirectionLB->set_active_id(OUString::number(static_cast<sal_uInt32>(nDirection)));
     }
 
     if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SfxItemState::DEFAULT )
@@ -1620,22 +1586,22 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
             case text::VertOrientation::CENTER:   nPos = 1;   break;
             case text::VertOrientation::BOTTOM:   nPos = 2;   break;
         }
-        m_pVertOrientLB->SelectEntryPos(nPos);
+        m_xVertOrientLB->set_active(nPos);
     }
 
-    m_pPageCollCB->SaveValue();
-    m_pPageCollLB->SaveValue();
-    m_pPgBrkCB->SaveValue();
-    m_pPgBrkRB->SaveValue();
-    m_pColBrkRB->SaveValue();
-    m_pPgBrkBeforeRB->SaveValue();
-    m_pPgBrkAfterRB->SaveValue();
-    m_pPageNoCB->SaveValue();
-    m_pPageNoNF->SaveValue();
-    m_pTextDirectionLB->SaveValue();
-    m_pVertOrientLB->SaveValue();
+    m_xPageCollCB->save_state();
+    m_xPageCollLB->save_value();
+    m_xPgBrkCB->save_state();
+    m_xPgBrkRB->save_state();
+    m_xColBrkRB->save_state();
+    m_xPgBrkBeforeRB->save_state();
+    m_xPgBrkAfterRB->save_state();
+    m_xPageNoCB->save_state();
+    m_xPageNoNF->save_value();
+    m_xTextDirectionLB->save_value();
+    m_xVertOrientLB->save_value();
 
-    HeadLineCBClickHdl(nullptr);
+    HeadLineCBClickHdl(*m_xHeadLineCB);
 }
 
 void SwTextFlowPage::SetShell(SwWrtShell* pSh)
@@ -1644,145 +1610,136 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     bHtmlMode = 0 != (::GetHtmlMode(pShell->GetView().GetDocShell()) & HTMLMODE_ON);
     if(bHtmlMode)
     {
-        m_pPageNoNF->Enable(false);
-        m_pPageNoCB->Enable(false);
+        m_xPageNoNF->set_sensitive(false);
+        m_xPageNoCB->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, weld::ToggleButton&, void)
 {
-    if( m_pPgBrkCB->IsChecked() )
+    if (m_xPgBrkCB->get_active())
     {
-            m_pPgBrkRB->       Enable();
-            m_pColBrkRB->      Enable();
-            m_pPgBrkBeforeRB-> Enable();
-            m_pPgBrkAfterRB->  Enable();
+        m_xPgBrkRB->set_sensitive(true);
+        m_xColBrkRB->set_sensitive(true);
+        m_xPgBrkBeforeRB->set_sensitive(true);
+        m_xPgBrkAfterRB->set_sensitive(true);
 
-            if ( m_pPgBrkRB->IsChecked() && m_pPgBrkBeforeRB->IsChecked() )
+        if (m_xPgBrkRB->get_active() && m_xPgBrkBeforeRB->get_active())
+        {
+            m_xPageCollCB->set_sensitive(true);
+
+            bool bEnable = m_xPageCollCB->get_active() && m_xPageCollLB->get_count();
+            m_xPageCollLB->set_sensitive(bEnable);
+            if (!bHtmlMode)
             {
-                m_pPageCollCB->Enable();
-
-                bool bEnable = m_pPageCollCB->IsChecked() &&
-                                            m_pPageCollLB->GetEntryCount();
-                m_pPageCollLB->Enable(bEnable);
-                if(!bHtmlMode)
-                {
-                    m_pPageNoCB->Enable(bEnable);
-                    m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
-                }
+                m_xPageNoCB->set_sensitive(bEnable);
+                m_xPageNoNF->set_sensitive(bEnable && m_xPageNoCB->get_active());
             }
+        }
     }
     else
     {
-            m_pPageCollCB->Check( false );
-            m_pPageCollCB->Enable(false);
-            m_pPageCollLB->Enable(false);
-            m_pPageNoCB->Enable(false);
-            m_pPageNoNF->Enable(false);
-            m_pPgBrkRB->       Enable(false);
-            m_pColBrkRB->      Enable(false);
-            m_pPgBrkBeforeRB-> Enable(false);
-            m_pPgBrkAfterRB->  Enable(false);
+        m_xPageCollCB->set_active(false);
+        m_xPageCollCB->set_sensitive(false);
+        m_xPageCollLB->set_sensitive(false);
+        m_xPageNoCB->set_sensitive(false);
+        m_xPageNoNF->set_sensitive(false);
+        m_xPgBrkRB->set_sensitive(false);
+        m_xColBrkRB->set_sensitive(false);
+        m_xPgBrkBeforeRB->set_sensitive(false);
+        m_xPgBrkAfterRB->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl, weld::ToggleButton&, void)
 {
     bool bEnable = false;
-    if ( m_pPageCollCB->IsChecked() &&
-         m_pPageCollLB->GetEntryCount() )
+    if (m_xPageCollCB->get_active() && m_xPageCollLB->get_count())
     {
         bEnable = true;
-        m_pPageCollLB->SelectEntryPos( 0 );
+        m_xPageCollLB->set_active(0);
     }
     else
     {
-        m_pPageCollLB->SetNoSelection();
+        m_xPageCollLB->set_active(-1);
     }
-    m_pPageCollLB->Enable(bEnable);
-    if(!bHtmlMode)
+    m_xPageCollLB->set_sensitive(bEnable);
+    if (!bHtmlMode)
     {
-        m_pPageNoCB->Enable(bEnable);
-        m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
+        m_xPageNoCB->set_sensitive(bEnable);
+        m_xPageNoNF->set_sensitive(bEnable && m_xPageNoCB->get_active());
     }
 }
 
-IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, Button*, pBtn, void )
+IMPL_LINK_NOARG(SwTextFlowPage, PageBreakPosHdl_Impl, weld::ToggleButton&, void)
 {
-    if ( m_pPgBrkCB->IsChecked() )
+    if (m_xPgBrkCB->get_active())
     {
-        if ( pBtn == m_pPgBrkBeforeRB && m_pPgBrkRB->IsChecked() )
+        if (m_xPgBrkBeforeRB->get_active() && m_xPgBrkRB->get_active())
         {
-            m_pPageCollCB->Enable();
+            m_xPageCollCB->set_sensitive(true);
 
-            bool bEnable = m_pPageCollCB->IsChecked()  &&
-                                        m_pPageCollLB->GetEntryCount();
+            bool bEnable = m_xPageCollCB->get_active() && m_xPageCollLB->get_count();
 
-            m_pPageCollLB->Enable(bEnable);
-            if(!bHtmlMode)
+            m_xPageCollLB->set_sensitive(bEnable);
+            if (!bHtmlMode)
             {
-                m_pPageNoCB->Enable(bEnable);
-                m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
+                m_xPageNoCB->set_sensitive(bEnable);
+                m_xPageNoNF->set_sensitive(bEnable && m_xPageNoCB->get_active());
             }
         }
-        else if (pBtn == m_pPgBrkAfterRB)
+        else if (m_xPgBrkAfterRB->get_active())
         {
-            m_pPageCollCB->Check( false );
-            m_pPageCollCB->Enable(false);
-            m_pPageCollLB->Enable(false);
-            m_pPageNoCB->Enable(false);
-            m_pPageNoNF->Enable(false);
+            m_xPageCollCB->set_active(false);
+            m_xPageCollCB->set_sensitive(false);
+            m_xPageCollLB->set_sensitive(false);
+            m_xPageNoCB->set_sensitive(false);
+            m_xPageNoNF->set_sensitive(false);
         }
     }
 }
 
-IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, Button*, pBtn, void )
+IMPL_LINK_NOARG(SwTextFlowPage, PageBreakTypeHdl_Impl, weld::ToggleButton&, void)
 {
-    if ( pBtn == m_pColBrkRB || m_pPgBrkAfterRB->IsChecked() )
+    if (m_xColBrkRB->get_active() || m_xPgBrkAfterRB->get_active())
     {
-        m_pPageCollCB->Check(false);
-        m_pPageCollCB->Enable(false);
-        m_pPageCollLB->Enable(false);
-        m_pPageNoCB->Enable(false);
-        m_pPageNoNF->Enable(false);
+        m_xPageCollCB->set_active(false);
+        m_xPageCollCB->set_sensitive(false);
+        m_xPageCollLB->set_sensitive(false);
+        m_xPageNoCB->set_sensitive(false);
+        m_xPageNoNF->set_sensitive(false);
     }
-    else if ( m_pPgBrkBeforeRB->IsChecked() )
-        PageBreakPosHdl_Impl(m_pPgBrkBeforeRB);
+    else if (m_xPgBrkBeforeRB->get_active())
+        PageBreakPosHdl_Impl(*m_xPgBrkBeforeRB);
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageNoClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwTextFlowPage, PageNoClickHdl_Impl, weld::ToggleButton&, void)
 {
-    m_pPageNoNF->Enable(m_pPageNoCB->IsChecked());
+    m_xPageNoNF->set_sensitive(m_xPageNoCB->get_active());
 }
 
-IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, Button*, pBox, void )
+IMPL_LINK(SwTextFlowPage, SplitHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    m_pSplitRowCB->Enable(static_cast<CheckBox*>(pBox)->IsChecked());
+    m_xSplitRowCB->set_sensitive(rBox.get_active());
 }
 
-IMPL_STATIC_LINK(
-    SwTextFlowPage, SplitRowHdl_Impl, Button*, pBox, void )
+IMPL_LINK_NOARG(SwTextFlowPage, HeadLineCBClickHdl, weld::ToggleButton&, void)
 {
-    static_cast<TriStateBox*>(pBox)->EnableTriState(false);
-}
-
-IMPL_LINK_NOARG(SwTextFlowPage, HeadLineCBClickHdl, Button*, void)
-{
-    m_pRepeatHeaderCombo->Enable(m_pHeadLineCB->IsChecked());
+    m_xRepeatHeaderCombo->set_sensitive(m_xHeadLineCB->get_active());
 }
 
 void SwTextFlowPage::DisablePageBreak()
 {
     bPageBreak = false;
-    m_pPgBrkCB->Disable();
-    m_pPgBrkRB->Disable();
-    m_pColBrkRB->Disable();
-    m_pPgBrkBeforeRB->Disable();
-    m_pPgBrkAfterRB->Disable();
-    m_pPageCollCB->Disable();
-    m_pPageCollLB->Disable();
-    m_pPageNoCB->Disable();
-    m_pPageNoNF->Disable();
+    m_xPgBrkCB->set_sensitive(false);
+    m_xPgBrkRB->set_sensitive(false);
+    m_xColBrkRB->set_sensitive(false);
+    m_xPgBrkBeforeRB->set_sensitive(false);
+    m_xPgBrkAfterRB->set_sensitive(false);
+    m_xPageCollCB->set_sensitive(false);
+    m_xPageCollLB->set_sensitive(false);
+    m_xPageNoCB->set_sensitive(false);
+    m_xPageNoNF->set_sensitive(false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
