@@ -578,12 +578,18 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         {
             case 100:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, true ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, false ) );
             break;
             case 150:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, true ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, false ) );
             break;
             case 200:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, true ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, false ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, false ) );
             break;
         }
     }
