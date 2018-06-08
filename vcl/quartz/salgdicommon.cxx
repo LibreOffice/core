@@ -426,7 +426,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
     }
     else
     {
-        SalBitmap* pBitmap = pSrc->getBitmap( rPosAry.mnSrcX, rPosAry.mnSrcY,
+        std::shared_ptr<SalBitmap> pBitmap = pSrc->getBitmap( rPosAry.mnSrcX, rPosAry.mnSrcY,
                                               rPosAry.mnSrcWidth, rPosAry.mnSrcHeight );
         if( pBitmap )
         {
@@ -434,7 +434,6 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
             aPosAry.mnSrcX = 0;
             aPosAry.mnSrcY = 0;
             drawBitmap( aPosAry, *pBitmap );
-            delete pBitmap;
         }
     }
 }
@@ -1440,16 +1439,15 @@ sal_uInt16 AquaSalGraphics::GetBitCount() const
     return nBits;
 }
 
-SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
+std::shared_ptr<SalBitmap> AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
     SAL_WARN_IF( !mxLayer, "vcl.quartz", "AquaSalGraphics::getBitmap() with no layer this=" << this );
 
     ApplyXorContext();
 
-    QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
+    std::shared_ptr<QuartzSalBitmap> pBitmap = std::make_shared<QuartzSalBitmap>();
     if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY, IsFlipped()) )
     {
-        delete pBitmap;
         pBitmap = nullptr;
     }
     return pBitmap;

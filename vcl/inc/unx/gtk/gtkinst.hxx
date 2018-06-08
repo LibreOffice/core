@@ -207,7 +207,7 @@ public:
                                                      long &nDX, long &nDY,
                                                      DeviceFormat eFormat,
                                                      const SystemGraphicsData* = nullptr ) override;
-    virtual SalBitmap*          CreateSalBitmap() override;
+    virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
 
     virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;

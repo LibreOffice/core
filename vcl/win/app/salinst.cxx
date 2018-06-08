@@ -986,12 +986,12 @@ SalTimer* WinSalInstance::CreateSalTimer()
     return new WinSalTimer();
 }
 
-SalBitmap* WinSalInstance::CreateSalBitmap()
+std::shared_ptr<SalBitmap> WinSalInstance::CreateSalBitmap()
 {
     if (OpenGLHelper::isVCLOpenGLEnabled())
-        return new OpenGLSalBitmap();
+        return std::make_shared<OpenGLSalBitmap>();
     else
-        return new WinSalBitmap();
+        return std::make_shared<WinSalBitmap>();
 }
 
 const OUString& SalGetDesktopEnvironment()

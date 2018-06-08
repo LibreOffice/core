@@ -252,7 +252,7 @@ public:
                                       const SalBitmap& rSalBitmap,
                                       Color nMaskColor ) override;
 
-    virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual std::shared_ptr<SalBitmap> getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
     virtual Color           getPixel( long nX, long nY ) override;
 
     // invert --> ClipRegion (only Windows or VirDevs)

@@ -960,9 +960,9 @@ SalSystem* AquaSalInstance::CreateSalSystem()
     return new AquaSalSystem();
 }
 
-SalBitmap* AquaSalInstance::CreateSalBitmap()
+std::shared_ptr<SalBitmap> AquaSalInstance::CreateSalBitmap()
 {
-    return new QuartzSalBitmap();
+    return std::make_shared<QuartzSalBitmap>();
 }
 
 OUString AquaSalInstance::getOSVersion()
