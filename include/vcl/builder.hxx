@@ -238,6 +238,17 @@ private:
         SizeGroup() {}
     };
 
+    struct ComboBoxTextItem
+    {
+        OUString m_sItem;
+        OString m_sId;
+        ComboBoxTextItem(const OUString& rItem, const OString& rId)
+            : m_sItem(rItem)
+            , m_sId(rId)
+        {
+        }
+    };
+
     typedef std::map<VclPtr<vcl::Window>, stringmap> AtkMap;
 
     struct ParserState
@@ -361,7 +372,7 @@ private:
     void        handleRow(xmlreader::XmlReader &reader, const OString &rID);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handleMenu(xmlreader::XmlReader &reader, const OString &rID);
-    std::vector<OUString> handleItems(xmlreader::XmlReader &reader) const;
+    std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader &reader) const;
 
     void        handleSizeGroup(xmlreader::XmlReader &reader);
 
