@@ -91,18 +91,6 @@ QString KDE5FilePicker::getCurrentFilter() const
     return filter;
 }
 
-void KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction, bool value)
-{
-    if (_customWidgets.contains(controlId))
-    {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
-        if (cb)
-            cb->setChecked(value);
-    }
-    else
-        qWarning() << "set value on unknown control" << controlId;
-}
-
 bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) const
 {
     bool ret = false;
