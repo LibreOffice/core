@@ -11491,6 +11491,11 @@ else
             AC_MSG_WARN([Unable to query installed fonts - unit tests disabled.])
             TEST_FONTS_MISSING=1
         else
+            test_font_map 'LiberationMono' 'LiberationMono'
+            test_font_map 'Arial' 'LiberationSans'
+            test_font_map 'LiberationSans' 'LiberationSans'
+            #test_font_map 'Times New Roman' 'LiberationSerif'
+            test_font_map 'LiberationSerif' 'LiberationSerif'
             test_font_map 'Calibri' 'Carlito'
             test_font_map 'DejaVuSans' 'DejaVuSans'
             test_font_map 'Linux Libertine G' 'LinLibertine_R_G'
