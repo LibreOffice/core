@@ -31,6 +31,7 @@
 #include <unx/gtk/gtksalmenu.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
+#include <salimestatus.hxx>
 #include <vcl/inputtypes.hxx>
 #include <unx/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
@@ -226,7 +227,7 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
 }
 
 #if !GTK_CHECK_VERSION(3,0,0)
-SalI18NImeStatus* GtkInstance::CreateI18NImeStatus()
+std::unique_ptr<SalI18NImeStatus> GtkInstance::CreateI18NImeStatus()
 {
     //we want the default SalInstance::CreateI18NImeStatus returns the no-op
     //stub here, not the X11Instance::CreateI18NImeStatus which the gtk2
