@@ -436,8 +436,7 @@ public:
 
     // rAttr.Number not empty if NatNum attributes are to be stored
     void GetNatNumXml(
-            css::i18n::NativeNumberXmlAttributes& rAttr,
-            css::i18n::NativeNumberXmlAttributes2& rAttr2,
+            css::i18n::NativeNumberXmlAttributes2& rAttr,
             sal_uInt16 nNumFor ) const;
 
     /** Switches to the first non-"gregorian" calendar, but only if the current
