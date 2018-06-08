@@ -100,6 +100,12 @@ inline void readIpcArg(std::istream& stream, sal_uIntPtr& value)
     stream.ignore(); // skip space
 }
 
+inline void readIpcArg(std::istream& stream, uint64_t value)
+{
+    stream >> value;
+    stream.ignore(); // skip space
+}
+
 inline void readIpcArgs(std::istream& /*stream*/)
 {
     // end of arguments, nothing to do
@@ -134,6 +140,8 @@ inline void sendIpcArg(std::ostream& stream, bool value) { stream << value << ' 
 inline void sendIpcArg(std::ostream& stream, sal_Int16 value) { stream << value << ' '; }
 
 inline void sendIpcArg(std::ostream& stream, sal_uIntPtr value) { stream << value << ' '; }
+
+inline void sendIpcArg(std::ostream& stream, uint64_t value) { stream << value << ' '; }
 
 inline void sendIpcArgsImpl(std::ostream& stream)
 {
