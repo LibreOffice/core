@@ -32,7 +32,6 @@
 #include <tools/color.hxx>
 #include <sax/tools/converter.hxx>
 
-#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <com/sun/star/i18n/NativeNumberXmlAttributes2.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
@@ -1191,11 +1190,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     }
 
     // Native number transliteration
-    css::i18n::NativeNumberXmlAttributes aAttr;
-    css::i18n::NativeNumberXmlAttributes2 aAttr2;
-    rFormat.GetNatNumXml( aAttr, aAttr2, nPart );
+    css::i18n::NativeNumberXmlAttributes2 aAttr;
+    rFormat.GetNatNumXml( aAttr, nPart );
     if ( !aAttr.Format.isEmpty() )
     {
+        assert(aAttr.Spellout.isEmpty());   // mutually exclusive
+
         /* FIXME-BCP47: ODF defines no transliteration-script or
          * transliteration-rfc-language-tag */
         LanguageTag aLanguageTag( aAttr.Locale);
@@ -1211,19 +1211,32 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                               aAttr.Style );
     }
 
-    if ( !aAttr2.Spellout.isEmpty() )
+    if ( !aAttr.Spellout.isEmpty() )
     {
-        /* FIXME-BCP47: ODF defines no transliteration-script or
-         * transliteration-rfc-language-tag */
-        LanguageTag aLanguageTag( aAttr2.Locale);
-        OUString aLanguage, aScript, aCountry;
-        aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_TRANSLITERATION_SPELLOUT,
-                              aAttr2.Spellout );
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,
-                              aLanguage );
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,
-                              aCountry );
+        const bool bWriteSpellout = aAttr.Format.isEmpty();
+        assert(bWriteSpellout);     // mutually exclusive
+
+        // Export only for 1.2 with extensions or 1.3 and later.
+        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+        // Also ensure that duplicated transliteration-language and
+        // transliteration-country attributes never escape into the wild with
+        // releases.
+        if (eVersion > SvtSaveOptions::ODFSVER_012 && bWriteSpellout)
+        {
+            /* FIXME-BCP47: ODF defines no transliteration-script or
+             * transliteration-rfc-language-tag */
+            LanguageTag aLanguageTag( aAttr.Locale);
+            OUString aLanguage, aScript, aCountry;
+            aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
+            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            rExport.AddAttribute( ((eVersion < SvtSaveOptions::ODFSVER_013) ?
+                        XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
+                    XML_TRANSLITERATION_SPELLOUT, aAttr.Spellout );
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,
+                                  aLanguage );
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,
+                                  aCountry );
+        }
     }
 
     // The element

@@ -5392,8 +5392,7 @@ void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
     rStr.append(sTemp);
 }
 
-void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes& rAttr,
-                                   css::i18n::NativeNumberXmlAttributes2& rAttr2,
+void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes2& rAttr,
                                    sal_uInt16 nNumFor ) const
 {
     if ( nNumFor <= 3 )
@@ -5404,23 +5403,37 @@ void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes& rAttr,
             css::lang::Locale aLocale(
                     LanguageTag( rNum.GetLang() ).getLocale() );
 
+            /* TODO: a new XNativeNumberSupplier2::convertToXmlAttributes()
+             * should rather return NativeNumberXmlAttributes2 and places
+             * adapted, and whether to fill Spellout or something different
+             * should be internal there. */
+            css::i18n::NativeNumberXmlAttributes aTmp(
+                    GetFormatter().GetNatNum()->convertToXmlAttributes(
+                        aLocale, rNum.GetNatNum()));
+            rAttr.Locale = aTmp.Locale;
+            rAttr.Format = aTmp.Format;
+            rAttr.Style = aTmp.Style;
             if ( NatNumTakesParameters(rNum.GetNatNum()) )
             {
                 // NatNum12 spell out numbers, dates and money amounts
-                rAttr2 = css::i18n::NativeNumberXmlAttributes2(aLocale, rNum.GetParams());
-            } else {
-                rAttr = GetFormatter().GetNatNum()->convertToXmlAttributes(
-                    aLocale, rNum.GetNatNum() );
+                rAttr.Spellout = rNum.GetParams();
+                // Mutually exclusive.
+                rAttr.Format.clear();
+                rAttr.Style.clear();
+            }
+            else
+            {
+                rAttr.Spellout.clear();
             }
         }
         else
         {
-            rAttr = css::i18n::NativeNumberXmlAttributes();
+            rAttr = css::i18n::NativeNumberXmlAttributes2();
         }
     }
     else
     {
-        rAttr = css::i18n::NativeNumberXmlAttributes();
+        rAttr = css::i18n::NativeNumberXmlAttributes2();
     }
 }
 
