@@ -1130,6 +1130,7 @@ public:
     virtual void set_active(bool active) override
     {
         m_bBlockNotify = true;
+        m_xCheckButton->EnableTriState(false);
         m_xCheckButton->Check(active);
         m_bBlockNotify = false;
     }
@@ -1142,6 +1143,7 @@ public:
     virtual void set_inconsistent(bool inconsistent) override
     {
         m_bBlockNotify = true;
+        m_xCheckButton->EnableTriState(true);
         m_xCheckButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
         m_bBlockNotify = false;
     }
@@ -1161,6 +1163,7 @@ IMPL_LINK_NOARG(SalInstanceCheckButton, ToggleHdl, CheckBox&, void)
 {
     if (m_bBlockNotify)
         return;
+    m_xCheckButton->EnableTriState(false);
     signal_toggled();
 }
 
