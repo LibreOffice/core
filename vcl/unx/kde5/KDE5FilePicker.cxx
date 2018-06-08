@@ -141,21 +141,6 @@ QString KDE5FilePicker::getLabel(sal_Int16 controlId) const
     return label;
 }*/
 
-/*void KDE5FilePicker::initialize(bool saveDialog)
-{
-    //default is opening
-    QFileDialog::AcceptMode operationMode
-        = saveDialog ? QFileDialog::AcceptSave : QFileDialog::AcceptOpen;
-
-    _dialog->setAcceptMode(operationMode);
-
-    if (saveDialog)
-    {
-        _dialog->setConfirmOverwrite(true);
-        _dialog->setFileMode(QFileDialog::AnyFile);
-    }
-}*/
-
 void KDE5FilePicker::setWinId(sal_uIntPtr winId) { _winId = winId; }
 
 bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
