@@ -498,11 +498,6 @@ bool SvpSalInstance::AnyInput( VclInputFlags nType )
     return false;
 }
 
-SalSession* SvpSalInstance::CreateSalSession()
-{
-    return nullptr;
-}
-
 OUString SvpSalInstance::GetConnectionIdentifier()
 {
     return OUString();
