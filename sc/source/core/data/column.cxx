@@ -184,7 +184,7 @@ sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::Matr
                 bOpen = false;      // bottom edge closes
         }
 
-        nRow += nEnd;
+        nRow += nEnd - nOffset;
     }
     if (bOpen)
         nEdges |= MatrixEdge::Open; // not closed, matrix continues
