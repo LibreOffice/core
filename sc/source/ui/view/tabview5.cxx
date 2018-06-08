@@ -653,7 +653,7 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    const SdrCaptionObj* pCaption = pNote->GetCaption();
+    const SdrCaptionObj* pCaption = pNote->GetCaption().get();
     if (!pCaption) return;
 
     tools::Rectangle aRect = pCaption->GetLogicRect();

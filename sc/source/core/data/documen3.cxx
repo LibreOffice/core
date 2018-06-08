@@ -76,6 +76,7 @@
 #include <refupdatecontext.hxx>
 #include <scopetools.hxx>
 #include <filterentries.hxx>
+#include <docsh.hxx>
 
 #include <globalnames.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -1093,7 +1094,7 @@ void ScDocument::UpdateReference(
     // After moving, no clipboard move ref-updates are possible
     if (rCxt.meMode != URM_COPY && IsClipboardSource())
     {
-        ScDocument* pClipDoc = ScModule::GetClipDoc();
+        ScDocument* pClipDoc = static_cast<ScDocShell*>(mpShell)->GetClipDoc();
         if (pClipDoc)
             pClipDoc->GetClipParam().mbCutMode = false;
     }
