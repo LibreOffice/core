@@ -105,6 +105,8 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     connect(this, &KDE5FilePicker::setDisplayDirectorySignal /*(const OUString&)*/, this,
             &KDE5FilePicker::setDisplayDirectorySlot /*(const OUString&)*/,
             Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::setValueSignal, this, &KDE5FilePicker::setValueSlot,
+            Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
     setMultiSelectionMode(false);
@@ -205,6 +207,23 @@ void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitle*/,
 void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                        const uno::Any& value)
 {
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT setValueSignal(controlId, nControlAction, value);
+    }
+
+    if (_customWidgets.contains(controlId))
+    {
+        bool bChecked = false;
+        value >>= bChecked;
+
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
+        if (cb)
+            cb->setChecked(bChecked);
+    }
+    else
+        SAL_WARN("vcl.kde5", "set value on unknown control " << controlId);
 }
 
 uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
@@ -433,7 +452,6 @@ void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
             OSL_TRACE("Unknown templates %d", templateId);
             return;
     }
-
     setTitle(VclResId(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));
 }
 
