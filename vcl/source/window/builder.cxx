@@ -2639,11 +2639,11 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, vcl::Window *pWin
     }
 }
 
-std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader) const
+std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &reader) const
 {
     int nLevel = 1;
 
-    std::vector<OUString> aItems;
+    std::vector<ComboBoxTextItem> aItems;
     sal_Int32 nItemIndex = 0;
 
     while(true)
@@ -2663,7 +2663,7 @@ std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader) cons
             if (name.equals("item"))
             {
                 bool bTranslated = false;
-                OString sContext;
+                OString sContext, sId;
 
                 while (reader.nextAttribute(&nsId, &name))
                 {
@@ -2675,6 +2675,11 @@ std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader) cons
                     {
                         name = reader.getAttributeValue(false);
                         sContext = OString(name.begin, name.length);
+                    }
+                    else if (name.equals("id"))
+                    {
+                        name = reader.getAttributeValue(false);
+                        sId = OString(name.begin, name.length);
                     }
                 }
 
@@ -2695,7 +2700,7 @@ std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader) cons
                 if (m_pStringReplace)
                     sFinalValue = (*m_pStringReplace)(sFinalValue);
 
-                aItems.push_back(sFinalValue);
+                aItems.emplace_back(sFinalValue, sId);
                 ++nItemIndex;
             }
         }
@@ -3021,7 +3026,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
 
 /// Insert items to a ComboBox or a ListBox.
 /// They have no common ancestor that would have 'InsertEntry()', so use a template.
-template<typename T> bool insertItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap, const std::vector<OUString> &rItems)
+template<typename T> bool insertItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap, const std::vector<ComboBoxTextItem> &rItems)
 {
     T *pContainer = dynamic_cast<T*>(pWindow);
     if (!pContainer)
@@ -3029,7 +3034,11 @@ template<typename T> bool insertItems(vcl::Window *pWindow, VclBuilder::stringma
 
     sal_uInt16 nActiveId = extractActive(rMap);
     for (auto const& item : rItems)
-        pContainer->InsertEntry(item);
+    {
+        sal_Int32 nPos = pContainer->InsertEntry(item.m_sItem);
+        if (!item.m_sId.isEmpty())
+            pContainer->SetEntryData(nPos, new OUString(OUString::fromUtf8(item.m_sId)));
+    }
     if (nActiveId < rItems.size())
         pContainer->SelectEntryPos(nActiveId);
 
@@ -3090,7 +3099,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
 
     stringmap aProperties, aPangoAttributes;
     stringmap aAtkAttributes;
-    std::vector<OUString> aItems;
+    std::vector<ComboBoxTextItem> aItems;
 
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
