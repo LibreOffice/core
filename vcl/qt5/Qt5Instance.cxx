@@ -185,8 +185,6 @@ bool Qt5Instance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 
 bool Qt5Instance::AnyInput(VclInputFlags /*nType*/) { return false; }
 
-SalSession* Qt5Instance::CreateSalSession() { return nullptr; }
-
 OUString Qt5Instance::GetConnectionIdentifier() { return OUString(); }
 
 void Qt5Instance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&) {}

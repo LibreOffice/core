@@ -158,8 +158,8 @@ public:
     virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
     virtual void            DestroyMenuItem( SalMenuItem* pItem );
 
-    // may return NULL to disable session management
-    virtual SalSession*     CreateSalSession() = 0;
+    // may return NULL to disable session management, only used by X11 backend
+    virtual std::unique_ptr<SalSession> CreateSalSession();
 
     virtual OpenGLContext*  CreateOpenGLContext() = 0;
 
