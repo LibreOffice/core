@@ -233,19 +233,11 @@ void AquaSalInstance::DestroyMenu( SalMenu* pSalMenu )
     delete pSalMenu;
 }
 
-SalMenuItem* AquaSalInstance::CreateMenuItem( const SalItemParams* pItemData )
+std::unique_ptr<SalMenuItem> AquaSalInstance::CreateMenuItem( const SalItemParams & rItemData )
 {
-    if( !pItemData )
-        return nullptr;
+    AquaSalMenuItem *pSalMenuItem = new AquaSalMenuItem( &rItemData );
 
-    AquaSalMenuItem *pSalMenuItem = new AquaSalMenuItem( pItemData );
-
-    return pSalMenuItem;
-}
-
-void AquaSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
-{
-    delete pSalMenuItem;
+    return std::unique_ptr<SalMenuItem>(pSalMenuItem);
 }
 
 /*

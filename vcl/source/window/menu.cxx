@@ -431,7 +431,7 @@ MenuItemData* Menu::NbcInsertItem(sal_uInt16 nId, MenuItemBits nBits,
 
     // update native menu
     if (ImplGetSalMenu() && pData->pSalMenuItem)
-        ImplGetSalMenu()->InsertItem(pData->pSalMenuItem, nPos);
+        ImplGetSalMenu()->InsertItem(pData->pSalMenuItem.get(), nPos);
 
     return pData;
 }
@@ -514,7 +514,7 @@ void Menu::InsertSeparator(const OString &rIdent, sal_uInt16 nPos)
     size_t itemPos = ( nPos != MENU_APPEND ) ? nPos : pItemList->size() - 1;
     MenuItemData *pData = pItemList->GetDataFromPos( itemPos );
     if( ImplGetSalMenu() && pData && pData->pSalMenuItem )
-        ImplGetSalMenu()->InsertItem( pData->pSalMenuItem, nPos );
+        ImplGetSalMenu()->InsertItem( pData->pSalMenuItem.get(), nPos );
 
     mpLayoutData.reset();
 
@@ -763,9 +763,9 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
     if( ImplGetSalMenu() && pData->pSalMenuItem )
     {
         if( pMenu )
-            ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, pMenu->ImplGetSalMenu(), nPos );
+            ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem.get(), pMenu->ImplGetSalMenu(), nPos );
         else
-            ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, nullptr, nPos );
+            ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem.get(), nullptr, nPos );
     }
 
     oldSubMenu.disposeAndClear();
@@ -798,7 +798,7 @@ void Menu::SetAccelKey( sal_uInt16 nItemId, const KeyCode& rKeyCode )
 
     // update native menu
     if( ImplGetSalMenu() && pData->pSalMenuItem )
-        ImplGetSalMenu()->SetAccelerator( nPos, pData->pSalMenuItem, rKeyCode, rKeyCode.GetName() );
+        ImplGetSalMenu()->SetAccelerator( nPos, pData->pSalMenuItem.get(), rKeyCode, rKeyCode.GetName() );
 }
 
 KeyCode Menu::GetAccelKey( sal_uInt16 nItemId ) const
@@ -998,7 +998,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
         ImplSetMenuItemData( pData );
         // update native menu
         if( ImplGetSalMenu() && pData->pSalMenuItem )
-            ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem, rStr );
+            ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem.get(), rStr );
 
         vcl::Window* pWin = ImplGetWindow();
         mpLayoutData.reset();
@@ -1037,7 +1037,7 @@ void Menu::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 
     // update native menu
     if( ImplGetSalMenu() && pData->pSalMenuItem )
-        ImplGetSalMenu()->SetItemImage( nPos, pData->pSalMenuItem, rImage );
+        ImplGetSalMenu()->SetItemImage( nPos, pData->pSalMenuItem.get(), rImage );
 }
 
 Image Menu::GetItemImage( sal_uInt16 nItemId ) const

@@ -54,7 +54,7 @@ struct MenuItemData
     Size            aSz;                    // only temporarily valid
     OUString        aAccessibleName;        // accessible name
 
-    SalMenuItem*    pSalMenuItem;           // access to native menu
+    std::unique_ptr<SalMenuItem> pSalMenuItem; // access to native menu
 
     MenuItemData()
         : nId(0)
@@ -68,7 +68,6 @@ struct MenuItemData
         , bVisible(false)
         , bIsTemporary(false)
         , bHiddenOnGUI(false)
-        , pSalMenuItem(nullptr)
     {
     }
     MenuItemData( const OUString& rStr )
@@ -85,7 +84,6 @@ struct MenuItemData
         , bVisible(false)
         , bIsTemporary(false)
         , bHiddenOnGUI(false)
-        , pSalMenuItem(nullptr)
     {
     }
     ~MenuItemData();

@@ -154,8 +154,7 @@ public:
     // menus
     virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pMenu );
     virtual void            DestroyMenu( SalMenu* pMenu);
-    virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
-    virtual void            DestroyMenuItem( SalMenuItem* pItem );
+    virtual std::unique_ptr<SalMenuItem> CreateMenuItem( const SalItemParams& pItemData );
 
     // may return NULL to disable session management, only used by X11 backend
     virtual std::unique_ptr<SalSession> CreateSalSession();

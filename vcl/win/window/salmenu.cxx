@@ -65,16 +65,13 @@ void WinSalInstance::DestroyMenu( SalMenu* pSalMenu )
     delete pSalMenu;
 }
 
-SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
+std::unique_ptr<SalMenuItem> WinSalInstance::CreateMenuItem( const SalItemParams & rItemData )
 {
-    if( !pItemData )
-        return nullptr;
-
     WinSalMenuItem *pSalMenuItem = new WinSalMenuItem();
     memset( &pSalMenuItem->mInfo, 0, sizeof( MENUITEMINFOW ) );
     pSalMenuItem->mInfo.cbSize = sizeof( MENUITEMINFOW );
 
-    if( pItemData->eType == MenuItemType::SEPARATOR )
+    if( rItemData.eType == MenuItemType::SEPARATOR )
     {
         // separator
         pSalMenuItem->mInfo.fMask = MIIM_TYPE;
@@ -83,10 +80,10 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
     else
     {
         // item
-        pSalMenuItem->mText   = pItemData->aText;
-        pSalMenuItem->mpMenu  = pItemData->pMenu;
-        pSalMenuItem->maBitmap= !!pItemData->aImage ? pItemData->aImage.GetBitmapEx().GetBitmap() : Bitmap();
-        pSalMenuItem->mnId    = pItemData->nId;
+        pSalMenuItem->mText   = rItemData.aText;
+        pSalMenuItem->mpMenu  = rItemData.pMenu;
+        pSalMenuItem->maBitmap= !!rItemData.aImage ? rItemData.aImage.GetBitmapEx().GetBitmap() : Bitmap();
+        pSalMenuItem->mnId    = rItemData.nId;
 
         // 'translate' mnemonics
         pSalMenuItem->mText = pSalMenuItem->mText.replaceAll( "~", "&" );
@@ -96,16 +93,11 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
         pSalMenuItem->mInfo.dwTypeData = o3tl::toW(const_cast<sal_Unicode *>(pSalMenuItem->mText.getStr()));
         pSalMenuItem->mInfo.cch = pSalMenuItem->mText.getLength();
 
-        pSalMenuItem->mInfo.wID = pItemData->nId;
+        pSalMenuItem->mInfo.wID = rItemData.nId;
         pSalMenuItem->mInfo.dwItemData = reinterpret_cast<ULONG_PTR>(pSalMenuItem); // user data
     }
 
-    return pSalMenuItem;
-}
-
-void WinSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
-{
-    delete pSalMenuItem;
+    return std::unique_ptr<SalMenuItem>(pSalMenuItem);
 }
 
 static void ImplDrawMenuBar( SalMenu *pMenu )
