@@ -75,6 +75,7 @@
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
@@ -187,6 +188,7 @@ public:
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
+    void testPptCrop();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -268,6 +270,7 @@ public:
     CPPUNIT_TEST(testTdf116899);
     CPPUNIT_TEST(testTdf77747);
     CPPUNIT_TEST(testTdf116266);
+    CPPUNIT_TEST(testPptCrop);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -630,6 +633,24 @@ void SdImportTest::testFdo68594()
     CPPUNIT_ASSERT_MESSAGE( "no color item", pC != nullptr);
     // Color should be black
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Placeholder color mismatch", sal_uInt32(0), sal_uInt32(pC->GetValue()) );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testPptCrop()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/crop.ppt"), PPT);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getShapeFromPage(/*nShape=*/1, /*nPage=*/0, xDocShRef));
+    text::GraphicCrop aCrop;
+    xPropertySet->getPropertyValue("GraphicCrop") >>= aCrop;
+    // These were all 0, lazy-loading broke cropping.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aCrop.Top);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aCrop.Bottom);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aCrop.Left);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aCrop.Right);
 
     xDocShRef->DoClose();
 }
