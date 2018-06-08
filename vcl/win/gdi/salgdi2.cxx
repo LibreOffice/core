@@ -215,7 +215,7 @@ void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
     mpImpl->drawMask( rPosAry, rSSalBitmap, nMaskColor );
 }
 
-SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
+std::shared_ptr<SalBitmap> WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
     return mpImpl->getBitmap( nX, nY, nDX, nDY );
 }

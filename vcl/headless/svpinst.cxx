@@ -260,12 +260,12 @@ SalSystem* SvpSalInstance::CreateSalSystem()
     return new SvpSalSystem();
 }
 
-SalBitmap* SvpSalInstance::CreateSalBitmap()
+std::shared_ptr<SalBitmap> SvpSalInstance::CreateSalBitmap()
 {
 #ifdef IOS
-    return new QuartzSalBitmap();
+    return std::make_shared<QuartzSalBitmap>();
 #else
-    return new SvpSalBitmap();
+    return std::make_shared<SvpSalBitmap>();
 #endif
 }
 

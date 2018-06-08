@@ -52,12 +52,12 @@
 #include <memory>
 
 
-SalBitmap* X11SalInstance::CreateSalBitmap()
+std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
 {
     if (OpenGLHelper::isVCLOpenGLEnabled())
-        return new OpenGLSalBitmap();
+        return std::make_shared<OpenGLSalBitmap>();
     else
-        return new X11SalBitmap();
+        return std::make_shared<X11SalBitmap>();
 }
 
 ImplSalBitmapCache* X11SalBitmap::mpCache = nullptr;

@@ -71,7 +71,7 @@ public:
     virtual SalTimer*           CreateSalTimer() override;
     virtual std::unique_ptr<SalI18NImeStatus> CreateI18NImeStatus() override;
     virtual SalSystem*          CreateSalSystem() override;
-    virtual SalBitmap*          CreateSalBitmap() override;
+    virtual std::shared_ptr<SalBitmap>  CreateSalBitmap() override;
     virtual std::unique_ptr<SalSession> CreateSalSession() override;
     virtual OpenGLContext*      CreateOpenGLContext() override;
 
