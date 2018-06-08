@@ -713,7 +713,6 @@ void OutputDevice::SetTextFillColor()
 
 void OutputDevice::SetTextFillColor( const Color& rColor )
 {
-
     Color aColor( rColor );
     bool bTransFill = ImplIsColorTransparent( aColor );
 
