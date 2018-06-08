@@ -74,8 +74,7 @@ public:
     virtual bool                AnyInput( VclInputFlags nType ) override;
     virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* ) override;
     virtual void                DestroyMenu( SalMenu* ) override;
-    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData ) override;
-    virtual void                DestroyMenuItem( SalMenuItem* ) override;
+    virtual std::unique_ptr<SalMenuItem> CreateMenuItem( const SalItemParams & rItemData ) override;
     virtual OpenGLContext*      CreateOpenGLContext() override;
     virtual OUString            GetConnectionIdentifier() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;

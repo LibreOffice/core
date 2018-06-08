@@ -120,12 +120,10 @@ SalMenu* Qt5Instance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 
 void Qt5Instance::DestroyMenu(SalMenu* pMenu) { delete pMenu; }
 
-SalMenuItem* Qt5Instance::CreateMenuItem(const SalItemParams* pItemData)
+std::unique_ptr<SalMenuItem> Qt5Instance::CreateMenuItem(const SalItemParams& rItemData)
 {
-    return new Qt5MenuItem(pItemData);
+    return std::unique_ptr<SalMenuItem>(new Qt5MenuItem(&rItemData));
 }
-
-void Qt5Instance::DestroyMenuItem(SalMenuItem* pItem) { delete pItem; }
 
 SalTimer* Qt5Instance::CreateSalTimer() { return new Qt5Timer(); }
 
