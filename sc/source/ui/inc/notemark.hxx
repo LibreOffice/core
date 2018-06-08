@@ -48,7 +48,7 @@ private:
     tools::Rectangle       m_aRect;
     ScDrawView*     m_pDrawView;
     SdrModel*       m_pModel;
-    ScCaptionPtr    m_xObject;
+    std::shared_ptr< SdrCaptionObj >    m_xObject;
     bool            m_bVisible;
     DECL_LINK( TimeHdl, Timer*, void );
 
