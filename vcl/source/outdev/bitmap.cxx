@@ -465,12 +465,11 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
             if ( !bClipped )
             {
-                SalBitmap* pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, this );
+                std::shared_ptr<SalBitmap> pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, this );
 
                 if( pSalBmp )
                 {
-                    std::shared_ptr<SalBitmap> xImpBmp(pSalBmp);
-                    aBmp.ImplSetSalBitmap(xImpBmp);
+                    aBmp.ImplSetSalBitmap(pSalBmp);
                 }
             }
         }

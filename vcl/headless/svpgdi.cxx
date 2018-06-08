@@ -1309,9 +1309,9 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     releaseCairoContext(cr, false, extents);
 }
 
-SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
+std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
-    SvpSalBitmap* pBitmap = new SvpSalBitmap();
+    std::shared_ptr<SvpSalBitmap> pBitmap = std::make_shared<SvpSalBitmap>();
     BitmapPalette aPal;
     if (GetBitCount() == 1)
     {
@@ -1323,7 +1323,6 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     if (!pBitmap->Create(Size(nWidth, nHeight), GetBitCount(), aPal))
     {
         SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create bitmap");
-        delete pBitmap;
         return nullptr;
     }
 

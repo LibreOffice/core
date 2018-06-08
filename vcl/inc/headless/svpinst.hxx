@@ -165,7 +165,7 @@ public:
     // SalSystem
     virtual SalSystem*      CreateSalSystem() override;
     // SalBitmap
-    virtual SalBitmap*      CreateSalBitmap() override;
+    virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
