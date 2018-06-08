@@ -200,8 +200,7 @@ public:
     virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
     virtual SalMenu*            CreateMenu( bool, Menu* ) override;
     virtual void                DestroyMenu( SalMenu* pMenu ) override;
-    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* ) override;
-    virtual void                DestroyMenuItem( SalMenuItem* pItem ) override;
+    virtual std::unique_ptr<SalMenuItem> CreateMenuItem( const SalItemParams& ) override;
     virtual SalTimer*           CreateSalTimer() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
     virtual std::unique_ptr<SalVirtualDevice>
