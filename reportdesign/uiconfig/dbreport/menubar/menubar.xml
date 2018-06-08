@@ -30,12 +30,8 @@
             <menu:menuitem menu:id=".uno:SaveAs"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:ExportReportTo">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:TextDocument"/>
-                    <menu:menuitem menu:id=".uno:Spreadsheet"/>
-                </menu:menupopup>
-            </menu:menu>
+            <menu:menuitem menu:id=".uno:TextDocument"/>
+            <menu:menuitem menu:id=".uno:Spreadsheet"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>

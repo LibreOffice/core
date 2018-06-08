@@ -26,22 +26,22 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Save"/>
-            <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuitem menu:id=".uno:CheckOut"/>
             <menu:menuitem menu:id=".uno:CancelCheckOut"/>
             <menu:menuitem menu:id=".uno:CheckIn"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SaveBasicAs"/>
-            <menu:menuitem menu:id=".uno:ExportDialog"/>
+            <menu:menuitem menu:id=".uno:Save"/>
+            <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:LoadBasic"/>
+            <menu:menuitem menu:id=".uno:SaveBasicAs"/>
             <menu:menuitem menu:id=".uno:ImportDialog"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Signature"/>
+            <menu:menuitem menu:id=".uno:ExportDialog"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Print"/>
             <menu:menuitem menu:id=".uno:PrinterSetup"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Signature"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>
