@@ -2302,9 +2302,7 @@ OUString Menu::GetAccessibleName( sal_uInt16 nItemId ) const
 
 void Menu::ImplClearSalMenu()
 {
-    if( mpSalMenu )
-        ImplGetSVData()->mpDefInst->DestroyMenu( mpSalMenu );
-    mpSalMenu = nullptr;
+    mpSalMenu.reset();
 }
 
 void Menu::GetSystemMenuData( SystemMenuData* pData ) const

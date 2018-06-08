@@ -111,14 +111,12 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, D
     }
 }
 
-SalMenu* Qt5Instance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
+std::unique_ptr<SalMenu> Qt5Instance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 {
     Qt5Menu* pSalMenu = new Qt5Menu(bMenuBar);
     pSalMenu->SetMenu(pVCLMenu);
-    return pSalMenu;
+    return std::unique_ptr<SalMenu>(pSalMenu);
 }
-
-void Qt5Instance::DestroyMenu(SalMenu* pMenu) { delete pMenu; }
 
 std::unique_ptr<SalMenuItem> Qt5Instance::CreateMenuItem(const SalItemParams& rItemData)
 {

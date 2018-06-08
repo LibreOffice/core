@@ -218,19 +218,14 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
-SalMenu* AquaSalInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
+std::unique_ptr<SalMenu> AquaSalInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
 {
     initAppMenu();
 
     AquaSalMenu *pAquaSalMenu = new AquaSalMenu( bMenuBar );
     pAquaSalMenu->mpVCLMenu = pVCLMenu;
 
-    return pAquaSalMenu;
-}
-
-void AquaSalInstance::DestroyMenu( SalMenu* pSalMenu )
-{
-    delete pSalMenu;
+    return std::unique_ptr<SalMenu>(pAquaSalMenu);
 }
 
 std::unique_ptr<SalMenuItem> AquaSalInstance::CreateMenuItem( const SalItemParams & rItemData )

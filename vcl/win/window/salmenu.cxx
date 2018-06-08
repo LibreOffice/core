@@ -43,7 +43,7 @@ bool SalData::IsKnownMenuHandle( HMENU hMenu )
 
 // WinSalInst factory methods
 
-SalMenu* WinSalInstance::CreateMenu( bool bMenuBar, Menu* )
+std::unique_ptr<SalMenu> WinSalInstance::CreateMenu( bool bMenuBar, Menu* )
 {
     WinSalMenu *pSalMenu = new WinSalMenu();
 
@@ -57,12 +57,7 @@ SalMenu* WinSalInstance::CreateMenu( bool bMenuBar, Menu* )
     if( pSalMenu->mhMenu )
         GetSalData()->mhMenuSet.insert( pSalMenu->mhMenu );
 
-    return pSalMenu;
-}
-
-void WinSalInstance::DestroyMenu( SalMenu* pSalMenu )
-{
-    delete pSalMenu;
+    return std::unique_ptr<SalMenu>(pSalMenu);
 }
 
 std::unique_ptr<SalMenuItem> WinSalInstance::CreateMenuItem( const SalItemParams & rItemData )
