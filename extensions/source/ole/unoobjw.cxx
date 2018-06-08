@@ -1075,10 +1075,15 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
+    if( ! rgdispid)
+        return E_POINTER;
+
     OUString sNames;
     sNames += "[";
     for (unsigned int i = 0; i < cNames; ++i)
     {
+        // Intialise returned rgdispid values.
+        rgdispid[i] = DISPID_UNKNOWN;
         if (i > 0)
             sNames += ",";
         sNames += "\"" + OUString(o3tl::toU(rgszNames[i])) + "\"";
@@ -1091,8 +1096,6 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
     try
     {
         MutexGuard guard( getBridgeMutex());
-        if( ! rgdispid)
-            return E_POINTER;
 
         // FIXME: Handle the cNames > 1 case? Note that the rest of the names mean the names of *arguments*.
 
@@ -1119,19 +1122,17 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
             OUString name(o3tl::toU(rgszNames[0]));
             NameToIdMap::iterator iter = m_nameToDispIdMap.find(name);
 
+            bool bIsMethod = false;
+
+            OUString exactName = name;
+
             if (iter == m_nameToDispIdMap.end())
             {
-                OUString exactName;
-
                 if (m_xExactName.is())
                 {
                     exactName = m_xExactName->getExactName(name);
                     if (exactName.isEmpty())
                         exactName = name;
-                }
-                else
-                {
-                    exactName = name;
                 }
 
                 MemberInfo d(0, exactName);
@@ -1146,6 +1147,7 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
                 if (m_xInvocation->hasMethod(exactName))
                 {
                     d.flags |= DISPATCH_METHOD;
+                    bIsMethod = true;
                 }
 
                 if (d.flags != 0)
@@ -1167,9 +1169,46 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
             }
             else
             {
-                *rgdispid = (*iter).second;
-                SAL_INFO("extensions.olebridge", "  " << name << ": " << *rgdispid);
-                ret = S_OK;
+                rgdispid[0] = (*iter).second;
+                SAL_INFO("extensions.olebridge", "  " << name << ": " << rgdispid[0]);
+
+                if (bIsMethod && cNames > 1)
+                {
+                    Reference<XIdlMethod> xIdlMethod;
+                    Reference<XIntrospectionAccess> xIntrospectionAccess = m_xInvocation->getIntrospection();
+                    try
+                    {
+                        if (xIntrospectionAccess.is())
+                            xIdlMethod = xIntrospectionAccess->getMethod(exactName, MethodConcept::ALL);
+                    }
+                    catch (const NoSuchMethodException&)
+                    {
+                    }
+                    if (xIdlMethod.is())
+                    {
+                        auto aParamInfos = xIdlMethod->getParameterInfos();
+                        for (unsigned int i = 1; i < cNames; ++i)
+                        {
+                            for (int j = 0; j < aParamInfos.getLength(); ++j)
+                            {
+                                if (aParamInfos[j].aName.equalsIgnoreAsciiCase(OUString(o3tl::toU(rgszNames[i]))))
+                                {
+                                    rgdispid[i] = j;
+                                    SAL_INFO("extensions.olebridge", "  " << OUString(o3tl::toU(rgszNames[i])) << ": " << rgdispid[i]);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Return value should be S_OK only if *all* the names were found.
+                unsigned int i;
+                for (i = 0; i < cNames; ++i)
+                    if (rgdispid[i] == DISPID_UNKNOWN)
+                        break;
+                if (i == cNames)
+                    ret = S_OK;
             }
         }
     }
