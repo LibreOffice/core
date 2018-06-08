@@ -426,7 +426,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
     }
     else
     {
-        SalBitmap* pBitmap = pSrc->getBitmap( rPosAry.mnSrcX, rPosAry.mnSrcY,
+        std::shared_ptr<SalBitmap> pBitmap = pSrc->getBitmap( rPosAry.mnSrcX, rPosAry.mnSrcY,
                                               rPosAry.mnSrcWidth, rPosAry.mnSrcHeight );
         if( pBitmap )
         {
@@ -434,7 +434,6 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
             aPosAry.mnSrcX = 0;
             aPosAry.mnSrcY = 0;
             drawBitmap( aPosAry, *pBitmap );
-            delete pBitmap;
         }
     }
 }

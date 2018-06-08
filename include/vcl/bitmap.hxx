@@ -28,6 +28,7 @@
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class Color;
 
@@ -124,7 +125,7 @@ public:
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
                             Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = nullptr );
-    explicit                Bitmap( SalBitmap* pSalBitmap );
+    explicit                Bitmap( std::shared_ptr<SalBitmap> const & xSalBitmap );
     virtual                 ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );

@@ -133,7 +133,7 @@ public:
     // SalSystem
     virtual SalSystem*      CreateSalSystem() = 0;
     // SalBitmap
-    virtual SalBitmap*      CreateSalBitmap() = 0;
+    virtual std::shared_ptr<SalBitmap> CreateSalBitmap() = 0;
 
     // YieldMutex
     virtual comphelper::SolarMutex*

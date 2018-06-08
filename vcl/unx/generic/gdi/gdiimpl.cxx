@@ -586,7 +586,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         // #i60699# No chance to handle graphics exposures - we copy
         // to a temp bitmap first, into which no repaints are
         // technically possible.
-        std::unique_ptr<SalBitmap> xDDB(pSrcGraphics->getBitmap( rPosAry.mnSrcX,
+        std::shared_ptr<SalBitmap> xDDB(pSrcGraphics->getBitmap( rPosAry.mnSrcX,
                                                                    rPosAry.mnSrcY,
                                                                    rPosAry.mnSrcWidth,
                                                                    rPosAry.mnSrcHeight ));
@@ -1684,7 +1684,7 @@ Color X11SalGraphicsImpl::getPixel( long nX, long nY )
     return mrParent.GetColormap().GetColor( aXColor.pixel );
 }
 
-SalBitmap *X11SalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
+std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
 {
     bool bFakeWindowBG = false;
 
@@ -1737,7 +1737,7 @@ SalBitmap *X11SalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
         }
     }
 
-    X11SalBitmap* pSalBitmap = new X11SalBitmap;
+    std::shared_ptr<X11SalBitmap> pSalBitmap = std::make_shared<X11SalBitmap>();
     sal_uInt16 nBitCount = GetBitCount();
 
     if( &mrParent.GetDisplay()->GetColormap( mrParent.m_nXScreen ) != &mrParent.GetColormap() )
