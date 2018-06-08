@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_d12f97f4",
+        "filename": "offapi/com/sun/star/i18n/NativeNumberXmlAttributes2.idl",
+        "patchSetId": 15
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-08T18:10:08Z",
+      "side": 1,
+      "message": "Will all this be ready for 6.1 and to be cherry-picked?",
+      "range": {
+        "startLine": 38,
+        "startChar": 23,
+        "endLine": 38,
+        "endChar": 26
+      },
+      "revId": "32f1c56d8ff5e6f87dbcf086fd3743d6d36182bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_91efdfaf",
+        "filename": "offapi/com/sun/star/i18n/NativeNumberXmlAttributes2.idl",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-08T18:10:08Z",
+      "side": 1,
+      "message": "I\u0027m not so happy with having this as a separate struct with yet another Locale field. When implementing XNativeNumberSupplier2::convert...() this should be derived from NativeNumberXmlAttributes and internally only NativeNumberXmlAttributes2 be used to interface with SvNumberformat::GetNatNumXml(). XNativeNumberSupplier and XNativeNumberSupplier2 will have to have a slightly different implementation anyway and XNativeNumberSupplier can assign fields from NativeNumberXmlAttributes2 to NativeNumberXmlAttributes, and XNativeNumberSupplier2 simply forward a NativeNumberXmlAttributes2.",
+      "revId": "32f1c56d8ff5e6f87dbcf086fd3743d6d36182bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f1fd736f",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-08T18:10:08Z",
+      "side": 1,
+      "message": "Code must ensure that not both, Format and Spellout, are written, because duplicating the transliteration-language or transliteration-country attribute would be invalid ODF.\n\nFor the ODF specification draft that means that (number:transliteration-format,number:transliteration-style) and number:transliteration-spellout are mutually exclusive.\n\nOr is there any use case where spellout could occur together with format,style? Then the code would have to write number:transliteration-language and number:transliteration-country only once. But I doubt there is.",
+      "revId": "32f1c56d8ff5e6f87dbcf086fd3743d6d36182bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
