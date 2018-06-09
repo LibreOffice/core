@@ -12,6 +12,7 @@
 
 #include <vector>
 #include <tools/stream.hxx>
+#include <tools/gen.hxx>
 
 namespace com
 {
@@ -44,6 +45,14 @@ VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic,
 VCL_DLLPUBLIC size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
                                css::uno::Sequence<sal_Int8>& rPdfData,
                                const double fResolutionDPI = 96.);
+
+/// Import PDF as Graphic images (1 per page), all unloaded.
+/// Since Graphic is unloaded, we need to return the page size (in pixels) separately.
+/// Does not set rPdfData if no conversion is done.
+/// Returns the number of pages read.
+VCL_DLLPUBLIC size_t ImportPDFUnloaded(const OUString& rURL,
+                                       std::vector<std::pair<Graphic, Size>>& rGraphics,
+                                       const double fResolutionDPI = 96.);
 }
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
