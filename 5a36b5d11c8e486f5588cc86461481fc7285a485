@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_445be354",
+        "filename": "sc/source/core/data/postit.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-09T18:33:48Z",
+      "side": 1,
+      "message": "return by const \u0026",
+      "revId": "5a36b5d11c8e486f5588cc86461481fc7285a485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
