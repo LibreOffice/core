@@ -2002,6 +2002,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         else if (aFilterName == IMP_PDF)
         {
+            // Note: will import rGraphic.getPageNumber if non-negative, or the first.
             if (!vcl::ImportPDF(rIStream, rGraphic))
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
             else
