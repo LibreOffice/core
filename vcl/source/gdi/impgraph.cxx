@@ -1537,6 +1537,8 @@ bool ImpGraphic::ensureAvailable() const
 bool ImpGraphic::loadPrepared()
 {
     Graphic aGraphic;
+    // Set the page number to load the correct page (for multipage types).
+    aGraphic.setPageNumber(mnPageNumber);
     if (mpGfxLink->LoadNative(aGraphic))
     {
         GraphicExternalLink aLink = maGraphicExternalLink;
