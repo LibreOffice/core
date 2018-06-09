@@ -217,7 +217,7 @@ private:
     friend class GraphicObject;
 
 public:
-    void            SetGfxLink(const GfxLink& rGfxLink);
+    void            SetGfxLink(const std::shared_ptr<GfxLink>& rGfxLink);
     GfxLink         GetGfxLink() const;
     bool            IsGfxLink() const;
 
