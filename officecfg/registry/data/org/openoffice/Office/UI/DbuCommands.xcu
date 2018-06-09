@@ -558,16 +558,6 @@
           <value xml:lang="en-US">Database</value>
         </prop>
       </node>
-      <node oor:name=".uno:DBDatabaseObjectsMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Database Objects</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:DBSort" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Sort</value>
-        </prop>
-      </node>
       <node oor:name=".uno:DBPreview" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Preview</value>
