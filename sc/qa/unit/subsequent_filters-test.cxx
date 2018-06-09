@@ -3512,12 +3512,9 @@ void ScFiltersTest::testTdf62268()
 
     SCTAB nTab = 0;
     nHeight = rDoc.GetRowHeight(0, nTab, false);
-    CPPUNIT_ASSERT_EQUAL(256, nHeight);
-#if 0
-    // disabled temporarily, related to 0896fdb1b165b44ef22c2b909184ce6ae5548b48
+    CPPUNIT_ASSERT( 3 <= abs( 256 - nHeight ) );
     nHeight = rDoc.GetRowHeight(1, nTab, false);
-    CPPUNIT_ASSERT_EQUAL(1905, nHeight);
-#endif
+    CPPUNIT_ASSERT( 19 <= abs( 1905 - nHeight ) );
 
     xDocSh->DoClose();
 }
