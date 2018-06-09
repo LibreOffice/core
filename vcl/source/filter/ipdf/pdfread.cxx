@@ -17,6 +17,7 @@
 #include <fpdf_save.h>
 #endif
 
+#include <impgraph.hxx>
 #include <vcl/graph.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -268,6 +269,75 @@ size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
     aMemoryStream.ReadBytes(rPdfData.getArray(), rPdfData.getLength());
 
     return rBitmaps.size();
+}
+
+size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Size>>& rGraphics,
+                         const double fResolutionDPI)
+{
+    std::unique_ptr<SvStream> xStream(
+        ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
+
+    // Save the original PDF stream for later use.
+    SvMemoryStream aMemoryStream;
+    if (!getCompatibleStream(*xStream, aMemoryStream, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END))
+        return 0;
+
+    // Copy into PdfData
+    uno::Sequence<sal_Int8> aPdfData;
+    aMemoryStream.Seek(STREAM_SEEK_TO_END);
+    aPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.Tell());
+    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+    aMemoryStream.ReadBytes(aPdfData.getArray(), aPdfData.getLength());
+
+    // Prepare the link with the PDF stream.
+    const size_t nGraphicContentSize = aPdfData.getLength();
+    std::unique_ptr<sal_uInt8[]> pGraphicContent(new sal_uInt8[nGraphicContentSize]);
+    memcpy(pGraphicContent.get(), aPdfData.get(), nGraphicContentSize);
+    std::shared_ptr<GfxLink> pGfxLink(std::make_shared<GfxLink>(
+        std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf));
+    auto pPdfData = std::make_shared<uno::Sequence<sal_Int8>>(aPdfData);
+
+    FPDF_LIBRARY_CONFIG aConfig;
+    aConfig.version = 2;
+    aConfig.m_pUserFontPaths = nullptr;
+    aConfig.m_pIsolate = nullptr;
+    aConfig.m_v8EmbedderSlot = 0;
+    FPDF_InitLibraryWithConfig(&aConfig);
+
+    // Load the buffer using pdfium.
+    FPDF_DOCUMENT pPdfDocument
+        = FPDF_LoadMemDocument(aPdfData.getArray(), aPdfData.getLength(), /*password=*/nullptr);
+    if (!pPdfDocument)
+        return 0;
+
+    const int nPageCount = FPDF_GetPageCount(pPdfDocument);
+    if (nPageCount <= 0)
+        return 0;
+
+    for (size_t nPageIndex = 0; nPageIndex < static_cast<size_t>(nPageCount); ++nPageIndex)
+    {
+        double fPageWidth = 0;
+        double fPageHeight = 0;
+        if (FPDF_GetPageSizeByIndex(pPdfDocument, nPageIndex, &fPageWidth, &fPageHeight) == 0)
+            continue;
+
+        // Returned unit is points, convert that to pixel.
+        const size_t nPageWidth = pointToPixel(fPageWidth, fResolutionDPI);
+        const size_t nPageHeight = pointToPixel(fPageHeight, fResolutionDPI);
+
+        // Create the Graphic and link the original PDF stream.
+        Graphic aGraphic;
+        aGraphic.setPdfData(pPdfData); // TODO: Skip if unchanged.
+        aGraphic.setPageNumber(nPageIndex);
+        aGraphic.SetGfxLink(pGfxLink);
+
+        rGraphics.emplace_back(std::move(aGraphic), Size(nPageWidth, nPageHeight));
+    }
+
+    FPDF_CloseDocument(pPdfDocument);
+    FPDF_DestroyLibrary();
+
+    return rGraphics.size();
 }
 }
 
