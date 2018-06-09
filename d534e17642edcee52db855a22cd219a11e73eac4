@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_6749c1d0",
+        "filename": "basctl/uiconfig/basicide/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-09T23:58:11Z",
+      "side": 1,
+      "message": "This will show as a blank item, as the label is in WriterCommands.xcu instead of GenericCommands.xcu.",
+      "revId": "d534e17642edcee52db855a22cd219a11e73eac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_473cc52f",
+        "filename": "basctl/uiconfig/basicide/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-09T23:58:11Z",
+      "side": 1,
+      "message": "Missing closing \u003c/menu:menu\u003e tag.",
+      "revId": "d534e17642edcee52db855a22cd219a11e73eac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
