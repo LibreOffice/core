@@ -115,6 +115,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maSwapInfo(rImpGraphic.maSwapInfo)
     , mpContext(rImpGraphic.mpContext)
     , mpSwapFile(rImpGraphic.mpSwapFile)
+    , mpGfxLink(rImpGraphic.mpGfxLink)
     , meType(rImpGraphic.meType)
     , mnSizeBytes(rImpGraphic.mnSizeBytes)
     , mbSwapOut(rImpGraphic.mbSwapOut)
@@ -124,9 +125,6 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
     , mnPageNumber(rImpGraphic.mnPageNumber)
 {
-    if( rImpGraphic.mpGfxLink )
-        mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
-
     if( rImpGraphic.mpAnimation )
     {
         mpAnimation = o3tl::make_unique<Animation>( *rImpGraphic.mpAnimation );
@@ -239,10 +237,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         mbSwapOut = rImpGraphic.mbSwapOut;
         mpSwapFile = rImpGraphic.mpSwapFile;
 
-        mpGfxLink.reset();
-
-        if( rImpGraphic.mpGfxLink )
-            mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
+        mpGfxLink = rImpGraphic.mpGfxLink;
 
         maVectorGraphicData = rImpGraphic.maVectorGraphicData;
         mpPdfData = rImpGraphic.mpPdfData;
@@ -1370,11 +1365,11 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
     return bRet;
 }
 
-void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
+void ImpGraphic::ImplSetLink(const GfxLink& rGfxLink)
 {
-    mpGfxLink = o3tl::make_unique<GfxLink>( rGfxLink );
+    mpGfxLink = rGfxLink;
 
-    if( mpGfxLink->IsNative() )
+    if (mpGfxLink && mpGfxLink->IsNative())
         mpGfxLink->SwapOut();
 }
 
@@ -1489,7 +1484,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
         // set dummy link to avoid creation of additional link after filtering;
         // we set a default link to avoid unnecessary swapping of native data
-        aGraphic.SetLink( GfxLink() );
+        aGraphic.SetLink(GfxLink());
 
         if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
         {
@@ -1506,7 +1501,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 rImpGraphic.ImplSetPrefSize( aLink.GetPrefSize() );
 
             if( bSetLink )
-                rImpGraphic.ImplSetLink( aLink );
+                rImpGraphic.ImplSetLink(aLink);
         }
         else
         {
