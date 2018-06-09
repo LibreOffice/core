@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_27a349a0",
+        "filename": "dbaccess/uiconfig/dbapp/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-09T22:20:17Z",
+      "side": 0,
+      "message": "This appears to be the only place where .uno:DBDatabaseObjectsMenu was used. Please also remove the command from officecfg/registry/data/org/openoffice/Office/UI/DbuCommands.xcu.",
+      "revId": "d534e17642edcee52db855a22cd219a11e73eac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_47a04591",
+        "filename": "dbaccess/uiconfig/dbapp/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-09T22:20:17Z",
+      "side": 0,
+      "message": "Why are you removing the menu:style\u003d\"radio\" bits?",
+      "revId": "d534e17642edcee52db855a22cd219a11e73eac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_a7b579d1",
+        "filename": "dbaccess/uiconfig/dbapp/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-09T22:20:17Z",
+      "side": 0,
+      "message": "This appears to be the only place where it was used. Please also remove the command from officecfg/registry/data/org/openoffice/Office/UI/DbuCommands.xcu.",
+      "revId": "d534e17642edcee52db855a22cd219a11e73eac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
