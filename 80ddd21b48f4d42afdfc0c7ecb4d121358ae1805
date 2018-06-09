@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_e734d14b",
+        "filename": "framework/uiconfig/startmodule/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-09T23:45:57Z",
+      "side": 1,
+      "message": "Bad indentation.",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 8
+      },
+      "revId": "80ddd21b48f4d42afdfc0c7ecb4d121358ae1805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
