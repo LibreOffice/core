@@ -1630,10 +1630,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             const sal_Int32 m = -nNLen;
             if (nLen && IsIdxInside(nPos, nLen))
             {
-                if (!nLen)
-                    InvalidateSize();
-                else
-                    InvalidateRange( SwCharRange(nPos, TextFrameIndex(1)), m );
+                InvalidateRange( SwCharRange(nPos, TextFrameIndex(1)), m );
             }
             lcl_SetWrong( *this, rNode, nNPos, m, true );
             if (nLen)
