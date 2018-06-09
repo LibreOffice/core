@@ -21,10 +21,11 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:Open"/>
+      <menu:menuitem menu:id=".uno:OpenRemote"/>
       <menu:menuitem menu:id=".uno:RecentFileList"/>
+      <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
-      <menu:menuseparator/>
       <menu:menu menu:id=".uno:TemplateMenu">
           <menu:menupopup>
               <menu:menuitem menu:id=".uno:OpenTemplate"/>
@@ -34,25 +35,35 @@
           </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CloseDoc"/>
+      <menu:menuitem menu:id=".uno:Reload"/>
+      <menu:menuitem menu:id=".uno:VersionDialog"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Save"/>
+      <menu:menuitem menu:id=".uno:SaveAsRemote"/>
       <menu:menuitem menu:id=".uno:SaveAs"/>
+      <menu:menuitem menu:id=".uno:SaveACopy"/>
       <menu:menuitem menu:id=".uno:SaveAll"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CheckOut"/>
       <menu:menuitem menu:id=".uno:CancelCheckOut"/>
       <menu:menuitem menu:id=".uno:CheckIn"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Reload"/>
-      <menu:menuitem menu:id=".uno:VersionDialog"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ExportTo"/>
-      <menu:menuitem menu:id=".uno:ExportToPDF"/>
+      <menu:menu menu:id=".uno:ExportAsMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ExportToPDF"/>
+          <menu:menuitem menu:id=".uno:ExportDirectToPDF"/>
+          <menu:menuitem menu:id=".uno:ExportToEPUB"/>
+          <menu:menuitem menu:id=".uno:ExportDirectToEPUB"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menu menu:id=".uno:SendToMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SendMail"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsOOo"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsMS"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsPDF"/>
+          <menu:menuitem menu:id=".uno:SendViaBluetooth"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:NewGlobalDoc"/>
           <menu:menuitem menu:id=".uno:NewHtmlDoc"/>
@@ -65,11 +76,11 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PrintPreview"/>
       <menu:menuitem menu:id=".uno:Print"/>
       <menu:menuitem menu:id=".uno:PrinterSetup"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Quit"/>
     </menu:menupopup>
