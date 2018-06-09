@@ -867,7 +867,7 @@ MapViewToModel(MergedPara const& rMerged, TextFrameIndex const i_nIndex)
     assert(nIndex == 0 && "view index out of bounds");
     return pExtent
         ? std::make_pair(pExtent->pNode, pExtent->nEnd) //1-past-the-end index
-        : std::make_pair(rMerged.pFirstNode, 0);
+        : std::make_pair(rMerged.pFirstNode, sal_Int32(0));
 }
 
 TextFrameIndex MapModelToView(MergedPara const& rMerged, SwTextNode const*const pNode, sal_Int32 const nIndex)
