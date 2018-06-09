@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_87d87d1f",
+        "filename": "sw/uiconfig/sweb/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-09T23:29:53Z",
+      "side": 1,
+      "message": "This doesn\u0027t work in sweb.",
+      "revId": "5bdbceb1c2ec70a4b8b370092a5bf96accadf3f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
