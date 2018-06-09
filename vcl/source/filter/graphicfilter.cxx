@@ -2080,6 +2080,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         else if (aFilterName == IMP_PDF)
         {
+            // Note: will import rGraphic.getPageNumber if non-negative, or the first.
             if (!vcl::ImportPDF(rIStream, rGraphic))
                 nStatus = GRFILTER_FILTERERROR;
             else

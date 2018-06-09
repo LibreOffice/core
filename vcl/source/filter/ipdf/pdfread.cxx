@@ -262,14 +262,16 @@ bool ImportPDF(SvStream& rStream, Bitmap &rBitmap,
 bool ImportPDF(SvStream& rStream, Graphic& rGraphic,
                const double fResolutionDPI)
 {
+    // Load the first page implicitly, if a specific one is not requested.
+    if (rGraphic.getPageNumber() < 0)
+        rGraphic.setPageNumber(0);
+
     uno::Sequence<sal_Int8> aPdfData;
     Bitmap aBitmap;
-    bool bRet = ImportPDF(rStream, aBitmap, 0, aPdfData,
-                          STREAM_SEEK_TO_BEGIN,
-                          STREAM_SEEK_TO_END, fResolutionDPI);
+    const bool bRet = ImportPDF(rStream, aBitmap, rGraphic.getPageNumber(), aPdfData,
+                                STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END, fResolutionDPI);
     rGraphic = aBitmap;
     rGraphic.setPdfData(std::make_shared<css::uno::Sequence<sal_Int8>>(aPdfData));
-    rGraphic.setPageNumber(0); // We currently import only the first page.
     return bRet;
 }
 
