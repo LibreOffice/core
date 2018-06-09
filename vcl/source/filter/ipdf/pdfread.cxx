@@ -268,12 +268,21 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic,
     if (rGraphic.getPageNumber() < 0)
         rGraphic.setPageNumber(0);
 
-    uno::Sequence<sal_Int8> aPdfData;
+    if (rGraphic.getPdfData() == nullptr)
+        rGraphic.setPdfData(std::make_shared<css::uno::Sequence<sal_Int8>>());
+
+    // Preserve the PdfData, if exists, as it's shared.
+    std::shared_ptr<css::uno::Sequence<sal_Int8>> pPdfData = rGraphic.getPdfData();
+
     Bitmap aBitmap;
-    const bool bRet = ImportPDF(rStream, aBitmap, rGraphic.getPageNumber(), aPdfData,
+    const bool bRet = ImportPDF(rStream, aBitmap, rGraphic.getPageNumber(), *pPdfData,
                                 STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END, fResolutionDPI);
+
+    // Assign the bitmap; will clobber PdfData.
     rGraphic = aBitmap;
-    rGraphic.setPdfData(std::make_shared<css::uno::Sequence<sal_Int8>>(aPdfData));
+
+    // Set PdfData.
+    rGraphic.setPdfData(pPdfData);
     return bRet;
 }
 
