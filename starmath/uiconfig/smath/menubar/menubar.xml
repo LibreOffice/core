@@ -21,24 +21,25 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:Open"/>
+      <menu:menuitem menu:id=".uno:OpenRemote"/>
       <menu:menuitem menu:id=".uno:RecentFileList"/>
+      <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CloseDoc"/>
-      <menu:menuitem menu:id=".uno:Save"/>
-      <menu:menuitem menu:id=".uno:SaveAs"/>
-      <menu:menuitem menu:id=".uno:SaveAll"/>
-      <menu:menuitem menu:id=".uno:CheckOut"/>
-      <menu:menuitem menu:id=".uno:CancelCheckOut"/>
-      <menu:menuitem menu:id=".uno:CheckIn"/>
-      <menu:menuitem menu:id=".uno:CancelCheckOut"/>
-      <menu:menuitem menu:id=".uno:CheckIn"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Reload"/>
       <menu:menuitem menu:id=".uno:VersionDialog"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ExportTo"/>
+      <menu:menuitem menu:id=".uno:Save"/>
+      <menu:menuitem menu:id=".uno:SaveAsRemote"/>
+      <menu:menuitem menu:id=".uno:SaveAs"/>
+      <menu:menuitem menu:id=".uno:SaveAll"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:CheckOut"/>
+      <menu:menuitem menu:id=".uno:CancelCheckOut"/>
+      <menu:menuitem menu:id=".uno:CheckIn"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ExportToPDF"/>
       <menu:menu menu:id=".uno:SendToMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SendMail"/>
@@ -46,11 +47,16 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
-      <menu:menuitem menu:id=".uno:Signature"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Print"/>
       <menu:menuitem menu:id=".uno:PrinterSetup"/>
+      <menu:menuseparator/>
+      <menu:menu menu:id=".uno:SignaturesMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:Signature"/>
+          <menu:menuitem menu:id=".uno:SignPDF"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Quit"/>
     </menu:menupopup>
@@ -80,6 +86,7 @@
       <menu:menuitem menu:id=".uno:ToolbarMode"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
       <menu:menuitem menu:id=".uno:ElementsDockingWindow"/>
       <menu:menuseparator/>
@@ -126,7 +133,6 @@
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
         </menu:menupopup>
       </menu:menu>
-
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
