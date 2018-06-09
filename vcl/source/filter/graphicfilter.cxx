@@ -1854,7 +1854,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         if( nStatus == ERRCODE_NONE )
         {
-            rGraphic.SetLink( GfxLink( std::move(pGraphicContent), nGraphicContentSize, eLinkType ) );
+            rGraphic.SetLink(GfxLink(std::move(pGraphicContent), nGraphicContentSize, eLinkType));
         }
     }
 
