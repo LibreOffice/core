@@ -387,11 +387,13 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
 
 void ImpGraphic::setPdfData(const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData)
 {
+    // No need to swap-in graphic when setting optional PDF data.
     mpPdfData = rPdfData;
 }
 
 const std::shared_ptr<uno::Sequence<sal_Int8>>& ImpGraphic::getPdfData() const
 {
+    // No need to swap-in graphic when getting optional PDF data.
     return mpPdfData;
 }
 
@@ -1418,8 +1420,12 @@ bool ImpGraphic::ensureAvailable() const
 bool ImpGraphic::loadPrepared()
 {
     Graphic aGraphic;
+
     // Set the page number to load the correct page (for multipage types).
     aGraphic.setPageNumber(mnPageNumber);
+    // Preserve the PdfData since it's shared.
+    aGraphic.setPdfData(getPdfData());
+
     if (mpGfxLink->LoadNative(aGraphic))
     {
         *this = *aGraphic.ImplGetImpGraphic();
