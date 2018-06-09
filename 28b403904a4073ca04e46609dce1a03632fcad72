@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_2472677d",
+        "filename": "sc/inc/postit.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-09T07:10:31Z",
+      "side": 1,
+      "message": "cheaper to return a const \u0026 here, to avoid unnecessary ref counting",
+      "revId": "28b403904a4073ca04e46609dce1a03632fcad72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_446f6392",
+        "filename": "sc/inc/postit.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-09T07:10:31Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "28b403904a4073ca04e46609dce1a03632fcad72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_a40497c6",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2572,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-09T07:10:31Z",
+      "side": 1,
+      "message": "makes no sense (here and elsewhere) to do a dynamic_cast and then not bother to check the result. Rather do a static_cast if you know for sure what the type is",
+      "revId": "28b403904a4073ca04e46609dce1a03632fcad72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_c40993df",
+        "filename": "sc/source/core/data/postit.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-09T07:10:31Z",
+      "side": 1,
+      "message": "return by const \u0026",
+      "revId": "28b403904a4073ca04e46609dce1a03632fcad72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
