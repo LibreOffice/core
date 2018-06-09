@@ -4067,9 +4067,9 @@ void ScFiltersTest::testTdf62268()
 
     SCTAB nTab = 0;
     nHeight = rDoc.GetRowHeight(0, nTab, false);
-    CPPUNIT_ASSERT_EQUAL(256, nHeight);
+    CPPUNIT_ASSERT_LESSEQUAL( 3, abs( 256 - nHeight ) );
     nHeight = rDoc.GetRowHeight(1, nTab, false);
-    CPPUNIT_ASSERT_EQUAL(1905, nHeight);
+    CPPUNIT_ASSERT_LESSEQUAL( 19, abs( 1905 - nHeight ) );
 
     xDocSh->DoClose();
 }
