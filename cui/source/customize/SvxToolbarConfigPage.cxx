@@ -889,9 +889,9 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(vcl::Window* pParent, SvxTool
     : SvxMenuEntriesListBox(pParent, pPg)
     , pPage(pPg)
 {
-    m_pButtonData = new SvLBoxButtonData( this );
-    BuildCheckBoxButtonImages( m_pButtonData );
-    EnableCheckButton( m_pButtonData );
+    m_pButtonData.reset(new SvLBoxButtonData( this ));
+    BuildCheckBoxButtonImages( m_pButtonData.get() );
+    EnableCheckButton( m_pButtonData.get() );
 }
 
 SvxToolbarEntriesListBox::~SvxToolbarEntriesListBox()
@@ -901,8 +901,7 @@ SvxToolbarEntriesListBox::~SvxToolbarEntriesListBox()
 
 void SvxToolbarEntriesListBox::dispose()
 {
-    delete m_pButtonData;
-    m_pButtonData = nullptr;
+    m_pButtonData.reset();
 
     pPage.clear();
     SvxMenuEntriesListBox::dispose();
@@ -971,7 +970,7 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
     if (( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) &&
         ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ))
     {
-        BuildCheckBoxButtonImages( m_pButtonData );
+        BuildCheckBoxButtonImages( m_pButtonData.get() );
         Invalidate();
     }
 }
