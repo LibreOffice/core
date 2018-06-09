@@ -846,7 +846,7 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
         // 4 means CMYK, which is not handled.
         return false;
 
-    Size aSize = rGraphic.GetSizePixel();
+    const Size aSize = rGraphic.GetSizePixel();
 
     // small items better off as PNG anyway
     if ( aSize.Width() < 32 &&
