@@ -56,13 +56,14 @@
             <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:HelpMenu">
-        <menu:menupopup>
+        <menu:menu menu:id=".uno:HelpMenu">
+            <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex"/>
+            <menu:menuitem menu:id=".uno:ExtendedHelp"/>
+            <menu:menuitem menu:id=".uno:Documentation"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:QuestionAnswers"/>
             <menu:menuitem menu:id=".uno:SendFeedback"/>
-            <menu:menuitem menu:id=".uno:Documentation"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SafeMode"/>
             <menu:menuseparator/>
@@ -70,6 +71,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowLicense"/>
             <menu:menuitem menu:id=".uno:About"/>
-        </menu:menupopup>
-    </menu:menu>
+            </menu:menupopup>
+        </menu:menu>
 </menu:menubar>
