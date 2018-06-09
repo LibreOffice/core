@@ -118,6 +118,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maSwapInfo(rImpGraphic.maSwapInfo)
     , mpContext(rImpGraphic.mpContext)
     , mpSwapFile(rImpGraphic.mpSwapFile)
+    , mpGfxLink(rImpGraphic.mpGfxLink)
     , meType(rImpGraphic.meType)
     , mnSizeBytes(rImpGraphic.mnSizeBytes)
     , mbSwapOut(rImpGraphic.mbSwapOut)
@@ -129,9 +130,6 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , mbPrepared (rImpGraphic.mbPrepared)
     , mnPageNumber(rImpGraphic.mnPageNumber)
 {
-    if( rImpGraphic.mpGfxLink )
-        mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
-
     if( rImpGraphic.mpAnimation )
     {
         mpAnimation = o3tl::make_unique<Animation>( *rImpGraphic.mpAnimation );
@@ -272,10 +270,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         mpSwapFile = rImpGraphic.mpSwapFile;
         mbPrepared = rImpGraphic.mbPrepared;
 
-        mpGfxLink.reset();
-
-        if( rImpGraphic.mpGfxLink )
-            mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
+        mpGfxLink = rImpGraphic.mpGfxLink;
 
         maSvgData = rImpGraphic.maSvgData;
         mpPdfData = rImpGraphic.mpPdfData;
@@ -1520,13 +1515,13 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
     return bRet;
 }
 
-void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
+void ImpGraphic::ImplSetLink(const std::shared_ptr<GfxLink>& rGfxLink)
 {
     ensureAvailable();
 
-    mpGfxLink = o3tl::make_unique<GfxLink>( rGfxLink );
+    mpGfxLink = rGfxLink;
 
-    if( mpGfxLink->IsNative() )
+    if (mpGfxLink && mpGfxLink->IsNative())
         mpGfxLink->SwapOut();
 }
 
@@ -1647,7 +1642,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
         // set dummy link to avoid creation of additional link after filtering;
         // we set a default link to avoid unnecessary swapping of native data
-        aGraphic.SetGfxLink( GfxLink() );
+        aGraphic.SetGfxLink(std::make_shared<GfxLink>());
 
         if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
         {
@@ -1664,7 +1659,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 rImpGraphic.ImplSetPrefSize( aLink.GetPrefSize() );
 
             if( bSetLink )
-                rImpGraphic.ImplSetLink( aLink );
+                rImpGraphic.ImplSetLink(std::make_shared<GfxLink>(aLink));
         }
         else
         {

@@ -315,7 +315,7 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
 
     if( GfxLinkType::NONE != maGfxLink.GetType() )
     {
-        rSubstitute.SetGfxLink( maGfxLink );
+        rSubstitute.SetGfxLink( std::make_shared<GfxLink>(maGfxLink) ); //FIXME: reuse the original shared_ptr!
     }
 
     if( bDefaultType )

@@ -301,7 +301,7 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
     // To avoid that a native link is created
     if( !rGrf.IsGfxLink() &&
         !rGrf.GetContext() && !bNativFormat )
-        rGrf.SetGfxLink( GfxLink() );
+        rGrf.SetGfxLink( std::make_shared<GfxLink>() );
 
     if( !pStream )
         nRes = xMed.Is() ? GRFILTER_OPENERROR

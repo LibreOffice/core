@@ -557,7 +557,7 @@ bool Graphic::IsSwapOut() const
     return mxImpGraphic->ImplIsSwapOut();
 }
 
-void Graphic::SetGfxLink( const GfxLink& rGfxLink )
+void Graphic::SetGfxLink( const std::shared_ptr<GfxLink>& rGfxLink )
 {
     ImplTestRefCount();
     mxImpGraphic->ImplSetLink( rGfxLink );
