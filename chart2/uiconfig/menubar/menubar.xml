@@ -20,24 +20,13 @@
     <menu:menu menu:id=".uno:PickList">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:AddDirect"/>
-            <menu:menuitem menu:id=".uno:Open"/>
-            <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:CloseDoc"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Save"/>
             <menu:menuitem menu:id=".uno:SaveAs"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
-            <menu:menuitem menu:id=".uno:CheckOut"/>
-            <menu:menuitem menu:id=".uno:CancelCheckOut"/>
-            <menu:menuitem menu:id=".uno:CheckIn"/>
-            <menu:menuitem menu:id=".uno:Reload"/>
-            <menu:menuitem menu:id=".uno:VersionDialog"/>
-            <menu:menuitem menu:id=".uno:SendMail"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Print"/>
-            <menu:menuitem menu:id=".uno:PrinterSetup"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>
@@ -56,7 +45,10 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Sidebar"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DiagramData"/>
         </menu:menupopup>
