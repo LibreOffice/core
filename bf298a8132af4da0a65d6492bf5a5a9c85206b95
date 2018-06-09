@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_67f2a19c",
+        "filename": "chart2/uiconfig/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-09T23:39:05Z",
+      "side": 1,
+      "message": "Does it work?",
+      "revId": "bf298a8132af4da0a65d6492bf5a5a9c85206b95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
