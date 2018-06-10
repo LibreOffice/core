@@ -41,6 +41,7 @@
 
 #include <strings.hrc>
 #include <drawdoc.hxx>
+#include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <stlpool.hxx>
 #include <sdresid.hxx>

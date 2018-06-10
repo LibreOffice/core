@@ -95,6 +95,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sdabstdlg.hxx>
+#include <sdmod.hxx>
 
 using namespace ::com::sun::star;
 

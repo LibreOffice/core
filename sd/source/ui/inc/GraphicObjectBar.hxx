@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_GRAPHICOBJECTBAR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_GRAPHICOBJECTBAR_HXX
 
-#include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
 #include <glob.hxx>
 

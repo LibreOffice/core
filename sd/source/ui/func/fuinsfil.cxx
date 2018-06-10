@@ -51,6 +51,7 @@
 #include <View.hxx>
 #include <strings.hrc>
 #include <stlpool.hxx>
+#include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <strmname.h>
 #include <ViewShellBase.hxx>

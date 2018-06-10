@@ -21,8 +21,8 @@
 #define INCLUDED_SD_SOURCE_UI_INC_FUCONCS_HXX
 
 #include "fuconstr.hxx"
+#include <rtl/ustring.hxx>
 
-class KeyEvent;
 class SdDrawDocument;
 class SdrObject;
 
