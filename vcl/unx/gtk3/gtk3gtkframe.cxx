@@ -1130,6 +1130,9 @@ void GtkSalFrame::InitCommon()
     m_bGraphics = false;
     m_pGraphics = nullptr;
 
+    m_nFloatFlags = FloatWinPopupFlags::NONE;
+    m_bFloatPositioned = false;
+
     m_nWidthRequest = 0;
     m_nHeightRequest = 0;
 
@@ -2447,6 +2450,16 @@ void GtkSalFrame::EndSetClipRegion()
         gdk_window_shape_combine_region( widget_get_window(m_pWindow), m_pRegion, 0, 0 );
 }
 
+void GtkSalFrame::PositionByToolkit(const tools::Rectangle& rRect, FloatWinPopupFlags nFlags)
+{
+    if (ImplGetSVData()->maNWFData.mbCanDetermineWindowPosition)
+        return;
+
+    m_aFloatRect = rRect;
+    m_nFloatFlags = nFlags;
+    m_bFloatPositioned = true;
+}
+
 void GtkSalFrame::SetModal(bool bModal)
 {
     if (!m_pWindow)
@@ -2990,6 +3003,24 @@ void GtkSalFrame::sizeAllocated(GtkWidget* pWidget, GdkRectangle *pAllocation, g
         pThis->TriggerPaintEvent();
 }
 
+#if GTK_CHECK_VERSION(3,23,0)
+namespace {
+
+void swapDirection(GdkGravity& gravity)
+{
+    if (gravity == GDK_GRAVITY_NORTH_WEST)
+        gravity = GDK_GRAVITY_NORTH_EAST;
+    else if (gravity == GDK_GRAVITY_NORTH_EAST)
+        gravity = GDK_GRAVITY_NORTH_WEST;
+    else if (gravity == GDK_GRAVITY_SOUTH_WEST)
+        gravity = GDK_GRAVITY_SOUTH_EAST;
+    else if (gravity == GDK_GRAVITY_SOUTH_EAST)
+        gravity = GDK_GRAVITY_SOUTH_WEST;
+}
+
+}
+#endif
+
 void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
@@ -2997,6 +3028,45 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
     if (pThis->m_bSalObjectSetPosSize)
         return;
     pThis->TriggerPaintEvent();
+
+#if GTK_CHECK_VERSION(3,23,0)
+    if (gtk_check_version(3, 23, 0) == nullptr && pThis->m_bFloatPositioned)
+    {
+        GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
+
+        if (pThis->m_nFloatFlags & FloatWinPopupFlags::Left)
+        {
+            rect_anchor = GDK_GRAVITY_NORTH_WEST;
+            menu_anchor = GDK_GRAVITY_NORTH_EAST;
+        }
+        else if (pThis->m_nFloatFlags & FloatWinPopupFlags::Up)
+        {
+            rect_anchor = GDK_GRAVITY_NORTH_WEST;
+            menu_anchor = GDK_GRAVITY_SOUTH_WEST;
+        }
+        else if (pThis->m_nFloatFlags & FloatWinPopupFlags::Right)
+        {
+            rect_anchor = GDK_GRAVITY_NORTH_EAST;
+        }
+
+        VclPtr<vcl::Window> pVclParent = pThis->GetWindow()->GetParent();
+        if (pVclParent->HasMirroredGraphics() && pVclParent->IsRTLEnabled())
+        {
+            swapDirection(rect_anchor);
+            swapDirection(menu_anchor);
+        }
+
+        tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pVclParent, pThis->m_aFloatRect);
+        if (gdk_window_get_window_type(widget_get_window(pThis->m_pParent->m_pWindow)) != GDK_WINDOW_TOPLEVEL)
+            aFloatRect.Move(-pThis->m_pParent->maGeometry.nX, -pThis->m_pParent->maGeometry.nY);
+
+        GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                           static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
+
+        GdkWindow* gdkWindow = widget_get_window(pThis->m_pWindow);
+        gdk_window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_FLIP, 0, 0);
+    }
+#endif
 }
 
 gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpointer frame)
@@ -3105,6 +3175,15 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     pThis->CallCallbackExc( SalEvent::Resize, nullptr );
+
+    if (pThis->m_bFloatPositioned)
+    {
+        // Unrealize is needed for cases where we reuse the same popup
+        // (e.g. the font name control), making the realize signal fire
+        // again on next show.
+        gtk_widget_unrealize(pThis->m_pWindow);
+        pThis->m_bFloatPositioned = false;
+    }
 
     return false;
 }
