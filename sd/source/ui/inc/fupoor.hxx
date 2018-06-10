@@ -23,8 +23,7 @@
 #include <vcl/timer.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
-#include <vcl/event.hxx>
-#include <rtl/ref.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <helper/simplereferencecomponent.hxx>
 
@@ -32,6 +31,10 @@ class SdDrawDocument;
 class SfxRequest;
 class Dialog;
 class SdrObject;
+class CommandEvent;
+class HelpEvent;
+class KeyEvent;
+class MouseEvent;
 
 namespace sd {
 

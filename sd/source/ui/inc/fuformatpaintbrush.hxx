@@ -22,9 +22,6 @@
 
 #include "futext.hxx"
 
-#include <svl/itemset.hxx>
-#include <memory>
-
 namespace sd {
 
 class DrawViewShell;
