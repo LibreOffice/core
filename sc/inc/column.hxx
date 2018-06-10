@@ -340,10 +340,12 @@ public:
      */
     ScFormulaCell* SetFormulaCell(
         SCROW nRow, ScFormulaCell* pCell,
-        sc::StartListeningType eListenType = sc::SingleCellListening );
+        sc::StartListeningType eListenType = sc::SingleCellListening,
+        bool bInheritNumFormatIfNeeded = true);
     void SetFormulaCell(
         sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell,
-        sc::StartListeningType eListenType = sc::SingleCellListening );
+        sc::StartListeningType eListenType = sc::SingleCellListening,
+        bool bInheritNumFormatIfNeeded = true);
 
     bool SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells );
 

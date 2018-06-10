@@ -815,7 +815,7 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     bInChangeTrack( false ),
     bTableOpDirty( false ),
     bNeedListening( false ),
-    mbNeedsNumberFormat( false ),
+    mbNeedsNumberFormat( rCell.mbNeedsNumberFormat ),
     mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
