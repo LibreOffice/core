@@ -1146,14 +1146,12 @@ SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
     mpSdrPageProperties(nullptr),
     mxUnoPage(),
     mpMasterPageDescriptor(nullptr),
-    aPrefVisiLayers(),
     nPageNum(0),
     mbMaster(bMasterPage),
     mbInserted(false),
     mbObjectsNotPersistent(false),
     mbPageBorderOnlyLeftRight(false)
 {
-    aPrefVisiLayers.SetAll();
     mpSdrPageProperties.reset(new SdrPageProperties(*this));
 }
 
@@ -1209,7 +1207,6 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     // the contained objects
     mbMaster = rSrcPage.mbMaster;
     mbPageBorderOnlyLeftRight = rSrcPage.mbPageBorderOnlyLeftRight;
-    aPrefVisiLayers = rSrcPage.aPrefVisiLayers;
     mnWidth = rSrcPage.mnWidth;
     mnHeight = rSrcPage.mnHeight;
     mnBorderLeft = rSrcPage.mnBorderLeft;

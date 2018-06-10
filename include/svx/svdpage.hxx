@@ -430,7 +430,6 @@ protected:
     // new MasterPageDescriptorVector
     std::unique_ptr<sdr::MasterPageDescriptor> mpMasterPageDescriptor;
 
-    SdrLayerIDSet       aPrefVisiLayers;
     sal_uInt16          nPageNum;
 
     bool                mbMaster : 1;               // flag if this is a MasterPage
