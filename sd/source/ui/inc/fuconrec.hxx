@@ -22,7 +22,6 @@
 
 #include "fuconstr.hxx"
 
-class KeyEvent;
 class SdDrawDocument;
 class SdrObject;
 class SfxItemSet;

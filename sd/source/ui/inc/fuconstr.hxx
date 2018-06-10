@@ -22,7 +22,6 @@
 
 #include "fudraw.hxx"
 
-class KeyEvent;
 class SdrObject;
 class SfxItemSet;
 

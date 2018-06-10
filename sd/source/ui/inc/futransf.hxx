@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUTRANSF_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUTRANSF_HXX
 
-#include <svx/rectenum.hxx>
 #include "fupoor.hxx"
 
 namespace sd {

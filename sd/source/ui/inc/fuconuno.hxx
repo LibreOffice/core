@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUCONUNO_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUCONUNO_HXX
 
-#include <svl/itemset.hxx>
 #include "fuconstr.hxx"
+#include <rtl/ustring.hxx>
 
 enum class SdrInventor : sal_uInt32;
 
