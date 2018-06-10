@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_a711f9b1",
+        "filename": "dbaccess/uiconfig/dbrelation/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-10T00:10:12Z",
+      "side": 1,
+      "message": "Save as isn\u0027t applicable to the relations designer.",
+      "revId": "d4c69bb7a12ac8c05ebac6d1a7cac3f82aeabf68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
