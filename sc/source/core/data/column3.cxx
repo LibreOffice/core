@@ -1003,7 +1003,9 @@ public:
                         {
                             mrDestCol.SetFormulaCell(
                                 maDestBlockPos, nSrcRow + mnRowOffset,
-                                new ScFormulaCell(rSrcCell, *mrDestCol.GetDoc(), aDestPos));
+                                new ScFormulaCell(rSrcCell, *mrDestCol.GetDoc(), aDestPos),
+                                sc::SingleCellListening,
+                                rSrcCell.NeedsNumberFormat());
                         }
                     }
                     else if (bNumeric || bDateTime || bString)
@@ -1969,11 +1971,12 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 }
 
 ScFormulaCell* ScColumn::SetFormulaCell(
-    SCROW nRow, ScFormulaCell* pCell, sc::StartListeningType eListenType )
+    SCROW nRow, ScFormulaCell* pCell, sc::StartListeningType eListenType,
+    bool bInheritNumFormatIfNeeded )
 {
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(GetDoc()->GetNonThreadedContext(), nRow);
-    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && bInheritNumFormatIfNeeded )
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
@@ -1986,11 +1989,12 @@ ScFormulaCell* ScColumn::SetFormulaCell(
 
 void ScColumn::SetFormulaCell(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell,
-    sc::StartListeningType eListenType )
+    sc::StartListeningType eListenType,
+    bool bInheritNumFormatIfNeeded )
 {
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(GetDoc()->GetNonThreadedContext(), nRow);
-    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && bInheritNumFormatIfNeeded )
         pCell->SetNeedNumberFormat(true);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pCell);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
