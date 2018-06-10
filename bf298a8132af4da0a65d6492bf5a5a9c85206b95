@@ -16,6 +16,24 @@
       "revId": "bf298a8132af4da0a65d6492bf5a5a9c85206b95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_07d64dc5",
+        "filename": "chart2/uiconfig/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-06-10T07:59:30Z",
+      "side": 1,
+      "message": "I don\u0027t know but it should work cause the sidebar section for charts isn\u0027t bad (but don\u0027t work) so maybe it\u0027s something like work in progress.\n\nI would leave it there and add a bug that the sidebar in chart is visible available but not clickable.",
+      "parentUuid": "5a22e58a_67f2a19c",
+      "revId": "bf298a8132af4da0a65d6492bf5a5a9c85206b95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
