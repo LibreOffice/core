@@ -41,8 +41,7 @@ void Qt5Graphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
     {
         if (!m_pTextStyle[i])
             break;
-        m_pTextStyle[i]->Release();
-        m_pTextStyle[i] = nullptr;
+        m_pTextStyle[i].clear();
     }
 
     if (!pReqFont)
@@ -51,8 +50,7 @@ void Qt5Graphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
     if (!pReqFont->mpFontInstance)
         return;
 
-    m_pTextStyle[nFallbackLevel] = static_cast<Qt5Font*>(pReqFont->mpFontInstance);
-    m_pTextStyle[nFallbackLevel]->Acquire();
+    m_pTextStyle[nFallbackLevel] = static_cast<Qt5Font*>(pReqFont->mpFontInstance.get());
 }
 
 void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
@@ -137,7 +135,7 @@ bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& r
     if (nLevel >= MAX_FALLBACK)
         return false;
 
-    Qt5Font* pFont = m_pTextStyle[nLevel];
+    Qt5Font* pFont = m_pTextStyle[nLevel].get();
     if (!pFont)
         return false;
 
