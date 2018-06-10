@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <com/sun/star/media/XPlayer.hpp>
 #include <fusel.hxx>
 #include <basic/sbstar.hxx>
 #include <svx/svddrgmt.hxx>

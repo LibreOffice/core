@@ -22,6 +22,7 @@
 
 #include <memory>
 #include "fupoor.hxx"
+#include <vcl/weld.hxx>
 
 class SfxItemSet;
 class SdBackgroundObjUndoAction;

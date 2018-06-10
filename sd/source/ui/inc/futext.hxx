@@ -20,9 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUTEXT_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUTEXT_HXX
 
-#include <editeng/editdata.hxx>
 #include "fuconstr.hxx"
-#include <svx/svdotext.hxx>
+#include <tools/weakbase.h>
 
 class SdrTextObj;
 class FontList;

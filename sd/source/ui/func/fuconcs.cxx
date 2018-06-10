@@ -18,6 +18,7 @@
  */
 
 #include <fuconcs.hxx>
+#include <rtl/ustring.hxx>
 #include <svx/svdpagv.hxx>
 
 #include <svx/svxids.hrc>

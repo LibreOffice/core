@@ -22,7 +22,6 @@
 
 #include "fupoor.hxx"
 
-#include <math.h>
 #include <vector>
 
 namespace basegfx {

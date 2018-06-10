@@ -22,7 +22,7 @@
 
 #include "fudraw.hxx"
 
-#include <com/sun/star/media/XPlayer.hpp>
+namespace com { namespace sun { namespace star { namespace media { class XPlayer; } } } }
 
 class SdrHdl;
 class SdrObject;

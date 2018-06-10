@@ -50,6 +50,7 @@
 #include <editeng/pbinitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/opengrf.hxx>
+#include <rtl/ustring.hxx>
 
 #include <strings.hrc>
 #include <sdpage.hxx>

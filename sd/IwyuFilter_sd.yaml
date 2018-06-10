@@ -125,3 +125,9 @@ blacklist:
     - com/sun/star/view/XFormLayerAccess.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
     - sfx2/sfxbasecontroller.hxx
+    sd/source/ui/inc/fupage.hxx:
+    # base class has to be a complete type
+    - vcl/weld.hxx
+    sd/source/ui/inc/GraphicObjectBar.hxx:
+    # Used via macro, really needed to compile
+    - class SfxModule
