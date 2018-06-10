@@ -4646,6 +4646,7 @@ fi
 if test "$OS" = "HAIKU"; then
     enable_cairo_canvas=yes
     test_qt5=yes
+    test_kde5=yes
 fi
 
 dnl ===================================================================
@@ -11150,8 +11151,14 @@ if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
         \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
         \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
 then
-    kf5_incdirs="$KF5INC /usr/include/ $x_includes"
-    kf5_libdirs="$KF5LIB /usr/lib /usr/lib/kf5 /usr/lib/kf5/devel $x_libraries"
+    if test "$OS" = "HAIKU"; then
+        haiku_arch="`echo $RTL_ARCH | tr X x`"
+        kf5_haiku_incdirs="`findpaths -c ' ' -a $haiku_arch B_FIND_PATH_HEADERS_DIRECTORY`"
+        kf5_haiku_libdirs="`findpaths -c ' ' -a $haiku_arch B_FIND_PATH_DEVELOP_LIB_DIRECTORY`"
+    fi
+
+    kf5_incdirs="$KF5INC /usr/include/ $kf5_haiku_incdirs $x_includes"
+    kf5_libdirs="$KF5LIB /usr/lib /usr/lib/kf5 /usr/lib/kf5/devel $kf5_haiku_libdirs $x_libraries"
     if test -n "$supports_multilib"; then
         kf5_libdirs="$kf5_libdirs /usr/lib64 /usr/lib64/kf5 /usr/lib64/kf5/devel"
     fi

@@ -676,11 +676,9 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lbe \
 ))
 
-ifeq ($(ENABLE_QT5),TRUE)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/plugadapt/salplug \
+$(eval $(call gb_Library_add_exception_objects,vcl, \
+    $(if $(or $(ENABLE_QT5),$(ENABLE_KDE5)),vcl/unx/generic/plugadapt/salplug) \
 ))
-endif
 
 $(eval $(call gb_Library_use_externals,vcl,\
     cairo \

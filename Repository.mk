@@ -312,6 +312,7 @@ endif
 ifeq ($(OS),HAIKU)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,haiku, \
     $(if $(ENABLE_QT5),vclplug_qt5) \
+    $(if $(ENABLE_KDE5),vclplug_kde5) \
 ))
 endif
 
