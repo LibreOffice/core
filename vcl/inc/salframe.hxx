@@ -159,6 +159,7 @@ public:
     SAL_WARN_UNUSED_RESULT
     virtual bool            GetWindowState( SalFrameState* pState ) = 0;
     virtual void            ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) = 0;
+    virtual void            PositionByToolkit( const tools::Rectangle&, FloatWinPopupFlags ) {};
 
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void            StartPresentation( bool bStart ) = 0;

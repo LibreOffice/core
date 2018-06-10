@@ -210,7 +210,10 @@ class GtkSalFrame : public SalFrame
 
 #if GTK_CHECK_VERSION(3,0,0)
     OUString                        m_aTooltip;
-    tools::Rectangle                       m_aHelpArea;
+    tools::Rectangle                m_aHelpArea;
+    tools::Rectangle                m_aFloatRect;
+    FloatWinPopupFlags              m_nFloatFlags;
+    bool                            m_bFloatPositioned;
     long                            m_nWidthRequest;
     long                            m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
@@ -532,6 +535,7 @@ public:
     virtual void                EndSetClipRegion() override;
 
 #if GTK_CHECK_VERSION(3,0,0)
+    virtual void                PositionByToolkit(const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void                SetModal(bool bModal) override;
     virtual bool                ShowTooltip(const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
     virtual void*               ShowPopover(const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
