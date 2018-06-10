@@ -25,6 +25,7 @@
 #include <AxisIndexDefines.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

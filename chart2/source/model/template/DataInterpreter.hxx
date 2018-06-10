@@ -22,7 +22,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/chart2/XDataInterpreter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace chart
 {

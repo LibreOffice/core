@@ -15,6 +15,7 @@
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace com::sun::star;
 

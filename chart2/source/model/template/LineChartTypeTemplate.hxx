@@ -24,7 +24,6 @@
 #include <MutexContainer.hxx>
 #include <StackMode.hxx>
 #include <comphelper/uno3.hxx>
-#include <com/sun/star/chart2/CurveStyle.hpp>
 
 namespace chart
 {

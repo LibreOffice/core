@@ -32,6 +32,7 @@
 #include "UndoManager.hxx"
 #include <ChartView.hxx>
 #include <PopupRequest.hxx>
+#include <ModifyListenerHelper.hxx>
 #include <svx/charthelper.hxx>
 
 #include <vcl/openglwin.hxx>

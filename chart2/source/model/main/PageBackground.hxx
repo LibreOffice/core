@@ -20,13 +20,13 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_PAGEBACKGROUND_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 #include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <ModifyListenerHelper.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart

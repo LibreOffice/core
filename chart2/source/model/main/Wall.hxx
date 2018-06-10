@@ -24,9 +24,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
-#include <cppuhelper/weak.hxx>
 
-#include <ModifyListenerHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 

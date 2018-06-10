@@ -19,13 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <ModifyListenerHelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>

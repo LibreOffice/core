@@ -18,6 +18,7 @@
  */
 
 #include "AreaChartType.hxx"
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <servicenames_charttypes.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
