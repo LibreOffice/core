@@ -20,6 +20,7 @@
 #include <svl/intitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
+#include <i18nutil/paper.hxx>
 
 #include <dlgpage.hxx>
 

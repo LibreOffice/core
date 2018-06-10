@@ -21,6 +21,7 @@
 
 #include <DocumentRenderer.hxx>
 #include <DocumentRenderer.hrc>
+#include <ViewShellBase.hxx>
 
 #include <drawdoc.hxx>
 #include <sdpage.hxx>

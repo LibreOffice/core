@@ -24,6 +24,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itemset.hxx>
+#include <svx/langbox.hxx>
 #include <editeng/langitem.hxx>
 #include <unotools/useroptions.hxx>
 

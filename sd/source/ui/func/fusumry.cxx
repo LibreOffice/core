@@ -35,6 +35,7 @@
 #include <drawdoc.hxx>
 #include <ViewShell.hxx>
 #include <DrawDocShell.hxx>
+#include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <optsitem.hxx>
 #include <DrawViewShell.hxx>

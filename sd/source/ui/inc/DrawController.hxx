@@ -20,26 +20,26 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DRAWCONTROLLER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DRAWCONTROLLER_HXX
 
-#include "ViewShell.hxx"
-
-#include <osl/mutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
-#include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/drawing/framework/ModuleController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <tools/weakbase.hxx>
+#include <tools/weakbase.h>
 #include <memory>
 #include <vector>
-#include <com/sun/star/drawing/XLayer.hpp>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawSubController; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XModuleController; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XLayer; } } } }
+namespace osl { class Mutex; }
+
+class SdPage;
 
 namespace sd {
 
@@ -61,9 +61,7 @@ public:
     ::cppu::OBroadcastHelper maBroadcastHelper;
 };
 
-class DrawSubController;
 class ViewShellBase;
-class ViewShell;
 
 /** The DrawController is the UNO controller for Impress and Draw.  It
     relies objects that implement the DrawSubController interface for view

@@ -58,6 +58,7 @@
 #include <OutlineViewShell.hxx>
 #include <app.hrc>
 #include <strings.hrc>
+#include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <Outliner.hxx>
 #include <EventMultiplexer.hxx>

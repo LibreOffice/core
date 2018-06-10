@@ -54,6 +54,7 @@
 #include <svtools/embedtransfer.hxx>
 #include <DrawDocShell.hxx>
 #include <View.hxx>
+#include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <drawview.hxx>
 #include <drawdoc.hxx>

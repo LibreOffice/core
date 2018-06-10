@@ -62,6 +62,7 @@
 #include <sdpage.hxx>
 #include <DrawViewShell.hxx>
 #include <drawdoc.hxx>
+#include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
 #include <imapinfo.hxx>

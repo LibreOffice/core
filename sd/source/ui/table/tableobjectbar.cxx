@@ -43,6 +43,7 @@
 #include <ViewShell.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>
+#include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>

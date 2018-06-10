@@ -28,6 +28,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sot/storage.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <Outliner.hxx>

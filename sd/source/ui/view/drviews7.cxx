@@ -79,6 +79,7 @@
 #include <Outliner.hxx>
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
+#include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <sdpage.hxx>
 #include <Client.hxx>

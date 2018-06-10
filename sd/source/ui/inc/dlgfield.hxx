@@ -21,8 +21,11 @@
 #define INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
 
 #include <vcl/weld.hxx>
-#include <svx/langbox.hxx>
+#include <memory>
+#include <svl/itemset.hxx>
+
 class SvxFieldData;
+class LanguageBox;
 
 /**
  * dialog to adjust field-commands

@@ -85,6 +85,7 @@
 
 #include <Annotation.hxx>
 #include <drawdoc.hxx>
+#include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <sdpage.hxx>
 

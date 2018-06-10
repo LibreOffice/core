@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DOCUMENTRENDERER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DOCUMENTRENDERER_HXX
 
-#include "ViewShellBase.hxx"
-
 #include <com/sun/star/view/XRenderable.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <memory>
+
+namespace sd { class ViewShellBase; }
 
 namespace sd {
 

@@ -46,12 +46,13 @@
 #include <svx/float3d.hxx>
 #include <svx/extedit.hxx>
 #include <svx/sidebar/SelectionAnalyzer.hxx>
+#include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <helpids.h>
 
 #include <view/viewoverlaymanager.hxx>
 #include <app.hrc>
 #include <strings.hrc>
-
+#include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <FrameView.hxx>
 #include <drawdoc.hxx>
