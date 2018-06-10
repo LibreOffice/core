@@ -741,6 +741,7 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
     DoInitialLayout();
     mpImplData->maPos = ImplCalcPos(this, rRect, nFlags, nArrangeIndex, &mpImplData->maLOKTwipsPos);
     SetPosPixel( mpImplData->maPos );
+    ImplGetFrame()->PositionByToolkit(rRect, nFlags);
 
     // set data and display window
     // convert maFloatRect to absolute device coordinates
