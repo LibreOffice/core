@@ -27,7 +27,8 @@
 
 class Qt5Font final : public QFont, public LogicalFontInstance
 {
-    friend LogicalFontInstance* Qt5FontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance>
+    Qt5FontFace::CreateFontInstance(const FontSelectPattern&) const;
 
     virtual hb_font_t* ImplInitHbFont() override;
 

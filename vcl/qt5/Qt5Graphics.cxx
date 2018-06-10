@@ -47,7 +47,7 @@ Qt5Graphics::~Qt5Graphics()
     {
         if (!m_pTextStyle[i])
             break;
-        m_pTextStyle[i]->Release();
+        m_pTextStyle[i].clear();
     }
 }
 
