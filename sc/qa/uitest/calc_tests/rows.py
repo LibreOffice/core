@@ -225,4 +225,80 @@ class CalcRows(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_row_height_insert_below(self):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+
+        #Make sure that tools-options-StarOffice Calc-General
+        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+        xDialogOpt = self.xUITest.getTopFocusWindow()
+
+        xPages = xDialogOpt.getChild("pages")
+        xWriterEntry = xPages.getChild('3')                 # Calc
+        xWriterEntry.executeAction("EXPAND", tuple())
+        xWriterGeneralEntry = xWriterEntry.getChild('0')
+        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General /cm
+        xunitlb = xDialogOpt.getChild("unitlb")
+        props = {"TEXT": "Centimeter"}
+        actionProps = mkPropertyValues(props)
+        xunitlb.executeAction("SELECT", actionProps)
+        xOKBtn = xDialogOpt.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+        #select A3
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
+        #row height
+        self.ui_test.execute_dialog_through_command(".uno:RowHeight")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
+        # Click Ok
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+        #select row 3
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
+        self.xUITest.executeCommand(".uno:SelectRow")
+        #insert rows below
+        self.xUITest.executeCommand(".uno:InsertRowsAfter")
+
+        #verify
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
+        self.ui_test.execute_dialog_through_command(".uno:RowHeight")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A4"}))
+        self.ui_test.execute_dialog_through_command(".uno:RowHeight")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        self.ui_test.close_doc()
+
+    def test_tdf83901_row_insert_after(self):
+        #Bug 83901 - ROW() value is not updated if row is inserted after
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+
+        #- A2 = ROW(A3)
+        enter_text_to_cell(gridwin, "A2", "=ROW(A3)")
+        #- Insert a row between rows 2 and 3 by right-clicking on row 3 and choosing "insert rows above".
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
+        self.xUITest.executeCommand(".uno:SelectRow")
+        self.xUITest.executeCommand(".uno:InsertRowsBefore")
+
+        #- Result: cell A2 still shows "3" as its value, although it should show "4".
+        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 4)
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
