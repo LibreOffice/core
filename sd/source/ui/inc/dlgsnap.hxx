@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_DLGSNAP_HXX
 
 #include <tools/fract.hxx>
-#include <sdenumdef.hxx>
 #include <vcl/weld.hxx>
 
 /************************************************************************/

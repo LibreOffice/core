@@ -87,6 +87,7 @@
 #include <editeng/editeng.hxx>
 #include <svl/poolitem.hxx>
 #include <strings.hxx>
+#include <sdmod.hxx>
 #include <AccessibleDocumentViewBase.hxx>
 
 using namespace ::com::sun::star;

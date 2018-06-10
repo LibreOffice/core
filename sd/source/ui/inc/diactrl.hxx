@@ -20,14 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 
-#include <svl/intitem.hxx>
-#include <sfx2/bindings.hxx>
 #include <svx/itemwin.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/toolbox.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
+
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+class SfxUInt16Item;
 
 // SdPagesField:
 

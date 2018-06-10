@@ -26,6 +26,7 @@
 #include <Window.hxx>
 
 #include <drawdoc.hxx>
+#include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <sdxfer.hxx>
 #include <strings.hxx>

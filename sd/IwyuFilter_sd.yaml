@@ -111,3 +111,17 @@ blacklist:
     sd/source/ui/inc/BezierObjectBar.hxx:
     # Used via macro, really needed to compile
     - class SfxModule
+    sd/source/ui/inc/DrawDocShell.hxx:
+    # base class has to be a complete type
+    - fupoor.hxx
+    sd/source/ui/inc/DocumentRenderer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/view/XRenderable.hpp
+    sd/source/ui/inc/DrawController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XDrawView.hpp
+    - com/sun/star/drawing/framework/XControllerManager.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/view/XFormLayerAccess.hpp
+    - com/sun/star/view/XSelectionSupplier.hpp
+    - sfx2/sfxbasecontroller.hxx

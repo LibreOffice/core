@@ -23,12 +23,8 @@
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
-#include <svl/lstner.hxx>
-#include <tools/link.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
-#include <set>
-#include <memory>
+template <typename Arg, typename Ret> class Link;
 
 namespace sd {
 class ViewShellBase;

@@ -46,6 +46,7 @@
 #include <optsitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sdattr.hxx>
+#include <sdmod.hxx>
 #include <ViewShell.hxx>
 #include <FrameView.hxx>
 #include <Outliner.hxx>

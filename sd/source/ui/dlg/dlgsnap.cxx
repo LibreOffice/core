@@ -26,6 +26,7 @@
 #include <View.hxx>
 #include <drawdoc.hxx>
 #include <dlgsnap.hxx>
+#include <sdenumdef.hxx>
 
 /**
  * dialog to adjust grid (scarcely ESO!)

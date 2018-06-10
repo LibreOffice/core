@@ -82,6 +82,7 @@
 #include <drawdoc.hxx>
 #include <textapi.hxx>
 #include <optsitem.hxx>
+#include <sdmod.hxx>
 
 #include <memory>
 

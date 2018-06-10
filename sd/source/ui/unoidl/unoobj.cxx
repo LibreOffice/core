@@ -64,6 +64,7 @@
 #include <unoprnms.hxx>
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
+#include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
 #include <unokywds.hxx>

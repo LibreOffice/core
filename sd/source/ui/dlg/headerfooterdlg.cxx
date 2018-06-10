@@ -37,6 +37,7 @@
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <ViewShell.hxx>
+#include <sdmod.hxx>
 
 // preview control for presentation layout
 #include <vcl/ctrl.hxx>

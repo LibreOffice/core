@@ -37,6 +37,7 @@
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
+#include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <navigatr.hxx>
 #include <strings.hrc>

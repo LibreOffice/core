@@ -23,21 +23,19 @@
 #include <memory>
 #include "ViewShell.hxx"
 #include "tools/AsynchronousCall.hxx"
-#include <sfx2/viewfac.hxx>
-#include <sfx2/viewsh.hxx>
 #include "TabControl.hxx"
 #include <pres.hxx>
-#include <svx/sidebar/SelectionChangeHandler.hxx>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <unotools/caserotate.hxx>
 #include <unotools/options.hxx>
+
+namespace svx { namespace sidebar { class SelectionChangeHandler; } }
+namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
+namespace com { namespace sun { namespace star { namespace scanner { class XScannerManager2; } } } }
 
 class Outliner;
 class SdPage;
 class SdStyleSheet;
 class SdrExternalToolEdit;
-class DrawDocShell;
 class TabBar;
 class SdrObject;
 class SdrPageView;

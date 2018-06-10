@@ -35,6 +35,7 @@
 #include <drawdoc.hxx>
 #include <app.hrc>
 #include <sdtreelb.hxx>
+#include <sdmod.hxx>
 #include <sfx2/bindings.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
