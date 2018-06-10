@@ -22,7 +22,6 @@
 
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/container/XChild.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 

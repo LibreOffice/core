@@ -24,6 +24,7 @@
 #include <PropertyHelper.hxx>
 #include <unonames.hxx>
 
+#include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

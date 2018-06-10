@@ -20,6 +20,7 @@
 #include <Diagram.hxx>
 #include <PropertyHelper.hxx>
 #include "Wall.hxx"
+#include <ModifyListenerHelper.hxx>
 #include <UserDefinedProperties.hxx>
 #include <ConfigColorScheme.hxx>
 #include <DiagramHelper.hxx>

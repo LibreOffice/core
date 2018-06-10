@@ -22,6 +22,7 @@
 #include <UserDefinedProperties.hxx>
 #include <ContainerHelper.hxx>
 #include <CloneHelper.hxx>
+#include <ModifyListenerHelper.hxx>
 #include "Axis.hxx"
 #include <AxisHelper.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
