@@ -62,7 +62,8 @@ Qt5FontFace::~Qt5FontFace() {}
 
 sal_IntPtr Qt5FontFace::GetFontId() const { return reinterpret_cast<sal_IntPtr>(&m_aFontId); }
 
-LogicalFontInstance* Qt5FontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance>
+Qt5FontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new Qt5Font(*this, rFSD);
 }
