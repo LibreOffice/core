@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a22e58a_674e21c3",
+        "filename": "dbaccess/uiconfig/dbapp/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-06-10T07:59:48Z",
+      "side": 0,
+      "message": "Is CheckOut, CancelCheckOut and CheckIn available in base?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 51
+      },
+      "revId": "d534e17642edcee52db855a22cd219a11e73eac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a22e58a_27a349a0",
         "filename": "dbaccess/uiconfig/dbapp/menubar/menubar.xml",
         "patchSetId": 1
