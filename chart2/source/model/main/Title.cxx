@@ -24,11 +24,13 @@
 #include <ContainerHelper.hxx>
 #include <CloneHelper.hxx>
 #include <PropertyHelper.hxx>
+#include <ModifyListenerHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>

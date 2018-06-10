@@ -26,6 +26,7 @@
 #include <CloneHelper.hxx>
 #include <AxisHelper.hxx>
 #include <EventListenerHelper.hxx>
+#include <ModifyListenerHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>

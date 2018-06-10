@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>

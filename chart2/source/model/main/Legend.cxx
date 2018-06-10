@@ -23,6 +23,7 @@
 #include <CharacterProperties.hxx>
 #include <UserDefinedProperties.hxx>
 #include <LegendHelper.hxx>
+#include <ModifyListenerHelper.hxx>
 #include <CloneHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

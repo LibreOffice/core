@@ -20,17 +20,14 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_CHARTTYPETEMPLATE_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include "DataInterpreter.hxx"
 #include <StackMode.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 
-#include <utility>
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystemContainer; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {

@@ -20,8 +20,10 @@
 #include "CandleStickChartType.hxx"
 #include <PropertyHelper.hxx>
 #include <StockBar.hxx>
+#include <ModifyListenerHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
