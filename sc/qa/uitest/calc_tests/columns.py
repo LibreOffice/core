@@ -225,4 +225,117 @@ class CalcColumns(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_tdf117522_column_width_insert_left(self):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+
+        #Make sure that tools-options-StarOffice Calc-General
+        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+        xDialogOpt = self.xUITest.getTopFocusWindow()
+
+        xPages = xDialogOpt.getChild("pages")
+        xWriterEntry = xPages.getChild('3')                 # Calc
+        xWriterEntry.executeAction("EXPAND", tuple())
+        xWriterGeneralEntry = xWriterEntry.getChild('0')
+        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General /cm
+        xunitlb = xDialogOpt.getChild("unitlb")
+        props = {"TEXT": "Centimeter"}
+        actionProps = mkPropertyValues(props)
+        xunitlb.executeAction("SELECT", actionProps)
+        xOKBtn = xDialogOpt.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+        #select C1
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
+        #column width
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
+        # Click Ok
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+        #select D1
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
+        #column width
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"2 cm"}))
+        # Click Ok
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+        #select E1
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "E1"}))
+        #column width
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"3 cm"}))
+        # Click Ok
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+        #select columns C-E
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:E1"}))
+        self.xUITest.executeCommand(".uno:SelectColumn")
+        #Insert Columns Left
+        self.xUITest.executeCommand(".uno:InsertColumnsBefore")
+        #verify
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.00 cm")
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "E1"}))
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.00 cm")
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "F1"}))
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "G1"}))
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.00 cm")
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "H1"}))
+        self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xvalue = xDialog.getChild("value")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.00 cm")
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
