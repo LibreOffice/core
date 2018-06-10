@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_8234ebde",
+        "filename": "vcl/unx/gtk3_kde5/filepicker_ipc_commands.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-10T13:02:32Z",
+      "side": 1,
+      "message": "missing \u0026 on \"value\" so this won\u0027t really assign it since it\u0027s not a reference",
+      "revId": "1c90385d8012765d620c177c09d4155bfac397b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
