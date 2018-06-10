@@ -69,6 +69,7 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_hsql_binary_import,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    connectivity/source/drivers/hsqldb/hsqldb \
     connectivity/source/drivers/firebird/firebird_sdbc \
     connectivity/source/manager/sdbc2 \
     dbaccess/util/dba \
