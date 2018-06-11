@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_fd81c2fc",
+        "filename": "sc/inc/interpretercontext.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2018-06-11T10:27:17Z",
+      "side": 1,
+      "message": "Do we really need to store ScAddress ? won\u0027t just the row index suffice as we are dealing with formula-groups ?",
+      "revId": "e969e59a0f84cb81be93c52062eac6021e3d4f52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
