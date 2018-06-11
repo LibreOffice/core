@@ -176,6 +176,9 @@ Q_SIGNALS:
     void setDisplayDirectorySignal(const OUString& rDir);
     void setValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction,
                         const css::uno::Any& rValue);
+    void appendFilterSignal(const OUString& rTitle, const OUString& rFilter);
+    void appendFilterGroupSignal(const OUString& rTitle,
+                                 const css::uno::Sequence<css::beans::StringPair>& rFilters);
 
 private Q_SLOTS:
     void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
@@ -183,6 +186,17 @@ private Q_SLOTS:
     void setValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue)
     {
         return setValue(nControlAction, nControlAction, rValue);
+    }
+
+    void appendFilterSlot(const OUString& rTitle, const OUString& rFilter)
+    {
+        return appendFilter(rTitle, rFilter);
+    }
+
+    void appendFilterGroupSlot(const OUString& rTitle,
+                               const css::uno::Sequence<css::beans::StringPair>& rFilters)
+    {
+        return appendFilterGroup(rTitle, rFilters);
     }
 };
 
