@@ -29,6 +29,7 @@
 
 #include <stdio.h>
 #include <list>
+#include <sstream>
 #include <unordered_map>
 #include <vector>
 
@@ -1767,7 +1768,20 @@ STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
-    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::Invoke(" << dispidMember << ")");
+    OUString sParams;
+#if defined SAL_LOG_INFO
+    sParams += "[";
+    for (unsigned int i = 0; i < pdispparams->cArgs; ++i)
+    {
+        if (i > 0)
+            sParams += ",";
+        std::stringstream aStringStream;
+        aStringStream << pdispparams->rgvarg[i];
+        sParams += OUString::createFromAscii(aStringStream.str().c_str());
+    }
+    sParams += "]";
+#endif
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::Invoke(" << dispidMember << "," << sParams << ")");
 
     comphelper::ProfileZone aZone("COM Bridge");
     HRESULT ret = S_OK;
