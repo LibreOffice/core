@@ -493,7 +493,7 @@ void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sa
     }
 }
 
-void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames)
+void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, std::vector<OUString>& _rStyleNames)
 {
     ::std::vector< XMLPropertyState > aPropertyStates;
     aPropertyStates.emplace_back(0);
@@ -570,9 +570,9 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
         ).first;
     lcl_calculate(aColumnPos,aRowPos,aInsert->second);
 
-    TGridStyleMap::iterator aPos = m_aColumnStyleNames.emplace(_xProp.get(),TStringVec()).first;
+    TGridStyleMap::iterator aPos = m_aColumnStyleNames.emplace(_xProp.get(),std::vector<OUString>()).first;
     collectStyleNames(XML_STYLE_FAMILY_TABLE_COLUMN,aColumnPos,aPos->second);
-    aPos = m_aRowStyleNames.emplace(_xProp.get(),TStringVec()).first;
+    aPos = m_aRowStyleNames.emplace(_xProp.get(),std::vector<OUString>()).first;
     collectStyleNames(XML_STYLE_FAMILY_TABLE_ROW,aRowPos,aPos->second);
 
     sal_Int32 x1 = 0;
@@ -737,8 +737,8 @@ void ORptExport::exportTableColumns(const Reference< XSection>& _xSection)
     if ( aColFind == m_aColumnStyleNames.end() )
         return;
 
-    TStringVec::const_iterator aColIter = aColFind->second.begin();
-    TStringVec::const_iterator aColEnd = aColFind->second.end();
+    auto aColIter = aColFind->second.cbegin();
+    auto aColEnd = aColFind->second.cend();
     for (; aColIter != aColEnd; ++aColIter)
     {
         AddAttribute( m_sTableStyle,*aColIter );
@@ -760,7 +760,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
     TGrid::const_iterator aRowEnd = aFind->second.end();
 
     TGridStyleMap::const_iterator aRowFind = m_aRowStyleNames.find(_xSection.get());
-    TStringVec::const_iterator aHeightIter = aRowFind->second.begin();
+    auto aHeightIter = aRowFind->second.cbegin();
     OSL_ENSURE(aRowFind->second.size() == aFind->second.size(),"Different count for rows");
 
     bool bShapeHandled = false;

@@ -29,12 +29,10 @@
 
 namespace {
 
-typedef std::vector<rtl::OString> OStringVec;
-
 struct StaticDebugBaseAddressFilter
-    : rtl::StaticWithInit<OStringVec, StaticDebugBaseAddressFilter> {
-    OStringVec operator()() const {
-        OStringVec vec;
+    : rtl::StaticWithInit<std::vector<OString>, StaticDebugBaseAddressFilter> {
+    std::vector<OString> operator()() const {
+        std::vector<OString> vec;
         rtl_uString * pStr = nullptr;
         rtl::OUString const name(
             "OSL_DEBUGBASE_STORE_ADDRESSES" );
@@ -83,14 +81,14 @@ osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
 bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName )
     SAL_THROW_EXTERN_C()
 {
-    OStringVec const& rVec = StaticDebugBaseAddressFilter::get();
+    std::vector<OString> const& rVec = StaticDebugBaseAddressFilter::get();
     if (rVec.empty())
         return false;
     // check for "all":
     rtl::OString const& rFirst = rVec[0];
     if ( rFirst == "all" )
         return true;
-    OStringVec::const_iterator const iEnd( rVec.end() );
+    auto const iEnd( rVec.cend() );
     return std::find_if( rVec.begin(), iEnd,
         [pName] (OString const& it) { return isSubStr(pName, it); }) != iEnd;
 }

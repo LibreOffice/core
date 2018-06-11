@@ -36,11 +36,6 @@
 
 namespace /* private */
 {
-    typedef std::vector<rtl::OUString> string_container_t;
-    typedef string_container_t::iterator string_container_iterator_t;
-    typedef string_container_t::const_iterator string_container_const_iterator_t;
-    typedef std::vector<sal_Unicode> environment_container_t;
-
     /* Function object that compares two strings that are
        expected to be environment variables in the form
        "name=value". Only the 'name' part will be compared.
@@ -91,13 +86,13 @@ namespace /* private */
         size_t sum_;
     };
 
-    inline size_t calc_sum_of_string_lengths(const string_container_t& string_cont)
+    inline size_t calc_sum_of_string_lengths(const std::vector<OUString>& string_cont)
     {
         return std::for_each(
             string_cont.begin(), string_cont.end(), sum_of_string_lengths());
     }
 
-    void read_environment(/*out*/ string_container_t* environment)
+    void read_environment(/*out*/ std::vector<OUString>* environment)
     {
         // GetEnvironmentStrings returns a sorted list, Windows
         // sorts environment variables upper case
@@ -124,7 +119,7 @@ namespace /* private */
     bool create_merged_environment(
         rtl_uString* env_vars[],
         sal_uInt32 env_vars_count,
-        /*in|out*/ string_container_t* merged_env)
+        /*in|out*/ std::vector<OUString>* merged_env)
     {
         OSL_ASSERT(env_vars && env_vars_count > 0 && merged_env);
 
@@ -162,9 +157,9 @@ namespace /* private */
     bool setup_process_environment(
         rtl_uString* environment_vars[],
         sal_uInt32 n_environment_vars,
-        /*in|out*/ environment_container_t& environment)
+        /*in|out*/ std::vector<sal_Unicode>& environment)
     {
-        string_container_t merged_env;
+        std::vector<OUString> merged_env;
         if (!create_merged_environment(environment_vars, n_environment_vars, &merged_env))
             return false;
 
@@ -172,8 +167,8 @@ namespace /* private */
         // a final '\0'
         environment.resize(calc_sum_of_string_lengths(merged_env) + 1);
 
-        string_container_const_iterator_t iter = merged_env.begin();
-        string_container_const_iterator_t iter_end = merged_env.end();
+        auto iter = merged_env.cbegin();
+        auto iter_end = merged_env.cend();
 
         sal_uInt32 pos = 0;
         for (/**/; iter != iter_end; ++iter)
@@ -445,7 +440,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
             command_line.append(ustrArguments[n]);
     }
 
-    environment_container_t environment;
+    std::vector<sal_Unicode> environment;
     LPVOID p_environment = nullptr;
 
     if (nEnvironmentVars && ustrEnvironmentVars)
