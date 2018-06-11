@@ -12,11 +12,19 @@
 
 #include <vector>
 #include <formula/token.hxx>
+#include "address.hxx"
 
 #define TOKEN_CACHE_SIZE 8
 
 class ScDocument;
 class SvNumberFormatter;
+
+// SetNumberFormat() is not thread-safe, so calls to it need to be delayed to the main thread.
+struct DelayedSetNumberFormat
+{
+    ScAddress mPos;
+    sal_uInt32 mnNumberFormat;
+};
 
 struct ScInterpreterContext
 {
@@ -24,6 +32,7 @@ struct ScInterpreterContext
     SvNumberFormatter* mpFormatter;
     size_t mnTokenCachePos;
     std::vector<formula::FormulaToken*> maTokens;
+    std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
         : mrDoc(rDoc)
