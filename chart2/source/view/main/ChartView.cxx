@@ -34,6 +34,7 @@
 #include <LegendHelper.hxx>
 #include "VLegend.hxx"
 #include <PropertyMapper.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ScaleAutomatism.hxx>

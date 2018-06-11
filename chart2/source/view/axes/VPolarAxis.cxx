@@ -22,6 +22,7 @@
 #include "VPolarRadiusAxis.hxx"
 #include "Tickmarks.hxx"
 #include <ShapeFactory.hxx>
+#include <PlottingPositionHelper.hxx>
 
 namespace chart
 {

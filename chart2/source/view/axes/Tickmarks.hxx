@@ -19,15 +19,16 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_AXES_TICKMARKS_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_TICKMARKS_HXX
 
-#include "TickmarkProperties.hxx"
-#include "VAxisProperties.hxx"
 #include <chartview/ExplicitScaleValues.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/uno/Sequence.h>
 
 #include <vector>
+
+namespace chart { struct AxisProperties; }
+namespace chart { struct TickmarkProperties; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XScaling; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
 namespace chart {
 

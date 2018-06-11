@@ -23,10 +23,9 @@
 #include <ThreeDHelper.hxx>
 #include <chartview/ExplicitScaleValues.hxx>
 
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+
+namespace com { namespace sun { namespace star { namespace drawing { struct HomogenMatrix; } } } }
 
 namespace chart
 {

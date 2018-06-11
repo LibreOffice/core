@@ -19,9 +19,16 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_VTITLE_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_MAIN_VTITLE_HXX
 
-#include <com/sun/star/chart2/XTitle.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star { namespace awt { struct Point; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XTitle; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 namespace chart
 {

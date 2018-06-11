@@ -20,24 +20,22 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_VAXISPROPERTIES_HXX
 
 #include "TickmarkProperties.hxx"
-#include <PlottingPositionHelper.hxx>
 #include <LabelAlignment.hxx>
-#include <ExplicitCategoriesProvider.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 #include <vector>
 #include <boost/optional.hpp>
+
+namespace chart { class ExplicitCategoriesProvider; }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XTextualDataSequence; } } } } }
 
 namespace chart
 {
