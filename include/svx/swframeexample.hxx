@@ -135,15 +135,12 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    void SetWrap(css::text::WrapTextMode nW) { nWrap     = nW; }
-
     void SetHAlign(short nH)          { nHAlign   = nH; }
     void SetHoriRel(short nR)         { nHRel     = nR; }
 
     void SetVAlign(short nV)          { nVAlign   = nV; }
     void SetVertRel(short nR)         { nVRel     = nR; }
 
-    void SetTransparent(bool bT)      { bTrans    = bT; }
     void SetAnchor(RndStdIds nA) { nAnchor   = nA; }
 
     void SetRelPos(const Point& rP);

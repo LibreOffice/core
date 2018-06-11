@@ -347,14 +347,6 @@ void SwContact::MoveObjToLayer( const bool _bToVisible,
     }
 }
 
-// some virtual helper methods for information
-// about the object (Writer fly frame resp. drawing object)
-
-const SwIndex& SwContact::GetContentAnchorIndex() const
-{
-    return GetContentAnchor().nContent;
-}
-
 /// get minimum order number of anchored objects handled by with contact
 sal_uInt32 SwContact::GetMinOrdNum() const
 {

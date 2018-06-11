@@ -224,8 +224,6 @@ public:
                                       SalGraphics* pSrcGraphics ) override;
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap ) override;
-    void                    drawBitmap( const SalTwoRect& rPosAry,
-                                        BitmapBuffer* pBuffer );
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,
                                         const SalBitmap& rTransparentBitmap ) override;

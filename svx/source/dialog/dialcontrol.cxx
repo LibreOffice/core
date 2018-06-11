@@ -621,22 +621,6 @@ void SvxDialControl::LoseFocus()
     HandleEscapeEvent();
 }
 
-bool SvxDialControl::HasRotation() const
-{
-    return !mpImpl->mbNoRot;
-}
-
-void SvxDialControl::SetNoRotation()
-{
-    if( !mpImpl->mbNoRot )
-    {
-        mpImpl->mbNoRot = true;
-        InvalidateControl();
-        if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->set_text("");
-    }
-}
-
 sal_Int32 SvxDialControl::GetRotation() const
 {
     return mpImpl->mnAngle;
@@ -687,11 +671,6 @@ void SvxDialControl::SaveValue()
 bool SvxDialControl::IsValueModified()
 {
     return mpImpl->mnInitialAngle != mpImpl->mnAngle;
-}
-
-void SvxDialControl::SetModifyHdl( const Link<SvxDialControl*,void>& rLink )
-{
-    mpImpl->maModifyHdl = rLink;
 }
 
 void SvxDialControl::Init( const Size& rWinSize, const vcl::Font& rWinFont )

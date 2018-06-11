@@ -60,11 +60,6 @@ public:
                rID.mnID3 == mnID3 && rID.mnID4 == mnID4;
     }
 
-    bool IsEmpty() const
-    {
-        return 0 == mnID4;
-    }
-
     OString getIDString() const;
 };
 

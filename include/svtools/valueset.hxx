@@ -453,16 +453,12 @@ private:
     friend class SvtValueSetAcc;
     friend class SvtValueItemAcc;
 
-    SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-
-    SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
     SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtValueSetItem* pItem, tools::Rectangle aRect);
     SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
-    SVT_DLLPRIVATE bool         ImplScroll( const Point& rPos );
     SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SVT_DLLPRIVATE SvtValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE SvtValueSetItem*    ImplGetFirstItem();
@@ -501,101 +497,51 @@ public:
     void            SetStyle(WinBits nStyle) { mnStyle = nStyle; }
     WinBits         GetStyle() const { return mnStyle; }
 
-    /// Insert @rImage item.
-    void            InsertItem(sal_uInt16 nItemId, const Image& rImage);
-    /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
-    void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
-                               const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);
-    /// Insert an User Drawn item.
-    void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
-    /// Insert an User Drawn item with @rStr tooltip.
-    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos);
-    void            RemoveItem(sal_uInt16 nItemId);
-
-    void            Clear();
 
     size_t          GetItemCount() const;
     size_t          GetItemPos( sal_uInt16 nItemId ) const;
     sal_uInt16      GetItemId( size_t nPos ) const;
     sal_uInt16      GetItemId( const Point& rPos ) const;
     tools::Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
-    void            EnableFullItemMode( bool bFullMode );
 
     void            SetColCount( sal_uInt16 nNewCols = 1 );
-    sal_uInt16      GetColCount() const
-    {
-        return mnUserCols;
-    }
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
-    sal_uInt16      GetLineCount() const
-    {
-        return mnUserVisLines;
-    }
     void           SetItemWidth( long nItemWidth );
     void           SetItemHeight( long nLineHeight );
-    Size           GetLargestItemSize();
-    void           RecalculateItemSizes();
 
     void           SelectItem( sal_uInt16 nItemId );
     sal_uInt16     GetSelectedItemId() const
     {
         return mnSelItemId;
     }
-    size_t         GetSelectItemPos() const
-    {
-        return GetItemPos( mnSelItemId );
-    }
     bool IsItemSelected( sal_uInt16 nItemId ) const
     {
         return !mbNoSelection && (nItemId == mnSelItemId);
     }
     void SetNoSelection();
-    bool IsNoSelection() const
-    {
-        return mbNoSelection;
-    }
 
-    void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
-    Image           GetItemImage( sal_uInt16 nItemId ) const;
-    void            SetItemColor( sal_uInt16 nItemId, const Color& rColor );
     Color           GetItemColor( sal_uInt16 nItemId ) const;
-    void            SetItemData( sal_uInt16 nItemId, void* pData );
-    void*           GetItemData( sal_uInt16 nItemId ) const;
-    void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
     void            SetColor( const Color& rColor );
-    void            SetColor()
-    {
-        SetColor(COL_TRANSPARENT);
-    }
     bool            IsColor() const
     {
         return maColor.GetTransparency() == 0;
     }
 
-    void            SetExtraSpacing( sal_uInt16 nNewSpacing );
-
     void            Format(vcl::RenderContext const & rRenderContext);
-    void            SetFormat();
 
     Size            CalcWindowSizePixel(const Size& rItemSize,
                                         sal_uInt16 nCalcCols = 0,
                                         sal_uInt16 nCalcLines = 0) const;
     Size            CalcItemSizePixel(const Size& rSize) const;
 
-    void            SetSelectHdl(const Link<SvtValueSet*,void>& rLink)
-    {
-        maSelectHdl = rLink;
-    }
     void            SetDoubleClickHdl(const Link<SvtValueSet*,void>& rLink)
     {
         maDoubleClickHdl = rLink;
     }
-
-    void            SetHighlightHdl(const Link<SvtValueSet*,void>& rLink);
 
     bool GetEdgeBlending() const
     {

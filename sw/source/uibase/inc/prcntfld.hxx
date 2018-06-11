@@ -59,16 +59,10 @@ public:
     bool HasFocus() const { return m_pField->HasFocus(); }
     void SetAccessibleName(const OUString& rName) { m_pField->SetAccessibleName(rName); }
     void SetText(const OUString& rStr) { m_pField->SetText(rStr); }
-    void SaveValue() { m_pField->SaveValue(); }
     void ClearModifyFlag() { m_pField->ClearModifyFlag(); }
-    OUString const & GetSavedValue() const { return m_pField->GetSavedValue(); }
-    OUString GetText() const { return m_pField->GetText(); }
     void SetMetricFieldMin(sal_Int64 nNewMin) { m_pField->SetMin(nNewMin); }
-    void SetMetricFieldMax(sal_Int64 nNewMax) { m_pField->SetMax(nNewMax); }
 
     void SetValue(sal_Int64 nNewValue) { m_pField->SetValue(nNewValue, FUNIT_NONE); }
-
-    void SetLast(sal_Int64 nNewLast) { m_pField->SetLast(nNewLast); }
 
     void SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
@@ -128,34 +122,20 @@ public:
     void SetMetric(FieldUnit eUnit) { ::SetFieldUnit(*m_pField, eUnit); }
     void set_sensitive(bool bEnable) { m_pField->set_sensitive(bEnable); }
     bool has_focus() const { return m_pField->has_focus(); }
-    void set_accessible_name(const OUString& rName) { m_pField->set_accessible_name(rName); }
-    void set_text(const OUString& rStr) { m_pField->set_text(rStr); }
     void save_value() { m_pField->save_value(); }
     bool get_value_changed_from_saved() const { return m_pField->get_value_changed_from_saved(); }
-    OUString get_text() const { return m_pField->get_text(); }
     void SetMetricFieldMin(int nNewMin) { m_pField->set_min(nNewMin, FUNIT_NONE); }
     void SetMetricFieldMax(int nNewMax) { m_pField->set_max(nNewMax, FUNIT_NONE); }
-    int GetMetrixFieldMin() const { int nMin, nMax; m_pField->get_range(nMin, nMax, FUNIT_NONE); return nMin; }
-
-    void set_value(int nNewValue) { m_pField->set_value(nNewValue, FUNIT_NONE); }
 
     void SetPrcntValue(int nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
-    void SetUserValue(int nNewValue, FieldUnit eInUnit);
-
-    void SetBaseValue(int nNewValue, FieldUnit eInUnit);
-
     int get_value(FieldUnit eOutUnit = FUNIT_NONE);
-
-    bool IsValueModified();
 
     void set_min(int nNewMin, FieldUnit eInUnit);
     void set_max(int nNewMax, FieldUnit eInUnit);
 
     int NormalizePercent(int nValue);
     int DenormalizePercent(int nValue);
-
-    int normalize(int nValue) const { return m_pField->normalize(nValue); }
 
     void SetRefValue(int nValue);
     int GetRealValue(FieldUnit eOutUnit);
@@ -164,7 +144,6 @@ public:
 
     void ShowPercent(bool bPercent);
 
-    void LockAutoCalculation(bool bLock) {bLockAutoCalculation = bLock;}
 };
 
 

@@ -358,11 +358,6 @@ void Outliner::SetDefaultLanguage( LanguageType eLang )
     pEditEngine->SetDefaultLanguage( eLang );
 }
 
-LanguageType Outliner::GetDefaultLanguage() const
-{
-    return pEditEngine->GetDefaultLanguage();
-}
-
 void Outliner::CompleteOnlineSpelling()
 {
     pEditEngine->CompleteOnlineSpelling();

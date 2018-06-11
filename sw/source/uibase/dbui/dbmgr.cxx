@@ -706,54 +706,6 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
     }
 }
 
-// fill Listbox with tablelist
-bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
-{
-    bool bRet = false;
-    OUString sOldTableName(pListBox->GetSelectedEntry());
-    pListBox->Clear();
-    SwDSParam* pParam = FindDSConnection(rDBName, false);
-    uno::Reference< sdbc::XConnection> xConnection;
-    if(pParam && pParam->xConnection.is())
-        xConnection = pParam->xConnection;
-    else
-    {
-        if ( !rDBName.isEmpty() )
-            xConnection = RegisterConnection( rDBName );
-    }
-    if(xConnection.is())
-    {
-        uno::Reference<sdbcx::XTablesSupplier> xTSupplier(xConnection, uno::UNO_QUERY);
-        if(xTSupplier.is())
-        {
-            uno::Reference<container::XNameAccess> xTables = xTSupplier->getTables();
-            uno::Sequence<OUString> aTables = xTables->getElementNames();
-            const OUString* pTables = aTables.getConstArray();
-            for(long i = 0; i < aTables.getLength(); i++)
-            {
-                const sal_Int32 nEntry = pListBox->InsertEntry(pTables[i]);
-                pListBox->SetEntryData(nEntry, nullptr);
-            }
-        }
-        uno::Reference<sdb::XQueriesSupplier> xQSupplier(xConnection, uno::UNO_QUERY);
-        if(xQSupplier.is())
-        {
-            uno::Reference<container::XNameAccess> xQueries = xQSupplier->getQueries();
-            uno::Sequence<OUString> aQueries = xQueries->getElementNames();
-            const OUString* pQueries = aQueries.getConstArray();
-            for(long i = 0; i < aQueries.getLength(); i++)
-            {
-                const sal_Int32 nEntry = pListBox->InsertEntry(pQueries[i]);
-                pListBox->SetEntryData(nEntry, reinterpret_cast<void*>(1));
-            }
-        }
-        if (!sOldTableName.isEmpty())
-            pListBox->SelectEntry(sOldTableName);
-        bRet = true;
-    }
-    return bRet;
-}
-
 bool SwDBManager::GetTableNames(weld::ComboBoxText& rBox, const OUString& rDBName)
 {
     bool bRet = false;

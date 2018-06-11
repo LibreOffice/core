@@ -32,7 +32,7 @@ connectivity/source/inc/java/lang/Object.hxx:117
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
 connectivity/source/inc/odbc/OConnection.hxx:78
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
-connectivity/source/inc/odbc/OStatement.hxx:116
+connectivity/source/inc/odbc/OStatement.hxx:115
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
 extensions/source/scanner/sane.hxx:97
     _Bool Sane::CheckConsistency(const char *,_Bool)
@@ -46,7 +46,7 @@ extensions/source/scanner/sanedlg.hxx:90
     _Bool SaneDlg::LoadState()
 extensions/source/scanner/sanedlg.hxx:104
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
-filter/source/flash/swfexporter.hxx:84
+filter/source/flash/swfexporter.hxx:85
     _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
 i18nlangtag/source/languagetag/languagetag.cxx:274
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
@@ -140,9 +140,9 @@ include/oox/dump/oledumper.hxx:326
     unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
 include/oox/dump/oledumper.hxx:327
     char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
-include/oox/export/shapes.hxx:203
+include/oox/export/shapes.hxx:202
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
-include/oox/export/shapes.hxx:204
+include/oox/export/shapes.hxx:203
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,int)
 include/oox/helper/binaryoutputstream.hxx:78
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
@@ -170,10 +170,16 @@ include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
 include/svl/poolitem.hxx:173
     class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
-include/svx/charmap.hxx:87
+include/svx/charmap.hxx:84
     _Bool SvxShowCharSet::GetFontCharMap(class tools::SvRef<class FontCharMap> &) const
+include/svx/dlgctrl.hxx:176
+    class Point RectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:195
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
+include/svx/svdograf.hxx:120
+    _Bool SdrGrafObj::ImpUpdateGraphicLink(_Bool) const
+include/svx/SvxColorValueSet.hxx:55
+    class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/test/sheet/xsheetannotation.hxx:36
@@ -188,13 +194,19 @@ include/tools/color.hxx:151
     class SvStream & Color::Read(class SvStream &)
 include/tools/color.hxx:152
     class SvStream & Color::Write(class SvStream &) const
+include/tools/config.hxx:37
+    _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
+include/vcl/bitmap.hxx:189
+    _Bool Bitmap::Dither(enum BmpDitherFlags)
+include/vcl/bitmapex.hxx:241
+    _Bool BitmapEx::Rotate(long,const class Color &)
 include/vcl/fontcharmap.hxx:48
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
 include/vcl/gdimtf.hxx:186
     class SvStream & GDIMetaFile::Read(class SvStream &)
-include/vcl/graphicfilter.hxx:255
+include/vcl/graphicfilter.hxx:260
     class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
 include/vcl/GraphicNativeTransform.hxx:29
     _Bool GraphicNativeTransform::rotateBitmapOnly(unsigned short)
@@ -204,16 +216,22 @@ include/vcl/texteng.hxx:285
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/textview.hxx:192
     _Bool TextView::SetCursorAtPoint(const class Point &)
-include/vcl/toolbox.hxx:513
-    _Bool ToolBox::ChangeHighlightUpDn(_Bool,_Bool)
-include/vcl/weld.hxx:227
+include/vcl/toolbox.hxx:515
+    _Bool ToolBox::ChangeHighlightUpDn(_Bool)
+include/vcl/weld.hxx:271
     _Bool weld::ComboBoxText::get_entry_selection_bounds(int &,int &)
+include/vcl/weld.hxx:483
+    _Bool weld::Entry::get_selection_bounds(int &,int &)
+include/vcl/weld.hxx:762
+    _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
+reportdesign/source/ui/inc/DateTime.hxx:76
+    short rptui::ODateTimeDialog::execute()
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
 sc/source/core/opencl/formulagroupcl.cxx:952
@@ -256,25 +274,25 @@ sc/source/ui/vba/vbaformat.hxx:145
     class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:135
+sd/source/filter/eppt/pptx-epptooxml.cxx:140
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/ui/inc/OutlineViewShell.hxx:114
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
-sfx2/source/appl/appserv.cxx:324
+sfx2/source/appl/appserv.cxx:321
     short (anonymous namespace)::LicenseDialog::execute()
-sfx2/source/appl/appserv.cxx:342
+sfx2/source/appl/appserv.cxx:338
     short (anonymous namespace)::SafeModeQueryDialog::execute()
 sw/inc/calc.hxx:112
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/doc.hxx:1103
+sw/inc/doc.hxx:1061
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1285
+sw/inc/doc.hxx:1243
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
-sw/inc/editsh.hxx:270
+sw/inc/editsh.hxx:262
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
-sw/inc/editsh.hxx:641
+sw/inc/editsh.hxx:633
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/inc/IDocumentUndoRedo.hxx:180
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
@@ -284,6 +302,8 @@ sw/inc/tblafmt.hxx:343
     _Bool SwTableAutoFormatTable::Load(class SvStream &)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
+sw/source/core/inc/scriptinfo.hxx:226
+    _Bool SwScriptInfo::GetBoundsOfHiddenRange(int,int &,int &) const
 sw/source/filter/ww8/ww8toolbar.hxx:339
     _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
 sw/source/ui/frmdlg/cption.cxx:80
@@ -306,15 +326,15 @@ vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
 vcl/inc/salframe.hxx:221
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
-vcl/inc/salgdi.hxx:393
+vcl/inc/salgdi.hxx:392
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:294
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/source/gdi/pdfwriter_impl.hxx:1262
-    _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
 vcl/source/gdi/pdfwriter_impl.hxx:1263
-    _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
+    _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
 vcl/source/gdi/pdfwriter_impl.hxx:1264
+    _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
+vcl/source/gdi/pdfwriter_impl.hxx:1265
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

@@ -434,14 +434,6 @@ int SwPercentField::DenormalizePercent(int nValue)
     return nValue;
 }
 
-bool SwPercentField::IsValueModified()
-{
-    if (m_pField->get_unit() == FUNIT_PERCENT)
-        return true;
-    else
-        return m_pField->get_value_changed_from_saved();
-}
-
 int SwPercentField::ImpPower10(sal_uInt16 n)
 {
     int nValue = 1;

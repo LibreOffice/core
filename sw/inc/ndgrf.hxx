@@ -104,7 +104,6 @@ public:
         bChgTwipSize = b;
     }
 
-    bool IsGraphicArrived() const        { return bGraphicArrived; }
     void SetGraphicArrived( bool b )     { bGraphicArrived = b; }
 
     bool IsFrameInPaint() const          { return bFrameInPaint; }
