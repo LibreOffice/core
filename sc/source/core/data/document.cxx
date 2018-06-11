@@ -3693,6 +3693,7 @@ sal_uInt32 ScDocument::GetNumberFormat( const ScInterpreterContext& rContext, co
 
 void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat )
 {
+    assert(!IsThreadedGroupCalcInProgress());
     SCTAB nTab = rPos.Tab();
     if (!TableExists(nTab))
         return;
@@ -6752,6 +6753,20 @@ void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSp
 void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& /*rNonThreadedData*/)
 {
     // What about recursion helper and lookup cache?
+}
+
+void ScDocument::MergeBackIntoNonThreadedContext(ScInterpreterContext& threadedContext)
+{
+    // Move data from a context used by a calculation thread to the main thread's context.
+    // So far all the data moved is accessed by the main thread only after the calculation thread
+    // has finished, so locking is necessary only here (in case this function gets called
+    // for multiple calculation threads at the same time).
+    static osl::Mutex mutex;
+    osl::MutexGuard guard( mutex );
+    maInterpreterContext.maDelayedSetNumberFormat.insert(
+        maInterpreterContext.maDelayedSetNumberFormat.end(),
+        std::make_move_iterator(threadedContext.maDelayedSetNumberFormat.begin()),
+        std::make_move_iterator(threadedContext.maDelayedSetNumberFormat.end()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
