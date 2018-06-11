@@ -369,10 +369,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             awt::Point aCurrPos(0, 0);
             if (nIncX == -1)
                 aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
-            if (nIncY == -1)
-                aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
 
-            if(nCount <= 2 && nIncY == -1)
+            if (nCount <= 2 && nIncY == -1)
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height*2;
             else
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height*(nCount+1);
