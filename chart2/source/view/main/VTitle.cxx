@@ -22,6 +22,8 @@
 #include <PropertyMapper.hxx>
 #include <ShapeFactory.hxx>
 #include <com/sun/star/chart2/XFormattedString.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>

@@ -29,6 +29,7 @@
 #include <BaseGFXHelper.hxx>
 #include <AxisHelper.hxx>
 #include "Tickmarks_Equidistant.hxx"
+#include <ExplicitCategoriesProvider.hxx>
 
 #include <rtl/math.hxx>
 #include <tools/color.hxx>

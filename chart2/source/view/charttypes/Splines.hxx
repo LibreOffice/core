@@ -20,7 +20,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_SPLINES_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_SPLINES_HXX
 
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
 
 namespace chart
 {

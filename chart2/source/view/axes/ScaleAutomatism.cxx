@@ -22,7 +22,9 @@
 #include <DateHelper.hxx>
 #include "DateScaling.hxx"
 #include <AxisHelper.hxx>
+#include "VAxisProperties.hxx"
 #include <com/sun/star/chart/TimeUnit.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
 
 #include <rtl/math.hxx>
 #include <limits>

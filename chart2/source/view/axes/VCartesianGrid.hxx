@@ -20,7 +20,9 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_VCARTESIANGRID_HXX
 
 #include "VAxisOrGridBase.hxx"
-#include <VLineProperties.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+namespace chart { struct VLineProperties; }
 
 namespace chart
 {

@@ -24,6 +24,7 @@
 #include <ShapeFactory.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <PolarLabelPositionHelper.hxx>
+#include <PlottingPositionHelper.hxx>
 #include <tools/color.hxx>
 
 #include <memory>

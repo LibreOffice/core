@@ -20,6 +20,7 @@
 #include "VLegend.hxx"
 #include "VButton.hxx"
 #include <PropertyMapper.hxx>
+#include <ChartModel.hxx>
 #include <CommonConverters.hxx>
 #include <ObjectIdentifier.hxx>
 #include <RelativePositionHelper.hxx>
@@ -33,6 +34,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
