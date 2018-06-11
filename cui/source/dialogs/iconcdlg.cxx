@@ -205,8 +205,7 @@ void IconChoiceDialog::dispose()
     }
     maPageList.clear();
 
-    delete pRanges;
-    pRanges = nullptr;
+    pRanges.reset();
     pOutSet.reset();
 
     m_pIconCtrl.clear();
@@ -467,7 +466,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
     }
 
     if ( pRanges )
-        return pRanges;
+        return pRanges.get();
     std::vector<sal_uInt16> aUS;
 
     size_t nCount = maPageList.size();
@@ -484,11 +483,11 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
         std::sort( aUS.begin(), aUS.end() );
     }
 
-    pRanges = new sal_uInt16[aUS.size() + 1];
-    std::copy( aUS.begin(), aUS.end(), pRanges );
+    pRanges.reset(new sal_uInt16[aUS.size() + 1]);
+    std::copy( aUS.begin(), aUS.end(), pRanges.get() );
     pRanges[aUS.size()] = 0;
 
-    return pRanges;
+    return pRanges.get();
 }
 
 
