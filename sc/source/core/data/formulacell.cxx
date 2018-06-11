@@ -2009,7 +2009,16 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             if (bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)))
             {
                 // set number format explicitly
-                pDocument->SetNumberFormat( aPos, nFormatIndex );
+                if (!pDocument->IsThreadedGroupCalcInProgress())
+                    pDocument->SetNumberFormat( aPos, nFormatIndex );
+                else
+                {
+                    // SetNumberFormat() is not thread-safe (modifies ScAttrArray), delay the work
+                    // to the main thread. Since thread calculations operate on formula groups,
+                    // it's enough to store just the row.
+                    DelayedSetNumberFormat data = { aPos.Row(), nFormatIndex };
+                    rContext.maDelayedSetNumberFormat.push_back( data );
+                }
                 bChanged = true;
             }
 
@@ -4435,7 +4444,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             const unsigned mnThisThread;
             const unsigned mnThreadsTotal;
             ScDocument* mpDocument;
-            SvNumberFormatter* mpFormatter;
+            ScInterpreterContext* mpContext;
             const ScAddress& mrTopPos;
             SCROW mnLength;
 
@@ -4444,14 +4453,14 @@ bool ScFormulaCell::InterpretFormulaGroup()
                      unsigned nThisThread,
                      unsigned nThreadsTotal,
                      ScDocument* pDocument2,
-                     SvNumberFormatter* pFormatter,
+                     ScInterpreterContext* pContext,
                      const ScAddress& rTopPos,
                      SCROW nLength) :
                 comphelper::ThreadTask(rTag),
                 mnThisThread(nThisThread),
                 mnThreadsTotal(nThreadsTotal),
                 mpDocument(pDocument2),
-                mpFormatter(pFormatter),
+                mpContext(pContext),
                 mrTopPos(rTopPos),
                 mnLength(nLength)
             {
@@ -4459,9 +4468,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
             virtual void doWork() override
             {
-                ScInterpreterContext aContext(*mpDocument, mpFormatter);
-
-                auto aNonThreadedData = mpDocument->CalculateInColumnInThread(aContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
+                auto aNonThreadedData = mpDocument->CalculateInColumnInThread(*mpContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
                 aNonThreadedData.MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
             }
 
@@ -4485,15 +4492,24 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
             // Start nThreadCount new threads
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
+            std::vector<ScInterpreterContext*> contexts(nThreadCount);
             for (int i = 0; i < nThreadCount; ++i)
             {
-                rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, pNonThreadedFormatter, mxGroup->mpTopCell->aPos, mxGroup->mnLength));
+                contexts[i] = new ScInterpreterContext(*pDocument, pNonThreadedFormatter);
+                rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, contexts[i], mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 
             SAL_INFO("sc.threaded", "Joining threads");
             rThreadPool.waitUntilDone(aTag);
 
             pDocument->SetThreadedGroupCalcInProgress(false);
+
+            for (int i = 0; i < nThreadCount; ++i)
+            {
+                // This is intentionally done in this main thread in order to avoid locking.
+                pDocument->MergeBackIntoNonThreadedContext(*contexts[i]);
+                delete contexts[i];
+            }
 
             SAL_INFO("sc.threaded", "Done");
         }
