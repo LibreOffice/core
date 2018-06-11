@@ -124,6 +124,7 @@ public:
     bool has_focus() const { return m_pField->has_focus(); }
     void save_value() { m_pField->save_value(); }
     bool get_value_changed_from_saved() const { return m_pField->get_value_changed_from_saved(); }
+    void set_text(const OUString& rStr) { m_pField->set_text(rStr); }
     void SetMetricFieldMin(int nNewMin) { m_pField->set_min(nNewMin, FUNIT_NONE); }
     void SetMetricFieldMax(int nNewMax) { m_pField->set_max(nNewMax, FUNIT_NONE); }
 
