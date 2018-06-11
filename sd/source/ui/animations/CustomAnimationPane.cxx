@@ -590,8 +590,9 @@ void CustomAnimationPane::updateControls()
                 pSubControl = mpLBProperty->getSubControl();
                 if( !pSubControl || (pSubControl->getControlType() != mnPropertyType) )
                 {
-                    pSubControl = PropertySubControl::create( mnPropertyType, mpPlaceholderBox, aValue, pEffect->getPresetId(), LINK( this, CustomAnimationPane, implPropertyHdl ) );
-                    mpLBProperty->setSubControl( pSubControl );
+                    auto pNewControl = PropertySubControl::create( mnPropertyType, mpPlaceholderBox, aValue, pEffect->getPresetId(), LINK( this, CustomAnimationPane, implPropertyHdl ) );
+                    pSubControl = pNewControl.get();
+                    mpLBProperty->setSubControl( std::move(pNewControl) );
                 }
                 else
                 {

@@ -2285,18 +2285,15 @@ PropertyControl::~PropertyControl()
 
 void PropertyControl::dispose()
 {
-    delete mpSubControl;
+    mpSubControl.reset();
     ListBox::dispose();
 }
 
-void PropertyControl::setSubControl( PropertySubControl* pSubControl )
+void PropertyControl::setSubControl( std::unique_ptr<PropertySubControl> pSubControl )
 {
-    if( mpSubControl && mpSubControl != pSubControl )
-        delete mpSubControl;
+    mpSubControl = std::move(pSubControl);
 
-    mpSubControl = pSubControl;
-
-    Control* pControl = pSubControl ? pSubControl->getControl() : nullptr;
+    Control* pControl = mpSubControl ? mpSubControl->getControl() : nullptr;
 
     if( pControl )
     {
@@ -2323,15 +2320,15 @@ PropertySubControl::~PropertySubControl()
 {
 }
 
-PropertySubControl* PropertySubControl::create( sal_Int32 nType, vcl::Window* pParent, const Any& rValue, const OUString& rPresetId, const Link<LinkParamNone*,void>& rModifyHdl )
+std::unique_ptr<PropertySubControl> PropertySubControl::create( sal_Int32 nType, vcl::Window* pParent, const Any& rValue, const OUString& rPresetId, const Link<LinkParamNone*,void>& rModifyHdl )
 {
-    PropertySubControl* pSubControl = nullptr;
+    std::unique_ptr<PropertySubControl> pSubControl;
     switch( nType )
     {
     case nPropertyTypeDirection:
     case nPropertyTypeSpokes:
     case nPropertyTypeZoom:
-        pSubControl = new PresetPropertyBox( nType, pParent, rValue, rPresetId, rModifyHdl );
+        pSubControl.reset( new PresetPropertyBox( nType, pParent, rValue, rPresetId, rModifyHdl ) );
         break;
 
     case nPropertyTypeColor:
@@ -2339,31 +2336,31 @@ PropertySubControl* PropertySubControl::create( sal_Int32 nType, vcl::Window* pP
     case nPropertyTypeFirstColor:
     case nPropertyTypeCharColor:
     case nPropertyTypeLineColor:
-        pSubControl = new ColorPropertyBox( nType, pParent, rValue, rModifyHdl );
+        pSubControl.reset( new ColorPropertyBox( nType, pParent, rValue, rModifyHdl ) );
         break;
 
     case nPropertyTypeFont:
-        pSubControl = new FontPropertyBox( nType, pParent, rValue, rModifyHdl );
+        pSubControl.reset( new FontPropertyBox( nType, pParent, rValue, rModifyHdl ) );
         break;
 
     case nPropertyTypeCharHeight:
-        pSubControl = new CharHeightPropertyBox( nType, pParent, rValue, rModifyHdl );
+        pSubControl.reset( new CharHeightPropertyBox( nType, pParent, rValue, rModifyHdl ) );
         break;
 
     case nPropertyTypeRotate:
-        pSubControl = new RotationPropertyBox( nType, pParent, rValue, rModifyHdl );
+        pSubControl.reset( new RotationPropertyBox( nType, pParent, rValue, rModifyHdl ) );
         break;
 
     case nPropertyTypeTransparency:
-        pSubControl = new TransparencyPropertyBox( nType, pParent, rValue, rModifyHdl );
+        pSubControl.reset( new TransparencyPropertyBox( nType, pParent, rValue, rModifyHdl ) );
         break;
 
     case nPropertyTypeScale:
-        pSubControl = new ScalePropertyBox( nType, pParent, rValue, rModifyHdl );
+        pSubControl.reset( new ScalePropertyBox( nType, pParent, rValue, rModifyHdl ) );
         break;
 
     case nPropertyTypeCharDecoration:
-        pSubControl = new FontStylePropertyBox( nType, pParent, rValue, rModifyHdl );
+        pSubControl.reset( new FontStylePropertyBox( nType, pParent, rValue, rModifyHdl ) );
         break;
     }
 
