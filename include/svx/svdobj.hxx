@@ -343,7 +343,7 @@ public:
     SdrObject(SdrModel& rSdrModel);
 
     // SdrModel/SdrPage access on SdrObject level
-    virtual SdrPage* getSdrPageFromSdrObject() const;
+    SdrPage* getSdrPageFromSdrObject() const;
     SdrModel& getSdrModelFromSdrObject() const;
     SdrObjList* getParentOfSdrObject() const;
     virtual SdrObjList* getChildrenOfSdrObject() const;

@@ -231,7 +231,7 @@ protected:
     };
     std::unique_ptr< DialControl_Impl > mpImpl;
 
-    virtual void        HandleMouseEvent( const Point& rPos, bool bInitial );
+    void                HandleMouseEvent( const Point& rPos, bool bInitial );
     void                HandleEscapeEvent();
 
     void                SetRotation( sal_Int32 nAngle, bool bBroadcast );

@@ -494,8 +494,7 @@ public:
     virtual void    StyleUpdated() override;
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
 
-    virtual void    Select();
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    void            Select();
 
     OUString        GetText() const { return maText; }
     void            SetText(const OUString& rText) { maText = rText; }
