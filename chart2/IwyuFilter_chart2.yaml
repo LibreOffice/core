@@ -294,6 +294,63 @@ blacklist:
     chart2/source/view/inc/VPolarTransformation.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XTransformation.hpp
+    chart2/source/view/axes/DateScaling.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XScaling.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XServiceName.hpp
+    # TODO: in view/axes iwyu actually runs without
+    # -I/$SRCDIR/chart2/source/view/inc
+    # thus gives way more false positives
+    chart2/source/view/axes/VAxisOrGridBase.hxx:
+    # False positives
+    - ThreeDHelper.hxx
+    - basegfx/matrix/b3dhommatrix.hxx
+    chart2/source/view/axes/VAxisProperties.hxx:
+    # False positives
+    - com/sun/star/awt/Rectangle.hpp
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/chart/ChartAxisMarkPosition.hpp
+    - com/sun/star/chart/ChartAxisPosition.hpp
+    - com/sun/star/uno/Any.hxx
+    - vector
+    - TickmarkProperties.hxx
+    chart2/source/view/axes/VCartesianGrid.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/view/axes/VPolarAxis.hxx:
+    # False positives
+    - memory
+    chart2/source/view/axes/VPolarGrid.hxx:
+    # False positives
+    - memory
+    chart2/source/view/axes/VPolarGrid.hxx:
+    # False positives
+    - com/sun/star/drawing/PointSequenceSequence.hpp
+    chart2/source/view/axes/VPolarRadiusAxis.hxx:
+    # False positives
+    - memory
+    chart2/source/view/axes/VPolarGrid.hxx:
+    # False positives
+    - memory
+    - com/sun/star/drawing/PointSequenceSequence.hpp
+    chart2/source/view/charttypes/BarChart.hxx:
+    # False positives
+    - memory
+    chart2/source/view/charttypes/CandleStickChart.hxx:
+    # False positives
+    - memory
+    chart2/source/view/charttypes/AreaChart.hxx:
+    # False positives
+    - memory
+    chart2/source/view/charttypes/NetChart.hxx:
+    # False positives
+    - memory
+    chart2/source/view/charttypes/PieChart.hxx:
+    # False positives
+    - memory
+    - basegfx/vector/b2ivector.hxx
+    - com/sun/star/awt/Point.hpp
     chart2/source/controller/inc/AccessibleTextHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleContext.hpp

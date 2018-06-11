@@ -21,9 +21,10 @@
 
 #include "VAxisOrGridBase.hxx"
 #include "Tickmarks.hxx"
-#include <VLineProperties.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <memory>
+
+namespace chart { struct VLineProperties; }
 
 namespace chart
 {

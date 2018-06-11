@@ -24,9 +24,11 @@
 #include <ObjectIdentifier.hxx>
 #include <CommonConverters.hxx>
 #include <AxisHelper.hxx>
+#include <VLineProperties.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/XTransformation.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <memory>
 #include <vector>

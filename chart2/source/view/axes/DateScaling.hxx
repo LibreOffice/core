@@ -22,7 +22,6 @@
 #include <com/sun/star/chart2/XScaling.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/date.hxx>
 

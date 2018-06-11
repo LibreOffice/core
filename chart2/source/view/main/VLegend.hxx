@@ -19,15 +19,18 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_VLEGEND_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_MAIN_VLEGEND_HXX
 
-#include <com/sun/star/chart2/XLegend.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-
-#include <ChartModel.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>
+
+namespace chart { class ChartModel; }
+namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
+namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XLegend; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {

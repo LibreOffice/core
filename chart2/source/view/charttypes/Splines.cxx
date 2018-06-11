@@ -20,6 +20,7 @@
 #include "Splines.hxx"
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
+#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 
 #include <vector>
 #include <algorithm>

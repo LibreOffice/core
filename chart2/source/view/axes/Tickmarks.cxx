@@ -21,8 +21,10 @@
 #include "Tickmarks_Equidistant.hxx"
 #include "Tickmarks_Dates.hxx"
 #include <ViewDefines.hxx>
+#include "VAxisProperties.hxx"
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
+#include <com/sun/star/chart2/AxisType.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::rtl::math;

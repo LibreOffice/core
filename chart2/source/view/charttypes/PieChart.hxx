@@ -22,8 +22,8 @@
 
 #include <memory>
 #include <VSeriesPlotter.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/range/b2irectangle.hxx>
+#include <basegfx/vector/b2ivector.hxx>
+#include <com/sun/star/awt/Point.hpp>
 
 namespace chart
 {
