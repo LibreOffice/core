@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_c21183b1",
+        "filename": "sc/qa/uitest/calc_tests/columns.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-11T01:32:26Z",
+      "side": 1,
+      "message": "Phrase seems incomplete",
+      "revId": "1202b34e977c64b2b643c45773dd3697889790b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_e2167fa6",
+        "filename": "sc/qa/uitest/calc_tests/columns.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-11T01:32:26Z",
+      "side": 1,
+      "message": "xWriter.* ? Looks like a copy-paste from a writer testing code, without appropriate renaming of variables...",
+      "range": {
+        "startLine": 239,
+        "startChar": 8,
+        "endLine": 239,
+        "endChar": 20
+      },
+      "revId": "1202b34e977c64b2b643c45773dd3697889790b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
