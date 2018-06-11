@@ -114,13 +114,12 @@ OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8> bytes)
 
 OUString lcl_putDot(const OUString& sNum, sal_Int32 nScale)
 {
+    // e.g. sNum = "0", nScale = 2 -> "0.00"
     OUStringBuffer sBuf{ sNum };
-    if (nScale >= sNum.getLength())
-    {
-        sal_Int32 nNullsToAppend = nScale - sNum.getLength();
-        for (sal_Int32 i = 0; i < nNullsToAppend; ++i)
-            sBuf.insert(0, "0");
-    }
+    sal_Int32 nNullsToAppend = nScale - sNum.getLength() + 1;
+    for (sal_Int32 i = 0; i < nNullsToAppend; ++i)
+        sBuf.insert(0, "0");
+
     if (nScale > 0)
         sBuf.insert(sBuf.getLength() - 1 - nScale, ".");
     return sBuf.makeStringAndClear();
