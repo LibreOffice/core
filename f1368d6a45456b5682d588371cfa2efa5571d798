@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_5dc1f67f",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-06-11T08:34:04Z",
+      "side": 1,
+      "message": "the aCurrPos.Y set here is always overwritten by either of the if else branches after it, so this line no longer does anything useful (coverity#1436015 Unused value) I\u0027m assuming that\u0027s desirable, https://gerrit.libreoffice.org/#/c/55607/",
+      "revId": "f1368d6a45456b5682d588371cfa2efa5571d798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
