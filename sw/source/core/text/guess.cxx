@@ -149,7 +149,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         .getIDocumentSettingAccess().get(DocumentSettingId::UNBREAKABLE_NUMBERINGS);
 
     // first check if everything fits to line
-    if ( ( long ( nLineWidth ) * 2 > sal_Int32(nMaxLen) * nPorHeight ) ||
+    if ( ( nLineWidth * 2 > SwTwips(nMaxLen) * nPorHeight ) ||
          ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
     {
         // call GetTextSize with maximum compression (for kanas)
