@@ -958,13 +958,12 @@ bool SwCursorShell::TestCurrPam(
 
     // search in all selections for this position
     SwShellCursor* pCmp = m_pCurrentCursor; // keep the pointer on cursor
-    do {
-        if( pCmp && pCmp->HasMark() &&
-            *pCmp->Start() <= aPtPos && *pCmp->End() > aPtPos )
-        {
+    do
+    {
+        if (pCmp->HasMark() && *pCmp->Start() <= aPtPos && *pCmp->End() > aPtPos)
             return true;               // return without update
-        }
-    } while( m_pCurrentCursor != ( pCmp = pCmp->GetNext() ) );
+        pCmp = pCmp->GetNext();
+    } while (m_pCurrentCursor != pCmp);
     return false;
 }
 
