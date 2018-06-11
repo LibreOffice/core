@@ -118,6 +118,18 @@
     <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
     </FormatElement>
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="60">
+      <FormatCode>[NatNum12 D=ordinal-number]D" of "MMMM, YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="61">
+      <FormatCode>[NatNum12 D=ordinal]D" of "MMMM, YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="62">
+      <FormatCode>[NatNum12 D=ordinal-number]D" of "MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey25" default="false" type="medium" usage="DATE" formatindex="63">
+      <FormatCode>[NatNum12 D=ordinal]D" of "MMMM</FormatCode>
+    </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME"  formatindex="39">
       <FormatCode>HH:MM</FormatCode>
     </FormatElement>
