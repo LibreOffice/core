@@ -47,17 +47,6 @@ class NumberingPreview : public vcl::Window
         }
 
         virtual ~NumberingPreview() override;
-
-        void    SetNumRule(const SwNumRule* pNum)
-                    {pActNum = pNum; Invalidate();};
-        void    SetPageWidth(long nPgWidth)
-                                {nPageWidth = nPgWidth;}
-        void    SetOutlineNames(const OUString* pNames)
-                        {pOutlineNames = pNames;}
-        void    SetPositionMode()
-                        { bPosition = true;}
-        void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
-
 };
 
 class SwNumberingPreview : public weld::CustomWidgetController

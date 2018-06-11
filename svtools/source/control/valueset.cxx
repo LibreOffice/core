@@ -2698,11 +2698,6 @@ tools::Rectangle SvtValueSet::GetItemRect( sal_uInt16 nItemId ) const
     return tools::Rectangle();
 }
 
-void SvtValueSet::EnableFullItemMode( bool bFullMode )
-{
-    mbFullMode = bFullMode;
-}
-
 tools::Rectangle SvtValueSet::ImplGetItemRect( size_t nPos ) const
 {
     const size_t nVisibleBegin = static_cast<size_t>(mnFirstLine)*mnCols;
@@ -2721,11 +2716,6 @@ tools::Rectangle SvtValueSet::ImplGetItemRect( size_t nPos ) const
     const long y = maItemListRect.Top()+row*(mnItemHeight+mnSpacing);
 
     return tools::Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
-}
-
-void SvtValueSet::SetFormat()
-{
-    mbFormat = true;
 }
 
 void SvtValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
@@ -3460,39 +3450,6 @@ void SvtValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUS
         rRenderContext.Erase(tools::Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
     }
     rRenderContext.DrawText(Point((aWinSize.Width() - nTxtWidth) / 2, nTxtOffset + (NAME_OFFSET / 2)), rText);
-}
-
-bool SvtValueSet::ImplScroll(const Point& rPos)
-{
-    if (!mbScroll || !maItemListRect.IsInside(rPos))
-        return false;
-
-    const long nScrollOffset = (mnItemHeight <= 16) ? SCROLL_OFFSET / 2 : SCROLL_OFFSET;
-    bool bScroll = false;
-
-    if (rPos.Y() <= maItemListRect.Top() + nScrollOffset)
-    {
-        if (mnFirstLine > 0)
-        {
-            --mnFirstLine;
-            bScroll = true;
-        }
-    }
-    else if (rPos.Y() >= maItemListRect.Bottom() - nScrollOffset)
-    {
-        if (mnFirstLine < static_cast<sal_uInt16>(mnLines - mnVisLines))
-        {
-            ++mnFirstLine;
-            bScroll = true;
-        }
-    }
-
-    if (!bScroll)
-        return false;
-
-    mbFormat = true;
-    Invalidate();
-    return true;
 }
 
 void SvtValueSet::StyleUpdated()

@@ -102,17 +102,6 @@ private:
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException
         void adoptSymKey( PK11SymKey* aSymKey ) ;
-        /// @throws css::uno::Exception
-        /// @throws css::uno::RuntimeException
-        PK11SymKey* getSymKey( unsigned int position ) ;
-
-        /// @throws css::uno::Exception
-        /// @throws css::uno::RuntimeException
-        SECKEYPublicKey* getPubKey( unsigned int position ) ;
-
-        /// @throws css::uno::Exception
-        /// @throws css::uno::RuntimeException
-        SECKEYPrivateKey* getPriKey( unsigned int position ) ;
 
         virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override ;
         virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override

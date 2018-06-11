@@ -79,10 +79,6 @@ class VCL_PLUGIN_PUBLIC SVMConverter
 {
 private:
     SAL_DLLPRIVATE static void      ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf );
-    SAL_DLLPRIVATE sal_uLong        ImplWriteActions( SvStream& rOStm, GDIMetaFile const & rMtf,
-                                          VirtualDevice& rSaveVDev, bool& rRop_0_1,
-                                          Color& rLineCol, ::std::stack<Color*>& rLineColStack,
-                                          rtl_TextEncoding& rActualCharSet );
 
 public:
                         SVMConverter( SvStream& rIStm, GDIMetaFile& rMtf  );

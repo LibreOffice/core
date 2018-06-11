@@ -222,7 +222,6 @@ class ImpSdrPdfImport final
     void MapScaling();
 
     // #i73407# reformulation to use new B2DPolygon classes
-    bool CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly);
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     void DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport, int nPageIndex);

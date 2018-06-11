@@ -227,48 +227,6 @@ void SecurityEnvironment_NssImpl::adoptSymKey( PK11SymKey* aSymKey ) {
     }
 }
 
-PK11SymKey* SecurityEnvironment_NssImpl::getSymKey( unsigned int position ) {
-    PK11SymKey* symkey ;
-    std::list< PK11SymKey* >::iterator keyIt ;
-    unsigned int pos ;
-
-    symkey = nullptr ;
-    for( pos = 0, keyIt = m_tSymKeyList.begin() ; pos < position && keyIt != m_tSymKeyList.end() ; pos ++ , ++keyIt ) ;
-
-    if( pos == position && keyIt != m_tSymKeyList.end() )
-        symkey = *keyIt ;
-
-    return symkey ;
-}
-
-SECKEYPublicKey* SecurityEnvironment_NssImpl::getPubKey( unsigned int position ) {
-    SECKEYPublicKey* pubkey ;
-    std::list< SECKEYPublicKey* >::iterator keyIt ;
-    unsigned int pos ;
-
-    pubkey = nullptr ;
-    for( pos = 0, keyIt = m_tPubKeyList.begin() ; pos < position && keyIt != m_tPubKeyList.end() ; pos ++ , ++keyIt ) ;
-
-    if( pos == position && keyIt != m_tPubKeyList.end() )
-        pubkey = *keyIt ;
-
-    return pubkey ;
-}
-
-SECKEYPrivateKey* SecurityEnvironment_NssImpl::getPriKey( unsigned int position )  {
-    SECKEYPrivateKey* prikey ;
-    std::list< SECKEYPrivateKey* >::iterator keyIt ;
-    unsigned int pos ;
-
-    prikey = nullptr ;
-    for( pos = 0, keyIt = m_tPriKeyList.begin() ; pos < position && keyIt != m_tPriKeyList.end() ; pos ++ , ++keyIt ) ;
-
-    if( pos == position && keyIt != m_tPriKeyList.end() )
-        prikey = *keyIt ;
-
-    return prikey ;
-}
-
 void SecurityEnvironment_NssImpl::updateSlots()
 {
     //In case new tokens are present then we can obtain the corresponding slot

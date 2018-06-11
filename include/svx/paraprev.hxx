@@ -102,10 +102,6 @@ public:
     {
         aText = rStr;
     }
-    void SetSize( Size aNew )
-    {
-        aSize = aNew;
-    }
     OUString GetText() const override
     {
         return aText;
@@ -140,10 +136,6 @@ class SVX_DLLPUBLIC ParaPrevWindow final : public weld::CustomWidgetController
 public:
     ParaPrevWindow();
 
-    void SetFirstLineOfst( short nNew )
-    {
-        nFirstLineOfst = nNew;
-    }
     void SetLeftMargin( long nNew )
     {
         nLeftMargin = nNew;
@@ -151,14 +143,6 @@ public:
     void SetRightMargin( long nNew )
     {
         nRightMargin = nNew;
-    }
-    void SetUpper( sal_uInt16 nNew )
-    {
-        nUpper = nNew;
-    }
-    void SetLower( sal_uInt16 nNew )
-    {
-        nLower = nNew;
     }
     void SetAdjust( SvxAdjust eNew )
     {
@@ -168,21 +152,9 @@ public:
     {
         eLastLine = eNew;
     }
-    void SetLineSpace( SvxPrevLineSpace eNew )
-    {
-        eLine = eNew;
-    }
-    void SetText( const OUString& rStr )
-    {
-        aText = rStr;
-    }
     void SetSize( Size aNew )
     {
         aSize = aNew;
-    }
-    OUString GetText() const
-    {
-        return aText;
     }
 };
 

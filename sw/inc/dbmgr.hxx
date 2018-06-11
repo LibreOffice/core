@@ -312,7 +312,6 @@ public:
     void     SetInitDBFields(bool b) { bInitDBFields = b;    }
 
     /// Fill listbox with all table names of a database.
-    bool            GetTableNames(ListBox* pListBox, const OUString& rDBName );
     bool            GetTableNames(weld::ComboBoxText& rBox, const OUString& rDBName);
 
     /// Fill listbox with all column names of a database table.

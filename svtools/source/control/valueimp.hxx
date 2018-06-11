@@ -410,10 +410,6 @@ public:
     SvtValueItemAcc(SvtValueSetItem* pParent, bool bIsTransientChildrenDisabled);
     virtual ~SvtValueItemAcc() override;
 
-    void    ParentDestroyed();
-
-    void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-
     static SvtValueItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
 
 public:

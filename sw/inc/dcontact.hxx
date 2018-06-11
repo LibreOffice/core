@@ -156,8 +156,6 @@ public:
         return *(GetAnchorFormat().GetContentAnchor());
     }
 
-    const SwIndex&     GetContentAnchorIndex() const;
-
     /** get data collection of anchored objects, handled by with contact */
     virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
 

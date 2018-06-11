@@ -178,12 +178,6 @@ public:
     virtual void        Resize() override;
 
     const OUString&     GetText() const { return m_aText; }
-    void SetText(const OUString& rText) { m_aText = rText; }
-
-    /** Returns true, if the control is not in "don't care" state. */
-    bool                HasRotation() const;
-    /** Sets the control to "don't care" state. */
-    void                SetNoRotation();
 
     /** Returns the current rotation angle in 1/100 degrees. */
     sal_Int32           GetRotation() const;
@@ -197,9 +191,6 @@ public:
      *     2 means 100th of degree
      */
     void                SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimalPlaces = 0);
-
-    /** The passed handler is called whenever the rotation value changes. */
-    void                SetModifyHdl( const Link<SvxDialControl*,void>& rLink );
 
     /** Save value for later comparison */
     void                SaveValue();
