@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_qt5,\
         jvmaccess) \
     cppu \
     sal \
+    salhelper \
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_qt5,\
