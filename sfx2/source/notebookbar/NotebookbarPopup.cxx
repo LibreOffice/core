@@ -42,7 +42,8 @@ void NotebookbarPopup::PopupModeEnd()
         vcl::Window* pWindow = m_pBox->GetChild(0);
         pWindow->SetParent(m_pParent);
 
-        if (m_pParent)
+        // resize after all children of box are empty
+        if (m_pParent && !m_pBox->GetChildCount())
             m_pParent->Resize();
     }
 
