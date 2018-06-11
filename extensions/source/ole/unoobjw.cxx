@@ -1078,7 +1078,7 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
     sNames += "[";
     for (unsigned int i = 0; i < cNames; ++i)
     {
-        // Intialise returned rgdispid values.
+        // Initialise returned rgdispid values.
         rgdispid[i] = DISPID_UNKNOWN;
         if (i > 0)
             sNames += ",";
