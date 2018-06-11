@@ -146,7 +146,6 @@ public:
         std::vector<sal_Int32>      m_aMCIDParents;
         PDFWriter::PageTransition   m_eTransition;
         sal_uInt32                  m_nTransTime;
-        sal_uInt32                  m_nDuration;
 
         PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation );
         ~PDFPage();

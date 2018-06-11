@@ -266,8 +266,6 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
 
 bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
 {
-    m_bInSwapIn = true;
-
     if( !GetObj() && ( bNativFormat || ( !IsSynchron() && bWaitForData ) ))
     {
         AddNextRef();
@@ -308,7 +306,6 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
     else
         bRes = Update();
 
-    m_bInSwapIn = false;
     return bRes;
 }
 

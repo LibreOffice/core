@@ -494,7 +494,6 @@ class SvxMainMenuOrganizerDialog : public weld::GenericDialogController
 {
     std::unique_ptr<SvxEntries> mpEntries;
     OUString m_sNewMenuEntryId;
-    bool            bModified;
 
     std::unique_ptr<weld::Widget> m_xMenuBox;
     std::unique_ptr<weld::Entry> m_xMenuNameEdit;

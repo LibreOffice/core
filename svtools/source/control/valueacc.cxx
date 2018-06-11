@@ -66,7 +66,6 @@ SvtValueSetItem::SvtValueSetItem( SvtValueSet& rParent )
     , mnId(0)
     , meType(VALUESETITEM_NONE)
     , mbVisible(true)
-    , mpData(nullptr)
     , mxAcc()
 {
 }

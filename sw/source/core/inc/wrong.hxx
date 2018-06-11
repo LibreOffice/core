@@ -346,7 +346,6 @@ private:
     sw::MergedPara const*const m_pMergedPara;
     size_t m_CurrentExtent;
     TextFrameIndex m_CurrentIndex;
-    TextFrameIndex m_CurrentNodeIndex;
     SwWrongList const*const m_pWrongList;
 
 public:

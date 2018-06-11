@@ -1888,7 +1888,6 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     SvxConfigEntry const * selection, bool bCreateMenu )
     : GenericDialogController(pParent, "cui/ui/movemenu.ui", "MoveMenuDialog")
     , mpEntries(nullptr)
-    , bModified(false)
     , m_xMenuBox(m_xBuilder->weld_widget("namebox"))
     , m_xMenuNameEdit(m_xBuilder->weld_entry("menuname"))
     , m_xMenuListBox(m_xBuilder->weld_tree_view("menulist"))
@@ -2010,8 +2009,6 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, weld::Button&, rButton, void )
     m_xMenuListBox->remove(nSourceEntry);
     m_xMenuListBox->insert(nTargetEntry, sId, sEntry, "");
     m_xMenuListBox->select(nTargetEntry);
-
-    bModified = true;
 
     UpdateButtonStates();
 }

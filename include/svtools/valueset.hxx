@@ -426,7 +426,6 @@ private:
     long            mnUserItemWidth;
     long            mnUserItemHeight;
     sal_uInt16      mnSelItemId;
-    sal_uInt16      mnHighItemId;
     sal_uInt16      mnCols;
     sal_uInt16      mnCurCol;
     sal_uInt16      mnUserCols;
@@ -439,7 +438,6 @@ private:
     WinBits         mnStyle;
     Link<SvtValueSet*,void>  maDoubleClickHdl;
     Link<SvtValueSet*,void>  maSelectHdl;
-    Link<SvtValueSet*,void>  maHighlightHdl;
 
     bool            mbFormat : 1;
     bool            mbNoSelection : 1;
