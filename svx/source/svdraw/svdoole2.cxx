@@ -1864,9 +1864,9 @@ bool SdrOle2Obj::IsReal3DChart() const
     return ChartHelper::isGL3DDiagram(xChart2Diagram);
 }
 
-void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic, const OUString& aMediaType )
+void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic )
 {
-    mpImpl->mxObjRef.SetGraphic( aGraphic, aMediaType );
+    mpImpl->mxObjRef.SetGraphic( aGraphic, OUString() );
 }
 
 void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrStream, const OUString& aMediaType )

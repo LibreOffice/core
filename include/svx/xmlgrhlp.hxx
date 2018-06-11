@@ -90,8 +90,7 @@ public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
 
     static rtl::Reference<SvXMLGraphicHelper> Create( const css::uno::Reference < css::embed::XStorage >& rXMLStorage,
-                                        SvXMLGraphicHelperMode eCreateMode,
-                                        const OUString& rGraphicMimeType = OUString() );
+                                        SvXMLGraphicHelperMode eCreateMode );
     static rtl::Reference<SvXMLGraphicHelper>  Create( SvXMLGraphicHelperMode eCreateMode,
                                         const OUString& rMimeType = OUString() );
 

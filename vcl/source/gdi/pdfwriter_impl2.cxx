@@ -1208,8 +1208,7 @@ void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
 2. build the encryption key following algorithms described in the PDF specification
  */
 uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OUString& i_rOwnerPassword,
-                                                                        const OUString& i_rUserPassword,
-                                                                        bool b128Bit
+                                                                        const OUString& i_rUserPassword
                                                                         )
 {
     uno::Reference< beans::XMaterialHolder > xResult;
@@ -1222,11 +1221,8 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OU
         sal_uInt8 aPadUPW[ENCRYPTED_PWD_SIZE], aPadOPW[ENCRYPTED_PWD_SIZE];
         padPassword( i_rOwnerPassword.isEmpty() ? i_rUserPassword : i_rOwnerPassword, aPadOPW );
         padPassword( i_rUserPassword, aPadUPW );
-        sal_Int32 nKeyLength = SECUR_40BIT_KEY;
-        if( b128Bit )
-            nKeyLength = SECUR_128BIT_KEY;
 
-        if( computeODictionaryValue( aPadOPW, aPadUPW, pTransporter->getOValue(), nKeyLength ) )
+        if( computeODictionaryValue( aPadOPW, aPadUPW, pTransporter->getOValue(), SECUR_128BIT_KEY ) )
         {
             pTransporter->getUDigest()->update(aPadUPW, ENCRYPTED_PWD_SIZE);
         }

@@ -1059,8 +1059,7 @@ public:
 
     static css::uno::Reference< css::beans::XMaterialHolder >
            initEncryption( const OUString& i_rOwnerPassword,
-                           const OUString& i_rUserPassword,
-                           bool b128Bit );
+                           const OUString& i_rUserPassword );
 
     /* for documentation of public functions please see pdfwriter.hxx */
 

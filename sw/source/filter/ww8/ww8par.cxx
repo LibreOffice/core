@@ -197,12 +197,11 @@ void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell const * pDocSh
 
 namespace
 {
-    void lclIgnoreString32(SvStream& rStrm, bool b16Bit)
+    void lclIgnoreUString32(SvStream& rStrm)
     {
         sal_uInt32 nChars(0);
         rStrm.ReadUInt32(nChars);
-        if (b16Bit)
-            nChars *= 2;
+        nChars *= 2;
         rStrm.SeekRel(nChars);
     }
 }
@@ -241,7 +240,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
 
     // description (ignore)
     if( ::get_flag( nFlags, WW8_HLINK_DESCR ) )
-        lclIgnoreString32( rStrm, true );
+        lclIgnoreUString32( rStrm );
 
     // target frame
     if( ::get_flag( nFlags, WW8_HLINK_FRAME ) )

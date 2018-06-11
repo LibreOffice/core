@@ -119,7 +119,7 @@ private:
     static rtl::OUString    GetDescription_Impl( const INetURLObject& rObject, bool bDetectFolder );
 
 public:
-    SVT_DLLPUBLIC static OUString GetImageId( const INetURLObject& rURL, bool bBig = false );
+    SVT_DLLPUBLIC static OUString GetImageId( const INetURLObject& rURL );
     SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, bool bBig = false );
     SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL );
     SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, bool bBig = false );
