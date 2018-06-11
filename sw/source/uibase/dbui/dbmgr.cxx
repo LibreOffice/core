@@ -1502,6 +1502,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     ++targetDocPageCount; // Docs always start on odd pages (so offset must be even).
                 SwNodeIndex appendedDocStart = pTargetDoc->AppendDoc( *pWorkDoc,
                     nStartingPageNo, !bWorkDocInitialized, targetDocPageCount, nDocNo);
+                // ensure layout is up to date in order to get correct page count
+                pWorkShell->CalcLayout();
                 targetDocPageCount += pWorkShell->GetPageCnt();
 
                 if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
