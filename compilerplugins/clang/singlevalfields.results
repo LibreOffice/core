@@ -1,6 +1,3 @@
-basic/source/inc/token.hxx:110
-    SbiTokenizer bKeywords
-    1
 chart2/source/model/main/DataPoint.hxx:107
     chart::DataPoint m_bNoParentPropAllowed
     0
@@ -9,6 +6,9 @@ chart2/source/view/inc/GL3DRenderer.hxx:161
     512
 connectivity/source/inc/dbase/DIndexIter.hxx:37
     connectivity::dbase::OIndexIterator m_pOperand
+    0
+desktop/source/app/cmdlineargs.hxx:137
+    desktop::CommandLineArgs m_quickstart
     0
 include/basic/sbxvar.hxx:70
     SbxValues::(anonymous) pData
@@ -34,41 +34,14 @@ include/oox/ole/axcontrol.hxx:427
 include/oox/ole/axcontrol.hxx:428
     oox::ole::ComCtlModelBase mbComplexPart
     1
-include/svtools/HtmlWriter.hxx:29
-    HtmlWriter mbContentWritten
-    0
 include/svtools/svparser.hxx:74
     SvParser::TokenStackType nTokenValue
     0
 include/svtools/svparser.hxx:75
     SvParser::TokenStackType bTokenHasValue
     0
-include/svx/svdviter.hxx:73
-    SdrViewIter mbNoMasterPage
-    0
-include/tools/config.hxx:36
-    Config mnLockCount
-    1
-include/vcl/filter/pdfdocument.hxx:174
+include/vcl/filter/pdfdocument.hxx:188
     vcl::filter::PDFNameElement m_nLength
-    0
-include/vcl/pdfwriter.hxx:548
-    vcl::PDFWriter::PDFSignContext m_pDerEncoded
-    0
-include/vcl/pdfwriter.hxx:550
-    vcl::PDFWriter::PDFSignContext m_nDerEncoded
-    0
-include/vcl/pdfwriter.hxx:552
-    vcl::PDFWriter::PDFSignContext m_pByteRange1
-    0
-include/vcl/pdfwriter.hxx:554
-    vcl::PDFWriter::PDFSignContext m_nByteRange1
-    0
-include/vcl/pdfwriter.hxx:556
-    vcl::PDFWriter::PDFSignContext m_pByteRange2
-    0
-include/vcl/pdfwriter.hxx:558
-    vcl::PDFWriter::PDFSignContext m_nByteRange2
     0
 libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading
@@ -85,7 +58,7 @@ pyuno/source/module/pyuno_impl.hxx:312
 sax/source/tools/fastserializer.hxx:231
     sax_fastparser::FastSaxSerializer mbXescape
     1
-sc/inc/compiler.hxx:108
+sc/inc/compiler.hxx:111
     ScRawToken::(anonymous union)::(anonymous) eInForceArray
     0
 sc/qa/unit/ucalc.hxx:41
@@ -94,7 +67,7 @@ sc/qa/unit/ucalc.hxx:41
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
     0
-sd/source/filter/html/htmlex.hxx:112
+sd/source/filter/html/htmlex.hxx:113
     HtmlExport mbAutoSlide
     1
 sfx2/source/appl/lnkbase2.cxx:77
@@ -106,7 +79,7 @@ sfx2/source/appl/lnkbase2.cxx:82
 sfx2/source/doc/doctemplates.cxx:136
     (anonymous namespace)::WaitWindow_Impl mnTextStyle
     12576
-sfx2/source/view/ipclient.cxx:78
+sfx2/source/view/ipclient.cxx:81
     SfxBooleanFlagGuard m_bLifeValue
     1
 soltools/cpp/cpp.h:120
@@ -121,12 +94,24 @@ soltools/mkdepend/def.h:132
 stoc/source/inspect/introspection.cxx:1530
     (anonymous namespace)::Cache::Data hits
     1
-sw/inc/hints.hxx:188
+svtools/source/control/valueimp.hxx:81
+    SvtValueSetItem mpData
+    0
+svx/source/svdraw/svdpdf.hxx:168
+    ImpSdrPdfImport maLineJoin
+    0
+svx/source/svdraw/svdpdf.hxx:169
+    ImpSdrPdfImport maLineCap
+    0
+sw/inc/hints.hxx:199
     SwAttrSetChg m_bDelSet
     0
 sw/inc/pagepreviewlayout.hxx:49
     SwPagePreviewLayout mnYFree
     568
+sw/inc/swbaslnk.hxx:32
+    SwBaseLink m_bIgnoreDataChanged
+    0
 sw/source/core/inc/frmtool.hxx:260
     SwBorderAttrs m_bBorderDist
     1
@@ -154,38 +139,32 @@ sw/source/filter/ww8/ww8par.hxx:655
 sw/source/filter/ww8/ww8par.hxx:664
     WW8FormulaControl mhpsCheckBox
     20
-sw/source/uibase/inc/envlop.hxx:66
+sw/source/uibase/inc/envlop.hxx:76
     SwEnvDlg pAddresseeSet
     0
-sw/source/uibase/inc/envlop.hxx:67
+sw/source/uibase/inc/envlop.hxx:77
     SwEnvDlg pSenderSet
     0
 unotools/source/config/saveopt.cxx:77
     SvtSaveOptions_Impl bROUserAutoSave
     0
-vcl/inc/salprn.hxx:41
+vcl/inc/salprn.hxx:42
     SalPrinterQueueInfo mnStatus
     0
-vcl/inc/salprn.hxx:42
+vcl/inc/salprn.hxx:43
     SalPrinterQueueInfo mnJobs
     4294967295
-vcl/inc/salprn.hxx:43
-    SalPrinterQueueInfo mpSysData
-    0
-vcl/inc/svdata.hxx:268
+vcl/inc/svdata.hxx:267
     ImplSVNWFData mnStatusBarLowerRightOffset
     0
-vcl/inc/svdata.hxx:284
+vcl/inc/svdata.hxx:283
     ImplSVNWFData mbCenteredTabs
     0
-vcl/inc/svdata.hxx:285
+vcl/inc/svdata.hxx:284
     ImplSVNWFData mbNoActiveTabTextRaise
     0
-vcl/inc/svdata.hxx:287
+vcl/inc/svdata.hxx:286
     ImplSVNWFData mbProgressNeedsErase
-    0
-vcl/source/control/morebtn.cxx:26
-    ImplMoreButtonData mpItemList
     0
 vcl/source/filter/jpeg/transupp.h:128
     (anonymous) perfect
@@ -238,10 +217,10 @@ vcl/source/gdi/dibtools.cxx:116
 vcl/source/gdi/dibtools.cxx:117
     (anonymous namespace)::DIBV5Header nV5Reserved
     0
-vcl/source/gdi/pdfwriter_impl.hxx:698
+vcl/source/gdi/pdfwriter_impl.hxx:699
     vcl::PDFWriterImpl m_nInheritedPageWidth
     595
-vcl/source/gdi/pdfwriter_impl.hxx:699
+vcl/source/gdi/pdfwriter_impl.hxx:700
     vcl::PDFWriterImpl m_nInheritedPageHeight
     842
 writerfilter/source/dmapper/GraphicImport.cxx:223
