@@ -2009,7 +2009,16 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             if (bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)))
             {
                 // set number format explicitly
-                pDocument->SetNumberFormat( aPos, nFormatIndex );
+                if (!pDocument->IsThreadedGroupCalcInProgress())
+                    pDocument->SetNumberFormat( aPos, nFormatIndex );
+                else
+                {
+                    // SetNumberFormat() is not thread-safe (modifies ScAttrArray), delay the work
+                    // to the main thread. Since thread calculations operate on formula groups,
+                    // it's enough to store just the row.
+                    DelayedSetNumberFormat data = { aPos.Row(), nFormatIndex };
+                    rContext.maDelayedSetNumberFormat.push_back( data );
+                }
                 bChanged = true;
             }
 
@@ -4463,6 +4472,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
                 auto aNonThreadedData = mpDocument->CalculateInColumnInThread(aContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
                 aNonThreadedData.MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
+                mpDocument->MergeBackIntoNonThreadedContext(aContext);
             }
 
         };
