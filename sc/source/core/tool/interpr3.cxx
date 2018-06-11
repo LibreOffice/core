@@ -3406,8 +3406,7 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
         {
             OSL_ENSURE(nIndex < nSize-1, "GetPercentile: wrong index(2)");
             double fVal = *iter;
-            iter = rArray.begin() + nIndex+1;
-            ::std::nth_element( rArray.begin(), iter, rArray.end());
+            iter = ::std::min_element( rArray.begin() + nIndex + 1, rArray.end());
             return fVal + fDiff * (*iter - fVal);
         }
     }
@@ -3438,8 +3437,7 @@ double ScInterpreter::GetPercentileExclusive( vector<double> & rArray, double fP
     {
         OSL_ENSURE(nIndex < nSize1, "GetPercentile: wrong index(2)");
         double fVal = *iter;
-        iter = rArray.begin() + nIndex + 1;
-        ::std::nth_element( rArray.begin(), iter, rArray.end());
+        iter = ::std::min_element( rArray.begin() + nIndex + 1, rArray.end());
         return fVal + fDiff * (*iter - fVal);
     }
 }
