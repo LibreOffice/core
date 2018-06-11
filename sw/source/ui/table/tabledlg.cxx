@@ -131,7 +131,7 @@ void  SwFormatTablePage::Init()
     m_xRightBtn->connect_toggled( aLk2 );
     m_xCenterBtn->connect_toggled( aLk2 );
 
-    Link<weld::MetricSpinButton&,void> aLk = LINK( this, SwFormatTablePage, UpDownHdl );
+    Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwFormatTablePage, ValueChangedHdl);
     m_xTopMF->connect_value_changed(aLk);
     m_xBottomMF->connect_value_changed(aLk);
     m_xRightMF->connect_value_changed(aLk);
@@ -256,9 +256,9 @@ void SwFormatTablePage::RightModify()
     }
 }
 
-IMPL_LINK( SwFormatTablePage, UpDownHdl, weld::MetricSpinButton&, rEdit, void )
+IMPL_LINK( SwFormatTablePage, ValueChangedHdl, weld::MetricSpinButton&, rEdit, void )
 {
-    if( m_xRightMF->get() == &rEdit)
+    if (m_xRightMF->get() == &rEdit)
         RightModify();
     ModifyHdl(rEdit);
 }
@@ -697,9 +697,8 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 //Description: Page column configuration
-SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "TableColumnPage",
-        "modules/swriter/ui/tablecolumnpage.ui", &rSet)
+SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/tablecolumnpage.ui", "TableColumnPage", &rSet)
     , pTableData(nullptr)
     , nTableWidth(0)
     , nMinWidth(MINLAY)
@@ -708,28 +707,25 @@ SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSe
     , bModified(false)
     , bModifyTable(false)
     , bPercentMode(false)
+    , m_aFieldArr { m_xBuilder->weld_metric_spin_button("width1", FUNIT_CM),
+                    m_xBuilder->weld_metric_spin_button("width2", FUNIT_CM),
+                    m_xBuilder->weld_metric_spin_button("width3", FUNIT_CM),
+                    m_xBuilder->weld_metric_spin_button("width4", FUNIT_CM),
+                    m_xBuilder->weld_metric_spin_button("width5", FUNIT_CM),
+                    m_xBuilder->weld_metric_spin_button("width6", FUNIT_CM) }
+    , m_aTextArr { std::unique_ptr<weld::Label>(m_xBuilder->weld_label("1")),
+                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("2")),
+                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("3")),
+                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("4")),
+                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("5")),
+                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("6")) }
+    , m_xModifyTableCB(m_xBuilder->weld_check_button("adaptwidth"))
+    , m_xProportionalCB(m_xBuilder->weld_check_button("adaptcolumns"))
+    , m_xSpaceFT(m_xBuilder->weld_label("spaceft"))
+    , m_xSpaceED(m_xBuilder->weld_metric_spin_button("space", FUNIT_CM))
+    , m_xUpBtn(m_xBuilder->weld_button("next"))
+    , m_xDownBtn(m_xBuilder->weld_button("back"))
 {
-    get(m_pModifyTableCB, "adaptwidth");
-    get(m_pProportionalCB, "adaptcolumns");
-    get(m_pSpaceFT, "spaceft");
-    get(m_pSpaceED, "space-nospin");
-    get(m_pUpBtn, "next");
-    get(m_pDownBtn, "back");
-
-    m_aFieldArr[0].set(get<MetricField>("width1"));
-    m_aFieldArr[1].set(get<MetricField>("width2"));
-    m_aFieldArr[2].set(get<MetricField>("width3"));
-    m_aFieldArr[3].set(get<MetricField>("width4"));
-    m_aFieldArr[4].set(get<MetricField>("width5"));
-    m_aFieldArr[5].set(get<MetricField>("width6"));
-
-    m_pTextArr[0] = get<FixedText>("1");
-    m_pTextArr[1] = get<FixedText>("2");
-    m_pTextArr[2] = get<FixedText>("3");
-    m_pTextArr[3] = get<FixedText>("4");
-    m_pTextArr[4] = get<FixedText>("5");
-    m_pTextArr[5] = get<FixedText>("6");
-
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
@@ -739,26 +735,11 @@ SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSe
 
 SwTableColumnPage::~SwTableColumnPage()
 {
-    disposeOnce();
 }
 
-void SwTableColumnPage::dispose()
+VclPtr<SfxTabPage> SwTableColumnPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    m_pModifyTableCB.clear();
-    m_pProportionalCB.clear();
-    m_pSpaceFT.clear();
-    m_pSpaceED.clear();
-    m_pUpBtn.clear();
-    m_pDownBtn.clear();
-    for (auto& p : m_pTextArr)
-        p.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> SwTableColumnPage::Create( TabPageParent pParent,
-                                              const SfxItemSet* rAttrSet)
-{
-    return VclPtr<SwTableColumnPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<SwTableColumnPage>::Create(pParent, *rAttrSet);
 }
 
 void  SwTableColumnPage::Reset( const SfxItemSet* )
@@ -786,19 +767,19 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
         {
             m_aFieldArr[i].SetPrcntValue( m_aFieldArr[i].NormalizePercent(
                                                 GetVisibleWidth(i) ), FUNIT_TWIP );
-            m_aFieldArr[i].SetMin( nMinTwips , FUNIT_TWIP );
-            m_aFieldArr[i].SetMax( nMaxTwips , FUNIT_TWIP );
-            m_aFieldArr[i].Enable();
-            m_pTextArr[i]->Enable();
+            m_aFieldArr[i].set_min(nMinTwips, FUNIT_TWIP);
+            m_aFieldArr[i].set_max(nMaxTwips, FUNIT_TWIP);
+            m_aFieldArr[i].set_sensitive(true);
+            m_aTextArr[i]->set_sensitive(true);
         }
 
         if( nNoOfVisibleCols > MET_FIELDS )
-            m_pUpBtn->Enable();
+            m_xUpBtn->set_sensitive(true);
 
         for( sal_uInt16 i = nNoOfVisibleCols; i < MET_FIELDS; ++i )
         {
-            m_aFieldArr[i].SetText( OUString() );
-            m_pTextArr[i]->Disable();
+            m_aFieldArr[i].set_text(OUString());
+            m_aTextArr[i]->set_sensitive(false);
         }
     }
     ActivatePage(rSet);
@@ -808,32 +789,28 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
 void  SwTableColumnPage::Init(bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
-    Link<SpinField&,void> aLkUp = LINK( this, SwTableColumnPage, UpHdl );
-    Link<SpinField&,void> aLkDown = LINK( this, SwTableColumnPage, DownHdl );
-    Link<Control&,void> aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
-    for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
+    Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwTableColumnPage, ValueChangedHdl);
+    for (sal_uInt16 i = 0; i < MET_FIELDS; ++i)
     {
         aValueTable[i] = i;
         m_aFieldArr[i].SetMetric(aMetric);
-        m_aFieldArr[i].SetUpHdl( aLkUp );
-        m_aFieldArr[i].SetDownHdl( aLkDown );
-        m_aFieldArr[i].SetLoseFocusHdl( aLkLF );
+        m_aFieldArr[i].connect_value_changed(aLk);
     }
-    SetMetric(*m_pSpaceED, aMetric);
+    SetFieldUnit(*m_xSpaceED, aMetric);
 
-    Link<Button*,void> aLk = LINK( this, SwTableColumnPage, AutoClickHdl );
-    m_pUpBtn->SetClickHdl( aLk );
-    m_pDownBtn->SetClickHdl( aLk );
+    Link<weld::Button&,void> aClickLk = LINK(this, SwTableColumnPage, AutoClickHdl);
+    m_xUpBtn->connect_clicked(aClickLk);
+    m_xDownBtn->connect_clicked(aClickLk);
 
-    aLk = LINK( this, SwTableColumnPage, ModeHdl );
-    m_pModifyTableCB->SetClickHdl( aLk );
-    m_pProportionalCB->SetClickHdl( aLk );
+    Link<weld::ToggleButton&,void> aToggleLk = LINK(this, SwTableColumnPage, ModeHdl);
+    m_xModifyTableCB->connect_toggled(aToggleLk);
+    m_xProportionalCB->connect_toggled(aToggleLk);
 }
 
-IMPL_LINK( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
+IMPL_LINK(SwTableColumnPage, AutoClickHdl, weld::Button&, rControl, void)
 {
     //move display window
-    if(pControl == m_pDownBtn.get())
+    if (&rControl == m_xDownBtn.get())
     {
         if(aValueTable[0] > 0)
         {
@@ -841,7 +818,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
                 rn -= 1;
         }
     }
-    if (pControl == m_pUpBtn.get())
+    if (&rControl == m_xUpBtn.get())
     {
         if( aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
         {
@@ -854,88 +831,72 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
         OUString sEntry('~');
         OUString sIndex = OUString::number( aValueTable[i] + 1 );
         sEntry += sIndex;
-        m_pTextArr[i]->SetText( sEntry );
+        m_aTextArr[i]->set_label(sEntry);
     }
 
-    m_pDownBtn->Enable(aValueTable[0] > 0);
-    m_pUpBtn->Enable(aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
+    m_xDownBtn->set_sensitive(aValueTable[0] > 0);
+    m_xUpBtn->set_sensitive(aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
     UpdateCols(0);
 }
 
-IMPL_LINK( SwTableColumnPage, UpHdl, SpinField&, rEdit, void )
+IMPL_LINK(SwTableColumnPage, ValueChangedHdl, weld::MetricSpinButton&, rEdit, void)
 {
     bModified = true;
-    ModifyHdl( static_cast<MetricField*>(&rEdit) );
+    ModifyHdl(&rEdit);
 }
 
-IMPL_LINK( SwTableColumnPage, DownHdl, SpinField&, rEdit, void )
+IMPL_LINK(SwTableColumnPage, ModeHdl, weld::ToggleButton&, rBox, void)
 {
-    bModified = true;
-    ModifyHdl( static_cast<MetricField*>(&rEdit) );
-}
-
-IMPL_LINK( SwTableColumnPage, LoseFocusHdl, Control&, rControl, void )
-{
-    MetricField* pEdit = static_cast<MetricField*>(&rControl);
-    if (pEdit->IsModified())
+    const bool bCheck = rBox.get_active();
+    if (&rBox == m_xProportionalCB.get())
     {
-        bModified = true;
-        ModifyHdl( pEdit );
+        if (bCheck)
+            m_xModifyTableCB->set_active(true);
+        m_xModifyTableCB->set_sensitive(!bCheck && bModifyTable);
     }
 }
 
-IMPL_LINK( SwTableColumnPage, ModeHdl, Button*, pBox, void )
+bool SwTableColumnPage::FillItemSet( SfxItemSet* )
 {
-    bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
-    if (pBox == m_pProportionalCB)
+    for (SwPercentField & i : m_aFieldArr)
     {
-        if(bCheck)
-            m_pModifyTableCB->Check();
-        m_pModifyTableCB->Enable(!bCheck && bModifyTable);
-    }
-}
-
-bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
-{
-    for(PercentField & i : m_aFieldArr)
-    {
-        if (i.HasFocus())
+        if (i.has_focus())
         {
-            LoseFocusHdl(*i.get());
+            ModifyHdl(i.get());
             break;
         }
     }
 
-    if(bModified)
+    if (bModified)
     {
         pTableData->SetColsChanged();
     }
     return bModified;
 }
 
-void   SwTableColumnPage::ModifyHdl( MetricField const * pField )
+void SwTableColumnPage::ModifyHdl(const weld::MetricSpinButton* pField)
 {
-        PercentField *pEdit = nullptr;
-        sal_uInt16 i;
+    SwPercentField *pEdit = nullptr;
+    sal_uInt16 i;
 
-        for( i = 0; i < MET_FIELDS; i++)
+    for( i = 0; i < MET_FIELDS; i++)
+    {
+        if (pField == m_aFieldArr[i].get())
         {
-            if (pField == m_aFieldArr[i].get())
-            {
-                pEdit = &m_aFieldArr[i];
-                break;
-            }
+            pEdit = &m_aFieldArr[i];
+            break;
         }
+    }
 
-        if (MET_FIELDS <= i || !pEdit)
-        {
-            OSL_ENSURE(false, "cannot happen.");
-            return;
-        }
+    if (MET_FIELDS <= i || !pEdit)
+    {
+        OSL_ENSURE(false, "cannot happen.");
+        return;
+    }
 
-        SetVisibleWidth(aValueTable[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FUNIT_TWIP ))) );
+    SetVisibleWidth(aValueTable[i], pEdit->DenormalizePercent(pEdit->get_value(FUNIT_TWIP)));
 
-        UpdateCols( aValueTable[i] );
+    UpdateCols( aValueTable[i] );
 }
 
 void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
@@ -948,8 +909,8 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
     }
     SwTwips nDiff = nSum - nTableWidth;
 
-    bool bModifyTableChecked = m_pModifyTableCB->IsChecked();
-    bool bProp =    m_pProportionalCB->IsChecked();
+    bool bModifyTableChecked = m_xModifyTableCB->get_active();
+    bool bProp = m_xProportionalCB->get_active();
 
     if (!bModifyTableChecked && !bProp)
     {
@@ -1041,17 +1002,16 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
     }
 
     if(!bPercentMode)
-        m_pSpaceED->SetValue(m_pSpaceED->Normalize( pTableData->GetSpace() - nTableWidth) , FUNIT_TWIP);
+        m_xSpaceED->set_value(m_xSpaceED->normalize(pTableData->GetSpace() - nTableWidth), FUNIT_TWIP);
 
     for( sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
     {
         m_aFieldArr[i].SetPrcntValue(m_aFieldArr[i].NormalizePercent(
                         GetVisibleWidth(aValueTable[i]) ), FUNIT_TWIP);
-        m_aFieldArr[i].ClearModifyFlag();
     }
 }
 
-void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
+void SwTableColumnPage::ActivatePage( const SfxItemSet& )
 {
     bPercentMode = pTableData->GetWidthPercent() != 0;
     for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
@@ -1070,27 +1030,27 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
         UpdateCols(0);
     }
     bModifyTable = true;
-    if(pTableData->GetWidthPercent() ||
+    if (pTableData->GetWidthPercent() ||
                 text::HoriOrientation::FULL == nTableAlign ||
                         pTableData->IsLineSelected()  )
         bModifyTable = false;
-    if(bPercentMode)
+    if (bPercentMode)
     {
-        m_pModifyTableCB->Check(false);
-        m_pProportionalCB->Check(false);
+        m_xModifyTableCB->set_active(false);
+        m_xProportionalCB->set_active(false);
     }
-    else if( !bModifyTable )
+    else if (!bModifyTable)
     {
-        m_pProportionalCB->Check(false);
-        m_pModifyTableCB->Check(false);
+        m_xProportionalCB->set_active(false);
+        m_xModifyTableCB->set_active(false);
     }
-    m_pSpaceFT->Enable(!bPercentMode);
-    m_pSpaceED->Enable(!bPercentMode);
-    m_pModifyTableCB->Enable( !bPercentMode && bModifyTable );
-    m_pProportionalCB->Enable(!bPercentMode && bModifyTable );
+    m_xSpaceFT->set_sensitive(!bPercentMode);
+    m_xSpaceED->set_sensitive(!bPercentMode);
+    m_xModifyTableCB->set_sensitive( !bPercentMode && bModifyTable );
+    m_xProportionalCB->set_sensitive(!bPercentMode && bModifyTable );
 
-    m_pSpaceED->SetValue(m_pSpaceED->Normalize(
-                pTableData->GetSpace() - nTableWidth) , FUNIT_TWIP);
+    m_xSpaceED->set_value(m_xSpaceED->normalize(
+                pTableData->GetSpace() - nTableWidth), FUNIT_TWIP);
 
 }
 
