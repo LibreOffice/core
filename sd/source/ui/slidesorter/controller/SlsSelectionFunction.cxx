@@ -1098,12 +1098,16 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             pInsertionIndicatorHandler->UpdatePosition(
                     rDescriptor.maMousePosition,
                     InsertionIndicatorHandler::MoveMode);
+
             mrSlideSorter.GetController().GetSelectionManager()->SetInsertionPosition(
                 pInsertionIndicatorHandler->GetInsertionPageIndex());
 
             mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
                 SID_INSERTPAGE,
                 SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+
+            pInsertionIndicatorHandler->End(Animator::AM_Immediate);
+
             break;
         }
 
