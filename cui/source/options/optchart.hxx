@@ -40,8 +40,8 @@ private:
     VclPtr<PushButton>             m_pPBAdd;
     VclPtr<PushButton>             m_pPBRemove;
 
-    SvxChartOptions*        pChartOptions;
-    SvxChartColorTableItem* pColorConfig;
+    std::unique_ptr<SvxChartOptions>        pChartOptions;
+    std::unique_ptr<SvxChartColorTableItem> pColorConfig;
     XColorListRef           pColorList;
     ImpColorList            aColorList;
 
