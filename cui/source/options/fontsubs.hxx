@@ -75,7 +75,7 @@ class SvxFontSubstTabPage : public SfxTabPage
 
     OUString                    m_sAutomatic;
 
-    SvtFontSubstConfig*         pConfig;
+    std::unique_ptr<SvtFontSubstConfig> pConfig;
 
     Color           aTextColor;
 
