@@ -736,11 +736,8 @@ void SdDrawDocument::StopOnlineSpelling()
         mpOnlineSpellingIdle->Stop();
     }
 
-    delete mpOnlineSpellingIdle;
-    mpOnlineSpellingIdle = nullptr;
-
-    delete mpOnlineSpellingList;
-    mpOnlineSpellingList = nullptr;
+    mpOnlineSpellingIdle.reset();
+    mpOnlineSpellingList.reset();
 }
 
 // Start OnlineSpelling in the background
@@ -763,7 +760,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 
         pOutl->SetDefaultLanguage( meLanguage );
 
-        mpOnlineSpellingList = new ShapeList;
+        mpOnlineSpellingList.reset(new ShapeList);
         sal_uInt16 nPage;
 
         for ( nPage = 0; nPage < GetPageCount(); nPage++ )
@@ -779,7 +776,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
         }
 
         mpOnlineSpellingList->seekShape(0);
-        mpOnlineSpellingIdle = new Idle("OnlineSpelling");
+        mpOnlineSpellingIdle.reset(new Idle("OnlineSpelling"));
         mpOnlineSpellingIdle->SetInvokeHandler( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
         mpOnlineSpellingIdle->SetPriority(TaskPriority::LOWEST);
         mpOnlineSpellingIdle->Start();
