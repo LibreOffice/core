@@ -846,13 +846,12 @@ void HtmlExport::SetDocColors( SdPage* pPage )
 
 void HtmlExport::InitProgress( sal_uInt16 nProgrCount )
 {
-    mpProgress = new SfxProgress( mpDocSh, SdResId(STR_CREATE_PAGES), nProgrCount );
+    mpProgress.reset(new SfxProgress( mpDocSh, SdResId(STR_CREATE_PAGES), nProgrCount ));
 }
 
 void HtmlExport::ResetProgress()
 {
-    delete mpProgress;
-    mpProgress = nullptr;
+    mpProgress.reset();
 }
 
 void HtmlExport::ExportKiosk()
