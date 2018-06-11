@@ -318,19 +318,14 @@ class CommonSubseq
 {
 private:
     std::unique_ptr<int[]> pData;
-    int nSize;
 
 protected:
     ArrayComparator &rCmp;
 
     CommonSubseq( ArrayComparator &rComparator, int nMaxSize )
-        : nSize( nMaxSize ), rCmp( rComparator )
+        : rCmp( rComparator )
     {
-        pData.reset( new int[ nSize ] );
-    }
-
-    ~CommonSubseq()
-    {
+        pData.reset( new int[ nMaxSize ] );
     }
 
     int FindLCS( int *pLcs1, int *pLcs2, int nStt1,

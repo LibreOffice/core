@@ -37,12 +37,6 @@ class SwSelectDBTableDialog : public SfxModalDialog
 {
     VclPtr<SwAddressTable> m_pTable;
     VclPtr<PushButton>     m_pPreviewPB;
-
-    OUString        m_sName;
-    OUString        m_sType;
-    OUString        m_sTable;
-    OUString        m_sQuery;
-
     css::uno::Reference<css::sdbc::XConnection> m_xConnection;
 
     DECL_LINK(PreviewHdl, Button*, void);

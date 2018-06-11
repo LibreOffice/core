@@ -57,8 +57,6 @@ class SwAddressListDialog : public SfxModalDialog
 
     VclPtr<OKButton>       m_pOK;
 
-    OUString        m_sName;
-    OUString        m_sTable;
     OUString        m_sConnecting;
 
     SvTreeListEntry*    m_pCreatedDataSource;

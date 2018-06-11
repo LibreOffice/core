@@ -1724,6 +1724,7 @@ SwTextSlot::SwTextSlot(
     , nLen(0)
     , pInf(nullptr)
 {
+    OUString aText;
     if( rCh.isEmpty() )
     {
         bOn = pPor->GetExpText( *pNew, aText );

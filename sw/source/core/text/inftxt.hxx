@@ -680,7 +680,6 @@ public:
  */
 class SwTextSlot final
 {
-    OUString aText;
     std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldText;
     sw::WrongListIterator * m_pOldSmartTagList;
