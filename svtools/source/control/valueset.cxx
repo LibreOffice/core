@@ -2360,10 +2360,6 @@ void SvtValueSet::Select()
     maSelectHdl.Call( this );
 }
 
-void SvtValueSet::UserDraw( const UserDrawEvent& )
-{
-}
-
 size_t SvtValueSet::ImplGetItem( const Point& rPos ) const
 {
     if (!mbHasVisibleItems)
@@ -3376,8 +3372,6 @@ void SvtValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtV
 
         if (pItem->meType == VALUESETITEM_USERDRAW)
         {
-            UserDrawEvent aUDEvt(nullptr, maVirDev.get(), aRect, pItem->mnId);
-            UserDraw(aUDEvt);
         }
         else
         {
