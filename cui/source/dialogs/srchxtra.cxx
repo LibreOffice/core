@@ -65,8 +65,7 @@ SvxSearchFormatDialog::~SvxSearchFormatDialog()
 
 void SvxSearchFormatDialog::dispose()
 {
-    delete m_pFontList;
-    m_pFontList = nullptr;
+    m_pFontList.reset();
     SfxTabDialog::dispose();
 }
 
@@ -90,8 +89,8 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
         if ( !pList )
         {
             if ( !m_pFontList )
-                m_pFontList = new FontList( this );
-            pList = m_pFontList;
+                m_pFontList.reset( new FontList( this ) );
+            pList = m_pFontList.get();
         }
 
         if ( pList )
