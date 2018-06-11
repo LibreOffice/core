@@ -113,7 +113,7 @@ private:
     const SfxItemSet*       pSet;
     std::unique_ptr<SfxItemSet>     pOutSet;
     SfxItemSet*             pExampleSet;
-    sal_uInt16*                 pRanges;
+    std::unique_ptr<sal_uInt16[]>   pRanges;
 
     DECL_LINK( ChosePageHdl_Impl, SvtIconChoiceCtrl*, void );
     DECL_LINK( OkHdl, Button*, void );
