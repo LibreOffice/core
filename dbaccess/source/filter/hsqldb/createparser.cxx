@@ -58,7 +58,7 @@ OUString lcl_ConvertToUTF8(const OString& rText)
         const sal_Unicode cDec = static_cast<sal_Unicode>(strtol(sHex.getStr(), nullptr, 16));
         const OString sNewChar = OString(&cDec, 1, RTL_TEXTENCODING_UTF8);
         sResult = sResult.replaceAll("\\u" + sHex, sNewChar);
-        nIndex = lcl_IndexOfUnicode(sResult, nIndex);
+        nIndex = lcl_IndexOfUnicode(sResult, nIndex + 1);
     }
     return OStringToOUString(sResult, RTL_TEXTENCODING_UTF8);
 }
