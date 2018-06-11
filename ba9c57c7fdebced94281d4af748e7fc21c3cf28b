@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_78c40040",
+        "filename": "chart2/source/controller/inc/TimerTriggeredControllerLock.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2018-06-11T19:56:36Z",
+      "side": 1,
+      "message": "guess you missed to remove this line",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 36
+      },
+      "revId": "ba9c57c7fdebced94281d4af748e7fc21c3cf28b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_98c1bc31",
+        "filename": "chart2/source/controller/inc/TimerTriggeredControllerLock.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2018-06-11T19:56:36Z",
+      "side": 1,
+      "message": "and this one",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 42
+      },
+      "revId": "ba9c57c7fdebced94281d4af748e7fc21c3cf28b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
