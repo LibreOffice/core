@@ -75,7 +75,7 @@ class SwFormatTablePage : public SfxTabPage
     DECL_LINK(AutoClickHdl, weld::ToggleButton&, void);
     DECL_LINK(RelWidthClickHdl, weld::ToggleButton&, void);
     void RightModify();
-    DECL_LINK(UpDownHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ValueChangedHdl, weld::MetricSpinButton&, void);
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -96,33 +96,31 @@ public:
 
 class SwTableColumnPage : public SfxTabPage
 {
-    VclPtr<CheckBox>       m_pModifyTableCB;
-    VclPtr<CheckBox>       m_pProportionalCB;
-    VclPtr<FixedText>      m_pSpaceFT;
-    VclPtr<MetricField>    m_pSpaceED;
-    VclPtr<PushButton>     m_pUpBtn;
-    VclPtr<PushButton>     m_pDownBtn;
-
     SwTableRep*     pTableData;
-    PercentField  m_aFieldArr[MET_FIELDS];
-    VclPtr<FixedText>      m_pTextArr[MET_FIELDS];
     SwTwips         nTableWidth;
     SwTwips         nMinWidth;
-    sal_uInt16          nNoOfCols;
-    sal_uInt16          nNoOfVisibleCols;
+    sal_uInt16      nNoOfCols;
+    sal_uInt16      nNoOfVisibleCols;
     // Remember the width, when switching to autoalign
-    sal_uInt16          aValueTable[MET_FIELDS];// primary assignment of the MetricFields
+    sal_uInt16      aValueTable[MET_FIELDS];// primary assignment of the MetricFields
     bool            bModified:1;
     bool            bModifyTable:1;
     bool            bPercentMode:1;
 
+    SwPercentField  m_aFieldArr[MET_FIELDS];
+    std::unique_ptr<weld::Label> m_aTextArr[MET_FIELDS];
+    std::unique_ptr<weld::CheckButton> m_xModifyTableCB;
+    std::unique_ptr<weld::CheckButton> m_xProportionalCB;
+    std::unique_ptr<weld::Label> m_xSpaceFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xSpaceED;
+    std::unique_ptr<weld::Button> m_xUpBtn;
+    std::unique_ptr<weld::Button> m_xDownBtn;
+
     void        Init(bool bWeb);
-    DECL_LINK( AutoClickHdl, Button *, void );
-    void        ModifyHdl( MetricField const * pEdit );
-    DECL_LINK( UpHdl, SpinField&, void );
-    DECL_LINK( DownHdl, SpinField&, void );
-    DECL_LINK( LoseFocusHdl, Control&, void );
-    DECL_LINK( ModeHdl, Button *, void );
+    DECL_LINK(AutoClickHdl, weld::Button&, void);
+    void        ModifyHdl(const weld::MetricSpinButton* pEdit);
+    DECL_LINK(ValueChangedHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModeHdl, weld::ToggleButton&, void);
     void        UpdateCols( sal_uInt16 nCurrentPos );
     SwTwips     GetVisibleWidth(sal_uInt16 nPos);
     void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
@@ -131,9 +129,8 @@ class SwTableColumnPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwTableColumnPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwTableColumnPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
