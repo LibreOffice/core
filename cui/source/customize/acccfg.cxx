@@ -999,9 +999,7 @@ void SfxAcceleratorConfigPage::dispose()
     m_pEntriesBox->Clear();
     m_pKeyBox->Clear();
 
-    delete m_pFileDlg;
-    m_pFileDlg = nullptr;
-
+    m_pFileDlg.reset();
     m_pEntriesBox.clear();
     m_pOfficeButton.clear();
     m_pModuleButton.clear();
@@ -1557,8 +1555,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( StartFileDialogType nType, const
     bool bSave = nType == StartFileDialogType::SaveAs;
     short nDialogType = bSave ? ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
                               : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-    delete m_pFileDlg;
-    m_pFileDlg = new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, GetFrameWeld());
+    m_pFileDlg.reset(new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, GetFrameWeld()));
 
     m_pFileDlg->SetTitle( rTitle );
     m_pFileDlg->AddFilter( aFilterAllStr, FILEDIALOG_FILTER_ALL );
