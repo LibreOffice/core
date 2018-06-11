@@ -48,7 +48,6 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
 {
     meButtonSize = ToolBoxButtonSize::DontCare;
     mpMenu = VclPtr<PopupMenu>::Create();
-    mnEventId = nullptr;
 
     maMenuType = ToolBoxMenuType::NONE;
     maMenubuttonItem.maItemSize = Size( TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET, TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET );
@@ -1621,9 +1620,6 @@ namespace
 void ToolBox::UpdateCustomMenu()
 {
     // fill clipped items into menu
-    if( !IsMenuEnabled() )
-        return;
-
     PopupMenu *pMenu = GetMenu();
     pMenu->Clear();
 
@@ -1680,11 +1676,12 @@ IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
     }
 }
 
-IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
+void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
 {
-    mpData->mnEventId = nullptr;
-    if( !IsMenuEnabled() )
+    if ( !IsMenuEnabled() || ImplIsInPopupMode() )
         return;
+
+    UpdateCustomMenu();
 
     if( GetMenuType() & ToolBoxMenuType::Customize )
         // call button handler to allow for menu customization
@@ -1700,8 +1697,7 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
     bool bBorderDel = false;
 
     VclPtr<vcl::Window> pWin = this;
-    tools::Rectangle aMenuRect = mpData->maMenuRect;
-    mpData->maMenuRect.SetEmpty();
+    tools::Rectangle aMenuRect = rRect;
     VclPtr<ImplBorderWindow> pBorderWin;
     if( aMenuRect.IsEmpty() && IsFloatingMode() )
     {
@@ -1733,19 +1729,6 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
 
     if( uId )
         GrabFocusToDocument();
-
-}
-
-void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
-{
-    if ( IsMenuEnabled() && !ImplIsInPopupMode() )
-    {
-        UpdateCustomMenu();
-        // handle custom menu asynchronously
-        // to avoid problems if the toolbox is closed during menu execute
-        mpData->maMenuRect = rRect;
-        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ), nullptr, true );
-    }
 }
 
 // checks override first, useful during calculation of sizes

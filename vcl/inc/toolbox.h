@@ -129,9 +129,7 @@ struct ImplToolBoxPrivateData
 
     // the optional custom menu
     VclPtr<PopupMenu>   mpMenu;
-    tools::Rectangle       maMenuRect;
     ToolBoxMenuType maMenuType;
-    ImplSVEvent *   mnEventId;
 
     // called when menu button is clicked and before the popup menu is executed
     Link<ToolBox *, void> maMenuButtonHdl;
