@@ -490,6 +490,7 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
         SwTextFootnote * const pFootnote =
             static_cast<SwTextFootnote*>(
                 pTextNd->GetTextAttrForCharAt( m_nStart ));
+        assert(pFootnote);
         SwFormatFootnote &rFootnote = const_cast<SwFormatFootnote&>(pFootnote->GetFootnote());
         rFootnote.SetNumStr( m_FootnoteNumber  );
         if ( rFootnote.IsEndNote() != m_bEndNote )
