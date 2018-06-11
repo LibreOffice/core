@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_5da01691",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-11T10:52:23Z",
+      "side": 1,
+      "message": "You may want to factor this bloc out into a separate func, since ~same chunk of code is already in ScGridWindow::LaunchAutoFilterMenu",
+      "revId": "a5d4a61f24caf2ae2c169560adbe6f1d55a443a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_3dca7a50",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-11T10:52:23Z",
+      "side": 1,
+      "message": "So I wonder if it\u0027d make sense to use \u0027\u003e\u0027 instead of \u0027!\u003d\u0027 operator here.\n\naAllString.size \u003e aSelected.size is clearly possible\nbut can it also happen that aAllString.size \u003c aSelected.size? \n\nIgnore me if this is nonsense",
+      "range": {
+        "startLine": 810,
+        "startChar": 30,
+        "endLine": 810,
+        "endChar": 33
+      },
+      "revId": "a5d4a61f24caf2ae2c169560adbe6f1d55a443a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
