@@ -105,44 +105,44 @@
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
       <FormatCode># ##0,-- [$Ft-40E];[RED]-# ##0,-- [$Ft-40E]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-      <FormatCode>YYYY". "M". "D.</FormatCode>
+    <FormatElement msgid="DateFormatskey1" default="false" type="short" usage="DATE" formatindex="18">
+      <FormatCode>YYYY". "MM". "DD.</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
+    <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="19">
+      <FormatCode>[NatNum12 MMMM=abbreviation]YYYY". "MMMM D.</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey8" default="true" type="long" usage="DATE" formatindex="20">
       <FormatCode>YYYY". "MMMM D.</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>YY-MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
       <FormatCode>YYYY-MM-DD</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>YY". "MMM D.</FormatCode>
+    <FormatElement msgid="DateFormatskey10" default="true" type="short" usage="DATE" formatindex="22">
+      <FormatCode>YYYY". "MM". "DD.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>YYYY". "MMM D.</FormatCode>
+      <FormatCode>[NatNum12 D=-a]YYYY". "MMMM D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>YYYY". "MMM D.</FormatCode>
+      <FormatCode>[NatNum12 D=-án]YYYY". "MMMM D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>YYYY". "MMMM D.</FormatCode>
+      <FormatCode>[NatNum12 D=-ától]YYYY". "MMMM D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>YYYY". "MMMM D.</FormatCode>
+      <FormatCode>[NatNum12 D=-áig]YYYY". "MMMM D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>YY-MM-DD, NN</FormatCode>
+      <FormatCode>[NatNum12 D=-ai]YYYY". "MMMM D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>YYYY". "MMM D., NNN</FormatCode>
+      <FormatCode>YYYY". "MMMM D., NNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>YYYY". "MMMM D., NN</FormatCode>
+      <FormatCode>[NatNum12 D=-án,NNN=-n]YYYY". "MMMM D, NNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>YYYY". "MMMM D., NNN</FormatCode>
+      <FormatCode>YYYY". "MMM" "D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM-DD</FormatCode>
@@ -168,6 +168,87 @@
     </FormatElement>
     <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW.</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="60">
+      <FormatCode>[NatNum12 D=-a]MMMM" "D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="61">
+      <FormatCode>[NatNum12 D=-án]MMMM" "D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="62">
+      <FormatCode>[NatNum12 D=-ától]MMMM" "D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey25" default="false" type="medium" usage="DATE" formatindex="63">
+      <FormatCode>[NatNum12 D=-áig]MMMM" "D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey26" default="false" type="long" usage="DATE" formatindex="64">
+      <FormatCode>[NatNum12 MMMM=article,D=-ai]MMMM" "D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey27" default="false" type="medium" usage="DATE" formatindex="65">
+      <FormatCode>[NatNum12 MMMM=capitalize article,D=-ai]MMMM" "D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey28" default="false" type="long" usage="DATE" formatindex="66">
+      <FormatCode>[NatNum12 MMMM=article,D=-i]MMMM" "D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="67">
+      <FormatCode>[NatNum12 MMMM=capitalize article,D=-i]MMMM" "D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey30" default="false" type="long" usage="DATE" formatindex="68">
+      <FormatCode>[NatNum12 MMMM=article]MMMM"i"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey31" default="false" type="medium" usage="DATE" formatindex="69">
+      <FormatCode>[NatNum12 MMMM=capitalize article]MMMM"i"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey32" default="false" type="medium" usage="DATE" formatindex="70">
+      <FormatCode>[NatNum12 -n]NNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey33" default="false" type="medium" usage="DATE" formatindex="71">
+      <FormatCode>[NatNum12 -tól]NNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey34" default="false" type="medium" usage="DATE" formatindex="72">
+      <FormatCode>[NatNum12 -ig]NNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey35" default="false" type="medium" usage="DATE" formatindex="73">
+      <FormatCode>[NatNum12 -ban]YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey36" default="false" type="medium" usage="DATE" formatindex="74">
+      <FormatCode>[NatNum12 -tól]YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey37" default="false" type="medium" usage="DATE" formatindex="75">
+      <FormatCode>[NatNum12 article]MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey38" default="false" type="medium" usage="DATE" formatindex="76">
+      <FormatCode>[NatNum12 capitalize article]MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey39" default="false" type="medium" usage="DATE" formatindex="77">
+      <FormatCode>[NatNum12 -ban]MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey40" default="false" type="medium" usage="DATE" formatindex="79">
+      <FormatCode>[NatNum12 article -ban]MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey41" default="false" type="medium" usage="DATE" formatindex="80">
+      <FormatCode>[NatNum12 capitalize article -ban]MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey42" default="false" type="medium" usage="DATE" formatindex="81">
+      <FormatCode>[NatNum12 -tól]MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey43" default="false" type="medium" usage="DATE" formatindex="82">
+      <FormatCode>[NatNum12 article -tól]MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey44" default="false" type="medium" usage="DATE" formatindex="83">
+      <FormatCode>[NatNum12 capitalize article -tól]MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey45" default="false" type="medium" usage="DATE" formatindex="84">
+      <FormatCode>[NatNum12 MMMM=-ában]YYYY" "MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey46" default="false" type="medium" usage="DATE" formatindex="85">
+      <FormatCode>[NatNum12 MMMM=-ától]YYYY" "MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey47" default="false" type="medium" usage="DATE" formatindex="86">
+      <FormatCode>[NatNum12 MMMM=-áig]YYYY" "MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey48" default="false" type="medium" usage="DATE" formatindex="87">
+      <FormatCode>[NatNum12 ordinal year]YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
       <FormatCode>HH:MM</FormatCode>
