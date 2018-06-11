@@ -1981,9 +1981,11 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                     InvalidatePrt_();
                 }
 
-                if (nClear || (m_pMergedPara &&
+                const bool bMergeModify = (m_pMergedPara &&
                         (m_pMergedPara->pParaPropsNode != &rModify ||
-                         m_pMergedPara->pFirstNode != &rModify)))
+                         m_pMergedPara->pFirstNode != &rModify));
+                const bool bHasOldNew = pOld && pNew;
+                if ((nClear || bMergeModify) && bHasOldNew)
                 {
                     SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
                     SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
