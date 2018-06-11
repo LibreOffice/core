@@ -107,6 +107,10 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::setValueSignal, this, &KDE5FilePicker::setValueSlot,
             Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::appendFilterSignal, this, &KDE5FilePicker::appendFilterSlot,
+            Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::appendFilterGroupSignal, this,
+            &KDE5FilePicker::appendFilterGroupSlot, Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
     setMultiSelectionMode(false);
@@ -183,7 +187,29 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
     return seq;
 }
 
-void SAL_CALL KDE5FilePicker::appendFilter(const OUString& title, const OUString& filter) {}
+void SAL_CALL KDE5FilePicker::appendFilter(const OUString& title, const OUString& filter)
+{
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT appendFilterSignal(title, filter);
+    }
+
+    QString t(toQString(title));
+    QString f(toQString(filter));
+    // '/' need to be escaped else they are assumed to be mime types by kfiledialog
+    //see the docs
+    t.replace("/", "\\/");
+
+    // libreoffice separates by filters by ';' qt dialogs by space
+    f.replace(";", " ");
+
+    // make sure "*.*" is not used as "all files"
+    f.replace("*.*", "*");
+
+    _filters << QStringLiteral("%1 (%2)").arg(t, f);
+    _titleToFilters[t] = _filters.constLast();
+}
 
 void SAL_CALL KDE5FilePicker::setCurrentFilter(const OUString& title) {}
 
@@ -193,9 +219,15 @@ OUString SAL_CALL KDE5FilePicker::getCurrentFilter()
     return filter;
 }
 
-void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitle*/,
+void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
                                                 const uno::Sequence<beans::StringPair>& filters)
 {
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT appendFilterGroupSignal(rGroupTitle, filters);
+    }
+
     const sal_uInt16 length = filters.getLength();
     for (sal_uInt16 i = 0; i < length; ++i)
     {

@@ -57,24 +57,6 @@ QString KDE5FilePicker::getDisplayDirectory() const { return _dialog->directoryU
 
 QList<QUrl> KDE5FilePicker::getSelectedFiles() const { return _dialog->selectedUrls(); }
 
-void KDE5FilePicker::appendFilter(const QString& title, const QString& filter)
-{
-    QString t = title;
-    QString f = filter;
-    // '/' need to be escaped else they are assumed to be mime types by kfiledialog
-    //see the docs
-    t.replace("/", "\\/");
-
-    // openoffice gives us filters separated by ';' qt dialogs just want space separated
-    f.replace(";", " ");
-
-    // make sure "*.*" is not used as "all files"
-    f.replace("*.*", "*");
-
-    _filters << QStringLiteral("%1 (%2)").arg(t, f);
-    _titleToFilters[t] = _filters.constLast();
-}
-
 void KDE5FilePicker::setCurrentFilter(const QString& title)
 {
     _currentFilter = _titleToFilters.value(title);
