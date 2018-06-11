@@ -246,7 +246,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     ExchangeData*           pData;
     std::vector<OUString>   aFoundList;
-    std::vector< FilterEntry* >
+    std::vector< std::unique_ptr<FilterEntry> >
                             aFilterEntryList;
     Timer                   aPreviewTimer;
     OUString                aLastFilterName;

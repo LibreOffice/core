@@ -756,9 +756,6 @@ void TPGalleryThemeProperties::dispose()
     xMediaPlayer.clear();
     xDialogListener.clear();
 
-    for (FilterEntry* i : aFilterEntryList) {
-        delete i;
-    }
     aFilterEntryList.clear();
 
     m_pCbbFileType.clear();
@@ -794,7 +791,6 @@ void TPGalleryThemeProperties::FillFilterList()
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     OUString            aExt;
     OUString            aName;
-    FilterEntry*        pFilterEntry;
     sal_uInt16          i, nKeyCount;
 
     // graphic filters
@@ -803,7 +799,7 @@ void TPGalleryThemeProperties::FillFilterList()
         aExt = rFilter.GetImportFormatShortName( i );
         aName = rFilter.GetImportFormatName( i );
         size_t entryIndex = 0;
-        FilterEntry* pTestEntry = aFilterEntryList.empty() ? nullptr : aFilterEntryList[ entryIndex ];
+        FilterEntry* pTestEntry = aFilterEntryList.empty() ? nullptr : aFilterEntryList[ entryIndex ].get();
         bool bInList = false;
 
         OUString aExtensions;
@@ -831,17 +827,17 @@ void TPGalleryThemeProperties::FillFilterList()
                 break;
             }
             pTestEntry = ( ++entryIndex < aFilterEntryList.size() )
-                       ? aFilterEntryList[ entryIndex ] : nullptr;
+                       ? aFilterEntryList[ entryIndex ].get() : nullptr;
         }
         if ( !bInList )
         {
-            pFilterEntry = new FilterEntry;
+            std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
             pFilterEntry->aFilterName = aExt;
             size_t pos = m_pCbbFileType->InsertEntry( aName );
             if ( pos < aFilterEntryList.size() ) {
-                aFilterEntryList.insert( aFilterEntryList.begin() + pos, pFilterEntry );
+                aFilterEntryList.insert( aFilterEntryList.begin() + pos, std::move(pFilterEntry) );
             } else {
-                aFilterEntryList.push_back( pFilterEntry );
+                aFilterEntryList.push_back( std::move(pFilterEntry) );
             }
         }
     }
@@ -857,7 +853,7 @@ void TPGalleryThemeProperties::FillFilterList()
         {
             OUString aFilterWildcard( aWildcard );
 
-            pFilterEntry = new FilterEntry;
+            std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
             pFilterEntry->aFilterName = aFilter.second.getToken( 0, ';', nIndex );
             nFirstExtFilterPos = m_pCbbFileType->InsertEntry(
                 addExtension(
@@ -868,10 +864,10 @@ void TPGalleryThemeProperties::FillFilterList()
             if ( nFirstExtFilterPos < aFilterEntryList.size() ) {
                 aFilterEntryList.insert(
                     aFilterEntryList.begin() + nFirstExtFilterPos,
-                    pFilterEntry
+                    std::move(pFilterEntry)
                 );
             } else {
-                aFilterEntryList.push_back( pFilterEntry );
+                aFilterEntryList.push_back( std::move(pFilterEntry) );
             }
         }
     }
@@ -915,16 +911,16 @@ void TPGalleryThemeProperties::FillFilterList()
         aExtensions = "*.*";
 #endif
 
-    pFilterEntry = new FilterEntry;
+    std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
     pFilterEntry->aFilterName = CuiResId(RID_SVXSTR_GALLERY_ALLFILES);
     pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
     size_t pos = m_pCbbFileType->InsertEntry( pFilterEntry->aFilterName, 0 );
-    if ( pos < aFilterEntryList.size() ) {
-        aFilterEntryList.insert( aFilterEntryList.begin() + pos, pFilterEntry );
-    } else {
-        aFilterEntryList.push_back( pFilterEntry );
-    }
     m_pCbbFileType->SetText( pFilterEntry->aFilterName );
+    if ( pos < aFilterEntryList.size() ) {
+        aFilterEntryList.insert( aFilterEntryList.begin() + pos, std::move(pFilterEntry) );
+    } else {
+        aFilterEntryList.push_back( std::move(pFilterEntry) );
+    }
 }
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
