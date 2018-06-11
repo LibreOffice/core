@@ -1188,6 +1188,10 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
     return ret;
 }
 
+// Note: What the comments here say about JScript possibly holds for Automation clients in general,
+// like VBScript ones, too. Or not. Hard to say. What is the relevance of JScript nowadays anyway,
+// and can LO really be used from JScript code on web pages any longer?
+
 // "convertDispparamsArgs" converts VARIANTS to their respecting Any counterparts
 // The parameters "id", "wFlags" and "pdispparams" equal those as used in
 // IDispatch::Invoke. The function handles special JavaScript
@@ -1294,6 +1298,16 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
 
         if (i < countIncomingArgs)
         {
+            // A missing (and hopefully optional) arg (in the middle of the argument list) is passed
+            // as an empty Any.
+            if (pdispparams->rgvarg[i].vt == VT_ERROR && pdispparams->rgvarg[i].scode == DISP_E_PARAMNOTFOUND)
+            {
+                Any aEmpty;
+                pParams[ outgoingArgIndex ] = aEmpty;
+                outgoingArgIndex++;
+                continue;
+            }
+
             if(convertValueObject( & pdispparams->rgvarg[i], anyParam))
             { //a param is a ValueObject and could be converted
                 pParams[ outgoingArgIndex ] = anyParam;
@@ -1775,17 +1789,88 @@ STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
             {
                 if ((flags & DISPATCH_METHOD) != 0)
                 {
+                    std::unique_ptr<DISPPARAMS> pNewDispParams;
+                    std::vector<VARIANTARG> vNewArgs;
+
                     if (pdispparams->cNamedArgs > 0)
-                        ret = DISP_E_NONAMEDARGS;
-                    else
                     {
-                        Sequence<Any> params;
+                        // Convert named arguments to positional ones.
 
-                        convertDispparamsArgs(dispidMember, wFlags, pdispparams , params );
+                        // An example:
+                        //
+                        // Function declaration (in pseudo-code):
+                        // int foo(int A, int B, optional int C, optional int D, optional int E, optional int F, optional int G)
+                        //
+                        // Corresponding parameter numbers (DISPIDs):
+                        //             0      1               2               3               4               5               6
+                        //
+                        // Actual call:
+                        // foo(10, 20, E:=50, D:=40, F:=60)
+                        //
+                        // That is, A and B are pased positionally, D, E, and F as named arguments,
+                        // and the optional C and G parameters are left out.
+                        //
+                        // Incoming DISPPARAMS:
+                        //     cArgs=5, cNamedArgs=3
+                        //     rgvarg: [60, 40, 50, 20, 10]
+                        //     rgdispidNamedArgs: [5, 3, 4]
+                        //
+                        // We calculate nLowestNamedArgDispid = 3 and nHighestNamedArgDispid = 5.
+                        //
+                        // Result of conversion, no named args:
+                        //     cArgs=6, cNamedArgs=0
+                        //     rgvarg: [60, 50, 40, DISP_E_PARAMNOTFOUND, 20, 10]
 
-                        ret= doInvoke(pdispparams, pvarResult,
-                                      pexcepinfo, puArgErr, d.name, params);
+                        // First find the lowest and highest DISPID of the named arguments.
+                        DISPID nLowestNamedArgDispid = 1000000;
+                        DISPID nHighestNamedArgDispid = -1;
+                        for (unsigned int i = 0; i < pdispparams->cNamedArgs; ++i)
+                        {
+                            if (pdispparams->rgdispidNamedArgs[i] < nLowestNamedArgDispid)
+                                nLowestNamedArgDispid = pdispparams->rgdispidNamedArgs[i];
+                            if (pdispparams->rgdispidNamedArgs[i] > nHighestNamedArgDispid)
+                                nHighestNamedArgDispid = pdispparams->rgdispidNamedArgs[i];
+                        }
+
+                        // Make sure named arguments don't overlap with positional ones. The lowest
+                        // DISPID of the named arguments should be >= the number of positional
+                        // arguments.
+                        if (nLowestNamedArgDispid < static_cast<DISPID>(pdispparams->cArgs - pdispparams->cNamedArgs))
+                            return DISP_E_NONAMEDARGS;
+
+                        // Do the actual conversion.
+                        pNewDispParams.reset(new DISPPARAMS);
+                        vNewArgs.resize(nHighestNamedArgDispid + 1);
+                        pNewDispParams->rgvarg = vNewArgs.data();
+                        pNewDispParams->rgdispidNamedArgs = nullptr;
+                        pNewDispParams->cArgs = nHighestNamedArgDispid + 1;
+                        pNewDispParams->cNamedArgs = 0;
+
+                        // Initialise all parameter slots as missing
+                        for (int i = 0; i < nHighestNamedArgDispid; ++i)
+                        {
+                            pNewDispParams->rgvarg[i].vt = VT_ERROR;
+                            pNewDispParams->rgvarg[i].scode = DISP_E_PARAMNOTFOUND;
+                        }
+
+                        // Then set the value of those actually present.
+                        for (unsigned int i = 0; i < pdispparams->cNamedArgs; ++i)
+                            pNewDispParams->rgvarg[nHighestNamedArgDispid - pdispparams->rgdispidNamedArgs[i]] = pdispparams->rgvarg[i];
+
+                        const int nFirstUnnamedArg = pdispparams->cNamedArgs + (nLowestNamedArgDispid-(pdispparams->cArgs - pdispparams->cNamedArgs));
+
+                        for (unsigned int i = pdispparams->cNamedArgs; i < pdispparams->cArgs; ++i)
+                            pNewDispParams->rgvarg[nFirstUnnamedArg + (i-pdispparams->cNamedArgs)] = pdispparams->rgvarg[i];
+
+                        pdispparams = pNewDispParams.get();
                     }
+
+                    Sequence<Any> params;
+
+                    convertDispparamsArgs(dispidMember, wFlags, pdispparams , params );
+
+                    ret= doInvoke(pdispparams, pvarResult,
+                                  pexcepinfo, puArgErr, d.name, params);
                 }
                 else if ((flags & DISPATCH_PROPERTYGET) != 0)
                 {
