@@ -71,7 +71,6 @@ class SwExtraPainter
     sal_uLong nLineNr;
     sal_uInt16 nDivider;
     bool bGoLeft;
-    bool bLineNum;
     bool IsClipChg() { return aClip.IsChg(); }
 
     SwExtraPainter(const SwExtraPainter&) = delete;
@@ -93,7 +92,7 @@ public:
 
 SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
                                 const SwLineNumberInfo &rLnInf, const SwRect &rRct,
-                                sal_Int16 eHor, bool bLnNm )
+                                sal_Int16 eHor, bool bLineNum )
     : aClip( pVwSh->GetWin() || pFrame->IsUndersized() ? pVwSh->GetOut() : nullptr )
     , aRect( rRct )
     , pTextFrame( pFrame )
@@ -105,7 +104,6 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
     , nLineNr( 1 )
     , nDivider(0)
     , bGoLeft(false)
-    , bLineNum( bLnNm )
 {
     if( pFrame->IsUndersized() )
     {

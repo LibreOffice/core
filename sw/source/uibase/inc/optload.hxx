@@ -116,7 +116,6 @@ private:
     OUString maText;
     bool mbFontInitialized;
     vcl::Font maFont;
-    Point maDrawPos;
 public:
     SwCaptionPreview(vcl::Window* pParent, WinBits nStyle);
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
@@ -157,7 +156,6 @@ private:
     OUString m_sOLE;
 
     OUString m_sIllustration;
-    OUString m_sFigure;
     OUString m_sTable;
     OUString m_sText;
     OUString m_sDrawing;

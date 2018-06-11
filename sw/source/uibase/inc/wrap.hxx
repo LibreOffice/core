@@ -31,8 +31,6 @@ class SwWrtShell;
 
 class SwWrapDlg : public SfxSingleTabDialog
 {
-    SwWrtShell*         pWrtShell;
-
 public:
     SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
 };

@@ -49,7 +49,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeC
         m_sAddressList(     SwResId( ST_ADDRESSLIST )),
         m_sGreetingsLine(   SwResId( ST_GREETINGSLINE   )),
         m_sLayout(          SwResId( ST_LAYOUT        )),
-        m_sFinish(          SwResId( ST_FINISH       )),
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
     defaultButton(WizardButtonFlags::NEXT);
@@ -57,7 +56,7 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeC
 
     setTitleBase(SwResId( ST_MMWTITLE ) );
 
-    m_pFinish->SetText(m_sFinish);
+    m_pFinish->SetText(SwResId( ST_FINISH ));
     m_pNextPage->SetHelpId(HID_MM_NEXT_PAGE);
     m_pPrevPage->SetHelpId(HID_MM_PREV_PAGE);
 

@@ -146,7 +146,6 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
         virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
     private:
-        SidebarTextControl& mrSidebarTextControl;
         ::accessibility::AccessibleTextHelper* mpAccessibleTextHelper;
 
         ::osl::Mutex maMutex;
@@ -156,12 +155,11 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 
 SidebarTextControlAccessibleContext::SidebarTextControlAccessibleContext( SidebarTextControl& rSidebarTextControl )
     : VCLXAccessibleComponent( rSidebarTextControl.GetWindowPeer() )
-    , mrSidebarTextControl( rSidebarTextControl )
     , mpAccessibleTextHelper( nullptr )
     , maMutex()
 {
-    mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SidebarTextEditSource>(mrSidebarTextControl) );
-    mpAccessibleTextHelper->SetEventSource( mrSidebarTextControl.GetWindowPeer() );
+    mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SidebarTextEditSource>(rSidebarTextControl) );
+    mpAccessibleTextHelper->SetEventSource( rSidebarTextControl.GetWindowPeer() );
 }
 
 SidebarTextControlAccessibleContext::~SidebarTextControlAccessibleContext()

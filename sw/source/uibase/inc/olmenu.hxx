@@ -99,8 +99,6 @@ class SW_DLLPUBLIC SwSpellPopup
     OUString m_sExplanationLink;
 
     LanguageType                m_nCheckedLanguage;
-    LanguageType                m_nGuessLangWord;
-    LanguageType                m_nGuessLangPara;
 
     std::map< sal_Int16, OUString > m_aLangTable_Text;
     std::map< sal_Int16, OUString > m_aLangTable_Paragraph;

@@ -139,7 +139,6 @@ class SwFieldSlot
 {
     std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldText;
-    OUString aText;
     TextFrameIndex nIdx;
     TextFrameIndex nLen;
     SwTextFormatInfo *pInf;
@@ -155,6 +154,7 @@ SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pP
     , nLen(0)
     , pInf(nullptr)
 {
+    OUString aText;
     bOn = pPor->GetExpText( *pNew, aText );
 
     // The text will be replaced ...

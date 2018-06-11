@@ -47,7 +47,6 @@ class SwConvertTableDlg : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
     std::unique_ptr<weld::Button> m_xAutoFormatBtn;
 
-    OUString        sConvertTextTable;
     std::unique_ptr<SwTableAutoFormat> mxTAutoFormat;
     SwWrtShell*     pShell;
 

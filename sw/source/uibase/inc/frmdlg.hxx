@@ -29,7 +29,6 @@ class SwFrameDlg : public SfxTabDialog
 {
     bool m_bFormat;
     bool m_bNew;
-    bool m_bHTMLMode;
     const SfxItemSet&   m_rSet;
     OUString m_sDlgType;
     SwWrtShell* m_pWrtShell;

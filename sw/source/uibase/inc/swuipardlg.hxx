@@ -24,7 +24,6 @@ class SwParaDlg: public SfxTabDialog
 {
     SwView& rView;
     sal_uInt16 nHtmlMode;
-    sal_uInt8 nDlgMode;
     bool bDrawParaDlg;
 
     sal_uInt16 m_nParaStd;
