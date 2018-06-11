@@ -670,7 +670,6 @@ WrongListIterator::WrongListIterator(SwTextFrame const& rFrame,
     , m_pMergedPara(rFrame.GetMergedPara())
     , m_CurrentExtent(0)
     , m_CurrentIndex(0)
-    , m_CurrentNodeIndex(0)
     , m_pWrongList(m_pMergedPara
                     ? nullptr
                     : (rFrame.GetTextNodeFirst()->*pGetWrongList)())
@@ -682,7 +681,6 @@ WrongListIterator::WrongListIterator(SwWrongList const& rWrongList)
     , m_pMergedPara(nullptr)
     , m_CurrentExtent(0)
     , m_CurrentIndex(0)
-    , m_CurrentNodeIndex(0)
     , m_pWrongList(&rWrongList)
 {
 }
@@ -695,7 +693,6 @@ bool WrongListIterator::Check(TextFrameIndex & rStart, TextFrameIndex & rLen)
         {   // rewind
             m_CurrentExtent = 0;
             m_CurrentIndex = TextFrameIndex(0);
-            m_CurrentNodeIndex = TextFrameIndex(0);
         }
         while (m_CurrentExtent < m_pMergedPara->extents.size())
         {
@@ -787,11 +784,6 @@ bool WrongListIterator::Check(TextFrameIndex & rStart, TextFrameIndex & rLen)
             }
             m_CurrentIndex += TextFrameIndex(rExtent.nEnd - rExtent.nStart);
             ++m_CurrentExtent;
-            if (m_CurrentExtent < m_pMergedPara->extents.size() &&
-                rExtent.pNode != m_pMergedPara->extents[m_CurrentExtent].pNode)
-            {
-                m_CurrentNodeIndex = m_CurrentIndex; // reset
-            }
         }
         return false;
     }
@@ -816,7 +808,6 @@ WrongListIterator::GetWrongElement(TextFrameIndex const nStart)
         {   // rewind
             m_CurrentExtent = 0;
             m_CurrentIndex = TextFrameIndex(0);
-            m_CurrentNodeIndex = TextFrameIndex(0);
         }
         while (m_CurrentExtent < m_pMergedPara->extents.size())
         {
@@ -836,11 +827,6 @@ WrongListIterator::GetWrongElement(TextFrameIndex const nStart)
             }
             m_CurrentIndex += TextFrameIndex(rExtent.nEnd - rExtent.nStart);
             ++m_CurrentExtent;
-            if (m_CurrentExtent < m_pMergedPara->extents.size() &&
-                rExtent.pNode != m_pMergedPara->extents[m_CurrentExtent].pNode)
-            {
-                m_CurrentNodeIndex = m_CurrentIndex; // reset
-            }
         }
         return nullptr;
     }

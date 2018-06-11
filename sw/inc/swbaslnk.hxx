@@ -27,7 +27,6 @@ class SwContentNode;
 class SwBaseLink : public ::sfx2::SvBaseLink
 {
     SwContentNode* m_pContentNode;
-    bool m_bInSwapIn : 1;   ///< Prevent recursion and notifications during SwapIn
     bool m_bNoDataFlag : 1;
     bool m_bIgnoreDataChanged : 1;
 
@@ -35,7 +34,7 @@ public:
 
     SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = nullptr )
         : ::sfx2::SvBaseLink( nMode, nFormat ), m_pContentNode( pNode ),
-        m_bInSwapIn( false ), m_bNoDataFlag( false ), m_bIgnoreDataChanged( false )
+        m_bNoDataFlag( false ), m_bIgnoreDataChanged( false )
     {}
     virtual ~SwBaseLink() override;
 

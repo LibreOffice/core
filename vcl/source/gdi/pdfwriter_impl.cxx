@@ -1126,8 +1126,7 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, doub
         m_nStreamLengthObject( 0 ),
         m_nBeginStreamPos( 0 ),
         m_eTransition( PDFWriter::PageTransition::Regular ),
-        m_nTransTime( 0 ),
-        m_nDuration( 0 )
+        m_nTransTime( 0 )
 {
     // object ref must be only ever updated in emit()
     m_nPageObject = m_pWriter->createObject();
@@ -1250,12 +1249,6 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
 
         aLine.append( "/StructParents " );
         aLine.append( sal_Int32(m_pWriter->m_aStructParentTree.size()-1) );
-        aLine.append( "\n" );
-    }
-    if( m_nDuration > 0 )
-    {
-        aLine.append( "/Dur " );
-        aLine.append( static_cast<sal_Int32>(m_nDuration) );
         aLine.append( "\n" );
     }
     if( m_eTransition != PDFWriter::PageTransition::Regular && m_nTransTime > 0 )

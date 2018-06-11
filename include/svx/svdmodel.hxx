@@ -184,7 +184,6 @@ protected:
     sal_uInt16          nUndoLevel;                   // undo nesting
     bool                bMyPool:1;        // to clean up pMyPool from 303a
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
-    bool                bExtColorTable:1; // For no own ColorTable
     bool                mbChanged:1;
     bool                bPagNumsDirty:1;
     bool                bMPgNumsDirty:1;

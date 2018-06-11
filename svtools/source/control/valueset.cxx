@@ -2294,7 +2294,6 @@ SvtValueSet::SvtValueSet()
     mnUserItemHeight    = 0;
     mnFirstLine         = 0;
     mnSelItemId         = 0;
-    mnHighItemId        = 0;
     mnCols              = 0;
     mnCurCol            = 0;
     mnUserCols          = 0;
@@ -2849,7 +2848,6 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
         Any aNewAny;
         ImplFireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny);
     }
-    maHighlightHdl.Call(this);
 }
 
 void SvtValueSet::SetNoSelection()
@@ -3365,27 +3363,16 @@ void SvtValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtV
         }
         else
         {
-            Size aImageSize = pItem->maImage.GetSizePixel();
             Size  aRectSize = aRect.GetSize();
             Point aPos(aRect.Left(), aRect.Top());
-            aPos.AdjustX((aRectSize.Width() - aImageSize.Width()) / 2 );
+            aPos.AdjustX(aRectSize.Width() / 2 );
 
             if (pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
-                aPos.AdjustY((aRectSize.Height() - aImageSize.Height()) / 2 );
+                aPos.AdjustY(aRectSize.Height() / 2 );
 
             DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
             if (!IsEnabled())
                 nImageStyle  |= DrawImageFlags::Disable;
-
-            if (aImageSize.Width()  > aRectSize.Width() ||
-                aImageSize.Height() > aRectSize.Height())
-            {
-                maVirDev->SetClipRegion(vcl::Region(aRect));
-                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
-                maVirDev->SetClipRegion();
-            }
-            else
-                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
 
             if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
             {

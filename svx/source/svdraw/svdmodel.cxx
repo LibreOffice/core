@@ -129,7 +129,6 @@ void SdrModel::ImpCtor(
     pCurrentUndoGroup=nullptr;
     nUndoLevel=0;
     mbUndoEnabled=true;
-    bExtColorTable=false;
     mbChanged = false;
     bPagNumsDirty=false;
     bMPgNumsDirty=false;

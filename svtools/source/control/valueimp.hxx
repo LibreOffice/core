@@ -75,10 +75,8 @@ struct SvtValueSetItem
     sal_uInt16          mnId;
     sal_uInt8           meType;
     bool                mbVisible;
-    Image               maImage;
     Color               maColor;
     OUString            maText;
-    void*               mpData;
     css::uno::Reference< css::accessibility::XAccessible > mxAcc;
 
     explicit SvtValueSetItem( SvtValueSet& rParent );
