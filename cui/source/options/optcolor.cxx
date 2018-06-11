@@ -1016,13 +1016,11 @@ void SvxColorOptionsTabPage::dispose()
         }
         pColorConfig->ClearModified();
         pColorConfig->EnableBroadcast();
-        delete pColorConfig;
-        pColorConfig = nullptr;
+        pColorConfig.reset();
 
         pExtColorConfig->ClearModified();
         pExtColorConfig->EnableBroadcast();
-        delete pExtColorConfig;
-        pExtColorConfig = nullptr;
+        pExtColorConfig.reset();
     }
     m_pColorSchemeLB.clear();
     m_pSaveSchemePB.clear();
@@ -1057,18 +1055,16 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
     {
         pColorConfig->ClearModified();
         pColorConfig->DisableBroadcast();
-        delete pColorConfig;
     }
-    pColorConfig = new EditableColorConfig;
+    pColorConfig.reset(new EditableColorConfig);
     m_pColorConfigCT->SetConfig(*pColorConfig);
 
     if(pExtColorConfig)
     {
         pExtColorConfig->ClearModified();
         pExtColorConfig->DisableBroadcast();
-        delete pExtColorConfig;
     }
-    pExtColorConfig = new EditableExtendedColorConfig;
+    pExtColorConfig.reset(new EditableExtendedColorConfig);
     m_pColorConfigCT->SetExtendedConfig(*pExtColorConfig);
 
     OUString sUser = GetUserData();
