@@ -29,7 +29,6 @@ class ScInsertContentsDlg : public weld::GenericDialogController
 {
 public:
             ScInsertContentsDlg( weld::Window*      pParent,
-                                 InsertDeleteFlags nCheckDefaults,
                                  const OUString*   pStrTitle );
     virtual ~ScInsertContentsDlg() override;
 

@@ -2006,8 +2006,9 @@ const std::vector<VclPtr<FixedText> >& Window::list_mnemonic_labels() const
 
 } /* namespace vcl */
 
-void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, int nBorder)
+void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
+    const int nBorder = 1;
     rRenderContext.Invert(tools::Rectangle(Point(rRect.Left(), rRect.Top()), Size(rRect.GetWidth(), nBorder)), InvertFlags::N50);
     rRenderContext.Invert(tools::Rectangle(Point(rRect.Left(), rRect.Bottom()-nBorder+1), Size(rRect.GetWidth(), nBorder)), InvertFlags::N50);
     rRenderContext.Invert(tools::Rectangle(Point(rRect.Left(), rRect.Top()+nBorder), Size(nBorder, rRect.GetHeight()-(nBorder*2))), InvertFlags::N50);

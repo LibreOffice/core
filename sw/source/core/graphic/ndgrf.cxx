@@ -367,9 +367,9 @@ void SwGrfNode::onGraphicChanged()
     }
 }
 
-void SwGrfNode::SetGraphic(const Graphic& rGraphic, const OUString& rLink)
+void SwGrfNode::SetGraphic(const Graphic& rGraphic)
 {
-    maGrfObj.SetGraphic(rGraphic, rLink);
+    maGrfObj.SetGraphic(rGraphic, OUString());
     onGraphicChanged();
 }
 

@@ -150,7 +150,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         {
             aGrfSz = ::GetGraphicSizeTwip( aGrf, nullptr );
 
-            pSwGrfNode->SetGraphic(aGrf, "");
+            pSwGrfNode->SetGraphic(aGrf);
             bUpdate = true;
 
             // Always use the correct graphic size

@@ -519,11 +519,10 @@ void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLSto
 }
 
 rtl::Reference<SvXMLGraphicHelper> SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
-                                                SvXMLGraphicHelperMode eCreateMode,
-                                                const OUString& rGraphicMimeType )
+                                                SvXMLGraphicHelperMode eCreateMode )
 {
     rtl::Reference<SvXMLGraphicHelper> pThis = new SvXMLGraphicHelper;
-    pThis->Init( rXMLStorage, eCreateMode, rGraphicMimeType );
+    pThis->Init( rXMLStorage, eCreateMode, OUString() );
 
     return pThis;
 }

@@ -28,7 +28,6 @@ InsertContentsFlags ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags:
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
 
 ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
-                                         InsertDeleteFlags nCheckDefaults,
                                          const OUString* pStrTitle )
     : GenericDialogController(pParent, "modules/scalc/ui/pastespecial.ui", "PasteSpecial")
     , bOtherDoc(false)
@@ -65,13 +64,6 @@ ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
 {
     if (pStrTitle)
         m_xDialog->set_title(*pStrTitle);
-
-    if ( nCheckDefaults != InsertDeleteFlags::NONE )
-    {
-        ScInsertContentsDlg::nPreviousChecks = nCheckDefaults;
-        ScInsertContentsDlg::bPreviousAllCheck = false;
-        ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
-    }
 
     mxBtnInsAll->set_active( ScInsertContentsDlg::bPreviousAllCheck );
     mxBtnInsStrings->set_active( bool(InsertDeleteFlags::STRING & ScInsertContentsDlg::nPreviousChecks) );

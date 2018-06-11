@@ -158,7 +158,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
             {
                 GraphicObject aGrafObj( xGraphic );
                 const Graphic aGraphic( aGrafObj.GetGraphic() );
-                pOle->SetGraphicToObj( aGraphic, OUString() );
+                pOle->SetGraphicToObj( aGraphic );
             }
             return true;
         }
