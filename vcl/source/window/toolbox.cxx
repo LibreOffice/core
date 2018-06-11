@@ -1341,10 +1341,6 @@ ToolBox::~ToolBox()
 
 void ToolBox::dispose()
 {
-    // custom menu event still running?
-    if( mpData && mpData->mnEventId )
-        Application::RemoveUserEvent( mpData->mnEventId );
-
     // #103005# make sure our activate/deactivate balance is right
     while( mnActivateCount > 0 )
         Deactivate();

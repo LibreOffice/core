@@ -410,32 +410,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
                                      FloatWinPopupFlags nFlags)
 {
 #if GTK_CHECK_VERSION(3,0,0)
-    guint nButton;
-    guint32 nTime;
-
-    //typically there is an event, and we can then distinguish if this was
-    //launched from the keyboard (gets auto-mnemoniced) or the mouse (which
-    //doesn't)
-    GdkEvent *pEvent = gtk_get_current_event();
-    if (pEvent)
-    {
-        gdk_event_get_button(pEvent, &nButton);
-        nTime = gdk_event_get_time(pEvent);
-    }
-    else
-    {
-        nButton = 0;
-        nTime = GtkSalFrame::GetLastInputEventTime();
-    }
-
     VclPtr<vcl::Window> xParent = pWin->ImplGetWindowImpl()->mpRealParent;
     mpFrame = static_cast<GtkSalFrame*>(xParent->ImplGetFrame());
-
-    // do the same strange semantics as vcl popup windows to arrive at a frame geometry
-    // in mirrored UI case; best done by actually executing the same code
-    sal_uInt16 nArrangeIndex;
-    Point aPos = FloatingWindow::ImplCalcPos(pWin, rRect, nFlags, nArrangeIndex);
-    aPos = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
 
     GLOActionGroup* pActionGroup = g_lo_action_group_new();
     mpActionGroup = G_ACTION_GROUP(pActionGroup);
@@ -445,7 +421,6 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
     GtkWidget *pWidget = gtk_menu_new_from_model(mpMenuModel);
     gtk_menu_attach_to_widget(GTK_MENU(pWidget), mpFrame->getMouseEventWidget(), nullptr);
-
     gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", mpActionGroup);
 
     //run in a sub main loop because we need to keep vcl PopupMenu alive to use
@@ -454,8 +429,66 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     //until the gtk menu is destroyed
     GMainLoop* pLoop = g_main_loop_new(nullptr, true);
     g_signal_connect_swapped(G_OBJECT(pWidget), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
-    gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, MenuPositionFunc,
-                   &aPos, nButton, nTime);
+
+#if GTK_CHECK_VERSION(3,22,0)
+    if (gtk_check_version(3, 22, 0) == nullptr)
+    {
+        GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
+
+        if (nFlags & FloatWinPopupFlags::Left)
+        {
+            rect_anchor = GDK_GRAVITY_NORTH_WEST;
+            menu_anchor = GDK_GRAVITY_NORTH_EAST;
+        }
+        else if (nFlags & FloatWinPopupFlags::Up)
+        {
+            rect_anchor = GDK_GRAVITY_NORTH_WEST;
+            menu_anchor = GDK_GRAVITY_SOUTH_WEST;
+        }
+        else if (nFlags & FloatWinPopupFlags::Right)
+        {
+            rect_anchor = GDK_GRAVITY_NORTH_EAST;
+        }
+
+        tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
+        aFloatRect.Move(-mpFrame->maGeometry.nX, -mpFrame->maGeometry.nY);
+        GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                           static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
+
+        GdkWindow* gdkWindow = widget_get_window(mpFrame->getMouseEventWidget());
+        gtk_menu_popup_at_rect(GTK_MENU(pWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
+    }
+    else
+#endif
+    {
+        guint nButton;
+        guint32 nTime;
+
+        //typically there is an event, and we can then distinguish if this was
+        //launched from the keyboard (gets auto-mnemoniced) or the mouse (which
+        //doesn't)
+        GdkEvent *pEvent = gtk_get_current_event();
+        if (pEvent)
+        {
+            gdk_event_get_button(pEvent, &nButton);
+            nTime = gdk_event_get_time(pEvent);
+        }
+        else
+        {
+            nButton = 0;
+            nTime = GtkSalFrame::GetLastInputEventTime();
+        }
+
+        // do the same strange semantics as vcl popup windows to arrive at a frame geometry
+        // in mirrored UI case; best done by actually executing the same code
+        sal_uInt16 nArrangeIndex;
+        Point aPos = FloatingWindow::ImplCalcPos(pWin, rRect, nFlags, nArrangeIndex);
+        aPos = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
+
+        gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, MenuPositionFunc,
+                       &aPos, nButton, nTime);
+    }
+
     if (g_main_loop_is_running(pLoop))
     {
         gdk_threads_leave();
