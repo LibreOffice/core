@@ -1448,9 +1448,8 @@ SfxTabDialogController::SfxTabDialogController
 (
     weld::Window* pParent,              // Parent Window
     const OUString& rUIXMLDescription, const OString& rID, // Dialog .ui path, Dialog Name
-    const SfxItemSet* pItemSet,   // Itemset with the data;
+    const SfxItemSet* pItemSet    // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
-    bool bEditFmt                 // when yes -> additional Button for standard
 )
     : GenericDialogController(pParent, rUIXMLDescription, rID)
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
@@ -1463,7 +1462,7 @@ SfxTabDialogController::SfxTabDialogController
     , m_pOutSet(nullptr)
     , m_pRanges(nullptr)
 {
-    Init_Impl(bEditFmt);
+    Init_Impl(/*bEditFmt*/false);
 }
 
 void SfxTabDialogController::Init_Impl(bool /*bFmtFlag*/)

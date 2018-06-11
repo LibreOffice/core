@@ -272,7 +272,7 @@ protected:
 
 public:
     SfxTabDialogController(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
-                           const SfxItemSet * = nullptr, bool bEditFmt = false);
+                           const SfxItemSet * = nullptr);
     virtual ~SfxTabDialogController() override;
 
     void                AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui

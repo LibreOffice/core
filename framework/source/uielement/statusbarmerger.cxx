@@ -102,14 +102,13 @@ bool lcl_MergeItems( StatusBar* pStatusbar,
                             sal_uInt16 nPos,
                             sal_uInt16 nModIndex,
                             sal_uInt16& rItemId,
-                            const ::rtl::OUString& rModuleIdentifier,
                             const AddonStatusbarItemContainer& rAddonItems )
 {
     const sal_uInt16 nSize( rAddonItems.size() );
     for ( sal_Int32 i = 0; i < nSize; i++ )
     {
         const AddonStatusbarItem& rItem = rAddonItems[i];
-        if ( !StatusbarMerger::IsCorrectContext( rItem.aContext, rModuleIdentifier ) )
+        if ( !StatusbarMerger::IsCorrectContext( rItem.aContext, OUString() ) )
             continue;
 
         sal_uInt16 nInsPos = nPos + nModIndex + i;
@@ -129,7 +128,7 @@ bool lcl_ReplaceItem( StatusBar* pStatusbar,
                              const AddonStatusbarItemContainer& rAddonToolbarItems )
 {
     pStatusbar->RemoveItem( pStatusbar->GetItemId( nPos ) );
-    return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, OUString(), rAddonToolbarItems );
+    return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, rAddonToolbarItems );
 }
 
 bool lcl_RemoveItems( StatusBar* pStatusbar,
@@ -194,9 +193,9 @@ bool StatusbarMerger::ProcessMergeOperation(
     const AddonStatusbarItemContainer& rItems )
 {
     if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
-        return lcl_MergeItems( pStatusbar, nPos, 1, rItemId, "", rItems );
+        return lcl_MergeItems( pStatusbar, nPos, 1, rItemId, rItems );
     else if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
-        return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, "", rItems );
+        return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REPLACE )
         return lcl_ReplaceItem( pStatusbar, nPos, rItemId, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REMOVE )
@@ -223,9 +222,9 @@ bool StatusbarMerger::ProcessMergeFallback(
              ( rMergeCommand == MERGECOMMAND_ADDAFTER ) )
     {
         if ( rMergeFallback == "AddFirst" )
-            return lcl_MergeItems( pStatusbar, 0, 0, rItemId, "", rItems );
+            return lcl_MergeItems( pStatusbar, 0, 0, rItemId, rItems );
         else if ( rMergeFallback == "AddLast" )
-            return lcl_MergeItems( pStatusbar, STATUSBAR_APPEND, 0, rItemId, "", rItems );
+            return lcl_MergeItems( pStatusbar, STATUSBAR_APPEND, 0, rItemId, rItems );
     }
 
     return false;
