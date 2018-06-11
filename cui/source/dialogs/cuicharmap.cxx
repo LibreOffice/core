@@ -657,8 +657,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
     // setup unicode subset listbar with font specific subsets,
     // hide unicode subset listbar for symbol fonts
     // TODO: get info from the Font once it provides it
-    delete pSubsetMap;
-    pSubsetMap = nullptr;
+    pSubsetMap.reset();
     m_xSubsetLB->clear();
 
     bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
@@ -666,7 +665,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
     {
         FontCharMapRef xFontCharMap( new FontCharMap() );
         m_xShowSet->GetFontCharMap( xFontCharMap );
-        pSubsetMap = new SubsetMap( xFontCharMap );
+        pSubsetMap.reset(new SubsetMap( xFontCharMap ));
 
         // update subset listbox for new font's unicode subsets
         bool bFirst = true;

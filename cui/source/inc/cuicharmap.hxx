@@ -76,7 +76,7 @@ private:
 
     VclPtr<VirtualDevice> m_xVirDev;
     vcl::Font           aFont;
-    const SubsetMap*    pSubsetMap;
+    std::unique_ptr<const SubsetMap> pSubsetMap;
     bool                isSearchMode;
     bool                m_bHasInsert;
     std::deque<OUString> maRecentCharList;
