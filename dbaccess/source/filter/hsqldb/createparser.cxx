@@ -50,15 +50,16 @@ sal_Int32 lcl_IndexOfUnicode(const OString& rSource, const sal_Int32 nFrom = 0)
 //Convert ascii escaped unicode to utf-8
 OUString lcl_ConvertToUTF8(const OString& rText)
 {
+    OString original = rText;
     OString sResult = rText;
     sal_Int32 nIndex = lcl_IndexOfUnicode(sResult);
     while (nIndex != -1 && nIndex < rText.getLength())
     {
-        const OString sHex = sResult.copy(nIndex + 2, 4);
+        const OString sHex = original.copy(nIndex + 2, 4);
         const sal_Unicode cDec = static_cast<sal_Unicode>(strtol(sHex.getStr(), nullptr, 16));
         const OString sNewChar = OString(&cDec, 1, RTL_TEXTENCODING_UTF8);
         sResult = sResult.replaceAll("\\u" + sHex, sNewChar);
-        nIndex = lcl_IndexOfUnicode(sResult, nIndex);
+        nIndex = lcl_IndexOfUnicode(original, nIndex + 1);
     }
     return OStringToOUString(sResult, RTL_TEXTENCODING_UTF8);
 }
