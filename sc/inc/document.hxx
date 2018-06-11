@@ -572,6 +572,7 @@ public:
         maInterpreterContext.mpFormatter = GetFormatTable();
         return maInterpreterContext;
     }
+    void MergeBackIntoNonThreadedContext( ScInterpreterContext& threadedContext );
     void SetThreadedGroupCalcInProgress( bool set ) { (void)this; ScGlobal::bThreadedGroupCalcInProgress = set; }
     bool IsThreadedGroupCalcInProgress() const { (void)this; return ScGlobal::bThreadedGroupCalcInProgress; }
 
