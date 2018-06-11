@@ -2271,7 +2271,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             Sub( aRegion, aTmp );
 
             // The next statement means neither ruby nor rotate(90):
-            if( MultiPortionType::RUBY != pEnd2Pos->nMultiType )
+            if( MultiPortionType::RUBY != pEnd2Pos->nMultiType && MultiPortionType::ROT_90 != pEnd2Pos->nMultiType )
             {
                 SwTwips nTmp = fnRectX.GetTop(pEnd2Pos->aLine);
                 if( fnRectX.GetTop(aEndRect) != nTmp )
@@ -2366,7 +2366,9 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     if( pStartFrame == pEndFrame )
     {
         bool bSameRotatedOrBidi = pSt2Pos && pEnd2Pos &&
-            ( MultiPortionType::BIDI == pSt2Pos->nMultiType ) &&
+            ( MultiPortionType::BIDI == pSt2Pos->nMultiType  ||
+              MultiPortionType::ROT_270 == pSt2Pos->nMultiType ||
+              MultiPortionType::ROT_90  == pSt2Pos->nMultiType ) &&
             pSt2Pos->aPortion == pEnd2Pos->aPortion;
         //case 1: (Same frame and same row)
         if( bSameRotatedOrBidi ||
