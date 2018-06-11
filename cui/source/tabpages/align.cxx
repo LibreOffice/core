@@ -175,7 +175,7 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
     get(m_pCbStacked,"checkVertStack");
     get(m_pCbAsianMode,"checkAsianMode");
 
-    m_pOrientHlp = new OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
+    m_pOrientHlp.reset( new OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked) );
 
     // Properties
     get(m_pBtnWrap,"checkWrapTextAuto");
@@ -246,8 +246,7 @@ AlignmentTabPage::~AlignmentTabPage()
 
 void AlignmentTabPage::dispose()
 {
-    delete m_pOrientHlp;
-    m_pOrientHlp = nullptr;
+    m_pOrientHlp.reset();
     m_pLbHorAlign.clear();
     m_pFtIndent.clear();
     m_pEdIndent.clear();

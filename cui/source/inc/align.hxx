@@ -93,7 +93,7 @@ private:
     VclPtr<ValueSet>            m_pVsRefEdge;
     VclPtr<TriStateBox>         m_pCbStacked;
     VclPtr<TriStateBox>         m_pCbAsianMode;
-    OrientationHelper*   m_pOrientHlp;
+    std::unique_ptr<OrientationHelper> m_pOrientHlp;
 
     VclPtr<VclHBox>             m_pBoxDirection;
     VclPtr<TriStateBox>         m_pBtnWrap;
