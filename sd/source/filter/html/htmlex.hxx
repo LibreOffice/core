@@ -87,7 +87,7 @@ class HtmlExport final
     HtmlErrorContext meEC;
 
     HtmlPublishMode meMode;
-    SfxProgress* mpProgress;
+    std::unique_ptr<SfxProgress> mpProgress;
     bool mbImpress;
     sal_uInt16 mnSdPageCount;
     sal_uInt16 mnPagesWritten;
