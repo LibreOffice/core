@@ -864,6 +864,7 @@ namespace cppcanvas
             // TODO(F2): implement all text effects
             // if( rState.textAlignment );             // TODO(F2): NYI
 
+            ::Color aTextFillColor( COL_AUTO );
             ::Color aShadowColor( COL_AUTO );
             ::Color aReliefColor( COL_AUTO );
             ::Size  aShadowOffset;
@@ -929,6 +930,9 @@ namespace cppcanvas
                 aReliefColor.SetTransparency( aTextColor.GetTransparency() );
             }
 
+            if (rState.isTextFillColorSet)
+                aTextFillColor = vcl::unotools::doubleSequenceToColor(rState.textFillColor, xColorSpace);
+
             // create the actual text action
             std::shared_ptr<Action> pTextAction(
                 TextActionFactory::createTextAction(
@@ -937,6 +941,7 @@ namespace cppcanvas
                     aReliefColor,
                     aShadowOffset,
                     aShadowColor,
+                    aTextFillColor,
                     rString,
                     nIndex,
                     nLength,
@@ -1001,6 +1006,7 @@ namespace cppcanvas
                             aReliefColor,
                             aShadowOffset,
                             aShadowColor,
+                            aTextFillColor,
                             aStrikeoutText,
                             0/*nStartPos*/,
                             aStrikeoutText.getLength(),
