@@ -84,18 +84,16 @@ inline ::rtl::OUString getExecutablePath()
 
 //rtl::OUString CWD = getExecutablePath();
 
-typedef std::vector<OString> string_container_t;
-
 #if !defined _WIN32
 
 class exclude
 {
 public:
 
-    explicit exclude(const string_container_t& exclude_list)
+    explicit exclude(const std::vector<OString>& exclude_list)
     {
-        string_container_t::const_iterator iter     = exclude_list.begin();
-        string_container_t::const_iterator iter_end = exclude_list.end();
+        auto iter     = exclude_list.cbegin();
+        auto iter_end = exclude_list.cend();
         for (/**/; iter != iter_end; ++iter)
             exclude_list_.push_back(env_var_name(*iter));
     }
@@ -125,12 +123,12 @@ private:
     }
 
 private:
-    string_container_t exclude_list_;
+    std::vector<OString> exclude_list_;
 };
 
 namespace
 {
-    void tidy_container(string_container_t &env_container)
+    void tidy_container(std::vector<OString> &env_container)
     {
         //sort them because there are no guarantees to ordering
         std::sort(env_container.begin(), env_container.end());
@@ -147,7 +145,7 @@ namespace
     }
 }
 
-    void read_parent_environment(string_container_t* env_container)
+    void read_parent_environment(std::vector<OString>* env_container)
     {
         for (int i = 0; environ[i] != nullptr; i++)
             env_container->push_back(OString(environ[i]));
@@ -208,7 +206,7 @@ public:
 
 #if !defined _WIN32
 
-    void read_child_environment(string_container_t* env_container)
+    void read_child_environment(std::vector<OString>* env_container)
     {
         OString temp_file_name = OUStringToOString(OUString(
             parameters_[1]), osl_getThreadTextEncoding());
@@ -232,10 +230,10 @@ public:
     // environment into a file
     void compare_environments()
     {
-        string_container_t parent_env;
+        std::vector<OString> parent_env;
         read_parent_environment(&parent_env);
 
-        string_container_t child_env;
+        std::vector<OString> child_env;
         read_child_environment(&child_env);
 
         OString msg(
@@ -256,12 +254,12 @@ public:
 
     // compare the equal environment parts and the
     // different part of the child environment
-    bool compare_merged_environments(const string_container_t& different_env_vars)
+    bool compare_merged_environments(const std::vector<OString>& different_env_vars)
     {
-        string_container_t parent_env;
+        std::vector<OString> parent_env;
         read_parent_environment(&parent_env);
 
-        for (string_container_t::const_iterator iter = parent_env.begin(), end = parent_env.end(); iter != end; ++iter)
+        for (auto iter = parent_env.cbegin(), end = parent_env.cend(); iter != end; ++iter)
             std::cout << "initially parent env: " << *iter << "\n";
 
         //remove the environment variables that we have changed
@@ -270,36 +268,36 @@ public:
             std::remove_if(parent_env.begin(), parent_env.end(), exclude(different_env_vars)),
             parent_env.end());
 
-        for (string_container_t::const_iterator iter = parent_env.begin(), end = parent_env.end(); iter != end; ++iter)
+        for (auto iter = parent_env.cbegin(), end = parent_env.cend(); iter != end; ++iter)
             std::cout << "stripped parent env: " << *iter << "\n";
 
         //read the child environment and exclude the variables that
         //are different
-        string_container_t child_env;
+        std::vector<OString> child_env;
         read_child_environment(&child_env);
 
-        for (string_container_t::const_iterator iter = child_env.begin(), end = child_env.end(); iter != end; ++iter)
+        for (auto iter = child_env.cbegin(), end = child_env.cend(); iter != end; ++iter)
             std::cout << "initial child env: " << *iter << "\n";
         //partition the child environment into the variables that
         //are different to the parent environment (they come first)
         //and the variables that should be equal between parent
         //and child environment
-        string_container_t::iterator iter_logical_end =
+        auto iter_logical_end =
             std::stable_partition(child_env.begin(), child_env.end(), exclude(different_env_vars));
 
-        string_container_t different_child_env_vars(child_env.begin(), iter_logical_end);
+        std::vector<OString> different_child_env_vars(child_env.begin(), iter_logical_end);
         child_env.erase(child_env.begin(), iter_logical_end);
 
-        for (string_container_t::const_iterator iter = child_env.begin(), end = child_env.end(); iter != end; ++iter)
+        for (auto iter = child_env.cbegin(), end = child_env.cend(); iter != end; ++iter)
             std::cout << "stripped child env: " << *iter << "\n";
 
         bool common_env_size_equals    = (parent_env.size() == child_env.size());
         bool common_env_content_equals = std::equal(child_env.begin(), child_env.end(), parent_env.begin());
 
-        for (string_container_t::const_iterator iter = different_env_vars.begin(), end = different_env_vars.end(); iter != end; ++iter)
+        for (auto iter = different_env_vars.cbegin(), end = different_env_vars.cend(); iter != end; ++iter)
             std::cout << "different should be: " << *iter << "\n";
 
-        for (string_container_t::const_iterator iter = different_child_env_vars.begin(), end = different_child_env_vars.end(); iter != end; ++iter)
+        for (auto iter = different_child_env_vars.cbegin(), end = different_child_env_vars.cend(); iter != end; ++iter)
             std::cout << "different are: " << *iter << "\n";
 
         bool different_env_size_equals    = (different_child_env_vars.size() == different_env_vars.size());
@@ -393,7 +391,7 @@ public:
 
         osl_freeProcessHandle(process);
 
-        string_container_t different_child_env_vars;
+        std::vector<OString> different_child_env_vars;
         different_child_env_vars.push_back(ENV1);
         different_child_env_vars.push_back(ENV2);
         different_child_env_vars.push_back(ENV4);

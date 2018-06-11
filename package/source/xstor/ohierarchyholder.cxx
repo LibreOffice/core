@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 // OHierarchyHolder_Impl
 
-uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, OStringList_Impl& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
+uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, std::vector<OUString>& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
     uno::Reference< embed::XStorage > xOwnStor( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
 
@@ -50,7 +50,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStream
     return xResult;
 }
 
-void OHierarchyHolder_Impl::RemoveStreamHierarchically( OStringList_Impl& aListPath )
+void OHierarchyHolder_Impl::RemoveStreamHierarchically( std::vector<OUString>& aListPath )
 {
     uno::Reference< embed::XStorage > xOwnStor( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
 
@@ -58,9 +58,9 @@ void OHierarchyHolder_Impl::RemoveStreamHierarchically( OStringList_Impl& aListP
 }
 
 // static
-OStringList_Impl OHierarchyHolder_Impl::GetListPathFromString( const OUString& aPath )
+std::vector<OUString> OHierarchyHolder_Impl::GetListPathFromString( const OUString& aPath )
 {
-    OStringList_Impl aResult;
+    std::vector<OUString> aResult;
     sal_Int32 nIndex = 0;
     do
     {
@@ -77,7 +77,7 @@ OStringList_Impl OHierarchyHolder_Impl::GetListPathFromString( const OUString& a
 
 // OHierarchyElement_Impl
 
-uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, OStringList_Impl& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
+uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, std::vector<OUString>& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -161,7 +161,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     return xResult;
 }
 
-void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aListPath )
+void OHierarchyElement_Impl::RemoveStreamHierarchically( std::vector<OUString>& aListPath )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

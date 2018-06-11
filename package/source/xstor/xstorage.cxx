@@ -5431,7 +5431,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
       && ( nOpenMode & embed::ElementModes::WRITE ) )
         throw io::IOException( THROW_WHERE ); // Access denied
 
-    OStringList_Impl aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
+    std::vector<OUString> aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
     OSL_ENSURE( aListPath.size(), "The result list must not be empty!" );
 
     uno::Reference< embed::XExtendedStorageStream > xResult;
@@ -5493,7 +5493,7 @@ void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& a
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException( THROW_WHERE ); // Access denied
 
-    OStringList_Impl aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
+    std::vector<OUString> aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
     OSL_ENSURE( aListPath.size(), "The result list must not be empty!" );
 
     if ( !m_pData->m_rHierarchyHolder.is() )
@@ -5527,7 +5527,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
       && ( nOpenMode & embed::ElementModes::WRITE ) )
         throw io::IOException( THROW_WHERE ); // Access denied
 
-    OStringList_Impl aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
+    std::vector<OUString> aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
     OSL_ENSURE( aListPath.size(), "The result list must not be empty!" );
 
     uno::Reference< embed::XExtendedStorageStream > xResult;

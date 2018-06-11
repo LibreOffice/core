@@ -38,7 +38,6 @@ struct OHierarchyElement_Impl;
 typedef std::unordered_map< OUString,
                          ::rtl::Reference< OHierarchyElement_Impl > > OHierarchyElementList_Impl;
 
-typedef ::std::vector< OUString > OStringList_Impl;
 typedef ::std::list< css::uno::WeakReference< css::embed::XExtendedStorageStream > >
                         OWeakStorRefList_Impl;
 
@@ -75,11 +74,11 @@ public:
 
     css::uno::Reference< css::embed::XExtendedStorageStream >
         GetStreamHierarchically( sal_Int32 nStorageMode,
-                                OStringList_Impl& aPath,
+                                std::vector<OUString>& aPath,
                                 sal_Int32 nStreamMode,
                                 const ::comphelper::SequenceAsHashMap& aEncryptionData );
 
-    void RemoveStreamHierarchically( OStringList_Impl& aListPath );
+    void RemoveStreamHierarchically( std::vector<OUString>& aListPath );
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
@@ -102,15 +101,15 @@ public:
     , m_xChild( new OHierarchyElement_Impl( css::uno::WeakReference< css::embed::XStorage >( xOwnStorage ) ) )
     {}
 
-    static OStringList_Impl GetListPathFromString( const OUString& aPath );
+    static std::vector<OUString> GetListPathFromString( const OUString& aPath );
 
     css::uno::Reference< css::embed::XExtendedStorageStream >
         GetStreamHierarchically( sal_Int32 nStorageMode,
-                                OStringList_Impl& aListPath,
+                                std::vector<OUString>& aListPath,
                                 sal_Int32 nStreamMode,
                                 const ::comphelper::SequenceAsHashMap& aEncryptionData = ::comphelper::SequenceAsHashMap() );
 
-    void RemoveStreamHierarchically( OStringList_Impl& aListPath );
+    void RemoveStreamHierarchically( std::vector<OUString>& aListPath );
 };
 
 #endif // _OHIERARCHYHOLDER
