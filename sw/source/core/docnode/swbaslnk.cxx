@@ -90,9 +90,8 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     }
 
     SwDoc* pDoc = m_pContentNode->GetDoc();
-    if( pDoc->IsInDtor() || ChkNoDataFlag() || m_bIgnoreDataChanged )
+    if( pDoc->IsInDtor() || ChkNoDataFlag() )
     {
-        m_bIgnoreDataChanged = false;
         return SUCCESS;
     }
 
@@ -290,9 +289,6 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
             bRes = aValue.hasValue();
             if ( bRes )
             {
-                // The Flag needs to be reset on a SwapIn, because
-                // we want to reapply the data.
-                m_bIgnoreDataChanged = false;
                 DataChanged( aMimeType, aValue );
             }
         }

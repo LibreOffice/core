@@ -28,13 +28,12 @@ class SwBaseLink : public ::sfx2::SvBaseLink
 {
     SwContentNode* m_pContentNode;
     bool m_bNoDataFlag : 1;
-    bool m_bIgnoreDataChanged : 1;
 
 public:
 
     SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = nullptr )
         : ::sfx2::SvBaseLink( nMode, nFormat ), m_pContentNode( pNode ),
-        m_bNoDataFlag( false ), m_bIgnoreDataChanged( false )
+        m_bNoDataFlag( false )
     {}
     virtual ~SwBaseLink() override;
 
