@@ -66,6 +66,7 @@ namespace cppcanvas
                                                      const ::Color&                 rReliefColor,
                                                      const ::Size&                  rShadowOffset,
                                                      const ::Color&                 rShadowColor,
+                                                     const ::Color&                 rTextFillColor,
                                                      const OUString&                rText,
                                                      sal_Int32                      nStartPos,
                                                      sal_Int32                      nLen,
