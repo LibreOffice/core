@@ -38,7 +38,7 @@ protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
 private:
-    FontList*  m_pFontList;
+    std::unique_ptr<FontList> m_pFontList;
     sal_uInt16 m_nNamePageId;
     sal_uInt16 m_nParaStdPageId;
     sal_uInt16 m_nParaAlignPageId;
