@@ -22,13 +22,14 @@
 
 #include "types.hxx"
 
+#include <memory>
 #include <vector>
 
 class ScColumn;
 
 class ScColContainer
 {
-    typedef std::vector<ScColumn*> ScColumnVector;
+    typedef std::vector<std::unique_ptr<ScColumn>> ScColumnVector;
     ScColumnVector    aCols;
 
 public:
