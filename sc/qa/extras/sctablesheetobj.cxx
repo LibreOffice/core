@@ -14,6 +14,7 @@
 #include <test/sheet/xarrayformularange.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
+#include <test/sheet/xcellrangedata.hxx>
 #include <test/sheet/xcellrangeformula.hxx>
 #include <test/sheet/xcellrangemovement.hxx>
 #include <test/sheet/xcellseries.hxx>
@@ -54,6 +55,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XArrayFormulaRange,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
+                                               public apitest::XCellRangeData,
                                                public apitest::XCellRangeFormula,
                                                public apitest::XCellRangeMovement,
                                                public apitest::XCellSeries,
@@ -86,6 +88,7 @@ public:
     virtual OUString getFileURL() override;
 
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< uno::XInterface > getXCellRangeData() override;
     virtual uno::Reference< uno::XInterface > getXSpreadsheetDocument() override;
     virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
     virtual uno::Reference< uno::XInterface > getScenarioSpreadsheet() override;
@@ -111,6 +114,10 @@ public:
 
     // XCellRangeAddressable
     CPPUNIT_TEST(testGetRangeAddress);
+
+    // XCellRangeData
+    CPPUNIT_TEST(testGetDataArrayOnTableSheet);
+    CPPUNIT_TEST(testSetDataArrayOnTableSheet);
 
     // XCellRangeFormula
 #if 0 // disable, because it makes no sense to set an FormulaArray over the whole sheet
@@ -243,6 +250,11 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     xSheets->getByName("Scenario");
 
     return xSheet;
+}
+
+uno::Reference< uno::XInterface > ScTableSheetObj::getXCellRangeData()
+{
+    return init();
 }
 
 uno::Reference<uno::XInterface> ScTableSheetObj::getXSpreadsheetDocument()

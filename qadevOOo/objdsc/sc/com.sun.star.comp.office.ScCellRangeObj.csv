@@ -185,8 +185,6 @@
 "ScCellRangeObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "ScCellRangeObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
 "ScCellRangeObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
-"ScCellRangeObj";"com::sun::star::sheet::XCellRangeData";"getDataArray()"
-"ScCellRangeObj";"com::sun::star::sheet::XCellRangeData";"setDataArray()"
 "ScCellRangeObj";"com::sun::star::chart::XChartDataArray";"getData()"
 "ScCellRangeObj";"com::sun::star::chart::XChartDataArray";"setData()"
 "ScCellRangeObj";"com::sun::star::chart::XChartDataArray";"getRowDescriptions()"
