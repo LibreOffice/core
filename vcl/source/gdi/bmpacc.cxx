@@ -41,7 +41,6 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 
     if( mnAccessMode == BitmapAccessMode::Write && xImpBmp.use_count() > 2 )
     {
-        SAL_WARN( "vcl", "two code paths trying to write to same underlying Bitmap" );
         xImpBmp.reset();
         rBitmap.ImplMakeUnique();
         xImpBmp = rBitmap.ImplGetSalBitmap();
