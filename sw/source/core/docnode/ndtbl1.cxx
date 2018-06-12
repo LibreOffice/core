@@ -51,6 +51,7 @@
 #include <calbck.hxx>
 #include <UndoTable.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/make_unique.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -60,38 +61,49 @@ using namespace ::com::sun::star;
 
 inline bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
-class SwTableFormatCmp
+// SwTableLine::ChgFrameFormat may delete old format which doesn't have writer listeners anymore.
+// This may invalidate my pointers, and lead to use-after-free. For this reason, I register myself
+// as a writer listener for the old format here, and take care to delete formats without listeners
+// in my own dtor.
+class SwTableFormatCmp : public SwClient
 {
 public:
-    SwFrameFormat *pOld,
-             *pNew;
-    sal_Int16     nType;
-
     SwTableFormatCmp( SwFrameFormat *pOld, SwFrameFormat *pNew, sal_Int16 nType );
+    ~SwTableFormatCmp() override;
 
-    static SwFrameFormat *FindNewFormat( std::vector<SwTableFormatCmp*> &rArr, SwFrameFormat const *pOld, sal_Int16 nType );
-    static void Delete( std::vector<SwTableFormatCmp*> &rArr );
+    static SwFrameFormat* FindNewFormat(std::vector<std::unique_ptr<SwTableFormatCmp>>& rArr,
+                                        SwFrameFormat const* pOld, sal_Int16 nType);
+
+private:
+    SwFrameFormat *pOld, *pNew;
+    sal_Int16 nType;
 };
 
 SwTableFormatCmp::SwTableFormatCmp( SwFrameFormat *pO, SwFrameFormat *pN, sal_Int16 nT )
     : pOld ( pO ), pNew ( pN ), nType( nT )
 {
+    if (pOld)
+        pOld->Add(this);
 }
 
-SwFrameFormat *SwTableFormatCmp::FindNewFormat( std::vector<SwTableFormatCmp*> &rArr, SwFrameFormat const *pOld, sal_Int16 nType )
+SwTableFormatCmp::~SwTableFormatCmp()
 {
-    for ( auto pCmp : rArr )
+    if (pOld)
+        pOld->Remove(this);
+    if (!pOld->HasWriterListeners())
+        delete pOld;
+}
+
+// static
+SwFrameFormat* SwTableFormatCmp::FindNewFormat(std::vector<std::unique_ptr<SwTableFormatCmp>>& rArr,
+                                               SwFrameFormat const* pOld, sal_Int16 nType)
+{
+    for (auto& pCmp : rArr)
     {
         if ( pCmp->pOld == pOld && pCmp->nType == nType )
             return pCmp->pNew;
     }
     return nullptr;
-}
-
-void SwTableFormatCmp::Delete( std::vector<SwTableFormatCmp*> &rArr )
-{
-    for ( auto pCmp : rArr )
-        delete pCmp;
 }
 
 static void lcl_GetStartEndCell( const SwCursor& rCursor,
@@ -254,7 +266,8 @@ static void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& r
     }
 }
 
-static void lcl_ProcessRowAttr( std::vector<SwTableFormatCmp*>& rFormatCmp, SwTableLine* pLine, const SfxPoolItem& rNew )
+static void lcl_ProcessRowAttr(std::vector<std::unique_ptr<SwTableFormatCmp>>& rFormatCmp,
+                               SwTableLine* pLine, const SfxPoolItem& rNew)
 {
     SwFrameFormat *pNewFormat;
     if ( nullptr != (pNewFormat = SwTableFormatCmp::FindNewFormat( rFormatCmp, pLine->GetFrameFormat(), 0 )))
@@ -264,13 +277,15 @@ static void lcl_ProcessRowAttr( std::vector<SwTableFormatCmp*>& rFormatCmp, SwTa
         SwFrameFormat *pOld = pLine->GetFrameFormat();
         SwFrameFormat *pNew = pLine->ClaimFrameFormat();
         pNew->SetFormatAttr( rNew );
-        rFormatCmp.push_back( new SwTableFormatCmp( pOld, pNew, 0 ) );
+        rFormatCmp.push_back(o3tl::make_unique<SwTableFormatCmp>(pOld, pNew, 0));
     }
 }
 
-static void lcl_ProcessBoxSize( std::vector<SwTableFormatCmp*> &rFormatCmp, SwTableBox *pBox, const SwFormatFrameSize &rNew );
+static void lcl_ProcessBoxSize(std::vector<std::unique_ptr<SwTableFormatCmp>>& rFormatCmp,
+                               SwTableBox* pBox, const SwFormatFrameSize& rNew);
 
-static void lcl_ProcessRowSize( std::vector<SwTableFormatCmp*> &rFormatCmp, SwTableLine *pLine, const SwFormatFrameSize &rNew )
+static void lcl_ProcessRowSize(std::vector<std::unique_ptr<SwTableFormatCmp>>& rFormatCmp,
+                               SwTableLine* pLine, const SwFormatFrameSize& rNew)
 {
     lcl_ProcessRowAttr( rFormatCmp, pLine, rNew );
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
@@ -278,7 +293,8 @@ static void lcl_ProcessRowSize( std::vector<SwTableFormatCmp*> &rFormatCmp, SwTa
         ::lcl_ProcessBoxSize( rFormatCmp, pBox, rNew );
 }
 
-static void lcl_ProcessBoxSize( std::vector<SwTableFormatCmp*> &rFormatCmp, SwTableBox *pBox, const SwFormatFrameSize &rNew )
+static void lcl_ProcessBoxSize(std::vector<std::unique_ptr<SwTableFormatCmp>>& rFormatCmp,
+                               SwTableBox* pBox, const SwFormatFrameSize& rNew)
 {
     SwTableLines &rLines = pBox->GetTabLines();
     if ( !rLines.empty() )
@@ -305,13 +321,12 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew )
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTable(*pTableNd));
             }
 
-            std::vector<SwTableFormatCmp*> aFormatCmp;
+            std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
             aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
 
             for( auto pLn : aRowArr )
                 ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
 
-            SwTableFormatCmp::Delete( aFormatCmp );
             getIDocumentState().SetModified();
         }
     }
@@ -378,11 +393,10 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFormatFrameSize &rNew
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTable(*pTableNd));
             }
 
-            std::vector<SwTableFormatCmp*> aFormatCmp;
+            std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
             aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
             for ( auto pLn : aRowArr )
                 ::lcl_ProcessRowSize( aFormatCmp, pLn, rNew );
-            SwTableFormatCmp::Delete( aFormatCmp );
 
             getIDocumentState().SetModified();
         }
@@ -453,11 +467,10 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly )
                             new SwUndoAttrTable(*pTableNd));
                 }
 
-                std::vector<SwTableFormatCmp*> aFormatCmp;
+                std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
                 aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
                 for( auto pLn : aRowArr )
                     ::lcl_ProcessRowSize( aFormatCmp, pLn, aNew );
-                SwTableFormatCmp::Delete( aFormatCmp );
 
                 getIDocumentState().SetModified();
             }
@@ -482,13 +495,12 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTable(*pTableNd));
             }
 
-            std::vector<SwTableFormatCmp*> aFormatCmp;
+            std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
             aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
 
             for( auto pLn : aRowArr )
                 ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
 
-            SwTableFormatCmp::Delete( aFormatCmp );
             getIDocumentState().SetModified();
         }
     }
@@ -570,7 +582,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
         GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTable(*pTableNd) );
     }
 
-    std::vector<SwTableFormatCmp*> aFormatCmp;
+    std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
     aFormatCmp.reserve( 255 );
     const SvxBoxItem* pSetBox;
     const SvxBoxInfoItem *pSetBoxInfo;
@@ -791,7 +803,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 SwFrameFormat *pOld = pBox->GetFrameFormat();
                 SwFrameFormat *pNew = pBox->ClaimFrameFormat();
                 pNew->SetFormatAttr( aBox );
-                aFormatCmp.push_back( new SwTableFormatCmp( pOld, pNew, nType ) );
+                aFormatCmp.push_back(o3tl::make_unique<SwTableFormatCmp>(pOld, pNew, nType));
             }
         }
 
@@ -807,7 +819,6 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
         pTableLayout->BordersChanged(
             pTableLayout->GetBrowseWidthByTabFrame( *pTabFrame ) );
     }
-    SwTableFormatCmp::Delete( aFormatCmp );
     ::ClearFEShellTabCols(*this, nullptr);
     getIDocumentState().SetModified();
 }
@@ -1139,7 +1150,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
             GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTable(*pTableNd) );
         }
 
-        std::vector<SwTableFormatCmp*> aFormatCmp;
+        std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
         aFormatCmp.reserve(std::max<size_t>(255, aBoxes.size()));
         for (size_t i = 0; i < aBoxes.size(); ++i)
         {
@@ -1153,7 +1164,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
                 SwFrameFormat *pOld = pBox->GetFrameFormat();
                 SwFrameFormat *pNew = pBox->ClaimFrameFormat();
                 pNew->SetFormatAttr( rNew );
-                aFormatCmp.push_back( new SwTableFormatCmp( pOld, pNew, 0 ) );
+                aFormatCmp.push_back(o3tl::make_unique<SwTableFormatCmp>(pOld, pNew, 0));
             }
 
             pBox->SetDirectFormatting(true);
@@ -1168,7 +1179,6 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
             pTableLayout->Resize(
                 pTableLayout->GetBrowseWidthByTabFrame( *pTabFrame ), true );
         }
-        SwTableFormatCmp::Delete( aFormatCmp );
         getIDocumentState().SetModified();
     }
 }
