@@ -142,8 +142,13 @@ private:
 
     ScFormulaCell( const ScFormulaCell& ) = delete;
 
-    bool InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope);
-    bool InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& aScope);
+    bool CheckComputeDependencies(sc::FormulaLogger::GroupScope& rScope);
+    bool InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope,
+                                        bool& bDependencyComputed,
+                                        bool& bDependencyCheckFailed);
+    bool InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& aScope,
+                                     bool& bDependencyComputed,
+                                     bool& bDependencyCheckFailed);
     bool InterpretInvariantFormulaGroup();
 
 public:
