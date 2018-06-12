@@ -70,6 +70,7 @@ public:
 
     // XWordBasic
     virtual void SAL_CALL FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot ) override;
+    virtual OUString SAL_CALL WindowName() override;
 };
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
@@ -457,6 +458,12 @@ SwWordBasic::FileOpen( const OUString& Name, const uno::Any& ConfirmConversions,
 
     if (aDocuments >>= rDocuments)
         rDocuments->Open( Name, ConfirmConversions, ReadOnly, AddToMru, PasswordDoc, PasswordDot, Revert, WritePasswordDoc, WritePasswordDot, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any() );
+}
+
+OUString SAL_CALL
+SwWordBasic::WindowName()
+{
+    return mpApp->getActiveSwVbaWindow()->getCaption();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
