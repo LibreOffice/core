@@ -198,6 +198,12 @@ void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
         return;
     }
 
+    if (!aSize.Width() || !aSize.Height())
+    {
+        bStatus = false;
+        return;
+    }
+
     if (bGCTransparent)
     {
         const Color aWhite(COL_WHITE);
