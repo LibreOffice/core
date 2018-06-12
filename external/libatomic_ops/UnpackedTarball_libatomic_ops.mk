@@ -11,4 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libatomic_ops))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libatomic_ops,$(LIBATOMIC_OPS_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libatomic_ops))
+
 # vim: set noet sw=4 ts=4:
