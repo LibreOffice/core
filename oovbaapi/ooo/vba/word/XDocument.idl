@@ -38,6 +38,7 @@ interface XDocument
     [attribute] boolean AutoHyphenation;
     [attribute] long HyphenationZone;
     [attribute] long ConsecutiveHyphensLimit;
+    [attribute, readonly] XMailMerge MailMerge;
 
     XRange Range( [in] any Start, [in] any End ) raises (com::sun::star::script::BasicErrorException);
     any BuiltInDocumentProperties( [in] any Index );
