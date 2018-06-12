@@ -33,13 +33,12 @@ MultipleItemConverter::MultipleItemConverter( SfxItemPool& rItemPool )
 }
 MultipleItemConverter::~MultipleItemConverter()
 {
-    std::for_each( m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void MultipleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
-    std::vector< ItemConverter* >::const_iterator       aIter = m_aConverters.begin();
-    const std::vector< ItemConverter* >::const_iterator aEnd  = m_aConverters.end();
+    auto aIter = m_aConverters.begin();
+    auto aEnd  = m_aConverters.end();
     if( aIter != aEnd )
     {
         (*aIter)->FillItemSet( rOutItemSet );

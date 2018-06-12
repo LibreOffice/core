@@ -74,11 +74,11 @@ FormattedStringsConverter::FormattedStringsConverter(
         if( xProp.is())
         {
             if( bHasRefSize )
-                m_aConverters.push_back(
+                m_aConverters.emplace_back(
                     new CharacterPropertyItemConverter(
                         xProp, rItemPool, pRefSize, "ReferencePageSize", xParentProp));
             else
-                m_aConverters.push_back( new CharacterPropertyItemConverter( xProp, rItemPool ));
+                m_aConverters.emplace_back( new CharacterPropertyItemConverter( xProp, rItemPool ));
         }
     }
 }
@@ -96,7 +96,7 @@ TitleItemConverter::TitleItemConverter(
     const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
-    m_aConverters.push_back( new GraphicPropertyItemConverter(
+    m_aConverters.emplace_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
                                  xNamedPropertyContainerFactory,
                                  GraphicObjectType::LineAndFillProperties ));
@@ -109,7 +109,7 @@ TitleItemConverter::TitleItemConverter(
         uno::Sequence< uno::Reference< chart2::XFormattedString > > aStringSeq( xTitle->getText());
         if( aStringSeq.getLength() > 0 )
         {
-            m_aConverters.push_back(
+            m_aConverters.emplace_back(
                 new FormattedStringsConverter( aStringSeq, rItemPool, pRefSize, rPropertySet ));
         }
     }
@@ -117,7 +117,6 @@ TitleItemConverter::TitleItemConverter(
 
 TitleItemConverter::~TitleItemConverter()
 {
-    std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void TitleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

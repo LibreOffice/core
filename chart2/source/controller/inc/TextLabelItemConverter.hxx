@@ -55,7 +55,7 @@ protected:
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet ) override;
 
 private:
-    std::vector<ItemConverter*> maConverters;
+    std::vector<std::unique_ptr<ItemConverter>> maConverters;
     sal_Int32                           mnNumberFormat;
     sal_Int32                           mnPercentNumberFormat;
     css::uno::Sequence<sal_Int32>       maAvailableLabelPlacements;
