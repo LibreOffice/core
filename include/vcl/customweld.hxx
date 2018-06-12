@@ -104,6 +104,7 @@ public:
         m_xDrawingArea->set_size_request(nWidth, nHeight);
     }
     void show() { m_xDrawingArea->show(); }
+    void hide() { m_xDrawingArea->hide(); }
     void set_margin_top(int nMargin) { m_xDrawingArea->set_margin_top(nMargin); }
     void set_margin_bottom(int nMargin) { m_xDrawingArea->set_margin_bottom(nMargin); }
     void set_sensitive(bool bSensitive) { m_xDrawingArea->set_sensitive(bSensitive); }

@@ -1,14 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentDegrees">
     <property name="upper">359</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPercent">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPercent1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPercent2">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPercent3">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPercent4">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPercent5">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -91,7 +115,6 @@
                         <property name="image_position">bottom</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">RBT_TRANS_LINEAR</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -107,11 +130,10 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">RBT_TRANS_GRADIENT</property>
+                        <property name="group">RBT_TRANS_OFF</property>
                         <accessibility>
-                          <relation type="label-for" target="MTR_TRANSPARENT:0%"/>
+                          <relation type="label-for" target="MTR_TRANSPARENT"/>
                         </accessibility>
                       </object>
                       <packing>
@@ -127,7 +149,6 @@
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RBT_TRANS_OFF</property>
                       </object>
@@ -137,9 +158,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_TRANSPARENT:0%">
+                      <object class="GtkSpinButton" id="MTR_TRANSPARENT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent</property>
                         <accessibility>
                           <relation type="labelled-by" target="RBT_TRANS_LINEAR"/>
@@ -170,10 +192,11 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_TRGR_END_VALUE:0%">
+                      <object class="GtkSpinButton" id="MTR_TRGR_END_VALUE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="adjustment">adjustmentPercent</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPercent5</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -181,10 +204,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_TRGR_START_VALUE:0%">
+                      <object class="GtkSpinButton" id="MTR_TRGR_START_VALUE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="adjustment">adjustmentPercent</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPercent4</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -192,10 +216,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_TRGR_BORDER:0%">
+                      <object class="GtkSpinButton" id="MTR_TRGR_BORDER">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="adjustment">adjustmentPercent</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPercent3</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -203,9 +228,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_TRGR_ANGLE:0degree">
+                      <object class="GtkSpinButton" id="MTR_TRGR_ANGLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentDegrees</property>
                       </object>
                       <packing>
@@ -214,10 +240,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_TRGR_CENTER_Y:0%">
+                      <object class="GtkSpinButton" id="MTR_TRGR_CENTER_Y">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="adjustment">adjustmentPercent</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPercent2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -225,10 +252,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_TRGR_CENTER_X:0%">
+                      <object class="GtkSpinButton" id="MTR_TRGR_CENTER_X">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="adjustment">adjustmentPercent</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPercent1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -255,10 +283,10 @@
                           <object class="GtkLabel" id="FT_TRGR_TYPE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_TYPE">Ty_pe:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">LB_TRGR_GRADIENT_TYPES</property>
+                            <property name="xalign">1</property>
                           </object>
                         </child>
                       </object>
@@ -276,10 +304,10 @@
                           <object class="GtkLabel" id="FT_TRGR_CENTER_X">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_CENTER_X">Center _X:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">MTR_TRGR_CENTER_X:0%</property>
+                            <property name="mnemonic_widget">MTR_TRGR_CENTER_X</property>
+                            <property name="xalign">1</property>
                           </object>
                         </child>
                       </object>
@@ -297,10 +325,10 @@
                           <object class="GtkLabel" id="FT_TRGR_CENTER_Y">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_CENTER_Y">Center _Y:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">MTR_TRGR_CENTER_Y:0%</property>
+                            <property name="mnemonic_widget">MTR_TRGR_CENTER_Y</property>
+                            <property name="xalign">1</property>
                           </object>
                         </child>
                       </object>
@@ -318,10 +346,10 @@
                           <object class="GtkLabel" id="FT_TRGR_ANGLE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_ANGLE">_Angle:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">MTR_TRGR_ANGLE:0degree</property>
+                            <property name="mnemonic_widget">MTR_TRGR_ANGLE</property>
+                            <property name="xalign">1</property>
                           </object>
                         </child>
                       </object>
@@ -339,10 +367,10 @@
                           <object class="GtkLabel" id="FT_TRGR_BORDER">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_BORDER">_Border:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">MTR_TRGR_BORDER:0%</property>
+                            <property name="mnemonic_widget">MTR_TRGR_BORDER</property>
+                            <property name="xalign">1</property>
                           </object>
                         </child>
                       </object>
@@ -360,10 +388,10 @@
                           <object class="GtkLabel" id="FT_TRGR_START_VALUE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_START_VALUE">_Start value:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">MTR_TRGR_START_VALUE:0%</property>
+                            <property name="mnemonic_widget">MTR_TRGR_START_VALUE</property>
+                            <property name="xalign">1</property>
                           </object>
                         </child>
                       </object>
@@ -381,10 +409,10 @@
                           <object class="GtkLabel" id="FT_TRGR_END_VALUE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_END_VALUE">_End value:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">MTR_TRGR_END_VALUE:0%</property>
+                            <property name="mnemonic_widget">MTR_TRGR_END_VALUE</property>
+                            <property name="xalign">1</property>
                           </object>
                         </child>
                       </object>
@@ -418,14 +446,31 @@
                 <property name="spacing">6</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="svxlo-SvxXRectPreview" id="CTL_BITMAP_PREVIEW">
+                  <object class="GtkScrolledWindow" id="bitmap_border">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="transparencytabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="CTL_BITMAP_PREVIEW">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="transparencytabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -436,14 +481,31 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxXRectPreview" id="CTL_TRANS_PREVIEW">
+                  <object class="GtkScrolledWindow" id="trans_border">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="CTL_TRANS_PREVIEW-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="transparencytabpage|CTL_TRANS_PREVIEW-atkobject">Example</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="CTL_TRANS_PREVIEW">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="CTL_TRANS_PREVIEW-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="transparencytabpage|CTL_TRANS_PREVIEW-atkobject">Example</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -483,8 +545,8 @@
       <object class="GtkLabel" id="FL_PROP">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes" context="transparencytabpage|FL_PROP">Area Transparency Mode</property>
+        <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -495,13 +557,13 @@
     <property name="mode">both</property>
     <property name="ignore_hidden">True</property>
     <widgets>
-      <widget name="MTR_TRANSPARENT:0%"/>
-      <widget name="MTR_TRGR_END_VALUE:0%"/>
-      <widget name="MTR_TRGR_START_VALUE:0%"/>
-      <widget name="MTR_TRGR_BORDER:0%"/>
-      <widget name="MTR_TRGR_ANGLE:0degree"/>
-      <widget name="MTR_TRGR_CENTER_Y:0%"/>
-      <widget name="MTR_TRGR_CENTER_X:0%"/>
+      <widget name="MTR_TRANSPARENT"/>
+      <widget name="MTR_TRGR_END_VALUE"/>
+      <widget name="MTR_TRGR_START_VALUE"/>
+      <widget name="MTR_TRGR_BORDER"/>
+      <widget name="MTR_TRGR_ANGLE"/>
+      <widget name="MTR_TRGR_CENTER_Y"/>
+      <widget name="MTR_TRGR_CENTER_X"/>
       <widget name="LB_TRGR_GRADIENT_TYPES"/>
     </widgets>
   </object>

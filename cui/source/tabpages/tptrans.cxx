@@ -59,22 +59,22 @@ const sal_uInt16 SvxTransparenceTabPage::pTransparenceRanges[] =
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl, weld::ToggleButton&, void)
 {
     // disable all other controls
     ActivateLinear(false);
     ActivateGradient(false);
 
     // Preview
-    rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
-    rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
-    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
-    m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    rXFSet.ClearItem(XATTR_FILLTRANSPARENCE);
+    rXFSet.ClearItem(XATTR_FILLFLOATTRANSPARENCE);
+    m_aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
+    m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
-    InvalidatePreview( false );
+    InvalidatePreview(false);
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, weld::ToggleButton&, void)
 {
     // enable linear, disable other
     ActivateLinear(true);
@@ -82,10 +82,10 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, Button*, void)
 
     // preview
     rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
-    ModifyTransparentHdl_Impl (*m_pMtrTransparent);
+    ModifyTransparentHdl_Impl(*m_xMtrTransparent);
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, weld::ToggleButton&, void)
 {
     // enable gradient, disable other
     ActivateLinear(false);
@@ -93,79 +93,56 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, Button*, voi
 
     // preview
     rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
-    ModifiedTrgrHdl_Impl (nullptr);
+    ModifiedTrgrHdl_Impl(nullptr);
 }
 
 SvxTransparenceTabPage::~SvxTransparenceTabPage()
 {
-    disposeOnce();
-}
-
-void SvxTransparenceTabPage::dispose()
-{
-    m_pRbtTransOff.clear();
-    m_pRbtTransLinear.clear();
-    m_pRbtTransGradient.clear();
-    m_pMtrTransparent.clear();
-    m_pGridGradient.clear();
-    m_pLbTrgrGradientType.clear();
-    m_pFtTrgrCenterX.clear();
-    m_pMtrTrgrCenterX.clear();
-    m_pFtTrgrCenterY.clear();
-    m_pMtrTrgrCenterY.clear();
-    m_pFtTrgrAngle.clear();
-    m_pMtrTrgrAngle.clear();
-    m_pMtrTrgrBorder.clear();
-    m_pMtrTrgrStartValue.clear();
-    m_pMtrTrgrEndValue.clear();
-    m_pCtlBitmapPreview.clear();
-    m_pCtlXRectPreview.clear();
-    SvxTabPage::dispose();
 }
 
 void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 {
-    m_pMtrTransparent->Enable(bActivate);
+    m_xMtrTransparent->set_sensitive(bActivate);
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nPos = static_cast<sal_uInt16>(m_pMtrTransparent->GetValue());
+    sal_uInt16 nPos = m_xMtrTransparent->get_value(FUNIT_PERCENT);
     rXFSet.Put(XFillTransparenceItem(nPos));
 
     // preview
     InvalidatePreview();
 }
 
-IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl, ListBox&, rListBox, void)
+IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl, weld::ComboBoxText&, rListBox, void)
 {
     ModifiedTrgrHdl_Impl(&rListBox);
 }
 
-IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl, Edit&, rBox, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl, weld::MetricSpinButton&, void)
 {
-    ModifiedTrgrHdl_Impl(&rBox);
+    ModifiedTrgrHdl_Impl(nullptr);
 }
 
-void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void const * pControl)
+void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(const weld::ComboBoxText* pControl)
 {
-    if(pControl == m_pLbTrgrGradientType || pControl == this)
+    if (pControl == m_xLbTrgrGradientType.get())
     {
-        css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_pLbTrgrGradientType->GetSelectedEntryPos());
+        css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_xLbTrgrGradientType->get_active());
         SetControlState_Impl( eXGS );
     }
 
     // preview
-    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_pMtrTrgrStartValue->GetValue()) * 255) / 100);
-    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_pMtrTrgrEndValue->GetValue()) * 255) / 100);
+    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrStartValue->get_value(FUNIT_PERCENT)) * 255) / 100);
+    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrEndValue->get_value(FUNIT_PERCENT)) * 255) / 100);
     XGradient aTmpGradient(
                 Color(nStartCol, nStartCol, nStartCol),
                 Color(nEndCol, nEndCol, nEndCol),
-                static_cast<css::awt::GradientStyle>(m_pLbTrgrGradientType->GetSelectedEntryPos()),
-                static_cast<sal_uInt16>(m_pMtrTrgrAngle->GetValue()) * 10,
-                static_cast<sal_uInt16>(m_pMtrTrgrCenterX->GetValue()),
-                static_cast<sal_uInt16>(m_pMtrTrgrCenterY->GetValue()),
-                static_cast<sal_uInt16>(m_pMtrTrgrBorder->GetValue()),
+                static_cast<css::awt::GradientStyle>(m_xLbTrgrGradientType->get_active()),
+                static_cast<sal_uInt16>(m_xMtrTrgrAngle->get_value(FUNIT_DEGREE)) * 10,
+                static_cast<sal_uInt16>(m_xMtrTrgrCenterX->get_value(FUNIT_PERCENT)),
+                static_cast<sal_uInt16>(m_xMtrTrgrCenterY->get_value(FUNIT_PERCENT)),
+                static_cast<sal_uInt16>(m_xMtrTrgrBorder->get_value(FUNIT_PERCENT)),
                 100, 100);
 
     XFillFloatTransparenceItem aItem( aTmpGradient);
@@ -176,11 +153,11 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void const * pControl)
 
 void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
 {
-    m_pGridGradient->Enable(bActivate);
+    m_xGridGradient->set_sensitive(bActivate);
 
-    if(bActivate)
+    if (bActivate)
     {
-        css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_pLbTrgrGradientType->GetSelectedEntryPos());
+        css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_xLbTrgrGradientType->get_active());
         SetControlState_Impl( eXGS );
     }
 }
@@ -191,107 +168,102 @@ void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
     {
         case css::awt::GradientStyle_LINEAR:
         case css::awt::GradientStyle_AXIAL:
-            m_pFtTrgrCenterX->Disable();
-            m_pMtrTrgrCenterX->Disable();
-            m_pFtTrgrCenterY->Disable();
-            m_pMtrTrgrCenterY->Disable();
-            m_pFtTrgrAngle->Enable();
-            m_pMtrTrgrAngle->Enable();
+            m_xFtTrgrCenterX->set_sensitive(false);
+            m_xMtrTrgrCenterX->set_sensitive(false);
+            m_xFtTrgrCenterY->set_sensitive(false);
+            m_xMtrTrgrCenterY->set_sensitive(false);
+            m_xFtTrgrAngle->set_sensitive(true);
+            m_xMtrTrgrAngle->set_sensitive(true);
             break;
 
         case css::awt::GradientStyle_RADIAL:
-            m_pFtTrgrCenterX->Enable();
-            m_pMtrTrgrCenterX->Enable();
-            m_pFtTrgrCenterY->Enable();
-            m_pMtrTrgrCenterY->Enable();
-            m_pFtTrgrAngle->Disable();
-            m_pMtrTrgrAngle->Disable();
+            m_xFtTrgrCenterX->set_sensitive(true);
+            m_xMtrTrgrCenterX->set_sensitive(true);
+            m_xFtTrgrCenterY->set_sensitive(true);
+            m_xMtrTrgrCenterY->set_sensitive(true);
+            m_xFtTrgrAngle->set_sensitive(false);
+            m_xMtrTrgrAngle->set_sensitive(false);
             break;
 
         case css::awt::GradientStyle_ELLIPTICAL:
-            m_pFtTrgrCenterX->Enable();
-            m_pMtrTrgrCenterX->Enable();
-            m_pFtTrgrCenterY->Enable();
-            m_pMtrTrgrCenterY->Enable();
-            m_pFtTrgrAngle->Enable();
-            m_pMtrTrgrAngle->Enable();
+            m_xFtTrgrCenterX->set_sensitive(true);
+            m_xMtrTrgrCenterX->set_sensitive(true);
+            m_xFtTrgrCenterY->set_sensitive(true);
+            m_xMtrTrgrCenterY->set_sensitive(true);
+            m_xFtTrgrAngle->set_sensitive(true);
+            m_xMtrTrgrAngle->set_sensitive(true);
             break;
 
         case css::awt::GradientStyle_SQUARE:
         case css::awt::GradientStyle_RECT:
-            m_pFtTrgrCenterX->Enable();
-            m_pMtrTrgrCenterX->Enable();
-            m_pFtTrgrCenterY->Enable();
-            m_pMtrTrgrCenterY->Enable();
-            m_pFtTrgrAngle->Enable();
-            m_pMtrTrgrAngle->Enable();
+            m_xFtTrgrCenterX->set_sensitive(true);
+            m_xMtrTrgrCenterX->set_sensitive(true);
+            m_xFtTrgrCenterY->set_sensitive(true);
+            m_xMtrTrgrCenterY->set_sensitive(true);
+            m_xFtTrgrAngle->set_sensitive(true);
+            m_xMtrTrgrAngle->set_sensitive(true);
             break;
         default:
             break;
     }
 }
 
-SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
-:   SvxTabPage          ( pParent,
-                          "TransparencyTabPage",
-                          "cui/ui/transparencytabpage.ui",
-                          rInAttrs),
-    rOutAttrs           ( rInAttrs ),
-    nPageType           ( PageType::Area ),
-    nDlgType            (0),
-    bBitmap             ( false ),
-    aXFillAttr          ( rInAttrs.GetPool() ),
-    rXFSet              ( aXFillAttr.GetItemSet() )
+SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pParent, "cui/ui/transparencytabpage.ui", "TransparencyTabPage", rInAttrs)
+    , rOutAttrs(rInAttrs)
+    , nPageType(PageType::Area)
+    , nDlgType(0)
+    , bBitmap(false)
+    , aXFillAttr(rInAttrs.GetPool())
+    , rXFSet(aXFillAttr.GetItemSet())
+    , m_xRbtTransOff(m_xBuilder->weld_radio_button("RBT_TRANS_OFF"))
+    , m_xRbtTransLinear(m_xBuilder->weld_radio_button("RBT_TRANS_LINEAR"))
+    , m_xRbtTransGradient(m_xBuilder->weld_radio_button("RBT_TRANS_GRADIENT"))
+    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_TRANSPARENT", FUNIT_PERCENT))
+    , m_xGridGradient(m_xBuilder->weld_widget("gridGradient"))
+    , m_xLbTrgrGradientType(m_xBuilder->weld_combo_box_text("LB_TRGR_GRADIENT_TYPES"))
+    , m_xFtTrgrCenterX(m_xBuilder->weld_label("FT_TRGR_CENTER_X"))
+    , m_xMtrTrgrCenterX(m_xBuilder->weld_metric_spin_button("MTR_TRGR_CENTER_X", FUNIT_PERCENT))
+    , m_xFtTrgrCenterY(m_xBuilder->weld_label("FT_TRGR_CENTER_Y"))
+    , m_xMtrTrgrCenterY(m_xBuilder->weld_metric_spin_button("MTR_TRGR_CENTER_Y", FUNIT_PERCENT))
+    , m_xFtTrgrAngle(m_xBuilder->weld_label("FT_TRGR_ANGLE"))
+    , m_xMtrTrgrAngle(m_xBuilder->weld_metric_spin_button("MTR_TRGR_ANGLE", FUNIT_DEGREE))
+    , m_xMtrTrgrBorder(m_xBuilder->weld_metric_spin_button("MTR_TRGR_BORDER", FUNIT_PERCENT))
+    , m_xMtrTrgrStartValue(m_xBuilder->weld_metric_spin_button("MTR_TRGR_START_VALUE", FUNIT_PERCENT))
+    , m_xMtrTrgrEndValue(m_xBuilder->weld_metric_spin_button("MTR_TRGR_END_VALUE", FUNIT_PERCENT))
+    , m_xCtlBitmapBorder(m_xBuilder->weld_widget("bitmap_border"))
+    , m_xCtlXRectBorder(m_xBuilder->weld_widget("trans_border"))
+    , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_BITMAP_PREVIEW", m_aCtlBitmapPreview))
+    , m_xCtlXRectPreview(new weld::CustomWeld(*m_xBuilder, "CTL_TRANS_PREVIEW", m_aCtlXRectPreview))
 {
-    get(m_pRbtTransOff,"RBT_TRANS_OFF");
-    get(m_pRbtTransLinear,"RBT_TRANS_LINEAR");
-    get(m_pRbtTransGradient,"RBT_TRANS_GRADIENT");
-
-    get(m_pMtrTransparent,"MTR_TRANSPARENT");
-
-    get(m_pGridGradient,"gridGradient");
-    get(m_pLbTrgrGradientType,"LB_TRGR_GRADIENT_TYPES");
-    get(m_pFtTrgrCenterX,"FT_TRGR_CENTER_X");
-    get(m_pMtrTrgrCenterX,"MTR_TRGR_CENTER_X");
-    get(m_pFtTrgrCenterY,"FT_TRGR_CENTER_Y");
-    get(m_pMtrTrgrCenterY,"MTR_TRGR_CENTER_Y");
-    get(m_pFtTrgrAngle,"FT_TRGR_ANGLE");
-    get(m_pMtrTrgrAngle,"MTR_TRGR_ANGLE");
-    get(m_pMtrTrgrBorder,"MTR_TRGR_BORDER");
-    get(m_pMtrTrgrStartValue,"MTR_TRGR_START_VALUE");
-    get(m_pMtrTrgrEndValue,"MTR_TRGR_END_VALUE");
-
-    get(m_pCtlBitmapPreview,"CTL_BITMAP_PREVIEW");
-    get(m_pCtlXRectPreview,"CTL_TRANS_PREVIEW");
-
     // main selection
-    m_pRbtTransOff->SetClickHdl(LINK(this, SvxTransparenceTabPage, ClickTransOffHdl_Impl));
-    m_pRbtTransLinear->SetClickHdl(LINK(this, SvxTransparenceTabPage, ClickTransLinearHdl_Impl));
-    m_pRbtTransGradient->SetClickHdl(LINK(this, SvxTransparenceTabPage, ClickTransGradientHdl_Impl));
+    m_xRbtTransOff->connect_toggled(LINK(this, SvxTransparenceTabPage, ClickTransOffHdl_Impl));
+    m_xRbtTransLinear->connect_toggled(LINK(this, SvxTransparenceTabPage, ClickTransLinearHdl_Impl));
+    m_xRbtTransGradient->connect_toggled(LINK(this, SvxTransparenceTabPage, ClickTransGradientHdl_Impl));
 
     // linear transparency
-    m_pMtrTransparent->SetValue( 50 );
-    m_pMtrTransparent->SetModifyHdl(LINK(this, SvxTransparenceTabPage, ModifyTransparentHdl_Impl));
+    m_xMtrTransparent->set_value(50, FUNIT_PERCENT);
+    m_xMtrTransparent->connect_value_changed(LINK(this, SvxTransparenceTabPage, ModifyTransparentHdl_Impl));
 
     // gradient transparency
-    m_pMtrTrgrEndValue->SetValue( 100 );
-    m_pMtrTrgrStartValue->SetValue( 0 );
-    Link<Edit&,void> aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl);
-    m_pLbTrgrGradientType->SetSelectHdl( LINK( this, SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl) );
-    m_pMtrTrgrCenterX->SetModifyHdl( aLink );
-    m_pMtrTrgrCenterY->SetModifyHdl( aLink );
-    m_pMtrTrgrAngle->SetModifyHdl( aLink );
-    m_pMtrTrgrBorder->SetModifyHdl( aLink );
-    m_pMtrTrgrStartValue->SetModifyHdl( aLink );
-    m_pMtrTrgrEndValue->SetModifyHdl( aLink );
+    m_xMtrTrgrEndValue->set_value(100, FUNIT_PERCENT);
+    m_xMtrTrgrStartValue->set_value(0, FUNIT_PERCENT);
+    Link<weld::MetricSpinButton&,void> aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl);
+    m_xLbTrgrGradientType->connect_changed(LINK(this, SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl));
+    m_xMtrTrgrCenterX->connect_value_changed( aLink );
+    m_xMtrTrgrCenterY->connect_value_changed( aLink );
+    m_xMtrTrgrAngle->connect_value_changed( aLink );
+    m_xMtrTrgrBorder->connect_value_changed( aLink );
+    m_xMtrTrgrStartValue->connect_value_changed( aLink );
+    m_xMtrTrgrEndValue->connect_value_changed( aLink );
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
 }
 
-VclPtr<SfxTabPage> SvxTransparenceTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxTransparenceTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxTransparenceTabPage>::Create(pWindow.pParent, *rAttrs);
+    return VclPtr<SvxTransparenceTabPage>::Create(pParent, *rAttrs);
 }
 
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
@@ -310,11 +282,11 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
     bool bSwitchOffLinear(false);
     bool bSwitchOffGradient(false);
 
-    if(m_pMtrTransparent->IsEnabled())
+    if (m_xMtrTransparent->get_sensitive())
     {
         // linear transparence
-        sal_uInt16 nPos = static_cast<sal_uInt16>(m_pMtrTransparent->GetValue());
-        if(m_pMtrTransparent->IsValueChangedFromSaved() || !bLinearActive)
+        sal_uInt16 nPos = m_xMtrTransparent->get_value(FUNIT_PERCENT);
+        if (m_xMtrTransparent->get_value_changed_from_saved() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);
             SdrPercentItem aShadowItem(makeSdrShadowTransparenceItem(nPos));
@@ -328,28 +300,28 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
             }
         }
     }
-    else if(m_pLbTrgrGradientType->IsEnabled())
+    else if (m_xLbTrgrGradientType->get_active())
     {
         // transparence gradient, fill ItemSet from values
-        if(!bGradActive
-            || m_pLbTrgrGradientType->IsValueChangedFromSaved()
-            || m_pMtrTrgrAngle->IsValueChangedFromSaved()
-            || m_pMtrTrgrCenterX->IsValueChangedFromSaved()
-            || m_pMtrTrgrCenterY->IsValueChangedFromSaved()
-            || m_pMtrTrgrBorder->IsValueChangedFromSaved()
-            || m_pMtrTrgrStartValue->IsValueChangedFromSaved()
-            || m_pMtrTrgrEndValue->IsValueChangedFromSaved() )
+        if (!bGradActive
+            || m_xLbTrgrGradientType->get_value_changed_from_saved()
+            || m_xMtrTrgrAngle->get_value_changed_from_saved()
+            || m_xMtrTrgrCenterX->get_value_changed_from_saved()
+            || m_xMtrTrgrCenterY->get_value_changed_from_saved()
+            || m_xMtrTrgrBorder->get_value_changed_from_saved()
+            || m_xMtrTrgrStartValue->get_value_changed_from_saved()
+            || m_xMtrTrgrEndValue->get_value_changed_from_saved())
         {
-            sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_pMtrTrgrStartValue->GetValue()) * 255) / 100);
-            sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_pMtrTrgrEndValue->GetValue()) * 255) / 100);
+            sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrStartValue->get_value(FUNIT_PERCENT)) * 255) / 100);
+            sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(m_xMtrTrgrEndValue->get_value(FUNIT_PERCENT)) * 255) / 100);
             XGradient aTmpGradient(
                         Color(nStartCol, nStartCol, nStartCol),
                         Color(nEndCol, nEndCol, nEndCol),
-                        static_cast<css::awt::GradientStyle>(m_pLbTrgrGradientType->GetSelectedEntryPos()),
-                        static_cast<sal_uInt16>(m_pMtrTrgrAngle->GetValue()) * 10,
-                        static_cast<sal_uInt16>(m_pMtrTrgrCenterX->GetValue()),
-                        static_cast<sal_uInt16>(m_pMtrTrgrCenterY->GetValue()),
-                        static_cast<sal_uInt16>(m_pMtrTrgrBorder->GetValue()),
+                        static_cast<css::awt::GradientStyle>(m_xLbTrgrGradientType->get_active()),
+                        static_cast<sal_uInt16>(m_xMtrTrgrAngle->get_value(FUNIT_DEGREE)) * 10,
+                        static_cast<sal_uInt16>(m_xMtrTrgrCenterX->get_value(FUNIT_PERCENT)),
+                        static_cast<sal_uInt16>(m_xMtrTrgrCenterY->get_value(FUNIT_PERCENT)),
+                        static_cast<sal_uInt16>(m_xMtrTrgrBorder->get_value(FUNIT_PERCENT)),
                         100, 100);
 
             XFillFloatTransparenceItem aItem(aTmpGradient);
@@ -412,37 +384,37 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     // transparence gradient
     const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
     css::awt::GradientStyle eXGS(rGradient.GetGradientStyle());
-    m_pLbTrgrGradientType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXGS));
-    m_pMtrTrgrAngle->SetValue(rGradient.GetAngle() / 10);
-    m_pMtrTrgrBorder->SetValue(rGradient.GetBorder());
-    m_pMtrTrgrCenterX->SetValue(rGradient.GetXOffset());
-    m_pMtrTrgrCenterY->SetValue(rGradient.GetYOffset());
-    m_pMtrTrgrStartValue->SetValue(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255));
-    m_pMtrTrgrEndValue->SetValue(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255));
+    m_xLbTrgrGradientType->set_active(sal::static_int_cast< sal_Int32 >(eXGS));
+    m_xMtrTrgrAngle->set_value(rGradient.GetAngle() / 10, FUNIT_DEGREE);
+    m_xMtrTrgrBorder->set_value(rGradient.GetBorder(), FUNIT_PERCENT);
+    m_xMtrTrgrCenterX->set_value(rGradient.GetXOffset(), FUNIT_PERCENT);
+    m_xMtrTrgrCenterY->set_value(rGradient.GetYOffset(), FUNIT_PERCENT);
+    m_xMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255), FUNIT_PERCENT);
+    m_xMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255), FUNIT_PERCENT);
 
     // linear transparence
     sal_uInt16 nTransp = static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue();
-    m_pMtrTransparent->SetValue(bLinearActive ? nTransp : 50);
-    ModifyTransparentHdl_Impl(*m_pMtrTransparent);
+    m_xMtrTransparent->set_value(bLinearActive ? nTransp : 50, FUNIT_PERCENT);
+    ModifyTransparentHdl_Impl(*m_xMtrTransparent);
 
     // select the correct radio button
     if(bGradActive)
     {
         // transparence gradient, set controls appropriate to item
-        m_pRbtTransGradient->Check();
-        ClickTransGradientHdl_Impl(nullptr);
+        m_xRbtTransGradient->set_active(true);
+        ClickTransGradientHdl_Impl(*m_xRbtTransGradient);
     }
     else if(bLinearActive)
     {
         // linear transparence
-        m_pRbtTransLinear->Check();
-        ClickTransLinearHdl_Impl(nullptr);
+        m_xRbtTransLinear->set_active(true);
+        ClickTransLinearHdl_Impl(*m_xRbtTransLinear);
     }
     else
     {
         // no transparence
-        m_pRbtTransOff->Check();
-        ClickTransOffHdl_Impl(nullptr);
+        m_xRbtTransOff->set_active(true);
+        ClickTransOffHdl_Impl(*m_xRbtTransOff);
         ModifiedTrgrHdl_Impl(nullptr);
     }
 
@@ -454,14 +426,14 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
 
 void SvxTransparenceTabPage::ChangesApplied()
 {
-    m_pMtrTransparent->SaveValue();
-    m_pLbTrgrGradientType->SaveValue();
-    m_pMtrTrgrCenterX->SaveValue();
-    m_pMtrTrgrCenterY->SaveValue();
-    m_pMtrTrgrAngle->SaveValue();
-    m_pMtrTrgrBorder->SaveValue();
-    m_pMtrTrgrStartValue->SaveValue();
-    m_pMtrTrgrEndValue->SaveValue();
+    m_xMtrTransparent->save_value();
+    m_xLbTrgrGradientType->save_value();
+    m_xMtrTrgrCenterX->save_value();
+    m_xMtrTrgrCenterY->save_value();
+    m_xMtrTrgrAngle->save_value();
+    m_xMtrTrgrBorder->save_value();
+    m_xMtrTrgrStartValue->save_value();
+    m_xMtrTrgrEndValue->save_value();
 }
 
 void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -493,18 +465,20 @@ void SvxTransparenceTabPage::PointChanged(weld::DrawingArea*, RectPoint)
 
 // Preview-Methods
 
-bool SvxTransparenceTabPage::InitPreview ( const SfxItemSet& rSet )
+bool SvxTransparenceTabPage::InitPreview(const SfxItemSet& rSet)
 {
     // set transparencetype for preview
-    if ( m_pRbtTransOff->IsChecked() )
+    if (m_xRbtTransOff->get_active())
     {
-        ClickTransOffHdl_Impl(nullptr);
-    } else if ( m_pRbtTransLinear->IsChecked() )
+        ClickTransOffHdl_Impl(*m_xRbtTransOff);
+    }
+    else if (m_xRbtTransLinear->get_active())
     {
-        ClickTransLinearHdl_Impl(nullptr);
-    } else if ( m_pRbtTransGradient->IsChecked() )
+        ClickTransLinearHdl_Impl(*m_xRbtTransLinear);
+    }
+    else if (m_xRbtTransGradient->get_active())
     {
-        ClickTransGradientHdl_Impl(nullptr);
+        ClickTransGradientHdl_Impl(*m_xRbtTransGradient);
     }
 
     // Get fillstyle for preview
@@ -515,24 +489,24 @@ bool SvxTransparenceTabPage::InitPreview ( const SfxItemSet& rSet )
     rXFSet.Put ( rSet.Get(XATTR_FILLBACKGROUND) );
     rXFSet.Put ( rSet.Get(XATTR_FILLBITMAP) );
 
-    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
-    m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
+    m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
     bBitmap = rSet.Get(XATTR_FILLSTYLE).GetValue() == drawing::FillStyle_BITMAP;
 
     // show the right preview window
     if ( bBitmap )
     {
-        m_pCtlBitmapPreview->Show();
-        m_pCtlXRectPreview->Hide();
+        m_xCtlBitmapBorder->show();
+        m_xCtlXRectBorder->hide();
     }
     else
     {
-        m_pCtlBitmapPreview->Hide();
-        m_pCtlXRectPreview->Show();
+        m_xCtlBitmapBorder->hide();
+        m_xCtlXRectBorder->show();
     }
 
-    return !m_pRbtTransOff->IsChecked();
+    return !m_xRbtTransOff->get_active();
 }
 
 void SvxTransparenceTabPage::InvalidatePreview (bool bEnable)
@@ -541,23 +515,23 @@ void SvxTransparenceTabPage::InvalidatePreview (bool bEnable)
     {
         if ( bEnable )
         {
-            m_pCtlBitmapPreview->Enable();
-            m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
+            m_xCtlBitmapPreview->set_sensitive(true);
+            m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
         }
         else
-            m_pCtlBitmapPreview->Disable();
-        m_pCtlBitmapPreview->Invalidate();
+            m_xCtlBitmapPreview->set_sensitive(false);
+        m_xCtlBitmapPreview->queue_draw();
     }
     else
     {
         if ( bEnable )
         {
-            m_pCtlXRectPreview->Enable();
-            m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+            m_xCtlXRectPreview->set_sensitive(true);
+            m_aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
         }
         else
-            m_pCtlXRectPreview->Disable();
-        m_pCtlXRectPreview->Invalidate();
+            m_xCtlXRectPreview->set_sensitive(false);
+        m_xCtlXRectPreview->queue_draw();
     }
 }
 

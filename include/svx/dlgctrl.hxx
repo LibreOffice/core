@@ -383,6 +383,41 @@ public:
     }
 };
 
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI PreviewBase : public weld::CustomWidgetController
+{
+private:
+    std::unique_ptr<SdrModel> mpModel;
+    VclPtr<VirtualDevice> mpBufferDevice;
+
+protected:
+    void InitSettings();
+
+    // prepare buffered paint
+    void LocalPrePaint(vcl::RenderContext const & rRenderContext);
+
+    // end and output buffered paint
+    void LocalPostPaint(vcl::RenderContext& rRenderContext);
+
+public:
+    PreviewBase();
+    virtual void SetDrawingArea(weld::DrawingArea*) override;
+    virtual ~PreviewBase() override;
+
+    // change support
+    virtual void StyleUpdated() override;
+
+    // dada read access
+    SdrModel& getModel() const
+    {
+        return *mpModel;
+    }
+    OutputDevice& getBufferDevice() const
+    {
+        return *mpBufferDevice;
+    }
+};
+
+
 /*************************************************************************
 |*
 |* SvxLinePreview
@@ -435,6 +470,22 @@ public:
     void SetAttributes(const SfxItemSet& rItemSet);
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Resize() override;
+};
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC XRectPreview : public PreviewBase
+{
+private:
+    SdrObject* mpRectangleObject;
+
+public:
+    XRectPreview();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual ~XRectPreview() override;
+
+    void SetAttributes(const SfxItemSet& rItemSet);
+
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void Resize() override;
 };
 
