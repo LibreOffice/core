@@ -1394,6 +1394,15 @@ void Test::testUserDefinedNumberFormats()
         sCode = "[NatNum12 ordinal-number]0";
         sExpected = "123rd";
         checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
+        sCode = "[NatNum12 capitalize]0";
+        sExpected = "One hundred twenty-three";
+        checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
+        sCode = "[NatNum12 title ordinal]0";
+        sExpected = "One Thousand Two Hundred Thirty-Fourth";
+        checkPreviewString(aFormatter, sCode, 1234, eLang, sExpected);
+        sCode = "[NatNum12 upper ordinal-number]0";
+        sExpected = "12345TH";
+        checkPreviewString(aFormatter, sCode, 12345, eLang, sExpected);
 #endif
     }
     {  // tdf#105968 engineering format with value rounded up to next magnitude
