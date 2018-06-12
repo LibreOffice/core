@@ -1125,7 +1125,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
             sal_Int32 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL), 0);
             aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(SfxStyleSearchBits::All) );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
-            for(const SfxFilterTupel& i : rFilter)
+            for(const SfxFilterTuple& i : rFilter)
             {
                 SfxStyleSearchBits nFilterFlags = i.nFlags;
                 nPos = aFilterLb->InsertEntry( i.aName );
@@ -1577,7 +1577,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
         for ( size_t i = 0; i < nFilterCount; ++i )
         {
-            const SfxFilterTupel &rTupel = pFamilyItem->GetFilterList()[ i ];
+            const SfxFilterTuple &rTupel = pFamilyItem->GetFilterList()[ i ];
 
             if ( ( rTupel.nFlags & nFilterFlags ) == nFilterFlags && pIdx )
                 *pIdx = i;
