@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_132bef31",
+        "filename": "dbaccess/uiconfig/dbapp/menubar/menubar.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-06-12T08:31:42Z",
+      "side": 1,
+      "message": "shouldnt be in this group, so move to the bottom and add separator above it.",
+      "range": {
+        "startLine": 89,
+        "startChar": 36,
+        "endLine": 89,
+        "endChar": 50
+      },
+      "revId": "172de5d31f7e196145837e3ed0759b1aee5a63f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
