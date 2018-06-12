@@ -2818,7 +2818,9 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
         aBitmap.Scale(aDrawSize, nScaleFlag);
 
         // convert to desired bitmap color format
-        aBitmap.Convert(eColorConversion);
+        Size aSize(aBitmap.GetSizePixel());
+        if (aSize.Width() && aSize.Height())
+            aBitmap.Convert(eColorConversion);
 
         rBitmapEx = BitmapEx(aBitmap);
     }

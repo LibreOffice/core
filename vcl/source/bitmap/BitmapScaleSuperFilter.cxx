@@ -950,10 +950,17 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
 
     if (nDstW <= 1 || nDstH <= 1)
         return BitmapEx();
+
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
 
         Bitmap aOutBmp(Size(nDstW, nDstH), 24);
+        Size aOutSize = aOutBmp.GetSizePixel();
+        if (!aOutSize.Width() || !aOutSize.Height())
+        {
+            SAL_WARN("vcl.gdi", "bmp creation failed");
+            return BitmapEx();
+        }
 
         BitmapScopedWriteAccess pWriteAccess(aOutBmp);
 
