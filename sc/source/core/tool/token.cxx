@@ -1819,9 +1819,18 @@ void ScTokenArray::GenHash()
 
 void ScTokenArray::ResetVectorState()
 {
-    meVectorState = FormulaVectorEnabled;
-    mbOpenCLEnabled = true;
-    mbThreadingEnabled = !ScCalcConfig::isOpenCLEnabled() && ScCalcConfig::isThreadingEnabled();
+    if(ScCalcConfig::isOpenCLEnabled())
+    {
+        meVectorState = FormulaVectorEnabled;
+        mbOpenCLEnabled = true;
+        mbThreadingEnabled = false;
+    }
+    else
+    {
+        meVectorState = FormulaVectorDisabled;
+        mbOpenCLEnabled = false;
+        mbThreadingEnabled = ScCalcConfig::isThreadingEnabled();
+    }
 }
 
 bool ScTokenArray::IsFormulaVectorDisabled() const
@@ -1887,11 +1896,9 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
 
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),
-    mnHashValue(0),
-    meVectorState(FormulaVectorEnabled),
-    mbOpenCLEnabled(true),
-    mbThreadingEnabled(!ScCalcConfig::isOpenCLEnabled() && ScCalcConfig::isThreadingEnabled())
+    mnHashValue(0)
 {
+    ResetVectorState();
 }
 
 ScTokenArray::~ScTokenArray()
@@ -1929,9 +1936,7 @@ bool ScTokenArray::EqualTokens( const ScTokenArray* pArr2) const
 void ScTokenArray::Clear()
 {
     mnHashValue = 0;
-    meVectorState = FormulaVectorEnabled;
-    mbOpenCLEnabled = true;
-    mbThreadingEnabled = !ScCalcConfig::isOpenCLEnabled() && ScCalcConfig::isThreadingEnabled();
+    ResetVectorState();
     FormulaTokenArray::Clear();
 }
 
