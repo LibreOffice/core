@@ -215,13 +215,13 @@ DataPointItemConverter::DataPointItemConverter(
         m_aAvailableLabelPlacements(),
         m_bForbidPercentValue(true)
 {
-    m_aConverters.push_back( new GraphicPropertyItemConverter(
+    m_aConverters.emplace_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
-    m_aConverters.push_back( new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+    m_aConverters.emplace_back( new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
     if( bDataSeries )
     {
-        m_aConverters.push_back( new StatisticsItemConverter( xChartModel, rPropertySet, rItemPool ));
-        m_aConverters.push_back( new SeriesOptionsItemConverter( xChartModel, xContext, rPropertySet, rItemPool ));
+        m_aConverters.emplace_back( new StatisticsItemConverter( xChartModel, rPropertySet, rItemPool ));
+        m_aConverters.emplace_back( new SeriesOptionsItemConverter( xChartModel, xContext, rPropertySet, rItemPool ));
     }
 
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
@@ -236,7 +236,6 @@ DataPointItemConverter::DataPointItemConverter(
 
 DataPointItemConverter::~DataPointItemConverter()
 {
-    std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

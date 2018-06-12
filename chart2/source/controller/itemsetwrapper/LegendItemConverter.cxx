@@ -49,17 +49,16 @@ LegendItemConverter::LegendItemConverter(
     const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
-    m_aConverters.push_back( new GraphicPropertyItemConverter(
+    m_aConverters.emplace_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
                                  GraphicObjectType::LineAndFillProperties ));
-    m_aConverters.push_back( new CharacterPropertyItemConverter(
+    m_aConverters.emplace_back( new CharacterPropertyItemConverter(
                                  rPropertySet, rItemPool, pRefSize,
                                  "ReferencePageSize" ));
 }
 
 LegendItemConverter::~LegendItemConverter()
 {
-    std::for_each( m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void LegendItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

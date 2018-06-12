@@ -194,7 +194,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     mbDataSeries(bDataSeries),
     mbForbidPercentValue(true)
 {
-    maConverters.push_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+    maConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
     uno::Reference<XDiagram> xDiagram(ChartModelHelper::findDiagram(xChartModel));
     uno::Reference<XChartType> xChartType(DiagramHelper::getChartTypeOfSeries(xDiagram, xSeries));
@@ -208,7 +208,6 @@ TextLabelItemConverter::TextLabelItemConverter(
 
 TextLabelItemConverter::~TextLabelItemConverter()
 {
-    std::for_each(maConverters.begin(), maConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void TextLabelItemConverter::FillItemSet( SfxItemSet& rOutItemSet ) const
