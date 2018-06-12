@@ -396,7 +396,7 @@ namespace emfplushelper
 
     void EmfPlusHelperData::EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex)
     {
-        const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[penIndex & 0xff].get());
+        const EMFPPen* pen = dynamic_cast<EMFPPen*>(maEMFPObjects[penIndex & 0xff].get());
         SAL_WARN_IF(!pen, "drawinglayer", "emf+ missing pen");
 
         if (pen && polygon.count())
