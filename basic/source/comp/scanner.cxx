@@ -29,7 +29,7 @@
 SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
 {
     pBasic   = p;
-    pLine    = nullptr;
+    nLineIdx = -1;
     nVal     = 0;
     eScanType = SbxVARIANT;
     nErrors  = 0;
@@ -50,7 +50,7 @@ SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
     bInStatement =
     bPrevLineExtentsComment = false;
     bHash    = true;
-    pSaveLine = nullptr;
+    nSaveLineIdx = -1;
 }
 
 SbiScanner::~SbiScanner()
@@ -107,7 +107,7 @@ bool SbiScanner::DoesColonFollow()
 {
     if(nCol < aLine.getLength() && aLine[nCol] == ':')
     {
-        ++pLine; ++nCol;
+        ++nLineIdx; ++nCol;
         return true;
     }
     else
@@ -145,7 +145,7 @@ void SbiScanner::scanAlphanumeric()
     sal_Int32 n = nCol;
     while(nCol < aLine.getLength() && (BasicCharClass::isAlphaNumeric(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
-        ++pLine;
+        ++nLineIdx;
         ++nCol;
     }
     aSym = aLine.copy(n, nCol - n);
@@ -163,7 +163,7 @@ void SbiScanner::scanGoto()
         if(aTemp.equalsIgnoreAsciiCase("to"))
         {
             aSym = "goto";
-            pLine += n + 2 - nCol;
+            nLineIdx += n + 2 - nCol;
             nCol = n + 2;
         }
     }
@@ -194,7 +194,7 @@ bool SbiScanner::readLine()
         ++n;
 
     nBufPos = n;
-    pLine = aLine.getStr();
+    nLineIdx = 0;
 
     ++nLine;
     nCol = nCol1 = nCol2 = 0;
@@ -217,7 +217,7 @@ bool SbiScanner::NextSym()
     bool bCompilerDirective = false;
 
     // read in line?
-    if( !pLine )
+    if (nLineIdx == -1)
     {
         if(!readLine())
             return false;
@@ -231,7 +231,7 @@ bool SbiScanner::NextSym()
         bSpaces = true;
         while(nCol < aLine.getLength() && BasicCharClass::isWhitespace(aLine[nCol]))
         {
-            ++pLine;
+            ++nLineIdx;
             ++nCol;
         }
     }
@@ -247,15 +247,15 @@ bool SbiScanner::NextSym()
 
     if(nCol < aLine.getLength() && aLine[nCol] == '#')
     {
-        const sal_Unicode* pLineTemp = pLine;
+        sal_Int32 nLineTempIdx = nLineIdx;
         do
         {
-            pLineTemp++;
-        } while (*pLineTemp && !BasicCharClass::isWhitespace(*pLineTemp) && *pLineTemp != '#');
+            nLineTempIdx++;
+        } while (nLineTempIdx < aLine.getLength() && !BasicCharClass::isWhitespace(aLine[nLineTempIdx]) && aLine[nLineTempIdx] != '#');
         // leave it if it is a date literal - it will be handled later
-        if (*pLineTemp != '#')
+        if (nLineTempIdx >= aLine.getLength() || aLine[nLineTempIdx] != '#')
         {
-            ++pLine;
+            ++nLineIdx;
             ++nCol;
             //ignore compiler directives (# is first non-space character)
             if (nOldCol2 == 0)
@@ -272,7 +272,7 @@ bool SbiScanner::NextSym()
         if(nCol + 1 == aLine.getLength() && aLine[nCol] == '_')
         {
             // Note that nCol is not incremented here...
-            ++pLine;
+            ++nLineIdx;
             goto eoln;
         }
 
@@ -286,7 +286,7 @@ bool SbiScanner::NextSym()
 
         // replace closing '_' by space when end of line is following
         // (wrong line continuation otherwise)
-        if(nCol == aLine.getLength() && aLine[nCol - 1] == '_' )
+        if (nCol == aLine.getLength() && aLine[nCol - 1] == '_')
         {
             // We are going to modify a potentially shared string, so force
             // a copy, so that aSym is not modified by the following operation
@@ -294,7 +294,7 @@ bool SbiScanner::NextSym()
             aSym = aSymCopy;
 
             // HACK: modifying a potentially shared string here!
-            *const_cast<sal_Unicode*>(pLine-1) = ' ';
+            const_cast<sal_Unicode*>(aLine.getStr())[nLineIdx - 1] = ' ';
         }
 
         // type recognition?
@@ -309,7 +309,7 @@ bool SbiScanner::NextSym()
                 if( t != SbxVARIANT )
                 {
                     eScanType = t;
-                    ++pLine;
+                    ++nLineIdx;
                     ++nCol;
                 }
             }
@@ -332,7 +332,7 @@ bool SbiScanner::NextSym()
             if( (p-buf) == (BUF_SIZE-1) )
             {
                 bBufOverflow = true;
-                ++pLine;
+                ++nLineIdx;
                 ++nCol;
                 continue;
             }
@@ -353,7 +353,7 @@ bool SbiScanner::NextSym()
                     *p++ = 'E';
                     if (nCol + 1 < aLine.getLength() && (aLine[nCol+1] == '+' || aLine[nCol+1] == '-'))
                     {
-                        ++pLine;
+                        ++nLineIdx;
                         ++nCol;
                         if( (p-buf) == (BUF_SIZE-1) )
                         {
@@ -368,7 +368,7 @@ bool SbiScanner::NextSym()
             {
                 *p++ = aLine[nCol];
             }
-            ++pLine;
+            ++nLineIdx;
             ++nCol;
         }
         *p = 0;
@@ -378,7 +378,7 @@ bool SbiScanner::NextSym()
         ErrCode nError = ERRCODE_NONE;
         if (bScanError)
         {
-            --pLine;
+            --nLineIdx;
             --nCol;
             aError = OUString( aLine[nCol]);
             nError = ERRCODE_BASIC_BAD_CHAR_IN_NUMBER;
@@ -391,9 +391,9 @@ bool SbiScanner::NextSym()
         {
             // e.g. "12e" or "12e+", or with bScanError "12d"+"E".
             sal_Int32 nChars = buf+(p-buf) - pParseEnd;
-            pLine -= nChars;
+            nLineIdx -= nChars;
             nCol -= nChars;
-            // For bScanError, pLine and nCol were already decremented, just
+            // For bScanError, nLineIdx and nCol were already decremented, just
             // add that character to the parse end.
             if (bScanError)
                 ++nChars;
@@ -430,7 +430,7 @@ bool SbiScanner::NextSym()
             if( t != SbxVARIANT )
             {
                 eScanType = t;
-                ++pLine;
+                ++nLineIdx;
                 ++nCol;
             }
        }
@@ -439,10 +439,10 @@ bool SbiScanner::NextSym()
     // Hex/octal number? Read in and convert:
     else if(aLine.getLength() - nCol > 1 && aLine[nCol] == '&')
     {
-        ++pLine; ++nCol;
+        ++nLineIdx; ++nCol;
         sal_Unicode base = 16;
         sal_Unicode xch  = aLine[nCol];
-        ++pLine; ++nCol;
+        ++nLineIdx; ++nCol;
         switch( rtl::toAsciiUpperCase( xch ) )
         {
             case 'O':
@@ -452,7 +452,7 @@ bool SbiScanner::NextSym()
                 break;
             default :
                 // treated as an operator
-                --pLine; --nCol; nCol1 = nCol-1;
+                --nLineIdx; --nCol; nCol1 = nCol-1;
                 aSym = "&";
                 return true;
         }
@@ -464,7 +464,7 @@ bool SbiScanner::NextSym()
         while(nCol < aLine.getLength() && BasicCharClass::isAlphaNumeric(aLine[nCol], false))
         {
             sal_Unicode ch = rtl::toAsciiUpperCase(aLine[nCol]);
-            ++pLine; ++nCol;
+            ++nLineIdx; ++nCol;
             if( ((base == 16 ) && rtl::isAsciiHexDigit( ch ) ) ||
                      ((base == 8) && rtl::isAsciiOctalDigit( ch )))
             {
@@ -484,7 +484,7 @@ bool SbiScanner::NextSym()
         }
         if(nCol < aLine.getLength() && aLine[nCol] == '&')
         {
-            ++pLine;
+            ++nLineIdx;
             ++nCol;
         }
         sal_Int32 ls = static_cast<sal_Int32>(lu);
@@ -495,27 +495,27 @@ bool SbiScanner::NextSym()
     }
 
     // Strings:
-    else if( *pLine == '"' || *pLine == '[' )
+    else if (aLine[nLineIdx] == '"' || aLine[nLineIdx] == '[')
     {
-        sal_Unicode cSep = *pLine;
+        sal_Unicode cSep = aLine[nLineIdx];
         if( cSep == '[' )
         {
             bSymbol = true;
             cSep = ']';
         }
         sal_Int32 n = nCol + 1;
-        while( *pLine )
+        while (nLineIdx < aLine.getLength())
         {
             do
             {
-                pLine++;
+                nLineIdx++;
                 nCol++;
             }
-            while( *pLine && ( *pLine != cSep ) );
-            if( *pLine == cSep )
+            while (nLineIdx < aLine.getLength() && (aLine[nLineIdx] != cSep));
+            if (nLineIdx < aLine.getLength() && aLine[nLineIdx] == cSep)
             {
-                pLine++; nCol++;
-                if( *pLine != cSep || cSep == ']' )
+                nLineIdx++; nCol++;
+                if (nLineIdx >= aLine.getLength() || aLine[nLineIdx] != cSep || cSep == ']')
                 {
                     // If VBA Interop then doesn't eat the [] chars
                     if ( cSep == ']' && bVBASupportOn )
@@ -545,18 +545,18 @@ bool SbiScanner::NextSym()
     }
 
     // Date:
-    else if( *pLine == '#' )
+    else if (aLine[nLineIdx] == '#')
     {
         sal_Int32 n = nCol + 1;
         do
         {
-            pLine++;
+            nLineIdx++;
             nCol++;
         }
-        while( *pLine && ( *pLine != '#' ) );
-        if( *pLine == '#' )
+        while (nLineIdx < aLine.getLength() && (aLine[nLineIdx] != '#'));
+        if (nLineIdx < aLine.getLength() && aLine[nLineIdx] == '#')
         {
-            pLine++; nCol++;
+            nLineIdx++; nCol++;
             aSym = aLine.copy( n, nCol - n - 1 );
 
             // parse date literal
@@ -592,22 +592,27 @@ bool SbiScanner::NextSym()
         }
     }
     // invalid characters:
-    else if( *pLine >= 0x7F )
+    else if (aLine[nLineIdx] >= 0x7F)
     {
-        GenError( ERRCODE_BASIC_SYNTAX ); pLine++; nCol++;
+        GenError( ERRCODE_BASIC_SYNTAX ); nLineIdx++; nCol++;
     }
     // other groups:
     else
     {
         sal_Int32 n = 1;
-        switch( *pLine++ )
+        auto nChar = nLineIdx < aLine.getLength() ? aLine[nLineIdx] : 0;
+        ++nLineIdx;
+        if (nLineIdx < aLine.getLength())
         {
-            case '<': if( *pLine == '>' || *pLine == '=' ) n = 2; break;
-            case '>': if( *pLine == '=' ) n = 2; break;
-            case ':': if( *pLine == '=' ) n = 2; break;
+            switch (nChar)
+            {
+                case '<': if( aLine[nLineIdx] == '>' || aLine[nLineIdx] == '=' ) n = 2; break;
+                case '>': if( aLine[nLineIdx] == '=' ) n = 2; break;
+                case ':': if( aLine[nLineIdx] == '=' ) n = 2; break;
+            }
         }
         aSym = aLine.copy(nCol, std::min(n, aLine.getLength() - nCol));
-        pLine += n-1; nCol = nCol + n;
+        nLineIdx += n-1; nCol = nCol + n;
     }
 
     nCol2 = nCol-1;
@@ -621,19 +626,19 @@ PrevLineCommentLbl:
     {
         bPrevLineExtentsComment = false;
         aSym = "REM";
-        sal_Int32 nLen = rtl_ustr_getLength(pLine);
-        if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
+        sal_Int32 nLen = aLine.getLength() - nLineIdx;
+        if( bCompatible && aLine[nLineIdx + nLen - 1] == '_' && aLine[nLineIdx + nLen - 2] == ' ' )
             bPrevLineExtentsComment = true;
         nCol2 = nCol2 + nLen;
-        pLine = nullptr;
+        nLineIdx = -1;
     }
     return true;
 
 
 eoln:
-    if( nCol && *--pLine == '_' )
+    if( nCol && aLine[--nLineIdx] == '_' )
     {
-        pLine = nullptr;
+        nLineIdx = -1;
         bool bRes = NextSym();
         if( aSym.startsWith(".") )
         {
@@ -646,7 +651,7 @@ eoln:
     }
     else
     {
-        pLine = nullptr;
+        nLineIdx = -1;
         nLine = nOldLine;
         nCol1 = nOldCol1;
         nCol2 = nOldCol2;
