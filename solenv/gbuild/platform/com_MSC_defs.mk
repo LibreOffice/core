@@ -252,7 +252,7 @@ gb_LinkTarget_LDFLAGS += \
 
 gb_DEBUGINFO_FLAGS := \
 	-FS \
-	-Zi \
+	-Z7 \
 
 gb_DEBUG_CFLAGS :=
 
