@@ -55,7 +55,6 @@ SwParaDlg::SwParaDlg(vcl::Window *pParent,
                  "modules/swriter/ui/paradialog.ui",
                  &rCoreSet,  nullptr != pTitle)
     , rView(rVw)
-    , nDlgMode(nDialogMode)
     , bDrawParaDlg(bDraw)
     , m_nParaStd(0)
     , m_nParaAlign(0)
@@ -132,7 +131,7 @@ SwParaDlg::SwParaDlg(vcl::Window *pParent,
     }
     else
     {
-        if(!(nDlgMode & DLG_ENVELOP))
+        if(!(nDialogMode & DLG_ENVELOP))
             m_nParaNumPara = AddTabPage("labelTP_NUMPARA", SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
         else
             RemoveTabPage("labelTP_NUMPARA");

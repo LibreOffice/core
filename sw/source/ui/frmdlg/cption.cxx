@@ -127,7 +127,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     SwWrtShell &rSh = rView.GetWrtShell();
      uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
 
-    eType = rSh.GetSelectionType();
+    SelectionType eType = rSh.GetSelectionType();
     if ( eType & SelectionType::Ole )
     {
         eType = SelectionType::Graphic;
@@ -163,7 +163,6 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         nPoolId = RES_POOLCOLL_LABEL_FIGURE;
         sString = ::GetOldGrfCat();
         bCopyAttributes = true;
-        sObjectName = rSh.GetFlyName();
         //if not OLE
         if(!xNameAccess.is())
         {
@@ -178,7 +177,6 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         sString = ::GetOldTabCat();
         uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
         xNameAccess = xTables->getTextTables();
-        sObjectName = rSh.GetTableFormat()->GetName();
     }
     else if( eType & SelectionType::Frame )
     {
@@ -186,7 +184,6 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         sString = ::GetOldFrameCat();
          uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
         xNameAccess = xFrames->getTextFrames();
-        sObjectName = rSh.GetFlyName();
     }
     else if( eType == SelectionType::Text )
     {

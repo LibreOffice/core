@@ -63,8 +63,7 @@ class SwReadOnlyPopup
     const Point &m_rDocPos;
                 Graphic m_aGraphic;
     OUString    m_sURL,
-                m_sTargetFrameName,
-                m_sDescription;
+                m_sTargetFrameName;
     OUString    m_sGrfName;
     std::vector<OUString> m_aThemeList;
     bool        m_bGrfToGalleryAsLnk;

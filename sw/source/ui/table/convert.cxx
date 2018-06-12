@@ -106,7 +106,6 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadersb"))
     , m_xDontSplitCB(m_xBuilder->weld_check_button("dontsplitcb"))
     , m_xAutoFormatBtn(m_xBuilder->weld_button("autofmt"))
-    , sConvertTextTable(SwResId(STR_CONVERT_TEXT_TABLE))
     , pShell(&rView.GetWrtShell())
 {
     if (nSaveButtonState > -1)
@@ -133,7 +132,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     }
     if( bToTable )
     {
-        m_xDialog->set_title(sConvertTextTable);
+        m_xDialog->set_title(SwResId(STR_CONVERT_TEXT_TABLE));
         m_xAutoFormatBtn->connect_clicked(LINK(this, SwConvertTableDlg, AutoFormatHdl));
         m_xAutoFormatBtn->show();
         m_xKeepColumn->show();

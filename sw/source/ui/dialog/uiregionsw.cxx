@@ -349,7 +349,7 @@ SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
     get(m_pDismiss, "remove");
     get(m_pOK, "ok");
 
-    bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell() ) != nullptr;
+    bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell() ) != nullptr;
 
     m_pTree->SetSelectHdl(LINK(this, SwEditRegionDlg, GetFirstEntryHdl));
     m_pTree->SetDeselectHdl(LINK(this, SwEditRegionDlg, DeselectHdl));

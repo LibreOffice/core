@@ -71,10 +71,8 @@ class SwCaptionDialog : public SvxStandardDialog
 
     SwView       &rView; // search per active, avoid View
     SwFieldMgr     *pMgr;      // pointer to save the include
-    SelectionType eType;
 
     OUString     sCharacterStyle;
-    OUString     sObjectName;
     bool         bCopyAttributes;
     bool        bOrderNumberingFirst; //#i61007# order of captions
 

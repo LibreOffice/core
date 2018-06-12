@@ -96,7 +96,6 @@ class SwEditRegionDlg : public SfxModalDialog
     sfx2::DocumentInserter* m_pDocInserter;
 
     bool            bDontCheckPasswd :1;
-    bool            bWeb            :1;
 
     void    RecurseList( const SwSectionFormat* pFormat, SvTreeListEntry* pEntry);
     size_t  FindArrPos(const SwSectionFormat* pFormat);

@@ -2807,7 +2807,6 @@ class CellSaveStruct : public SectionSaveStruct
     sal_uInt16 m_nRowSpan, m_nColSpan, m_nWidth, m_nHeight;
     sal_Int32 m_nNoBreakEndContentPos;     // Character index of a <NOBR>
 
-    SvxAdjust m_eAdjust;
     sal_Int16 m_eVertOri;
 
     bool m_bHead : 1;
@@ -2850,7 +2849,6 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
     m_nWidth( 0 ),
     m_nHeight( 0 ),
     m_nNoBreakEndContentPos( 0 ),
-    m_eAdjust( pCurTable->GetInheritedAdjust() ),
     m_eVertOri( pCurTable->GetInheritedVertOri() ),
     m_bHead( bHd ),
     m_bPrcWidth( false ),
@@ -2861,6 +2859,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
     m_bNoBreak( false )
 {
     OUString aNumFormat, aValue;
+    SvxAdjust eAdjust( pCurTable->GetInheritedAdjust() );
 
     if( bReadOpt )
     {
@@ -2890,7 +2889,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 }
                 break;
             case HtmlOptionId::ALIGN:
-                m_eAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eAdjust );
+                eAdjust = rOption.GetEnum( aHTMLPAlignTable, eAdjust );
                 break;
             case HtmlOptionId::VALIGN:
                 m_eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, m_eVertOri );
@@ -2972,8 +2971,8 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
         nColl = RES_POOLCOLL_TABLE;
     }
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, aEmptyOUStr, true));
-    if( SvxAdjust::End != m_eAdjust )
-        rParser.InsertAttr(&rParser.m_xAttrTab->pAdjust, SvxAdjustItem(m_eAdjust, RES_PARATR_ADJUST),
+    if( SvxAdjust::End != eAdjust )
+        rParser.InsertAttr(&rParser.m_xAttrTab->pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST),
                            xCntxt.get());
 
     if( SwHTMLParser::HasStyleOptions( m_aStyle, m_aId, m_aClass, &m_aLang, &m_aDir ) )
@@ -4851,14 +4850,11 @@ namespace
 {
     class FrameDeleteWatch : public SwClient
     {
-        SwFrameFormat* m_pObjectFormat;
     public:
         FrameDeleteWatch(SwFrameFormat* pObjectFormat)
-            : m_pObjectFormat(pObjectFormat)
         {
-            if (m_pObjectFormat)
-                m_pObjectFormat->Add(this);
-
+            if (pObjectFormat)
+                pObjectFormat->Add(this);
         }
 
         virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override

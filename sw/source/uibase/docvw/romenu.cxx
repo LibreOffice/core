@@ -115,7 +115,8 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
 {
     m_bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    rSh.IsURLGrfAtPos( m_rDocPos, &m_sURL, &m_sTargetFrameName, &m_sDescription );
+    OUString sDescription;
+    rSh.IsURLGrfAtPos( m_rDocPos, &m_sURL, &m_sTargetFrameName, &sDescription );
     if ( m_sURL.isEmpty() )
     {
         SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
@@ -124,7 +125,6 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
             const SwFormatINetFormat &rIItem = *static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
             m_sURL = rIItem.GetValue();
             m_sTargetFrameName = rIItem.GetTargetFrame();
-            m_sDescription = aContentAtPos.sStr;
         }
     }
 

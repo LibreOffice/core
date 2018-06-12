@@ -87,10 +87,6 @@ void SwAddressTable::setColSizes()
 SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
         const uno::Reference< sdbc::XConnection>& rConnection)
     : SfxModalDialog(pParent, "SelectTableDialog", "modules/swriter/ui/selecttabledialog.ui")
-    , m_sName(SwResId(ST_NAME))
-    , m_sType(SwResId(ST_TYPE))
-    , m_sTable(SwResId(ST_TABLE))
-    , m_sQuery(SwResId(ST_QUERY))
     , m_xConnection(rConnection)
 {
     get(m_pPreviewPB, "preview");
@@ -102,8 +98,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     m_pTable = VclPtr<SwAddressTable>::Create(*pHeaderTreeContainer);
     long const aStaticTabs[]= { 0, 0 };
     m_pTable->SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs );
-    m_pTable->InsertHeaderItem(1, m_sName );
-    m_pTable->InsertHeaderItem(2, m_sType );
+    m_pTable->InsertHeaderItem(1, SwResId(ST_NAME) );
+    m_pTable->InsertHeaderItem(2, SwResId(ST_TYPE) );
 
     m_pPreviewPB->SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 
@@ -117,7 +113,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
         {
             OUString sEntry = pTables[i];
             sEntry += "\t";
-            sEntry += m_sTable;
+            sEntry += SwResId(ST_TABLE);
             SvTreeListEntry* pEntry = m_pTable->InsertEntry(sEntry);
             pEntry->SetUserData(nullptr);
         }
@@ -132,7 +128,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
         {
             OUString sEntry = pQueries[i];
             sEntry += "\t";
-            sEntry += m_sQuery;
+            sEntry += SwResId(ST_QUERY);
             SvTreeListEntry* pEntry = m_pTable->InsertEntry(sEntry);
             pEntry->SetUserData(reinterpret_cast<void*>(1));
         }
