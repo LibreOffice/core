@@ -196,7 +196,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
 
         for ( i = 0; i < nCount; ++i )
         {
-            const SfxFilterTupel& rTupel = rList[ i ];
+            const SfxFilterTuple& rTupel = rList[ i ];
 
             if ( rTupel.nFlags != SfxStyleSearchBits::Auto     &&
                  rTupel.nFlags != SfxStyleSearchBits::Used     &&

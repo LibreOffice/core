@@ -27,18 +27,18 @@
 #include <svl/style.hxx>
 #include <vector>
 
-struct SFX2_DLLPUBLIC SfxFilterTupel
+struct SFX2_DLLPUBLIC SfxFilterTuple
 {
     OUString aName;
     SfxStyleSearchBits nFlags;
-    SfxFilterTupel(const OUString& rName, SfxStyleSearchBits nArg)
+    SfxFilterTuple(const OUString& rName, SfxStyleSearchBits nArg)
         : aName(rName)
         , nFlags(nArg)
     {
     }
 };
 
-typedef std::vector<SfxFilterTupel> SfxStyleFilter;
+typedef std::vector<SfxFilterTuple> SfxStyleFilter;
 
 class SFX2_DLLPUBLIC SfxStyleFamilyItem
 {
