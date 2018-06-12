@@ -294,11 +294,19 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                 if ( !sCommand.isEmpty() )
                 {
                     BitmapEx aBitEx( pIcon->getBitMap() );
-                    if ( pSpecificInfo->getIconMask() )
-                         // according to the spec:
-                         // "the iconMask is white in all the areas in which the icon is
-                         // displayed as transparent and is black in all other areas."
-                         aBitEx = BitmapEx( aBitEx.GetBitmap(), pSpecificInfo->getIconMask()->getBitMap().GetBitmap().CreateMask( COL_WHITE ) );
+                    TBCBitMap* pIconMask = pSpecificInfo->getIconMask();
+                    if (pIconMask)
+                    {
+                        Bitmap aMaskBase(pIconMask->getBitMap().GetBitmap());
+                        Size aMaskSize = aMaskBase.GetSizePixel();
+                        if (aMaskSize.Width() && aMaskSize.Height())
+                        {
+                            // according to the spec:
+                            // "the iconMask is white in all the areas in which the icon is
+                            // displayed as transparent and is black in all other areas."
+                            aBitEx = BitmapEx(aBitEx.GetBitmap(), aMaskBase.CreateMask(COL_WHITE));
+                        }
+                    }
 
                     Graphic aGraphic( aBitEx );
                     helper.addIcon( aGraphic.GetXGraphic(), sCommand );
