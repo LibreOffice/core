@@ -2173,4 +2173,153 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     LocalPostPaint(rRenderContext);
 }
 
+void PreviewBase::InitSettings()
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    svtools::ColorConfig aColorConfig;
+    Color aTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+    getBufferDevice().SetTextColor(aTextColor);
+
+    getBufferDevice().SetBackground(rStyleSettings.GetWindowColor());
+
+    getBufferDevice().SetDrawMode(rStyleSettings.GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
+
+    Invalidate();
+}
+
+PreviewBase::PreviewBase()
+    : mpModel(new SdrModel())
+{
+    // init model
+    mpModel->GetItemPool().FreezeIdRanges();
+}
+
+void PreviewBase::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    mpBufferDevice = VclPtr<VirtualDevice>::Create(pDrawingArea->get_ref_device());
+    mpBufferDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
+}
+
+PreviewBase::~PreviewBase()
+{
+    mpModel.reset();
+    mpBufferDevice.disposeAndClear();
+}
+
+void PreviewBase::LocalPrePaint(vcl::RenderContext const & rRenderContext)
+{
+    // init BufferDevice
+    if (mpBufferDevice->GetOutputSizePixel() != GetOutputSizePixel())
+    {
+        mpBufferDevice->SetDrawMode(rRenderContext.GetDrawMode());
+        mpBufferDevice->SetSettings(rRenderContext.GetSettings());
+        mpBufferDevice->SetAntialiasing(rRenderContext.GetAntialiasing());
+        mpBufferDevice->SetOutputSizePixel(GetOutputSizePixel());
+        mpBufferDevice->SetMapMode(rRenderContext.GetMapMode());
+    }
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    if (rStyleSettings.GetPreviewUsesCheckeredBackground())
+    {
+        const Point aNull(0, 0);
+        static const sal_uInt32 nLen(8);
+        static const Color aW(COL_WHITE);
+        static const Color aG(0xef, 0xef, 0xef);
+        const bool bWasEnabled(mpBufferDevice->IsMapModeEnabled());
+
+        mpBufferDevice->EnableMapMode(false);
+        mpBufferDevice->DrawCheckered(aNull, mpBufferDevice->GetOutputSizePixel(), nLen, aW, aG);
+        mpBufferDevice->EnableMapMode(bWasEnabled);
+    }
+    else
+    {
+        mpBufferDevice->Erase();
+    }
+}
+
+void PreviewBase::LocalPostPaint(vcl::RenderContext& rRenderContext)
+{
+    // copy to front (in pixel mode)
+    const bool bWasEnabledSrc(mpBufferDevice->IsMapModeEnabled());
+    const bool bWasEnabledDst(rRenderContext.IsMapModeEnabled());
+    const Point aEmptyPoint;
+
+    mpBufferDevice->EnableMapMode(false);
+    rRenderContext.EnableMapMode(false);
+
+    rRenderContext.DrawOutDev(aEmptyPoint, GetOutputSizePixel(),
+                              aEmptyPoint, GetOutputSizePixel(),
+                              *mpBufferDevice);
+
+    mpBufferDevice->EnableMapMode(bWasEnabledSrc);
+    rRenderContext.EnableMapMode(bWasEnabledDst);
+}
+
+void PreviewBase::StyleUpdated()
+{
+    InitSettings();
+}
+
+XRectPreview::XRectPreview()
+    : mpRectangleObject(nullptr)
+{
+}
+
+void XRectPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    PreviewBase::SetDrawingArea(pDrawingArea);
+    InitSettings();
+
+    // create RectangleObject
+    const tools::Rectangle aObjectSize(Point(), GetOutputSizePixel());
+    mpRectangleObject = new SdrRectObj(
+        getModel(),
+        aObjectSize);
+}
+
+void XRectPreview::Resize()
+{
+    const tools::Rectangle aObjectSize(Point(), GetOutputSizePixel());
+    SdrObject *pOrigObject = mpRectangleObject;
+    if (pOrigObject)
+    {
+        mpRectangleObject = new SdrRectObj(
+            getModel(),
+            aObjectSize);
+        SetAttributes(pOrigObject->GetMergedItemSet());
+        SdrObject::Free(pOrigObject);
+    }
+    PreviewBase::Resize();
+}
+
+XRectPreview::~XRectPreview()
+{
+    SdrObject::Free(mpRectangleObject);
+}
+
+void XRectPreview::SetAttributes(const SfxItemSet& rItemSet)
+{
+    mpRectangleObject->SetMergedItemSet(rItemSet, true);
+    mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+}
+
+void XRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    LocalPrePaint(rRenderContext);
+
+    sdr::contact::SdrObjectVector aObjectVector;
+
+    aObjectVector.push_back(mpRectangleObject);
+
+    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    aPainter.ProcessDisplay(aDisplayInfo);
+
+    LocalPostPaint(rRenderContext);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

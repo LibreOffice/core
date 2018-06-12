@@ -146,42 +146,48 @@ class SvxTransparenceTabPage : public SvxTabPage
     PageType               nPageType;
     sal_uInt16             nDlgType;
 
-    // main selection
-    VclPtr<RadioButton>        m_pRbtTransOff;
-    VclPtr<RadioButton>        m_pRbtTransLinear;
-    VclPtr<RadioButton>        m_pRbtTransGradient;
-
-    /// linear transparency
-    VclPtr<MetricField>        m_pMtrTransparent;
-
-    // gradient transparency
-    VclPtr<VclGrid>            m_pGridGradient;
-    VclPtr<ListBox>            m_pLbTrgrGradientType;
-    VclPtr<FixedText>          m_pFtTrgrCenterX;
-    VclPtr<MetricField>        m_pMtrTrgrCenterX;
-    VclPtr<FixedText>          m_pFtTrgrCenterY;
-    VclPtr<MetricField>        m_pMtrTrgrCenterY;
-    VclPtr<FixedText>          m_pFtTrgrAngle;
-    VclPtr<MetricField>        m_pMtrTrgrAngle;
-    VclPtr<MetricField>        m_pMtrTrgrBorder;
-    VclPtr<MetricField>        m_pMtrTrgrStartValue;
-    VclPtr<MetricField>        m_pMtrTrgrEndValue;
-
-    // preview
-    VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
-    VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
     bool                bBitmap;
 
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-    DECL_LINK(ClickTransOffHdl_Impl, Button*, void );
-    DECL_LINK(ClickTransLinearHdl_Impl, Button*, void );
-    DECL_LINK(ClickTransGradientHdl_Impl, Button*, void );
-    DECL_LINK(ModifyTransparentHdl_Impl, Edit&, void);
-    DECL_LINK(ModifiedTrgrEditHdl_Impl, Edit&, void);
-    DECL_LINK(ModifiedTrgrListBoxHdl_Impl, ListBox&, void);
-    void ModifiedTrgrHdl_Impl(void const *);
+    XRectPreview     m_aCtlBitmapPreview;
+    XRectPreview     m_aCtlXRectPreview;
+
+    // main selection
+    std::unique_ptr<weld::RadioButton> m_xRbtTransOff;
+    std::unique_ptr<weld::RadioButton> m_xRbtTransLinear;
+    std::unique_ptr<weld::RadioButton> m_xRbtTransGradient;
+
+    /// linear transparency
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTransparent;
+
+    // gradient transparency
+    std::unique_ptr<weld::Widget> m_xGridGradient;
+    std::unique_ptr<weld::ComboBoxText> m_xLbTrgrGradientType;
+    std::unique_ptr<weld::Label> m_xFtTrgrCenterX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTrgrCenterX;
+    std::unique_ptr<weld::Label> m_xFtTrgrCenterY;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTrgrCenterY;
+    std::unique_ptr<weld::Label> m_xFtTrgrAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTrgrAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTrgrBorder;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTrgrStartValue;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTrgrEndValue;
+    std::unique_ptr<weld::Widget> m_xCtlBitmapBorder;
+    std::unique_ptr<weld::Widget> m_xCtlXRectBorder;
+
+    // preview
+    std::unique_ptr<weld::CustomWeld> m_xCtlBitmapPreview;
+    std::unique_ptr<weld::CustomWeld> m_xCtlXRectPreview;
+
+    DECL_LINK(ClickTransOffHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ClickTransLinearHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ClickTransGradientHdl_Impl, weld::ToggleButton&, void );
+    DECL_LINK(ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifiedTrgrEditHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifiedTrgrListBoxHdl_Impl, weld::ComboBoxText&, void);
+    void ModifiedTrgrHdl_Impl(const weld::ComboBoxText*);
 
     void ActivateLinear(bool bActivate);
     void ActivateGradient(bool bActivate);
@@ -191,9 +197,8 @@ class SvxTransparenceTabPage : public SvxTabPage
     void InvalidatePreview (bool bEnable = true );
 
 public:
-    SvxTransparenceTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
+    SvxTransparenceTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxTransparenceTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent, const SfxItemSet*);
     static const sal_uInt16* GetRanges() { return pTransparenceRanges; }
