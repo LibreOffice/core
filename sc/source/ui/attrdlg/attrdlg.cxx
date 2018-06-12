@@ -86,7 +86,7 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
     }
 }
 
-IMPL_LINK_NOARG(ScAttrDlg, OkHandler, SfxPoolItem*, void)
+IMPL_LINK_NOARG(ScAttrDlg, OkHandler, SfxPoolItem const *, void)
 {
     GetOKButton().GetClickHdl().Call( nullptr );
 }

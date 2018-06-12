@@ -111,7 +111,7 @@ class SwNavigationPI : public PanelLayout,
     DECL_LINK( ToolBoxDropdownClickHdl, ToolBox*, void );
     DECL_LINK( EditAction, NumEditAction&, void );
     DECL_LINK( EditGetFocus, Control&, void );
-    DECL_LINK( DoneLink, SfxPoolItem *, void );
+    DECL_LINK( DoneLink, SfxPoolItem const *, void );
     DECL_LINK( MenuSelectHdl, Menu *, bool );
     DECL_LINK( ChangePageHdl, Timer*, void );
     DECL_LINK( PageEditModifyHdl, SpinField&, void );
