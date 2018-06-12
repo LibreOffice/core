@@ -55,8 +55,6 @@ void KDE5FilePicker::setDefaultName(const QString& name) { _dialog->selectUrl(QU
 
 QString KDE5FilePicker::getDisplayDirectory() const { return _dialog->directoryUrl().url(); }
 
-QList<QUrl> KDE5FilePicker::getSelectedFiles() const { return _dialog->selectedUrls(); }
-
 bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) const
 {
     bool ret = false;
