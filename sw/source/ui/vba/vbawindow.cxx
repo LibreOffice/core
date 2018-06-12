@@ -113,6 +113,37 @@ SwVbaWindow::setWindowState( const uno::Any& _windowstate )
     }
 }
 
+OUString SAL_CALL
+SwVbaWindow::getCaption()
+{
+    SwView* pView = word::getView( m_xModel );
+    if( !pView )
+        return OUString("");
+
+    uno::Reference< css::beans::XPropertySet > xFrameProps( pView->GetViewFrame()->GetFrame().GetFrameInterface()->getController()->getFrame(), uno::UNO_QUERY );
+    if( !xFrameProps.is() )
+        return OUString("");
+
+    OUString sTitle;
+    xFrameProps->getPropertyValue( "Title" ) >>= sTitle;
+
+    return sTitle;
+}
+
+void SAL_CALL
+SwVbaWindow::setCaption( const OUString& _caption )
+{
+    SwView* pView = word::getView( m_xModel );
+    if( !pView )
+        return;
+
+    uno::Reference< css::beans::XPropertySet > xFrameProps( pView->GetViewFrame()->GetFrame().GetFrameInterface()->getController()->getFrame(), uno::UNO_QUERY );
+    if( !xFrameProps.is() )
+        return;
+
+    xFrameProps->setPropertyValue( "Title", uno::makeAny( _caption ) );
+}
+
 uno::Any SAL_CALL
 SwVbaWindow::Panes( const uno::Any& aIndex )
 {
