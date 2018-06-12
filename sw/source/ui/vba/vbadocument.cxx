@@ -25,6 +25,7 @@
 #include "vbarangehelper.hxx"
 #include "vbadocumentproperties.hxx"
 #include "vbabookmarks.hxx"
+#include "vbamailmerge.hxx"
 #include "vbavariables.hxx"
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -397,6 +398,11 @@ void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutiv
     sal_Int16 nHyphensLimit = static_cast< sal_Int16 >( _consecutivehyphenslimit );
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
     xParaProps->setPropertyValue("ParaHyphenationMaxHyphens", uno::makeAny( nHyphensLimit ) );
+}
+
+uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL SwVbaDocument::getMailMerge()
+{
+    return uno::Reference< ooo::vba::word::XMailMerge >(SwVbaMailMerge::get(mxParent, mxContext).get());
 }
 
 void SAL_CALL SwVbaDocument::Protect( ::sal_Int32 /*Type*/, const uno::Any& /*NOReset*/, const uno::Any& /*Password*/, const uno::Any& /*UseIRM*/, const uno::Any& /*EnforceStyleLock*/ )
