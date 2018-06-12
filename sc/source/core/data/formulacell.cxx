@@ -4362,14 +4362,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     auto aScope = sc::FormulaLogger::get().enterGroup(*pDocument, *this);
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
 
-    if (rRecursionHelper.GetRecursionCount())
-    {
-        // Do not attempt to interpret a group when calculations are already
-        // running, otherwise we may run into a circular reference hell. See
-        // tdf#95748
-        aScope.addMessage("group calc disabled during recursive calculation.");
-        return false;
-    }
+    sal_uInt16 nRecursionCount = rRecursionHelper.GetRecursionCount();
 
     if (mxGroup->meCalcState == sc::GroupCalcDisabled)
     {
@@ -4513,6 +4506,18 @@ bool ScFormulaCell::InterpretFormulaGroup()
     }
 
     bool bCanVectorize = pCode->IsEnabledForOpenCL();
+    bool bIsOpenCLEnabled = ScCalcConfig::isOpenCLEnabled();
+
+    if (bCanVectorize && bIsOpenCLEnabled && nRecursionCount)
+    {
+        // Only for OpenCL.
+        // Do not attempt to interpret a group when calculations are already
+        // running, otherwise we may run into a circular reference hell. See
+        // tdf#95748
+        aScope.addMessage("group calc disabled during recursive calculation.");
+        return false;
+    }
+
     switch (pCode->GetVectorState())
     {
         case FormulaVectorEnabled:
@@ -4542,7 +4547,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (!bCanVectorize)
         return false;
 
-    if (!ScCalcConfig::isOpenCLEnabled() && !ScCalcConfig::isSwInterpreterEnabled())
+    if (!bIsOpenCLEnabled && !ScCalcConfig::isSwInterpreterEnabled())
     {
         aScope.addMessage("opencl not enabled and sw interpreter not enabled");
         return false;
