@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_b3d21b33",
+        "filename": "basctl/uiconfig/basicide/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-06-12T08:46:48Z",
+      "side": 1,
+      "message": "likely should be removed here and in other patches where it isnt applicable.",
+      "range": {
+        "startLine": 27,
+        "startChar": 36,
+        "endLine": 27,
+        "endChar": 54
+      },
+      "revId": "2213a0a1077c2cc1f2c9053db48443e97ce6859b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_d3d79721",
+        "filename": "basctl/uiconfig/basicide/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-06-12T08:46:48Z",
+      "side": 1,
+      "message": "think this can be removed.",
+      "range": {
+        "startLine": 38,
+        "startChar": 12,
+        "endLine": 38,
+        "endChar": 33
+      },
+      "revId": "2213a0a1077c2cc1f2c9053db48443e97ce6859b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
