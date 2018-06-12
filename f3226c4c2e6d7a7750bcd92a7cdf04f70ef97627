@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_731a6319",
+        "filename": "starmath/uiconfig/smath/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-06-12T08:39:13Z",
+      "side": 0,
+      "message": "would be good to get a devs input on whether there will be any other export options for formulas in the future other than pdf before removing this entry.",
+      "range": {
+        "startLine": 41,
+        "startChar": 30,
+        "endLine": 41,
+        "endChar": 43
+      },
+      "revId": "f3226c4c2e6d7a7750bcd92a7cdf04f70ef97627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
