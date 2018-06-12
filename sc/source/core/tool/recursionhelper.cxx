@@ -109,9 +109,7 @@ bool ScRecursionHelper::PushFormulaGroup(ScFormulaCellGroup* pGrp)
         {
             --nIdx;
             assert(nIdx >= 0);
-            auto& eCalcState = aFGList[nIdx]->meCalcState;
-            if (eCalcState == sc::GroupCalcEnabled)
-                eCalcState = sc::GroupCalcDisabled;
+            aFGList[nIdx]->mbPartOfCycle = true;
         } while (aFGList[nIdx] != pGrp);
 
         return false;
