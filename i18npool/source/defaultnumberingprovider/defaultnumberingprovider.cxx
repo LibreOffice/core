@@ -584,7 +584,6 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      sal_Int16 tableSize = 0;
      const sal_Unicode *table = nullptr;     // initialize to avoid compiler warning
      bool bRecycleSymbol = false;
-     bool bCapitalize = false;
      OUString sNatNumParams;
      Locale locale;
 
@@ -638,21 +637,18 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                break;
           case TEXT_NUMBER: // ordinal indicators (1st, 2nd, 3rd, ...)
                natNum = NativeNumberMode::NATNUM12;
-               sNatNumParams = "ordinal-number";
+               sNatNumParams = "capitalize ordinal-number";
                locale = aLocale;
-               bCapitalize = true;
                break;
           case TEXT_CARDINAL: // cardinal number names (One, Two, Three, ...)
                natNum = NativeNumberMode::NATNUM12;
-               sNatNumParams = "cardinal";
+               sNatNumParams = "capitalize";
                locale = aLocale;
-               bCapitalize = true;
                break;
           case TEXT_ORDINAL: // ordinal number names (First, Second, Third, ...)
                natNum = NativeNumberMode::NATNUM12;
-               sNatNumParams = "ordinal";
+               sNatNumParams = "capitalize ordinal";
                locale = aLocale;
-               bCapitalize = true;
                break;
           case ROMAN_UPPER:
                result += toRoman( number );
@@ -913,17 +909,8 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
         if (natNum) {
             rtl::Reference<NativeNumberSupplierService> xNatNum(new NativeNumberSupplierService);
-            OUString aNum = xNatNum->getNativeNumberStringParams(OUString::number(number), locale,
+            result += xNatNum->getNativeNumberStringParams(OUString::number(number), locale,
                                                                  natNum, sNatNumParams);
-            if (bCapitalize)
-            {
-                if (!xCharClass.is())
-                    xCharClass = CharacterClassification::create(m_xContext);
-                // capitalize first letter
-                result += xCharClass->toTitle(aNum, 0, 1, aLocale) + aNum.copy(1);
-            }
-            else
-                result += aNum;
         } else if (tableSize) {
             if ( number > tableSize && !bRecycleSymbol)
                 result += OUString::number( number);
