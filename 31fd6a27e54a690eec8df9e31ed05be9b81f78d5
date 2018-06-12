@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_33ce2b84",
+        "filename": "extensions/uiconfig/sbibliography/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-06-12T09:25:44Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 9,
+        "startChar": 36,
+        "endLine": 9,
+        "endChar": 54
+      },
+      "revId": "31fd6a27e54a690eec8df9e31ed05be9b81f78d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f3aad384",
+        "filename": "extensions/uiconfig/sbibliography/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-06-12T09:25:44Z",
+      "side": 1,
+      "message": "these are disabled so likely they can be removed.",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 26,
+        "endChar": 65
+      },
+      "revId": "31fd6a27e54a690eec8df9e31ed05be9b81f78d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
