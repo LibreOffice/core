@@ -1615,7 +1615,7 @@ namespace cppcanvas
         void ImplRenderer::EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
                                                 OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex)
         {
-            EMFPPen* pen = static_cast<EMFPPen*>( aObjects [penIndex & 0xff] );
+            EMFPPen* pen = dynamic_cast<EMFPPen*>( aObjects [penIndex & 0xff] );
 
             SAL_WARN_IF( !pen, "cppcanvas.emf", "emf+ missing pen" );
 
