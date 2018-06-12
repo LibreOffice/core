@@ -116,6 +116,8 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
             case svSingleRef:
             {
                 ScSingleRefData aRef = *p->GetSingleRef();
+                if( aRef.IsDeleted())
+                    return false;
                 ScAddress aRefPos = aRef.toAbs(mrPos);
                 if (aRef.IsRowRel())
                 {
@@ -178,6 +180,8 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
 
 #if 0
                 ScComplexRefData aRef = *p->GetDoubleRef();
+                if( aRef.IsDeleted())
+                    return false;
                 ScRange aAbs = aRef.toAbs(mrPos);
 
                 // Multiple sheets not handled by vector/matrix.
