@@ -741,9 +741,8 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 }
 
 /// Generate two-dimensional array of FndBoxes
-FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBox) :
+FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBoxRef) :
     pDoc(pDocPtr),
-    rBoxRef(rBox),
     nRow(0),
     nCol(0)
 { // If the array is symmetric

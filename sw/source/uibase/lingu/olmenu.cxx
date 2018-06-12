@@ -305,20 +305,20 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->EnableItem(m_nCorrectMenuId, bEnable);
 
     uno::Reference< linguistic2::XLanguageGuessing > xLG = SW_MOD()->GetLanguageGuesser();
-    m_nGuessLangWord = LANGUAGE_NONE;
-    m_nGuessLangPara = LANGUAGE_NONE;
+    LanguageType nGuessLangWord = LANGUAGE_NONE;
+    LanguageType nGuessLangPara = LANGUAGE_NONE;
     if (m_xSpellAlt.is() && xLG.is())
     {
-        m_nGuessLangWord = EditView::CheckLanguage( m_xSpellAlt->getWord(), ::GetSpellChecker(), xLG, false );
-        m_nGuessLangPara = EditView::CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
+        nGuessLangWord = EditView::CheckLanguage( m_xSpellAlt->getWord(), ::GetSpellChecker(), xLG, false );
+        nGuessLangPara = EditView::CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
     }
-    if (m_nGuessLangWord != LANGUAGE_NONE || m_nGuessLangPara != LANGUAGE_NONE)
+    if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
     {
         // make sure LANGUAGE_NONE gets not used as menu entry
-        if (m_nGuessLangWord == LANGUAGE_NONE)
-            m_nGuessLangWord = m_nGuessLangPara;
-        if (m_nGuessLangPara == LANGUAGE_NONE)
-            m_nGuessLangPara = m_nGuessLangWord;
+        if (nGuessLangWord == LANGUAGE_NONE)
+            nGuessLangWord = nGuessLangPara;
+        if (nGuessLangPara == LANGUAGE_NONE)
+            nGuessLangPara = nGuessLangWord;
     }
 
     pMenu = m_xPopupMenu->GetPopupMenu(m_nAddMenuId);
@@ -400,7 +400,7 @@ SwSpellPopup::SwSpellPopup(
     aSeq[0] = aCurrentLang;
     aSeq[1] = aScriptTypesInUse;
     aSeq[2] = aKeyboardLang;
-    aSeq[3] = SvtLanguageTable::GetLanguageString(m_nGuessLangWord);
+    aSeq[3] = SvtLanguageTable::GetLanguageString(nGuessLangWord);
 
     pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, m_aLangTable_Text );
@@ -522,19 +522,19 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->EnableItem(m_nCorrectDialogId, false);
 
     uno::Reference< linguistic2::XLanguageGuessing > xLG = SW_MOD()->GetLanguageGuesser();
-    m_nGuessLangWord = LANGUAGE_NONE;
-    m_nGuessLangPara = LANGUAGE_NONE;
+    LanguageType nGuessLangWord = LANGUAGE_NONE;
+    LanguageType nGuessLangPara = LANGUAGE_NONE;
     if (xLG.is())
     {
-        m_nGuessLangPara = EditView::CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
+        nGuessLangPara = EditView::CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
     }
-    if (m_nGuessLangWord != LANGUAGE_NONE || m_nGuessLangPara != LANGUAGE_NONE)
+    if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
     {
         // make sure LANGUAGE_NONE gets not used as menu entry
-        if (m_nGuessLangWord == LANGUAGE_NONE)
-            m_nGuessLangWord = m_nGuessLangPara;
-        if (m_nGuessLangPara == LANGUAGE_NONE)
-            m_nGuessLangPara = m_nGuessLangWord;
+        if (nGuessLangWord == LANGUAGE_NONE)
+            nGuessLangWord = nGuessLangPara;
+        if (nGuessLangPara == LANGUAGE_NONE)
+            nGuessLangPara = nGuessLangWord;
     }
 
     m_xPopupMenu->EnableItem(m_nAddMenuId, false);
@@ -562,7 +562,7 @@ SwSpellPopup::SwSpellPopup(
     aSeq[0] = aCurrentLang;
     aSeq[1] = aScriptTypesInUse;
     aSeq[2] = aKeyboardLang;
-    aSeq[3] = SvtLanguageTable::GetLanguageString(m_nGuessLangWord);
+    aSeq[3] = SvtLanguageTable::GetLanguageString(nGuessLangWord);
 
     PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, m_aLangTable_Text );

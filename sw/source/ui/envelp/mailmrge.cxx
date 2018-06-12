@@ -128,9 +128,9 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     pImpl           (new SwMailMergeDlg_Impl),
 
     rSh             (rShell),
-    nMergeType      (DBMGR_MERGE_EMAIL),
-    m_aDialogSize( GetSizePixel() )
+    nMergeType      (DBMGR_MERGE_EMAIL)
 {
+    Size aDialogSize( GetSizePixel() );
     get(m_pBeamerWin, "beamer");
 
     get(m_pAllRB, "all");
@@ -315,7 +315,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
         m_pAllRB->Check();
         m_pMarkedRB->Enable(false);
     }
-    SetMinOutputSizePixel(m_aDialogSize);
+    SetMinOutputSizePixel(aDialogSize);
     try {
         uno::Reference< container::XNameContainer> xFilterFactory(
             xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY_THROW);

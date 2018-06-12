@@ -478,9 +478,9 @@ void SwUndoDrawUnGroupConnectToLayout::AddFormatAndObj( SwDrawFrameFormat* pDraw
 }
 
 SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc* pDoc )
-    : SwUndo( SwUndoId::DRAWDELETE, pDoc ), nSize( nCnt ), bDelFormat( true )
+    : SwUndo( SwUndoId::DRAWDELETE, pDoc ), bDelFormat( true )
 {
-    pObjArr.reset( new SwUndoGroupObjImpl[ nSize ] );
+    pObjArr.reset( new SwUndoGroupObjImpl[ nCnt ] );
     pMarkLst = new SdrMarkList();
 }
 

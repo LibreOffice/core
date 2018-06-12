@@ -50,10 +50,8 @@ const sal_uInt16 SwWrapTabPage::m_aWrapPageRg[] = {
     0
 };
 
-SwWrapDlg::SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode)
+SwWrapDlg::SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
     : SfxSingleTabDialog(pParent, rSet, "WrapDialog", "modules/swriter/ui/wrapdialog.ui")
-    , pWrtShell(pSh)
-
 {
     // create TabPage
     VclPtr<SwWrapTabPage> pNewPage = static_cast<SwWrapTabPage*>( SwWrapTabPage::Create(get_content_area(), &rSet).get() );

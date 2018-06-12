@@ -139,7 +139,6 @@ private:
     void                FillFlat(const FndBox_&, bool bLastBox=false);
 
     SwDoc*              pDoc;
-    const FndBox_&      rBoxRef;
     std::unique_ptr<FndBox_ const *[]> pArr;
     std::vector<std::unique_ptr<SfxItemSet>> ppItemSets;
 
