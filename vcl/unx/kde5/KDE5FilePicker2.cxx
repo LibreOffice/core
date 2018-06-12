@@ -115,6 +115,8 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             &KDE5FilePicker::setCurrentFilterSlot, Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::getCurrentFilterSignal, this,
             &KDE5FilePicker::getCurrentFilterSlot, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getSelectedFilesSignal, this,
+            &KDE5FilePicker::getSelectedFilesSlot, Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
     setMultiSelectionMode(false);
@@ -187,7 +189,21 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getFiles()
 
 uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
 {
-    uno::Sequence<OUString> seq;
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT getSelectedFilesSignal();
+    }
+
+    QList<QUrl> aURLs = _dialog->selectedUrls();
+    uno::Sequence<OUString> seq(aURLs.size());
+
+    size_t i = 0;
+    for (auto& aURL : aURLs)
+    {
+        seq[i++] = toOUString(aURL.toString());
+    }
+
     return seq;
 }
 

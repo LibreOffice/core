@@ -181,6 +181,7 @@ Q_SIGNALS:
                                  const css::uno::Sequence<css::beans::StringPair>& rFilters);
     void setCurrentFilterSignal(const OUString& rFilter);
     OUString getCurrentFilterSignal();
+    css::uno::Sequence<OUString> getSelectedFilesSignal();
 
 private Q_SLOTS:
     void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
@@ -203,6 +204,7 @@ private Q_SLOTS:
 
     void setCurrentFilterSlot(const OUString& rFilter) { return setCurrentFilter(rFilter); }
     OUString getCurrentFilterSlot() { return getCurrentFilter(); }
+    css::uno::Sequence<OUString> getSelectedFilesSlot() { return getFiles(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
