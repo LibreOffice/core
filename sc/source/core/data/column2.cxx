@@ -48,6 +48,7 @@
 #include <scmatrix.hxx>
 #include <rowheightcontext.hxx>
 #include <tokenstringcontext.hxx>
+#include <recursionhelper.hxx>
 
 #include <editeng/eeitem.hxx>
 
@@ -2813,7 +2814,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 }
 
-bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
+bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
 {
     if (nRow1 > nRow2)
         return false;
@@ -2822,6 +2823,11 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
     sc::CellStoreType::const_iterator it = aPos.first;
     size_t nOffset = aPos.second;
     SCROW nRow = nRow1;
+    ScRecursionHelper& rRecursionHelper = GetDoc()->GetRecursionHelper();
+
+    if (!rRecursionHelper.PushFormulaGroup(mxGroup.get())) // Cycle found with current FG
+        return false;
+
     for (;it != maCells.end() && nRow <= nRow2; ++it, nOffset = 0)
     {
         switch( it->type )
@@ -2829,6 +2835,7 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
             case sc::element_type_edittext:
                 // These require EditEngine (in ScEditUtils::GetString()), which is probably
                 // too complex for use in threads.
+                rRecursionHelper.PopFormulaGroup(); // For the current FG
                 return false;
             case sc::element_type_formula:
             {
@@ -2839,7 +2846,24 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
                 for (size_t i = nOffset; i < nEnd; ++itCell, ++i)
                 {
                     // Loop inside the formula block.
-                    (*itCell)->MaybeInterpret();
+                    ScFormulaCell* pCell = *itCell;
+                    // pCell's Interpret resulted in this call, cycle already !
+                    if (pCell->IsRunning())
+                    {
+                        rRecursionHelper.PopFormulaGroup(); // For the current FG
+                        return false;
+                    }
+
+                    pCell->MaybeInterpret();
+
+                    // pCell's Interpret could result in calling dependency calc
+                    // and that could detect a cycle involving mxGroup
+                    // and do early exit in that case.
+                    if (mxGroup->mbPartOfCycle)
+                    {
+                        rRecursionHelper.PopFormulaGroup(); // For the current FG
+                        return false;
+                    }
                 }
                 nRow += nEnd - nOffset;
                 break;
@@ -2851,6 +2875,7 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
         }
     }
 
+    rRecursionHelper.PopFormulaGroup(); // For the current FG
     return true;
 }
 
