@@ -179,6 +179,8 @@ Q_SIGNALS:
     void appendFilterSignal(const OUString& rTitle, const OUString& rFilter);
     void appendFilterGroupSignal(const OUString& rTitle,
                                  const css::uno::Sequence<css::beans::StringPair>& rFilters);
+    void setCurrentFilterSignal(const OUString& rFilter);
+    OUString getCurrentFilterSignal();
 
 private Q_SLOTS:
     void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
@@ -198,6 +200,9 @@ private Q_SLOTS:
     {
         return appendFilterGroup(rTitle, rFilters);
     }
+
+    void setCurrentFilterSlot(const OUString& rFilter) { return setCurrentFilter(rFilter); }
+    OUString getCurrentFilterSlot() { return getCurrentFilter(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
