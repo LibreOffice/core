@@ -83,8 +83,6 @@ struct LocaleItem
 };
 
 typedef std::vector< LocaleItem* > LocaleItemVector;
-typedef std::vector< LocaleItem* >::iterator LocaleItemVectorIt;
-typedef std::vector< LocaleItem* >::const_iterator LocaleItemVectorConstIt;
 
 typedef ::cppu::WeakImplHelper<
     css::lang::XServiceInfo,

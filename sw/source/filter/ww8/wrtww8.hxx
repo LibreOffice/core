@@ -456,7 +456,6 @@ class MSWordExportBase
 public:
     wwFontHelper m_aFontHelper;
     std::vector<sal_uLong> m_aChapterFieldLocs;
-    typedef std::vector<sal_uLong>::const_iterator mycCFIter;
     OUString m_aMainStg;
     std::vector<const SwTOXType*> m_aTOXArr;
     const SfxItemSet* m_pISet;    // for double attributes

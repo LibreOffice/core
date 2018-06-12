@@ -344,8 +344,8 @@ bool MSWordExportBase::ContentContainsChapterField(const SwFormatContent &rConte
         sal_uLong nStart = aIdx.GetIndex();
         sal_uLong nEnd = aEnd.GetIndex();
         //If the header/footer contains a chapter field
-        mycCFIter aIEnd = m_aChapterFieldLocs.end();
-        for ( mycCFIter aI = m_aChapterFieldLocs.begin(); aI != aIEnd; ++aI )
+        auto aIEnd = m_aChapterFieldLocs.cend();
+        for ( auto aI = m_aChapterFieldLocs.cbegin(); aI != aIEnd; ++aI )
         {
             if ( ( nStart <= *aI ) && ( *aI <= nEnd ) )
             {

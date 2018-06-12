@@ -483,8 +483,7 @@ void ClientBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
 
     const ::osl::MutexGuard aGuard(m_entriesMutex);
 
-    typedef std::vector< TClientBoxEntry >::iterator ITER;
-    for (ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
+    for (auto iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
     {
         aSize.setHeight( (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight );
         ::tools::Rectangle aEntryRect(aStart, aSize);
