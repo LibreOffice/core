@@ -988,7 +988,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
 
             if (pCell)
             {
-                pCell->GetFormula( rBuffer, eGrammar);
+                pCell->GetFormula( rBuffer, eGrammar, pContext );
                 return;
             }
             else
