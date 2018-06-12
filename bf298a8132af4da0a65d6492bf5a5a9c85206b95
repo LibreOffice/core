@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a22e58a_73f183cd",
+        "filename": "chart2/uiconfig/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-06-12T09:22:13Z",
+      "side": 1,
+      "message": "these are disabled in chart mode so likely they can be removed.",
+      "range": {
+        "startLine": 25,
+        "startChar": 12,
+        "endLine": 26,
+        "endChar": 57
+      },
+      "revId": "bf298a8132af4da0a65d6492bf5a5a9c85206b95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_53e4870c",
+        "filename": "chart2/uiconfig/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2018-06-12T09:22:13Z",
+      "side": 1,
+      "message": "these are disabled in chart mode so likely they can be removed.",
+      "range": {
+        "startLine": 32,
+        "startChar": 12,
+        "endLine": 39,
+        "endChar": 65
+      },
+      "revId": "bf298a8132af4da0a65d6492bf5a5a9c85206b95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a22e58a_67f2a19c",
         "filename": "chart2/uiconfig/menubar/menubar.xml",
         "patchSetId": 1
