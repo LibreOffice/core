@@ -118,7 +118,7 @@ private:
     SvxNumberInfoItem*      pNumItem;
     SvxNumberFormatShell*   pNumFmtShell;
     sal_uLong               nInitFormat;
-    Link<SfxPoolItem*,void> fnOkHdl;
+    Link<SfxPoolItem const *,void> fnOkHdl;
 
     bool                bNumItemFlag; ///< for handling with DocShell
     bool                bOneAreaFlag;

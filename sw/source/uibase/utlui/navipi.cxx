@@ -1014,9 +1014,9 @@ void SwNavigationPI::UpdateListBox()
     m_aDocListBox->SetUpdateMode(true);
 }
 
-IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem, void)
+IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem const *, pItem, void)
 {
-    const SfxViewFrameItem* pFrameItem = dynamic_cast<SfxViewFrameItem*>( pItem  );
+    const SfxViewFrameItem* pFrameItem = dynamic_cast<SfxViewFrameItem const *>( pItem  );
     if( pFrameItem )
     {
         SfxViewFrame* pFrame =  pFrameItem->GetFrame();

@@ -99,16 +99,16 @@ enum class SfxToolsModule
 
 class SFX2_DLLPUBLIC SfxLinkItem : public SfxPoolItem
 {
-    Link<SfxPoolItem*, void> aLink;
+    Link<SfxPoolItem const *, void> aLink;
 public:
-    SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem*, void>& rValue ) : SfxPoolItem( nWhichId )
+    SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem const *, void>& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
 
     virtual SfxPoolItem*     Clone( SfxItemPool* = nullptr ) const override
     {   return new SfxLinkItem( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const override
     {   return static_cast<const SfxLinkItem&>(rL).aLink == aLink; }
-    const Link<SfxPoolItem*, void>&
+    const Link<SfxPoolItem const *, void>&
                              GetValue() const { return aLink; }
 };
 
