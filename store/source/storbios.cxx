@@ -460,7 +460,6 @@ protected:
  * OStorePageBIOS::AceCache implementation.
  *
  *======================================================================*/
-extern "C"  typedef  int (* ace_constructor_type)(void*,void*);
 
 OStorePageBIOS::AceCache &
 OStorePageBIOS::AceCache::get()
@@ -475,7 +474,7 @@ OStorePageBIOS::AceCache::AceCache()
     "store_ace_cache",
     sizeof (OStorePageBIOS::Ace),
     0, // objalign
-   reinterpret_cast<ace_constructor_type>( OStorePageBIOS::Ace::constructor),
+    OStorePageBIOS::Ace::constructor,
     nullptr, // destructor,
     nullptr, // reclaim,
     nullptr, // userarg,
