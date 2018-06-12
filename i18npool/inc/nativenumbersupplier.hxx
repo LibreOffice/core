@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 
 namespace i18npool {
 
@@ -76,6 +77,7 @@ public:
 private:
         css::lang::Locale aLocale;
         bool useOffset;
+        mutable css::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
 };
 
 }

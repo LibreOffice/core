@@ -935,7 +935,8 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
         }
         aOUStr = OUString::createFromAscii(aStr);
     }
-    if (nNativeNumberMode > 0) {
+    // NatNum12 used only for selected parts
+    if (nNativeNumberMode > 0 && nNativeNumberMode != 12) {
         // For Japanese calendar, first year calls GAN, see bug 111668 for detail.
         if (eraArray == gengou_eraArray && value == 1
             && (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||

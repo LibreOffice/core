@@ -597,7 +597,7 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
     OUString numbertext_prefix;
     // default "cardinal" gets empty prefix
-    if (sNumberTextParams != "cardinal")
+    if (!sNumberTextParams.isEmpty() && sNumberTextParams != "cardinal")
         numbertext_prefix = sNumberTextParams + " ";
     // Several hundreds of headings could result typing lags because
     // of the continuous update of the multiple number names during typing.
@@ -628,7 +628,34 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
         return aNumberString;
 
     if (nNativeNumberMode == NativeNumberMode::NATNUM12)
-        return getNumberText(rLocale, aNumberString, rNativeNumberParams);
+    {
+        // handle capitalization prefixes "capitalize", "upper" and "title"
+        sal_Int32 nStripCase = 0;
+        if ( rNativeNumberParams.startsWith("capitalize") )
+            nStripCase = 10;
+        else if (rNativeNumberParams.startsWith("title") || rNativeNumberParams.startsWith("upper"))
+            nStripCase = 5;
+
+        if (nStripCase > 0 && (rNativeNumberParams.getLength() == nStripCase ||
+                    rNativeNumberParams[nStripCase] == ' '))
+        {
+            if (rNativeNumberParams.getLength() > nStripCase)
+                nStripCase++;
+            OUString aStr = getNumberText(rLocale, aNumberString, rNativeNumberParams.copy(nStripCase));
+
+            if (!xCharClass.is())
+                xCharClass = CharacterClassification::create(comphelper::getProcessComponentContext());
+            if ( rNativeNumberParams.startsWith("capitalize") )
+            {
+                return xCharClass->toTitle(aStr, 0, 1, aLocale) + aStr.copy(1);
+            } else if ( rNativeNumberParams.startsWith("upper") ) {
+                return xCharClass->toUpper(aStr, 0, aStr.getLength(), aLocale);
+            } else
+                return xCharClass->toTitle(aStr, 0, aStr.getLength(), aLocale);
+        } else {
+            return getNumberText(rLocale, aNumberString, rNativeNumberParams);
+        }
+    }
 
     sal_Int16 langnum = getLanguageNumber(rLocale);
     if (langnum == -1)
