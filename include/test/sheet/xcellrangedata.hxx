@@ -18,10 +18,13 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XCellRangeData
 {
 public:
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
     virtual css::uno::Reference< css::uno::XInterface > getXCellRangeData() = 0;
 
     void testGetDataArray();
     void testSetDataArray();
+    void testGetDataArrayOnTableSheet();
+    void testSetDataArrayOnTableSheet();
 
 protected:
     ~XCellRangeData() {}

@@ -564,7 +564,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sdb/_XSQLErrorBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_SpreadsheetDocument \
     qadevOOo/tests/java/ifc/sheet/_TableAutoFormatField \
-    qadevOOo/tests/java/ifc/sheet/_XCellRangeData \
     qadevOOo/tests/java/ifc/sheet/_XCellRangeReferrer \
     qadevOOo/tests/java/ifc/sheet/_XCellRangesQuery \
     qadevOOo/tests/java/ifc/sheet/_XDocumentAuditing \

@@ -8,7 +8,12 @@
  */
 
 #include <test/sheet/xcellrangedata.hxx>
+
 #include <com/sun/star/sheet/XCellRangeData.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -43,7 +48,17 @@ void XCellRangeData::testSetDataArray()
     aColRow.realloc(4);
     setValues(aColRow, 1);
     xCellRangeData->setDataArray(aColRow);
-    // need to check here for correct values
+
+    for ( sal_Int32 i = 0; i < aColRow.getLength(); ++i)
+    {
+        for ( sal_Int32 j = 0; j < aColRow[i].getLength(); ++j)
+        {
+            Any& aAny = aColRow[i][j];
+            double nValue = 0.0;
+            CPPUNIT_ASSERT( aAny >>= nValue);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+j+1), nValue, 0.000001);
+        }
+    }
 
     // set old values
     setValues(aColRow, 0);
@@ -54,18 +69,26 @@ void XCellRangeData::testGetDataArray()
 {
     uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
     uno::Sequence< uno::Sequence < Any > > aColRow = xCellRangeData->getDataArray();
-    for ( sal_Int32 i = 0; i < aColRow.getLength(); ++i)
-    {
-        for ( sal_Int32 j = 0; j < aColRow[i].getLength(); ++j)
-        {
-            Any& aAny = aColRow[i][j];
-            double nValue = 0.0;
-            CPPUNIT_ASSERT( aAny >>= nValue);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+j), nValue, 0.000001);
-        }
-    }
+    CPPUNIT_ASSERT(aColRow.getLength());
 }
 
+void XCellRangeData::testGetDataArrayOnTableSheet()
+{
+    uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_THROW_MESSAGE("No RuntimeException thrown", xCellRangeData->getDataArray(),
+                                 css::uno::RuntimeException);
+}
+
+void XCellRangeData::testSetDataArrayOnTableSheet()
+{
+    uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
+
+    uno::Sequence< uno::Sequence < Any > > aColRow;
+    aColRow.realloc(4);
+    setValues(aColRow, 1);
+    CPPUNIT_ASSERT_THROW_MESSAGE("No RuntimeException thrown", xCellRangeData->setDataArray(aColRow),
+                                 css::uno::RuntimeException);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

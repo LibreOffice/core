@@ -190,8 +190,6 @@
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
-"ScCellCursorObj";"com::sun::star::sheet::XCellRangeData";"getDataArray()"
-"ScCellCursorObj";"com::sun::star::sheet::XCellRangeData";"setDataArray()"
 "ScCellCursorObj";"com::sun::star::chart::XChartDataArray";"getData()"
 "ScCellCursorObj";"com::sun::star::chart::XChartDataArray";"setData()"
 "ScCellCursorObj";"com::sun::star::chart::XChartDataArray";"getRowDescriptions()"

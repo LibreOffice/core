@@ -12,6 +12,7 @@
 #include <test/sheet/xarrayformularange.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
+#include <test/sheet/xcellrangedata.hxx>
 #include <test/sheet/xcellrangeformula.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
@@ -36,6 +37,7 @@ class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XArrayFormulaRange,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
+                                               public apitest::XCellRangeData,
                                                public apitest::XCellRangeFormula,
                                                public apitest::XCellSeries,
                                                public apitest::XMultipleOperation,
@@ -53,6 +55,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< uno::XInterface > getXCellRangeData() override;
     virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
 
     CPPUNIT_TEST_SUITE(ScCellCursorObj);
@@ -68,6 +71,10 @@ public:
 
     // XCellRangeAddressable
     CPPUNIT_TEST(testGetRangeAddress);
+
+    // XCellRangeData
+    CPPUNIT_TEST(testGetDataArray);
+    CPPUNIT_TEST(testSetDataArray);
 
     // XCellRangeFormula
     CPPUNIT_TEST(testGetSetFormulaArray);
@@ -128,6 +135,11 @@ uno::Reference< uno::XInterface > ScCellCursorObj::init()
     uno::Reference<table::XCellCursor> xCellCursor(xSheet->createCursorByRange(xSheetCellRange), UNO_QUERY_THROW);
 
     return xCellCursor;
+}
+
+uno::Reference< uno::XInterface > ScCellCursorObj::getXCellRangeData()
+{
+    return init();
 }
 
 uno::Reference< uno::XInterface > ScCellCursorObj::getXSpreadsheet()
