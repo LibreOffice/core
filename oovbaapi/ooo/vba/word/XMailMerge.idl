@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __ooo_vba_word_XMailMerge_idl__
+#define __ooo_vba_word_XMailMerge_idl__
+
+module ooo {  module vba {  module word {
+
+interface XMailMerge : XHelperInterface
+{
+    [attribute] long MainDocumentType;
+
+    void OpenDataSource( [in] string Name,
+                         [in] any Format,
+                         [in] any ConfirmConversions,
+                         [in] any ReadOnly,
+                         [in] any LinkToSource,
+                         [in] any AddToRecentFiles,
+                         [in] any PasswordDocument,
+                         [in] any PasswordTemplate,
+                         [in] any Revert,
+                         [in] any WritePasswordDocument,
+                         [in] any WritePasswordTemplate,
+                         [in] any Connection,
+                         [in] any SQLStatement,
+                         [in] any SQLStatement1,
+                         [in] any OpenExclusive,
+                         [in] any SubType );
+};
+
+}; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
