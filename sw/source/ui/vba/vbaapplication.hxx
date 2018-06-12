@@ -50,7 +50,6 @@ typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplic
 class SwVbaApplication : public SwVbaApplication_BASE
 {
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
-    SwVbaWindow* getActiveSwVbaWindow();
 
 public:
     explicit SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
@@ -58,6 +57,8 @@ public:
 
     sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
     void RemoveSink( sal_uInt32 nNumber );
+
+    SwVbaWindow* getActiveSwVbaWindow();
 
     // XApplication
     virtual OUString SAL_CALL getName() override;

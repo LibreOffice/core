@@ -15,6 +15,7 @@ module ooo {  module vba {  module word {
 interface XWordBasic
 {
     void FileOpen( [in] string Name, [in] any ConfirmConversions, [in] any ReadOnly, [in] any AddToMru, [in] any PasswordDoc, [in] any PasswordDot, [in] any Revert, [in] any WritePasswordDoc, [in] any WritePasswordDot );
+    string WindowName();
 };
 
 }; }; };
