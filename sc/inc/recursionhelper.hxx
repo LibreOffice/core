@@ -104,6 +104,19 @@ public:
     void PopFormulaGroup();
 };
 
+/** A class to wrap ScRecursionHelper::PushFormulaGroup(),
+    ScRecursionHelper::PopFormulaGroup() and make these calls
+    exception safe. */
+class ScFormulaGroupCycleCheckGuard
+{
+    ScRecursionHelper& mrRecHelper;
+    bool mbShouldPop;
+public:
+    ScFormulaGroupCycleCheckGuard() = delete;
+    ScFormulaGroupCycleCheckGuard(ScRecursionHelper& rRecursionHelper, ScFormulaCellGroup* pGrp);
+    ~ScFormulaGroupCycleCheckGuard();
+};
+
 #endif // INCLUDED_SC_INC_RECURSIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

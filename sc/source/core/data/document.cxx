@@ -1803,13 +1803,13 @@ void ScDocument::UnlockAdjustHeight()
         --nAdjustHeightLock;
 }
 
-bool ScDocument::HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength )
+bool ScDocument::HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength, const ScFormulaCellGroupRef& mxGroup )
 {
     SCTAB nTab = rPos.Tab();
     if (!TableExists(nTab))
         return false;
 
-    return maTabs[nTab]->HandleRefArrayForParallelism(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
+    return maTabs[nTab]->HandleRefArrayForParallelism(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1, mxGroup);
 }
 
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )

@@ -109,9 +109,7 @@ bool ScRecursionHelper::PushFormulaGroup(ScFormulaCellGroup* pGrp)
         {
             --nIdx;
             assert(nIdx >= 0);
-            auto& eCalcState = aFGList[nIdx]->meCalcState;
-            if (eCalcState == sc::GroupCalcEnabled)
-                eCalcState = sc::GroupCalcDisabled;
+            aFGList[nIdx]->mbPartOfCycle = true;
         } while (aFGList[nIdx] != pGrp);
 
         return false;
@@ -129,6 +127,18 @@ void ScRecursionHelper::PopFormulaGroup()
     ScFormulaCellGroup* pGrp = aFGList.back();
     pGrp->mbSeenInPath = false;
     aFGList.pop_back();
+}
+
+ScFormulaGroupCycleCheckGuard::ScFormulaGroupCycleCheckGuard(ScRecursionHelper& rRecursionHelper, ScFormulaCellGroup* pGrp) :
+    mrRecHelper(rRecursionHelper)
+{
+    mbShouldPop = mrRecHelper.PushFormulaGroup(pGrp);
+}
+
+ScFormulaGroupCycleCheckGuard::~ScFormulaGroupCycleCheckGuard()
+{
+    if (mbShouldPop)
+        mrRecHelper.PopFormulaGroup();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

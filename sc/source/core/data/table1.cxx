@@ -2309,7 +2309,7 @@ formula::VectorRefArray ScTable::FetchVectorRefArray( SCCOL nCol, SCROW nRow1, S
     return aCol[nCol].FetchVectorRefArray(nRow1, nRow2);
 }
 
-bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
 {
     if (nRow2 < nRow1)
         return false;
@@ -2317,7 +2317,7 @@ bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2
     if ( !IsColValid( nCol ) || !ValidRow( nRow1 ) || !ValidRow( nRow2 ) )
         return false;
 
-    return aCol[nCol].HandleRefArrayForParallelism(nRow1, nRow2);
+    return aCol[nCol].HandleRefArrayForParallelism(nRow1, nRow2, mxGroup);
 }
 
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )

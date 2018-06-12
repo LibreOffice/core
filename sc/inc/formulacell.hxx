@@ -68,6 +68,7 @@ public:
     bool mbInvariant:1;
     bool mbSubTotal:1;
     bool mbSeenInPath:1; // For detecting cycle of formula groups
+    bool mbPartOfCycle:1; // To flag FG's part of a cycle
 
     sal_uInt8 meCalcState;
 
@@ -142,8 +143,13 @@ private:
 
     ScFormulaCell( const ScFormulaCell& ) = delete;
 
-    bool InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope);
-    bool InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& aScope);
+    bool CheckComputeDependencies(sc::FormulaLogger::GroupScope& rScope);
+    bool InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope,
+                                        bool& bDependencyComputed,
+                                        bool& bDependencyCheckFailed);
+    bool InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& aScope,
+                                     bool& bDependencyComputed,
+                                     bool& bDependencyCheckFailed);
     bool InterpretInvariantFormulaGroup();
 
 public:

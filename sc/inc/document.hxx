@@ -2384,7 +2384,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
     formula::VectorRefArray FetchVectorRefArray( const ScAddress& rPos, SCROW nLength );
-    bool HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength );
+    bool HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength, const ScFormulaCellGroupRef& mxGroup );
 
     /**
      * Call this before any operations that might trigger one or more formula

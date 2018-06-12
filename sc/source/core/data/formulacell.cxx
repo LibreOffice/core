@@ -529,6 +529,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mbInvariant(false),
     mbSubTotal(false),
     mbSeenInPath(false),
+    mbPartOfCycle(false),
     meCalcState(sc::GroupCalcEnabled)
 {
 }
@@ -1474,6 +1475,15 @@ void ScFormulaCell::Interpret()
 {
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
 
+    if (mxGroup && mxGroup->mbSeenInPath)
+    {
+        // This call arose from a dependency calculation and
+        // we just found a cycle.
+        // This will mark all elements in the cycle as parts-of-cycle
+        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, mxGroup.get());
+        return;
+    }
+
 #if DEBUG_CALCULATION
     static bool bDebugCalculationInit = true;
     if (bDebugCalculationInit)
@@ -1529,13 +1539,6 @@ void ScFormulaCell::Interpret()
     {
         pDocument->IncInterpretLevel();
 
-        bool bCheckForFGCycle = mxGroup && !pDocument->IsThreadedGroupCalcInProgress() &&
-            mxGroup->meCalcState == sc::GroupCalcEnabled &&
-            ScCalcConfig::isThreadingEnabled();
-        bool bPopFormulaGroup = false;
-        if (bCheckForFGCycle)
-            bPopFormulaGroup = rRecursionHelper.PushFormulaGroup(mxGroup.get());
-
 #if DEBUG_CALCULATION
         aDC.enterGroup();
         bool bGroupInterpreted = InterpretFormulaGroup();
@@ -1546,9 +1549,6 @@ void ScFormulaCell::Interpret()
         if (!InterpretFormulaGroup())
             InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
 #endif
-
-        if (bPopFormulaGroup)
-            rRecursionHelper.PopFormulaGroup();
 
         pDocument->DecInterpretLevel();
     }
@@ -2452,7 +2452,10 @@ void ScFormulaCell::SetDirtyVar()
     bDirty = true;
     mbPostponedDirty = false;
     if (mxGroup && mxGroup->meCalcState == sc::GroupCalcRunning)
+    {
         mxGroup->meCalcState = sc::GroupCalcEnabled;
+        mxGroup->mbPartOfCycle = false;
+    }
 
     // mark the sheet of this cell to be calculated
     //#FIXME do we need to revert this remnant of old fake vba events? pDocument->AddCalculateTable( aPos.Tab() );
@@ -4164,13 +4167,15 @@ struct ScDependantsCalculator
 {
     ScDocument& mrDoc;
     const ScTokenArray& mrCode;
+    const ScFormulaCellGroupRef& mxGroup;
     const SCROW mnLen;
     const ScAddress& mrPos;
 
     ScDependantsCalculator(ScDocument& rDoc, const ScTokenArray& rCode, const ScFormulaCell& rCell, const ScAddress& rPos) :
         mrDoc(rDoc),
         mrCode(rCode),
-        mnLen(rCell.GetCellGroup()->mnLength),
+        mxGroup(rCell.GetCellGroup()),
+        mnLen(mxGroup->mnLength),
         mrPos(rPos)
     {
     }
@@ -4303,16 +4308,6 @@ struct ScDependantsCalculator
 
                         // Trim data array length to actual data range.
                         SCROW nTrimLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), mnLen);
-                        // Fetch double array guarantees that the length of the
-                        // returned array equals or greater than the requested
-                        // length.
-
-                        formula::VectorRefArray aArray;
-                        if (nTrimLen)
-                            aArray = mrDoc.FetchVectorRefArray(aRefPos, nTrimLen);
-
-                        if (!aArray.isValid())
-                            return false;
 
                         aRangeList.Join(ScRange(aRefPos.Col(), aRefPos.Row(), aRefPos.Tab(),
                                                 aRefPos.Col(), aRefPos.Row() + nTrimLen - 1, aRefPos.Tab()));
@@ -4391,7 +4386,7 @@ struct ScDependantsCalculator
             for (auto nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); nCol++)
             {
                 if (!mrDoc.HandleRefArrayForParallelism(ScAddress(nCol, rRange.aStart.Row(), rRange.aStart.Tab()),
-                                                        rRange.aEnd.Row() - rRange.aStart.Row() + 1))
+                                                        rRange.aEnd.Row() - rRange.aStart.Row() + 1, mxGroup))
                     return false;
             }
         }
@@ -4407,12 +4402,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
     auto aScope = sc::FormulaLogger::get().enterGroup(*pDocument, *this);
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
 
-    if (rRecursionHelper.GetRecursionCount())
+    if (mxGroup->mbPartOfCycle)
     {
-        // Do not attempt to interpret a group when calculations are already
-        // running, otherwise we may run into a circular reference hell. See
-        // tdf#95748
-        aScope.addMessage("group calc disabled during recursive calculation.");
+        aScope.addMessage("This formula-group is part of a cycle");
         return false;
     }
 
@@ -4444,57 +4436,85 @@ bool ScFormulaCell::InterpretFormulaGroup()
     // ScFormulaCell::InterpretTail()
     RecursionCounter aRecursionCounter( rRecursionHelper, this);
 
+    bool bDependencyComputed = false;
+    bool bDependencyCheckFailed = false;
+
     // Preference order:
     // First try OpenCL, but only if actual OpenCL is available (i.e. no SwInterpreter).
     // Then try threading and as the last one try SwInterpreter.
     if( ScCalcConfig::isOpenCLEnabled())
-        if( InterpretFormulaGroupOpenCL(aScope))
+        if( InterpretFormulaGroupOpenCL(aScope, bDependencyComputed, bDependencyCheckFailed))
             return true;
 
-    if( InterpretFormulaGroupThreading(aScope))
+    if( InterpretFormulaGroupThreading(aScope, bDependencyComputed, bDependencyCheckFailed))
         return true;
 
-    return InterpretFormulaGroupOpenCL(aScope);
+    return InterpretFormulaGroupOpenCL(aScope, bDependencyComputed, bDependencyCheckFailed);
 }
 
+bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rScope)
+{
+    ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
+    // iterate over code in the formula ...
+    // ensure all input is pre-calculated -
+    // to avoid writing during the calculation
+
+    bool bOKToParallelize = false;
+    {
+        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, mxGroup.get());
+        if (mxGroup->mbPartOfCycle)
+        {
+            mxGroup->meCalcState = sc::GroupCalcDisabled;
+            rScope.addMessage("found circular formula-group dependencies");
+            return false;
+        }
+
+        ScDependantsCalculator aCalculator(*pDocument, *pCode, *this, mxGroup->mpTopCell->aPos);
+        bOKToParallelize = aCalculator.DoIt();
+    }
+
+    if (rRecursionHelper.IsInRecursionReturn())
+    {
+        mxGroup->meCalcState = sc::GroupCalcDisabled;
+        rScope.addMessage("Recursion limit reached, cannot thread this formula group now");
+        return false;
+    }
+
+    if (mxGroup->mbPartOfCycle)
+    {
+        mxGroup->meCalcState = sc::GroupCalcDisabled;
+        rScope.addMessage("found circular formula-group dependencies");
+        return false;
+    }
+
+    if (!bOKToParallelize)
+    {
+        mxGroup->meCalcState = sc::GroupCalcDisabled;
+        rScope.addMessage("could not do new dependencies calculation thing");
+        return false;
+    }
+
+    return true;
+}
 
 // To be called only from InterpretFormulaGroup().
-bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope)
+bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope,
+                                                   bool& bDependencyComputed,
+                                                   bool& bDependencyCheckFailed)
 {
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
-    if (!bThreadingProhibited &&
+    if (!bDependencyCheckFailed && !bThreadingProhibited &&
         pCode->IsEnabledForThreading() &&
         ScCalcConfig::isThreadingEnabled())
     {
-        // iterate over code in the formula ...
-        // ensure all input is pre-calculated -
-        // to avoid writing during the calculation
-        ScDependantsCalculator aCalculator(*pDocument, *pCode, *this, mxGroup->mpTopCell->aPos);
-
-        // Disable or hugely enlarge subset for S/W group
-        // threading interpreter
-
-        bool bOKToThread = aCalculator.DoIt();
-
-        if (pDocument->GetRecursionHelper().IsInRecursionReturn())
+        if(!bDependencyComputed && !CheckComputeDependencies(aScope))
         {
-            mxGroup->meCalcState = sc::GroupCalcDisabled;
-            aScope.addMessage("Recursion limit reached, cannot thread this formula group now");
+            bDependencyComputed = true;
+            bDependencyCheckFailed = true;
             return false;
         }
 
-        if (!bOKToThread)
-        {
-            mxGroup->meCalcState = sc::GroupCalcDisabled;
-            aScope.addMessage("could not do new dependencies calculation thing");
-            return false;
-        }
-
-        if (mxGroup->meCalcState == sc::GroupCalcDisabled)
-        {
-            aScope.addMessage("found circular formula-group dependencies");
-            return false;
-        }
+        bDependencyComputed = true;
 
         const static bool bHyperThreadingActive = tools::cpuid::hasHyperThreading();
 
@@ -4584,7 +4604,9 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 }
 
 // To be called only from InterpretFormulaGroup().
-bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& aScope)
+bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& aScope,
+                                                bool& bDependencyComputed,
+                                                bool& bDependencyCheckFailed)
 {
     bool bCanVectorize = pCode->IsEnabledForOpenCL();
     switch (pCode->GetVectorState())
@@ -4621,6 +4643,18 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
         aScope.addMessage("opencl not enabled and sw interpreter not enabled");
         return false;
     }
+
+    if (bDependencyCheckFailed)
+        return false;
+
+    if(!bDependencyComputed && !CheckComputeDependencies(aScope))
+    {
+        bDependencyComputed = true;
+        bDependencyCheckFailed = true;
+        return false;
+    }
+
+    bDependencyComputed = true;
 
     // TODO : Disable invariant formula group interpretation for now in order
     // to get implicit intersection to work.

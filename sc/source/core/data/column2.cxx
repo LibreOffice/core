@@ -48,6 +48,7 @@
 #include <scmatrix.hxx>
 #include <rowheightcontext.hxx>
 #include <tokenstringcontext.hxx>
+#include <recursionhelper.hxx>
 
 #include <editeng/eeitem.hxx>
 
@@ -2831,7 +2832,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 }
 
-bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
+bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
 {
     if (nRow1 > nRow2)
         return false;
@@ -2858,6 +2859,12 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
                 {
                     // Loop inside the formula block.
                     (*itCell)->MaybeInterpret();
+
+                    // child cell's Interpret could result in calling dependency calc
+                    // and that could detect a cycle involving mxGroup
+                    // and do early exit in that case.
+                    if (mxGroup->mbPartOfCycle)
+                        return false;
                 }
                 nRow += nEnd - nOffset;
                 break;

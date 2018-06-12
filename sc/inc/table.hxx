@@ -987,7 +987,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol, SCROW nRow );
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     formula::VectorRefArray FetchVectorRefArray( SCCOL nCol, SCROW nRow1, SCROW nRow2 );
-    bool HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2 );
+    bool HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup );
 
     void SplitFormulaGroups( SCCOL nCol, std::vector<SCROW>& rRows );
     void UnshareFormulaCells( SCCOL nCol, std::vector<SCROW>& rRows );
