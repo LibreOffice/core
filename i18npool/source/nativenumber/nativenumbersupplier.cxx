@@ -597,7 +597,7 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
     OUString numbertext_prefix;
     // default "cardinal" gets empty prefix
-    if (sNumberTextParams != "cardinal")
+    if (!sNumberTextParams.isEmpty() && sNumberTextParams != "cardinal")
         numbertext_prefix = sNumberTextParams + " ";
     // Several hundreds of headings could result typing lags because
     // of the continuous update of the multiple number names during typing.
@@ -628,7 +628,63 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
         return aNumberString;
 
     if (nNativeNumberMode == NativeNumberMode::NATNUM12)
-        return getNumberText(rLocale, aNumberString, rNativeNumberParams);
+    {
+        // handle capitalization prefixes "capitalize", "upper" and "title"
+
+        enum WhichCasing
+        {
+            CAPITALIZE,
+            UPPER,
+            TITLE
+        };
+
+        struct CasingEntry
+        {
+            OUStringLiteral aLiteral;
+            WhichCasing     eCasing;
+        };
+
+        static const CasingEntry Casings[] =
+        {
+            { OUStringLiteral("capitalize"), CAPITALIZE },
+            { OUStringLiteral("upper"), UPPER },
+            { OUStringLiteral("title"), TITLE }
+        };
+
+        sal_Int32 nStripCase = 0;
+        size_t nCasing;
+        for (nCasing = 0; nCasing < SAL_N_ELEMENTS(Casings); ++nCasing)
+        {
+            if (rNativeNumberParams.startsWith( Casings[nCasing].aLiteral))
+            {
+                nStripCase = Casings[nCasing].aLiteral.size;
+                break;
+            }
+        }
+
+        if (nStripCase > 0 && (rNativeNumberParams.getLength() == nStripCase ||
+                    rNativeNumberParams[nStripCase++] == ' '))
+        {
+            OUString aStr = getNumberText(rLocale, aNumberString, rNativeNumberParams.copy(nStripCase));
+
+            if (!xCharClass.is())
+                xCharClass = CharacterClassification::create(comphelper::getProcessComponentContext());
+
+            switch (Casings[nCasing].eCasing)
+            {
+                case CAPITALIZE:
+                    return xCharClass->toTitle(aStr, 0, 1, aLocale) + aStr.copy(1);
+                case UPPER:
+                    return xCharClass->toUpper(aStr, 0, aStr.getLength(), aLocale);
+                case TITLE:
+                    return xCharClass->toTitle(aStr, 0, aStr.getLength(), aLocale);
+            }
+        }
+        else
+        {
+            return getNumberText(rLocale, aNumberString, rNativeNumberParams);
+        }
+    }
 
     sal_Int16 langnum = getLanguageNumber(rLocale);
     if (langnum == -1)
