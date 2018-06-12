@@ -42,7 +42,7 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC MaterialAttribute3D
         {
         public:
-            typedef o3tl::cow_wrapper< ImpMaterialAttribute3D > ImplType;
+            typedef o3tl::cow_wrapper<ImpMaterialAttribute3D, o3tl::ThreadSafeRefCountingPolicy> ImplType;
 
         private:
             ImplType mpMaterialAttribute3D;
