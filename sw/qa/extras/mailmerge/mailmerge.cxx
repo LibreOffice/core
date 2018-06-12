@@ -677,6 +677,48 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf102010, "empty.odt", "10-testing-addresses.od
     loadMailMergeDocument( 1 );
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testTdf118113, "tdf118113.odt", "tdf118113.ods", "testing-addresses")
+{
+    executeMailMerge();
+
+    // The document contains a text box anchored to the page and a conditionally hidden
+    // section that is only shown for one of the 4 recipients, namely the 3rd record.
+    // In case the hidden section is shown, the page count is 3 for a single data entry, otherwise 1.
+    // Previously, the page number was calculated incorrectly which led to the
+    // text box being anchored to the wrong page.
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    // 3 documents with 1 page size each + 1 document with 3 pages
+    // + an additional page after each of the first 3 documents to make
+    // sure that each document starts on an odd page number
+    sal_uInt16 nPhysPages = pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(9), nPhysPages);
+
+    // verify that there is a text box for each data record
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxMMComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
+
+    // verify the text box for each data record is anchored to the first page of the given data record's pages
+    std::vector<sal_uInt16> expectedPageNumbers {1, 3, 5, 9};
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    for (sal_Int32 i = 0; i < xDraws->getCount(); i++)
+    {
+        xPropertySet.set(xDraws->getByIndex(i), uno::UNO_QUERY);
+
+        text::TextContentAnchorType nAnchorType;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_TYPE ) >>= nAnchorType);
+        CPPUNIT_ASSERT_EQUAL( text::TextContentAnchorType_AT_PAGE, nAnchorType );
+
+        sal_uInt16 nAnchorPageNo = {};
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_PAGE_NO ) >>= nAnchorPageNo);
+
+        CPPUNIT_ASSERT_EQUAL(expectedPageNumbers.at(i), nAnchorPageNo);
+    }
+}
+
+
 namespace
 {
 constexpr char const* const EmptyValuesLegacyData[][8]
