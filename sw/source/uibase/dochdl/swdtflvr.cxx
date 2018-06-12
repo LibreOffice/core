@@ -184,12 +184,19 @@ class SwTrnsfrActionAndUndo
 {
     SwWrtShell *pSh;
 public:
-    SwTrnsfrActionAndUndo( SwWrtShell *pS, bool bDelSel = false)
+    SwTrnsfrActionAndUndo( SwWrtShell *pS, SfxItemSet aSet, bool bDelSel = false)
         : pSh( pS )
     {
         pSh->StartUndo( SwUndoId::PASTE_CLIPBOARD );
         if( bDelSel )
             pSh->DelRight();
+        SwTextFormatColl* pColl = pSh->GetCurTextFormatColl();
+        if(pColl && pColl->IsAutoUpdateFormat())
+        {
+            pSh->AutoUpdatePara(pColl, aSet);
+        }
+        else
+           pSh->SetAttrSet(aSet);
         pSh->StartAllAction();
     }
     ~SwTrnsfrActionAndUndo() COVERITY_NOEXCEPT_FALSE
@@ -1182,6 +1189,8 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             bool bPasteSelection, RndStdIds nAnchorType )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
+    SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{});
+    rSh.GetCurAttr(aSet);
     std::unique_ptr<SwTrnsfrActionAndUndo, o3tl::default_delete<SwTrnsfrActionAndUndo>> pAction;
     SwModule* pMod = SW_MOD();
 
@@ -1238,7 +1247,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
         if( bDelSel )
             // #i34830#
-            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, true ));
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, aSet, true ));
     }
 
     SwTransferable *pTrans=nullptr, *pTunneledTrans=GetSwTransferable( rData );
@@ -1283,7 +1292,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     {
         if( !pAction )
         {
-            pAction.reset(new SwTrnsfrActionAndUndo( &rSh ));
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, aSet ));
         }
 
         // in Drag&Drop MessageBoxes must not be showed
@@ -3244,8 +3253,9 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
         return false; // the return value of the SwFEShell::Paste also is bool!
 
     const SelectionType nSelection = rShell.GetSelectionType();
-
-    SwTrnsfrActionAndUndo aAction( &rShell );
+    SfxItemSet aSet(rShell.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{});
+    rShell.GetCurAttr(aSet);
+    SwTrnsfrActionAndUndo aAction( &rShell,aSet );
 
     bool bKillPaMs = false;
 
