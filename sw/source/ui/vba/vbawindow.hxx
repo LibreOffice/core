@@ -42,6 +42,8 @@ public:
     virtual void SAL_CALL setView( const css::uno::Any& _view ) override;
     virtual css::uno::Any SAL_CALL getWindowState() override;
     virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) override;
+    virtual OUString SAL_CALL getCaption() override;
+    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
     // Methods
     virtual void SAL_CALL Activate(  ) override;
     virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& RouteDocument ) override;
