@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
     sw/source/ui/vba/vbalistlevels \
     sw/source/ui/vba/vbalisttemplate \
     sw/source/ui/vba/vbalisttemplates \
+    sw/source/ui/vba/vbamailmerge \
     sw/source/ui/vba/vbarevision \
     sw/source/ui/vba/vbarevisions \
     sw/source/ui/vba/vbarow \

@@ -1070,6 +1070,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/word,\
 	XListLevels \
 	XListTemplate \
 	XListTemplates \
+	XMailMerge \
 	XOptions \
 	XPageSetup \
 	XPane \

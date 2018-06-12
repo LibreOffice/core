@@ -30,6 +30,7 @@
 #include "vbaselection.hxx"
 #include "vbadocuments.hxx"
 #include "vbaaddins.hxx"
+#include "vbamailmerge.hxx"
 #include "vbadialogs.hxx"
 #include <ooo/vba/XConnectionPoint.hpp>
 #include <ooo/vba/word/WdEnableCancelKey.hpp>
@@ -70,9 +71,20 @@ public:
     SwWordBasic( SwVbaApplication* pApp );
 
     // XWordBasic
+    virtual sal_Int32 SAL_CALL getMailMergeMainDocumentType() override;
+    virtual void SAL_CALL setMailMergeMainDocumentType( sal_Int32 _mailmergemaindocumenttype ) override;
+
     virtual void SAL_CALL FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot ) override;
     virtual OUString SAL_CALL WindowName() override;
     virtual sal_Bool SAL_CALL ExistingBookmark( const OUString& Name ) override;
+    virtual void SAL_CALL MailMergeOpenDataSource(const OUString& Name, const css::uno::Any& Format,
+                                                  const css::uno::Any& ConfirmConversions, const css::uno::Any& ReadOnly,
+                                                  const css::uno::Any& LinkToSource, const css::uno::Any& AddToRecentFiles,
+                                                  const css::uno::Any& PasswordDocument, const css::uno::Any& PasswordTemplate,
+                                                  const css::uno::Any& Revert, const css::uno::Any& WritePasswordDocument,
+                                                  const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Connection,
+                                                  const css::uno::Any& SQLStatement, const css::uno::Any& SQLStatement1,
+                                                  const css::uno::Any& OpenExclusive, const css::uno::Any& SubType) override;
 };
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
@@ -125,6 +137,12 @@ SwVbaApplication::getActiveSwVbaWindow()
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     return new SwVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel, xController );
+}
+
+uno::Reference< css::uno::XComponentContext >
+SwVbaApplication::getContext()
+{
+    return mxContext;
 }
 
 uno::Reference< word::XWindow > SAL_CALL
@@ -451,6 +469,19 @@ SwWordBasic::SwWordBasic( SwVbaApplication* pApp ) :
 }
 
 // XWordBasic
+sal_Int32 SAL_CALL
+SwWordBasic::getMailMergeMainDocumentType()
+{
+    return SwVbaMailMerge::get( mpApp->getParent(), mpApp->getContext() )->getMainDocumentType();
+}
+
+// XWordBasic
+void SAL_CALL
+SwWordBasic::setMailMergeMainDocumentType( sal_Int32 _mailmergemaindocumenttype )
+{
+    SwVbaMailMerge::get( mpApp->getParent(), mpApp->getContext() )->setMainDocumentType( _mailmergemaindocumenttype );
+}
+
 void SAL_CALL
 SwWordBasic::FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot )
 {
@@ -473,6 +504,25 @@ SwWordBasic::ExistingBookmark( const OUString& Name )
 {
     uno::Reference< word::XBookmarks > xBookmarks( mpApp->getActiveDocument()->Bookmarks( uno::Any() ), uno::UNO_QUERY );
     return xBookmarks.is() && xBookmarks->Exists( Name );
+}
+
+void SAL_CALL
+SwWordBasic::MailMergeOpenDataSource( const OUString& Name, const css::uno::Any& Format,
+                                      const css::uno::Any& ConfirmConversions, const css::uno::Any& ReadOnly,
+                                      const css::uno::Any& LinkToSource, const css::uno::Any& AddToRecentFiles,
+                                      const css::uno::Any& PasswordDocument, const css::uno::Any& PasswordTemplate,
+                                      const css::uno::Any& Revert, const css::uno::Any& WritePasswordDocument,
+                                      const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Connection,
+                                      const css::uno::Any& SQLStatement, const css::uno::Any& SQLStatement1,
+                                      const css::uno::Any& OpenExclusive, const css::uno::Any& SubType )
+{
+    mpApp->getActiveDocument()->getMailMerge()->OpenDataSource( Name, Format, ConfirmConversions, ReadOnly,
+                                                                LinkToSource, AddToRecentFiles,
+                                                                PasswordDocument, PasswordTemplate,
+                                                                Revert, WritePasswordDocument,
+                                                                WritePasswordTemplate, Connection,
+                                                                SQLStatement, SQLStatement1,
+                                                                OpenExclusive, SubType );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

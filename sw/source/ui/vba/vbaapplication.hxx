@@ -52,13 +52,14 @@ class SwVbaApplication : public SwVbaApplication_BASE
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
 
 public:
-    explicit SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
+    explicit SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~SwVbaApplication() override;
 
     sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
     void RemoveSink( sal_uInt32 nNumber );
 
     SwVbaWindow* getActiveSwVbaWindow();
+    css::uno::Reference< css::uno::XComponentContext > getContext();
 
     // XApplication
     virtual OUString SAL_CALL getName() override;
