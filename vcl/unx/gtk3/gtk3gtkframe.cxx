@@ -3052,23 +3052,19 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
             rect_anchor = GDK_GRAVITY_NORTH_EAST;
         }
 
-        GdkRectangle rect {static_cast<int>(pThis->m_aFloatRect.Left()),
-                           static_cast<int>(pThis->m_aFloatRect.Top()),
-                           static_cast<int>(pThis->m_aFloatRect.GetWidth()),
-                           static_cast<int>(pThis->m_aFloatRect.GetHeight())};
-
-        if (AllSettings::GetLayoutRTL())
+        VclPtr<vcl::Window> pVclParent = pThis->GetWindow()->GetParent();
+        if (pVclParent->HasMirroredGraphics() && pVclParent->IsRTLEnabled())
         {
-            rect.x = pThis->m_pParent->maGeometry.nWidth-rect.width-1-rect.x;
             swapDirection(rect_anchor);
             swapDirection(menu_anchor);
         }
 
-        if (gdk_window_get_window_type(widget_get_window(pThis->m_pParent->m_pWindow)) == GDK_WINDOW_TOPLEVEL)
-        {
-            rect.x += pThis->m_pParent->maGeometry.nX;
-            rect.y += pThis->m_pParent->maGeometry.nY;
-        }
+        tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pVclParent, pThis->m_aFloatRect);
+        if (pThis->m_pParent->m_pParent)
+            aFloatRect.Move(-pThis->m_pParent->maGeometry.nX, -pThis->m_pParent->maGeometry.nY);
+
+        GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                           static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 
         GdkWindow* gdkWindow = widget_get_window(pThis->m_pWindow);
         gdk_window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_FLIP, 0, 0);
