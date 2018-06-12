@@ -159,8 +159,10 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
 
     std::unique_ptr<UIObject> pUIObject = xUIElement->GetUITestFactory()(xUIElement.get());
 
+    OUString parent_id = xUIElement->GetParent()->get_id();
+
     OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
-            rID + " Parent: UNKNOWN "+ aKeyCode;
+            rID + " Parent:"+ parent_id +" " + aKeyCode;
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
 
