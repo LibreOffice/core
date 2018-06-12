@@ -1892,8 +1892,7 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
 {
     const size_t nMaxArraySize = 500000; // arbitrary max array size
 
-    typedef ::std::vector< double > HypContainer;
-    HypContainer cnNumer, cnDenom;
+    std::vector<double> cnNumer, cnDenom;
 
     size_t nEstContainerSize = static_cast<size_t>( x + ::std::min( n, M ) );
     size_t nMaxSize = ::std::min( cnNumer.max_size(), nMaxArraySize );
@@ -2068,8 +2067,8 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
 
     ::std::sort( cnNumer.begin(), cnNumer.end() );
     ::std::sort( cnDenom.begin(), cnDenom.end() );
-    HypContainer::reverse_iterator it1 = cnNumer.rbegin(), it1End = cnNumer.rend();
-    HypContainer::reverse_iterator it2 = cnDenom.rbegin(), it2End = cnDenom.rend();
+    auto it1 = cnNumer.rbegin(), it1End = cnNumer.rend();
+    auto it2 = cnDenom.rbegin(), it2End = cnDenom.rend();
 
     double fFactor = 1.0;
     for ( ; it1 != it1End || it2 != it2End; )

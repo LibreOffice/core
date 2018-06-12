@@ -401,7 +401,7 @@ bool ScRangeList::UpdateReference(
     if(maRanges.empty())
         return true;
 
-    iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    auto itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
     {
         ScRange& rR = *itr;
@@ -441,7 +441,7 @@ bool ScRangeList::UpdateReference(
 void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize )
 {
     std::vector<ScRange> aNewRanges;
-    for(iterator it = maRanges.begin(), itEnd = maRanges.end(); it != itEnd;
+    for(auto it = maRanges.begin(), itEnd = maRanges.end(); it != itEnd;
             ++it)
     {
         ScRange & rRange = *it;
@@ -461,7 +461,7 @@ void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW n
         }
     }
 
-    for(std::vector<ScRange>::const_iterator it = aNewRanges.begin(), itEnd = aNewRanges.end();
+    for(auto it = aNewRanges.cbegin(), itEnd = aNewRanges.cend();
             it != itEnd; ++it)
     {
         if(!it->IsValid())
@@ -474,7 +474,7 @@ void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW n
 void ScRangeList::InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize )
 {
     std::vector<ScRange> aNewRanges;
-    for(iterator it = maRanges.begin(), itEnd = maRanges.end(); it != itEnd;
+    for(auto it = maRanges.begin(), itEnd = maRanges.end(); it != itEnd;
             ++it)
     {
         ScRange & rRange = *it;
@@ -945,7 +945,7 @@ bool ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
     std::vector<ScRange> aNewRanges;
 
-    for(iterator itr = maRanges.begin(); itr != maRanges.end(); ++itr)
+    for(auto itr = maRanges.begin(); itr != maRanges.end(); ++itr)
     {
         // we have two basic cases here:
         // 1. Delete area and pRange intersect
@@ -1005,14 +1005,14 @@ bool ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
-    const_iterator itr = find_if(
-        maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
+    auto itr = find_if(
+        maRanges.cbegin(), maRanges.cend(), FindEnclosingRange<ScAddress>(rAdr));
     return itr == maRanges.end() ? nullptr : &*itr;
 }
 
 ScRange* ScRangeList::Find( const ScAddress& rAdr )
 {
-    iterator itr = find_if(
+    auto itr = find_if(
         maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
     return itr == maRanges.end() ? nullptr : &*itr;
 }
@@ -1089,7 +1089,7 @@ ScRange ScRangeList::Combine() const
     if (maRanges.empty())
         return ScRange();
 
-    const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    auto itr = maRanges.cbegin(), itrEnd = maRanges.cend();
     ScRange aRet = *itr;
     ++itr;
     for (; itr != itrEnd; ++itr)
@@ -1145,7 +1145,7 @@ ScAddress ScRangeList::GetTopLeftCorner() const
 ScRangeList ScRangeList::GetIntersectedRange(const ScRange& rRange) const
 {
     ScRangeList aReturn;
-    for(const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    for(auto itr = maRanges.cbegin(), itrEnd = maRanges.cend();
             itr != itrEnd; ++itr)
     {
         if(itr->Intersects(rRange))
