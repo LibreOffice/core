@@ -57,22 +57,6 @@ QString KDE5FilePicker::getDisplayDirectory() const { return _dialog->directoryU
 
 QList<QUrl> KDE5FilePicker::getSelectedFiles() const { return _dialog->selectedUrls(); }
 
-void KDE5FilePicker::setCurrentFilter(const QString& title)
-{
-    _currentFilter = _titleToFilters.value(title);
-}
-
-QString KDE5FilePicker::getCurrentFilter() const
-{
-    QString filter = _titleToFilters.key(_dialog->selectedNameFilter());
-
-    //default if not found
-    if (filter.isEmpty())
-        filter = "ODF Text Document (.odt)";
-
-    return filter;
-}
-
 bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) const
 {
     bool ret = false;

@@ -111,6 +111,10 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::appendFilterGroupSignal, this,
             &KDE5FilePicker::appendFilterGroupSlot, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::setCurrentFilterSignal, this,
+            &KDE5FilePicker::setCurrentFilterSlot, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getCurrentFilterSignal, this,
+            &KDE5FilePicker::getCurrentFilterSlot, Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
     setMultiSelectionMode(false);
@@ -211,11 +215,31 @@ void SAL_CALL KDE5FilePicker::appendFilter(const OUString& title, const OUString
     _titleToFilters[t] = _filters.constLast();
 }
 
-void SAL_CALL KDE5FilePicker::setCurrentFilter(const OUString& title) {}
+void SAL_CALL KDE5FilePicker::setCurrentFilter(const OUString& title)
+{
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT setCurrentFilterSignal(title);
+    }
+
+    _currentFilter = _titleToFilters.value(toQString(title));
+}
 
 OUString SAL_CALL KDE5FilePicker::getCurrentFilter()
 {
-    OUString filter;
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT getCurrentFilterSignal();
+    }
+
+    OUString filter = toOUString(_titleToFilters.key(_dialog->selectedNameFilter()));
+
+    //default if not found
+    if (filter.isEmpty())
+        filter = "ODF Text Document (.odt)";
+
     return filter;
 }
 
