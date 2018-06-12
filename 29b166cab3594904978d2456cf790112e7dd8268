@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_53264617",
+        "filename": "sw/source/uibase/inc/loggerdata.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-06-12T20:12:48Z",
+      "side": 1,
+      "message": "This is surely not a good way. Please avoid global objects as they are normally not thread safe and cause problems.",
+      "revId": "29b166cab3594904978d2456cf790112e7dd8268",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
