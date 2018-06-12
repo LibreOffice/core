@@ -253,7 +253,7 @@ public:
         explicit Row( size_t nColSize ) : maCells(nColSize, Cell()), mbHidden(false), mbFiltered(false) {}
     };
 
-    typedef std::vector<Row*> RowsType;
+    typedef std::vector<Row> RowsType;
 
 private:
     std::unique_ptr<RowsType> mpRows; /// row-wise data table for sort by row operation.
@@ -288,12 +288,6 @@ public:
 
         for (size_t i = 0; i < nCount; ++i)
             maOrderIndices.push_back(i+nStart);
-    }
-
-    ~ScSortInfoArray()
-    {
-        if (mpRows)
-            std::for_each(mpRows->begin(), mpRows->end(), std::default_delete<Row>());
     }
 
     void SetKeepQuery( bool b ) { mbKeepQuery = b; }
@@ -387,10 +381,7 @@ public:
     RowsType& InitDataRows( size_t nRowSize, size_t nColSize )
     {
         mpRows.reset(new RowsType);
-        mpRows->reserve(nRowSize);
-        for (size_t i = 0; i < nRowSize; ++i)
-            mpRows->push_back(new Row(nColSize));
-
+        mpRows->resize(nRowSize, Row(nColSize));
         return *mpRows;
     }
 
@@ -426,7 +417,7 @@ void initDataRows(
 
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
-            ScSortInfoArray::Row& rRow = *rRows[nRow-nRow1];
+            ScSortInfoArray::Row& rRow = rRows[nRow-nRow1];
             ScSortInfoArray::Cell& rCell = rRow.maCells[nCol-nCol1];
             rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
             rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
@@ -443,7 +434,7 @@ void initDataRows(
     {
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
-            ScSortInfoArray::Row& rRow = *rRows[nRow-nRow1];
+            ScSortInfoArray::Row& rRow = rRows[nRow-nRow1];
             rRow.mbHidden = rTab.RowHidden(nRow);
             rRow.mbFiltered = rTab.RowFiltered(nRow);
         }
@@ -700,12 +691,12 @@ void fillSortedColumnArray(
 
     for (size_t i = 0; i < pRows->size(); ++i)
     {
-        ScSortInfoArray::Row* pRow = (*pRows)[i];
-        for (size_t j = 0; j < pRow->maCells.size(); ++j)
+        ScSortInfoArray::Row& rRow = (*pRows)[i];
+        for (size_t j = 0; j < rRow.maCells.size(); ++j)
         {
             ScAddress aCellPos(nCol1 + j, nRow1 + i, nTab);
 
-            ScSortInfoArray::Cell& rCell = pRow->maCells[j];
+            ScSortInfoArray::Cell& rCell = rRow.maCells[j];
 
             sc::CellStoreType& rCellStore = aSortedCols.at(j).get()->maCells;
             switch (rCell.maCell.meType)
@@ -799,8 +790,8 @@ void fillSortedColumnArray(
         {
             // Hidden and filtered flags are first converted to segments.
             SCROW nRow = nRow1 + i;
-            aRowFlags.setRowHidden(nRow, pRow->mbHidden);
-            aRowFlags.setRowFiltered(nRow, pRow->mbFiltered);
+            aRowFlags.setRowHidden(nRow, rRow.mbHidden);
+            aRowFlags.setRowFiltered(nRow, rRow.mbFiltered);
         }
 
         if (pProgress)
