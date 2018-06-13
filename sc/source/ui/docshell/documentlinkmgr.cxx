@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/doublecheckedinit.hxx>
 #include <documentlinkmgr.hxx>
 #include <datastream.hxx>
 #include <ddelink.hxx>
@@ -36,7 +37,7 @@ struct DocumentLinkManagerImpl
 {
     SfxObjectShell* mpShell;
     std::unique_ptr<DataStream, o3tl::default_delete<DataStream>> mpDataStream;
-    std::unique_ptr<sfx2::LinkManager> mpLinkManager;
+    std::atomic<sfx2::LinkManager*> mpLinkManager;
 
     DocumentLinkManagerImpl(const DocumentLinkManagerImpl&) = delete;
     const DocumentLinkManagerImpl& operator=(const DocumentLinkManagerImpl&) = delete;
@@ -47,15 +48,17 @@ struct DocumentLinkManagerImpl
     ~DocumentLinkManagerImpl()
     {
         // Shared base links
-        if (mpLinkManager)
+        sfx2::LinkManager* linkManager = mpLinkManager;
+        if (linkManager)
         {
-            sfx2::SvLinkSources aTemp = mpLinkManager->GetServers();
+            sfx2::SvLinkSources aTemp = linkManager->GetServers();
             for (sfx2::SvLinkSources::const_iterator it = aTemp.begin(); it != aTemp.end(); ++it)
                 (*it)->Closed();
 
-            if (!mpLinkManager->GetLinks().empty())
-                mpLinkManager->Remove(0, mpLinkManager->GetLinks().size());
+            if (!linkManager->GetLinks().empty())
+                linkManager->Remove(0, linkManager->GetLinks().size());
         }
+        delete linkManager;
     }
 };
 
@@ -83,23 +86,25 @@ const DataStream* DocumentLinkManager::getDataStream() const
 
 sfx2::LinkManager* DocumentLinkManager::getLinkManager( bool bCreate )
 {
-    if (!mpImpl->mpLinkManager && bCreate && mpImpl->mpShell)
-        mpImpl->mpLinkManager.reset(new sfx2::LinkManager(mpImpl->mpShell));
-    return mpImpl->mpLinkManager.get();
+    if (bCreate && mpImpl->mpShell)
+        return comphelper::doubleCheckedInit( mpImpl->mpLinkManager,
+            [this]() { return new sfx2::LinkManager(mpImpl->mpShell); } );
+    return mpImpl->mpLinkManager;
 }
 
 const sfx2::LinkManager* DocumentLinkManager::getExistingLinkManager() const
 {
-    return mpImpl->mpLinkManager.get();
+    return mpImpl->mpLinkManager;
 }
 
 bool DocumentLinkManager::idleCheckLinks()
 {
-    if (!mpImpl->mpLinkManager)
+    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
+    if (!pMgr)
         return false;
 
     bool bAnyLeft = false;
-    const sfx2::SvBaseLinks& rLinks = mpImpl->mpLinkManager->GetLinks();
+    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     for (const auto & rLink : rLinks)
     {
         sfx2::SvBaseLink* pBase = rLink.get();
@@ -127,10 +132,11 @@ bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks() const
 
 bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, bool bWebService) const
 {
-    if (!mpImpl->mpLinkManager)
+    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
+    if (!pMgr)
         return false;
 
-    const sfx2::SvBaseLinks& rLinks = mpImpl->mpLinkManager->GetLinks();
+    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     for (const auto & rLink : rLinks)
     {
         sfx2::SvBaseLink* pBase = rLink.get();
@@ -147,10 +153,10 @@ bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, boo
 
 bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(weld::Window* pWin)
 {
-    if (!mpImpl->mpLinkManager)
+    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
+    if (!pMgr)
         return false;
 
-    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager.get();
     const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
 
     // If the update takes longer, reset all values so that nothing
@@ -210,10 +216,10 @@ bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(weld::Window* pWin)
 
 void DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
 {
-    if (!mpImpl->mpLinkManager)
+    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
+    if (!pMgr)
         return;
 
-    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager.get();
     const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
 
     for (const auto & rLink : rLinks)
@@ -235,11 +241,12 @@ void DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& 
 
 size_t DocumentLinkManager::getDdeLinkCount() const
 {
-    if (!mpImpl->mpLinkManager)
+    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
+    if (!pMgr)
         return 0;
 
     size_t nDdeCount = 0;
-    const sfx2::SvBaseLinks& rLinks = mpImpl->mpLinkManager->GetLinks();
+    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     for (const auto & rLink : rLinks)
     {
         ::sfx2::SvBaseLink* pBase = rLink.get();
@@ -255,10 +262,11 @@ size_t DocumentLinkManager::getDdeLinkCount() const
 
 void DocumentLinkManager::disconnectDdeLinks()
 {
-    if (!mpImpl->mpLinkManager)
+    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
+    if (!pMgr)
         return;
 
-    const sfx2::SvBaseLinks& rLinks = mpImpl->mpLinkManager->GetLinks();
+    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     for (const auto & rLink : rLinks)
     {
         ::sfx2::SvBaseLink* pBase = rLink.get();
