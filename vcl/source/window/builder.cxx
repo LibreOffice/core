@@ -2954,7 +2954,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
     {
         OUString sLabel(BuilderUtils::convertMnemonicMarkup(extractLabel(rProps)));
         OUString aCommand(extractActionName(rProps));
-        pParent->InsertItem(nNewId, sLabel, MenuItemBits::TEXT, rID);
+        pParent->InsertItem(nNewId, sLabel, MenuItemBits::NONE , rID);
         pParent->SetItemCommand(nNewId, aCommand);
         if (pSubMenu)
             pParent->SetPopupMenu(nNewId, pSubMenu);
