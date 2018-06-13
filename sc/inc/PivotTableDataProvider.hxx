@@ -10,19 +10,11 @@
 #ifndef INCLUDED_SC_INC_PIVOTTABLEDATAPROVIDER_HXX
 #define INCLUDED_SC_INC_PIVOTTABLEDATAPROVIDER_HXX
 
-#include "cellsuno.hxx"
-#include "externalrefmgr.hxx"
-#include "types.hxx"
-
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
-#include <com/sun/star/chart2/data/XDataSource.hpp>
-#include <com/sun/star/chart2/data/XDataSequence.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <svl/lstner.hxx>
@@ -30,8 +22,15 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include <memory>
 #include <vector>
+#include <unordered_map>
+
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSource; } } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+
+class ScDocument;
 
 namespace sc
 {
