@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -16,9 +16,27 @@
   </object>
   <object class="GtkAdjustment" id="adjustment3">
     <property name="upper">9999</property>
+    <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
-    <property name="value">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="lower">2</property>
+    <property name="upper">9</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="lower">2</property>
+    <property name="upper">9</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="lower">2</property>
+    <property name="upper">9</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkGrid" id="TextFlowPage">
     <property name="visible">True</property>
@@ -73,6 +91,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">25</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                   </object>
                   <packing>
@@ -86,7 +105,8 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">25</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment4</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -99,6 +119,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">25</property>
+                    <property name="activates_default">True</property>
                     <property name="input_purpose">number</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
@@ -242,6 +263,7 @@
                   <object class="GtkSpinButton" id="spinPageNumber">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <accessibility>
                       <relation type="labelled-by" target="labelPageNum"/>
@@ -254,13 +276,14 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="labelPageNum">
+                    <property name="label" translatable="yes" context="textflowpage|labelPageNum">Page _number:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label" translatable="yes" context="textflowpage|labelPageNum">Page _number:</property>
+                    <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="inconsistent">True</property>
-                    <property name="justify">right</property>
                     <property name="xalign">1</property>
+                    <property name="inconsistent">True</property>
+                    <property name="draw_indicator">True</property>
                     <accessibility>
                       <relation type="label-for" target="spinPageNumber"/>
                     </accessibility>
@@ -446,7 +469,8 @@
                   <object class="GtkSpinButton" id="spinOrphan">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment5</property>
                     <accessibility>
                       <relation type="labelled-by" target="checkOrphan"/>
                     </accessibility>
@@ -460,7 +484,8 @@
                   <object class="GtkSpinButton" id="spinWidow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment6</property>
                     <property name="climb_rate">1</property>
                     <property name="numeric">True</property>
                     <accessibility>
