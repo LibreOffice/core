@@ -59,10 +59,9 @@ private:
         ColumnType(SCROW nStart, SCROW nEnd, bool bInit);
     };
 
-    typedef std::vector<ColumnType*> TableType;
-    typedef std::vector<TableType*> DocType;
+    typedef std::vector<std::unique_ptr<ColumnType>> TableType;
 
-    DocType maDoc;
+    std::vector<std::unique_ptr<TableType>> maTables;
     bool mbInit;
 
     ColumnType& getColumn(SCTAB nTab, SCCOL nCol);

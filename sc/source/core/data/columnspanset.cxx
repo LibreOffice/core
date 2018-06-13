@@ -60,32 +60,22 @@ ColumnSpanSet::ColumnSpanSet(bool bInit) : mbInit(bInit) {}
 
 ColumnSpanSet::~ColumnSpanSet()
 {
-    DocType::iterator itTab = maDoc.begin(), itTabEnd = maDoc.end();
-    for (; itTab != itTabEnd; ++itTab)
-    {
-        TableType* pTab = *itTab;
-        if (!pTab)
-            continue;
-
-        std::for_each(pTab->begin(), pTab->end(), std::default_delete<ColumnType>());
-        delete pTab;
-    }
 }
 
 ColumnSpanSet::ColumnType& ColumnSpanSet::getColumn(SCTAB nTab, SCCOL nCol)
 {
-    if (static_cast<size_t>(nTab) >= maDoc.size())
-        maDoc.resize(nTab+1, nullptr);
+    if (static_cast<size_t>(nTab) >= maTables.size())
+        maTables.resize(nTab+1);
 
-    if (!maDoc[nTab])
-        maDoc[nTab] = new TableType;
+    if (!maTables[nTab])
+        maTables[nTab].reset(new TableType);
 
-    TableType& rTab = *maDoc[nTab];
+    TableType& rTab = *maTables[nTab];
     if (static_cast<size_t>(nCol) >= rTab.size())
-        rTab.resize(nCol+1, nullptr);
+        rTab.resize(nCol+1);
 
     if (!rTab[nCol])
-        rTab[nCol] = new ColumnType(0, MAXROW, mbInit);
+        rTab[nCol].reset(new ColumnType(0, MAXROW, mbInit));
 
     return *rTab[nCol];
 }
@@ -155,12 +145,12 @@ void ColumnSpanSet::scan(
 
 void ColumnSpanSet::executeAction(Action& ac) const
 {
-    for (size_t nTab = 0; nTab < maDoc.size(); ++nTab)
+    for (size_t nTab = 0; nTab < maTables.size(); ++nTab)
     {
-        if (!maDoc[nTab])
+        if (!maTables[nTab])
             continue;
 
-        const TableType& rTab = *maDoc[nTab];
+        const TableType& rTab = *maTables[nTab];
         for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
         {
             if (!rTab[nCol])
@@ -186,12 +176,12 @@ void ColumnSpanSet::executeAction(Action& ac) const
 
 void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const
 {
-    for (size_t nTab = 0; nTab < maDoc.size(); ++nTab)
+    for (size_t nTab = 0; nTab < maTables.size(); ++nTab)
     {
-        if (!maDoc[nTab])
+        if (!maTables[nTab])
             continue;
 
-        const TableType& rTab = *maDoc[nTab];
+        const TableType& rTab = *maTables[nTab];
         for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
         {
             if (!rTab[nCol])
@@ -229,12 +219,12 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
 
 void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac, double& fMem) const
 {
-    for (size_t nTab = 0; nTab < maDoc.size(); ++nTab)
+    for (size_t nTab = 0; nTab < maTables.size(); ++nTab)
     {
-        if (!maDoc[nTab])
+        if (!maTables[nTab])
             continue;
 
-        const TableType& rTab = *maDoc[nTab];
+        const TableType& rTab = *maTables[nTab];
         for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
         {
             if (!rTab[nCol])
