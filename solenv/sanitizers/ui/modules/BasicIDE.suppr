@@ -2,3 +2,7 @@ basctl/uiconfig/basicide/ui/basicmacrodialog.ui://basctllo-TreeListBox[@id='libr
 basctl/uiconfig/basicide/ui/basicmacrodialog.ui://GtkLabel[@id='macrofromft'] orphan-label
 basctl/uiconfig/basicide/ui/basicmacrodialog.ui://GtkLabel[@id='macrotoft'] orphan-label
 basctl/uiconfig/basicide/ui/basicmacrodialog.ui://GtkEntry[@id='macronameedit'] no-labelled-by
+basctl/uiconfig/basicide/ui/defaultlanguage.ui://GtkLabel[@id='defined'] orphan-label
+basctl/uiconfig/basicide/ui/defaultlanguage.ui://GtkLabel[@id='added'] orphan-label
+basctl/uiconfig/basicide/ui/defaultlanguage.ui://GtkLabel[@id='alttitle'] orphan-label
+basctl/uiconfig/basicide/ui/managelanguages.ui://GtkLabel[@id='label2'] orphan-label

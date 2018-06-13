@@ -149,29 +149,6 @@ gb_UIConfig_gla11y_PARAMETERS += --widgets-button +vcllo-SmallButton,cuilo-RubyR
 # All new warnings should be fatal except a few kinds which could be only doubtful
 gb_UIConfig_gla11y_PARAMETERS += --fatal-all --not-fatal-type duplicate-mnemonic --not-fatal-type labelled-by-and-mnemonic --not-fatal-type orphan-label
 
-# Disable all warnings types by default for now, to enable warnings types progressively
-gb_UIConfig_gla11y_PARAMETERS += --disable-all
-
-# For now, ignore orphan labels without an unlabelled widget
-gb_UIConfig_gla11y_PARAMETERS += --disable-orphan-labels
-# but do not ignore orphan labels with an unlabelled widget
-gb_UIConfig_gla11y_PARAMETERS += --enable-type orphan-label
-
-# The following are to be uncommented progressively
-
-# These are definite errors
-gb_UIConfig_gla11y_PARAMETERS += --enable-type undeclared-target
-gb_UIConfig_gla11y_PARAMETERS += --enable-type missing-label-for
-gb_UIConfig_gla11y_PARAMETERS += --enable-type missing-labelled-by
-gb_UIConfig_gla11y_PARAMETERS += --enable-type duplicate-id
-
-# These are often buttons with only an image
-gb_UIConfig_gla11y_PARAMETERS += --enable-type button-no-label
-# These are often doubtful
-gb_UIConfig_gla11y_PARAMETERS += --enable-type duplicate-mnemonic --enable-type labelled-by-and-mnemonic
-
-gb_UIConfig_gla11y_PARAMETERS += --enable-type no-labelled-by
-
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
 $(call gb_UIConfig__gla11y_command)
