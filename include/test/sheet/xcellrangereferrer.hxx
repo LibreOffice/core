@@ -11,6 +11,9 @@
 #define INCLUDED_TEST_SHEET_XCELLRANGEREFERRER_HXX
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <test/testdllapi.hxx>
 
 namespace apitest {
@@ -18,18 +21,17 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XCellRangeReferrer
 {
 public:
-    XCellRangeReferrer( css::table::CellRangeAddress aCellRange ):
-                maCellRange( aCellRange ) {}
-
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
+    void setCellRange(css::table::CellRangeAddress aCellRange) { m_aCellRange = aCellRange; }
+    const css::table::CellRangeAddress getCellRange() { return m_aCellRange; }
     void testGetReferredCells();
 
 protected:
     ~XCellRangeReferrer() {}
 
 private:
-    css::table::CellRangeAddress maCellRange;
+    css::table::CellRangeAddress m_aCellRange;
 };
 
 }

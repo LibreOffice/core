@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/xcellrangereferrer.hxx>
 #include <test/sheet/xviewpane.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -23,7 +24,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScViewPaneObj : public CalcUnoApiTest, public apitest::XViewPane
+class ScViewPaneObj : public CalcUnoApiTest,
+                      public apitest::XCellRangeReferrer,
+                      public apitest::XViewPane
 {
 public:
     ScViewPaneObj();
@@ -33,6 +36,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScViewPaneObj);
+
+    // XCellRangeReferrer
+    CPPUNIT_TEST(testGetReferredCells);
 
     // XViewPane
     CPPUNIT_TEST(testFirstVisibleColumn);
@@ -58,6 +64,9 @@ uno::Reference< uno::XInterface > ScViewPaneObj::init()
     uno::Reference< frame::XController > xController = xModel->getCurrentController();
     uno::Reference< container::XIndexAccess > xIndexAccess(xController, uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XViewPane > xViewPane (xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    setCellRange(xViewPane->getVisibleRange());
+
     return xViewPane;
 }
 

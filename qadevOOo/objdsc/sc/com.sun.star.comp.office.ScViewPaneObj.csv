@@ -1,4 +1,3 @@
-"ScViewPaneObj";"com::sun::star::sheet::XCellRangeReferrer";"getReferredCells()"
 "ScViewPaneObj";"com::sun::star::view::XControlAccess#optional";"getControl()"
 "ScViewPaneObj";"com::sun::star::view::XFormLayerAccess#optional";"getFromController()"
 "ScViewPaneObj";"com::sun::star::view::XFormLayerAccess#optional";"isFormDesignMode()"

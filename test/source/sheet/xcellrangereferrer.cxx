@@ -7,10 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <test/cppunitasserthelper.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
+
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
+
 #include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
@@ -26,13 +29,8 @@ void XCellRangeReferrer::testGetReferredCells()
     uno::Reference< sheet::XCellRangeAddressable > xAdressable( xReferredRange, UNO_QUERY_THROW );
     table::CellRangeAddress aCellRange = xAdressable->getRangeAddress();
 
-    CPPUNIT_ASSERT_EQUAL( aCellRange.Sheet, maCellRange.Sheet );
-    CPPUNIT_ASSERT_EQUAL( aCellRange.StartRow, maCellRange.StartRow );
-    CPPUNIT_ASSERT_EQUAL( aCellRange.EndRow, maCellRange.EndRow );
-    CPPUNIT_ASSERT_EQUAL( aCellRange.StartColumn, maCellRange.StartColumn );
-    CPPUNIT_ASSERT_EQUAL( aCellRange.EndColumn, maCellRange.EndColumn );
+    CPPUNIT_ASSERT_EQUAL(aCellRange, getCellRange());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
