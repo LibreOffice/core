@@ -62,9 +62,9 @@ Size getDrawPreviewOptimalSize(const vcl::Window *pReference)
     return pReference->LogicToPixel(Size(88, 42), MapMode(MapUnit::MapAppFont));
 }
 
-Size getPreviewStripSize(const vcl::Window *pReference)
+Size getPreviewStripSize(const OutputDevice& rReference)
 {
-    return pReference->LogicToPixel(Size(70 , 40), MapMode(MapUnit::MapAppFont));
+    return rReference.LogicToPixel(Size(70 , 40), MapMode(MapUnit::MapAppFont));
 }
 
 Size getPreviewOptionsSize(const vcl::Window *pReference)
