@@ -2239,37 +2239,21 @@ void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
                     DisablePageBreak();
 }
 
-SvxAsianTabPage::SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, "AsianTypography","cui/ui/asiantypography.ui", &rSet)
-
+SvxAsianTabPage::SvxAsianTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/asiantypography.ui", "AsianTypography", &rSet)
+    , m_xForbiddenRulesCB(m_xBuilder->weld_check_button("checkForbidList"))
+    , m_xHangingPunctCB(m_xBuilder->weld_check_button("checkHangPunct"))
+    , m_xScriptSpaceCB(m_xBuilder->weld_check_button("checkApplySpacing"))
 {
-    get(m_pForbiddenRulesCB,"checkForbidList");
-    get(m_pHangingPunctCB,"checkHangPunct");
-    get(m_pScriptSpaceCB,"checkApplySpacing");
-
-    Link<Button*,void> aLink = LINK( this, SvxAsianTabPage, ClickHdl_Impl );
-    m_pHangingPunctCB->SetClickHdl( aLink );
-    m_pScriptSpaceCB->SetClickHdl( aLink );
-    m_pForbiddenRulesCB->SetClickHdl( aLink );
-
 }
 
 SvxAsianTabPage::~SvxAsianTabPage()
 {
-    disposeOnce();
 }
 
-void SvxAsianTabPage::dispose()
+VclPtr<SfxTabPage> SvxAsianTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    m_pForbiddenRulesCB.clear();
-    m_pHangingPunctCB.clear();
-    m_pScriptSpaceCB.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> SvxAsianTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
-{
-    return VclPtr<SvxAsianTabPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SvxAsianTabPage>::Create(pParent, *rSet);
 }
 
 const sal_uInt16*     SvxAsianTabPage::GetRanges()
@@ -2286,66 +2270,60 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bRet = false;
     SfxItemPool* pPool = rSet->GetPool();
-    if (m_pScriptSpaceCB->IsEnabled() && m_pScriptSpaceCB->IsValueChangedFromSaved())
+    if (m_xScriptSpaceCB->get_sensitive() && m_xScriptSpaceCB->get_state_changed_from_saved())
     {
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone()));
-        pNewItem->SetValue(m_pScriptSpaceCB->IsChecked());
+        pNewItem->SetValue(m_xScriptSpaceCB->get_active());
         rSet->Put(*pNewItem);
         bRet = true;
     }
-    if (m_pHangingPunctCB->IsEnabled() && m_pHangingPunctCB->IsValueChangedFromSaved())
+    if (m_xHangingPunctCB->get_sensitive() && m_xHangingPunctCB->get_state_changed_from_saved())
     {
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone()));
-        pNewItem->SetValue(m_pHangingPunctCB->IsChecked());
+        pNewItem->SetValue(m_xHangingPunctCB->get_active());
         rSet->Put(*pNewItem);
         bRet = true;
     }
-    if (m_pForbiddenRulesCB->IsEnabled() && m_pForbiddenRulesCB->IsValueChangedFromSaved())
+    if (m_xForbiddenRulesCB->get_sensitive() && m_xForbiddenRulesCB->get_state_changed_from_saved())
     {
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone()));
-        pNewItem->SetValue(m_pForbiddenRulesCB->IsChecked());
+        pNewItem->SetValue(m_xForbiddenRulesCB->get_active());
         rSet->Put(*pNewItem);
         bRet = true;
     }
     return bRet;
 }
 
-static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, CheckBox& rBox)
+static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, weld::CheckButton& rBox)
 {
     sal_uInt16 _nWhich = rSet.GetPool()->GetWhich(nSlotId);
     SfxItemState eState = rSet.GetItemState(_nWhich);
     if( eState == SfxItemState::UNKNOWN || eState == SfxItemState::DISABLED )
-        rBox.Enable(false);
+        rBox.set_sensitive(false);
     else if(eState >= SfxItemState::DEFAULT)
-    {
-        rBox.EnableTriState( false );
-        rBox.Check(static_cast<const SfxBoolItem&>(rSet.Get(_nWhich)).GetValue());
-    }
+        rBox.set_active(static_cast<const SfxBoolItem&>(rSet.Get(_nWhich)).GetValue());
     else
-        rBox.SetState( TRISTATE_INDET );
-    rBox.SaveValue();
+        rBox.set_state(TRISTATE_INDET);
+    rBox.save_state();
 }
 
 void SvxAsianTabPage::Reset( const SfxItemSet* rSet )
 {
-    lcl_SetBox(*rSet, SID_ATTR_PARA_FORBIDDEN_RULES, *m_pForbiddenRulesCB );
-    lcl_SetBox(*rSet, SID_ATTR_PARA_HANGPUNCTUATION, *m_pHangingPunctCB );
+    lcl_SetBox(*rSet, SID_ATTR_PARA_FORBIDDEN_RULES, *m_xForbiddenRulesCB );
+    lcl_SetBox(*rSet, SID_ATTR_PARA_HANGPUNCTUATION, *m_xHangingPunctCB );
 
     //character distance not yet available
-    lcl_SetBox(*rSet, SID_ATTR_PARA_SCRIPTSPACE, *m_pScriptSpaceCB );
+    lcl_SetBox(*rSet, SID_ATTR_PARA_SCRIPTSPACE, *m_xScriptSpaceCB );
 }
+
 void SvxAsianTabPage::ChangesApplied()
 {
-    m_pForbiddenRulesCB->SaveValue();
-    m_pHangingPunctCB->SaveValue();
-    m_pScriptSpaceCB->SaveValue();
-}
-IMPL_STATIC_LINK( SvxAsianTabPage, ClickHdl_Impl, Button*, pBox, void )
-{
-    static_cast<CheckBox*>(pBox)->EnableTriState( false );
+    m_xForbiddenRulesCB->save_state();
+    m_xHangingPunctCB->save_state();
+    m_xScriptSpaceCB->save_state();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

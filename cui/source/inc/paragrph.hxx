@@ -275,20 +275,16 @@ class SvxAsianTabPage : public SfxTabPage
 {
     friend class VclPtr<SvxAsianTabPage>;
 
-    VclPtr<CheckBox>     m_pForbiddenRulesCB;
-    VclPtr<CheckBox>     m_pHangingPunctCB;
-    VclPtr<CheckBox>     m_pScriptSpaceCB;
+    std::unique_ptr<weld::CheckButton> m_xForbiddenRulesCB;
+    std::unique_ptr<weld::CheckButton> m_xHangingPunctCB;
+    std::unique_ptr<weld::CheckButton> m_xScriptSpaceCB;
 
-    SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
-    DECL_STATIC_LINK( SvxAsianTabPage, ClickHdl_Impl, Button*, void );
+    SvxAsianTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
 public:
     virtual ~SvxAsianTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
-                                const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
