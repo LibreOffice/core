@@ -173,7 +173,9 @@ protected:
 
 Q_SIGNALS:
     void setTitleSignal(const OUString& rTitle);
+    void setDefaultNameSignal(const OUString& rName);
     void setDisplayDirectorySignal(const OUString& rDir);
+    OUString getDisplayDirectorySignal();
     void setValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction,
                         const css::uno::Any& rValue);
     void appendFilterSignal(const OUString& rTitle, const OUString& rFilter);
@@ -186,7 +188,9 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
+    void setDefaultNameSlot(const OUString& rName) { return setDefaultName(rName); }
     void setDisplayDirectorySlot(const OUString& rDir) { return setDisplayDirectory(rDir); }
+    OUString getDisplayDirectorySlot() { return getDisplayDirectory(); }
     void setValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue)
     {
         return setValue(nControlAction, nControlAction, rValue);

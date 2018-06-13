@@ -46,11 +46,7 @@ KDE5FilePicker::~KDE5FilePicker()
     delete _dialog;
 }
 
-/*void KDE5FilePicker::setDefaultName(const QString& name) { _dialog->selectUrl(QUrl(name)); }
-
-QString KDE5FilePicker::getDisplayDirectory() const { return _dialog->directoryUrl().url(); }
-
-bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) const
+/*bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) const
 {
     bool ret = false;
     if (_customWidgets.contains(controlId))
