@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_d65f8473",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-13T11:47:33Z",
+      "side": 1,
+      "message": "presumably need the same check here?",
+      "revId": "4733ff1229fbf29d9067a825fa61b2068b79f290",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f664804a",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-13T11:47:33Z",
+      "side": 1,
+      "message": "okay so this is possible... i was thinking that if it starts at a CH_TXTATR it must have length 1 and a sub-list, but evidently that isn\u0027t true (and i have no experience with the wrong-lists)",
+      "revId": "4733ff1229fbf29d9067a825fa61b2068b79f290",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
