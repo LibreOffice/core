@@ -636,11 +636,10 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
     for (std::vector<unsigned>::const_iterator it = aSheetsWithFamily.begin();
          it != aSheetsWithFamily.end(); ++it )
     {
-        rtl::Reference<SfxStyleSheetBase> const xSheet =
-            rSourcePool.GetStyleSheetByPositionInIndex( *it );
-        if( !xSheet.is() )
+        SfxStyleSheetBase* pSheet = rSourcePool.GetStyleSheetByPositionInIndex( *it );
+        if( !pSheet )
             continue;
-        rtl::OUString aName( xSheet->GetName() );
+        rtl::OUString aName( pSheet->GetName() );
 
         // now check whether we already have a sheet with the same name
         std::vector<unsigned> aSheetsWithName = GetIndexedStyleSheets().FindPositionsByName(aName);
@@ -650,9 +649,9 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
         {
             // if we have a rename suffix, try to find a new name
             pExistingSheet =
-                GetStyleSheetByPositionInIndex(aSheetsWithName.front()).get();
+                GetStyleSheetByPositionInIndex(aSheetsWithName.front());
             if (!rRenameSuffix.isEmpty() &&
-                pExistingSheet->GetItemSet().Equals(xSheet->GetItemSet(), false))
+                pExistingSheet->GetItemSet().Equals(pSheet->GetItemSet(), false))
             {
                 // we have found a sheet with the same name, but different contents. Try to find a new name.
                 // If we already have a sheet with the new name, and it is equal to the one in the source pool,
@@ -664,7 +663,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                     aTmpName = aName + rRenameSuffix + OUString::number(nSuffix);
                     pExistingSheet = Find(aTmpName, eFamily);
                     nSuffix++;
-                } while( pExistingSheet && pExistingSheet->GetItemSet().Equals(xSheet->GetItemSet(), false) );
+                } while( pExistingSheet && pExistingSheet->GetItemSet().Equals(pSheet->GetItemSet(), false) );
                 aName = aTmpName;
                 bAddToList = true;
             }
@@ -675,28 +674,28 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
             assert(!Find(aName, eFamily));
             rtl::Reference< SfxStyleSheetBase > xNewSheet( &Make( aName, eFamily ) );
 
-            xNewSheet->SetMask( xSheet->GetMask() );
+            xNewSheet->SetMask( pSheet->GetMask() );
 
             // Also set parent relation for copied style sheets
-            OUString aParent( xSheet->GetParent() );
+            OUString aParent( pSheet->GetParent() );
             if( !aParent.isEmpty() )
                 aNewStyles.emplace_back( xNewSheet, aParent );
 
             if( !bAddToList )
             {
                 OUString aHelpFile;
-                xNewSheet->SetHelpId( aHelpFile, xSheet->GetHelpId( aHelpFile ) );
+                xNewSheet->SetHelpId( aHelpFile, pSheet->GetHelpId( aHelpFile ) );
             }
-            xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
+            xNewSheet->GetItemSet().Put( pSheet->GetItemSet() );
 
             rCreatedSheets.emplace_back( static_cast< SdStyleSheet* >( xNewSheet.get() ) );
-            aRenamedList.emplace_back( xSheet->GetName(), aName );
+            aRenamedList.emplace_back( pSheet->GetName(), aName );
         }
         else if (bAddToList)
         {
             // Add to list - used for renaming
             rCreatedSheets.emplace_back( static_cast< SdStyleSheet* >( pExistingSheet ) );
-            aRenamedList.emplace_back( xSheet->GetName(), aName );
+            aRenamedList.emplace_back( pSheet->GetName(), aName );
         }
     }
 
@@ -939,7 +938,7 @@ void SdStyleSheetPool::UpdateStdNames()
     for (std::vector<unsigned>::const_iterator it = aUserDefinedStyles.begin();
             it != aUserDefinedStyles.end(); ++it)
     {
-        SfxStyleSheetBase* pStyle = GetStyleSheetByPositionInIndex(*it).get();
+        SfxStyleSheetBase* pStyle = GetStyleSheetByPositionInIndex(*it);
 
         if( !pStyle->IsUserDefined() )
         {

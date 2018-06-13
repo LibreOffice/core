@@ -109,7 +109,7 @@ public:
      * @internal
      * Method is not const because the returned style sheet is not const
      */
-    rtl::Reference< SfxStyleSheetBase >
+    SfxStyleSheetBase*
     GetStyleSheetByPosition(unsigned pos);
 
     /** Find the position of a provided style.
@@ -155,7 +155,7 @@ public:
     Reindex();
 
     /** Warning: counting for n starts at 0, i.e., the 0th style sheet is the first that is found. */
-    rtl::Reference<SfxStyleSheetBase>
+    SfxStyleSheetBase*
     GetNthStyleSheetThatMatchesPredicate(unsigned n, StyleSheetPredicate& predicate,
             unsigned startAt = 0);
 

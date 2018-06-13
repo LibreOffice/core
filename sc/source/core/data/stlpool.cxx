@@ -113,7 +113,7 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
-    OSL_ENSURE( dynamic_cast<const ScStyleSheet*>( &rStyle) !=  nullptr, "Invalid StyleSheet-class! :-/" );
+    OSL_ENSURE( rStyle.isScStyleSheet(), "Invalid StyleSheet-class! :-/" );
     return new ScStyleSheet( static_cast<const ScStyleSheet&>(rStyle) );
 }
 
@@ -423,14 +423,10 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
 
     for (/**/;it != aFoundPositions.end(); ++it)
     {
-        SfxStyleSheetBase *pFound = GetStyleSheetByPositionInIndex(*it).get();
-        ScStyleSheet* pSheet = nullptr;
+        SfxStyleSheetBase *pFound = GetStyleSheetByPositionInIndex(*it);
         // we do not know what kind of sheets we have.
-        pSheet = dynamic_cast<ScStyleSheet*>(pFound);
-        if (pSheet != nullptr)
-        {
-            return pSheet;
-        }
+        if (pFound->isScStyleSheet())
+            return static_cast<ScStyleSheet*>(pFound);
     }
     return nullptr;
 }

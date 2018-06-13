@@ -176,6 +176,9 @@ public:
     /// If the style has parents, it is _not_ required that the returned item
     /// set has parents (i.e. use it for display purposes only).
     virtual std::unique_ptr<SfxItemSet> GetItemSetForPreview();
+
+    /// Fix for expensive dynamic_cast
+    virtual bool isScStyleSheet() const { return false; }
 };
 
 /* Class to iterate and search on a SfxStyleSheetBasePool */
@@ -243,8 +246,7 @@ protected:
      */
     const svl::IndexedStyleSheets&
                                 GetIndexedStyleSheets() const;
-    rtl::Reference<SfxStyleSheetBase>
-                                GetStyleSheetByPositionInIndex(unsigned pos);
+    SfxStyleSheetBase*          GetStyleSheetByPositionInIndex(unsigned pos);
 
 public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
