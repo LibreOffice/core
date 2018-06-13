@@ -353,7 +353,7 @@ else
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/Paths-internallibnumbertextdata.xcu
 endif
 
-ifneq ($(filter $(CPUNAME),POWERPC INTEL ARM HPPA GODSON M68K SPARC S390),)
+ifneq ($(filter POWERPC INTEL ARM HPPA GODSON M68K SPARC S390,$(CPUNAME)),)
 postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/Common-32bit.xcu
 endif
