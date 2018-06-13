@@ -380,7 +380,7 @@ bool SwDocShell::PrepareClose( bool bUI )
         SW_MOD()->CallAutomationApplicationEventSinks( "DocumentBeforeClose", aArgs );
 
         // If the Cancel argument was set to True by an event handler, return false.
-        bool bCancel;
+        bool bCancel(false);
         aArgs[1] >>= bCancel;
         if (bCancel)
             bRet = false;
