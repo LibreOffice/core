@@ -197,6 +197,25 @@ blacklist:
     - com/sun/star/container/XNameAccess.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - cppuhelper/supportsservice.hxx
+    sc/inc/PivotTableDataSequence.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/data/DataSequenceRole.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XNumericalDataSequence.hpp
+    - com/sun/star/chart2/data/XTextualDataSequence.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    sc/inc/PivotTableDataProvider.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/data/PivotTableFieldEntry.hpp
+    - com/sun/star/chart2/data/XDataProvider.hpp
+    - com/sun/star/chart2/data/XPivotTableDataProvider.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
     sc/inc/reftokenhelper.hxx:
     # base class has to be a complete type
     - refdata.hxx

@@ -16,9 +16,7 @@
 #include <svl/lstner.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include "document.hxx"
-
-#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
 
 namespace sc
 {
