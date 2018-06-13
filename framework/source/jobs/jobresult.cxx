@@ -105,7 +105,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
             But we provide this information here only.
             Doing so is part of any user of us.
          */
-        bool bDeactivate;
+        bool bDeactivate(false);
         pIt->second >>= bDeactivate;
         if (bDeactivate)
             m_eParts |= E_DEACTIVATE;
