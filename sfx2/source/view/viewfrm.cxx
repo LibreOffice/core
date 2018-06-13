@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/splitwin.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -106,6 +107,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/objface.hxx>
 #include <openflag.hxx>
 #include <objshimp.hxx>
+#include <openuriexternally.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
@@ -1214,6 +1216,35 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
+                // inform about the community involvement
+                const sal_Int64 nLastShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
+                const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                const sal_Int64 nPeriodSec(60 * 60 * 24 * 30); // 30 days in seconds
+                bool bUpdateLastTimeGetInvolvedShown = false;
+
+                if (nLastShown == 0)
+                    bUpdateLastTimeGetInvolvedShown = true;
+                else if (nPeriodSec < nNow && nLastShown < nNow - nPeriodSec)
+                {
+                    bUpdateLastTimeGetInvolvedShown = true;
+
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", SfxResId(STR_GET_INVOLVED_TEXT), InfoBarType::Info);
+
+                    VclPtrInstance<PushButton> xGetInvolvedButton(&GetWindow());
+                    xGetInvolvedButton->SetText(SfxResId(STR_GET_INVOLVED_BUTTON));
+                    xGetInvolvedButton->SetSizePixel(xGetInvolvedButton->GetOptimalSize());
+                    xGetInvolvedButton->SetClickHdl(LINK(this, SfxViewFrame, GetInvolvedHandler));
+                    pInfoBar->addButton(xGetInvolvedButton);
+                }
+
+                if (bUpdateLastTimeGetInvolvedShown)
+                {
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                    officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
+                    batch->commit();
+                }
+
+                // read-only infobar if necessary
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
                 if ( m_xObjSh->IsReadOnly() &&
@@ -1333,6 +1364,17 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
             default: break;
         }
+    }
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
+{
+    try
+    {
+        sfx2::openUriExternally("https://tdf.io/joinus", false);
+    }
+    catch (const Exception&)
+    {
     }
 }
 
