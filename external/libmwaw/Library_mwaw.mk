@@ -26,7 +26,6 @@ $(eval $(call gb_Library_add_defs,mwaw,\
 	-DBUILD_MWAW \
 	-DNDEBUG \
 	-D_WINDLL \
-	-DSHAREDPTR_STD \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
