@@ -3504,7 +3504,7 @@ bool SvtValueSet::ImplScroll(const Point& rPos)
 void SvtValueSet::StyleUpdated()
 {
     mbFormat = true;
-    Invalidate();
+    CustomWidgetController::StyleUpdated();
 }
 
 void SvtValueSet::SetColCount( sal_uInt16 nNewCols )
