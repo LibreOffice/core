@@ -437,7 +437,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
     SfxStyleSheetBase* retval = nullptr;
     if( IsTrivialSearch())
     {
-        retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nIdx).get();
+        retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nIdx);
         nCurrentPosition = nIdx;
     }
     else if(nMask == SfxStyleSearchBits::All)
@@ -491,7 +491,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
         if (nStyleSheets > newPosition)
         {
             nCurrentPosition = newPosition;
-            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nCurrentPosition).get();
+            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nCurrentPosition);
         }
     }
     else if(nMask == SfxStyleSearchBits::All)
@@ -502,8 +502,8 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
         if (familyVector.size() > newPosition)
         {
             nCurrentPosition = newPosition;
-            unsigned stylePosition = familyVector.at(newPosition);
-            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(stylePosition).get();
+            unsigned stylePosition = familyVector[newPosition];
+            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(stylePosition);
         }
     }
     else
@@ -533,7 +533,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Find(const OUString& rStr)
     }
 
     unsigned pos = positions.front();
-    SfxStyleSheetBase* pStyle = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(pos).get();
+    SfxStyleSheetBase* pStyle = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(pos);
     nCurrentPosition = pos;
     pCurrentStyle = pStyle;
     return pCurrentStyle;
@@ -971,7 +971,7 @@ SfxStyleSheetBasePool::GetIndexedStyleSheets() const
     return *pImpl->mxIndexedStyleSheets;
 }
 
-rtl::Reference<SfxStyleSheetBase>
+SfxStyleSheetBase*
 SfxStyleSheetBasePool::GetStyleSheetByPositionInIndex(unsigned pos)
 {
     return pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(pos);

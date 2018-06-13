@@ -2409,10 +2409,10 @@ void SvxStyleToolBoxControl::FillStyleBox()
         SfxStyleSheetBase*      pStyle      = nullptr;
         bool                    bDoFill     = false;
 
-        pStyleSheetPool->SetSearchMask( eFamily, SfxStyleSearchBits::Used );
+        SfxStyleSheetIterator aIter( pStyleSheetPool, eFamily, SfxStyleSearchBits::Used );
 
         // Check whether fill is necessary
-        pStyle = pStyleSheetPool->First();
+        pStyle = aIter.First();
         //!!! TODO: This condition isn't right any longer, because we always show some default entries
         //!!! so the list doesn't show the count
         if ( nCount != pBox->GetEntryCount() )
@@ -2425,7 +2425,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
             while ( pStyle && !bDoFill )
             {
                 bDoFill = ( pBox->GetEntry(i) != pStyle->GetName() );
-                pStyle = pStyleSheetPool->Next();
+                pStyle = aIter.Next();
                 i++;
             }
         }
@@ -2436,7 +2436,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
             pBox->Clear();
 
             {
-                pStyle = pStyleSheetPool->First();
+                pStyle = aIter.First();
 
                 if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
                 {
@@ -2456,7 +2456,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
                         if( bInsert )
                             pBox->InsertEntry( aName );
-                        pStyle = pStyleSheetPool->Next();
+                        pStyle = aIter.Next();
                     }
                 }
                 else
@@ -2464,7 +2464,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                     while ( pStyle )
                     {
                         pBox->InsertEntry( pStyle->GetName() );
-                        pStyle = pStyleSheetPool->Next();
+                        pStyle = aIter.Next();
                     }
                 }
             }
