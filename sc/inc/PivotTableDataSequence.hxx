@@ -25,10 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/math.hxx>
 
-#include "unonames.hxx"
-#include "document.hxx"
-
-#include "dpsave.hxx"
+class ScDocument;
 
 namespace sc
 {
