@@ -24,6 +24,7 @@
 #include <osl/getglobalmutex.hxx>
 
 #include <functional>
+#include <memory>
 
 namespace comphelper
 {
@@ -48,6 +49,36 @@ static inline Type* doubleCheckedInit(Type*& pointer, Function function,
             p = function();
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             pointer = p;
+        }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
+    return p;
+}
+
+/**
+ * Thread-safe singleton creation.
+ *
+ * This function acts like rtl_Instance::create(), but it uses an external std::unique_ptr for storing
+ * the object.
+ */
+template <typename Type, typename Function = std::function<Type*()>,
+          typename Guard = osl::MutexGuard, typename GuardCtor = osl::GetGlobalMutex>
+static inline Type* doubleCheckedInit(std::unique_ptr<Type>& pointer, Function function,
+                                      GuardCtor guardCtor = osl::GetGlobalMutex())
+{
+    Type* p = pointer.get();
+    if (!p)
+    {
+        Guard guard(guardCtor());
+        p = pointer.get();
+        if (!p)
+        {
+            p = function();
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            pointer.reset(p);
         }
     }
     else

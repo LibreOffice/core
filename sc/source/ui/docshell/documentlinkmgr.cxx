@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/doublecheckedinit.hxx>
 #include <documentlinkmgr.hxx>
 #include <datastream.hxx>
 #include <ddelink.hxx>
@@ -83,8 +84,9 @@ const DataStream* DocumentLinkManager::getDataStream() const
 
 sfx2::LinkManager* DocumentLinkManager::getLinkManager( bool bCreate )
 {
-    if (!mpImpl->mpLinkManager && bCreate && mpImpl->mpShell)
-        mpImpl->mpLinkManager.reset(new sfx2::LinkManager(mpImpl->mpShell));
+    if (bCreate && mpImpl->mpShell)
+        return comphelper::doubleCheckedInit( mpImpl->mpLinkManager,
+            [this]() { return new sfx2::LinkManager(mpImpl->mpShell); } );
     return mpImpl->mpLinkManager.get();
 }
 
