@@ -263,10 +263,8 @@ SwTextNode::~SwTextNode()
 
     InitSwParaStatistics( false );
 
-    if (HasWriterListeners())
-    {
-        DelFrames_TextNodePart();
-    }
+    DelFrames(false); // must be called here while it's still a SwTextNode
+    DelFrames_TextNodePart();
 }
 
 void SwTextNode::FileLoadedInitHints()
