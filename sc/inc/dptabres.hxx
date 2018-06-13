@@ -292,7 +292,7 @@ class ScDPResultData
     bool                    bDataAtRow:1;
 
     //! add "displayed values" settings
-    mutable std::vector<ResultMembers*> maDimMembers;
+    mutable std::vector<std::unique_ptr<ResultMembers>> maDimMembers;
 public:
     ScDPResultData( ScDPSource& rSrc );
     ~ScDPResultData();
@@ -328,7 +328,7 @@ public:
     bool                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
                                           const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
-    ResultMembers* GetDimResultMembers(long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const;
+    ResultMembers&      GetDimResultMembers(long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const;
 
     const ScDPSource& GetSource() const { return mrSource;}
 };
