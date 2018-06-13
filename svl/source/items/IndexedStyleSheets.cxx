@@ -164,19 +164,19 @@ IndexedStyleSheets::GetNumberOfStyleSheetsWithPredicate(StyleSheetPredicate& pre
     return r;
 }
 
-rtl::Reference<SfxStyleSheetBase>
+SfxStyleSheetBase*
 IndexedStyleSheets::GetNthStyleSheetThatMatchesPredicate(
         unsigned n,
         StyleSheetPredicate& predicate,
         unsigned startAt)
 {
-    rtl::Reference<SfxStyleSheetBase> retval;
+    SfxStyleSheetBase* retval = nullptr;
     unsigned matching = 0;
     for (VectorType::const_iterator it = mStyleSheets.begin()+startAt; it != mStyleSheets.end(); ++it) {
         SfxStyleSheetBase *ssheet = it->get();
         if (predicate.Check(*ssheet)) {
             if (matching == n) {
-                retval = *it;
+                retval = it->get();
                 break;
             }
             ++matching;
@@ -223,11 +223,11 @@ IndexedStyleSheets::HasStyleSheet(const rtl::Reference< SfxStyleSheetBase >& sty
     return false;
 }
 
-rtl::Reference< SfxStyleSheetBase >
+SfxStyleSheetBase*
 IndexedStyleSheets::GetStyleSheetByPosition(unsigned pos)
 {
     if( pos < mStyleSheets.size() )
-        return mStyleSheets.at(pos);
+        return mStyleSheets.at(pos).get();
     return nullptr;
 }
 

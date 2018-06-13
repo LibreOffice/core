@@ -4956,9 +4956,11 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
         for ( const SfxStyleSheetBase* pStyle = aIter.First(); pStyle;
                                        pStyle = aIter.Next() )
         {
-            const ScStyleSheet* pScStyle = dynamic_cast<const ScStyleSheet*>( pStyle  );
-            if ( pScStyle )
+            if (pStyle->isScStyleSheet())
+            {
+                const ScStyleSheet* pScStyle = static_cast<const ScStyleSheet*>( pStyle  );
                 pScStyle->SetUsage( ScStyleSheet::NOTUSED );
+            }
         }
 
         bool bIsUsed = false;

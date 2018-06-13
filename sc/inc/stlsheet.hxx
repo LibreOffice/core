@@ -53,6 +53,8 @@ public:
     void                SetUsage( ScStyleSheet::Usage eUse ) const { eUsage = eUse; }
     ScStyleSheet::Usage GetUsage() const { return eUsage; }
 
+    /// Fix for expensive dynamic_cast
+    virtual bool isScStyleSheet() const override { return true; }
 private:
     virtual             ~ScStyleSheet() override;
 
