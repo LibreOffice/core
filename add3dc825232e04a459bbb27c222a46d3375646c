@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_d92b3532",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-13T19:25:42Z",
+      "side": 1,
+      "message": "Convention: please put those two functions into anonymous namespace\n\nnamespace \n{\n   $code_here\n}",
+      "revId": "add3dc825232e04a459bbb27c222a46d3375646c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
