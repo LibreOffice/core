@@ -1789,7 +1789,7 @@ SwTextSlot::SwTextSlot(
                 {
                     const sal_uInt16 nPos = pGrammar->GetWrongPos(pos.second);
                     const sal_Int32 nListPos = pGrammar->Pos(nPos);
-                    if (nListPos == pos.second)
+                    if (nListPos == pos.second && pGrammar->SubList(nPos) != nullptr)
                     {
                         m_pTempIter.reset(new sw::WrongListIterator(*pGrammar->SubList(nPos)));
                         static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pTempIter.get());
