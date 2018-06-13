@@ -34,6 +34,8 @@
 
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/langitem.hxx>
+#include <o3tl/temporary.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>
@@ -464,46 +466,47 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, CopyToHdl_Impl, Button*, void)
 
 namespace {
 
-int documentStartPageNumber(SwMailMergeConfigItem* pConfigItem, int document)
+int documentStartPageNumber(SwMailMergeConfigItem* pConfigItem, int document, bool bIgnoreEmpty)
 {
     SwView* pTargetView = pConfigItem->GetTargetView();
     assert( pTargetView );
     SwCursorShell& shell = pTargetView->GetWrtShell();
     const SwDocMergeInfo& info = pConfigItem->GetDocumentMergeInfo(document);
-    sal_uInt16 page, dummy;
+    sal_uInt16 page;
     shell.Push();
     shell.GotoMark( info.startPageInTarget );
-    shell.GetPageNum( page, dummy );
+    if (!bIgnoreEmpty)
+        shell.GetPageNum(page, o3tl::temporary(sal_uInt16()));
+    else
+        page = shell.GetPageNumSeqNonEmpty(true, true);
     shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
     return page;
 }
 
-int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document)
+int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document, bool bIgnoreEmpty)
 {
     SwView* pTargetView = pConfigItem->GetTargetView();
     assert( pTargetView );
     SwWrtShell& shell = pTargetView->GetWrtShell();
+    shell.Push();
     if (document < int(pConfigItem->GetMergedDocumentCount()) - 1)
     {
         // Go to the page before the starting page of the next merged document.
         const SwDocMergeInfo& info = pConfigItem->GetDocumentMergeInfo( document + 1 );
-        sal_uInt16 page, dummy;
-        shell.Push();
         shell.GotoMark( info.startPageInTarget );
         shell.EndPrvPg();
-        shell.GetPageNum( page, dummy );
-        shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
-        return page;
     }
     else
     {   // This is the last merged document, so it ends on the page at which the document ends.
-        sal_uInt16 page, dummy;
-        shell.Push();
         shell.SttEndDoc( false ); // go to doc end
-        shell.GetPageNum( page, dummy );
-        shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
-        return page;
     }
+    sal_uInt16 page;
+    if (!bIgnoreEmpty)
+        shell.GetPageNum(page, o3tl::temporary(sal_uInt16()));
+    else
+        page = shell.GetPageNumSeqNonEmpty(true, true);
+    shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    return page;
 }
 
 void endDialog(Button* pButton)
@@ -661,8 +664,9 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
             pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
 
-            pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
-                documentStartPageNumber(xConfigItem.get(), nDoc), documentEndPageNumber(xConfigItem.get(), nDoc));
+            pTargetView->GetWrtShell().PastePages(
+                pTempView->GetWrtShell(), documentStartPageNumber(xConfigItem.get(), nDoc, false),
+                documentEndPageNumber(xConfigItem.get(), nDoc, false));
             pTargetView->GetWrtShell().EndAction();
             //then save it
             OUString sOutPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
@@ -777,9 +781,13 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
             nEnd = documentCount;
     }
 
-    OUString sPages(OUString::number(documentStartPageNumber(xConfigItem.get(), nBegin)));
-    sPages += " - ";
-    sPages += OUString::number(documentEndPageNumber(xConfigItem.get(), nEnd - 1));
+    // If we skip autoinserted blanks, then the page numbers used in the print range string
+    // refer to the non-blank pages as they appear in the document (see tdf#89708).
+    const bool bIgnoreEmptyPages = !officecfg::Office::Writer::Print::EmptyPages::get();
+    const int nStartPage = documentStartPageNumber(xConfigItem.get(), nBegin, bIgnoreEmptyPages);
+    const int nEndPage = documentEndPageNumber(xConfigItem.get(), nEnd - 1, bIgnoreEmptyPages);
+
+    const OUString sPages(OUString::number(nStartPage) + "-" + OUString::number(nEndPage));
 
     pTargetView->SetMailMergeConfigItem(xConfigItem);
     if(m_pTempPrinter)
@@ -1071,8 +1079,9 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
         pTempView->GetDocShell()->GetDoc()->ReplaceCompatibilityOptions( *pTargetView->GetDocShell()->GetDoc());
         pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
         pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
-        pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
-            documentStartPageNumber(xConfigItem.get(), nDoc), documentEndPageNumber(xConfigItem.get(), nDoc));
+        pTargetView->GetWrtShell().PastePages(
+            pTempView->GetWrtShell(), documentStartPageNumber(xConfigItem.get(), nDoc, false),
+            documentEndPageNumber(xConfigItem.get(), nDoc, false));
         pTargetView->GetWrtShell().EndAction();
 
         //then save it
