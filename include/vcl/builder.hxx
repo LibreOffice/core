@@ -217,7 +217,7 @@ private:
     };
 
     const ListStore* get_model_by_name(const OString& sID) const;
-    static void     mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
+    void     mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
     typedef stringmap TextBuffer;
     const TextBuffer* get_buffer_by_name(const OString& sID) const;
