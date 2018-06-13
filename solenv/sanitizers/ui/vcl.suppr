@@ -9,6 +9,7 @@ vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='status'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='location'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='comment'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkTreeView[@id='printers:border'] no-labelled-by
+vcl/uiconfig/ui/printdialog.ui://GtkImage[@id='collateimage'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='fromwhich'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkEntry[@id='pagerange'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkComboBox[@id='paperspersheetlb'] no-labelled-by

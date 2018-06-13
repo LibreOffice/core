@@ -14,3 +14,4 @@ starmath/uiconfig/smath/ui/symdefinedialog.ui://GtkLabel[@id='oldSymbolSetName']
 starmath/uiconfig/smath/ui/symdefinedialog.ui://GtkLabel[@id='symbolName'] orphan-label
 starmath/uiconfig/smath/ui/symdefinedialog.ui://GtkDrawingArea[@id='symbolDisplay'] no-labelled-by
 starmath/uiconfig/smath/ui/symdefinedialog.ui://GtkLabel[@id='symbolSetName'] orphan-label
+starmath/uiconfig/smath/ui/symdefinedialog.ui://GtkImage[@id='rightArrow'] no-labelled-by
