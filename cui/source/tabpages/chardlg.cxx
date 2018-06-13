@@ -216,6 +216,55 @@ void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp
     m_pPreviewWin->Invalidate();
 }
 
+inline SvxFont& CharBasePage::GetPreviewFont()
+{
+    return m_aPreviewWin.GetFont();
+}
+
+inline SvxFont& CharBasePage::GetPreviewCJKFont()
+{
+    return m_aPreviewWin.GetCJKFont();
+}
+
+inline SvxFont& CharBasePage::GetPreviewCTLFont()
+{
+    return m_aPreviewWin.GetCTLFont();
+}
+
+CharBasePage::CharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
+    : SfxTabPage(pParent, rUIXMLDescription, rID, &rItemset)
+    , m_bPreviewBackgroundToCharacter( false )
+{
+}
+
+CharBasePage::~CharBasePage()
+{
+}
+
+void CharBasePage::ActivatePage(const SfxItemSet& rSet)
+{
+    m_aPreviewWin.SetFromItemSet(rSet, m_bPreviewBackgroundToCharacter);
+}
+
+void CharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
+{
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
+    if (rSet.GetItemState(nWhich)>=SfxItemState::DEFAULT)
+    {
+        const SvxCharScaleWidthItem &rItem = static_cast<const SvxCharScaleWidthItem&>( rSet.Get( nWhich ) );
+        m_aPreviewWin.SetFontWidthScale(rItem.GetValue());
+    }
+}
+
+void CharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
+{
+    setPrevFontEscapement(GetPreviewFont(),nProp,nEscProp,nEsc);
+    setPrevFontEscapement(GetPreviewCJKFont(),nProp,nEscProp,nEsc);
+    setPrevFontEscapement(GetPreviewCTLFont(),nProp,nEscProp,nEsc);
+    m_aPreviewWin.Invalidate();
+}
+
+
 // SvxCharNamePage_Impl --------------------------------------------------
 
 struct SvxCharNamePage_Impl
@@ -2475,65 +2524,39 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 
 // class SvxCharPositionPage ---------------------------------------------
 
-SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet& rInSet )
-    : SvxCharBasePage(pParent, "PositionPage", "cui/ui/positionpage.ui", rInSet)
+SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rInSet)
+    : CharBasePage(pParent, "cui/ui/positionpage.ui", "PositionPage", rInSet)
     , m_nSuperEsc(short(DFLT_ESC_SUPER))
     , m_nSubEsc(short(DFLT_ESC_SUB))
     , m_nScaleWidthItemSetVal(100)
     , m_nScaleWidthInitialVal(100)
     , m_nSuperProp(sal_uInt8(DFLT_ESC_PROP))
     , m_nSubProp(sal_uInt8(DFLT_ESC_PROP))
+    , m_xHighPosBtn(m_xBuilder->weld_radio_button("superscript"))
+    , m_xNormalPosBtn(m_xBuilder->weld_radio_button("normal"))
+    , m_xLowPosBtn(m_xBuilder->weld_radio_button("subscript"))
+    , m_xHighLowFT(m_xBuilder->weld_label("raiselower"))
+    , m_xHighLowMF(m_xBuilder->weld_metric_spin_button("raiselowersb", FUNIT_PERCENT))
+    , m_xHighLowRB(m_xBuilder->weld_check_button("automatic"))
+    , m_xFontSizeFT(m_xBuilder->weld_label("relativefontsize"))
+    , m_xFontSizeMF(m_xBuilder->weld_metric_spin_button("fontsizesb", FUNIT_PERCENT))
+    , m_xRotationContainer(m_xBuilder->weld_widget("rotationcontainer"))
+    , m_xScalingFT(m_xBuilder->weld_label("scale"))
+    , m_xScalingAndRotationFT(m_xBuilder->weld_label("rotateandscale"))
+    , m_x0degRB(m_xBuilder->weld_radio_button("0deg"))
+    , m_x90degRB(m_xBuilder->weld_radio_button("90deg"))
+    , m_x270degRB(m_xBuilder->weld_radio_button("270deg"))
+    , m_xFitToLineCB(m_xBuilder->weld_check_button("fittoline"))
+    , m_xScaleWidthMF(m_xBuilder->weld_metric_spin_button("scalewidthsb", FUNIT_PERCENT))
+    , m_xKerningMF(m_xBuilder->weld_metric_spin_button("kerningsb", FUNIT_POINT))
+    , m_xPairKerningBtn(m_xBuilder->weld_check_button("pairkerning"))
 {
-    get(m_pHighPosBtn, "superscript");
-    get(m_pNormalPosBtn, "normal");
-    get(m_pLowPosBtn, "subscript");
-    get(m_pHighLowFT, "raiselower");
-    get(m_pHighLowMF, "raiselowersb");
-    get(m_pHighLowRB, "automatic");
-    get(m_pFontSizeFT, "relativefontsize");
-    get(m_pFontSizeMF, "fontsizesb");
-    get(m_pRotationContainer, "rotationcontainer");
-    get(m_pScalingFT, "scale");
-    get(m_pScalingAndRotationFT, "rotateandscale");
-    get(m_p0degRB, "0deg");
-    get(m_p90degRB, "90deg");
-    get(m_p270degRB, "270deg");
-    get(m_pFitToLineCB, "fittoline");
-    get(m_pScaleWidthMF, "scalewidthsb");
-    get(m_pKerningMF, "kerningsb");
-    get(m_pPairKerningBtn, "pairkerning");
-
-    get(m_pPreviewWin, "preview");
-
+    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
     Initialize();
 }
 
 SvxCharPositionPage::~SvxCharPositionPage()
 {
-    disposeOnce();
-}
-
-void SvxCharPositionPage::dispose()
-{
-    m_pHighPosBtn.clear();
-    m_pNormalPosBtn.clear();
-    m_pLowPosBtn.clear();
-    m_pHighLowFT.clear();
-    m_pHighLowMF.clear();
-    m_pHighLowRB.clear();
-    m_pFontSizeFT.clear();
-    m_pFontSizeMF.clear();
-    m_pRotationContainer.clear();
-    m_pScalingFT.clear();
-    m_pScalingAndRotationFT.clear();
-    m_p0degRB.clear();
-    m_p90degRB.clear();
-    m_p270degRB.clear();
-    m_pFitToLineCB.clear();
-    m_pScaleWidthMF.clear();
-    m_pKerningMF.clear();
-    m_pPairKerningBtn.clear();
-    SvxCharBasePage::dispose();
 }
 
 
@@ -2546,31 +2569,27 @@ void SvxCharPositionPage::Initialize()
     GetPreviewCJKFont().SetFontSize( Size( 0, 240 ) );
     GetPreviewCTLFont().SetFontSize( Size( 0, 240 ) );
 
-    m_pNormalPosBtn->Check();
-    PositionHdl_Impl( m_pNormalPosBtn );
+    m_xNormalPosBtn->set_active(true);
+    PositionHdl_Impl(*m_xNormalPosBtn);
 
-    Link<Button*,void> aLink2 = LINK( this, SvxCharPositionPage, PositionHdl_Impl );
-    m_pHighPosBtn->SetClickHdl( aLink2 );
-    m_pNormalPosBtn->SetClickHdl( aLink2 );
-    m_pLowPosBtn->SetClickHdl( aLink2 );
+    Link<weld::ToggleButton&,void> aLink2 = LINK(this, SvxCharPositionPage, PositionHdl_Impl);
+    m_xHighPosBtn->connect_toggled(aLink2);
+    m_xNormalPosBtn->connect_toggled(aLink2);
+    m_xLowPosBtn->connect_toggled(aLink2);
 
     aLink2 = LINK( this, SvxCharPositionPage, RotationHdl_Impl );
-    m_p0degRB->SetClickHdl( aLink2 );
-    m_p90degRB->SetClickHdl( aLink2 );
-    m_p270degRB->SetClickHdl( aLink2 );
+    m_x0degRB->connect_toggled(aLink2);
+    m_x90degRB->connect_toggled(aLink2);
+    m_x270degRB->connect_toggled(aLink2);
 
-    Link<Edit&,void> aLink = LINK( this, SvxCharPositionPage, FontModifyHdl_Impl );
-    m_pHighLowMF->SetModifyHdl( aLink );
-    m_pFontSizeMF->SetModifyHdl( aLink );
+    Link<weld::MetricSpinButton&,void> aLink3 = LINK(this, SvxCharPositionPage, ValueChangedHdl_Impl);
+    m_xHighLowMF->connect_value_changed(aLink3);
+    m_xFontSizeMF->connect_value_changed(aLink3);
 
-    Link<Control&,void> aLink3 = LINK( this, SvxCharPositionPage, LoseFocusHdl_Impl );
-    m_pHighLowMF->SetLoseFocusHdl( aLink3 );
-    m_pFontSizeMF->SetLoseFocusHdl( aLink3 );
-
-    m_pHighLowRB->SetClickHdl( LINK( this, SvxCharPositionPage, AutoPositionHdl_Impl ) );
-    m_pFitToLineCB->SetClickHdl( LINK( this, SvxCharPositionPage, FitToLineHdl_Impl ) );
-    m_pKerningMF->SetModifyHdl( LINK( this, SvxCharPositionPage, KerningModifyHdl_Impl ) );
-    m_pScaleWidthMF->SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
+    m_xHighLowRB->connect_toggled(LINK(this, SvxCharPositionPage, AutoPositionHdl_Impl));
+    m_xFitToLineCB->connect_toggled(LINK(this, SvxCharPositionPage, FitToLineHdl_Impl));
+    m_xKerningMF->connect_value_changed(LINK(this, SvxCharPositionPage, KerningModifyHdl_Impl));
+    m_xScaleWidthMF->connect_value_changed(LINK(this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl));
 }
 
 void SvxCharPositionPage::UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
@@ -2596,102 +2615,93 @@ void SvxCharPositionPage::SetEscapement_Impl( SvxEscapement nEsc )
 
     short nFac = aEscItm.GetEsc() < 0 ? -1 : 1;
 
-    m_pHighLowMF->SetValue( aEscItm.GetEsc() * nFac );
-    m_pFontSizeMF->SetValue( aEscItm.GetProportionalHeight() );
+    m_xHighLowMF->set_value(aEscItm.GetEsc() * nFac, FUNIT_PERCENT);
+    m_xFontSizeMF->set_value(aEscItm.GetProportionalHeight(), FUNIT_PERCENT);
 
     if ( SvxEscapement::Off == nEsc )
     {
-        m_pHighLowFT->Disable();
-        m_pHighLowMF->Disable();
-        m_pFontSizeFT->Disable();
-        m_pFontSizeMF->Disable();
-        m_pHighLowRB->Disable();
+        m_xHighLowFT->set_sensitive(false);
+        m_xHighLowMF->set_sensitive(false);
+        m_xFontSizeFT->set_sensitive(false);
+        m_xFontSizeMF->set_sensitive(false);
+        m_xHighLowRB->set_sensitive(false);
     }
     else
     {
-        m_pFontSizeFT->Enable();
-        m_pFontSizeMF->Enable();
-        m_pHighLowRB->Enable();
+        m_xFontSizeFT->set_sensitive(true);
+        m_xFontSizeMF->set_sensitive(true);
+        m_xHighLowRB->set_sensitive(true);
 
-        if ( !m_pHighLowRB->IsChecked() )
+        if (!m_xHighLowRB->get_active())
         {
-            m_pHighLowFT->Enable();
-            m_pHighLowMF->Enable();
+            m_xHighLowFT->set_sensitive(true);
+            m_xHighLowMF->set_sensitive(true);
         }
         else
-            AutoPositionHdl_Impl( m_pHighLowRB );
+            AutoPositionHdl_Impl(*m_xHighLowRB);
     }
 
     UpdatePreview_Impl( 100, aEscItm.GetProportionalHeight(), aEscItm.GetEsc() );
 }
 
 
-IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, Button*, pBtn, void )
+IMPL_LINK_NOARG(SvxCharPositionPage, PositionHdl_Impl, weld::ToggleButton&, void)
 {
     SvxEscapement nEsc = SvxEscapement::Off;   // also when pBtn == NULL
 
-    if ( m_pHighPosBtn == pBtn )
+    if (m_xHighPosBtn->get_active())
         nEsc = SvxEscapement::Superscript;
-    else if ( m_pLowPosBtn == pBtn )
+    else if (m_xLowPosBtn->get_active())
         nEsc = SvxEscapement::Subscript;
 
     SetEscapement_Impl( nEsc );
 }
 
-
-IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, Button*, pBtn, void )
+IMPL_LINK_NOARG(SvxCharPositionPage, RotationHdl_Impl, weld::ToggleButton&, void)
 {
     bool bEnable = false;
-    if (m_p90degRB == pBtn  || m_p270degRB == pBtn)
+    if (m_x90degRB->get_active() || m_x270degRB->get_active())
         bEnable = true;
     else
-        OSL_ENSURE( m_p0degRB == pBtn, "unexpected button" );
-    m_pFitToLineCB->Enable( bEnable );
+        OSL_ENSURE(m_x0degRB->get_active(), "unexpected button");
+    m_xFitToLineCB->set_sensitive(bEnable);
 }
 
-
-IMPL_LINK_NOARG(SvxCharPositionPage, FontModifyHdl_Impl, Edit&, void)
+void SvxCharPositionPage::FontModifyHdl_Impl()
 {
-    sal_uInt8 nEscProp = static_cast<sal_uInt8>(m_pFontSizeMF->GetValue());
-    short nEsc  = static_cast<short>(m_pHighLowMF->GetValue());
-    nEsc *= m_pLowPosBtn->IsChecked() ? -1 : 1;
+    sal_uInt8 nEscProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FUNIT_PERCENT));
+    short nEsc  = static_cast<short>(m_xHighLowMF->get_value(FUNIT_PERCENT));
+    nEsc *= m_xLowPosBtn->get_active() ? -1 : 1;
     UpdatePreview_Impl( 100, nEscProp, nEsc );
 }
 
-
-IMPL_LINK( SvxCharPositionPage, AutoPositionHdl_Impl, Button*, pBox, void )
+IMPL_LINK(SvxCharPositionPage, AutoPositionHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    if ( static_cast<CheckBox*>(pBox)->IsChecked() )
+    if (rBox.get_active())
     {
-        m_pHighLowFT->Disable();
-        m_pHighLowMF->Disable();
+        m_xHighLowFT->set_sensitive(false);
+        m_xHighLowMF->set_sensitive(false);
     }
     else
-        PositionHdl_Impl( m_pHighPosBtn->IsChecked() ? m_pHighPosBtn
-                                                      : m_pLowPosBtn->IsChecked() ? m_pLowPosBtn
-                                                                                   : m_pNormalPosBtn );
+        PositionHdl_Impl(m_xHighPosBtn->get_active() ? *m_xHighPosBtn
+                                                     : m_xLowPosBtn->get_active() ? *m_xLowPosBtn
+                                                                                  : *m_xNormalPosBtn);
 }
 
-
-IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, Button*, pBox, void )
+IMPL_LINK_NOARG(SvxCharPositionPage, FitToLineHdl_Impl, weld::ToggleButton&, void)
 {
-    if (m_pFitToLineCB == pBox)
-    {
-        sal_uInt16 nVal = m_nScaleWidthInitialVal;
-        if (m_pFitToLineCB->IsChecked())
-            nVal = m_nScaleWidthItemSetVal;
-        m_pScaleWidthMF->SetValue( nVal );
-
-        m_pPreviewWin->SetFontWidthScale( nVal );
-    }
+    sal_uInt16 nVal = m_nScaleWidthInitialVal;
+    if (m_xFitToLineCB->get_active())
+        nVal = m_nScaleWidthItemSetVal;
+    m_xScaleWidthMF->set_value(nVal, FUNIT_PERCENT);
+    m_aPreviewWin.SetFontWidthScale( nVal );
 }
 
-
-IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
-    long nVal = static_cast<long>(m_pKerningMF->GetValue());
+    long nVal = static_cast<long>(m_xKerningMF->get_value(FUNIT_POINT));
     nVal = LogicToLogic( nVal, MapUnit::MapPoint, MapUnit::MapTwip );
-    long nKern = static_cast<short>(m_pKerningMF->Denormalize( nVal ));
+    long nKern = static_cast<short>(m_xKerningMF->denormalize(nVal));
 
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
@@ -2700,37 +2710,36 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
     rFont.SetFixKerning( static_cast<short>(nKern) );
     rCJKFont.SetFixKerning( static_cast<short>(nKern) );
     rCTLFont.SetFixKerning( static_cast<short>(nKern) );
-    m_pPreviewWin->Invalidate();
+    m_aPreviewWin.Invalidate();
 }
 
-
-IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, Control&, rControl, void )
+IMPL_LINK(SvxCharPositionPage, ValueChangedHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
-    MetricField* pField = static_cast<MetricField*>(&rControl);
-    bool bHigh = m_pHighPosBtn->IsChecked();
-    bool bLow = m_pLowPosBtn->IsChecked();
+    bool bHigh = m_xHighPosBtn->get_active();
+    bool bLow = m_xLowPosBtn->get_active();
     DBG_ASSERT( bHigh || bLow, "normal position is not valid" );
 
-    if ( m_pHighLowMF == pField )
+    if (m_xHighLowMF.get() == &rField)
     {
         if ( bLow )
-            m_nSubEsc = static_cast<short>(m_pHighLowMF->GetValue()) * -1;
+            m_nSubEsc = static_cast<short>(m_xHighLowMF->get_value(FUNIT_PERCENT)) * -1;
         else
-            m_nSuperEsc = static_cast<short>(m_pHighLowMF->GetValue());
+            m_nSuperEsc = static_cast<short>(m_xHighLowMF->get_value(FUNIT_PERCENT));
     }
-    else if ( m_pFontSizeMF == pField )
+    else if (m_xFontSizeMF.get() == &rField)
     {
         if ( bLow )
-            m_nSubProp = static_cast<sal_uInt8>(m_pFontSizeMF->GetValue());
+            m_nSubProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FUNIT_PERCENT));
         else
-            m_nSuperProp = static_cast<sal_uInt8>(m_pFontSizeMF->GetValue());
+            m_nSuperProp = static_cast<sal_uInt8>(m_xFontSizeMF->get_value(FUNIT_PERCENT));
     }
+
+    FontModifyHdl_Impl();
 }
 
-
-IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
-    m_pPreviewWin->SetFontWidthScale( sal_uInt16( m_pScaleWidthMF->GetValue() ) );
+    m_aPreviewWin.SetFontWidthScale(sal_uInt16(m_xScaleWidthMF->get_value(FUNIT_PERCENT)));
 }
 
 DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
@@ -2740,12 +2749,10 @@ DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-
-VclPtr<SfxTabPage> SvxCharPositionPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharPositionPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxCharPositionPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SvxCharPositionPage>::Create(pParent, *rSet);
 }
-
 
 void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
 {
@@ -2761,13 +2768,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         //fdo#75307 validate all the entries and discard all of them if any are
         //out of range
         bool bValid = true;
-        if (m_nSuperEsc < m_pHighLowMF->GetMin() || m_nSuperEsc > m_pHighLowMF->GetMax())
+        if (m_nSuperEsc < m_xHighLowMF->get_min(FUNIT_PERCENT) || m_nSuperEsc > m_xHighLowMF->get_max(FUNIT_PERCENT))
             bValid = false;
-        if (m_nSubEsc*-1 < m_pHighLowMF->GetMin() || m_nSubEsc*-1 > m_pHighLowMF->GetMax())
+        if (m_nSubEsc*-1 < m_xHighLowMF->get_min(FUNIT_PERCENT) || m_nSubEsc*-1 > m_xHighLowMF->get_max(FUNIT_PERCENT))
             bValid = false;
-        if (m_nSuperProp < m_pFontSizeMF->GetMin() || m_nSuperProp > m_pFontSizeMF->GetMax())
+        if (m_nSuperProp < m_xFontSizeMF->get_min(FUNIT_PERCENT) || m_nSuperProp > m_xFontSizeMF->get_max(FUNIT_PERCENT))
             bValid = false;
-        if (m_nSubProp < m_pFontSizeMF->GetMin() || m_nSubProp > m_pFontSizeMF->GetMax())
+        if (m_nSubProp < m_xFontSizeMF->get_min(FUNIT_PERCENT) || m_nSubProp > m_xFontSizeMF->get_max(FUNIT_PERCENT))
             bValid = false;
 
         if (!bValid)
@@ -2782,10 +2789,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     short nEsc = 0;
     sal_uInt8 nEscProp = 100;
 
-    m_pHighLowFT->Disable();
-    m_pHighLowMF->Disable();
-    m_pFontSizeFT->Disable();
-    m_pFontSizeMF->Disable();
+    m_xHighLowFT->set_sensitive(false);
+    m_xHighLowMF->set_sensitive(false);
+    m_xFontSizeFT->set_sensitive(false);
+    m_xFontSizeMF->set_sensitive(false);
 
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
@@ -2800,10 +2807,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
 
         if ( nEsc != 0 )
         {
-            m_pHighLowFT->Enable();
-            m_pHighLowMF->Enable();
-            m_pFontSizeFT->Enable();
-            m_pFontSizeMF->Enable();
+            m_xHighLowFT->set_sensitive(true);
+            m_xHighLowMF->set_sensitive(true);
+            m_xFontSizeFT->set_sensitive(true);
+            m_xFontSizeMF->set_sensitive(true);
 
             short nFac;
             bool bAutomatic(false);
@@ -2811,7 +2818,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
             if ( nEsc > 0 )
             {
                 nFac = 1;
-                m_pHighPosBtn->Check();
+                m_xHighPosBtn->set_active(true);
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
                     nEsc = DFLT_ESC_SUPER;
@@ -2821,40 +2828,40 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
             else
             {
                 nFac = -1;
-                m_pLowPosBtn->Check();
+                m_xLowPosBtn->set_active(true);
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
                     nEsc = DFLT_ESC_SUB;
                     bAutomatic = true;
                 }
             }
-            if (!m_pHighLowRB->IsEnabled())
+            if (!m_xHighLowRB->get_sensitive())
             {
-                m_pHighLowRB->Enable();
+                m_xHighLowRB->set_sensitive(true);
             }
-            m_pHighLowRB->Check(bAutomatic);
+            m_xHighLowRB->set_active(bAutomatic);
 
-            if ( m_pHighLowRB->IsChecked() )
+            if (m_xHighLowRB->get_active())
             {
-                m_pHighLowFT->Disable();
-                m_pHighLowMF->Disable();
+                m_xHighLowFT->set_sensitive(false);
+                m_xHighLowMF->set_sensitive(false);
             }
-            m_pHighLowMF->SetValue( m_pHighLowMF->Normalize( nFac * nEsc ) );
+            m_xHighLowMF->set_value(m_xHighLowMF->normalize(nFac * nEsc), FUNIT_PERCENT);
         }
         else
         {
-            m_pNormalPosBtn->Check();
-            m_pHighLowRB->Check();
-            PositionHdl_Impl( nullptr );
+            m_xNormalPosBtn->set_active(true);
+            m_xHighLowRB->set_active(true);
+            PositionHdl_Impl(*m_xNormalPosBtn);
         }
         //the height has to be set after the handler is called to keep the value also if the escapement is zero
-        m_pFontSizeMF->SetValue( m_pFontSizeMF->Normalize( nEscProp ) );
+        m_xFontSizeMF->set_value(m_xFontSizeMF->normalize(nEscProp), FUNIT_PERCENT);
     }
     else
     {
-        m_pHighPosBtn->Check( false );
-        m_pNormalPosBtn->Check( false );
-        m_pLowPosBtn->Check( false );
+        m_xHighPosBtn->set_active(false);
+        m_xNormalPosBtn->set_active(false);
+        m_xLowPosBtn->set_active(false);
     }
 
     // set BspFont
@@ -2867,7 +2874,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     {
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>(rSet->Get( nWhich ));
         MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
-        long nBig = static_cast<long>(m_pKerningMF->Normalize( static_cast<long>(rItem.GetValue()) ));
+        long nBig = static_cast<long>(m_xKerningMF->normalize( static_cast<long>(rItem.GetValue()) ));
         long nKerning = LogicToLogic( nBig, eUnit, MapUnit::MapPoint );
 
         // set Kerning at the Font, convert into Twips before
@@ -2877,13 +2884,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         rCTLFont.SetFixKerning( static_cast<short>(nKern) );
 
         //the attribute value must be displayed also if it's above the maximum allowed value
-        long nVal = static_cast<long>(m_pKerningMF->GetMax());
+        long nVal = static_cast<long>(m_xKerningMF->get_max(FUNIT_POINT));
         if(nVal < nKerning)
-            m_pKerningMF->SetMax( nKerning );
-        m_pKerningMF->SetValue( nKerning );
+            m_xKerningMF->set_max(nKerning, FUNIT_POINT);
+        m_xKerningMF->set_value(nKerning, FUNIT_POINT);
     }
     else
-        m_pKerningMF->SetText( OUString() );
+        m_xKerningMF->set_text(OUString());
 
     // Pair kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
@@ -2891,10 +2898,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     if ( rSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         const SvxAutoKernItem& rItem = static_cast<const SvxAutoKernItem&>(rSet->Get( nWhich ));
-        m_pPairKerningBtn->Check( rItem.GetValue() );
+        m_xPairKerningBtn->set_active(rItem.GetValue());
     }
     else
-        m_pPairKerningBtn->Check( false );
+        m_xPairKerningBtn->set_active(false);
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
@@ -2902,10 +2909,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     {
         const SvxCharScaleWidthItem& rItem = static_cast<const SvxCharScaleWidthItem&>( rSet->Get( nWhich ) );
         m_nScaleWidthInitialVal = rItem.GetValue();
-        m_pScaleWidthMF->SetValue( m_nScaleWidthInitialVal );
+        m_xScaleWidthMF->set_value(m_nScaleWidthInitialVal, FUNIT_PERCENT);
     }
     else
-        m_pScaleWidthMF->SetValue( 100 );
+        m_xScaleWidthMF->set_value(100, FUNIT_PERCENT);
 
     nWhich = GetWhich( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE );
     if ( rSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
@@ -2916,72 +2923,68 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     SfxItemState eState = rSet->GetItemState( nWhich );
     if( SfxItemState::UNKNOWN == eState )
     {
-        m_pRotationContainer->Hide();
-        m_pScalingAndRotationFT->Hide();
-        m_pScalingFT->Show();
+        m_xRotationContainer->hide();
+        m_xScalingAndRotationFT->hide();
+        m_xScalingFT->show();
     }
     else
     {
-        m_pRotationContainer->Show();
-        m_pScalingAndRotationFT->Show();
-        m_pScalingFT->Hide();
+        m_xRotationContainer->show();
+        m_xScalingAndRotationFT->show();
+        m_xScalingFT->hide();
 
-        Link<Button*,void> aOldLink( m_pFitToLineCB->GetClickHdl() );
-        m_pFitToLineCB->SetClickHdl( Link<Button*,void>() );
         if( eState >= SfxItemState::DEFAULT )
         {
             const SvxCharRotateItem& rItem =
                     static_cast<const SvxCharRotateItem&>( rSet->Get( nWhich ));
             if (rItem.IsBottomToTop())
-                m_p90degRB->Check();
+                m_x90degRB->set_active(true);
             else if (rItem.IsTopToBottom())
-                m_p270degRB->Check();
+                m_x270degRB->set_active(true);
             else
             {
                 DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
-                m_p0degRB->Check();
+                m_x0degRB->set_active(true);
             }
-            m_pFitToLineCB->Check( rItem.IsFitToLine() );
+            m_xFitToLineCB->set_active(rItem.IsFitToLine());
         }
         else
         {
             if( eState == SfxItemState::DONTCARE )
             {
-                m_p0degRB->Check( false );
-                m_p90degRB->Check( false );
-                m_p270degRB->Check( false );
+                m_x0degRB->set_active(false);
+                m_x90degRB->set_active(false);
+                m_x270degRB->set_active(false);
             }
             else
-                m_p0degRB->Check();
+                m_x0degRB->set_active(true);
 
-            m_pFitToLineCB->Check( false );
+            m_xFitToLineCB->set_active(false);
         }
-        m_pFitToLineCB->SetClickHdl( aOldLink );
-        m_pFitToLineCB->Enable( !m_p0degRB->IsChecked() );
+        m_xFitToLineCB->set_sensitive(!m_x0degRB->get_active());
 
         // is this value set?
         if( SfxItemState::UNKNOWN == rSet->GetItemState( GetWhich(
                                         SID_ATTR_CHAR_WIDTH_FIT_TO_LINE ) ))
-            m_pFitToLineCB->Hide();
+            m_xFitToLineCB->hide();
     }
     ChangesApplied();
 }
 
 void SvxCharPositionPage::ChangesApplied()
 {
-    m_pHighPosBtn->SaveValue();
-    m_pNormalPosBtn->SaveValue();
-    m_pLowPosBtn->SaveValue();
-    m_pHighLowRB->SaveValue();
-    m_p0degRB->SaveValue();
-    m_p90degRB->SaveValue();
-    m_p270degRB->SaveValue();
-    m_pFitToLineCB->SaveValue();
-    m_pScaleWidthMF->SaveValue();
-    m_pKerningMF->SaveValue();
-    m_pPairKerningBtn->SaveValue();
+    m_xHighPosBtn->save_state();
+    m_xNormalPosBtn->save_state();
+    m_xLowPosBtn->save_state();
+    m_xHighLowRB->save_state();
+    m_x0degRB->save_state();
+    m_x90degRB->save_state();
+    m_x270degRB->save_state();
+    m_xFitToLineCB->save_state();
+    m_xScaleWidthMF->save_value();
+    m_xKerningMF->save_value();
+    m_xPairKerningBtn->save_state();
 }
-
 
 bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
 {
@@ -2990,20 +2993,20 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     bool bModified = false, bChanged = true;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
     const SfxPoolItem* pOld = GetOldItem( *rSet, SID_ATTR_CHAR_ESCAPEMENT );
-    const bool bHigh = m_pHighPosBtn->IsChecked();
+    const bool bHigh = m_xHighPosBtn->get_active();
     short nEsc;
     sal_uInt8  nEscProp;
 
-    if ( bHigh || m_pLowPosBtn->IsChecked() )
+    if (bHigh || m_xLowPosBtn->get_active())
     {
-        if ( m_pHighLowRB->IsChecked() )
+        if (m_xHighLowRB->get_active())
             nEsc = bHigh ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;
         else
         {
-            nEsc = static_cast<short>(m_pHighLowMF->Denormalize( m_pHighLowMF->GetValue() ));
+            nEsc = static_cast<short>(m_xHighLowMF->denormalize(m_xHighLowMF->get_value(FUNIT_PERCENT)));
             nEsc *= (bHigh ? 1 : -1);
         }
-        nEscProp = static_cast<sal_uInt8>(m_pFontSizeMF->Denormalize( m_pFontSizeMF->GetValue() ));
+        nEscProp = static_cast<sal_uInt8>(m_xFontSizeMF->denormalize(m_xFontSizeMF->get_value(FUNIT_PERCENT)));
     }
     else
     {
@@ -3018,12 +3021,12 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
             bChanged = false;
     }
 
-    if ( !bChanged && !m_pHighPosBtn->GetSavedValue() &&
-         !m_pNormalPosBtn->GetSavedValue() && !m_pLowPosBtn->GetSavedValue() )
+    if ( !bChanged && !m_xHighPosBtn->get_saved_state() &&
+         !m_xNormalPosBtn->get_saved_state() && !m_xLowPosBtn->get_saved_state() )
         bChanged = true;
 
     if ( bChanged &&
-         ( m_pHighPosBtn->IsChecked() || m_pNormalPosBtn->IsChecked() || m_pLowPosBtn->IsChecked() ) )
+         ( m_xHighPosBtn->get_active() || m_xNormalPosBtn->get_active() || m_xLowPosBtn->get_active() ) )
     {
         rSet->Put( SvxEscapementItem( nEsc, nEscProp, nWhich ) );
         bModified = true;
@@ -3039,15 +3042,15 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     short nKerning = 0;
     MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
 
-    long nTmp = static_cast<long>(m_pKerningMF->GetValue());
+    long nTmp = static_cast<long>(m_xKerningMF->get_value(FUNIT_POINT));
     long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, eUnit );
-    nKerning = static_cast<short>(m_pKerningMF->Denormalize( nVal ));
+    nKerning = static_cast<short>(m_xKerningMF->denormalize( nVal ));
 
     SfxItemState eOldKernState = rOldSet.GetItemState( nWhich, false );
     if ( pOld )
     {
         const SvxKerningItem& rItem = *static_cast<const SvxKerningItem*>(pOld);
-        if ( (eOldKernState >= SfxItemState::DEFAULT || m_pKerningMF->GetText().isEmpty()) && rItem.GetValue() == nKerning )
+        if ( (eOldKernState >= SfxItemState::DEFAULT || m_xKerningMF->get_text().isEmpty()) && rItem.GetValue() == nKerning )
             bChanged = false;
     }
 
@@ -3062,9 +3065,9 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     // Pair-Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
 
-    if ( m_pPairKerningBtn->IsValueChangedFromSaved() )
+    if (m_xPairKerningBtn->get_state_changed_from_saved())
     {
-        rSet->Put( SvxAutoKernItem( m_pPairKerningBtn->IsChecked(), nWhich ) );
+        rSet->Put( SvxAutoKernItem( m_xPairKerningBtn->get_active(), nWhich ) );
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
@@ -3072,9 +3075,9 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if ( m_pScaleWidthMF->IsValueChangedFromSaved() )
+    if (m_xScaleWidthMF->get_value_changed_from_saved())
     {
-        rSet->Put( SvxCharScaleWidthItem( static_cast<sal_uInt16>(m_pScaleWidthMF->GetValue()), nWhich ) );
+        rSet->Put(SvxCharScaleWidthItem(static_cast<sal_uInt16>(m_xScaleWidthMF->get_value(FUNIT_PERCENT)), nWhich));
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
@@ -3082,15 +3085,15 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
 
     // Rotation
     nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
-    if ( m_p0degRB->IsValueChangedFromSaved()  ||
-         m_p90degRB->IsValueChangedFromSaved()  ||
-         m_p270degRB->IsValueChangedFromSaved()  ||
-         m_pFitToLineCB->IsValueChangedFromSaved() )
+    if ( m_x0degRB->get_state_changed_from_saved()  ||
+         m_x90degRB->get_state_changed_from_saved()  ||
+         m_x270degRB->get_state_changed_from_saved()  ||
+         m_xFitToLineCB->get_state_changed_from_saved() )
     {
-        SvxCharRotateItem aItem( 0, m_pFitToLineCB->IsChecked(), nWhich );
-        if (m_p90degRB->IsChecked())
+        SvxCharRotateItem aItem( 0, m_xFitToLineCB->get_active(), nWhich );
+        if (m_x90degRB->get_active())
             aItem.SetBottomToTop();
-        else if (m_p270degRB->IsChecked())
+        else if (m_x270degRB->get_active())
             aItem.SetTopToBottom();
         rSet->Put( aItem );
         bModified = true;

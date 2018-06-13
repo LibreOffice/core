@@ -68,7 +68,7 @@ VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxXMeasurePreview, 0)
 
 Size SvxXMeasurePreview::GetOptimalSize() const
 {
-    return getPreviewStripSize(this);
+    return getPreviewStripSize(*this);
 }
 
 SvxXMeasurePreview::~SvxXMeasurePreview()
