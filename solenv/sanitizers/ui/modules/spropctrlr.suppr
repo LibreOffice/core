@@ -1,0 +1,3 @@
+extensions/uiconfig/spropctrlr/ui/formlinksdialog.ui://GtkLabel[@id='explanationLabel'] orphan-label
+extensions/uiconfig/spropctrlr/ui/formlinksdialog.ui://GtkLabel[@id='detailLabel'] orphan-label
+extensions/uiconfig/spropctrlr/ui/formlinksdialog.ui://GtkLabel[@id='masterLabel'] orphan-label

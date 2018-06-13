@@ -1,3 +1,4 @@
+vcl/uiconfig/ui/cupspassworddialog.ui://GtkLabel[@id='text'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkSpinButton[@id='pageedit-nospin'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='totalnumpages'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkButton[@id='forward'] button-no-label
@@ -38,6 +39,8 @@ vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label6'] orphan-label
 vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label7'] orphan-label
 vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label8'] orphan-label
 vcl/qa/cppunit/builder/demo.ui://GtkEntry[@id='entry1'] no-labelled-by
+vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label3'] orphan-label
+vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label10'] orphan-label
 vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label20'] orphan-label
 vcl/qa/cppunit/builder/demo.ui://GtkDrawingArea[@id='drawingarea1'] no-labelled-by
 vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label34'] orphan-label
