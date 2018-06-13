@@ -47,6 +47,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include <comphelper/doublecheckedinit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -125,33 +126,6 @@ sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too
 sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
 
 bool ScGlobal::bThreadedGroupCalcInProgress = false;
-
-// Thread-safe singleton creation. Ideally rtl_Instance should be used, but that one doesn't
-// allow accessing the pointer (so ScGlobal::Clear() cannot free the objects). So this function
-// is basically rtl_Instance::create() that uses a given pointer.
-template< typename Type, typename Function = std::function< Type*() >,
-          typename Guard = osl::MutexGuard, typename GuardCtor = osl::GetGlobalMutex >
-static inline
-Type* doubleCheckedInit( Type*& pointer, Function function, GuardCtor guardCtor = osl::GetGlobalMutex())
-{
-    Type* p = pointer;
-    if (!p)
-    {
-        Guard guard(guardCtor());
-        p = pointer;
-        if (!p)
-        {
-            p = function();
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            pointer = p;
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
-    return p;
-}
 
 // Static functions
 
@@ -304,12 +278,12 @@ ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
 
 LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
 {
-    return doubleCheckedInit( pLegacyFuncCollection, []() { return new LegacyFuncCollection(); });
+    return comphelper::doubleCheckedInit( pLegacyFuncCollection, []() { return new LegacyFuncCollection(); });
 }
 
 ScUnoAddInCollection* ScGlobal::GetAddInCollection()
 {
-    return doubleCheckedInit( pAddInCollection, []() { return new ScUnoAddInCollection(); });
+    return comphelper::doubleCheckedInit( pAddInCollection, []() { return new ScUnoAddInCollection(); });
 }
 
 ScUserList* ScGlobal::GetUserList()
@@ -1004,7 +978,7 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatte
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 {
-    return doubleCheckedInit( pTransliteration,
+    return comphelper::doubleCheckedInit( pTransliteration,
         []()
         {
             const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -1016,7 +990,7 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 }
 ::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
 {
-    return doubleCheckedInit( pCaseTransliteration,
+    return comphelper::doubleCheckedInit( pCaseTransliteration,
         []()
         {
             const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -1046,7 +1020,7 @@ CalendarWrapper*     ScGlobal::GetCalendar()
 }
 CollatorWrapper*        ScGlobal::GetCollator()
 {
-    return doubleCheckedInit( pCollator,
+    return comphelper::doubleCheckedInit( pCollator,
         []()
         {
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
@@ -1056,7 +1030,7 @@ CollatorWrapper*        ScGlobal::GetCollator()
 }
 CollatorWrapper*        ScGlobal::GetCaseCollator()
 {
-    return doubleCheckedInit( pCaseCollator,
+    return comphelper::doubleCheckedInit( pCaseCollator,
         []()
         {
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
@@ -1066,7 +1040,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
 }
 css::lang::Locale*     ScGlobal::GetLocale()
 {
-    return doubleCheckedInit( pLocale,
+    return comphelper::doubleCheckedInit( pLocale,
         []() { return new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale()); });
 }
 
