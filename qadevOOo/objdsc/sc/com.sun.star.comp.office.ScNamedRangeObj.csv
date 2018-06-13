@@ -1,3 +1,2 @@
-"ScNamedRangeObj";"com::sun::star::sheet::XCellRangeReferrer";"getReferredCells()"
 "ScNamedRangeObj";"com::sun::star::container::XNamed";"getName()"
 "ScNamedRangeObj";"com::sun::star::container::XNamed";"setName()"
