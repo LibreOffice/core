@@ -325,10 +325,18 @@ void myparser::traverse( xmlNodePtr parentNode )
         else if (!strcmp(reinterpret_cast<const char*>(test->name), "bookmark"))
         {
             xmlChar *branchxml = xmlGetProp(test, reinterpret_cast<const xmlChar*>("branch"));
-            xmlChar *idxml = xmlGetProp(test, reinterpret_cast<const xmlChar*>("id"));
+            if (branchxml == nullptr) {
+                throw HelpProcessingException(
+                    HelpProcessingErrorClass::XmlParsing, "bookmark lacks branch attribute");
+            }
             std::string branch(reinterpret_cast<char*>(branchxml));
-            std::string anchor(reinterpret_cast<char*>(idxml));
             xmlFree (branchxml);
+            xmlChar *idxml = xmlGetProp(test, reinterpret_cast<const xmlChar*>("id"));
+            if (idxml == nullptr) {
+                throw HelpProcessingException(
+                    HelpProcessingErrorClass::XmlParsing, "bookmark lacks id attribute");
+            }
+            std::string anchor(reinterpret_cast<char*>(idxml));
             xmlFree (idxml);
 
             if (branch.compare(0, 3, "hid") == 0)
