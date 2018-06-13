@@ -4462,10 +4462,22 @@
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce28"/>
-     <table:table-cell table:style-name="ce32"/>
-     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:formula="of:=ZTEST([.F18:.G18]; 42)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#DIV/0!</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#DIV/0!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#DIV/0!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:formula="of:=ERROR.TYPE([.A18])=2" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=ZTEST(F18:G18, 42)" calcext:value-type="string">
+      <text:p>=ZTEST(F18:G18, 42)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="42" calcext:value-type="float">
+      <text:p>42</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce58"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce46"/>
