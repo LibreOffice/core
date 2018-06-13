@@ -1014,7 +1014,10 @@ SwContentNode::~SwContentNode()
 {
     // The base class SwClient of SwFrame excludes itself from the dependency list!
     // Thus, we need to delete all Frames in the dependency list.
-    DelFrames(false);
+    if (!IsTextNode()) // see ~SwTextNode
+    {
+        DelFrames(false);
+    }
 
     m_aCondCollListener.EndListeningAll();
     m_pCondColl = nullptr;
@@ -1307,7 +1310,7 @@ void SwContentNode::MakeFrames( SwContentNode& rNode )
  *
  * An input param to identify if the acc table should be disposed.
  */
-void SwContentNode::DelFrames( bool bIsDisposeAccTable )
+void SwContentNode::DelFrames(bool /*removeme*/)
 {
     if( !HasWriterListeners() )
         return;
@@ -1360,11 +1363,6 @@ void SwContentNode::DelFrames( bool bIsDisposeAccTable )
         }
         pFrame->Cut();
         SwFrame::DestroyFrame(pFrame);
-    }
-
-    if( bIsDisposeAccTable && IsTextNode() )
-    {
-        GetTextNode()->DelFrames_TextNodePart();
     }
 }
 
