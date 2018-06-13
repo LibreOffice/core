@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_9358be58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-06-13T02:40:14Z",
+      "side": 1,
+      "message": "Remember to add the “#” symbol to the bug number reference; otherwise, the Commit Notification bot and the changelog generator won’t pick up this patch.",
+      "revId": "1bbae6e5449d8b1ef08e9d79e5bdb4c88a1fa1d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
