@@ -327,32 +327,31 @@ public:
 
 // class SvxCharTwoLinesPage ---------------------------------------------
 
-class SvxCharTwoLinesPage : public SvxCharBasePage
+class SvxCharTwoLinesPage : public CharBasePage
 {
     friend class VclPtr<SvxCharTwoLinesPage>;
 private:
     static const sal_uInt16 pTwoLinesRanges[];
-    VclPtr<CheckBox>           m_pTwoLinesBtn;
-    VclPtr<VclContainer>       m_pEnclosingFrame;
-    VclPtr<ListBox>            m_pStartBracketLB;
-    VclPtr<ListBox>            m_pEndBracketLB;
-
     sal_uInt16              m_nStartBracketPosition;
     sal_uInt16              m_nEndBracketPosition;
 
-    SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    std::unique_ptr<weld::CheckButton>  m_xTwoLinesBtn;
+    std::unique_ptr<weld::Widget> m_xEnclosingFrame;
+    std::unique_ptr<weld::TreeView> m_xStartBracketLB;
+    std::unique_ptr<weld::TreeView> m_xEndBracketLB;
+
+    SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     void                UpdatePreview_Impl();
     void                Initialize();
-    void                SelectCharacter( ListBox* pBox );
-    void                SetBracket( sal_Unicode cBracket, bool bStart );
+    void                SelectCharacter(weld::TreeView* pBox);
+    void                SetBracket(sal_Unicode cBracket, bool bStart);
 
-    DECL_LINK(TwoLinesHdl_Impl, Button*, void);
-    DECL_LINK(CharacterMapHdl_Impl, ListBox&, void );
+    DECL_LINK(TwoLinesHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(CharacterMapHdl_Impl, weld::TreeView&, void);
 
 public:
     virtual ~SvxCharTwoLinesPage() override;
-    virtual void dispose() override;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

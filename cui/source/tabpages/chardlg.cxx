@@ -3127,45 +3127,33 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharTwoLinesPage ------------------------------------------------
 
-SvxCharTwoLinesPage::SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pParent, "TwoLinesPage", "cui/ui/twolinespage.ui", rInSet)
+SvxCharTwoLinesPage::SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rInSet)
+    : CharBasePage(pParent, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)
     , m_nStartBracketPosition( 0 )
     , m_nEndBracketPosition( 0 )
+    , m_xTwoLinesBtn(m_xBuilder->weld_check_button("twolines"))
+    , m_xEnclosingFrame(m_xBuilder->weld_widget("enclosing"))
+    , m_xStartBracketLB(m_xBuilder->weld_tree_view("startbracket"))
+    , m_xEndBracketLB(m_xBuilder->weld_tree_view("endbracket"))
 {
-    get(m_pTwoLinesBtn, "twolines");
-    get(m_pEnclosingFrame, "enclosing");
-    get(m_pStartBracketLB, "startbracket");
-    get(m_pEndBracketLB, "endbracket");
-
-    get(m_pPreviewWin, "preview");
-
+    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
     Initialize();
 }
 
 SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
 {
-    disposeOnce();
-}
-
-void SvxCharTwoLinesPage::dispose()
-{
-    m_pTwoLinesBtn.clear();
-    m_pEnclosingFrame.clear();
-    m_pStartBracketLB.clear();
-    m_pEndBracketLB.clear();
-    SvxCharBasePage::dispose();
 }
 
 void SvxCharTwoLinesPage::Initialize()
 {
-    m_pTwoLinesBtn->Check( false );
-    TwoLinesHdl_Impl( nullptr );
+    m_xTwoLinesBtn->set_active(false);
+    TwoLinesHdl_Impl(*m_xTwoLinesBtn);
 
-    m_pTwoLinesBtn->SetClickHdl( LINK( this, SvxCharTwoLinesPage, TwoLinesHdl_Impl ) );
+    m_xTwoLinesBtn->connect_toggled(LINK(this, SvxCharTwoLinesPage, TwoLinesHdl_Impl));
 
-    Link<ListBox&,void> aLink = LINK( this, SvxCharTwoLinesPage, CharacterMapHdl_Impl );
-    m_pStartBracketLB->SetSelectHdl( aLink );
-    m_pEndBracketLB->SetSelectHdl( aLink );
+    Link<weld::TreeView&,void> aLink = LINK(this, SvxCharTwoLinesPage, CharacterMapHdl_Impl);
+    m_xStartBracketLB->connect_changed(aLink);
+    m_xEndBracketLB->connect_changed(aLink);
 
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
@@ -3175,10 +3163,9 @@ void SvxCharTwoLinesPage::Initialize()
     rCTLFont.SetFontSize( Size( 0, 220 ) );
 }
 
-
-void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
+void SvxCharTwoLinesPage::SelectCharacter(weld::TreeView* pBox)
 {
-    bool bStart = pBox == m_pStartBracketLB;
+    bool bStart = pBox == m_xStartBracketLB.get();
     SvxCharacterMap aDlg(GetFrameWeld(), nullptr, false);
     aDlg.DisableFontSelection();
 
@@ -3189,28 +3176,28 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
     }
     else
     {
-        pBox->SelectEntryPos( bStart ? m_nStartBracketPosition : m_nEndBracketPosition );
+        pBox->select(bStart ? m_nStartBracketPosition : m_nEndBracketPosition);
     }
 }
 
 
 void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, bool bStart )
 {
-    sal_Int32 nEntryPos = 0;
-    ListBox* pBox = bStart ? m_pStartBracketLB.get() : m_pEndBracketLB.get();
-    if ( 0 == cBracket )
-        pBox->SelectEntryPos(0);
+    int nEntryPos = 0;
+    weld::TreeView* pBox = bStart ? m_xStartBracketLB.get() : m_xEndBracketLB.get();
+    if (cBracket == 0)
+        pBox->select(0);
     else
     {
         bool bFound = false;
-        for ( sal_Int32 i = 1; i < pBox->GetEntryCount(); ++i )
+        for (int i = 1; i < pBox->n_children(); ++i)
         {
-            if ( reinterpret_cast<sal_uLong>(pBox->GetEntryData(i)) != CHRDLG_ENCLOSE_SPECIAL_CHAR )
+            if (pBox->get_id(i).toInt32() != CHRDLG_ENCLOSE_SPECIAL_CHAR)
             {
-                const sal_Unicode cChar = pBox->GetEntry(i)[0];
-                if ( cChar == cBracket )
+                const sal_Unicode cChar = pBox->get_text(i)[0];
+                if (cChar == cBracket)
                 {
-                    pBox->SelectEntryPos(i);
+                    pBox->select(i);
                     nEntryPos = i;
                     bFound = true;
                     break;
@@ -3218,37 +3205,35 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, bool bStart )
             }
         }
 
-        if ( !bFound )
+        if (!bFound)
         {
-            nEntryPos = pBox->InsertEntry( OUString(cBracket) );
-            pBox->SelectEntryPos( nEntryPos );
+            pBox->append_text(OUString(cBracket));
+            nEntryPos = pBox->n_children() - 1;
+            pBox->select(nEntryPos);
         }
     }
-    if( bStart )
+    if (bStart)
         m_nStartBracketPosition = nEntryPos;
     else
         m_nEndBracketPosition = nEntryPos;
 }
 
-
-IMPL_LINK_NOARG(SvxCharTwoLinesPage, TwoLinesHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxCharTwoLinesPage, TwoLinesHdl_Impl, weld::ToggleButton&, void)
 {
-    bool bChecked = m_pTwoLinesBtn->IsChecked();
-    m_pEnclosingFrame->Enable( bChecked );
-
+    bool bChecked = m_xTwoLinesBtn->get_active();
+    m_xEnclosingFrame->set_sensitive(bChecked);
     UpdatePreview_Impl();
 }
 
-
-IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK(SvxCharTwoLinesPage, CharacterMapHdl_Impl, weld::TreeView&, rBox, void)
 {
-    sal_Int32 nPos = rBox.GetSelectedEntryPos();
-    if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == reinterpret_cast<sal_uLong>(rBox.GetEntryData( nPos )) )
+    int nPos = rBox.get_selected_index();
+    if (rBox.get_id(nPos).toInt32() == CHRDLG_ENCLOSE_SPECIAL_CHAR)
         SelectCharacter( &rBox );
     else
     {
-        bool bStart = &rBox == m_pStartBracketLB;
-        if( bStart )
+        bool bStart = &rBox == m_xStartBracketLB.get();
+        if (bStart)
             m_nStartBracketPosition = nPos;
         else
             m_nEndBracketPosition = nPos;
@@ -3256,12 +3241,10 @@ IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox&, rBox, void )
     UpdatePreview_Impl();
 }
 
-
 void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SvxCharBasePage::ActivatePage( rSet );
+    CharBasePage::ActivatePage(rSet);
 }
-
 
 DeactivateRC SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -3270,22 +3253,21 @@ DeactivateRC SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-
-VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxCharTwoLinesPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SvxCharTwoLinesPage>::Create(pParent, *rSet);
 }
 
 void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )
 {
-    m_pTwoLinesBtn->Check( false );
+    m_xTwoLinesBtn->set_active(false);
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
     SfxItemState eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SfxItemState::DONTCARE )
     {
         const SvxTwoLinesItem& rItem = static_cast<const SvxTwoLinesItem&>(rSet->Get( nWhich ));
-        m_pTwoLinesBtn->Check( rItem.GetValue() );
+        m_xTwoLinesBtn->set_active(rItem.GetValue());
 
         if ( rItem.GetValue() )
         {
@@ -3293,7 +3275,7 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )
             SetBracket( rItem.GetEndBracket(), false );
         }
     }
-    TwoLinesHdl_Impl( nullptr );
+    TwoLinesHdl_Impl(*m_xTwoLinesBtn);
 
     SetPrevFontWidthScale( *rSet );
 }
@@ -3304,11 +3286,11 @@ bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet* rSet )
     bool bModified = false, bChanged = true;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
     const SfxPoolItem* pOld = GetOldItem( *rSet, SID_ATTR_CHAR_TWO_LINES );
-    bool bOn = m_pTwoLinesBtn->IsChecked();
-    sal_Unicode cStart = ( bOn && m_pStartBracketLB->GetSelectedEntryPos() > 0 )
-        ? m_pStartBracketLB->GetSelectedEntry()[0] : 0;
-    sal_Unicode cEnd = ( bOn && m_pEndBracketLB->GetSelectedEntryPos() > 0 )
-        ? m_pEndBracketLB->GetSelectedEntry()[0] : 0;
+    bool bOn = m_xTwoLinesBtn->get_active();
+    sal_Unicode cStart = ( bOn && m_xStartBracketLB->get_selected_index() > 0 )
+        ? m_xStartBracketLB->get_selected_text()[0] : 0;
+    sal_Unicode cEnd = ( bOn && m_xEndBracketLB->get_selected_index() > 0 )
+        ? m_xEndBracketLB->get_selected_text()[0] : 0;
 
     if ( pOld )
     {
@@ -3331,13 +3313,13 @@ bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet* rSet )
 
 void    SvxCharTwoLinesPage::UpdatePreview_Impl()
 {
-    sal_Unicode cStart = m_pStartBracketLB->GetSelectedEntryPos() > 0
-        ? m_pStartBracketLB->GetSelectedEntry()[0] : 0;
-    sal_Unicode cEnd = m_pEndBracketLB->GetSelectedEntryPos() > 0
-        ? m_pEndBracketLB->GetSelectedEntry()[0] : 0;
-    m_pPreviewWin->SetBrackets(cStart, cEnd);
-    m_pPreviewWin->SetTwoLines(m_pTwoLinesBtn->IsChecked());
-    m_pPreviewWin->Invalidate();
+    sal_Unicode cStart = m_xStartBracketLB->get_selected_index() > 0
+        ? m_xStartBracketLB->get_selected_text()[0] : 0;
+    sal_Unicode cEnd = m_xEndBracketLB->get_selected_index() > 0
+        ? m_xEndBracketLB->get_selected_text()[0] : 0;
+    m_aPreviewWin.SetBrackets(cStart, cEnd);
+    m_aPreviewWin.SetTwoLines(m_xTwoLinesBtn->get_active());
+    m_aPreviewWin.Invalidate();
 }
 
 void SvxCharTwoLinesPage::PageCreated(const SfxAllItemSet& aSet)
