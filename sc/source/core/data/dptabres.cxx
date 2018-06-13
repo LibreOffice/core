@@ -758,7 +758,6 @@ ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
 
 ScDPResultData::~ScDPResultData()
 {
-    std::for_each(maDimMembers.begin(), maDimMembers.end(), std::default_delete<ResultMembers>());
 }
 
 void ScDPResultData::SetMeasureData(
@@ -909,15 +908,15 @@ bool ScDPResultData::HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
         return false;
 }
 
-ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const
+ResultMembers& ScDPResultData::GetDimResultMembers(long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const
 {
     if (nDim < static_cast<long>(maDimMembers.size()) && maDimMembers[nDim])
-        return maDimMembers[nDim];
+        return *maDimMembers[nDim];
 
     if (nDim >= static_cast<long>(maDimMembers.size()))
-        maDimMembers.resize(nDim+1, nullptr);
+        maDimMembers.resize(nDim+1);
 
-    ResultMembers* pResultMembers = new ResultMembers();
+    std::unique_ptr<ResultMembers> pResultMembers(new ResultMembers());
     // global order is used to initialize aMembers, so it doesn't have to be looked at later
     const ScMemberSortOrder& rGlobalOrder = pLevel->GetGlobalOrder();
 
@@ -934,8 +933,8 @@ ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, const ScDPDimensio
         }
     }
 
-    maDimMembers[nDim] = pResultMembers;
-    return maDimMembers[nDim];
+    maDimMembers[nDim] = std::move(pResultMembers);
+    return *maDimMembers[nDim];
 }
 
 ScDPResultMember::ScDPResultMember(
@@ -2902,12 +2901,12 @@ void ScDPResultDimension::LateInitFrom(
 
     if ( !bLateInitAllMembers )
     {
-        ResultMembers* pMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
-        bLateInitAllMembers = pMembers->IsHasHideDetailsMembers();
+        ResultMembers& rMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
+        bLateInitAllMembers = rMembers.IsHasHideDetailsMembers();
 
-        SAL_INFO("sc.core", aDimensionName << (pMembers->IsHasHideDetailsMembers() ? " HasHideDetailsMembers" : ""));
+        SAL_INFO("sc.core", aDimensionName << (rMembers.IsHasHideDetailsMembers() ? " HasHideDetailsMembers" : ""));
 
-        pMembers->SetHasHideDetailsMembers( false );
+        rMembers.SetHasHideDetailsMembers( false );
     }
 
     bool bNewAllMembers = (!rParams.IsRow()) ||  nPos == 0 || bLateInitAllMembers;
@@ -4011,7 +4010,7 @@ void ScDPResultDimension::InitWithMembers(
         long nDimSource = pThisDim->GetDimension();     //TODO: check GetSourceDim?
 
         //  create all members at the first call (preserve order)
-        ResultMembers* pMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
+        ResultMembers& rMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
         ScDPGroupCompare aCompare( pResultData, rInitState, nDimSource );
         //  initialize only specific member (or all if "show empty" flag is set)
         ScDPResultMember* pResultMember = nullptr;
@@ -4022,7 +4021,7 @@ void ScDPResultDimension::InitWithMembers(
 
         if ( pResultMember == nullptr )
         { //only insert found item
-            ScDPParentDimData* pMemberData = pMembers->FindMember( nDataID );
+            ScDPParentDimData* pMemberData = rMembers.FindMember( nDataID );
             if ( pMemberData && aCompare.IsIncluded( *( pMemberData->mpMemberDesc ) ) )
                 pResultMember = InsertMember( pMemberData );
         }
