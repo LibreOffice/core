@@ -14,6 +14,7 @@ vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='fromwhich'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkEntry[@id='pagerange'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkComboBox[@id='paperspersheetlb'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='pagespersheettxt'] orphan-label
+vcl/uiconfig/ui/printdialog.ui://vcllo-ShowNupOrderWindow[@id='orderpreview'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='pagemargintxt2'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='sheetmargintxt2'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkComboBox[@id='scriptdirection'] no-labelled-by

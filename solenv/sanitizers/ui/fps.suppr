@@ -1,3 +1,4 @@
+fpicker/uiconfig/ui/explorerfiledialog.ui://svtlo-SvtURLBox[@id='current_path'] no-labelled-by
 fpicker/uiconfig/ui/explorerfiledialog.ui://GtkLabel[@id='shared_label'] orphan-label
 fpicker/uiconfig/ui/explorerfiledialog.ui://GtkComboBox[@id='shared'] no-labelled-by
 fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='link'] button-no-label
