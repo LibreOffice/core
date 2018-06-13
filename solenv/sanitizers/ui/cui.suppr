@@ -237,7 +237,6 @@ cui/uiconfig/ui/personalization_tab.ui://GtkButton[@id='default3'] button-no-lab
 cui/uiconfig/ui/personalization_tab.ui://GtkLabel[@id='applied_theme'] orphan-label
 cui/uiconfig/ui/personalization_tab.ui://GtkLabel[@id='extensions_label'] orphan-label
 cui/uiconfig/ui/personalization_tab.ui://GtkButton[@id='persona_preview'] button-no-label
-cui/uiconfig/ui/positionpage.ui://GtkSpinButton[@id='kerningsb:0pt'] no-labelled-by
 cui/uiconfig/ui/select_persona_dialog.ui://GtkEntry[@id='search_term'] no-labelled-by
 cui/uiconfig/ui/select_persona_dialog.ui://GtkButton[@id='suggestion1'] button-no-label
 cui/uiconfig/ui/select_persona_dialog.ui://GtkButton[@id='suggestion2'] button-no-label

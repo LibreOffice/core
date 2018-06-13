@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">100</property>
@@ -22,6 +21,12 @@
     <property name="upper">1000</property>
     <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="lower">1</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkBox" id="PositionPage">
     <property name="visible">True</property>
@@ -123,7 +128,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="positionpage|raiselower">Raise/lower by</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">raiselowersb:0%</property>
+                        <property name="mnemonic_widget">raiselowersb</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -132,7 +137,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="raiselowersb:0%">
+                      <object class="GtkSpinButton" id="raiselowersb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustment1</property>
@@ -143,10 +148,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="fontsizesb:0%">
+                      <object class="GtkSpinButton" id="fontsizesb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="adjustment">adjustment4</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -174,7 +179,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="positionpage|relativefontsize">Relative font size</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">fontsizesb:0%</property>
+                        <property name="mnemonic_widget">fontsizesb</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -245,7 +250,6 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">90deg</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -262,7 +266,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">270deg</property>
+                        <property name="group">0deg</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -321,7 +325,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="positionpage|label24">Scale width</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">scalewidthsb:0%</property>
+                        <property name="mnemonic_widget">scalewidthsb</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -330,7 +334,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="scalewidthsb:0%">
+                      <object class="GtkSpinButton" id="scalewidthsb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustment2</property>
@@ -415,7 +419,21 @@
                 <property name="can_focus">False</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkSpinButton" id="kerningsb:0pt">
+                  <object class="GtkLabel" id="label7">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="positionpage|label7">Character spacing</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">kerningsb</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="kerningsb">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment3</property>
@@ -424,7 +442,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -440,7 +458,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -473,14 +491,29 @@
         <property name="left_padding">12</property>
         <property name="right_padding">12</property>
         <child>
-          <object class="svxlo-SvxFontPrevWindow" id="preview:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="preview:border-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="positionpage|preview-atkobject">Preview</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkDrawingArea" id="preview">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="preview-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="positionpage|preview-atkobject">Preview</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

@@ -26,6 +26,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/langbox.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
 
 // forward ---------------------------------------------------------------
@@ -54,6 +55,33 @@ protected:
 public:
     virtual ~SvxCharBasePage() override;
     virtual void dispose() override;
+
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
+
+    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
+
+};
+
+class CharBasePage : public SfxTabPage
+{
+protected:
+    FontPrevWindow   m_aPreviewWin;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
+
+    bool                m_bPreviewBackgroundToCharacter;
+
+    CharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
+
+    void SetPrevFontWidthScale( const SfxItemSet& rSet );
+    void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
+
+    inline SvxFont&     GetPreviewFont();
+    inline SvxFont&     GetPreviewCJKFont();
+    inline SvxFont&     GetPreviewCTLFont();
+
+public:
+    virtual ~CharBasePage() override;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -252,35 +280,12 @@ public:
 // class SvxCharPositionPage ---------------------------------------------
 
 
-class SvxCharPositionPage : public SvxCharBasePage
+class SvxCharPositionPage : public CharBasePage
 {
     friend class VclPtr<SvxCharPositionPage>;
     static const sal_uInt16 pPositionRanges[];
 
 private:
-    VclPtr<RadioButton>        m_pHighPosBtn;
-    VclPtr<RadioButton>        m_pNormalPosBtn;
-    VclPtr<RadioButton>        m_pLowPosBtn;
-    VclPtr<FixedText>          m_pHighLowFT;
-    VclPtr<MetricField>        m_pHighLowMF;
-    VclPtr<CheckBox>           m_pHighLowRB;
-    VclPtr<FixedText>          m_pFontSizeFT;
-    VclPtr<MetricField>        m_pFontSizeMF;
-
-    VclPtr<VclContainer>       m_pRotationContainer;
-
-    VclPtr<FixedText>          m_pScalingFT;
-    VclPtr<FixedText>          m_pScalingAndRotationFT;
-    VclPtr<RadioButton>        m_p0degRB;
-    VclPtr<RadioButton>        m_p90degRB;
-    VclPtr<RadioButton>        m_p270degRB;
-    VclPtr<CheckBox>           m_pFitToLineCB;
-
-    VclPtr<MetricField>        m_pScaleWidthMF;
-
-    VclPtr<MetricField>        m_pKerningMF;
-    VclPtr<CheckBox>           m_pPairKerningBtn;
-
     short               m_nSuperEsc;
     short               m_nSubEsc;
 
@@ -290,25 +295,47 @@ private:
     sal_uInt8                m_nSuperProp;
     sal_uInt8                m_nSubProp;
 
-                        SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    std::unique_ptr<weld::RadioButton> m_xHighPosBtn;
+    std::unique_ptr<weld::RadioButton> m_xNormalPosBtn;
+    std::unique_ptr<weld::RadioButton> m_xLowPosBtn;
+    std::unique_ptr<weld::Label> m_xHighLowFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xHighLowMF;
+    std::unique_ptr<weld::CheckButton> m_xHighLowRB;
+    std::unique_ptr<weld::Label> m_xFontSizeFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xFontSizeMF;
+
+    std::unique_ptr<weld::Widget> m_xRotationContainer;
+
+    std::unique_ptr<weld::Label> m_xScalingFT;
+    std::unique_ptr<weld::Label> m_xScalingAndRotationFT;
+    std::unique_ptr<weld::RadioButton> m_x0degRB;
+    std::unique_ptr<weld::RadioButton> m_x90degRB;
+    std::unique_ptr<weld::RadioButton> m_x270degRB;
+    std::unique_ptr<weld::CheckButton> m_xFitToLineCB;
+
+    std::unique_ptr<weld::MetricSpinButton> m_xScaleWidthMF;
+
+    std::unique_ptr<weld::MetricSpinButton> m_xKerningMF;
+    std::unique_ptr<weld::CheckButton> m_xPairKerningBtn;
+
+                        SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
     void                SetEscapement_Impl( SvxEscapement nEsc );
 
-    DECL_LINK(    PositionHdl_Impl, Button*, void );
-    DECL_LINK(    RotationHdl_Impl, Button*, void );
-    DECL_LINK(    FontModifyHdl_Impl, Edit&, void );
-    DECL_LINK(    AutoPositionHdl_Impl, Button*, void );
-    DECL_LINK(    FitToLineHdl_Impl, Button*, void );
-    DECL_LINK(    KerningSelectHdl_Impl, ListBox&, void );
-    DECL_LINK(    KerningModifyHdl_Impl, Edit&, void );
-    DECL_LINK(    LoseFocusHdl_Impl, Control&, void );
-    DECL_LINK(    ScaleWidthModifyHdl_Impl, Edit&, void );
+    DECL_LINK(PositionHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(RotationHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(AutoPositionHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(FitToLineHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(KerningSelectHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(KerningModifyHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ValueChangedHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ScaleWidthModifyHdl_Impl, weld::MetricSpinButton&, void);
+    void FontModifyHdl_Impl();
 
 public:
     virtual ~SvxCharPositionPage() override;
-    virtual void dispose() override;
 
     using SfxTabPage::DeactivatePage;
 

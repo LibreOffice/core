@@ -1947,7 +1947,7 @@ VCL_BUILDER_FACTORY(SvxXLinePreview)
 
 Size SvxXLinePreview::GetOptimalSize() const
 {
-    return getPreviewStripSize(this);
+    return getPreviewStripSize(*this);
 }
 
 SvxXLinePreview::~SvxXLinePreview()
@@ -2261,6 +2261,7 @@ void PreviewBase::LocalPostPaint(vcl::RenderContext& rRenderContext)
 void PreviewBase::StyleUpdated()
 {
     InitSettings();
+    CustomWidgetController::StyleUpdated();
 }
 
 XRectPreview::XRectPreview()

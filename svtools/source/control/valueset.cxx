@@ -3442,7 +3442,7 @@ void SvtValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUS
 void SvtValueSet::StyleUpdated()
 {
     mbFormat = true;
-    Invalidate();
+    CustomWidgetController::StyleUpdated();
 }
 
 void SvtValueSet::SetColCount( sal_uInt16 nNewCols )
