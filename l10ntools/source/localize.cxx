@@ -58,6 +58,8 @@ bool matchList(
 
 bool passesNegativeList(const OUString& rUrl) {
     static const OUStringLiteral list[] = {
+        "/desktop/test/deployment/passive/help/en/help.tree",
+        "/desktop/test/deployment/passive/help/en/main.xhp",
         "/dictionaries.xcu",
         "/dictionaries/da_DK/help/da/help.tree",
         ("/dictionaries/da_DK/help/da/"
