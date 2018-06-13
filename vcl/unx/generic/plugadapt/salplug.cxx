@@ -99,7 +99,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                  * #i109007# KDE3 seems to have the same problem.
                  * And same applies for KDE4.
                  */
-                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "kde4" || rModuleBase == "gtk3_kde5")
+                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "kde4" || rModuleBase == "gtk3_kde5" || rModuleBase == "kde5")
                 {
                     pCloseModule = nullptr;
                 }
@@ -163,12 +163,16 @@ static SalInstance* autodetect_plugin()
 {
     static const char* const pKDEFallbackList[] =
     {
+#if ENABLE_KDE5
+       "kde5"
+#endif
 #if ENABLE_GTK3_KDE5
         "gtk3_kde5",
 #endif
 #if ENABLE_KDE4
         "kde4",
 #endif
+
         "gtk3", "gtk", "gen", nullptr
     };
 
@@ -207,9 +211,12 @@ static SalInstance* autodetect_plugin()
         SAL_INFO_IF(
             pInst, "vcl.plugadapt",
             "plugin autodetection: " << pList[nListEntry]);
+        if (!pInst)
+        {
+            break;
+        }
         nListEntry++;
     }
-
     return pInst;
 }
 
@@ -233,7 +240,7 @@ SalInstance *CreateSalInstance()
 
     // fallback, try everything
     static const char* const pPlugin[] = {
-        "gtk3", "gtk", "kde4", "kde", "tde", "gen" };
+        "kde5", "gtk3", "gtk", "kde4", "kde", "tde", "gen" };
 
     for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
