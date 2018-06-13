@@ -163,6 +163,9 @@ static SalInstance* autodetect_plugin()
 {
     static const char* const pKDEFallbackList[] =
     {
+#if ENABLE_KDE5
+       "kde5",
+#endif
 #if ENABLE_GTK3_KDE5
         "gtk3_kde5",
 #endif
@@ -233,7 +236,7 @@ SalInstance *CreateSalInstance()
 
     // fallback, try everything
     static const char* const pPlugin[] = {
-        "gtk3", "gtk", "kde4", "kde", "tde", "gen" };
+        "gtk3", "gtk", "kde5", "kde4", "kde", "tde", "gen" };
 
     for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
