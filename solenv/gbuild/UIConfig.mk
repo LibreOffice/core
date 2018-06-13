@@ -170,31 +170,7 @@ gb_UIConfig_gla11y_PARAMETERS += --enable-type button-no-label
 # These are often doubtful
 gb_UIConfig_gla11y_PARAMETERS += --enable-type duplicate-mnemonic --enable-type labelled-by-and-mnemonic
 
-# For now, disable warning about widgets without a label by default, to enable warnings for classes progressively
-# To be uncommented progressively
-gb_UIConfig_gla11y_PARAMETERS += --disable-type no-labelled-by
-# Clearly need labelling
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkScale
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkEntry
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkSpinButton
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkSpinner
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkProgressBar
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-SvxColorListBox
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-SvxLanguageBox
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.sfxlo-SvxCharView
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.foruilo-RefEdit
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-PaperSizeListBox
-# Probably need labelling
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBox
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBoxText
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkMenuItem
-# Possibly need labelling
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeView
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeViewColumn
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTextView
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkDrawingArea
-# Perhaps need labelling
-gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkImage
+gb_UIConfig_gla11y_PARAMETERS += --enable-type no-labelled-by
 
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
