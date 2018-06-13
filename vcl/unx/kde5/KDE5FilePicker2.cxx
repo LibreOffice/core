@@ -102,9 +102,13 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
     connect(this, &KDE5FilePicker::setTitleSignal /*(const OUString&)*/, this,
             &KDE5FilePicker::setTitleSlot /*(const OUString&)*/, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::setDefaultNameSignal, this, &KDE5FilePicker::setDefaultNameSlot,
+            Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::setDisplayDirectorySignal /*(const OUString&)*/, this,
             &KDE5FilePicker::setDisplayDirectorySlot /*(const OUString&)*/,
             Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getDisplayDirectorySignal, this,
+            &KDE5FilePicker::getDisplayDirectorySlot, Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::setMultiSelectionSignal, this,
             &KDE5FilePicker::setMultiSelectionSlot, Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::setValueSignal, this, &KDE5FilePicker::setValueSlot,
@@ -170,7 +174,16 @@ void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
     _dialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles : QFileDialog::ExistingFile);
 }
 
-void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name) {}
+void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name)
+{
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT setDefaultNameSignal(name);
+    }
+
+    _dialog->selectUrl(QUrl(toQString(name)));
+}
 
 void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
 {
@@ -185,7 +198,13 @@ void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
 
 OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
 {
-    OUString dir;
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT getDisplayDirectorySignal();
+    }
+
+    OUString dir = toOUString(_dialog->directoryUrl().url());
     return dir;
 }
 
