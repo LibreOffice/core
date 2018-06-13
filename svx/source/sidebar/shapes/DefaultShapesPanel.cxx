@@ -34,7 +34,6 @@ DefaultShapesPanel::DefaultShapesPanel (
     SvxShapeCommandsMap(),
     mxFrame(rxFrame)
 {
-    get(mpScrollWindow, "scrolledwindow1");
     get(mpLineArrowSet, "LinesArrows");
     get(mpCurveSet, "Curves");
     get(mpConnectorSet, "Connectors");
@@ -92,7 +91,6 @@ void DefaultShapesPanel::Initialize()
 void DefaultShapesPanel::dispose()
 {
     mpShapesSetMap.clear();
-    mpScrollWindow.clear();
     mpLineArrowSet.clear();
     mpCurveSet.clear();
     mpConnectorSet.clear();
