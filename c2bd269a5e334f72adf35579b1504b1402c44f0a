@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_36ec58c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-13T10:59:59Z",
+      "side": 1,
+      "message": "Example lacks a closing quote and should be\n\n [NatNum12 YYYY\u003dyear,D\u003dordinal]D\" of \"MMMM\",\" YYYY",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 49
+      },
+      "revId": "c2bd269a5e334f72adf35579b1504b1402c44f0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_96c42c41",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3572,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-13T10:59:59Z",
+      "side": 1,
+      "message": "Example lacks a closing quote and should be\n\n [NatNum12 YYYY\u003dyear,D\u003dordinal]D\" of \"MMMM\",\" YYYY\n\notherwise\n\n thirteenth of June\", YYYY\n\nis displayed ;-)",
+      "range": {
+        "startLine": 3572,
+        "startChar": 49,
+        "endLine": 3572,
+        "endChar": 51
+      },
+      "revId": "c2bd269a5e334f72adf35579b1504b1402c44f0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_d6b5c4d0",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3633,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-13T10:59:59Z",
+      "side": 1,
+      "message": "Just a question for understanding: I wonder how this is supposed to work with genitive and partitive case month names? Or does it?",
+      "revId": "c2bd269a5e334f72adf35579b1504b1402c44f0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_b69cc86a",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3734,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-13T10:59:59Z",
+      "side": 1,
+      "message": "This should be moved behind the if/else blocks to act also on the ensured 4-digits string.",
+      "revId": "c2bd269a5e334f72adf35579b1504b1402c44f0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f6bac0bf",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3794,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-13T10:59:59Z",
+      "side": 1,
+      "message": "Shouldn\u0027t date+time be handled similar? Or is this for date only? (which I\u0027m fine with, just asking)",
+      "revId": "c2bd269a5e334f72adf35579b1504b1402c44f0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_3687f810",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5455,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-13T10:59:59Z",
+      "side": 1,
+      "message": "Nitpick: name nField",
+      "range": {
+        "startLine": 5455,
+        "startChar": 14,
+        "endLine": 5455,
+        "endChar": 20
+      },
+      "revId": "c2bd269a5e334f72adf35579b1504b1402c44f0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_567c7420",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5468,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-13T10:59:59Z",
+      "side": 1,
+      "message": "Nitpick: name nKeywordLen",
+      "range": {
+        "startLine": 5468,
+        "startChar": 14,
+        "endLine": 5468,
+        "endChar": 25
+      },
+      "revId": "c2bd269a5e334f72adf35579b1504b1402c44f0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_7679702f",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5469,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-13T10:59:59Z",
+      "side": 1,
+      "message": "Nitpick: name nFieldEnd",
+      "range": {
+        "startLine": 5469,
+        "startChar": 14,
+        "endLine": 5469,
+        "endChar": 23
+      },
+      "revId": "c2bd269a5e334f72adf35579b1504b1402c44f0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
