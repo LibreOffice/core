@@ -41,6 +41,11 @@
             <value>true</value>
           </prop>
         </node>
+        <node oor:name="ParameterNameSubstitution" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
         <node oor:name="UseKeywordAsBeforeAlias" oor:op="replace">
@@ -111,6 +116,11 @@
           </prop>
         </node>
         <node oor:name="AddIndexAppendix" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="ParameterNameSubstitution" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
           </prop>
@@ -190,6 +200,11 @@
           </prop>
         </node>
         <node oor:name="AddIndexAppendix" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="ParameterNameSubstitution" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
           </prop>
