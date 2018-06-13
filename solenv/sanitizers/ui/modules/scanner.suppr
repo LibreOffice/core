@@ -5,3 +5,5 @@ extensions/uiconfig/scanner/ui/sanedialog.ui://GtkComboBox[@id='stringRangeCombo
 extensions/uiconfig/scanner/ui/sanedialog.ui://GtkCheckButton[@id='boolCheckbutton'] button-no-label
 extensions/uiconfig/scanner/ui/sanedialog.ui://GtkEntry[@id='stringEntry'] no-labelled-by
 extensions/uiconfig/scanner/ui/sanedialog.ui://GtkEntry[@id='numericEntry'] no-labelled-by
+extensions/uiconfig/scanner/ui/sanedialog.ui://GtkImage[@id='plus'] no-labelled-by
+extensions/uiconfig/scanner/ui/sanedialog.ui://GtkImage[@id='minus'] no-labelled-by

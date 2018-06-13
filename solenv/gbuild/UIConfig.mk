@@ -194,7 +194,7 @@ gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeViewCol
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTextView
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkDrawingArea
 # Perhaps need labelling
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkImage
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkImage
 
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
