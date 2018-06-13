@@ -27,7 +27,6 @@ $(eval $(call gb_Library_add_defs,staroffice,\
 	-DBUILD_STOFF \
 	-D_WINDLL \
 	-DNDEBUG \
-	-DSHAREDPTR_STD \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,staroffice,\
