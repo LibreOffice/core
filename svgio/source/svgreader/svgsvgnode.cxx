@@ -675,7 +675,7 @@ namespace svgio
                             // If no Width/Height is set (usually done in
                             // <svg ... width="215.9mm" height="279.4mm" >) which
                             // is the case for own-Impress-exports, assume that
-                            // the Units are alrteady 100ThMM.
+                            // the Units are already 100ThMM.
                             // Maybe only for own-Impress-exports, thus may need to be
                             // &&ed with getDocument().findSvgNodeById("ooo:meta_slides"),
                             // but does not need to be.

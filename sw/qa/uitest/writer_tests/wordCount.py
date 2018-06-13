@@ -198,7 +198,7 @@ class writerWordCount(UITestCase):
         xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "9", "END_POS": "10"}))
         #5. Replace selection by a non-breaking space by pressing Shift+Ctrl+Space.  Don't move the cursor.
         self.xUITest.executeCommand(".uno:InsertNonBreakingSpace")
-        #   Word count in dialogue shows 4 words, wheras in the status line it shows 5 words.
+        #   Word count in dialogue shows 4 words, whereas in the status line it shows 5 words.
         self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
         xDialog = self.xUITest.getTopFocusWindow()
 
@@ -283,7 +283,7 @@ class writerWordCount(UITestCase):
 #        #4. Click after "At nunc" then <Shift><Home>
 #        self.xUITest.executeCommand(".uno:StartOfParaSel")
 #        sleep(3)  #need to wait, because Word count dialog is already open and it takes time to refresh the counter
-#        #Expected result : Words 2 & Characters 7 & excludind space 6  #Actual result : Words 0 & Characters 0
+#        #Expected result : Words 2 & Characters 7 & excluding space 6  #Actual result : Words 0 & Characters 0
 #        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "2")
 #        self.assertEqual(get_state_as_dict(xselectchars)["Text"], "7")
 #        self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "6")
