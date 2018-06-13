@@ -20,6 +20,14 @@ $(eval $(call gb_Extension_add_files,test-passive,, \
     $(call gb_Jar_get_target,passive_java) \
 ))
 
+$(eval $(call gb_Extension_add_files,test-passive,help/en, \
+    $(SRCDIR)/desktop/test/deployment/passive/help/en/help.tree \
+))
+
+$(eval $(call gb_Extension_add_files,test-passive,help/en/org.openoffice%2Fframework%2Fdesktop%2Ftest%2Fdeployment%2Fpassive, \
+    $(SRCDIR)/desktop/test/deployment/passive/help/en/main.xhp \
+))
+
 $(eval $(call gb_Extension_add_libraries,test-passive, \
     passive_native \
 ))

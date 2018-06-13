@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<helpdocument version="1.0">
+  <meta>
+    <topic id="" indexer="include">
+      <title xml-lang="en" id="">The test-passive Extension</title>
+      <filename>/org.openoffice%2Fframework%2Fdesktop%2Ftest%2Fdeployment%2Fpassive/main.xhp</filename>
+      <bookmark branch="index" xml-lang="en" id="">
+        <bookmark_value>test-passive extension</bookmark_value>
+        <bookmark_value>extensions;test-passive</bookmark_value>
+      </bookmark>
+      <bookmark branch="index" xml-lang="en" id="_scalc_swriter">
+        <bookmark_value>test-passive extension in Calc and Writer</bookmark_value>
+      </bookmark>
+    </topic>
+  </meta>
+  <body>
+    <bookmark branch="hid/vnd.org.openoffice.test.desktop.deployment.passive_native:" xml-lang="en"
+        id=""/>
+    <paragraph role="paragraph" id="" xml-lang="en">
+      <ahelp hid="vnd.org.openoffice.test.desktop.deployment.passive_native:" visibility="hidden">
+        Show the test-passive extension's native dialog
+      </ahelp>
+    </paragraph>
+    <paragraph role="heading" level="1" id="" xml-lang="en">The test-passive Extension</paragraph>
+    <paragraph role="paragraph" id="" xml-lang="en">Bla bla bla.</paragraph>
+  </body>
+</helpdocument>

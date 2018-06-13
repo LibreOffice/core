@@ -22,6 +22,7 @@
       m:full-path="Addons.xcu"/>
   <m:file-entry m:media-type="application/vnd.sun.star.configuration-data"
       m:full-path="ProtocolHandler.xcu"/>
+  <m:file-entry m:media-type="application/vnd.sun.star.help" m:full-path="help"/>
   <m:file-entry
       m:media-type="application/vnd.sun.star.uno-components;platform=@PLATFORM@"
       m:full-path="platform.components"/>

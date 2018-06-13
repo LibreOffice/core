@@ -54,6 +54,21 @@
           </node>
         </node>
       </node>
+      <node o:name="OfficeToolBar">
+        <node o:name="org.openoffice.test.desktop.deployment.passive" o:op="replace">
+          <node o:name="1" o:op="replace">
+            <prop o:name="URL">
+              <value>vnd.org.openoffice.test.desktop.deployment.passive_native:</value>
+            </prop>
+            <prop o:name="Title" xml:lang="en-US">
+              <value>native</value>
+            </prop>
+            <prop o:name="Context">
+              <value/>
+            </prop>
+          </node>
+        </node>
+      </node>
     </node>
   </item>
 </o:items>
