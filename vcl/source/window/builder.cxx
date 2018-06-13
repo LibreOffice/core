@@ -3682,8 +3682,16 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         sal_uInt16 nEntry = rTarget.InsertEntry(rRow[0]);
         if (rRow.size() > 1)
         {
-            sal_IntPtr nValue = rRow[1].toInt32();
-            rTarget.SetEntryData(nEntry, reinterpret_cast<void*>(nValue));
+            if (m_bLegacy)
+            {
+                sal_IntPtr nValue = rRow[1].toInt32();
+                rTarget.SetEntryData(nEntry, reinterpret_cast<void*>(nValue));
+            }
+            else
+            {
+                if (!rRow[1].isEmpty())
+                    rTarget.SetEntryData(nEntry, new OUString(rRow[1]));
+            }
         }
     }
     if (nActiveId < rStore.m_aEntries.size())
