@@ -19,16 +19,17 @@ INST_ROOT=$1  #Where libreoffice program folder can be found
 PROFILESFROM=$2  #Where the profile files are
 INSTALLTO=$3  #Where should the apparmor profiles (For manual use should be /etc/apparmor.d)
 RESTART=$4 #Should we restart apparmor using service?
+CHECK=$5 #Check parsing of the new profile?
 
 #Example uses:
 #Ubuntu 16.04 with stock LibreOffice:
-# sudo ./sysui/desktop/share/apparmor.sh /usr/lib/libreoffice/ sysui/desktop/apparmor/ /etc/apparmor.d/ true
+# sudo ./sysui/desktop/share/apparmor.sh /usr/lib/libreoffice/ sysui/desktop/apparmor/ /etc/apparmor.d/ true true
 
 #Ubuntu 16.04, with built debs from LibreOffice git
-# sudo ./sysui/desktop/share/apparmor.sh /opt/libreofficedev5.2/ sysui/desktop/apparmor/ /etc/apparmor.d/ true
+# sudo ./sysui/desktop/share/apparmor.sh /opt/libreofficedev5.2/ sysui/desktop/apparmor/ /etc/apparmor.d/ true true
 
 #Ubuntu 16.04, running from git!
-# sudo ./sysui/desktop/share/apparmor.sh /mnt/store/git/libo/instdir/ sysui/desktop/apparmor/ /etc/apparmor.d/ true
+# sudo ./sysui/desktop/share/apparmor.sh /mnt/store/git/libo/instdir/ sysui/desktop/apparmor/ /etc/apparmor.d/ true true
 
 #Need to convert / to . for profile names
 INST_ROOT_FORMAT=${INST_ROOT/\//}
@@ -43,7 +44,11 @@ do
     tourl=$INSTALLTO$INST_ROOT_FORMAT${filename##*/}
     sed "s/INSTDIR-/$INST_ROOT_SED/g" "$filename" > "$tourl"
     echo "$tourl"
-
+  if [ "$CHECK" = "true" ]; then
+    # check profile parsing
+    echo "Checking $tourl profile."
+    /sbin/apparmor_parser --add --skip-cache --skip-kernel-load $tourl
+  fi
 done
 
 if [ "$RESTART" = true ] ; then
