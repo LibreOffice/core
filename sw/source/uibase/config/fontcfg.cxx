@@ -257,6 +257,9 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageTyp
         case  FONT_OUTLINE_CTL:
             nRet = FONTSIZE_OUTLINE;
             break;
+        case FONT_STANDARD_CTL:
+            nRet = FONTSIZE_CTL_DEFAULT;
+            break;
         case FONT_STANDARD_CJK:
             nRet = FONTSIZE_CJK_DEFAULT;
             break;
