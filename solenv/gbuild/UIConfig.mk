@@ -188,10 +188,10 @@ gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBox
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBoxText
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkMenuItem
 # Possibly need labelling
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeView
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeViewColumn
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTextView
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkDrawingArea
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeView
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTreeViewColumn
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkTextView
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkDrawingArea
 # Perhaps need labelling
 #gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkImage
 

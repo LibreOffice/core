@@ -1,3 +1,5 @@
+xmlsecurity/uiconfig/ui/securitytrustpage.ui://GtkLabel[@id='label8'] orphan-label
+xmlsecurity/uiconfig/ui/securitytrustpage.ui://GtkTreeView[@id='locations:border'] no-labelled-by
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='issuedto'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='issuedby'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='usage'] orphan-label

@@ -1,9 +1,12 @@
+desktop/uiconfig/ui/dependenciesdialog.ui://GtkLabel[@id='label1'] orphan-label
+desktop/uiconfig/ui/dependenciesdialog.ui://GtkTreeView[@id='depListTreeview'] no-labelled-by
 desktop/uiconfig/ui/extensionmanager.ui://GtkLabel[@id='progressft'] orphan-label
 desktop/uiconfig/ui/extensionmanager.ui://GtkProgressBar[@id='progressbar'] no-labelled-by
 desktop/uiconfig/ui/updatedialog.ui://GtkLabel[@id='UPDATE_LABEL'] orphan-label
 desktop/uiconfig/ui/updatedialog.ui://GtkLabel[@id='UPDATE_CHECKING'] orphan-label
 desktop/uiconfig/ui/updatedialog.ui://GtkSpinner[@id='THROBBER'] no-labelled-by
 desktop/uiconfig/ui/updatedialog.ui://GtkLabel[@id='DESCRIPTION_LABEL'] orphan-label
+desktop/uiconfig/ui/updatedialog.ui://GtkTextView[@id='DESCRIPTIONS:border'] no-labelled-by
 desktop/uiconfig/ui/updaterequireddialog.ui://GtkLabel[@id='updatelabel'] orphan-label
 desktop/uiconfig/ui/updaterequireddialog.ui://GtkLabel[@id='progresslabel'] orphan-label
 desktop/uiconfig/ui/updaterequireddialog.ui://GtkProgressBar[@id='progress'] no-labelled-by
