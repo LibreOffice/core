@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/splitwin.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -105,6 +106,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/objface.hxx>
 #include <openflag.hxx>
 #include <objshimp.hxx>
+#include <openuriexternally.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
@@ -1213,6 +1215,35 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
+                // inform about the community involvement
+                const sal_uInt64 nLastShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
+                const sal_uInt64 nNow = tools::Time::GetSystemTicks();
+                const sal_uInt64 nPeriodMS = 1000L * 60L * 60L * 24L * 30L; // 30 days in ms
+                bool bUpdateLastTimeGetInvolvedShown = false;
+
+                if (nLastShown == 0)
+                    bUpdateLastTimeGetInvolvedShown = true;
+                else if (nLastShown + nPeriodMS < nNow)
+                {
+                    bUpdateLastTimeGetInvolvedShown = true;
+
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", SfxResId(STR_GET_INVOLVED_TEXT), InfoBarType::Info);
+
+                    VclPtrInstance<PushButton> xGetInvolvedButton(&GetWindow());
+                    xGetInvolvedButton->SetText(SfxResId(STR_GET_INVOLVED_BUTTON));
+                    xGetInvolvedButton->SetSizePixel(xGetInvolvedButton->GetOptimalSize());
+                    xGetInvolvedButton->SetClickHdl(LINK(this, SfxViewFrame, GetInvolvedHandler));
+                    pInfoBar->addButton(xGetInvolvedButton);
+                }
+
+                if (bUpdateLastTimeGetInvolvedShown)
+                {
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                    officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
+                    batch->commit();
+                }
+
+                // read-only infobar if necessary
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
                 if ( m_xObjSh->IsReadOnly() &&
@@ -1332,6 +1363,17 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
             default: break;
         }
+    }
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
+{
+    try
+    {
+        sfx2::openUriExternally("https://www.libreoffice.org/community/get-involved/", false);
+    }
+    catch (const Exception&)
+    {
     }
 }
 
