@@ -202,7 +202,6 @@ class SvxExtParagraphTabPage: public SfxTabPage
 
 public:
     virtual ~SvxExtParagraphTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rSet );
@@ -218,58 +217,57 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-                        SvxExtParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
-    // hyphenation
-    VclPtr<TriStateBox>        m_pHyphenBox;
-    VclPtr<FixedText>          m_pBeforeText;
-    VclPtr<NumericField>       m_pExtHyphenBeforeBox;
-    VclPtr<FixedText>          m_pAfterText;
-    VclPtr<NumericField>       m_pExtHyphenAfterBox;
-    VclPtr<FixedText>          m_pMaxHyphenLabel;
-    VclPtr<NumericField>       m_pMaxHyphenEdit;
-
-    // pagebreak
-    VclPtr<TriStateBox>        m_pPageBreakBox;
-    VclPtr<FixedText>          m_pBreakTypeFT;
-    VclPtr<ListBox>            m_pBreakTypeLB;
-    VclPtr<FixedText>          m_pBreakPositionFT;
-    VclPtr<ListBox>            m_pBreakPositionLB;
-    VclPtr<TriStateBox>        m_pApplyCollBtn;
-    VclPtr<ListBox>            m_pApplyCollBox;
-    VclPtr<TriStateBox>        m_pPageNumBox;
-    VclPtr<NumericField>       m_pPagenumEdit;
-
-    // paragraph division
-    VclPtr<TriStateBox>        m_pKeepTogetherBox;
-    VclPtr<TriStateBox>        m_pKeepParaBox;
-
-    // orphan/widow
-    VclPtr<TriStateBox>        m_pOrphanBox;
-    VclPtr<NumericField>       m_pOrphanRowNo;
-    VclPtr<FixedText>          m_pOrphanRowLabel;
-
-    VclPtr<TriStateBox>        m_pWidowBox;
-    VclPtr<NumericField>       m_pWidowRowNo;
-    VclPtr<FixedText>          m_pWidowRowLabel;
+    SvxExtParagraphTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     bool                bPageBreak;
     bool                bHtmlMode;
-    sal_uInt16              nStdPos;
+    sal_uInt16          nStdPos;
 
-    DECL_LINK(PageBreakHdl_Impl, Button*, void);
-    DECL_LINK(KeepTogetherHdl_Impl, Button*, void);
-    DECL_LINK(WidowHdl_Impl, Button*, void);
-    DECL_LINK(OrphanHdl_Impl, Button*, void);
-    DECL_LINK(HyphenClickHdl_Impl, Button*, void);
-    DECL_LINK(ApplyCollClickHdl_Impl, Button*, void);
-    DECL_LINK( PageBreakPosHdl_Impl, ListBox&, void );
-    DECL_LINK( PageBreakTypeHdl_Impl, ListBox&, void );
-    DECL_LINK(PageNumBoxClickHdl_Impl, Button*, void);
+    // hyphenation
+    std::unique_ptr<weld::CheckButton> m_xHyphenBox;
+    std::unique_ptr<weld::Label> m_xBeforeText;
+    std::unique_ptr<weld::SpinButton> m_xExtHyphenBeforeBox;
+    std::unique_ptr<weld::Label> m_xAfterText;
+    std::unique_ptr<weld::SpinButton> m_xExtHyphenAfterBox;
+    std::unique_ptr<weld::Label> m_xMaxHyphenLabel;
+    std::unique_ptr<weld::SpinButton> m_xMaxHyphenEdit;
+
+    // pagebreak
+    std::unique_ptr<weld::CheckButton> m_xPageBreakBox;
+    std::unique_ptr<weld::Label> m_xBreakTypeFT;
+    std::unique_ptr<weld::ComboBoxText> m_xBreakTypeLB;
+    std::unique_ptr<weld::Label> m_xBreakPositionFT;
+    std::unique_ptr<weld::ComboBoxText> m_xBreakPositionLB;
+    std::unique_ptr<weld::CheckButton> m_xApplyCollBtn;
+    std::unique_ptr<weld::ComboBoxText> m_xApplyCollBox;
+    std::unique_ptr<weld::CheckButton> m_xPageNumBox;
+    std::unique_ptr<weld::SpinButton> m_xPagenumEdit;
+
+    // paragraph division
+    std::unique_ptr<weld::CheckButton> m_xKeepTogetherBox;
+    std::unique_ptr<weld::CheckButton> m_xKeepParaBox;
+
+    // orphan/widow
+    std::unique_ptr<weld::CheckButton> m_xOrphanBox;
+    std::unique_ptr<weld::SpinButton> m_xOrphanRowNo;
+    std::unique_ptr<weld::Label> m_xOrphanRowLabel;
+
+    std::unique_ptr<weld::CheckButton> m_xWidowBox;
+    std::unique_ptr<weld::SpinButton> m_xWidowRowNo;
+    std::unique_ptr<weld::Label> m_xWidowRowLabel;
+
+    DECL_LINK(PageBreakHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(KeepTogetherHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(WidowHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(OrphanHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(HyphenClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ApplyCollClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(PageBreakPosHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(PageBreakTypeHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(PageNumBoxClickHdl_Impl, weld::ToggleButton&, void);
 
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
-
 
 class SvxAsianTabPage : public SfxTabPage
 {
