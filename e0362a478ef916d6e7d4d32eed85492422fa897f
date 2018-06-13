@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_b3a77a4e",
+        "filename": "dbaccess/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-06-13T02:23:43Z",
+      "side": 1,
+      "message": "Indentation",
+      "range": {
+        "startLine": 493,
+        "startChar": 46,
+        "endLine": 493,
+        "endChar": 47
+      },
+      "revId": "e0362a478ef916d6e7d4d32eed85492422fa897f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_d3623616",
+        "filename": "dbaccess/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-06-13T02:23:43Z",
+      "side": 1,
+      "message": "This is a comma splice. Please fix it by using a period or a line break.",
+      "range": {
+        "startLine": 493,
+        "startChar": 171,
+        "endLine": 493,
+        "endChar": 174
+      },
+      "revId": "e0362a478ef916d6e7d4d32eed85492422fa897f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
