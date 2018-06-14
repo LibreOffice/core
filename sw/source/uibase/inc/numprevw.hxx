@@ -26,40 +26,6 @@
 class SwNumRule;
 namespace rtl { class OUString; }
 
-class NumberingPreview : public vcl::Window
-{
-    const SwNumRule*    pActNum;
-    vcl::Font           aStdFont;
-    long                nPageWidth;
-    const OUString*     pOutlineNames;
-    bool                bPosition;
-    sal_uInt16          nActLevel;
-
-    protected:
-        virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
-
-    public:
-        NumberingPreview(vcl::Window* pParent)
-            : Window(pParent)
-            , pActNum(nullptr),nPageWidth(0), pOutlineNames(nullptr),
-            bPosition(false), nActLevel(USHRT_MAX)
-        {
-        }
-
-        virtual ~NumberingPreview() override;
-
-        void    SetNumRule(const SwNumRule* pNum)
-                    {pActNum = pNum; Invalidate();};
-        void    SetPageWidth(long nPgWidth)
-                                {nPageWidth = nPgWidth;}
-        void    SetOutlineNames(const OUString* pNames)
-                        {pOutlineNames = pNames;}
-        void    SetPositionMode()
-                        { bPosition = true;}
-        void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
-
-};
-
 class SwNumberingPreview : public weld::CustomWidgetController
 {
     const SwNumRule*    pActNum;
