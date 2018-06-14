@@ -242,6 +242,13 @@ enum class VclMessageType
     Error
 };
 
+enum class VclSizeGroupMode
+{
+    NONE,
+    Horizontal,
+    Vertical,
+    Both
+};
 
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
