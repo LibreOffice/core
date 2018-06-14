@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_076e44c9",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-14T19:41:24Z",
+      "side": 1,
+      "message": "If aPreAutoCorrectString shall be the same string as aString then don\u0027t obtain it again from the EditEngine but instead just copy-construct from aString, i.e.\n\n OUString aPreAutoCorrectString( aString);",
+      "revId": "7d1e6d81d60a4259b1adbb5efaab1253612d72fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_a7b6503b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2651,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-14T19:41:24Z",
+      "side": 1,
+      "message": "Later comparing aString against aPreAutoCorrectString and if different submitting as another ScInputStatusItem ignores and overrides such necessary changes as removing tabs. That is wrong. So here also removing the tabs on the uncorrected string is needed:\n\n lcl_RemoveTabs(aPreAutoCorrectString);\n\nPlease watch out for maybe other such treatments of the input string.",
+      "range": {
+        "startLine": 2651,
+        "startChar": 0,
+        "endLine": 2651,
+        "endChar": 28
+      },
+      "revId": "7d1e6d81d60a4259b1adbb5efaab1253612d72fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_e7868864",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2887,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-14T19:41:24Z",
+      "side": 1,
+      "message": "This replacement of typographic quotes must not be un-doable as otherwise formulas with literal string constants (which are to be quoted in ASCII \"\" quotes) will not work.\n\nSo probably some flag is needed to indicate whether the corrected string is affected by this in which case to not submit an ScInputStatusItem with aPreAutoCorrectString but only one with aString.",
+      "revId": "7d1e6d81d60a4259b1adbb5efaab1253612d72fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
