@@ -2628,6 +2628,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     bool            bForget     = false; // Remove due to validity?
 
     OUString aString = GetEditText(mpEditEngine.get());
+    OUString aPreAutoCorrectString = GetEditText(mpEditEngine.get());
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (bModified && pActiveView && !aString.isEmpty() && !lcl_IsNumber(aString))
     {
@@ -2640,7 +2641,6 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         }
 
         vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : nullptr;
-
         if (pTopView)
             pTopView->CompleteAutoCorrect(); // CompleteAutoCorrect for both Views
         if (pTableView)
@@ -2914,20 +2914,18 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         }
 
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScKillEditViewNoPaint ) );
-
         if ( pExecuteSh )
         {
             SfxBindings& rBindings = pExecuteSh->GetViewFrame()->GetBindings();
 
             sal_uInt16 nId = FID_INPUTLINE_ENTER;
-            if ( nBlockMode == ScEnterMode::BLOCK )
+            if (nBlockMode == ScEnterMode::BLOCK)
                 nId = FID_INPUTLINE_BLOCK;
-            else if ( nBlockMode == ScEnterMode::MATRIX )
+            else if (nBlockMode == ScEnterMode::MATRIX)
                 nId = FID_INPUTLINE_MATRIX;
-
-            ScInputStatusItem aItem( FID_INPUTLINE_STATUS,
-                                     aCursorPos, aCursorPos, aCursorPos,
-                                     aString, pObject.get() );
+            ScInputStatusItem aItem(FID_INPUTLINE_STATUS,
+                aCursorPos, aCursorPos, aCursorPos,
+                aPreAutoCorrectString, pObject.get());
 
             if (!aMisspellRanges.empty())
                 aItem.SetMisspellRanges(&aMisspellRanges);
@@ -2935,7 +2933,17 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             const SfxPoolItem* aArgs[2];
             aArgs[0] = &aItem;
             aArgs[1] = nullptr;
-            rBindings.Execute( nId, aArgs );
+
+            rBindings.Execute(nId, aArgs);
+            if (aString != aPreAutoCorrectString)
+            {
+                ScInputStatusItem aItemCorrected(FID_INPUTLINE_STATUS,
+                    aCursorPos, aCursorPos, aCursorPos,
+                    aString, pObject.get());
+                aArgs[0] = &aItemCorrected;
+                rBindings.Execute(nId, aArgs);
+
+            }
         }
 
         pLastState.reset(); // pLastState still contains the old text
