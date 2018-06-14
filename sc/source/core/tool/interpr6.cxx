@@ -809,7 +809,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     ScCellIterator aIter( pDok, aRange, mnSubTotalFlags );
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
-                        if ( !aIter.hasEmptyData() )
+                        if ( !aIter.isEmpty() )
                         {
                             ++nCount;
                         }
