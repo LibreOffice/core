@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_fc4e1f95",
+        "filename": "i18npool/source/localedata/data/hu_HU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-14T16:52:07Z",
+      "side": 1,
+      "message": "ARGHL.. localized parameter keywords? Please don\u0027t!",
+      "revId": "ac3fa3a7d7e9006348e275ddc5c8245eca000281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
