@@ -46,22 +46,7 @@ KDE5FilePicker::~KDE5FilePicker()
     delete _dialog;
 }
 
-/*bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) const
-{
-    bool ret = false;
-    if (_customWidgets.contains(controlId))
-    {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
-        if (cb)
-            ret = cb->isChecked();
-    }
-    else
-        qWarning() << "get value on unknown control" << controlId;
-
-    return ret;
-}
-
-void KDE5FilePicker::enableControl(sal_Int16 controlId, bool enable)
+/*void KDE5FilePicker::enableControl(sal_Int16 controlId, bool enable)
 {
     if (_customWidgets.contains(controlId))
         _customWidgets.value(controlId)->setEnabled(enable);
