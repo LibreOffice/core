@@ -812,40 +812,48 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         return true;
     }
 
-    if ( impl_hasHTMLHelpInstalled() )
+    // If the HTML or no help is installed, but aHelpURL nevertheless references valid help content,
+    // that implies that that help content belongs to an extension (and thus would not be available
+    // in neither the offline nor online HTML help); in that case, fall through to the "old-help to
+    // display" code below:
+    if (SfxContentHelper::IsHelpErrorDocument(aHelpURL))
     {
-        impl_showOfflineHelp(aHelpURL);
-        return true;
-    }
-
-    if ( !impl_hasHelpInstalled() )
-    {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWindow ? pWindow->GetFrameWeld() : nullptr, "sfx/ui/helpmanual.ui"));
-        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
-
-        LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
-        OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
-        OUString sPrimText = xQueryBox->get_primary_text();
-        xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
-        short OnlineHelpBox = xQueryBox->run();
-
-        if(OnlineHelpBox == RET_OK)
+        if ( impl_hasHTMLHelpInstalled() )
         {
-            if ( impl_showOnlineHelp( aHelpURL ) )
-                return true;
+            impl_showOfflineHelp(aHelpURL);
+            return true;
+        }
+
+        if ( !impl_hasHelpInstalled() )
+        {
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWindow ? pWindow->GetFrameWeld() : nullptr, "sfx/ui/helpmanual.ui"));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
+
+            LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
+            OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
+            OUString sPrimText = xQueryBox->get_primary_text();
+            xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
+            short OnlineHelpBox = xQueryBox->run();
+
+            if(OnlineHelpBox == RET_OK)
+            {
+                if ( impl_showOnlineHelp( aHelpURL ) )
+                    return true;
+                else
+                {
+                    NoHelpErrorBox aErrBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
+                    aErrBox.run();
+                    return false;
+                }
+            }
             else
             {
-                NoHelpErrorBox aErrBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
-                aErrBox.run();
                 return false;
             }
-        }
-        else
-        {
-            return false;
-        }
 
+        }
     }
+
     // old-help to display
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
@@ -954,40 +962,47 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
         return true;
     }
 
-    if ( impl_hasHTMLHelpInstalled() )
+    // If the HTML or no help is installed, but aHelpURL nevertheless references valid help content,
+    // that implies that that help content belongs to an extension (and thus would not be available
+    // in neither the offline nor online HTML help); in that case, fall through to the "old-help to
+    // display" code below:
+    if (SfxContentHelper::IsHelpErrorDocument(aHelpURL))
     {
-        impl_showOfflineHelp(aHelpURL);
-        return true;
-    }
-
-    if ( !impl_hasHelpInstalled() )
-    {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWidget, "sfx/ui/helpmanual.ui"));
-        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
-
-        LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
-        OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
-        OUString sPrimText = xQueryBox->get_primary_text();
-        xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
-        xQueryBox->connect_help(LINK(nullptr, NoHelpErrorBox, HelpRequestHdl));
-        short OnlineHelpBox = xQueryBox->run();
-        xQueryBox->hide();
-        if (OnlineHelpBox == RET_OK)
+        if ( impl_hasHTMLHelpInstalled() )
         {
-            if (impl_showOnlineHelp( aHelpURL ) )
-                return true;
+            impl_showOfflineHelp(aHelpURL);
+            return true;
+        }
+
+        if ( !impl_hasHelpInstalled() )
+        {
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWidget, "sfx/ui/helpmanual.ui"));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
+
+            LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
+            OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
+            OUString sPrimText = xQueryBox->get_primary_text();
+            xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
+            xQueryBox->connect_help(LINK(nullptr, NoHelpErrorBox, HelpRequestHdl));
+            short OnlineHelpBox = xQueryBox->run();
+            xQueryBox->hide();
+            if (OnlineHelpBox == RET_OK)
+            {
+                if (impl_showOnlineHelp( aHelpURL ) )
+                    return true;
+                else
+                {
+                    NoHelpErrorBox aErrBox(pWidget);
+                    aErrBox.run();
+                    return false;
+                }
+            }
             else
             {
-                NoHelpErrorBox aErrBox(pWidget);
-                aErrBox.run();
                 return false;
             }
-        }
-        else
-        {
-            return false;
-        }
 
+        }
     }
 
     // old-help to display
