@@ -337,7 +337,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     // The caller must ensure that the top position is the start position of
     // the group.
 
-    static bool bHyperThreadingActive = tools::cpuid::hasHyperThreading();
+    const static bool bHyperThreadingActive = tools::cpuid::hasHyperThreading();
     ScAddress aTmpPos = rTopPos;
     std::vector<formula::FormulaConstTokenRef> aResults(xGroup->mnLength);
 
