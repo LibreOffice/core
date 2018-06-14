@@ -4425,7 +4425,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             return false;
         }
 
-        static bool bHyperThreadingActive = tools::cpuid::hasHyperThreading();
+        const static bool bHyperThreadingActive = tools::cpuid::hasHyperThreading();
 
         // Then do the threaded calculation
 
