@@ -1966,7 +1966,7 @@ void SfxTabDialogController::setPreviewsToSamePlace()
     std::vector<std::unique_ptr<weld::Widget>> aGrids;
     for (auto pDataObject : m_pImpl->aData)
     {
-        if (pDataObject->pTabPage)
+        if (!pDataObject->pTabPage)
             continue;
         if (!pDataObject->pTabPage->m_xBuilder)
             continue;
