@@ -29,7 +29,6 @@ private:
 
     bool                mbUseExtension;
     int                 mnEventBase;
-    int                 mnErrorBase;
 
 public:
 

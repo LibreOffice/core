@@ -2354,11 +2354,6 @@ void SvtValueSet::ImplDeleteItems()
     mItemList.clear();
 }
 
-void SvtValueSet::Select()
-{
-    maSelectHdl.Call( this );
-}
-
 size_t SvtValueSet::ImplGetItem( const Point& rPos ) const
 {
     if (!mbHasVisibleItems)
@@ -2603,7 +2598,6 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
         case KEY_RETURN:
             if (GetStyle() & WB_NO_DIRECTSELECT)
             {
-                Select();
                 break;
             }
             SAL_FALLTHROUGH;
@@ -2624,11 +2618,6 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
     if ( nItemId != mnSelItemId )
     {
         SelectItem( nItemId );
-        if (!(GetStyle() & WB_NO_DIRECTSELECT))
-        {
-            // select only if WB_NO_DIRECTSELECT is not set
-            Select();
-        }
     }
 
     return true;
@@ -2646,7 +2635,6 @@ void SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
                 SelectItem( pItem->mnId );
                 if (!(GetStyle() & WB_NOPOINTERFOCUS))
                     GrabFocus();
-                Select();
             }
             else if ( rMouseEvent.GetClicks() == 2 )
                 maDoubleClickHdl.Call( this );

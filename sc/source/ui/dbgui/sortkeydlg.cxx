@@ -39,8 +39,6 @@ void ScSortKeyItem::EnableField()
 ScSortKeyWindow::ScSortKeyWindow(weld::Container* pBox)
     : m_pBox(pBox)
 {
-    ScSortKeyItem aTemp(m_pBox);
-    m_nItemHeight = aTemp.getItemHeight();
 }
 
 ScSortKeyWindow::~ScSortKeyWindow()

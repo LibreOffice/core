@@ -20,7 +20,7 @@ canvas/source/vcl/canvasbitmap.hxx:117
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
-chart2/source/controller/inc/RangeSelectionListener.hxx:62
+chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
 chart2/source/view/inc/GL3DRenderer.hxx:54
     chart::opengl3D::MaterialParameters pad float
@@ -50,7 +50,7 @@ cui/source/dialogs/colorpicker.cxx:721
     cui::ColorPickerDialog m_xColorField std::unique_ptr<weld::CustomWeld>
 cui/source/dialogs/colorpicker.cxx:723
     cui::ColorPickerDialog m_xColorPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cfg.hxx:577
+cui/source/inc/cfg.hxx:576
     SvxNewToolbarDialog m_xBtnOK std::unique_ptr<weld::Button>
 cui/source/inc/cuicharmap.hxx:104
     SvxCharacterMap m_xShowChar std::unique_ptr<weld::CustomWeld>
@@ -246,8 +246,6 @@ svl/source/crypto/cryptosign.cxx:280
     (anonymous namespace)::(anonymous) statusString SECItem
 svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
-svtools/source/control/valueimp.hxx:81
-    SvtValueSetItem mpData void *
 svtools/source/svhtml/htmlkywd.cxx:558
     HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
@@ -278,7 +276,7 @@ sw/source/uibase/inc/num.hxx:82
     SwNumPositionTabPage m_xPreviewWIN std::unique_ptr<weld::CustomWeld>
 sw/source/uibase/inc/outline.hxx:98
     SwOutlineSettingsTabPage m_xPreviewWIN std::unique_ptr<weld::CustomWeld>
-sw/source/uibase/inc/regionsw.hxx:234
+sw/source/uibase/inc/regionsw.hxx:233
     SwSectionIndentTabPage m_xPreviewWin std::unique_ptr<weld::CustomWeld>
 sw/source/uibase/inc/splittbl.hxx:30
     SwSplitTableDlg m_xHorzBox std::unique_ptr<weld::RadioButton>

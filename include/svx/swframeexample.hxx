@@ -116,9 +116,7 @@ class SVX_DLLPUBLIC SwFrameExample : public weld::CustomWidgetController
     short       nVAlign;
     short       nVRel;
 
-    css::text::WrapTextMode nWrap;
     RndStdIds   nAnchor;
-    bool        bTrans;
 
     Point       aRelPos;
 

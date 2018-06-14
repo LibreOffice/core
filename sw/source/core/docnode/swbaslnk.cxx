@@ -139,8 +139,6 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
         bFrameInPaint = pSwGrfNode->IsFrameInPaint();
 
-        pSwGrfNode->SetGraphicArrived(true);
-
         Graphic aGrf;
 
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&

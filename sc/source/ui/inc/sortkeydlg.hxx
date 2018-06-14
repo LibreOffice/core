@@ -43,7 +43,6 @@ public:
     ScSortKeyItems m_aSortKeyItems;
 private:
     weld::Container* m_pBox;
-    sal_Int32 m_nItemHeight;
 
 public:
     ScSortKeyWindow(weld::Container* pBox);

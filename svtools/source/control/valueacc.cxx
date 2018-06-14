@@ -1813,7 +1813,6 @@ void SAL_CALL SvtValueSetAcc::selectAccessibleChild( sal_Int32 nChildIndex )
         throw lang::IndexOutOfBoundsException();
 
     mpParent->SelectItem( pItem->mnId );
-    mpParent->Select ();
 }
 
 

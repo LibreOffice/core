@@ -160,8 +160,6 @@ private:
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDialControl : public weld::CustomWidgetController
 {
-private:
-    OUString m_aText;
 public:
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
@@ -176,8 +174,6 @@ public:
     virtual void        LoseFocus() override;
 
     virtual void        Resize() override;
-
-    const OUString&     GetText() const { return m_aText; }
 
     /** Returns the current rotation angle in 1/100 degrees. */
     sal_Int32           GetRotation() const;
@@ -204,7 +200,6 @@ protected:
         ScopedVclPtr<DialControlBmp> mxBmpEnabled;
         ScopedVclPtr<DialControlBmp> mxBmpDisabled;
         ScopedVclPtr<DialControlBmp> mxBmpBuffered;
-        Link<SvxDialControl*,void>      maModifyHdl;
         weld::SpinButton*   mpLinkField;
         sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
@@ -224,8 +219,6 @@ protected:
 
     void                HandleMouseEvent( const Point& rPos, bool bInitial );
     void                HandleEscapeEvent();
-
-    void                SetRotation( sal_Int32 nAngle, bool bBroadcast );
 
     void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
     void                Init( const Size& rWinSize );

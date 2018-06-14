@@ -184,9 +184,6 @@ class ImpSdrPdfImport final
     bool mbNoLine;
     bool mbNoFill;
 
-    // to optimize multiple lines into a Polyline
-    bool mbLastObjWasLine;
-
     // clipregion
     basegfx::B2DPolyPolygon maClip;
 

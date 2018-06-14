@@ -28,12 +28,7 @@ namespace rtl { class OUString; }
 
 class NumberingPreview : public vcl::Window
 {
-    const SwNumRule*    pActNum;
     vcl::Font           aStdFont;
-    long                nPageWidth;
-    const OUString*     pOutlineNames;
-    bool                bPosition;
-    sal_uInt16          nActLevel;
 
     protected:
         virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
@@ -41,8 +36,6 @@ class NumberingPreview : public vcl::Window
     public:
         NumberingPreview(vcl::Window* pParent)
             : Window(pParent)
-            , pActNum(nullptr),nPageWidth(0), pOutlineNames(nullptr),
-            bPosition(false), nActLevel(USHRT_MAX)
         {
         }
 

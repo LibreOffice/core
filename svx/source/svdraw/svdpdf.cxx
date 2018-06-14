@@ -141,7 +141,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mbLastObjWasPolyWithoutLine(false)
     , mbNoLine(false)
     , mbNoFill(false)
-    , mbLastObjWasLine(false)
     , maClip()
     , mpPdfDocument(nullptr)
     , mnPageCount(0)
@@ -696,12 +695,10 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
                 const bool bClosed(pObj->IsClosedObj());
 
                 mbLastObjWasPolyWithoutLine = mbNoLine && bClosed;
-                mbLastObjWasLine = !bClosed;
             }
             else
             {
                 mbLastObjWasPolyWithoutLine = false;
-                mbLastObjWasLine = false;
             }
         }
     }

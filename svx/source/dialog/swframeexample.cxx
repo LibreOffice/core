@@ -721,9 +721,7 @@ SwFrameExample::SwFrameExample()
     , nHRel(RelOrientation::FRAME)
     , nVAlign(VertOrientation::TOP)
     , nVRel(RelOrientation::PRINT_AREA)
-    , nWrap(WrapTextMode_NONE)
     , nAnchor(RndStdIds::FLY_AT_PAGE)
-    , bTrans(false)
     , aRelPos(Point(0,0))
 {
     InitColors_Impl();
@@ -1312,22 +1310,8 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
             if (aTxt.IsOver(aFrmRect) && nAnchor != RndStdIds::FLY_AS_CHAR && !bIgnoreWrap)
             {
-                switch(nWrap)
-                {
-                    case WrapTextMode_NONE:
-                        aTxt.SetTop( aFrmRect.Bottom() + nTxtLineHeight );
-                        aTxt.SetBottom( aTxt.Top() + nTxtLineHeight - 1 );
-                        break;
-
-                    case WrapTextMode_LEFT:
-                        aTxt.SetRight( aFrmRect.Left() );
-                        break;
-
-                    case WrapTextMode_RIGHT:
-                        aTxt.SetLeft( aFrmRect.Right() );
-                        break;
-                    default: break;
-                }
+                aTxt.SetTop( aFrmRect.Bottom() + nTxtLineHeight );
+                aTxt.SetBottom( aTxt.Top() + nTxtLineHeight - 1 );
             }
             if (pOuterFrame->IsInside(aTxt))
                 DrawRect_Impl(rRenderContext, aTxt, m_aTxtCol, m_aTransColor );
@@ -1363,7 +1347,7 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     DrawRect_Impl(rRenderContext, aRect, m_aTransColor, m_aAlignColor);
 
     // Frame View
-    bool bDontFill = (nAnchor == RndStdIds::FLY_AT_CHAR && aFrmRect.IsOver(aAutoCharFrame)) || bTrans;
+    bool bDontFill = (nAnchor == RndStdIds::FLY_AT_CHAR && aFrmRect.IsOver(aAutoCharFrame));
     DrawRect_Impl(rRenderContext, aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor);
 }
 
