@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_9cbe0bfe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-06-14T12:26:49Z",
+      "side": 1,
+      "message": "I can\u0027t reproduce this right now, so I\u0027m not sure if I had bad testing or what. Anyway, I need to review this again.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 39
+      },
+      "revId": "42b16af9ccd3d2f66d8d50727d01f79db820190e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
