@@ -342,6 +342,7 @@ public:
     void testHtmlCopyImages();
     void testTdf116789();
     void testTdf117225();
+    void testTdf91801();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -535,6 +536,7 @@ public:
     CPPUNIT_TEST(testHtmlCopyImages);
     CPPUNIT_TEST(testTdf116789);
     CPPUNIT_TEST(testTdf117225);
+    CPPUNIT_TEST(testTdf91801);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6230,6 +6232,15 @@ void SwUiWriterTest::testTdf117225()
     int nActual = CountFilesInDirectory(aTargetDirectory);
     // nActual was nExpected + 1, i.e. we leaked a tempfile.
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
+void SwUiWriterTest::testTdf91801()
+{
+    // Tests calculation with several user field variables without prior user fields
+    createDoc("tdf91801.fodt");
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell(xTable->getCellByName("A1"));
+    CPPUNIT_ASSERT_EQUAL(555.0, xCell->getValue());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
