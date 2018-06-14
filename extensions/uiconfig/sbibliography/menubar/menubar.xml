@@ -14,27 +14,23 @@
             <menu:menuitem menu:id=".uno:Cut"/>
             <menu:menuitem menu:id=".uno:Copy"/>
             <menu:menuitem menu:id=".uno:Paste"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Bib/Mapping"/>
-            <menu:menuitem menu:id=".uno:Bib/sdbsource"/>
-            <menu:menuitem menu:id=".uno:Bib/DeleteRecord"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:ViewMenu">
-        <menu:menupopup>
-            <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-            <menu:menuitem menu:id=".uno:StatusBarVisible"/>
-        </menu:menupopup>
-    </menu:menu>
-    <menu:menu menu:id=".uno:InsertMenu">
+    <menu:menu menu:id=".uno:DataMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:Bib/InsertRecord"/>
+            <menu:menuitem menu:id=".uno:Bib/DeleteRecord"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Bib/autoFilter"/>
+            <menu:menuitem menu:id=".uno:Bib/standardFilter"/>
+            <menu:menuitem menu:id=".uno:Bib/removeFilter"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Bib/sdbsource"/>
+            <menu:menuitem menu:id=".uno:Bib/Mapping"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:Bib/standardFilter"/>
-            <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:MacroRecorder"/>
