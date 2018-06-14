@@ -84,7 +84,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     SwNumRule*          pNumRule;
     OUString*           pCollNames;
     sal_uInt16          nActLevel;
-    SwNumberingPreview  m_aPreviewWIN;
+    NumberingPreview  m_aPreviewWIN;
 
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::ComboBoxText> m_xCollBox;
