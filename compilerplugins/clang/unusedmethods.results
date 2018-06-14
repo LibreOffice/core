@@ -8,6 +8,8 @@ basic/source/inc/buffer.hxx:46
     void SbiBuffer::operator+=(int)
 canvas/source/vcl/impltools.hxx:105
      vclcanvas::tools::LocalGuard::LocalGuard()
+chart2/source/inc/CommonConverters.hxx:202
+    vector<type-parameter-?-?, allocator<type-parameter-?-?> > FlattenVector(const vector<vector<type-parameter-?-?, allocator<type-parameter-?-?> >, allocator<vector<type-parameter-?-?, allocator<type-parameter-?-?> > > > &)
 connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:51
     class com::sun::star::uno::Reference<class com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
 connectivity/source/drivers/firebird/Driver.hxx:65
@@ -46,6 +48,8 @@ connectivity/source/inc/OTypeInfo.hxx:46
     _Bool connectivity::OTypeInfo::operator==(const struct connectivity::OTypeInfo &) const
 connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
+cui/source/inc/chardlg.hxx:49
+    void SvxCharBasePage::SetPrevFontEscapement(unsigned char,unsigned char,short)
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:20
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:82
@@ -410,8 +414,6 @@ include/drawinglayer/primitive3d/baseprimitive3d.hxx:113
     _Bool drawinglayer::primitive3d::BasePrimitive3D::operator!=(const class drawinglayer::primitive3d::BasePrimitive3D &) const
 include/drawinglayer/texture/texture.hxx:44
     _Bool drawinglayer::texture::GeoTexSvx::operator!=(const class drawinglayer::texture::GeoTexSvx &) const
-include/editeng/outliner.hxx:914
-    struct o3tl::strong_int<unsigned short, struct LanguageTypeTag> Outliner::GetDefaultLanguage() const
 include/filter/msfilter/msdffimp.hxx:287
     struct SvxMSDffImportRec * SvxMSDffImportData::front()
 include/filter/msfilter/mstoolbar.hxx:98
@@ -550,8 +552,6 @@ include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
 include/sfx2/sidebar/Context.hxx:55
     _Bool sfx2::sidebar::Context::operator==(const class sfx2::sidebar::Context &) const
-include/sfx2/sidebar/Sidebar.hxx:50
-    void sfx2::sidebar::Sidebar::TogglePanel(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &)
 include/svl/cryptosign.hxx:90
     _Bool isMSCng()
 include/svl/itempool.hxx:167
@@ -560,60 +560,8 @@ include/svl/itempool.hxx:196
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
 include/svtools/dialogcontrolling.hxx:167
     void svt::ControlDependencyManager::enableOnCheckMark(class CheckBox &,class vcl::Window &,class vcl::Window &)
-include/svtools/valueset.hxx:456
-    void SvtValueSet::ImplInitSettings(_Bool,_Bool,_Bool)
-include/svtools/valueset.hxx:458
-    void SvtValueSet::ImplInitScrollBar()
-include/svtools/valueset.hxx:465
-    _Bool SvtValueSet::ImplScroll(const class Point &)
-include/svtools/valueset.hxx:506
-    void SvtValueSet::InsertItem(unsigned short,const class Image &)
-include/svtools/valueset.hxx:508
-    void SvtValueSet::InsertItem(unsigned short,const class Image &,const class rtl::OUString &,unsigned long,_Bool)
-include/svtools/valueset.hxx:514
-    void SvtValueSet::InsertItem(unsigned short,unsigned long)
-include/svtools/valueset.hxx:516
-    void SvtValueSet::InsertItem(unsigned short,const class rtl::OUString &,unsigned long)
-include/svtools/valueset.hxx:517
-    void SvtValueSet::RemoveItem(unsigned short)
-include/svtools/valueset.hxx:519
-    void SvtValueSet::Clear()
 include/svtools/valueset.hxx:526
-    void SvtValueSet::EnableFullItemMode(_Bool)
-include/svtools/valueset.hxx:529
-    unsigned short SvtValueSet::GetColCount() const
-include/svtools/valueset.hxx:534
-    unsigned short SvtValueSet::GetLineCount() const
-include/svtools/valueset.hxx:540
-    class Size SvtValueSet::GetLargestItemSize()
-include/svtools/valueset.hxx:541
-    void SvtValueSet::RecalculateItemSizes()
-include/svtools/valueset.hxx:548
-    unsigned long SvtValueSet::GetSelectItemPos() const
-include/svtools/valueset.hxx:557
-    _Bool SvtValueSet::IsNoSelection() const
-include/svtools/valueset.hxx:562
-    void SvtValueSet::SetItemImage(unsigned short,const class Image &)
-include/svtools/valueset.hxx:563
-    class Image SvtValueSet::GetItemImage(unsigned short) const
-include/svtools/valueset.hxx:564
-    void SvtValueSet::SetItemColor(unsigned short,const class Color &)
-include/svtools/valueset.hxx:566
-    void SvtValueSet::SetItemData(unsigned short,void *)
-include/svtools/valueset.hxx:567
-    void * SvtValueSet::GetItemData(unsigned short) const
-include/svtools/valueset.hxx:568
-    void SvtValueSet::SetItemText(unsigned short,const class rtl::OUString &)
-include/svtools/valueset.hxx:571
-    void SvtValueSet::SetColor()
-include/svtools/valueset.hxx:580
-    void SvtValueSet::SetExtraSpacing(unsigned short)
-include/svtools/valueset.hxx:583
-    void SvtValueSet::SetFormat()
-include/svtools/valueset.hxx:590
-    void SvtValueSet::SetSelectHdl(const class Link<class SvtValueSet *, void> &)
-include/svtools/valueset.hxx:599
-    void SvtValueSet::SetHighlightHdl(const class Link<class SvtValueSet *, void> &)
+    void SvtValueSet::SetColor(const class Color &)
 include/svx/ClassificationEditView.hxx:42
     void svx::ClassificationEditView::SetCharAttributes()
 include/svx/ClassificationEditView.hxx:48
@@ -622,44 +570,30 @@ include/svx/ClassificationField.hxx:47
     const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:52
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
-include/svx/dialcontrol.hxx:181
-    void svx::SvxDialControl::SetText(const class rtl::OUString &)
-include/svx/dialcontrol.hxx:184
-    _Bool svx::SvxDialControl::HasRotation() const
-include/svx/dialcontrol.hxx:186
-    void svx::SvxDialControl::SetNoRotation()
-include/svx/dialcontrol.hxx:202
-    void svx::SvxDialControl::SetModifyHdl(const class Link<class svx::SvxDialControl *, void> &)
+include/svx/fntctrl.hxx:70
+    void SvxFontPrevWindow::SetTwoLines(_Bool)
+include/svx/fntctrl.hxx:72
+    void SvxFontPrevWindow::SetBrackets(char16_t,char16_t)
+include/svx/fntctrl.hxx:112
+    void FontPrevWindow::Init(const class SfxItemSet &)
+include/svx/fntctrl.hxx:117
+    void FontPrevWindow::SetFont(const class SvxFont &,const class SvxFont &,const class SvxFont &)
+include/svx/fntctrl.hxx:120
+    void FontPrevWindow::SetColor(const class Color &)
+include/svx/fntctrl.hxx:121
+    void FontPrevWindow::ResetColor()
+include/svx/fntctrl.hxx:123
+    void FontPrevWindow::UseResourceText()
+include/svx/fntctrl.hxx:125
+    void FontPrevWindow::SetText(const class rtl::OUString &)
 include/svx/framelink.hxx:201
     _Bool operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
-include/svx/paraprev.hxx:105
-    void SvxParaPrevWindow::SetSize(class Size)
-include/svx/paraprev.hxx:143
-    void ParaPrevWindow::SetFirstLineOfst(short)
-include/svx/paraprev.hxx:155
-    void ParaPrevWindow::SetUpper(unsigned short)
-include/svx/paraprev.hxx:159
-    void ParaPrevWindow::SetLower(unsigned short)
-include/svx/paraprev.hxx:171
-    void ParaPrevWindow::SetLineSpace(enum SvxPrevLineSpace)
-include/svx/paraprev.hxx:175
-    void ParaPrevWindow::SetText(const class rtl::OUString &)
-include/svx/paraprev.hxx:183
-    class rtl::OUString ParaPrevWindow::GetText() const
 include/svx/svdlayer.hxx:72
     _Bool SdrLayer::operator==(const class SdrLayer &) const
 include/svx/svdpage.hxx:105
     class SdrModel & SdrObjList::getSdrModelFromSdrObjList() const
-include/svx/SvxColorValueSet.hxx:53
-    void ColorValueSet::addEntriesForColorSet(const class std::__debug::set<class Color, struct std::less<class Color>, class std::allocator<class Color> > &,const class rtl::OUString &)
-include/svx/SvxColorValueSet.hxx:54
-    class Size ColorValueSet::layoutAllVisible(unsigned int)
-include/svx/swframeexample.hxx:138
-    void SwFrameExample::SetWrap(enum com::sun::star::text::WrapTextMode)
-include/svx/swframeexample.hxx:146
-    void SwFrameExample::SetTransparent(_Bool)
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
 include/tools/bigint.hxx:86
@@ -738,6 +672,8 @@ include/vcl/customweld.hxx:64
     void weld::CustomWidgetController::set_size_request(int,int)
 include/vcl/customweld.hxx:98
     void weld::CustomWeld::queue_draw_area(int,int,int,int)
+include/vcl/customweld.hxx:107
+    void weld::CustomWeld::hide()
 include/vcl/edit.hxx:233
     class rtl::OUString Edit::GetPlaceholderText() const
 include/vcl/EnumContext.hxx:135
@@ -806,9 +742,9 @@ include/vcl/uitest/uiobject.hxx:270
      TabPageUIObject::TabPageUIObject(const class VclPtr<class TabPage> &)
 include/vcl/uitest/uiobject.hxx:278
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > TabPageUIObject::create(class vcl::Window *)
-include/vcl/uitest/uiobject.hxx:339
+include/vcl/uitest/uiobject.hxx:341
      SpinUIObject::SpinUIObject(const class VclPtr<class SpinButton> &)
-include/vcl/uitest/uiobject.hxx:347
+include/vcl/uitest/uiobject.hxx:349
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > SpinUIObject::create(class vcl::Window *)
 include/vcl/wall.hxx:98
     _Bool Wallpaper::operator!=(const class Wallpaper &) const
@@ -834,37 +770,39 @@ include/vcl/weld.hxx:324
     void weld::TreeView::set_top_entry(int)
 include/vcl/weld.hxx:350
     void weld::TreeView::select_all()
-include/vcl/weld.hxx:475
+include/vcl/weld.hxx:473
     void weld::Entry::signal_insert_text(class rtl::OUString &)
-include/vcl/weld.hxx:658
+include/vcl/weld.hxx:670
     _Bool weld::MetricSpinButton::get_visible() const
-include/vcl/weld.hxx:687
+include/vcl/weld.hxx:676
+    void weld::MetricSpinButton::set_accessible_name(const class rtl::OUString &)
+include/vcl/weld.hxx:699
     void weld::MetricSpinButton::set_position(int)
-include/vcl/weld.hxx:733
+include/vcl/weld.hxx:745
     _Bool weld::TimeSpinButton::get_sensitive() const
-include/vcl/weld.hxx:734
+include/vcl/weld.hxx:746
     _Bool weld::TimeSpinButton::get_visible() const
-include/vcl/weld.hxx:735
+include/vcl/weld.hxx:747
     void weld::TimeSpinButton::grab_focus()
-include/vcl/weld.hxx:736
+include/vcl/weld.hxx:748
     _Bool weld::TimeSpinButton::has_focus() const
-include/vcl/weld.hxx:737
+include/vcl/weld.hxx:749
     void weld::TimeSpinButton::show(_Bool)
-include/vcl/weld.hxx:738
+include/vcl/weld.hxx:750
     void weld::TimeSpinButton::hide()
-include/vcl/weld.hxx:739
+include/vcl/weld.hxx:751
     void weld::TimeSpinButton::save_value()
-include/vcl/weld.hxx:740
+include/vcl/weld.hxx:752
     _Bool weld::TimeSpinButton::get_value_changed_from_saved() const
-include/vcl/weld.hxx:824
+include/vcl/weld.hxx:836
     void weld::DrawingArea::connect_key_release(const class Link<const class KeyEvent &, _Bool> &)
-include/vcl/weld.hxx:849
+include/vcl/weld.hxx:861
     void weld::Menu::set_sensitive(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:850
+include/vcl/weld.hxx:862
     void weld::Menu::set_active(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:871
+include/vcl/weld.hxx:883
     class weld::Window * weld::Builder::weld_window(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:955
+include/vcl/weld.hxx:967
     class rtl::OUString weld::MessageDialogController::get_primary_text() const
 include/vcl/window.hxx:430
     const char * ImplDbgCheckWindow(const void *)
@@ -912,13 +850,13 @@ sc/inc/postit.hxx:46
      ScCaptionPtr::ScCaptionPtr(class SdrCaptionObj *)
 sc/inc/scdll.hxx:42
      ScDLL::ScDLL()
-sc/inc/scmatrix.hxx:625
+sc/inc/scmatrix.hxx:622
     class ScFullMatrix & ScFullMatrix::operator+=(const class ScFullMatrix &)
-sc/inc/scmatrix.hxx:846
+sc/inc/scmatrix.hxx:843
     class ScVectorRefMatrix & ScVectorRefMatrix::operator+=(const class ScVectorRefMatrix &)
-sc/inc/stlalgorithm.hxx:62
+sc/inc/stlalgorithm.hxx:61
     _Bool sc::AlignedAllocator::operator==(const AlignedAllocator<T, Alignment> &) const
-sc/inc/stlalgorithm.hxx:63
+sc/inc/stlalgorithm.hxx:62
     _Bool sc::AlignedAllocator::operator!=(const AlignedAllocator<T, Alignment> &) const
 sc/inc/table.hxx:327
     _Bool ScTable::IsColRowTabValid(const short,const int,const short) const
@@ -951,9 +889,9 @@ sc/source/core/opencl/formulagroupcl.cxx:1214
 sc/source/core/opencl/formulagroupcl.cxx:1216
     unsigned long sc::opencl::ParallelReductionVectorRef::GetWindowSize() const
 sc/source/core/opencl/formulagroupcl.cxx:1218
-    unsigned long sc::opencl::ParallelReductionVectorRef::GetStartFixed() const
+    _Bool sc::opencl::ParallelReductionVectorRef::GetStartFixed() const
 sc/source/core/opencl/formulagroupcl.cxx:1220
-    unsigned long sc::opencl::ParallelReductionVectorRef::GetEndFixed() const
+    _Bool sc::opencl::ParallelReductionVectorRef::GetEndFixed() const
 sc/source/core/opencl/op_statistical.hxx:204
      sc::opencl::OpGeoMean::OpGeoMean()
 sc/source/core/tool/scmatrix.cxx:2268
@@ -1060,10 +998,6 @@ svgio/inc/svgstyleattributes.hxx:345
     class svgio::svgreader::SvgNumber svgio::svgreader::SvgStyleAttributes::getStrokeDashOffset() const
 svgio/inc/svgstyleattributes.hxx:369
     enum svgio::svgreader::FontStretch svgio::svgreader::SvgStyleAttributes::getFontStretch() const
-svtools/source/control/valueimp.hxx:413
-    void SvtValueItemAcc::ParentDestroyed()
-svtools/source/control/valueimp.hxx:415
-    void SvtValueItemAcc::FireAccessibleEvent(short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
 svx/source/svdraw/svdpdf.hxx:87
     double ImpSdrPdfImport::Matrix::b() const
 svx/source/svdraw/svdpdf.hxx:89
@@ -1074,8 +1008,6 @@ svx/source/svdraw/svdpdf.hxx:91
     double ImpSdrPdfImport::Matrix::f() const
 svx/source/svdraw/svdpdf.hxx:144
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > ImpSdrPdfImport::Matrix::toString() const
-svx/source/svdraw/svdpdf.hxx:225
-    _Bool ImpSdrPdfImport::CheckLastLineMerge(const class basegfx::B2DPolygon &)
 sw/inc/dbgoutsw.hxx:53
     const char * dbg_out(const void *)
 sw/inc/dbgoutsw.hxx:55
@@ -1126,10 +1058,6 @@ sw/inc/dbgoutsw.hxx:107
     const char * dbg_out(const struct SwFormToken &)
 sw/inc/dbgoutsw.hxx:108
     const char * dbg_out(const class std::__debug::vector<struct SwFormToken, class std::allocator<struct SwFormToken> > &)
-sw/inc/dbmgr.hxx:315
-    _Bool SwDBManager::GetTableNames(class ListBox *,const class rtl::OUString &)
-sw/inc/dcontact.hxx:159
-    const class SwIndex & SwContact::GetContentAnchorIndex() const
 sw/inc/docary.hxx:133
     void SwVectorModifyBase::dumpAsXml(struct _xmlTextWriter *)
 sw/inc/docary.hxx:218
@@ -1156,8 +1084,6 @@ sw/inc/IMark.hxx:64
     _Bool sw::mark::IMark::operator<(const class sw::mark::IMark &) const
 sw/inc/IMark.hxx:66
     _Bool sw::mark::IMark::operator==(const class sw::mark::IMark &) const
-sw/inc/ndgrf.hxx:107
-    _Bool SwGrfNode::IsGraphicArrived() const
 sw/inc/node.hxx:98
     enum SwNode::Merge SwNode::GetRedlineMergeFlag() const
 sw/inc/node.hxx:232
@@ -1232,46 +1158,14 @@ sw/source/core/text/txtpaint.hxx:73
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,class Color)
 sw/source/filter/ww8/ww8struc.hxx:242
      WW8_BRCVer6::WW8_BRCVer6()
-sw/source/uibase/inc/numprevw.hxx:51
-    void NumberingPreview::SetNumRule(const class SwNumRule *)
-sw/source/uibase/inc/numprevw.hxx:53
-    void NumberingPreview::SetPageWidth(long)
-sw/source/uibase/inc/numprevw.hxx:55
-    void NumberingPreview::SetOutlineNames(const class rtl::OUString *)
-sw/source/uibase/inc/numprevw.hxx:57
-    void NumberingPreview::SetPositionMode()
-sw/source/uibase/inc/numprevw.hxx:59
-    void NumberingPreview::SetLevel(unsigned short)
+sw/source/uibase/inc/prcntfld.hxx:52
+    void PercentField::SetUpHdl(const class Link<class SpinField &, void> &)
+sw/source/uibase/inc/prcntfld.hxx:53
+    void PercentField::SetDownHdl(const class Link<class SpinField &, void> &)
+sw/source/uibase/inc/prcntfld.hxx:59
+    _Bool PercentField::HasFocus() const
 sw/source/uibase/inc/prcntfld.hxx:62
-    void PercentField::SaveValue()
-sw/source/uibase/inc/prcntfld.hxx:64
-    const class rtl::OUString & PercentField::GetSavedValue() const
-sw/source/uibase/inc/prcntfld.hxx:65
-    class rtl::OUString PercentField::GetText() const
-sw/source/uibase/inc/prcntfld.hxx:67
-    void PercentField::SetMetricFieldMax(long)
-sw/source/uibase/inc/prcntfld.hxx:71
-    void PercentField::SetLast(long)
-sw/source/uibase/inc/prcntfld.hxx:131
-    void SwPercentField::set_accessible_name(const class rtl::OUString &)
-sw/source/uibase/inc/prcntfld.hxx:132
-    void SwPercentField::set_text(const class rtl::OUString &)
-sw/source/uibase/inc/prcntfld.hxx:135
-    class rtl::OUString SwPercentField::get_text() const
-sw/source/uibase/inc/prcntfld.hxx:138
-    int SwPercentField::GetMetrixFieldMin() const
-sw/source/uibase/inc/prcntfld.hxx:140
-    void SwPercentField::set_value(int)
-sw/source/uibase/inc/prcntfld.hxx:144
-    void SwPercentField::SetUserValue(int,enum FieldUnit)
-sw/source/uibase/inc/prcntfld.hxx:146
-    void SwPercentField::SetBaseValue(int,enum FieldUnit)
-sw/source/uibase/inc/prcntfld.hxx:150
-    _Bool SwPercentField::IsValueModified()
-sw/source/uibase/inc/prcntfld.hxx:158
-    int SwPercentField::normalize(int) const
-sw/source/uibase/inc/prcntfld.hxx:167
-    void SwPercentField::LockAutoCalculation(_Bool)
+    void PercentField::ClearModifyFlag()
 sw/source/uibase/inc/swcont.hxx:86
     _Bool SwContent::operator==(const class SwContent &) const
 test/source/sheet/xsubtotalfield.cxx:28
@@ -1302,8 +1196,6 @@ vcl/inc/headless/svpgdi.hxx:227
     void SvpSalGraphics::drawBitmap(const struct SalTwoRect &,struct BitmapBuffer *)
 vcl/inc/impgraph.hxx:57
     _Bool GraphicID::operator==(const class GraphicID &) const
-vcl/inc/impgraph.hxx:63
-    _Bool GraphicID::IsEmpty() const
 vcl/inc/opengl/BufferObject.hxx:50
     void vcl::BufferObject::unbind()
 vcl/inc/opengl/PackedTextureAtlas.hxx:44
@@ -1328,9 +1220,9 @@ vcl/inc/openglgdiimpl.hxx:141
     void OpenGLSalGraphicsImpl::DrawMask(class OpenGLTexture &,class Color,const struct SalTwoRect &)
 vcl/inc/openglgdiimpl.hxx:145
     void OpenGLSalGraphicsImpl::DeferredTextDraw(const class OpenGLTexture &,const class Color,const struct SalTwoRect &)
-vcl/inc/PhysicalFontFace.hxx:61
+vcl/inc/PhysicalFontFace.hxx:60
     int PhysicalFontFace::GetWidth() const
-vcl/inc/PhysicalFontFace.hxx:71
+vcl/inc/PhysicalFontFace.hxx:69
     void PhysicalFontFace::SetBitmapSize(int,int)
 vcl/inc/PhysicalFontFamily.hxx:58
     const class rtl::OUString & PhysicalFontFamily::GetAliasNames() const
@@ -1338,7 +1230,7 @@ vcl/inc/regionband.hxx:27
     const char * ImplDbgTestRegionBand(const void *)
 vcl/inc/salmenu.hxx:46
      SalMenuButtonItem::SalMenuButtonItem()
-vcl/inc/salobj.hxx:67
+vcl/inc/salobj.hxx:69
     _Bool SalObject::IsEraseBackgroundEnabled() const
 vcl/inc/saltimer.hxx:70
      VersionedEvent::VersionedEvent()
@@ -1352,8 +1244,6 @@ vcl/inc/salwtype.hxx:115
      SalMenuEvent::SalMenuEvent()
 vcl/inc/schedulerimpl.hxx:37
     const char * ImplSchedulerData::GetDebugName() const
-vcl/inc/svmconverter.hxx:82
-    unsigned long SVMConverter::ImplWriteActions(class SvStream &,const class GDIMetaFile &,class VirtualDevice &,_Bool &,class Color &,class std::stack<class Color *, class std::__debug::deque<class Color *, class std::allocator<class Color *> > > &,unsigned short &)
 vcl/inc/unx/glyphcache.hxx:72
     void GlyphCache::ClearFontOptions()
 vcl/inc/unx/gtk/gtkdata.hxx:191
@@ -1396,9 +1286,3 @@ xmlsecurity/source/gpg/XMLEncryption.hxx:27
      XMLEncryptionGpg::XMLEncryptionGpg()
 xmlsecurity/source/xmlsec/nss/nssinitializer.hxx:44
      ONSSInitializer::ONSSInitializer(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.hxx:107
-    struct PK11SymKeyStr * SecurityEnvironment_NssImpl::getSymKey(unsigned int)
-xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.hxx:111
-    struct SECKEYPublicKeyStr * SecurityEnvironment_NssImpl::getPubKey(unsigned int)
-xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.hxx:115
-    struct SECKEYPrivateKeyStr * SecurityEnvironment_NssImpl::getPriKey(unsigned int)

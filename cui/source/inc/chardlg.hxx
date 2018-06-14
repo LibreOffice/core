@@ -46,7 +46,6 @@ protected:
     SvxCharBasePage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset);
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
-    void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
 
     inline SvxFont&     GetPreviewFont();
     inline SvxFont&     GetPreviewCJKFont();

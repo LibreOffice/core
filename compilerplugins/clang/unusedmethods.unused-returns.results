@@ -1,31 +1,11 @@
 chart2/source/view/main/OpenGLRender.hxx:69
     int OpenGLRender::InitOpenGL()
-chart2/source/view/main/OpenGLRender.hxx:70
-    int OpenGLRender::MoveModelf(const struct PosVecf3 &,const struct PosVecf3 &,const struct PosVecf3 &)
 chart2/source/view/main/OpenGLRender.hxx:74
     int OpenGLRender::RenderLine2FBO()
-chart2/source/view/main/OpenGLRender.hxx:75
-    int OpenGLRender::SetLine2DShapePoint(float,float,int)
-chart2/source/view/main/OpenGLRender.hxx:79
-    int OpenGLRender::Bubble2DShapePoint(float,float,float,float)
 chart2/source/view/main/OpenGLRender.hxx:80
     int OpenGLRender::RenderBubble2FBO()
-chart2/source/view/main/OpenGLRender.hxx:84
-    int OpenGLRender::RenderRectangleShape(_Bool,_Bool)
-chart2/source/view/main/OpenGLRender.hxx:85
-    int OpenGLRender::RectangleShapePoint(float,float,float,float)
 chart2/source/view/main/OpenGLRender.hxx:92
     int OpenGLRender::CreateTextTexture(const class BitmapEx &,const struct com::sun::star::awt::Size &,long,const struct com::sun::star::drawing::HomogenMatrix3 &)
-chart2/source/view/main/OpenGLRender.hxx:95
-    int OpenGLRender::RenderTextShape()
-chart2/source/view/main/OpenGLRender.hxx:97
-    int OpenGLRender::SetArea2DShapePoint(float,float,int)
-chart2/source/view/main/OpenGLRender.hxx:98
-    int OpenGLRender::RenderArea2DShape()
-chart2/source/view/main/OpenGLRender.hxx:102
-    int OpenGLRender::RenderPieSegment2DShape(float,float,float)
-chart2/source/view/main/OpenGLRender.hxx:104
-    int OpenGLRender::RenderSymbol2DShape(float,float,int)
 chart2/source/view/main/OpenGLRender.hxx:117
     int OpenGLRender::Create2DCircle(int)
 connectivity/source/inc/java/lang/Object.hxx:117
@@ -178,8 +158,10 @@ include/svx/framelink.hxx:195
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/svx/svdograf.hxx:120
     _Bool SdrGrafObj::ImpUpdateGraphicLink(_Bool) const
-include/svx/SvxColorValueSet.hxx:55
+include/svx/SvxColorValueSet.hxx:53
     class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
+include/test/sheet/xcellrangedata.hxx:21
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XCellRangeData::init()
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/test/sheet/xsheetannotation.hxx:36
@@ -198,7 +180,7 @@ include/tools/config.hxx:37
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
-include/vcl/bitmap.hxx:189
+include/vcl/bitmap.hxx:190
     _Bool Bitmap::Dither(enum BmpDitherFlags)
 include/vcl/bitmapex.hxx:241
     _Bool BitmapEx::Rotate(long,const class Color &)
@@ -216,13 +198,13 @@ include/vcl/texteng.hxx:285
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/textview.hxx:192
     _Bool TextView::SetCursorAtPoint(const class Point &)
-include/vcl/toolbox.hxx:515
+include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
 include/vcl/weld.hxx:271
     _Bool weld::ComboBoxText::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:483
+include/vcl/weld.hxx:481
     _Bool weld::Entry::get_selection_bounds(int &,int &)
-include/vcl/weld.hxx:762
+include/vcl/weld.hxx:774
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -310,7 +292,7 @@ sw/source/ui/frmdlg/cption.cxx:80
     short SwSequenceOptionDialog::execute()
 sw/source/uibase/inc/fldmgr.hxx:113
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
-sw/source/uibase/inc/mailmergewizard.hxx:80
+sw/source/uibase/inc/mailmergewizard.hxx:79
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
 ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
     _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
@@ -324,7 +306,7 @@ vcl/inc/opengl/salbmp.hxx:99
     _Bool OpenGLSalBitmap::ImplScaleArea(const class rtl::Reference<class OpenGLContext> &,double,double)
 vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
-vcl/inc/salframe.hxx:221
+vcl/inc/salframe.hxx:222
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
 vcl/inc/salgdi.hxx:392
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
@@ -332,9 +314,9 @@ vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:294
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/source/gdi/pdfwriter_impl.hxx:1263
+vcl/source/gdi/pdfwriter_impl.hxx:1261
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/source/gdi/pdfwriter_impl.hxx:1264
+vcl/source/gdi/pdfwriter_impl.hxx:1262
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/source/gdi/pdfwriter_impl.hxx:1265
+vcl/source/gdi/pdfwriter_impl.hxx:1263
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

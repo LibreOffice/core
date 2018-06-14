@@ -67,9 +67,6 @@ public:
     void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
     bool                IsTwoLines() const;
-    void                SetTwoLines(bool bSet);
-
-    void                SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);
 
     void                SetFontWidthScale( sal_uInt16 nScaleInPercent );
 
@@ -109,20 +106,13 @@ public:
 
     virtual void        StyleUpdated() override;
 
-    void                Init( const SfxItemSet& rSet );
-
     // for reasons of efficiency not const
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;
-    void                SetFont( const SvxFont& rNormalFont, const SvxFont& rCJKFont, const SvxFont& rCTLFont );
     SvxFont&            GetCJKFont();
     SvxFont&            GetCTLFont();
-    void                SetColor( const Color& rColor );
-    void                ResetColor();
     void                SetBackColor( const Color& rColor );
-    void                UseResourceText();
     const OUString&     GetText() const { return maText; }
-    void                SetText(const OUString& rText) { maText = rText; }
     void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
     bool                IsTwoLines() const;
