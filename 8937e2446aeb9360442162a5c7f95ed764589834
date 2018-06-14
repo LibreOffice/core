@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_272500ab",
+        "filename": "sw/qa/extras/ww8export/ww8export2.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-06-14T18:23:27Z",
+      "side": 1,
+      "message": "exact sizes are dangerous.  On my computer the number is off by one.  Much better to do a comparison between the two since this is exactly what your patch is doing.",
+      "range": {
+        "startLine": 319,
+        "startChar": 39,
+        "endLine": 319,
+        "endChar": 43
+      },
+      "revId": "8937e2446aeb9360442162a5c7f95ed764589834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_a71ad06c",
+        "filename": "sw/source/filter/ww8/wrtw8esh.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-06-14T18:23:27Z",
+      "side": 1,
+      "message": "This didn\u0027t look right to me because there should be no connection between these two ideas. The only reason the watermark shouldn\u0027t be tweaked is because it is exactly 45 degrees rotated.",
+      "range": {
+        "startLine": 699,
+        "startChar": 23,
+        "endLine": 699,
+        "endChar": 80
+      },
+      "revId": "8937e2446aeb9360442162a5c7f95ed764589834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_c7250caf",
+        "filename": "sw/source/filter/ww8/wrtw8esh.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-06-14T18:23:27Z",
+      "side": 1,
+      "message": "I looked up these functions (in svdtrans.hxx and gen.hxx) and they return long format. I always try to match that.",
+      "range": {
+        "startLine": 701,
+        "startChar": 24,
+        "endLine": 701,
+        "endChar": 33
+      },
+      "revId": "8937e2446aeb9360442162a5c7f95ed764589834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_e72a087e",
+        "filename": "sw/source/filter/ww8/wrtw8esh.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-06-14T18:23:27Z",
+      "side": 1,
+      "message": "These were your big mistakes. The import functions give the correct version.",
+      "range": {
+        "startLine": 703,
+        "startChar": 38,
+        "endLine": 703,
+        "endChar": 45
+      },
+      "revId": "8937e2446aeb9360442162a5c7f95ed764589834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
