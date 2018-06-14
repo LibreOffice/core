@@ -197,7 +197,7 @@ private Q_SLOTS:
     OUString getDisplayDirectorySlot() { return getDisplayDirectory(); }
     void setValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue)
     {
-        return setValue(nControlAction, nControlAction, rValue);
+        return setValue(nControlId, nControlAction, rValue);
     }
 
     css::uno::Any getValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction)
