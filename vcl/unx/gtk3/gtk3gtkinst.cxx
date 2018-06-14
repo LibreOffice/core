@@ -1747,6 +1747,47 @@ public:
     }
 };
 
+class GtkInstanceSizeGroup : public weld::SizeGroup
+{
+private:
+    GtkSizeGroup* m_pGroup;
+public:
+    GtkInstanceSizeGroup()
+        : m_pGroup(gtk_size_group_new(GTK_SIZE_GROUP_NONE))
+    {
+    }
+    virtual void add_widget(weld::Widget* pWidget) override
+    {
+        GtkInstanceWidget* pVclWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
+        assert(pVclWidget);
+        gtk_size_group_add_widget(m_pGroup, pVclWidget->getWidget());
+    }
+    virtual void set_mode(VclSizeGroupMode eVclMode) override
+    {
+        GtkSizeGroupMode eGtkMode;
+        switch (eVclMode)
+        {
+            case VclSizeGroupMode::NONE:
+                eGtkMode = GTK_SIZE_GROUP_NONE;
+                break;
+            case VclSizeGroupMode::Horizontal:
+                eGtkMode = GTK_SIZE_GROUP_HORIZONTAL;
+                break;
+            case VclSizeGroupMode::Vertical:
+                eGtkMode = GTK_SIZE_GROUP_VERTICAL;
+                break;
+            case VclSizeGroupMode::Both:
+                eGtkMode = GTK_SIZE_GROUP_BOTH;
+                break;
+        }
+        gtk_size_group_set_mode(m_pGroup, eGtkMode);
+    }
+    virtual ~GtkInstanceSizeGroup() override
+    {
+        g_object_unref(m_pGroup);
+    }
+};
+
 class GtkInstanceContainer : public GtkInstanceWidget, public virtual weld::Container
 {
 private:
@@ -4884,6 +4925,11 @@ public:
         if (!pMenu)
             return nullptr;
         return new GtkInstanceMenu(pMenu, bTakeOwnership);
+    }
+
+    virtual weld::SizeGroup* create_size_group() override
+    {
+        return new GtkInstanceSizeGroup;
     }
 };
 
