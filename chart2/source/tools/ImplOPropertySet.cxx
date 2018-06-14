@@ -22,7 +22,9 @@
 
 #include <algorithm>
 #include <iterator>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 
 using namespace ::com::sun::star;
 

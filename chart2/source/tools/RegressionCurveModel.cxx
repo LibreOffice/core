@@ -24,6 +24,7 @@
 #include "RegressionEquation.hxx"
 #include <CloneHelper.hxx>
 #include <PropertyHelper.hxx>
+#include <ModifyListenerHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <rtl/math.hxx>

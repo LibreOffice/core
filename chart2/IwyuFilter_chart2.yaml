@@ -344,6 +344,25 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/chart2/XDataInterpreter.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/tools/RegressionCurveModel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XRegressionCurve.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XServiceName.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/tools/ImplOPropertySet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/PropertyState.hpp
+    - com/sun/star/uno/Sequence.hxx
+    chart2/source/tools/RegressionEquation.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XTitle.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/util/XModifyListener.hpp
     chart2/source/view/inc/3DChartObjects.hxx:
     # base class has to be a complete type
     - boost/shared_array.hpp

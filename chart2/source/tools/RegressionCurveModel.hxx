@@ -21,17 +21,17 @@
 
 #include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
-#include <ModifyListenerHelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 
 namespace chart
 {

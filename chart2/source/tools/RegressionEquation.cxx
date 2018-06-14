@@ -24,6 +24,7 @@
 #include <CharacterProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ContainerHelper.hxx>
+#include <ModifyListenerHelper.hxx>
 #include <unonames.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -33,6 +34,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
