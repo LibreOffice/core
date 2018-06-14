@@ -51,48 +51,53 @@ class SvxStdParagraphTabPage: public SfxTabPage
     static const sal_uInt16 pStdRanges[];
 
 private:
-    SvxStdParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
-    // indention
-    VclPtr<SvxRelativeField>       m_pLeftIndent;
-
-    VclPtr<FixedText>              m_pRightLabel;
-    VclPtr<SvxRelativeField>       m_pRightIndent;
-
-    VclPtr<FixedText>              m_pFLineLabel;
-    VclPtr<SvxRelativeField>       m_pFLineIndent;
-    VclPtr<CheckBox>               m_pAutoCB;
-
-    // distance
-    VclPtr<SvxRelativeField>       m_pTopDist;
-    VclPtr<SvxRelativeField>       m_pBottomDist;
-    VclPtr<CheckBox>               m_pContextualCB;
-
-    // line spacing
-    VclPtr<ListBox>                m_pLineDist;
-    VclPtr<FixedText>              m_pLineDistAtLabel;
-    VclPtr<MetricField>            m_pLineDistAtPercentBox;
-    VclPtr<MetricField>            m_pLineDistAtMetricBox;
-    VclPtr<FixedText>              m_pAbsDist;
-    OUString                sAbsDist;
-    VclPtr<SvxParaPrevWindow>      m_pExampleWin;
-
-    // only writer
-    VclPtr<VclFrame>               m_pRegisterFL;
-    VclPtr<CheckBox>               m_pRegisterCB;
+    SvxStdParagraphTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     long                    nAbst;
     long                    nWidth;
     long                    nMinFixDist;
     bool                    bRelativeMode;
+    OUString                sAbsDist;
+
+    ParaPrevWindow m_aExampleWin;
+
+    // indention
+    std::unique_ptr<RelativeField> m_xLeftIndent;
+
+    std::unique_ptr<weld::Label> m_xRightLabel;
+    std::unique_ptr<RelativeField> m_xRightIndent;
+
+    std::unique_ptr<weld::Label> m_xFLineLabel;
+    std::unique_ptr<RelativeField> m_xFLineIndent;
+    std::unique_ptr<weld::CheckButton> m_xAutoCB;
+
+    // distance
+    std::unique_ptr<RelativeField> m_xTopDist;
+    std::unique_ptr<RelativeField> m_xBottomDist;
+    std::unique_ptr<weld::CheckButton> m_xContextualCB;
+
+    // line spacing
+    std::unique_ptr<weld::ComboBoxText> m_xLineDist;
+    std::unique_ptr<weld::MetricSpinButton> m_xLineDistAtPercentBox;
+    std::unique_ptr<weld::MetricSpinButton> m_xLineDistAtMetricBox;
+    std::unique_ptr<weld::Label> m_xLineDistAtLabel;
+    std::unique_ptr<weld::Label> m_xAbsDist;
+
+    // only writer
+    std::unique_ptr<weld::Widget> m_xRegisterFL;
+    std::unique_ptr<weld::CheckButton> m_xRegisterCB;
+
+    // preview
+    std::unique_ptr<weld::CustomWeld> m_xExampleWin;
 
     void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
     void                    Init_Impl();
     void                    UpdateExample_Impl();
+    void                    ELRLoseFocus();
 
-    DECL_LINK( LineDistHdl_Impl, ListBox&, void );
-    DECL_LINK( ModifyHdl_Impl, Edit&, void );
-    DECL_LINK( AutoHdl_Impl, Button*, void );
+    DECL_LINK(LineDistHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(ModifyHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(AutoHdl_Impl, weld::ToggleButton&, void);
 
 protected:
     virtual void            ActivatePage( const SfxItemSet& rSet ) override;
@@ -101,9 +106,8 @@ protected:
 
 public:
     virtual ~SvxStdParagraphTabPage() override;
-    virtual void dispose() override;
 
-    DECL_LINK(ELRLoseFocusHdl, Control&, void);
+    DECL_LINK(ELRLoseFocusHdl, weld::MetricSpinButton&, void);
 
     static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pStdRanges; }
