@@ -115,6 +115,10 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::getValueSignal, this, &KDE5FilePicker::getValueSlot,
             Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::setLabelSignal, this, &KDE5FilePicker::setLabelSlot,
+            Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getLabelSignal, this, &KDE5FilePicker::getLabelSlot,
+            Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::enableControlSignal, this, &KDE5FilePicker::enableControlSlot,
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::appendFilterSignal, this, &KDE5FilePicker::appendFilterSlot,
@@ -374,11 +378,42 @@ void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable
         SAL_WARN("vcl.kde5", "enable on unknown control" << controlId);
 }
 
-void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label) {}
+void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
+{
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT setLabelSignal(controlId, label);
+    }
+
+    if (_customWidgets.contains(controlId))
+    {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
+        if (cb)
+            cb->setText(toQString(label));
+    }
+    else
+        SAL_WARN("vcl.kde5", "set label on unknown control" << controlId);
+}
 
 OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
 {
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT getLabelSignal(controlId);
+    }
+
     OUString label;
+    if (_customWidgets.contains(controlId))
+    {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
+        if (cb)
+            label = toOUString(cb->text());
+    }
+    else
+        SAL_WARN("vcl.kde5", "get label on unknown control" << controlId);
+
     return label;
 }
 
