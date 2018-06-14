@@ -26,7 +26,7 @@
 class SwNumRule;
 namespace rtl { class OUString; }
 
-class SwNumberingPreview : public weld::CustomWidgetController
+class NumberingPreview : public weld::CustomWidgetController
 {
     const SwNumRule*    pActNum;
     vcl::Font           aStdFont;
@@ -39,8 +39,8 @@ private:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
-    SwNumberingPreview()
-       : pActNum(nullptr)
+    NumberingPreview()
+        : pActNum(nullptr)
         , nPageWidth(0)
         , pOutlineNames(nullptr)
         , bPosition(false)
