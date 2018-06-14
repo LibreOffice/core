@@ -851,25 +851,6 @@ static long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat &rForma
     return nRet;
 }
 
-VCL_BUILDER_FACTORY(NumberingPreview)
-
-// paint numbering's preview
-void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
-{
-    const Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
-
-    ScopedVclPtrInstance<VirtualDevice> pVDev(rRenderContext);
-    pVDev->SetMapMode(rRenderContext.GetMapMode());
-    pVDev->SetOutputSize(aSize);
-
-    // #101524# OJ
-    pVDev->SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
-    pVDev->SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor());
-    pVDev->DrawRect(tools::Rectangle(Point(0,0), aSize));
-
-    rRenderContext.DrawOutDev(Point(0,0), aSize, Point(0,0), aSize, *pVDev);
-}
-
 void SwNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
@@ -1072,11 +1053,6 @@ void SwNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::
         }
     }
     rRenderContext.DrawOutDev(Point(0,0), aSize, Point(0,0), aSize, *pVDev);
-}
-
-
-NumberingPreview::~NumberingPreview()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

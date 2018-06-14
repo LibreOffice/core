@@ -269,9 +269,6 @@
     <glade-widget-class title="Document Preview Window" name="sdlo-SdDocPreviewWin"
                         generic-name="Document Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Writer Number Preview" name="swuilo-NumberingPreview"
-                        generic-name="Writer Number Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Background Preview" name="cuilo-BackgroundPreview"
                         generic-name="Background Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
