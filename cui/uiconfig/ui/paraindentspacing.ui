@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentED_DIST">
+    <property name="upper">9999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentED_DIST1">
     <property name="upper">9999</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -25,43 +30,15 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststoreLB_LINEDIST">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Single</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">1.15 Lines</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">1.5 Lines</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Double</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Proportional</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">At least</col>
-        <col id="1">5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Leading</col>
-        <col id="1">6</col>
-      </row>
-    </data>
+  <object class="GtkAdjustment" id="adjustmentspinED_INDENT1">
+    <property name="upper">9999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentspinED_INDENT2">
+    <property name="upper">9999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkGrid" id="ParaIndentSpacing">
     <property name="visible">True</property>
@@ -79,16 +56,33 @@
         <property name="vexpand">True</property>
         <property name="top_padding">24</property>
         <child>
-          <object class="svxlo-SvxParaPrevWindow" id="drawingareaWN_EXAMPLE">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="halign">center</property>
             <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="drawingareaWN_EXAMPLE-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="paraindentspacing|drawingareaWN_EXAMPLE-atkobject">Example</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="vscrollbar_policy">never</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkDrawingArea" id="drawingareaWN_EXAMPLE">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="drawingareaWN_EXAMPLE-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="paraindentspacing|drawingareaWN_EXAMPLE-atkobject">Example</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -128,7 +122,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="paraindentspacing|labelFT_LEFTINDENT">_Before text:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinED_LEFTINDENT:0cm</property>
+                        <property name="mnemonic_widget">spinED_LEFTINDENT</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -142,7 +136,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="paraindentspacing|labelFT_RIGHTINDENT">After _text:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinED_RIGHTINDENT:0cm</property>
+                        <property name="mnemonic_widget">spinED_RIGHTINDENT</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -156,7 +150,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="paraindentspacing|labelFT_FLINEINDENT">_First line:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinED_FLINEINDENT:0cm</property>
+                        <property name="mnemonic_widget">spinED_FLINEINDENT</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -180,9 +174,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-SvxRelativeField" id="spinED_LEFTINDENT:0cm">
+                      <object class="GtkSpinButton" id="spinED_LEFTINDENT">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentspinED_INDENT</property>
                       </object>
                       <packing>
@@ -191,10 +186,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-SvxRelativeField" id="spinED_RIGHTINDENT:0cm">
+                      <object class="GtkSpinButton" id="spinED_RIGHTINDENT">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustmentspinED_INDENT</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentspinED_INDENT1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -202,10 +198,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-SvxRelativeField" id="spinED_FLINEINDENT:0cm">
+                      <object class="GtkSpinButton" id="spinED_FLINEINDENT">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustmentspinED_INDENT</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentspinED_INDENT2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -272,7 +269,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="paraindentspacing|labelFT_TOPDIST">Ab_ove paragraph:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinED_TOPDIST:0cm</property>
+                            <property name="mnemonic_widget">spinED_TOPDIST</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -286,7 +283,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="paraindentspacing|labelFT_BOTTOMDIST">Below _paragraph:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinED_BOTTOMDIST:0cm</property>
+                            <property name="mnemonic_widget">spinED_BOTTOMDIST</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -295,9 +292,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-SvxRelativeField" id="spinED_TOPDIST:0cm">
+                          <object class="GtkSpinButton" id="spinED_TOPDIST">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentED_DIST</property>
                           </object>
                           <packing>
@@ -306,10 +304,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-SvxRelativeField" id="spinED_BOTTOMDIST:0cm">
+                          <object class="GtkSpinButton" id="spinED_BOTTOMDIST">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="adjustment">adjustmentED_DIST</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentED_DIST1</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -382,10 +381,18 @@
                         <property name="can_focus">False</property>
                         <property name="spacing">12</property>
                         <child>
-                          <object class="GtkComboBox" id="comboLB_LINEDIST">
+                          <object class="GtkComboBoxText" id="comboLB_LINEDIST">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="model">liststoreLB_LINEDIST</property>
+                            <items>
+                              <item id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Single</item>
+                              <item id="1" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">1.15 Lines</item>
+                              <item id="2" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">1.5 Lines</item>
+                              <item id="3" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Double</item>
+                              <item id="4" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Proportional</item>
+                              <item id="5" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">At least</item>
+                              <item id="6" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Leading</item>
+                            </items>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -417,9 +424,10 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkSpinButton" id="spinED_LINEDISTPERCENT:0%">
+                          <object class="GtkSpinButton" id="spinED_LINEDISTPERCENT">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentLINEDISTPERCENT</property>
                           </object>
                           <packing>
@@ -429,9 +437,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinED_LINEDISTMETRIC:0cm">
+                          <object class="GtkSpinButton" id="spinED_LINEDISTMETRIC">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentED_LINEDISTMETRIC</property>
                             <property name="digits">1</property>
                           </object>
@@ -527,11 +536,11 @@
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
       <widget name="box1"/>
-      <widget name="spinED_LEFTINDENT:0cm"/>
-      <widget name="spinED_RIGHTINDENT:0cm"/>
-      <widget name="spinED_FLINEINDENT:0cm"/>
-      <widget name="spinED_TOPDIST:0cm"/>
-      <widget name="spinED_BOTTOMDIST:0cm"/>
+      <widget name="spinED_LEFTINDENT"/>
+      <widget name="spinED_RIGHTINDENT"/>
+      <widget name="spinED_FLINEINDENT"/>
+      <widget name="spinED_TOPDIST"/>
+      <widget name="spinED_BOTTOMDIST"/>
     </widgets>
   </object>
 </interface>

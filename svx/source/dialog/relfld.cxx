@@ -119,5 +119,85 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
     SetSelection( aSelection );
 }
 
+RelativeField::RelativeField(weld::MetricSpinButton* pControl)
+    : m_xSpinButton(pControl)
+    , nRelMin(0)
+    , nRelMax(0)
+    , bRelativeMode(false)
+    , bRelative(false)
+    , bNegativeEnabled(false)
+
+{
+    weld::SpinButton& rSpinButton = m_xSpinButton->get_widget();
+    rSpinButton.connect_changed(LINK(this, RelativeField, ModifyHdl));
+}
+
+IMPL_LINK_NOARG(RelativeField, ModifyHdl, weld::Entry&, void)
+{
+    if (bRelativeMode)
+    {
+        OUString  aStr = m_xSpinButton->get_text();
+        bool      bNewMode = bRelative;
+
+        if ( bRelative )
+        {
+            const sal_Unicode* pStr = aStr.getStr();
+
+            while ( *pStr )
+            {
+                if( ( ( *pStr < '0' ) || ( *pStr > '9' ) ) &&
+                    ( *pStr != '%' ) )
+                {
+                    bNewMode = false;
+                    break;
+                }
+                pStr++;
+            }
+        }
+        else
+        {
+            if ( aStr.indexOf( "%" ) != -1 )
+                bNewMode = true;
+        }
+
+        if ( bNewMode != bRelative )
+            SetRelative( bNewMode );
+    }
+}
+
+void RelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)
+{
+    bRelativeMode = true;
+    nRelMin       = nMin;
+    nRelMax       = nMax;
+    m_xSpinButton->set_unit(FUNIT_CM);
+}
+
+void RelativeField::SetRelative( bool bNewRelative )
+{
+    weld::SpinButton& rSpinButton = m_xSpinButton->get_widget();
+
+    int nStartPos, nEndPos;
+    rSpinButton.get_selection_bounds(nStartPos, nEndPos);
+    OUString aStr = rSpinButton.get_text();
+
+    if ( bNewRelative )
+    {
+        bRelative = true;
+        m_xSpinButton->set_digits(0);
+        m_xSpinButton->set_range(nRelMin, nRelMax, FUNIT_NONE);
+        m_xSpinButton->set_unit(FUNIT_PERCENT);
+    }
+    else
+    {
+        bRelative = false;
+        m_xSpinButton->set_digits(2);
+        m_xSpinButton->set_range(bNegativeEnabled ? -9999 : 0, 9999, FUNIT_NONE);
+        m_xSpinButton->set_unit(FUNIT_CM);
+    }
+
+    rSpinButton.set_text(aStr);
+    rSpinButton.select_region(nStartPos, nEndPos);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
