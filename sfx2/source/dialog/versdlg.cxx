@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/document/XCmisDocument.hpp>
+
 #include <unotools/localedatawrapper.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -297,7 +299,11 @@ void SfxVersionDialog::Init_Impl()
     SvtMiscOptions miscOptions;
     if ( !miscOptions.IsExperimentalMode() )
         m_pCmisButton->Hide( );
-    m_pCmisButton->Enable();
+    uno::Reference<document::XCmisDocument> xCmisDoc(pObjShell->GetModel(), uno::UNO_QUERY);
+    if (xCmisDoc && xCmisDoc->isVersionable())
+        m_pCmisButton->Enable();
+    else
+        m_pCmisButton->Disable();
 
     SelectHdl_Impl(m_pVersionBox);
 }
