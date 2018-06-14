@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_3c3a7737",
+        "filename": "sw/source/core/bastyp/calc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-14T15:08:25Z",
+      "side": 1,
+      "message": "does this need to be a\n    std::vector\u003cstd::unique_ptr\u003cGuard\ncan it not be simply a \n  std::vector\u003cGuard\n?\nAnd can use value initialisation:\n    std::vector\u003c..\u003e aRestore {\n        comphelper::ValueRestorationGuard(...),\n        ....\n    };",
+      "revId": "bb22db6086fffc75f9271965f1a173905f468aa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
