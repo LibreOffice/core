@@ -2628,6 +2628,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     bool            bForget     = false; // Remove due to validity?
 
     OUString aString = GetEditText(mpEditEngine.get());
+    OUString aPreAutoCorrectString = GetEditText(mpEditEngine.get());
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (bModified && pActiveView && !aString.isEmpty() && !lcl_IsNumber(aString))
     {
@@ -2927,7 +2928,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
             ScInputStatusItem aItem( FID_INPUTLINE_STATUS,
                                      aCursorPos, aCursorPos, aCursorPos,
-                                     aString, pObject.get() );
+                                     aPreAutoCorrectString, pObject.get() );
 
             if (!aMisspellRanges.empty())
                 aItem.SetMisspellRanges(&aMisspellRanges);
@@ -2936,6 +2937,15 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             aArgs[0] = &aItem;
             aArgs[1] = nullptr;
             rBindings.Execute( nId, aArgs );
+            if (aString != aPreAutoCorrectString)
+            {
+                ScInputStatusItem aItemCorrected(FID_INPUTLINE_STATUS,
+                    aCursorPos, aCursorPos, aCursorPos,
+                    aString, pObject.get());
+                aArgs[0] = &aItemCorrected;
+                rBindings.Execute(nId, aArgs);
+
+            }
         }
 
         pLastState.reset(); // pLastState still contains the old text
