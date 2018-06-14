@@ -130,36 +130,38 @@ class SvxParaAlignTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
     static const sal_uInt16 pAlignRanges[];
 
+    ParaPrevWindow m_aExampleWin;
+
     // alignment
-    VclPtr<RadioButton>             m_pLeft;
-    VclPtr<RadioButton>             m_pRight;
-    VclPtr<RadioButton>             m_pCenter;
-    VclPtr<RadioButton>             m_pJustify;
-    VclPtr<FixedText>               m_pLeftBottom;
-    VclPtr<FixedText>               m_pRightTop;
+    std::unique_ptr<weld::RadioButton> m_xLeft;
+    std::unique_ptr<weld::RadioButton> m_xRight;
+    std::unique_ptr<weld::RadioButton> m_xCenter;
+    std::unique_ptr<weld::RadioButton> m_xJustify;
+    std::unique_ptr<weld::Label> m_xLeftBottom;
+    std::unique_ptr<weld::Label> m_xRightTop;
 
-    VclPtr<FixedText>               m_pLastLineFT;
-    VclPtr<ListBox>                 m_pLastLineLB;
-    VclPtr<CheckBox>                m_pExpandCB;
+    std::unique_ptr<weld::Label> m_xLastLineFT;
+    std::unique_ptr<weld::ComboBoxText> m_xLastLineLB;
+    std::unique_ptr<weld::CheckButton> m_xExpandCB;
 
-    VclPtr<CheckBox>                m_pSnapToGridCB;
+    std::unique_ptr<weld::CheckButton> m_xSnapToGridCB;
 
     //preview
-    VclPtr<SvxParaPrevWindow>       m_pExampleWin;
+    std::unique_ptr<weld::CustomWeld> m_xExampleWin;
     //vertical alignment
-    VclPtr<VclFrame>                m_pVertAlignFL;
-    VclPtr<ListBox>                 m_pVertAlignLB;
+    std::unique_ptr<weld::Widget> m_xVertAlignFL;
+    std::unique_ptr<weld::ComboBoxText> m_xVertAlignLB;
 
-    VclPtr<VclFrame>                m_pPropertiesFL;
-    VclPtr<svx::FrameDirectionListBox>  m_pTextDirectionLB;
+    std::unique_ptr<weld::Widget> m_xPropertiesFL;
+    std::unique_ptr<svx::SvxFrameDirectionListBox>  m_xTextDirectionLB;
 
-    DECL_LINK(AlignHdl_Impl, Button*, void);
-    DECL_LINK(LastLineHdl_Impl, ListBox&, void);
-    DECL_LINK(TextDirectionHdl_Impl, ListBox&, void);
+    DECL_LINK(AlignHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(LastLineHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(TextDirectionHdl_Impl, weld::ComboBoxText&, void);
 
     void                    UpdateExample_Impl();
 
-                            SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxParaAlignTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
 protected:
     virtual void            ActivatePage( const SfxItemSet& rSet ) override;
@@ -167,7 +169,6 @@ protected:
 
 public:
     virtual ~SvxParaAlignTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pAlignRanges; }

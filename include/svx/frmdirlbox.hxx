@@ -75,6 +75,7 @@ public:
     {
         m_xControl->append(OUString::number(static_cast<sal_uInt32>(eDirection)), rString);
     }
+    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xControl->connect_changed(rLink); }
 };
 
 /** Wrapper for usage of a FrameDirectionListBox in item connections. */

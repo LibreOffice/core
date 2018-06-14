@@ -1016,29 +1016,24 @@ void    SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 #define LASTLINECOUNT_OLD       3
 #define LASTLINECOUNT_NEW       4
 
-SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
-
-    : SfxTabPage(pParent, "ParaAlignPage", "cui/ui/paragalignpage.ui",&rSet)
+SvxParaAlignTabPage::SvxParaAlignTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/paragalignpage.ui", "ParaAlignPage", &rSet)
+    , m_xLeft(m_xBuilder->weld_radio_button("radioBTN_LEFTALIGN"))
+    , m_xRight(m_xBuilder->weld_radio_button("radioBTN_RIGHTALIGN"))
+    , m_xCenter(m_xBuilder->weld_radio_button("radioBTN_CENTERALIGN"))
+    , m_xJustify(m_xBuilder->weld_radio_button("radioBTN_JUSTIFYALIGN"))
+    , m_xLeftBottom(m_xBuilder->weld_label("labelST_LEFTALIGN_ASIAN"))
+    , m_xRightTop(m_xBuilder->weld_label("labelST_RIGHTALIGN_ASIAN"))
+    , m_xLastLineFT(m_xBuilder->weld_label("labelLB_LASTLINE"))
+    , m_xLastLineLB(m_xBuilder->weld_combo_box_text("comboLB_LASTLINE"))
+    , m_xExpandCB(m_xBuilder->weld_check_button("checkCB_EXPAND"))
+    , m_xSnapToGridCB(m_xBuilder->weld_check_button("checkCB_SNAP"))
+    , m_xExampleWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWN_EXAMPLE", m_aExampleWin))
+    , m_xVertAlignFL(m_xBuilder->weld_widget("frameFL_VERTALIGN"))
+    , m_xVertAlignLB(m_xBuilder->weld_combo_box_text("comboLB_VERTALIGN"))
+    , m_xPropertiesFL(m_xBuilder->weld_widget("framePROPERTIES"))
+    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box_text("comboLB_TEXTDIRECTION")))
 {
-    get(m_pLeft,"radioBTN_LEFTALIGN");
-    get(m_pRight,"radioBTN_RIGHTALIGN");
-    get(m_pCenter,"radioBTN_CENTERALIGN");
-    get(m_pJustify,"radioBTN_JUSTIFYALIGN");
-    get(m_pLeftBottom,"labelST_LEFTALIGN_ASIAN");
-    get(m_pRightTop,"labelST_RIGHTALIGN_ASIAN");
-
-    get(m_pLastLineFT,"labelLB_LASTLINE");
-    get(m_pLastLineLB,"comboLB_LASTLINE");
-    get(m_pExpandCB,"checkCB_EXPAND");
-    get(m_pSnapToGridCB,"checkCB_SNAP");
-    get(m_pExampleWin,"drawingareaWN_EXAMPLE");
-
-    get(m_pVertAlignLB,"comboLB_VERTALIGN");
-    get(m_pVertAlignFL,"frameFL_VERTALIGN");
-
-    get(m_pPropertiesFL,"framePROPERTIES");
-    get(m_pTextDirectionLB,"comboLB_TEXTDIRECTION");
-
     SetExchangeSupport();
 
     SvtLanguageOptions aLangOptions;
@@ -1046,63 +1041,40 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
 
     if ( aLangOptions.IsAsianTypographyEnabled() )
     {
-        m_pLeft->SetText(m_pLeftBottom->GetText());
-        m_pRight->SetText(m_pRightTop->GetText());
+        m_xLeft->set_label(m_xLeftBottom->get_label());
+        m_xRight->set_label(m_xRightTop->get_label());
 
-        OUString sLeft(m_pLeft->GetText());
+        OUString sLeft(m_xLeft->get_label());
         sLeft = MnemonicGenerator::EraseAllMnemonicChars( sLeft );
 
-        if ( m_pLastLineLB->GetEntryCount() == LASTLINECOUNT_OLD )
+        if (m_xLastLineLB->get_count() == LASTLINECOUNT_OLD)
         {
-            m_pLastLineLB->RemoveEntry( 0 );
-            m_pLastLineLB->InsertEntry( sLeft, 0 );
+            m_xLastLineLB->remove(0);
+            m_xLastLineLB->insert_text(0, sLeft);
         }
         else
             nLastLinePos = LASTLINEPOS_LEFT;
     }
 
     // remove "Default" or "Left" entry, depends on CJKOptions
-    if ( m_pLastLineLB->GetEntryCount() == LASTLINECOUNT_NEW )
-        m_pLastLineLB->RemoveEntry( nLastLinePos );
+    if (m_xLastLineLB->get_count() == LASTLINECOUNT_NEW)
+        m_xLastLineLB->remove(nLastLinePos);
 
-    Link<Button*,void> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
-    m_pLeft->SetClickHdl( aLink );
-    m_pRight->SetClickHdl( aLink );
-    m_pCenter->SetClickHdl( aLink );
-    m_pJustify->SetClickHdl( aLink );
-    m_pLastLineLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
-    m_pTextDirectionLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, TextDirectionHdl_Impl ) );
+    Link<weld::ToggleButton&, void> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
+    m_xLeft->connect_toggled(aLink);
+    m_xRight->connect_toggled(aLink);
+    m_xCenter->connect_toggled(aLink);
+    m_xJustify->connect_toggled(aLink);
+    m_xLastLineLB->connect_changed(LINK(this, SvxParaAlignTabPage, LastLineHdl_Impl));
+    m_xTextDirectionLB->connect_changed(LINK(this, SvxParaAlignTabPage, TextDirectionHdl_Impl));
 
-    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
-    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
-    m_pTextDirectionLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
-
-    setPreviewsToSamePlace(pParent, this);
+    m_xTextDirectionLB->append(SvxFrameDirection::Environment, SvxResId(RID_SVXSTR_FRAMEDIR_SUPER));
+    m_xTextDirectionLB->append(SvxFrameDirection::Horizontal_LR_TB, SvxResId(RID_SVXSTR_FRAMEDIR_LTR));
+    m_xTextDirectionLB->append(SvxFrameDirection::Horizontal_RL_TB, SvxResId(RID_SVXSTR_FRAMEDIR_RTL));
 }
 
 SvxParaAlignTabPage::~SvxParaAlignTabPage()
 {
-    disposeOnce();
-}
-
-void SvxParaAlignTabPage::dispose()
-{
-    m_pLeft.clear();
-    m_pRight.clear();
-    m_pCenter.clear();
-    m_pJustify.clear();
-    m_pLeftBottom.clear();
-    m_pRightTop.clear();
-    m_pLastLineFT.clear();
-    m_pLastLineLB.clear();
-    m_pExpandCB.clear();
-    m_pSnapToGridCB.clear();
-    m_pExampleWin.clear();
-    m_pVertAlignFL.clear();
-    m_pVertAlignLB.clear();
-    m_pPropertiesFL.clear();
-    m_pTextDirectionLB.clear();
-    SfxTabPage::dispose();
 }
 
 DeactivateRC SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1112,9 +1084,9 @@ DeactivateRC SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxParaAlignTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxParaAlignTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxParaAlignTabPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SvxParaAlignTabPage>::Create(pParent, *rSet);
 }
 
 bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1123,20 +1095,20 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     SvxAdjust eAdjust = SvxAdjust::Left;
 
-    if ( m_pLeft->IsChecked() )
+    if ( m_xLeft->get_active() )
         eAdjust = SvxAdjust::Left;
-    else if ( m_pRight->IsChecked() )
+    else if ( m_xRight->get_active() )
         eAdjust = SvxAdjust::Right;
-    else if ( m_pCenter->IsChecked() )
+    else if ( m_xCenter->get_active() )
         eAdjust = SvxAdjust::Center;
-    else if ( m_pJustify->IsChecked() )
+    else if ( m_xJustify->get_active() )
         eAdjust = SvxAdjust::Block;
 
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
 
-    SvxAdjust eOneWord = m_pExpandCB->IsChecked() ? SvxAdjust::Block : SvxAdjust::Left;
+    SvxAdjust eOneWord = m_xExpandCB->get_active() ? SvxAdjust::Block : SvxAdjust::Left;
 
-    sal_Int32 nLBPos = m_pLastLineLB->GetSelectedEntryPos();
+    int nLBPos = m_xLastLineLB->get_active();
     SvxAdjust eLastBlock = SvxAdjust::Left;
     if ( 1 == nLBPos )
         eLastBlock = SvxAdjust::Center;
@@ -1150,22 +1122,23 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
     rOutSet->Put( aAdj );
     bModified = true;
 
-    if(m_pSnapToGridCB->IsValueChangedFromSaved())
+    if (m_xSnapToGridCB->get_state_changed_from_saved())
     {
-        rOutSet->Put(SvxParaGridItem(m_pSnapToGridCB->IsChecked(), GetWhich( SID_ATTR_PARA_SNAPTOGRID )));
-        bModified = true;
-    }
-    if(m_pVertAlignLB->IsValueChangedFromSaved())
-    {
-        rOutSet->Put(SvxParaVertAlignItem(static_cast<SvxParaVertAlignItem::Align>(m_pVertAlignLB->GetSelectedEntryPos()), GetWhich( SID_PARA_VERTALIGN )));
+        rOutSet->Put(SvxParaGridItem(m_xSnapToGridCB->get_active(), GetWhich( SID_ATTR_PARA_SNAPTOGRID )));
         bModified = true;
     }
 
-    if( m_pTextDirectionLB->IsVisible() )
+    if (m_xVertAlignLB->get_value_changed_from_saved())
     {
-        if( m_pTextDirectionLB->IsValueChangedFromSaved() )
+        rOutSet->Put(SvxParaVertAlignItem(static_cast<SvxParaVertAlignItem::Align>(m_xVertAlignLB->get_active()), GetWhich( SID_PARA_VERTALIGN )));
+        bModified = true;
+    }
+
+    if (m_xTextDirectionLB->get_visible())
+    {
+        if (m_xTextDirectionLB->get_value_changed_from_saved())
         {
-            SvxFrameDirection eDir = m_pTextDirectionLB->GetSelectEntryValue();
+            SvxFrameDirection eDir = m_xTextDirectionLB->get_active_id();
             rOutSet->Put( SvxFrameDirectionItem( eDir, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
             bModified = true;
         }
@@ -1191,18 +1164,18 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 
         switch ( rAdj.GetAdjust() /*!!! ask VB rAdj.GetLastBlock()*/ )
         {
-            case SvxAdjust::Left: m_pLeft->Check(); break;
+            case SvxAdjust::Left: m_xLeft->set_active(true); break;
 
-            case SvxAdjust::Right: m_pRight->Check(); break;
+            case SvxAdjust::Right: m_xRight->set_active(true); break;
 
-            case SvxAdjust::Center: m_pCenter->Check(); break;
+            case SvxAdjust::Center: m_xCenter->set_active(true); break;
 
-            case SvxAdjust::Block: m_pJustify->Check(); break;
+            case SvxAdjust::Block: m_xJustify->set_active(true); break;
             default: ; //prevent warning
         }
-        bool bEnable = m_pJustify->IsChecked();
-        m_pLastLineFT->Enable(bEnable);
-        m_pLastLineLB->Enable(bEnable);
+        bool bEnable = m_xJustify->get_active();
+        m_xLastLineFT->set_sensitive(bEnable);
+        m_xLastLineLB->set_sensitive(bEnable);
 
         switch(rAdj.GetLastBlock())
         {
@@ -1213,34 +1186,34 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
             case SvxAdjust::Block: nLBSelect = 2;  break;
             default: ; //prevent warning
         }
-        m_pExpandCB->Enable(bEnable && nLBSelect == 2);
-        m_pExpandCB->Check(SvxAdjust::Block == rAdj.GetOneWord());
+        m_xExpandCB->set_sensitive(bEnable && nLBSelect == 2);
+        m_xExpandCB->set_active(SvxAdjust::Block == rAdj.GetOneWord());
     }
     else
     {
-        m_pLeft->Check( false );
-        m_pRight->Check( false );
-        m_pCenter->Check( false );
-        m_pJustify->Check( false );
+        m_xLeft->set_active(false);
+        m_xRight->set_active(false);
+        m_xCenter->set_active(false);
+        m_xJustify->set_active(false);
     }
-    m_pLastLineLB->SelectEntryPos(nLBSelect);
+    m_xLastLineLB->set_active(nLBSelect);
 
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl(*rSet);
     if(nHtmlMode & HTMLMODE_ON)
     {
-        m_pLastLineLB->Hide();
-        m_pLastLineFT->Hide();
-        m_pExpandCB->Hide();
+        m_xLastLineLB->hide();
+        m_xLastLineFT->hide();
+        m_xExpandCB->hide();
         if(!(nHtmlMode & HTMLMODE_FULL_STYLES) )
-            m_pJustify->Disable();
-        m_pSnapToGridCB->Show(false);
+            m_xJustify->set_sensitive(false);
+        m_xSnapToGridCB->show(false);
     }
     _nWhich = GetWhich(SID_ATTR_PARA_SNAPTOGRID);
     eItemState = rSet->GetItemState( _nWhich );
     if ( eItemState >= SfxItemState::DEFAULT )
     {
         const SvxParaGridItem& rSnap = static_cast<const SvxParaGridItem&>(rSet->Get( _nWhich ));
-        m_pSnapToGridCB->Check(rSnap.GetValue());
+        m_xSnapToGridCB->set_active(rSnap.GetValue());
     }
 
     _nWhich = GetWhich( SID_PARA_VERTALIGN );
@@ -1248,11 +1221,11 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 
     if ( eItemState >= SfxItemState::DEFAULT )
     {
-        m_pVertAlignFL->Show();
+        m_xVertAlignFL->show();
 
         const SvxParaVertAlignItem& rAlign = static_cast<const SvxParaVertAlignItem&>(rSet->Get( _nWhich ));
 
-        m_pVertAlignLB->SelectEntryPos(static_cast<sal_Int32>(rAlign.GetValue()));
+        m_xVertAlignLB->set_active(static_cast<sal_Int32>(rAlign.GetValue()));
     }
 
     _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
@@ -1260,125 +1233,126 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     if( SfxItemState::DEFAULT <= rSet->GetItemState( _nWhich ) )
     {
         const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet->Get( _nWhich ) );
-        m_pTextDirectionLB->SelectEntryValue( rFrameDirItem.GetValue() );
-        m_pTextDirectionLB->SaveValue();
+        m_xTextDirectionLB->set_active_id(rFrameDirItem.GetValue());
+        m_xTextDirectionLB->save_value();
     }
 
-    m_pSnapToGridCB->SaveValue();
-    m_pVertAlignLB->SaveValue();
-    m_pLeft->SaveValue();
-    m_pRight->SaveValue();
-    m_pCenter->SaveValue();
-    m_pJustify->SaveValue();
-    m_pLastLineLB->SaveValue();
-    m_pExpandCB->SaveValue();
+    m_xSnapToGridCB->save_state();
+    m_xVertAlignLB->save_value();
+    m_xLeft->save_state();
+    m_xRight->save_state();
+    m_xCenter->save_state();
+    m_xJustify->save_state();
+    m_xLastLineLB->save_value();
+    m_xExpandCB->save_state();
 
     UpdateExample_Impl();
 }
+
 void SvxParaAlignTabPage::ChangesApplied()
 {
-    m_pTextDirectionLB->SaveValue();
-    m_pSnapToGridCB->SaveValue();
-    m_pVertAlignLB->SaveValue();
-    m_pLeft->SaveValue();
-    m_pRight->SaveValue();
-    m_pCenter->SaveValue();
-    m_pJustify->SaveValue();
-    m_pLastLineLB->SaveValue();
-    m_pExpandCB->SaveValue();
+    m_xTextDirectionLB->save_value();
+    m_xSnapToGridCB->save_state();
+    m_xVertAlignLB->save_value();
+    m_xLeft->save_state();
+    m_xRight->save_state();
+    m_xCenter->save_state();
+    m_xJustify->save_state();
+    m_xLastLineLB->save_value();
+    m_xExpandCB->save_state();
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::ToggleButton&, void)
 {
-    bool bJustify = m_pJustify->IsChecked();
-    m_pLastLineFT->Enable(bJustify);
-    m_pLastLineLB->Enable(bJustify);
-    bool bLastLineIsBlock = m_pLastLineLB->GetSelectedEntryPos() == 2;
-    m_pExpandCB->Enable(bJustify && bLastLineIsBlock);
+    bool bJustify = m_xJustify->get_active();
+    m_xLastLineFT->set_sensitive(bJustify);
+    m_xLastLineLB->set_sensitive(bJustify);
+    bool bLastLineIsBlock = m_xLastLineLB->get_active() == 2;
+    m_xExpandCB->set_sensitive(bJustify && bLastLineIsBlock);
     //set last line listbox to entry position 0 if not enabled
-    if(!m_pLastLineLB->IsEnabled())
-        m_pLastLineLB->SelectEntryPos(0);
+    if (!m_xLastLineLB->get_sensitive())
+        m_xLastLineLB->set_active(0);
     //uncheck 'Expand ... word' when check box is not enabled
-    if(!m_pExpandCB->IsEnabled())
-        m_pExpandCB->Check(false);
+    if (!m_xExpandCB->get_sensitive())
+        m_xExpandCB->set_active(false);
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, weld::ComboBoxText&, void)
 {
     //fdo#41350 only enable 'Expand last word' if last line is also justified
-    bool bLastLineIsBlock = m_pLastLineLB->GetSelectedEntryPos() == 2;
-    m_pExpandCB->Enable(bLastLineIsBlock);
+    bool bLastLineIsBlock = m_xLastLineLB->get_active() == 2;
+    m_xExpandCB->set_sensitive(bLastLineIsBlock);
     //uncheck 'Expand ... word' when check box is not enabled
-    if(!m_pExpandCB->IsEnabled())
-        m_pExpandCB->Check(false);
+    if (!m_xExpandCB->get_sensitive())
+        m_xExpandCB->set_active(false);
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, weld::ComboBoxText&, void)
 {
     UpdateExample_Impl();
 }
 
 void SvxParaAlignTabPage::UpdateExample_Impl()
 {
-    if ( m_pLeft->IsChecked() )
+    if (m_xLeft->get_active())
     {
-        m_pExampleWin->EnableRTL( false );
-        m_pExampleWin->SetAdjust( SvxAdjust::Left );
-        m_pExampleWin->SetLastLine( SvxAdjust::Left );
+        m_aExampleWin.EnableRTL(false);
+        m_aExampleWin.SetAdjust(SvxAdjust::Left);
+        m_aExampleWin.SetLastLine(SvxAdjust::Left);
     }
-    else if ( m_pRight->IsChecked() )
+    else if (m_xRight->get_active())
     {
-        m_pExampleWin->EnableRTL( true );
-        m_pExampleWin->SetAdjust( SvxAdjust::Left );
-        m_pExampleWin->SetLastLine( SvxAdjust::Left );
+        m_aExampleWin.EnableRTL(true);
+        m_aExampleWin.SetAdjust(SvxAdjust::Left);
+        m_aExampleWin.SetLastLine(SvxAdjust::Left);
     }
     else
     {
-        SvxFrameDirection eDir = m_pTextDirectionLB->GetSelectEntryValue();
+        SvxFrameDirection eDir = m_xTextDirectionLB->get_active_id();
         switch ( eDir )
         {
             case SvxFrameDirection::Environment :
-                if ( !m_pRight->IsChecked() )
-                    m_pExampleWin->EnableRTL( IsRTLEnabled() /*false*/ );
+                if ( !m_xRight->get_active() )
+                    m_aExampleWin.EnableRTL( IsRTLEnabled() /*false*/ );
                 break;
             case SvxFrameDirection::Horizontal_RL_TB :
-                if ( !m_pLeft->IsChecked() )
-                    m_pExampleWin->EnableRTL( true );
+                if ( !m_xLeft->get_active() )
+                    m_aExampleWin.EnableRTL( true );
                 break;
             case SvxFrameDirection::Horizontal_LR_TB :
-                if ( !m_pRight->IsChecked() )
-                    m_pExampleWin->EnableRTL( false );
+                if ( !m_xRight->get_active() )
+                    m_aExampleWin.EnableRTL( false );
                 break;
             default: ; //prevent warning
         }
-        if ( m_pCenter->IsChecked() )
-            m_pExampleWin->SetAdjust( SvxAdjust::Center );
-        else if ( m_pJustify->IsChecked() )
+        if (m_xCenter->get_active())
+            m_aExampleWin.SetAdjust( SvxAdjust::Center );
+        else if (m_xJustify->get_active())
         {
-            m_pExampleWin->SetAdjust( SvxAdjust::Block );
-            sal_Int32 nLBPos = m_pLastLineLB->GetSelectedEntryPos();
-            if(nLBPos == 0)
-                m_pExampleWin->SetLastLine(SvxAdjust::Left);
-            else if(nLBPos == 1)
-                m_pExampleWin->SetLastLine(SvxAdjust::Center);
-            else if(nLBPos == 2)
-                m_pExampleWin->SetLastLine(SvxAdjust::Block);
+            m_aExampleWin.SetAdjust( SvxAdjust::Block );
+            int nLBPos = m_xLastLineLB->get_active();
+            if (nLBPos == 0)
+                m_aExampleWin.SetLastLine(SvxAdjust::Left);
+            else if (nLBPos == 1)
+                m_aExampleWin.SetLastLine(SvxAdjust::Center);
+            else if (nLBPos == 2)
+                m_aExampleWin.SetLastLine(SvxAdjust::Block);
         }
     }
 
-    m_pExampleWin->Invalidate();
+    m_aExampleWin.Invalidate();
 }
 
 void SvxParaAlignTabPage::EnableJustifyExt()
 {
-    m_pLastLineFT->Show();
-    m_pLastLineLB->Show();
-    m_pExpandCB->Show();
+    m_xLastLineFT->show();
+    m_xLastLineLB->show();
+    m_xExpandCB->show();
     SvtLanguageOptions aCJKOptions;
-    if(aCJKOptions.IsAsianTypographyEnabled())
-        m_pSnapToGridCB->Show();
+    if (aCJKOptions.IsAsianTypographyEnabled())
+        m_xSnapToGridCB->show();
 
 }
 
