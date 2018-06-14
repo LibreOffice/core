@@ -15,6 +15,7 @@
 #include <test/sheet/xcellrangedata.hxx>
 #include <test/sheet/xcellrangeformula.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
 #include <test/sheet/xsheetfilterable.hxx>
@@ -40,6 +41,7 @@ class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XCellRangeData,
                                                public apitest::XCellRangeFormula,
                                                public apitest::XCellSeries,
+                                               public apitest::XFormulaQuery,
                                                public apitest::XMultipleOperation,
                                                public apitest::XSheetCellRange,
                                                public apitest::XSheetFilterable,
@@ -83,6 +85,10 @@ public:
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
 
+    // XFormulaQuery
+    CPPUNIT_TEST(testQueryDependents);
+    CPPUNIT_TEST(testQueryPrecedents);
+
     // XMultipleOperation
     CPPUNIT_TEST(testSetTableOperation);
 
@@ -119,7 +125,8 @@ private:
 
 ScCellCursorObj::ScCellCursorObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-    apitest::XCellSeries(0, 0)
+    apitest::XCellSeries(0, 0),
+    apitest::XFormulaQuery(table::CellRangeAddress(0, 15, 15, 15, 15), table::CellRangeAddress(0, 0, 15, 0, 15))
 {
 }
 
@@ -148,6 +155,8 @@ uno::Reference< uno::XInterface > ScCellCursorObj::getXSpreadsheet()
 
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+
+    setXCell(xSheet->getCellByPosition(15, 15));
 
     return xSheet;
 }
