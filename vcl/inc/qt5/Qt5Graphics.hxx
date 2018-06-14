@@ -120,7 +120,8 @@ public:
     virtual void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                           Color nMaskColor) override;
 
-    virtual SalBitmap* getBitmap(long nX, long nY, long nWidth, long nHeight) override;
+    virtual std::shared_ptr<SalBitmap> getBitmap(long nX, long nY, long nWidth,
+                                                 long nHeight) override;
     virtual Color getPixel(long nX, long nY) override;
 
     virtual void invert(long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) override;
