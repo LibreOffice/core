@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_e7512810",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-14T18:33:41Z",
+      "side": 0,
+      "message": "Can you please teach your file system or editor (or whatever may cause this) environment to not set the executable flag on changed files? Thanks. (i.e. 644 is rw-r--r-- and 755 is rwxr-x-r-x)",
+      "revId": "f32428f7eb03bce4fa8a4f8e7837d306cb7f4558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
