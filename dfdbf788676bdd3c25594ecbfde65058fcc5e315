@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_199f8d04",
+        "filename": "vcl/unx/generic/plugadapt/salplug.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-14T09:33:17Z",
+      "side": 1,
+      "message": "Eek, this plugin is not too stable yet, so we certainly don\u0027t want it to be picked up first :) I\u0027d place it let\u0027s say between gtk and kde4",
+      "range": {
+        "startLine": 239,
+        "startChar": 8,
+        "endLine": 239,
+        "endChar": 15
+      },
+      "revId": "dfdbf788676bdd3c25594ecbfde65058fcc5e315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
