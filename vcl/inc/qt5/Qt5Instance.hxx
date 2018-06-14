@@ -85,7 +85,7 @@ public:
 
     virtual SalTimer* CreateSalTimer() override;
     virtual SalSystem* CreateSalSystem() override;
-    virtual SalBitmap* CreateSalBitmap() override;
+    virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
 
     virtual bool DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool AnyInput(VclInputFlags nType) override;

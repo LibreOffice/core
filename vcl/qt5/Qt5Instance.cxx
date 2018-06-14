@@ -127,12 +127,12 @@ SalTimer* Qt5Instance::CreateSalTimer() { return new Qt5Timer(); }
 
 SalSystem* Qt5Instance::CreateSalSystem() { return new SvpSalSystem(); }
 
-SalBitmap* Qt5Instance::CreateSalBitmap()
+std::shared_ptr<SalBitmap> Qt5Instance::CreateSalBitmap()
 {
     if (m_bUseCairo)
-        return new SvpSalBitmap();
+        return std::make_shared<SvpSalBitmap>();
     else
-        return new Qt5Bitmap();
+        return std::make_shared<Qt5Bitmap>();
 }
 
 bool Qt5Instance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
