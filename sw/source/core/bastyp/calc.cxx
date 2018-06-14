@@ -449,6 +449,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                 sal_Int32 nCommandPos = m_nCommandPos;
                 SwCalcOper eCurrOper = m_eCurrOper;
                 SwCalcOper eCurrListOper = m_eCurrListOper;
+                OUString sCurrCommand = m_sCommand;
 
                 pFnd->nValue.PutDouble( pUField->GetValue( *this ) );
 
@@ -459,6 +460,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                 m_nCommandPos = nCommandPos;
                 m_eCurrOper = eCurrOper;
                 m_eCurrListOper = eCurrListOper;
+                m_sCommand = sCurrCommand;
             }
             else
             {
