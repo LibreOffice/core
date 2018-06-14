@@ -46,15 +46,7 @@ KDE5FilePicker::~KDE5FilePicker()
     delete _dialog;
 }
 
-/*void KDE5FilePicker::enableControl(sal_Int16 controlId, bool enable)
-{
-    if (_customWidgets.contains(controlId))
-        _customWidgets.value(controlId)->setEnabled(enable);
-    else
-        qWarning() << "enable on unknown control" << controlId;
-}
-
-void KDE5FilePicker::setLabel(sal_Int16 controlId, const QString& label)
+/*void KDE5FilePicker::setLabel(sal_Int16 controlId, const QString& label)
 {
     if (_customWidgets.contains(controlId))
     {
