@@ -19,6 +19,7 @@
 
 
 #include <comphelper/flagguard.hxx>
+#include <comphelper/valueguard.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Exception.hpp>
 
@@ -49,6 +50,10 @@ FlagGuard::~FlagGuard()
 }
 
 FlagRestorationGuard::~FlagRestorationGuard()
+{
+}
+
+ValueRestorationGuard::~ValueRestorationGuard()
 {
 }
 

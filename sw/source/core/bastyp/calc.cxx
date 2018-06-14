@@ -25,6 +25,7 @@
 #include <memory>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/valueguard.hxx>
 #include <cstdlib>
 #include <dbfld.hxx>
 #include <dbmgr.hxx>
@@ -38,6 +39,7 @@
 #include <editeng/unolingu.hxx>
 #include <expfld.hxx>
 #include <hintids.hxx>
+#include <o3tl/make_unique.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/diagnose.hxx>
 #include <rtl/math.hxx>
@@ -443,24 +445,16 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             else if( !pUField->IsValid() )
             {
                 // Save the current values...
-                sal_uInt16 nListPor = m_nListPor;
-                SwSbxValue nLastLeft = m_nLastLeft;
-                SwSbxValue nNumberValue = m_nNumberValue;
-                sal_Int32 nCommandPos = m_nCommandPos;
-                SwCalcOper eCurrOper = m_eCurrOper;
-                SwCalcOper eCurrListOper = m_eCurrListOper;
-                OUString sCurrCommand = m_sCommand;
+                std::vector<std::unique_ptr<comphelper::ValueRestorationGuard>> aRestore;
+                aRestore.push_back(o3tl::make_unique<comphelper::ValueRestorationGuard>(m_nListPor));
+                aRestore.push_back(o3tl::make_unique<comphelper::ValueRestorationGuard>(m_nLastLeft));
+                aRestore.push_back(o3tl::make_unique<comphelper::ValueRestorationGuard>(m_nNumberValue));
+                aRestore.push_back(o3tl::make_unique<comphelper::ValueRestorationGuard>(m_nCommandPos));
+                aRestore.push_back(o3tl::make_unique<comphelper::ValueRestorationGuard>(m_eCurrOper));
+                aRestore.push_back(o3tl::make_unique<comphelper::ValueRestorationGuard>(m_eCurrListOper));
+                aRestore.push_back(o3tl::make_unique<comphelper::ValueRestorationGuard>(m_sCommand));
 
                 pFnd->nValue.PutDouble( pUField->GetValue( *this ) );
-
-                // ...and write them back.
-                m_nListPor = nListPor;
-                m_nLastLeft = nLastLeft;
-                m_nNumberValue = nNumberValue;
-                m_nCommandPos = nCommandPos;
-                m_eCurrOper = eCurrOper;
-                m_eCurrListOper = eCurrListOper;
-                m_sCommand = sCurrCommand;
             }
             else
             {
