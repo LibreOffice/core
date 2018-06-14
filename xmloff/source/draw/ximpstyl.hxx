@@ -141,7 +141,6 @@ public:
 
 class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
 {
-    OUString               msName;
     std::vector< rtl::Reference< SdXMLPresentationPlaceholderContext > >
                            maList;
     sal_uInt16             mnTypeId;

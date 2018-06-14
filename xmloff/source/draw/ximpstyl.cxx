@@ -424,19 +424,6 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-
-        if(nPrefix == XML_NAMESPACE_STYLE && IsXMLToken( aLocalName, XML_NAME ) )
-        {
-            msName = xAttrList->getValueByIndex( i );
-        }
-    }
 }
 
 SvXMLImportContextRef SdXMLPresentationPageLayoutContext::CreateChildContext(

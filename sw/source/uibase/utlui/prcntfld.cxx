@@ -287,7 +287,6 @@ SwPercentField::SwPercentField(weld::MetricSpinButton* pControl)
     , nLastValue(-1)
     , nOldDigits(m_pField->get_digits())
     , eOldUnit(FUNIT_NONE)
-    , bLockAutoCalculation(false)
 {
     int nMin, nMax;
     m_pField->get_range(nMin, nMax, FUNIT_TWIP);
@@ -301,7 +300,7 @@ void SwPercentField::SetRefValue(int nValue)
 
     nRefValue = nValue;
 
-    if (!bLockAutoCalculation && (m_pField->get_unit() == FUNIT_PERCENT))
+    if (m_pField->get_unit() == FUNIT_PERCENT)
         SetPrcntValue(nRealValue, eOldUnit);
 }
 

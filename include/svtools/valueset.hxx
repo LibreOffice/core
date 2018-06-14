@@ -437,7 +437,6 @@ private:
     OUString        maText;
     WinBits         mnStyle;
     Link<SvtValueSet*,void>  maDoubleClickHdl;
-    Link<SvtValueSet*,void>  maSelectHdl;
 
     bool            mbFormat : 1;
     bool            mbNoSelection : 1;
@@ -487,8 +486,6 @@ public:
     virtual void    Resize() override;
     virtual void    StyleUpdated() override;
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
-
-    void            Select();
 
     OUString        GetText() const { return maText; }
     void            SetText(const OUString& rText) { maText = rText; }

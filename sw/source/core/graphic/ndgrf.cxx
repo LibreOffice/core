@@ -76,7 +76,6 @@ SwGrfNode::SwGrfNode(
     bInSwapIn = bChgTwipSize =
         bFrameInPaint = bScaleImageMap = false;
 
-    bGraphicArrived = true;
     ReRead(rGrfName, rFltName, pGraphic, false);
 }
 
@@ -93,7 +92,6 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 {
     bInSwapIn = bChgTwipSize  =
         bFrameInPaint = bScaleImageMap = false;
-    bGraphicArrived = true;
 }
 
 /** Create new SW/G reader.
@@ -119,7 +117,6 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 
     bInSwapIn = bChgTwipSize =
         bFrameInPaint = bScaleImageMap = false;
-    bGraphicArrived = false;
 
     InsertLink( rGrfName, rFltName );
     if( IsLinkedFile() )

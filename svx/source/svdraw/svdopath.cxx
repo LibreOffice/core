@@ -90,7 +90,6 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     sal_uInt16                  nPrevPrevPnt;   // index of point before previous point
     sal_uInt16                  nNextNextPnt;   // index of point after next point
     bool                        bControl;       // point is a control point
-    bool                        bIsPrevControl; // point is a control point before a support point
     bool                        bIsNextControl; // point is a control point after a support point
     bool                        bPrevIsControl; // if nPnt is a support point: a control point comes before
     bool                        bNextIsControl; // if nPnt is a support point: a control point comes after
@@ -128,7 +127,6 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
     , nPrevPrevPnt(0)
     , nNextNextPnt(0)
     , bControl(false)
-    , bIsPrevControl(false)
     , bIsNextControl(false)
     , bPrevIsControl(false)
     , bNextIsControl(false)
@@ -190,13 +188,11 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
         if (!bPrevIsBegPnt) nPrevPrevPnt=GetPrevPnt(nPrevPnt,nPntMax,bClosed);
         if (!bNextIsEndPnt) nNextNextPnt=GetNextPnt(nNextPnt,nPntMax,bClosed);
         bControl=rHdl.IsPlusHdl();          // point is a control point
-        bIsPrevControl=false;               // point is a control point before a support point
         bIsNextControl=false;               // point is a control point after a support point
         bPrevIsControl=false;               // if nPnt is a support point: a control point comes before
         bNextIsControl=false;               // if nPnt is a support point: a control point comes after
         if (bControl) {
-            bIsPrevControl=aTmpXP.IsControl(nPrevPnt);
-            bIsNextControl=!bIsPrevControl;
+            bIsNextControl=!aTmpXP.IsControl(nPrevPnt);
         } else {
             bPrevIsControl=!bBegPnt && !bPrevIsBegPnt && aTmpXP.GetFlags(nPrevPnt)==PolyFlags::Control;
             bNextIsControl=!bEndPnt && !bNextIsEndPnt && aTmpXP.GetFlags(nNextPnt)==PolyFlags::Control;

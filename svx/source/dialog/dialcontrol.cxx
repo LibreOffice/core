@@ -626,11 +626,6 @@ sal_Int32 SvxDialControl::GetRotation() const
     return mpImpl->mnAngle;
 }
 
-void SvxDialControl::SetRotation( sal_Int32 nAngle )
-{
-    SetRotation( nAngle, false );
-}
-
 void SvxDialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimalPlaces)
 {
     mpImpl->mnLinkedFieldValueMultiplyer = 100 / std::pow(10.0, double(nDecimalPlaces));
@@ -659,7 +654,7 @@ IMPL_LINK_NOARG(SvxDialControl, LinkedFieldModifyHdl, weld::SpinButton&, void)
 void SvxDialControl::LinkedFieldModifyHdl()
 {
     if( mpImpl->mpLinkField )
-        SetRotation(mpImpl->mpLinkField->get_value() * mpImpl->mnLinkedFieldValueMultiplyer, false);
+        SetRotation(mpImpl->mpLinkField->get_value() * mpImpl->mnLinkedFieldValueMultiplyer);
 }
 
 
@@ -696,11 +691,11 @@ void SvxDialControl::InvalidateControl()
 {
     mpImpl->mxBmpBuffered->CopyBackground( IsEnabled() ? *mpImpl->mxBmpEnabled : *mpImpl->mxBmpDisabled );
     if( !mpImpl->mbNoRot )
-        mpImpl->mxBmpBuffered->DrawElements( GetText(), mpImpl->mnAngle );
+        mpImpl->mxBmpBuffered->DrawElements( OUString(), mpImpl->mnAngle );
     Invalidate();
 }
 
-void SvxDialControl::SetRotation( sal_Int32 nAngle, bool bBroadcast )
+void SvxDialControl::SetRotation( sal_Int32 nAngle )
 {
     bool bOldSel = mpImpl->mbNoRot;
     mpImpl->mbNoRot = false;
@@ -714,8 +709,6 @@ void SvxDialControl::SetRotation( sal_Int32 nAngle, bool bBroadcast )
         InvalidateControl();
         if( mpImpl->mpLinkField )
             mpImpl->mpLinkField->set_value(GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer);
-        if( bBroadcast )
-            mpImpl->maModifyHdl.Call( this );
     }
 }
 
@@ -734,7 +727,7 @@ void SvxDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
             nAngle = ((nAngle + 750) / 1500) * 1500;
         // Round up to 1 degree
         nAngle = (((nAngle + 50) / 100) * 100) % 36000;
-        SetRotation( nAngle, true );
+        SetRotation( nAngle );
     }
 }
 
@@ -743,7 +736,7 @@ void SvxDialControl::HandleEscapeEvent()
     if( IsMouseCaptured() )
     {
         ReleaseMouse();
-        SetRotation( mpImpl->mnOldAngle, true );
+        SetRotation( mpImpl->mnOldAngle );
         if( mpImpl->mpLinkField )
             mpImpl->mpLinkField->grab_focus();
     }

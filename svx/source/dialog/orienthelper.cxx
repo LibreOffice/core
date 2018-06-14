@@ -33,7 +33,6 @@ struct OrientationHelper_Impl
     typedef std::pair< VclPtr<vcl::Window>, TriState >  WindowPair;
     typedef std::vector< WindowPair >       WindowVec;
 
-    DialControl&        mrCtrlDial;
     CheckBox&           mrCbStacked;
     WindowVec           maWinVec;
     bool                mbEnabled;
@@ -53,12 +52,11 @@ struct OrientationHelper_Impl
 
 
 OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox& rCbStacked ) :
-    mrCtrlDial( rCtrlDial ),
     mrCbStacked( rCbStacked ),
     mbEnabled( rCtrlDial.IsEnabled() ),
     mbVisible( rCtrlDial.IsVisible() )
 {
-    maWinVec.emplace_back( &mrCtrlDial, TRISTATE_TRUE );
+    maWinVec.emplace_back( &rCtrlDial, TRISTATE_TRUE );
     maWinVec.emplace_back( &mrCbStacked, TRISTATE_INDET );
     mrCbStacked.SetClickHdl( LINK( this, OrientationHelper_Impl, ClickHdl ) );
 }

@@ -64,7 +64,6 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         bool bOverwrite )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE )
-,   sIsPhysical( "IsPhysical" )
 ,   sFollowStyle( "FollowStyle" )
 ,   bInsertHeader( false )
 ,   bInsertFooter( false )
@@ -141,6 +140,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
+    OUString sIsPhysical( "IsPhysical" );
     if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );

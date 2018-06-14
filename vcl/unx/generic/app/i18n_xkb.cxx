@@ -28,7 +28,6 @@
 SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     : mbUseExtension(true)
     , mnEventBase(0)
-    , mnErrorBase(0)
 {
     sal_uInt32 nDefaultGroup = 0;
 
@@ -55,9 +54,10 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
         int nMajorExtOpcode;
         int nExtMajorVersion = XkbMajorVersion;
         int nExtMinorVersion = XkbMinorVersion;
+        int nErrorBase = 0;
 
         mbUseExtension = XkbQueryExtension( pDisplay,
-            &nMajorExtOpcode, &mnEventBase, &mnErrorBase,
+            &nMajorExtOpcode, &mnEventBase, &nErrorBase,
             &nExtMajorVersion, &nExtMinorVersion ) != 0;
     }
 

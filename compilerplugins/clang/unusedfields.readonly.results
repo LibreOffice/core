@@ -92,6 +92,10 @@ connectivity/source/inc/TConnection.hxx:55
     connectivity::OMetaConnection m_aResources class connectivity::SharedResources
 connectivity/source/inc/writer/WTable.hxx:69
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
+cppcanvas/source/mtfrenderer/textaction.cxx:827
+    cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextFillColor const ::Color
+cppcanvas/source/mtfrenderer/textaction.cxx:1663
+    cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:34
     Mapping m_from uno::Environment
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:35
@@ -310,8 +314,20 @@ include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:33
     MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
-include/svtools/valueset.hxx:442
-    SvtValueSet maHighlightHdl Link<class SvtValueSet *, void>
+include/svtools/valueset.hxx:440
+    SvtValueSet maSelectHdl Link<class SvtValueSet *, void>
+include/svx/dialcontrol.hxx:164
+    svx::SvxDialControl m_aText class rtl::OUString
+include/svx/dialcontrol.hxx:207
+    svx::SvxDialControl::DialControl_Impl maModifyHdl Link<class svx::SvxDialControl *, void>
+include/svx/paraprev.hxx:118
+    ParaPrevWindow nFirstLineOfst short
+include/svx/paraprev.hxx:120
+    ParaPrevWindow nUpper sal_uInt16
+include/svx/paraprev.hxx:121
+    ParaPrevWindow nLower sal_uInt16
+include/svx/paraprev.hxx:127
+    ParaPrevWindow eLine enum SvxPrevLineSpace
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/sdr/overlay/overlaymanager.hxx:73
@@ -324,6 +340,10 @@ include/svx/svdoedge.hxx:161
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
 include/svx/svdpntv.hxx:170
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
+include/svx/swframeexample.hxx:119
+    SwFrameExample nWrap css::text::WrapTextMode
+include/svx/swframeexample.hxx:121
+    SwFrameExample bTrans _Bool
 include/test/sheet/xdatapilottable.hxx:31
     apitest::XDataPilotTable xCellForChange css::uno::Reference<css::table::XCell>
 include/test/sheet/xdatapilottable.hxx:32
@@ -516,8 +536,6 @@ svtools/source/control/headbar.cxx:39
     ImplHeadItem maImage class Image
 svtools/source/control/tabbar.cxx:207
     ImplTabBarItem maHelpId class rtl::OString
-svtools/source/control/valueimp.hxx:78
-    SvtValueSetItem maImage class Image
 svtools/source/dialogs/insdlg.cxx:46
     OleObjectDescriptor cbSize sal_uInt32
 svtools/source/dialogs/insdlg.cxx:47
@@ -598,8 +616,18 @@ sw/source/uibase/inc/fldmgr.hxx:77
     SwInsertField_Data m_aDBDataSource css::uno::Any
 sw/source/uibase/inc/labimg.hxx:49
     SwLabItem m_aBin class rtl::OUString
+sw/source/uibase/inc/numprevw.hxx:31
+    NumberingPreview pActNum const class SwNumRule *
+sw/source/uibase/inc/numprevw.hxx:33
+    NumberingPreview nPageWidth long
+sw/source/uibase/inc/numprevw.hxx:34
+    NumberingPreview pOutlineNames const class rtl::OUString *
+sw/source/uibase/inc/numprevw.hxx:35
+    NumberingPreview bPosition _Bool
 sw/source/uibase/inc/optload.hxx:94
     CaptionComboBox aDefault class rtl::OUString
+sw/source/uibase/inc/prcntfld.hxx:111
+    SwPercentField bLockAutoCalculation _Bool
 toolkit/source/awt/vclxtoolkit.cxx:433
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:46
@@ -726,9 +754,7 @@ vcl/source/gdi/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/gdi/dibtools.cxx:117
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:149
-    vcl::PDFWriterImpl::PDFPage m_nDuration sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:302
+vcl/source/gdi/pdfwriter_impl.hxx:301
     vcl::PDFWriterImpl::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/window/menuitemlist.hxx:55
     MenuItemData aAccessibleName class rtl::OUString

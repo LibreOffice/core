@@ -42,7 +42,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
     Size nGrfSize;
     bool bInSwapIn              :1;
 
-    bool bGraphicArrived        :1;
     bool bChgTwipSize           :1;
     bool bFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
     bool bScaleImageMap         :1; ///< Scale image map in SetTwipSize.
@@ -103,8 +102,6 @@ public:
     {
         bChgTwipSize = b;
     }
-
-    void SetGraphicArrived( bool b )     { bGraphicArrived = b; }
 
     bool IsFrameInPaint() const          { return bFrameInPaint; }
     void SetFrameInPaint( bool b )       { bFrameInPaint = b; }

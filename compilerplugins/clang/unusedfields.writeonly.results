@@ -154,8 +154,6 @@ cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:81
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
-cui/source/inc/cfg.hxx:497
-    SvxMainMenuOrganizerDialog bModified _Bool
 cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
 cui/source/inc/cuihyperdlg.hxx:77
@@ -250,16 +248,10 @@ include/opencl/platforminfo.hxx:30
     OpenCLDeviceInfo mnComputeUnits size_t
 include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
-include/svtools/valueset.hxx:429
-    SvtValueSet mnHighItemId sal_uInt16
 include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
-include/svx/float3d.hxx:177
-    Svx3DWin pControllerItem class Svx3DCtrlItem *
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/svx/svdmodel.hxx:187
-    SdrModel bExtColorTable _Bool
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:415
@@ -284,15 +276,15 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
-registry/source/reflread.cxx:488
+registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b1 sal_uInt32
-registry/source/reflread.cxx:489
+registry/source/reflread.cxx:467
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b2 sal_uInt32
-registry/source/reflread.cxx:556
+registry/source/reflread.cxx:534
     FieldList m_pCP class ConstantPool *
-registry/source/reflread.cxx:740
+registry/source/reflread.cxx:718
     ReferenceList m_pCP class ConstantPool *
-registry/source/reflread.cxx:841
+registry/source/reflread.cxx:819
     MethodList m_pCP class ConstantPool *
 sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
@@ -472,20 +464,20 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:105
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:106
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
+svx/source/svdraw/svdpdf.hxx:188
+    ImpSdrPdfImport mbLastObjWasLine _Bool
 svx/source/svdraw/svdpdf.hxx:195
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
+sw/inc/ndgrf.hxx:45
+    SwGrfNode bGraphicArrived _Bool
 sw/inc/shellio.hxx:145
     SwReader aFileName class rtl::OUString
-sw/inc/swbaslnk.hxx:30
-    SwBaseLink m_bInSwapIn _Bool
 sw/source/core/doc/tblafmt.cxx:185
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
 sw/source/core/inc/swfont.hxx:977
     SvStatistics nGetStretchTextSize sal_uInt16
-sw/source/core/inc/wrong.hxx:349
-    sw::WrongListIterator m_CurrentNodeIndex TextFrameIndex
 sw/source/core/text/xmldump.cxx:34
     XmlPortionDumper ofs TextFrameIndex
 sw/source/filter/html/htmlcss1.cxx:77
@@ -546,10 +538,12 @@ vcl/inc/salwtype.hxx:212
     SalQueryCharPositionEvent mnCursorBoundWidth long
 vcl/inc/salwtype.hxx:213
     SalQueryCharPositionEvent mnCursorBoundHeight long
-vcl/inc/salwtype.hxx:250
+vcl/inc/salwtype.hxx:248
     SalSwipeEvent mnVelocityY double
 vcl/inc/sft.hxx:462
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
+vcl/inc/unx/gtk/gtkframe.hxx:215
+    GtkSalFrame m_nFloatFlags enum FloatWinPopupFlags
 vcl/opengl/salbmp.cxx:435
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/source/filter/graphicfilter.cxx:1008
