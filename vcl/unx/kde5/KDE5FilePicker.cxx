@@ -46,33 +46,6 @@ KDE5FilePicker::~KDE5FilePicker()
     delete _dialog;
 }
 
-/*void KDE5FilePicker::setLabel(sal_Int16 controlId, const QString& label)
-{
-    if (_customWidgets.contains(controlId))
-    {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
-        if (cb)
-            cb->setText(label);
-    }
-    else
-        qWarning() << "set label on unknown control" << controlId;
-}
-
-QString KDE5FilePicker::getLabel(sal_Int16 controlId) const
-{
-    QString label;
-    if (_customWidgets.contains(controlId))
-    {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
-        if (cb)
-            label = cb->text();
-    }
-    else
-        qWarning() << "get label on unknown control" << controlId;
-
-    return label;
-}*/
-
 void KDE5FilePicker::setWinId(sal_uIntPtr winId) { _winId = winId; }
 
 bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)

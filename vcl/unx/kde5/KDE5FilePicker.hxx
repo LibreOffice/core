@@ -180,6 +180,8 @@ Q_SIGNALS:
                         const css::uno::Any& rValue);
     css::uno::Any getValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction);
     void enableControlSignal(sal_Int16 nControlId, sal_Bool bEnable);
+    void setLabelSignal(sal_Int16 nControlId, const OUString& rLabel);
+    OUString getLabelSignal(sal_Int16 nControlId);
     void appendFilterSignal(const OUString& rTitle, const OUString& rFilter);
     void appendFilterGroupSignal(const OUString& rTitle,
                                  const css::uno::Sequence<css::beans::StringPair>& rFilters);
@@ -207,6 +209,13 @@ private Q_SLOTS:
     {
         return enableControl(nControlId, bEnable);
     }
+
+    void setLabelSlot(sal_Int16 nControId, const OUString& rLabel)
+    {
+        return setLabel(nControId, rLabel);
+    }
+
+    OUString getLabelSlot(sal_Int16 nControlId) { return getLabel(nControlId); }
 
     void appendFilterSlot(const OUString& rTitle, const OUString& rFilter)
     {
