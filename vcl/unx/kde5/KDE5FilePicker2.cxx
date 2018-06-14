@@ -113,6 +113,8 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             &KDE5FilePicker::setMultiSelectionSlot, Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::setValueSignal, this, &KDE5FilePicker::setValueSlot,
             Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getValueSignal, this, &KDE5FilePicker::getValueSlot,
+            Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::appendFilterSignal, this, &KDE5FilePicker::appendFilterSlot,
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::appendFilterGroupSignal, this,
@@ -329,6 +331,12 @@ void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAc
 
 uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT getValueSignal(controlId, nControlAction);
+    }
+
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the function.
         // Always return false, to pretend we do not support this, otherwise
@@ -338,6 +346,14 @@ uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContr
         return uno::Any(false);
 
     bool value = false;
+    if (_customWidgets.contains(controlId))
+    {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
+        if (cb)
+            value = cb->isChecked();
+    }
+    else
+        SAL_WARN("vcl.kde5", "get value on unknown control" << controlId);
 
     return uno::Any(value);
 }
