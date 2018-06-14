@@ -239,6 +239,7 @@ private:
     std::unique_ptr<weld::Button> m_xUserBtn;
     std::unique_ptr<weld::Button> m_xCancelBtn;
     std::unique_ptr<weld::Button> m_xResetBtn;
+    std::unique_ptr<weld::SizeGroup> m_xSizeGroup;
 
     SfxItemSet*         m_pSet;
     std::unique_ptr<SfxItemSet>           m_pOutSet;
@@ -250,6 +251,7 @@ private:
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
     SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag);
     SAL_DLLPRIVATE void CreatePages();
+    SAL_DLLPRIVATE void setPreviewsToSamePlace();
 
 protected:
     virtual short               Ok();

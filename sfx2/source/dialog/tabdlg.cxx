@@ -1957,6 +1957,35 @@ void SfxTabDialogController::CreatePages()
     }
 }
 
+void SfxTabDialogController::setPreviewsToSamePlace()
+{
+    //where tab pages have the same basic layout with a preview on the right,
+    //get both of their non-preview areas to request the same size so that the
+    //preview appears in the same place in each one so flipping between tabs
+    //isn't distracting as it jumps around
+    std::vector<std::unique_ptr<weld::Widget>> aGrids;
+    for (auto pDataObject : m_pImpl->aData)
+    {
+        if (pDataObject->pTabPage)
+            continue;
+        if (!pDataObject->pTabPage->m_xBuilder)
+            continue;
+        weld::Widget* pGrid = pDataObject->pTabPage->m_xBuilder->weld_widget("maingrid");
+        if (!pGrid)
+            continue;
+        aGrids.emplace_back(pGrid);
+    }
+
+    m_xSizeGroup.reset();
+
+    if (aGrids.size() <= 1)
+        return;
+
+    m_xSizeGroup.reset(m_xBuilder->create_size_group());
+    for (auto& rGrid : aGrids)
+        m_xSizeGroup->add_widget(rGrid.get());
+}
+
 void SfxTabDialogController::RemoveTabPage(const OString& rId)
 
 /*  [Description]
@@ -1999,6 +2028,8 @@ void SfxTabDialogController::RemoveTabPage(const OString& rId)
 void SfxTabDialogController::Start_Impl()
 {
     CreatePages();
+
+    setPreviewsToSamePlace();
 
     assert(m_pImpl->aData.size() == static_cast<size_t>(m_xTabCtrl->get_n_pages())
             && "not all pages registered");

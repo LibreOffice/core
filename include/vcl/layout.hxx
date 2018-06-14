@@ -564,14 +564,6 @@ public:
     virtual void Command(const CommandEvent& rCEvt) override;
 };
 
-enum class VclSizeGroupMode
-{
-    NONE,
-    Horizontal,
-    Vertical,
-    Both
-};
-
 class VCL_DLLPUBLIC VclSizeGroup
 {
 private:

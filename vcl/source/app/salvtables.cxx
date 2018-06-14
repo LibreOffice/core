@@ -457,6 +457,27 @@ public:
     }
 };
 
+class SalInstanceSizeGroup : public weld::SizeGroup
+{
+private:
+    std::shared_ptr<VclSizeGroup> m_xGroup;
+public:
+    SalInstanceSizeGroup()
+        : m_xGroup(new VclSizeGroup)
+    {
+    }
+    virtual void add_widget(weld::Widget* pWidget) override
+    {
+        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+        assert(pVclWidget);
+        m_xGroup->insert(pVclWidget->getWidget());
+    }
+    virtual void set_mode(VclSizeGroupMode eMode) override
+    {
+        m_xGroup->set_mode(eMode);
+    }
+};
+
 class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Container
 {
 private:
@@ -2358,6 +2379,11 @@ public:
     {
         PopupMenu* pMenu = m_xBuilder->get_menu(id);
         return pMenu ? new SalInstanceMenu(pMenu, bTakeOwnership) : nullptr;
+    }
+
+    virtual weld::SizeGroup* create_size_group() override
+    {
+        return new SalInstanceSizeGroup;
     }
 
     virtual ~SalInstanceBuilder() override

@@ -864,6 +864,14 @@ public:
     virtual ~Menu() {}
 };
 
+class VCL_DLLPUBLIC SizeGroup
+{
+public:
+    virtual void add_widget(weld::Widget* pWidget) = 0;
+    virtual void set_mode(VclSizeGroupMode eMode) = 0;
+    virtual ~SizeGroup() {}
+};
+
 class VCL_DLLPUBLIC Builder
 {
 private:
@@ -914,6 +922,7 @@ public:
                                            void* pUserData = nullptr, bool bTakeOwnership = false)
         = 0;
     virtual Menu* weld_menu(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual SizeGroup* create_size_group() = 0;
     virtual ~Builder() {}
 };
 
