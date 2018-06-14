@@ -2628,6 +2628,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     bool            bForget     = false; // Remove due to validity?
 
     OUString aString = GetEditText(mpEditEngine.get());
+    OUString aPreAutoCorrectString(GetEditText(mpEditEngine.get()));
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (bModified && pActiveView && !aString.isEmpty() && !lcl_IsNumber(aString))
     {
@@ -2648,6 +2649,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         aString = GetEditText(mpEditEngine.get());
     }
     lcl_RemoveTabs(aString);
+    lcl_RemoveTabs(aPreAutoCorrectString);
 
     // Test if valid (always with simple string)
     if ( bModified && nValidation && pActiveViewSh )
@@ -2881,12 +2883,14 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
     if (bOldMod && !bProtected && !bForget)
     {
+        bool bInsertPreCorrectedString = true;
         // No typographic quotes in formulas
         if (aString.startsWith("="))
         {
             SvxAutoCorrect* pAuto = SvxAutoCorrCfg::Get().GetAutoCorrect();
             if ( pAuto )
             {
+                bInsertPreCorrectedString = false;
                 OUString aReplace(pAuto->GetStartDoubleQuote());
                 if( aReplace.isEmpty() )
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkStart();
@@ -2924,18 +2928,24 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                 nId = FID_INPUTLINE_BLOCK;
             else if ( nBlockMode == ScEnterMode::MATRIX )
                 nId = FID_INPUTLINE_MATRIX;
-
-            ScInputStatusItem aItem( FID_INPUTLINE_STATUS,
-                                     aCursorPos, aCursorPos, aCursorPos,
-                                     aString, pObject.get() );
-
-            if (!aMisspellRanges.empty())
-                aItem.SetMisspellRanges(&aMisspellRanges);
-
             const SfxPoolItem* aArgs[2];
-            aArgs[0] = &aItem;
             aArgs[1] = nullptr;
-            rBindings.Execute( nId, aArgs );
+            if ( aString != aPreAutoCorrectString  && bInsertPreCorrectedString )
+            {
+               ScInputStatusItem aItem(FID_INPUTLINE_STATUS,
+                                       aCursorPos, aCursorPos, aCursorPos,
+                                       aPreAutoCorrectString, pObject.get());
+                aArgs[0] = &aItem;
+                rBindings.Execute(nId, aArgs);
+            }
+                ScInputStatusItem aItemCorrected(FID_INPUTLINE_STATUS,
+                    aCursorPos, aCursorPos, aCursorPos,
+                    aString, pObject.get());
+                if (!aMisspellRanges.empty())
+                    aItemCorrected.SetMisspellRanges(&aMisspellRanges);
+
+                aArgs[0] = &aItemCorrected;
+                rBindings.Execute(nId, aArgs);
         }
 
         pLastState.reset(); // pLastState still contains the old text
