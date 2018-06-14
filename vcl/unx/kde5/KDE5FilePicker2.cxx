@@ -115,6 +115,8 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::getValueSignal, this, &KDE5FilePicker::getValueSlot,
             Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::enableControlSignal, this, &KDE5FilePicker::enableControlSlot,
+            Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::appendFilterSignal, this, &KDE5FilePicker::appendFilterSlot,
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::appendFilterGroupSignal, this,
@@ -358,7 +360,19 @@ uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContr
     return uno::Any(value);
 }
 
-void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable) {}
+void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
+{
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT enableControlSignal(controlId, enable);
+    }
+
+    if (_customWidgets.contains(controlId))
+        _customWidgets.value(controlId)->setEnabled(enable);
+    else
+        SAL_WARN("vcl.kde5", "enable on unknown control" << controlId);
+}
 
 void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label) {}
 
