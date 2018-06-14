@@ -630,14 +630,14 @@ public:
         set_range(min, max, eValueUnit);
     }
 
-    int get_min(FieldUnit eValueUnit)
+    int get_min(FieldUnit eValueUnit) const
     {
         int min, dummy;
         get_range(min, dummy, eValueUnit);
         return min;
     }
 
-    int get_max(FieldUnit eValueUnit)
+    int get_max(FieldUnit eValueUnit) const
     {
         int dummy, max;
         get_range(dummy, max, eValueUnit);
