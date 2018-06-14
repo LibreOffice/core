@@ -208,14 +208,6 @@ namespace
 }
 
 
-void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
-{
-    setPrevFontEscapement(GetPreviewFont(),nProp,nEscProp,nEsc);
-    setPrevFontEscapement(GetPreviewCJKFont(),nProp,nEscProp,nEsc);
-    setPrevFontEscapement(GetPreviewCTLFont(),nProp,nEscProp,nEsc);
-    m_pPreviewWin->Invalidate();
-}
-
 inline SvxFont& CharBasePage::GetPreviewFont()
 {
     return m_aPreviewWin.GetFont();

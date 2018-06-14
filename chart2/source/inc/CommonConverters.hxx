@@ -197,20 +197,6 @@ css::uno::Sequence< T >
     return aResult;
 }
 
-template< typename T >
-    std::vector< T >
-    FlattenVector( const std::vector< std::vector< T > > & rVecVec )
-{
-    typedef std::vector< T > tFlatVec;
-    typedef std::vector< tFlatVec > tVecVec;
-
-    tFlatVec aResult;
-    typename tVecVec::const_iterator aOuterEnd( rVecVec.end());
-    for( typename tVecVec::const_iterator aOuterIt( rVecVec.begin()); aOuterIt != aOuterEnd; ++aOuterIt )
-        std::copy( aOuterIt->begin(), aOuterIt->end(), back_inserter( aResult ));
-    return aResult;
-}
-
 OOO_DLLPUBLIC_CHARTTOOLS
 bool hasDoubleValue( const css::uno::Any& rAny );
 
