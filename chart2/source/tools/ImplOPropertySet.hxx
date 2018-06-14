@@ -20,11 +20,12 @@
 #define INCLUDED_CHART2_SOURCE_TOOLS_IMPLOPROPERTYSET_HXX
 
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/uno/Reference.h>
 
 #include <map>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace style { class XStyle; } } } }
 
 namespace property
 {
