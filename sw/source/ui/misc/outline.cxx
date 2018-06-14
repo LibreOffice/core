@@ -851,7 +851,7 @@ static long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat &rForma
     return nRet;
 }
 
-void SwNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 

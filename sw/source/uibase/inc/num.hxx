@@ -49,7 +49,7 @@ class SwNumPositionTabPage : public SfxTabPage
     bool                bInInintControl     : 1;  // work around modify-error; should be resolved from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
-    SwNumberingPreview  m_aPreviewWIN;
+    NumberingPreview  m_aPreviewWIN;
 
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::Widget> m_xPositionFrame;
