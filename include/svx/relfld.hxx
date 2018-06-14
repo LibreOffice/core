@@ -20,7 +20,9 @@
 #define INCLUDED_SVX_RELFLD_HXX
 
 #include <tools/fldunit.hxx>
+#include <svtools/unitconv.hxx>
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SvxRelativeField : public MetricField
@@ -42,6 +44,46 @@ public:
     void            SetRelative( bool bRelative );
     bool            IsRelative() const { return bRelative; }
     void            EnableNegativeMode() {bNegativeEnabled = true;}
+};
+
+class SVX_DLLPUBLIC RelativeField
+{
+private:
+    std::unique_ptr<weld::MetricSpinButton> m_xSpinButton;
+
+    sal_uInt16          nRelMin;
+    sal_uInt16          nRelMax;
+    bool                bRelativeMode;
+    bool                bRelative;
+    bool                bNegativeEnabled;
+
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
+
+public:
+    RelativeField(weld::MetricSpinButton* pControl);
+
+    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax );
+    void            SetRelative( bool bRelative );
+    bool            IsRelative() const { return bRelative; }
+    void            EnableNegativeMode() {bNegativeEnabled = true;}
+
+    void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
+    void set_value(int nValue, FieldUnit eValueUnit) { m_xSpinButton->set_value(nValue, eValueUnit); }
+    int get_value(FieldUnit eDestUnit) const { return m_xSpinButton->get_value(eDestUnit); }
+    int get_min(FieldUnit eValueUnit) const { return m_xSpinButton->get_min(eValueUnit); }
+    void set_min(int min, FieldUnit eValueUnit) { m_xSpinButton->set_min(min, eValueUnit); }
+    void set_max(int max, FieldUnit eValueUnit) { m_xSpinButton->set_max(max, eValueUnit); }
+    int normalize(int nValue) const { return m_xSpinButton->normalize(nValue); }
+    int denormalize(int nValue) const { return m_xSpinButton->denormalize(nValue); }
+    void connect_value_changed(const Link<weld::MetricSpinButton&, void>& rLink) { m_xSpinButton->connect_value_changed(rLink); }
+    OUString get_text() const { return m_xSpinButton->get_text(); }
+    void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
+    void save_value() { m_xSpinButton->save_value(); }
+    bool get_value_changed_from_saved() const { return m_xSpinButton->get_value_changed_from_saved(); }
+
+    int GetCoreValue(MapUnit eUnit) const { return ::GetCoreValue(*m_xSpinButton, eUnit); }
+    void SetFieldUnit(FieldUnit eUnit, bool bAll = false) { ::SetFieldUnit(*m_xSpinButton, eUnit, bAll); }
+    void SetMetricValue(int lCoreValue, MapUnit eUnit) { ::SetMetricValue(*m_xSpinButton, lCoreValue, eUnit); }
 };
 
 #endif
