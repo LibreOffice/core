@@ -1050,7 +1050,7 @@
             </node>
             <node oor:name=".uno:LineNumberingDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Line Numbering...</value>
+                    <value xml:lang="en-US">L~ine Numbering...</value>
                 </prop>
             </node>
             <node oor:name=".uno:LineUpSel" oor:op="replace">
