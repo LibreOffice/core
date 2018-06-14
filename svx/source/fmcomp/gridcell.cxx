@@ -1150,10 +1150,22 @@ void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle&
 
 OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
 {
+    if (!_rxField.is())
+        return OUString();
+
     const css::uno::Reference<css::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
     FormattedColumnValue fmter( xFormatter, xPS );
 
-    return fmter.getFormattedValue();
+    try
+    {
+        return fmter.getFormattedValue();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return OUString();
+
 }
 
 
