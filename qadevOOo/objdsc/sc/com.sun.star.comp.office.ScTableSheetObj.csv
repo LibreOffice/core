@@ -112,8 +112,6 @@
 "ScTableSheetObj";"com::sun::star::util::XProtectable";"protect()"
 "ScTableSheetObj";"com::sun::star::util::XProtectable";"unprotect()"
 "ScTableSheetObj";"com::sun::star::util::XProtectable";"isProtected()"
-"ScTableSheetObj";"com::sun::star::sheet::XFormulaQuery";"queryDependents()"
-"ScTableSheetObj";"com::sun::star::sheet::XFormulaQuery";"queryPrecedents()"
 "ScTableSheetObj";"com::sun::star::util::XIndent";"decrementIndent()"
 "ScTableSheetObj";"com::sun::star::util::XIndent";"incrementIndent()"
 "ScTableSheetObj";"com::sun::star::table::XAutoFormattable";"autoFormat()"

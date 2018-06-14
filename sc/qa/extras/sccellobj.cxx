@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/sheetcell.hxx>
 #include <test/sheet/xcelladdressable.hxx>
+#include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xsheetannotationanchor.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -29,12 +30,14 @@ namespace sc_apitest {
 
 class ScCellObj : public CalcUnoApiTest, public apitest::SheetCell,
                                          public apitest::XCellAddressable,
+                                         public apitest::XFormulaQuery,
                                          public apitest::XSheetAnnotationAnchor
 {
 public:
     ScCellObj();
 
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -46,6 +49,10 @@ public:
     // XCellAddressable
     CPPUNIT_TEST(testGetCellAddress);
 
+    // XFormulaQuery
+    CPPUNIT_TEST(testQueryDependents);
+    CPPUNIT_TEST(testQueryPrecedents);
+
     // XSheetAnnotationAnchor
     CPPUNIT_TEST(testGetAnnotation);
 
@@ -56,7 +63,8 @@ private:
 };
 
 ScCellObj::ScCellObj()
-        : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+        : CalcUnoApiTest("/sc/qa/extras/testdocuments"),
+          apitest::XFormulaQuery(table::CellRangeAddress(0, 2, 3, 2, 3), table::CellRangeAddress(0, 0, 0, 3, 0), 0, 0)
 {
 }
 
@@ -74,6 +82,19 @@ uno::Reference< uno::XInterface > ScCellObj::init()
     xSheetAnnos->insertNew(table::CellAddress(0, 2, 3), "xSheetAnnotation");
 
     return xSheet->getCellByPosition(2, 3);
+}
+
+uno::Reference<uno::XInterface> ScCellObj::getXSpreadsheet()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSpreadsheets> xSheets (xSheetDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xSheets, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
+
+    setXCell(xSheet->getCellByPosition(2, 3));
+
+    return xSheet;
 }
 
 void ScCellObj::setUp()

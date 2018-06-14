@@ -19,6 +19,7 @@
 #include <test/sheet/xcellrangemovement.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xdatapilottablessupplier.hxx>
+#include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
 #include <test/sheet/xprintareas.hxx>
 #include <test/sheet/xscenario.hxx>
@@ -60,6 +61,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XCellRangeMovement,
                                                public apitest::XCellSeries,
                                                public apitest::XDataPilotTablesSupplier,
+                                               public apitest::XFormulaQuery,
                                                public apitest::XMultipleOperation,
                                                public apitest::XPrintAreas,
                                                public apitest::XReplaceable,
@@ -136,6 +138,10 @@ public:
 
     // XDataPilotTablesSupplier
     CPPUNIT_TEST(testGetDataPilotTables);
+
+    // XFormulaQuery
+    CPPUNIT_TEST(testQueryDependents);
+    CPPUNIT_TEST(testQueryPrecedents);
 
     // XSearchable
     CPPUNIT_TEST(testFindAll);
@@ -220,6 +226,7 @@ private:
 ScTableSheetObj::ScTableSheetObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments"),
     apitest::XCellSeries(1, 0),
+    apitest::XFormulaQuery(table::CellRangeAddress(0, 0, 0, 1023, 1048575), table::CellRangeAddress(0, 0, 0, 1023, 1048575), 0, 0),
     apitest::XReplaceable("searchReplaceString", "replaceReplaceString"),
     apitest::XSearchable("test", 4)
 {
@@ -312,6 +319,8 @@ uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
     uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
     xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
     xSheets->getByName("Scenario");
+
+    setXCell(xSheet->getCellByPosition(15, 15));
     return xSheet;
 }
 

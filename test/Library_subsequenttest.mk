@@ -97,6 +97,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xdatapilottables \
 	test/source/sheet/xdatapilottablessupplier \
 	test/source/sheet/xddelink \
+	test/source/sheet/xformulaquery \
 	test/source/sheet/xfunctiondescriptions \
 	test/source/sheet/xheaderfootercontent \
 	test/source/sheet/xlabelrange \
