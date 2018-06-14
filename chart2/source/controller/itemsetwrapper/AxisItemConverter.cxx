@@ -22,6 +22,7 @@
 #include <CharacterPropertyItemConverter.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
+#include <chartview/ExplicitScaleValues.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include "SchWhichPairs.hxx"
 #include <ChartModelHelper.hxx>
@@ -34,6 +35,7 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>

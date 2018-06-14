@@ -21,9 +21,19 @@
 
 #include <chartview/ExplicitValueProvider.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/interfacecontainer.h>
 
 #include <svl/lstner.hxx>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XUpdatable2.hpp>
 
 #include <vector>
@@ -31,17 +41,10 @@
 
 #include <vcl/timer.hxx>
 
-namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
 namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XInitialization; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XServiceInfo; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XUnoTunnel; } } } }
-namespace com { namespace sun { namespace star { namespace qa { class XDumper; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
 namespace com { namespace sun { namespace star { namespace util { class XUpdatable2; } } } }
 
 class SdrPage;

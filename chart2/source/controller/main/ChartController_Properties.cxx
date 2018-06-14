@@ -22,6 +22,7 @@
 #include <chartview/DrawModelWrapper.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <ObjectIdentifier.hxx>
+#include <chartview/ExplicitScaleValues.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <dlg_ObjectProperties.hxx>
 #include <dlg_View3D.hxx>
