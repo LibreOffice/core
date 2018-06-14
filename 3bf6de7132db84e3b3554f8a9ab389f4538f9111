@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_fc645f4a",
+        "filename": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-14T16:25:16Z",
+      "side": 1,
+      "message": "Just a nitpick on style:\nEither use no braces for single statements, or place opening braces on a new line and the else if / else keywords as well. So one of these, either\n\n if ( rNativeNumberParams.startsWith(\"capitalize\") )\n     return xCharClass-\u003etoTitle(aStr, 0, 1, aLocale) + aStr.copy(1);\n else if ( rNativeNumberParams.startsWith(\"upper\") )\n     return xCharClass-\u003etoUpper(aStr, 0, aStr.getLength(), aLocale);\n else\n     return xCharClass-\u003etoTitle(aStr, 0, aStr.getLength(), aLocale);\n\nor\n\n if ( rNativeNumberParams.startsWith(\"capitalize\") )\n {\n     return xCharClass-\u003etoTitle(aStr, 0, 1, aLocale) + aStr.copy(1);\n }\n else if ( rNativeNumberParams.startsWith(\"upper\") )\n {\n     return xCharClass-\u003etoUpper(aStr, 0, aStr.getLength(), aLocale);\n }\n else\n {\n     return xCharClass-\u003etoTitle(aStr, 0, aStr.getLength(), aLocale);\n }",
+      "range": {
+        "startLine": 648,
+        "startChar": 0,
+        "endLine": 654,
+        "endChar": 79
+      },
+      "revId": "3bf6de7132db84e3b3554f8a9ab389f4538f9111",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_dc9403ea",
+        "filename": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-14T16:25:16Z",
+      "side": 1,
+      "message": "Instead of the startsWith() calls to manually assign a literal length and repeating startsWith() again for the xCharClass calls I\u0027d rather suggest the following. It may look like overkill for these few cases, but saves calls and is easier extensible if other prefixes should be introduced. (untested code)\n\n enum WhichCasing\n {\n     CAPITALIZE,\n     UPPER,\n     TITLE\n };\n \n struct CasingEntry\n {\n     OUStringLiteral aLiteral;\n     WhichCasing     eCasing;\n };\n \n static const CasingEntry Casings[] \u003d\n {\n     { OUStringLiteral(\"capitalize\"), CAPITALIZE },\n     { OUStringLiteral(\"upper\"), UPPER },\n     { OUStringLiteral(\"title\"), TITLE }\n };\n \n sal_Int32 nStripCase \u003d 0;\n size_t nCasing;\n for (nCasing \u003d 0; nCasing \u003c SAL_N_ELEMENTS(Casings); ++nCasing)\n {\n     if (rNativeNumberParams.startsWith( Casings[nCasing].aLiteral))\n     {\n         nStripCase \u003d Casings[nCasing].aLiteral.size;\n         break;\n     }\n }\n if (nStripCase \u003e 0 \u0026\u0026 ...)\n {\n     ...\n     switch (Casings[nCasing].eCasing)\n     {\n         case CAPITALIZE:\n             return ...;\n         case UPPER:\n             return ...;\n         case TITLE:\n             return ...;\n     }\n }",
+      "revId": "3bf6de7132db84e3b3554f8a9ab389f4538f9111",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
