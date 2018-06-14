@@ -237,7 +237,6 @@ public:
     const ScRefCellValue& getRefCellValue() const { return maCurCell;}
 
     bool hasString() const;
-    bool hasEmptyData() const;
     bool isEmpty() const;
     bool equalsWithoutFormat( const ScAddress& rPos ) const;
 

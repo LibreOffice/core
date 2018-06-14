@@ -1008,17 +1008,6 @@ bool ScCellIterator::hasString() const
     return maCurCell.hasString();
 }
 
-bool ScCellIterator::hasEmptyData() const
-{
-    if (maCurCell.isEmpty())
-        return true;
-
-    if (maCurCell.meType == CELLTYPE_FORMULA)
-        return maCurCell.mpFormula->IsEmpty();
-
-    return false;
-}
-
 bool ScCellIterator::isEmpty() const
 {
     return maCurCell.isEmpty();
