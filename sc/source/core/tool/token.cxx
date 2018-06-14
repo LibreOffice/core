@@ -1820,7 +1820,12 @@ void ScTokenArray::GenHash()
 
 void ScTokenArray::ResetVectorState()
 {
-    if(ScCalcConfig::isOpenCLEnabled())
+    // The preference order is (according to ScFormulaCell::InterpretFormulaGroup()):
+    // - OpenCL
+    // - threading
+    // - SoftwareInterpreter
+    if(ScCalcConfig::isOpenCLEnabled()
+        || (!ScCalcConfig::isThreadingEnabled() && ScCalcConfig::isSwInterpreterEnabled()))
     {
         meVectorState = FormulaVectorEnabled;
         mbOpenCLEnabled = true;
