@@ -11949,6 +11949,13 @@ AC_MSG_CHECKING([which languages to be built])
 ALL_LANGS="en-US $completelangiso"
 # check the configured localizations
 WITH_LANG="$with_lang"
+
+# Check for --without-lang which turns up as $with_lang being "no". Luckily there is no language with code "no".
+# (Norwegian is "nb" and "nn".)
+if test "$WITH_LANG" = "no"; then
+    WITH_LANG=
+fi
+
 if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
     AC_MSG_RESULT([en-US])
 else
