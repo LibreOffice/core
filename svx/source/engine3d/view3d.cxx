@@ -583,7 +583,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
                     // fill and insert new object
                     pNewCompoundObj->NbcSetLayer(pCompoundObj->GetLayer());
                     pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), true);
-                    pDstScene->Insert3DObj(pNewCompoundObj);
+                    pDstScene->InsertObject(pNewCompoundObj);
                     bRetval = true;
 
                     // Create undo
@@ -763,7 +763,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
             p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), true);
 
             // Insert a new extrude object
-            pScene->Insert3DObj(p3DObj);
+            pScene->InsertObject(p3DObj);
         }
     }
 }
@@ -1290,7 +1290,7 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 
     InitScene(pScene, fW, fH, aVolume.getMaxZ() + ((fW + fH) / 4.0));
 
-    pScene->Insert3DObj(p3DObj);
+    pScene->InsertObject(p3DObj);
     pScene->NbcSetSnapRect(aRect);
 
     return pScene;

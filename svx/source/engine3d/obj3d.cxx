@@ -262,14 +262,6 @@ void E3dObject::RecalcSnapRect()
     maSnapRect = tools::Rectangle();
 }
 
-// Inform the parent about insertion of a 3D object, so that the parent is able
-// treat the particular objects in a special way (eg Light / Label in E3dScene)
-void E3dObject::NewObjectInserted(const E3dObject* p3DObj)
-{
-    if(GetParentObj())
-        GetParentObj()->NewObjectInserted(p3DObj);
-}
-
 // Inform parent of changes in the structure (eg by transformation), in this
 // process the object in which the change has occurred is returned.
 void E3dObject::StructureChanged()

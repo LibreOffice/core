@@ -93,7 +93,6 @@ private:
     bool            mbIsSelected            : 1;
 
 protected:
-    virtual void NewObjectInserted(const E3dObject* p3DObj);
     virtual void StructureChanged();
     virtual basegfx::B3DRange RecalcBoundVolume() const;
 

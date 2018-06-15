@@ -78,7 +78,6 @@ protected:
 
     bool mbSkipSettingDirty : 1;
 
-    virtual void NewObjectInserted(const E3dObject* p3DObj) override;
     virtual void StructureChanged() override;
 
     void RebuildLists();
@@ -195,8 +194,6 @@ public:
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     virtual SdrObjList* GetSubList() const override;
-    void Insert3DObj(E3dObject* p3DObj);
-    void Remove3DObj(E3dObject const * p3DObj);
     virtual void SetTransformChanged() override;
 
 protected:

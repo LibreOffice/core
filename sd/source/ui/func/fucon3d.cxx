@@ -407,7 +407,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     aCam.SetFocalLength(mpView->GetDefaultCamFocal());
     aCam.SetDefaults(::basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt);
     pScene->SetCamera(aCam);
-    pScene->Insert3DObj(p3DObj);
+    pScene->InsertObject(p3DObj);
     pScene->NbcSetSnapRect(a3DRect);
     ImpPrepareBasic3DShape(p3DObj, pScene);
     SfxItemSet aAttr(mpDoc->GetPool());

@@ -194,7 +194,7 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
         if( mp3DObj )
         {
             aSet.Put(mp3DObj->GetMergedItemSet());
-            mpScene->Remove3DObj( mp3DObj );
+            mpScene->RemoveObject( mp3DObj->GetOrdNum() );
             // always use SdrObject::Free(...) for SdrObjects (!)
             SdrObject* pTemp(mp3DObj);
             SdrObject::Free(pTemp);
@@ -225,7 +225,7 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
 
         if (mp3DObj)
         {
-            mpScene->Insert3DObj( mp3DObj );
+            mpScene->InsertObject( mp3DObj );
             mp3DObj->SetMergedItemSet(aSet);
         }
 
@@ -293,7 +293,7 @@ void Svx3DLightControl::Construct2()
             mp3DView->Get3DDefaultAttributes(),
             basegfx::B3DPoint(-fMaxExpansion, -fMaxExpansion, -fMaxExpansion),
             basegfx::B3DVector(2.0 * fMaxExpansion, 2.0 * fMaxExpansion, 2.0 * fMaxExpansion));
-        mpScene->Insert3DObj( mpExpansionObject );
+        mpScene->InsertObject( mpExpansionObject );
         SfxItemSet aSet(mpModel->GetItemPool());
         aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
         aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
@@ -315,7 +315,7 @@ void Svx3DLightControl::Construct2()
         mpLampBottomObject = new E3dPolygonObj(
             *mpModel,
             basegfx::B3DPolyPolygon(a3DCircle));
-        mpScene->Insert3DObj( mpLampBottomObject );
+        mpScene->InsertObject( mpLampBottomObject );
 
         // half circle with stand
         basegfx::B2DPolygon a2DHalfCircle;
@@ -329,7 +329,7 @@ void Svx3DLightControl::Construct2()
         mpLampShaftObject = new E3dPolygonObj(
             *mpModel,
             basegfx::B3DPolyPolygon(a3DHalfCircle));
-        mpScene->Insert3DObj( mpLampShaftObject );
+        mpScene->InsertObject( mpLampShaftObject );
 
         // initially invisible
         SfxItemSet aSet(mpModel->GetItemPool());
@@ -375,7 +375,7 @@ void Svx3DLightControl::ConstructLightObjects()
         // get rid of possible existing light object
         if(maLightObjects[a])
         {
-            mpScene->Remove3DObj(maLightObjects[a]);
+            mpScene->RemoveObject(maLightObjects[a]->GetOrdNum());
             // always use SdrObject::Free(...) for SdrObjects (!)
             SdrObject* pTemp(maLightObjects[a]);
             SdrObject::Free(pTemp);
@@ -395,7 +395,7 @@ void Svx3DLightControl::ConstructLightObjects()
                 mp3DView->Get3DDefaultAttributes(),
                 basegfx::B3DPoint( 0, 0, 0 ),
                 basegfx::B3DVector( fLampSize, fLampSize, fLampSize));
-            mpScene->Insert3DObj(pNewLight);
+            mpScene->InsertObject(pNewLight);
 
             basegfx::B3DHomMatrix aTransform;
             aTransform.translate(aDirection.getX(), aDirection.getY(), aDirection.getZ());
