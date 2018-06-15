@@ -82,19 +82,19 @@
 tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
 SvxSearchItem*  ScGlobal::pSearchItem = nullptr;
 ScAutoFormat*   ScGlobal::pAutoFormat = nullptr;
-LegacyFuncCollection* ScGlobal::pLegacyFuncCollection = nullptr;
-ScUnoAddInCollection* ScGlobal::pAddInCollection = nullptr;
+std::atomic<LegacyFuncCollection*> ScGlobal::pLegacyFuncCollection(nullptr);
+std::atomic<ScUnoAddInCollection*> ScGlobal::pAddInCollection(nullptr);
 ScUserList*     ScGlobal::pUserList = nullptr;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
-css::lang::Locale*     ScGlobal::pLocale = nullptr;
+std::atomic<css::lang::Locale*> ScGlobal::pLocale(nullptr);
 SvtSysLocale*   ScGlobal::pSysLocale = nullptr;
 const CharClass*  ScGlobal::pCharClass = nullptr;
 const LocaleDataWrapper*  ScGlobal::pLocaleData = nullptr;
 CalendarWrapper* ScGlobal::pCalendar = nullptr;
-CollatorWrapper* ScGlobal::pCollator = nullptr;
-CollatorWrapper* ScGlobal::pCaseCollator = nullptr;
-::utl::TransliterationWrapper* ScGlobal::pTransliteration = nullptr;
-::utl::TransliterationWrapper* ScGlobal::pCaseTransliteration = nullptr;
+std::atomic<CollatorWrapper*> ScGlobal::pCollator(nullptr);
+std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
+std::atomic<::utl::TransliterationWrapper*> ScGlobal::pTransliteration(nullptr);
+std::atomic<::utl::TransliterationWrapper*> ScGlobal::pCaseTransliteration(nullptr);
 css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = nullptr;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 OUString*       ScGlobal::pEmptyOUString = nullptr;
@@ -132,23 +132,18 @@ bool ScGlobal::bThreadedGroupCalcInProgress = false;
 template< typename Type, typename Function = std::function< Type*() >,
           typename Guard = osl::MutexGuard, typename GuardCtor = osl::GetGlobalMutex >
 static inline
-Type* doubleCheckedInit( Type*& pointer, Function function, GuardCtor guardCtor = osl::GetGlobalMutex())
+Type* doubleCheckedInit( std::atomic<Type*>& pointer, Function function, GuardCtor guardCtor = osl::GetGlobalMutex())
 {
-    Type* p = pointer;
+    Type* p = pointer.load( std::memory_order_acquire );
     if (!p)
     {
         Guard guard(guardCtor());
-        p = pointer;
+        p = pointer.load( std::memory_order_relaxed );
         if (!p)
         {
             p = function();
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            pointer = p;
+            pointer.store( p, std::memory_order_release );
         }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
     return p;
 }
