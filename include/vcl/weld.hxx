@@ -255,6 +255,7 @@ public:
     virtual void remove(int pos) = 0;
     void remove_text(const OUString& rText) { remove(find_text(rText)); }
     virtual int find_text(const OUString& rStr) const = 0;
+    void remove_id(const OUString& rId) { remove(find_id(rId)); }
     virtual int find_id(const OUString& rId) const = 0;
     virtual int get_count() const = 0;
     virtual void make_sorted() = 0;
@@ -590,21 +591,30 @@ public:
         update_width_chars();
     }
 
+    int convert_value_to(int nValue, FieldUnit eValueUnit) const
+    {
+        return ConvertValue(nValue, m_eSrcUnit, eValueUnit);
+    }
+
+    int convert_value_from(int nValue, FieldUnit eValueUnit) const
+    {
+        return ConvertValue(nValue, eValueUnit, m_eSrcUnit);
+    }
+
     void set_value(int nValue, FieldUnit eValueUnit)
     {
-        m_xSpinButton->set_value(ConvertValue(nValue, eValueUnit, m_eSrcUnit));
+        m_xSpinButton->set_value(convert_value_from(nValue, eValueUnit));
     }
 
     int get_value(FieldUnit eDestUnit) const
     {
-        int nValue = m_xSpinButton->get_value();
-        return ConvertValue(nValue, m_eSrcUnit, eDestUnit);
+        return convert_value_to(m_xSpinButton->get_value(), eDestUnit);
     }
 
     void set_range(int min, int max, FieldUnit eValueUnit)
     {
-        min = ConvertValue(min, eValueUnit, m_eSrcUnit);
-        max = ConvertValue(max, eValueUnit, m_eSrcUnit);
+        min = convert_value_from(min, eValueUnit);
+        max = convert_value_from(max, eValueUnit);
         m_xSpinButton->set_range(min, max);
         update_width_chars();
     }
@@ -612,8 +622,8 @@ public:
     void get_range(int& min, int& max, FieldUnit eDestUnit) const
     {
         m_xSpinButton->get_range(min, max);
-        min = ConvertValue(min, m_eSrcUnit, eDestUnit);
-        max = ConvertValue(max, m_eSrcUnit, eDestUnit);
+        min = convert_value_to(min, eDestUnit);
+        max = convert_value_to(max, eDestUnit);
     }
 
     void set_min(int min, FieldUnit eValueUnit)
@@ -646,16 +656,16 @@ public:
 
     void set_increments(int step, int page, FieldUnit eValueUnit)
     {
-        step = ConvertValue(step, eValueUnit, m_eSrcUnit);
-        page = ConvertValue(page, eValueUnit, m_eSrcUnit);
+        step = convert_value_from(step, eValueUnit);
+        page = convert_value_from(page, eValueUnit);
         m_xSpinButton->set_increments(step, page);
     }
 
     void get_increments(int& step, int& page, FieldUnit eDestUnit) const
     {
         m_xSpinButton->get_increments(step, page);
-        step = ConvertValue(step, m_eSrcUnit, eDestUnit);
-        page = ConvertValue(page, m_eSrcUnit, eDestUnit);
+        step = convert_value_to(step, eDestUnit);
+        page = convert_value_to(page, eDestUnit);
     }
 
     void connect_value_changed(const Link<MetricSpinButton&, void>& rLink)
