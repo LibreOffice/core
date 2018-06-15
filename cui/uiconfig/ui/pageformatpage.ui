@@ -1,34 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
-  <object class="GtkListStore" id="liststorePageLayout">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="pageformatpage|liststorePageLayout">Right and left</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="pageformatpage|liststorePageLayout">Mirrored</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="pageformatpage|liststorePageLayout">Only right</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="pageformatpage|liststorePageLayout">Only left</col>
-        <col id="1">0</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkGrid" id="PageFormatPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -80,7 +53,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-PaperSizeListBox" id="comboPageFormat">
+                      <object class="GtkComboBoxText" id="comboPageFormat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -95,7 +68,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="pageformatpage|labelWidth">_Width:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinWidth:0.00cm</property>
+                        <property name="mnemonic_widget">spinWidth</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -104,10 +77,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinWidth:0.00cm">
+                      <object class="GtkSpinButton" id="spinWidth">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                         <property name="update_policy">if-valid</property>
                       </object>
                       <packing>
@@ -121,7 +95,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="pageformatpage|labelHeight">_Height:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinHeight:0.00cm</property>
+                        <property name="mnemonic_widget">spinHeight</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -130,10 +104,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinHeight:0.00cm">
+                      <object class="GtkSpinButton" id="spinHeight">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -165,7 +140,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobuttonLandscape</property>
                         <accessibility>
                           <relation type="member-of" target="labelOrientation"/>
                         </accessibility>
@@ -211,7 +185,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-FrameDirectionListBox" id="comboTextFlowBox">
+                      <object class="GtkComboBoxText" id="comboTextFlowBox">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
                       </object>
@@ -242,7 +216,7 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="svxlo-SvxPageWindow" id="drawingareaPageDirection">
+                          <object class="GtkDrawingArea" id="drawingareaPageDirection">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">center</property>
@@ -272,7 +246,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="comboPaperTray">
+                          <object class="GtkComboBoxText" id="comboPaperTray">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
@@ -343,7 +317,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="pageformatpage|labelTopMargin">Top:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinMargTop:0.00cm</property>
+                        <property name="mnemonic_widget">spinMargTop</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -357,7 +331,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="pageformatpage|labelBottomMargin">Bottom:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinMargBot:0.00cm</property>
+                        <property name="mnemonic_widget">spinMargBot</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -366,9 +340,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinMargLeft:0.00cm">
+                      <object class="GtkSpinButton" id="spinMargLeft">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -376,9 +351,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinMargRight:0.00cm">
+                      <object class="GtkSpinButton" id="spinMargRight">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -386,9 +362,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinMargTop:0.00cm">
+                      <object class="GtkSpinButton" id="spinMargTop">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -396,9 +373,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinMargBot:0.00cm">
+                      <object class="GtkSpinButton" id="spinMargBot">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -416,7 +394,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="pageformatpage|labelRightMargin">Right:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMargRight:0.00cm</property>
+                            <property name="mnemonic_widget">spinMargRight</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -430,7 +408,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="pageformatpage|labelOuter">O_uter:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMargRight:0.00cm</property>
+                            <property name="mnemonic_widget">spinMargRight</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -456,7 +434,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="pageformatpage|labelLeftMargin">Left:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
+                            <property name="mnemonic_widget">spinMargLeft</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -470,7 +448,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="pageformatpage|labelInner">I_nner:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
+                            <property name="mnemonic_widget">spinMargLeft</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -572,10 +550,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="comboPageLayout">
+                      <object class="GtkComboBoxText" id="comboPageLayout">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">liststorePageLayout</property>
+                        <items>
+                          <item translatable="yes" context="pageformatpage|liststorePageLayout">Right and left</item>
+                          <item translatable="yes" context="pageformatpage|liststorePageLayout">Mirrored</item>
+                          <item translatable="yes" context="pageformatpage|liststorePageLayout">Only right</item>
+                          <item translatable="yes" context="pageformatpage|liststorePageLayout">Only left</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -583,7 +566,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-PageNumberListBox" id="comboLayoutFormat">
+                      <object class="GtkComboBoxText" id="comboLayoutFormat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -682,7 +665,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="comboRegisterStyle">
+                              <object class="GtkComboBoxText" id="comboRegisterStyle">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                               </object>

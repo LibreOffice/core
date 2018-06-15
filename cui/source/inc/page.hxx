@@ -25,6 +25,7 @@
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <svx/pagectrl.hxx>
+#include <svx/pagenumberlistbox.hxx>
 #include <svx/papersizelistbox.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <editeng/svxenum.hxx>
@@ -74,55 +75,7 @@ class SvxPageDescPage : public SfxTabPage
 
     static const sal_uInt16 pRanges[];
 private:
-    // paper format
-    VclPtr<PaperSizeListBox>    m_pPaperSizeBox;
-
-    VclPtr<MetricField>         m_pPaperWidthEdit;
-    VclPtr<MetricField>         m_pPaperHeightEdit;
-
-    VclPtr<FixedText>           m_pOrientationFT;
-    VclPtr<RadioButton>         m_pPortraitBtn;
-    VclPtr<RadioButton>         m_pLandscapeBtn;
-
-    VclPtr<SvxPageWindow>       m_pBspWin;
-
-    VclPtr<FixedText>           m_pTextFlowLbl;
-    VclPtr<svx::FrameDirectionListBox>  m_pTextFlowBox;
-
-    VclPtr<ListBox>             m_pPaperTrayBox;
-
-    // Margins
-    VclPtr<FixedText>           m_pLeftMarginLbl;
-    VclPtr<MetricField>         m_pLeftMarginEdit;
-    VclPtr<FixedText>           m_pRightMarginLbl;
-    VclPtr<MetricField>         m_pRightMarginEdit;
-    VclPtr<MetricField>         m_pTopMarginEdit;
-    VclPtr<MetricField>         m_pBottomMarginEdit;
-
-    // layout settings
-    VclPtr<FixedText>           m_pPageText;
-    VclPtr<ListBox>             m_pLayoutBox;
-    VclPtr<ListBox>             m_pNumberFormatBox;
-
-    //Extras Calc
-    VclPtr<FixedText>           m_pTblAlignFT;
-    VclPtr<CheckBox>            m_pHorzBox;
-    VclPtr<CheckBox>            m_pVertBox;
-
-    // Impress and Draw
-    VclPtr<CheckBox>            m_pAdaptBox;
-
-    //Register Writer
-    VclPtr<CheckBox>            m_pRegisterCB;
-    VclPtr<FixedText>           m_pRegisterFT;
-    VclPtr<ListBox>             m_pRegisterLB;
-
-    OUString             sStandardRegister;
-
-    VclPtr<FixedText>           m_pInsideLbl;
-    VclPtr<FixedText>           m_pOutsideLbl;
-    VclPtr<FixedText>           m_pPrintRangeQueryText;
-
+    OUString            sStandardRegister;
     long                nFirstLeftMargin;
     long                nFirstRightMargin;
     long                nFirstTopMargin;
@@ -143,38 +96,76 @@ private:
     bool                mbDelPrinter : 1;
     bool                mbEnableDrawingLayerFillStyles : 1;
 
+    PageWindow m_aBspWin;
+
+    // paper format
+    std::unique_ptr<SvxPaperSizeListBox> m_xPaperSizeBox;
+    std::unique_ptr<weld::MetricSpinButton> m_xPaperWidthEdit;
+    std::unique_ptr<weld::MetricSpinButton> m_xPaperHeightEdit;
+    std::unique_ptr<weld::Label> m_xOrientationFT;
+    std::unique_ptr<weld::RadioButton> m_xPortraitBtn;
+    std::unique_ptr<weld::RadioButton> m_xLandscapeBtn;
+    std::unique_ptr<weld::Label> m_xTextFlowLbl;
+    std::unique_ptr<svx::SvxFrameDirectionListBox>  m_xTextFlowBox;
+    std::unique_ptr<weld::ComboBoxText> m_xPaperTrayBox;
+    // Margins
+    std::unique_ptr<weld::Label> m_xLeftMarginLbl;
+    std::unique_ptr<weld::MetricSpinButton> m_xLeftMarginEdit;
+    std::unique_ptr<weld::Label> m_xRightMarginLbl;
+    std::unique_ptr<weld::MetricSpinButton> m_xRightMarginEdit;
+    std::unique_ptr<weld::MetricSpinButton> m_xTopMarginEdit;
+    std::unique_ptr<weld::MetricSpinButton> m_xBottomMarginEdit;
+    // layout settings
+    std::unique_ptr<weld::Label> m_xPageText;
+    std::unique_ptr<weld::ComboBoxText> m_xLayoutBox;
+    std::unique_ptr<SvxPageNumberListBox> m_xNumberFormatBox;
+    //Extras Calc
+    std::unique_ptr<weld::Label> m_xTblAlignFT;
+    std::unique_ptr<weld::CheckButton> m_xHorzBox;
+    std::unique_ptr<weld::CheckButton> m_xVertBox;
+    // Impress and Draw
+    std::unique_ptr<weld::CheckButton> m_xAdaptBox;
+    //Register Writer
+    std::unique_ptr<weld::CheckButton> m_xRegisterCB;
+    std::unique_ptr<weld::Label> m_xRegisterFT;
+    std::unique_ptr<weld::ComboBoxText> m_xRegisterLB;
+    std::unique_ptr<weld::Label> m_xInsideLbl;
+    std::unique_ptr<weld::Label> m_xOutsideLbl;
+    std::unique_ptr<weld::Label> m_xPrintRangeQueryText;
+    std::unique_ptr<weld::CustomWeld> m_xBspWin;
+
     void                Init_Impl();
-    DECL_LINK(    LayoutHdl_Impl, ListBox&, void);
-    DECL_LINK(    PaperBinHdl_Impl, Control&, void);
-    DECL_LINK(    SwapOrientation_Impl, Button*, void );
-    void                SwapFirstValues_Impl( bool bSet );
-    DECL_LINK(    BorderModify_Impl, Edit&, void);
-    void                InitHeadFoot_Impl( const SfxItemSet& rSet );
-    DECL_LINK(    CenterHdl_Impl, Button*, void);
-    void                UpdateExample_Impl( bool bResetbackground = false );
+    DECL_LINK(LayoutHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(PaperBinHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(SwapOrientation_Impl, weld::ToggleButton&, void);
+    void SwapFirstValues_Impl( bool bSet );
+    DECL_LINK(BorderModify_Impl, weld::MetricSpinButton&, void);
+    void InitHeadFoot_Impl( const SfxItemSet& rSet );
+    DECL_LINK(CenterHdl_Impl, weld::ToggleButton&, void);
+    void UpdateExample_Impl( bool bResetbackground = false );
 
-    DECL_LINK(    PaperSizeSelect_Impl, ListBox&, void );
-    DECL_LINK(    PaperSizeModify_Impl, Edit&, void);
+    DECL_LINK(PaperSizeSelect_Impl, weld::ComboBoxText&, void );
+    DECL_LINK(PaperSizeModify_Impl, weld::MetricSpinButton&, void);
 
-    DECL_LINK(    FrameDirectionModify_Impl, ListBox&, void );
+    DECL_LINK(FrameDirectionModify_Impl, weld::ComboBoxText&, void );
 
-    void                ResetBackground_Impl( const SfxItemSet& rSet );
+    void ResetBackground_Impl( const SfxItemSet& rSet );
 
-    DECL_LINK(    RangeHdl_Impl, Control&, void );
-    void                CalcMargin_Impl();
+    void RangeHdl_Impl();
+    void CalcMargin_Impl();
 
-    DECL_LINK(    RegisterModify, Button*, void );
+    DECL_LINK(RegisterModify, weld::ToggleButton&, void);
 
     // page direction
     /** Disables vertical page direction entries in the text flow listbox. */
     void                DisableVerticalPageDir();
 
-    bool                IsPrinterRangeOverflow( MetricField& rField, long nFirstMargin,
-                                                long nLastMargin, MarginPosition nPos );
+    bool                IsPrinterRangeOverflow(weld::MetricSpinButton& rField, long nFirstMargin,
+                                               long nLastMargin, MarginPosition nPos);
     void                CheckMarginEdits( bool _bClear );
     bool                IsMarginOutOfRange();
 
-    SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rSet);
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;

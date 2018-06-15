@@ -23,6 +23,7 @@
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
 using namespace css::uno;
@@ -44,7 +45,8 @@ public:
             Pass ::std::numeric_limits<sal_uInt16>::max() if there is no such
             restriction.
     */
-    static void GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotRemove );
+    static void GetI18nNumbering(ListBox& rFmtLB, sal_uInt16 nDoNotRemove);
+    static void GetI18nNumbering(weld::ComboBoxText& rFmtLB, sal_uInt16 nDoNotRemove);
 };
 
 #endif
