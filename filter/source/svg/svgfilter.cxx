@@ -486,7 +486,7 @@ private:
     const uno::Reference<io::XInputStream>&     mxInput;
     uno::Sequence< sal_Int8 >                   mnFirstBytes;
     sal_Int32                                   mnFirstBytesSize;
-    sal_uInt64                                  mnFirstRead;
+    sal_Int32                                   mnFirstRead;
     bool                                        mbProcessed;
     bool                                        mbIsSVG;
 
@@ -555,7 +555,7 @@ private:
         }
 
         // check if it is gzipped -> svgz
-        if(mnFirstBytes[0] == 0x1F && static_cast<sal_uInt8>(mnFirstBytes[1]) == 0x8B)
+        if (mnFirstBytes[0] == 0x1F && static_cast<sal_uInt8>(mnFirstBytes[1]) == 0x8B)
         {
             ZCodec aCodec;
 
@@ -568,6 +568,9 @@ private:
                 reinterpret_cast< sal_uInt8* >(mnFirstBytes.getArray()),
                 mnFirstBytesSize);
             aCodec.EndCompression();
+
+            if (mnFirstRead < 0)
+                return;
         }
 
         if(!mbIsSVG)
