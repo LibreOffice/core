@@ -119,10 +119,16 @@ class SVX_DLLPUBLIC ParaPrevWindow final : public weld::CustomWidgetController
     // indentation
     long                nLeftMargin;
     long                nRightMargin;
+    short               nFirstLineOfst;
+    // distances
+    sal_uInt16          nUpper;
+    sal_uInt16          nLower;
     // adjustment
     SvxAdjust           eAdjust;
     // last line in justification
     SvxAdjust           eLastLine;
+    // line distance
+    SvxPrevLineSpace    eLine;
 
     OUString            aText;
     tools::Rectangle    Lines[9];
