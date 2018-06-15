@@ -101,6 +101,9 @@ namespace vcl
     class TextLayoutCache;
     class Window;
     class FontInfo;
+    namespace font {
+        struct Feature;
+    }
 }
 
 namespace com { namespace sun { namespace star { namespace rendering {
@@ -1215,6 +1218,9 @@ public:
 
     bool                        GetFontCharMap( FontCharMapRef& rxFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
+
+    bool GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const;
+
 
     /** Retrieve detailed font information in platform independent structure
 
