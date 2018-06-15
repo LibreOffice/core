@@ -24,6 +24,7 @@
 #include <vcl/print.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <font/FeatureCollector.hxx>
 
 #include <sallayout.hxx>
 #include <salgdi.hxx>
@@ -158,6 +159,39 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
 
     if( mpAlphaVDev )
         mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
+
+    return true;
+}
+
+bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const
+{
+    if (mbNewFont)
+        ImplNewFont();
+
+    if (mbInitFont)
+        InitFont();
+
+    if (!mpFontInstance)
+        return false;
+
+    LogicalFontInstance* pFontInstance = mpFontInstance;
+
+    if (!pFontInstance)
+        return false;
+
+    hb_font_t* pHbFont = pFontInstance->GetHbFont();
+
+    if (!pHbFont)
+        return false;
+
+    hb_face_t* pHbFace = hb_font_get_face(pHbFont);
+
+    if (!pHbFace)
+        return false;
+
+    vcl::font::FeatureCollector aFeatureCollector(pHbFace, rFontFeatures);
+    aFeatureCollector.collectForTable(HB_OT_TAG_GSUB); // substitution
+    aFeatureCollector.collectForTable(HB_OT_TAG_GPOS); // positioning
 
     return true;
 }
