@@ -89,4 +89,56 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 n
     }
 }
 
+void SvxNumOptionsTabPageHelper::GetI18nNumbering(weld::ComboBoxText& rFmtLB, sal_uInt16 nDoNotRemove)
+{
+    Reference<XDefaultNumberingProvider> xDefNum = GetNumberingProvider();
+    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
+
+    // Extended numbering schemes present in the resource but not offered by
+    // the i18n framework per configuration must be removed from the listbox.
+    // Do not remove a special entry matching nDoNotRemove.
+    const sal_uInt16 nDontRemove = SAL_MAX_UINT16;
+    ::std::vector< sal_uInt16> aRemove( rFmtLB.get_count(), nDontRemove);
+    for (size_t i=0; i<aRemove.size(); ++i)
+    {
+        sal_uInt16 nEntryData = rFmtLB.get_id(i).toInt32();
+        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N && nEntryData != nDoNotRemove)
+            aRemove[i] = nEntryData;
+    }
+    if(xInfo.is())
+    {
+        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
+        const sal_Int16* pTypes = aTypes.getConstArray();
+        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+        {
+            sal_Int16 nCurrent = pTypes[nType];
+            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+            {
+                bool bInsert = true;
+                for (int nEntry = 0; nEntry < rFmtLB.get_count(); ++nEntry)
+                {
+                    sal_uInt16 nEntryData = rFmtLB.get_id(nEntry).toInt32();
+                    if (nEntryData == static_cast<sal_uInt16>(nCurrent))
+                    {
+                        bInsert = false;
+                        aRemove[nEntry] = nDontRemove;
+                        break;
+                    }
+                }
+                if(bInsert)
+                {
+                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
+                    rFmtLB.append(OUString::number(nCurrent), aIdent);
+                }
+            }
+        }
+    }
+    for (unsigned short i : aRemove)
+    {
+        if (i == nDontRemove)
+            continue;
+        rFmtLB.remove_id(OUString::number(i));
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
