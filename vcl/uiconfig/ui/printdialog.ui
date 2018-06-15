@@ -573,7 +573,7 @@
                                         </child>
                                         <child>
                                           <object class="GtkComboBox" id="printpagesbox">
-                                            <property name="visible">True</property>
+                                            <property name="visible">False</property>
                                             <property name="can_focus">False</property>
                                           </object>
                                           <packing>
@@ -591,25 +591,26 @@
                                             <property name="row_spacing">6</property>
                                             <property name="column_spacing">3</property>
                                             <child>
-                                              <object class="GtkLabel" id="labelpages">
-                                                <property name="visible">True</property>
+                                              <object class="GtkLabel" id="printrange">
+                                                <property name="visible">False</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="halign">center</property>
                                                 <property name="label" translatable="yes" context="printdialog|labelpages">Pages:</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
-                                                <property name="top_attach">0</property>
+                                                <property name="top_attach">1</property>
                                               </packing>
                                             </child>
                                             <child>
                                               <object class="GtkEntry" id="pagerange">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="placeholder_text" translatable="yes" context="printdialog|pagerange">e.g.: 1, 3-5, 7, 9</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="top_attach">0</property>
+                                                <property name="top_attach">1</property>
                                                 <property name="width">2</property>
                                               </packing>
                                             </child>
@@ -617,13 +618,13 @@
                                               <object class="GtkLabel" id="labelpapersides">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="halign">end</property>
+                                                <property name="halign">center</property>
                                                 <property name="margin_left">6</property>
                                                 <property name="label" translatable="yes" context="printdialog|labelpapersides">Paper Sides:</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
+                                                <property name="top_attach">2</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -633,7 +634,28 @@
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="top_attach">1</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="width">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="fromwhich">
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">center</property>
+                                                <property name="label" translatable="yes" context="printdialog|fromwhich">From which print:</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBox" id="printextrabox">
+                                                <property name="can_focus">False</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
                                                 <property name="width">2</property>
                                               </packing>
                                             </child>

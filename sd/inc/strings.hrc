@@ -475,7 +475,8 @@
 #define STR_IMPRESS_PRINT_UI_PAGE_SIDES                 NC_("STR_IMPRESS_PRINT_UI_PAGE_SIDES", "Page sides")
 #define STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE           NC_("STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE", "Include")
 #define STR_IMPRESS_PRINT_UI_PAPER_TRAY                 NC_("STR_IMPRESS_PRINT_UI_PAPER_TRAY", "~Use only paper tray from printer preferences")
-#define STR_IMPRESS_PRINT_UI_PAGE_RANGE                 NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE", "Print range")
+#define STR_IMPRESS_PRINT_UI_PAGE_RANGE                 NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE", "Pages:")
+#define STR_IMPRESS_PRINT_UI_SLIDE_RANGE                NC_("STR_IMPRESS_PRINT_UI_SLIDE_RANGE", "Slides:")
 
 #define STR_SAR_WRAP_FORWARD                            NC_("STR_SAR_WRAP_FORWARD", "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?")
 #define STR_SAR_WRAP_BACKWARD                           NC_("STR_SAR_WRAP_BACKWARD", "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?")
