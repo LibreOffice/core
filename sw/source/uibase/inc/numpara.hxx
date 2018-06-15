@@ -29,35 +29,35 @@
 // are performed.
 class SwParagraphNumTabPage final : public SfxTabPage
 {
-    VclPtr<VclHBox>                 m_pOutlineStartBX;
-    VclPtr<ListBox>                 m_pOutlineLvLB;
-    VclPtr<VclHBox>                 m_pNumberStyleBX;
-    VclPtr<ListBox>                 m_pNumberStyleLB;
-    VclPtr<PushButton>              m_pEditNumStyleBtn;
-
-    VclPtr<TriStateBox>             m_pNewStartCB;
-    VclPtr<VclHBox>                 m_pNewStartBX;
-    VclPtr<TriStateBox>             m_pNewStartNumberCB;
-    VclPtr<NumericField>            m_pNewStartNF;
-
-    VclPtr<VclFrame>                m_pCountParaFram;
-    VclPtr<TriStateBox>             m_pCountParaCB;
-    VclPtr<TriStateBox>             m_pRestartParaCountCB;
-
-    VclPtr<VclHBox>                 m_pRestartBX;
-    VclPtr<NumericField>            m_pRestartNF;
-
     // #outlinelevel#
     const OUString msOutlineNumbering;
 
     bool                    bModified : 1;
     bool                    bCurNumrule : 1;
 
-    DECL_LINK(NewStartHdl_Impl, Button*, void);
-    DECL_LINK( StyleHdl_Impl, ListBox&,void );
-    DECL_LINK(LineCountHdl_Impl, Button*, void);
-    DECL_LINK(EditNumStyleHdl_Impl, Button*, void);
-    DECL_LINK(EditNumStyleSelectHdl_Impl, ListBox&, void);
+    std::unique_ptr<weld::Widget> m_xOutlineStartBX;
+    std::unique_ptr<weld::ComboBoxText> m_xOutlineLvLB;
+    std::unique_ptr<weld::Widget> m_xNumberStyleBX;
+    std::unique_ptr<weld::ComboBoxText> m_xNumberStyleLB;
+    std::unique_ptr<weld::Button> m_xEditNumStyleBtn;
+
+    std::unique_ptr<weld::CheckButton> m_xNewStartCB;
+    std::unique_ptr<weld::Widget> m_xNewStartBX;
+    std::unique_ptr<weld::CheckButton> m_xNewStartNumberCB;
+    std::unique_ptr<weld::SpinButton> m_xNewStartNF;
+
+    std::unique_ptr<weld::Widget> m_xCountParaFram;
+    std::unique_ptr<weld::CheckButton> m_xCountParaCB;
+    std::unique_ptr<weld::CheckButton> m_xRestartParaCountCB;
+
+    std::unique_ptr<weld::Widget> m_xRestartBX;
+    std::unique_ptr<weld::SpinButton> m_xRestartNF;
+
+    DECL_LINK(NewStartHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(StyleHdl_Impl, weld::ComboBoxText&,void);
+    DECL_LINK(LineCountHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(EditNumStyleHdl_Impl, weld::Button&, void);
+    DECL_LINK(EditNumStyleSelectHdl_Impl, weld::ComboBoxText&, void);
 
     static const sal_uInt16 aPageRg[];
 
@@ -65,9 +65,8 @@ class SwParagraphNumTabPage final : public SfxTabPage
                           SfxStyleFamily nFamily );
 
 public:
-    SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
+    SwParagraphNumTabPage(TabPageParent pParent, const SfxItemSet& rSet );
     virtual ~SwParagraphNumTabPage() override;
-    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent pParent,
                                       const SfxItemSet* rSet );
@@ -81,7 +80,7 @@ public:
     void                DisableOutline();
     void                DisableNumbering();
 
-    ListBox&            GetStyleBox() {return *m_pNumberStyleLB;};
+    weld::ComboBoxText& GetStyleBox() {return *m_xNumberStyleLB;};
 };
 
 #endif

@@ -411,7 +411,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             static_cast<SwParagraphNumTabPage&>(rPage).DisableOutline() ;
             static_cast<SwParagraphNumTabPage&>(rPage).DisableNumbering();
         }//<-end
-        ListBox & rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
+        weld::ComboBoxText& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SfxStyleFamily::Pseudo);
         const SfxStyleSheetBase* pBase = pPool->First();
@@ -422,7 +422,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             pBase = pPool->Next();
         }
         for(std::set<OUString>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
-            rBox.InsertEntry(*it);
+            rBox.append_text(*it);
     }
     else if (nId == m_nAlignId)
     {
