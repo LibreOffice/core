@@ -173,7 +173,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
     const int nRTLOpts = bRTL ? 1 : 0;
-    const int nNumProps = nRTLOpts + (bWeb ? 15 : 21);
+    const int nNumProps = nRTLOpts + (bWeb ? 14 : 20);
     m_aUIProperties.resize( nNumProps );
     int nIdx = 0;
 
@@ -264,32 +264,33 @@ SwPrintUIOptions::SwPrintUIOptions(
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
     aPrintRangeOpt.mbInternalOnly = true;
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", SwResId( STR_PRINTOPTUI_RANGE_COPIES),
-                                                           OUString(),
-                                                           aPrintRangeOpt);
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt( "printrange",
+                                                          SwResId( STR_PRINTOPTUI_PAGES_TEXT ),
+                                                          OUString(),
+                                                          aPrintRangeOpt );
 
     // create a choice for the content to create
     const OUString aPrintRangeName( "PrintContent" );
-    uno::Sequence< OUString > aChoices( 3 );
-    uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
-    uno::Sequence< OUString > aHelpIds( 3 );
-    uno::Sequence< OUString > aWidgetIds( 3 );
-    aChoices[0] = SwResId( STR_PRINTOPTUI_ALLPAGES);
-    aChoicesDisabled[0] = false;
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
-    aWidgetIds[0] = "printallpages";
-    aChoices[1] = SwResId( STR_PRINTOPTUI_SOMEPAGES);
-    aChoicesDisabled[1] = false;
-    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
-    aWidgetIds[1] = "printpages";
-    aChoices[2] = SwResId( STR_PRINTOPTUI_SELECTION);
-    aChoicesDisabled[2] = ! bHasSelection;
-    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
-    aWidgetIds[2] = "printselection";
-    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
-                                                        aHelpIds, aPrintRangeName,
-                                                        aChoices, 0 /* always default to 'All pages' */,
-                                                        aChoicesDisabled);
+    uno::Sequence< OUString > aChoices( 2 );
+    uno::Sequence< OUString > aHelpIds( 1 );
+
+    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:ListBox";
+
+    aChoices[0] = SwResId( STR_PRINTOPTUI_PRINTALLPAGES );
+    aChoices[1] = SwResId( STR_PRINTOPTUI_PRINTPAGES );
+    if ( bHasSelection )
+    {
+        aChoices.realloc( 3 );
+        aChoices[2] = SwResId( STR_PRINTOPTUI_PRINTSELECTION );
+    }
+
+    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt( "printpagesbox",
+                                                        OUString(),
+                                                        aHelpIds,
+                                                        aPrintRangeName,
+                                                        aChoices,
+                                                        0 /* always default to 'All pages' */ );
+
     // show an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
@@ -297,12 +298,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                       "PageRange",
                                                       OUString::number( nCurrentPage ) /* set text box to current page number */,
                                                       aPageRangeOpt);
-    // print content selection
-    vcl::PrinterOptionsHelper::UIControlOptions aContentsOpt;
-    aContentsOpt.maGroupHint = "JobPage";
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("extrawriterprintoptions",
-                                                          SwResId( STR_PRINTOPTUI_PRINT),
-                                                          OUString(), aContentsOpt);
+
     // create a list box for notes content
     const SwPostItMode nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
     aChoices.realloc( 5 );
