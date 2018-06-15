@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 class SVX_DLLPUBLIC PageNumberListBox : public ListBox
 {
@@ -31,6 +32,22 @@ public:
     void SetSelection( sal_uInt16 );
 
     Size GetOptimalSize() const override;
+};
+
+class SVX_DLLPUBLIC SvxPageNumberListBox
+{
+private:
+    std::unique_ptr<weld::ComboBoxText> m_xControl;
+public:
+    SvxPageNumberListBox(weld::ComboBoxText* pControl);
+    void SetSelection( sal_uInt16 );
+    int get_count() const { return m_xControl->get_count(); }
+    OUString get_id(int pos) const { return m_xControl->get_id(pos); }
+    bool get_active() const { return m_xControl->get_active(); }
+    void set_active(int pos) { m_xControl->set_active(pos); }
+    void save_value() { m_xControl->save_value(); }
+    bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
+    weld::ComboBoxText& get_widget() const { return *m_xControl; }
 };
 
 #endif

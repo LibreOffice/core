@@ -23,6 +23,7 @@
 #include <i18nutil/paper.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 enum class PaperSizeApp
 {
@@ -40,6 +41,25 @@ public:
     Paper GetSelection() const;
 
     Size GetOptimalSize() const override;
+};
+
+class SVX_DLLPUBLIC SvxPaperSizeListBox
+{
+private:
+    std::unique_ptr<weld::ComboBoxText> m_xControl;
+public:
+    SvxPaperSizeListBox(weld::ComboBoxText *pControl);
+
+    void FillPaperSizeEntries(PaperSizeApp eApp);
+    void SetSelection(Paper eSize);
+    Paper GetSelection() const;
+
+    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    void clear() { m_xControl->clear(); }
+    void save_value() { return m_xControl->save_value(); }
+    bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
+
+    weld::ComboBoxText& get_widget() const { return *m_xControl; }
 };
 
 #endif

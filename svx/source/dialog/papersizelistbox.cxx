@@ -83,5 +83,55 @@ Size PaperSizeListBox::GetOptimalSize() const
 {
     return Size(150, ListBox::GetOptimalSize().Height());
 }
+
+SvxPaperSizeListBox::SvxPaperSizeListBox(weld::ComboBoxText* pControl)
+    : m_xControl(pControl)
+{
+    m_xControl->set_size_request(150, -1);
+}
+
+void SvxPaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
+{
+    const std::pair<const char*, int>* pPaperAry = eApp == PaperSizeApp::Std ?
+        RID_SVXSTRARY_PAPERSIZE_STD : RID_SVXSTRARY_PAPERSIZE_DRAW;
+    sal_uInt32 nCnt = eApp == PaperSizeApp::Std ?
+        SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_STD) : SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_DRAW);
+
+    for ( sal_uInt32 i = 0; i < nCnt; ++i )
+    {
+        OUString aStr = SvxResId(pPaperAry[i].first);
+        Paper eSize = static_cast<Paper>(pPaperAry[i].second);
+        m_xControl->append(OUString::number(static_cast<sal_Int32>(eSize)), aStr);
+    }
+}
+
+void SvxPaperSizeListBox::SetSelection( Paper ePreselectPaper )
+{
+    int nEntryCount = m_xControl->get_count();
+    int nSelPos = -1;
+    int nUserPos = -1;
+
+    for (int i = 0; i < nEntryCount; ++i)
+    {
+        Paper eTmp = static_cast<Paper>(m_xControl->get_id(i).toInt32());
+        if (eTmp == ePreselectPaper)
+        {
+            nSelPos = i;
+            break;
+        }
+
+        if (eTmp == PAPER_USER)
+           nUserPos = i;
+    }
+
+    // preselect current paper format - #115915#: ePaper might not be in aPaperSizeBox so use PAPER_USER instead
+    m_xControl->set_active((nSelPos != -1) ? nSelPos : nUserPos);
+}
+
+Paper SvxPaperSizeListBox::GetSelection() const
+{
+    return static_cast<Paper>(m_xControl->get_active_id().toInt32());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
