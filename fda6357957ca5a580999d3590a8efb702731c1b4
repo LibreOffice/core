@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_e735a8f7",
+        "filename": "sc/source/core/data/documen8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-06-15T09:20:36Z",
+      "side": 1,
+      "message": "Would prefer to setup state before threading, and then do the threaded calc, building this much as you do, and then do the cleanup after we join all the threads - so no locking is required etc.",
+      "revId": "fda6357957ca5a580999d3590a8efb702731c1b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_c730ac0a",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 6764,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-06-15T09:20:36Z",
+      "side": 1,
+      "message": "not a fan of another random mutex \u003d)",
+      "revId": "fda6357957ca5a580999d3590a8efb702731c1b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_073ba4ec",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4475,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-06-15T09:20:36Z",
+      "side": 1,
+      "message": "would prefer to do this after we join the threads ... in some state that survives - eg. perhaps putting it into the thread structure itself (?)",
+      "revId": "fda6357957ca5a580999d3590a8efb702731c1b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
