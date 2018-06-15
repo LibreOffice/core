@@ -27,6 +27,7 @@
 
 #include "types.hxx"
 #include "interpretercontext.hxx"
+#include "formulalogger.hxx"
 #include "formularesult.hxx"
 
 namespace sc {
@@ -140,6 +141,11 @@ private:
         const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
 
     ScFormulaCell( const ScFormulaCell& ) = delete;
+
+    bool InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope);
+    bool InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& aScope);
+    bool InterpretInvariantFormulaGroup();
+
 public:
 
 
@@ -417,7 +423,6 @@ public:
     CompareState CompareByTokenArray( const ScFormulaCell& rOther ) const;
 
     bool InterpretFormulaGroup();
-    bool InterpretInvariantFormulaGroup();
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
     void StartListeningTo( ScDocument* pDoc );
