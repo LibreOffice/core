@@ -2070,8 +2070,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             }
                         }
                         else if (i > 0 && i < nStringsCnt-1   &&
-                                 (cPre == '#' || cPre == '0')      &&
-                                 ((cNext = NextChar(i)) == '#' || cNext == '0')) // #,#
+                                 (cPre == '#' || cPre == '0' || cPre == '?')      &&
+                                 ((cNext = NextChar(i)) == '#' || cNext == '0' || cNext == '?')) // #,#
                         {
                             nPos = nPos + sStrArray[i].getLength();
                             if (!bThousand) // only once
@@ -2083,7 +2083,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             nResultStringsCnt--;
                             i++;
                         }
-                        else if (i > 0 && (cPre == '#' || cPre == '0')
+                        else if (i > 0 && (cPre == '#' || cPre == '0' || cPre == '?')
                                  && PreviousType(i) == NF_SYMBOLTYPE_DIGIT
                                  && nThousand < FLAG_STANDARD_IN_FORMAT )
                         {   // #,,,,
