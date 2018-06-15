@@ -491,6 +491,7 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
 
 IMPL_LINK_NOARG( SvxPersonalizationTabPage, SelectPersona, Button*, void )
 {
+    m_pOwnPersona->Check();
     ScopedVclPtrInstance< SelectPersonaDialog > aDialog(nullptr);
 
     if ( aDialog->Execute() == RET_OK )
