@@ -60,7 +60,7 @@ bool isDerivedFromTestFixture(const CXXRecordDecl *decl) {
 StringRef StaticMethods::getFilename(SourceLocation loc)
 {
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(loc);
-    return compiler.getSourceManager().getFilename(spellingLocation);
+    return getFileNameOfSpellingLoc(spellingLocation);
 }
 
 bool startsWith(const std::string& rStr, const char* pSubStr) {
@@ -235,6 +235,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         report(DiagnosticsEngine::Note, "defined here:", def->getLocation())
             << def->getSourceRange();
     }
+    report(DiagnosticsEngine::Note, aFilename);
     return true;
 }
 

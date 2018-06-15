@@ -29,6 +29,7 @@
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 
+#include <atomic>
 #include <map>
 
 class SfxItemSet;
@@ -496,8 +497,8 @@ class ScGlobal
 {
     static SvxSearchItem*   pSearchItem;
     static ScAutoFormat*    pAutoFormat;
-    static LegacyFuncCollection* pLegacyFuncCollection;
-    static ScUnoAddInCollection* pAddInCollection;
+    static std::atomic<LegacyFuncCollection*> pLegacyFuncCollection;
+    static std::atomic<ScUnoAddInCollection*> pAddInCollection;
     static ScUserList*      pUserList;
     static std::map<const char*, OUString>* pRscString;
     static OUString*        pStrScDoc;
@@ -516,12 +517,12 @@ class ScGlobal
 
     static css::uno::Reference< css::i18n::XOrdinalSuffix> xOrdinalSuffix;
     static CalendarWrapper*     pCalendar;
-    static CollatorWrapper*     pCaseCollator;
-    static CollatorWrapper*     pCollator;
-    static ::utl::TransliterationWrapper* pTransliteration;
-    static ::utl::TransliterationWrapper* pCaseTransliteration;
+    static std::atomic<CollatorWrapper*>     pCaseCollator;
+    static std::atomic<CollatorWrapper*>     pCollator;
+    static std::atomic<::utl::TransliterationWrapper*> pTransliteration;
+    static std::atomic<::utl::TransliterationWrapper*> pCaseTransliteration;
     static IntlWrapper*         pScIntlWrapper;
-    static css::lang::Locale*   pLocale;
+    static std::atomic<css::lang::Locale*>   pLocale;
 
     static ScFieldEditEngine*   pFieldEditEngine;
 
