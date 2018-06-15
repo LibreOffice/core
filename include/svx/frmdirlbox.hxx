@@ -66,10 +66,14 @@ public:
     }
 
     bool get_visible() const { return m_xControl->get_visible(); }
+    void save_value() { m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
     SvxFrameDirection get_active_id() const { return static_cast<SvxFrameDirection>(m_xControl->get_active_id().toUInt32()); }
     void set_active_id(SvxFrameDirection eDir) { m_xControl->set_active_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
-    void save_value() { m_xControl->save_value(); }
+    void remove_id(SvxFrameDirection eDir) { m_xControl->remove_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
+    void hide() { m_xControl->hide(); }
+    void show() { m_xControl->show(); }
+    int get_count() const { return m_xControl->get_count(); }
     /** Inserts a string with corresponding direction enum into the listbox. */
     void append(SvxFrameDirection eDirection, const OUString& rString)
     {
