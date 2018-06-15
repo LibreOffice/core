@@ -348,16 +348,6 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
     ImpCleanup3DDepthMapper();
 }
 
-void E3dScene::NewObjectInserted(const E3dObject* p3DObj)
-{
-    E3dObject::NewObjectInserted(p3DObj);
-
-    if ( p3DObj == this )
-        return;
-
-    ImpCleanup3DDepthMapper();
-}
-
 // Inform parent of changes of a child
 
 void E3dScene::StructureChanged()
@@ -492,8 +482,9 @@ void E3dScene::RebuildLists()
     {
         E3dObject* p3DObj(static_cast< E3dObject* >(a3DIterator.Next()));
         p3DObj->NbcSetLayer(nCurrLayerID);
-        NewObjectInserted(p3DObj);
     }
+
+    ImpCleanup3DDepthMapper();
 }
 
 SdrObjGeoData *E3dScene::NewGeoData() const
@@ -753,9 +744,12 @@ void E3dScene::NbcInsertObject(SdrObject* pObj, size_t nPos)
     // Is it even a 3D object?
     if(nullptr != dynamic_cast< const E3dObject* >(pObj))
     {
-        // Normal 3D object, insert means
-        // call parent
+        // Normal 3D object, insert means call parent
         SdrObjList::NbcInsertObject(pObj, nPos);
+
+        // local needed stuff
+        InvalidateBoundVolume();
+        StructureChanged();
     }
     else
     {
@@ -766,10 +760,21 @@ void E3dScene::NbcInsertObject(SdrObject* pObj, size_t nPos)
 
 void E3dScene::InsertObject(SdrObject* pObj, size_t nPos)
 {
-    // call parent
-    SdrObjList::InsertObject(pObj, nPos);
+    // Is it even a 3D object?
+    if(nullptr != dynamic_cast< const E3dObject* >(pObj))
+    {
+        // call parent
+        SdrObjList::InsertObject(pObj, nPos);
 
-    Cleanup3DDepthMapper();
+        // local needed stuff
+        InvalidateBoundVolume();
+        StructureChanged();
+    }
+    else
+    {
+        // No 3D object, inserted a page in place in a scene ...
+        getSdrObjectFromSdrObjList()->getSdrPageFromSdrObject()->InsertObject(pObj, nPos);
+    }
 }
 
 SdrObject* E3dScene::NbcRemoveObject(size_t nObjNum)
@@ -777,7 +782,8 @@ SdrObject* E3dScene::NbcRemoveObject(size_t nObjNum)
     // call parent
     SdrObject* pRetval = SdrObjList::NbcRemoveObject(nObjNum);
 
-    Cleanup3DDepthMapper();
+    InvalidateBoundVolume();
+    StructureChanged();
 
     return pRetval;
 }
@@ -785,9 +791,10 @@ SdrObject* E3dScene::NbcRemoveObject(size_t nObjNum)
 SdrObject* E3dScene::RemoveObject(size_t nObjNum)
 {
     // call parent
-    SdrObject* pRetval = SdrObjList::RemoveObject(nObjNum);
+    SdrObject* pRetval(SdrObjList::RemoveObject(nObjNum));
 
-    Cleanup3DDepthMapper();
+    InvalidateBoundVolume();
+    StructureChanged();
 
     return pRetval;
 }
@@ -850,27 +857,6 @@ void E3dScene::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 SdrObjList* E3dScene::GetSubList() const
 {
     return const_cast< E3dScene* >(this);
-}
-
-void E3dScene::Insert3DObj(E3dObject* p3DObj)
-{
-    DBG_ASSERT(p3DObj, "Insert3DObj with NULL-pointer!");
-    InsertObject(p3DObj);
-    InvalidateBoundVolume();
-    NewObjectInserted(p3DObj);
-    StructureChanged();
-}
-
-void E3dScene::Remove3DObj(E3dObject const * p3DObj)
-{
-    DBG_ASSERT(p3DObj, "Remove3DObj with NULL-pointer!");
-
-    if(p3DObj->GetParentObj() == this)
-    {
-        RemoveObject(p3DObj->GetOrdNum());
-        InvalidateBoundVolume();
-        StructureChanged();
-    }
 }
 
 basegfx::B3DRange E3dScene::RecalcBoundVolume() const

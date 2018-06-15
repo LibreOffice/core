@@ -531,7 +531,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                             p3DObj->SetMergedItem(XFillBitmapItem(OUString(), Graphic(aFillBmp)));
                         }
                     }
-                    pScene->Insert3DObj( p3DObj );
+                    pScene->InsertObject( p3DObj );
                     p3DObj = new E3dExtrudeObj(
                         rSdrObjCustomShape.getSdrModelFromSdrObject(),
                         a3DDefaultAttr,
@@ -544,7 +544,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     p3DObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
-                    pScene->Insert3DObj( p3DObj );
+                    pScene->InsertObject( p3DObj );
 
                     // #i122777# depth 0 is okay for planes when using double-sided
                     p3DObj = new E3dExtrudeObj(
@@ -573,7 +573,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
                 }
-                pScene->Insert3DObj( p3DObj );
+                pScene->InsertObject( p3DObj );
                 bSceneHasObjects = true;
             }
         }
@@ -742,7 +742,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             for (std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() ); aObjectListIter != aPlaceholderObjectList.end(); )
             {
                 E3dCompoundObject* pTemp(*aObjectListIter++);
-                pScene->Remove3DObj( pTemp );
+                pScene->RemoveObject( pTemp->GetOrdNum() );
                 // always use SdrObject::Free(...) for SdrObjects (!)
                 SdrObject* pTemp2(pTemp);
                 SdrObject::Free(pTemp2);
