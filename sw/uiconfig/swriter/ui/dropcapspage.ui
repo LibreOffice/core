@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentFLD_DISTANCE">
     <property name="upper">2</property>
     <property name="step_increment">0.10000000000000001</property>
@@ -87,10 +86,10 @@
                       <object class="GtkLabel" id="labelFT_DROPCAPS">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes" context="dropcapspage|labelFT_DROPCAPS">Number of _characters:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinFLD_DROPCAPS</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -101,10 +100,10 @@
                       <object class="GtkLabel" id="labelTXT_LINES">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes" context="dropcapspage|labelTXT_LINES">_Lines:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinFLD_LINES</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -115,10 +114,10 @@
                       <object class="GtkLabel" id="labelTXT_DISTANCE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes" context="dropcapspage|labelTXT_DISTANCE">_Space to text:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinFLD_DISTANCE:0cm</property>
+                        <property name="mnemonic_widget">spinFLD_DISTANCE</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -130,6 +129,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentFLD_DROPCAPS</property>
                       </object>
                       <packing>
@@ -142,6 +142,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentFLD_LINES</property>
                       </object>
                       <packing>
@@ -150,10 +151,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinFLD_DISTANCE:0cm">
+                      <object class="GtkSpinButton" id="spinFLD_DISTANCE">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentFLD_DISTANCE</property>
                         <property name="digits">2</property>
                       </object>
@@ -204,10 +206,10 @@
                       <object class="GtkLabel" id="labelTXT_TEXT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes" context="dropcapspage|labelTXT_TEXT">_Text:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">entryEDT_TEXT</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -218,10 +220,10 @@
                       <object class="GtkLabel" id="labelTXT_TEMPLATE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes" context="dropcapspage|labelTXT_TEMPLATE">Character st_yle:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboBOX_TEMPLATE</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -233,6 +235,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="max_length">9</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -240,7 +243,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="comboBOX_TEMPLATE">
+                      <object class="GtkComboBoxText" id="comboBOX_TEMPLATE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -283,11 +286,28 @@
         <property name="vexpand">True</property>
         <property name="top_padding">24</property>
         <child>
-          <object class="swuilo-SwDropCapsPict" id="drawingareaWN_EXAMPLE">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="halign">center</property>
             <property name="valign">start</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="vscrollbar_policy">never</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkDrawingArea" id="drawingareaWN_EXAMPLE">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">start</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
@@ -312,7 +332,7 @@
     <widgets>
       <widget name="spinFLD_DROPCAPS"/>
       <widget name="spinFLD_LINES"/>
-      <widget name="spinFLD_DISTANCE:0cm"/>
+      <widget name="spinFLD_DISTANCE"/>
     </widgets>
   </object>
 </interface>
