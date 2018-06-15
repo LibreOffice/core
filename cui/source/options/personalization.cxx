@@ -420,6 +420,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     GraphicFilter aFilter;
     Graphic aGraphic;
     sal_Int32 nIndex = 0;
+    bool foundOne = false;
 
     while( aStream.IsOpen() && !aStream.eof() )
     {
@@ -439,7 +440,10 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         BitmapEx aBmp = aGraphic.GetBitmapEx();
         m_vDefaultPersonaImages[nIndex]->Show();
         m_vDefaultPersonaImages[nIndex++]->SetModeImage( Image( aBmp ) );
+        foundOne = true;
     }
+
+    m_pDefaultPersona->Enable(foundOne);
 }
 
 void SvxPersonalizationTabPage::LoadExtensionThemes()
