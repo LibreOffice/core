@@ -4487,13 +4487,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
                         ;   // nothing
                         break;
                     case '?':
-                        // erAck: 2008-04-03T16:24+0200
-                        // Actually this currently isn't executed
-                        // because the format scanner in the context of
-                        // "?," doesn't generate a group separator but
-                        // a literal ',' character instead that is
-                        // inserted unconditionally. Should be changed
-                        // on some occasion.
+                        // replace thousand separator with blank
                         sBuff.insert(k, ' ');
                         break;
                     default:
