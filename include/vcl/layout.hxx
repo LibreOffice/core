@@ -702,6 +702,7 @@ public:
         , m_pFactoryFunction(nullptr)
         , m_pUserData(nullptr)
     {
+        SetBackground();
     }
     void SetUITestFactory(FactoryFunction pFactoryFunction, void* pUserData)
     {
