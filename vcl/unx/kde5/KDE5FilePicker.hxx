@@ -86,8 +86,6 @@ public:
     explicit KDE5FilePicker(QFileDialog::FileMode);
     virtual ~KDE5FilePicker() override;
 
-    void enableFolderMode();
-
     // XFilePickerNotifier
     virtual void SAL_CALL addFilePickerListener(
         const css::uno::Reference<css::ui::dialogs::XFilePickerListener>& xListener) override;
