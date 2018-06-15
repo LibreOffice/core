@@ -42,40 +42,36 @@ const sal_uInt16 SwParagraphNumTabPage::aPageRg[] = {
     0
 };
 
-SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rAttr ) :
-    SfxTabPage(pParent, "NumParaPage", "modules/swriter/ui/numparapage.ui", &rAttr),
-
-    msOutlineNumbering( SwResId( STR_OUTLINE_NUMBERING ) ),
-    bModified(false),
-    bCurNumrule(false)
+SwParagraphNumTabPage::SwParagraphNumTabPage(TabPageParent pParent, const SfxItemSet& rAttr)
+    : SfxTabPage(pParent, "modules/swriter/ui/numparapage.ui", "NumParaPage", &rAttr)
+    , msOutlineNumbering(SwResId(STR_OUTLINE_NUMBERING ))
+    , bModified(false)
+    , bCurNumrule(false)
+    , m_xOutlineStartBX(m_xBuilder->weld_widget("boxOUTLINE"))
+    , m_xOutlineLvLB(m_xBuilder->weld_combo_box_text("comboLB_OUTLINE_LEVEL"))
+    , m_xNumberStyleBX(m_xBuilder->weld_widget("boxNUMBER_STYLE"))
+    , m_xNumberStyleLB(m_xBuilder->weld_combo_box_text("comboLB_NUMBER_STYLE"))
+    , m_xEditNumStyleBtn(m_xBuilder->weld_button("editnumstyle"))
+    , m_xNewStartCB(m_xBuilder->weld_check_button("checkCB_NEW_START"))
+    , m_xNewStartBX(m_xBuilder->weld_widget("boxNEW_START"))
+    , m_xNewStartNumberCB(m_xBuilder->weld_check_button("checkCB_NUMBER_NEW_START"))
+    , m_xNewStartNF(m_xBuilder->weld_spin_button("spinNF_NEW_START"))
+    , m_xCountParaFram(m_xBuilder->weld_widget("frameFL_COUNT_PARA"))
+    , m_xCountParaCB(m_xBuilder->weld_check_button("checkCB_COUNT_PARA"))
+    , m_xRestartParaCountCB(m_xBuilder->weld_check_button("checkCB_RESTART_PARACOUNT"))
+    , m_xRestartBX(m_xBuilder->weld_widget("boxRESTART_NO"))
+    , m_xRestartNF(m_xBuilder->weld_spin_button("spinNF_RESTART_PARA"))
 {
-    get(m_pOutlineStartBX,         "boxOUTLINE");
-    get(m_pOutlineLvLB,            "comboLB_OUTLINE_LEVEL");
+    m_xNewStartCB->set_state(TRISTATE_FALSE);
+    m_xNewStartNumberCB->set_state(TRISTATE_FALSE);
+    m_xCountParaCB->set_state(TRISTATE_FALSE);
+    m_xRestartParaCountCB->set_state(TRISTATE_FALSE);
 
-    get(m_pNumberStyleBX,          "boxNUMBER_STYLE");
-    get(m_pNumberStyleLB,          "comboLB_NUMBER_STYLE");
-    get(m_pEditNumStyleBtn,        "editnumstyle");
-    get(m_pNewStartBX,             "boxNEW_START");
-    get(m_pNewStartCB,             "checkCB_NEW_START");
-    m_pNewStartCB->SetState(TRISTATE_FALSE);
-    get(m_pNewStartNumberCB,       "checkCB_NUMBER_NEW_START");
-    m_pNewStartNumberCB->SetState(TRISTATE_FALSE);
-    get(m_pNewStartNF,             "spinNF_NEW_START");
-
-    get(m_pCountParaFram,          "frameFL_COUNT_PARA");
-    get(m_pCountParaCB,            "checkCB_COUNT_PARA");
-    m_pCountParaCB->SetState(TRISTATE_FALSE);
-    get(m_pRestartParaCountCB,     "checkCB_RESTART_PARACOUNT");
-    m_pRestartParaCountCB->SetState(TRISTATE_FALSE);
-
-    get(m_pRestartBX,              "boxRESTART_NO");
-    get(m_pRestartNF,              "spinNF_RESTART_PARA");
-
-    sal_Int32 numSelectPos = m_pNumberStyleLB->GetSelectedEntryPos();
-    if ( numSelectPos == 0 )
-        m_pEditNumStyleBtn->Disable();
+    int numSelectPos = m_xNumberStyleLB->get_active();
+    if (numSelectPos == 0)
+        m_xEditNumStyleBtn->set_sensitive(false);
     else
-        m_pEditNumStyleBtn->Enable();
+        m_xEditNumStyleBtn->set_sensitive(true);
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pObjSh;
@@ -86,53 +82,32 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
         const sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
         if (HTMLMODE_ON & nHtmlMode)
-            m_pCountParaFram->Hide();
+            m_xCountParaFram->hide();
     }
 
-    m_pNewStartCB->SetClickHdl(LINK(this, SwParagraphNumTabPage, NewStartHdl_Impl));
-    m_pNewStartNumberCB->SetClickHdl(LINK(this, SwParagraphNumTabPage, NewStartHdl_Impl));
-    m_pNumberStyleLB->SetSelectHdl(LINK(this, SwParagraphNumTabPage, StyleHdl_Impl));
-    m_pCountParaCB->SetClickHdl(LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
-    m_pRestartParaCountCB->SetClickHdl( LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
-    m_pNumberStyleLB->SetSelectHdl( LINK( this, SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl ) );
-    m_pEditNumStyleBtn->SetClickHdl( LINK(this, SwParagraphNumTabPage, EditNumStyleHdl_Impl));
+    m_xNewStartCB->connect_toggled(LINK(this, SwParagraphNumTabPage, NewStartHdl_Impl));
+    m_xNewStartNumberCB->connect_toggled(LINK(this, SwParagraphNumTabPage, NewStartHdl_Impl));
+    m_xNumberStyleLB->connect_changed(LINK(this, SwParagraphNumTabPage, StyleHdl_Impl));
+    m_xCountParaCB->connect_toggled(LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
+    m_xRestartParaCountCB->connect_toggled(LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
+    m_xNumberStyleLB->connect_changed(LINK(this, SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl));
+    m_xEditNumStyleBtn->connect_clicked(LINK(this, SwParagraphNumTabPage, EditNumStyleHdl_Impl));
 }
 
 SwParagraphNumTabPage::~SwParagraphNumTabPage()
 {
-    disposeOnce();
 }
 
-void SwParagraphNumTabPage::dispose()
+VclPtr<SfxTabPage> SwParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    m_pOutlineStartBX.clear();
-    m_pOutlineLvLB.clear();
-    m_pNumberStyleBX.clear();
-    m_pNumberStyleLB.clear();
-    m_pEditNumStyleBtn.clear();
-    m_pNewStartCB.clear();
-    m_pNewStartBX.clear();
-    m_pNewStartNumberCB.clear();
-    m_pNewStartNF.clear();
-    m_pCountParaFram.clear();
-    m_pCountParaCB.clear();
-    m_pRestartParaCountCB.clear();
-    m_pRestartBX.clear();
-    m_pRestartNF.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> SwParagraphNumTabPage::Create( TabPageParent pParent,
-                                                  const SfxItemSet* rSet )
-{
-    return VclPtr<SwParagraphNumTabPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwParagraphNumTabPage>::Create(pParent, *rSet);
 }
 
 bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if( m_pOutlineLvLB->IsValueChangedFromSaved())
+    if (m_xOutlineLvLB->get_value_changed_from_saved())
     {
-        const sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectedEntryPos();
+        const sal_uInt16 aOutlineLv = m_xOutlineLvLB->get_active();
         const SfxUInt16Item* pOldOutlineLv = static_cast<const SfxUInt16Item*>(GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL));
         if (pOldOutlineLv)
         {
@@ -144,11 +119,11 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
-    if( m_pNumberStyleLB->IsValueChangedFromSaved())
+    if (m_xNumberStyleLB->get_value_changed_from_saved())
     {
         OUString aStyle;
-        if(m_pNumberStyleLB->GetSelectedEntryPos())
-            aStyle = m_pNumberStyleLB->GetSelectedEntry();
+        if (m_xNumberStyleLB->get_active())
+            aStyle = m_xNumberStyleLB->get_active_text();
         const SfxStringItem* pOldRule = static_cast<const SfxStringItem*>(GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE));
         SfxStringItem* pRule = pOldRule ? static_cast<SfxStringItem*>(pOldRule->Clone()) : nullptr;
         if (pRule)
@@ -159,26 +134,26 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
             bModified = true;
         }
     }
-    if(m_pNewStartCB->IsValueChangedFromSaved() ||
-       m_pNewStartNumberCB->IsValueChangedFromSaved()||
-       m_pNewStartNF->IsValueChangedFromSaved())
+    if (m_xNewStartCB->get_state_changed_from_saved() ||
+        m_xNewStartNumberCB->get_state_changed_from_saved()||
+        m_xNewStartNF->get_value_changed_from_saved())
     {
         bModified = true;
-        bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
-        bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
+        bool bNewStartChecked = TRISTATE_TRUE == m_xNewStartCB->get_state();
+        bool bNumberNewStartChecked = TRISTATE_TRUE == m_xNewStartNumberCB->get_state();
         rSet->Put(SfxBoolItem(FN_NUMBER_NEWSTART, bNewStartChecked));
         rSet->Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
-                  bNumberNewStartChecked && bNewStartChecked ? static_cast<sal_uInt16>(m_pNewStartNF->GetValue()) : USHRT_MAX));
+                  bNumberNewStartChecked && bNewStartChecked ? static_cast<sal_uInt16>(m_xNewStartNF->get_value()) : USHRT_MAX));
     }
 
-    if(m_pCountParaCB->IsValueChangedFromSaved()||
-       m_pRestartParaCountCB->IsValueChangedFromSaved() ||
-       m_pRestartNF->IsValueChangedFromSaved() )
+    if (m_xCountParaCB->get_state_changed_from_saved()||
+        m_xRestartParaCountCB->get_state_changed_from_saved() ||
+        m_xRestartNF->get_value_changed_from_saved())
     {
         SwFormatLineNumber aFormat;
-        aFormat.SetStartValue( static_cast< sal_uLong >(m_pRestartParaCountCB->GetState() == TRISTATE_TRUE ?
-                                m_pRestartNF->GetValue() : 0 ));
-        aFormat.SetCountLines( m_pCountParaCB->IsChecked() );
+        aFormat.SetStartValue( static_cast< sal_uLong >(m_xRestartParaCountCB->get_state() == TRISTATE_TRUE ?
+                                m_xRestartNF->get_value() : 0 ));
+        aFormat.SetCountLines(m_xCountParaCB->get_active());
         rSet->Put(aFormat);
         bModified = true;
     }
@@ -187,15 +162,16 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SwParagraphNumTabPage::ChangesApplied()
 {
-    m_pOutlineLvLB->SaveValue();
-    m_pNumberStyleLB->SaveValue();
-    m_pNewStartCB->SaveValue();
-    m_pNewStartNumberCB->SaveValue();
-    m_pCountParaCB->SaveValue();
-    m_pRestartParaCountCB->SaveValue();
-    m_pRestartNF->SaveValue();
+    m_xOutlineLvLB->save_value();
+    m_xNumberStyleLB->save_value();
+    m_xNewStartCB->save_state();
+    m_xNewStartNumberCB->save_state();
+    m_xCountParaCB->save_state();
+    m_xRestartParaCountCB->save_state();
+    m_xRestartNF->save_value();
 }
-void    SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
+
+void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 {
     bool bHasNumberStyle = false;
 
@@ -205,13 +181,13 @@ void    SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
     if( eItemState >= SfxItemState::DEFAULT )
     {
         nOutlineLv = static_cast<const SfxUInt16Item &>(rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
-        m_pOutlineLvLB->SelectEntryPos( nOutlineLv ) ;
+        m_xOutlineLvLB->set_active(nOutlineLv) ;
     }
     else
     {
-        m_pOutlineLvLB->SetNoSelection();
+        m_xOutlineLvLB->set_active(-1);
     }
-    m_pOutlineLvLB->SaveValue();
+    m_xOutlineLvLB->save_value();
 
     eItemState = rSet->GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
 
@@ -219,26 +195,27 @@ void    SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
     {
         OUString aStyle = static_cast<const SfxStringItem &>(rSet->Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
         if(aStyle.isEmpty())
-            aStyle = m_pNumberStyleLB->GetEntry(0);
+            aStyle = m_xNumberStyleLB->get_text(0);
 
         if( aStyle == "Outline")
         {
-            m_pNumberStyleLB->InsertEntry( msOutlineNumbering );
-            m_pNumberStyleLB->SelectEntry( msOutlineNumbering );
-            m_pNumberStyleLB->RemoveEntry(msOutlineNumbering);
-            m_pNumberStyleLB->SaveValue();
+            //add it, select it, remove it ? do we really want set_active(-1) instead ?
+            m_xNumberStyleLB->append_text(msOutlineNumbering);
+            m_xNumberStyleLB->set_active_text(msOutlineNumbering);
+            m_xNumberStyleLB->remove_text(msOutlineNumbering);
+            m_xNumberStyleLB->save_value();
         }
         else
-            m_pNumberStyleLB->SelectEntry( aStyle );
+            m_xNumberStyleLB->set_active_text(aStyle);
 
         bHasNumberStyle = true;
     }
     else
     {
-        m_pNumberStyleLB->SetNoSelection();
+        m_xNumberStyleLB->set_active(-1);
     }
 
-    m_pNumberStyleLB->SaveValue();
+    m_xNumberStyleLB->save_value();
 
     eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART );
     if(eItemState > SfxItemState::DEFAULT )
@@ -246,99 +223,93 @@ void    SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
         bCurNumrule = true;
         const SfxBoolItem& rStart = static_cast<const SfxBoolItem&>(rSet->Get(FN_NUMBER_NEWSTART));
 
-        m_pNewStartCB->SetState(rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
-
-        m_pNewStartCB->EnableTriState(false);
+        m_xNewStartCB->set_state(rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
     else
-        m_pNewStartCB->SetState(bHasNumberStyle ? TRISTATE_FALSE : TRISTATE_INDET);
+        m_xNewStartCB->set_state(bHasNumberStyle ? TRISTATE_FALSE : TRISTATE_INDET);
 
-    m_pNewStartCB->SaveValue();
+    m_xNewStartCB->save_state();
 
     eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART_AT);
     if( eItemState > SfxItemState::DEFAULT )
     {
         const sal_uInt16 nNewStart = static_cast<const SfxUInt16Item&>(rSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
         const bool bNotMax = USHRT_MAX != nNewStart;
-        m_pNewStartNumberCB->Check(bNotMax);
-        m_pNewStartNF->SetValue(bNotMax ? nNewStart : 1);
-        m_pNewStartNumberCB->EnableTriState(false);
+        m_xNewStartNumberCB->set_active(bNotMax);
+        m_xNewStartNF->set_value(bNotMax ? nNewStart : 1);
     }
     else
-        m_pNewStartCB->SetState(TRISTATE_INDET);
-    NewStartHdl_Impl(m_pNewStartCB);
-    m_pNewStartNF->SaveValue();
-    m_pNewStartNumberCB->SaveValue();
-    StyleHdl_Impl(*m_pNumberStyleLB.get());
+        m_xNewStartCB->set_state(TRISTATE_INDET);
+    NewStartHdl_Impl(*m_xNewStartCB);
+    m_xNewStartNF->save_value();
+    m_xNewStartNumberCB->save_state();
+    StyleHdl_Impl(*m_xNumberStyleLB.get());
     if( SfxItemState::DEFAULT <= rSet->GetItemState(RES_LINENUMBER))
     {
         const SwFormatLineNumber& rNum = rSet->Get(RES_LINENUMBER);
         sal_uLong nStartValue = rNum.GetStartValue();
         bool bCount = rNum.IsCount();
-        m_pCountParaCB->SetState( bCount ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pRestartParaCountCB->SetState( 0 != nStartValue ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pRestartNF->SetValue(nStartValue == 0 ? 1 : nStartValue);
-        LineCountHdl_Impl(m_pCountParaCB);
-        m_pCountParaCB->EnableTriState(false);
-        m_pRestartParaCountCB->EnableTriState(false);
+        m_xCountParaCB->set_state(bCount ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xRestartParaCountCB->set_state(0 != nStartValue ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xRestartNF->set_value(nStartValue == 0 ? 1 : nStartValue);
+        LineCountHdl_Impl(*m_xCountParaCB);
     }
     else
     {
-        m_pCountParaCB->SetState(TRISTATE_INDET);
-        m_pRestartParaCountCB->SetState(TRISTATE_INDET);
+        m_xCountParaCB->set_state(TRISTATE_INDET);
+        m_xRestartParaCountCB->set_state(TRISTATE_INDET);
     }
-    m_pCountParaCB->SaveValue();
-    m_pRestartParaCountCB->SaveValue();
-    m_pRestartNF->SaveValue();
+    m_xCountParaCB->save_state();
+    m_xRestartParaCountCB->save_state();
+    m_xRestartNF->save_value();
 
     bModified = false;
 }
 
 void SwParagraphNumTabPage::DisableOutline()
 {
-    m_pOutlineStartBX->Disable();
+    m_xOutlineStartBX->set_sensitive(false);
 }
 
 void SwParagraphNumTabPage::DisableNumbering()
 {
-    m_pNumberStyleBX->Disable();
+    m_xNumberStyleBX->set_sensitive(false);
 }
 
 void SwParagraphNumTabPage::EnableNewStart()
 {
-    m_pNewStartCB->Show();
-    m_pNewStartBX->Show();
+    m_xNewStartCB->show();
+    m_xNewStartBX->show();
 }
 
-IMPL_LINK_NOARG(SwParagraphNumTabPage, NewStartHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwParagraphNumTabPage, NewStartHdl_Impl, weld::ToggleButton&, void)
 {
-    bool bEnable = m_pNewStartCB->IsChecked();
-    m_pNewStartNumberCB->Enable(bEnable);
-    m_pNewStartNF->Enable(bEnable && m_pNewStartNumberCB->IsChecked());
+    bool bEnable = m_xNewStartCB->get_active();
+    m_xNewStartNumberCB->set_sensitive(bEnable);
+    m_xNewStartNF->set_sensitive(bEnable && m_xNewStartNumberCB->get_active());
 }
 
-
-IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl, weld::ToggleButton&, void)
 {
-    m_pRestartParaCountCB->Enable(m_pCountParaCB->IsChecked());
+    m_xRestartParaCountCB->set_sensitive(m_xCountParaCB->get_active());
 
-    bool bEnableRestartValue = m_pRestartParaCountCB->IsEnabled() &&
-                               m_pRestartParaCountCB->IsChecked();
-    m_pRestartBX->Enable(bEnableRestartValue);
+    bool bEnableRestartValue = m_xRestartParaCountCB->get_sensitive() &&
+                               m_xRestartParaCountCB->get_active();
+    m_xRestartBX->set_sensitive(bEnableRestartValue);
 }
 
-IMPL_LINK_NOARG( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, ListBox&, void )
+IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, weld::ComboBoxText&, void)
 {
-    sal_Int32 numSelectPos = m_pNumberStyleLB->GetSelectedEntryPos();
-    if ( numSelectPos == 0 )
-        m_pEditNumStyleBtn->Disable();
+    int numSelectPos = m_xNumberStyleLB->get_active();
+    if (numSelectPos == 0)
+        m_xEditNumStyleBtn->set_sensitive(false);
     else
-        m_pEditNumStyleBtn->Enable();
+        m_xEditNumStyleBtn->set_sensitive(true);
 }
 
-IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl, weld::Button&, void)
 {
-    OUString aTemplName(m_pNumberStyleLB->GetSelectedEntry());
+    OUString aTemplName(m_xNumberStyleLB->get_active_text());
     ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, SfxStyleFamily::Pseudo );
 }
 
@@ -366,11 +337,11 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
 
 }
 
-IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK(SwParagraphNumTabPage, StyleHdl_Impl, weld::ComboBoxText&, rBox, void)
 {
-    bool bEnable = bCurNumrule || rBox.GetSelectedEntryPos() > 0;
-    m_pNewStartCB->Enable(bEnable);
-    NewStartHdl_Impl(m_pNewStartCB);
+    bool bEnable = bCurNumrule || rBox.get_active() > 0;
+    m_xNewStartCB->set_sensitive(bEnable);
+    NewStartHdl_Impl(*m_xNewStartCB);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
