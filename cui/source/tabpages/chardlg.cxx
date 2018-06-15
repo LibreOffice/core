@@ -69,6 +69,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/flagsdef.hxx>
+#include <FontFeaturesDialog.hxx>
 
 using namespace ::com::sun::star;
 
@@ -302,6 +303,8 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
         get(m_pWestFontLanguageFT, "westlangft-cjk");
         get(m_pWestFontLanguageLB, "westlanglb-cjk");
         get(m_pWestFontTypeFT, "westfontinfo-cjk");
+
+        get(m_pWestFontFeaturesButton, "west_features_button-cjk");
     }
     else
     {
@@ -328,6 +331,7 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
     get(m_pEastFontLanguageFT, "eastlangft");
     get(m_pEastFontLanguageLB, "eastlanglb");
     get(m_pEastFontTypeFT, "eastfontinfo");
+    get(m_pEastFontFeaturesButton, "east_features_button");
 
     get(m_pCTLFrame, "ctl");
     get(m_pCTLFontNameFT, "ctlfontnameft");
@@ -339,6 +343,7 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
     get(m_pCTLFontLanguageFT, "ctllangft");
     get(m_pCTLFontLanguageLB, "ctllanglb");
     get(m_pCTLFontTypeFT, "ctlfontinfo");
+    get(m_pCTLFontFeaturesButton, "ctl_features_button");
 
     //In MacOSX the standard dialogs name font-name, font-style as
     //Family, Typeface
@@ -404,6 +409,7 @@ void SvxCharNamePage::dispose()
     m_pWestFontSizeLB.clear();
     m_pWestFontLanguageFT.clear();
     m_pWestFontLanguageLB.clear();
+    m_pWestFontFeaturesButton.clear();
     m_pWestFontTypeFT.clear();
     m_pEastFrame.clear();
     m_pEastFontNameFT.clear();
@@ -415,6 +421,7 @@ void SvxCharNamePage::dispose()
     m_pEastFontLanguageFT.clear();
     m_pEastFontLanguageLB.clear();
     m_pEastFontTypeFT.clear();
+    m_pEastFontFeaturesButton.clear();
     m_pCTLFrame.clear();
     m_pCTLFontNameFT.clear();
     m_pCTLFontNameLB.clear();
@@ -425,6 +432,8 @@ void SvxCharNamePage::dispose()
     m_pCTLFontLanguageFT.clear();
     m_pCTLFontLanguageLB.clear();
     m_pCTLFontTypeFT.clear();
+    m_pCTLFontFeaturesButton.clear();
+
     SvxCharBasePage::dispose();
 }
 
@@ -438,14 +447,20 @@ void SvxCharNamePage::Initialize()
     m_pWestFontStyleLB->SetModifyHdl( aLink );
     m_pWestFontSizeLB->SetModifyHdl( aLink );
     m_pWestFontLanguageLB->SetSelectHdl( LINK( this, SvxCharNamePage, FontModifyComboBoxHdl_Impl ) );
+
+    m_pWestFontFeaturesButton->SetClickHdl(LINK(this, SvxCharNamePage, FontFeatureButtonClicked));
+
     m_pEastFontNameLB->SetModifyHdl( aLink );
     m_pEastFontStyleLB->SetModifyHdl( aLink );
     m_pEastFontSizeLB->SetModifyHdl( aLink );
     m_pEastFontLanguageLB->SetSelectHdl( LINK( this, SvxCharNamePage, FontModifyListBoxHdl_Impl ) );
+    m_pEastFontFeaturesButton->SetClickHdl(LINK(this, SvxCharNamePage, FontFeatureButtonClicked));
+
     m_pCTLFontNameLB->SetModifyHdl( aLink );
     m_pCTLFontStyleLB->SetModifyHdl( aLink );
     m_pCTLFontSizeLB->SetModifyHdl( aLink );
     m_pCTLFontLanguageLB->SetSelectHdl( LINK( this, SvxCharNamePage, FontModifyListBoxHdl_Impl ) );
+    m_pCTLFontFeaturesButton->SetClickHdl(LINK(this, SvxCharNamePage, FontFeatureButtonClicked));
 
     m_pImpl->m_aUpdateIdle.SetInvokeHandler( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
 }
@@ -1185,6 +1200,38 @@ IMPL_LINK( SvxCharNamePage, FontModifyEditHdl_Impl, Edit&, rBox, void )
 {
     FontModifyHdl_Impl(&rBox);
 }
+IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, Button*, pButton, void )
+{
+    OUString sFontName;
+    FontNameBox * pNameBox = nullptr;
+
+    if (pButton == m_pWestFontFeaturesButton.get())
+    {
+        pNameBox = m_pWestFontNameLB;
+        sFontName = GetPreviewFont().GetFamilyName();
+    }
+    else if (pButton == m_pEastFontFeaturesButton.get())
+    {
+        pNameBox = m_pEastFontNameLB;
+        sFontName = GetPreviewCJKFont().GetFamilyName();
+    }
+    else if (pButton == m_pCTLFontFeaturesButton.get())
+    {
+        pNameBox = m_pCTLFontNameLB;
+        sFontName = GetPreviewCTLFont().GetFamilyName();
+    }
+
+    if (!sFontName.isEmpty() && pNameBox)
+    {
+        ScopedVclPtrInstance<cui::FontFeaturesDialog> pDialog(this, sFontName);
+        if (pDialog->Execute() == RET_OK)
+        {
+            pNameBox->SetText(pDialog->getResultFontName());
+            UpdatePreview_Impl();
+        }
+    }
+}
+
 void SvxCharNamePage::FontModifyHdl_Impl(void const * pNameBox)
 {
     m_pImpl->m_aUpdateIdle.Start();

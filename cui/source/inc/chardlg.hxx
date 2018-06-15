@@ -27,6 +27,7 @@
 #include <svx/langbox.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/button.hxx>
 #include <memory>
 
 // forward ---------------------------------------------------------------
@@ -109,6 +110,7 @@ private:
     VclPtr<FixedText>          m_pWestFontLanguageFT;
     VclPtr<SvxLanguageComboBox> m_pWestFontLanguageLB;
     VclPtr<FixedText>          m_pWestFontTypeFT;
+    VclPtr<PushButton>         m_pWestFontFeaturesButton;
 
     VclPtr<VclContainer>       m_pEastFrame;
     VclPtr<FixedText>          m_pEastFontNameFT;
@@ -120,6 +122,7 @@ private:
     VclPtr<FixedText>          m_pEastFontLanguageFT;
     VclPtr<SvxLanguageBox>     m_pEastFontLanguageLB;
     VclPtr<FixedText>          m_pEastFontTypeFT;
+    VclPtr<PushButton>         m_pEastFontFeaturesButton;
 
     VclPtr<VclContainer>       m_pCTLFrame;
     VclPtr<FixedText>          m_pCTLFontNameFT;
@@ -131,6 +134,7 @@ private:
     VclPtr<FixedText>          m_pCTLFontLanguageFT;
     VclPtr<SvxLanguageBox>     m_pCTLFontLanguageLB;
     VclPtr<FixedText>          m_pCTLFontTypeFT;
+    VclPtr<PushButton>         m_pCTLFontFeaturesButton;
 
     std::unique_ptr<SvxCharNamePage_Impl>   m_pImpl;
 
@@ -164,6 +168,8 @@ private:
     DECL_LINK( FontModifyEditHdl_Impl, Edit&, void );
     DECL_LINK( FontModifyListBoxHdl_Impl, ListBox&, void );
     DECL_LINK( FontModifyComboBoxHdl_Impl, ComboBox&, void );
+    DECL_LINK(FontFeatureButtonClicked, Button*, void);
+
     void FontModifyHdl_Impl(void const *);
 
 public:
