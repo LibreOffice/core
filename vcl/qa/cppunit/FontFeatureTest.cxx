@@ -10,8 +10,9 @@
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
-#include <vcl/font/Feature.hxx>
 
+#include <vcl/font/Feature.hxx>
+#include <vcl/font/FeatureParser.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 
@@ -24,9 +25,11 @@ public:
     }
 
     void testGetFontFeatures();
+    void testParseFeature();
 
     CPPUNIT_TEST_SUITE(FontFeatureTest);
     CPPUNIT_TEST(testGetFontFeatures);
+    CPPUNIT_TEST(testParseFeature);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -100,6 +103,70 @@ void FontFeatureTest::testGetFontFeatures()
             = rFracFeatureDefinition.getEnumParameters()[1];
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), rParameter2.getCode());
         CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
+    }
+}
+
+void FontFeatureTest::testParseFeature()
+{
+    { // No font features specified
+        vcl::font::FeatureParser aParser("Font name with no features");
+        CPPUNIT_ASSERT_EQUAL(size_t(0), aParser.getFeatures().size());
+    }
+    { // One feature specified, no value
+        vcl::font::FeatureParser aParser("Font name:abcd");
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aParser.getFeatures().size());
+        auto aFeatures = aParser.getFeatures();
+
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("abcd"), aFeatures[0].first);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aFeatures[0].second);
+    }
+    { // One feature specified, explicit value
+        vcl::font::FeatureParser aParser("Font name:abcd=5");
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aParser.getFeatures().size());
+        auto aFeatures = aParser.getFeatures();
+
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("abcd"), aFeatures[0].first);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aFeatures[0].second);
+    }
+    { // Multiple features specified, no values
+        vcl::font::FeatureParser aParser("Font name:abcd&bcde&efgh");
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aParser.getFeatures().size());
+        auto aFeatures = aParser.getFeatures();
+
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("abcd"), aFeatures[0].first);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aFeatures[0].second);
+
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("bcde"), aFeatures[1].first);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aFeatures[1].second);
+
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("efgh"), aFeatures[2].first);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aFeatures[2].second);
+    }
+    {
+        // Multiple features specified, explicit values
+        // Only 4 char parameter names supported - "toolong" is too long and igoned
+        // If value is 0, it should be also ignored
+        vcl::font::FeatureParser aParser("Font name:abcd=1&bcde=0&toolong=1&cdef=3");
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aParser.getFeatures().size());
+        auto aFeatures = aParser.getFeatures();
+
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("abcd"), aFeatures[0].first);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aFeatures[0].second);
+
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("cdef"), aFeatures[1].first);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aFeatures[1].second);
+    }
+    {
+        // Special case - "lang" is parsed specially and access separately not as a feature.
+
+        vcl::font::FeatureParser aParser("Font name:abcd=1&lang=slo");
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aParser.getFeatures().size());
+        auto aFeatures = aParser.getFeatures();
+
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("abcd"), aFeatures[0].first);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aFeatures[0].second);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("slo"), aParser.getLanguage());
     }
 }
 
