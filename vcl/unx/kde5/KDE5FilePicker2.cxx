@@ -94,7 +94,14 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
         QStringLiteral("webdavs"),
         QStringLiteral("smb"),
     });
+
     _dialog->setFileMode(eMode);
+
+    if (eMode == QFileDialog::Directory)
+    {
+        _dialog->setOption(QFileDialog::ShowDirsOnly, true);
+        _dialog->setWindowTitle(toQString(VclResId(STR_FPICKER_FOLDER_DEFAULT_TITLE)));
+    }
 
     setMultiSelectionMode(false);
 

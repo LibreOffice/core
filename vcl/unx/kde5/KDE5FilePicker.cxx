@@ -34,12 +34,6 @@
 
 // KDE5FilePicker
 
-void KDE5FilePicker::enableFolderMode()
-{
-    _dialog->setOption(QFileDialog::ShowDirsOnly, true);
-    _dialog->setFileMode(QFileDialog::Directory);
-}
-
 KDE5FilePicker::~KDE5FilePicker()
 {
     delete _extraControls;
