@@ -55,32 +55,30 @@ public:
 
 class SwCharURLPage : public SfxTabPage
 {
-    VclPtr<Edit>               m_pURLED;
-    VclPtr<FixedText>          m_pTextFT;
-    VclPtr<Edit>               m_pTextED;
-    VclPtr<Edit>               m_pNameED;
-    VclPtr<ComboBox>           m_pTargetFrameLB;
-    VclPtr<PushButton>         m_pURLPB;
-    VclPtr<PushButton>         m_pEventPB;
-    VclPtr<ListBox>            m_pVisitedLB;
-    VclPtr<ListBox>            m_pNotVisitedLB;
-
-    VclPtr<VclContainer>       m_pCharStyleContainer;
-
     SvxMacroItem*       pINetItem;
     bool                bModified;
 
-    DECL_LINK(InsertFileHdl, Button*, void);
-    DECL_LINK(EventHdl, Button*, void);
+    std::unique_ptr<weld::Entry> m_xURLED;
+    std::unique_ptr<weld::Label> m_xTextFT;
+    std::unique_ptr<weld::Entry> m_xTextED;
+    std::unique_ptr<weld::Entry> m_xNameED;
+    std::unique_ptr<weld::ComboBoxText> m_xTargetFrameLB;
+    std::unique_ptr<weld::Button> m_xURLPB;
+    std::unique_ptr<weld::Button> m_xEventPB;
+    std::unique_ptr<weld::ComboBoxText> m_xVisitedLB;
+    std::unique_ptr<weld::ComboBoxText> m_xNotVisitedLB;
+    std::unique_ptr<weld::Widget> m_xCharStyleContainer;
+
+    DECL_LINK(InsertFileHdl, weld::Button&, void);
+    DECL_LINK(EventHdl, weld::Button&, void);
 
 public:
-                        SwCharURLPage( vcl::Window* pParent,
-                                           const SfxItemSet& rSet );
+    SwCharURLPage(TabPageParent pParent, const SfxItemSet& rSet);
 
-                        virtual ~SwCharURLPage() override;
-    virtual void        dispose() override;
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
-                                      const SfxItemSet* rAttrSet);
+    virtual ~SwCharURLPage() override;
+    virtual void dispose() override;
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent,
+                                     const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
