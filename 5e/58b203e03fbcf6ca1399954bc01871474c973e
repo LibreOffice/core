@@ -1,0 +1,9 @@
+Code-Review+1: Adolfo Jayme Barrientos <fitojb@ubuntu.com>
+Code-Review+1: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Code-Review+2: Stephan Bergmann <sbergman@redhat.com>
+Verified+1: Jenkins
+Submitted-by: Stephan Bergmann <sbergman@redhat.com>
+Submitted-at: Fri, 15 Jun 2018 23:12:39 +0200
+Reviewed-on: https://gerrit.libreoffice.org/55880
+Project: core
+Branch: refs/heads/libreoffice-6-1
