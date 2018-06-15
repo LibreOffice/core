@@ -16,6 +16,24 @@
       "revId": "b6c77ba63aa6b23b181ecaaacf7c791d0127b8ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_a290feed",
+        "filename": "sc/source/core/data/global.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2018-06-15T15:40:37Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027s necessary. Cleanup is called from the main thread when no other thread should be touching it. It\u0027s the on-demand creation that needs protection.",
+      "parentUuid": "5a22e58a_223a4e37",
+      "revId": "b6c77ba63aa6b23b181ecaaacf7c791d0127b8ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
