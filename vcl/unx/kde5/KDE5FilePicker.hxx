@@ -78,8 +78,6 @@ protected:
     //layout for extra custom controls
     QGridLayout* _layout;
 
-    sal_uIntPtr _winId;
-
     bool allowRemoteUrls;
 
 public:
@@ -139,8 +137,6 @@ public:
 
     // XFilePicker2 functions
     virtual css::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
-
-    void setWinId(sal_uIntPtr winId);
 
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
