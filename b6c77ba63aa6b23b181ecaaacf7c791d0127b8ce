@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_223a4e37",
+        "filename": "sc/source/core/data/global.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-15T14:54:01Z",
+      "side": 1,
+      "message": "if you want to delete this atomically, you\u0027re going to need something like:\n   auto p \u003d var.load();\n   if (p \u0026\u0026 var.compare_exchange_strong(p, nullptr))\n       delete p;\notherwise, you could in theory do a double-delete.",
+      "revId": "b6c77ba63aa6b23b181ecaaacf7c791d0127b8ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
