@@ -121,20 +121,12 @@ void IdlAttributeFieldImpl::release() throw()
 
 Sequence< Type > IdlAttributeFieldImpl::getTypes()
 {
-    static ::cppu::OTypeCollection * s_pTypes = nullptr;
-    if (! s_pTypes)
-    {
-        ::osl::MutexGuard aGuard( getMutexAccess() );
-        if (! s_pTypes)
-        {
-            static ::cppu::OTypeCollection s_aTypes(
-                cppu::UnoType<XIdlField2>::get(),
-                cppu::UnoType<XIdlField>::get(),
-                IdlMemberImpl::getTypes() );
-            s_pTypes = &s_aTypes;
-        }
-    }
-    return s_pTypes->getTypes();
+    static cppu::OTypeCollection s_aTypes(
+        cppu::UnoType<XIdlField2>::get(),
+        cppu::UnoType<XIdlField>::get(),
+        IdlMemberImpl::getTypes() );
+
+    return s_aTypes.getTypes();
 }
 
 Sequence< sal_Int8 > IdlAttributeFieldImpl::getImplementationId()
@@ -383,19 +375,11 @@ void IdlInterfaceMethodImpl::release() throw()
 
 Sequence< Type > IdlInterfaceMethodImpl::getTypes()
 {
-    static ::cppu::OTypeCollection * s_pTypes = nullptr;
-    if (! s_pTypes)
-    {
-        ::osl::MutexGuard aGuard( getMutexAccess() );
-        if (! s_pTypes)
-        {
-            static ::cppu::OTypeCollection s_aTypes(
-                cppu::UnoType<XIdlMethod>::get(),
-                IdlMemberImpl::getTypes() );
-            s_pTypes = &s_aTypes;
-        }
-    }
-    return s_pTypes->getTypes();
+    static cppu::OTypeCollection s_aTypes(
+        cppu::UnoType<XIdlMethod>::get(),
+        IdlMemberImpl::getTypes() );
+
+    return s_aTypes.getTypes();
 }
 
 Sequence< sal_Int8 > IdlInterfaceMethodImpl::getImplementationId()

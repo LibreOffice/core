@@ -52,19 +52,11 @@ void ArrayIdlClassImpl::release() throw()
 
 Sequence< Type > ArrayIdlClassImpl::getTypes()
 {
-    static ::cppu::OTypeCollection * s_pTypes = nullptr;
-    if (! s_pTypes)
-    {
-        ::osl::MutexGuard aGuard( getMutexAccess() );
-        if (! s_pTypes)
-        {
-            static ::cppu::OTypeCollection s_aTypes(
-                cppu::UnoType<XIdlArray>::get(),
-                IdlClassImpl::getTypes() );
-            s_pTypes = &s_aTypes;
-        }
-    }
-    return s_pTypes->getTypes();
+    static cppu::OTypeCollection s_aTypes(
+        cppu::UnoType<XIdlArray>::get(),
+        IdlClassImpl::getTypes() );
+
+    return s_aTypes.getTypes();
 }
 
 Sequence< sal_Int8 > ArrayIdlClassImpl::getImplementationId()

@@ -82,21 +82,13 @@ void IdlReflectionServiceImpl::release() throw()
 
 Sequence< Type > IdlReflectionServiceImpl::getTypes()
 {
-    static OTypeCollection * s_pTypes = nullptr;
-    if (! s_pTypes)
-    {
-        MutexGuard aGuard( _aComponentMutex );
-        if (! s_pTypes)
-        {
-            static OTypeCollection s_aTypes(
-                cppu::UnoType<XIdlReflection>::get(),
-                cppu::UnoType<XHierarchicalNameAccess>::get(),
-                cppu::UnoType<XServiceInfo>::get(),
-                OComponentHelper::getTypes() );
-            s_pTypes = &s_aTypes;
-        }
-    }
-    return s_pTypes->getTypes();
+    static OTypeCollection s_aTypes(
+        cppu::UnoType<XIdlReflection>::get(),
+        cppu::UnoType<XHierarchicalNameAccess>::get(),
+        cppu::UnoType<XServiceInfo>::get(),
+        OComponentHelper::getTypes() );
+
+    return s_aTypes.getTypes();
 }
 
 Sequence< sal_Int8 > IdlReflectionServiceImpl::getImplementationId()
