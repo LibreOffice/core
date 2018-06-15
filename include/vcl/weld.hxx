@@ -255,6 +255,7 @@ public:
     virtual void remove(int pos) = 0;
     void remove_text(const OUString& rText) { remove(find_text(rText)); }
     virtual int find_text(const OUString& rStr) const = 0;
+    void remove_id(const OUString& rId) { remove(find_id(rId)); }
     virtual int find_id(const OUString& rId) const = 0;
     virtual int get_count() const = 0;
     virtual void make_sorted() = 0;
