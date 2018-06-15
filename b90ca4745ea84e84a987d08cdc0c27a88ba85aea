@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_c2789afb",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1001838
+      },
+      "writtenOn": "2018-06-15T15:08:15Z",
+      "side": 1,
+      "message": "This might not be right, will look into further and fix.",
+      "range": {
+        "startLine": 2893,
+        "startChar": 0,
+        "endLine": 2893,
+        "endChar": 50
+      },
+      "revId": "b90ca4745ea84e84a987d08cdc0c27a88ba85aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
