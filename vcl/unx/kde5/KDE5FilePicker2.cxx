@@ -82,7 +82,6 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     , _dialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , _extraControls(new QWidget)
     , _layout(new QGridLayout(_extraControls))
-    , _winId(0)
     , allowRemoteUrls(false)
 {
     _dialog->setSupportedSchemes({
