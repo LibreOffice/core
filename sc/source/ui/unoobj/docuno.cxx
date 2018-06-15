@@ -276,7 +276,7 @@ ScPrintUIOptions::ScPrintUIOptions()
     // show Subgroup for print content
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", ScResId( SCSTR_PRINTOPT_PRNTCONTENT ),
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", ScResId( SCSTR_PRINTOPT_PAGES ),
                                                       OUString(),
                                                       aPrintRangeOpt);
 
@@ -286,14 +286,8 @@ ScPrintUIOptions::ScPrintUIOptions()
         ScResId( SCSTR_PRINTOPT_SELECTEDSHEETS ),
         ScResId( SCSTR_PRINTOPT_SELECTEDCELLS )};
     uno::Sequence< OUString > aHelpIds{
-        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
-        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1",
-        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"};
-    uno::Sequence< OUString > aWidgetIds{
-        "printallsheets",
-        "printselectedsheets",
-        "printselectedcells"};
-    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
+        ".HelpID:vcl:PrintDialog:PrintContent:ListBox"};
+    m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( "printpagesbox", OUString(),
                                                     aHelpIds, "PrintContent",
                                                     aChoices, nContent );
 
@@ -306,15 +300,11 @@ ScPrintUIOptions::ScPrintUIOptions()
     // create a choice for the range to print
     OUString aPrintRangeName( "PrintRange" );
     aChoices.realloc( 2 );
-    aHelpIds.realloc( 2 );
-    aWidgetIds.realloc( 2 );
-    aChoices[0] = ScResId( SCSTR_PRINTOPT_ALLPAGES );
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0";
-    aWidgetIds[0] = "printallpages";
-    aChoices[1] = ScResId( SCSTR_PRINTOPT_PAGES_ );
-    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1";
-    aWidgetIds[1] = "printpages";
-    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
+    aHelpIds.realloc( 1 );
+    aChoices[0] = ScResId( SCSTR_PRINTOPT_PRINTALLPAGES );
+    aChoices[1] = ScResId( SCSTR_PRINTOPT_PRINTPAGES );
+    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:ListBox";
+    m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( "printextrabox", OUString(),
                                                     aHelpIds,
                                                     aPrintRangeName,
                                                     aChoices,

@@ -573,21 +573,10 @@ namespace {
             aPrintRangeOpt.mbInternalOnly = true;
             aPrintRangeOpt.maGroupHint = "PrintRange" ;
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("printrange",
-                                SdResId(STR_IMPRESS_PRINT_UI_PAGE_RANGE),
+                                mbImpress ? SdResId(STR_IMPRESS_PRINT_UI_SLIDE_RANGE) : SdResId(STR_IMPRESS_PRINT_UI_PAGE_RANGE),
                                 "",
                                 aPrintRangeOpt )
                              );
-
-            // create a choice for the content to create
-            OUString aPrintRangeName( "PrintContent" );
-            aHelpIds.realloc( 3 );
-            aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ;
-            aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ;
-            aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ;
-            aWidgetIds.realloc( 3 );
-            aWidgetIds[0] = "printallpages";
-            aWidgetIds[1] = "printpages";
-            aWidgetIds[2] = "printselection";
 
             // check if there is a selection of slides
             OUString aPageRange(OUString::number(mnCurPage + 1));
@@ -611,18 +600,19 @@ namespace {
                             aBuf.append(',');
                         aBuf.append(OUString::number(pPage->GetPageNum() / 2 + 1));
                     }
-                    aPageRange = aBuf.getStr();
                     nPrintRange = 1;
                 }
             }
 
-            AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(aWidgetIds, "",
-                                aHelpIds,
-                                aPrintRangeName,
-                                mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE)) :
-                                            CreateChoice(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE)),
-                                nPrintRange )
-                            );
+            OUString aPrintRangeName( "PrintContent" );
+            aHelpIds.realloc( 1 );
+            aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox";
+            AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt( "printpagesbox", OUString(),
+                                aHelpIds, aPrintRangeName,
+                                mbImpress ? CreateChoice( STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE ) ) :
+                                            CreateChoice( STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE ) ),
+                                nPrintRange ) );
+
             // create a an Edit dependent on "Pages" selected
             vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
             AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("pagerange", "",
