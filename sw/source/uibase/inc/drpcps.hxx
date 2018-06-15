@@ -19,18 +19,20 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DRPCPS_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DRPCPS_HXX
 
+#include <editeng/svxfont.hxx>
+
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/printer.hxx>
 
 #include <vcl/button.hxx>
-
 #include <vcl/fixed.hxx>
-
 #include <vcl/field.hxx>
-
 #include <vcl/edit.hxx>
-
 #include <vcl/lstbox.hxx>
+#include <vcl/customweld.hxx>
+
+#include <com/sun/star/i18n/BreakIterator.hpp>
 
 class SwWrtShell;
 
@@ -40,25 +42,83 @@ public:
     SwDropCapsDlg(vcl::Window *pParent, const SfxItemSet &rSet );
 };
 
-class SwDropCapsPict;
+class SwDropCapsPage;
+
+class SwDropCapsPict : public weld::CustomWidgetController
+{
+    VclPtr<SwDropCapsPage> mpPage;
+    OUString        maText;
+    OUString        maScriptText;
+    Color           maBackColor;
+    Color           maTextLineColor;
+    sal_uInt8       mnLines;
+    long            mnTotLineH;
+    long            mnLineH;
+    long            mnTextH;
+    sal_uInt16      mnDistance;
+    VclPtr<Printer> mpPrinter;
+    bool            mbDelPrinter;
+    /// The ScriptInfo structure holds information on where we change from one
+    /// script to another.
+    struct ScriptInfo
+    {
+        sal_uLong  textWidth;   ///< Physical width of this segment.
+        sal_uInt16 scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
+        sal_Int32 changePos;   ///< Character position where the script changes.
+        ScriptInfo(sal_uInt16 scrptType, sal_Int32 position)
+            : textWidth(0), scriptType(scrptType), changePos(position) {}
+    };
+    std::vector<ScriptInfo> maScriptChanges;
+    SvxFont         maFont;
+    SvxFont         maCJKFont;
+    SvxFont         maCTLFont;
+    Size            maTextSize;
+    css::uno::Reference< css::i18n::XBreakIterator >   xBreak;
+
+    virtual void    Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle &rRect) override;
+    void            CheckScript();
+    Size            CalcTextSize();
+    inline void     InitPrinter();
+    void            InitPrinter_();
+    static void     GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich );
+    void            GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
+    bool            GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
+
+public:
+
+    SwDropCapsPict()
+        : mpPage(nullptr)
+        , mnLines(0)
+        , mnTotLineH(0)
+        , mnLineH(0)
+        , mnTextH(0)
+        , mnDistance(0)
+        , mpPrinter(nullptr)
+        , mbDelPrinter(false)
+    {}
+
+    void SetDropCapsPage(SwDropCapsPage* pPage) { mpPage = pPage; }
+
+    virtual ~SwDropCapsPict() override;
+
+    void UpdatePaintSettings();       // also invalidates control!
+
+    virtual void Resize() override;
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
+    void SetText( const OUString& rT );
+    void SetLines( sal_uInt8 nL );
+    void SetDistance( sal_uInt16 nD );
+    void SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance );
+
+    void DrawPrev(vcl::RenderContext& rRenderContext, const Point& rPt);
+};
 
 class SwDropCapsPage : public SfxTabPage
 {
 friend class SwDropCapsPict;
-    VclPtr<CheckBox>        m_pDropCapsBox;
-    VclPtr<CheckBox>        m_pWholeWordCB;
-    VclPtr<FixedText>       m_pSwitchText;
-    VclPtr<NumericField>    m_pDropCapsField;
-    VclPtr<FixedText>       m_pLinesText;
-    VclPtr<NumericField>    m_pLinesField;
-    VclPtr<FixedText>       m_pDistanceText;
-    VclPtr<MetricField>     m_pDistanceField;
-    VclPtr<FixedText>       m_pTextText;
-    VclPtr<Edit>            m_pTextEdit;
-    VclPtr<FixedText>       m_pTemplateText;
-    VclPtr<ListBox>         m_pTemplateBox;
-
-    VclPtr<SwDropCapsPict>  m_pPict;
+    SwDropCapsPict  m_aPict;
 
     bool          bModified;
     bool          bFormat;
@@ -66,13 +126,31 @@ friend class SwDropCapsPict;
 
     SwWrtShell &rSh;
 
+    std::unique_ptr<weld::CheckButton> m_xDropCapsBox;
+    std::unique_ptr<weld::CheckButton> m_xWholeWordCB;
+    std::unique_ptr<weld::Label> m_xSwitchText;
+    std::unique_ptr<weld::SpinButton> m_xDropCapsField;
+    std::unique_ptr<weld::Label> m_xLinesText;
+    std::unique_ptr<weld::SpinButton> m_xLinesField;
+    std::unique_ptr<weld::Label> m_xDistanceText;
+    std::unique_ptr<weld::MetricSpinButton> m_xDistanceField;
+    std::unique_ptr<weld::Label> m_xTextText;
+    std::unique_ptr<weld::Entry> m_xTextEdit;
+    std::unique_ptr<weld::Label> m_xTemplateText;
+    std::unique_ptr<weld::ComboBoxText> m_xTemplateBox;
+    std::unique_ptr<weld::CustomWeld> m_xPict;
+
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     void    FillSet( SfxItemSet &rSet );
 
-    DECL_LINK( ClickHdl, Button*, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( WholeWordHdl, Button*, void );
+    void ModifyEntry(weld::Entry& rEdit);
+
+    DECL_LINK(ClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(MetricValueChangedHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ValueChangedHdl, weld::SpinButton&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(WholeWordHdl, weld::ToggleButton&, void);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -80,9 +158,8 @@ friend class SwDropCapsPict;
     static const sal_uInt16 aPageRg[];
 
 public:
-    SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
