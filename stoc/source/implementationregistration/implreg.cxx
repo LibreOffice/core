@@ -99,17 +99,9 @@ struct StringPool
 
 const StringPool &spool()
 {
-    static StringPool *pPool = nullptr;
-    if( ! pPool )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pPool )
-        {
-            static StringPool pool;
-            pPool = &pool;
-        }
-    }
-    return *pPool;
+    static StringPool s_pool;
+
+    return s_pool;
 }
 
 
