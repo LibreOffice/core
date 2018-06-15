@@ -40,8 +40,6 @@ KDE5FilePicker::~KDE5FilePicker()
     delete _dialog;
 }
 
-void KDE5FilePicker::setWinId(sal_uIntPtr winId) { _winId = winId; }
-
 bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
 {
     if (e->type() == QEvent::Show && o->isWidgetType())
@@ -49,7 +47,6 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
         auto* w = static_cast<QWidget*>(o);
         if (!w->parentWidget() && w->isModal())
         {
-            KWindowSystem::setMainWindow(w, _winId);
             if (auto* fileWidget = w->findChild<KFileWidget*>({}, Qt::FindDirectChildrenOnly))
                 fileWidget->setCustomWidget(_extraControls);
         }
