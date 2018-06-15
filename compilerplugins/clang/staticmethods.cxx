@@ -235,6 +235,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         report(DiagnosticsEngine::Note, "defined here:", def->getLocation())
             << def->getSourceRange();
     }
+    report(DiagnosticsEngine::Note, aFilename);
     return true;
 }
 
