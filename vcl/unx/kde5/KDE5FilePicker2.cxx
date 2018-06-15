@@ -190,7 +190,7 @@ void SAL_CALL KDE5FilePicker::setDefaultName(const OUString& name)
         return Q_EMIT setDefaultNameSignal(name);
     }
 
-    _dialog->selectUrl(QUrl(toQString(name)));
+    _dialog->selectFile(toQString(name));
 }
 
 void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
