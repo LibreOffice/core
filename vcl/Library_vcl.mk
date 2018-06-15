@@ -403,6 +403,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/wmf/wmf \
     vcl/source/filter/wmf/wmfexternal \
     vcl/source/filter/wmf/wmfwr \
+    vcl/source/font/Feature \
+    vcl/source/font/FeatureCollector \
+    vcl/source/font/OpenTypeFeatureDefinitonList \
     vcl/source/font/PhysicalFontCollection \
     vcl/source/font/PhysicalFontFace \
     vcl/source/font/PhysicalFontFamily \
