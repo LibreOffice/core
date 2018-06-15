@@ -25,6 +25,8 @@
 
 #include <unotools/configmgr.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/font/Feature.hxx>
+#include <vcl/font/FeatureParser.hxx>
 #include <scrptrun.h>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <i18nlangtag/mslangid.hxx>
@@ -68,27 +70,16 @@ GenericSalLayout::~GenericSalLayout()
 
 void GenericSalLayout::ParseFeatures(const OUString& aName)
 {
-    if (aName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX) < 0)
-        return;
+    vcl::font::FeatureParser aParser(aName);
+    OUString sLanguage = aParser.getLanguage();
+    if (!sLanguage.isEmpty())
+        msLanguage = OUStringToOString(sLanguage, RTL_TEXTENCODING_ASCII_US);
 
-    OString sName = OUStringToOString(aName, RTL_TEXTENCODING_ASCII_US);
-    sName = sName.getToken(1, FontSelectPatternAttributes::FEAT_PREFIX);
-    sal_Int32 nIndex = 0;
-    do
+    for (std::pair<sal_uInt32, sal_uInt32> const & rPair : aParser.getFeatures())
     {
-        OString sToken = sName.getToken(0, FontSelectPatternAttributes::FEAT_SEPARATOR, nIndex);
-        if (sToken.startsWith("lang="))
-        {
-            msLanguage = sToken.getToken(1, '=');
-        }
-        else
-        {
-            hb_feature_t aFeature;
-            if (hb_feature_from_string(sToken.getStr(), sToken.getLength(), &aFeature))
-                maFeatures.push_back(aFeature);
-        }
+        hb_feature_t aFeature { rPair.first, rPair.second, 0, SAL_MAX_UINT32 };
+        maFeatures.push_back(aFeature);
     }
-    while (nIndex >= 0);
 }
 
 struct SubRun
