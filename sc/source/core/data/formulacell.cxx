@@ -4385,8 +4385,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
-    static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
-
     // To temporarily use threading for sc unit tests regardless of the size of the formula group,
     // add the condition !std::getenv("LO_TESTNAME") below (with &&)
     if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
@@ -4409,7 +4407,25 @@ bool ScFormulaCell::InterpretFormulaGroup()
     // ScFormulaCell::InterpretTail()
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
 
-    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() &&
+    // Preference order:
+    // First try OpenCL, but only if actual OpenCL is available (i.e. no SwInterpreter).
+    // Then try threading and as the last one try SwInterpreter.
+    if( ScCalcConfig::isOpenCLEnabled())
+        if( InterpretFormulaGroupOpenCL(aScope))
+            return true;
+
+    if( InterpretFormulaGroupThreading(aScope))
+        return true;
+
+    return InterpretFormulaGroupOpenCL(aScope);
+}
+
+
+// To be called only from InterpretFormulaGroup().
+bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope)
+{
+    static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
+    if (!bThreadingProhibited &&
         pCode->IsEnabledForThreading() &&
         ScCalcConfig::isThreadingEnabled())
     {
@@ -4519,6 +4535,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return true;
     }
 
+    return false;
+}
+
+// To be called only from InterpretFormulaGroup().
+bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& aScope)
+{
     bool bCanVectorize = pCode->IsEnabledForOpenCL();
     switch (pCode->GetVectorState())
     {
