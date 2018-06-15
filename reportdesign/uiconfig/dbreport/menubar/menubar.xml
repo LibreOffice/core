@@ -21,12 +21,14 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:AddDirect"/>
             <menu:menuitem menu:id=".uno:Open"/>
+            <menu:menuitem menu:id=".uno:OpenRemote"/>
             <menu:menuitem menu:id=".uno:RecentFileList"/>
+            <menu:menuitem menu:id=".uno:CloseDoc"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:CloseDoc"/>
             <menu:menuitem menu:id=".uno:Save"/>
+            <menu:menuitem menu:id=".uno:SaveAsRemote"/>
             <menu:menuitem menu:id=".uno:SaveAs"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuseparator/>
@@ -48,9 +50,10 @@
             <menu:menuitem menu:id=".uno:Cut"/>
             <menu:menuitem menu:id=".uno:Copy"/>
             <menu:menuitem menu:id=".uno:Paste"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menu menu:id=".uno:Select">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:SelectAll"/>
                     <menu:menuitem menu:id=".uno:SelectAllLabels"/>
                     <menu:menuitem menu:id=".uno:SelectAllEdits"/>
                     <menu:menuitem menu:id=".uno:SelectReport"/>
@@ -63,7 +66,6 @@
             <menu:menuitem menu:id=".uno:ReportHeaderFooter"/>
             <menu:menuitem menu:id=".uno:ColumnHeaderFooter"/>
             <menu:menuseparator/>
-
             <menu:menu menu:id=".uno:EditShapeMenu">
                 <menu:menupopup>
                     <!--
@@ -83,7 +85,6 @@
 -->
                 </menu:menupopup>
             </menu:menu>
-
             <menu:menu menu:id=".uno:EditControlMenu">
                 <menu:menupopup>
                     <menu:menu menu:id=".uno:ObjectAlign" >
@@ -97,7 +98,6 @@
                             <menu:menuitem menu:id=".uno:AlignDown"/>
                         </menu:menupopup>
                     </menu:menu>
-
                     <menu:menu menu:id=".uno:ObjectResize" >
                         <menu:menupopup>
                             <menu:menuitem menu:id=".uno:SmallestWidth"/>
@@ -107,7 +107,6 @@
                             <menu:menuitem menu:id=".uno:GreatestHeight"/>
                         </menu:menupopup>
                     </menu:menu>
-
                     <menu:menu menu:id=".uno:SectionAlignmentMenu" >
                         <menu:menupopup>
                             <menu:menuitem menu:id=".uno:SectionAlignLeft"/>
@@ -117,10 +116,8 @@
                             <menu:menuitem menu:id=".uno:SectionAlignBottom"/>
                         </menu:menupopup>
                     </menu:menu>
-
                 </menu:menupopup>
             </menu:menu>
-
             <menu:menu menu:id=".uno:SectionShrinkMenu" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SectionShrink"/>
@@ -128,18 +125,12 @@
                     <menu:menuitem menu:id=".uno:SectionShrinkBottom"/>
                 </menu:menupopup>
             </menu:menu>
-
-
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ExecuteReport"/>
+            <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
         </menu:menupopup>
     </menu:menu>
-
-
     <menu:menu menu:id=".uno:ViewMenu" >
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ControlProperties"/>
             <menu:menuitem menu:id=".uno:AddField"/>
             <menu:menuitem menu:id=".uno:DbSortingAndGrouping"/>
@@ -148,26 +139,27 @@
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menuitem menu:id=".uno:ShowRuler"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:GridMenu" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:GridVisible"/>
                     <menu:menuitem menu:id=".uno:GridUse"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:SnapLinesMenu">
-                <menu:menupopup>
                     <menu:menuitem menu:id=".uno:HelplinesMove"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Zoom"/>
             <menu:menu menu:id=".uno:ZoomMenu">
               <menu:menupopup>
+                <menu:menuitem menu:id=".uno:ZoomPage"/>
+                <menu:menuitem menu:id=".uno:ZoomPageWidth"/>
+                <menu:menuitem menu:id=".uno:ZoomOptimal"/>
                 <menu:menuitem menu:id=".uno:Zoom50Percent"/>
                 <menu:menuitem menu:id=".uno:Zoom75Percent"/>
                 <menu:menuitem menu:id=".uno:Zoom100Percent"/>
                 <menu:menuitem menu:id=".uno:Zoom150Percent"/>
                 <menu:menuitem menu:id=".uno:Zoom200Percent"/>
                 <menu:menuseparator/>
-                <menu:menuitem menu:id=".uno:Zoom"/>
               </menu:menupopup>
             </menu:menu>
         </menu:menupopup>
@@ -192,13 +184,11 @@
                     <menu:menuitem menu:id=".uno:VFixedLine"/>
                 </menu:menupopup>
             </menu:menu>
-
             <menu:menu menu:id=".uno:GraphicMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertGraphic"/>
                 </menu:menupopup>
             </menu:menu>
-
             <menu:menu menu:id=".uno:ShapesMenu" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:BasicShapes"/>
@@ -209,7 +199,6 @@
                     <menu:menuitem menu:id=".uno:StarShapes"/>
                 </menu:menupopup>
             </menu:menu>
-
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:FormatMenu" >
@@ -256,6 +245,8 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu" >
         <menu:menupopup>
+            <menu:menuitem menu:id=".uno:ExecuteReport"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:MacroRecorder"/>
