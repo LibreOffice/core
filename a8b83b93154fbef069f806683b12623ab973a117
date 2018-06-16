@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_cddc4b1b",
+        "filename": "sc/source/ui/docshell/documentlinkmgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-16T07:08:11Z",
+      "side": 1,
+      "message": "should this not be clearing mpLinkManager? Or will it only be hit once?",
+      "revId": "a8b83b93154fbef069f806683b12623ab973a117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
