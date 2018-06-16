@@ -72,8 +72,6 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
     EnableRTL( false );
 }
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(GraphCtrl, 0)
-
 GraphCtrl::~GraphCtrl()
 {
     disposeOnce();
