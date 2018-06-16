@@ -2484,10 +2484,10 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const tools::Rectangle&
 
 namespace
 {
-    void set_pointing_to(GtkPopover *pPopOver, const tools::Rectangle& rHelpArea, const SalFrameGeometry& rGeometry)
+    void set_pointing_to(GtkPopover *pPopOver, vcl::Window* pParent, const tools::Rectangle& rHelpArea, const SalFrameGeometry& rGeometry)
     {
         GdkRectangle aRect;
-        aRect.x = rHelpArea.Left();
+        aRect.x = FloatingWindow::ImplConvertToAbsPos(pParent, rHelpArea).Left() - rGeometry.nX;
         aRect.y = rHelpArea.Top();
         aRect.width = 1;
         aRect.height = 1;
@@ -2505,14 +2505,11 @@ namespace
                 break;
         }
 
-        if (AllSettings::GetLayoutRTL())
-            aRect.x = rGeometry.nWidth-aRect.width-1-aRect.x;
-
         gtk_popover_set_pointing_to(pPopOver, &aRect);
     }
 }
 
-void* GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags)
+void* GtkSalFrame::ShowPopover(const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags)
 {
     GtkWidget *pWidget = gtk_popover_new(getMouseEventWidget());
     OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
@@ -2528,7 +2525,7 @@ void* GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rectangle
     else if (nFlags & QuickHelpFlags::Right)
         gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_LEFT);
 
-    set_pointing_to(GTK_POPOVER(pWidget), rHelpArea, maGeometry);
+    set_pointing_to(GTK_POPOVER(pWidget), pParent, rHelpArea, maGeometry);
 
     gtk_popover_set_modal(GTK_POPOVER(pWidget), false);
 
@@ -2537,11 +2534,11 @@ void* GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rectangle
     return pWidget;
 }
 
-bool GtkSalFrame::UpdatePopover(void* nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea)
+bool GtkSalFrame::UpdatePopover(void* nId, const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea)
 {
     GtkWidget *pWidget = static_cast<GtkWidget*>(nId);
 
-    set_pointing_to(GTK_POPOVER(pWidget), rHelpArea, maGeometry);
+    set_pointing_to(GTK_POPOVER(pWidget), pParent, rHelpArea, maGeometry);
 
     GtkWidget *pLabel = gtk_bin_get_child(GTK_BIN(pWidget));
     OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
