@@ -419,7 +419,7 @@ static bool implIsInsideGroup( SdrObject const * pObj )
         return false;
     }
 
-    SdrObjList* pSdrObjList(pObj->getParentOfSdrObject());
+    SdrObjList* pSdrObjList(pObj->getParentSdrObjListFromSdrObject());
 
     if(nullptr == pSdrObjList)
     {

@@ -201,8 +201,8 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
             if (pSrcEdge!=nullptr) {
                 SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(true);
                 SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(false);
-                if (pSrcNode1!=nullptr && pSrcNode1->getParentOfSdrObject()!=pSrcEdge->getParentOfSdrObject()) pSrcNode1=nullptr; // can't do this
-                if (pSrcNode2!=nullptr && pSrcNode2->getParentOfSdrObject()!=pSrcEdge->getParentOfSdrObject()) pSrcNode2=nullptr; // across all lists (yet)
+                if (pSrcNode1!=nullptr && pSrcNode1->getParentSdrObjListFromSdrObject()!=pSrcEdge->getParentSdrObjListFromSdrObject()) pSrcNode1=nullptr; // can't do this
+                if (pSrcNode2!=nullptr && pSrcNode2->getParentSdrObjListFromSdrObject()!=pSrcEdge->getParentSdrObjListFromSdrObject()) pSrcNode2=nullptr; // across all lists (yet)
                 if (pSrcNode1!=nullptr || pSrcNode2!=nullptr) {
                     SdrObject* pEdgeObjTmp=GetObj(no);
                     SdrEdgeObj* pDstEdge=dynamic_cast<SdrEdgeObj*>( pEdgeObjTmp );

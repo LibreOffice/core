@@ -409,7 +409,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
     {
         SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
         if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->getSdrPageFromSdrObject() == GetDrawPage()) &&
-            (pObj->getSdrPageFromSdrObject() == pObj->getParentOfSdrObject()) ) //only do something if the object lies direct on the page
+            (pObj->getSdrPageFromSdrObject() == pObj->getParentSdrObjListFromSdrObject()) ) //only do something if the object lies direct on the page
         {
             switch (pSdrHint->GetKind())
             {
@@ -1063,7 +1063,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
         if( pMarkedObj )
         {
             uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape(), uno::UNO_QUERY);
-            pUpObj = pMarkedObj->GetUpGroup();
+            pUpObj = pMarkedObj->getParentSdrObjectFromSdrObject();
 
             if( pMarkedObj == pFocusedObj )
             {

@@ -175,7 +175,7 @@ SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj )
 SwContact* GetUserCall( const SdrObject* pObj )
 {
     SdrObject *pTmp;
-    while ( !pObj->GetUserCall() && nullptr != (pTmp = pObj->GetUpGroup()) )
+    while ( !pObj->GetUserCall() && nullptr != (pTmp = pObj->getParentSdrObjectFromSdrObject()) )
         pObj = pTmp;
     assert((!pObj->GetUserCall() || nullptr != dynamic_cast<const SwContact*>(pObj->GetUserCall())) &&
             "<::GetUserCall(..)> - wrong type of found object user call." );
@@ -1223,12 +1223,12 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 // If drawing object is a member of a group, the adjustment
                 // of the positioning and the alignment attributes has to
                 // be done for the top group object.
-                if ( rObj.GetUpGroup() )
+                if ( rObj.getParentSdrObjectFromSdrObject() )
                 {
-                    const SdrObject* pGroupObj = rObj.GetUpGroup();
-                    while ( pGroupObj->GetUpGroup() )
+                    const SdrObject* pGroupObj = rObj.getParentSdrObjectFromSdrObject();
+                    while ( pGroupObj->getParentSdrObjectFromSdrObject() )
                     {
-                        pGroupObj = pGroupObj->GetUpGroup();
+                        pGroupObj = pGroupObj->getParentSdrObjectFromSdrObject();
                     }
                     // use geometry of drawing object
                     aObjRect = pGroupObj->GetSnapRect();

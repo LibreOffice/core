@@ -31,9 +31,9 @@ E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pO
     // Secure old 3D transformation stack before modification
     if(const E3dObject* pE3dObject = dynamic_cast< const E3dObject* >(pObject))
     {
-        mpScene = pE3dObject->GetScene();
+        mpScene = pE3dObject->getRootE3dSceneFromE3dObject();
 
-        if(mpScene && mpScene->GetScene() == mpScene)
+        if(nullptr != mpScene && mpScene->getRootE3dSceneFromE3dObject() == mpScene)
         {
             // if there is a scene and it's the outmost scene, get current 3D range
             const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(mpScene->GetViewContact());

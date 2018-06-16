@@ -123,8 +123,8 @@ static bool ImpSdrMarkListSorter(std::unique_ptr<SdrMark> const& lhs, std::uniqu
 {
     SdrObject* pObj1 = lhs->GetMarkedSdrObj();
     SdrObject* pObj2 = rhs->GetMarkedSdrObj();
-    SdrObjList* pOL1 = pObj1 ? pObj1->getParentOfSdrObject() : nullptr;
-    SdrObjList* pOL2 = pObj2 ? pObj2->getParentOfSdrObject() : nullptr;
+    SdrObjList* pOL1 = pObj1 ? pObj1->getParentSdrObjListFromSdrObject() : nullptr;
+    SdrObjList* pOL2 = pObj2 ? pObj2->getParentSdrObjListFromSdrObject() : nullptr;
 
     if (pOL1 == pOL2)
     {
@@ -297,8 +297,8 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
             maList.emplace_back(new SdrMark(rMark));
 
             // now check if the sort is ok
-            const SdrObjList* pLastOL = pLastObj!=nullptr ? pLastObj->getParentOfSdrObject() : nullptr;
-            const SdrObjList* pNewOL = pNewObj !=nullptr ? pNewObj->getParentOfSdrObject() : nullptr;
+            const SdrObjList* pLastOL = pLastObj!=nullptr ? pLastObj->getParentSdrObjListFromSdrObject() : nullptr;
+            const SdrObjList* pNewOL = pNewObj !=nullptr ? pNewObj->getParentSdrObjListFromSdrObject() : nullptr;
 
             if(pLastOL == pNewOL)
             {

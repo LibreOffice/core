@@ -1511,7 +1511,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     if (pTopMarkHit==nullptr) return MarkObj(rPnt,sal_uInt16(nTol));
 
     SdrObject* pTopObjHit=pTopMarkHit->GetMarkedSdrObj();
-    SdrObjList* pObjList=pTopObjHit->getParentOfSdrObject();
+    SdrObjList* pObjList=pTopObjHit->getParentSdrObjListFromSdrObject();
     SdrPageView* pPV=pTopMarkHit->GetPageView();
     // find lowermost of the selected objects that is hit by rPnt
     // and is placed on the same PageView as pTopMarkHit
@@ -1528,11 +1528,12 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     SdrObject* pBtmObjHit=pBtmMarkHit->GetMarkedSdrObj();
     const size_t nObjCount = pObjList->GetObjCount();
 
-    size_t nSearchBeg = 0;
-    E3dScene* pScene = nullptr;
-    SdrObject* pObjHit = bPrev ? pBtmObjHit : pTopObjHit;
-    bool bRemap = dynamic_cast< const E3dCompoundObject* >(pObjHit) !=  nullptr
-        && static_cast<E3dCompoundObject*>(pObjHit)->IsAOrdNumRemapCandidate(pScene);
+    size_t nSearchBeg(0);
+    E3dScene* pScene(nullptr);
+    SdrObject* pObjHit(bPrev ? pBtmObjHit : pTopObjHit);
+    const bool bRemap(
+        nullptr != dynamic_cast< const E3dCompoundObject* >(pObjHit)
+        && nullptr != (pScene = dynamic_cast< E3dScene* >(pObjHit->getParentSdrObjectFromSdrObject())));
 
     if(bPrev)
     {
@@ -1752,13 +1753,16 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     rpRootObj=nullptr;
     if (pOL!=nullptr)
     {
-        bool bBack(nOptions & SdrSearchOptions::BACKWARD);
-        bool bRemap(pOL->getSdrObjectFromSdrObjList() && dynamic_cast< const E3dScene* >(pOL->getSdrObjectFromSdrObjList()) != nullptr);
-        E3dScene* pRemapScene = (bRemap ? static_cast< E3dScene* >(pOL->getSdrObjectFromSdrObjList()) : nullptr);
+        const bool bBack(nOptions & SdrSearchOptions::BACKWARD);
+        const bool bRemap(
+            nullptr != pOL->getSdrObjectFromSdrObjList()
+            && nullptr != dynamic_cast< const E3dScene* >(pOL->getSdrObjectFromSdrObjList()));
+        const E3dScene* pRemapScene(bRemap ? static_cast< E3dScene* >(pOL->getSdrObjectFromSdrObjList()) : nullptr);
+        const size_t nObjCount(pOL->GetObjCount());
+        size_t nObjNum(bBack ? 0 : nObjCount);
 
-        const size_t nObjCount=pOL->GetObjCount();
-        size_t nObjNum=bBack ? 0 : nObjCount;
-        while (pRet==nullptr && (bBack ? nObjNum<nObjCount : nObjNum>0)) {
+        while (pRet==nullptr && (bBack ? nObjNum<nObjCount : nObjNum>0))
+        {
             if (!bBack) nObjNum--;
             SdrObject* pObj;
 

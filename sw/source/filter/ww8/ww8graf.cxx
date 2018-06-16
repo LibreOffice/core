@@ -1102,7 +1102,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         if( m_bObj )
                         {
                             if( bMakeSdrGrafObj && pTextObj &&
-                                pTextObj->GetUpGroup() )
+                                pTextObj->getParentSdrObjectFromSdrObject() )
                             {
                                 // use SdrOleObj/SdrGrafObj instead of
                                 // SdrTextObj in this Group
@@ -1121,7 +1121,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                 pNew->SetLogicRect( pTextObj->GetCurrentBoundRect() );
                                 pNew->SetLayer( pTextObj->GetLayer() );
 
-                                pTextObj->GetUpGroup()->GetSubList()->
+                                pTextObj->getParentSdrObjectFromSdrObject()->GetSubList()->
                                     ReplaceObject(pNew, pTextObj->GetOrdNum());
                             }
                             else
@@ -2831,7 +2831,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
             pSdrTextObj->GetSnapRect().GetHeight());
 
         // Object is part of a group?
-        SdrObject* pGroupObject = pSdrTextObj->GetUpGroup();
+        SdrObject* pGroupObject = pSdrTextObj->getParentSdrObjectFromSdrObject();
 
         const size_t nOrdNum = pSdrTextObj->GetOrdNum();
         bool bEraseThisObject;

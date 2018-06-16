@@ -50,9 +50,9 @@ namespace sdr
         {
             // include Items of scene this object belongs to
             const E3dCompoundObject& rObj = static_cast<const E3dCompoundObject&>(GetSdrObject());
-            E3dScene* pScene = rObj.GetScene();
+            E3dScene* pScene(rObj.getRootE3dSceneFromE3dObject());
 
-            if(pScene)
+            if(nullptr != pScene)
             {
                 // force ItemSet
                 GetObjectItemSet();
@@ -71,9 +71,9 @@ namespace sdr
         {
             // Set scene specific items at scene
             E3dCompoundObject& rObj = static_cast<E3dCompoundObject&>(GetSdrObject());
-            E3dScene* pScene = rObj.GetScene();
+            E3dScene* pScene(rObj.getRootE3dSceneFromE3dObject());
 
-            if(pScene)
+            if(nullptr != pScene)
             {
                 // force ItemSet
                 GetObjectItemSet();

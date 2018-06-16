@@ -200,8 +200,9 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
         E3dObject* pE3d = dynamic_cast< E3dObject* >(pRet);
         if( pE3d )
         {
-            E3dScene* pScene = pE3d->GetScene();
-            if( pScene )
+            E3dScene* pScene(pE3d->getRootE3dSceneFromE3dObject());
+
+            if(nullptr != pScene)
             {
                 // prepare result vector and call helper
                 std::vector< const E3dCompoundObject* > aHitList;

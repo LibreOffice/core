@@ -199,7 +199,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
         pSdrShape = mxPage->CreateSdrObject_( xShape );
 
     if( pSdrShape->IsInserted() )
-        pSdrShape->getParentOfSdrObject()->RemoveObject( pSdrShape->GetOrdNum() );
+        pSdrShape->getParentSdrObjListFromSdrObject()->RemoveObject( pSdrShape->GetOrdNum() );
 
     GetSdrObject()->GetSubList()->InsertObject(pSdrShape, nPos);
     // TTTT Was created using mpModel in CreateSdrObject_ above
@@ -242,10 +242,10 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
     if( pShape )
         pSdrShape = pShape->GetSdrObject();
 
-    if( !HasSdrObject() || pSdrShape == nullptr || pSdrShape->getParentOfSdrObject()->getSdrObjectFromSdrObjList() != GetSdrObject() )
+    if( !HasSdrObject() || pSdrShape == nullptr || pSdrShape->getParentSdrObjectFromSdrObject() != GetSdrObject() )
         throw uno::RuntimeException();
 
-    SdrObjList& rList = *pSdrShape->getParentOfSdrObject();
+    SdrObjList& rList = *pSdrShape->getParentSdrObjListFromSdrObject();
 
     const size_t nObjCount = rList.GetObjCount();
     size_t nObjNum = 0;

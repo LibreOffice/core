@@ -190,7 +190,7 @@ void SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
 
             if( Imp()->GetDrawView()->IsGroupEntered() ||
-                ( !pObj->GetUserCall() && pObj->GetUpGroup()) )
+                ( !pObj->GetUserCall() && pObj->getParentSdrObjectFromSdrObject()) )
             {
                 SfxItemSet aSet( pClpDoc->GetAttrPool(), aFrameFormatSetRange );
 
@@ -377,7 +377,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             if( bRet )
             {
                 if( pSrcDrwView->IsGroupEntered() ||
-                    ( !pObj->GetUserCall() && pObj->GetUpGroup()) )
+                    ( !pObj->GetUserCall() && pObj->getParentSdrObjectFromSdrObject()) )
                 {
                     SfxItemSet aSet( pDestDoc->GetAttrPool(),aFrameFormatSetRange);
                     aSet.Put( aAnchor );
@@ -927,7 +927,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                             Imp()->GetDrawView()->InsertObjectAtView( pNew, *Imp()->GetPageView() );
 
                             Point aGrpAnchor( 0, 0 );
-                            SdrObjList* pList = pNew->getParentOfSdrObject();
+                            SdrObjList* pList = pNew->getParentSdrObjListFromSdrObject();
                             if ( pList )
                             {
                                 SdrObjGroup* pOwner(dynamic_cast< SdrObjGroup* >(pList->getSdrObjectFromSdrObjList()));
@@ -1275,7 +1275,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel& _rModel )
             if( pOle2Obj )
             {
                 // found an ole2 shape
-                SdrObjList* pObjList = pOle2Obj->getParentOfSdrObject();
+                SdrObjList* pObjList = pOle2Obj->getParentSdrObjListFromSdrObject();
 
                 // get its graphic
                 Graphic aGraphic;

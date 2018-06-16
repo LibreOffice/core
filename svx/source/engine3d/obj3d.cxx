@@ -160,10 +160,12 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     // Movement in X, Y in the eye coordinate system
-    E3dScene* pScene = GetScene();
+    E3dScene* pScene(getRootE3dSceneFromE3dObject());
 
-    if(!pScene)
+    if(nullptr == pScene)
+    {
         return;
+    }
 
     // transform pos from 2D world to 3D eye
     const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
@@ -210,18 +212,21 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 void E3dObject::NbcMove(const Size& rSize)
 {
     // Movement in X, Y in the eye coordinate system
-    E3dScene* pScene = GetScene();
+    E3dScene* pScene(getRootE3dSceneFromE3dObject());
 
-    if(!pScene)
+    if(nullptr == pScene)
+    {
         return;
+    }
 
     //Dimensions of the scene in 3D and 2D for comparison
     tools::Rectangle aRect = pScene->GetSnapRect();
-
     basegfx::B3DHomMatrix aInvDispTransform;
-    if(GetParentObj())
+    E3dScene* pParent(getParentE3dSceneFromE3dObject());
+
+    if(nullptr != pParent)
     {
-        aInvDispTransform = GetParentObj()->GetFullTransform();
+        aInvDispTransform = pParent->GetFullTransform();
         aInvDispTransform.invert();
     }
 
@@ -266,31 +271,28 @@ void E3dObject::RecalcSnapRect()
 // process the object in which the change has occurred is returned.
 void E3dObject::StructureChanged()
 {
-    if ( GetParentObj() )
+    E3dScene* pParent(getParentE3dSceneFromE3dObject());
+
+    if(nullptr != pParent)
     {
-        GetParentObj()->InvalidateBoundVolume();
-        GetParentObj()->StructureChanged();
+        pParent->InvalidateBoundVolume();
+        pParent->StructureChanged();
     }
 }
 
-E3dObject* E3dObject::GetParentObj() const
+E3dScene* E3dObject::getParentE3dSceneFromE3dObject() const
 {
-    E3dObject* pRetval = nullptr;
-
-    if(getParentOfSdrObject())
-    {
-        pRetval = dynamic_cast< E3dObject* >(getParentOfSdrObject()->getSdrObjectFromSdrObjList());
-    }
-
-    return pRetval;
+    return dynamic_cast< E3dScene* >(getParentSdrObjectFromSdrObject());
 }
 
 // Determine the top-level scene object
-E3dScene* E3dObject::GetScene() const
+E3dScene* E3dObject::getRootE3dSceneFromE3dObject() const
 {
-    if(GetParentObj())
+    E3dScene* pParent(getParentE3dSceneFromE3dObject());
+
+    if(nullptr != pParent)
     {
-        return GetParentObj()->GetScene();
+        return pParent->getRootE3dSceneFromE3dObject();
     }
 
     return nullptr;
@@ -349,10 +351,11 @@ const basegfx::B3DHomMatrix& E3dObject::GetFullTransform() const
     if(mbTfHasChanged)
     {
         basegfx::B3DHomMatrix aNewFullTransformation(maTransformation);
+        E3dScene* pParent(getParentE3dSceneFromE3dObject());
 
-        if ( GetParentObj() )
+        if(nullptr != pParent)
         {
-            aNewFullTransformation = GetParentObj()->GetFullTransform() * aNewFullTransformation;
+            aNewFullTransformation = pParent->GetFullTransform() * aNewFullTransformation;
         }
 
         const_cast< E3dObject* >(this)->maFullTransform = aNewFullTransformation;
@@ -665,17 +668,6 @@ basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::
     }
 
     return aRetval;
-}
-
-bool E3dCompoundObject::IsAOrdNumRemapCandidate(E3dScene*& prScene) const
-{
-    if(getParentOfSdrObject() && getParentOfSdrObject()->getSdrObjectFromSdrObjList())
-    {
-        prScene = static_cast< E3dScene* >(getParentOfSdrObject()->getSdrObjectFromSdrObjList());
-        return true;
-    }
-
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

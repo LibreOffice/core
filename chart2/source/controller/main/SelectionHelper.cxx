@@ -330,7 +330,7 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
 
     while( pObj && !ObjectIdentifier::isCID( aName  )  )
     {
-        SdrObjList* pObjList = pObj->getParentOfSdrObject();
+        SdrObjList* pObjList = pObj->getParentSdrObjListFromSdrObject();
         if( !pObjList )
             return false;
         SdrObject* pOwner = pObjList->getSdrObjectFromSdrObjList();
@@ -549,14 +549,15 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
         }
     }
 
-    E3dScene* pScene = nullptr;
+    E3dScene* pScene(nullptr);
+
     if(pRotateable)
     {
         SolarMutexGuard aSolarGuard;
-        pScene = pRotateable->GetScene();
+        pScene = pRotateable->getRootE3dSceneFromE3dObject();
     }
-    return pScene;
 
+    return pScene;
 }
 
 bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )

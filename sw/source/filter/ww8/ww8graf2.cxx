@@ -336,7 +336,7 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
     SdrObject &rSubObj)
 {
     // Insert SdrGrafObj instead of SdrTextObj into this group
-    if (SdrObject* pGroupObject = rReplaceObj.GetUpGroup())
+    if (SdrObject* pGroupObject = rReplaceObj.getParentSdrObjectFromSdrObject())
     {
         SdrObjList* pObjectList = pGroupObject->GetSubList();
 
@@ -657,7 +657,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                 }
 
                 bool bTextObjWasGrouped = false;
-                if (pOldFlyFormat && pTextObj && pTextObj->GetUpGroup())
+                if (pOldFlyFormat && pTextObj && pTextObj->getParentSdrObjectFromSdrObject())
                     bTextObjWasGrouped = true;
 
                 if (bTextObjWasGrouped)

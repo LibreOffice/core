@@ -2610,9 +2610,9 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                 ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,nullptr,false);
                 if (!pAccShapeImpl.is())
                 {
-                    while (pObj && pObj->GetUpGroup())
+                    while (pObj && pObj->getParentSdrObjectFromSdrObject())
                     {
-                        pObj = pObj->GetUpGroup();
+                        pObj = pObj->getParentSdrObjectFromSdrObject();
                     }
                     if (pObj != nullptr)
                     {

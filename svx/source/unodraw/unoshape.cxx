@@ -2151,7 +2151,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         sal_Int32 nNewOrdNum = 0;
         if(rValue >>= nNewOrdNum)
         {
-            SdrObjList* pObjList = GetSdrObject()->getParentOfSdrObject();
+            SdrObjList* pObjList = GetSdrObject()->getParentSdrObjListFromSdrObject();
             if( pObjList )
             {
                 SdrObject* pCheck =
@@ -3742,7 +3742,7 @@ uno::Reference<uno::XInterface> SAL_CALL SvxShape::getParent()
 
     if(nullptr != pSdrObject)
     {
-        const SdrObjList* pParentSdrObjList(GetSdrObject()->getParentOfSdrObject());
+        const SdrObjList* pParentSdrObjList(GetSdrObject()->getParentSdrObjListFromSdrObject());
 
         if(nullptr != pParentSdrObjList)
         {

@@ -487,8 +487,10 @@ void BarChart::createShapes()
         for (uno::Reference<drawing::XShape> const & rShape : aShapeSet)
         {
             E3dScene* pScene = lcl_getE3dScene(rShape);
-            if (pScene)
-                aSceneSet.insert(pScene->GetScene());
+            if(nullptr != pScene)
+            {
+                aSceneSet.insert(pScene->getRootE3dSceneFromE3dObject());
+            }
         }
         for (E3dScene* pScene : aSceneSet)
         {

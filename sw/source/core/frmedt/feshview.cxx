@@ -1202,7 +1202,7 @@ bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject* pObj) const
         if (pM)
         {
             SdrObject* pMarkObj = pM->GetMarkedSdrObj();
-            if (pMarkObj && pMarkObj->GetUpGroup() == pObj->GetUpGroup())
+            if (pMarkObj && pMarkObj->getParentSdrObjectFromSdrObject() == pObj->getParentSdrObjectFromSdrObject())
                 return true;
         }
     }
@@ -1229,7 +1229,7 @@ void SwFEShell::EndTextEdit()
             pTmp = pObj;
         pUserCall->Changed( *pTmp, SdrUserCallType::Resize, pTmp->GetLastBoundRect() );
     }
-    if ( !pObj->GetUpGroup() )
+    if ( !pObj->getParentSdrObjectFromSdrObject() )
     {
         if ( SdrEndTextEditKind::ShouldBeDeleted == pView->SdrEndTextEdit(true) )
         {
@@ -1504,7 +1504,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             // If an object inside a group is selected, we want to
             // iterate over the group members.
             if ( ! pStartObj->GetUserCall() )
-                pList = pStartObj->getParentOfSdrObject();
+                pList = pStartObj->getParentSdrObjListFromSdrObject();
         }
         else
         {
@@ -1767,10 +1767,10 @@ bool SwFEShell::ImpEndCreate()
         return false;
     }
 
-    if( rSdrObj.GetUpGroup() )
+    if( rSdrObj.getParentSdrObjectFromSdrObject() )
     {
         Point aTmpPos( rSdrObj.GetSnapRect().TopLeft() );
-        Point aNewAnchor( rSdrObj.GetUpGroup()->GetAnchorPos() );
+        Point aNewAnchor( rSdrObj.getParentSdrObjectFromSdrObject()->GetAnchorPos() );
         // OD 2004-04-05 #i26791# - direct object positioning for group members
         rSdrObj.NbcSetRelativePos( aTmpPos - aNewAnchor );
         rSdrObj.NbcSetAnchorPos( aNewAnchor );
@@ -2255,7 +2255,7 @@ void SwFEShell::ChgAnchor( RndStdIds eAnchorId, bool bSameOnly, bool bPosCorr )
     OSL_ENSURE( Imp()->HasDrawView(), "ChgAnchor without DrawView?" );
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if( rMrkList.GetMarkCount() &&
-        !rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
+        !rMrkList.GetMark( 0 )->GetMarkedSdrObj()->getParentSdrObjectFromSdrObject() )
     {
         StartAllAction();
 
@@ -2388,9 +2388,9 @@ bool SwFEShell::IsGroupAllowed() const
         {
             const SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if ( i )
-                bIsGroupAllowed = pObj->GetUpGroup() == pUpGroup;
+                bIsGroupAllowed = pObj->getParentSdrObjectFromSdrObject() == pUpGroup;
             else
-                pUpGroup = pObj->GetUpGroup();
+                pUpGroup = pObj->getParentSdrObjectFromSdrObject();
 
             if ( bIsGroupAllowed )
                 bIsGroupAllowed = HasSuitableGroupingAnchor(pObj);

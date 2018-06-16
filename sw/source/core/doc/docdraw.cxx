@@ -202,7 +202,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-    bool bNoGroup = ( nullptr == pObj->GetUpGroup() );
+    bool bNoGroup = ( nullptr == pObj->getParentSdrObjectFromSdrObject() );
     SwDrawContact* pNewContact = nullptr;
     if( bNoGroup )
     {
@@ -317,7 +317,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     {
         pFormatsAndObjs = new std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >[nMarkCount];
         SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        if( !pMyObj->GetUpGroup() )
+        if( !pMyObj->getParentSdrObjectFromSdrObject() )
         {
             for ( size_t i = 0; i < nMarkCount; ++i )
             {
@@ -429,7 +429,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
         if( rMrkList.GetMarkCount() && bDelMarked )
         {
             SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-            if( !pObj->GetUpGroup() )
+            if( !pObj->getParentSdrObjectFromSdrObject() )
             {
                 SwUndoDrawDelete *const pUndo =
                     (!GetIDocumentUndoRedo().DoesUndo())

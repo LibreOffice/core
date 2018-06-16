@@ -1319,11 +1319,11 @@ AccessibleShape::getGroupPosition( const uno::Any& )
 
     // Compute object's group level.
     sal_Int32 nGroupLevel = 0;
-    SdrObject * pUper = pObj->GetUpGroup();
+    SdrObject * pUper = pObj->getParentSdrObjectFromSdrObject();
     while( pUper )
     {
         ++nGroupLevel;
-        pUper = pUper->GetUpGroup();
+        pUper = pUper->getParentSdrObjectFromSdrObject();
     }
 
     css::uno::Reference<XAccessibleContext> xParentContext = xParent->getAccessibleContext();
@@ -1345,8 +1345,8 @@ AccessibleShape::getGroupPosition( const uno::Any& )
     }
 
     SdrObjList *pGrpList = nullptr;
-    if( pObj->GetUpGroup() )
-        pGrpList = pObj->GetUpGroup()->GetSubList();
+    if( pObj->getParentSdrObjectFromSdrObject() )
+        pGrpList = pObj->getParentSdrObjectFromSdrObject()->GetSubList();
     else
         return aRet;
 

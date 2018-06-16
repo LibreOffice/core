@@ -727,7 +727,7 @@ std::vector<SdrObject*> SdrEditView::DeleteMarkedList(SdrMarkList const& rMark)
                 --nm;
                 SdrMark* pM = rMark.GetMark(nm);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
-                SdrObjList*  pOL = pObj->getParentOfSdrObject();
+                SdrObjList*  pOL = pObj->getParentSdrObjListFromSdrObject();
                 const size_t nOrdNum(pObj->GetOrdNumDirect());
 
                 bool bIs3D = dynamic_cast< E3dObject* >(pObj);
@@ -799,7 +799,7 @@ void SdrEditView::DeleteMarkedObj()
                 // in the first run, add all found parents, but only once
                 SdrMark* pMark(rMarkList.GetMark(a));
                 SdrObject* pObject(pMark->GetMarkedSdrObj());
-                SdrObject* pParent(pObject->getParentOfSdrObject()->getSdrObjectFromSdrObjList());
+                SdrObject* pParent(pObject->getParentSdrObjectFromSdrObject());
 
                 if(pParent)
                 {
@@ -1012,7 +1012,7 @@ void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrO
             pSdrView->SdrEndTextEdit();
     }
 
-    SdrObjList* pOL=pOldObj->getParentOfSdrObject();
+    SdrObjList* pOL=pOldObj->getParentSdrObjListFromSdrObject();
     const bool bUndo = IsUndoEnabled();
     if( bUndo  )
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pOldObj,*pNewObj));
