@@ -174,7 +174,7 @@ bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeature
     if (!mpFontInstance)
         return false;
 
-    LogicalFontInstance* pFontInstance = mpFontInstance;
+    LogicalFontInstance* pFontInstance = mpFontInstance.get();
 
     if (!pFontInstance)
         return false;
