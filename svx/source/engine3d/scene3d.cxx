@@ -280,7 +280,7 @@ sal_uInt16 E3dScene::GetObjIdentifier() const
 
 void E3dScene::SetBoundRectDirty()
 {
-    E3dScene* pScene = GetScene();
+    E3dScene* pScene(getRootE3dSceneFromE3dObject());
 
     if(pScene == this)
     {
@@ -354,20 +354,28 @@ void E3dScene::StructureChanged()
 {
     E3dObject::StructureChanged();
 
-    if (!GetScene()->mbSkipSettingDirty)
+    E3dScene* pScene(getRootE3dSceneFromE3dObject());
+
+    if(nullptr != pScene && !pScene->mbSkipSettingDirty)
+    {
         SetRectsDirty();
+    }
 
     ImpCleanup3DDepthMapper();
 }
 
 // Determine the overall scene object
 
-E3dScene* E3dScene::GetScene() const
+E3dScene* E3dScene::getRootE3dSceneFromE3dObject() const
 {
-    if(GetParentObj())
-        return GetParentObj()->GetScene();
-    else
-        return const_cast<E3dScene*>(this);
+    E3dScene* pParent(getParentE3dSceneFromE3dObject());
+
+    if(nullptr != pParent)
+    {
+        return pParent->getRootE3dSceneFromE3dObject();
+    }
+
+    return const_cast< E3dScene* >(this);
 }
 
 void E3dScene::removeAllNonSelectedObjects()
@@ -456,17 +464,32 @@ E3dScene& E3dScene::operator=(const E3dScene& rSource)
 
 void E3dScene::SuspendReportingDirtyRects()
 {
-    GetScene()->mbSkipSettingDirty = true;
+    E3dScene* pScene(getRootE3dSceneFromE3dObject());
+
+    if(nullptr != pScene)
+    {
+        pScene->mbSkipSettingDirty = true;
+    }
 }
 
 void E3dScene::ResumeReportingDirtyRects()
 {
-    GetScene()->mbSkipSettingDirty = false;
+    E3dScene* pScene(getRootE3dSceneFromE3dObject());
+
+    if(nullptr != pScene)
+    {
+        pScene->mbSkipSettingDirty = false;
+    }
 }
 
 void E3dScene::SetAllSceneRectsDirty()
 {
-    GetScene()->SetRectsDirty();
+    E3dScene* pScene(getRootE3dSceneFromE3dObject());
+
+    if(nullptr != pScene)
+    {
+        pScene->SetRectsDirty();
+    }
 }
 
 // Rebuild Light- and label- object lists rebuild (after loading, allocation)
@@ -634,7 +657,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 
 void E3dScene::RecalcSnapRect()
 {
-    E3dScene* pScene = GetScene();
+    E3dScene* pScene(getRootE3dSceneFromE3dObject());
 
     if(pScene == this)
     {

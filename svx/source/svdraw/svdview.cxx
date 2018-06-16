@@ -405,7 +405,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         if (pObj!=pHitObj)
         {
             SdrObject* pObjTmp=nullptr;
-            pObjTmp=pHitObj->GetUpGroup();
+            pObjTmp=pHitObj->getParentSdrObjectFromSdrObject();
             if (pObjTmp==pObj) pObjTmp=nullptr;
             while (pObjTmp!=nullptr)
             {
@@ -414,7 +414,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     bMid=true;
                     pMidObj=pObjTmp;
                 }
-                pObjTmp=pObjTmp->GetUpGroup();
+                pObjTmp=pObjTmp->getParentSdrObjectFromSdrObject();
                 if (pObjTmp==pObj) pObjTmp=nullptr;
             }
         }
@@ -743,8 +743,8 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     rVEvt.eEvent=eEvent;
 #ifdef DGB_UTIL
     if (rVEvt.pRootObj!=NULL) {
-        if (rVEvt.pRootObj->getParentOfSdrObject()!=rVEvt.pPV->GetObjList()) {
-            OSL_FAIL("SdrView::PickAnything(): pRootObj->getParentOfSdrObject()!=pPV->GetObjList() !");
+        if (rVEvt.pRootObj->getParentSdrObjListFromSdrObject()!=rVEvt.pPV->GetObjList()) {
+            OSL_FAIL("SdrView::PickAnything(): pRootObj->getParentSdrObjListFromSdrObject()!=pPV->GetObjList() !");
         }
     }
 #endif

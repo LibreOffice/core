@@ -1513,10 +1513,10 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                     delete pDelUndo;
                 }
                 eRet=SdrEndTextEditKind::Deleted;
-                DBG_ASSERT(pTEObj->getParentOfSdrObject()!=nullptr,"SdrObjEditView::SdrEndTextEdit(): Fatal: Object edited doesn't have an ObjList!");
-                if (pTEObj->getParentOfSdrObject()!=nullptr)
+                DBG_ASSERT(pTEObj->getParentSdrObjListFromSdrObject()!=nullptr,"SdrObjEditView::SdrEndTextEdit(): Fatal: Object edited doesn't have an ObjList!");
+                if (pTEObj->getParentSdrObjListFromSdrObject()!=nullptr)
                 {
-                    pTEObj->getParentOfSdrObject()->RemoveObject(pTEObj->GetOrdNum());
+                    pTEObj->getParentSdrObjListFromSdrObject()->RemoveObject(pTEObj->GetOrdNum());
                     CheckMarked(); // remove selection immediately...
                 }
             }

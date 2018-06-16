@@ -345,8 +345,13 @@ public:
     // SdrModel/SdrPage access on SdrObject level
     SdrPage* getSdrPageFromSdrObject() const;
     SdrModel& getSdrModelFromSdrObject() const;
-    SdrObjList* getParentOfSdrObject() const;
+
+    // access to possible children (SdrObjGroup/E3dScene)
     virtual SdrObjList* getChildrenOfSdrObject() const;
+
+    // access to parent
+    SdrObjList* getParentSdrObjListFromSdrObject() const;
+    SdrObject* getParentSdrObjectFromSdrObject() const;
 
 private:
     // only allow SetParentAtSdrObjectFromSdrObjList to call setParentOfSdrObject
@@ -428,7 +433,6 @@ public:
     // for group objects
     bool IsGroupObject() const;
     virtual SdrObjList* GetSubList() const;
-    SdrObject* GetUpGroup() const;
 
     /// The order number (aka ZOrder, aka z-index) determines whether a
     /// SdrObject is located above or below another.  Objects are painted from

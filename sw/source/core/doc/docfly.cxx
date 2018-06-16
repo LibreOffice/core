@@ -726,7 +726,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     OSL_ENSURE( getIDocumentLayoutAccess().GetCurrentLayout(), "No layout!" );
 
     if ( !_rMrkList.GetMarkCount() ||
-         _rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
+         _rMrkList.GetMark( 0 )->GetMarkedSdrObj()->getParentSdrObjectFromSdrObject() )
     {
         return false;
     }

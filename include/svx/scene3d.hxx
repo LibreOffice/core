@@ -59,10 +59,6 @@ class Imp3DDepthRemapper;
 
 class SVX_DLLPUBLIC E3dScene : public E3dObject, public SdrObjList
 {
-private:
-    // to allow sdr::properties::E3dSceneProperties access to StructureChanged()
-    friend class sdr::properties::E3dSceneProperties;
-
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
@@ -78,13 +74,10 @@ protected:
 
     bool mbSkipSettingDirty : 1;
 
-    virtual void StructureChanged() override;
-
     void RebuildLists();
 
     virtual void Notify(SfxBroadcaster &rBC, const SfxHint  &rHint) override;
 
-protected:
     void SetDefaultAttributes();
     void ImpCleanup3DDepthMapper();
 
@@ -93,6 +86,8 @@ protected:
 
 public:
     E3dScene(SdrModel& rSdrModel);
+
+    virtual void StructureChanged() override;
 
     // derived from SdrObjList
     virtual SdrPage* getSdrPageFromSdrObjList() const override;
@@ -134,7 +129,7 @@ public:
                                                  const Fraction& rYFact) override;
     virtual void    RecalcSnapRect() override;
 
-    virtual E3dScene* GetScene() const override;
+    virtual E3dScene* getRootE3dSceneFromE3dObject() const override;
     void SetCamera(const Camera3D& rNewCamera);
     const Camera3D& GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();

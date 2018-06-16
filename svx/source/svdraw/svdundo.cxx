@@ -656,7 +656,7 @@ SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     : SdrUndoObj(rNewObj)
     , bOwner(false)
 {
-    pObjList=pObj->getParentOfSdrObject();
+    pObjList=pObj->getParentSdrObjListFromSdrObject();
     if (bOrdNumDirect)
     {
         nOrdNum=pObj->GetOrdNumDirect();
@@ -857,7 +857,7 @@ SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, b
 {
     SetOldOwner(true);
 
-    pObjList=pObj->getParentOfSdrObject();
+    pObjList=pObj->getParentSdrObjListFromSdrObject();
     if (bOrdNumDirect)
     {
         nOrdNum=pObj->GetOrdNumDirect();
@@ -984,7 +984,7 @@ void SdrUndoObjOrdNum::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    SdrObjList* pOL=pObj->getParentOfSdrObject();
+    SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
     if (pOL==nullptr)
     {
         OSL_FAIL("UndoObjOrdNum: pObj does not have an ObjList.");
@@ -995,7 +995,7 @@ void SdrUndoObjOrdNum::Undo()
 
 void SdrUndoObjOrdNum::Redo()
 {
-    SdrObjList* pOL=pObj->getParentOfSdrObject();
+    SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
     if (pOL==nullptr)
     {
         OSL_FAIL("RedoObjOrdNum: pObj does not have an ObjList.");

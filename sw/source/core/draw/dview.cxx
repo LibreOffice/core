@@ -429,7 +429,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
                                           size_t nNewPos )
 {
     // nothing to do for group members
-    if ( pObj->GetUpGroup() )
+    if ( pObj->getParentSdrObjectFromSdrObject() )
     {
         return;
     }

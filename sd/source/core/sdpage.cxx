@@ -1055,7 +1055,7 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
         const bool bUndo = pDoc->IsUndoEnabled();
         if( bUndo )
             pDoc->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
-        SdrObjList* pOL = pObject->getParentOfSdrObject();
+        SdrObjList* pOL = pObject->getParentSdrObjListFromSdrObject();
         pOL->RemoveObject(pObject->GetOrdNumDirect());
 
         if( !bUndo )

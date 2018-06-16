@@ -1781,7 +1781,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
     SdrObject* pObject = pSvxShape ? pSvxShape->GetSdrObject() : nullptr;
     if(pObject)
     {
-        bGroupMember = pObject->GetUpGroup() != nullptr;
+        bGroupMember = pObject->getParentSdrObjectFromSdrObject() != nullptr;
         bFormControl = pObject->GetObjInventor() == SdrInventor::FmForm;
     }
     const OUString* pNames = aPropertyNames.getConstArray();
@@ -2123,7 +2123,7 @@ void SwXShape::dispose()
         // correct assertion and refine it for safety reason.
         OSL_ENSURE( !pObj ||
                 dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr ||
-                pObj->GetUpGroup() ||
+                pObj->getParentSdrObjectFromSdrObject() ||
                 pObj == pFormat->FindSdrObject(),
                 "<SwXShape::dispose(..) - different 'master' drawing objects!!" );
         // perform delete of draw frame format *not*
@@ -2132,7 +2132,7 @@ void SwXShape::dispose()
         // of a group
         if ( pObj &&
              dynamic_cast<const SwDrawVirtObj*>( pObj) ==  nullptr &&
-             !pObj->GetUpGroup() &&
+             !pObj->getParentSdrObjectFromSdrObject() &&
              pObj->IsInserted() )
         {
             if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
@@ -2376,12 +2376,12 @@ SdrObject* SwXShape::GetTopGroupObj( SvxShape* _pSvxShape )
     if ( pSvxShape )
     {
         SdrObject* pSdrObj = pSvxShape->GetSdrObject();
-        if ( pSdrObj && pSdrObj->GetUpGroup() )
+        if ( pSdrObj && pSdrObj->getParentSdrObjectFromSdrObject() )
         {
-            pTopGroupObj = pSdrObj->GetUpGroup();
-            while ( pTopGroupObj->GetUpGroup() )
+            pTopGroupObj = pSdrObj->getParentSdrObjectFromSdrObject();
+            while ( pTopGroupObj->getParentSdrObjectFromSdrObject() )
             {
-                pTopGroupObj = pTopGroupObj->GetUpGroup();
+                pTopGroupObj = pTopGroupObj->getParentSdrObjectFromSdrObject();
             }
         }
     }

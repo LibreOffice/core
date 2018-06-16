@@ -829,9 +829,15 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                         tools::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
-                        const E3dObject* pE3dObject = dynamic_cast< const E3dObject*>( pObj );
-                        if( pE3dObject )
-                            aObjectRect = pE3dObject->GetScene()->GetSnapRect();
+                        const E3dObject* pE3dObject(dynamic_cast< const E3dObject*>(pObj));
+                        if(nullptr != pE3dObject)
+                        {
+                            E3dScene* pScene(pE3dObject->getRootE3dSceneFromE3dObject());
+                            if(nullptr != pScene)
+                            {
+                                aObjectRect = pScene->GetSnapRect();
+                            }
+                        }
 
                         ActionDescriptionProvider::ActionType eActionType(ActionDescriptionProvider::ActionType::Move);
                         if( !bIsMoveOnly && m_aSelection.isResizeableObjectSelected() )
