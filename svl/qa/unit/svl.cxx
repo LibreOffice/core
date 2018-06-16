@@ -1529,6 +1529,19 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "117,669,030,460,994.00000000000000000000";
         checkPreviewString(aFormatter, sCode, 117669030460994.0, LANGUAGE_ENGLISH_US, sExpected);
     }
+    {   // tdf#117575 treat thousand separator with '?' in integer part
+        sCode = "\"Value= \"?,??0.00";
+        sExpected = "Value=     3.14";
+        checkPreviewString(aFormatter, sCode, M_PI, LANGUAGE_ENGLISH_US, sExpected);
+        sExpected = "Value=    12.00";
+        checkPreviewString(aFormatter, sCode, 12, LANGUAGE_ENGLISH_US, sExpected);
+        sExpected = "Value=   123.00";
+        checkPreviewString(aFormatter, sCode, 123, LANGUAGE_ENGLISH_US, sExpected);
+        sExpected = "Value= 1,234.00";
+        checkPreviewString(aFormatter, sCode, 1234, LANGUAGE_ENGLISH_US, sExpected);
+        sExpected = "Value= 12,345.00";
+        checkPreviewString(aFormatter, sCode, 12345, LANGUAGE_ENGLISH_US, sExpected);
+    }
 }
 
 void Test::testNfEnglishKeywordsIntegrity()
