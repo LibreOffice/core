@@ -226,7 +226,7 @@ String STR_PASTE
 };
 String STR_CONVERT_TO
 {
-    Text [ en-US ] = "Converts the selected %1object to the object type %2." ;
+    Text [ en-US ] = "Converts the selected %1 object to the object type %2." ;
 };
 String STR_ACTIVATE_AS
 {
