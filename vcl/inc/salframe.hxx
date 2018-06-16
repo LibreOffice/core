@@ -246,13 +246,13 @@ public:
     }
 
     // return !0 to indicate popovers are shown natively, 0 otherwise
-    virtual void*           ShowPopover(const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/, QuickHelpFlags /*nFlags*/)
+    virtual void*           ShowPopover(const OUString& /*rHelpText*/, vcl::Window* /*pParent*/, const tools::Rectangle& /*rHelpArea*/, QuickHelpFlags /*nFlags*/)
     {
         return nullptr;
     }
 
     // return true to indicate popovers are shown natively, false otherwise
-    virtual bool            UpdatePopover(void* /*nId*/, const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/)
+    virtual bool            UpdatePopover(void* /*nId*/, const OUString& /*rHelpText*/, vcl::Window* /*pParent*/, const tools::Rectangle& /*rHelpArea*/)
     {
         return false;
     }
