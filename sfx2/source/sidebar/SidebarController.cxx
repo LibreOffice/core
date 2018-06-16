@@ -1344,9 +1344,15 @@ tools::Rectangle SidebarController::GetDeckDragArea() const
 {
     tools::Rectangle aRect;
 
-    VclPtr<DeckTitleBar> pTitleBar = mpCurrentDeck->GetTitleBar();
-    if ( pTitleBar)
-        aRect = pTitleBar->GetDragArea();
+    if(mpCurrentDeck)
+    {
+        VclPtr<DeckTitleBar> pTitleBar(mpCurrentDeck->GetTitleBar());
+
+        if(pTitleBar)
+        {
+            aRect = pTitleBar->GetDragArea();
+        }
+    }
 
     return aRect;
 }
