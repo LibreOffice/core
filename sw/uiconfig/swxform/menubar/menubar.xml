@@ -107,7 +107,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
-      <menu:menuitem menu:id=".uno:EditGlossary"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ChangesMenu">
         <menu:menupopup>
@@ -430,17 +429,31 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SpellingAndGrammarDialog"/>
       <menu:menuitem menu:id=".uno:SpellOnline"/>
+      <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
       <menu:menu menu:id=".uno:LanguageMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
-          <menu:menuitem menu:id=".uno:ChineseConversion"/>
-          <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
+          <menu:menuitem menu:id=".uno:SetLanguageSelectionMenu"/>
+          <menu:menuitem menu:id=".uno:SetLanguageParagraphMenu"/>
+          <menu:menuitem menu:id=".uno:SetLanguageAllTextMenu"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:Hyphenate"/>
+          <menu:menuitem menu:id=".uno:ChineseConversion"/>
+          <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:MoreDictionaries"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:WordCountDialog"/>
+      <menu:menuseparator/>
+      <menu:menu menu:id=".uno:AutoFormatMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:OnlineAutoFormat"/>
+          <menu:menuitem menu:id=".uno:AutoFormatApply"/>
+          <menu:menuitem menu:id=".uno:AutoFormatRedlineApply"/>
+          <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menuitem menu:id=".uno:EditGlossary"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog"/>
@@ -451,33 +464,34 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:MailMergeWizard"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SortDialog"/>
-      <menu:menuitem menu:id=".uno:CalculateSel"/>
       <menu:menu menu:id=".uno:UpdateMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:UpdateAll"/>
           <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:Repaginate"/>
           <menu:menuitem menu:id=".uno:UpdateFields"/>
+          <menu:menuitem menu:id=".uno:UpdateAllIndexes"/>
+          <menu:menuitem menu:id=".uno:UpdateCurIndex"/>
           <menu:menuitem menu:id=".uno:UpdateAllLinks"/>
           <menu:menuitem menu:id=".uno:UpdateCharts"/>
-          <menu:menuitem menu:id=".uno:UpdateCurIndex"/>
-          <menu:menuitem menu:id=".uno:UpdateAllIndexes"/>
-          <menu:menuitem menu:id=".uno:Repaginate"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:SortDialog"/>
+      <menu:menuitem menu:id=".uno:CalculateSel"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:MacroRecorder"/>
           <menu:menuitem menu:id=".uno:RunMacro"/>
+          <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
           <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
-          <menu:menuitem menu:id=".uno:MacroSignature"/>
           <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:MacroSignature"/>
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
       <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+      <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
     </menu:menupopup>
