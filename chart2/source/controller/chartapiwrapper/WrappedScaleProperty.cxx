@@ -23,6 +23,7 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart/ChartAxisType.hpp>
 #include <chartview/ExplicitScaleValues.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;

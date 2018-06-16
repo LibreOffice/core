@@ -34,6 +34,7 @@
 #include <svl/stritem.hxx>
 #include <svx/tabline.hxx>
 
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <memory>

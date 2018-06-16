@@ -20,12 +20,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTTYPEHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTTYPEHELPER_HXX
 
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include "charttoolsdllapi.hxx"
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
 
 namespace chart
 {

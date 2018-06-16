@@ -19,9 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CONTROLLERLOCKGUARD_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CONTROLLERLOCKGUARD_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
-#include <ChartModel.hxx>
+#include <com/sun/star/uno/Reference.h>
+
+namespace chart { class ChartModel; }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace chart
 {

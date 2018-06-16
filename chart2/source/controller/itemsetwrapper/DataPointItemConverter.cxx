@@ -32,6 +32,7 @@
 #include <unonames.hxx>
 
 #include <svx/chrtitem.hxx>
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

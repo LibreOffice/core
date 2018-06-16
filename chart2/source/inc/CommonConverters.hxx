@@ -20,23 +20,21 @@
 #define INCLUDED_CHART2_SOURCE_INC_COMMONCONVERTERS_HXX
 
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include "charttoolsdllapi.hxx"
 
-#include <iterator>
-#include <vector>
+namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonBezierCoords; } } } }
 
 namespace chart
 {

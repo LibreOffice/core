@@ -25,13 +25,14 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include "charttoolsdllapi.hxx"
+
+namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
 
 namespace chart
 {

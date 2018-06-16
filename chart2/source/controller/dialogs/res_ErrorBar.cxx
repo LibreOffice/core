@@ -23,6 +23,7 @@
 #include <TabPageNotifiable.hxx>
 #include <helpids.h>
 #include <chartview/ChartSfxItemIds.hxx>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>
