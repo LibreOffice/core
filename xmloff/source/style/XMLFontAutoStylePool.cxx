@@ -137,10 +137,10 @@ public:
     }
 };
 
-XMLFontAutoStylePool::XMLFontAutoStylePool( SvXMLExport& rExp, bool _tryToEmbedFonts ) :
+XMLFontAutoStylePool::XMLFontAutoStylePool(SvXMLExport& rExp, bool bTryToEmbedFonts) :
     rExport( rExp ),
-    pPool( new XMLFontAutoStylePool_Impl ),
-    tryToEmbedFonts( _tryToEmbedFonts )
+    m_pFontAutoStylePool( new XMLFontAutoStylePool_Impl ),
+    m_bTryToEmbedFonts( bTryToEmbedFonts )
 {
 }
 
@@ -158,8 +158,8 @@ OUString XMLFontAutoStylePool::Add(
     OUString sPoolName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    XMLFontAutoStylePool_Impl::const_iterator it = pPool->find( &aTmp );
-    if( it != pPool->end() )
+    XMLFontAutoStylePool_Impl::const_iterator it = m_pFontAutoStylePool->find( &aTmp );
+    if( it != m_pFontAutoStylePool->end() )
     {
         sPoolName = (*it)->GetName();
     }
@@ -195,8 +195,9 @@ OUString XMLFontAutoStylePool::Add(
         XMLFontAutoStylePoolEntry_Impl *pEntry =
             new XMLFontAutoStylePoolEntry_Impl( sName, rFamilyName, rStyleName,
                                                 nFamily, nPitch, eEnc );
-        pPool->insert( pEntry );
+        m_pFontAutoStylePool->insert( pEntry );
         m_aNames.insert(sName);
+        printf ("%s\n", sName.toUtf8().getStr());
     }
 
     return sPoolName;
@@ -212,8 +213,8 @@ OUString XMLFontAutoStylePool::Find(
     OUString sName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    XMLFontAutoStylePool_Impl::const_iterator it = pPool->find( &aTmp );
-    if( it != pPool->end() )
+    XMLFontAutoStylePool_Impl::const_iterator it = m_pFontAutoStylePool->find( &aTmp );
+    if( it != m_pFontAutoStylePool->end() )
     {
         sName = (*it)->GetName();
     }
@@ -299,10 +300,10 @@ void XMLFontAutoStylePool::exportXML()
     const SvXMLUnitConverter& rUnitConv = GetExport().GetMM100UnitConverter();
 
     std::map< OUString, OUString > fontFilesMap; // our url to document url
-    sal_uInt32 nCount = pPool->size();
+    sal_uInt32 nCount = m_pFontAutoStylePool->size();
     for( sal_uInt32 i=0; i<nCount; i++ )
     {
-        const XMLFontAutoStylePoolEntry_Impl *pEntry = (*pPool)[ i ];
+        const XMLFontAutoStylePoolEntry_Impl *pEntry = (*m_pFontAutoStylePool)[ i ];
 
         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                   XML_NAME, pEntry->GetName() );
@@ -337,16 +338,15 @@ void XMLFontAutoStylePool::exportXML()
                                   XML_FONT_FACE,
                                   true, true );
 
-        if( tryToEmbedFonts )
+        if (m_bTryToEmbedFonts)
         {
             const bool bExportFlat( GetExport().getExportFlags() & SvXMLExportFlags::EMBEDDED );
             std::vector< EmbeddedFontInfo > aEmbeddedFonts;
             static const FontWeight weight[] = { WEIGHT_NORMAL, WEIGHT_BOLD, WEIGHT_NORMAL, WEIGHT_BOLD };
             static const FontItalic italic[] = { ITALIC_NONE, ITALIC_NONE, ITALIC_NORMAL, ITALIC_NORMAL };
             assert( SAL_N_ELEMENTS( weight ) == SAL_N_ELEMENTS( italic ));
-            for( unsigned int j = 0;
-                 j < SAL_N_ELEMENTS( weight );
-                 ++j )
+
+            for (unsigned int j = 0; j < SAL_N_ELEMENTS(weight); ++j)
             {
                 // Embed font if at least viewing is allowed (in which case the opening app must check
                 // the font license rights too and open either read-only or not use the font for editing).
