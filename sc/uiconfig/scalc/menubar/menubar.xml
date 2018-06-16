@@ -146,7 +146,6 @@
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:InputLineVisible"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
-            <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewRowColumnHeaders"/>
             <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>

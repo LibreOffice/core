@@ -46,8 +46,6 @@
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Sidebar"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DiagramData"/>
