@@ -69,6 +69,7 @@
       <menu:menuitem menu:id=".uno:Cut"/>
       <menu:menuitem menu:id=".uno:Copy"/>
       <menu:menuitem menu:id=".uno:Paste"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Select"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:NextMark"/>
