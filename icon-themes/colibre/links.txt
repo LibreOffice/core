@@ -944,8 +944,40 @@ cmd/sc_sbabrwinsert.png cmd/sc_insertfieldctrl.png
 
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
+
+# Underline includ language support
 cmd/lc_underlinesimple.png cmd/lc_underline.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
+cmd/32/underlinesimple.png cmd/32/underline.png
+
+cmd/ca/lc_underlinesimple.png cmd/ca/lc_underline.png
+cmd/ca/sc_underlinesimple.png cmd/ca/sc_underline.png
+cmd/es/lc_underlinesimple.png cmd/es/lc_underline.png
+cmd/es/sc_underlinesimple.png cmd/es/sc_underline.png
+cmd/fr/lc_underlinesimple.png cmd/fr/lc_underline.png
+cmd/fr/sc_underlinesimple.png cmd/fr/sc_underline.png
+cmd/hu/lc_underlinesimple.png cmd/hu/lc_underline.png
+cmd/hu/sc_underlinesimple.png cmd/hu/sc_underline.png
+cmd/it/lc_underlinesimple.png cmd/it/lc_underline.png
+cmd/it/sc_underlinesimple.png cmd/it/sc_underline.png
+cmd/km/lc_underlinesimple.png cmd/km/lc_underline.png
+cmd/km/sc_underlinesimple.png cmd/km/sc_underline.png
+cmd/ko/lc_underlinesimple.png cmd/ko/lc_underline.png
+cmd/ko/sc_underlinesimple.png cmd/ko/sc_underline.png
+cmd/nl/lc_underlinesimple.png cmd/nl/lc_underline.png
+cmd/nl/sc_underlinesimple.png cmd/nl/sc_underline.png
+cmd/pl/lc_underlinesimple.png cmd/pl/lc_underline.png
+cmd/pl/sc_underlinesimple.png cmd/pl/sc_underline.png
+cmd/pt/lc_underlinesimple.png cmd/pt/lc_underline.png
+cmd/pt/sc_underlinesimple.png cmd/pt/sc_underline.png
+cmd/pt-BR/lc_underlinesimple.png cmd/pt-BR/lc_underline.png
+cmd/pt-BR/sc_underlinesimple.png cmd/pt-BR/sc_underline.png
+cmd/ru/lc_underlinesimple.png cmd/ru/lc_underline.png
+cmd/ru/sc_underlinesimple.png cmd/ru/sc_underline.png
+cmd/sl/lc_underlinesimple.png cmd/sl/lc_underline.png
+cmd/sl/sc_underlinesimple.png cmd/sl/sc_underline.png
+cmd/tr/lc_underlinesimple.png cmd/tr/lc_underline.png
+cmd/tr/sc_underlinesimple.png cmd/tr/sc_underline.png
 
 # Slide command aliases
 cmd/lc_insertslide.png cmd/lc_insertpage.png
