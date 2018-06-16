@@ -198,7 +198,7 @@ void Help::HideBalloonAndQuickHelp()
 void* Help::ShowPopover(vcl::Window* pParent, const tools::Rectangle& rScreenRect,
                               const OUString& rText, QuickHelpFlags nStyle)
 {
-    void* nId = pParent->ImplGetFrame()->ShowPopover(rText, rScreenRect, nStyle);
+    void* nId = pParent->ImplGetFrame()->ShowPopover(rText, pParent, rScreenRect, nStyle);
     if (nId)
     {
         //popovers are handled natively, return early
@@ -218,7 +218,7 @@ void* Help::ShowPopover(vcl::Window* pParent, const tools::Rectangle& rScreenRec
 void Help::UpdatePopover(void* nId, vcl::Window* pParent, const tools::Rectangle& rScreenRect,
                          const OUString& rText)
 {
-    if (pParent->ImplGetFrame()->UpdatePopover(nId, rText, rScreenRect))
+    if (pParent->ImplGetFrame()->UpdatePopover(nId, rText, pParent, rScreenRect))
     {
         //popovers are handled natively, return early
         return;
