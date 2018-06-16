@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <vector>
 
 namespace chart
 {

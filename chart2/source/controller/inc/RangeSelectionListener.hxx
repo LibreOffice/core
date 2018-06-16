@@ -21,9 +21,9 @@
 
 #include <ControllerLockGuard.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <com/sun/star/sheet/XRangeSelectionListener.hpp>
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XRangeSelectionListener; } } } }
 
 namespace chart
 {

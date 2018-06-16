@@ -19,21 +19,21 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTMODELHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTMODELHELPER_HXX
 
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
 
-#include <ChartModel.hxx>
-
 #include <vector>
+
+namespace chart { class ChartModel; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataProvider; } } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XRangeHighlighter; } } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 
 namespace chart
 {

@@ -19,6 +19,7 @@
 
 #include <CharacterProperties.hxx>
 
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
