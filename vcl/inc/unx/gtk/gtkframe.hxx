@@ -538,8 +538,8 @@ public:
     virtual void                PositionByToolkit(const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void                SetModal(bool bModal) override;
     virtual bool                ShowTooltip(const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
-    virtual void*               ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
-    virtual bool                UpdatePopover(void* nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
+    virtual void*               ShowPopover(const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
+    virtual bool                UpdatePopover(void* nId, const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea) override;
     virtual bool                HidePopover(void* nId) override;
     virtual weld::Window*       GetFrameWeld() const override;
 #endif
