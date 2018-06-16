@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_4d777bd4",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2018-06-16T13:12:45Z",
+      "side": 1,
+      "message": "Hello,\n\nThis URL should be translatable, to be able to open for example the french contribution page in french for french users. For example in France we should open https://fr.libreoffice.org/community/get-involved/",
+      "range": {
+        "startLine": 1374,
+        "startChar": 0,
+        "endLine": 1374,
+        "endChar": 64
+      },
+      "revId": "5e58b203e03fbcf6ca1399954bc01871474c973e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
