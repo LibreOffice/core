@@ -547,7 +547,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     String ST_NON_BREAK_SPACE
     {
-       Text [ en-US ] = "Add non breaking space before specific punctuation marks in french text" ;
+       Text [ en-US ] = "Add non breaking space before specific punctuation marks in French text" ;
     };
     String ST_ORDINAL
     {
