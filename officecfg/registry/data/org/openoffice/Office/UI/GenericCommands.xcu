@@ -6279,6 +6279,11 @@
           <value xml:lang="en-US">~Insert</value>
         </prop>
       </node>
+      <node oor:name=".uno:DataMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Data</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SendToMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sen~d</value>

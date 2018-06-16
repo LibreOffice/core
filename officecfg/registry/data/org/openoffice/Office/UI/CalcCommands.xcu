@@ -2128,11 +2128,6 @@
           <value xml:lang="en-US">Insert Page ~Break</value>
         </prop>
       </node>
-      <node oor:name=".uno:DataMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Data</value>
-        </prop>
-      </node>
       <node oor:name=".uno:DelBreakMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete Page ~Break</value>
