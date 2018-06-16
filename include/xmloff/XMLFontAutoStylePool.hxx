@@ -35,9 +35,9 @@ class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public salhelper::SimpleReferenceO
 {
     SvXMLExport& rExport;
 
-    std::unique_ptr<XMLFontAutoStylePool_Impl> pPool;
+    std::unique_ptr<XMLFontAutoStylePool_Impl> m_pFontAutoStylePool;
     std::set<OUString> m_aNames;
-    bool tryToEmbedFonts;
+    bool m_bTryToEmbedFonts;
 
     OUString embedFontFile( const OUString& fontUrl );
 
