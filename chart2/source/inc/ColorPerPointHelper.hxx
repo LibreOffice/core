@@ -20,8 +20,10 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_COLORPERPOINTHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_COLORPERPOINTHELPER_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include "charttoolsdllapi.hxx"
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 
 namespace chart
 {

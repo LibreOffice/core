@@ -27,12 +27,14 @@
 #include <Scaling.hxx>
 #include <ChartModelHelper.hxx>
 #include <DataSourceHelper.hxx>
+#include <ReferenceSizeProvider.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 #include <unonames.hxx>
 
 #include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
-
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>

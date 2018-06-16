@@ -48,6 +48,7 @@
 #include <BaseGFXHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DateHelper.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 #include <defines.hxx>
 #include <unonames.hxx>
 #if HAVE_FEATURE_OPENGL

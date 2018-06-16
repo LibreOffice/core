@@ -27,6 +27,7 @@
 #include <ModifyListenerHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/diagnose_ex.h>
 

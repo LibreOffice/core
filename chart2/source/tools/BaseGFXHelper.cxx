@@ -19,6 +19,8 @@
 
 #include <BaseGFXHelper.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
+#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

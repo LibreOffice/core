@@ -20,17 +20,21 @@
 #define INCLUDED_CHART2_SOURCE_INC_AXISHELPER_HXX
 
 #include "charttoolsdllapi.hxx"
-#include "ReferenceSizeProvider.hxx"
-#include "ExplicitCategoriesProvider.hxx"
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-
-#include <ChartModel.hxx>
+#include <com/sun/star/chart2/ScaleData.hpp>
 
 #include <vector>
+
+namespace chart { class ChartModel; }
+namespace chart { class ExplicitCategoriesProvider; }
+namespace chart { class ReferenceSizeProvider; }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XScaling; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {

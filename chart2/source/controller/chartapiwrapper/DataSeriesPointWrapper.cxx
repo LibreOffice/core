@@ -49,6 +49,7 @@
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
