@@ -277,8 +277,7 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
 
     // create OUStrings from ASCII property names
     typedef ::std::pair< OUString, size_t >     IndexedOUString;
-    typedef ::std::vector< IndexedOUString >    IndexedOUStringVec;
-    IndexedOUStringVec aPropNameVec;
+    std::vector<IndexedOUString> aPropNameVec;
     for( size_t nVecIdx = 0; *ppcPropNames; ++ppcPropNames, ++nVecIdx )
     {
         OUString aPropName = OUString::createFromAscii( *ppcPropNames );
@@ -296,8 +295,8 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
 
     // fill the property name sequence and store original sort order
     sal_Int32 nSeqIdx = 0;
-    for( IndexedOUStringVec::const_iterator aIt = aPropNameVec.begin(),
-            aEnd = aPropNameVec.end(); aIt != aEnd; ++aIt, ++nSeqIdx )
+    for( auto aIt = aPropNameVec.cbegin(), aEnd = aPropNameVec.cend();
+            aIt != aEnd; ++aIt, ++nSeqIdx )
     {
         maNameSeq[ nSeqIdx ] = aIt->first;
         maNameOrder[ aIt->second ] = nSeqIdx;

@@ -215,14 +215,14 @@ util::DateTime UnitConverter::calcDateTimeFromSerial( double fSerial ) const
 
 sal_uInt8 UnitConverter::calcBiffErrorCode( const OUString& rErrorCode ) const
 {
-    OoxErrorCodeMap::const_iterator aIt = maOoxErrCodes.find( rErrorCode );
+    auto aIt = maOoxErrCodes.find( rErrorCode );
     return (aIt == maOoxErrCodes.end()) ? BIFF_ERR_NA : aIt->second;
 }
 
 OUString UnitConverter::calcErrorString( sal_uInt8 nErrorCode ) const
 {
-    OoxErrorCodeMap::const_iterator iFail( maOoxErrCodes.end());
-    for (OoxErrorCodeMap::const_iterator aIt( maOoxErrCodes.begin()); aIt != maOoxErrCodes.end(); ++aIt)
+    auto iFail( maOoxErrCodes.cend());
+    for (auto aIt( maOoxErrCodes.cbegin()); aIt != maOoxErrCodes.cend(); ++aIt)
     {
         if (aIt->second == nErrorCode)
             return aIt->first;

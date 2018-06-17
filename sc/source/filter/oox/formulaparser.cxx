@@ -537,11 +537,9 @@ protected:
     bool                mbSpecialTokens;            /// True = special handling for tExp and tTbl tokens, false = exit with error.
 
 private:
-    typedef ::std::vector< size_t > SizeTypeVector;
-
     ApiTokenVector      maTokenStorage;             /// Raw unordered token storage.
-    SizeTypeVector      maTokenIndexes;             /// Indexes into maTokenStorage.
-    SizeTypeVector      maOperandSizeStack;         /// Stack with token sizes per operand.
+    std::vector<size_t> maTokenIndexes;             /// Indexes into maTokenStorage.
+    std::vector<size_t> maOperandSizeStack;         /// Stack with token sizes per operand.
     WhiteSpaceVec       maLeadingSpaces;            /// List of whitespaces before next token.
     WhiteSpaceVec       maOpeningSpaces;            /// List of whitespaces before opening parenthesis.
     WhiteSpaceVec       maClosingSpaces;            /// List of whitespaces before closing parenthesis.
@@ -621,7 +619,7 @@ ApiTokenSequence FormulaParserImpl::finalizeImport()
     if( aTokens.hasElements() )
     {
         ApiToken* pToken = aTokens.getArray();
-        for( SizeTypeVector::const_iterator aIt = maTokenIndexes.begin(), aEnd = maTokenIndexes.end(); aIt != aEnd; ++aIt, ++pToken )
+        for( auto aIt = maTokenIndexes.cbegin(), aEnd = maTokenIndexes.cend(); aIt != aEnd; ++aIt, ++pToken )
             *pToken = maTokenStorage[ *aIt ];
     }
     return finalizeTokenArray( aTokens );
@@ -716,8 +714,8 @@ ApiToken& FormulaParserImpl::getOperandToken( size_t nOpIndex, size_t nTokenInde
 {
     SAL_WARN_IF( getOperandSize( nOpIndex ) <= nTokenIndex, "sc.filter",
         "FormulaParserImpl::getOperandToken - invalid parameters" );
-    SizeTypeVector::const_iterator aIndexIt = maTokenIndexes.end();
-    for( SizeTypeVector::const_iterator aEnd = maOperandSizeStack.end(), aIt = aEnd - 1 + nOpIndex; aIt != aEnd; ++aIt )
+    auto aIndexIt = maTokenIndexes.cend();
+    for( auto aEnd = maOperandSizeStack.cend(), aIt = aEnd - 1 + nOpIndex; aIt != aEnd; ++aIt )
         aIndexIt -= *aIt;
     return maTokenStorage[ *(aIndexIt + nTokenIndex) ];
 }
