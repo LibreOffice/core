@@ -596,7 +596,14 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             bNeedMigration = aWarnDlg.run() == RET_OK;
         }
         if (bNeedMigration)
+        {
+            // back up content xml file if migration was successfull
+            Reference<XStorage> xRootStorage = m_pImpl->getOrCreateRootStorage();
+            xRootStorage->copyElementTo("content.xml", xRootStorage,
+                    "content_before_migration.xml");
+
             m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
+        }
     }
 #endif
 
