@@ -35,6 +35,8 @@ class SwFrameFormat;
 class SwFormatAnchor;
 enum class RndStdIds;
 
+enum class SwAnchoredObjectType { SwAnchoredObject, SwAnchoredDrawObject, SwFlyFrame };
+
 /** wrapper class for the positioning of Writer fly frames and drawing objects
 
     Purpose of this class is to provide a unified interface for the positioning
@@ -478,6 +480,9 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         /** The element name to show in the XML dump. */
         virtual const char* getElementName( ) const { return "SwAnchoredObject"; }
+
+        /** Return the type of the anchored object */
+        virtual SwAnchoredObjectType getAnchoredObjectType() const { return SwAnchoredObjectType::SwAnchoredObject; }
 };
 
 /// Helper class for notify that positioning of an anchored object is in progress.

@@ -52,6 +52,8 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
 /** calculate rectangle in that the object can be moved or rather be resized */
 bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove = true );
 
+enum class SwFlyFrameType { SwFlyFrame, SwFlyFreeFrame, SwFlyInContentFrame };
+
 /** general base class for all free-flowing frames
 
     #i26791# - inherit also from <SwAnchoredFlyFrame>
@@ -267,6 +269,9 @@ public:
     Point& ContentPos() { return m_aContentPos; }
 
     void InvalidateContentPos();
+
+    virtual SwAnchoredObjectType getAnchoredObjectType() const override { return SwAnchoredObjectType::SwFlyFrame; }
+    virtual SwFlyFrameType getSwFlyFrameType() const { return SwFlyFrameType::SwFlyFrame; }
 };
 #endif
 

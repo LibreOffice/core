@@ -184,16 +184,22 @@ const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj
         // RotateFlyFrame3: Object has no set contour, but for rotated
         // FlyFrames we can create a 'default' contour to make text
         // flow around the free, non-covered
-        const SwFlyFreeFrame* pSwFlyFreeFrame(dynamic_cast< const SwFlyFreeFrame* >(pAnchoredObj));
-
-        if(nullptr != pSwFlyFreeFrame && pSwFlyFreeFrame->supportsAutoContour())
+        if(pAnchoredObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame)
         {
-            bHandleContour = true;
+            const SwFlyFrame* pSwFlyFrame(static_cast< const SwFlyFrame* >(pAnchoredObj));
+            if(pSwFlyFrame->getSwFlyFrameType() == SwFlyFrameType::SwFlyFreeFrame)
+            {
+                const SwFlyFreeFrame* pSwFlyFreeFrame(static_cast< const SwFlyFreeFrame* >(pSwFlyFrame));
+                if(pSwFlyFreeFrame->supportsAutoContour())
+                {
+                    bHandleContour = true;
+                }
+            }
         }
     }
 
     if( bHandleContour &&
-        ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr ||
+        ( pAnchoredObj->getAnchoredObjectType() != SwAnchoredObjectType::SwFlyFrame ||
           ( static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower() &&
             static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower()->IsNoTextFrame() ) ) )
     {
@@ -514,11 +520,11 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
         {
             // #i68520#
             const SwAnchoredObject* pTmpAnchoredObj = (*mpAnchoredObjList)[i];
-            if( dynamic_cast<const SwFlyFrame*>(pTmpAnchoredObj) &&
+            if( pTmpAnchoredObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame &&
                 mpCurrAnchoredObj != pTmpAnchoredObj )
             {
                 // #i68520#
-                const SwFlyFrame& rFly = dynamic_cast<const SwFlyFrame&>(*pTmpAnchoredObj);
+                const SwFlyFrame& rFly = static_cast<const SwFlyFrame&>(*pTmpAnchoredObj);
                 if( aRegion.GetOrigin().IsOver( rFly.getFrameArea() ) )
                 {
                     const SwFrameFormat *pFormat = rFly.GetFormat();
@@ -604,9 +610,9 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
                 continue;
 
             // #i68520#
-            const SwFlyFrame* pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObjTmp);
-            if (pFly)
+            if (pAnchoredObjTmp->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame)
             {
+                const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pAnchoredObjTmp);
                 // #i68520#
                 const SwFormatSurround& rSur = pAnchoredObjTmp->GetFrameFormat().GetSurround();
 
@@ -690,9 +696,13 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         // #i68520#
         // bEvade: consider pNew, if we are not inside a fly
         //         consider pNew, if pNew is lower of <mpCurrAnchoredObj>
-        bool bEvade = !mpCurrAnchoredObj ||
-                          Is_Lower_Of( dynamic_cast<const SwFlyFrame*>(mpCurrAnchoredObj), pNew);
-
+        bool bEvade = !mpCurrAnchoredObj;
+        if( mpCurrAnchoredObj )
+        {
+            const SwFlyFrame* const pFlyFrame = (mpCurrAnchoredObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame
+                                             ? static_cast<const SwFlyFrame*>(mpCurrAnchoredObj) : nullptr);
+            bEvade = Is_Lower_Of( pFlyFrame, pNew);
+        }
         if ( !bEvade )
         {
             // We are currently inside a fly frame and pNew is not
