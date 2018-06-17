@@ -6255,6 +6255,10 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Track Chan~ges</value>
         </prop>
+      <node oor:name=".uno:ReviewMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Review</value>
+        </prop>
       </node>
       <node oor:name=".uno:EditLinksMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">

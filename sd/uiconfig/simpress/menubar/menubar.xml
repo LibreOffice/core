@@ -143,7 +143,6 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:ShowAnnotations"/>
-            <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Sidebar"/>
             <menu:menuitem menu:id=".uno:ModifyPage"/>
