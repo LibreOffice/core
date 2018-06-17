@@ -50,8 +50,11 @@ namespace connectivity
         class OPreparedStatement final : public OCommonStatement,
                                     public OPreparedStatement_BASE
         {
-            unsigned int        m_paramCount;   // number of placeholders
+            unsigned int        m_paramCount = 0;   // number of placeholders
             Reference< XResultSetMetaData > m_xMetaData;
+            MYSQL_STMT* m_pStmt;
+            MYSQL_RES* m_pResult = nullptr;
+            std::vector<MYSQL_BIND> m_binds;
 
             void checkParameterIndex(sal_Int32 parameter);
 
@@ -68,7 +71,7 @@ namespace connectivity
             getSupportedServiceNames()
                 SAL_OVERRIDE;
 
-            OPreparedStatement(OConnection* _pConnection, sql::PreparedStatement * cppPrepStmt);
+            OPreparedStatement(OConnection* _pConnection, MYSQL_STMT* pStmt);
 
             //XInterface
             Any SAL_CALL queryInterface(const Type & rType) SAL_OVERRIDE;
@@ -149,15 +152,5 @@ namespace connectivity
     } /* mysqlc */
 } /* connectivity */
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_PREPAREDSTATEMENT_HXX
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

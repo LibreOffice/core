@@ -72,15 +72,18 @@ sal_Bool OPreparedStatement::supportsService(rtl::OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-OPreparedStatement::OPreparedStatement(OConnection* _pConnection, sql::PreparedStatement * _cppPrepStmt)
-    :OCommonStatement(_pConnection, _cppPrepStmt)
+OPreparedStatement::OPreparedStatement(OConnection* _pConnection, MYSQL_STMT* pStmt)
+    :OCommonStatement(_pConnection)
+        ,m_pStmt(pStmt)
 {
     m_xConnection = _pConnection;
-
-    try {
-        m_paramCount = static_cast<sql::PreparedStatement *>(cppStatement.get())->getParameterMetaData()->getParameterCount();
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    m_paramCount = mysql_stmt_param_count(m_pStmt);
+    m_binds.reserve(m_paramCount);
+    for(int i=0; i<m_paramCount; ++i)
+    {
+        MYSQL_BIND bind;
+        bind.is_null = 1; // NULL by default
+        m_binds.push_back(bind);
     }
 }
 
@@ -119,17 +122,11 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    try {
-        if (!m_xMetaData.is()) {
-            m_xMetaData = new OResultSetMetaData(
-                                    static_cast<sql::PreparedStatement *>(cppStatement.get())->getMetaData(),
-                                    getOwnConnection()->getConnectionEncoding()
-                                );
-        }
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    if (!m_xMetaData.is()) {
+        m_xMetaData = new OResultSetMetaData(
+                                *m_xConnection.get(),
+                                m_pResult,
+                getOwnConnection()->getConnectionEncoding());
     }
     return m_xMetaData;
 }
@@ -146,9 +143,6 @@ void SAL_CALL OPreparedStatement::close()
     } catch (const SQLException &) {
         // If we get an error, ignore
     }
-
-    // Remove this Statement object from the Connection object's
-    // list
 }
 
 sal_Bool SAL_CALL OPreparedStatement::execute()
@@ -156,13 +150,16 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    bool success = false;
-    try {
-        success = static_cast<sql::PreparedStatement *>(cppStatement.get())->execute();
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
-    return success;
+    int nFail = mysql_stmt_execute(m_pStmt);
+
+        if(nFail != 0)
+        {
+            MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+            mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql),
+                    mysql_errno(pMysql), *this, m_xConnection.get()->getConnectionEncoding());
+        }
+
+    return !nFail;
 }
 
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
@@ -170,12 +167,16 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    sal_Int32 affectedRows = 0;
-    try {
-        affectedRows = static_cast<sql::PreparedStatement *>(cppStatement.get())->executeUpdate();
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    int nFail = mysql_stmt_execute(m_pStmt);
+
+    if(nFail != 0)
+    {
+        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql),
+                mysql_errno(pMysql), *this, m_xConnection.get()->getConnectionEncoding());
     }
+
+    sal_Int32 affectedRows = mysql_stmt_affected_rows(m_pStmt);
     return affectedRows;
 }
 
@@ -185,14 +186,13 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const rtl::OUSt
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        std::string stringie(rtl::OUStringToOString(x, m_xConnection->getConnectionEncoding()).getStr());
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setString(parameter, stringie);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    rtl::OString stringie(rtl::OUStringToOString(x,
+                m_xConnection->getConnectionEncoding());
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_STRING;
+    m_binds[nIndex].buffer = stringie.getStr();
+    m_binds[nIndex].is_null = 0;
+    m_binds[nIndex].length = stringie.getLength();
 }
 
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
@@ -208,6 +208,16 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
+    int nFail = mysql_stmt_execute(m_pStmt);
+
+    if(nFail != 0)
+    {
+        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql),
+                mysql_errno(pMysql), *this, m_xConnection.get()->getConnectionEncoding());
+    }
+
+    // TODO create result set from prepared statement
     Reference< XResultSet > xResultSet;
     try {
         sql::ResultSet * res = static_cast<sql::PreparedStatement *>(cppStatement.get())->executeQuery();
@@ -730,15 +740,5 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 column)
         throw SQLException("Parameter index out of range", *this, rtl::OUString(), 1, Any ());
     }
 }
-
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

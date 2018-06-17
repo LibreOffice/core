@@ -23,6 +23,7 @@
 #include "mysqlc_preparedstatement.hxx"
 #include "mysqlc_statement.hxx"
 #include "mysqlc_subcomponent.hxx"
+#include "mysqlc_connection.hxx"
 
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
@@ -68,11 +69,16 @@ namespace connectivity
                             public  ::cppu::OPropertySetHelper,
                             public  OPropertyArrayUsageHelper<OResultSet>
         {
+            OConnection         &m_rConnection;
+            MYSQL_ROW           m_aRow;
+            unsigned long       *m_aLengths = nullptr;
+            MYSQL               *m_pMysql = nullptr;
             css::uno::WeakReferenceHelper  m_aStatement;
             css::uno::Reference< css::sdbc::XResultSetMetaData> m_xMetaData;
-            sql::ResultSet      *m_result;
+            MYSQL_RES           *m_pResult;
             unsigned int        fieldCount;
             rtl_TextEncoding    m_encoding;
+            sal_Int32           m_nCurrentField = 0;
             // OPropertyArrayUsageHelper
             ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
             // OPropertySetHelper
@@ -98,7 +104,7 @@ namespace connectivity
             getSupportedServiceNames()
                 SAL_OVERRIDE;
 
-            OResultSet( OCommonStatement* pStmt, sql::ResultSet *result, rtl_TextEncoding _encoding );
+            OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES *pResult, rtl_TextEncoding _encoding );
 
             // ::cppu::OComponentHelper
             void SAL_CALL disposing() SAL_OVERRIDE;
@@ -236,14 +242,5 @@ namespace connectivity
     } /* mysqlc */
 } /* connectivity */
 #endif // CONNECTIVITY_SRESULTSET_HXX
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
