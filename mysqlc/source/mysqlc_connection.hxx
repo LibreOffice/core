@@ -43,6 +43,8 @@
 #include <rtl/string.hxx>
 #include <rtl/ref.hxx>
 
+#include <mysql.h>
+
 #include <map>
 
 
@@ -85,6 +87,8 @@ namespace connectivity
         class OConnection final : public OBase_Mutex,
                             public OConnection_BASE
         {
+        private:
+            MYSQL m_mysql;
             ConnectionSettings  m_settings;
             css::uno::Reference< css::container::XNameAccess > m_typeMap;
             css::uno::Reference< css::util::XStringSubstitution > m_xParameterSubstitution;
@@ -98,9 +102,9 @@ namespace connectivity
                                             // for this Connection
 
             rtl::Reference<MysqlCDriver> m_xDriver; // Pointer to the owning driver object
-            sql::Driver*    cppDriver;
-
         public:
+            MYSQL* getMysqlConnection() { return &m_mysql; }
+
             /// @throws SQLException
             /// @throws RuntimeException
             sal_Int32 getMysqlVersion();
@@ -108,7 +112,7 @@ namespace connectivity
             /// @throws SQLException
             void construct(const rtl::OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
 
-            OConnection(MysqlCDriver& _rDriver, sql::Driver * cppDriver);
+            OConnection(MysqlCDriver& _rDriver );
             virtual ~OConnection();
 
             rtl_TextEncoding getConnectionEncoding() const { return m_settings.encoding; }
@@ -183,14 +187,5 @@ namespace connectivity
     } /* mysqlc */
 } /* connectivity */
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
