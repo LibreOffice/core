@@ -18,9 +18,11 @@
  */
 
 #include "mysqlc_resultsetmetadata.hxx"
+#include "mysqlc_resultset.hxx"
 #include "mysqlc_general.hxx"
 #include <cppconn/exception.h>
 
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <rtl/ustrbuf.hxx>
 
 using namespace connectivity::mysqlc;
@@ -28,150 +30,92 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-
-OResultSetMetaData::~OResultSetMetaData()
+MYSQL_FIELD* OResultSetMetaData::getField(sal_Int32 column) const
 {
+    return mysql_fetch_field_direct(m_pRes, column - 1);
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize(sal_Int32 column)
 {
-    try {
-        meta->getColumnDisplaySize(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getColumnDisplaySize", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return 0; // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return pField->length;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 {
     checkColumnIndex(column);
+    MYSQL_FIELD* pField = getField(column);
 
-    try {
-        return mysqlc_sdbc_driver::mysqlToOOOType(meta->getColumnType(column));
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return 0; // fool compiler
+    return mysqlc_sdbc_driver::mysqlToOOOType(pField->type);
 }
 
-/*
-  XXX: This method doesn't throw exceptions at all.
-  Should it declare that it throws ?? What if throw() is removed?
-  Does it change the API, the open-close principle?
-*/
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount()
 {
-    try {
-        return meta->getColumnCount();
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return 0; // fool compiler
+    return mysql_num_fields(m_pRes);
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
 {
     checkColumnIndex(column);
+    //   MYSQL_FIELD::charsetnr is the collation identifier
+    //   _ci postfix means it's insensitive
+    MYSQL_FIELD* pField = getField(column);
+    rtl::OUStringBuffer sql{"SHOW COLLATION WHERE Id ="};
+    sql.append(rtl::OUString::number(pField->charsetnr));
 
-    try {
-        return meta->isCaseSensitive(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return false; // fool compiler
+    Reference< XStatement > stmt = m_rConnection.createStatement();
+    Reference< XResultSet > rs = stmt->executeQuery(sql.makeStringAndClear());
+    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
+
+    rs->next(); // fetch first and only row
+    rtl::OUString sColName = xRow->getString(1); // first column is Collation name
+
+    return !sColName.isEmpty() && !sColName.endsWith("_ci");
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
 {
     checkColumnIndex(column);
+    MYSQL_FIELD* pField = getField(column);
 
-    try {
-        return convert(meta->getSchemaName(column));
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return rtl::OUString(); // fool compiler
+    return rtl::OStringToOUString(pField->db, m_rConnection.getConnectionEncoding());
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
 {
     checkColumnIndex(column);
 
-    try {
-        return convert( meta->getColumnName( column ) );
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return rtl::OUString(); // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return rtl::OStringToOUString(pField->name, m_rConnection.getConnectionEncoding());
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    try {
-        return convert(meta->getTableName(column));
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return rtl::OUString(); // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return rtl::OStringToOUString(pField->table, m_rConnection.getConnectionEncoding());
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    try {
-        return convert(meta->getCatalogName(column));
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return rtl::OUString(); // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return rtl::OStringToOUString(pField->catalog, m_rConnection.getConnectionEncoding());
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 {
     checkColumnIndex(column);
+    MYSQL_FIELD* pField = getField(column);
 
-    try {
-        return convert(meta->getColumnTypeName(column));
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return rtl::OUString(); // fool compiler
+    return mysqlc_sdbc_driver::mysqlTypeToStr(pField);
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    try {
-        return convert(meta->getColumnLabel(column));
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return rtl::OUString(); // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return rtl::OStringToOUString(pField->name, m_rConnection.getConnectionEncoding());
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
@@ -182,166 +126,85 @@ rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column
     return aRet;
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
+sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 /*column*/)
 {
-    checkColumnIndex(column);
-
-    try {
-        return meta->isCurrency(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return false; // fool compiler
+    return false; // TODO
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 {
     checkColumnIndex(column);
 
-    try {
-        return meta->isAutoIncrement(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return false; // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return pField->flags & AUTO_INCREMENT_FLAG;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
 {
     checkColumnIndex(column);
 
-    try {
-        return meta->isSigned(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return false; // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return !(pField->flags & UNSIGNED_FLAG);
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    try {
-        return meta->getPrecision(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getPrecision", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return 0; // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return pField->max_length - pField->decimals;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
 {
     checkColumnIndex(column);
-    try {
-        return meta->getScale(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getScale", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return 0; // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return pField->decimals;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    try {
-        return sal_Int32(bool(meta->isNullable(column)));
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return sal_Int32(false); // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return !(pField->flags & NOT_NULL_FLAG);
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
+sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 /*column*/)
 {
-    checkColumnIndex(column);
-
-    try {
-        return meta->isSearchable(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return false; // fool compiler
+    return true;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    try {
-        return meta->isReadOnly(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return false; // fool compiler
+    MYSQL_FIELD* pField = getField(column);
+    return !(pField->db && strlen(pField->db));
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    try {
-        return meta->isDefinitelyWritable(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return false; // fool compiler
+    return !isReadOnly(column);
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    try {
-        return meta->isWritable(column);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
-    }
-    return false; // fool compiler
+    return !isReadOnly(column);
 }
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
 {
-    if (columnIndex < 1 || columnIndex > static_cast<sal_Int32>(meta->getColumnCount())) {
+    unsigned nColCount = mysql_num_fields(m_pRes);
+    if (columnIndex < 1 || columnIndex > static_cast<sal_Int32>(nColCount)) {
 
         rtl::OUStringBuffer buf;
         buf.appendAscii( "Column index out of range (expected 1 to " );
-        buf.append( sal_Int32( meta->getColumnCount() ) );
+        buf.append( sal_Int32( nColCount ) );
         buf.appendAscii( ", got " );
         buf.append( columnIndex );
         buf.append( '.' );
         throw SQLException( buf.makeStringAndClear(), *this, rtl::OUString(), 1, Any() );
     }
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

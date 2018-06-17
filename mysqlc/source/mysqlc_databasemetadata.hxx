@@ -42,7 +42,7 @@ namespace connectivity
         class ODatabaseMetaData final : public ODatabaseMetaData_BASE
         {
             OConnection&    m_rConnection;
-            sql::DatabaseMetaData * meta;
+            MYSQL * m_pMySql;
             rtl::OUString           identifier_quote_string;
             bool                    identifier_quote_string_set;
 
@@ -56,7 +56,7 @@ namespace connectivity
         public:
             const OConnection& getOwnConnection() const { return m_rConnection; }
 
-            explicit ODatabaseMetaData(OConnection& _rCon);
+            explicit ODatabaseMetaData(OConnection& _rCon, MYSQL* pMySql);
             virtual ~ODatabaseMetaData();
 
             // as I mentioned before this interface is really BIG

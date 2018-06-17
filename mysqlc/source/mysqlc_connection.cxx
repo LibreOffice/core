@@ -61,12 +61,26 @@ using ::osl::MutexGuard;
 #define MYSQLC_URI_PREFIX "sdbc:mysqlc:"
 
 
+namespace
+{
+    void lcl_executeUpdate(MYSQL* pMySql, const rtl::OString& sql)
+    {
+        mysql_real_query(pMySql, sql.getStr(), sql.getLength());
+        // TODO handle error
+    }
+}
+
 OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     :OMetaConnection_BASE(m_aMutex)
     ,m_xMetaData(nullptr)
     ,m_xDriver(&_rDriver)
     ,cppDriver(_cppDriver)
 {
+    mysql_init(&m_mysql);
+
+    // use TCP as connection
+    mysql_protocol_type protocol = MYSQL_PROTOCOL_TCP;
+    mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, reinterpret_cast<int*>(&protocol));
 }
 
 OConnection::~OConnection()
@@ -144,29 +158,22 @@ void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyVa
     }
 
     if (!bEmbedded) {
-        try {
-            sql::ConnectOptionsMap connProps;
-            std::string host_str = rtl::OUStringToOString(aHostName, m_settings.encoding).getStr();
-            std::string user_str = rtl::OUStringToOString(aUser, m_settings.encoding).getStr();
-            std::string pass_str = rtl::OUStringToOString(aPass, m_settings.encoding).getStr();
-            std::string schema_str = rtl::OUStringToOString(aDbName, m_settings.encoding).getStr();
-            connProps["hostName"] = sql::ConnectPropertyVal(host_str);
-            connProps["userName"] = sql::ConnectPropertyVal(user_str);
-            connProps["password"] = sql::ConnectPropertyVal(pass_str);
-            connProps["schema"] = sql::ConnectPropertyVal(schema_str);
-            connProps["port"] = sql::ConnectPropertyVal(static_cast<int>(nPort));
-            if (unixSocketPassed) {
-                sql::SQLString socket_str = rtl::OUStringToOString(sUnixSocket, m_settings.encoding).getStr();
-                connProps["socket"] = socket_str;
-            } else if (namedPipePassed) {
-                sql::SQLString pipe_str = rtl::OUStringToOString(sNamedPipe, m_settings.encoding).getStr();
-                connProps["socket"] = pipe_str;
-            }
-
-            m_settings.cppConnection.reset(cppDriver->connect(connProps));
-        } catch (const sql::SQLException &e) {
-            mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
+        rtl::OString host_str = rtl::OUStringToOString(aHostName, m_settings.encoding);
+        rtl::OString user_str = rtl::OUStringToOString(aUser, m_settings.encoding);
+        rtl::OString pass_str = rtl::OUStringToOString(aPass, m_settings.encoding);
+        rtl::OString schema_str = rtl::OUStringToOString(aDbName, m_settings.encoding);
+        rtl::OString socket_str;
+        if (unixSocketPassed) {
+            socket_str = rtl::OUStringToOString(sUnixSocket, m_settings.encoding);
+        } else if (namedPipePassed) {
+            socket_str = rtl::OUStringToOString(sNamedPipe, m_settings.encoding);
         }
+
+        // flags can also be passed as last parameter
+        if(!mysql_real_connect(&m_mysql, host_str.getStr(), user_str.getStr(),
+                    pass_str.getStr(), schema_str.getStr(), nPort, socket_str.getStr(), 0))
+            mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql),
+                    mysql_errno(&m_mysql),*this, getConnectionEncoding());
     } else {
         // TODO: support for embedded server
     }
@@ -182,9 +189,9 @@ void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyVa
             0,
             Any());
     }
-    std::unique_ptr<sql::Statement> stmt(m_settings.cppConnection->createStatement());
-    stmt->executeUpdate("SET session sql_mode='ANSI_QUOTES'");
-    stmt->executeUpdate("SET NAMES utf8");
+
+    lcl_executeUpdate(&m_mysql, rtl::OString{"SET session sql_mode='ANSI_QUOTES'"});
+    lcl_executeUpdate(&m_mysql, rtl::OString{"SET NAMES utf8"});
 }
 
 rtl::OUString OConnection::getImplementationName()
@@ -213,7 +220,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement()
     Reference< XStatement > xReturn;
     // the statement can only be executed once
     try {
-        xReturn = new OStatement(this, m_settings.cppConnection->createStatement());
+        xReturn = new OStatement(this);
         m_aStatements.push_back(WeakReferenceHelper(xReturn));
         return xReturn;
     } catch (const sql::SQLException & e) {
@@ -226,18 +233,20 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const rtl
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    const rtl::OUString sSqlStatement = transFormPreparedStatement( _sSql );
+    const rtl::OString sSqlStatement = rtl::OUStringToOString(
+            _sSql, getConnectionEncoding()); // TODO transform statement
+
+    MYSQL_STMT* pStmt = mysql_stmt_init(&m_mysql);
+    mysql_stmt_prepare(pStmt, sSqlStatement.getStr(), sSqlStatement.getLength());
+
+    unsigned int nErrorNum = mysql_errno(&m_mysql);
+    if(nErrorNum != 0)
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql),
+                  nErrorNum,*this, getConnectionEncoding());
 
     Reference< XPreparedStatement > xStatement;
-    try {
-        // create a statement
-        // the statement can only be executed more than once
-        xStatement = new OPreparedStatement(this,
-                    m_settings.cppConnection->prepareStatement(rtl::OUStringToOString(sSqlStatement, getConnectionEncoding()).getStr()));
-        m_aStatements.push_back( WeakReferenceHelper( xStatement ) );
-    } catch (const sql::SQLException & e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }
+    xStatement = new OPreparedStatement(this, pStmt);
+    m_aStatements.push_back( WeakReferenceHelper( xStatement ) );
     return xStatement;
 }
 
@@ -269,11 +278,8 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    try {
-        m_settings.cppConnection->setAutoCommit(autoCommit);
-    } catch (const sql::SQLException & e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }
+    if(!mysql_autocommit(&m_mysql, autoCommit))
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql), *this, getConnectionEncoding());
 }
 
 sal_Bool SAL_CALL OConnection::getAutoCommit()
@@ -281,6 +287,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
     // you have to distinguish which if you are in autocommit mode or not
     // at normal case true should be fine here
 
+    // TODO use SELECT @@autocommit query for that
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
@@ -297,22 +304,18 @@ void SAL_CALL OConnection::commit()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    try {
-        m_settings.cppConnection->commit();
-    } catch (const sql::SQLException & e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }
+
+    if(!mysql_commit(&m_mysql))
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql), *this, getConnectionEncoding());
 }
 
 void SAL_CALL OConnection::rollback()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    try {
-        m_settings.cppConnection->rollback();
-    } catch (const sql::SQLException & e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }
+
+    if(!mysql_rollback(&m_mysql))
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql), *this, getConnectionEncoding());
 }
 
 sal_Bool SAL_CALL OConnection::isClosed()
@@ -329,12 +332,9 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
-    if (!xMetaData.is()) {
-        try {
-            xMetaData = new ODatabaseMetaData(*this); // need the connection because it can return it
-        } catch (const sql::SQLException & e) {
-            mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-        }
+    if (!xMetaData.is())
+    {
+        xMetaData = new ODatabaseMetaData(*this, &m_mysql);
         m_xMetaData = xMetaData;
     }
 
@@ -363,6 +363,7 @@ void SAL_CALL OConnection::setCatalog(const rtl::OUString& catalog)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
+    // TODO How?
     try {
 //      m_settings.cppConnection->setCatalog(rtl::OUStringToOString(catalog, m_settings.encoding).getStr());
         m_settings.cppConnection->setSchema(rtl::OUStringToOString(catalog, getConnectionEncoding()).getStr());
@@ -376,6 +377,7 @@ rtl::OUString SAL_CALL OConnection::getCatalog()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
+    // TODO How?
     rtl::OUString catalog;
     try {
         catalog = mysqlc_sdbc_driver::convert(m_settings.cppConnection->getSchema(), getConnectionEncoding());
@@ -507,15 +509,8 @@ sal_Int32 OConnection::getMysqlVersion()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    sal_Int32 version(0);
-    try {
-        version = 10000 * m_settings.cppConnection->getMetaData()->getDatabaseMajorVersion();
-        version += 100 * m_settings.cppConnection->getMetaData()->getDatabaseMinorVersion();
-        version += m_settings.cppConnection->getMetaData()->getDatabasePatchVersion();
-    } catch (const sql::SQLException & e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }
-    return version;
+    unsigned long version = mysql_get_server_version(&m_mysql);
+    return static_cast<sal_Int32>(version);
 }
 
 rtl::OUString OConnection::transFormPreparedStatement(const rtl::OUString& _sSQL)
@@ -538,14 +533,5 @@ rtl::OUString OConnection::transFormPreparedStatement(const rtl::OUString& _sSQL
     return sSqlStatement;
 }
 
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
