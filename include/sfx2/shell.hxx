@@ -56,6 +56,7 @@ class SfxRepeatTarget;
 class SbxVariable;
 class SbxBase;
 class SfxBindings;
+class SfxModule;
 
 namespace svl
 {

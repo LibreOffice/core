@@ -108,9 +108,6 @@ blacklist:
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessibleSelection.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    sd/source/ui/inc/BezierObjectBar.hxx:
-    # Used via macro, really needed to compile
-    - class SfxModule
     sd/source/ui/inc/DrawDocShell.hxx:
     # base class has to be a complete type
     - fupoor.hxx
