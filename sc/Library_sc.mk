@@ -399,6 +399,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/dataprovider/dataprovider \
     sc/source/ui/dataprovider/datatransformation \
     sc/source/ui/dataprovider/htmldataprovider \
+    sc/source/ui/dataprovider/xmldataprovider \
     sc/source/ui/dbgui/asciiopt \
     sc/source/ui/dbgui/consdlg \
     sc/source/ui/dbgui/csvcontrol \
