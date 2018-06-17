@@ -23,26 +23,19 @@
 
 using namespace ::com::sun::star;
 
-VclPtr<SfxTabPage> SfxDocumentFontsPage::Create(TabPageParent parent, const SfxItemSet* set)
+VclPtr<SfxTabPage> SfxDocumentFontsPage::Create(TabPageParent pParent, const SfxItemSet* set)
 {
-    return VclPtr<SfxDocumentFontsPage>::Create( parent.pParent, *set );
+    return VclPtr<SfxDocumentFontsPage>::Create(pParent, *set);
 }
 
-SfxDocumentFontsPage::SfxDocumentFontsPage( vcl::Window* parent, const SfxItemSet& set )
-    : SfxTabPage( parent, "DocumentFontsPage", "sfx/ui/documentfontspage.ui", &set )
+SfxDocumentFontsPage::SfxDocumentFontsPage(TabPageParent parent, const SfxItemSet& set)
+    : SfxTabPage(parent, "sfx/ui/documentfontspage.ui", "DocumentFontsPage", &set)
+    , embedFontsCheckbox(m_xBuilder->weld_check_button("embedFonts"))
 {
-    get( embedFontsCheckbox, "embedFonts" );
 }
 
 SfxDocumentFontsPage::~SfxDocumentFontsPage()
 {
-    disposeOnce();
-}
-
-void SfxDocumentFontsPage::dispose()
-{
-    embedFontsCheckbox.clear();
-    SfxTabPage::dispose();
 }
 
 void SfxDocumentFontsPage::Reset( const SfxItemSet* )
@@ -61,12 +54,12 @@ void SfxDocumentFontsPage::Reset( const SfxItemSet* )
         {
         }
     }
-    embedFontsCheckbox->Check( bVal );
+    embedFontsCheckbox->set_active(bVal);
 }
 
 bool SfxDocumentFontsPage::FillItemSet( SfxItemSet* )
 {
-    bool bVal = embedFontsCheckbox->IsChecked();
+    bool bVal = embedFontsCheckbox->get_active();
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
     {
