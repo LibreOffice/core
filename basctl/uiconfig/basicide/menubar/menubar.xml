@@ -70,8 +70,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ObjectCatalog"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
         </menu:menupopup>
     </menu:menu>

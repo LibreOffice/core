@@ -87,7 +87,6 @@
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
       <menu:menuitem menu:id=".uno:ElementsDockingWindow"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
