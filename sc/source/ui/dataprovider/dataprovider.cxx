@@ -15,6 +15,7 @@
 #include <rtl/strbuf.hxx>
 
 #include "htmldataprovider.hxx"
+#include "xmldataprovider.hxx"
 #include <datatransformation.hxx>
 
 using namespace com::sun::star;
@@ -74,6 +75,13 @@ void ExternalDataSource::setID(const OUString& rID)
     maID = rID;
 }
 
+void ExternalDataSource::setXMLImportParam(const ScOrcusImportXMLParam& rParam)
+{
+    maParam = rParam;
+}
+
+
+
 void ExternalDataSource::setURL(const OUString& rURL)
 {
     maURL = rURL;
@@ -98,6 +106,11 @@ const OUString& ExternalDataSource::getProvider() const
 const OUString& ExternalDataSource::getID() const
 {
     return maID;
+}
+
+const ScOrcusImportXMLParam& ExternalDataSource::getXMLImportParam() const
+{
+    return maParam;
 }
 
 OUString ExternalDataSource::getDBName() const
@@ -274,6 +287,8 @@ std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* p
             return std::shared_ptr<DataProvider>(new CSVDataProvider(pDoc, rDataSource));
         else if (rDataProvider == "org.libreoffice.calc.html")
             return std::shared_ptr<DataProvider>(new HTMLDataProvider(pDoc, rDataSource));
+        else if (rDataProvider == "org.libreoffice.calc.xml")
+            return std::shared_ptr<DataProvider>(new XMLDataProvider(pDoc, rDataSource));
     }
     else
     {
@@ -289,6 +304,7 @@ std::vector<OUString> DataProviderFactory::getDataProviders()
     std::vector<OUString> aDataProviders;
     aDataProviders.emplace_back("org.libreoffice.calc.csv");
     aDataProviders.emplace_back("org.libreoffice.calc.html");
+    aDataProviders.emplace_back("org.libreoffice.calc.xml");
 
     return aDataProviders;
 }
