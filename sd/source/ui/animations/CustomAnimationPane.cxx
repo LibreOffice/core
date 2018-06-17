@@ -1501,15 +1501,23 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
         if( bHasTextGrouping )
             pResultSet->getPropertyValue(nHandleTextGrouping) >>= nTextGrouping;
+        else
+            pOldSet->getPropertyValue(nHandleTextGrouping) >>= nTextGrouping;
 
         if( bHasAnimateForm )
             pResultSet->getPropertyValue(nHandleAnimateForm) >>= bAnimateForm;
+        else
+            pOldSet->getPropertyValue(nHandleAnimateForm) >>= bAnimateForm;
 
         if( bHasTextGroupingAuto )
             pResultSet->getPropertyValue(nHandleTextGroupingAuto) >>= fTextGroupingAuto;
+        else
+            pOldSet->getPropertyValue(nHandleTextGroupingAuto) >>= fTextGroupingAuto;
 
         if( bHasTextReverse )
             pResultSet->getPropertyValue(nHandleTextReverse) >>= bTextReverse;
+        else
+            pOldSet->getPropertyValue(nHandleTextReverse) >>= bTextReverse;
 
         EffectSequence const aSelectedEffects( maListSelection );
         EffectSequence::const_iterator iter( aSelectedEffects.begin() );
