@@ -495,7 +495,7 @@ bool SbiScanner::NextSym()
     }
 
     // Strings:
-    else if (aLine[nLineIdx] == '"' || aLine[nLineIdx] == '[')
+    else if (nLineIdx < aLine.getLength() && (aLine[nLineIdx] == '"' || aLine[nLineIdx] == '['))
     {
         sal_Unicode cSep = aLine[nLineIdx];
         if( cSep == '[' )
@@ -545,7 +545,7 @@ bool SbiScanner::NextSym()
     }
 
     // Date:
-    else if (aLine[nLineIdx] == '#')
+    else if (nLineIdx < aLine.getLength() && aLine[nLineIdx] == '#')
     {
         sal_Int32 n = nCol + 1;
         do
@@ -592,7 +592,7 @@ bool SbiScanner::NextSym()
         }
     }
     // invalid characters:
-    else if (aLine[nLineIdx] >= 0x7F)
+    else if (nLineIdx < aLine.getLength() && aLine[nLineIdx] >= 0x7F)
     {
         GenError( ERRCODE_BASIC_SYNTAX ); nLineIdx++; nCol++;
     }
