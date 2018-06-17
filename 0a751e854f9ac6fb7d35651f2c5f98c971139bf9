@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_686a651c",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-06-17T09:07:24Z",
+      "side": 1,
+      "message": "Wouldn\u0027t hide the radio button but disable it. By doing that we can also keep the label since otherwise the \"if available\" part is weird.",
+      "range": {
+        "startLine": 447,
+        "startChar": 27,
+        "endLine": 447,
+        "endChar": 31
+      },
+      "revId": "0a751e854f9ac6fb7d35651f2c5f98c971139bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
