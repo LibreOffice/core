@@ -2617,7 +2617,7 @@ void SAL_CALL Frame::windowHidden( const css::lang::EventObject& )
     @short      called by dispose of our windows!
     @descr      This object is forced to release all references to the interfaces given
                 by the parameter source. We are a listener at our container window and
-                should listen for his diposing.
+                should listen for his disposing.
 
     @seealso    XWindowListener
     @seealso    XTopWindowListener
