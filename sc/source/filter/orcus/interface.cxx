@@ -224,12 +224,12 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, const OUSt
     rtl::math::setNan(&mfValue);
 }
 
-ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
+ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc, bool bSkipDefaultStyles) :
     maDoc(rDoc),
     maGlobalSettings(maDoc),
     maSharedStrings(*this),
     maNamedExpressions(maDoc, maGlobalSettings),
-    maStyles(rDoc),
+    maStyles(rDoc, bSkipDefaultStyles),
     mnProgress(0) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
@@ -1064,10 +1064,10 @@ size_t ScOrcusSharedStrings::commit_segments()
     return mrFactory.addString(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
 }
 
-ScOrcusStyles::ScOrcusStyles(ScDocument& rDoc):
+ScOrcusStyles::ScOrcusStyles(ScDocument& rDoc, bool bSkipDefaultStyles):
     mrDoc(rDoc)
 {
-    if (!mrDoc.GetStyleSheetPool()->HasStandardStyles())
+    if (!bSkipDefaultStyles && !mrDoc.GetStyleSheetPool()->HasStandardStyles())
         mrDoc.GetStyleSheetPool()->CreateStandardStyles();
 }
 

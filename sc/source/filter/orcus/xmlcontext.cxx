@@ -243,7 +243,7 @@ public:
 
 void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
 {
-    ScOrcusFactory aFactory(mrDoc);
+    ScOrcusFactory aFactory(mrDoc, true);
     OString aSysPath = ScOrcusFiltersImpl::toSystemPath(maPath);
     const char* path = aSysPath.getStr();
     try
