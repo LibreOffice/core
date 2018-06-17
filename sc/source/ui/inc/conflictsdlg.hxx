@@ -39,15 +39,13 @@ enum ScConflictAction
     SC_CONFLICT_ACTION_KEEP_OTHER
 };
 
-typedef ::std::vector< sal_uLong > ScChangeActionList;
-
 // struct ScConflictsListEntry
 
 struct ScConflictsListEntry
 {
     ScConflictAction    meConflictAction;
-    ScChangeActionList  maSharedActions;
-    ScChangeActionList  maOwnActions;
+    std::vector<sal_uLong>  maSharedActions;
+    std::vector<sal_uLong>  maOwnActions;
 
     bool                HasSharedAction( sal_uLong nSharedAction ) const;
     bool                HasOwnAction( sal_uLong nOwnAction ) const;
@@ -60,7 +58,7 @@ typedef ::std::vector< ScConflictsListEntry > ScConflictsList;
 class ScConflictsListHelper
 {
 private:
-    static void                     Transform_Impl( ScChangeActionList& rActionList, ScChangeActionMergeMap* pMergeMap );
+    static void                     Transform_Impl( std::vector<sal_uLong>& rActionList, ScChangeActionMergeMap* pMergeMap );
 
 public:
     static bool                     HasOwnAction( ScConflictsList& rConflictsList, sal_uLong nOwnAction );
@@ -86,7 +84,7 @@ private:
 
     static bool             DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 );
     ScConflictsListEntry*   GetIntersectingEntry( const ScChangeAction* pAction ) const;
-    ScConflictsListEntry*   GetEntry( sal_uLong nSharedAction, const ScChangeActionList& rOwnActions );
+    ScConflictsListEntry*   GetEntry( sal_uLong nSharedAction, const std::vector<sal_uLong>& rOwnActions );
 
 public:
                             ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartShared, sal_uLong nEndShared,
