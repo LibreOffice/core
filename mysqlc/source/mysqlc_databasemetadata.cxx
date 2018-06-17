@@ -44,12 +44,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using mysqlc_sdbc_driver::getStringFromAny;
 
-#include <cppconn/connection.h>
-#include <cppconn/resultset.h>
-#include <cppconn/metadata.h>
-#include <cppconn/statement.h>
-#include <cppconn/prepared_statement.h>
-
 #include <sal/macros.h>
 
 static std::string wild("%");
@@ -76,9 +70,9 @@ void lcl_setRows_throw(const Reference< XResultSet >& _xResultSet,sal_Int32 _nTy
     xIni->initialize(aArgs);
 }
 
-ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
+ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon, MYSQL* pMySql)
     :m_rConnection(_rCon)
-    ,meta(_rCon.getConnectionSettings().cppConnection->getMetaData())
+    ,m_pMySql(pMySql)
     ,identifier_quote_string_set(false)
 {
 }
@@ -87,564 +81,477 @@ ODatabaseMetaData::~ODatabaseMetaData()
 {
 }
 
-rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*Method)() )
-{
-    rtl::OUString stringMetaData;
-    try {
-        stringMetaData = mysqlc_sdbc_driver::convert((meta->*Method)(), m_rConnection.getConnectionEncoding());
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-    return stringMetaData;
-}
-
-rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*Method)() )
-{
-    rtl::OUString stringMetaData;
-    try {
-        stringMetaData = mysqlc_sdbc_driver::convert((meta->*Method)(), m_rConnection.getConnectionEncoding());
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-    return stringMetaData;
-}
-
-sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*Method)() )
-{
-    sal_Int32 int32MetaData(0);
-    try {
-        int32MetaData = (meta->*Method)();
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-    return int32MetaData;
-}
-
-bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)() )
-{
-    bool boolMetaData(false);
-    try {
-        boolMetaData = (meta->*Method)();
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-    return boolMetaData;
-}
-
-bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)(int), sal_Int32 _arg )
-{
-    bool boolMetaData(false);
-    try {
-        boolMetaData = (meta->*Method)( _arg );
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-    return boolMetaData;
-}
-
-bool ODatabaseMetaData::impl_getRSTypeMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)(int), sal_Int32 _resultSetType )
-{
-    int resultSetType(sql::ResultSet::TYPE_FORWARD_ONLY);
-    switch ( _resultSetType ) {
-        case ResultSetType::SCROLL_INSENSITIVE: resultSetType = sql::ResultSet::TYPE_SCROLL_INSENSITIVE;    break;
-        case ResultSetType::SCROLL_SENSITIVE:   resultSetType = sql::ResultSet::TYPE_SCROLL_SENSITIVE;      break;
-    }
-
-    return impl_getBoolMetaData(_methodName, Method, resultSetType);
-}
-
 rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator()
 {
-    return impl_getStringMetaData("getCatalogSeparator", &sql::DatabaseMetaData::getCatalogSeparator);
+    return rtl::OUString();
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength()
 {
-    return impl_getInt32MetaData("getMaxBinaryLiteralLength", &sql::DatabaseMetaData::getMaxBinaryLiteralLength);
+        return 16777208L;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize()
 {
-    return impl_getInt32MetaData("getMaxRowSize", &sql::DatabaseMetaData::getMaxRowSize);
+        return 2147483647L - 8; // Max buffer size - HEADER
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength()
 {
-    return impl_getInt32MetaData("getMaxCatalogNameLength", &sql::DatabaseMetaData::getMaxCatalogNameLength);
+        return 32;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength()
 {
-    return impl_getInt32MetaData("getMaxCharLiteralLength", &sql::DatabaseMetaData::getMaxCharLiteralLength);
+        return 16777208;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength()
 {
-    return impl_getInt32MetaData("getMaxColumnNameLength", &sql::DatabaseMetaData::getMaxColumnNameLength);
+        return 64;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex()
 {
-    return impl_getInt32MetaData("getMaxColumnsInIndex", &sql::DatabaseMetaData::getMaxColumnsInIndex);
+        return 16;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength()
 {
-    return impl_getInt32MetaData("getMaxCursorNameLength", &sql::DatabaseMetaData::getMaxCursorNameLength);
+        return 64;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections()
 {
-    return impl_getInt32MetaData("getMaxConnections", &sql::DatabaseMetaData::getMaxConnections);
+        // TODO
+        // SELECT @@max_connections
+        return 100;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable()
 {
-    return impl_getInt32MetaData("getMaxColumnsInTable", &sql::DatabaseMetaData::getMaxColumnsInTable);
+        return 512;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength()
 {
-    return impl_getInt32MetaData("getMaxStatementLength", &sql::DatabaseMetaData::getMaxStatementLength);
+        // TODO
+        // "SHOW VARIABLES LIKE 'max_allowed_packet'"
+    return 32767;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength()
 {
-    return impl_getInt32MetaData("getMaxTableNameLength", &sql::DatabaseMetaData::getMaxTableNameLength);
+        return 64;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect()
 {
-    return impl_getInt32MetaData("getMaxTablesInSelect", &sql::DatabaseMetaData::getMaxTablesInSelect);
+        return 256;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs()
 {
-    return impl_getBoolMetaData("doesMaxRowSizeIncludeBlobs", &sql::DatabaseMetaData::doesMaxRowSizeIncludeBlobs);
+        return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers()
 {
-    return impl_getBoolMetaData("storesLowerCaseQuotedIdentifiers", &sql::DatabaseMetaData::storesLowerCaseQuotedIdentifiers);
+        // TODO
+        return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers()
 {
-    return impl_getBoolMetaData("storesLowerCaseIdentifiers", &sql::DatabaseMetaData::storesLowerCaseIdentifiers);
+        //TODO;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers()
 {
-    return impl_getBoolMetaData("storesMixedCaseQuotedIdentifiers", &sql::DatabaseMetaData::storesMixedCaseQuotedIdentifiers);
+        // TODO
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers()
 {
-    return impl_getBoolMetaData("storesMixedCaseIdentifiers", &sql::DatabaseMetaData::storesMixedCaseIdentifiers);
+        // TODO
+        return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers()
 {
-    return impl_getBoolMetaData("storesUpperCaseQuotedIdentifiers", &sql::DatabaseMetaData::storesUpperCaseQuotedIdentifiers);
+        // TODO
+        return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers()
 {
-    return impl_getBoolMetaData("storesUpperCaseIdentifiers", &sql::DatabaseMetaData::storesUpperCaseIdentifiers);
+        // TODO
+        return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn()
 {
-    return impl_getBoolMetaData("supportsAlterTableWithAddColumn", &sql::DatabaseMetaData::supportsAlterTableWithAddColumn);
+        return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithDropColumn()
 {
-    return impl_getBoolMetaData("supportsAlterTableWithDropColumn", &sql::DatabaseMetaData::supportsAlterTableWithDropColumn);
+        return true;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength()
 {
-    return impl_getInt32MetaData("getMaxIndexLength", &sql::DatabaseMetaData::getMaxIndexLength);
+        return 256;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns()
 {
-    return impl_getBoolMetaData("supportsNonNullableColumns", &sql::DatabaseMetaData::supportsNonNullableColumns);
+        return true;
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm()
 {
-    return impl_getStringMetaData("getCatalogTerm", &sql::DatabaseMetaData::getCatalogTerm);
+    return rtl::OUString("n/a");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString()
 {
-    if (!identifier_quote_string_set) {
-        identifier_quote_string = impl_getStringMetaData("getIdentifierQuoteString", &sql::DatabaseMetaData::getIdentifierQuoteString);
-        identifier_quote_string_set = true;
-    }
-    return identifier_quote_string;
+    return rtl::OUString("\"");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters()
 {
-    return impl_getStringMetaData("getExtraNameCharacters", &sql::DatabaseMetaData::getExtraNameCharacters);
+    return rtl::OUString("#@");
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames()
 {
-    return impl_getBoolMetaData("supportsDifferentTableCorrelationNames", &sql::DatabaseMetaData::supportsDifferentTableCorrelationNames);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart()
 {
-    return impl_getBoolMetaData("isCatalogAtStart", &sql::DatabaseMetaData::isCatalogAtStart);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions()
 {
-    return impl_getBoolMetaData("dataDefinitionIgnoredInTransactions", &sql::DatabaseMetaData::dataDefinitionIgnoredInTransactions);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit()
 {
-    return impl_getBoolMetaData("dataDefinitionCausesTransactionCommit", &sql::DatabaseMetaData::dataDefinitionCausesTransactionCommit);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly()
 {
-    return impl_getBoolMetaData("supportsDataManipulationTransactionsOnly", &sql::DatabaseMetaData::supportsDataManipulationTransactionsOnly);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions()
 {
-    return impl_getBoolMetaData("supportsDataDefinitionAndDataManipulationTransactions", &sql::DatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete()
 {
-    return impl_getBoolMetaData("supportsPositionedDelete", &sql::DatabaseMetaData::supportsPositionedDelete);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate()
 {
-    return impl_getBoolMetaData("supportsPositionedUpdate", &sql::DatabaseMetaData::supportsPositionedUpdate);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback()
 {
-    return impl_getBoolMetaData("supportsOpenStatementsAcrossRollback", &sql::DatabaseMetaData::supportsOpenStatementsAcrossRollback);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit()
 {
-    return impl_getBoolMetaData("supportsOpenStatementsAcrossCommit", &sql::DatabaseMetaData::supportsOpenStatementsAcrossCommit);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit()
 {
-    return impl_getBoolMetaData("supportsOpenCursorsAcrossCommit", &sql::DatabaseMetaData::supportsOpenCursorsAcrossCommit);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback()
 {
-    return impl_getBoolMetaData("supportsOpenCursorsAcrossRollback", &sql::DatabaseMetaData::supportsOpenCursorsAcrossRollback);
+    return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel(sal_Int32 level)
+sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel(sal_Int32 /*level*/)
 {
-    return impl_getBoolMetaData("supportsTransactionIsolationLevel", &sql::DatabaseMetaData::supportsTransactionIsolationLevel, level);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInDataManipulation()
 {
-    return impl_getBoolMetaData("supportsSchemasInDataManipulation", &sql::DatabaseMetaData::supportsSchemasInDataManipulation);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL()
 {
-    return impl_getBoolMetaData("supportsANSI92FullSQL", &sql::DatabaseMetaData::supportsANSI92FullSQL);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL()
 {
-    return impl_getBoolMetaData("supportsANSI92EntryLevelSQL", &sql::DatabaseMetaData::supportsANSI92EntryLevelSQL);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility()
 {
-    return impl_getBoolMetaData("supportsIntegrityEnhancementFacility", &sql::DatabaseMetaData::supportsIntegrityEnhancementFacility);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions()
 {
-    return impl_getBoolMetaData("supportsSchemasInIndexDefinitions", &sql::DatabaseMetaData::supportsSchemasInIndexDefinitions);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions()
 {
-    return impl_getBoolMetaData("supportsSchemasInTableDefinitions", &sql::DatabaseMetaData::supportsSchemasInTableDefinitions);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions()
 {
-    return impl_getBoolMetaData("supportsCatalogsInTableDefinitions", &sql::DatabaseMetaData::supportsCatalogsInTableDefinitions);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions()
 {
-    return impl_getBoolMetaData("supportsCatalogsInIndexDefinitions", &sql::DatabaseMetaData::supportsCatalogsInIndexDefinitions);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation()
 {
-    return impl_getBoolMetaData("supportsCatalogsInDataManipulation", &sql::DatabaseMetaData::supportsCatalogsInDataManipulation);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins()
 {
-    return impl_getBoolMetaData("supportsOuterJoins", &sql::DatabaseMetaData::supportsOuterJoins);
+    return true;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements()
 {
-    return impl_getInt32MetaData("getMaxStatements", &sql::DatabaseMetaData::getMaxStatements);
+    return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength()
 {
-    return impl_getInt32MetaData("getMaxProcedureNameLength", &sql::DatabaseMetaData::getMaxProcedureNameLength);
+    return 64;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength()
 {
-    return impl_getInt32MetaData("getMaxSchemaNameLength", &sql::DatabaseMetaData::getMaxSchemaNameLength);
+    return 64;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions()
 {
-    return impl_getBoolMetaData("supportsTransactions", &sql::DatabaseMetaData::supportsTransactions);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable()
 {
-    return impl_getBoolMetaData("allProceduresAreCallable", &sql::DatabaseMetaData::allProceduresAreCallable);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures()
 {
-    return impl_getBoolMetaData("supportsStoredProcedures", &sql::DatabaseMetaData::supportsStoredProcedures);
+    return m_rConnection.getMysqlVersion() >= 50000;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate()
 {
-    return impl_getBoolMetaData("supportsSelectForUpdate", &sql::DatabaseMetaData::supportsSelectForUpdate);
+    return m_rConnection.getMysqlVersion() >= 40000;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable()
 {
-    return impl_getBoolMetaData("allTablesAreSelectable", &sql::DatabaseMetaData::allTablesAreSelectable);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly()
 {
-    return impl_getBoolMetaData("isReadOnly", &sql::DatabaseMetaData::isReadOnly);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles()
 {
-    return impl_getBoolMetaData("usesLocalFiles", &sql::DatabaseMetaData::usesLocalFiles);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable()
 {
-    return impl_getBoolMetaData("usesLocalFilePerTable", &sql::DatabaseMetaData::usesLocalFilePerTable);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTypeConversion()
 {
-    return impl_getBoolMetaData("supportsTypeConversion", &sql::DatabaseMetaData::supportsTypeConversion);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullPlusNonNullIsNull()
 {
-    return impl_getBoolMetaData("nullPlusNonNullIsNull", &sql::DatabaseMetaData::nullPlusNonNullIsNull);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing()
 {
-    return impl_getBoolMetaData("supportsColumnAliasing", &sql::DatabaseMetaData::supportsColumnAliasing);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames()
 {
-    return impl_getBoolMetaData("supportsTableCorrelationNames", &sql::DatabaseMetaData::supportsTableCorrelationNames);
+    return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /* fromType */, sal_Int32 /* toType */)
+sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /*fromType*/,  sal_Int32 /*toType*/)
 {
-    try {
-        /* ToDo -> use supportsConvert( fromType, toType) */
-        return meta->supportsConvert();
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::supportsConvert", *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::supportsConvert", *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
+    // TODO
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy()
 {
-    return impl_getBoolMetaData("supportsExpressionsInOrderBy", &sql::DatabaseMetaData::supportsExpressionsInOrderBy);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupBy()
 {
-    return impl_getBoolMetaData("supportsGroupBy", &sql::DatabaseMetaData::supportsGroupBy);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByBeyondSelect()
 {
-    return impl_getBoolMetaData("supportsGroupByBeyondSelect", &sql::DatabaseMetaData::supportsGroupByBeyondSelect);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated()
 {
-    return impl_getBoolMetaData("supportsGroupByUnrelated", &sql::DatabaseMetaData::supportsGroupByUnrelated);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions()
 {
-    return impl_getBoolMetaData("supportsMultipleTransactions", &sql::DatabaseMetaData::supportsMultipleTransactions);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets()
 {
-    return impl_getBoolMetaData("supportsMultipleResultSets", &sql::DatabaseMetaData::supportsMultipleResultSets);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause()
 {
-    return impl_getBoolMetaData("supportsLikeEscapeClause", &sql::DatabaseMetaData::supportsLikeEscapeClause);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated()
 {
-    return impl_getBoolMetaData("supportsOrderByUnrelated", &sql::DatabaseMetaData::supportsOrderByUnrelated);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion()
 {
-    return impl_getBoolMetaData("supportsUnion", &sql::DatabaseMetaData::supportsUnion);
+    return m_rConnection.getMysqlVersion() >= 40000;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll()
 {
-    return impl_getBoolMetaData("supportsUnionAll", &sql::DatabaseMetaData::supportsUnionAll);
+    return m_rConnection.getMysqlVersion() >= 40000;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers()
 {
-    return impl_getBoolMetaData("supportsMixedCaseIdentifiers", &sql::DatabaseMetaData::supportsMixedCaseIdentifiers);
+    // TODO
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
 {
-    return impl_getBoolMetaData("supportsMixedCaseQuotedIdentifiers", &sql::DatabaseMetaData::supportsMixedCaseQuotedIdentifiers);
+    // TODO
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd()
 {
-    return impl_getBoolMetaData("nullsAreSortedAtEnd", &sql::DatabaseMetaData::nullsAreSortedAtEnd);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtStart()
 {
-    return impl_getBoolMetaData("nullsAreSortedAtStart", &sql::DatabaseMetaData::nullsAreSortedAtStart);
+    return m_rConnection.getMysqlVersion() > 40001 && m_rConnection.getMysqlVersion() < 40011;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedHigh()
 {
-    return impl_getBoolMetaData("nullsAreSortedHigh", &sql::DatabaseMetaData::nullsAreSortedHigh);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedLow()
 {
-    return impl_getBoolMetaData("nullsAreSortedLow", &sql::DatabaseMetaData::nullsAreSortedLow);
+    return !nullsAreSortedHigh();
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls()
 {
-    return impl_getBoolMetaData("supportsSchemasInProcedureCalls", &sql::DatabaseMetaData::supportsSchemasInProcedureCalls);
+    return m_rConnection.getMysqlVersion() >= 32200;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions()
 {
-    return impl_getBoolMetaData("supportsSchemasInPrivilegeDefinitions", &sql::DatabaseMetaData::supportsSchemasInPrivilegeDefinitions);
+    return m_rConnection.getMysqlVersion() >= 32200;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls()
 {
-    return impl_getBoolMetaData("supportsCatalogsInProcedureCalls", &sql::DatabaseMetaData::supportsCatalogsInProcedureCalls);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions()
 {
-    return impl_getBoolMetaData("supportsCatalogsInPrivilegeDefinitions", &sql::DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries()
 {
-    return impl_getBoolMetaData("supportsCorrelatedSubqueries", &sql::DatabaseMetaData::supportsCorrelatedSubqueries);
+    return m_rConnection.getMysqlVersion() >= 40100;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInComparisons()
 {
-    return impl_getBoolMetaData("supportsSubqueriesInComparisons", &sql::DatabaseMetaData::supportsSubqueriesInComparisons);
+    return m_rConnection.getMysqlVersion() >= 40100;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInExists()
 {
-    return impl_getBoolMetaData("supportsSubqueriesInExists", &sql::DatabaseMetaData::supportsSubqueriesInExists);
+    return m_rConnection.getMysqlVersion() >= 40100;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInIns()
 {
-    return impl_getBoolMetaData("supportsSubqueriesInIns", &sql::DatabaseMetaData::supportsSubqueriesInIns);
+    return m_rConnection.getMysqlVersion() >= 40100;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInQuantifieds()
 {
-    return impl_getBoolMetaData("supportsSubqueriesInQuantifieds", &sql::DatabaseMetaData::supportsSubqueriesInQuantifieds);
+    return m_rConnection.getMysqlVersion() >= 40100;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL()
 {
-    return impl_getBoolMetaData("supportsANSI92IntermediateSQL", &sql::DatabaseMetaData::supportsANSI92IntermediateSQL);
+    return false;
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getURL()
@@ -654,7 +561,8 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getURL()
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getUserName()
 {
-    return impl_getStringMetaData("getUserName", &sql::DatabaseMetaData::getUserName);
+    // TODO execute "SELECT USER()"
+    return rtl::OUString();
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getDriverName()
@@ -669,199 +577,236 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()
 {
-    return impl_getStringMetaData("getDatabaseProductVersion", &sql::DatabaseMetaData::getDatabaseProductVersion);
+    return rtl::OStringToOUString(mysql_get_server_info(m_pMySql),
+        m_rConnection.getConnectionEncoding());
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName()
 {
-    return impl_getStringMetaData("getDatabaseProductName", &sql::DatabaseMetaData::getDatabaseProductName);
+    return rtl::OUString("MySQL");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getProcedureTerm()
 {
-    return impl_getStringMetaData("getProcedureTerm", &sql::DatabaseMetaData::getProcedureTerm);
+    return rtl::OUString("procedure");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getSchemaTerm()
 {
-    return impl_getStringMetaData("getSchemaTerm", &sql::DatabaseMetaData::getSchemaTerm);
+    return rtl::OUString("database");
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
 {
+    // TODO
     return MARIADBC_VERSION_MAJOR;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
 {
-    try {
-        switch (meta->getDefaultTransactionIsolation()) {
-            case sql::TRANSACTION_SERIALIZABLE:     return TransactionIsolation::SERIALIZABLE;
-            case sql::TRANSACTION_REPEATABLE_READ:  return TransactionIsolation::REPEATABLE_READ;
-            case sql::TRANSACTION_READ_COMMITTED:   return TransactionIsolation::READ_COMMITTED;
-            case sql::TRANSACTION_READ_UNCOMMITTED: return TransactionIsolation::READ_UNCOMMITTED;
-        }
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getDriverMajorVersion", *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getDriverMajorVersion", *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-    return TransactionIsolation::NONE;
+    return m_rConnection.getMysqlVersion() >= 32336 ? TransactionIsolation::READ_COMMITTED :
+        TransactionIsolation::NONE;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
 {
+    // TODO
     return MARIADBC_VERSION_MINOR;
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getSQLKeywords()
 {
-    return impl_getStringMetaData("getSQLKeywords", &sql::DatabaseMetaData::getSQLKeywords);
+    return rtl::OUString(
+        "ACCESSIBLE, ADD, ALL,"\
+        "ALTER, ANALYZE, AND, AS, ASC, ASENSITIVE, BEFORE,"\
+        "BETWEEN, BIGINT, BINARY, BLOB, BOTH, BY, CALL,"\
+        "CASCADE, CASE, CHANGE, CHAR, CHARACTER, CHECK,"\
+        "COLLATE, COLUMN, CONDITION, CONNECTION, CONSTRAINT,"\
+        "CONTINUE, CONVERT, CREATE, CROSS, CURRENT_DATE,"\
+        "CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, CURSOR,"\
+        "DATABASE, DATABASES, DAY_HOUR, DAY_MICROSECOND,"\
+        "DAY_MINUTE, DAY_SECOND, DEC, DECIMAL, DECLARE,"\
+        "DEFAULT, DELAYED, DELETE, DESC, DESCRIBE,"\
+        "DETERMINISTIC, DISTINCT, DISTINCTROW, DIV, DOUBLE,"\
+        "DROP, DUAL, EACH, ELSE, ELSEIF, ENCLOSED,"\
+        "ESCAPED, EXISTS, EXIT, EXPLAIN, FALSE, FETCH,"\
+        "FLOAT, FLOAT4, FLOAT8, FOR, FORCE, FOREIGN, FROM,"\
+        "FULLTEXT, GRANT, GROUP, HAVING, HIGH_PRIORITY,"\
+        "HOUR_MICROSECOND, HOUR_MINUTE, HOUR_SECOND, IF,"\
+        "IGNORE, IN, INDEX, INFILE, INNER, INOUT,"\
+        "INSENSITIVE, INSERT, INT, INT1, INT2, INT3, INT4,"\
+        "INT8, INTEGER, INTERVAL, INTO, IS, ITERATE, JOIN,"\
+        "KEY, KEYS, KILL, LEADING, LEAVE, LEFT, LIKE,"\
+        "LOCALTIMESTAMP, LOCK, LONG, LONGBLOB, LONGTEXT,"\
+        "LOOP, LOW_PRIORITY, MATCH, MEDIUMBLOB, MEDIUMINT,"\
+        "MEDIUMTEXT, MIDDLEINT, MINUTE_MICROSECOND,"\
+        "MINUTE_SECOND, MOD, MODIFIES, NATURAL, NOT,"\
+        "NO_WRITE_TO_BINLOG, NULL, NUMERIC, ON, OPTIMIZE,"\
+        "OPTION, OPTIONALLY, OR, ORDER, OUT, OUTER,"\
+        "OUTFILE, PRECISION, PRIMARY, PROCEDURE, PURGE,"\
+        "RANGE, READ, READS, READ_ONLY, READ_WRITE, REAL,"\
+        "REFERENCES, REGEXP, RELEASE, RENAME, REPEAT,"\
+        "REPLACE, REQUIRE, RESTRICT, RETURN, REVOKE, RIGHT,"\
+        "RLIKE, SCHEMA, SCHEMAS, SECOND_MICROSECOND, SELECT,"\
+        "SENSITIVE, SEPARATOR, SET, SHOW, SMALLINT, SPATIAL,"\
+        "SPECIFIC, SQL, SQLEXCEPTION, SQLSTATE, SQLWARNING,"\
+        "SQL_BIG_RESULT, SQL_CALC_FOUND_ROWS, SQL_SMALL_RESULT,"\
+        "SSL, STARTING, STRAIGHT_JOIN, TABLE, TERMINATED,"\
+        "THEN, TINYBLOB, TINYINT, TINYTEXT, TO, TRAILING,"\
+        "TRIGGER, TRUE, UNDO, UNION, UNIQUE, UNLOCK,"\
+        "UNSIGNED, UPDATE, USAGE, USE, USING, UTC_DATE,"\
+        "UTC_TIME, UTC_TIMESTAMP, VALUES, VARBINARY, VARCHAR,"\
+        "VARCHARACTER, VARYING, WHEN, WHERE, WHILE, WITH,"\
+        "WRITE, X509, XOR, YEAR_MONTH, ZEROFILL" \
+        "GENERAL, IGNORE_SERVER_IDS, MASTER_HEARTBEAT_PERIOD," \
+        "MAXVALUE, RESIGNAL, SIGNAL, SLOW");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape()
 {
-    return impl_getStringMetaData("getSearchStringEscape", &sql::DatabaseMetaData::getSearchStringEscape);
+    return rtl::OUString("\\");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getStringFunctions()
 {
-    return impl_getStringMetaData("getStringFunctions", &sql::DatabaseMetaData::getStringFunctions);
+    return rtl::OUString(
+        "ASCII,BIN,BIT_LENGTH,CHAR,CHARACTER_LENGTH,CHAR_LENGTH,CONCAT,"
+        "CONCAT_WS,CONV,ELT,EXPORT_SET,FIELD,FIND_IN_SET,HEX,INSERT,"
+        "INSTR,LCASE,LEFT,LENGTH,LOAD_FILE,LOCATE,LOCATE,LOWER,LPAD,"
+        "LTRIM,MAKE_SET,MATCH,MID,OCT,OCTET_LENGTH,ORD,POSITION,"
+        "QUOTE,REPEAT,REPLACE,REVERSE,RIGHT,RPAD,RTRIM,SOUNDEX,"
+        "SPACE,STRCMP,SUBSTRING,SUBSTRING,SUBSTRING,SUBSTRING,"
+        "SUBSTRING_INDEX,TRIM,UCASE,UPPER");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions()
 {
-    return impl_getStringMetaData("getTimeDateFunctions", &sql::DatabaseMetaData::getTimeDateFunctions);
+    return rtl::OUString(
+        "DAYOFWEEK,WEEKDAY,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,"
+        "MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,PERIOD_ADD,"
+        "PERIOD_DIFF,TO_DAYS,FROM_DAYS,DATE_FORMAT,TIME_FORMAT,"
+        "CURDATE,CURRENT_DATE,CURTIME,CURRENT_TIME,NOW,SYSDATE,"
+        "CURRENT_TIMESTAMP,UNIX_TIMESTAMP,FROM_UNIXTIME,"
+        "SEC_TO_TIME,TIME_TO_SEC");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getSystemFunctions()
 {
-    return impl_getStringMetaData("getSystemFunctions", &sql::DatabaseMetaData::getSystemFunctions);
+    return rtl::OUString(
+        "DATABASE,USER,SYSTEM_USER,"
+        "SESSION_USER,PASSWORD,ENCRYPT,LAST_INSERT_ID,VERSION");
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getNumericFunctions()
 {
-    return impl_getStringMetaData("getNumericFunctions", &sql::DatabaseMetaData::getNumericFunctions);
+    return rtl::OUString("ABS,ACOS,ASIN,ATAN,ATAN2,BIT_COUNT,CEILING,COS,"
+                "COT,DEGREES,EXP,FLOOR,LOG,LOG10,MAX,MIN,MOD,PI,POW,"
+                "POWER,RADIANS,RAND,ROUND,SIN,SQRT,TAN,TRUNCATE");
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar()
 {
-    return impl_getBoolMetaData("supportsExtendedSQLGrammar", &sql::DatabaseMetaData::supportsExtendedSQLGrammar);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar()
 {
-    return impl_getBoolMetaData("supportsCoreSQLGrammar", &sql::DatabaseMetaData::supportsCoreSQLGrammar);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar()
 {
-    return impl_getBoolMetaData("supportsMinimumSQLGrammar", &sql::DatabaseMetaData::supportsMinimumSQLGrammar);
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins()
 {
-    return impl_getBoolMetaData("supportsFullOuterJoins", &sql::DatabaseMetaData::supportsFullOuterJoins);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins()
 {
-    return impl_getBoolMetaData("supportsLimitedOuterJoins", &sql::DatabaseMetaData::supportsLimitedOuterJoins);
+    return true;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInGroupBy()
 {
-    return impl_getInt32MetaData("getMaxColumnsInGroupBy", &sql::DatabaseMetaData::getMaxColumnsInGroupBy);
+    return 64;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInOrderBy()
 {
-    return impl_getInt32MetaData("getMaxColumnsInOrderBy", &sql::DatabaseMetaData::getMaxColumnsInOrderBy);
+    return 64;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect()
 {
-    return impl_getInt32MetaData("getMaxColumnsInSelect", &sql::DatabaseMetaData::getMaxColumnsInSelect);
+    return 256;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength()
 {
-    return impl_getInt32MetaData("getMaxUserNameLength", &sql::DatabaseMetaData::getMaxUserNameLength);
+    return 16;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("supportsResultSetType", &sql::DatabaseMetaData::supportsResultSetType, setType);
+    return setType == ResultSetType::SCROLL_SENSITIVE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(sal_Int32 setType, sal_Int32 concurrency)
 {
-    /* TODO: Check this out */
-    try {
-        return meta->supportsResultSetConcurrency(setType, concurrency==css::sdbc::TransactionIsolation::READ_COMMITTED?
-                                                    sql::TRANSACTION_READ_COMMITTED:
-                                                    (concurrency == css::sdbc::TransactionIsolation::SERIALIZABLE?
-                                                        sql::TRANSACTION_SERIALIZABLE:sql::TRANSACTION_SERIALIZABLE));
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::supportsResultSetConcurrency", *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::supportsResultSetConcurrency", *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("ownUpdatesAreVisible", &sql::DatabaseMetaData::ownUpdatesAreVisible, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("ownDeletesAreVisible", &sql::DatabaseMetaData::ownDeletesAreVisible, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("ownInsertsAreVisible", &sql::DatabaseMetaData::ownInsertsAreVisible, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("othersUpdatesAreVisible", &sql::DatabaseMetaData::othersUpdatesAreVisible, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("othersDeletesAreVisible", &sql::DatabaseMetaData::othersDeletesAreVisible, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("othersInsertsAreVisible", &sql::DatabaseMetaData::othersInsertsAreVisible, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("updatesAreDetected", &sql::DatabaseMetaData::updatesAreDetected, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("deletesAreDetected", &sql::DatabaseMetaData::deletesAreDetected, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected(sal_Int32 setType)
 {
-    return impl_getRSTypeMetaData("insertsAreDetected", &sql::DatabaseMetaData::insertsAreDetected, setType);
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates()
 {
-    return impl_getBoolMetaData("supportsBatchUpdates", &sql::DatabaseMetaData::supportsBatchUpdates);
+    return true;
 }
 
 Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
@@ -936,30 +881,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs()
 {
+    // TODO
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
-    std::vector< std::vector< Any > > rRows;
-
-    try {
-        rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::unique_ptr< sql::ResultSet> rset( meta->getCatalogs());
-        sql::ResultSetMetaData * rs_meta = rset->getMetaData();
-        sal_uInt32 columns = rs_meta->getColumnCount();
-        while (rset->next()) {
-            std::vector< Any > aRow { Any() };
-            for (sal_uInt32 i = 1; i <= columns; i++) {
-                aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
-            }
-            rRows.push_back(aRow);
-        }
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getCatalogs", *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getCatalogs", *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-
-    lcl_setRows_throw(xResultSet, 0, rRows);
     return xResultSet;
 }
 
@@ -970,10 +893,21 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::unique_ptr< sql::ResultSet> rset( meta->getSchemas());
-        sql::ResultSetMetaData * rs_meta = rset->getMetaData();
+
+        OUString sSql = m_rConnection.getMysqlVersion() > 49999?
+                "SELECT SCHEMA_NAME AS TABLE_SCHEM, CATALOG_NAME AS TABLE_CATALOG FROM INFORMATION_SCHEMA.SCHEMATA ORDER BY SCHEMA_NAME":
+                "SHOW DATABASES";
+
+        uno::Reference< XStatement > statement = m_pConnection->createStatement();
+        uno::Reference< XInterface > executed = statement->executeQuery(sSql);
+        uno::Reference< XResultSet > rs( executed, UNO_QUERY_THROW);
+        uno::Reference< XResultSetMetaDataSupplier > supp( executed, UNO_QUERY_THROW);
+        uno::Reference< XResultSetMetaData > rs_meta supp->getMetaData();
+
+        uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
         sal_uInt32 columns = rs_meta->getColumnCount();
-        while (rset->next()) {
+        while( rs->next() )
+        {
             std::vector< Any > aRow { Any() };
             bool informationSchema = false;
             for (sal_uInt32 i = 1; i <= columns; i++) {
@@ -1490,14 +1424,5 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs(
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getUDTs", *this);
     return nullptr;
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

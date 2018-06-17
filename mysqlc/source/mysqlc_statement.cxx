@@ -52,11 +52,11 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
 
-OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement)
+OCommonStatement::OCommonStatement(OConnection* _pConnection, MYSQL* pMySql)
     :OCommonStatement_IBase(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBase::rBHelper)
     ,m_xConnection(_pConnection)
-    ,cppStatement(_cppStatement)
+    ,m_pMySql(pMySql)
 {
 }
 
@@ -131,30 +131,32 @@ sal_Bool SAL_CALL OCommonStatement::execute(const rtl::OUString& sql)
     checkDisposed(rBHelper.bDisposed);
     const rtl::OUString sSqlStatement = m_xConnection->transFormPreparedStatement( sql );
 
-    bool success = false;
-    try {
-        success = cppStatement->execute(rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionSettings().encoding).getStr());
-    } catch (const sql::SQLException &e) {
+        const rtl::OString toExec = rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionSettings().encoding);
+
+    int failure = mysql_real_query(m_pMySql, toExec.getStr(), toExec.getLength());
+
+    m_nAffectedRows = mysql_affected_rows(m_pMySql);
+
+        if(failure)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
-    return success;
+
+    return !failure;
 }
 
 Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const rtl::OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const rtl::OUString sSqlStatement = m_xConnection->transFormPreparedStatement(sql);
 
-    Reference< XResultSet > xResultSet;
-    try {
-        std::unique_ptr< sql::ResultSet > rset(cppStatement->executeQuery(rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionEncoding()).getStr()));
-        xResultSet = new OResultSet(this, rset.get(), m_xConnection->getConnectionEncoding());
-        rset.release();
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
-    return xResultSet;
+    execute(sql);
+
+    MYSQL_RES* pResult = mysql_store_result(m_pMySql);
+
+    m_xResultSet = new OResultSet(this, pResult, m_xConnection->getConnectionEncoding());
+
+        if(failure)
+                mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    return m_xResultSet;
 }
 
 Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
@@ -168,7 +170,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
 
 sal_Int32 SAL_CALL OCommonStatement::getUpdateCount()
 {
-    return cppStatement->getUpdateCount();
+    return m_nAffectedRows;
 }
 
 Any SAL_CALL OStatement::queryInterface(const Type & rType)
@@ -199,15 +201,9 @@ sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const rtl::OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const rtl::OUString sSqlStatement = m_xConnection->transFormPreparedStatement(sql);
 
-    sal_Int32 affectedRows = 0;
-    try {
-        affectedRows = cppStatement->executeUpdate(rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionEncoding()).getStr());
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
-    return affectedRows;
+    execute(sql);
+    return m_nAffectedRows;
 }
 
 Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
@@ -215,23 +211,12 @@ Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-    Reference< XResultSet > xResultSet;
-    try {
-        std::unique_ptr< sql::ResultSet > rset(cppStatement->getResultSet());
-        xResultSet = new OResultSet(this, rset.get(), m_xConnection->getConnectionEncoding());
-        rset.release();
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
-    return xResultSet;
+    return m_xResultSet;
 }
 
 sal_Bool SAL_CALL OCommonStatement::getMoreResults()
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(rBHelper.bDisposed);
-
-    return cppStatement->getMoreResults();
+    return false; // TODO IMPL
 }
 
 Any SAL_CALL OCommonStatement::getWarnings()
@@ -369,14 +354,5 @@ Reference< css::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getProperty
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
