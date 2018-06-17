@@ -56,6 +56,7 @@ mkdir -p $RPM_BUILD_ROOT
 export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/usr
 export PREFIXDIR=/usr
+export BINDIR=/usr/bin
 export GNOMEDIR=%{gnome_dir}
 
 ./create_tree.sh
@@ -408,6 +409,8 @@ done
 /usr/share/icons/hicolor/*/mimetypes/*png
 /usr/share/icons/hicolor/*/mimetypes/*svg
 /usr/share/icons/locolor/*/apps/*png
+/usr/share/icons/locolor/*/apps/*svg
 /usr/share/icons/locolor/*/mimetypes/*png
+/usr/share/icons/locolor/*/mimetypes/*svg
 /usr/share/mime/packages/*
 /usr/share/appdata/*
