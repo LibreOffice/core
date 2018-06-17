@@ -20,7 +20,6 @@
 #define INCLUDED_SFX2_SOURCE_INC_DOCUMENTFONTSDIALOG_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
 
 /**
  Tab page for document font settings in the document properties dialog.
@@ -28,15 +27,14 @@
 class SfxDocumentFontsPage: public SfxTabPage
 {
 public:
-    SfxDocumentFontsPage( vcl::Window* parent, const SfxItemSet& set );
+    SfxDocumentFontsPage(TabPageParent parent, const SfxItemSet& set);
     virtual ~SfxDocumentFontsPage() override;
-    virtual void dispose() override;
     static VclPtr<SfxTabPage> Create(TabPageParent parent, const SfxItemSet* set);
 protected:
     virtual bool FillItemSet( SfxItemSet* set ) override;
     virtual void Reset( const SfxItemSet* set ) override;
 private:
-    VclPtr<CheckBox> embedFontsCheckbox;
+    std::unique_ptr<weld::CheckButton> embedFontsCheckbox;
 };
 
 #endif
