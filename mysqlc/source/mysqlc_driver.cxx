@@ -198,7 +198,7 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const rtl::OUString& url
     Reference< XConnection > xConn;
     // create a new connection with the given properties and append it to our vector
     try {
-        OConnection* pCon = new OConnection(*this, cppDriver);
+        OConnection* pCon = new OConnection(*this);
         xConn = pCon;
 
         pCon->construct(url,info);
