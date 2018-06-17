@@ -25,6 +25,8 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
+#include <mysql.h>
+
 #if defined __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated"
@@ -36,6 +38,43 @@
 
 namespace mysqlc_sdbc_driver
 {
+    template<typename T>
+    void resetSqlVar(void* target, T* pValue, enum_field_types type, sal_Int32 nSize = 0)
+    {
+        if(target)
+        {
+            free(target);
+            target = nullptr;
+        }
+        constexpr auto nUnitSize = sizeof(T);
+        switch(type)
+        {
+            case MYSQL_TYPE_LONG:
+            case MYSQL_TYPE_SHORT:
+            case MYSQL_TYPE_TINY:
+            case MYSQL_TYPE_LONGLONG:
+            case MYSQL_TYPE_FLOAT:
+            case MYSQL_TYPE_DOUBLE:
+            case MYSQL_TYPE_TIME:
+            case MYSQL_TYPE_DATE:
+            case MYSQL_TYPE_DATETIME:
+            case MYSQL_TYPE_TIMESTAMP:
+                target = malloc(nUnitSize);
+                memcpy(target, pValue, nUnitSize);
+                break;
+            case MYSQL_TYPE_STRING:
+            case MYSQL_TYPE_BLOB:
+                target = malloc(nUnitSize*nSize);
+                memcpy(target, pValue, nUnitSize*nSize);
+                break;
+            case MYSQL_TYPE_NULL:
+                // nothing I guess
+                break;
+            default:
+                SAL_WARN("connectivity","unknown enum_field_type");
+        }
+    }
+
     rtl::OUString getStringFromAny(const css::uno::Any& _rAny);
 
     /// @throws css::sdbc::SQLException
@@ -52,8 +91,11 @@ namespace mysqlc_sdbc_driver
 
     void translateAndThrow(const ::sql::SQLException& _error, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding);
 
+    void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding);
+
     int mysqlToOOOType(int mysqlType) throw ();
 
+    rtl::OUString mysqlTypeToStr(MYSQL_FIELD* pField);
 
     rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
 

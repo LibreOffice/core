@@ -21,6 +21,7 @@
 
 #include <cppconn/exception.h>
 #include <cppconn/datatype.h>
+#include <rtl/ustring.hxx>
 
 using com::sun::star::sdbc::SQLException;
 
@@ -28,10 +29,12 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Any;
 
+using namespace rtl;
+
 namespace mysqlc_sdbc_driver
 {
 
-void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext )
+void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const css::uno::Reference< XInterface >& _rxContext )
 {
     const rtl::OUString sMessage = rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ": feature not implemented.";
     throw SQLException(
@@ -43,7 +46,7 @@ void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, co
     );
 }
 
-void throwInvalidArgumentException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext )
+void throwInvalidArgumentException( const sal_Char* _pAsciiFeatureName, const css::uno::Reference< XInterface >& _rxContext )
 {
     const rtl::OUString sMessage = rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ": invalid arguments.";
     throw SQLException(
@@ -64,6 +67,14 @@ void translateAndThrow(const ::sql::SQLException& _error, const css::uno::Refere
             _error.getErrorCode(),
             Any()
         );
+}
+
+void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding)
+{
+    rtl::OString errorMsg{msg};
+    // TODO error code?
+    throw SQLException( rtl::OStringToOUString(errorMsg, encoding),
+            _context, rtl::OUString(), errorNum, Any());
 }
 
 rtl::OUString getStringFromAny(const Any& _rAny)
@@ -142,6 +153,84 @@ int mysqlToOOOType(int cppConnType)
 
     OSL_FAIL( "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
     return css::sdbc::DataType::VARCHAR;
+}
+
+rtl::OUString mysqlTypeToStr(MYSQL_FIELD* field)
+{
+    bool isUnsigned = (field->flags & UNSIGNED_FLAG) != 0;
+    bool isZerofill = (field->flags & ZEROFILL_FLAG) != 0;
+    switch (field->type)
+    {
+            case MYSQL_TYPE_BIT:
+                    return OUString{"BIT"};
+            case MYSQL_TYPE_DECIMAL:
+            case MYSQL_TYPE_NEWDECIMAL:
+                    return isUnsigned ? (isZerofill? OUString{"DECIMAL UNSIGNED ZEROFILL"} : OUString{"DECIMAL UNSIGNED"}): OUString{"DECIMAL"};
+            case MYSQL_TYPE_TINY:
+                    return isUnsigned ? (isZerofill? OUString{"TINYINT UNSIGNED ZEROFILL"} : OUString{"TINYINT UNSIGNED"}): OUString{"TINYINT"};
+            case MYSQL_TYPE_SHORT:
+                    return isUnsigned ? (isZerofill? OUString{"SMALLINT UNSIGNED ZEROFILL"} : OUString{"SMALLINT UNSIGNED"}): OUString{"SMALLINT"};
+            case MYSQL_TYPE_LONG:
+                    return isUnsigned ? (isZerofill? OUString{"INT UNSIGNED ZEROFILL"} : OUString{"INT UNSIGNED"}): OUString{"INT"};
+            case MYSQL_TYPE_FLOAT:
+                    return isUnsigned ? (isZerofill? OUString{"FLOAT UNSIGNED ZEROFILL"} : OUString{"FLOAT UNSIGNED"}): OUString{"FLOAT"};
+            case MYSQL_TYPE_DOUBLE:
+                    return isUnsigned ? (isZerofill? OUString{"DOUBLE UNSIGNED ZEROFILL"} : OUString{"DOUBLE UNSIGNED"}): OUString{"DOUBLE"};
+            case MYSQL_TYPE_NULL:
+                    return OUString{"NULL"};
+            case MYSQL_TYPE_TIMESTAMP:
+                    return OUString{"TIMESTAMP"};
+            case MYSQL_TYPE_LONGLONG:
+                    return isUnsigned ? (isZerofill? OUString{"BIGINT UNSIGNED ZEROFILL"} : OUString{"BIGINT UNSIGNED"}) : OUString{"BIGINT"};
+            case MYSQL_TYPE_INT24:
+                    return isUnsigned ? (isZerofill? OUString{"MEDIUMINT UNSIGNED ZEROFILL"} : OUString{"MEDIUMINT UNSIGNED"}) : OUString{"MEDIUMINT"};
+            case MYSQL_TYPE_DATE:
+                    return OUString{"DATE"};
+            case MYSQL_TYPE_TIME:
+                    return OUString{"TIME"};
+            case MYSQL_TYPE_DATETIME:
+                    return OUString{"DATETIME"};
+            case MYSQL_TYPE_TINY_BLOB:
+            {
+                    return OUString{"TINYBLOB"};
+            }
+            case MYSQL_TYPE_MEDIUM_BLOB:
+            {
+                    return OUString{"MEDIUMBLOB"};
+            }
+            case MYSQL_TYPE_LONG_BLOB:
+            {
+                    return OUString{"LONGBLOB"};
+            }
+            case MYSQL_TYPE_BLOB:
+            {
+                    return OUString{"BLOB"};
+            }
+            case MYSQL_TYPE_VARCHAR:
+            case MYSQL_TYPE_VAR_STRING:
+                    if (field->flags & ENUM_FLAG) {
+                            return OUString{"ENUM"};
+                    }
+                    if (field->flags & SET_FLAG) {
+                            return OUString{"SET"};
+                    }
+                    return OUString{"VARCHAR"};
+            case MYSQL_TYPE_STRING:
+                    if (field->flags & ENUM_FLAG) {
+                            return OUString{"ENUM"};
+                    }
+                    if (field->flags & SET_FLAG) {
+                            return OUString{"SET"};
+                    }
+                    return OUString{"CHAR"};
+            case MYSQL_TYPE_YEAR:
+                    return OUString{"YEAR"};
+            case MYSQL_TYPE_GEOMETRY:
+                    return OUString{"GEOMETRY"};
+            default:
+                    return OUString{"UNKNOWN"};
+    }
+
 }
 
 rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
