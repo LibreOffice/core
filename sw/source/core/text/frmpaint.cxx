@@ -152,15 +152,11 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         {
             bGoLeft = true;
             nX -= rLineInf.GetPosFromLeft();
-            if( nX < aRect.Left() )
-                bLineNum = false;
         }
         else
         {
             bGoLeft = false;
             nX += pFrame->getFrameArea().Width() + rLineInf.GetPosFromLeft();
-            if( nX > aRect.Right() )
-                bLineNum = false;
         }
     }
     if( eHor != text::HoriOrientation::NONE )
