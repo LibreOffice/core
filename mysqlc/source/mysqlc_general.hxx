@@ -25,6 +25,8 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
+#include <mysql.h>
+
 #if defined __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated"
@@ -36,6 +38,9 @@
 
 namespace mysqlc_sdbc_driver
 {
+    template<typename T>
+    void resetSqlVar(void* target, T* value, enum_field_types eType, sal_Int32 nSize = 0);
+
     rtl::OUString getStringFromAny(const css::uno::Any& _rAny);
 
     /// @throws css::sdbc::SQLException
@@ -52,8 +57,11 @@ namespace mysqlc_sdbc_driver
 
     void translateAndThrow(const ::sql::SQLException& _error, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding);
 
+    void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding);
+
     int mysqlToOOOType(int mysqlType) throw ();
 
+    rtl::OUString mysqlTypeToStr(MYSQL_FIELD* pField);
 
     rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
 

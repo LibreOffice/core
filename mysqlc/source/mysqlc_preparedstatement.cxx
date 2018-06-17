@@ -18,6 +18,7 @@
  */
 
 #include "mysqlc_general.hxx"
+#include "mysqlc_prepared_resultset.hxx"
 #include "mysqlc_preparedstatement.hxx"
 #include "mysqlc_propertyids.hxx"
 #include "mysqlc_resultsetmetadata.hxx"
@@ -48,7 +49,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
 
-
 static inline char * my_i_to_a(char * buf, size_t buf_size, int a)
 {
     snprintf(buf, buf_size, "%d", a);
@@ -72,15 +72,21 @@ sal_Bool OPreparedStatement::supportsService(rtl::OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-OPreparedStatement::OPreparedStatement(OConnection* _pConnection, sql::PreparedStatement * _cppPrepStmt)
-    :OCommonStatement(_pConnection, _cppPrepStmt)
+OPreparedStatement::OPreparedStatement(OConnection* _pConnection, MYSQL_STMT* pStmt)
+    :OCommonStatement(_pConnection)
+        ,m_pStmt(pStmt)
 {
     m_xConnection = _pConnection;
-
-    try {
-        m_paramCount = static_cast<sql::PreparedStatement *>(cppStatement.get())->getParameterMetaData()->getParameterCount();
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    m_paramCount = mysql_stmt_param_count(m_pStmt);
+    m_binds.reserve(m_paramCount);
+    m_bindMetas.reserve(m_paramCount);
+    for(unsigned i=0; i<m_paramCount; ++i)
+    {
+        m_binds.push_back(MYSQL_BIND{});
+        m_bindMetas.push_back(BindMetaData{});
+        m_binds.back().is_null = &m_bindMetas.back().is_null;
+        m_binds.back().length = &m_bindMetas.back().length;
+        m_binds.back().buffer = nullptr;
     }
 }
 
@@ -119,17 +125,11 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    try {
-        if (!m_xMetaData.is()) {
-            m_xMetaData = new OResultSetMetaData(
-                                    static_cast<sql::PreparedStatement *>(cppStatement.get())->getMetaData(),
-                                    getOwnConnection()->getConnectionEncoding()
-                                );
-        }
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::getMetaData", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    if (!m_xMetaData.is()) {
+        m_xMetaData = new OResultSetMetaData(
+                                *m_xConnection.get(),
+                                m_pResult,
+                getOwnConnection()->getConnectionEncoding());
     }
     return m_xMetaData;
 }
@@ -146,9 +146,6 @@ void SAL_CALL OPreparedStatement::close()
     } catch (const SQLException &) {
         // If we get an error, ignore
     }
-
-    // Remove this Statement object from the Connection object's
-    // list
 }
 
 sal_Bool SAL_CALL OPreparedStatement::execute()
@@ -156,13 +153,16 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    bool success = false;
-    try {
-        success = static_cast<sql::PreparedStatement *>(cppStatement.get())->execute();
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
-    return success;
+    int nFail = mysql_stmt_execute(m_pStmt);
+
+        if(nFail != 0)
+        {
+            MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+            mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql),
+                    mysql_errno(pMysql), *this, m_xConnection.get()->getConnectionEncoding());
+        }
+
+    return !nFail;
 }
 
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
@@ -170,12 +170,16 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    sal_Int32 affectedRows = 0;
-    try {
-        affectedRows = static_cast<sql::PreparedStatement *>(cppStatement.get())->executeUpdate();
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    int nFail = mysql_stmt_execute(m_pStmt);
+
+    if(nFail != 0)
+    {
+        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql),
+                mysql_errno(pMysql), *this, m_xConnection.get()->getConnectionEncoding());
     }
+
+    sal_Int32 affectedRows = mysql_stmt_affected_rows(m_pStmt);
     return affectedRows;
 }
 
@@ -185,14 +189,13 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const rtl::OUSt
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        std::string stringie(rtl::OUStringToOString(x, m_xConnection->getConnectionEncoding()).getStr());
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setString(parameter, stringie);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    rtl::OString stringie(rtl::OUStringToOString(x,
+                m_xConnection->getConnectionEncoding()));
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_STRING;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, stringie.getStr(), MYSQL_TYPE_STRING, stringie.getLength());
+    m_bindMetas[nIndex].is_null = 0;
+    m_bindMetas[nIndex].length = stringie.getLength();
 }
 
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
@@ -208,13 +211,17 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    Reference< XResultSet > xResultSet;
-    try {
-        sql::ResultSet * res = static_cast<sql::PreparedStatement *>(cppStatement.get())->executeQuery();
-        xResultSet = new OResultSet(this, res, getOwnConnection()->getConnectionEncoding());
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    int nFail = mysql_stmt_execute(m_pStmt);
+
+    if(nFail != 0)
+    {
+        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql),
+                mysql_errno(pMysql), *this, m_xConnection.get()->getConnectionEncoding());
     }
+
+    Reference< XResultSet > xResultSet;
+    xResultSet = new OPreparedResultSet(*m_xConnection.get(), this, m_pStmt);
     return xResultSet;
 }
 
@@ -224,13 +231,10 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 parameter, sal_Bool x)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setBoolean(parameter, x);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBoolean", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_TINY;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &x, MYSQL_TYPE_TINY);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
@@ -239,13 +243,10 @@ void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setInt(parameter, x);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setByte", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_TINY;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &x, MYSQL_TYPE_TINY);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData)
@@ -254,21 +255,16 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    std::string dateStr;
-    char buf[20];
-    dateStr.append(my_i_to_a(buf, sizeof(buf)-1, aData.Year));
-    dateStr.append("-", 1);
-    dateStr.append(my_i_to_a(buf, sizeof(buf)-1, aData.Month));
-    dateStr.append("-", 1);
-    dateStr.append(my_i_to_a(buf, sizeof(buf)-1, aData.Day));
+    MYSQL_TIME my_time;
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDateTime(parameter, dateStr);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setDate", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    my_time.year = aData.Year;
+    my_time.month = aData.Month;
+    my_time.day = aData.Day;
+
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_DATE;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &my_time, MYSQL_TYPE_DATE);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
@@ -277,21 +273,16 @@ void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    std::string timeStr;
-    char buf[20];
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Hours));
-    timeStr.append(":", 1);
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Minutes));
-    timeStr.append(":", 1);
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Seconds));
+    MYSQL_TIME my_time;
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDateTime(parameter, timeStr);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setTime", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    my_time.hour = aVal.Hours;
+    my_time.minute = aVal.Minutes;
+    my_time.second = aVal.Seconds;
+
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_TIME;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &my_time, MYSQL_TYPE_TIME);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTime& aVal)
@@ -300,29 +291,19 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    std::string timeStr;
-    char buf[20];
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Year));
-    timeStr.append("-", 1);
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Month));
-    timeStr.append("-", 1);
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Day));
+    MYSQL_TIME my_time;
 
-    timeStr.append(" ", 1);
+    my_time.hour = aVal.Hours;
+    my_time.minute = aVal.Minutes;
+    my_time.second = aVal.Seconds;
+    my_time.year = aVal.Year;
+    my_time.month = aVal.Month;
+    my_time.day = aVal.Day;
 
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Hours));
-    timeStr.append(":", 1);
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Minutes));
-    timeStr.append(":", 1);
-    timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Seconds));
-
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDateTime(parameter, timeStr);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setTimestamp", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_TIME;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &my_time, MYSQL_TYPE_DATETIME);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
@@ -331,13 +312,10 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDouble(parameter, x);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setDouble", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_DOUBLE;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &x, MYSQL_TYPE_DOUBLE);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
@@ -346,13 +324,10 @@ void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDouble(parameter, x);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setFloat", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_FLOAT;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &x, MYSQL_TYPE_FLOAT);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
@@ -361,13 +336,10 @@ void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setInt(parameter, x);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setInt", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_LONG;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &x, MYSQL_TYPE_LONG);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
@@ -376,28 +348,22 @@ void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setInt64(parameter, aVal);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setLong", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_LONGLONG;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &aVal, MYSQL_TYPE_LONGLONG);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
-void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 sqlType)
+void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 /*sqlType*/)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setNull(parameter, sqlType);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setNull", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_bindMetas[nIndex].is_null = 1;
+    free(m_binds[nIndex].buffer);
+    m_binds[nIndex].buffer = nullptr;
 }
 
 void SAL_CALL OPreparedStatement::setClob(sal_Int32 parameter, const Reference< XClob >& /* x */)
@@ -436,57 +402,42 @@ void SAL_CALL OPreparedStatement::setRef(sal_Int32 parameter, const Reference< X
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setRef", *this);
 }
 
-namespace
-{
-    template < class COMPLEXTYPE >
-    bool impl_setObject( const Reference< XParameters >& _rxParam, sal_Int32 _parameterIndex, const Any& _value,
-        void ( SAL_CALL XParameters::*Setter )( sal_Int32, const COMPLEXTYPE& ), bool _throwIfNotExtractable )
-    {
-        COMPLEXTYPE aValue;
-        if ( _value >>= aValue )
-        {
-            (_rxParam.get()->*Setter)( _parameterIndex, aValue );
-            return true;
-        }
-
-        if ( _throwIfNotExtractable )
-            mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", _rxParam );
-        return false;
-    }
-
-    template < class INTTYPE >
-    void impl_setObject( const Reference< XParameters >& _rxParam, sal_Int32 _parameterIndex, const Any& _value,
-        void ( SAL_CALL XParameters::*Setter )( sal_Int32, INTTYPE ) )
-    {
-        sal_Int32 nValue(0);
-        if ( !( _value >>= nValue ) )
-            mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", _rxParam );
-        (_rxParam.get()->*Setter)( _parameterIndex, static_cast<INTTYPE>(nValue) );
-    }
-}
-
-void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, const Any& _value, sal_Int32 _targetSqlType, sal_Int32 /* scale */)
+void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, const Any& value, sal_Int32 targetSqlType, sal_Int32 /* scale */)
 {
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
-    checkParameterIndex( _parameterIndex );
+    checkParameterIndex( parameterIndex );
 
-    if ( !_value.hasValue() )
+    const sal_Int32 nIndex = parameterIndex - 1;
+    if ( !value.hasValue() )
     {
-        setNull( _parameterIndex, _targetSqlType );
+        free(m_binds[nIndex].buffer);
+        m_binds[nIndex].buffer = nullptr;
+        m_bindMetas[parameterIndex-1].is_null = 1;
         return;
     }
 
-    switch ( _targetSqlType )
+    switch ( targetSqlType )
     {
     case DataType::DECIMAL:
     case DataType::NUMERIC:
     {
         double nValue(0);
-        if ( _value >>= nValue )
+        if ( value >>= nValue )
         {
-            setDouble( _parameterIndex, nValue );
+            setDouble( parameterIndex, nValue );
             break;
+        }
+        else
+        {
+            rtl::OUString sValue;
+            if( value >>= sValue )
+            {
+                m_binds[nIndex].buffer_type = MYSQL_TYPE_NEWDECIMAL;
+                mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, sValue.getStr(), MYSQL_TYPE_LONGLONG, sValue.getLength());
+                m_bindMetas[nIndex].is_null = 0;
+            }
+
         }
 #if defined __GNUC__ && __GNUC__ >= 7
         [[fallthrough]];
@@ -495,109 +446,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
 #endif
     }
 
-    case DataType::CHAR:
-    case DataType::VARCHAR:
-    case DataType::LONGVARCHAR:
-        impl_setObject( this, _parameterIndex, _value, &XParameters::setString, true );
-        break;
-
-    case DataType::BIGINT:
-    {
-        sal_Int64 nValue = 0;
-        if ( !( _value >>= nValue ) )
-            mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", *this );
-        setLong( _parameterIndex, nValue );
-    }
-    break;
-
-    case DataType::FLOAT:
-    case DataType::REAL:
-    {
-        float nValue = 0;
-        if ( _value >>= nValue )
-        {
-            setFloat(_parameterIndex,nValue);
-            break;
-        }
-#if defined __GNUC__ && __GNUC__ >= 7
-        [[fallthrough]];
-#else
-        BOOST_FALLTHROUGH;
-#endif
-    }
-
-    case DataType::DOUBLE:
-    {
-        double nValue(0);
-        if ( !( _value >>= nValue ) )
-            mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", *this );
-        setDouble( _parameterIndex, nValue );
-    }
-    break;
-
-    case DataType::DATE:
-        impl_setObject( this, _parameterIndex, _value, &XParameters::setDate, true );
-        break;
-
-    case DataType::TIME:
-        impl_setObject( this, _parameterIndex, _value, &XParameters::setTime, true );
-        break;
-
-    case DataType::TIMESTAMP:
-        impl_setObject( this, _parameterIndex, _value, &XParameters::setTimestamp, true );
-        break;
-
-    case DataType::BINARY:
-    case DataType::VARBINARY:
-    case DataType::LONGVARBINARY:
-    {
-        if  (   impl_setObject( this, _parameterIndex, _value, &XParameters::setBytes, false )
-            ||  impl_setObject( this, _parameterIndex, _value, &XParameters::setBlob, false )
-            ||  impl_setObject( this, _parameterIndex, _value, &XParameters::setClob, false )
-            )
-            break;
-
-        Reference< css::io::XInputStream > xBinStream;
-        if ( _value >>= xBinStream )
-        {
-            setBinaryStream( _parameterIndex, xBinStream, xBinStream->available() );
-            break;
-        }
-
-        mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", *this );
-    }
-    break;
-
-    case DataType::BIT:
-    case DataType::BOOLEAN:
-    {
-        bool bValue( false );
-        if ( _value >>= bValue )
-        {
-            setBoolean( _parameterIndex, bValue );
-            break;
-        }
-        sal_Int32 nValue( 0 );
-        if ( _value >>= nValue )
-        {
-            setBoolean( _parameterIndex, ( nValue != 0 ) );
-            break;
-        }
-        mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", *this );
-    }
-    break;
-
-    case DataType::TINYINT:
-        impl_setObject( this, _parameterIndex, _value, &XParameters::setByte );
-        break;
-
-    case DataType::SMALLINT:
-        impl_setObject( this, _parameterIndex, _value, &XParameters::setShort );
-        break;
-
-    case DataType::INTEGER:
-        impl_setObject( this, _parameterIndex, _value, &XParameters::setInt );
-        break;
+    // TODO other types
 
     default:
         mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", *this );
@@ -629,13 +478,10 @@ void SAL_CALL OPreparedStatement::setShort(sal_Int32 parameter, sal_Int16 x)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setInt(parameter, x);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setShort", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_SHORT;
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &x, MYSQL_TYPE_SHORT);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence< sal_Int8 >& x)
@@ -644,14 +490,10 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence< 
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    std::string blobby(reinterpret_cast<char const *>(x.getConstArray()), x.getLength());
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->setString(parameter, blobby);
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBytes", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
-    }
+    const sal_Int32 nIndex = parameter-1;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_BLOB; // FIXME
+    mysqlc_sdbc_driver::resetSqlVar(m_binds[nIndex].buffer, &x, MYSQL_TYPE_BLOB);
+    m_bindMetas[nIndex].is_null = 0;
 }
 
 void SAL_CALL OPreparedStatement::setCharacterStream(sal_Int32 parameter,
@@ -681,12 +523,11 @@ void SAL_CALL OPreparedStatement::clearParameters()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    try {
-        static_cast<sql::PreparedStatement *>(cppStatement.get())->clearParameters();
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
-    } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
+    for(size_t i=0; i<m_binds.size(); ++i)
+    {
+        m_bindMetas[i].is_null = 1;
+        free(m_binds[i].buffer);
+        m_binds[i].buffer = nullptr;
     }
 }
 
@@ -730,15 +571,5 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 column)
         throw SQLException("Parameter index out of range", *this, rtl::OUString(), 1, Any ());
     }
 }
-
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
