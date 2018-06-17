@@ -59,12 +59,12 @@ void FontFeatureTest::testGetFontFeatures()
         }
     }
 
-    CPPUNIT_ASSERT_EQUAL(size_t(31), rDefaultFontFeatures.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(27), rDefaultFontFeatures.size());
 
-    OUString aExpectedFeaturesString = "aalt c2sc case ccmp dlig fina frac hlig "
-                                       "liga lnum nalt onum pnum salt sinf smcp "
-                                       "ss01 ss02 ss03 ss04 ss05 ss06 sups tnum "
-                                       "zero cpsp kern lfbd mark mkmk rtbd ";
+    OUString aExpectedFeaturesString = "aalt c2sc case dlig frac hlig liga lnum "
+                                       "nalt onum pnum salt sinf smcp ss01 ss02 "
+                                       "ss03 ss04 ss05 ss06 sups tnum zero cpsp "
+                                       "kern lfbd rtbd ";
     CPPUNIT_ASSERT_EQUAL(aExpectedFeaturesString, aFeaturesString);
 
     // Check C2SC feature
@@ -83,7 +83,7 @@ void FontFeatureTest::testGetFontFeatures()
 
     // Check FRAC feature
     {
-        vcl::font::Feature& rFeature = rDefaultFontFeatures[6];
+        vcl::font::Feature& rFeature = rDefaultFontFeatures[4];
         CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("frac"), rFeature.m_aID.m_aFeatureCode);
 
         vcl::font::FeatureDefinition& rFracFeatureDefinition = rFeature.m_aDefinition;
