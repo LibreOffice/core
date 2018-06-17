@@ -1370,7 +1370,7 @@ IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
 {
     try
     {
-        sfx2::openUriExternally("https://tdf.io/joinus", false);
+        sfx2::openUriExternally("https://hub.libreoffice.org/joinus", false);
     }
     catch (const Exception&)
     {
