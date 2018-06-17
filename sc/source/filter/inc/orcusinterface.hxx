@@ -414,7 +414,7 @@ private:
     void applyXfToItemSet(SfxItemSet& rSet, const xf& rXf);
 
 public:
-    ScOrcusStyles(ScDocument& rDoc);
+    ScOrcusStyles(ScDocument& rDoc, bool bSkipDefaultStyles=false);
 
     void applyXfToItemSet(SfxItemSet& rSet, size_t xfId);
 
@@ -566,7 +566,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
     css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
 public:
-    ScOrcusFactory(ScDocument& rDoc);
+    ScOrcusFactory(ScDocument& rDoc, bool bSkipDefaultStyles=false);
 
     virtual orcus::spreadsheet::iface::import_sheet* append_sheet(
         orcus::spreadsheet::sheet_t sheet_index, const char *sheet_name, size_t sheet_name_length) override;
