@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_882081f9",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-17T09:01:00Z",
+      "side": 0,
+      "message": "Looks unrelated.",
+      "revId": "596820a5a3d9a12196b6bbcbfcb6d16ecd437962",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
