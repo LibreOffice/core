@@ -97,11 +97,8 @@ private:
     void                addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode );
 
 private:
-    typedef ::std::vector< double >                     DoubleVector;
-    typedef ::std::map< OUString, sal_uInt8 >    OoxErrorCodeMap;
-
-    DoubleVector        maCoeffs;           /// Coefficients for unit conversion.
-    OoxErrorCodeMap     maOoxErrCodes;      /// Maps error code strings to BIFF error constants.
+    std::vector<double> maCoeffs;           /// Coefficients for unit conversion.
+    std::map<OUString, sal_uInt8>     maOoxErrCodes;      /// Maps error code strings to BIFF error constants.
     sal_Int32           mnNullDate;         /// Nulldate of this workbook (number of days since 0000-01-01).
 };
 
