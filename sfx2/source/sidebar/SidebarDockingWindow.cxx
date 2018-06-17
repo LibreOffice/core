@@ -116,9 +116,18 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
 {
     MouseNotifyEvent nType = rEvent.GetType();
     if (MouseNotifyEvent::KEYINPUT == nType)
+    {
+        const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
+        if ( ( 0 == rKeyCode.GetModifier() ) && ( KEY_F11 == rKeyCode.GetCode() ) )
+        {
+            std::shared_ptr<PanelDescriptor> xPanelDescriptor =
+                    mpSidebarController->GetResourceManager()->GetPanelDescriptor( "StyleListPanel" );
+            if ( xPanelDescriptor && mpSidebarController->IsDeckVisible( xPanelDescriptor->msDeckId ) )
+                Close();
+        }
         return true;
-
-    if (MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
+    }
+    else if (MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
     {
         const MouseEvent *mEvt = rEvent.GetMouseEvent();
         if (mEvt->IsLeft())
