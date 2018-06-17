@@ -143,6 +143,8 @@ public:
 
     // RotateFlyFrame3 - Support for Transformations
     virtual void transform_translate(const Point& rOffset) override;
+
+    virtual SwFlyFrameType getSwFlyFrameType() const override { return SwFlyFrameType::SwFlyFreeFrame; }
 };
 
 // Flys that are bound to LayoutFrames and not to Content
@@ -236,6 +238,8 @@ public:
     // invalidate anchor frame on invalidation of the position, because the
     // position is calculated during the format of the anchor frame
     virtual void ActionOnInvalidation( const InvalidationType _nInvalid ) override;
+
+    virtual SwFlyFrameType getSwFlyFrameType() const override { return SwFlyFrameType::SwFlyInContentFrame; }
 };
 
 #endif

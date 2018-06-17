@@ -271,7 +271,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
                         // registered at the correct page frame, if frame
                         // position has changed.
                         if ( bAbsP && pContact->ObjAnchoredAtFly() &&
-                             dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+                             pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
                         {
                             // determine to-fly anchored Writer fly frame
                             SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pObj);
@@ -331,7 +331,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
                 // perform notification via the corresponding invalidations
                 if ( bNotify )
                 {
-                    if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+                    if (pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame)
                     {
                         SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pObj);
                         if ( bNotifySize )
@@ -344,7 +344,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
                         }
                         pFlyFrame->Invalidate_();
                     }
-                    else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
+                    else if (pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwAnchoredDrawObject )
                     {
                         // #115759# - no invalidation of
                         // position for as-character anchored objects.
@@ -396,7 +396,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
                 // #i50668#, #i50998# - invalidation of position
                 // of as-character anchored fly frames not needed and can cause
                 // layout loops
-                if ( dynamic_cast<const SwFlyInContentFrame*>( pFly) ==  nullptr )
+                if ( pFly->getSwFlyFrameType() != SwFlyFrameType::SwFlyInContentFrame )
                 {
                     pFly->InvalidatePos();
                 }
@@ -689,7 +689,7 @@ SwFlyNotify::~SwFlyNotify()
     // #i45180# - no adjustment of layout process flags and
     // further notifications/invalidations, if format is called by grow/shrink
     if ( pFly->ConsiderObjWrapInfluenceOnObjPos() &&
-         ( dynamic_cast<const SwFlyFreeFrame*>( pFly) ==  nullptr ||
+         (pFly->getSwFlyFrameType() != SwFlyFrameType::SwFlyFreeFrame ||
            !static_cast<SwFlyFreeFrame*>(pFly)->IsNoMoveOnCheckClip() ) )
     {
         // #i54138# - suppress restart of the layout process
@@ -1933,7 +1933,7 @@ static bool lcl_hasTabFrame(const SwTextFrame* pTextFrame)
         if (pSortedObjs->size() > 0)
         {
             SwAnchoredObject* pObject = (*pSortedObjs)[0];
-            if (dynamic_cast<const SwFlyFrame*>(pObject) !=  nullptr)
+            if (pObject->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame)
             {
                 SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObject);
                 if (pFly->Lower() && pFly->Lower()->IsTabFrame())
@@ -2371,7 +2371,7 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
         pObj->ResetLayoutProcessBools();
         // #115759# - remove also lower objects of as-character
         // anchored Writer fly frames from page
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if ( pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
         {
             SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pObj);
 
@@ -2396,7 +2396,7 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
             }
         }
         // #115759# - remove also drawing objects from page
-        else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
+        else if ( pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwAnchoredDrawObject )
         {
             if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
@@ -2531,10 +2531,10 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
         pObj->UnlockPosition();
         // #115759# - add also lower objects of as-character
         // anchored Writer fly frames from page
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if ( pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
         {
             SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pObj);
-            if ( dynamic_cast<const SwFlyFreeFrame*>( pObj) !=  nullptr )
+            if ( pFlyFrame->getSwFlyFrameType() == SwFlyFrameType::SwFlyFreeFrame )
             {
                 _pPage->AppendFlyToPage( pFlyFrame );
             }
@@ -2558,7 +2558,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
             }
         }
         // #115759# - remove also drawing objects from page
-        else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
+        else if ( pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwAnchoredDrawObject )
         {
             if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
@@ -2720,7 +2720,7 @@ static void lcl_Regist( SwPageFrame *pPage, const SwFrame *pAnch )
     SwSortedObjs *pObjs = const_cast<SwSortedObjs*>(pAnch->GetDrawObjs());
     for (SwAnchoredObject* pObj : *pObjs)
     {
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if ( pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
         {
             SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pObj);
             // register (not if already known)
@@ -2905,7 +2905,7 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
             const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
             for (SwAnchoredObject* pObj : rObjs)
             {
-                if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+                if ( pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
                 {
                     SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pObj);
                     if ( pFly->IsFlyInContentFrame() )
@@ -3038,7 +3038,7 @@ void Notify_Background( const SdrObject* pObj,
         const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         for (SwAnchoredObject* pAnchoredObj : rObjs)
         {
-            if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
+            if ( pAnchoredObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
             {
                 if( pAnchoredObj->GetDrawObj() == pObj )
                     continue;

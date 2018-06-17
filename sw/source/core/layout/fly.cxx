@@ -2227,7 +2227,7 @@ void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )
                 pAnchoredObj->SetClearedEnvironment( false );
             }
             // distinguish between writer fly frames and drawing objects
-            if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
+            if ( pAnchoredObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
             {
                 SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                 pFly->Invalidate_();
@@ -2262,7 +2262,7 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             // for at-character/as-character anchored objects the anchor character
             // text frame is taken.
             const SwFrame* pAnchorFrame = pObj->GetAnchorFrameContainingAnchPos();
-            if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+            if ( pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
             {
                 SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);
 
@@ -2294,7 +2294,7 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             }
             else
             {
-                OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr,
+                OSL_ENSURE( pObj->getAnchoredObjectType() == SwAnchoredObjectType::SwAnchoredDrawObject,
                         "<SwLayoutFrame::NotifyFlys() - anchored object of unexpected type" );
                 // #i26945# - use <pAnchorFrame> to check, if
                 // fly frame is lower of layout frame resp. if fly frame is
@@ -2748,7 +2748,7 @@ SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
-                if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
+                if ( pAnchoredObj->getAnchoredObjectType() == SwAnchoredObjectType::SwFlyFrame )
                 {
                     SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                     // OD 06.11.2003 #i22305# - consider
