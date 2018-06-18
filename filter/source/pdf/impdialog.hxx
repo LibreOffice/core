@@ -293,30 +293,26 @@ public:
 /// Class tab page viewer
 class ImpPDFTabViewerPage : public SfxTabPage
 {
-    VclPtr<CheckBox>            m_pCbResWinInit;
-    VclPtr<CheckBox>            m_pCbCenterWindow;
-    VclPtr<CheckBox>            m_pCbOpenFullScreen;
-    VclPtr<CheckBox>            m_pCbDispDocTitle;
-
-
-    VclPtr<CheckBox>            m_pCbHideViewerMenubar;
-    VclPtr<CheckBox>            m_pCbHideViewerToolbar;
-    VclPtr<CheckBox>            m_pCbHideViewerWindowControls;
-
-    VclPtr<CheckBox>            m_pCbTransitionEffects;
     bool                        mbIsPresentation;
 
-    VclPtr<RadioButton>         m_pRbAllBookmarkLevels;
-    VclPtr<RadioButton>         m_pRbVisibleBookmarkLevels;
-    VclPtr<NumericField>        m_pNumBookmarkLevels;
+    std::unique_ptr<weld::CheckButton> m_xCbResWinInit;
+    std::unique_ptr<weld::CheckButton> m_xCbCenterWindow;
+    std::unique_ptr<weld::CheckButton> m_xCbOpenFullScreen;
+    std::unique_ptr<weld::CheckButton> m_xCbDispDocTitle;
+    std::unique_ptr<weld::CheckButton> m_xCbHideViewerMenubar;
+    std::unique_ptr<weld::CheckButton> m_xCbHideViewerToolbar;
+    std::unique_ptr<weld::CheckButton> m_xCbHideViewerWindowControls;
+    std::unique_ptr<weld::CheckButton> m_xCbTransitionEffects;
+    std::unique_ptr<weld::RadioButton> m_xRbAllBookmarkLevels;
+    std::unique_ptr<weld::RadioButton> m_xRbVisibleBookmarkLevels;
+    std::unique_ptr<weld::SpinButton>m_xNumBookmarkLevels;
 
-    DECL_LINK( ToggleRbBookmarksHdl, RadioButton&, void );
+    DECL_LINK(ToggleRbBookmarksHdl, weld::ToggleButton&, void);
 
 public:
-                                ImpPDFTabViewerPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ImpPDFTabViewerPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabViewerPage() override;
 
-    virtual void                dispose() override;
     static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
