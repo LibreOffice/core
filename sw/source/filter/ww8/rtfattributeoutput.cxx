@@ -3768,21 +3768,6 @@ void RtfAttributeOutput::FontPitchType(FontPitch ePitch) const
     m_rExport.OutULong(nVal);
 }
 
-static bool IsEMF(const sal_uInt8* pGraphicAry, unsigned long nSize)
-{
-    if (pGraphicAry && (nSize > 0x2c))
-    {
-        // check the magic number
-        if ((pGraphicAry[0x28] == 0x20) && (pGraphicAry[0x29] == 0x45)
-            && (pGraphicAry[0x2a] == 0x4d) && (pGraphicAry[0x2b] == 0x46))
-        {
-            //emf detected
-            return true;
-        }
-    }
-    return false;
-}
-
 static bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, unsigned long& rSize)
 {
     if (rpGraphicAry && (rSize > 0x22))
@@ -4048,8 +4033,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
                 pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
                 break;
             case GfxLinkType::NativeWmf:
-                pBLIPType = IsEMF(pGraphicAry, nSize) ? OOO_STRING_SVTOOLS_RTF_EMFBLIP
-                                                      : OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+                pBLIPType = aGraphicLink.IsEMF() ? OOO_STRING_SVTOOLS_RTF_EMFBLIP
+                                                 : OOO_STRING_SVTOOLS_RTF_WMETAFILE;
                 break;
             case GfxLinkType::NativeGif:
                 // GIF is not supported by RTF, but we override default conversion to WMF, PNG seems fits better here.
