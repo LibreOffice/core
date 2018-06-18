@@ -817,7 +817,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             ++p;
         }
 
-        CharT const * pFirstSignificant = p;
+        CharT const * pFirstSignificant = ((p > pBegin && *(p-1) == CharT('0')) ? p-1 : p);
         long nValExp = 0;       // carry along exponent of mantissa
 
         // integer part of mantissa
