@@ -949,10 +949,9 @@ VclPtr<AbstractInsFootNoteDlg> SwAbstractDialogFactory_Impl::CreateInsFootNoteDl
     return VclPtr<AbstractInsFootNoteDlg_Impl>::Create(new SwInsFootNoteDlg(pParent, rSh, bEd));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTitlePageDlg ( vcl::Window *pParent )
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTitlePageDlg(weld::Window *pParent)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwTitlePageDlg>::Create( pParent );
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGenericDialog_Impl>::Create(new SwTitlePageDlg(pParent));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateVclSwViewDialog(SwView& rView)
