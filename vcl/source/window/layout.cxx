@@ -1926,6 +1926,8 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     {
         m_pVScroll->Show(nAvailHeight < aChildReq.Height());
     }
+    else if (m_pVScroll->IsVisible() != bool(GetStyle() & WB_VSCROLL))
+        m_pVScroll->Show((GetStyle() & WB_VSCROLL) != 0);
 
     if (m_pVScroll->IsVisible())
         nAvailWidth -= getLayoutRequisition(*m_pVScroll).Width();
@@ -1942,6 +1944,8 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
         if (GetStyle() & WB_AUTOVSCROLL)
             m_pVScroll->Show(nAvailHeight < aChildReq.Height());
     }
+    else if (m_pHScroll->IsVisible() != bool(GetStyle() & WB_HSCROLL))
+        m_pHScroll->Show((GetStyle() & WB_HSCROLL) != 0);
 
     Size aInnerSize(rAllocation);
     aInnerSize.AdjustWidth(-2);
