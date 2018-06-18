@@ -4258,7 +4258,7 @@ void ScInterpreter::ScColumn()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
-        double nVal = 0;
+        double nVal = 0.0;
         if (nParamCount == 0)
         {
             nVal = aPos.Col() + 1;
@@ -4297,15 +4297,40 @@ void ScInterpreter::ScColumn()
                     nVal = static_cast<double>(nCol1 + 1);
                 }
                 break;
+                case svExternalSingleRef :
+                {
+                    sal_uInt16 nFileId;
+                    OUString aTabName;
+                    ScSingleRefData aRef;
+                    PopExternalSingleRef( nFileId, aTabName, aRef );
+                    ScAddress aAbsRef = aRef.toAbs( aPos );
+                    nVal = static_cast<double>( aAbsRef.Col() + 1 );
+                }
+                break;
+
                 case svDoubleRef :
+                case svExternalDoubleRef :
                 {
                     SCCOL nCol1;
-                    SCROW nRow1;
-                    SCTAB nTab1;
                     SCCOL nCol2;
-                    SCROW nRow2;
-                    SCTAB nTab2;
-                    PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                    if ( GetStackType() == svDoubleRef )
+                    {
+                        SCROW nRow1;
+                        SCTAB nTab1;
+                        SCROW nRow2;
+                        SCTAB nTab2;
+                        PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                    }
+                    else
+                    {
+                        sal_uInt16 nFileId;
+                        OUString aTabName;
+                        ScComplexRefData aRef;
+                        PopExternalDoubleRef( nFileId, aTabName, aRef );
+                        ScRange aAbs = aRef.toAbs( aPos );
+                        nCol1 = aAbs.aStart.Col();
+                        nCol2 = aAbs.aEnd.Col();
+                    }
                     if (nCol2 > nCol1)
                     {
                         ScMatrixRef pResMat = GetNewMat(
@@ -4318,8 +4343,6 @@ void ScInterpreter::ScColumn()
                             PushMatrix(pResMat);
                             return;
                         }
-                        else
-                            nVal = 0.0;
                     }
                     else
                         nVal = static_cast<double>(nCol1 + 1);
@@ -4327,7 +4350,6 @@ void ScInterpreter::ScColumn()
                 break;
                 default:
                     SetError( FormulaError::IllegalParameter );
-                    nVal = 0.0;
             }
         }
         PushDouble( nVal );
