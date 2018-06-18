@@ -659,7 +659,12 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 case GfxLinkType::NativeJpg: aExtension = ".jpg"; break;
                 case GfxLinkType::NativePng: aExtension = ".png"; break;
                 case GfxLinkType::NativeTif: aExtension = ".tif"; break;
-                case GfxLinkType::NativeWmf: aExtension = ".wmf"; break;
+                case GfxLinkType::NativeWmf:
+                    if (aGfxLink.IsEMF())
+                        aExtension = ".emf";
+                    else
+                        aExtension = ".wmf";
+                    break;
                 case GfxLinkType::NativeMet: aExtension = ".met"; break;
                 case GfxLinkType::NativePct: aExtension = ".pct"; break;
                 case GfxLinkType::NativeSvg:
