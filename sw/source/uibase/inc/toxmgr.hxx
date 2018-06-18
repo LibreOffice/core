@@ -169,9 +169,9 @@ public:
 
 class SwTOXMarkDescription
 {
-    TOXTypes    eTOXType;
-    int         nLevel;
-    bool        bMainEntry;
+    TOXTypes    meTOXType;
+    int         mnLevel;
+    bool        mbMainEntry;
 
     boost::optional<OUString>  maPrimKey;
     boost::optional<OUString>  maSecKey;
@@ -188,19 +188,19 @@ class SwTOXMarkDescription
 public:
     // single argument ctors shall be explicit.
     explicit SwTOXMarkDescription(TOXTypes eType) :
-        eTOXType(eType),
-        nLevel(0),
-        bMainEntry(false)
+        meTOXType(eType),
+        mnLevel(0),
+        mbMainEntry(false)
         {
         }
 
-    TOXTypes        GetTOXType()const {return eTOXType;}
+    TOXTypes        GetTOXType()const {return meTOXType;}
 
-    void            SetLevel(int nSet) {nLevel = nSet;}
-    int             GetLevel() const {return nLevel;}
+    void            SetLevel(int nSet) {mnLevel = nSet;}
+    int             GetLevel() const {return mnLevel;}
 
-    void            SetMainEntry(bool bSet) {bMainEntry = bSet;}
-    bool            IsMainEntry() const {return bMainEntry;}
+    void            SetMainEntry(bool bSet) {mbMainEntry = bSet;}
+    bool            IsMainEntry() const {return mbMainEntry;}
 
     void            SetPrimKey(const OUString& rSet) { maPrimKey = rSet; }
     boost::optional<OUString> const & GetPrimKey() const { return maPrimKey; }
