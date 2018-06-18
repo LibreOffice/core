@@ -265,7 +265,7 @@ public:
     sal_Int32 GetWeight() const;
 
     bool IsEnabledForOpenCL() const { return mbOpenCLEnabled; }
-    bool IsEnabledForThreading() const { return !mbOpenCLEnabled && mbThreadingEnabled; }
+    bool IsEnabledForThreading() const { return mbThreadingEnabled; }
 
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;
