@@ -880,104 +880,75 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, CheckBox&, void)
     }
 }
 
-
 /// The option features tab page
-ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "PdfViewPage","filter/ui/pdfviewpage.ui", &rCoreSet)
+ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "filter/ui/pdfviewpage.ui", "PdfViewPage", &rCoreSet)
     , mbUseCTLFont(false)
+    , mxRbOpnPageOnly(m_xBuilder->weld_radio_button("pageonly"))
+    , mxRbOpnOutline(m_xBuilder->weld_radio_button("outline"))
+    , mxRbOpnThumbs(m_xBuilder->weld_radio_button("thumbs"))
+    , mxNumInitialPage(m_xBuilder->weld_spin_button("page"))
+    , mxRbMagnDefault(m_xBuilder->weld_radio_button("fitdefault"))
+    , mxRbMagnFitWin(m_xBuilder->weld_radio_button("fitwin"))
+    , mxRbMagnFitWidth(m_xBuilder->weld_radio_button("fitwidth"))
+    , mxRbMagnFitVisible(m_xBuilder->weld_radio_button("fitvis"))
+    , mxRbMagnZoom(m_xBuilder->weld_radio_button("fitzoom"))
+    , mxNumZoom(m_xBuilder->weld_spin_button("zoom"))
+    , mxRbPgLyDefault(m_xBuilder->weld_radio_button("defaultlayout"))
+    , mxRbPgLySinglePage(m_xBuilder->weld_radio_button("singlelayout"))
+    , mxRbPgLyContinue(m_xBuilder->weld_radio_button("contlayout"))
+    , mxRbPgLyContinueFacing(m_xBuilder->weld_radio_button("contfacinglayout"))
+    , mxCbPgLyFirstOnLeft(m_xBuilder->weld_check_button("firstonleft"))
 {
-    get(mpRbOpnPageOnly, "pageonly");
-    get(mpRbOpnOutline, "outline");
-    get(mpRbOpnThumbs, "thumbs");
-    get(mpNumInitialPage, "page");
-    get(mpRbMagnDefault, "fitdefault");
-    get(mpRbMagnFitWin, "fitwin");
-    get(mpRbMagnFitWidth, "fitwidth");
-    get(mpRbMagnFitVisible, "fitvis");
-    get(mpRbMagnZoom, "fitzoom");
-    get(mpNumZoom, "zoom");
-    get(mpRbPgLyDefault, "defaultlayout");
-    get(mpRbPgLySinglePage, "singlelayout");
-    get(mpRbPgLyContinue, "contlayout");
-    get(mpRbPgLyContinueFacing, "contfacinglayout");
-    get(mpCbPgLyFirstOnLeft, "firstonleft");
-
-    mpRbMagnDefault->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    mpRbMagnFitWin->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    mpRbMagnFitWidth->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    mpRbMagnFitVisible->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    mpRbMagnZoom->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mxRbMagnDefault->connect_toggled( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mxRbMagnFitWin->connect_toggled( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mxRbMagnFitWidth->connect_toggled( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mxRbMagnFitVisible->connect_toggled( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mxRbMagnZoom->connect_toggled( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
 }
-
 
 ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
 {
-    disposeOnce();
 }
 
-
-void ImpPDFTabOpnFtrPage::dispose()
+VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    mpRbOpnPageOnly.clear();
-    mpRbOpnOutline.clear();
-    mpRbOpnThumbs.clear();
-    mpNumInitialPage.clear();
-    mpRbMagnDefault.clear();
-    mpRbMagnFitWin.clear();
-    mpRbMagnFitWidth.clear();
-    mpRbMagnFitVisible.clear();
-    mpRbMagnZoom.clear();
-    mpNumZoom.clear();
-    mpRbPgLyDefault.clear();
-    mpRbPgLySinglePage.clear();
-    mpRbPgLyContinue.clear();
-    mpRbPgLyContinueFacing.clear();
-    mpCbPgLyFirstOnLeft.clear();
-    SfxTabPage::dispose();
+    return VclPtr<ImpPDFTabOpnFtrPage>::Create(pParent, *rAttrSet);
 }
-
-
-VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create( TabPageParent pParent,
-                                                const SfxItemSet* rAttrSet)
-{
-    return VclPtr<ImpPDFTabOpnFtrPage>::Create( pParent.pParent, *rAttrSet );
-}
-
 
 void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
     paParent->mnInitialView = 0;
-    if( mpRbOpnOutline->IsChecked() )
+    if( mxRbOpnOutline->get_active() )
         paParent->mnInitialView = 1;
-    else if( mpRbOpnThumbs->IsChecked() )
+    else if( mxRbOpnThumbs->get_active() )
         paParent->mnInitialView = 2;
 
     paParent->mnMagnification = 0;
-    if( mpRbMagnFitWin->IsChecked() )
+    if( mxRbMagnFitWin->get_active() )
         paParent->mnMagnification = 1;
-    else if( mpRbMagnFitWidth->IsChecked() )
+    else if( mxRbMagnFitWidth->get_active() )
         paParent->mnMagnification = 2;
-    else if( mpRbMagnFitVisible->IsChecked() )
+    else if( mxRbMagnFitVisible->get_active() )
         paParent->mnMagnification = 3;
-    else if( mpRbMagnZoom->IsChecked() )
+    else if( mxRbMagnZoom->get_active() )
     {
         paParent->mnMagnification = 4;
-        paParent->mnZoom = static_cast<sal_Int32>(mpNumZoom->GetValue());
+        paParent->mnZoom = mxNumZoom->get_value();
     }
 
-    paParent->mnInitialPage = static_cast<sal_Int32>(mpNumInitialPage->GetValue());
+    paParent->mnInitialPage = mxNumInitialPage->get_value();
 
     paParent->mnPageLayout = 0;
-    if( mpRbPgLySinglePage->IsChecked() )
+    if( mxRbPgLySinglePage->get_active() )
         paParent->mnPageLayout = 1;
-    else if( mpRbPgLyContinue->IsChecked() )
+    else if( mxRbPgLyContinue->get_active() )
         paParent->mnPageLayout = 2;
-    else if( mpRbPgLyContinueFacing->IsChecked() )
+    else if( mxRbPgLyContinueFacing->get_active() )
         paParent->mnPageLayout = 3;
 
-    paParent->mbFirstPageLeft = mbUseCTLFont && mpCbPgLyFirstOnLeft->IsChecked();
+    paParent->mbFirstPageLeft = mbUseCTLFont && mxCbPgLyFirstOnLeft->get_active();
 }
-
 
 void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
@@ -986,16 +957,16 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     {
     default:
     case 0:
-        mpRbPgLyDefault->Check();
+        mxRbPgLyDefault->set_active(true);
         break;
     case 1:
-        mpRbPgLySinglePage->Check();
+        mxRbPgLySinglePage->set_active(true);
         break;
     case 2:
-        mpRbPgLyContinue->Check();
+        mxRbPgLyContinue->set_active(true);
         break;
     case 3:
-        mpRbPgLyContinueFacing->Check();
+        mxRbPgLyContinueFacing->set_active(true);
         break;
     }
 
@@ -1003,13 +974,13 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     {
     default:
     case 0:
-        mpRbOpnPageOnly->Check();
+        mxRbOpnPageOnly->set_active(true);
         break;
     case 1:
-        mpRbOpnOutline->Check();
+        mxRbOpnOutline->set_active(true);
         break;
     case 2:
-        mpRbOpnThumbs->Check();
+        mxRbOpnThumbs->set_active(true);
         break;
     }
 
@@ -1017,56 +988,53 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     {
     default:
     case 0:
-        mpRbMagnDefault->Check();
-        mpNumZoom->Enable( false );
+        mxRbMagnDefault->set_active(true);
+        mxNumZoom->set_sensitive(false);
         break;
     case 1:
-        mpRbMagnFitWin->Check();
-        mpNumZoom->Enable( false );
+        mxRbMagnFitWin->set_active(true);
+        mxNumZoom->set_sensitive(false);
         break;
     case 2:
-        mpRbMagnFitWidth->Check();
-        mpNumZoom->Enable( false );
+        mxRbMagnFitWidth->set_active(true);
+        mxNumZoom->set_sensitive(false);
         break;
     case 3:
-        mpRbMagnFitVisible->Check();
-        mpNumZoom->Enable( false );
+        mxRbMagnFitVisible->set_active(true);
+        mxNumZoom->set_sensitive(false);
         break;
     case 4:
-        mpRbMagnZoom->Check();
-        mpNumZoom->Enable();
+        mxRbMagnZoom->set_active(true);
+        mxNumZoom->set_sensitive(true);
         break;
     }
 
-    mpNumZoom->SetValue( paParent->mnZoom );
-    mpNumInitialPage->SetValue( paParent->mnInitialPage );
+    mxNumZoom->set_value(paParent->mnZoom);
+    mxNumInitialPage->set_value(paParent->mnInitialPage);
 
-    if( !mbUseCTLFont )
-        mpCbPgLyFirstOnLeft->Hide( );
+    if (!mbUseCTLFont)
+        mxCbPgLyFirstOnLeft->hide();
     else
     {
-        mpRbPgLyContinueFacing->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl ) );
-        mpCbPgLyFirstOnLeft->Check( paParent->mbFirstPageLeft );
+        mxRbPgLyContinueFacing->connect_toggled(LINK(this, ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl));
+        mxCbPgLyFirstOnLeft->set_active(paParent->mbFirstPageLeft);
         ToggleRbPgLyContinueFacingHdl();
     }
 }
 
-
-IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, weld::ToggleButton&, void)
 {
     ToggleRbPgLyContinueFacingHdl();
 }
 
-
 void ImpPDFTabOpnFtrPage::ToggleRbPgLyContinueFacingHdl()
 {
-    mpCbPgLyFirstOnLeft->Enable( mpRbPgLyContinueFacing->IsChecked() );
+    mxCbPgLyFirstOnLeft->set_sensitive(mxRbPgLyContinueFacing->get_active());
 }
 
-
-IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, RadioButton&, void )
+IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, weld::ToggleButton&, void )
 {
-    mpNumZoom->Enable( mpRbMagnZoom->IsChecked() );
+    mxNumZoom->set_sensitive(mxRbMagnZoom->get_active());
 }
 
 
