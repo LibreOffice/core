@@ -1977,7 +1977,7 @@ uno::Reference<XAccessible > SAL_CALL
             xAccessible = GetAccessibleSpreadsheet();
     }
 
-    OSL_ENSURE(xAccessible.is(), "here should always be an accessible object or a exception throwed");
+    OSL_ENSURE(xAccessible.is(), "here should always be an accessible object or an exception thrown");
 
     return xAccessible;
 }

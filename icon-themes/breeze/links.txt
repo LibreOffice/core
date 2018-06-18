@@ -871,7 +871,7 @@ cmd/sc_dsbrowserexplorer.png cmd/sc_showfmexplorer.png
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
 
-# Underline includ language support
+# Underline include language support
 cmd/lc_underlinesimple.png cmd/lc_underline.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
 cmd/32/underlinesimple.png cmd/32/underline.png
