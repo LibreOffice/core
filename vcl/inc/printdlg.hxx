@@ -164,6 +164,7 @@ namespace vcl
         VclPtr<ListBox>                         mpNupOrientationBox;
 
         // page order ("left to right, then down")
+        VclPtr<FixedText>                       mpNupOrderTxt;
         VclPtr<ListBox>                         mpNupOrderBox;
         VclPtr<ShowNupOrderWindow>              mpNupOrderWin;
         /// border around each page
