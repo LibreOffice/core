@@ -149,7 +149,7 @@ void FontFeatureTest::testParseFeature()
     }
     {
         // Multiple features specified, explicit values
-        // Only 4 char parameter names supported - "toolong" is too long and igoned
+        // Only 4 char parameter names supported - "toolong" is too long and ignored
         // If value is 0, it should be also ignored
         vcl::font::FeatureParser aParser("Font name:abcd=1&bcde=0&toolong=1&cdef=3");
         CPPUNIT_ASSERT_EQUAL(size_t(2), aParser.getFeatures().size());

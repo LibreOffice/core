@@ -37,7 +37,7 @@
 #define STR_FONT_FEATURE_ID_DCAP          NC_("STR_FONT_FEATURE_ID_DCAP", "Drop Caps")
 #define STR_FONT_FEATURE_ID_DLIG          NC_("STR_FONT_FEATURE_ID_DLIG", "Discretionary Ligatures")
 #define STR_FONT_FEATURE_ID_DNOM          NC_("STR_FONT_FEATURE_ID_DNOM", "Denominators")
-#define STR_FONT_FEATURE_ID_DPNG          NC_("STR_FONT_FEATURE_ID_DPNG", "Dipthongs (Obsolete)")
+#define STR_FONT_FEATURE_ID_DPNG          NC_("STR_FONT_FEATURE_ID_DPNG", "Diphthongs (Obsolete)")
 #define STR_FONT_FEATURE_ID_EXPT          NC_("STR_FONT_FEATURE_ID_EXPT", "Expert Forms")
 #define STR_FONT_FEATURE_ID_FALT          NC_("STR_FONT_FEATURE_ID_FALT", "Final Glyph on Line Alternates")
 #define STR_FONT_FEATURE_ID_FRAC          NC_("STR_FONT_FEATURE_ID_FRAC", "DIagonal Fractions")

@@ -577,7 +577,7 @@ void SdrEditView::CheckPossibilities()
                     }
                 }
 
-                // Must be resizeable to allow cropping
+                // Must be resizable to allow cropping
                 if (!aInfo.bResizeFreeAllowed && !aInfo.bResizePropAllowed)
                     bCropAllowed = false;
 
