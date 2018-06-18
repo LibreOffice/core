@@ -1033,7 +1033,7 @@ void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
             DocumentSignature aSignature(m_aDocument);
             if (aSignature.supportsSignatures())
             {
-                aSignature.signScriptingContent();
+                aSignature.signScriptingContent(rReq.GetFrameWeld());
                 if (SfxBindings* pBindings = GetBindingsPtr())
                     pBindings->Invalidate(SID_SIGNATURE);
             }

@@ -355,19 +355,19 @@ public:
     bool                        ExportTo( SfxMedium &rMedium );
 
     /** Returns to if preparing was succesful, else false. */
-    bool PrepareForSigning();
+    bool PrepareForSigning(weld::Window* pDialogParent);
     bool CheckIsReadonly(bool bSignScriptingContent);
     void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
     bool HasValidSignatures();
     SignatureState              GetDocumentSignatureState();
-    void                        SignDocumentContent();
-    void SignSignatureLine(const OUString& aSignatureLineId,
+    void                        SignDocumentContent(weld::Window* pDialogParent);
+    void SignSignatureLine(weld::Window* pDialogParent, const OUString& aSignatureLineId,
                            const css::uno::Reference<css::security::XCertificate> xCert,
                            const css::uno::Reference<css::graphic::XGraphic> xValidGraphic,
                            const css::uno::Reference<css::graphic::XGraphic> xInvalidGraphic,
                            const OUString& aComment);
     SignatureState              GetScriptingSignatureState();
-    void                        SignScriptingContent();
+    void                        SignScriptingContent(weld::Window* pDialogParent);
     DECL_LINK(SignDocumentHandler, Button*, void);
 
     virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet& );
