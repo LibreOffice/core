@@ -21,6 +21,7 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:AddDirect"/>
             <menu:menuitem menu:id=".uno:Open"/>
+            <menu:menuitem menu:id=".uno:OpenRemote"/>
             <menu:menuitem menu:id=".uno:RecentFileList"/>
             <menu:menuitem menu:id=".uno:CloseDoc"/>
             <menu:menuseparator/>
@@ -64,13 +65,10 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowLines"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowPropBrowser"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ObjectCatalog"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
         </menu:menupopup>
@@ -83,6 +81,12 @@
             <menu:menuitem menu:id=".uno:BasicStepOver"/>
             <menu:menuitem menu:id=".uno:BasicStepInto"/>
             <menu:menuitem menu:id=".uno:BasicStepOut"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ToggleBreakPoint"/>
+            <menu:menuitem menu:id=".uno:ManageBreakPoints"/>
+            <menu:menuitem menu:id=".uno:AddWatch"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:MatchGroup"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:CompileBasic"/>
         </menu:menupopup>
@@ -103,11 +107,7 @@
             <menu:menuitem menu:id=".uno:Combobox"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:InsertPushbutton"/>
-            <menu:menuitem menu:id=".uno:SpinButton"/>
-            <menu:menuitem menu:id=".uno:ProgressBar"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:VScrollbar"/>
-            <menu:menuitem menu:id=".uno:HScrollbar"/>
+            <menu:menuitem menu:id=".uno:Imagebutton"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:InsertFormattedField"/>
             <menu:menu menu:id=".uno:FormMoreFieldsMenu">
@@ -128,15 +128,18 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HFixedLine"/>
             <menu:menuitem menu:id=".uno:VFixedLine"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SpinButton"/>
+            <menu:menuitem menu:id=".uno:ProgressBar"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:VScrollbar"/>
+            <menu:menuitem menu:id=".uno:HScrollbar"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:ToggleBreakPoint"/>
-            <menu:menuitem menu:id=".uno:ManageBreakPoints"/>
-            <menu:menuitem menu:id=".uno:AddWatch"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:MatchGroup"/>
+            <menu:menuitem menu:id=".uno:ChooseMacro"/>
+            <menu:menuitem menu:id=".uno:ModuleDialog"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:MacroRecorder"/>
             <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
