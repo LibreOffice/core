@@ -885,7 +885,6 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
         return *this;
     SdrRectObj::operator=( rObj );
 
-    mpGraphicObject->SetGraphic( rObj.GetGraphic(), &rObj.GetGraphicObject() );
     aFileName = rObj.aFileName;
     aFilterName = rObj.aFilterName;
     bMirrored = rObj.bMirrored;
@@ -899,6 +898,10 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     mbIsSignatureLineShowSignDate = rObj.mbIsSignatureLineShowSignDate;
     mbIsSignatureLineCanAddComment = rObj.mbIsSignatureLineCanAddComment;
     mpSignatureLineUnsignedGraphic = rObj.mpSignatureLineUnsignedGraphic;
+    if (mbIsSignatureLine && rObj.mpSignatureLineUnsignedGraphic)
+        mpGraphicObject->SetGraphic(rObj.mpSignatureLineUnsignedGraphic);
+    else
+        mpGraphicObject->SetGraphic( rObj.GetGraphic(), &rObj.GetGraphicObject() );
 
     if( rObj.IsLinkedGraphic() )
     {
