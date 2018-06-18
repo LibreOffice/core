@@ -597,7 +597,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         }
         if (bNeedMigration)
         {
-            // back up content xml file if migration was successfull
+            // back up content xml file if migration was successful
             Reference<XStorage> xRootStorage = m_pImpl->getOrCreateRootStorage();
             xRootStorage->copyElementTo("content.xml", xRootStorage,
                     "content_before_migration.xml");
