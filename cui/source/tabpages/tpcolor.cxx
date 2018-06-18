@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <i18nutil/unicode.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
@@ -53,8 +54,8 @@
 
 using namespace com::sun::star;
 
-SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", &rInAttrs)
+SvxColorTabPage::SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "cui/ui/colorpage.ui", "ColorPage", &rInAttrs)
     , mpTopDlg( GetParentDialog() )
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
@@ -63,99 +64,98 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( ColorModel::RGB )
     , m_context(comphelper::getProcessComponentContext())
+    , m_xValSetColorList(new ColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
+    , m_xValSetRecentList(new ColorValueSet(nullptr))
+    , m_xSelectPalette(m_xBuilder->weld_combo_box_text("paletteselector"))
+    , m_xRbRGB(m_xBuilder->weld_radio_button("RGB"))
+    , m_xRbCMYK(m_xBuilder->weld_radio_button("CMYK"))
+    , m_xRGBcustom(m_xBuilder->weld_widget("rgbcustom"))
+    , m_xRGBpreset(m_xBuilder->weld_widget("rgbpreset"))
+    , m_xRpreset(m_xBuilder->weld_entry("R_preset"))
+    , m_xGpreset(m_xBuilder->weld_entry("G_preset"))
+    , m_xBpreset(m_xBuilder->weld_entry("B_preset"))
+    , m_xRcustom(m_xBuilder->weld_spin_button("R_custom"))
+    , m_xGcustom(m_xBuilder->weld_spin_button("G_custom"))
+    , m_xBcustom(m_xBuilder->weld_spin_button("B_custom"))
+    , m_xHexpreset(new weld::HexColorControl(m_xBuilder->weld_entry("hex_preset")))
+    , m_xHexcustom(new weld::HexColorControl(m_xBuilder->weld_entry("hex_custom")))
+    , m_xCMYKcustom(m_xBuilder->weld_widget("cmykcustom"))
+    , m_xCMYKpreset(m_xBuilder->weld_widget("cmykpreset"))
+    , m_xCpreset(m_xBuilder->weld_entry("C_preset"))
+    , m_xYpreset(m_xBuilder->weld_entry("Y_preset"))
+    , m_xMpreset(m_xBuilder->weld_entry("M_preset"))
+    , m_xKpreset(m_xBuilder->weld_entry("K_preset"))
+    , m_xCcustom(m_xBuilder->weld_metric_spin_button("C_custom", FUNIT_PERCENT))
+    , m_xYcustom(m_xBuilder->weld_metric_spin_button("Y_custom", FUNIT_PERCENT))
+    , m_xMcustom(m_xBuilder->weld_metric_spin_button("M_custom", FUNIT_PERCENT))
+    , m_xKcustom(m_xBuilder->weld_metric_spin_button("K_custom", FUNIT_PERCENT))
+    , m_xBtnAdd(m_xBuilder->weld_button("add"))
+    , m_xBtnDelete(m_xBuilder->weld_button("delete"))
+    , m_xBtnWorkOn(m_xBuilder->weld_button("edit"))
+    , m_xCtlPreviewOld(new weld::CustomWeld(*m_xBuilder, "oldpreview", m_aCtlPreviewOld))
+    , m_xCtlPreviewNew(new weld::CustomWeld(*m_xBuilder, "newpreview", m_aCtlPreviewNew))
+    , m_xValSetColorListWin(new weld::CustomWeld(*m_xBuilder, "colorset", *m_xValSetColorList))
+    , m_xValSetRecentListWin(new weld::CustomWeld(*m_xBuilder, "recentcolorset", *m_xValSetRecentList))
 {
-    get(m_pSelectPalette, "paletteselector");
-    get(m_pValSetColorList, "colorset");
     Size aSize = LogicToPixel(Size(100 , 120), MapMode(MapUnit::MapAppFont));
-    m_pValSetColorList->set_width_request(aSize.Width());
-    m_pValSetColorList->set_height_request(aSize.Height());
-    get(m_pValSetRecentList, "recentcolorset");
-    get(m_pCtlPreviewOld, "oldpreview");
-    get(m_pCtlPreviewNew, "newpreview");
+    m_xValSetColorList->set_size_request(aSize.Width(), aSize.Height());
     aSize = LogicToPixel(Size(34 , 25), MapMode(MapUnit::MapAppFont));
-    m_pCtlPreviewOld->set_width_request(aSize.Width());
-    m_pCtlPreviewOld->set_height_request(aSize.Height());
-    m_pCtlPreviewNew->set_width_request(aSize.Width());
-    m_pCtlPreviewNew->set_height_request(aSize.Height());
-    get(m_pRbRGB, "RGB");
-    get(m_pRbCMYK, "CMYK");
-    get(m_pRGBcustom, "rgbcustom");
-    get(m_pRGBpreset, "rgbpreset");
-    get(m_pRcustom, "R_custom");
-    get(m_pRpreset, "R_preset-nospin");
-    get(m_pGcustom, "G_custom");
-    get(m_pGpreset, "G_preset-nospin");
-    get(m_pBcustom, "B_custom");
-    get(m_pBpreset, "B_preset-nospin");
-    get(m_pHexpreset, "hex_preset");
-    get(m_pHexcustom, "hex_custom");
-    get(m_pCMYKcustom, "cmykcustom");
-    get(m_pCMYKpreset,  "cmykpreset");
-    get(m_pCcustom, "C_custom");
-    get(m_pCpreset, "C_preset-nospin");
-    get(m_pYcustom, "Y_custom");
-    get(m_pYpreset, "Y_preset-nospin");
-    get(m_pMcustom, "M_custom");
-    get(m_pMpreset, "M_preset-nospin");
-    get(m_pKcustom, "K_custom");
-    get(m_pKpreset, "K_preset-nospin");
-    get(m_pBtnAdd, "add");
-    get(m_pBtnDelete, "delete");
-    get(m_pBtnWorkOn, "edit");
-
+    m_aCtlPreviewOld.set_size_request(aSize.Width(), aSize.Height());
+    m_aCtlPreviewNew.set_size_request(aSize.Width(), aSize.Height());
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
     // setting the output device
     rXFSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
     rXFSet.Put( XFillColorItem(OUString(), COL_BLACK) );
-    m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
-    m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
+    m_aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
+    m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
     // set handler
-    m_pSelectPalette->SetSelectHdl( LINK(this, SvxColorTabPage, SelectPaletteLBHdl) );
-    Link<ValueSet*, void> aValSelectLink = LINK( this, SvxColorTabPage, SelectValSetHdl_Impl );
-    m_pValSetColorList->SetSelectHdl( aValSelectLink );
-    m_pValSetRecentList->SetSelectHdl( aValSelectLink );
+    m_xSelectPalette->connect_changed(LINK(this, SvxColorTabPage, SelectPaletteLBHdl));
+    Link<SvtValueSet*, void> aValSelectLink = LINK(this, SvxColorTabPage, SelectValSetHdl_Impl);
+    m_xValSetColorList->SetSelectHdl(aValSelectLink);
+    m_xValSetRecentList->SetSelectHdl(aValSelectLink);
 
-    Link<Edit&,void> aLink = LINK( this, SvxColorTabPage, ModifiedHdl_Impl );
-    m_pRcustom->SetModifyHdl( aLink );
-    m_pGcustom->SetModifyHdl( aLink );
-    m_pBcustom->SetModifyHdl( aLink );
-    m_pHexpreset->SetModifyHdl( aLink );
-    m_pHexcustom->SetModifyHdl( aLink );
-    m_pCcustom->SetModifyHdl( aLink );
-    m_pYcustom->SetModifyHdl( aLink );
-    m_pMcustom->SetModifyHdl( aLink );
-    m_pKcustom->SetModifyHdl( aLink );
+    Link<weld::SpinButton&,void> aSpinLink = LINK(this, SvxColorTabPage, SpinValueHdl_Impl);
+    m_xRcustom->connect_value_changed(aSpinLink);
+    m_xGcustom->connect_value_changed(aSpinLink);
+    m_xBcustom->connect_value_changed(aSpinLink);
+    Link<weld::Entry&,void> aEntryLink = LINK(this, SvxColorTabPage, ModifiedHdl_Impl);
+    m_xHexcustom->connect_changed(aEntryLink);
+    Link<weld::MetricSpinButton&,void> aMetricSpinLink = LINK(this, SvxColorTabPage, MetricSpinValueHdl_Impl);
+    m_xCcustom->connect_value_changed(aMetricSpinLink);
+    m_xYcustom->connect_value_changed(aMetricSpinLink);
+    m_xMcustom->connect_value_changed(aMetricSpinLink);
+    m_xKcustom->connect_value_changed(aMetricSpinLink);
 
-    Link<RadioButton&,void> aLink2 = LINK( this, SvxColorTabPage, SelectColorModeHdl_Impl );
-    m_pRbRGB->SetToggleHdl( aLink2 );
-    m_pRbCMYK->SetToggleHdl( aLink2 );
+    Link<weld::ToggleButton&,void> aLink2 = LINK( this, SvxColorTabPage, SelectColorModeHdl_Impl );
+    m_xRbRGB->connect_toggled(aLink2);
+    m_xRbCMYK->connect_toggled(aLink2);
     SetColorModel( eCM );
     ChangeColorModel();
 
-    m_pBtnAdd->SetClickHdl( LINK( this, SvxColorTabPage, ClickAddHdl_Impl ) );
-    m_pBtnWorkOn->SetClickHdl( LINK( this, SvxColorTabPage, ClickWorkOnHdl_Impl ) );
-    m_pBtnDelete->SetClickHdl( LINK( this, SvxColorTabPage, ClickDeleteHdl_Impl ) );
+    m_xBtnAdd->connect_clicked( LINK( this, SvxColorTabPage, ClickAddHdl_Impl ) );
+    m_xBtnWorkOn->connect_clicked( LINK( this, SvxColorTabPage, ClickWorkOnHdl_Impl ) );
+    m_xBtnDelete->connect_clicked( LINK( this, SvxColorTabPage, ClickDeleteHdl_Impl ) );
     // disable modify buttons
     // Color palettes can't be modified
-    m_pBtnDelete->Disable();
+    m_xBtnDelete->set_sensitive(false);
 
     // disable preset color values
-    m_pRGBpreset->Disable();
-    m_pCMYKpreset->Disable();
+    m_xRGBpreset->set_sensitive(false);
+    m_xCMYKpreset->set_sensitive(false);
 
     // ValueSet
-    m_pValSetColorList->SetStyle( m_pValSetColorList->GetStyle() | WB_ITEMBORDER );
-    m_pValSetColorList->Show();
+    m_xValSetColorList->SetStyle(m_xValSetColorList->GetStyle() | WB_ITEMBORDER);
+    m_xValSetColorList->Show();
 
-    m_pValSetRecentList->SetStyle( m_pValSetColorList->GetStyle() | WB_ITEMBORDER );
-    m_pValSetRecentList->Show();
-    maPaletteManager.ReloadRecentColorSet( *m_pValSetRecentList );
-    aSize = m_pValSetRecentList->layoutAllVisible(maPaletteManager.GetRecentColorCount());
-    m_pValSetRecentList->set_height_request(aSize.Height());
-    m_pValSetRecentList->set_width_request(aSize.Width());
+    m_xValSetRecentList->SetStyle(m_xValSetRecentList->GetStyle() | WB_ITEMBORDER);
+    m_xValSetRecentList->Show();
+
+    maPaletteManager.ReloadRecentColorSet(*m_xValSetRecentList);
+    aSize = m_xValSetRecentList->layoutAllVisible(maPaletteManager.GetRecentColorCount());
+    m_xValSetRecentList->set_size_request(aSize.Width(), aSize.Height());
 }
 
 SvxColorTabPage::~SvxColorTabPage()
@@ -166,36 +166,8 @@ SvxColorTabPage::~SvxColorTabPage()
 void SvxColorTabPage::dispose()
 {
     mpTopDlg.clear();
-    m_pSelectPalette.clear();
-    m_pValSetColorList.clear();
-    m_pValSetRecentList.clear();
-    m_pCtlPreviewOld.clear();
-    m_pCtlPreviewNew.clear();
-    m_pRbRGB.clear();
-    m_pRbCMYK.clear();
-    m_pRGBcustom.clear();
-    m_pRGBpreset.clear();
-    m_pRcustom.clear();
-    m_pRpreset.clear();
-    m_pGcustom.clear();
-    m_pGpreset.clear();
-    m_pBcustom.clear();
-    m_pBpreset.clear();
-    m_pHexpreset.clear();
-    m_pHexcustom.clear();
-    m_pCMYKcustom.clear();
-    m_pCMYKpreset.clear();
-    m_pCcustom.clear();
-    m_pCpreset.clear();
-    m_pYcustom.clear();
-    m_pYpreset.clear();
-    m_pMcustom.clear();
-    m_pMpreset.clear();
-    m_pKcustom.clear();
-    m_pKpreset.clear();
-    m_pBtnAdd.clear();
-    m_pBtnDelete.clear();
-    m_pBtnWorkOn.clear();
+    m_xValSetRecentList.reset();
+    m_xValSetColorList.reset();
     SfxTabPage::dispose();
 }
 
@@ -203,23 +175,23 @@ void SvxColorTabPage::ImpColorCountChanged()
 {
     if (!pColorList.is())
         return;
-    m_pValSetColorList->SetColCount(SvxColorValueSet::getColumnCount());
-    m_pValSetRecentList->SetColCount(SvxColorValueSet::getColumnCount());
+    m_xValSetColorList->SetColCount(SvxColorValueSet::getColumnCount());
+    m_xValSetRecentList->SetColCount(SvxColorValueSet::getColumnCount());
 }
 
 void SvxColorTabPage::FillPaletteLB()
 {
-    m_pSelectPalette->Clear();
+    m_xSelectPalette->clear();
     std::vector<OUString> aPaletteList = maPaletteManager.GetPaletteList();
     for (auto const& palette : aPaletteList)
     {
-        m_pSelectPalette->InsertEntry(palette);
+        m_xSelectPalette->append_text(palette);
     }
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
-    m_pSelectPalette->SelectEntry(aPaletteName);
-    if (m_pSelectPalette->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+    m_xSelectPalette->set_active_text(aPaletteName);
+    if (m_xSelectPalette->get_active() != -1)
     {
-        SelectPaletteLBHdl( *m_pSelectPalette );
+        SelectPaletteLBHdl(*m_xSelectPalette);
     }
 }
 
@@ -247,15 +219,15 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
             sal_Int32 nPos = FindInPalette( aColor );
 
             if ( nPos != -1 )
-                m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( nPos ) );
+                m_xValSetColorList->SelectItem(m_xValSetColorList->GetItemId(nPos));
             // else search in other palettes?
 
         }
 
-        m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
-        m_pCtlPreviewOld->Invalidate();
+        m_aCtlPreviewOld.SetAttributes(aXFillAttr.GetItemSet());
+        m_aCtlPreviewOld.Invalidate();
 
-        SelectValSetHdl_Impl( m_pValSetColorList );
+        SelectValSetHdl_Impl(m_xValSetColorList.get());
     }
 }
 
@@ -266,7 +238,6 @@ DeactivateRC SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return DeactivateRC::LeavePage;
 }
-
 
 bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 {
@@ -279,7 +250,7 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 void SvxColorTabPage::UpdateModified()
 {
     bool bEnable = pColorList.is() && pColorList->Count();
-    m_pBtnWorkOn->Enable( bEnable );
+    m_xBtnWorkOn->set_sensitive(bEnable);
 }
 
 void SvxColorTabPage::Reset( const SfxItemSet* rSet )
@@ -306,48 +277,53 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
     UpdateModified();
 }
 
-
-VclPtr<SfxTabPage> SvxColorTabPage::Create( TabPageParent pWindow,
-                                            const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> SvxColorTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SvxColorTabPage>::Create( pWindow.pParent, *rOutAttrs );
+    return VclPtr<SvxColorTabPage>::Create(pParent, *rOutAttrs);
 }
 
 // is called when the content of the MtrFields is changed for color values
-IMPL_LINK(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
+IMPL_LINK_NOARG(SvxColorTabPage, SpinValueHdl_Impl, weld::SpinButton&, void)
 {
-    if (eCM == ColorModel::RGB)
-    {
-        // read current MtrFields, if cmyk, then k-value as transparency
-        if(&rEdit == m_pHexcustom)
-            aCurrentColor = m_pHexcustom->GetColor();
-        else
-        {
-            aCurrentColor = Color( static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pRcustom->GetValue()) )),
-                                            static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pGcustom->GetValue()) )),
-                                            static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pBcustom->GetValue()) )) );
-
-        }
-        UpdateColorValues();
-    }
-    else
-    {
-        // read current MtrFields, if cmyk, then k-value as transparency
-        aCurrentColor = Color( static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pKcustom->GetValue()) )),
-                                        static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pCcustom->GetValue()) )),
-                                        static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pYcustom->GetValue()) )),
-                                        static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pMcustom->GetValue()) )) );
-        ConvertColorValues (aCurrentColor, ColorModel::RGB);
-    }
+    // read current MtrFields, if cmyk, then k-value as transparency
+    aCurrentColor = Color(static_cast<sal_uInt8>(PercentToColor_Impl(m_xRcustom->get_value())),
+                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xGcustom->get_value())),
+                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xBcustom->get_value())));
+    UpdateColorValues();
 
     rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
-    m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
+    m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
-    m_pCtlPreviewNew->Invalidate();
+    m_aCtlPreviewNew.Invalidate();
 }
 
+IMPL_LINK_NOARG(SvxColorTabPage, MetricSpinValueHdl_Impl, weld::MetricSpinButton&, void)
+{
+    // read current MtrFields, if cmyk, then k-value as transparency
+    aCurrentColor = Color(static_cast<sal_uInt8>(PercentToColor_Impl(m_xKcustom->get_value(FUNIT_NONE))),
+                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xCcustom->get_value(FUNIT_NONE))),
+                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xYcustom->get_value(FUNIT_NONE))),
+                          static_cast<sal_uInt8>(PercentToColor_Impl(m_xMcustom->get_value(FUNIT_NONE))));
+    ConvertColorValues (aCurrentColor, ColorModel::RGB);
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
+    rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
+    m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+
+    m_aCtlPreviewNew.Invalidate();
+}
+
+IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl, weld::Entry&, void)
+{
+    aCurrentColor = m_xHexcustom->GetColor();
+    UpdateColorValues();
+
+    rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
+    m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+
+    m_aCtlPreviewNew.Invalidate();
+}
+
+IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
 {
     OUString aNewName( SvxResId( RID_SVXSTR_COLOR ) );
     OUString aDesc( CuiResId( RID_SVXSTR_DESC_COLOR ) );
@@ -387,8 +363,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
 
     if (!nError)
     {
-        m_pSelectPalette->SelectEntryPos(0);
-        SelectPaletteLBHdl( *m_pSelectPalette );
+        m_xSelectPalette->set_active(0);
+        SelectPaletteLBHdl(*m_xSelectPalette);
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
         css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
         css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
@@ -400,17 +376,17 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
         officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
         officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
         batch->commit();
-        sal_uInt16 nId = m_pValSetColorList->GetItemId(nSize - 1);
-        m_pValSetColorList->InsertItem( nId + 1 , aCurrentColor, aName );
-        m_pValSetColorList->SelectItem( nId + 1 );
-        m_pBtnDelete->Enable();
+        sal_uInt16 nId = m_xValSetColorList->GetItemId(nSize - 1);
+        m_xValSetColorList->InsertItem( nId + 1 , aCurrentColor, aName );
+        m_xValSetColorList->SelectItem( nId + 1 );
+        m_xBtnDelete->set_sensitive(false);
         ImpColorCountChanged();
     }
 
     UpdateModified();
 }
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
 {
     std::unique_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParentDialog() ));
 
@@ -424,18 +400,18 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
         UpdateColorValues( false );
         // fill ItemSet and pass it on to XOut
         rXFSet.Put( XFillColorItem( OUString(), aPreviewColor ) );
-        //m_pCtlPreviewOld->SetAttributes( aXFillAttr );
-        m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
+        //m_aCtlPreviewOld.SetAttributes( aXFillAttr );
+        m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
-        m_pCtlPreviewNew->Invalidate();
+        m_aCtlPreviewNew.Invalidate();
     }
 }
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
 {
-    sal_uInt16 nId = m_pValSetColorList->GetSelectedItemId();
-    size_t nPos = m_pValSetColorList->GetSelectItemPos();
-    if(m_pSelectPalette->GetSelectedEntryPos() == 0 && nPos != VALUESET_ITEM_NOTFOUND )
+    sal_uInt16 nId = m_xValSetColorList->GetSelectedItemId();
+    size_t nPos = m_xValSetColorList->GetSelectItemPos();
+    if (m_xSelectPalette->get_active() == 0 && nPos != VALUESET_ITEM_NOTFOUND )
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
         css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
@@ -451,24 +427,24 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
         officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
         officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
         batch->commit();
-        m_pValSetColorList->RemoveItem(nId);
-        if(m_pValSetColorList->GetItemCount() != 0)
+        m_xValSetColorList->RemoveItem(nId);
+        if (m_xValSetColorList->GetItemCount() != 0)
         {
-            nId = m_pValSetColorList->GetItemId(0);
-            m_pValSetColorList->SelectItem(nId);
-            SelectValSetHdl_Impl( m_pValSetColorList );
+            nId = m_xValSetColorList->GetItemId(0);
+            m_xValSetColorList->SelectItem(nId);
+            SelectValSetHdl_Impl(m_xValSetColorList.get());
         }
         else
-            m_pBtnDelete->Disable();
+            m_xBtnDelete->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBoxText&, void)
 {
-    m_pValSetColorList->Clear();
-    sal_Int32 nPos = m_pSelectPalette->GetSelectedEntryPos();
+    m_xValSetColorList->Clear();
+    sal_Int32 nPos = m_xSelectPalette->get_active();
     maPaletteManager.SetPalette( nPos );
-    maPaletteManager.ReloadColorSet( *m_pValSetColorList );
+    maPaletteManager.ReloadColorSet(*m_xValSetColorList);
 
     if(nPos != maPaletteManager.GetPaletteCount() - 1 && nPos != 0)
     {
@@ -491,13 +467,13 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
             *pnColorListState &= ~ChangeType::MODIFIED;
         }
     }
-    if(nPos != 0)
-        m_pBtnDelete->Disable();
+    if (nPos != 0)
+        m_xBtnDelete->set_sensitive(false);
 
-    m_pValSetColorList->Resize();
+    m_xValSetColorList->Resize();
 }
 
-IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
+IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, SvtValueSet*, pValSet, void)
 {
     sal_Int32 nPos = pValSet->GetSelectedItemId();
     if( nPos != 0 )
@@ -505,22 +481,22 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
         Color aColor = pValSet->GetItemColor( nPos );
 
         rXFSet.Put( XFillColorItem( OUString(), aColor ) );
-        m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
-        m_pCtlPreviewNew->Invalidate();
+        m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+        m_aCtlPreviewNew.Invalidate();
         ChangeColor(aColor, false);
 
-        if(pValSet == m_pValSetColorList)
+        if (pValSet == m_xValSetColorList.get())
         {
-            m_pValSetRecentList->SetNoSelection();
-            if(m_pSelectPalette->GetSelectedEntryPos() == 0 && m_pValSetColorList->GetSelectedItemId() != 0)
-                m_pBtnDelete->Enable();
+            m_xValSetRecentList->SetNoSelection();
+            if (m_xSelectPalette->get_active() == 0 && m_xValSetColorList->GetSelectedItemId() != 0)
+                m_xBtnDelete->set_sensitive(true);
             else
-                m_pBtnDelete->Disable();
+                m_xBtnDelete->set_sensitive(false);
         }
-        if(pValSet == m_pValSetRecentList)
+        if (pValSet == m_xValSetRecentList.get())
         {
-            m_pValSetColorList->SetNoSelection();
-            m_pBtnDelete->Disable();
+            m_xValSetColorList->SetNoSelection();
+            m_xBtnDelete->set_sensitive(false);
         }
     }
 }
@@ -545,11 +521,12 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
         break;
     }
 }
-IMPL_LINK(SvxColorTabPage, SelectColorModeHdl_Impl, RadioButton&, rRadioButton, void)
+
+IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModeHdl_Impl, weld::ToggleButton&, void)
 {
-    if( &rRadioButton == m_pRbRGB )
+    if (m_xRbRGB->get_active())
         eCM = ColorModel::RGB;
-    if( &rRadioButton == m_pRbCMYK )
+    else if (m_xRbCMYK->get_active())
         eCM = ColorModel::CMYK;
     ChangeColorModel();
     UpdateColorValues();
@@ -562,18 +539,16 @@ void SvxColorTabPage::ChangeColor(const Color &rNewColor, bool bUpdatePreset )
     UpdateColorValues( bUpdatePreset );
     // fill ItemSet and pass it on to XOut
     rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
-    m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
-    m_pCtlPreviewNew->Invalidate();
+    m_aCtlPreviewNew.SetAttributes(aXFillAttr.GetItemSet());
+    m_aCtlPreviewNew.Invalidate();
 }
 
 void SvxColorTabPage::SetColorModel( ColorModel eModel )
 {
-    m_pRbRGB->SetState(false);
-    m_pRbCMYK->SetState(false);
-    if(eModel == ColorModel::RGB)
-        m_pRbRGB->SetState(true);
-    if(eModel == ColorModel::CMYK)
-        m_pRbCMYK->SetState(true);
+    if (eModel == ColorModel::RGB)
+        m_xRbRGB->set_active(true);
+    else if (eModel == ColorModel::CMYK)
+        m_xRbCMYK->set_active(true);
 }
 
 void SvxColorTabPage::ChangeColorModel()
@@ -582,19 +557,19 @@ void SvxColorTabPage::ChangeColorModel()
     {
         case ColorModel::RGB:
         {
-            m_pRGBcustom->Show();
-            m_pRGBpreset->Show();
-            m_pCMYKcustom->Hide();
-            m_pCMYKpreset->Hide();
+            m_xRGBcustom->show();
+            m_xRGBpreset->show();
+            m_xCMYKcustom->hide();
+            m_xCMYKpreset->hide();
         }
         break;
 
         case ColorModel::CMYK:
         {
-            m_pCMYKcustom->Show();
-            m_pCMYKpreset->Show();
-            m_pRGBcustom->Hide();
-            m_pRGBpreset->Hide();
+            m_xCMYKcustom->show();
+            m_xCMYKpreset->show();
+            m_xRGBcustom->hide();
+            m_xRGBpreset->hide();
         }
         break;
     }
@@ -607,17 +582,21 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
         ConvertColorValues (aPreviousColor, eCM );
         ConvertColorValues (aCurrentColor, eCM);
 
-        m_pCcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-        m_pMcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-        m_pYcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-        m_pKcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetTransparency() ) );
+        m_xCcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetRed() ), FUNIT_PERCENT );
+        m_xMcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetBlue() ), FUNIT_PERCENT );
+        m_xYcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetGreen() ), FUNIT_PERCENT );
+        m_xKcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetTransparency() ), FUNIT_PERCENT );
 
         if( bUpdatePreset )
         {
-            m_pCpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetRed() ) );
-            m_pMpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetBlue() ) );
-            m_pYpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetGreen() ) );
-            m_pKpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetTransparency() ) );
+            m_xCpreset->set_text(unicode::formatPercent(ColorToPercent_Impl(aPreviousColor.GetRed()),
+                                                        Application::GetSettings().GetUILanguageTag()));
+            m_xMpreset->set_text(unicode::formatPercent(ColorToPercent_Impl(aPreviousColor.GetBlue()),
+                                                        Application::GetSettings().GetUILanguageTag()));
+            m_xYpreset->set_text(unicode::formatPercent(ColorToPercent_Impl(aPreviousColor.GetGreen()),
+                                                        Application::GetSettings().GetUILanguageTag()));
+            m_xKpreset->set_text(unicode::formatPercent(ColorToPercent_Impl(aPreviousColor.GetTransparency()),
+                                                        Application::GetSettings().GetUILanguageTag()));
         }
 
         ConvertColorValues (aPreviousColor, ColorModel::RGB);
@@ -625,17 +604,17 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
     }
     else
     {
-        m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-        m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-        m_pBcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-        m_pHexcustom->SetColor( aCurrentColor );
+        m_xRcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
+        m_xGcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
+        m_xBcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
+        m_xHexcustom->SetColor( aCurrentColor );
 
         if( bUpdatePreset )
         {
-            m_pRpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetRed() ) );
-            m_pGpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetGreen() ) );
-            m_pBpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetBlue() ) );
-            m_pHexpreset->SetColor( aPreviousColor );
+            m_xRpreset->set_text(OUString::number(ColorToPercent_Impl(aPreviousColor.GetRed())));
+            m_xGpreset->set_text(OUString::number(ColorToPercent_Impl(aPreviousColor.GetGreen())));
+            m_xBpreset->set_text(OUString::number(ColorToPercent_Impl(aPreviousColor.GetBlue())));
+            m_xHexpreset->SetColor( aPreviousColor );
         }
     }
 }

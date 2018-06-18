@@ -2339,6 +2339,91 @@ GType crippled_viewport_get_type()
     return type;
 }
 
+VclPolicyType GtkToVcl(GtkPolicyType eType)
+{
+    VclPolicyType eRet(VclPolicyType::NEVER);
+    switch (eType)
+    {
+        case GTK_POLICY_ALWAYS:
+            eRet = VclPolicyType::ALWAYS;
+            break;
+        case GTK_POLICY_AUTOMATIC:
+            eRet = VclPolicyType::AUTOMATIC;
+            break;
+        case GTK_POLICY_EXTERNAL:
+        case GTK_POLICY_NEVER:
+            eRet = VclPolicyType::NEVER;
+            break;
+    }
+    return eRet;
+}
+
+GtkPolicyType VclToGtk(VclPolicyType eType)
+{
+    GtkPolicyType eRet(GTK_POLICY_ALWAYS);
+    switch (eType)
+    {
+        case VclPolicyType::ALWAYS:
+            eRet = GTK_POLICY_ALWAYS;
+            break;
+        case VclPolicyType::AUTOMATIC:
+            eRet = GTK_POLICY_AUTOMATIC;
+            break;
+        case VclPolicyType::NEVER:
+            eRet = GTK_POLICY_NEVER;
+            break;
+    }
+    return eRet;
+}
+
+GtkMessageType VclToGtk(VclMessageType eType)
+{
+    GtkMessageType eRet(GTK_MESSAGE_INFO);
+    switch (eType)
+    {
+        case VclMessageType::Info:
+            eRet = GTK_MESSAGE_INFO;
+            break;
+        case VclMessageType::Warning:
+            eRet = GTK_MESSAGE_WARNING;
+            break;
+        case VclMessageType::Question:
+            eRet = GTK_MESSAGE_QUESTION;
+            break;
+        case VclMessageType::Error:
+            eRet = GTK_MESSAGE_ERROR;
+            break;
+    }
+    return eRet;
+}
+
+GtkButtonsType VclToGtk(VclButtonsType eType)
+{
+    GtkButtonsType eRet(GTK_BUTTONS_NONE);
+    switch (eType)
+    {
+        case VclButtonsType::NONE:
+            eRet = GTK_BUTTONS_NONE;
+            break;
+        case VclButtonsType::Ok:
+            eRet = GTK_BUTTONS_OK;
+            break;
+        case VclButtonsType::Close:
+            eRet = GTK_BUTTONS_CLOSE;
+            break;
+        case VclButtonsType::Cancel:
+            eRet = GTK_BUTTONS_CANCEL;
+            break;
+        case VclButtonsType::YesNo:
+            eRet = GTK_BUTTONS_YES_NO;
+            break;
+        case VclButtonsType::OkCancel:
+            eRet = GTK_BUTTONS_OK_CANCEL;
+            break;
+    }
+    return eRet;
+}
+
 class GtkInstanceScrolledWindow : public GtkInstanceContainer, public virtual weld::ScrolledWindow
 {
 private:
@@ -2417,6 +2502,27 @@ public:
         g_object_unref(pChild);
         m_pOrigViewport = pViewport;
         enable_notify_events();
+    }
+
+    virtual void set_vpolicy(VclPolicyType eVPolicy) override
+    {
+        GtkPolicyType eGtkHPolicy;
+        gtk_scrolled_window_get_policy(m_pScrolledWindow, &eGtkHPolicy, nullptr);
+        gtk_scrolled_window_set_policy(m_pScrolledWindow, eGtkHPolicy, VclToGtk(eVPolicy));
+    }
+
+    virtual VclPolicyType get_vpolicy() const override
+    {
+        GtkPolicyType eGtkVPolicy;
+        gtk_scrolled_window_get_policy(m_pScrolledWindow, nullptr, &eGtkVPolicy);
+        return GtkToVcl(eGtkVPolicy);
+    }
+
+    virtual int get_vscroll_width() const
+    {
+        if (gtk_scrolled_window_get_overlay_scrolling(m_pScrolledWindow))
+            return 0;
+        return gtk_widget_get_allocated_width(GTK_WIDGET(m_pScrolledWindow));
     }
 
     virtual void disable_notify_events() override
@@ -4960,54 +5066,6 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     GtkInstanceWidget* pParentWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile);
-}
-
-GtkMessageType VclToGtk(VclMessageType eType)
-{
-    GtkMessageType eRet(GTK_MESSAGE_INFO);
-    switch (eType)
-    {
-        case VclMessageType::Info:
-            eRet = GTK_MESSAGE_INFO;
-            break;
-        case VclMessageType::Warning:
-            eRet = GTK_MESSAGE_WARNING;
-            break;
-        case VclMessageType::Question:
-            eRet = GTK_MESSAGE_QUESTION;
-            break;
-        case VclMessageType::Error:
-            eRet = GTK_MESSAGE_ERROR;
-            break;
-    }
-    return eRet;
-}
-
-GtkButtonsType VclToGtk(VclButtonsType eType)
-{
-    GtkButtonsType eRet(GTK_BUTTONS_NONE);
-    switch (eType)
-    {
-        case VclButtonsType::NONE:
-            eRet = GTK_BUTTONS_NONE;
-            break;
-        case VclButtonsType::Ok:
-            eRet = GTK_BUTTONS_OK;
-            break;
-        case VclButtonsType::Close:
-            eRet = GTK_BUTTONS_CLOSE;
-            break;
-        case VclButtonsType::Cancel:
-            eRet = GTK_BUTTONS_CANCEL;
-            break;
-        case VclButtonsType::YesNo:
-            eRet = GTK_BUTTONS_YES_NO;
-            break;
-        case VclButtonsType::OkCancel:
-            eRet = GTK_BUTTONS_OK_CANCEL;
-            break;
-    }
-    return eRet;
 }
 
 weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString &rPrimaryMessage)
