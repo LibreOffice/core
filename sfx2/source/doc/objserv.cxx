@@ -396,7 +396,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
         if ( QueryHiddenInformation( HiddenWarningFact::WhenSigning, nullptr ) == RET_YES )
-            ( SID_SIGNATURE == nId ) ? SignDocumentContent() : SignScriptingContent();
+            ( SID_SIGNATURE == nId ) ? SignDocumentContent(rReq.GetFrameWeld()) : SignScriptingContent(rReq.GetFrameWeld());
         return;
     }
 
@@ -1363,7 +1363,7 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
     return *pState;
 }
 
-bool SfxObjectShell::PrepareForSigning()
+bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
 {
     // Check if it is stored in OASIS format...
     if  (   GetMedium()
@@ -1375,7 +1375,7 @@ bool SfxObjectShell::PrepareForSigning()
         )
     {
         // Only OASIS and OOo6.x formats will be handled further
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pDialogParent,
                                                   VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_WRONGDOCFORMAT)));
 
         xBox->run();
@@ -1411,7 +1411,7 @@ bool SfxObjectShell::PrepareForSigning()
         if ( nVersion >= SvtSaveOptions::ODFVER_012 )
         {
             OUString sQuestion(bHasSign ? SfxResId(STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN) : SfxResId(RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN));
-            std::unique_ptr<weld::MessageDialog> xQuestion(Application::CreateMessageDialog(nullptr,
+            std::unique_ptr<weld::MessageDialog> xQuestion(Application::CreateMessageDialog(pDialogParent,
                                                            VclMessageType::Question, VclButtonsType::YesNo, sQuestion));
 
 
@@ -1431,7 +1431,7 @@ bool SfxObjectShell::PrepareForSigning()
                     || SotStorage::GetVersion( GetMedium()->GetStorage() ) <= SOFFICE_FILEFORMAT_60 ) )
                 {
                     // Only OASIS format will be handled further
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pDialogParent,
                                                               VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_WRONGDOCFORMAT)));
                     xBox->run();
                     return false;
@@ -1448,7 +1448,7 @@ bool SfxObjectShell::PrepareForSigning()
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pDialogParent,
                                                       VclMessageType::Warning, VclButtonsType::Ok, SfxResId(STR_XMLSEC_ODF12_EXPECTED)));
             xBox->run();
             return false;
@@ -1549,9 +1549,9 @@ SignatureState SfxObjectShell::GetDocumentSignatureState()
     return ImplGetSignatureState();
 }
 
-void SfxObjectShell::SignDocumentContent()
+void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent)
 {
-    if (!PrepareForSigning())
+    if (!PrepareForSigning(pDialogParent))
         return;
 
     if (CheckIsReadonly(false))
@@ -1562,13 +1562,14 @@ void SfxObjectShell::SignDocumentContent()
     AfterSigning(bSignSuccess, false);
 }
 
-void SfxObjectShell::SignSignatureLine(const OUString& aSignatureLineId,
+void SfxObjectShell::SignSignatureLine(weld::Window* pDialogParent,
+                                       const OUString& aSignatureLineId,
                                        const Reference<XCertificate> xCert,
                                        const Reference<XGraphic> xValidGraphic,
                                        const Reference<XGraphic> xInvalidGraphic,
                                        const OUString& aComment)
 {
-    if (!PrepareForSigning())
+    if (!PrepareForSigning(pDialogParent))
         return;
 
     if (CheckIsReadonly(false))
@@ -1585,9 +1586,9 @@ SignatureState SfxObjectShell::GetScriptingSignatureState()
     return ImplGetSignatureState( true );
 }
 
-void SfxObjectShell::SignScriptingContent()
+void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent)
 {
-    if (!PrepareForSigning())
+    if (!PrepareForSigning(pDialogParent))
         return;
 
     if (CheckIsReadonly(true))

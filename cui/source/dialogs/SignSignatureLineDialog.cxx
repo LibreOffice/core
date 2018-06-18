@@ -146,8 +146,8 @@ void SignSignatureLineDialog::Apply()
     SfxObjectShell* pShell = SfxObjectShell::Current();
     Reference<XGraphic> xValidGraphic = getSignedGraphic(true);
     Reference<XGraphic> xInvalidGraphic = getSignedGraphic(false);
-    pShell->SignSignatureLine(m_aSignatureLineId, m_xSelectedCertifate, xValidGraphic,
-                              xInvalidGraphic, m_xEditComment->get_text());
+    pShell->SignSignatureLine(m_xDialog.get(), m_aSignatureLineId, m_xSelectedCertifate,
+                              xValidGraphic, xInvalidGraphic, m_xEditComment->get_text());
 }
 
 const css::uno::Reference<css::graphic::XGraphic>
