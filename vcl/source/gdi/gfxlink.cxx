@@ -277,4 +277,20 @@ std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
     return pData;
 }
 
+bool GfxLink::IsEMF() const
+{
+    const sal_uInt8* pGraphicAry = GetData();
+    if ((GetType() == GfxLinkType::NativeWmf) && pGraphicAry && (GetDataSize() > 0x2c))
+    {
+        // check the magic number
+        if ((pGraphicAry[0x28] == 0x20) && (pGraphicAry[0x29] == 0x45)
+            && (pGraphicAry[0x2a] == 0x4d) && (pGraphicAry[0x2b] == 0x46))
+        {
+            //emf detected
+            return true;
+        }
+    }
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
