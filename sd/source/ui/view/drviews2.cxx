@@ -2513,6 +2513,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     pDlg->GetName(aName);
                     pSelected->SetName(aName);
+
+                    SdPage* pPage = GetActualPage();
+                    if (pPage)
+                        pPage->notifyObjectRenamed(pSelected);
                 }
             }
 
