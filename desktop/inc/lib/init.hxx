@@ -16,9 +16,11 @@
 #include <mutex>
 
 #include <osl/thread.h>
+#include <rtl/ref.hxx>
 #include <vcl/idle.hxx>
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -99,6 +101,10 @@ namespace desktop {
     /// comma, like: Name1=Value1,Name2=Value2,Name3=Value3.
     /// @param rOptions When exctacted, the Param=Value is removed from it.
     DESKTOP_DLLPUBLIC OUString extractParameter(OUString& aOptions, const OUString& rName);
+
+    /// Helper function to convert JSON to a vector of PropertyValues.
+    /// Public to be unit-test-able.
+    DESKTOP_DLLPUBLIC std::vector<com::sun::star::beans::PropertyValue> jsonToPropertyValuesVector(const char* pJSON);
 }
 
 #endif
