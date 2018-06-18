@@ -5,6 +5,8 @@
   <object class="GtkBox" id="PdfSecurityPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="spacing">12</property>
     <child>
@@ -29,7 +31,6 @@
                   <object class="GtkButton" id="setpassword">
                     <property name="label" translatable="yes" context="pdfsecuritypage|setpassword">Set _Passwords…</property>
                     <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">start</property>
@@ -295,6 +296,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">printhigh</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -310,7 +312,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">printnone</property>
+                        <property name="group">printhigh</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -327,7 +329,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">printnone</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -381,6 +382,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">changeany</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -396,7 +398,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">changenone</property>
+                        <property name="group">changeany</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -412,7 +414,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">changenone</property>
+                        <property name="group">changeany</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -428,7 +430,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">changenone</property>
+                        <property name="group">changeany</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -445,7 +447,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">changenone</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
