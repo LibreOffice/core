@@ -257,36 +257,33 @@ public:
 /// Class tab page viewer
 class ImpPDFTabOpnFtrPage : public SfxTabPage
 {
-    VclPtr<RadioButton>         mpRbOpnPageOnly;
-    VclPtr<RadioButton>         mpRbOpnOutline;
-    VclPtr<RadioButton>         mpRbOpnThumbs;
-    VclPtr<NumericField>        mpNumInitialPage;
-
-    VclPtr<RadioButton>         mpRbMagnDefault;
-    VclPtr<RadioButton>         mpRbMagnFitWin;
-    VclPtr<RadioButton>         mpRbMagnFitWidth;
-    VclPtr<RadioButton>         mpRbMagnFitVisible;
-    VclPtr<RadioButton>         mpRbMagnZoom;
-    VclPtr<NumericField>        mpNumZoom;
-
-    VclPtr<RadioButton>         mpRbPgLyDefault;
-    VclPtr<RadioButton>         mpRbPgLySinglePage;
-    VclPtr<RadioButton>         mpRbPgLyContinue;
-    VclPtr<RadioButton>         mpRbPgLyContinueFacing;
-    VclPtr<CheckBox>            mpCbPgLyFirstOnLeft;
-
     bool                        mbUseCTLFont;
 
-    DECL_LINK( ToggleRbPgLyContinueFacingHdl, RadioButton&, void );
-    DECL_LINK( ToggleRbMagnHdl, RadioButton&, void );
+    std::unique_ptr<weld::RadioButton> mxRbOpnPageOnly;
+    std::unique_ptr<weld::RadioButton> mxRbOpnOutline;
+    std::unique_ptr<weld::RadioButton> mxRbOpnThumbs;
+    std::unique_ptr<weld::SpinButton> mxNumInitialPage;
+    std::unique_ptr<weld::RadioButton> mxRbMagnDefault;
+    std::unique_ptr<weld::RadioButton> mxRbMagnFitWin;
+    std::unique_ptr<weld::RadioButton> mxRbMagnFitWidth;
+    std::unique_ptr<weld::RadioButton> mxRbMagnFitVisible;
+    std::unique_ptr<weld::RadioButton> mxRbMagnZoom;
+    std::unique_ptr<weld::SpinButton> mxNumZoom;
+    std::unique_ptr<weld::RadioButton> mxRbPgLyDefault;
+    std::unique_ptr<weld::RadioButton> mxRbPgLySinglePage;
+    std::unique_ptr<weld::RadioButton> mxRbPgLyContinue;
+    std::unique_ptr<weld::RadioButton> mxRbPgLyContinueFacing;
+    std::unique_ptr<weld::CheckButton> mxCbPgLyFirstOnLeft;
+
+    DECL_LINK(ToggleRbPgLyContinueFacingHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleRbMagnHdl, weld::ToggleButton&, void);
 
     void                        ToggleRbPgLyContinueFacingHdl();
 
 public:
-                                ImpPDFTabOpnFtrPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ImpPDFTabOpnFtrPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabOpnFtrPage() override;
 
-    virtual void                dispose() override;
     static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
