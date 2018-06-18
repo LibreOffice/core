@@ -53,17 +53,11 @@ using namespace ::com::sun::star::uno;
     Please note: the default used here are the same as per specification,
     They should be the same in  PDFFilter::implExport and  in PDFExport::PDFExport
  */
-ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >& rFilterData,
+ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue >& rFilterData,
     const Reference< XComponent >& rxDoc)
-    : SfxTabDialog(pParent, "PdfOptionsDialog","filter/ui/pdfoptionsdialog.ui"),
+    : SfxTabDialogController(pParent, "filter/ui/pdfoptionsdialog.ui", "PdfOptionsDialog"),
     maConfigItem( "Office.Common/Filter/PDF/Export/", &rFilterData ),
     maConfigI18N( "Office.Common/I18N/CTL/" ),
-    mnSigningPageId(0),
-    mnSecurityPageId(0),
-    mnLinksPage(0),
-    mnInterfacePageId(0),
-    mnViewPageId(0),
-    mnGeneralPageId(0),
     mbIsPresentation( false ),
     mbIsSpreadsheet( false ),
     mbIsWriter( false ),
@@ -247,14 +241,14 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mbSignPDF = maConfigItem.ReadBool( "SignPDF", false );
 
     // queue the tab pages for later creation (created when first shown)
-    mnSigningPageId = AddTabPage("digitalsignatures", ImpPDFTabSigningPage::Create, nullptr);
-    mnSecurityPageId = AddTabPage("security", ImpPDFTabSecurityPage::Create, nullptr);
-    mnLinksPage = AddTabPage("links", ImpPDFTabLinksPage::Create, nullptr);
-    mnInterfacePageId = AddTabPage("userinterface", ImpPDFTabViewerPage::Create, nullptr);
-    mnViewPageId = AddTabPage("initialview", ImpPDFTabOpnFtrPage::Create, nullptr);
+    AddTabPage("general", ImpPDFTabGeneralPage::Create, nullptr );
+    AddTabPage("digitalsignatures", ImpPDFTabSigningPage::Create, nullptr);
+    AddTabPage("security", ImpPDFTabSecurityPage::Create, nullptr);
+    AddTabPage("links", ImpPDFTabLinksPage::Create, nullptr);
+    AddTabPage("userinterface", ImpPDFTabViewerPage::Create, nullptr);
+    AddTabPage("initialview", ImpPDFTabOpnFtrPage::Create, nullptr);
 
-    // last queued is the first to be displayed (or so it seems..)
-    mnGeneralPageId = AddTabPage("general", ImpPDFTabGeneralPage::Create, nullptr );
+    SetCurPageId("general");
 
     // get the string property value (from sfx2/source/dialog/mailmodel.cxx) to overwrite the text for the Ok button
     OUString sOkButtonText = maConfigItem.ReadString( "_OkButtonString", OUString() );
@@ -262,21 +256,19 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     // change text on the Ok button: get the relevant string from resources, update it on the button
     // according to the exported pdf file destination: send as e-mail or write to file?
     if (!sOkButtonText.isEmpty())
-    {
-        GetOKButton().SetText(sOkButtonText);
-    }
+        GetOKButton().set_label(sOkButtonText);
 
-    GetCancelButton().SetClickHdl(LINK(this, ImpPDFTabDialog, CancelHdl));
+    GetCancelButton().connect_clicked(LINK(this, ImpPDFTabDialog, CancelHdl));
 
     // remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
 
+    Start_Impl();
 }
-
 
 ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const
 {
-    SfxTabPage* pSecurityPage = GetTabPage(mnSecurityPageId);
+    SfxTabPage* pSecurityPage = GetTabPage("security");
     if (pSecurityPage)
     {
         return static_cast<ImpPDFTabSecurityPage*>(pSecurityPage);
@@ -287,7 +279,7 @@ ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const
 
 ImpPDFTabLinksPage* ImpPDFTabDialog::getLinksPage() const
 {
-    SfxTabPage* pLinksPage = GetTabPage(mnLinksPage);
+    SfxTabPage* pLinksPage = GetTabPage("links");
     if (pLinksPage)
     {
         return static_cast<ImpPDFTabLinksPage*>(pLinksPage);
@@ -298,7 +290,7 @@ ImpPDFTabLinksPage* ImpPDFTabDialog::getLinksPage() const
 
 ImpPDFTabGeneralPage* ImpPDFTabDialog::getGeneralPage() const
 {
-    SfxTabPage* pGeneralPage = GetTabPage(mnGeneralPageId);
+    SfxTabPage* pGeneralPage = GetTabPage("general");
     if (pGeneralPage)
     {
         return static_cast<ImpPDFTabGeneralPage*>(pGeneralPage);
@@ -306,64 +298,42 @@ ImpPDFTabGeneralPage* ImpPDFTabDialog::getGeneralPage() const
     return nullptr;
 }
 
-
-IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl, weld::Button&, void)
 {
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
-
 
 ImpPDFTabDialog::~ImpPDFTabDialog()
 {
-    disposeOnce();
-}
-
-
-void ImpPDFTabDialog::dispose()
-{
-    // delete the pages, needed because otherwise the child tab pages
-    // don't get destroyed
-    RemoveTabPage(mnGeneralPageId);
-    RemoveTabPage(mnInterfacePageId);
-    RemoveTabPage(mnViewPageId);
-    RemoveTabPage(mnLinksPage);
-    RemoveTabPage(mnSecurityPageId);
-    RemoveTabPage(mnSigningPageId);
     maConfigItem.WriteModifiedConfig();
     maConfigI18N.WriteModifiedConfig();
-    SfxTabDialog::dispose();
 }
 
-
-void ImpPDFTabDialog::PageCreated( sal_uInt16 _nId,
-                                   SfxTabPage& _rPage )
+void ImpPDFTabDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
-    if (_nId == mnGeneralPageId)
+    if (rId == "general")
+        static_cast<ImpPDFTabGeneralPage&>(rPage).SetFilterConfigItem(this);
+    else if (rId == "userinterface")
     {
-        static_cast<ImpPDFTabGeneralPage*>( &_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabViewerPage&>(rPage).SetFilterConfigItem(this);
     }
-    else if (_nId == mnInterfacePageId)
+    else if (rId == "initialview")
     {
-        static_cast<ImpPDFTabViewerPage*>( &_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabOpnFtrPage&>(rPage).SetFilterConfigItem(this);
     }
-    else if (_nId == mnViewPageId)
+    else if (rId == "links")
     {
-        static_cast<ImpPDFTabOpnFtrPage*>( &_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabLinksPage&>(rPage).SetFilterConfigItem(this);
     }
-    else if (_nId == mnLinksPage)
+    else if (rId == "security")
     {
-        static_cast<ImpPDFTabLinksPage*>( &_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabSecurityPage&>(rPage).SetFilterConfigItem(this);
     }
-    else if (_nId == mnSecurityPageId)
+    else if (rId == "digitalsignatures")
     {
-        static_cast<ImpPDFTabSecurityPage*>( &_rPage )->SetFilterConfigItem( this );
-    }
-    else if (_nId == mnSigningPageId)
-    {
-        static_cast<ImpPDFTabSigningPage*>( &_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabSigningPage&>(rPage).SetFilterConfigItem(this);
     }
 }
-
 
 short ImpPDFTabDialog::Ok( )
 {
@@ -372,22 +342,21 @@ short ImpPDFTabDialog::Ok( )
     return RET_OK;
 }
 
-
 Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 {
     // updating the FilterData sequence and storing FilterData to configuration
-    if( GetTabPage(mnGeneralPageId) )
-        static_cast<ImpPDFTabGeneralPage*>( GetTabPage(mnGeneralPageId) )->GetFilterConfigItem( this );
-    if( GetTabPage(mnInterfacePageId) )
-        static_cast<ImpPDFTabViewerPage*>( GetTabPage(mnInterfacePageId) )->GetFilterConfigItem( this );
-    if( GetTabPage(mnViewPageId) )
-        static_cast<ImpPDFTabOpnFtrPage*>( GetTabPage(mnViewPageId) )->GetFilterConfigItem( this );
-    if( GetTabPage(mnLinksPage) )
-        static_cast<ImpPDFTabLinksPage*>( GetTabPage(mnLinksPage) )->GetFilterConfigItem( this );
-    if( GetTabPage(mnSecurityPageId) )
-        static_cast<ImpPDFTabSecurityPage*>( GetTabPage(mnSecurityPageId) )->GetFilterConfigItem( this );
-    if( GetTabPage(mnSigningPageId) )
-        static_cast<ImpPDFTabSigningPage*>( GetTabPage(mnSigningPageId) )->GetFilterConfigItem( this );
+    if (ImpPDFTabGeneralPage* pPage = static_cast<ImpPDFTabGeneralPage*>(GetTabPage("general")))
+        pPage->GetFilterConfigItem(this);
+    if (ImpPDFTabViewerPage* pPage = static_cast<ImpPDFTabViewerPage*>(GetTabPage("userinterface")))
+        pPage->GetFilterConfigItem(this);
+    if (ImpPDFTabOpnFtrPage* pPage = static_cast<ImpPDFTabOpnFtrPage*>(GetTabPage("initialview")))
+        pPage->GetFilterConfigItem(this);
+    if (ImpPDFTabLinksPage* pPage = static_cast<ImpPDFTabLinksPage*>(GetTabPage("links")))
+        pPage->GetFilterConfigItem(this);
+    if (ImpPDFTabSecurityPage* pPage = static_cast<ImpPDFTabSecurityPage*>( GetTabPage("security")))
+        pPage->GetFilterConfigItem(this);
+    if (ImpPDFTabSigningPage* pPage = static_cast<ImpPDFTabSigningPage*>(GetTabPage("digitalsignatures")))
+        pPage->GetFilterConfigItem(this);
 
     // prepare the items to be returned
     maConfigItem.WriteBool( "UseLosslessCompression", mbUseLosslessCompression );
@@ -480,7 +449,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemS
     , mbIsPresentation(false)
     , mbIsSpreadsheet(false)
     , mbIsWriter(false)
-    , mpaParent(nullptr)
+    , mpParent(nullptr)
     , mxRbAll(m_xBuilder->weld_radio_button("all"))
     , mxRbRange(m_xBuilder->weld_radio_button("range"))
     , mxRbSelection(m_xBuilder->weld_radio_button("selection"))
@@ -518,18 +487,11 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemS
 
 ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
 {
-    disposeOnce();
 }
 
-void ImpPDFTabGeneralPage::dispose()
+void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 {
-    mpaParent.clear();
-    SfxTabPage::dispose();
-}
-
-void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
-{
-    mpaParent = paParent;
+    mpParent = pParent;
 
     // init this class data
     mxRbRange->connect_toggled( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
@@ -538,37 +500,37 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     mxRbAll->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleAllHdl ) );
     TogglePagesHdl();
 
-    mxRbSelection->set_sensitive( paParent->mbSelectionPresent );
-    if ( paParent->mbSelectionPresent )
+    mxRbSelection->set_sensitive( pParent->mbSelectionPresent );
+    if ( pParent->mbSelectionPresent )
         mxRbSelection->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleSelectionHdl ) );
-    mbIsPresentation = paParent->mbIsPresentation;
-    mbIsWriter = paParent->mbIsWriter;
-    mbIsSpreadsheet = paParent->mbIsSpreadsheet;
+    mbIsPresentation = pParent->mbIsPresentation;
+    mbIsWriter = pParent->mbIsWriter;
+    mbIsSpreadsheet = pParent->mbIsSpreadsheet;
 
     mxCbExportEmptyPages->set_sensitive( mbIsWriter );
     mxCbExportPlaceholders->set_sensitive( mbIsWriter );
 
     mxRbLosslessCompression->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
-    const bool bUseLosslessCompression = paParent->mbUseLosslessCompression;
+    const bool bUseLosslessCompression = pParent->mbUseLosslessCompression;
     if ( bUseLosslessCompression )
         mxRbLosslessCompression->set_active(true);
     else
         mxRbJPEGCompression->set_active(true);
 
-    mxNfQuality->set_value( paParent->mnQuality, FUNIT_PERCENT );
+    mxNfQuality->set_value( pParent->mnQuality, FUNIT_PERCENT );
     mxQualityFrame->set_sensitive(!bUseLosslessCompression);
 
     mxCbReduceImageResolution->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl));
-    const bool  bReduceImageResolution = paParent->mbReduceImageResolution;
+    const bool  bReduceImageResolution = pParent->mbReduceImageResolution;
     mxCbReduceImageResolution->set_active( bReduceImageResolution );
-    OUString aStrRes = OUString::number( paParent->mnMaxImageResolution ) + " DPI";
+    OUString aStrRes = OUString::number( pParent->mnMaxImageResolution ) + " DPI";
     mxCoReduceImageResolution->set_entry_text(aStrRes);
     mxCoReduceImageResolution->set_sensitive( bReduceImageResolution );
     mxCbWatermark->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
     mxFtWatermark->set_sensitive(false );
     mxEdWatermark->set_sensitive( false );
     mxCbPDFA1b->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
-    switch( paParent->mnPDFTypeSelection )
+    switch( pParent->mnPDFTypeSelection )
     {
     default:
     case 0: mxCbPDFA1b->set_active( false ); // PDF 1.5
@@ -581,8 +543,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     mxCbExportFormFields->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
 
     // get the form values, for use with PDF/A-1 selection interface
-    mbTaggedPDFUserSelection = paParent->mbUseTaggedPDF;
-    mbExportFormFieldsUserSelection = paParent->mbExportFormFields;
+    mbTaggedPDFUserSelection = pParent->mbUseTaggedPDF;
+    mbExportFormFieldsUserSelection = pParent->mbExportFormFields;
 
     if( !mxCbPDFA1b->get_active() )
     {
@@ -591,27 +553,27 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mxCbExportFormFields->set_active( mbExportFormFieldsUserSelection );
     }
 
-    mxLbFormsFormat->set_active(static_cast<sal_uInt16>(paParent->mnFormsType));
-    mxCbAllowDuplicateFieldNames->set_active( paParent->mbAllowDuplicateFieldNames );
-    mxFormsFrame->set_sensitive( paParent->mbExportFormFields );
+    mxLbFormsFormat->set_active(static_cast<sal_uInt16>(pParent->mnFormsType));
+    mxCbAllowDuplicateFieldNames->set_active( pParent->mbAllowDuplicateFieldNames );
+    mxFormsFrame->set_sensitive( pParent->mbExportFormFields );
 
-    mxCbExportBookmarks->set_active( paParent->mbExportBookmarks );
+    mxCbExportBookmarks->set_active( pParent->mbExportBookmarks );
 
-    mxCbExportNotes->set_active( paParent->mbExportNotes );
-    mxCbViewPDF->set_active( paParent->mbViewPDF);
+    mxCbExportNotes->set_active( pParent->mbExportNotes );
+    mxCbViewPDF->set_active( pParent->mbViewPDF);
 
     if ( mbIsPresentation )
     {
         mxRbRange->set_label(mxSlidesFt->get_label());
         mxCbExportNotesPages->show();
-        mxCbExportNotesPages->set_active(paParent->mbExportNotesPages);
+        mxCbExportNotesPages->set_active(pParent->mbExportNotesPages);
         mxCbExportNotesPages->connect_toggled( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
         mxCbExportOnlyNotesPages->show();
-        mxCbExportOnlyNotesPages->set_active(paParent->mbExportOnlyNotesPages);
+        mxCbExportOnlyNotesPages->set_active(pParent->mbExportOnlyNotesPages);
         // tdf#116473 Initially enable Export only note pages option depending on the checked state of Export notes pages option
         mxCbExportOnlyNotesPages->set_sensitive(mxCbExportNotesPages->get_active());
         mxCbExportHiddenSlides->show();
-        mxCbExportHiddenSlides->set_active(paParent->mbExportHiddenSlides);
+        mxCbExportHiddenSlides->set_active(pParent->mbExportHiddenSlides);
     }
     else
     {
@@ -635,72 +597,72 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     {
         mxCbExportPlaceholders->set_active(false);
     }
-    mxCbExportEmptyPages->set_active(!paParent->mbIsSkipEmptyPages);
-    mxCbExportPlaceholders->set_active(paParent->mbIsExportPlaceholders);
+    mxCbExportEmptyPages->set_active(!pParent->mbIsSkipEmptyPages);
+    mxCbExportPlaceholders->set_active(pParent->mbIsExportPlaceholders);
 
     mxCbAddStream->show();
-    mxCbAddStream->set_active(paParent->mbAddStream);
+    mxCbAddStream->set_active(pParent->mbAddStream);
 
     mxCbAddStream->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleAddStreamHdl));
     ToggleAddStreamHdl(*mxCbAddStream); // init addstream dependencies
 }
 
-void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
+void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
 {
     // updating the FilterData sequence and storing FilterData to configuration
-    paParent->mbUseLosslessCompression = mxRbLosslessCompression->get_active();
-    paParent->mnQuality = static_cast<sal_Int32>(mxNfQuality->get_value(FUNIT_PERCENT));
-    paParent->mbReduceImageResolution = mxCbReduceImageResolution->get_active();
-    paParent->mnMaxImageResolution = mxCoReduceImageResolution->get_active_text().toInt32();
-    paParent->mbExportNotes = mxCbExportNotes->get_active();
-    paParent->mbViewPDF = mxCbViewPDF->get_active();
-    paParent->mbUseReferenceXObject = mxCbUseReferenceXObject->get_active();
+    pParent->mbUseLosslessCompression = mxRbLosslessCompression->get_active();
+    pParent->mnQuality = static_cast<sal_Int32>(mxNfQuality->get_value(FUNIT_PERCENT));
+    pParent->mbReduceImageResolution = mxCbReduceImageResolution->get_active();
+    pParent->mnMaxImageResolution = mxCoReduceImageResolution->get_active_text().toInt32();
+    pParent->mbExportNotes = mxCbExportNotes->get_active();
+    pParent->mbViewPDF = mxCbViewPDF->get_active();
+    pParent->mbUseReferenceXObject = mxCbUseReferenceXObject->get_active();
     if ( mbIsPresentation )
     {
-        paParent->mbExportNotesPages = mxCbExportNotesPages->get_active();
-        paParent->mbExportOnlyNotesPages = mxCbExportOnlyNotesPages->get_active();
+        pParent->mbExportNotesPages = mxCbExportNotesPages->get_active();
+        pParent->mbExportOnlyNotesPages = mxCbExportOnlyNotesPages->get_active();
     }
-    paParent->mbExportBookmarks = mxCbExportBookmarks->get_active();
+    pParent->mbExportBookmarks = mxCbExportBookmarks->get_active();
     if ( mbIsPresentation )
-        paParent->mbExportHiddenSlides = mxCbExportHiddenSlides->get_active();
+        pParent->mbExportHiddenSlides = mxCbExportHiddenSlides->get_active();
 
-    paParent->mbIsSkipEmptyPages = !mxCbExportEmptyPages->get_active();
-    paParent->mbIsExportPlaceholders = mxCbExportPlaceholders->get_active();
-    paParent->mbAddStream = mxCbAddStream->get_visible() && mxCbAddStream->get_active();
+    pParent->mbIsSkipEmptyPages = !mxCbExportEmptyPages->get_active();
+    pParent->mbIsExportPlaceholders = mxCbExportPlaceholders->get_active();
+    pParent->mbAddStream = mxCbAddStream->get_visible() && mxCbAddStream->get_active();
 
-    paParent->mbIsRangeChecked = false;
+    pParent->mbIsRangeChecked = false;
     if( mxRbRange->get_active() )
     {
-        paParent->mbIsRangeChecked = true;
-        paParent->msPageRange = mxEdPages->get_text(); //FIXME all right on other languages ?
+        pParent->mbIsRangeChecked = true;
+        pParent->msPageRange = mxEdPages->get_text(); //FIXME all right on other languages ?
     }
     else if( mxRbSelection->get_active() )
     {
-        paParent->mbSelectionIsChecked = mxRbSelection->get_active();
+        pParent->mbSelectionIsChecked = mxRbSelection->get_active();
     }
 
-    paParent->mnPDFTypeSelection = 0;
+    pParent->mnPDFTypeSelection = 0;
     if( mxCbPDFA1b->get_active() )
     {
-        paParent->mnPDFTypeSelection = 1;
-        paParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
-        paParent->mbExportFormFields = mbExportFormFieldsUserSelection;
+        pParent->mnPDFTypeSelection = 1;
+        pParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
+        pParent->mbExportFormFields = mbExportFormFieldsUserSelection;
     }
     else
     {
-        paParent->mbUseTaggedPDF =  mxCbTaggedPDF->get_active();
-        paParent->mbExportFormFields = mxCbExportFormFields->get_active();
+        pParent->mbUseTaggedPDF =  mxCbTaggedPDF->get_active();
+        pParent->mbExportFormFields = mxCbExportFormFields->get_active();
     }
 
     if( mxCbWatermark->get_active() )
-        paParent->maWatermarkText = mxEdWatermark->get_text();
+        pParent->maWatermarkText = mxEdWatermark->get_text();
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
     * ever be an additional form submit format this could get invalid.
     */
-    paParent->mnFormsType = mxLbFormsFormat->get_active();
-    paParent->mbAllowDuplicateFieldNames = mxCbAllowDuplicateFieldNames->get_active();
+    pParent->mnFormsType = mxLbFormsFormat->get_active();
+    pParent->mbAllowDuplicateFieldNames = mxCbAllowDuplicateFieldNames->get_active();
 }
 
 VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( TabPageParent pParent,
@@ -793,7 +755,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::ToggleButton&, v
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, void)
 {
     // set the security page status (and its controls as well)
-    ImpPDFTabSecurityPage* pSecPage = mpaParent ? mpaParent->getSecurityPage() : nullptr;
+    ImpPDFTabSecurityPage* pSecPage = mpParent ? mpParent->getSecurityPage() : nullptr;
     if (pSecPage)
     {
         pSecPage->ImplPDFASecurityControl(!mxCbPDFA1b->get_active());
@@ -823,7 +785,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, 
 
     // PDF/A-1 doesn't allow launch action, so enable/disable the selection on
     // Link page
-    ImpPDFTabLinksPage* pLinksPage = mpaParent ? mpaParent->getLinksPage() : nullptr;
+    ImpPDFTabLinksPage* pLinksPage = mpParent ? mpParent->getLinksPage() : nullptr;
     if (pLinksPage)
         pLinksPage->ImplPDFALinkControl(!mxCbPDFA1b->get_active());
 
@@ -873,44 +835,44 @@ VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create(TabPageParent pParent, const SfxI
     return VclPtr<ImpPDFTabOpnFtrPage>::Create(pParent, *rAttrSet);
 }
 
-void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
+void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
 {
-    paParent->mnInitialView = 0;
+    pParent->mnInitialView = 0;
     if( mxRbOpnOutline->get_active() )
-        paParent->mnInitialView = 1;
+        pParent->mnInitialView = 1;
     else if( mxRbOpnThumbs->get_active() )
-        paParent->mnInitialView = 2;
+        pParent->mnInitialView = 2;
 
-    paParent->mnMagnification = 0;
+    pParent->mnMagnification = 0;
     if( mxRbMagnFitWin->get_active() )
-        paParent->mnMagnification = 1;
+        pParent->mnMagnification = 1;
     else if( mxRbMagnFitWidth->get_active() )
-        paParent->mnMagnification = 2;
+        pParent->mnMagnification = 2;
     else if( mxRbMagnFitVisible->get_active() )
-        paParent->mnMagnification = 3;
+        pParent->mnMagnification = 3;
     else if( mxRbMagnZoom->get_active() )
     {
-        paParent->mnMagnification = 4;
-        paParent->mnZoom = mxNumZoom->get_value();
+        pParent->mnMagnification = 4;
+        pParent->mnZoom = mxNumZoom->get_value();
     }
 
-    paParent->mnInitialPage = mxNumInitialPage->get_value();
+    pParent->mnInitialPage = mxNumInitialPage->get_value();
 
-    paParent->mnPageLayout = 0;
+    pParent->mnPageLayout = 0;
     if( mxRbPgLySinglePage->get_active() )
-        paParent->mnPageLayout = 1;
+        pParent->mnPageLayout = 1;
     else if( mxRbPgLyContinue->get_active() )
-        paParent->mnPageLayout = 2;
+        pParent->mnPageLayout = 2;
     else if( mxRbPgLyContinueFacing->get_active() )
-        paParent->mnPageLayout = 3;
+        pParent->mnPageLayout = 3;
 
-    paParent->mbFirstPageLeft = mbUseCTLFont && mxCbPgLyFirstOnLeft->get_active();
+    pParent->mbFirstPageLeft = mbUseCTLFont && mxCbPgLyFirstOnLeft->get_active();
 }
 
-void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
+void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 {
-    mbUseCTLFont = paParent->mbUseCTLFont;
-    switch( paParent->mnPageLayout )
+    mbUseCTLFont = pParent->mbUseCTLFont;
+    switch( pParent->mnPageLayout )
     {
     default:
     case 0:
@@ -927,7 +889,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
         break;
     }
 
-    switch( paParent->mnInitialView )
+    switch( pParent->mnInitialView )
     {
     default:
     case 0:
@@ -941,7 +903,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
         break;
     }
 
-    switch( paParent->mnMagnification )
+    switch( pParent->mnMagnification )
     {
     default:
     case 0:
@@ -966,15 +928,15 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
         break;
     }
 
-    mxNumZoom->set_value(paParent->mnZoom);
-    mxNumInitialPage->set_value(paParent->mnInitialPage);
+    mxNumZoom->set_value(pParent->mnZoom);
+    mxNumInitialPage->set_value(pParent->mnInitialPage);
 
     if (!mbUseCTLFont)
         mxCbPgLyFirstOnLeft->hide();
     else
     {
         mxRbPgLyContinueFacing->connect_toggled(LINK(this, ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl));
-        mxCbPgLyFirstOnLeft->set_active(paParent->mbFirstPageLeft);
+        mxCbPgLyFirstOnLeft->set_active(pParent->mbFirstPageLeft);
         ToggleRbPgLyContinueFacingHdl();
     }
 }
@@ -1029,34 +991,34 @@ VclPtr<SfxTabPage> ImpPDFTabViewerPage::Create( TabPageParent pParent,
     return VclPtr<ImpPDFTabViewerPage>::Create(pParent, *rAttrSet);
 }
 
-void ImpPDFTabViewerPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
+void ImpPDFTabViewerPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
 {
-    paParent->mbHideViewerMenubar = m_xCbHideViewerMenubar->get_active();
-    paParent->mbHideViewerToolbar = m_xCbHideViewerToolbar->get_active();
-    paParent->mbHideViewerWindowControls = m_xCbHideViewerWindowControls->get_active();
-    paParent->mbResizeWinToInit = m_xCbResWinInit->get_active();
-    paParent->mbOpenInFullScreenMode = m_xCbOpenFullScreen->get_active();
-    paParent->mbCenterWindow = m_xCbCenterWindow->get_active();
-    paParent->mbDisplayPDFDocumentTitle = m_xCbDispDocTitle->get_active();
-    paParent->mbUseTransitionEffects = m_xCbTransitionEffects->get_active();
-    paParent->mnOpenBookmarkLevels = m_xRbAllBookmarkLevels->get_active() ?
+    pParent->mbHideViewerMenubar = m_xCbHideViewerMenubar->get_active();
+    pParent->mbHideViewerToolbar = m_xCbHideViewerToolbar->get_active();
+    pParent->mbHideViewerWindowControls = m_xCbHideViewerWindowControls->get_active();
+    pParent->mbResizeWinToInit = m_xCbResWinInit->get_active();
+    pParent->mbOpenInFullScreenMode = m_xCbOpenFullScreen->get_active();
+    pParent->mbCenterWindow = m_xCbCenterWindow->get_active();
+    pParent->mbDisplayPDFDocumentTitle = m_xCbDispDocTitle->get_active();
+    pParent->mbUseTransitionEffects = m_xCbTransitionEffects->get_active();
+    pParent->mnOpenBookmarkLevels = m_xRbAllBookmarkLevels->get_active() ?
                                      -1 : static_cast<sal_Int32>(m_xNumBookmarkLevels->get_value());
 }
 
-void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
+void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 {
-    m_xCbHideViewerMenubar->set_active( paParent->mbHideViewerMenubar );
-    m_xCbHideViewerToolbar->set_active( paParent->mbHideViewerToolbar );
-    m_xCbHideViewerWindowControls->set_active( paParent->mbHideViewerWindowControls );
+    m_xCbHideViewerMenubar->set_active( pParent->mbHideViewerMenubar );
+    m_xCbHideViewerToolbar->set_active( pParent->mbHideViewerToolbar );
+    m_xCbHideViewerWindowControls->set_active( pParent->mbHideViewerWindowControls );
 
-    m_xCbResWinInit->set_active( paParent->mbResizeWinToInit );
-    m_xCbOpenFullScreen->set_active( paParent->mbOpenInFullScreenMode );
-    m_xCbCenterWindow->set_active( paParent->mbCenterWindow );
-    m_xCbDispDocTitle->set_active( paParent->mbDisplayPDFDocumentTitle );
-    mbIsPresentation = paParent->mbIsPresentation;
-    m_xCbTransitionEffects->set_active( paParent->mbUseTransitionEffects );
+    m_xCbResWinInit->set_active( pParent->mbResizeWinToInit );
+    m_xCbOpenFullScreen->set_active( pParent->mbOpenInFullScreenMode );
+    m_xCbCenterWindow->set_active( pParent->mbCenterWindow );
+    m_xCbDispDocTitle->set_active( pParent->mbDisplayPDFDocumentTitle );
+    mbIsPresentation = pParent->mbIsPresentation;
+    m_xCbTransitionEffects->set_active( pParent->mbUseTransitionEffects );
     m_xCbTransitionEffects->set_sensitive( mbIsPresentation );
-    if( paParent->mnOpenBookmarkLevels < 0 )
+    if( pParent->mnOpenBookmarkLevels < 0 )
     {
         m_xRbAllBookmarkLevels->set_active(true);
         m_xNumBookmarkLevels->set_sensitive( false );
@@ -1065,7 +1027,7 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     {
         m_xRbVisibleBookmarkLevels->set_active(true);
         m_xNumBookmarkLevels->set_sensitive(true);
-        m_xNumBookmarkLevels->set_value(paParent->mnOpenBookmarkLevels);
+        m_xNumBookmarkLevels->set_value(pParent->mnOpenBookmarkLevels);
     }
 }
 
@@ -1111,42 +1073,42 @@ VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create(TabPageParent pParent, const Sf
     return VclPtr<ImpPDFTabSecurityPage>::Create(pParent, *rAttrSet);
 }
 
-void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
+void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
 {
     // please note that in PDF/A-1a mode even if this are copied back,
     // the security settings are forced disabled in PDFExport::Export
-    paParent->mbEncrypt = mbHaveUserPassword;
-    paParent->mxPreparedPasswords = mxPreparedPasswords;
+    pParent->mbEncrypt = mbHaveUserPassword;
+    pParent->mxPreparedPasswords = mxPreparedPasswords;
 
-    paParent->mbRestrictPermissions = mbHaveOwnerPassword;
-    paParent->maPreparedOwnerPassword = maPreparedOwnerPassword;
+    pParent->mbRestrictPermissions = mbHaveOwnerPassword;
+    pParent->maPreparedOwnerPassword = maPreparedOwnerPassword;
 
     // verify print status
-    paParent->mnPrint = 0;
+    pParent->mnPrint = 0;
     if (mxRbPrintLowRes->get_active())
-        paParent->mnPrint = 1;
+        pParent->mnPrint = 1;
     else if (mxRbPrintHighRes->get_active())
-        paParent->mnPrint = 2;
+        pParent->mnPrint = 2;
 
     // verify changes permitted
-    paParent->mnChangesAllowed = 0;
+    pParent->mnChangesAllowed = 0;
 
     if( mxRbChangesInsDel->get_active() )
-        paParent->mnChangesAllowed = 1;
+        pParent->mnChangesAllowed = 1;
     else if( mxRbChangesFillForm->get_active() )
-        paParent->mnChangesAllowed = 2;
+        pParent->mnChangesAllowed = 2;
     else if( mxRbChangesComment->get_active() )
-        paParent->mnChangesAllowed = 3;
+        pParent->mnChangesAllowed = 3;
     else if( mxRbChangesAnyNoCopy->get_active() )
-        paParent->mnChangesAllowed = 4;
+        pParent->mnChangesAllowed = 4;
 
-    paParent->mbCanCopyOrExtract = mxCbEnableCopy->get_active();
-    paParent->mbCanExtractForAccessibility = mxCbEnableAccessibility->get_active();
+    pParent->mbCanCopyOrExtract = mxCbEnableCopy->get_active();
+    pParent->mbCanExtractForAccessibility = mxCbEnableAccessibility->get_active();
 }
 
-void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
+void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 {
-    switch( paParent->mnPrint )
+    switch( pParent->mnPrint )
     {
     default:
     case 0:
@@ -1160,7 +1122,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
         break;
     }
 
-    switch( paParent->mnChangesAllowed )
+    switch( pParent->mnChangesAllowed )
     {
     default:
     case 0:
@@ -1180,13 +1142,13 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
         break;
     }
 
-    mxCbEnableCopy->set_active(paParent->mbCanCopyOrExtract);
-    mxCbEnableAccessibility->set_active(paParent->mbCanExtractForAccessibility);
+    mxCbEnableCopy->set_active(pParent->mbCanCopyOrExtract);
+    mxCbEnableAccessibility->set_active(pParent->mbCanExtractForAccessibility);
 
     // set the status of this windows, according to the PDFA selection
     enablePermissionControls();
 
-    ImpPDFTabGeneralPage* pGeneralPage = paParent->getGeneralPage();
+    ImpPDFTabGeneralPage* pGeneralPage = pParent->getGeneralPage();
 
     if (pGeneralPage)
         ImplPDFASecurityControl(!pGeneralPage->IsPdfaSelected());
@@ -1224,7 +1186,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
 void ImpPDFTabSecurityPage::enablePermissionControls()
 {
     bool bIsPDFASel = false;
-    ImpPDFTabDialog* pParent = static_cast<ImpPDFTabDialog*>(GetTabDialog());
+    ImpPDFTabDialog* pParent = static_cast<ImpPDFTabDialog*>(GetDialogController());
     ImpPDFTabGeneralPage* pGeneralPage = pParent ? pParent->getGeneralPage() : nullptr;
     if (pGeneralPage)
     {
@@ -1319,12 +1281,12 @@ VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create(TabPageParent pParent, const SfxIt
     return VclPtr<ImpPDFTabLinksPage>::Create(pParent, *rAttrSet);
 }
 
-void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
+void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
 {
-    paParent->mbExportRelativeFsysLinks = m_xCbExportRelativeFsysLinks->get_active();
+    pParent->mbExportRelativeFsysLinks = m_xCbExportRelativeFsysLinks->get_active();
 
     bool bIsPDFASel = false;
-    ImpPDFTabGeneralPage* pGeneralPage = paParent->getGeneralPage();
+    ImpPDFTabGeneralPage* pGeneralPage = pParent->getGeneralPage();
     if (pGeneralPage)
         bIsPDFASel = pGeneralPage->IsPdfaSelected();
     // if PDF/A-1 was not selected while exiting dialog...
@@ -1337,26 +1299,26 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     }
     // the control states, or the saved is used
     // to form the stored selection
-    paParent->mnViewPDFMode = 0;
+    pParent->mnViewPDFMode = 0;
     if( mbOpnLnksBrowserUserState )
-        paParent->mnViewPDFMode = 2;
+        pParent->mnViewPDFMode = 2;
     else if( mbOpnLnksLaunchUserState )
-        paParent->mnViewPDFMode = 1;
+        pParent->mnViewPDFMode = 1;
 
-    paParent->mbConvertOOoTargets = m_xCbOOoToPDFTargets->get_active();
-    paParent->mbExportBmkToPDFDestination = m_xCbExprtBmkrToNmDst->get_active();
+    pParent->mbConvertOOoTargets = m_xCbOOoToPDFTargets->get_active();
+    pParent->mbExportBmkToPDFDestination = m_xCbExprtBmkrToNmDst->get_active();
 }
 
-void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
+void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 {
-    m_xCbOOoToPDFTargets->set_active(paParent->mbConvertOOoTargets);
-    m_xCbExprtBmkrToNmDst->set_active(paParent->mbExportBmkToPDFDestination);
+    m_xCbOOoToPDFTargets->set_active(pParent->mbConvertOOoTargets);
+    m_xCbExprtBmkrToNmDst->set_active(pParent->mbExportBmkToPDFDestination);
 
     m_xRbOpnLnksDefault->connect_toggled(LINK(this, ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl));
     m_xRbOpnLnksBrowser->connect_toggled(LINK(this, ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl));
 
-    m_xCbExportRelativeFsysLinks->set_active(paParent->mbExportRelativeFsysLinks);
-    switch( paParent->mnViewPDFMode )
+    m_xCbExportRelativeFsysLinks->set_active(pParent->mbExportRelativeFsysLinks);
+    switch( pParent->mnViewPDFMode )
     {
     default:
     case 0:
@@ -1377,7 +1339,7 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
     // and set the link action accordingly
     // PDF/A-1 doesn't allow launch action on links
 
-    ImpPDFTabGeneralPage* pGeneralPage = paParent->getGeneralPage();
+    ImpPDFTabGeneralPage* pGeneralPage = pParent->getGeneralPage();
     if (pGeneralPage)
         ImplPDFALinkControl(!pGeneralPage->mxCbPDFA1b->get_active());
 }
@@ -1487,7 +1449,7 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(TabPageParent pParent, const SfxItemS
     , mxEdSignReason(m_xBuilder->weld_entry("reason"))
     , mxLBSignTSA(m_xBuilder->weld_combo_box_text("tsa"))
 {
-    mxPbSignCertSelect->set_sensitive(false);
+    mxPbSignCertSelect->set_sensitive(true);
     mxPbSignCertSelect->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect));
     mxPbSignCertClear->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertClear));
 }
@@ -1557,20 +1519,20 @@ VclPtr<SfxTabPage> ImpPDFTabSigningPage::Create( TabPageParent pParent,
     return VclPtr<ImpPDFTabSigningPage>::Create(pParent, *rAttrSet);
 }
 
-void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
+void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
 {
-    paParent->mbSignPDF = maSignCertificate.is();
-    paParent->maSignCertificate = maSignCertificate;
-    paParent->msSignLocation = mxEdSignLocation->get_text();
-    paParent->msSignPassword = mxEdSignPassword->get_text();
-    paParent->msSignContact = mxEdSignContactInfo->get_text();
-    paParent->msSignReason = mxEdSignReason->get_text();
+    pParent->mbSignPDF = maSignCertificate.is();
+    pParent->maSignCertificate = maSignCertificate;
+    pParent->msSignLocation = mxEdSignLocation->get_text();
+    pParent->msSignPassword = mxEdSignPassword->get_text();
+    pParent->msSignContact = mxEdSignContactInfo->get_text();
+    pParent->msSignReason = mxEdSignReason->get_text();
     // Entry 0 is 'None'
     if (mxLBSignTSA->get_active() >= 1)
-        paParent->msSignTSA = mxLBSignTSA->get_active_text();
+        pParent->msSignTSA = mxLBSignTSA->get_active_text();
 }
 
-void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
+void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 {
     mxEdSignLocation->set_sensitive(false);
     mxEdSignPassword->set_sensitive(false);
@@ -1579,13 +1541,13 @@ void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent
     mxLBSignTSA->set_sensitive(false);
     mxPbSignCertClear->set_sensitive(false);
 
-    if (paParent->mbSignPDF)
+    if (pParent->mbSignPDF)
     {
-        mxEdSignPassword->set_text(paParent->msSignPassword);
-        mxEdSignLocation->set_text(paParent->msSignLocation);
-        mxEdSignContactInfo->set_text(paParent->msSignContact);
-        mxEdSignReason->set_text(paParent->msSignReason);
-        maSignCertificate = paParent->maSignCertificate;
+        mxEdSignPassword->set_text(pParent->msSignPassword);
+        mxEdSignLocation->set_text(pParent->msSignLocation);
+        mxEdSignContactInfo->set_text(pParent->msSignContact);
+        mxEdSignReason->set_text(pParent->msSignReason);
+        maSignCertificate = pParent->maSignCertificate;
     }
 }
 

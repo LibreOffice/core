@@ -61,21 +61,14 @@ class ImpPDFTabLinksPage;
 
 
 /// Class tabbed dialog
-class ImpPDFTabDialog final : public SfxTabDialog
+class ImpPDFTabDialog final : public SfxTabDialogController
 {
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
 
     Any                         maSelection;
 
-    DECL_LINK(CancelHdl, Button*, void);
-
-    sal_uInt16                  mnSigningPageId;
-    sal_uInt16                  mnSecurityPageId;
-    sal_uInt16                  mnLinksPage;
-    sal_uInt16                  mnInterfacePageId;
-    sal_uInt16                  mnViewPageId;
-    sal_uInt16                  mnGeneralPageId;
+    DECL_LINK(CancelHdl, weld::Button&, void);
 
     // the following data are the configuration used throughout the dialog and pages
     bool                        mbIsPresentation;
@@ -158,12 +151,9 @@ public:
     friend class                ImpPDFTabLinksPage;
     friend class                ImpPDFTabSigningPage;
 
-                                ImpPDFTabDialog( vcl::Window* pParent,
-                                                 Sequence< PropertyValue >& rFilterData,
-                                                 const css::uno::Reference< XComponent >& rDoc);
+    ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue >& rFilterData,
+                    const css::uno::Reference< XComponent >& rDoc);
     virtual                     ~ImpPDFTabDialog() override;
-
-    virtual void                dispose() override;
 
     Sequence< PropertyValue >   GetFilterData();
 
@@ -172,7 +162,7 @@ public:
     ImpPDFTabGeneralPage*       getGeneralPage() const;
 
 private:
-    virtual void                PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage ) override;
+    virtual void                PageCreated(const OString& rId, SfxTabPage& rPage) override;
     virtual short               Ok() override;
 };
 
@@ -187,9 +177,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     bool                         mbIsPresentation;
     bool                         mbIsSpreadsheet;
     bool                         mbIsWriter;
-
-    VclPtr<ImpPDFTabDialog>      mpaParent;
-
+    ImpPDFTabDialog*             mpParent;
 
     std::unique_ptr<weld::RadioButton> mxRbAll;
     std::unique_ptr<weld::RadioButton> mxRbRange;
@@ -242,7 +230,6 @@ public:
 
     ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabGeneralPage() override;
-    virtual void                dispose() override;
 
     static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
 
