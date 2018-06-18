@@ -313,7 +313,7 @@ static uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
     return aAny;
 }
 
-static std::vector<beans::PropertyValue> jsonToPropertyValuesVector(const char* pJSON)
+std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char* pJSON)
 {
     std::vector<beans::PropertyValue> aArguments;
     if (pJSON && pJSON[0] != '\0')
