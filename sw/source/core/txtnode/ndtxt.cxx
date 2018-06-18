@@ -2107,8 +2107,49 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     // copy hard attributes on whole paragraph
     if (HasSwAttrSet())
     {
+        bool hasSwAttrSet = pDest->HasSwAttrSet();
+        if (hasSwAttrSet)
+        {
+            // if we have our own property set it doesn't mean
+            // that this set defines any style different to Standard one.
+            hasSwAttrSet = false;
+
+            // so, let's check deeper if property set has defined any property
+            if (pDest->GetpSwAttrSet())
+            {
+                // check all items in the property set
+                SfxItemIter aIter( *pDest->GetpSwAttrSet() );
+                const SfxPoolItem* pItem = aIter.GetCurItem();
+                while( true )
+                {
+                    // check current item
+                    sal_uInt16 nWhich = IsInvalidItem( pItem )
+                        ? pDest->GetpSwAttrSet()->GetWhichByPos( aIter.GetCurPos() )
+                        : pItem->Which();
+                    if( RES_FRMATR_STYLE_NAME != nWhich &&
+                        RES_FRMATR_CONDITIONAL_STYLE_NAME != nWhich &&
+                        SfxItemState::SET == pDest->GetpSwAttrSet()->GetItemState( nWhich, false ) )
+                    {
+                        // check if parent value (original value in style) has the same value as in [pItem]
+                        const SfxPoolItem&  rParentItem = pDest->GetpSwAttrSet()->GetParent()->Get( nWhich, true );
+
+                        hasSwAttrSet = (rParentItem != *pItem);
+
+                        // property set is not empty => no need to make anymore checks
+                        if (hasSwAttrSet)
+                            break;
+                    }
+
+                    // let's check next item
+                    if( aIter.IsAtEnd() )
+                        break;
+                    pItem = aIter.NextItem();
+                }
+            }
+        }
+
         // all or just the Char attributes?
-        if( nInitSize || pDest->HasSwAttrSet() ||
+        if( nInitSize || hasSwAttrSet ||
             nLen != pDest->GetText().getLength())
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),

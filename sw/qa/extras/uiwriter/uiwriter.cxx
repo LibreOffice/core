@@ -255,6 +255,8 @@ public:
     void testTdf114536();
     void testTdf113877();
     void testTdf113877NoMerge();
+    void testTdf113877_default_style();
+    void testTdf113877_Standard_style();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -397,6 +399,8 @@ public:
     CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST(testTdf113877);
     CPPUNIT_TEST(testTdf113877NoMerge);
+    CPPUNIT_TEST(testTdf113877_default_style);
+    CPPUNIT_TEST(testTdf113877_Standard_style);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5101,6 +5105,70 @@ void SwUiWriterTest::testTdf113877NoMerge()
     CPPUNIT_ASSERT(listId4 != listId5);
     CPPUNIT_ASSERT_EQUAL(listId5, listId6);
     CPPUNIT_ASSERT(listId6 != listId7);
+}
+
+// Related test to testTdf113877(): Inserting into empty document a new document with list.
+// Insert position has NO its own paragraph style ("Standard" will be used).
+//
+// Resulting document should be the same for following tests:
+// - testTdf113877_default_style()
+// - testTdf113877_Standard_style()
+//
+void SwUiWriterTest::testTdf113877_default_style()
+{
+    load(DATA_DIRECTORY, "tdf113877_blank.odt");
+
+    // set a page cursor into the end of the document
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    // insert the same document at current cursor position
+    {
+        const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list_abcd.odt";
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
+        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    }
+
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
+    const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
+    const OUString listId3 = getProperty<OUString>(getParagraph(3), "ListId");
+
+    CPPUNIT_ASSERT_EQUAL(listId1, listId2);
+    CPPUNIT_ASSERT_EQUAL(listId1, listId3);
+}
+
+// Related test to testTdf113877(): Inserting into empty document a new document with list.
+// Insert position has its own paragraph style derived from "Standard", but this style is the same as "Standard".
+//
+// Resulting document should be the same for following tests:
+// - testTdf113877_default_style()
+// - testTdf113877_Standard_style()
+//
+void SwUiWriterTest::testTdf113877_Standard_style()
+{
+    load(DATA_DIRECTORY, "tdf113877_blank_ownStandard.odt");
+
+    // set a page cursor into the end of the document
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    // insert the same document at current cursor position
+    {
+        const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list_abcd.odt";
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
+        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    }
+
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
+    const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
+    const OUString listId3 = getProperty<OUString>(getParagraph(3), "ListId");
+
+    CPPUNIT_ASSERT_EQUAL(listId1, listId2);
+    CPPUNIT_ASSERT_EQUAL(listId1, listId3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
