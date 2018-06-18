@@ -2131,8 +2131,29 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     // copy hard attributes on whole paragraph
     if (HasSwAttrSet())
     {
+        bool hasSwAttrSet = pDest->HasSwAttrSet();
+        if (hasSwAttrSet)
+        {
+            hasSwAttrSet = false;
+
+            SfxItemSet aFormatSet( pDest->GetSwAttrSet() );
+            for (int i=0; i<aFormatSet.Count(); i++)
+            {
+                sal_uInt16 nWhich = aFormatSet.GetWhichByPos(i);
+
+                const SfxPoolItem* pItemOwn = nullptr;
+                const SfxItemState stateOwn = aFormatSet.GetItemState( nWhich, false, &pItemOwn );
+
+                if (stateOwn == SfxItemState::SET)
+                {
+                    hasSwAttrSet = true;
+                    break;
+                }
+            }
+        }
+
         // all or just the Char attributes?
-        if( nInitSize || pDest->HasSwAttrSet() ||
+        if( nInitSize || hasSwAttrSet ||
             nLen != pDest->GetText().getLength())
         {
             SfxItemSet aCharSet(
