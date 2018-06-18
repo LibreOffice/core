@@ -191,6 +191,19 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
     CPPUNIT_ASSERT_EQUAL(OUString("Check the machines!"), aSigningInstructions);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf117805, "tdf117805.odt")
+{
+    if (!mbExported)
+        return;
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    // This failed, the header was lost. It's still referenced at an incorrect
+    // location in document.xml, though.
+    CPPUNIT_ASSERT(xNameAccess->hasByName("word/header1.xml"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
 {
     // The horizontal positioning of the star shape affected the positioning of

@@ -117,6 +117,13 @@ void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, sal_Int64 
     aPos.X += nXDiff;
     aPos.Y += nYDiff;
 }
+
+/// Determines if the anchor is inside a paragraph.
+bool IsAnchorTypeInsideParagraph(const ww8::Frame* pFrame)
+{
+    const SwFormatAnchor& rAnchor = pFrame->GetFrameFormat().GetAttrSet().GetAnchor();
+    return rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE;
+}
 }
 
 ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd,
@@ -1395,7 +1402,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
                                       bool bTextBoxOnly)
 {
     bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
-    m_pImpl->m_bDMLAndVMLDrawingOpen = true;
+    m_pImpl->m_bDMLAndVMLDrawingOpen = IsAnchorTypeInsideParagraph(pParentFrame);
 
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
@@ -1690,7 +1697,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
 void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bTextBoxOnly)
 {
     bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
-    m_pImpl->m_bDMLAndVMLDrawingOpen = true;
+    m_pImpl->m_bDMLAndVMLDrawingOpen = IsAnchorTypeInsideParagraph(pParentFrame);
 
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
