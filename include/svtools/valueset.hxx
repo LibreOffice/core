@@ -416,6 +416,7 @@ private:
     css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
     SvtValueItemList   mItemList;
     std::unique_ptr<SvtValueSetItem> mpNoneItem;
+    std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     tools::Rectangle  maNoneItemRect;
     tools::Rectangle  maItemListRect;
     long            mnItemWidth;
@@ -437,6 +438,7 @@ private:
     OUString        maText;
     WinBits         mnStyle;
     Link<SvtValueSet*,void>  maDoubleClickHdl;
+    Link<SvtValueSet*,void>  maSelectHdl;
 
     bool            mbFormat : 1;
     bool            mbNoSelection : 1;
@@ -464,7 +466,7 @@ private:
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
-    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK(ImplScrollHdl, weld::ScrolledWindow&, void);
 
     SvtValueSet (const SvtValueSet &) = delete;
     SvtValueSet & operator= (const SvtValueSet &) = delete;
@@ -473,7 +475,7 @@ protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 public:
-    SvtValueSet();
+    SvtValueSet(weld::ScrolledWindow* pScrolledWindow);
     virtual         ~SvtValueSet() override;
 
     virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -485,16 +487,20 @@ public:
     virtual void    LoseFocus() override;
     virtual void    Resize() override;
     virtual void    StyleUpdated() override;
+    virtual void    Select();
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
 
     OUString        GetText() const { return maText; }
     void            SetText(const OUString& rText) { maText = rText; }
-    void            SetStyle(WinBits nStyle) { mnStyle = nStyle; }
+    void            SetStyle(WinBits nStyle);
     WinBits         GetStyle() const { return mnStyle; }
 
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);
+    void            RemoveItem(sal_uInt16 nItemId);
+
+    void            Clear();
 
     size_t          GetItemCount() const;
     size_t          GetItemPos( sal_uInt16 nItemId ) const;
@@ -511,6 +517,10 @@ public:
     sal_uInt16     GetSelectedItemId() const
     {
         return mnSelItemId;
+    }
+    size_t         GetSelectItemPos() const
+    {
+        return GetItemPos( mnSelItemId );
     }
     bool IsItemSelected( sal_uInt16 nItemId ) const
     {
@@ -531,6 +541,12 @@ public:
                                         sal_uInt16 nCalcCols = 0,
                                         sal_uInt16 nCalcLines = 0) const;
     Size            CalcItemSizePixel(const Size& rSize) const;
+    int             GetScrollWidth() const;
+
+    void            SetSelectHdl(const Link<SvtValueSet*,void>& rLink)
+    {
+        maSelectHdl = rLink;
+    }
 
     void            SetDoubleClickHdl(const Link<SvtValueSet*,void>& rLink)
     {
