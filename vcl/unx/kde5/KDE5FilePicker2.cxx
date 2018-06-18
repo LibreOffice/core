@@ -31,7 +31,6 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <osl/mutex.hxx>
-#include "FPServiceInfo.hxx"
 
 #undef Region
 
@@ -664,7 +663,7 @@ void KDE5FilePicker::disposing(const lang::EventObject& rEvent)
 
 OUString SAL_CALL KDE5FilePicker::getImplementationName()
 {
-    return OUString(FILE_PICKER_IMPL_NAME);
+    return OUString("com.sun.star.ui.dialogs.KDE5FilePicker");
 }
 
 sal_Bool SAL_CALL KDE5FilePicker::supportsService(const OUString& ServiceName)
