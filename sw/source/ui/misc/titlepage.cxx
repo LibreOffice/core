@@ -130,45 +130,44 @@ namespace
  */
 void SwTitlePageDlg::FillList()
 {
-    sal_uInt16 nTitlePages = m_pPageCountNF->GetValue();
-    m_pPagePropertiesLB->Clear();
+    sal_uInt16 nTitlePages = m_xPageCountNF->get_value();
+    m_xPagePropertiesLB->clear();
     if (mpTitleDesc)
-        m_pPagePropertiesLB->InsertEntry(mpTitleDesc->GetName());
+        m_xPagePropertiesLB->append_text(mpTitleDesc->GetName());
     if (nTitlePages > 1 && mpIndexDesc)
-        m_pPagePropertiesLB->InsertEntry(mpIndexDesc->GetName());
+        m_xPagePropertiesLB->append_text(mpIndexDesc->GetName());
     if (mpNormalDesc)
-        m_pPagePropertiesLB->InsertEntry(mpNormalDesc->GetName());
-    m_pPagePropertiesLB->SelectEntryPos(0);
+        m_xPagePropertiesLB->append_text(mpNormalDesc->GetName());
+    m_xPagePropertiesLB->set_active(0);
 }
 
 sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 {
     sal_uInt16 nPage = 1;
-    if (m_pPageStartNF->IsEnabled())
-        nPage = m_pPageStartNF->GetValue();
+    if (m_xPageStartNF->get_sensitive())
+        nPage = m_xPageStartNF->get_value();
     return nPage;
 }
 
-SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
-    SfxModalDialog( pParent, "DLG_TITLEPAGE", "modules/swriter/ui/titlepage.ui"),
-    mpPageFormatDesc(nullptr)
+SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
+    : GenericDialogController(pParent, "modules/swriter/ui/titlepage.ui", "DLG_TITLEPAGE")
+    , mpPageFormatDesc(nullptr)
+    , m_xUseExistingPagesRB(m_xBuilder->weld_radio_button("RB_USE_EXISTING_PAGES"))
+    , m_xPageCountNF(m_xBuilder->weld_spin_button("NF_PAGE_COUNT"))
+    , m_xDocumentStartRB(m_xBuilder->weld_radio_button("RB_DOCUMENT_START"))
+    , m_xPageStartRB(m_xBuilder->weld_radio_button("RB_PAGE_START"))
+    , m_xPageStartNF(m_xBuilder->weld_spin_button("NF_PAGE_START"))
+    , m_xRestartNumberingCB(m_xBuilder->weld_check_button("CB_RESTART_NUMBERING"))
+    , m_xRestartNumberingNF(m_xBuilder->weld_spin_button("NF_RESTART_NUMBERING"))
+    , m_xSetPageNumberCB(m_xBuilder->weld_check_button("CB_SET_PAGE_NUMBER"))
+    , m_xSetPageNumberNF(m_xBuilder->weld_spin_button("NF_SET_PAGE_NUMBER"))
+    , m_xPagePropertiesLB(m_xBuilder->weld_combo_box_text("LB_PAGE_PROPERTIES"))
+    , m_xPagePropertiesPB(m_xBuilder->weld_button("PB_PAGE_PROPERTIES"))
+    , m_xOkPB(m_xBuilder->weld_button("ok"))
 {
-    get(m_pUseExistingPagesRB, "RB_USE_EXISTING_PAGES");
-    get(m_pPageCountNF, "NF_PAGE_COUNT");
-    get(m_pDocumentStartRB, "RB_DOCUMENT_START");
-    get(m_pPageStartRB, "RB_PAGE_START");
-    get(m_pPageStartNF, "NF_PAGE_START");
-    get(m_pRestartNumberingCB, "CB_RESTART_NUMBERING");
-    get(m_pRestartNumberingNF, "NF_RESTART_NUMBERING");
-    get(m_pSetPageNumberCB, "CB_SET_PAGE_NUMBER");
-    get(m_pSetPageNumberNF, "NF_SET_PAGE_NUMBER");
-    get(m_pPagePropertiesLB, "LB_PAGE_PROPERTIES");
-    get(m_pPagePropertiesPB, "PB_PAGE_PROPERTIES");
-    get(m_pOkPB, "ok");
-
-    m_pOkPB->SetClickHdl(LINK(this, SwTitlePageDlg, OKHdl));
-    m_pRestartNumberingCB->SetClickHdl(LINK(this, SwTitlePageDlg, RestartNumberingHdl));
-    m_pSetPageNumberCB->SetClickHdl(LINK(this, SwTitlePageDlg, SetPageNumberHdl));
+    m_xOkPB->connect_clicked(LINK(this, SwTitlePageDlg, OKHdl));
+    m_xRestartNumberingCB->connect_toggled(LINK(this, SwTitlePageDlg, RestartNumberingHdl));
+    m_xSetPageNumberCB->connect_toggled(LINK(this, SwTitlePageDlg, SetPageNumberHdl));
 
     sal_uInt16 nSetPage = 1;
     sal_uInt16 nResetPage = 1;
@@ -207,92 +206,67 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     }
     lcl_PopCursor(mpSh);
 
-    m_pUseExistingPagesRB->Check();
-    m_pPageCountNF->SetValue(nTitlePages);
-    m_pPageCountNF->SetUpHdl(LINK(this, SwTitlePageDlg, UpHdl));
-    m_pPageCountNF->SetDownHdl(LINK(this, SwTitlePageDlg, DownHdl));
+    m_xUseExistingPagesRB->set_active(true);
+    m_xPageCountNF->set_value(nTitlePages);
+    m_xPageCountNF->connect_value_changed(LINK(this, SwTitlePageDlg, ValueChangeHdl));
 
-    m_pDocumentStartRB->Check();
-    m_pPageStartNF->Enable(false);
-    m_pPageStartNF->SetValue(lcl_GetCurrentPage(mpSh));
-    Link<Button*,void> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
-    m_pDocumentStartRB->SetClickHdl(aStartPageHdl);
-    m_pPageStartRB->SetClickHdl(aStartPageHdl);
+    m_xDocumentStartRB->set_active(true);
+    m_xPageStartNF->set_sensitive(false);
+    m_xPageStartNF->set_value(lcl_GetCurrentPage(mpSh));
+    Link<weld::ToggleButton&,void> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
+    m_xDocumentStartRB->connect_toggled(aStartPageHdl);
+    m_xPageStartRB->connect_toggled(aStartPageHdl);
 
     if (bMaybeResetNumbering && nResetPage > 0)
     {
-        m_pRestartNumberingCB->Check();
-        m_pRestartNumberingNF->SetValue(nResetPage);
+        m_xRestartNumberingCB->set_active(true);
+        m_xRestartNumberingNF->set_value(nResetPage);
     }
-    m_pRestartNumberingNF->Enable(m_pRestartNumberingCB->IsChecked());
+    m_xRestartNumberingNF->set_sensitive(m_xRestartNumberingCB->get_active());
 
-    m_pSetPageNumberNF->SetValue(nSetPage);
+    m_xSetPageNumberNF->set_value(nSetPage);
     if (nSetPage > 1)
-        m_pSetPageNumberCB->Check();
-    m_pSetPageNumberNF->Enable(m_pSetPageNumberCB->IsChecked());
+        m_xSetPageNumberCB->set_active(true);
+    m_xSetPageNumberNF->set_sensitive(m_xSetPageNumberCB->get_active());
 
     FillList();
-    m_pPagePropertiesPB->SetClickHdl(LINK(this, SwTitlePageDlg, EditHdl));
+    m_xPagePropertiesPB->connect_clicked(LINK(this, SwTitlePageDlg, EditHdl));
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, UpHdl, SpinField&, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, ValueChangeHdl, weld::SpinButton&, void)
 {
-    if (m_pPageCountNF->GetValue() == 2)
+    if (m_xPageCountNF->get_value() == 1 || m_xPageCountNF->get_value() == 2)
         FillList();
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, DownHdl, SpinField&, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, RestartNumberingHdl, weld::ToggleButton&, void)
 {
-    if (m_pPageCountNF->GetValue() == 1)
-        FillList();
+    m_xRestartNumberingNF->set_sensitive(m_xRestartNumberingCB->get_active());
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, RestartNumberingHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, SetPageNumberHdl, weld::ToggleButton&, void)
 {
-    m_pRestartNumberingNF->Enable(m_pRestartNumberingCB->IsChecked());
+    m_xSetPageNumberNF->set_sensitive(m_xSetPageNumberCB->get_active());
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, SetPageNumberHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl, weld::ToggleButton&, void)
 {
-    m_pSetPageNumberNF->Enable(m_pSetPageNumberCB->IsChecked());
-}
-
-IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl, Button*, void)
-{
-    m_pPageStartNF->Enable(m_pPageStartRB->IsChecked());
+    m_xPageStartNF->set_sensitive(m_xPageStartRB->get_active());
 }
 
 SwTitlePageDlg::~SwTitlePageDlg()
 {
-    disposeOnce();
-}
-
-void SwTitlePageDlg::dispose()
-{
     delete mpPageFormatDesc;
-    m_pUseExistingPagesRB.clear();
-    m_pPageCountNF.clear();
-    m_pDocumentStartRB.clear();
-    m_pPageStartRB.clear();
-    m_pPageStartNF.clear();
-    m_pRestartNumberingCB.clear();
-    m_pRestartNumberingNF.clear();
-    m_pSetPageNumberCB.clear();
-    m_pSetPageNumberNF.clear();
-    m_pPagePropertiesLB.clear();
-    m_pPagePropertiesPB.clear();
-    m_pOkPB.clear();
-    SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
 {
     SwView& rView = mpSh->GetView();
-    rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectedEntry(), "page", *mpSh);
+    rView.GetDocShell()->FormatPage(m_xPagePropertiesLB->get_active_text(), "page", *mpSh);
     rView.InvalidateRulerPos();
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
 {
     lcl_PushCursor(mpSh);
 
@@ -300,13 +274,13 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, Button*, void)
 
     SwFormatPageDesc aTitleDesc(mpTitleDesc);
 
-    if (m_pSetPageNumberCB->IsChecked())
-        aTitleDesc.SetNumOffset(m_pSetPageNumberNF->GetValue());
+    if (m_xSetPageNumberCB->get_active())
+        aTitleDesc.SetNumOffset(m_xSetPageNumberNF->get_value());
     else if (mpPageFormatDesc)
         aTitleDesc.SetNumOffset(mpPageFormatDesc->GetNumOffset());
 
-    sal_uInt16 nNoPages = m_pPageCountNF->GetValue();
-    if (!m_pUseExistingPagesRB->IsChecked())
+    sal_uInt16 nNoPages = m_xPageCountNF->get_value();
+    if (!m_xUseExistingPagesRB->get_active())
     {
         mpSh->GotoPage(GetInsertPosition(), false);
         for (sal_uInt16 nI=0; nI < nNoPages; ++nI)
@@ -329,9 +303,9 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, Button*, void)
         mpSh->SetAttrItem(aPageFormatDesc);
     }
 
-    if (m_pRestartNumberingCB->IsChecked() || nNoPages > 1)
+    if (m_xRestartNumberingCB->get_active() || nNoPages > 1)
     {
-        sal_uInt16 nPgNo = m_pRestartNumberingCB->IsChecked() ? m_pRestartNumberingNF->GetValue() : 0;
+        sal_uInt16 nPgNo = m_xRestartNumberingCB->get_active() ? m_xRestartNumberingNF->get_value() : 0;
         const SwPageDesc *pNewDesc = nNoPages > 1 ? mpNormalDesc : nullptr;
         mpSh->GotoPage(GetInsertPosition() + nNoPages, false);
         lcl_ChangePage(mpSh, nPgNo, pNewDesc);
@@ -339,9 +313,9 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, Button*, void)
 
     mpSh->EndUndo();
     lcl_PopCursor(mpSh);
-    if (!m_pUseExistingPagesRB->IsChecked())
+    if (!m_xUseExistingPagesRB->get_active())
         mpSh->GotoPage(GetInsertPosition(), false);
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
