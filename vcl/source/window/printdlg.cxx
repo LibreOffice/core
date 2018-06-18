@@ -519,6 +519,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     get(mpNupOrderWin, "orderpreview");
     get(mpNupPagesBox, "pagespersheetbox");
     get(mpNupOrientationBox, "pageorientationbox");
+    get(mpNupOrderTxt, "labelorder");
     get(mpNupOrderBox, "orderbox");
     get(mpPagesBtn, "pagespersheetbtn");
     get(mpBrochureBtn, "brochure");
@@ -640,6 +641,8 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     mpCopyCountField->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     mpNupColEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     mpNupRowsEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    mpPageMarginEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    mpSheetMarginEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
     preparePreview( true, true );
 }
@@ -691,6 +694,7 @@ void PrintDialog::dispose()
     mpNupOrientationBox.clear();
     mpNupOrderBox.clear();
     mpNupOrderWin.clear();
+    mpNupOrderTxt.clear();
     mpBorderCB.clear();
     ModalDialog::dispose();
 }
@@ -1025,8 +1029,26 @@ void PrintDialog::updateNupFromPages()
     mpSheetMarginEdt->SetValue( mpSheetMarginEdt->Normalize( nSheetMargin ), FUNIT_100TH_MM );
 
     showAdvancedControls( bCustom );
-
     updateNup();
+}
+
+void PrintDialog::enableNupControls( bool bEnable )
+{
+    mpNupPagesBox->Enable( bEnable );
+    mpNupNumPagesTxt->Enable( bEnable );
+    mpNupColEdt->Enable( bEnable );
+    mpNupTimesTxt->Enable( bEnable );
+    mpNupRowsEdt->Enable( bEnable );
+    mpPageMarginTxt1->Enable( bEnable );
+    mpPageMarginEdt->Enable( bEnable );
+    mpPageMarginTxt2->Enable( bEnable );
+    mpSheetMarginTxt1->Enable( bEnable );
+    mpSheetMarginEdt->Enable( bEnable );
+    mpSheetMarginTxt2->Enable( bEnable );
+    mpNupOrderTxt->Enable( bEnable );
+    mpNupOrderBox->Enable( bEnable );
+    mpNupOrderWin->Enable( bEnable );
+    mpBorderCB->Enable( bEnable );
 }
 
 void PrintDialog::showAdvancedControls( bool i_bShow )
@@ -1233,8 +1255,7 @@ void PrintDialog::setupOptionalUI()
         else if( aCtrlType == "Bool" && aGroupingHint == "LayoutPage" && aPropertyName == "PrintProspect" )
         {
             mpBrochureBtn->SetText( aText );
-            // FIXME: Brochure button is still not working, so it is hidden for now
-            // mpBrochureBtn->Show();
+            mpBrochureBtn->Show();
 
             bool bVal = false;
             PropertyValue* pVal = maPController->getValue( aPropertyName );
@@ -1583,12 +1604,12 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
             mpNupPagesBox->SelectEntryPos( 0 );
             updateNupFromPages();
             showAdvancedControls( false );
-            //enableNupControls( false );
+            enableNupControls( false );
         }
     }
     else if( pButton == mpPagesBtn )
     {
-        //enableNupControls( true );
+        enableNupControls( true );
         updateNupFromPages();
     }
     else if( pButton == mpCollateBox )
