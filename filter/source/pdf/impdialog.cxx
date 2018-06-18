@@ -1069,107 +1069,80 @@ IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, RadioButton&, void )
     mpNumZoom->Enable( mpRbMagnZoom->IsChecked() );
 }
 
-
 /// The Viewer preferences tab page
-ImpPDFTabViewerPage::ImpPDFTabViewerPage( vcl::Window* pParent,
-                                          const SfxItemSet& rCoreSet )
-: SfxTabPage(pParent, "PdfUserInterfacePage","filter/ui/pdfuserinterfacepage.ui", &rCoreSet)
-  , mbIsPresentation(false)
+ImpPDFTabViewerPage::ImpPDFTabViewerPage(TabPageParent pParent, const SfxItemSet& rCoreSet )
+    : SfxTabPage(pParent, "filter/ui/pdfuserinterfacepage.ui", "PdfUserInterfacePage", &rCoreSet)
+    , mbIsPresentation(false)
+    , m_xCbResWinInit(m_xBuilder->weld_check_button("resize"))
+    , m_xCbCenterWindow(m_xBuilder->weld_check_button("center"))
+    , m_xCbOpenFullScreen(m_xBuilder->weld_check_button("open"))
+    , m_xCbDispDocTitle(m_xBuilder->weld_check_button("display"))
+    , m_xCbHideViewerMenubar(m_xBuilder->weld_check_button("menubar"))
+    , m_xCbHideViewerToolbar(m_xBuilder->weld_check_button("toolbar"))
+    , m_xCbHideViewerWindowControls(m_xBuilder->weld_check_button("window"))
+    , m_xCbTransitionEffects(m_xBuilder->weld_check_button("effects"))
+    , m_xRbAllBookmarkLevels(m_xBuilder->weld_radio_button("allbookmarks"))
+    , m_xRbVisibleBookmarkLevels(m_xBuilder->weld_radio_button("visiblebookmark"))
+    , m_xNumBookmarkLevels(m_xBuilder->weld_spin_button("visiblelevel"))
 {
-    get(m_pCbResWinInit,"resize");
-    get(m_pCbCenterWindow,"center");
-    get(m_pCbOpenFullScreen,"open");
-    get(m_pCbDispDocTitle,"display");
-    get(m_pCbHideViewerMenubar,"menubar");
-    get(m_pCbHideViewerToolbar,"toolbar");
-    get(m_pCbHideViewerWindowControls,"window");
-    get(m_pCbTransitionEffects,"effects");
-    get(m_pRbAllBookmarkLevels,"allbookmarks");
-    get(m_pRbVisibleBookmarkLevels,"visiblebookmark");
-    get(m_pNumBookmarkLevels,"visiblelevel");
-
-    m_pRbAllBookmarkLevels->SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
-    m_pRbVisibleBookmarkLevels->SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
+    m_xRbAllBookmarkLevels->connect_toggled(LINK(this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl));
+    m_xRbVisibleBookmarkLevels->connect_toggled(LINK(this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl));
 }
-
 
 ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
 {
-    disposeOnce();
 }
 
-
-void ImpPDFTabViewerPage::dispose()
+IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, weld::ToggleButton&, void )
 {
-    m_pCbResWinInit.clear();
-    m_pCbCenterWindow.clear();
-    m_pCbOpenFullScreen.clear();
-    m_pCbDispDocTitle.clear();
-    m_pCbHideViewerMenubar.clear();
-    m_pCbHideViewerToolbar.clear();
-    m_pCbHideViewerWindowControls.clear();
-    m_pCbTransitionEffects.clear();
-    m_pRbAllBookmarkLevels.clear();
-    m_pRbVisibleBookmarkLevels.clear();
-    m_pNumBookmarkLevels.clear();
-    SfxTabPage::dispose();
+    m_xNumBookmarkLevels->set_sensitive(m_xRbVisibleBookmarkLevels->get_active());
 }
-
-
-IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, RadioButton&, void )
-{
-    m_pNumBookmarkLevels->Enable( m_pRbVisibleBookmarkLevels->IsChecked() );
-}
-
 
 VclPtr<SfxTabPage> ImpPDFTabViewerPage::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabViewerPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabViewerPage>::Create(pParent, *rAttrSet);
 }
-
 
 void ImpPDFTabViewerPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
-    paParent->mbHideViewerMenubar = m_pCbHideViewerMenubar->IsChecked();
-    paParent->mbHideViewerToolbar = m_pCbHideViewerToolbar->IsChecked( );
-    paParent->mbHideViewerWindowControls = m_pCbHideViewerWindowControls->IsChecked();
-    paParent->mbResizeWinToInit = m_pCbResWinInit->IsChecked();
-    paParent->mbOpenInFullScreenMode = m_pCbOpenFullScreen->IsChecked();
-    paParent->mbCenterWindow = m_pCbCenterWindow->IsChecked();
-    paParent->mbDisplayPDFDocumentTitle = m_pCbDispDocTitle->IsChecked();
-    paParent->mbUseTransitionEffects = m_pCbTransitionEffects->IsChecked();
-    paParent->mnOpenBookmarkLevels = m_pRbAllBookmarkLevels->IsChecked() ?
-                                     -1 : static_cast<sal_Int32>(m_pNumBookmarkLevels->GetValue());
+    paParent->mbHideViewerMenubar = m_xCbHideViewerMenubar->get_active();
+    paParent->mbHideViewerToolbar = m_xCbHideViewerToolbar->get_active();
+    paParent->mbHideViewerWindowControls = m_xCbHideViewerWindowControls->get_active();
+    paParent->mbResizeWinToInit = m_xCbResWinInit->get_active();
+    paParent->mbOpenInFullScreenMode = m_xCbOpenFullScreen->get_active();
+    paParent->mbCenterWindow = m_xCbCenterWindow->get_active();
+    paParent->mbDisplayPDFDocumentTitle = m_xCbDispDocTitle->get_active();
+    paParent->mbUseTransitionEffects = m_xCbTransitionEffects->get_active();
+    paParent->mnOpenBookmarkLevels = m_xRbAllBookmarkLevels->get_active() ?
+                                     -1 : static_cast<sal_Int32>(m_xNumBookmarkLevels->get_value());
 }
-
 
 void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
-    m_pCbHideViewerMenubar->Check( paParent->mbHideViewerMenubar );
-    m_pCbHideViewerToolbar->Check( paParent->mbHideViewerToolbar );
-    m_pCbHideViewerWindowControls->Check( paParent->mbHideViewerWindowControls );
+    m_xCbHideViewerMenubar->set_active( paParent->mbHideViewerMenubar );
+    m_xCbHideViewerToolbar->set_active( paParent->mbHideViewerToolbar );
+    m_xCbHideViewerWindowControls->set_active( paParent->mbHideViewerWindowControls );
 
-    m_pCbResWinInit->Check( paParent->mbResizeWinToInit );
-    m_pCbOpenFullScreen->Check( paParent->mbOpenInFullScreenMode );
-    m_pCbCenterWindow->Check( paParent->mbCenterWindow );
-    m_pCbDispDocTitle->Check( paParent->mbDisplayPDFDocumentTitle );
+    m_xCbResWinInit->set_active( paParent->mbResizeWinToInit );
+    m_xCbOpenFullScreen->set_active( paParent->mbOpenInFullScreenMode );
+    m_xCbCenterWindow->set_active( paParent->mbCenterWindow );
+    m_xCbDispDocTitle->set_active( paParent->mbDisplayPDFDocumentTitle );
     mbIsPresentation = paParent->mbIsPresentation;
-    m_pCbTransitionEffects->Check( paParent->mbUseTransitionEffects );
-    m_pCbTransitionEffects->Enable( mbIsPresentation );
+    m_xCbTransitionEffects->set_active( paParent->mbUseTransitionEffects );
+    m_xCbTransitionEffects->set_sensitive( mbIsPresentation );
     if( paParent->mnOpenBookmarkLevels < 0 )
     {
-        m_pRbAllBookmarkLevels->Check();
-        m_pNumBookmarkLevels->Enable( false );
+        m_xRbAllBookmarkLevels->set_active(true);
+        m_xNumBookmarkLevels->set_sensitive( false );
     }
     else
     {
-        m_pRbVisibleBookmarkLevels->Check();
-        m_pNumBookmarkLevels->Enable();
-        m_pNumBookmarkLevels->SetValue( paParent->mnOpenBookmarkLevels );
+        m_xRbVisibleBookmarkLevels->set_active(true);
+        m_xNumBookmarkLevels->set_sensitive(true);
+        m_xNumBookmarkLevels->set_value(paParent->mnOpenBookmarkLevels);
     }
 }
-
 
 /// The Security preferences tab page
 ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(TabPageParent i_pParent, const SfxItemSet& i_rCoreSet)
