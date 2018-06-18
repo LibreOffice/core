@@ -16,6 +16,24 @@
       "revId": "a8b83b93154fbef069f806683b12623ab973a117",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_7c894aca",
+        "filename": "sc/source/ui/docshell/documentlinkmgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2018-06-18T08:31:21Z",
+      "side": 1,
+      "message": "It is a destructor, no need to clear anything.",
+      "parentUuid": "5a22e58a_cddc4b1b",
+      "revId": "a8b83b93154fbef069f806683b12623ab973a117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
