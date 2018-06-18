@@ -622,7 +622,7 @@ public:
         SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton) override;
     virtual VclPtr<AbstractInsFootNoteDlg>     CreateInsFootNoteDlg(
         weld::Window * pParent, SwWrtShell &rSh, bool bEd = false) override;
-    virtual VclPtr<VclAbstractDialog>         CreateTitlePageDlg ( vcl::Window * pParent ) override;
+    virtual VclPtr<VclAbstractDialog>         CreateTitlePageDlg(weld::Window* pParent) override;
     virtual VclPtr<VclAbstractDialog>         CreateVclSwViewDialog(SwView& rView) override;
     virtual VclPtr<AbstractInsTableDlg>        CreateInsTableDlg(SwView& rView) override;
     virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(weld::Window* pParent,
