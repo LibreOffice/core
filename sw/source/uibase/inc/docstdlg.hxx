@@ -20,18 +20,14 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DOCSTDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
-
-#include <vcl/fixed.hxx>
-
 #include <docstat.hxx>
 
 // DocInfo now as page
 class SwDocStatPage final : public SfxTabPage
 {
 public:
-    SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwDocStatPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
 
@@ -39,20 +35,19 @@ private:
     virtual bool    FillItemSet(      SfxItemSet *rSet) override;
     virtual void    Reset      (const SfxItemSet *rSet) override;
 
-    DECL_LINK(UpdateHdl, Button*, void);
+    DECL_LINK(UpdateHdl, weld::Button&, void);
 
-    VclPtr<FixedText>      m_pPageNo;
-    VclPtr<FixedText>      m_pTableNo;
-    VclPtr<FixedText>      m_pGrfNo;
-    VclPtr<FixedText>      m_pOLENo;
-    VclPtr<FixedText>      m_pParaNo;
-    VclPtr<FixedText>      m_pWordNo;
-    VclPtr<FixedText>      m_pCharNo;
-    VclPtr<FixedText>      m_pCharExclSpacesNo;
-
-    VclPtr<FixedText>      m_pLineLbl;
-    VclPtr<FixedText>      m_pLineNo;
-    VclPtr<PushButton>     m_pUpdatePB;
+    std::unique_ptr<weld::Label> m_xPageNo;
+    std::unique_ptr<weld::Label> m_xTableNo;
+    std::unique_ptr<weld::Label> m_xGrfNo;
+    std::unique_ptr<weld::Label> m_xOLENo;
+    std::unique_ptr<weld::Label> m_xParaNo;
+    std::unique_ptr<weld::Label> m_xWordNo;
+    std::unique_ptr<weld::Label> m_xCharNo;
+    std::unique_ptr<weld::Label> m_xCharExclSpacesNo;
+    std::unique_ptr<weld::Label> m_xLineLbl;
+    std::unique_ptr<weld::Label> m_xLineNo;
+    std::unique_ptr<weld::Button> m_xUpdatePB;
 
     SwDocStat       aDocStat;
 
