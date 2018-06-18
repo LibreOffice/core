@@ -259,6 +259,7 @@ bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
     OUString aUpperName;
     static OUString aCacheName, aCacheUpperName;
 
+    assert(!IsThreadedGroupCalcInProgress());
     if (aCacheName != rName)
     {
         aCacheName = rName;
