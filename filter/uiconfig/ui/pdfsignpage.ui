@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkFrame" id="PdfSignPage">
@@ -33,10 +33,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="pdfsignpage|label2">Use this certificate to digitally sign PDF documents:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">cert</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -48,6 +48,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -106,6 +107,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="visibility">False</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -117,6 +119,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -128,6 +131,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -139,6 +143,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -149,7 +154,6 @@
                   <object class="GtkComboBoxText" id="tsa">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_entry">False</property>
                     <items>
                       <item translatable="yes" context="pdfsignpage|tsa">None</item>
                     </items>
@@ -163,10 +167,10 @@
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="pdfsignpage|label7">Certificate password:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">password</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -177,10 +181,10 @@
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="pdfsignpage|label12">Location:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">location</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -191,10 +195,10 @@
                   <object class="GtkLabel" id="label13">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="pdfsignpage|label13">Contact information:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">contact</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -205,10 +209,10 @@
                   <object class="GtkLabel" id="label14">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="pdfsignpage|label14">Reason:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">reason</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -219,10 +223,10 @@
                   <object class="GtkLabel" id="label15">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="pdfsignpage|label15">Time Stamp Authority:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">tsa</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
