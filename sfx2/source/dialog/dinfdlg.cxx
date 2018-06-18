@@ -604,45 +604,34 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-SfxDocumentDescPage::SfxDocumentDescPage( vcl::Window * pParent, const SfxItemSet& rItemSet )
-    : SfxTabPage(pParent, "DescriptionInfoPage", "sfx/ui/descriptioninfopage.ui", &rItemSet)
-    , m_pInfoItem   ( nullptr )
-
+SfxDocumentDescPage::SfxDocumentDescPage(TabPageParent pParent, const SfxItemSet& rItemSet)
+    : SfxTabPage(pParent, "sfx/ui/descriptioninfopage.ui", "DescriptionInfoPage", &rItemSet)
+    , m_pInfoItem( nullptr)
+    , m_xTitleEd(m_xBuilder->weld_entry("title"))
+    , m_xThemaEd(m_xBuilder->weld_entry("subject"))
+    , m_xKeywordsEd(m_xBuilder->weld_entry("keywords"))
+    , m_xCommentEd(m_xBuilder->weld_text_view("comments"))
 {
-    get(m_pTitleEd, "title");
-    get(m_pThemaEd, "subject");
-    get(m_pKeywordsEd, "keywords");
-    get(m_pCommentEd, "comments");
-    m_pCommentEd->set_width_request(m_pKeywordsEd->get_preferred_size().Width());
-    m_pCommentEd->set_height_request(m_pCommentEd->GetTextHeight() * 16);
+    m_xCommentEd->set_size_request(m_xKeywordsEd->get_preferred_size().Width(),
+                                   m_xCommentEd->get_height_rows(16));
 }
 
 SfxDocumentDescPage::~SfxDocumentDescPage()
 {
-    disposeOnce();
-}
-
-void SfxDocumentDescPage::dispose()
-{
-    m_pTitleEd.clear();
-    m_pThemaEd.clear();
-    m_pKeywordsEd.clear();
-    m_pCommentEd.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SfxDocumentDescPage::Create(TabPageParent pParent, const SfxItemSet *rItemSet)
 {
-     return VclPtr<SfxDocumentDescPage>::Create(pParent.pParent, *rItemSet);
+     return VclPtr<SfxDocumentDescPage>::Create(pParent, *rItemSet);
 }
 
 bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
 {
     // Test whether a change is present
-    const bool bTitleMod = m_pTitleEd->IsModified();
-    const bool bThemeMod = m_pThemaEd->IsModified();
-    const bool bKeywordsMod = m_pKeywordsEd->IsModified();
-    const bool bCommentMod = m_pCommentEd->IsModified();
+    const bool bTitleMod = m_xTitleEd->get_value_changed_from_saved();
+    const bool bThemeMod = m_xThemaEd->get_value_changed_from_saved();
+    const bool bKeywordsMod = m_xKeywordsEd->get_value_changed_from_saved();
+    const bool bCommentMod = m_xCommentEd->get_value_changed_from_saved();
     if ( !( bTitleMod || bThemeMod || bKeywordsMod || bCommentMod ) )
     {
         return false;
@@ -670,19 +659,19 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
 
     if ( bTitleMod )
     {
-        pInfo->setTitle( m_pTitleEd->GetText() );
+        pInfo->setTitle( m_xTitleEd->get_text() );
     }
     if ( bThemeMod )
     {
-        pInfo->setSubject( m_pThemaEd->GetText() );
+        pInfo->setSubject( m_xThemaEd->get_text() );
     }
     if ( bKeywordsMod )
     {
-        pInfo->setKeywords( m_pKeywordsEd->GetText() );
+        pInfo->setKeywords( m_xKeywordsEd->get_text() );
     }
     if ( bCommentMod )
     {
-        pInfo->setDescription( m_pCommentEd->GetText() );
+        pInfo->setDescription( m_xCommentEd->get_text() );
     }
     rSet->Put( *pInfo );
     if ( pInfo != m_pInfoItem )
@@ -693,26 +682,29 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     return true;
 }
 
-
 void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
 {
     m_pInfoItem = const_cast<SfxDocumentInfoItem*>(&rSet->Get(SID_DOCINFO));
 
-    m_pTitleEd->SetText( m_pInfoItem->getTitle() );
-    m_pThemaEd->SetText( m_pInfoItem->getSubject() );
-    m_pKeywordsEd->SetText( m_pInfoItem->getKeywords() );
-    m_pCommentEd->SetText( m_pInfoItem->getDescription() );
+    m_xTitleEd->set_text(m_pInfoItem->getTitle());
+    m_xThemaEd->set_text(m_pInfoItem->getSubject());
+    m_xKeywordsEd->set_text(m_pInfoItem->getKeywords());
+    m_xCommentEd->set_text(m_pInfoItem->getDescription());
+
+    m_xTitleEd->save_value();
+    m_xThemaEd->save_value();
+    m_xKeywordsEd->save_value();
+    m_xCommentEd->save_value();
 
     const SfxBoolItem* pROItem = SfxItemSet::GetItem<SfxBoolItem>(rSet, SID_DOC_READONLY, false);
-    if ( pROItem && pROItem->GetValue() )
+    if (pROItem && pROItem->GetValue())
     {
-        m_pTitleEd->SetReadOnly();
-        m_pThemaEd->SetReadOnly();
-        m_pKeywordsEd->SetReadOnly();
-        m_pCommentEd->SetReadOnly();
+        m_xTitleEd->set_editable(false);
+        m_xThemaEd->set_editable(false);
+        m_xKeywordsEd->set_editable(false);
+        m_xCommentEd->set_editable(false);
     }
 }
-
 
 namespace
 {

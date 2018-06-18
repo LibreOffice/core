@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="DescriptionInfoPage">
@@ -14,10 +14,10 @@
       <object class="GtkLabel" id="label27">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes" context="descriptioninfopage|label27">_Title:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">title</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -28,10 +28,10 @@
       <object class="GtkLabel" id="label28">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes" context="descriptioninfopage|label28">_Subject:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">subject</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -42,10 +42,10 @@
       <object class="GtkLabel" id="label29">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes" context="descriptioninfopage|label29">_Keywords:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">keywords</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -57,10 +57,10 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">start</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes" context="descriptioninfopage|label30">_Comments:</property>
         <property name="use_underline">True</property>
-        <property name="mnemonic_widget">comments:border</property>
+        <property name="mnemonic_widget">comments</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -108,7 +108,7 @@
         <property name="vexpand">True</property>
         <property name="shadow_type">in</property>
         <child>
-          <object class="GtkTextView" id="comments:border">
+          <object class="GtkTextView" id="comments">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
