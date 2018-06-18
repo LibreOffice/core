@@ -111,6 +111,7 @@ public:
     void                SwapIn();
     bool                IsSwappedOut() const { return( bool(mpSwapOutData) ); }
 
+    bool                IsEMF() const; // WMF & EMF stored under the same type (NativeWmf)
 public:
 
     friend VCL_DLLPUBLIC SvStream&  WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink );
