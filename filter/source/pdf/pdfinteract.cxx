@@ -60,9 +60,8 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
         for( sal_Int32 i = 0; i < nCodes; i++ )
             aCodes.insert( static_cast<vcl::PDFWriter::ErrorCode>(aExc.ErrorCodes.getConstArray()[i]) );
 
-        VclPtr<vcl::Window> xParent(VCLUnoHelper::GetWindow(m_xParent));
-        ImplErrorDialog aDlg(xParent ? xParent->GetFrameWeld() : nullptr, aCodes);
-        (void)aDlg.run();
+        ImplErrorDialog aDlg(Application::GetFrameWeld(m_xParent), aCodes);
+        aDlg.run();
         bHandled = true;
     }
     return bHandled;

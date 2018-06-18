@@ -81,7 +81,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, weld::Button&, void)
 
 // CTOR / DTOR -----------------------------------------------------------
 
-SfxPasswordDialog::SfxPasswordDialog(weld::Window* pParent, const OUString* pGroupText)
+SfxPasswordDialog::SfxPasswordDialog(weld::Widget* pParent, const OUString* pGroupText)
     : GenericDialogController(pParent, "sfx/ui/password.ui", "PasswordDialog")
     , m_xPassword1Box(m_xBuilder->weld_frame("password1frame"))
     , m_xUserFT(m_xBuilder->weld_label("userft"))
