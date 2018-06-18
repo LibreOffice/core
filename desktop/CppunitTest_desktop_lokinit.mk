@@ -19,6 +19,8 @@ $(eval $(call gb_CppunitTest_use_external,desktop_lok_init,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,desktop_lok_init))
 
+$(eval $(call gb_CppunitTest_use_ure,desktop_lok_init))
+
 $(eval $(call gb_CppunitTest_set_include,desktop_lok_init,\
     -I$(SRCDIR)/desktop/source/inc \
     -I$(SRCDIR)/desktop/inc \
