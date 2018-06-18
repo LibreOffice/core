@@ -2275,8 +2275,9 @@ void ValueSet::SetEdgeBlending(bool bNew)
     }
 }
 
-SvtValueSet::SvtValueSet()
+SvtValueSet::SvtValueSet(weld::ScrolledWindow* pScrolledWindow)
     : maVirDev( VclPtr<VirtualDevice>::Create())
+    , mxScrolledWindow(pScrolledWindow)
     , maColor(COL_TRANSPARENT)
     , mnStyle(0)
     , mbFormat(true)
@@ -2308,6 +2309,12 @@ SvtValueSet::SvtValueSet()
     mbFullMode          = true;
     mbEdgeBlending      = false;
     mbHasVisibleItems   = false;
+
+    if (mxScrolledWindow)
+    {
+        mxScrolledWindow->set_user_managed_scrolling();
+        mxScrolledWindow->connect_vadjustment_changed(LINK(this, SvtValueSet, ImplScrollHdl));
+    }
 }
 
 void SvtValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -2358,10 +2365,6 @@ void SvtValueSet::ImplDeleteItems()
 void SvtValueSet::Select()
 {
     maSelectHdl.Call( this );
-}
-
-void SvtValueSet::UserDraw( const UserDrawEvent& )
-{
 }
 
 size_t SvtValueSet::ImplGetItem( const Point& rPos ) const
@@ -2440,6 +2443,17 @@ bool SvtValueSet::ImplHasAccessibleListeners()
 {
     SvtValueSetAcc* pAcc = SvtValueSetAcc::getImplementation(mxAccessible);
     return( pAcc && pAcc->HasAccessibleListeners() );
+}
+
+IMPL_LINK(SvtValueSet, ImplScrollHdl, weld::ScrolledWindow&, rScrollWin, void)
+{
+    auto nNewFirstLine = rScrollWin.vadjustment_get_value();
+    if ( nNewFirstLine != mnFirstLine )
+    {
+        mnFirstLine = nNewFirstLine;
+        mbFormat = true;
+        Invalidate();
+    }
 }
 
 void SvtValueSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
@@ -2663,6 +2677,50 @@ void SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
     CustomWidgetController::MouseButtonDown( rMouseEvent );
 }
 
+void SvtValueSet::RemoveItem( sal_uInt16 nItemId )
+{
+    size_t nPos = GetItemPos( nItemId );
+
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    if ( nPos < mItemList.size() ) {
+        SvtValueItemList::iterator it = mItemList.begin();
+        ::std::advance( it, nPos );
+        delete *it;
+        mItemList.erase( it );
+    }
+
+    // reset variables
+    if (mnSelItemId == nItemId)
+    {
+        mnCurCol        = 0;
+        mnSelItemId     = 0;
+        mbNoSelection   = true;
+    }
+
+    queue_resize();
+
+    mbFormat = true;
+    if ( IsReallyVisible() && IsUpdateMode() )
+        Invalidate();
+}
+
+void SvtValueSet::Clear()
+{
+    ImplDeleteItems();
+
+    // reset variables
+    mnFirstLine     = 0;
+    mnCurCol        = 0;
+    mnSelItemId     = 0;
+    mbNoSelection   = true;
+
+    mbFormat = true;
+    if (IsReallyVisible() && IsUpdateMode())
+        Invalidate();
+}
+
 size_t SvtValueSet::GetItemCount() const
 {
     return mItemList.size();
@@ -2863,7 +2921,6 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
         Any aNewAny;
         ImplFireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny);
     }
-    maHighlightHdl.Call(this);
 }
 
 void SvtValueSet::SetNoSelection()
@@ -2872,6 +2929,16 @@ void SvtValueSet::SetNoSelection()
 
     if (IsReallyVisible() && IsUpdateMode())
         Invalidate();
+}
+
+void SvtValueSet::SetStyle(WinBits nStyle)
+{
+    if (nStyle != mnStyle)
+    {
+        mnStyle = nStyle;
+        mbFormat = false;
+        Invalidate();
+    }
 }
 
 void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
@@ -2883,6 +2950,13 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
     long nOff;
     long nNoneHeight;
     long nNoneSpace;
+
+    if (mxScrolledWindow && !(nStyle & WB_VSCROLL) && mxScrolledWindow->get_vpolicy() != VclPolicyType::NEVER)
+    {
+        mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
+        Size aPrefSize(GetDrawingArea()->get_preferred_size());
+        GetDrawingArea()->set_size_request(aPrefSize.Width() + GetScrollWidth(), aPrefSize.Height());
+    }
 
     // calculate item offset
     if (nStyle & WB_ITEMBORDER)
@@ -3028,6 +3102,13 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
         {
             mItemList[i]->mbVisible = false;
         }
+
+        if (mxScrolledWindow && mxScrolledWindow->get_vpolicy() != VclPolicyType::NEVER)
+        {
+            mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
+            Size aPrefSize(GetDrawingArea()->get_preferred_size());
+            GetDrawingArea()->set_size_request(aPrefSize.Width() + GetScrollWidth(), aPrefSize.Height());
+        }
     }
     else
     {
@@ -3163,6 +3244,19 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
 
                 pItem->mbVisible = false;
             }
+        }
+
+        // arrange ScrollBar, set values and show it
+        if (mxScrolledWindow && (nStyle & WB_VSCROLL) && mxScrolledWindow->get_vpolicy() != VclPolicyType::ALWAYS)
+        {
+            long nPageSize = mnVisLines;
+            if (nPageSize < 1)
+                nPageSize = 1;
+            mxScrolledWindow->vadjustment_configure(mnFirstLine, 0, mnLines, 1,
+                                                    mnVisLines, nPageSize);
+            mxScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
+            Size aPrefSize(GetDrawingArea()->get_preferred_size());
+            GetDrawingArea()->set_size_request(aPrefSize.Width() - GetScrollWidth(), aPrefSize.Height());
         }
     }
 
@@ -3376,8 +3470,6 @@ void SvtValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtV
 
         if (pItem->meType == VALUESETITEM_USERDRAW)
         {
-            UserDrawEvent aUDEvt(nullptr, maVirDev.get(), aRect, pItem->mnId);
-            UserDraw(aUDEvt);
         }
         else
         {
@@ -3597,6 +3689,9 @@ Size SvtValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesire
         aSize.AdjustHeight(nTxtHeight + n + mnSpacing );
     }
 
+    // sum possible ScrollBar width
+    aSize.AdjustWidth(GetScrollWidth());
+
     return aSize;
 }
 
@@ -3630,6 +3725,13 @@ void SvtValueSet::ImplInsertItem( SvtValueSetItem *const pItem, const size_t nPo
     mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
+}
+
+int SvtValueSet::GetScrollWidth() const
+{
+    if (mxScrolledWindow)
+        return mxScrolledWindow->get_vscroll_width();
+    return 0;
 }
 
 void SvtValueSet::SetEdgeBlending(bool bNew)

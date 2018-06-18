@@ -45,7 +45,7 @@ public:
 class SVX_DLLPUBLIC ColorValueSet : public SvtValueSet
 {
 public:
-    ColorValueSet();
+    ColorValueSet(weld::ScrolledWindow* pWindow);
 
     virtual void Resize() override;
 
