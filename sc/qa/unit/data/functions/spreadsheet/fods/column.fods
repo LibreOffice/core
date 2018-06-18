@@ -7224,34 +7224,75 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce12" table:formula="of:=COLUMN([&apos;file:///fake_path/filename&apos;#$Sheet3.B3])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce47" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=COLUMN(&apos;file:///fake_path/filename&apos;#$Sheet3.B3)" calcext:value-type="string">
+      <text:p>=COLUMN(&apos;file:///fake_path/filename&apos;#$Sheet3.B3)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="19"/>
      <table:table-cell table:style-name="ce8"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce12" table:formula="of:=[.F21]" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce47" table:formula="of:=[.A20]=[.B20]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.F21])" office:value-type="string" office:string-value="{=COLUMN(&apos;file:///fake_path/filename&apos;#$Sheet3.B3:D8)}" calcext:value-type="string">
+      <text:p>{=COLUMN(&apos;file:///fake_path/filename&apos;#$Sheet3.B3:D8)}</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="25"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce4"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell table:style-name="ce4"/>
-     <table:table-cell table:number-columns-repeated="24"/>
+     <table:table-cell table:formula="of:=[.G21]" office:value-type="float" office:value="3" calcext:value-type="float">
+     <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce47" table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.G21])" office:value-type="string" office:string-value="{=COLUMN(&apos;file:///fake_path/filename&apos;#$Sheet3.B3:D8)}" calcext:value-type="string">
+      <text:p>{=COLUMN(&apos;file:///fake_path/filename&apos;#$Sheet3.B3:D8)}</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce35"/>
+     <table:table-cell table:number-matrix-columns-spanned="3" table:number-matrix-rows-spanned="1" table:formula="of:=COLUMN([&apos;file:///fake_path/filename&apos;#$Sheet3.B3:.D8])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce4"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:formula="of:=[.H21]" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce47" table:formula="of:=[.A22]=[.B22]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.H21])" office:value-type="string" office:string-value="{=COLUMN(&apos;file:///fake_path/filename&apos;#$Sheet3.B3:D8)}" calcext:value-type="string">
+      <text:p>{=COLUMN(&apos;file:///fake_path/filename&apos;#$Sheet3.B3:D8)}</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce25"/>
      <table:table-cell table:number-columns-repeated="24"/>
     </table:table-row>
