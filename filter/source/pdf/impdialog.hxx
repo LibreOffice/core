@@ -398,24 +398,24 @@ public:
 //class to implement the digital signing
 class ImpPDFTabSigningPage : public SfxTabPage
 {
-    VclPtr<Edit>                mpEdSignCert;
-    VclPtr<PushButton>          mpPbSignCertSelect;
-    VclPtr<PushButton>          mpPbSignCertClear;
-    VclPtr<Edit>                mpEdSignPassword;
-    VclPtr<Edit>                mpEdSignLocation;
-    VclPtr<Edit>                mpEdSignContactInfo;
-    VclPtr<Edit>                mpEdSignReason;
-    VclPtr<ListBox>             mpLBSignTSA;
     css::uno::Reference< css::security::XCertificate > maSignCertificate;
 
-    DECL_LINK( ClickmaPbSignCertSelect, Button*, void );
-    DECL_LINK( ClickmaPbSignCertClear, Button*, void );
+    std::unique_ptr<weld::Entry> mxEdSignCert;
+    std::unique_ptr<weld::Button> mxPbSignCertSelect;
+    std::unique_ptr<weld::Button> mxPbSignCertClear;
+    std::unique_ptr<weld::Entry> mxEdSignPassword;
+    std::unique_ptr<weld::Entry> mxEdSignLocation;
+    std::unique_ptr<weld::Entry> mxEdSignContactInfo;
+    std::unique_ptr<weld::Entry> mxEdSignReason;
+    std::unique_ptr<weld::ComboBoxText> mxLBSignTSA;
+
+    DECL_LINK(ClickmaPbSignCertSelect, weld::Button&, void);
+    DECL_LINK(ClickmaPbSignCertClear, weld::Button&, void);
 
 public:
-                                ImpPDFTabSigningPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ImpPDFTabSigningPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabSigningPage() override;
 
-    virtual void                dispose() override;
     static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -423,6 +423,5 @@ public:
 };
 
 #endif // INCLUDED_FILTER_SOURCE_PDF_IMPDIALOG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
