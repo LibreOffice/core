@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="PdfSecurityPage">
@@ -49,8 +49,8 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label5">Open password set</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -61,8 +61,8 @@
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label6">PDF document will be encrypted</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -84,8 +84,8 @@
                       <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label7">No open password set</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -96,8 +96,8 @@
                       <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label8">PDF document will not be encrypted</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -119,9 +119,9 @@
                       <object class="GtkLabel" id="label30">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label30">PDF document will not be encrypted due to PDF/A export.</property>
                         <property name="wrap">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -143,8 +143,8 @@
                       <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label9">Permission password set</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -155,8 +155,8 @@
                       <object class="GtkLabel" id="label11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label11">PDF document will be restricted</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -178,8 +178,8 @@
                       <object class="GtkLabel" id="label12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label12">No permission password set</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -190,8 +190,8 @@
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label13">PDF document will be unrestricted</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -213,9 +213,9 @@
                       <object class="GtkLabel" id="label14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pdfsecuritypage|label14">PDF document will not be restricted due to PDF/A export.</property>
                         <property name="wrap">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -233,8 +233,8 @@
                   <object class="GtkLabel" id="setpasswordstitle">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="pdfsecuritypage|setpasswordstitle">Set Passwords</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -295,7 +295,6 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">printlow</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -311,7 +310,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">printhigh</property>
+                        <property name="group">printnone</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -382,7 +381,6 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">changeinsdel</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -398,7 +396,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">changeform</property>
+                        <property name="group">changenone</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -414,7 +412,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">changecomment</property>
+                        <property name="group">changenone</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -430,7 +428,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">changeany</property>
+                        <property name="group">changenone</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
