@@ -36,60 +36,38 @@
 
 VclPtr<SfxTabPage> SwDocStatPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwDocStatPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwDocStatPage>::Create(pParent, *rSet);
 }
 
-SwDocStatPage::SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet)
-
-    : SfxTabPage(pParent, "StatisticsInfoPage", "modules/swriter/ui/statisticsinfopage.ui", &rSet)
-
+SwDocStatPage::SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
+    , m_xPageNo(m_xBuilder->weld_label("nopages"))
+    , m_xTableNo(m_xBuilder->weld_label("notables"))
+    , m_xGrfNo(m_xBuilder->weld_label("nogrfs"))
+    , m_xOLENo(m_xBuilder->weld_label("nooles"))
+    , m_xParaNo(m_xBuilder->weld_label("noparas"))
+    , m_xWordNo(m_xBuilder->weld_label("nowords"))
+    , m_xCharNo(m_xBuilder->weld_label("nochars"))
+    , m_xCharExclSpacesNo(m_xBuilder->weld_label("nocharsexspaces"))
+    , m_xLineLbl(m_xBuilder->weld_label("lineft"))
+    , m_xLineNo(m_xBuilder->weld_label("nolines"))
+    , m_xUpdatePB(m_xBuilder->weld_button("update"))
 {
-    get(m_pPageNo, "nopages");
-    get(m_pTableNo, "notables");
-    get(m_pGrfNo, "nogrfs");
-    get(m_pOLENo, "nooles");
-    get(m_pParaNo, "noparas");
-    get(m_pWordNo, "nowords");
-    get(m_pCharNo, "nochars");
-    get(m_pCharExclSpacesNo, "nocharsexspaces");
-
-    get(m_pLineLbl, "lineft");
-    get(m_pLineNo, "nolines");
-    get(m_pUpdatePB, "update");
-
     Update();
-    m_pUpdatePB->SetClickHdl(LINK(this, SwDocStatPage, UpdateHdl));
+    m_xUpdatePB->connect_clicked(LINK(this, SwDocStatPage, UpdateHdl));
     //#111684# is the current view a page preview no SwFEShell can be found -> hide the update button
     SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current() );
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(!pFEShell)
     {
-        m_pUpdatePB->Show(false);
-        m_pLineLbl->Show(false);
-        m_pLineNo->Show(false);
+        m_xUpdatePB->show(false);
+        m_xLineLbl->show(false);
+        m_xLineNo->show(false);
     }
-
 }
 
 SwDocStatPage::~SwDocStatPage()
 {
-    disposeOnce();
-}
-
-void SwDocStatPage::dispose()
-{
-    m_pPageNo.clear();
-    m_pTableNo.clear();
-    m_pGrfNo.clear();
-    m_pOLENo.clear();
-    m_pParaNo.clear();
-    m_pWordNo.clear();
-    m_pCharNo.clear();
-    m_pCharExclSpacesNo.clear();
-    m_pLineLbl.clear();
-    m_pLineNo.clear();
-    m_pUpdatePB.clear();
-    SfxTabPage::dispose();
 }
 
 // Description: fill ItemSet when changed
@@ -106,14 +84,14 @@ void  SwDocStatPage::Reset(const SfxItemSet *)
 void SwDocStatPage::SetData(const SwDocStat &rStat)
 {
     const LocaleDataWrapper& rLocaleData = GetSettings().GetUILocaleDataWrapper();
-    m_pTableNo->SetText(rLocaleData.getNum(rStat.nTable, 0));
-    m_pGrfNo->SetText(rLocaleData.getNum(rStat.nGrf, 0));
-    m_pOLENo->SetText(rLocaleData.getNum(rStat.nOLE, 0));
-    m_pPageNo->SetText(rLocaleData.getNum(rStat.nPage, 0));
-    m_pParaNo->SetText(rLocaleData.getNum(rStat.nPara, 0));
-    m_pWordNo->SetText(rLocaleData.getNum(rStat.nWord, 0));
-    m_pCharNo->SetText(rLocaleData.getNum(rStat.nChar, 0));
-    m_pCharExclSpacesNo->SetText(rLocaleData.getNum(rStat.nCharExcludingSpaces, 0));
+    m_xTableNo->set_label(rLocaleData.getNum(rStat.nTable, 0));
+    m_xGrfNo->set_label(rLocaleData.getNum(rStat.nGrf, 0));
+    m_xOLENo->set_label(rLocaleData.getNum(rStat.nOLE, 0));
+    m_xPageNo->set_label(rLocaleData.getNum(rStat.nPage, 0));
+    m_xParaNo->set_label(rLocaleData.getNum(rStat.nPara, 0));
+    m_xWordNo->set_label(rLocaleData.getNum(rStat.nWord, 0));
+    m_xCharNo->set_label(rLocaleData.getNum(rStat.nChar, 0));
+    m_xCharExclSpacesNo->set_label(rLocaleData.getNum(rStat.nCharExcludingSpaces, 0));
 }
 
 // Description: update statistics
@@ -139,14 +117,13 @@ void SwDocStatPage::Update()
     SetData(aDocStat);
 }
 
-IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, Button*, void)
+IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, weld::Button&, void)
 {
     Update();
     SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current());
     SwFEShell* pFEShell = pDocShell->GetFEShell();
-    if(pFEShell)
-        m_pLineNo->SetText( OUString::number( pFEShell->GetLineCount()));
-    //pButton->Disable();
+    if (pFEShell)
+        m_xLineNo->set_label(OUString::number(pFEShell->GetLineCount()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
