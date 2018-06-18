@@ -29,6 +29,8 @@
 #include <editeng/tstpitem.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/ctloptions.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/multisel.hxx>
 #include <swmodule.hxx>
 #include <txtfld.hxx>
@@ -2124,8 +2126,49 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         assert(!pOtherDoc);
 
         // harte Absatz umspannende Attribute kopieren
-        if( HasSwAttrSet() )
+        if (HasSwAttrSet())
         {
+            bool hasSwAttrSet = pDest->HasSwAttrSet();
+            if (hasSwAttrSet)
+            {
+                // if we have our own property set it doesn't mean
+                // that this set defines any style different to Standard one.
+                hasSwAttrSet = false;
+
+                // so, let's check deeper if property set has defined any property
+                if (pDest->GetpSwAttrSet())
+                {
+                    // check all items in the property set
+                    SfxItemIter aIter( *pDest->GetpSwAttrSet() );
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
+                    while( true )
+                    {
+                        // check current item
+                        sal_uInt16 nWhich = IsInvalidItem( pItem )
+                            ? pDest->GetpSwAttrSet()->GetWhichByPos( aIter.GetCurPos() )
+                            : pItem->Which();
+                        if( RES_FRMATR_STYLE_NAME != nWhich &&
+                            RES_FRMATR_CONDITIONAL_STYLE_NAME != nWhich &&
+                            SFX_ITEM_SET == pDest->GetpSwAttrSet()->GetItemState( nWhich, false ) )
+                        {
+                            // check if parent value (original value in style) has the same value as in [pItem]
+                            const SfxPoolItem&  rParentItem = pDest->GetpSwAttrSet()->GetParent()->Get( nWhich, true );
+
+                            hasSwAttrSet = (rParentItem != *pItem);
+
+                            // property set is not empty => no need to make anymore checks
+                            if (hasSwAttrSet)
+                                break;
+                        }
+
+                        // let's check next item
+                        if( aIter.IsAtEnd() )
+                            break;
+                        pItem = aIter.NextItem();
+                    }
+                }
+            }
+
             // alle, oder nur die CharAttribute ?
             if( nInitSize || pDest->HasSwAttrSet() ||
                 nLen != pDest->GetTxt().getLength())
