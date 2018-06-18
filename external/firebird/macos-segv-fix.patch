@@ -1,0 +1,113 @@
+--- src/common/classes/alloc.cpp
++++ src/common/classes/alloc.cpp
+@@ -2187,7 +2187,7 @@
+ 
+ void* MemPool::allocRaw(size_t size) throw (OOM_EXCEPTION)
+ {
+-#ifndef USE_VALGRIND
++#if !(defined USE_VALGRIND || defined USE_ASAN)
+ 	if (size == DEFAULT_ALLOCATION)
+ 	{
+ 		MutexLockGuard guard(*cache_mutex, "MemPool::allocRaw");
+@@ -2267,7 +2267,7 @@
+ 
+ void MemPool::releaseRaw(bool destroying, void* block, size_t size, bool use_cache) throw ()
+ {
+-#ifndef USE_VALGRIND
++#if !(defined USE_VALGRIND || defined USE_ASAN)
+ 	if (use_cache && (size == DEFAULT_ALLOCATION))
+ 	{
+ 		MutexLockGuard guard(*cache_mutex, "MemPool::releaseRaw");
+@@ -2277,7 +2277,7 @@
+ 			return;
+ 		}
+ 	}
+-#else
++#elif defined USE_VALGRIND
+ 	// Set access protection for block to prevent memory from deleted pool being accessed
+ 	int handle = /* //VALGRIND_MAKE_NOACCESS */ VALGRIND_MAKE_MEM_DEFINED(block, size);
+ 
+--- src/common/classes/alloc.h
++++ src/common/classes/alloc.h
+@@ -295,40 +295,60 @@
+ 
+ // operators new and delete
+ 
++#if !defined USE_ASAN
+ inline void* operator new(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION)
+ {
+ 	return MemoryPool::globalAlloc(s ALLOC_PASS_ARGS);
+ }
+ inline void* operator new[](size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION)
+ {
+ 	return MemoryPool::globalAlloc(s ALLOC_PASS_ARGS);
+ }
++#endif
+ 
+ inline void* operator new(size_t s, Firebird::MemoryPool& pool ALLOC_PARAMS) throw (OOM_EXCEPTION)
+ {
++#if defined USE_ASAN
++	return operator new(s);
++#else
+ 	return pool.allocate(s ALLOC_PASS_ARGS);
++#endif
+ }
+ inline void* operator new[](size_t s, Firebird::MemoryPool& pool ALLOC_PARAMS) throw (OOM_EXCEPTION)
+ {
++#if defined USE_ASAN
++	return operator new[](s);
++#else
+ 	return pool.allocate(s ALLOC_PASS_ARGS);
++#endif
+ }
+ 
++#if !defined USE_ASAN
+ inline void operator delete(void* mem ALLOC_PARAMS) throw()
+ {
+ 	MemoryPool::globalFree(mem);
+ }
+ inline void operator delete[](void* mem ALLOC_PARAMS) throw()
+ {
+ 	MemoryPool::globalFree(mem);
+ }
++#endif
+ 
+ inline void operator delete(void* mem, Firebird::MemoryPool& pool ALLOC_PARAMS) throw()
+ {
++#if defined USE_ASAN
++	return operator delete(mem);
++#else
+ 	MemoryPool::globalFree(mem);
++#endif
+ }
+ inline void operator delete[](void* mem, Firebird::MemoryPool& pool ALLOC_PARAMS) throw()
+ {
++#if defined USE_ASAN
++	return operator delete[](mem);
++#else
+ 	MemoryPool::globalFree(mem);
++#endif
+ }
+ 
+ #ifdef DEBUG_GDS_ALLOC
+--- src/include/firebird.h
++++ src/include/firebird.h
+@@ -38,8 +38,17 @@
+ #include "gen/autoconfig.h"
+ #endif
+ 
++#if defined __clang__ && defined __has_feature
++#if __has_feature(address_sanitizer)
++#define USE_ASAN
++#endif
++#endif
++#if defined __clang__ && (defined __apple_build_version__ ? __clang_major__ >= 9 : __clang_major__ >= 4)
++#define USE_ASAN
++#endif
++
+ // Using our debugging code is pointless when we may use Valgrind features
+-#if defined(DEV_BUILD) && !defined(USE_VALGRIND)
++#if defined(DEV_BUILD) && !(defined(USE_VALGRIND) || defined(USE_ASAN))
+ #define DEBUG_GDS_ALLOC
+ #endif
+ 
