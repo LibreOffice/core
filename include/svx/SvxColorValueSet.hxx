@@ -45,11 +45,13 @@ public:
 class SVX_DLLPUBLIC ColorValueSet : public SvtValueSet
 {
 public:
-    ColorValueSet();
+    ColorValueSet(weld::ScrolledWindow* pWindow);
 
     virtual void Resize() override;
 
     void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
+    void addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix);
+    Size layoutAllVisible(sal_uInt32 nEntryCount);
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };
 
