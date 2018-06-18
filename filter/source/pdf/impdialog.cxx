@@ -1172,82 +1172,46 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 
 
 /// The Security preferences tab page
-ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(vcl::Window* i_pParent, const SfxItemSet& i_rCoreSet)
-    : SfxTabPage(i_pParent, "PdfSecurityPage","filter/ui/pdfsecuritypage.ui", &i_rCoreSet)
+ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(TabPageParent i_pParent, const SfxItemSet& i_rCoreSet)
+    : SfxTabPage(i_pParent, "filter/ui/pdfsecuritypage.ui", "PdfSecurityPage", &i_rCoreSet)
     , msUserPwdTitle( PDFFilterResId( STR_PDF_EXPORT_UDPWD ) )
     , mbHaveOwnerPassword( false )
     , mbHaveUserPassword( false )
     , msOwnerPwdTitle( PDFFilterResId( STR_PDF_EXPORT_ODPWD ) )
+    , mxPbSetPwd(m_xBuilder->weld_button("setpassword"))
+    , mxUserPwdSet(m_xBuilder->weld_widget("userpwdset"))
+    , mxUserPwdUnset(m_xBuilder->weld_widget("userpwdunset"))
+    , mxUserPwdPdfa(m_xBuilder->weld_widget("userpwdpdfa"))
+    , mxOwnerPwdSet(m_xBuilder->weld_widget("ownerpwdset"))
+    , mxOwnerPwdUnset(m_xBuilder->weld_widget("ownerpwdunset"))
+    , mxOwnerPwdPdfa(m_xBuilder->weld_widget("ownerpwdpdfa"))
+    , mxPrintPermissions(m_xBuilder->weld_widget("printing"))
+    , mxRbPrintNone(m_xBuilder->weld_radio_button("printnone"))
+    , mxRbPrintLowRes(m_xBuilder->weld_radio_button("printlow"))
+    , mxRbPrintHighRes(m_xBuilder->weld_radio_button("printhigh"))
+    , mxChangesAllowed(m_xBuilder->weld_widget("changes"))
+    , mxRbChangesNone(m_xBuilder->weld_radio_button("changenone"))
+    , mxRbChangesInsDel(m_xBuilder->weld_radio_button("changeinsdel"))
+    , mxRbChangesFillForm(m_xBuilder->weld_radio_button("changeform"))
+    , mxRbChangesComment(m_xBuilder->weld_radio_button("changecomment"))
+    , mxRbChangesAnyNoCopy(m_xBuilder->weld_radio_button("changeany"))
+    , mxContent(m_xBuilder->weld_widget("content"))
+    , mxCbEnableCopy(m_xBuilder->weld_check_button("enablecopy"))
+    , mxCbEnableAccessibility(m_xBuilder->weld_check_button("enablea11y"))
+    , mxPasswordTitle(m_xBuilder->weld_label("setpasswordstitle"))
 {
-    get(mpPbSetPwd, "setpassword");
-    msStrSetPwd = get<vcl::Window>("setpasswordstitle")->GetText();
-
-    get(mpUserPwdSet, "userpwdset");
-    get(mpUserPwdUnset, "userpwdunset");
-    get(mpUserPwdPdfa, "userpwdpdfa");
-
-    get(mpOwnerPwdSet, "ownerpwdset");
-    get(mpOwnerPwdUnset, "ownerpwdunset");
-    get(mpOwnerPwdPdfa, "ownerpwdpdfa");
-
-    get(mpPrintPermissions, "printing");
-    get(mpRbPrintNone, "printnone");
-    get(mpRbPrintLowRes, "printlow");
-    get(mpRbPrintHighRes, "printhigh");
-
-    get(mpChangesAllowed, "changes");
-    get(mpRbChangesNone, "changenone");
-    get(mpRbChangesInsDel, "changeinsdel");
-    get(mpRbChangesFillForm, "changeform");
-    get(mpRbChangesComment, "changecomment");
-    get(mpRbChangesAnyNoCopy, "changeany");
-
-    get(mpContent, "content");
-    get(mpCbEnableCopy, "enablecopy");
-    get(mpCbEnableAccessibility, "enablea11y");
-
-    mpPbSetPwd->SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl ) );
+    msStrSetPwd = mxPasswordTitle->get_label();
+    mxPbSetPwd->connect_clicked(LINK(this, ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl));
 }
-
 
 ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 {
-    disposeOnce();
 }
 
-
-void ImpPDFTabSecurityPage::dispose()
+VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    mpPbSetPwd.clear();
-    mpUserPwdSet.clear();
-    mpUserPwdUnset.clear();
-    mpUserPwdPdfa.clear();
-    mpOwnerPwdSet.clear();
-    mpOwnerPwdUnset.clear();
-    mpOwnerPwdPdfa.clear();
-    mpPrintPermissions.clear();
-    mpRbPrintNone.clear();
-    mpRbPrintLowRes.clear();
-    mpRbPrintHighRes.clear();
-    mpChangesAllowed.clear();
-    mpRbChangesNone.clear();
-    mpRbChangesInsDel.clear();
-    mpRbChangesFillForm.clear();
-    mpRbChangesComment.clear();
-    mpRbChangesAnyNoCopy.clear();
-    mpContent.clear();
-    mpCbEnableCopy.clear();
-    mpCbEnableAccessibility.clear();
-    SfxTabPage::dispose();
+    return VclPtr<ImpPDFTabSecurityPage>::Create(pParent, *rAttrSet);
 }
-
-
-VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create( TabPageParent pParent,
-                                                  const SfxItemSet* rAttrSet)
-{
-    return VclPtr<ImpPDFTabSecurityPage>::Create( pParent.pParent, *rAttrSet );
-}
-
 
 void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
@@ -1261,27 +1225,26 @@ void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 
     // verify print status
     paParent->mnPrint = 0;
-    if( mpRbPrintLowRes->IsChecked() )
+    if (mxRbPrintLowRes->get_active())
         paParent->mnPrint = 1;
-    else if( mpRbPrintHighRes->IsChecked() )
+    else if (mxRbPrintHighRes->get_active())
         paParent->mnPrint = 2;
 
     // verify changes permitted
     paParent->mnChangesAllowed = 0;
 
-    if( mpRbChangesInsDel->IsChecked() )
+    if( mxRbChangesInsDel->get_active() )
         paParent->mnChangesAllowed = 1;
-    else if( mpRbChangesFillForm->IsChecked() )
+    else if( mxRbChangesFillForm->get_active() )
         paParent->mnChangesAllowed = 2;
-    else if( mpRbChangesComment->IsChecked() )
+    else if( mxRbChangesComment->get_active() )
         paParent->mnChangesAllowed = 3;
-    else if( mpRbChangesAnyNoCopy->IsChecked() )
+    else if( mxRbChangesAnyNoCopy->get_active() )
         paParent->mnChangesAllowed = 4;
 
-    paParent->mbCanCopyOrExtract = mpCbEnableCopy->IsChecked();
-    paParent->mbCanExtractForAccessibility = mpCbEnableAccessibility->IsChecked();
+    paParent->mbCanCopyOrExtract = mxCbEnableCopy->get_active();
+    paParent->mbCanExtractForAccessibility = mxCbEnableAccessibility->get_active();
 }
-
 
 void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
@@ -1289,13 +1252,13 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
     {
     default:
     case 0:
-        mpRbPrintNone->Check();
+        mxRbPrintNone->set_active(true);
         break;
     case 1:
-        mpRbPrintLowRes->Check();
+        mxRbPrintLowRes->set_active(true);
         break;
     case 2:
-        mpRbPrintHighRes->Check();
+        mxRbPrintHighRes->set_active(true);
         break;
     }
 
@@ -1303,24 +1266,24 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
     {
     default:
     case 0:
-        mpRbChangesNone->Check();
+        mxRbChangesNone->set_active(true);
         break;
     case 1:
-        mpRbChangesInsDel->Check();
+        mxRbChangesInsDel->set_active(true);
         break;
     case 2:
-        mpRbChangesFillForm->Check();
+        mxRbChangesFillForm->set_active(true);
         break;
     case 3:
-        mpRbChangesComment->Check();
+        mxRbChangesComment->set_active(true);
         break;
     case 4:
-        mpRbChangesAnyNoCopy->Check();
+        mxRbChangesAnyNoCopy->set_active(true);
         break;
     }
 
-    mpCbEnableCopy->Check( paParent->mbCanCopyOrExtract );
-    mpCbEnableAccessibility->Check( paParent->mbCanExtractForAccessibility );
+    mxCbEnableCopy->set_active(paParent->mbCanCopyOrExtract);
+    mxCbEnableAccessibility->set_active(paParent->mbCanExtractForAccessibility);
 
     // set the status of this windows, according to the PDFA selection
     enablePermissionControls();
@@ -1331,8 +1294,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
         ImplPDFASecurityControl(!pGeneralPage->IsPdfaSelected());
 }
 
-
-IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, Button*, void)
+IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
 {
     SfxPasswordDialog aPwdDialog(GetFrameWeld(), &msUserPwdTitle);
     aPwdDialog.SetMinLen(0);
@@ -1372,54 +1334,53 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
     }
     if (bIsPDFASel)
     {
-        mpUserPwdPdfa->Show();
-        mpUserPwdSet->Hide();
-        mpUserPwdUnset->Hide();
+        mxUserPwdPdfa->show();
+        mxUserPwdSet->hide();
+        mxUserPwdUnset->hide();
     }
     else
     {
         if (mbHaveUserPassword && IsEnabled())
         {
-            mpUserPwdSet->Show();
-            mpUserPwdUnset->Hide();
-            mpUserPwdPdfa->Hide();
+            mxUserPwdSet->show();
+            mxUserPwdUnset->hide();
+            mxUserPwdPdfa->hide();
         }
         else
         {
-            mpUserPwdUnset->Show();
-            mpUserPwdSet->Hide();
-            mpUserPwdPdfa->Hide();
+            mxUserPwdUnset->show();
+            mxUserPwdSet->hide();
+            mxUserPwdPdfa->hide();
         }
     }
 
     bool bLocalEnable = mbHaveOwnerPassword && IsEnabled();
     if (bIsPDFASel)
     {
-        mpOwnerPwdPdfa->Show();
-        mpOwnerPwdSet->Hide();
-        mpOwnerPwdUnset->Hide();
+        mxOwnerPwdPdfa->show();
+        mxOwnerPwdSet->hide();
+        mxOwnerPwdUnset->hide();
     }
     else
     {
         if (bLocalEnable)
         {
-            mpOwnerPwdSet->Show();
-            mpOwnerPwdUnset->Hide();
-            mpOwnerPwdPdfa->Hide();
+            mxOwnerPwdSet->show();
+            mxOwnerPwdUnset->hide();
+            mxOwnerPwdPdfa->hide();
         }
         else
         {
-            mpOwnerPwdUnset->Show();
-            mpOwnerPwdSet->Hide();
-            mpOwnerPwdPdfa->Hide();
+            mxOwnerPwdUnset->show();
+            mxOwnerPwdSet->hide();
+            mxOwnerPwdPdfa->hide();
         }
     }
 
-    mpPrintPermissions->Enable(bLocalEnable);
-    mpChangesAllowed->Enable(bLocalEnable);
-    mpContent->Enable(bLocalEnable);
+    mxPrintPermissions->set_sensitive(bLocalEnable);
+    mxChangesAllowed->set_sensitive(bLocalEnable);
+    mxContent->set_sensitive(bLocalEnable);
 }
-
 
 // This tab page is under control of the PDF/A-1a checkbox:
 // TODO: implement a method to do it.
