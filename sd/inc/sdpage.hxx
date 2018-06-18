@@ -314,6 +314,9 @@ public:
     /** removes all custom animations for the given shape */
     void removeAnimations( const SdrObject* pObj );
 
+    /** Notify that the object has been renamed and the animation effects has to update. */
+    void notifyObjectRenamed(const SdrObject* pObj);
+
     /** Set the name of the page and broadcast a model change.
     */
     void SetName (const OUString& rName);

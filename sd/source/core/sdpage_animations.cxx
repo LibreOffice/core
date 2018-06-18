@@ -81,6 +81,18 @@ void SdPage::removeAnimations( const SdrObject* pObj )
     }
 }
 
+/** Notify that the object has been renamed and the animation effect has to update. */
+void SdPage::notifyObjectRenamed(const SdrObject* pObj)
+{
+    if (pObj && hasAnimationNode())
+    {
+        Reference<XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(), UNO_QUERY);
+
+        if (xShape.is() && getMainSequence()->hasEffect(xShape))
+            getMainSequence()->notify_change();
+    }
+}
+
 bool SdPage::hasAnimationNode() const
 {
     return mxAnimationNode.is();
