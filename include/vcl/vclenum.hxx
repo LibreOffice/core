@@ -250,6 +250,13 @@ enum class VclSizeGroupMode
     Both
 };
 
+enum class VclPolicyType
+{
+    ALWAYS,
+    AUTOMATIC,
+    NEVER
+};
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

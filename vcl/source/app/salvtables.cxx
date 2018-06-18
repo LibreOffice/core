@@ -805,6 +805,32 @@ public:
         rVertScrollBar.SetRangeMax(upper);
     }
 
+    virtual void set_vpolicy(VclPolicyType eVPolicy) override
+    {
+        WinBits nWinBits = m_xScrolledWindow->GetStyle() & ~(WB_AUTOVSCROLL|WB_VSCROLL);
+        if (eVPolicy == VclPolicyType::ALWAYS)
+            nWinBits |= WB_VSCROLL;
+        else if (eVPolicy == VclPolicyType::AUTOMATIC)
+            nWinBits |= WB_AUTOVSCROLL;
+        m_xScrolledWindow->SetStyle(nWinBits);
+        m_xScrolledWindow->queue_resize();
+    }
+
+    virtual VclPolicyType get_vpolicy() const override
+    {
+        WinBits nWinBits = m_xScrolledWindow->GetStyle();
+        if (nWinBits & WB_AUTOVSCROLL)
+            return VclPolicyType::AUTOMATIC;
+        else if (nWinBits & WB_VSCROLL)
+            return VclPolicyType::ALWAYS;
+        return VclPolicyType::NEVER;
+    }
+
+    virtual int get_vscroll_width() const override
+    {
+        return m_xScrolledWindow->getVertScrollBar().GetSizePixel().Width();
+    }
+
     virtual void set_user_managed_scrolling() override
     {
         m_bUserManagedScrolling = true;
