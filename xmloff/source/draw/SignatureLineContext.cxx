@@ -100,6 +100,13 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
                                 "No InvalidSignatureLineImage!");
                     xGraphic = xSignatureInfo[i].InvalidSignatureLineImage;
                 }
+
+                // Save unsigned graphic
+                Reference<XGraphic> xUnsignedGraphic;
+                xPropSet->getPropertyValue("Graphic") >>= xUnsignedGraphic;
+                if (xUnsignedGraphic.is())
+                    xPropSet->setPropertyValue("SignatureLineUnsignedImage", Any(xUnsignedGraphic));
+
                 xPropSet->setPropertyValue("Graphic", Any(xGraphic));
                 break;
             }
