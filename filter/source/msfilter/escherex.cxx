@@ -4208,22 +4208,18 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
                     case GfxLinkType::NativeWmf :
                     {
-                        if ( pGraphicAry && ( p_EscherBlibEntry->mnSize > 0x2c ) )
+                        if ( aGraphicLink.IsEMF() )
                         {
-                            if ( ( pGraphicAry[ 0x28 ] == 0x20 ) && ( pGraphicAry[ 0x29 ] == 0x45 )     // check the magic
-                                && ( pGraphicAry[ 0x2a ] == 0x4d ) && ( pGraphicAry[ 0x2b ] == 0x46 ) ) // number ( emf detection )
-                            {
-                                p_EscherBlibEntry->meBlibType = EMF;
-                            }
-                            else
-                            {
-                                p_EscherBlibEntry->meBlibType = WMF;
-                                if ( ( pGraphicAry[ 0 ] == 0xd7 ) && ( pGraphicAry[ 1 ] == 0xcd )
-                                    && ( pGraphicAry[ 2 ] == 0xc6 ) && ( pGraphicAry[ 3 ] == 0x9a ) )
-                                {   // we have to get rid of the metafileheader
-                                    pGraphicAry += 22;
-                                    p_EscherBlibEntry->mnSize -= 22;
-                                }
+                            p_EscherBlibEntry->meBlibType = EMF;
+                        }
+                        else if ( pGraphicAry && ( p_EscherBlibEntry->mnSize > 0x2c ) )
+                        {
+                            p_EscherBlibEntry->meBlibType = WMF;
+                            if ( ( pGraphicAry[ 0 ] == 0xd7 ) && ( pGraphicAry[ 1 ] == 0xcd )
+                                && ( pGraphicAry[ 2 ] == 0xc6 ) && ( pGraphicAry[ 3 ] == 0x9a ) )
+                            {   // we have to get rid of the metafileheader
+                                pGraphicAry += 22;
+                                p_EscherBlibEntry->mnSize -= 22;
                             }
                         }
                     }
