@@ -1640,48 +1640,29 @@ IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, weld::TreeView&, void)
 }
 
 /// The digital signatures tab page
-ImpPDFTabSigningPage::ImpPDFTabSigningPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "PdfSignPage","filter/ui/pdfsignpage.ui", &rCoreSet)
+ImpPDFTabSigningPage::ImpPDFTabSigningPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "filter/ui/pdfsignpage.ui", "PdfSignPage", &rCoreSet)
     , maSignCertificate()
+    , mxEdSignCert(m_xBuilder->weld_entry("cert"))
+    , mxPbSignCertSelect(m_xBuilder->weld_button("select"))
+    , mxPbSignCertClear(m_xBuilder->weld_button("clear"))
+    , mxEdSignPassword(m_xBuilder->weld_entry("password"))
+    , mxEdSignLocation(m_xBuilder->weld_entry("location"))
+    , mxEdSignContactInfo(m_xBuilder->weld_entry("contact"))
+    , mxEdSignReason(m_xBuilder->weld_entry("reason"))
+    , mxLBSignTSA(m_xBuilder->weld_combo_box_text("tsa"))
 {
-    get(mpEdSignCert, "cert");
-    get(mpPbSignCertSelect, "select");
-    get(mpPbSignCertClear, "clear");
-    get(mpEdSignPassword, "password");
-    get(mpEdSignLocation, "location");
-    get(mpEdSignContactInfo, "contact");
-    get(mpEdSignReason, "reason");
-    get(mpLBSignTSA, "tsa");
-
-    mpPbSignCertSelect->Enable();
-    mpPbSignCertSelect->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect ) );
-    mpPbSignCertClear->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertClear ) );
+    mxPbSignCertSelect->set_sensitive(false);
+    mxPbSignCertSelect->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect));
+    mxPbSignCertClear->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertClear));
 }
-
 
 ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
 {
-    disposeOnce();
 }
 
-
-void ImpPDFTabSigningPage::dispose()
+IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, void)
 {
-    mpEdSignCert.clear();
-    mpPbSignCertSelect.clear();
-    mpPbSignCertClear.clear();
-    mpEdSignPassword.clear();
-    mpEdSignLocation.clear();
-    mpEdSignContactInfo.clear();
-    mpEdSignReason.clear();
-    mpLBSignTSA.clear();
-    SfxTabPage::dispose();
-}
-
-
-IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
-{
-
     Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersion(
             comphelper::getProcessComponentContext(), "1.2" ) );
@@ -1692,13 +1673,13 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
 
     if (maSignCertificate.is())
     {
-        mpEdSignCert->SetText(maSignCertificate->getSubjectName());
-        mpPbSignCertClear->Enable();
-        mpEdSignLocation->Enable();
-        mpEdSignPassword->Enable();
-        mpEdSignContactInfo->Enable();
-        mpEdSignReason->Enable();
-        mpEdSignReason->SetText(aDescription);
+        mxEdSignCert->set_text(maSignCertificate->getSubjectName());
+        mxPbSignCertClear->set_sensitive(true);
+        mxEdSignLocation->set_sensitive(true);
+        mxEdSignPassword->set_sensitive(true);
+        mxEdSignContactInfo->set_sensitive(true);
+        mxEdSignReason->set_sensitive(true);
+        mxEdSignReason->set_text(aDescription);
 
         try
         {
@@ -1708,7 +1689,7 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
                 const css::uno::Sequence<OUString>& rTSAURLs = aTSAURLs.get();
                 for (auto const& elem : rTSAURLs)
                 {
-                    mpLBSignTSA->InsertEntry(elem);
+                    mxLBSignTSA->append_text(elem);
                 }
             }
         }
@@ -1718,62 +1699,57 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
         }
 
         // If more than only the "None" entry is there, enable the ListBox
-        if (mpLBSignTSA->GetEntryCount() > 1)
-            mpLBSignTSA->Enable();
+        if (mxLBSignTSA->get_count() > 1)
+            mxLBSignTSA->set_sensitive(true);
     }
 }
 
-
-IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear, Button*, void )
+IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertClear, weld::Button&, void)
 {
-    mpEdSignCert->SetText("");
+    mxEdSignCert->set_text("");
     maSignCertificate.clear();
-    mpPbSignCertClear->Enable( false );
-    mpEdSignLocation->Enable( false );
-    mpEdSignPassword->Enable( false );
-    mpEdSignContactInfo->Enable( false );
-    mpEdSignReason->Enable( false );
-    mpLBSignTSA->Enable( false );
+    mxPbSignCertClear->set_sensitive(false);
+    mxEdSignLocation->set_sensitive(false);
+    mxEdSignPassword->set_sensitive(false);
+    mxEdSignContactInfo->set_sensitive(false);
+    mxEdSignReason->set_sensitive(false);
+    mxLBSignTSA->set_sensitive(false);
 }
-
 
 VclPtr<SfxTabPage> ImpPDFTabSigningPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabSigningPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabSigningPage>::Create(pParent, *rAttrSet);
 }
-
 
 void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
     paParent->mbSignPDF = maSignCertificate.is();
     paParent->maSignCertificate = maSignCertificate;
-    paParent->msSignLocation = mpEdSignLocation->GetText();
-    paParent->msSignPassword = mpEdSignPassword->GetText();
-    paParent->msSignContact = mpEdSignContactInfo->GetText();
-    paParent->msSignReason = mpEdSignReason->GetText();
+    paParent->msSignLocation = mxEdSignLocation->get_text();
+    paParent->msSignPassword = mxEdSignPassword->get_text();
+    paParent->msSignContact = mxEdSignContactInfo->get_text();
+    paParent->msSignReason = mxEdSignReason->get_text();
     // Entry 0 is 'None'
-    if (mpLBSignTSA->GetSelectedEntryPos() >= 1)
-        paParent->msSignTSA = mpLBSignTSA->GetSelectedEntry();
+    if (mxLBSignTSA->get_active() >= 1)
+        paParent->msSignTSA = mxLBSignTSA->get_active_text();
 }
-
 
 void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
-
-    mpEdSignLocation->Enable( false );
-    mpEdSignPassword->Enable( false );
-    mpEdSignContactInfo->Enable( false );
-    mpEdSignReason->Enable( false );
-    mpLBSignTSA->Enable( false );
-    mpPbSignCertClear->Enable( false );
+    mxEdSignLocation->set_sensitive(false);
+    mxEdSignPassword->set_sensitive(false);
+    mxEdSignContactInfo->set_sensitive(false);
+    mxEdSignReason->set_sensitive(false);
+    mxLBSignTSA->set_sensitive(false);
+    mxPbSignCertClear->set_sensitive(false);
 
     if (paParent->mbSignPDF)
     {
-        mpEdSignPassword->SetText(paParent->msSignPassword);
-        mpEdSignLocation->SetText(paParent->msSignLocation);
-        mpEdSignContactInfo->SetText(paParent->msSignContact);
-        mpEdSignReason->SetText(paParent->msSignReason);
+        mxEdSignPassword->set_text(paParent->msSignPassword);
+        mxEdSignLocation->set_text(paParent->msSignLocation);
+        mxEdSignContactInfo->set_text(paParent->msSignContact);
+        mxEdSignReason->set_text(paParent->msSignReason);
         maSignCertificate = paParent->maSignCertificate;
     }
 }
