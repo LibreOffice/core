@@ -1433,7 +1433,7 @@ class CopyByCloneHandler
             // Clone as formula cell.
             ScFormulaCell* pCell = new ScFormulaCell(rSrcCell, *mrDestCol.GetDoc(), aDestPos, mnFormulaCellCloneFlags);
             pCell->SetDirtyVar();
-            mrDestCol.SetFormulaCell(maDestPos, nRow, pCell, meListenType);
+            mrDestCol.SetFormulaCell(maDestPos, nRow, pCell, meListenType, rSrcCell.NeedsNumberFormat());
             setDefaultAttrToDest(nRow);
             return;
         }
