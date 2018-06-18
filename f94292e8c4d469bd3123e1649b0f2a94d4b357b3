@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_1c7e96e4",
+        "filename": "vcl/source/fontsubset/sft.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-06-18T06:44:19Z",
+      "side": 0,
+      "message": "You can remove this whole comment block as it makes no sense anymore without the names.",
+      "revId": "f94292e8c4d469bd3123e1649b0f2a94d4b357b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
