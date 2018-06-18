@@ -124,16 +124,25 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
 {
     OUString aDescription;
     Reference< XPropertySet > xSet( xShape, UNO_QUERY );
+    bool bAppendIndex = true;
+
     if( xSet.is() )
     {
-        Reference< XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
-        const OUString aPropName( "UINameSingular");
-        if( xInfo->hasPropertyByName( aPropName ) )
-            xSet->getPropertyValue( aPropName ) >>= aDescription;
+        Reference<XPropertySetInfo> xInfo(xSet->getPropertySetInfo());
+
+        xSet->getPropertyValue("Name") >>= aDescription;
+        bAppendIndex = aDescription.isEmpty();
+
+        const OUString aPropName("UINameSingular");
+        if(xInfo->hasPropertyByName(aPropName))
+            xSet->getPropertyValue(aPropName) >>= aDescription;
     }
 
-    aDescription += " ";
-    aDescription += OUString::number( getShapeIndex( xShape ) );
+    if (bAppendIndex)
+    {
+        aDescription += " ";
+        aDescription += OUString::number(getShapeIndex(xShape));
+    }
 
     if( bWithText )
     {
