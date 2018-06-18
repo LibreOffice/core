@@ -22,8 +22,6 @@
 
 #include "osl/endian.h"
 
-#include <float.h>
-
 #if defined __sun
 #include <ieeefp.h>
 #endif /* __sun */

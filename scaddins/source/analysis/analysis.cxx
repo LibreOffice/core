@@ -32,6 +32,7 @@
 #include <unotools/resmgr.hxx>
 #include <algorithm>
 #include <cmath>
+#include <float.h>
 
 #define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
 #define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"

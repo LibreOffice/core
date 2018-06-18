@@ -1,2 +1,12 @@
 ---
 assumeFilename: desktop/source/app/app.cxx
+blacklist:
+    include/sal/typesizes.h:
+    # needed for build to work
+    - config_typesizes.h
+    include/sal/types.h:
+    # needed for build to work
+    - sal/typesizes.h
+    include/sal/mathconf.h:
+    # Platform dependent
+    - cmath

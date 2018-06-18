@@ -30,6 +30,7 @@
 #include <rtl/math.hxx>
 #include <stdexcept>
 #include <vector>
+#include <float.h>
 
 using namespace com::sun::star;
 

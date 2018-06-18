@@ -45,6 +45,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 
+#include <float.h>
 #include <set>
 #include <vector>
 
