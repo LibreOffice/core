@@ -114,7 +114,8 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, weld::Button&, void)
 }
 
 ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet()
-    : m_pTabBgColorDlg(nullptr)
+    : ColorValueSet(nullptr)
+    , m_pTabBgColorDlg(nullptr)
 {
 }
 

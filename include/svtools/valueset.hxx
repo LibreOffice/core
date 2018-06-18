@@ -416,6 +416,7 @@ private:
     css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
     SvtValueItemList   mItemList;
     std::unique_ptr<SvtValueSetItem> mpNoneItem;
+    std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     tools::Rectangle  maNoneItemRect;
     tools::Rectangle  maItemListRect;
     long            mnItemWidth;
@@ -439,7 +440,6 @@ private:
     WinBits         mnStyle;
     Link<SvtValueSet*,void>  maDoubleClickHdl;
     Link<SvtValueSet*,void>  maSelectHdl;
-    Link<SvtValueSet*,void>  maHighlightHdl;
 
     bool            mbFormat : 1;
     bool            mbNoSelection : 1;
@@ -471,7 +471,7 @@ private:
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
-    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK(ImplScrollHdl, weld::ScrolledWindow&, void);
 
     SvtValueSet (const SvtValueSet &) = delete;
     SvtValueSet & operator= (const SvtValueSet &) = delete;
@@ -480,7 +480,7 @@ protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 public:
-    SvtValueSet();
+    SvtValueSet(weld::ScrolledWindow* pScrolledWindow);
     virtual         ~SvtValueSet() override;
 
     virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -495,11 +495,10 @@ public:
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
 
     virtual void    Select();
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     OUString        GetText() const { return maText; }
     void            SetText(const OUString& rText) { maText = rText; }
-    void            SetStyle(WinBits nStyle) { mnStyle = nStyle; }
+    void            SetStyle(WinBits nStyle);
     WinBits         GetStyle() const { return mnStyle; }
 
     /// Insert @rImage item.
@@ -510,10 +509,6 @@ public:
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);
-    /// Insert an User Drawn item.
-    void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
-    /// Insert an User Drawn item with @rStr tooltip.
-    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos);
     void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
@@ -586,11 +581,13 @@ public:
                                         sal_uInt16 nCalcCols = 0,
                                         sal_uInt16 nCalcLines = 0) const;
     Size            CalcItemSizePixel(const Size& rSize) const;
+    int             GetScrollWidth() const;
 
     void            SetSelectHdl(const Link<SvtValueSet*,void>& rLink)
     {
         maSelectHdl = rLink;
     }
+
     void            SetDoubleClickHdl(const Link<SvtValueSet*,void>& rLink)
     {
         maDoubleClickHdl = rLink;
