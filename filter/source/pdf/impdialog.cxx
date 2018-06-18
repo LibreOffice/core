@@ -473,251 +473,214 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 }
 
 
-ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "PdfGeneralPage","filter/ui/pdfgeneralpage.ui", &rCoreSet)
+ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "filter/ui/pdfgeneralpage.ui", "PdfGeneralPage", &rCoreSet)
     , mbTaggedPDFUserSelection(false)
     , mbExportFormFieldsUserSelection(false)
     , mbIsPresentation(false)
     , mbIsSpreadsheet(false)
     , mbIsWriter(false)
     , mpaParent(nullptr)
+    , mxRbAll(m_xBuilder->weld_radio_button("all"))
+    , mxRbRange(m_xBuilder->weld_radio_button("range"))
+    , mxRbSelection(m_xBuilder->weld_radio_button("selection"))
+    , mxEdPages(m_xBuilder->weld_entry("pages"))
+    , mxSelectedSheets(m_xBuilder->weld_label("selectedsheets"))
+    , mxRbLosslessCompression(m_xBuilder->weld_radio_button("losslesscompress"))
+    , mxRbJPEGCompression(m_xBuilder->weld_radio_button("jpegcompress"))
+    , mxQualityFrame(m_xBuilder->weld_widget("qualityframe"))
+    , mxNfQuality(m_xBuilder->weld_metric_spin_button("quality", FUNIT_PERCENT))
+    , mxCbReduceImageResolution(m_xBuilder->weld_check_button("reduceresolution"))
+    , mxCoReduceImageResolution(m_xBuilder->weld_combo_box_text("resolution"))
+    , mxCbPDFA1b(m_xBuilder->weld_check_button("pdfa"))
+    , mxCbTaggedPDF(m_xBuilder->weld_check_button("tagged"))
+    , mxCbExportFormFields(m_xBuilder->weld_check_button("forms"))
+    , mxFormsFrame(m_xBuilder->weld_widget("formsframe"))
+    , mxLbFormsFormat(m_xBuilder->weld_combo_box_text("format"))
+    , mxCbAllowDuplicateFieldNames(m_xBuilder->weld_check_button("allowdups"))
+    , mxCbExportBookmarks(m_xBuilder->weld_check_button("bookmarks"))
+    , mxCbExportHiddenSlides(m_xBuilder->weld_check_button("hiddenpages"))
+    , mxCbExportNotes(m_xBuilder->weld_check_button("comments"))
+    , mxCbViewPDF(m_xBuilder->weld_check_button("viewpdf"))
+    , mxCbUseReferenceXObject(m_xBuilder->weld_check_button("usereferencexobject"))
+    , mxCbExportNotesPages(m_xBuilder->weld_check_button("notes"))
+    , mxCbExportOnlyNotesPages(m_xBuilder->weld_check_button("onlynotes"))
+    , mxCbExportEmptyPages(m_xBuilder->weld_check_button("emptypages"))
+    , mxCbExportPlaceholders(m_xBuilder->weld_check_button("exportplaceholders"))
+    , mxCbAddStream(m_xBuilder->weld_check_button("embed"))
+    , mxCbWatermark(m_xBuilder->weld_check_button("watermark"))
+    , mxFtWatermark(m_xBuilder->weld_label("watermarklabel"))
+    , mxEdWatermark(m_xBuilder->weld_entry("watermarkentry"))
+    , mxSlidesFt(m_xBuilder->weld_label("slides"))
+    , mxSheetsFt(m_xBuilder->weld_label("selectedsheets"))
 {
-    get(mpRbAll, "all");
-    get(mpRbRange, "range");
-    get(mpRbSelection, "selection");
-    get(mpSelectedSheets, "selectedsheets");
-    get(mpEdPages, "pages");
-
-    get(mpRbLosslessCompression, "losslesscompress");
-    get(mpRbJPEGCompression, "jpegcompress");
-    get(mpQualityFrame, "qualityframe");
-    get(mpNfQuality, "quality");
-    get(mpCbReduceImageResolution, "reduceresolution");
-    get(mpCoReduceImageResolution, "resolution");
-
-    get(mpCbAddStream, "embed");
-    get(mpCbPDFA1b, "pdfa");
-    get(mpCbTaggedPDF, "tagged");
-    get(mpCbExportFormFields, "forms");
-
-    get(mpFormsFrame, "formsframe");
-    get(mpLbFormsFormat, "format");
-    get(mpCbAllowDuplicateFieldNames, "allowdups");
-
-    get(mpCbExportBookmarks, "bookmarks");
-    get(mpCbExportHiddenSlides, "hiddenpages");
-    get(mpCbExportNotes, "comments");
-    get(mpCbExportNotesPages, "notes");
-    get(mpCbExportOnlyNotesPages, "onlynotes");
-    get(mpCbExportEmptyPages, "emptypages");
-    get(mpCbExportPlaceholders, "exportplaceholders" );
-    get(mpCbViewPDF, "viewpdf");
-    get(mpCbUseReferenceXObject, "usereferencexobject");
-
-    get(mpCbWatermark, "watermark");
-    get(mpFtWatermark, "watermarklabel");
-    get(mpEdWatermark, "watermarkentry");
 }
-
 
 ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
 {
     disposeOnce();
 }
 
-
 void ImpPDFTabGeneralPage::dispose()
 {
-    mpRbAll.clear();
-    mpRbRange.clear();
-    mpRbSelection.clear();
-    mpSelectedSheets.clear();
-    mpEdPages.clear();
-    mpRbLosslessCompression.clear();
-    mpRbJPEGCompression.clear();
-    mpQualityFrame.clear();
-    mpNfQuality.clear();
-    mpCbReduceImageResolution.clear();
-    mpCoReduceImageResolution.clear();
-    mpCbPDFA1b.clear();
-    mpCbTaggedPDF.clear();
-    mpCbExportFormFields.clear();
-    mpFormsFrame.clear();
-    mpLbFormsFormat.clear();
-    mpCbAllowDuplicateFieldNames.clear();
-    mpCbExportBookmarks.clear();
-    mpCbExportHiddenSlides.clear();
-    mpCbExportNotes.clear();
-    mpCbViewPDF.clear();
-    mpCbUseReferenceXObject.clear();
-    mpCbExportNotesPages.clear();
-    mpCbExportOnlyNotesPages.clear();
-    mpCbExportEmptyPages.clear();
-    mpCbExportPlaceholders.clear();
-    mpCbAddStream.clear();
-    mpCbWatermark.clear();
-    mpFtWatermark.clear();
-    mpEdWatermark.clear();
     mpaParent.clear();
     SfxTabPage::dispose();
 }
-
 
 void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
 {
     mpaParent = paParent;
 
     // init this class data
-    mpRbRange->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
+    mxRbRange->connect_toggled( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
 
-    mpRbAll->Check();
-    mpRbAll->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAllHdl ) );
+    mxRbAll->set_active(true);
+    mxRbAll->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleAllHdl ) );
     TogglePagesHdl();
 
-    mpRbSelection->Enable( paParent->mbSelectionPresent );
+    mxRbSelection->set_sensitive( paParent->mbSelectionPresent );
     if ( paParent->mbSelectionPresent )
-        mpRbSelection->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleSelectionHdl ) );
+        mxRbSelection->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleSelectionHdl ) );
     mbIsPresentation = paParent->mbIsPresentation;
     mbIsWriter = paParent->mbIsWriter;
     mbIsSpreadsheet = paParent->mbIsSpreadsheet;
 
-    mpCbExportEmptyPages->Enable( mbIsWriter );
-    mpCbExportPlaceholders->Enable( mbIsWriter );
+    mxCbExportEmptyPages->set_sensitive( mbIsWriter );
+    mxCbExportPlaceholders->set_sensitive( mbIsWriter );
 
-    mpRbLosslessCompression->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
+    mxRbLosslessCompression->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
     const bool bUseLosslessCompression = paParent->mbUseLosslessCompression;
     if ( bUseLosslessCompression )
-        mpRbLosslessCompression->Check();
+        mxRbLosslessCompression->set_active(true);
     else
-        mpRbJPEGCompression->Check();
+        mxRbJPEGCompression->set_active(true);
 
-    mpNfQuality->SetValue( paParent->mnQuality, FUNIT_PERCENT );
-    mpQualityFrame->Enable(!bUseLosslessCompression);
+    mxNfQuality->set_value( paParent->mnQuality, FUNIT_PERCENT );
+    mxQualityFrame->set_sensitive(!bUseLosslessCompression);
 
-    mpCbReduceImageResolution->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl ) );
+    mxCbReduceImageResolution->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl));
     const bool  bReduceImageResolution = paParent->mbReduceImageResolution;
-    mpCbReduceImageResolution->Check( bReduceImageResolution );
+    mxCbReduceImageResolution->set_active( bReduceImageResolution );
     OUString aStrRes = OUString::number( paParent->mnMaxImageResolution ) + " DPI";
-    mpCoReduceImageResolution->SetText( aStrRes );
-    mpCoReduceImageResolution->Enable( bReduceImageResolution );
-    mpCbWatermark->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
-    mpFtWatermark->Enable(false );
-    mpEdWatermark->Enable( false );
-    mpCbPDFA1b->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl) );
+    mxCoReduceImageResolution->set_entry_text(aStrRes);
+    mxCoReduceImageResolution->set_sensitive( bReduceImageResolution );
+    mxCbWatermark->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
+    mxFtWatermark->set_sensitive(false );
+    mxEdWatermark->set_sensitive( false );
+    mxCbPDFA1b->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
     switch( paParent->mnPDFTypeSelection )
     {
     default:
-    case 0: mpCbPDFA1b->Check( false ); // PDF 1.5
+    case 0: mxCbPDFA1b->set_active( false ); // PDF 1.5
         break;
-    case 1: mpCbPDFA1b->Check(); // PDF/A-1a
+    case 1: mxCbPDFA1b->set_active(true); // PDF/A-1a
         break;
     }
-    ToggleExportPDFAHdl( *mpCbPDFA1b );
+    ToggleExportPDFAHdl( *mxCbPDFA1b );
 
-    mpCbExportFormFields->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
+    mxCbExportFormFields->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
 
     // get the form values, for use with PDF/A-1 selection interface
     mbTaggedPDFUserSelection = paParent->mbUseTaggedPDF;
     mbExportFormFieldsUserSelection = paParent->mbExportFormFields;
 
-    if( !mpCbPDFA1b->IsChecked() )
+    if( !mxCbPDFA1b->get_active() )
     {
         // the value for PDF/A set by the ToggleExportPDFAHdl method called before
-        mpCbTaggedPDF->Check( mbTaggedPDFUserSelection  );
-        mpCbExportFormFields->Check( mbExportFormFieldsUserSelection );
+        mxCbTaggedPDF->set_active( mbTaggedPDFUserSelection  );
+        mxCbExportFormFields->set_active( mbExportFormFieldsUserSelection );
     }
 
-    mpLbFormsFormat->SelectEntryPos( static_cast<sal_uInt16>(paParent->mnFormsType) );
-    mpCbAllowDuplicateFieldNames->Check( paParent->mbAllowDuplicateFieldNames );
-    mpFormsFrame->Enable( paParent->mbExportFormFields );
+    mxLbFormsFormat->set_active(static_cast<sal_uInt16>(paParent->mnFormsType));
+    mxCbAllowDuplicateFieldNames->set_active( paParent->mbAllowDuplicateFieldNames );
+    mxFormsFrame->set_sensitive( paParent->mbExportFormFields );
 
-    mpCbExportBookmarks->Check( paParent->mbExportBookmarks );
+    mxCbExportBookmarks->set_active( paParent->mbExportBookmarks );
 
-    mpCbExportNotes->Check( paParent->mbExportNotes );
-    mpCbViewPDF->Check( paParent->mbViewPDF);
+    mxCbExportNotes->set_active( paParent->mbExportNotes );
+    mxCbViewPDF->set_active( paParent->mbViewPDF);
 
     if ( mbIsPresentation )
     {
-        mpRbRange->SetText(get<FixedText>("slides")->GetText());
-        mpCbExportNotesPages->Show();
-        mpCbExportNotesPages->Check(paParent->mbExportNotesPages);
-        mpCbExportNotesPages->SetToggleHdl( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
-        mpCbExportOnlyNotesPages->Show();
-        mpCbExportOnlyNotesPages->Check(paParent->mbExportOnlyNotesPages);
+        mxRbRange->set_label(mxSlidesFt->get_label());
+        mxCbExportNotesPages->show();
+        mxCbExportNotesPages->set_active(paParent->mbExportNotesPages);
+        mxCbExportNotesPages->connect_toggled( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
+        mxCbExportOnlyNotesPages->show();
+        mxCbExportOnlyNotesPages->set_active(paParent->mbExportOnlyNotesPages);
         // tdf#116473 Initially enable Export only note pages option depending on the checked state of Export notes pages option
-        mpCbExportOnlyNotesPages->Enable(mpCbExportNotesPages->IsChecked());
-        mpCbExportHiddenSlides->Show();
-        mpCbExportHiddenSlides->Check(paParent->mbExportHiddenSlides);
+        mxCbExportOnlyNotesPages->set_sensitive(mxCbExportNotesPages->get_active());
+        mxCbExportHiddenSlides->show();
+        mxCbExportHiddenSlides->set_active(paParent->mbExportHiddenSlides);
     }
     else
     {
-        mpCbExportNotesPages->Show(false);
-        mpCbExportNotesPages->Check(false);
-        mpCbExportOnlyNotesPages->Show(false);
-        mpCbExportOnlyNotesPages->Check(false);
-        mpCbExportHiddenSlides->Show(false);
-        mpCbExportHiddenSlides->Check(false);
+        mxCbExportNotesPages->show(false);
+        mxCbExportNotesPages->set_active(false);
+        mxCbExportOnlyNotesPages->show(false);
+        mxCbExportOnlyNotesPages->set_active(false);
+        mxCbExportHiddenSlides->show(false);
+        mxCbExportHiddenSlides->set_active(false);
     }
 
     if( mbIsSpreadsheet )
     {
-        mpRbSelection->SetText(get<FixedText>("selectedsheets")->GetText());
+        mxRbSelection->set_label(mxSheetsFt->get_label());
         // tdf#105965 Make Selection/Selected sheets the default PDF export range setting for spreadsheets
-        mpRbSelection->Check();
+        mxRbSelection->set_active(true);
     }
 
-    mpCbExportPlaceholders->Show(mbIsWriter);
+    mxCbExportPlaceholders->show(mbIsWriter);
     if( !mbIsWriter )
     {
-        mpCbExportPlaceholders->Check(false);
+        mxCbExportPlaceholders->set_active(false);
     }
-    mpCbExportEmptyPages->Check(!paParent->mbIsSkipEmptyPages);
-    mpCbExportPlaceholders->Check(paParent->mbIsExportPlaceholders);
+    mxCbExportEmptyPages->set_active(!paParent->mbIsSkipEmptyPages);
+    mxCbExportPlaceholders->set_active(paParent->mbIsExportPlaceholders);
 
-    mpCbAddStream->Show();
-    mpCbAddStream->Check(paParent->mbAddStream);
+    mxCbAddStream->show();
+    mxCbAddStream->set_active(paParent->mbAddStream);
 
-    mpCbAddStream->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
-    ToggleAddStreamHdl(*mpCbAddStream); // init addstream dependencies
+    mxCbAddStream->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleAddStreamHdl));
+    ToggleAddStreamHdl(*mxCbAddStream); // init addstream dependencies
 }
-
 
 void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 {
     // updating the FilterData sequence and storing FilterData to configuration
-    paParent->mbUseLosslessCompression = mpRbLosslessCompression->IsChecked();
-    paParent->mnQuality = static_cast<sal_Int32>(mpNfQuality->GetValue());
-    paParent->mbReduceImageResolution = mpCbReduceImageResolution->IsChecked();
-    paParent->mnMaxImageResolution = mpCoReduceImageResolution->GetText().toInt32();
-    paParent->mbExportNotes = mpCbExportNotes->IsChecked();
-    paParent->mbViewPDF = mpCbViewPDF->IsChecked();
-    paParent->mbUseReferenceXObject = mpCbUseReferenceXObject->IsChecked();
+    paParent->mbUseLosslessCompression = mxRbLosslessCompression->get_active();
+    paParent->mnQuality = static_cast<sal_Int32>(mxNfQuality->get_value(FUNIT_PERCENT));
+    paParent->mbReduceImageResolution = mxCbReduceImageResolution->get_active();
+    paParent->mnMaxImageResolution = mxCoReduceImageResolution->get_active_text().toInt32();
+    paParent->mbExportNotes = mxCbExportNotes->get_active();
+    paParent->mbViewPDF = mxCbViewPDF->get_active();
+    paParent->mbUseReferenceXObject = mxCbUseReferenceXObject->get_active();
     if ( mbIsPresentation )
     {
-        paParent->mbExportNotesPages = mpCbExportNotesPages->IsChecked();
-        paParent->mbExportOnlyNotesPages = mpCbExportOnlyNotesPages->IsChecked();
+        paParent->mbExportNotesPages = mxCbExportNotesPages->get_active();
+        paParent->mbExportOnlyNotesPages = mxCbExportOnlyNotesPages->get_active();
     }
-    paParent->mbExportBookmarks = mpCbExportBookmarks->IsChecked();
+    paParent->mbExportBookmarks = mxCbExportBookmarks->get_active();
     if ( mbIsPresentation )
-        paParent->mbExportHiddenSlides = mpCbExportHiddenSlides->IsChecked();
+        paParent->mbExportHiddenSlides = mxCbExportHiddenSlides->get_active();
 
-    paParent->mbIsSkipEmptyPages = !mpCbExportEmptyPages->IsChecked();
-    paParent->mbIsExportPlaceholders = mpCbExportPlaceholders->IsChecked();
-    paParent->mbAddStream = mpCbAddStream->IsVisible() && mpCbAddStream->IsChecked();
+    paParent->mbIsSkipEmptyPages = !mxCbExportEmptyPages->get_active();
+    paParent->mbIsExportPlaceholders = mxCbExportPlaceholders->get_active();
+    paParent->mbAddStream = mxCbAddStream->get_visible() && mxCbAddStream->get_active();
 
     paParent->mbIsRangeChecked = false;
-    if( mpRbRange->IsChecked() )
+    if( mxRbRange->get_active() )
     {
         paParent->mbIsRangeChecked = true;
-        paParent->msPageRange = mpEdPages->GetText(); //FIXME all right on other languages ?
+        paParent->msPageRange = mxEdPages->get_text(); //FIXME all right on other languages ?
     }
-    else if( mpRbSelection->IsChecked() )
+    else if( mxRbSelection->get_active() )
     {
-        paParent->mbSelectionIsChecked = mpRbSelection->IsChecked();
+        paParent->mbSelectionIsChecked = mxRbSelection->get_active();
     }
 
     paParent->mnPDFTypeSelection = 0;
-    if( mpCbPDFA1b->IsChecked() )
+    if( mxCbPDFA1b->get_active() )
     {
         paParent->mnPDFTypeSelection = 1;
         paParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
@@ -725,153 +688,147 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     }
     else
     {
-        paParent->mbUseTaggedPDF =  mpCbTaggedPDF->IsChecked();
-        paParent->mbExportFormFields = mpCbExportFormFields->IsChecked();
+        paParent->mbUseTaggedPDF =  mxCbTaggedPDF->get_active();
+        paParent->mbExportFormFields = mxCbExportFormFields->get_active();
     }
 
-    if( mpCbWatermark->IsChecked() )
-        paParent->maWatermarkText = mpEdWatermark->GetText();
+    if( mxCbWatermark->get_active() )
+        paParent->maWatermarkText = mxEdWatermark->get_text();
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
     * ever be an additional form submit format this could get invalid.
     */
-    paParent->mnFormsType = mpLbFormsFormat->GetSelectedEntryPos();
-    paParent->mbAllowDuplicateFieldNames = mpCbAllowDuplicateFieldNames->IsChecked();
+    paParent->mnFormsType = mxLbFormsFormat->get_active();
+    paParent->mbAllowDuplicateFieldNames = mxCbAllowDuplicateFieldNames->get_active();
 }
-
 
 VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabGeneralPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabGeneralPage>::Create(pParent, *rAttrSet);
 }
 
-
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAllHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAllHdl, weld::ToggleButton&, void)
 {
     EnableExportNotesPages();
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl, weld::ToggleButton&, void)
 {
     TogglePagesHdl();
     EnableExportNotesPages();
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleSelectionHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleSelectionHdl, weld::ToggleButton&, void)
 {
     EnableExportNotesPages();
 }
 
 void ImpPDFTabGeneralPage::TogglePagesHdl()
 {
-    mpEdPages->Enable( mpRbRange->IsChecked() );
-    if ( mpRbRange->IsChecked() )
-        mpEdPages->GrabFocus();
+    mxEdPages->set_sensitive( mxRbRange->get_active() );
+    if (mxRbRange->get_active())
+        mxEdPages->grab_focus();
 }
 
 void ImpPDFTabGeneralPage::EnableExportNotesPages()
 {
     if ( mbIsPresentation )
     {
-        mpCbExportNotesPages->Enable( !mpRbSelection->IsChecked() );
-        mpCbExportOnlyNotesPages->Enable( !mpRbSelection->IsChecked() && mpCbExportNotesPages->IsChecked() );
+        mxCbExportNotesPages->set_sensitive( !mxRbSelection->get_active() );
+        mxCbExportOnlyNotesPages->set_sensitive( !mxRbSelection->get_active() && mxCbExportNotesPages->get_active() );
     }
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, weld::ToggleButton&, void)
 {
-    mpFormsFrame->Enable(mpCbExportFormFields->IsChecked());
+    mxFormsFrame->set_sensitive(mxCbExportFormFields->get_active());
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, weld::ToggleButton&, void)
 {
-    mpCbExportOnlyNotesPages->Enable(mpCbExportNotesPages->IsChecked());
+    mxCbExportOnlyNotesPages->set_sensitive(mxCbExportNotesPages->get_active());
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl, weld::ToggleButton&, void)
 {
-    mpQualityFrame->Enable(mpRbJPEGCompression->IsChecked());
+    mxQualityFrame->set_sensitive(mxRbJPEGCompression->get_active());
 }
 
-
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, weld::ToggleButton&, void)
 {
-    mpCoReduceImageResolution->Enable( mpCbReduceImageResolution->IsChecked() );
+    mxCoReduceImageResolution->set_sensitive(mxCbReduceImageResolution->get_active());
 }
 
-
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, weld::ToggleButton&, void)
 {
-    mpEdWatermark->Enable( mpCbWatermark->IsChecked() );
-    mpFtWatermark->Enable (mpCbWatermark->IsChecked() );
-    if ( mpCbWatermark->IsChecked() )
-        mpEdWatermark->GrabFocus();
+    mxEdWatermark->set_sensitive(mxCbWatermark->get_active());
+    mxFtWatermark->set_sensitive(mxCbWatermark->get_active());
+    if (mxCbWatermark->get_active())
+        mxEdWatermark->grab_focus();
 }
 
-
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::ToggleButton&, void)
 {
-    if( mpCbAddStream->IsVisible() )
+    if (mxCbAddStream->get_visible())
     {
-        if( mpCbAddStream->IsChecked() )
+        if( mxCbAddStream->get_active() )
         {
-            mpRbAll->Check();
-            mpRbRange->Enable( false );
-            mpRbSelection->Enable( false );
-            mpEdPages->Enable( false );
-            mpRbAll->Enable( false );
+            mxRbAll->set_active(true);
+            mxRbRange->set_sensitive( false );
+            mxRbSelection->set_sensitive( false );
+            mxEdPages->set_sensitive( false );
+            mxRbAll->set_sensitive( false );
         }
         else
         {
-            mpRbAll->Enable();
-            mpRbRange->Enable();
-            mpRbSelection->Enable();
+            mxRbAll->set_sensitive(true);
+            mxRbRange->set_sensitive(true);
+            mxRbSelection->set_sensitive(true);
         }
     }
 }
 
-
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, void)
 {
     // set the security page status (and its controls as well)
     ImpPDFTabSecurityPage* pSecPage = mpaParent ? mpaParent->getSecurityPage() : nullptr;
     if (pSecPage)
     {
-        pSecPage->ImplPDFASecurityControl(!mpCbPDFA1b->IsChecked());
+        pSecPage->ImplPDFASecurityControl(!mxCbPDFA1b->get_active());
     }
 
     // PDF/A-1 needs tagged PDF, so force disable the control, will be forced in pdfexport.
-    bool bPDFA1Sel = mpCbPDFA1b->IsChecked();
-    mpFormsFrame->Enable(bPDFA1Sel);
+    bool bPDFA1Sel = mxCbPDFA1b->get_active();
+    mxFormsFrame->set_sensitive(bPDFA1Sel);
     if(bPDFA1Sel)
     {
         // store the values of subordinate controls
-        mbTaggedPDFUserSelection = mpCbTaggedPDF->IsChecked();
-        mpCbTaggedPDF->Check();
-        mpCbTaggedPDF->Enable(false);
-        mbExportFormFieldsUserSelection = mpCbExportFormFields->IsChecked();
-        mpCbExportFormFields->Check(false);
-        mpCbExportFormFields->Enable(false);
+        mbTaggedPDFUserSelection = mxCbTaggedPDF->get_active();
+        mxCbTaggedPDF->set_active(true);
+        mxCbTaggedPDF->set_sensitive(false);
+        mbExportFormFieldsUserSelection = mxCbExportFormFields->get_active();
+        mxCbExportFormFields->set_active(false);
+        mxCbExportFormFields->set_sensitive(false);
     }
     else
     {
         // retrieve the values of subordinate controls
-        mpCbTaggedPDF->Enable();
-        mpCbTaggedPDF->Check( mbTaggedPDFUserSelection );
-        mpCbExportFormFields->Check( mbExportFormFieldsUserSelection );
-        mpCbExportFormFields->Enable();
+        mxCbTaggedPDF->set_sensitive(true);
+        mxCbTaggedPDF->set_active(mbTaggedPDFUserSelection);
+        mxCbExportFormFields->set_active(mbExportFormFieldsUserSelection);
+        mxCbExportFormFields->set_sensitive(true);
     }
 
     // PDF/A-1 doesn't allow launch action, so enable/disable the selection on
     // Link page
     ImpPDFTabLinksPage* pLinksPage = mpaParent ? mpaParent->getLinksPage() : nullptr;
     if (pLinksPage)
-        pLinksPage->ImplPDFALinkControl(!mpCbPDFA1b->IsChecked());
+        pLinksPage->ImplPDFALinkControl(!mxCbPDFA1b->get_active());
 
     // if a password was set, inform the user that this will not be used in PDF/A case
-    if( mpCbPDFA1b->IsChecked() && pSecPage && pSecPage->hasPassword() )
+    if( mxCbPDFA1b->get_active() && pSecPage && pSecPage->hasPassword() )
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
@@ -1541,7 +1498,7 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 
     ImpPDFTabGeneralPage* pGeneralPage = paParent->getGeneralPage();
     if (pGeneralPage)
-        ImplPDFALinkControl(!pGeneralPage->mpCbPDFA1b->IsChecked());
+        ImplPDFALinkControl(!pGeneralPage->mxCbPDFA1b->get_active());
 }
 
 
