@@ -654,43 +654,6 @@ class SvxColorTabPage : public SfxTabPage
 private:
     VclPtr<Window>             mpTopDlg;
 
-    PaletteManager             maPaletteManager;
-    VclPtr<ListBox>            m_pSelectPalette;
-    VclPtr<SvxColorValueSet>   m_pValSetColorList;
-    VclPtr<SvxColorValueSet>   m_pValSetRecentList;
-
-    VclPtr<SvxXRectPreview>    m_pCtlPreviewOld;
-    VclPtr<SvxXRectPreview>    m_pCtlPreviewNew;
-
-    VclPtr<RadioButton>        m_pRbRGB;
-    VclPtr<RadioButton>        m_pRbCMYK;
-
-    VclPtr<VclContainer>       m_pRGBcustom;
-    VclPtr<VclContainer>       m_pRGBpreset;
-    VclPtr<NumericField>       m_pRcustom;
-    VclPtr<NumericField>       m_pRpreset;
-    VclPtr<NumericField>       m_pGcustom;
-    VclPtr<NumericField>       m_pGpreset;
-    VclPtr<NumericField>       m_pBcustom;
-    VclPtr<NumericField>       m_pBpreset;
-    VclPtr<HexColorControl>    m_pHexpreset;
-    VclPtr<HexColorControl>    m_pHexcustom;
-
-    VclPtr<VclContainer>       m_pCMYKcustom;
-    VclPtr<VclContainer>       m_pCMYKpreset;
-    VclPtr<MetricField>        m_pCcustom;
-    VclPtr<MetricField>        m_pCpreset;
-    VclPtr<MetricField>        m_pYcustom;
-    VclPtr<MetricField>        m_pYpreset;
-    VclPtr<MetricField>        m_pMcustom;
-    VclPtr<MetricField>        m_pMpreset;
-    VclPtr<MetricField>        m_pKcustom;
-    VclPtr<MetricField>        m_pKpreset;
-
-    VclPtr<PushButton>         m_pBtnAdd;
-    VclPtr<PushButton>         m_pBtnDelete;
-    VclPtr<PushButton>         m_pBtnWorkOn;
-
     const SfxItemSet&   rOutAttrs;
 
     XColorListRef         pColorList;
@@ -705,6 +668,44 @@ private:
     Color               aPreviousColor;
     Color               aCurrentColor;
 
+    css::uno::Reference< css::uno::XComponentContext > m_context;
+
+    PaletteManager maPaletteManager;
+    XRectPreview m_aCtlPreviewOld;
+    XRectPreview m_aCtlPreviewNew;
+    std::unique_ptr<ColorValueSet> m_xValSetColorList;
+    std::unique_ptr<ColorValueSet> m_xValSetRecentList;
+    std::unique_ptr<weld::ComboBoxText> m_xSelectPalette;
+    std::unique_ptr<weld::RadioButton> m_xRbRGB;
+    std::unique_ptr<weld::RadioButton> m_xRbCMYK;
+    std::unique_ptr<weld::Widget> m_xRGBcustom;
+    std::unique_ptr<weld::Widget> m_xRGBpreset;
+    std::unique_ptr<weld::Entry> m_xRpreset;
+    std::unique_ptr<weld::Entry> m_xGpreset;
+    std::unique_ptr<weld::Entry> m_xBpreset;
+    std::unique_ptr<weld::SpinButton> m_xRcustom;
+    std::unique_ptr<weld::SpinButton> m_xGcustom;
+    std::unique_ptr<weld::SpinButton> m_xBcustom;
+    std::unique_ptr<weld::HexColorControl> m_xHexpreset;
+    std::unique_ptr<weld::HexColorControl> m_xHexcustom;
+    std::unique_ptr<weld::Widget> m_xCMYKcustom;
+    std::unique_ptr<weld::Widget> m_xCMYKpreset;
+    std::unique_ptr<weld::Entry> m_xCpreset;
+    std::unique_ptr<weld::Entry> m_xYpreset;
+    std::unique_ptr<weld::Entry> m_xMpreset;
+    std::unique_ptr<weld::Entry> m_xKpreset;
+    std::unique_ptr<weld::MetricSpinButton> m_xCcustom;
+    std::unique_ptr<weld::MetricSpinButton> m_xYcustom;
+    std::unique_ptr<weld::MetricSpinButton> m_xMcustom;
+    std::unique_ptr<weld::MetricSpinButton> m_xKcustom;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnDelete;
+    std::unique_ptr<weld::Button> m_xBtnWorkOn;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPreviewOld;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPreviewNew;
+    std::unique_ptr<weld::CustomWeld> m_xValSetColorListWin;
+    std::unique_ptr<weld::CustomWeld> m_xValSetRecentListWin;
+
     static void    ConvertColorValues (Color& rColor, ColorModel eModell);
     static void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
     static void    CmykToRgb_Impl( Color& rColor, const sal_uInt16 nKey );
@@ -714,27 +715,28 @@ private:
     void ImpColorCountChanged();
     void FillPaletteLB();
 
-    DECL_LINK( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK( ClickWorkOnHdl_Impl, Button*, void );
-    DECL_LINK( ClickDeleteHdl_Impl, Button*, void );
+    DECL_LINK(ClickAddHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClickWorkOnHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClickDeleteHdl_Impl, weld::Button&, void);
 
-    DECL_LINK( SelectPaletteLBHdl, ListBox&, void );
-    DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
-    DECL_LINK( SelectColorModeHdl_Impl, RadioButton&, void );
+    DECL_LINK(SelectPaletteLBHdl, weld::ComboBoxText&, void);
+    DECL_LINK( SelectValSetHdl_Impl, SvtValueSet*, void );
+    DECL_LINK( SelectColorModeHdl_Impl, weld::ToggleButton&, void );
     void ChangeColor(const Color &rNewColor, bool bUpdatePreset = true);
     void SetColorModel(ColorModel eModel);
     void ChangeColorModel();
     void UpdateColorValues( bool bUpdatePreset = true );
-    DECL_LINK( ModifiedHdl_Impl, Edit&, void );
+    DECL_LINK(SpinValueHdl_Impl, weld::SpinButton&, void);
+    DECL_LINK(MetricSpinValueHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifiedHdl_Impl, weld::Entry&, void);
 
     void UpdateModified();
-    css::uno::Reference< css::uno::XComponentContext > m_context;
 
     static sal_Int32 FindInCustomColors( OUString const & aColorName );
     sal_Int32 FindInPalette( const Color& rColor );
 
 public:
-    SvxColorTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxColorTabPage() override;
     virtual void dispose() override;
 

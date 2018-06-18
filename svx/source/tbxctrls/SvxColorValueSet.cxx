@@ -29,7 +29,8 @@ SvxColorValueSet::SvxColorValueSet(vcl::Window* _pParent, WinBits nWinStyle)
     SetEdgeBlending(true);
 }
 
-ColorValueSet::ColorValueSet()
+ColorValueSet::ColorValueSet(weld::ScrolledWindow* pWindow)
+    : SvtValueSet(pWindow)
 {
     SetEdgeBlending(true);
 }
@@ -95,6 +96,27 @@ void ColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sal_u
     }
 }
 
+void ColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix)
+{
+    sal_uInt32 nStartIndex = 1;
+    if(rNamePrefix.getLength() != 0)
+    {
+        for(std::set<Color>::const_iterator it = rColorSet.begin();
+            it != rColorSet.end(); ++it, nStartIndex++)
+        {
+            InsertItem(nStartIndex, *it, rNamePrefix + OUString::number(nStartIndex));
+        }
+    }
+    else
+    {
+        for(std::set<Color>::const_iterator it = rColorSet.begin();
+            it != rColorSet.end(); ++it, nStartIndex++)
+        {
+            InsertItem(nStartIndex, *it, "");
+        }
+    }
+}
+
 void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix)
 {
     sal_uInt32 nStartIndex = 1;
@@ -114,6 +136,34 @@ void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, c
             InsertItem(nStartIndex, *it, "");
         }
     }
+}
+
+Size ColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
+{
+    if(!nEntryCount)
+    {
+        nEntryCount++;
+    }
+
+    const sal_uInt32 nRowCount(ceil(double(nEntryCount)/SvxColorValueSet::getColumnCount()));
+    const Size aItemSize(SvxColorValueSet::getEntryEdgeLength() - 2, SvxColorValueSet::getEntryEdgeLength() - 2);
+    const WinBits aWinBits(GetStyle() & ~WB_VSCROLL);
+
+    if (nRowCount > SvxColorValueSet::getMaxRowCount())
+    {
+        SetStyle(aWinBits|WB_VSCROLL);
+    }
+    else
+    {
+        SetStyle(aWinBits);
+    }
+
+    SetColCount(SvxColorValueSet::getColumnCount());
+    SetLineCount(std::min(nRowCount, SvxColorValueSet::getMaxRowCount()));
+    SetItemWidth(aItemSize.Width());
+    SetItemHeight(aItemSize.Height());
+
+    return CalcWindowSizePixel(aItemSize);
 }
 
 Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)

@@ -35,6 +35,7 @@ public:
     virtual const OUString&     GetName() = 0;
     virtual const OUString&     GetPath() = 0;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) = 0;
+    virtual void                LoadColorSet( ColorValueSet& rColorSet ) = 0;
 
     virtual bool                IsValid() = 0;
 };

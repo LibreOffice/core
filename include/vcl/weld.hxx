@@ -129,10 +129,13 @@ public:
     virtual void vadjustment_set_value(int value) = 0;
     virtual int vadjustment_get_upper() const = 0;
     virtual void vadjustment_set_upper(int upper) = 0;
+    virtual void set_vpolicy(VclPolicyType eVPolicy) = 0;
+    virtual VclPolicyType get_vpolicy() const = 0;
     void connect_vadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
     {
         m_aVChangeHdl = rLink;
     }
+    virtual int get_vscroll_width() const = 0;
 };
 
 class VCL_DLLPUBLIC Frame : virtual public Container

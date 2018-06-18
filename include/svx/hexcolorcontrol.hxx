@@ -32,21 +32,6 @@
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 
-class SVX_DLLPUBLIC HexColorControl : public Edit
-{
-public:
-    HexColorControl( vcl::Window* pParent, WinBits nStyle );
-
-    virtual bool PreNotify( NotifyEvent& rNEvt ) override;
-    virtual void Paste() override;
-
-    void SetColor( ::Color nColor );
-    ::Color GetColor();
-
-private:
-    static bool ImplProcessKeyInput( const KeyEvent& rKEv );
-};
-
 namespace weld {
 
 class SVX_DLLPUBLIC HexColorControl
