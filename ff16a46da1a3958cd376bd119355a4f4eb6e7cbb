@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_9f7438d0",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-18T13:11:49Z",
+      "side": 1,
+      "message": "typename A, typename D -\u003e typename, typename\n\nis possible, so that you don\u0027t duplicate template parameter names everywhere.",
+      "revId": "ff16a46da1a3958cd376bd119355a4f4eb6e7cbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
