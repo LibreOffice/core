@@ -173,7 +173,7 @@ Q_SIGNALS:
     void setValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction,
                         const css::uno::Any& rValue);
     css::uno::Any getValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction);
-    void enableControlSignal(sal_Int16 nControlId, sal_Bool bEnable);
+    void enableControlSignal(sal_Int16 nControlId, bool bEnable);
     void setLabelSignal(sal_Int16 nControlId, const OUString& rLabel);
     OUString getLabelSignal(sal_Int16 nControlId);
     void appendFilterSignal(const OUString& rTitle, const OUString& rFilter);
@@ -199,7 +199,7 @@ private Q_SLOTS:
         return getValue(nControlId, nControlAction);
     }
 
-    void enableControlSlot(sal_Int16 nControlId, sal_Bool bEnable)
+    void enableControlSlot(sal_Int16 nControlId, bool bEnable)
     {
         return enableControl(nControlId, bEnable);
     }
