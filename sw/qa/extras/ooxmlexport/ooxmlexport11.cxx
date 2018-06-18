@@ -381,6 +381,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116801, "tdf116801.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("D1"), xCell->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107969, "tdf107969.docx")
+{
+    // A VML object in a footnote's tracked changes caused write past end of document.xml at export to docx.
+    // After that, importing after export failed with
+    // SAXParseException: '[word/document.xml line 2]: Extra content at the end of the document', Stream 'word/document.xml'.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

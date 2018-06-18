@@ -682,11 +682,14 @@ void DocxExport::WriteFootnotesEndnotes()
         m_pAttrOutput->SetSerializer( pFootnotesFS );
         // tdf#99227
         m_pSdrExport->setSerializer( pFootnotesFS );
+        // tdf#107969
+        m_pVMLExport->SetFS(pFootnotesFS);
 
         // do the work
         m_pAttrOutput->FootnotesEndnotes( true );
 
         // switch the serializer back
+        m_pVMLExport->SetFS(m_pDocumentFS);
         m_pSdrExport->setSerializer( m_pDocumentFS );
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
     }
@@ -706,11 +709,14 @@ void DocxExport::WriteFootnotesEndnotes()
         m_pAttrOutput->SetSerializer( pEndnotesFS );
         // tdf#99227
         m_pSdrExport->setSerializer( pEndnotesFS );
+        // tdf#107969
+        m_pVMLExport->SetFS(pEndnotesFS);
 
         // do the work
         m_pAttrOutput->FootnotesEndnotes( false );
 
         // switch the serializer back
+        m_pVMLExport->SetFS(m_pDocumentFS);
         m_pSdrExport->setSerializer( m_pDocumentFS );
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
     }
