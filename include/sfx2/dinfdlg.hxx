@@ -225,21 +225,20 @@ public:
 class SfxDocumentDescPage : public SfxTabPage
 {
 private:
-    VclPtr<Edit>              m_pTitleEd;
-    VclPtr<Edit>              m_pThemaEd;
-    VclPtr<Edit>              m_pKeywordsEd;
-    VclPtr<VclMultiLineEdit>  m_pCommentEd;
-    SfxDocumentInfoItem*      m_pInfoItem;
+    SfxDocumentInfoItem* m_pInfoItem;
+    std::unique_ptr<weld::Entry> m_xTitleEd;
+    std::unique_ptr<weld::Entry> m_xThemaEd;
+    std::unique_ptr<weld::Entry> m_xKeywordsEd;
+    std::unique_ptr<weld::TextView> m_xCommentEd;
 
 protected:
     virtual ~SfxDocumentDescPage() override;
-    virtual void dispose() override;
 
     virtual bool            FillItemSet( SfxItemSet* ) override;
     virtual void            Reset( const SfxItemSet* ) override;
 
 public:
-    SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
+    SfxDocumentDescPage(TabPageParent pParent, const SfxItemSet&);
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
 };
 
