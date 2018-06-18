@@ -494,7 +494,6 @@ public:
     }
 
     void save_value() { m_sSavedValue = get_text(); }
-
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }
 };
 
@@ -777,6 +776,9 @@ public:
 
 class VCL_DLLPUBLIC TextView : virtual public Container
 {
+private:
+    OUString m_sSavedValue;
+
 public:
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
@@ -789,6 +791,9 @@ public:
         //can improve this if needed
         return get_text_height() * nRows;
     }
+
+    void save_value() { m_sSavedValue = get_text(); }
+    bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }
 };
 
 class VCL_DLLPUBLIC Expander : virtual public Container
