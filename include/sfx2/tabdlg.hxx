@@ -272,6 +272,7 @@ protected:
      */
     void SavePosAndId();
 
+    void Start_Impl();
 public:
     SfxTabDialogController(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
                            const SfxItemSet * = nullptr);
@@ -305,8 +306,6 @@ public:
                          const std::function<void(sal_Int32)>&);
 
     const SfxItemSet*   GetExampleSet() const { return m_xExampleSet.get(); }
-
-    SAL_DLLPRIVATE void Start_Impl();
 };
 
 namespace sfx { class ItemConnectionBase; }
