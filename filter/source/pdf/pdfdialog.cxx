@@ -104,12 +104,10 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
     return xInfo;
 }
 
-
 ::cppu::IPropertyArrayHelper& PDFDialog::getInfoHelper()
 {
     return *getArrayHelper();
 }
-
 
 ::cppu::IPropertyArrayHelper* PDFDialog::createArrayHelper() const
 {

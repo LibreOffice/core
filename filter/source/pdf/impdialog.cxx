@@ -830,7 +830,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, 
     // if a password was set, inform the user that this will not be used in PDF/A case
     if( mxCbPDFA1b->get_active() && pSecPage && pSecPage->hasPassword() )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   PDFFilterResId(STR_WARN_PASSWORD_PDFA)));
         xBox->run();
@@ -1194,7 +1194,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 
 IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
 {
-    SfxPasswordDialog aPwdDialog(GetFrameWeld(), &msUserPwdTitle);
+    SfxPasswordDialog aPwdDialog(m_xContainer.get(), &msUserPwdTitle);
     aPwdDialog.SetMinLen(0);
     aPwdDialog.ShowMinLengthText(false);
     aPwdDialog.ShowExtras( SfxShowExtras::CONFIRM | SfxShowExtras::PASSWORD2 | SfxShowExtras::CONFIRM2 );
