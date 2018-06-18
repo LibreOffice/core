@@ -1612,6 +1612,17 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
                 if( pTextGroup.get() && pTextGroup->getTextGrouping() != nTextGrouping )
                 {
                     pEffectSequence->setTextGrouping( pTextGroup, nTextGrouping );
+
+                    // All the effects of the outline object is removed so we need to
+                    // put it back. OTOH, the shape object that still has effects
+                    // in the text group is fine.
+                    if (nTextGrouping == -1 && pTextGroup->getEffects().size() == 0)
+                    {
+                        pEffect->setTarget(makeAny(pEffect->getTargetShape()));
+                        pEffect->setGroupId(-1);
+                        mpMainSequence->append(pEffect);
+                    }
+
                     bChanged = true;
                 }
             }
