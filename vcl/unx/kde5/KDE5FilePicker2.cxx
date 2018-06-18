@@ -48,6 +48,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QApplication>
+#include <KFileWidget>
 
 #include <fpicker/strings.hrc>
 #include <strings.hrc>
@@ -139,6 +140,12 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             &KDE5FilePicker::getSelectedFilesSlot, Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
+}
+
+KDE5FilePicker::~KDE5FilePicker()
+{
+    delete _extraControls;
+    delete _dialog;
 }
 
 void SAL_CALL
@@ -686,5 +693,21 @@ void KDE5FilePicker::selectionChanged()
     if (m_xListener.is())
         m_xListener->fileSelectionChanged(aEvent);
 }
+
+bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
+{
+    if (e->type() == QEvent::Show && o->isWidgetType())
+    {
+        auto* w = static_cast<QWidget*>(o);
+        if (!w->parentWidget() && w->isModal())
+        {
+            if (auto* fileWidget = w->findChild<KFileWidget*>({}, Qt::FindDirectChildrenOnly))
+                fileWidget->setCustomWidget(_extraControls);
+        }
+    }
+    return QObject::eventFilter(o, e);
+}
+
+#include <KDE5FilePicker.moc>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
