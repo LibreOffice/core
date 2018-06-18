@@ -80,7 +80,7 @@ private:
     void            SetPasswdText();
 
 public:
-    SfxPasswordDialog(weld::Window* pParent, const OUString* pGroupText = nullptr);
+    SfxPasswordDialog(weld::Widget* pParent, const OUString* pGroupText = nullptr);
 
     OUString GetUser() const
     {
