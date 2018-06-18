@@ -180,7 +180,7 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
 
     _dialog->show();
     //block and wait for user input
-    return _dialog->exec() == QFileDialog::Accepted;
+    return _dialog->exec() == QFileDialog::Accepted ? 1 : 0;
 }
 
 void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
