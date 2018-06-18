@@ -18,43 +18,14 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_spreadsheetsettingsobj, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_spreadsheetsettingsobj, \
-	basegfx \
-	comphelper \
 	cppu \
-	cppuhelper \
-	drawinglayer \
-	editeng \
-	for \
-	forui \
-	i18nlangtag \
-	msfilter \
-	oox \
 	sal \
-	salhelper \
-	sax \
-	sb \
-	sc \
-	sfx \
-	sot \
 	subsequenttest \
-	svl \
-	svt \
-	svx \
-	svxcore \
 	test \
-	tk \
-	tl \
-	ucbhelper \
 	unotest \
-	utl \
-	vbahelper \
-	vcl \
-	xo \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_spreadsheetsettingsobj,\
-	-I$(SRCDIR)/sc/source/ui/inc \
-	-I$(SRCDIR)/sc/inc \
 	$$(INCLUDE) \
 ))
 
