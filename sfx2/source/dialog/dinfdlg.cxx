@@ -839,7 +839,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl, Button*, void)
     SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
     {
-        pDoc->SignDocumentContent();
+        pDoc->SignDocumentContent(GetFrameWeld());
 
         ImplUpdateSignatures();
     }

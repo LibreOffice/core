@@ -20,8 +20,8 @@
 #define INCLUDED_BASCTL_SOURCE_INC_DOCSIGNATURE_HXX
 
 #include <sfx2/signaturestate.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
-
 
 namespace basctl
 {
@@ -53,7 +53,7 @@ namespace basctl
             @precond
                 isValid returns <TRUE/>
         */
-        void        signScriptingContent() const;
+        void        signScriptingContent(weld::Window* pDialogParent) const;
 
         /** retrieves the state of the signature of the scripting content inside the document
 
