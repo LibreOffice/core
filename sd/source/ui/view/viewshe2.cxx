@@ -901,7 +901,7 @@ sal_Int8 ViewShell::ExecuteDrop (
     return pView ? pView->ExecuteDrop( rEvt, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE;
 }
 
-void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool /*bBrowse*/)
+void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
@@ -919,7 +919,7 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     mpFrameView->WriteUserDataSequence( rSequence );
 }
 
-void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool /*bBrowse*/ )
+void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     mpFrameView->ReadUserDataSequence( rSequence );
 }
