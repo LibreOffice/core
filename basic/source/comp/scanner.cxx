@@ -226,6 +226,8 @@ bool SbiScanner::NextSym()
         nOldCol1 = nOldCol2 = 0;
     }
 
+    const sal_Int32 nLineIdxScanStart = nLineIdx;
+
     if(nCol < aLine.getLength() && BasicCharClass::isWhitespace(aLine[nCol]))
     {
         bSpaces = true;
@@ -632,6 +634,13 @@ PrevLineCommentLbl:
         nCol2 = nCol2 + nLen;
         nLineIdx = -1;
     }
+
+    if (nLineIdx == nLineIdxScanStart)
+    {
+        GenError( ERRCODE_BASIC_SYMBOL_EXPECTED );
+        return false;
+    }
+
     return true;
 
 
