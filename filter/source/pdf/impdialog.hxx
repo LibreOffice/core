@@ -329,35 +329,8 @@ public:
 /// Class security tab page
 class ImpPDFTabSecurityPage : public SfxTabPage
 {
-    VclPtr<PushButton>          mpPbSetPwd;
     OUString                    msStrSetPwd;
-
-    VclPtr<VclContainer>        mpUserPwdSet;
-    VclPtr<VclContainer>        mpUserPwdUnset;
-    VclPtr<VclContainer>        mpUserPwdPdfa;
-
-    VclPtr<VclContainer>        mpOwnerPwdSet;
-    VclPtr<VclContainer>        mpOwnerPwdUnset;
-    VclPtr<VclContainer>        mpOwnerPwdPdfa;
-
-    VclPtr<VclContainer>        mpPrintPermissions;
-    VclPtr<RadioButton>         mpRbPrintNone;
-    VclPtr<RadioButton>         mpRbPrintLowRes;
-    VclPtr<RadioButton>         mpRbPrintHighRes;
-
-    VclPtr<VclContainer>        mpChangesAllowed;
-    VclPtr<RadioButton>         mpRbChangesNone;
-    VclPtr<RadioButton>         mpRbChangesInsDel;
-    VclPtr<RadioButton>         mpRbChangesFillForm;
-    VclPtr<RadioButton>         mpRbChangesComment;
-    VclPtr<RadioButton>         mpRbChangesAnyNoCopy;
-
-    VclPtr<VclContainer>        mpContent;
-    VclPtr<CheckBox>            mpCbEnableCopy;
-    VclPtr<CheckBox>            mpCbEnableAccessibility;
-
     OUString                    msUserPwdTitle;
-
     bool                        mbHaveOwnerPassword;
     bool                        mbHaveUserPassword;
     css::uno::Sequence< css::beans::NamedValue > maPreparedOwnerPassword;
@@ -365,23 +338,43 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
     css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
 
-    DECL_LINK( ClickmaPbSetPwdHdl, Button*, void );
+    std::unique_ptr<weld::Button> mxPbSetPwd;
+    std::unique_ptr<weld::Widget> mxUserPwdSet;
+    std::unique_ptr<weld::Widget> mxUserPwdUnset;
+    std::unique_ptr<weld::Widget> mxUserPwdPdfa;
+    std::unique_ptr<weld::Widget> mxOwnerPwdSet;
+    std::unique_ptr<weld::Widget> mxOwnerPwdUnset;
+    std::unique_ptr<weld::Widget> mxOwnerPwdPdfa;
+    std::unique_ptr<weld::Widget> mxPrintPermissions;
+    std::unique_ptr<weld::RadioButton> mxRbPrintNone;
+    std::unique_ptr<weld::RadioButton> mxRbPrintLowRes;
+    std::unique_ptr<weld::RadioButton> mxRbPrintHighRes;
+    std::unique_ptr<weld::Widget> mxChangesAllowed;
+    std::unique_ptr<weld::RadioButton> mxRbChangesNone;
+    std::unique_ptr<weld::RadioButton> mxRbChangesInsDel;
+    std::unique_ptr<weld::RadioButton> mxRbChangesFillForm;
+    std::unique_ptr<weld::RadioButton> mxRbChangesComment;
+    std::unique_ptr<weld::RadioButton> mxRbChangesAnyNoCopy;
+    std::unique_ptr<weld::Widget> mxContent;
+    std::unique_ptr<weld::CheckButton> mxCbEnableCopy;
+    std::unique_ptr<weld::CheckButton> mxCbEnableAccessibility;
+    std::unique_ptr<weld::Label> mxPasswordTitle;
+
+    DECL_LINK(ClickmaPbSetPwdHdl, weld::Button&, void);
 
     void                        enablePermissionControls();
 
 public:
-                                ImpPDFTabSecurityPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ImpPDFTabSecurityPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabSecurityPage() override;
 
-    virtual void                dispose() override;
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
     void                        ImplPDFASecurityControl( bool bEnableSecurity );
     bool                        hasPassword() const { return mbHaveOwnerPassword || mbHaveUserPassword; }
 };
-
 
 /// Implements the relative link stuff
 class ImpPDFTabLinksPage : public SfxTabPage
