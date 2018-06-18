@@ -376,26 +376,25 @@ public:
 /// Implements the relative link stuff
 class ImpPDFTabLinksPage : public SfxTabPage
 {
-    VclPtr<CheckBox>            m_pCbExprtBmkrToNmDst;
-    VclPtr<CheckBox>            m_pCbOOoToPDFTargets;
-    VclPtr<CheckBox>            m_pCbExportRelativeFsysLinks;
-
-    VclPtr<RadioButton>         m_pRbOpnLnksDefault;
     bool                        mbOpnLnksDefaultUserState;
-    VclPtr<RadioButton>         m_pRbOpnLnksLaunch;
     bool                        mbOpnLnksLaunchUserState;
-    VclPtr<RadioButton>         m_pRbOpnLnksBrowser;
     bool                        mbOpnLnksBrowserUserState;
 
-    DECL_LINK( ClickRbOpnLnksDefaultHdl, Button*, void );
-    DECL_LINK( ClickRbOpnLnksBrowserHdl, Button*, void );
+    std::unique_ptr<weld::CheckButton> m_xCbExprtBmkrToNmDst;
+    std::unique_ptr<weld::CheckButton> m_xCbOOoToPDFTargets;
+    std::unique_ptr<weld::CheckButton> m_xCbExportRelativeFsysLinks;
+    std::unique_ptr<weld::RadioButton> m_xRbOpnLnksDefault;
+    std::unique_ptr<weld::RadioButton> m_xRbOpnLnksLaunch;
+    std::unique_ptr<weld::RadioButton> m_xRbOpnLnksBrowser;
+
+    DECL_LINK(ClickRbOpnLnksDefaultHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickRbOpnLnksBrowserHdl, weld::ToggleButton&, void);
 
 public:
-                                ImpPDFTabLinksPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ImpPDFTabLinksPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabLinksPage() override;
 
-    virtual void                dispose() override;
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );

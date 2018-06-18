@@ -1365,53 +1365,33 @@ void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( bool bEnableSecurity )
     enablePermissionControls();
 }
 
-
 /// The link preferences tab page (relative and other stuff)
-ImpPDFTabLinksPage::ImpPDFTabLinksPage( vcl::Window* pParent,
-                                              const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, "PdfLinksPage","filter/ui/pdflinkspage.ui",&rCoreSet ),
-
-    mbOpnLnksDefaultUserState( false ),
-    mbOpnLnksLaunchUserState( false ),
-    mbOpnLnksBrowserUserState( false )
+ImpPDFTabLinksPage::ImpPDFTabLinksPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "filter/ui/pdflinkspage.ui", "PdfLinksPage", &rCoreSet)
+    , mbOpnLnksDefaultUserState(false)
+    , mbOpnLnksLaunchUserState(false)
+    , mbOpnLnksBrowserUserState(false)
+    , m_xCbExprtBmkrToNmDst(m_xBuilder->weld_check_button("export"))
+    , m_xCbOOoToPDFTargets(m_xBuilder->weld_check_button("convert"))
+    , m_xCbExportRelativeFsysLinks(m_xBuilder->weld_check_button("exporturl"))
+    , m_xRbOpnLnksDefault(m_xBuilder->weld_radio_button("default"))
+    , m_xRbOpnLnksLaunch(m_xBuilder->weld_radio_button("openpdf"))
+    , m_xRbOpnLnksBrowser(m_xBuilder->weld_radio_button("openinternet"))
 {
-    get(m_pCbExprtBmkrToNmDst,"export");
-    get(m_pCbOOoToPDFTargets ,"convert");
-    get(m_pCbExportRelativeFsysLinks ,"exporturl");
-    get(m_pRbOpnLnksDefault ,"default");
-    get(m_pRbOpnLnksLaunch ,"openpdf");
-    get(m_pRbOpnLnksBrowser ,"openinternet");
 }
-
 
 ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
 {
-    disposeOnce();
 }
 
-
-void ImpPDFTabLinksPage::dispose()
+VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    m_pCbExprtBmkrToNmDst.clear();
-    m_pCbOOoToPDFTargets.clear();
-    m_pCbExportRelativeFsysLinks.clear();
-    m_pRbOpnLnksDefault.clear();
-    m_pRbOpnLnksLaunch.clear();
-    m_pRbOpnLnksBrowser.clear();
-    SfxTabPage::dispose();
+    return VclPtr<ImpPDFTabLinksPage>::Create(pParent, *rAttrSet);
 }
-
-
-VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create( TabPageParent pParent,
-                                               const SfxItemSet* rAttrSet)
-{
-    return VclPtr<ImpPDFTabLinksPage>::Create( pParent.pParent, *rAttrSet );
-}
-
 
 void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
-    paParent->mbExportRelativeFsysLinks = m_pCbExportRelativeFsysLinks->IsChecked();
+    paParent->mbExportRelativeFsysLinks = m_xCbExportRelativeFsysLinks->get_active();
 
     bool bIsPDFASel = false;
     ImpPDFTabGeneralPage* pGeneralPage = paParent->getGeneralPage();
@@ -1421,9 +1401,9 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     if( !bIsPDFASel )
     {
         // ...get the control states
-        mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
-        mbOpnLnksLaunchUserState =  m_pRbOpnLnksLaunch->IsChecked();
-        mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
+        mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
+        mbOpnLnksLaunchUserState =  m_xRbOpnLnksLaunch->get_active();
+        mbOpnLnksBrowserUserState = m_xRbOpnLnksBrowser->get_active();
     }
     // the control states, or the saved is used
     // to form the stored selection
@@ -1433,33 +1413,32 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     else if( mbOpnLnksLaunchUserState )
         paParent->mnViewPDFMode = 1;
 
-    paParent->mbConvertOOoTargets = m_pCbOOoToPDFTargets->IsChecked();
-    paParent->mbExportBmkToPDFDestination = m_pCbExprtBmkrToNmDst->IsChecked();
+    paParent->mbConvertOOoTargets = m_xCbOOoToPDFTargets->get_active();
+    paParent->mbExportBmkToPDFDestination = m_xCbExprtBmkrToNmDst->get_active();
 }
-
 
 void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
-    m_pCbOOoToPDFTargets->Check( paParent->mbConvertOOoTargets );
-    m_pCbExprtBmkrToNmDst->Check( paParent->mbExportBmkToPDFDestination );
+    m_xCbOOoToPDFTargets->set_active(paParent->mbConvertOOoTargets);
+    m_xCbExprtBmkrToNmDst->set_active(paParent->mbExportBmkToPDFDestination);
 
-    m_pRbOpnLnksDefault->SetClickHdl( LINK( this, ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl ) );
-    m_pRbOpnLnksBrowser->SetClickHdl( LINK( this, ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl ) );
+    m_xRbOpnLnksDefault->connect_toggled(LINK(this, ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl));
+    m_xRbOpnLnksBrowser->connect_toggled(LINK(this, ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl));
 
-    m_pCbExportRelativeFsysLinks->Check( paParent->mbExportRelativeFsysLinks );
+    m_xCbExportRelativeFsysLinks->set_active(paParent->mbExportRelativeFsysLinks);
     switch( paParent->mnViewPDFMode )
     {
     default:
     case 0:
-        m_pRbOpnLnksDefault->Check();
+        m_xRbOpnLnksDefault->set_active(true);
         mbOpnLnksDefaultUserState = true;
         break;
     case 1:
-        m_pRbOpnLnksLaunch->Check();
+        m_xRbOpnLnksLaunch->set_active(true);
         mbOpnLnksLaunchUserState = true;
         break;
     case 2:
-        m_pRbOpnLnksBrowser->Check();
+        m_xRbOpnLnksBrowser->set_active(true);
         mbOpnLnksBrowserUserState = true;
         break;
     }
@@ -1482,42 +1461,39 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( bool bEnableLaunch )
     // set the value and position of link type selection
     if( bEnableLaunch )
     {
-        m_pRbOpnLnksLaunch->Enable();
+        m_xRbOpnLnksLaunch->set_sensitive(true);
         // restore user state with no PDF/A-1 selected
-        m_pRbOpnLnksDefault->Check( mbOpnLnksDefaultUserState );
-        m_pRbOpnLnksLaunch->Check( mbOpnLnksLaunchUserState );
-        m_pRbOpnLnksBrowser->Check( mbOpnLnksBrowserUserState );
+        m_xRbOpnLnksDefault->set_active(mbOpnLnksDefaultUserState);
+        m_xRbOpnLnksLaunch->set_active(mbOpnLnksLaunchUserState);
+        m_xRbOpnLnksBrowser->set_active(mbOpnLnksBrowserUserState);
     }
     else
     {
         // save user state with no PDF/A-1 selected
-        mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
-        mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
-        mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
-        m_pRbOpnLnksLaunch->Enable( false );
-        if( mbOpnLnksLaunchUserState )
-            m_pRbOpnLnksBrowser->Check();
+        mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
+        mbOpnLnksLaunchUserState = m_xRbOpnLnksLaunch->get_active();
+        mbOpnLnksBrowserUserState = m_xRbOpnLnksBrowser->get_active();
+        m_xRbOpnLnksLaunch->set_sensitive(false);
+        if (mbOpnLnksLaunchUserState)
+            m_xRbOpnLnksBrowser->set_active(true);
     }
 }
 
-
 /// Reset the memory of Launch action present when PDF/A-1 was requested
-IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, Button*, void)
+IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, weld::ToggleButton&, void)
 {
-    mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
-    mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
-    mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
+    mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
+    mbOpnLnksLaunchUserState = m_xRbOpnLnksLaunch->get_active();
+    mbOpnLnksBrowserUserState = m_xRbOpnLnksBrowser->get_active();
 }
-
 
 /// Reset the memory of a launch action present when PDF/A-1 was requested
-IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, Button*, void)
+IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, weld::ToggleButton&, void)
 {
-    mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
-    mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
-    mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
+    mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
+    mbOpnLnksLaunchUserState = m_xRbOpnLnksLaunch->get_active();
+    mbOpnLnksBrowserUserState = m_xRbOpnLnksBrowser->get_active();
 }
-
 
 ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFWriter::ErrorCode>& rErrors)
     : MessageDialogController(pParent, "filter/ui/warnpdfdialog.ui", "WarnPDFDialog", "grid")
