@@ -182,76 +182,72 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 {
     friend class ImpPDFTabLinksPage;
 
-    VclPtr<RadioButton>          mpRbAll;
-    VclPtr<RadioButton>          mpRbRange;
-    VclPtr<RadioButton>          mpRbSelection;
-    VclPtr<Edit>                 mpEdPages;
-    VclPtr<FixedText>            mpSelectedSheets;
-
-    VclPtr<RadioButton>          mpRbLosslessCompression;
-    VclPtr<RadioButton>          mpRbJPEGCompression;
-    VclPtr<VclContainer>         mpQualityFrame;
-    VclPtr<MetricField>          mpNfQuality;
-    VclPtr<CheckBox>             mpCbReduceImageResolution;
-    VclPtr<ComboBox>             mpCoReduceImageResolution;
-
-    VclPtr<CheckBox>             mpCbPDFA1b;
-    VclPtr<CheckBox>             mpCbTaggedPDF;
     bool                         mbTaggedPDFUserSelection;
-
-    VclPtr<CheckBox>             mpCbExportFormFields;
     bool                         mbExportFormFieldsUserSelection;
-    VclPtr<VclContainer>         mpFormsFrame;
-    VclPtr<ListBox>              mpLbFormsFormat;
-    VclPtr<CheckBox>             mpCbAllowDuplicateFieldNames;
+    bool                         mbIsPresentation;
+    bool                         mbIsSpreadsheet;
+    bool                         mbIsWriter;
 
-    VclPtr<CheckBox>             mpCbExportBookmarks;
-    VclPtr<CheckBox>             mpCbExportHiddenSlides;
-    VclPtr<CheckBox>             mpCbExportNotes;
-    VclPtr<CheckBox>             mpCbViewPDF;
-    VclPtr<CheckBox>             mpCbUseReferenceXObject;
-    VclPtr<CheckBox>             mpCbExportNotesPages;
-    VclPtr<CheckBox>             mpCbExportOnlyNotesPages;
+    VclPtr<ImpPDFTabDialog>      mpaParent;
 
-    VclPtr<CheckBox>             mpCbExportEmptyPages;
-    VclPtr<CheckBox>             mpCbExportPlaceholders;
-    VclPtr<CheckBox>             mpCbAddStream;
 
-    VclPtr<CheckBox>             mpCbWatermark;
-    VclPtr<FixedText>            mpFtWatermark;
-    VclPtr<Edit>                mpEdWatermark;
+    std::unique_ptr<weld::RadioButton> mxRbAll;
+    std::unique_ptr<weld::RadioButton> mxRbRange;
+    std::unique_ptr<weld::RadioButton> mxRbSelection;
+    std::unique_ptr<weld::Entry> mxEdPages;
+    std::unique_ptr<weld::Label> mxSelectedSheets;
+    std::unique_ptr<weld::RadioButton> mxRbLosslessCompression;
+    std::unique_ptr<weld::RadioButton> mxRbJPEGCompression;
+    std::unique_ptr<weld::Widget> mxQualityFrame;
+    std::unique_ptr<weld::MetricSpinButton> mxNfQuality;
+    std::unique_ptr<weld::CheckButton> mxCbReduceImageResolution;
+    std::unique_ptr<weld::ComboBoxText> mxCoReduceImageResolution;
+    std::unique_ptr<weld::CheckButton> mxCbPDFA1b;
+    std::unique_ptr<weld::CheckButton> mxCbTaggedPDF;
+    std::unique_ptr<weld::CheckButton> mxCbExportFormFields;
+    std::unique_ptr<weld::Widget> mxFormsFrame;
+    std::unique_ptr<weld::ComboBoxText> mxLbFormsFormat;
+    std::unique_ptr<weld::CheckButton> mxCbAllowDuplicateFieldNames;
+    std::unique_ptr<weld::CheckButton> mxCbExportBookmarks;
+    std::unique_ptr<weld::CheckButton> mxCbExportHiddenSlides;
+    std::unique_ptr<weld::CheckButton> mxCbExportNotes;
+    std::unique_ptr<weld::CheckButton> mxCbViewPDF;
+    std::unique_ptr<weld::CheckButton> mxCbUseReferenceXObject;
+    std::unique_ptr<weld::CheckButton> mxCbExportNotesPages;
+    std::unique_ptr<weld::CheckButton> mxCbExportOnlyNotesPages;
+    std::unique_ptr<weld::CheckButton> mxCbExportEmptyPages;
+    std::unique_ptr<weld::CheckButton> mxCbExportPlaceholders;
+    std::unique_ptr<weld::CheckButton> mxCbAddStream;
+    std::unique_ptr<weld::CheckButton> mxCbWatermark;
+    std::unique_ptr<weld::Label> mxFtWatermark;
+    std::unique_ptr<weld::Entry> mxEdWatermark;
+    std::unique_ptr<weld::Label> mxSlidesFt;
+    std::unique_ptr<weld::Label> mxSheetsFt;
 
-    bool                        mbIsPresentation;
-    bool                        mbIsSpreadsheet;
-    bool                        mbIsWriter;
-
-    VclPtr<ImpPDFTabDialog>     mpaParent;
-
-    DECL_LINK( ToggleAllHdl, RadioButton&, void );
-    DECL_LINK( TogglePagesHdl, RadioButton&, void );
-    DECL_LINK( ToggleSelectionHdl, RadioButton&, void );
-    DECL_LINK( ToggleCompressionHdl, RadioButton&, void );
-    DECL_LINK( ToggleReduceImageResolutionHdl, CheckBox&, void );
-    DECL_LINK( ToggleWatermarkHdl, CheckBox&, void );
-    DECL_LINK( ToggleAddStreamHdl, CheckBox&, void );
-    DECL_LINK( ToggleExportFormFieldsHdl, CheckBox&, void );
-    DECL_LINK( ToggleExportNotesPagesHdl, CheckBox&, void );
+    DECL_LINK(ToggleAllHdl, weld::ToggleButton&, void);
+    DECL_LINK(TogglePagesHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleSelectionHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleCompressionHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleReduceImageResolutionHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleWatermarkHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleAddStreamHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleExportFormFieldsHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleExportNotesPagesHdl, weld::ToggleButton&, void);
 
     void                        TogglePagesHdl();
     void                        EnableExportNotesPages();
 
 public:
-    DECL_LINK( ToggleExportPDFAHdl, CheckBox&, void );
+    DECL_LINK(ToggleExportPDFAHdl, weld::ToggleButton&, void);
 
-                                ImpPDFTabGeneralPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabGeneralPage() override;
 
-    virtual void                dispose() override;
     static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem(ImpPDFTabDialog* paParent);
-    bool                        IsPdfaSelected() const { return mpCbPDFA1b->IsChecked(); }
+    bool                        IsPdfaSelected() const { return mxCbPDFA1b->get_active(); }
 };
 
 /// Class tab page viewer
