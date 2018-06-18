@@ -20,10 +20,7 @@
 #define INCLUDED_SFX2_SECURITYPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <sfx2/htmlmode.hxx>
-
 #include <memory>
-
 
 struct SfxSecurityPage_Impl;
 
@@ -36,10 +33,10 @@ protected:
     virtual void            Reset( const SfxItemSet* ) override;
 
 public:
-    SfxSecurityPage(vcl::Window* pParent, const SfxItemSet&);
+    SfxSecurityPage(TabPageParent pParent, const SfxItemSet&);
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet*);
+    weld::Builder& GetBuilder() const { return *m_xBuilder; }
 };
-
 
 #endif // INCLUDED_SFX2_SECURITYPAGE_HXX
 
