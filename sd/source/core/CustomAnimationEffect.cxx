@@ -2318,6 +2318,16 @@ void EffectSequenceHelper::updateTextGroups()
 
         pGroup->addEffect( pEffect );
     }
+
+    // Now that all the text groups have been cleared up and rebuilt, we need to update its
+    // text grouping. addEffect() already make mnTextGrouping the last possible level,
+    // so just continue to find the last level that is not EffectNodeType::WITH_PREVIOUS.
+    for(const auto &rGroupMapItem: maGroupMap)
+    {
+        const CustomAnimationTextGroupPtr &pGroup = rGroupMapItem.second;
+        while(pGroup->mnTextGrouping > 0 && pGroup->mnDepthFlags[pGroup->mnTextGrouping - 1] == EffectNodeType::WITH_PREVIOUS)
+            --pGroup->mnTextGrouping;
+    }
 }
 
 CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, bool bAnimateForm, bool bTextReverse )
