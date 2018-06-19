@@ -1,4 +1,4 @@
-From d5548168e6e25a96e2cad3c68534c57a0a890fca Mon Sep 17 00:00:00 2001
+From 654d217917039a1abbdad20e2ce94555cedf0785 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:12:29 +0100
 Subject: [PATCH] xmlsec1-vc.patch
@@ -10,10 +10,10 @@ Conflicts:
  1 file changed, 4 insertions(+)
 
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index e34c3e9f..aedb0188 100644
+index e7cd5c38..51c91399 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
-@@ -312,6 +312,10 @@ CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
+@@ -363,6 +363,10 @@ CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STRING_H" /D "HAVE_CTYPE_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_MALLOC_H" /D "HAVE_MEMORY_H"
  CFLAGS 			= $(CFLAGS) /D "XMLSEC_NO_GOST" /D "XMLSEC_NO_GOST2012" 
@@ -25,5 +25,5 @@ index e34c3e9f..aedb0188 100644
  !if "$(UNICODE)" == "1"
  CFLAGS 			= $(CFLAGS) /D "UNICODE" /D "_UNICODE"
 -- 
-2.13.5
+2.16.3
 
