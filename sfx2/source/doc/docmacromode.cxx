@@ -265,7 +265,7 @@ namespace sfx2
             }
         }
 
-        // conformation is required
+        // confirmation is required
         bool bSecure = false;
 
         if ( eAutoConfirm == eNoAutoConfirm )
