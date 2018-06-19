@@ -76,7 +76,6 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
@@ -1727,68 +1726,41 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     mpFS->endElementNS( XML_a, XML_tcPr );
 }
 
+void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& rBorderLine)
+{
+// While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
+// To get original value of LineWidth need to multiple by 2.
+    sal_Int32 nBorderWidth = rBorderLine.LineWidth;
+    nBorderWidth *= 2;
+    nBorderWidth = oox::drawingml::convertHmmToEmu( nBorderWidth );
+
+    if ( nBorderWidth > 0 )
+    {
+        mpFS->startElementNS( XML_a, XML_line, XML_w, I32S(nBorderWidth), FSEND );
+        DrawingML::WriteSolidFill( util::Color(rBorderLine.Color) );
+        mpFS->endElementNS( XML_a, XML_line );
+    }
+}
+
 void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPropSet)
 {
     BorderLine2 aBorderLine;
 
 // lnL - Left Border Line Properties of table cell
     xCellPropSet->getPropertyValue("LeftBorder") >>= aBorderLine;
-    sal_Int32 nLeftBorder = aBorderLine.LineWidth;
-    util::Color aLeftBorderColor = aBorderLine.Color;
-
-// While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
-// To get original value of LineWidth need to multiple by 2.
-    nLeftBorder = nLeftBorder*2;
-    nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
-
-    if(nLeftBorder > 0)
-    {
-        mpFS->startElementNS( XML_a, XML_lnL, XML_w, I32S(nLeftBorder), FSEND );
-        DrawingML::WriteSolidFill(aLeftBorderColor);
-        mpFS->endElementNS( XML_a, XML_lnL );
-    }
+    WriteBorderLine( XML_lnL, aBorderLine );
 
 // lnR - Right Border Line Properties of table cell
     xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
-    sal_Int32 nRightBorder = aBorderLine.LineWidth;
-    util::Color aRightBorderColor = aBorderLine.Color;
-    nRightBorder = nRightBorder * 2 ;
-    nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
-
-    if(nRightBorder > 0)
-    {
-        mpFS->startElementNS( XML_a, XML_lnR, XML_w, I32S(nRightBorder), FSEND);
-        DrawingML::WriteSolidFill(aRightBorderColor);
-        mpFS->endElementNS( XML_a, XML_lnR);
-    }
+    WriteBorderLine( XML_lnR, aBorderLine );
 
 // lnT - Top Border Line Properties of table cell
     xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
-    sal_Int32 nTopBorder = aBorderLine.LineWidth;
-    util::Color aTopBorderColor = aBorderLine.Color;
-    nTopBorder = nTopBorder * 2;
-    nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
-
-    if(nTopBorder > 0)
-    {
-        mpFS->startElementNS( XML_a, XML_lnT, XML_w, I32S(nTopBorder), FSEND);
-        DrawingML::WriteSolidFill(aTopBorderColor);
-        mpFS->endElementNS( XML_a, XML_lnT);
-    }
+    WriteBorderLine( XML_lnT, aBorderLine );
 
 // lnB - Bottom Border Line Properties of table cell
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
-    sal_Int32 nBottomBorder = aBorderLine.LineWidth;
-    util::Color aBottomBorderColor = aBorderLine.Color;
-    nBottomBorder = nBottomBorder * 2;
-    nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
-
-    if(nBottomBorder > 0)
-    {
-        mpFS->startElementNS( XML_a, XML_lnB, XML_w, I32S(nBottomBorder), FSEND);
-        DrawingML::WriteSolidFill(aBottomBorderColor);
-        mpFS->endElementNS( XML_a, XML_lnB);
-    }
+    WriteBorderLine( XML_lnB, aBorderLine );
 }
 
 ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
