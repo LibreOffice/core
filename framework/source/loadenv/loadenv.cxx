@@ -143,7 +143,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                                                                            const css::uno::Reference< css::uno::XComponentContext >&     xContext  ,
                                                                            const OUString&                                        sURL   ,
                                                                            const OUString&                                        sTarget,
-                                                                                 sal_Int32                                               nFlags ,
+                                                                                 sal_Int32                                               nSearchFlags ,
                                                                            const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
 {
     css::uno::Reference< css::lang::XComponent > xComponent;
@@ -163,7 +163,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                                lArgs,
                                css::uno::Reference< css::frame::XFrame >(xLoader, css::uno::UNO_QUERY),
                                sTarget,
-                               nFlags,
+                               nSearchFlags,
                                loadEnvFeatures);
         aEnv.startLoading();
         aEnv.waitWhileLoading(); // wait for ever!
@@ -1035,8 +1035,8 @@ bool LoadEnv::impl_loadContent()
         }
         else
         {
-            sal_Int32 nFlags = m_nSearchFlags & ~css::frame::FrameSearchFlag::CREATE;
-            m_xTargetFrame   = m_xBaseFrame->findFrame(sTarget, nFlags);
+            sal_Int32 nSearchFlags = m_nSearchFlags & ~css::frame::FrameSearchFlag::CREATE;
+            m_xTargetFrame   = m_xBaseFrame->findFrame(sTarget, nSearchFlags);
             if (! m_xTargetFrame.is())
             {
                 if (! impl_furtherDocsAllowed())
