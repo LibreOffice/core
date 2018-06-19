@@ -463,12 +463,14 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     , m_sNone(SwResId(SW_STR_NONE))
     , pMgr(new SwFieldMgr())
     , bHTMLMode(false)
+    , m_aTextFilter(m_sNone)
 {
     get(m_pCheckLB, "objects");
     get(m_pLbCaptionOrder, "captionorder");
     get(m_pPreview, "preview");
     get(m_pSettingsGroup, "settings");
     get(m_pCategoryBox, "category");
+    m_pCategoryBox->SetTextFilter(&m_aTextFilter);
     get(m_pFormatText, "numberingft");
     get(m_pFormatBox, "numbering");
     get(m_pNumberingSeparatorFT, "numseparatorft");
