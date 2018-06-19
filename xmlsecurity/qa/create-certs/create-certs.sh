@@ -60,7 +60,7 @@ chmod 400 private/ca.key.pem
 cd "$root/ca"
 openssl req -config openssl.cnf \
     -key private/ca.key.pem \
-    -new -x509 -days 7300 -sha256 -extensions v3_ca \
+    -new -x509 -days 36500 -sha256 -extensions v3_ca \
     -out certs/ca.cert.pem \
     -passin env:SSLPASS \
     -subj '/C=UK/ST=England/O=Xmlsecurity Test/CN=Xmlsecurity Test Root CA'
@@ -102,7 +102,7 @@ openssl req -config intermediate/openssl.cnf -new -sha256 \
 
 # The certificate itself.
 openssl ca -batch -config openssl.cnf -extensions v3_intermediate_ca \
-    -days 3650 -notext -md sha256 \
+    -days 36500 -notext -md sha256 \
     -in intermediate/csr/intermediate.csr.pem \
     -passin env:SSLPASS \
     -out intermediate/certs/intermediate.cert.pem
@@ -137,7 +137,7 @@ do
     cd "$root/ca"
     # usr_cert: the cert will be used for signing.
     openssl ca -batch -config intermediate/openssl.cnf \
-        -extensions usr_cert -days 375 -notext -md sha256 \
+        -extensions usr_cert -days 36500 -notext -md sha256 \
         -in intermediate/csr/example-xmlsecurity-${i}.csr.pem \
         -passin env:SSLPASS \
         -out intermediate/certs/example-xmlsecurity-${i}.cert.pem
