@@ -48,6 +48,8 @@ struct FormulaGroupEntry
     FormulaGroupEntry( ScFormulaCell* pCell, size_t nRow );
 };
 
+// Despite the name, this is actually a cache of cell values, used by OpenCL
+// code ... I think. And obviously it's not really a struct either.
 struct FormulaGroupContext
 {
     typedef AlignedAllocator<double,256> DoubleAllocType;
