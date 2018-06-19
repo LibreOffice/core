@@ -21,7 +21,9 @@
 
 #include <sal/config.h>
 
+#include <condition_variable>
 #include <cstddef>
+#include <mutex>
 
 #include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
@@ -103,8 +105,11 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
     // List of all Redline-authors.
     std::vector<OUString> m_pAuthorNames;
 
-    // DictionaryList listener to trigger spellchecking or hyphenation
     css::uno::Reference< css::linguistic2::XLinguServiceEventListener > m_xLinguServiceEventListener;
+    std::mutex          m_aLinguServiceEventListenerInitialisedMutex;
+    std::condition_variable  m_aLinguServiceEventListenerInitialisedCV;
+    bool                m_bLinguServiceEventListenerInitialised : 1;
+
     css::uno::Reference< css::scanner::XScannerManager2 >    m_xScannerManager;
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 
@@ -237,9 +242,9 @@ public:
     static void  CheckSpellChanges( bool bOnlineSpelling,
                     bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags );
 
-    inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >&
-            GetLngSvcEvtListener();
-    void    CreateLngSvcEvtListener();
+    bool IsLinguServiceEventListenerInitialised();
+
+    void WaitForLinguServiceEventListenerInitialised();
 
     css::uno::Reference< css::scanner::XScannerManager2 > const &
             GetScannerManager();
@@ -250,12 +255,6 @@ public:
     void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
 };
-
-inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >&
-        SwModule::GetLngSvcEvtListener()
-{
-    return m_xLinguServiceEventListener;
-}
 
 //    Access to SwModule, the View and the shell.
 
