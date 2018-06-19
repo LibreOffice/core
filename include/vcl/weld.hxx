@@ -82,6 +82,8 @@ public:
     virtual void set_accessible_name(const OUString& rName) = 0;
     virtual OUString get_accessible_name() const = 0;
 
+    virtual OUString get_accessible_description() const = 0;
+
     virtual void set_tooltip_text(const OUString& rTip) = 0;
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink)
