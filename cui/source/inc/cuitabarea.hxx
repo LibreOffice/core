@@ -46,37 +46,37 @@ class ButtonBox
 {
     private:
         sal_Int32 mnCurrentButton;
-        std::vector< VclPtr<PushButton> > maButtonList;
-        std::map< VclPtr<PushButton>, sal_Int32 > maButtonToPos;
+        std::vector<weld::ToggleButton*> maButtonList;
+        std::map<weld::ToggleButton*, sal_Int32 > maButtonToPos;
         void SelectButtonImpl( sal_Int32 nPos )
         {
             if(mnCurrentButton != NO_BUTTON_SELECTED)
             {
-                maButtonList[mnCurrentButton]->SetPressed(false);
+                maButtonList[mnCurrentButton]->set_active(false);
             }
             mnCurrentButton = nPos;
-            maButtonList[mnCurrentButton]->SetPressed(true);
+            maButtonList[mnCurrentButton]->set_active(true);
         };
     public:
         ButtonBox()
         {
             mnCurrentButton = NO_BUTTON_SELECTED;
         };
-        void AddButton(VclPtr<PushButton> pButton)
+        void AddButton(weld::ToggleButton* pButton)
         {
             maButtonList.push_back(pButton);
             maButtonToPos.insert( std::make_pair(pButton, maButtonList.size() - 1) );
         }
         sal_Int32 GetCurrentButtonPos() { return mnCurrentButton; }
-        sal_Int32 GetButtonPos( VclPtr<PushButton> pButton )
+        sal_Int32 GetButtonPos(weld::ToggleButton* pButton)
         {
-            std::map< VclPtr<PushButton>, sal_Int32 >::const_iterator aBtnPos = maButtonToPos.find(pButton);
+            std::map<weld::ToggleButton*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(pButton);
             if(aBtnPos != maButtonToPos.end())
                 return aBtnPos->second;
             else
                 return -1;
         }
-        void SelectButton( VclPtr<PushButton> pButton)
+        void SelectButton(weld::ToggleButton* pButton)
         {
             sal_Int32 nPos = GetButtonPos(pButton);
             if(nPos != -1)
@@ -224,13 +224,6 @@ class SvxAreaTabPage : public SvxTabPage
     static const sal_uInt16 pAreaRanges[];
 private:
     ScopedVclPtr<SfxTabPage>   m_pFillTabPage;
-    VclPtr<VclBox>             m_pFillTab;
-    VclPtr<PushButton>         m_pBtnNone;
-    VclPtr<PushButton>         m_pBtnColor;
-    VclPtr<PushButton>         m_pBtnGradient;
-    VclPtr<PushButton>         m_pBtnHatch;
-    VclPtr<PushButton>         m_pBtnBitmap;
-    VclPtr<PushButton>         m_pBtnPattern;
     ButtonBox                  maBox;
 
     XColorListRef         m_pColorList;
@@ -254,7 +247,15 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    DECL_LINK(SelectFillTypeHdl_Impl, Button*, void);
+    std::unique_ptr<weld::Container> m_xFillTab;
+    std::unique_ptr<weld::ToggleButton> m_xBtnNone;
+    std::unique_ptr<weld::ToggleButton> m_xBtnColor;
+    std::unique_ptr<weld::ToggleButton> m_xBtnGradient;
+    std::unique_ptr<weld::ToggleButton> m_xBtnHatch;
+    std::unique_ptr<weld::ToggleButton> m_xBtnBitmap;
+    std::unique_ptr<weld::ToggleButton> m_xBtnPattern;
+
+    DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);
 
     template< typename TabPage >
     bool FillItemSet_Impl( SfxItemSet* );
@@ -265,7 +266,7 @@ private:
 public:
     using TabPage::DeactivatePage;
 
-    SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxAreaTabPage() override;
     virtual void dispose() override;
 
