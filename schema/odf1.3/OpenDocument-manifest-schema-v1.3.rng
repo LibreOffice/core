@@ -81,6 +81,34 @@
   <rng:define name="base64Binary">
     <rng:data type="base64Binary"/>
   </rng:define>
+  <rng:define name="encrypted-key">
+    <rng:element name="manifest:encrypted-key">
+      <rng:optional>
+        <rng:element name="manifest:encryption-method">
+          <rng:attribute name="manifest:PGPAlgorithm">
+            <rng:ref name="anyURI"/>
+          </rng:attribute>
+        </rng:element>
+      </rng:optional>
+      <rng:element name="manifest:keyinfo">
+        <rng:element name="manifest:PGPData">
+          <rng:element name="manifest:PGPKeyID">
+            <rng:ref name="base64Binary"/>
+          </rng:element>
+          <rng:optional>
+            <rng:element name="manifest:PGPKeyPacket">
+              <rng:ref name="base64Binary"/>
+            </rng:element>
+          </rng:optional>
+        </rng:element>
+      </rng:element>
+      <rng:element name="manifest:CipherData">
+        <rng:element name="manifest:CipherValue">
+          <rng:ref name="base64Binary"/>
+        </rng:element>
+      </rng:element>
+    </rng:element>
+  </rng:define>
   <rng:define name="encryption-data">
     <rng:element name="manifest:encryption-data">
       <rng:ref name="encryption-data-attlist"/>
@@ -149,29 +177,38 @@
     </rng:element>
   </rng:define>
   <rng:define name="key-derivation-attlist">
-    <rng:interleave>
+ <rng:choice>
       <rng:attribute name="manifest:key-derivation-name">
-        <rng:choice>
-          <rng:value>PBKDF2</rng:value>
-          <rng:ref name="anyURI"/>
-        </rng:choice>
+           <rng:value>PGP</rng:value>
       </rng:attribute>
-      <rng:attribute name="manifest:salt">
-        <rng:ref name="base64Binary"/>
-      </rng:attribute>
-      <rng:attribute name="manifest:iteration-count">
-        <rng:ref name="nonNegativeInteger"/>
-      </rng:attribute>
-      <rng:optional>
-        <rng:attribute name="manifest:key-size">
+<rng:interleave>
+        <rng:attribute name="manifest:key-derivation-name">
+          <rng:choice>
+            <rng:value>PBKDF2</rng:value>
+            <rng:ref name="anyURI"/>
+          </rng:choice>
+        </rng:attribute>
+        <rng:attribute name="manifest:salt">
+          <rng:ref name="base64Binary"/>
+        </rng:attribute>
+        <rng:attribute name="manifest:iteration-count">
           <rng:ref name="nonNegativeInteger"/>
         </rng:attribute>
-      </rng:optional>
-    </rng:interleave>
+    <rng:optional>
+          <rng:attribute name="manifest:key-size">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:choice>
   </rng:define>
   <rng:define name="manifest">
     <rng:element name="manifest:manifest">
       <rng:ref name="manifest-attlist"/>
+       <rng:zeroOrMore>
+        <rng:ref name="encrypted-key"/>
+             </rng:zeroOrMore>
+    <!-- https://issues.oasis-open.org/browse/OFFICE-3940 -->
       <rng:oneOrMore>
         <rng:ref name="file-entry"/>
       </rng:oneOrMore>
@@ -184,7 +221,7 @@
   </rng:define>
   <rng:define name="namespacedToken">
     <rng:data type="QName">
-      <rng:param name="pattern">[^:]+:[^:]+</rng:param>
+      <rng:param name="pattern">[^:]:[^:]</rng:param>
     </rng:data>
   </rng:define>
   <rng:define name="nonNegativeInteger">

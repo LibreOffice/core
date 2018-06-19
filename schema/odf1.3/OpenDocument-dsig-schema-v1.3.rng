@@ -43,7 +43,7 @@
       <!-- content of the Signature element defined by W3C XML    -->
       <!-- Signature Syntax and Processing (Second Edition).      -->
       <!-- See OpenDocument v1.3 part 2, section 5.3.             -->
-      <!-- resolved by https://issues.oasis-open.org/browse/OFFICE-3874 -->
+      <!-- Office-3874 -->
       <rng:ref name="dsMarkup"/>
     </rng:element>
   </rng:define>

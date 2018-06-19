@@ -491,6 +491,10 @@
         <rng:ref name="chart-legend"/>
       </rng:optional>
       <rng:ref name="chart-plot-area"/>
+      <rng:zeroOrMore>
+	<rng:ref name="shape"/>
+      </rng:zeroOrMore>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-2123 -->
       <rng:optional>
         <rng:ref name="table-table"/>
       </rng:optional>
@@ -749,6 +753,7 @@
             <rng:ref name="double"/>
           <ref name="common-draw-size-attlist"/>
           </rng:attribute>
+	  <!-- https://issues.oasis-open.org/browse/OFFICE-3883 -->
         </rng:group>
         <rng:empty/>
       </rng:choice>
@@ -775,6 +780,10 @@
   <rng:define name="chart-plot-area">
     <rng:element name="chart:plot-area">
       <rng:ref name="chart-plot-area-attlist"/>
+      <rng:optional>
+	<!-- https://issues.oasis-open.org/browse/OFFICE-3928 -->
+            <rng:ref name="chart-coordinate-region"/>
+        </rng:optional>
       <rng:zeroOrMore>
         <rng:ref name="dr3d-light"/>
       </rng:zeroOrMore>
@@ -831,6 +840,16 @@
         <rng:ref name="xml-id"/>
       </rng:optional>
     </rng:interleave>
+  </rng:define>
+  <rng:define name="chart-coordinate-region">
+    <rng:element name="chart:coordinate-region">
+        <rng:ref name="chart-coordinate-region-attlist"/>
+        <empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="chart-coordinate-region-attlist" combine="interleave">
+    <rng:ref name="common-draw-position-attlist"/>
+    <rng:ref name="common-draw-size-attlist"/>
   </rng:define>
   <rng:define name="chart-regression-curve">
     <rng:element name="chart:regression-curve">
@@ -1502,6 +1521,11 @@
     <rng:optional>
       <rng:attribute name="number:decimal-places">
         <rng:ref name="integer"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="number:min-decimal-places">
+	<rng:ref name="integer"/>
       </rng:attribute>
     </rng:optional>
   </rng:define>
@@ -2206,9 +2230,10 @@
     <rng:optional>
       <rng:attribute name="style:page-number">
         <rng:choice>
-          <rng:ref name="positiveInteger"/>
+          <rng:ref name="nonNegativeInteger"/>
           <rng:value>auto</rng:value>
         </rng:choice>
+	<!-- https://issues.oasis-open.org/browse/OFFICE-3923 -->
       </rng:attribute>
     </rng:optional>
   </rng:define>
@@ -2955,7 +2980,8 @@
   <rng:define name="currency-symbol-and-text">
     <rng:ref name="number-currency-symbol"/>
     <rng:optional>
-      <rng:ref name="number-text"/>
+      <rng:ref name="number-text-with-fillchar"/>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
     </rng:optional>
   </rng:define>
   <rng:define name="current-selected">
@@ -4967,6 +4993,14 @@
         </rng:attribute>
       </rng:optional>
       <rng:empty/>
+      <rng:choice>
+        <rng:group>
+          <rng:ref name="common-draw-data-attlist"/>
+	  <rng:empty/>
+	</rng:group>
+        <rng:ref name="office-binary-data"/>
+      </rng:choice>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3933 -->
     </rng:element>
   </rng:define>
   <rng:define name="draw-fill-image-attlist">
@@ -5293,11 +5327,20 @@
           <rng:ref name="string"/>
         </rng:attribute>
       </rng:optional>
+      <rng:ref name="common-draw-mime-type-attlist"/>
       <rng:optional>
         <rng:ref name="xml-id"/>
       </rng:optional>
     </rng:interleave>
   </rng:define>
+  <rng:define name="common-draw-mime-type-attlist">
+       <rng:optional>
+            <rng:attribute name="draw:mime-type">
+                <rng:ref name="string"/>
+            </rng:attribute>
+        </rng:optional>    
+  </rng:define>
+  <!-- https://issues.oasis-open.org/browse/OFFICE-3943 -->
   <rng:define name="draw-image-map">
     <rng:element name="draw:image-map">
       <rng:zeroOrMore>
@@ -5650,16 +5693,13 @@
   </rng:define>
   <rng:define name="draw-plugin-attlist">
     <rng:interleave>
-      <rng:optional>
-        <rng:attribute name="draw:mime-type">
-          <rng:ref name="string"/>
-        </rng:attribute>
-      </rng:optional>
+     <rng:ref name="common-draw-mime-type-attlist"/>
       <rng:optional>
         <rng:ref name="xml-id"/>
       </rng:optional>
     </rng:interleave>
   </rng:define>
+  <!-- https://issues.oasis-open.org/browse/OFFICE-3943 -->
   <rng:define name="draw-polygon">
     <rng:element name="draw:polygon">
       <rng:ref name="common-draw-points-attlist"/>
@@ -6975,8 +7015,9 @@
   <rng:define name="number-and-text">
     <rng:ref name="number-number"/>
     <rng:optional>
-      <rng:ref name="number-text"/>
+      <rng:ref name="number-text-with-fillchar"/>
     </rng:optional>
+    <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
   </rng:define>
   <rng:define name="number-boolean">
     <rng:element name="number:boolean">
@@ -7011,8 +7052,9 @@
         <rng:ref name="style-text-properties"/>
       </rng:optional>
       <rng:optional>
-        <rng:ref name="number-text"/>
+        <rng:ref name="number-text-with-fillchar"/>
       </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       <rng:optional>
         <rng:choice>
           <rng:group>
@@ -7071,13 +7113,15 @@
         <rng:ref name="style-text-properties"/>
       </rng:optional>
       <rng:optional>
-        <rng:ref name="number-text"/>
+        <rng:ref name="number-text-with-fillchar"/>
       </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       <rng:oneOrMore>
         <rng:ref name="any-date"/>
         <rng:optional>
-          <rng:ref name="number-text"/>
+          <rng:ref name="number-text-with-fillchar"/>
         </rng:optional>
+	<!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       </rng:oneOrMore>
       <rng:zeroOrMore>
         <rng:ref name="style-map"/>
@@ -7264,14 +7308,16 @@
         <rng:ref name="style-text-properties"/>
       </rng:optional>
       <rng:optional>
-        <rng:ref name="number-text"/>
+        <rng:ref name="number-text-with-fillchar"/>
       </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       <rng:optional>
         <rng:ref name="any-number"/>
         <rng:optional>
-          <rng:ref name="number-text"/>
+          <rng:ref name="number-text-with-fillchar"/>
         </rng:optional>
       </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       <rng:zeroOrMore>
         <rng:ref name="style-map"/>
       </rng:zeroOrMore>
@@ -7284,8 +7330,9 @@
         <rng:ref name="style-text-properties"/>
       </rng:optional>
       <rng:optional>
-        <rng:ref name="number-text"/>
+        <rng:ref name="number-text-with-fillchar"/>
       </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       <rng:optional>
         <rng:ref name="number-and-text"/>
       </rng:optional>
@@ -7325,6 +7372,11 @@
         <rng:ref name="integer"/>
       </rng:attribute>
     </rng:optional>
+    <rng:optional>
+      <rng:attribute name="number:forced-exponent-sign">
+	<rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
   <rng:define name="number-seconds">
     <rng:element name="number:seconds">
@@ -7349,6 +7401,23 @@
       </rng:optional>
     </rng:interleave>
   </rng:define>
+  <rng:define name="number-text-with-fillchar">
+		<rng:optional>
+			<rng:ref name="number-text"/>
+		</rng:optional>
+		<rng:optional>
+			<rng:ref name="number-fill-character"/>
+			<rng:optional>
+				<rng:ref name="number-text"/>
+			</rng:optional>
+		</rng:optional>
+	</rng:define>
+	<rng:define name="number-fill-character">
+		<rng:element name="number:fill-character">
+			<rng:text/>
+		</rng:element>
+	</rng:define>
+  <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
   <rng:define name="number-text">
     <rng:element name="number:text">
       <rng:text/>
@@ -7366,13 +7435,15 @@
         <rng:ref name="style-text-properties"/>
       </rng:optional>
       <rng:optional>
-        <rng:ref name="number-text"/>
+        <rng:ref name="number-text-with-fillchar"/>
       </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       <rng:zeroOrMore>
         <rng:ref name="number-text-content"/>
         <rng:optional>
-          <rng:ref name="number-text"/>
+          <rng:ref name="number-text-with-fillchar"/>
         </rng:optional>
+	<!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       </rng:zeroOrMore>
       <rng:zeroOrMore>
         <rng:ref name="style-map"/>
@@ -7388,13 +7459,15 @@
         <rng:ref name="style-text-properties"/>
       </rng:optional>
       <rng:optional>
-        <rng:ref name="number-text"/>
+        <rng:ref name="number-text-with-fillchar"/>
       </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       <rng:oneOrMore>
         <rng:ref name="any-time"/>
         <rng:optional>
-          <rng:ref name="number-text"/>
+          <rng:ref name="number-text-with-fillchar"/>
         </rng:optional>
+	<!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
       </rng:oneOrMore>
       <rng:zeroOrMore>
         <rng:ref name="style-map"/>
@@ -7447,6 +7520,12 @@
       <rng:optional>
         <rng:ref name="meta-date-string"/>
       </rng:optional>
+      <rng:optional>
+	<rng:element name="meta:creator-initials">
+	  <rng:text/>
+	</rng:element>
+      </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3776 -->
       <rng:zeroOrMore>
         <rng:choice>
           <rng:ref name="text-p"/>
@@ -8210,6 +8289,27 @@
   </rng:define>
   <rng:define name="paragraph-content">
     <rng:choice>
+      <rng:element name="text:drop-down">
+<rng:attribute name="text:name">
+<rng:ref name="string"/>
+</rng:attribute>
+<rng:zeroOrMore>
+<rng:element name="text:label">
+<rng:optional>
+<rng:attribute name="text:value">
+<rng:ref name="string"/>
+</rng:attribute>
+</rng:optional>
+<rng:optional>
+<rng:attribute name="text:current-selected">
+<rng:ref name="boolean"/>
+</rng:attribute>
+</rng:optional>
+</rng:element>
+</rng:zeroOrMore>
+<rng:text/>
+      </rng:element>
+      
       <rng:text/>
       <rng:element name="text:s">
         <rng:optional>
@@ -9995,9 +10095,31 @@
             <rng:value>logarithmic</rng:value>
             <rng:value>exponential</rng:value>
             <rng:value>power</rng:value>
+	    <rng:value>polynomial</rng:value>
           </rng:choice>
         </rng:attribute>
       </rng:optional>
+    <rng:optional>
+      <rng:attribute name="chart:regression-max-degree">
+          <rng:ref name="positiveInteger"/>
+        </rng:attribute>        
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="chart:regression-force-intercept">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="chart:regression-intercept-value">
+          <rng:ref name="double"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="chart:regression-name">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3958 -->
       <rng:optional>
         <rng:attribute name="chart:axis-position">
           <rng:choice>
@@ -10031,6 +10153,12 @@
           <rng:ref name="boolean"/>
         </rng:attribute>
       </rng:optional>
+      <rng:optional>
+    <rng:attribute name="chart:data-label-series">
+      <rng:ref name="boolean"/>
+    </rng:attribute>
+      </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-2117 -->
     </rng:interleave>
   </rng:define>
   <rng:define name="style-chart-properties-content-strict">
@@ -10575,6 +10703,12 @@
       </rng:optional>
     </rng:interleave>
   </rng:define>
+  <rng:define name="style-header-first">
+   <rng:element name="style:header-first">
+       <rng:ref name="common-style-header-footer-attlist"/>
+       <rng:ref name="header-footer-content"/>
+   </rng:element>
+</rng:define>
   <rng:define name="style-footer">
     <rng:element name="style:footer">
       <rng:ref name="common-style-header-footer-attlist"/>
@@ -10587,6 +10721,13 @@
       <rng:ref name="header-footer-content"/>
     </rng:element>
   </rng:define>
+  <rng:define name="style-footer-first">
+   <rng:element name="style:footer-first">
+       <rng:ref name="common-style-header-footer-attlist"/>
+       <rng:ref name="header-footer-content"/>
+       <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
+   </rng:element>
+</rng:define>
   <rng:define name="style-footer-style">
     <rng:element name="style:footer-style">
       <rng:optional>
@@ -10989,8 +11130,9 @@
       </rng:optional>
       <rng:optional>
         <rng:attribute name="draw:luminance">
-          <rng:ref name="zeroToHundredPercent"/>
+          <rng:ref name="signedZeroToHundredPercent"/>
         </rng:attribute>
+	<!-- https://issues.oasis-open.org/browse/OFFICE-3821 -->
       </rng:optional>
       <rng:optional>
         <rng:attribute name="draw:contrast">
@@ -11840,12 +11982,18 @@
         <rng:optional>
           <rng:ref name="style-header-left"/>
         </rng:optional>
+	<rng:optional>
+	  <rng:ref name="style-header-first"/>
+	</rng:optional>
       </rng:optional>
       <rng:optional>
         <rng:ref name="style-footer"/>
         <rng:optional>
           <rng:ref name="style-footer-left"/>
         </rng:optional>
+	<rng:optional>
+	  <rng:ref name="style-footer-first"/>
+	</rng:optional>
       </rng:optional>
       <rng:optional>
         <rng:ref name="draw-layer-set"/>
@@ -12024,6 +12172,31 @@
           <rng:ref name="positiveInteger"/>
         </rng:attribute>
       </rng:optional>
+      <rng:choice>
+	<!-- https://issues.oasis-open.org/browse/OFFICE-3857 -->
+<rng:optional>
+<rng:attribute name="style:scale-to">
+<rng:ref name="percent"/>
+</rng:attribute>
+</rng:optional>
+<rng:optional>
+<rng:attribute name="style:scale-to-pages">
+<rng:ref name="positiveInteger"/>
+</rng:attribute>
+</rng:optional>
+<rng:group>
+<rng:optional>
+<rng:attribute name="style:scale-to-X">
+<rng:ref name="positiveInteger"/>
+</rng:attribute>
+</rng:optional>
+<rng:optional>
+<rng:attribute name="style:scale-to-Y">
+<rng:ref name="positiveInteger"/>
+</rng:attribute>
+</rng:optional>
+</rng:group>
+</rng:choice>
       <rng:optional>
         <rng:attribute name="style:table-centering">
           <rng:choice>
@@ -12119,6 +12292,12 @@
   </rng:define>
   <rng:define name="style-paragraph-properties-attlist">
     <rng:interleave>
+      <rng:optional>
+	<rng:attribute name="style:contextual-spacing">
+	  <rng:ref name="boolean"/>
+	</rng:attribute>
+      </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3767 -->
       <rng:optional>
         <rng:attribute name="fo:line-height">
           <rng:choice>
@@ -12891,6 +13070,12 @@
           <rng:ref name="boolean"/>
         </rng:attribute>
       </rng:optional>
+      <rng:optional>
+	<rng:attribute name="table:tab-color">
+	  <rng:ref name="color"/>
+	</rng:attribute>
+      </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-2173 -->
     </rng:interleave>
   </rng:define>
   <rng:define name="style-table-properties-content-strict">
@@ -14105,63 +14290,64 @@
       <rng:ref name="string"/>
     </rng:attribute>
   </rng:define>
-  <rng:define name="table-data-pilot-groups">
-    <rng:element name="table:data-pilot-groups">
-      <rng:ref name="table-data-pilot-groups-attlist"/>
-      <rng:oneOrMore>
-        <rng:ref name="table-data-pilot-group"/>
-      </rng:oneOrMore>
-    </rng:element>
-  </rng:define>
   <rng:define name="table-data-pilot-groups-attlist">
-    <rng:interleave>
-      <rng:attribute name="table:source-field-name">
-        <rng:ref name="string"/>
-      </rng:attribute>
-      <rng:choice>
-        <rng:attribute name="table:date-start">
-          <rng:choice>
-            <rng:ref name="dateOrDateTime"/>
-            <rng:value>auto</rng:value>
-          </rng:choice>
-        </rng:attribute>
-        <rng:attribute name="table:start">
-          <rng:choice>
-            <rng:ref name="double"/>
-            <rng:value>auto</rng:value>
-          </rng:choice>
-        </rng:attribute>
-      </rng:choice>
-      <rng:choice>
-        <rng:attribute name="table:date-end">
-          <rng:choice>
-            <rng:ref name="dateOrDateTime"/>
-            <rng:value>auto</rng:value>
-          </rng:choice>
-        </rng:attribute>
-        <rng:attribute name="table:end">
-          <rng:choice>
-            <rng:ref name="double"/>
-            <rng:value>auto</rng:value>
-          </rng:choice>
-        </rng:attribute>
-      </rng:choice>
-      <rng:attribute name="table:step">
-        <rng:ref name="double"/>
-      </rng:attribute>
-      <rng:attribute name="table:grouped-by">
-        <rng:choice>
-          <rng:value>seconds</rng:value>
-          <rng:value>minutes</rng:value>
-          <rng:value>hours</rng:value>
-          <rng:value>days</rng:value>
-          <rng:value>months</rng:value>
-          <rng:value>quarters</rng:value>
-          <rng:value>years</rng:value>
-        </rng:choice>
-      </rng:attribute>
-    </rng:interleave>
+		<rng:interleave>
+			<rng:attribute name="table:source-field-name">
+				<rng:ref name="string"/>
+			</rng:attribute>
+			<rng:optional>
+				<rng:choice>
+					<rng:attribute name="table:date-start">
+						<rng:choice>
+							<rng:ref name="dateOrDateTime"/>
+							<rng:value>auto</rng:value>
+						</rng:choice>
+					</rng:attribute>
+					<rng:attribute name="table:start">
+						<rng:choice>
+							<rng:ref name="double"/>
+							<rng:value>auto</rng:value>
+						</rng:choice>
+					</rng:attribute>
+				</rng:choice>
+			</rng:optional>
+			<rng:optional>
+				<rng:choice>
+					<rng:attribute name="table:date-end">
+						<rng:choice>
+							<rng:ref name="dateOrDateTime"/>
+							<rng:value>auto</rng:value>
+						</rng:choice>
+					</rng:attribute>
+					<rng:attribute name="table:end">
+						<rng:choice>
+							<rng:ref name="double"/>
+							<rng:value>auto</rng:value>
+						</rng:choice>
+					</rng:attribute>
+				</rng:choice>
+			</rng:optional>
+			<rng:optional>
+				<rng:attribute name="table:step">
+					<rng:ref name="double"/>
+				</rng:attribute>
+			</rng:optional>
+			<rng:optional>
+				<rng:attribute name="table:grouped-by">
+					<rng:choice>
+						<rng:value>seconds</rng:value>
+						<rng:value>minutes</rng:value>
+						<rng:value>hours</rng:value>
+						<rng:value>days</rng:value>
+						<rng:value>months</rng:value>
+						<rng:value>quarters</rng:value>
+						<rng:value>years</rng:value>
+					</rng:choice>
+				</rng:attribute>
+			</rng:optional>
+		</rng:interleave>
   </rng:define>
+  <!-- https://issues.oasis-open.org/browse/OFFICE-2118 -->
   <rng:define name="table-data-pilot-layout-info">
     <rng:element name="table:data-pilot-layout-info">
       <rng:ref name="table-data-pilot-layout-info-attlist"/>
@@ -15383,9 +15569,23 @@
     </rng:element>
   </rng:define>
   <rng:define name="table-source-cell-range-attlist">
-    <rng:attribute name="table:cell-range-address">
-      <rng:ref name="cellRangeAddress"/>
-    </rng:attribute>
+   <rng:interleave>
+	             <rng:choice>
+		        <rng:attribute name="table:cell-range-address">
+		        	<rng:ref name="cellRangeAddress"/>
+		        </rng:attribute>
+			<rng:group>
+			  <rng:attribute name="table:name">
+			    <rng:ref name="string"/>
+			  </rng:attribute>
+			  <rng:optional>
+			    <rng:attribute name="table:cell-range-address">
+			      <rng:ref name="cellRangeAddress"/>
+			    </rng:attribute>
+			  </rng:optional>
+			</rng:group>
+		    </rng:choice>
+		</rng:interleave>
   </rng:define>
   <rng:define name="table-source-range-address">
     <rng:element name="table:source-range-address">
@@ -16683,6 +16883,9 @@
         <rng:ref name="text-index-entry-text"/>
         <rng:ref name="text-index-entry-span"/>
         <rng:ref name="text-index-entry-tab-stop"/>
+	<rng:ref name="text-index-entry-link-start"/>
+	<rng:ref name="text-index-entry-link-end"/>
+	<!-- https://issues.oasis-open.org/browse/OFFICE-3941 -->
       </rng:choice>
     </rng:zeroOrMore>
   </rng:define>
@@ -16915,11 +17118,12 @@
   <rng:define name="text-index-source-style">
     <rng:element name="text:index-source-style">
       <rng:attribute name="text:style-name">
-        <rng:ref name="styleName"/>
+        <rng:ref name="styleNameRef"/>
       </rng:attribute>
       <rng:empty/>
     </rng:element>
   </rng:define>
+  <!-- https://issues.oasis-open.org/browse/OFFICE-3675 -->
   <rng:define name="text-index-source-styles">
     <rng:element name="text:index-source-styles">
       <rng:attribute name="text:outline-level">
@@ -17922,6 +18126,9 @@
           <rng:ref name="text-index-entry-text"/>
           <rng:ref name="text-index-entry-span"/>
           <rng:ref name="text-index-entry-tab-stop"/>
+	  <rng:ref name="text-index-entry-link-start"/>
+	  <rng:ref name="text-index-entry-link-end"/>
+	  <!-- https://issues.oasis-open.org/browse/OFFICE-3941 -->
         </rng:choice>
       </rng:zeroOrMore>
     </rng:element>
