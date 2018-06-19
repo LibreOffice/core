@@ -19,6 +19,8 @@
 
 #include <config_features.h>
 
+#include <thread>
+
 #include <hintids.hxx>
 #include <swerror.h>
 #include <vcl/wrkwin.hxx>
@@ -164,6 +166,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     m_pUserOptions(nullptr),
     m_pAttrPool(nullptr),
     m_pView(nullptr),
+    m_bLinguServiceEventListenerInitialised(false),
     m_bAuthorInitialised(false),
     m_bEmbeddedLoadSave( false ),
     m_pDragDrop( nullptr ),
@@ -193,6 +196,32 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
         // at the view options.
         GetColorConfig();
     }
+
+    std::thread([&]()
+                {
+                    {
+                        SolarMutexGuard aGuard;
+                        m_xLinguServiceEventListener = new SwLinguServiceEventListener;
+                    }
+                    {
+                        std::lock_guard<std::mutex> aLock(m_aLinguServiceEventListenerInitialisedMutex);
+                        m_bLinguServiceEventListenerInitialised = true;
+                    }
+                    m_aLinguServiceEventListenerInitialisedCV.notify_all();
+                }).detach();
+}
+
+bool SwModule::IsLinguServiceEventListenerInitialised()
+{
+    std::lock_guard<std::mutex> aLock(m_aLinguServiceEventListenerInitialisedMutex);
+    return m_bLinguServiceEventListenerInitialised;
+}
+
+void SwModule::WaitForLinguServiceEventListenerInitialised()
+{
+    std::unique_lock<std::mutex> aLock(m_aLinguServiceEventListenerInitialisedMutex);
+    if (!m_bLinguServiceEventListenerInitialised)
+        m_aLinguServiceEventListenerInitialisedCV.wait(aLock, [&]{ return m_bLinguServiceEventListenerInitialised; });
 }
 
 OUString SwResId(const char* pId)
@@ -225,12 +254,6 @@ SwModule::~SwModule()
     CallAutomationApplicationEventSinks( "Quit", aArgs );
     delete m_pErrorHandler;
     EndListening( *SfxGetpApp() );
-}
-
-void SwModule::CreateLngSvcEvtListener()
-{
-    if (!m_xLinguServiceEventListener.is())
-        m_xLinguServiceEventListener = new SwLinguServiceEventListener;
 }
 
 void SwDLL::RegisterFactories()
