@@ -122,7 +122,6 @@ public:
     void testN862510_4();
     void testBnc870237();
     void testBnc887225();
-    void testBnc480256();
     void testBnc591147();
     void testCreationDate();
     void testBnc584721_1();
@@ -201,7 +200,6 @@ public:
     CPPUNIT_TEST(testN862510_4);
     CPPUNIT_TEST(testBnc870237);
     CPPUNIT_TEST(testBnc887225);
-    CPPUNIT_TEST(testBnc480256);
     CPPUNIT_TEST(testBnc591147);
     CPPUNIT_TEST(testCreationDate);
     CPPUNIT_TEST(testBnc584721_1);
@@ -847,60 +845,6 @@ void SdImportTest::testBnc887225()
     xCell.set(xTable->getCellByPosition(3, 4), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
-
-    xDocShRef->DoClose();
-}
-
-void SdImportTest::testBnc480256()
-{
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/bnc480256.pptx"), PPTX);
-    // In the document, there are two tables with table background properties.
-    // Make sure colors are set properly for individual cells.
-
-    // TODO: If you are working on improving table background support, expect
-    // this unit test to fail. In that case, feel free to change the numbers.
-
-    const SdrPage *pPage = GetPage( 1, xDocShRef );
-
-    sdr::table::SdrTableObj *pTableObj;
-    uno::Reference< table::XCellRange > xTable;
-    uno::Reference< beans::XPropertySet > xCell;
-    sal_Int32 nColor;
-    table::BorderLine2 aBorderLine;
-
-    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT( pTableObj );
-    xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
-
-    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
-    xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10208238), nColor);
-    xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(5609427), aBorderLine.Color);
-
-    xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
-    xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(13032959), nColor);
-    xCell->getPropertyValue("TopBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(5609427), aBorderLine.Color);
-
-    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(1));
-    CPPUNIT_ASSERT( pTableObj );
-    xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
-
-    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
-    xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7056614), nColor);
-    xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(12505062), aBorderLine.Color);
-
-    xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
-    xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4626400), nColor);
-
-    xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
-    xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(COL_AUTO), aBorderLine.Color);
 
     xDocShRef->DoClose();
 }
