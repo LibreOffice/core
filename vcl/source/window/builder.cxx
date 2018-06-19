@@ -1502,8 +1502,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         VclPtr<Button> xButton;
         xButton = extractStockAndBuildMenuButton(pParent, rMap);
         OUString sMenu = extractPopupMenu(rMap);
-        assert(!sMenu.isEmpty());
-        m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
+        if (!sMenu.isEmpty())
+            m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         xButton->SetAccessibleRole(css::accessibility::AccessibleRole::BUTTON_MENU);
         setupFromActionName(xButton, rMap, m_xFrame);
@@ -1879,6 +1879,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xWindow = VclPtr<DockingWindow>::Create(pParent, nBits|WB_MOVEABLE);
         else
             xWindow = VclPtr<FloatingWindow>::Create(pParent, nBits|WB_MOVEABLE);
+    }
+    else if (name == "GtkPopover")
+    {
+        WinBits nBits = extractDeferredBits(rMap);
+        xWindow = VclPtr<DockingWindow>::Create(pParent, nBits|WB_DOCKABLE|WB_MOVEABLE);
     }
     else if (name == "GtkListBox")
     {
