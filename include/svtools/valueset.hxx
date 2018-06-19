@@ -495,6 +495,9 @@ public:
     void            SetStyle(WinBits nStyle);
     WinBits         GetStyle() const { return mnStyle; }
 
+    /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
+    void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
+                               const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);
@@ -533,11 +536,14 @@ public:
     }
 
     Color           GetItemColor( sal_uInt16 nItemId ) const;
+    void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
     bool            IsColor() const
     {
         return maColor.GetTransparency() == 0;
     }
+
+    void            SetExtraSpacing( sal_uInt16 nNewSpacing );
 
     void            Format(vcl::RenderContext const & rRenderContext);
 

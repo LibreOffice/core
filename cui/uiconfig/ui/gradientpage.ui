@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">3</property>
     <property name="upper">256</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">3</property>
+    <property name="upper">256</property>
+    <property name="value">3</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -14,6 +25,22 @@
     <property name="step_increment">15</property>
   </object>
   <object class="GtkAdjustment" id="percentadjustment">
+    <property name="upper">100</property>
+    <property name="step_increment">5</property>
+  </object>
+  <object class="GtkAdjustment" id="percentadjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">5</property>
+  </object>
+  <object class="GtkAdjustment" id="percentadjustment2">
+    <property name="upper">100</property>
+    <property name="step_increment">5</property>
+  </object>
+  <object class="GtkAdjustment" id="percentadjustment3">
+    <property name="upper">100</property>
+    <property name="step_increment">5</property>
+  </object>
+  <object class="GtkAdjustment" id="percentadjustment4">
     <property name="upper">100</property>
     <property name="step_increment">5</property>
   </object>
@@ -41,11 +68,28 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="svxcorelo-SvxPresetListBox" id="gradientpresetlist">
+                  <object class="GtkScrolledWindow" id="gradientpresetlistwin">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="gradientpresetlist">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -210,6 +254,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="adjustment">adjustment2</property>
                         <property name="round_digits">1</property>
                         <property name="draw_value">False</property>
                       </object>
@@ -271,7 +316,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="gradientpage|angleft">A_ngle:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">anglemtr:0degrees</property>
+                        <property name="mnemonic_widget">anglemtr</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0.43999999761581421</property>
                       </object>
@@ -281,7 +326,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="anglemtr:0degrees">
+                      <object class="GtkSpinButton" id="anglemtr">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">angleadjustment</property>
@@ -312,11 +357,11 @@
                         <property name="hexpand">True</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkSpinButton" id="centerxmtr:%">
+                          <object class="GtkSpinButton" id="centerxmtr">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">percentadjustment</property>
+                            <property name="adjustment">percentadjustment3</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -325,11 +370,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="centerymtr:%">
+                          <object class="GtkSpinButton" id="centerymtr">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">percentadjustment</property>
+                            <property name="adjustment">percentadjustment4</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -363,7 +408,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="gradientpage|borderft">_Border:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">bordermtr:%</property>
+                        <property name="mnemonic_widget">bordermtr</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0.43999999761581421</property>
                       </object>
@@ -377,6 +422,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="adjustment">adjustment3</property>
+                        <property name="fill_level">0</property>
                         <property name="round_digits">1</property>
                         <property name="draw_value">False</property>
                       </object>
@@ -386,7 +433,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="bordermtr:%">
+                      <object class="GtkSpinButton" id="bordermtr">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
@@ -429,11 +476,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-SvxColorListBox" id="colorfromlb">
+                      <object class="GtkMenuButton" id="colorfromlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -441,11 +491,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="colorfrommtr:%">
+                      <object class="GtkSpinButton" id="colorfrommtr">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_left">6</property>
-                        <property name="adjustment">percentadjustment</property>
+                        <property name="adjustment">percentadjustment1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -470,11 +520,14 @@
                     <property name="row_spacing">3</property>
                     <property name="column_spacing">6</property>
                     <child>
-                      <object class="svxcorelo-SvxColorListBox" id="colortolb">
+                      <object class="GtkMenuButton" id="colortolb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -482,11 +535,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="colortomtr:%">
+                      <object class="GtkSpinButton" id="colortomtr">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_left">6</property>
-                        <property name="adjustment">percentadjustment</property>
+                        <property name="adjustment">percentadjustment2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -526,7 +579,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="gradientpage|a11y_center_x">Center X</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">centerxmtr:%</property>
+                        <property name="mnemonic_widget">centerxmtr</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -540,7 +593,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="gradientpage|a11y_center_y">Center Y</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">centerymtr:%</property>
+                        <property name="mnemonic_widget">centerymtr</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -554,7 +607,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="gradientpage|a11y_percentage_from">From color percentage</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">colorfrommtr:%</property>
+                        <property name="mnemonic_widget">colorfrommtr</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -568,7 +621,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="gradientpage|a11y_percentage_to">To color percentage</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">colortomtr:%</property>
+                        <property name="mnemonic_widget">colortomtr</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -628,14 +681,31 @@
                 <property name="valign">start</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="svxlo-SvxXRectPreview" id="previewctl">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="previewctl-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="gradientpage|previewctl-atkobject">Example</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="previewctl">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="previewctl-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="gradientpage|previewctl-atkobject">Example</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
