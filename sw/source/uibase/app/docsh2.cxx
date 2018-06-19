@@ -1225,10 +1225,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
                 else
                 {
-                    SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
+                    SfxViewShell* pViewShell = GetView() ? GetView() : SfxViewShell::Current();
                     SfxBindings& rBindings( pViewShell->GetViewFrame()->GetBindings() );
-                    VclPtr<SwWatermarkDialog> pDlg(VclPtr<SwWatermarkDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), rBindings));
-                    pDlg->StartExecuteAsync([](sal_Int32 /*nResult*/){});
+                    std::shared_ptr<SwWatermarkDialog> xDlg(new SwWatermarkDialog(pViewShell->GetViewFrame()->GetWindow().GetFrameWeld(),
+                                                                                  rBindings));
+                    weld::DialogController::runAsync(xDlg, [](sal_Int32 /*nResult*/){});
                 }
             }
         }

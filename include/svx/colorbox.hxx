@@ -12,10 +12,12 @@
 
 #include <memory>
 #include <vcl/menubtn.hxx>
+#include <vcl/weld.hxx>
 #include <svx/colorwindow.hxx>
 #include <sfx2/controlwrapper.hxx>
 
 class SvxColorListBox;
+class ColorListBox;
 
 class SvxListBoxColorWrapper
 {
@@ -76,6 +78,65 @@ public:
     bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
+};
+
+class ListBoxColorWrapper
+{
+public:
+    ListBoxColorWrapper(ColorListBox* pControl);
+    void operator()(const OUString& rCommand, const NamedColor& rColor);
+    void dispose();
+private:
+    ColorListBox* mpControl;
+};
+
+class SVX_DLLPUBLIC ColorListBox
+{
+private:
+    friend class ListBoxColorWrapper;
+    std::unique_ptr<ColorWindow> m_xColorWindow;
+    std::unique_ptr<weld::MenuButton> m_xButton;
+    weld::Window* m_pTopLevel;
+    Link<ColorListBox&, void> m_aSelectedLink;
+    ListBoxColorWrapper m_aColorWrapper;
+    Color m_aAutoDisplayColor;
+    Color m_aSaveColor;
+    NamedColor m_aSelectedColor;
+    sal_uInt16 m_nSlotId;
+    bool m_bShowNoneButton;
+    std::shared_ptr<PaletteManager> m_xPaletteManager;
+    BorderColorStatus m_aBorderColorStatus;
+
+    void Selected(const NamedColor& rNamedColor);
+    void createColorWindow();
+    void LockWidthRequest();
+    ColorWindow* getColorWindow() const;
+public:
+    ColorListBox(weld::MenuButton* pControl, weld::Window* pWindow);
+    ~ColorListBox();
+
+    void SetSelectHdl(const Link<ColorListBox&, void>& rLink)
+    {
+        m_aSelectedLink = rLink;
+    }
+
+    void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
+
+    Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
+    NamedColor const & GetSelectedEntry() const { return m_aSelectedColor; }
+
+    void SelectEntry(const NamedColor& rColor);
+    void SelectEntry(const Color& rColor);
+
+    void SetNoSelection() { getColorWindow()->SetNoSelection(); }
+    bool IsNoSelection() const { return getColorWindow()->IsNoSelection(); }
+
+    void SetAutoDisplayColor(const Color &rColor) { m_aAutoDisplayColor = rColor; }
+    void ShowPreview(const NamedColor &rColor);
+    void EnsurePaletteManager();
+
+    void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
+    bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 };
 
 /** A wrapper for SvxColorListBox. */

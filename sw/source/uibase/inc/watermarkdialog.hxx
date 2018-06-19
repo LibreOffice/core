@@ -10,31 +10,28 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WATERMARKDIALOG_HXX
 
 #include <sfx2/bindings.hxx>
-#include <vcl/field.hxx>
-#include <vcl/layout.hxx>
-#include <svtools/ctrlbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/colorbox.hxx>
 
-class SwWatermarkDialog : public ModelessDialog
+class SwWatermarkDialog : public weld::GenericDialogController
 {
 public:
-    SwWatermarkDialog( vcl::Window* pParent, SfxBindings& rBindings );
+    SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings);
     virtual ~SwWatermarkDialog() override;
-    virtual void dispose() override;
 
     void InitFields();
 
 private:
-    DECL_LINK( OKButtonHdl, Button*, void );
+    DECL_LINK(OKButtonHdl, weld::Button&, void);
 
     SfxBindings& m_rBindings;
 
-    VclPtr<Edit> m_pTextInput;
-    VclPtr<PushButton> m_pOKButton;
-    VclPtr<FontNameBox> m_pFont;
-    VclPtr<NumericField> m_pAngle;
-    VclPtr<NumericField> m_pTransparency;
-    VclPtr<SvxColorListBox> m_pColor;
+    std::unique_ptr<weld::Entry> m_xTextInput;
+    std::unique_ptr<weld::Button> m_xOKButton;
+    std::unique_ptr<weld::ComboBoxText> m_xFont;
+    std::unique_ptr<weld::MetricSpinButton> m_xAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xTransparency;
+    std::unique_ptr<ColorListBox> m_xColor;
 };
 
 #endif

@@ -109,6 +109,63 @@ public:
     void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
 };
 
+class SVX_DLLPUBLIC ColorWindow : public svtools::ToolbarPopupBase
+{
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+
+    const sal_uInt16    theSlotId;
+    OUString            maCommand;
+    weld::Window* mpParentWindow;
+    weld::MenuButton* mpMenuButton;
+    std::shared_ptr<PaletteManager> mxPaletteManager;
+    BorderColorStatus&  mrBorderColorStatus;
+    ColorSelectFunction maColorSelectFunction;
+
+    std::unique_ptr<ColorValueSet> mxColorSet;
+    std::unique_ptr<ColorValueSet> mxRecentColorSet;
+    std::unique_ptr<weld::Container> mxTopLevel;
+    std::unique_ptr<weld::ComboBoxText> mxPaletteListBox;
+    std::unique_ptr<weld::Button> mxButtonAutoColor;
+    std::unique_ptr<weld::Button> mxButtonNoneColor;
+    std::unique_ptr<weld::Button> mxButtonPicker;
+    std::unique_ptr<weld::Widget> mxAutomaticSeparator;
+    std::unique_ptr<weld::CustomWeld> mxColorSetWin;
+    std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
+
+    Link<const NamedColor&, void> maSelectedLink;
+    DECL_LINK(SelectHdl, SvtValueSet*, void);
+    DECL_LINK(SelectPaletteHdl, weld::ComboBoxText&, void);
+    DECL_LINK(AutoColorClickHdl, weld::Button&, void);
+    DECL_LINK(OpenPickerClickHdl, weld::Button&, void);
+
+    static bool SelectValueSetEntry(ColorValueSet* pColorSet, const Color& rColor);
+    static NamedColor GetSelectEntryColor(SvtValueSet const * pColorSet);
+    NamedColor GetAutoColor() const;
+
+public:
+    ColorWindow(const OUString& rCommand,
+                std::shared_ptr<PaletteManager> const & rPaletteManager,
+                BorderColorStatus& rBorderColorStatus,
+                sal_uInt16 nSlotId,
+                const css::uno::Reference< css::frame::XFrame >& rFrame,
+                weld::Window* pParentWindow, weld::MenuButton* pMenuButton,
+                ColorSelectFunction const& rColorSelectFunction);
+    weld::Container* GetWidget() { return mxTopLevel.get(); }
+    virtual ~ColorWindow() override;
+    void                ShowNoneButton();
+    void                StartSelection();
+    void                SetNoSelection();
+    bool                IsNoSelection() const;
+    void                SelectEntry(const NamedColor& rColor);
+    void                SelectEntry(const Color& rColor);
+    NamedColor          GetSelectEntryColor() const;
+
+    virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+
+    void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
