@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_eb048ac7",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4496,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-19T22:39:47Z",
+      "side": 0,
+      "message": "Hey cool, occasionally 10 years later ;-)",
+      "revId": "e79dd394deedaeed122717700077b77d94360c12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
