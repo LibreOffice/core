@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_7596bd95",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-19T07:23:40Z",
+      "side": 1,
+      "message": "You\u0027re not deriving from PropertyState, you probably contain it as a member and have an inline destructor. If so, PropertyState is not a base class, at least please s/base class //.",
+      "revId": "b0d2b6a9e2ec1940b9b28ee9cccfbdaeb4b632cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_959339a3",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-19T07:23:40Z",
+      "side": 1,
+      "message": "Same.",
+      "revId": "b0d2b6a9e2ec1940b9b28ee9cccfbdaeb4b632cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
