@@ -37,6 +37,10 @@
 #define RTL_MUTEX_LOCK
 #define RTL_MUTEX_UNLOCK
 
+#include <premac.h>
+#include <Foundation/Foundation.h>
+#include <postmac.h>
+
 #else //defined(MACOSX)
 
 static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -161,6 +165,15 @@ int macxp_resolveAlias(char *path, int buflen)
   CFURLRef cfurl;
   CFErrorRef cferror;
   CFDataRef cfbookmark;
+
+  // Don't even try anything for files inside the app bundle. Just a
+  // waste of time.
+
+  static const char * const appBundle = [[[NSBundle mainBundle] bundlePath] UTF8String];
+
+  const size_t appBundleLen = strlen(appBundle);
+  if (strncmp(path, appBundle, appBundleLen) == 0 && path[appBundleLen] == '/')
+      return 0;
 
   char *unprocessedPath = path;
 
