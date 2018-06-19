@@ -216,11 +216,14 @@ public:
 |* Control for editing bitmaps
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPixelCtl final : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPixelCtl final : public weld::CustomWidgetController
 {
 private:
     static sal_uInt16 constexpr nLines = 8;
     static sal_uInt16 constexpr nSquares = nLines * nLines;
+
+    VclPtr<SvxTabPage> m_pPage;
+
     Color       aPixelColor;
     Color       aBackgroundColor;
     Size        aRectSize;
@@ -230,20 +233,19 @@ private:
     Point       aFocusPosition;
     rtl::Reference<SvxPixelCtlAccessible>  m_xAccess;
 
-    using OutputDevice::SetLineColor;
-
     tools::Rectangle   implCalFocusRect( const Point& aPosition );
     void    ChangePixel( sal_uInt16 nPixel );
 
 public:
-    SvxPixelCtl( vcl::Window* pParent );
+    SvxPixelCtl(SvxTabPage* pPage);
 
     virtual ~SvxPixelCtl() override;
 
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
+    virtual tools::Rectangle GetFocusRect() override;
 
     void    SetXBitmap( const BitmapEx& rBitmapEx );
 
@@ -257,10 +259,15 @@ public:
 
     void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return GetDrawingArea()->get_accessible_parent(); }
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    a11yrelationset get_accessible_relation_set() { return GetDrawingArea()->get_accessible_relation_set(); }
+
     static long GetSquares() { return nSquares ; }
     long GetWidth() const { return aRectSize.getWidth() ; }
     long GetHeight() const { return aRectSize.getHeight() ; }
+    SvxTabPage* GetTabPage() const { return m_pPage; }
 
     //Device Pixel .
     long ShowPosition( const Point &pt);
@@ -269,7 +276,7 @@ public:
     Point IndexToPoint(long nIndex) const ;
     long GetFocusPosIndex() const ;
     //Keyboard function for key input and focus handling function
-    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
 };
@@ -405,6 +412,11 @@ public:
 
     // change support
     virtual void StyleUpdated() override;
+
+    void SetDrawMode(DrawModeFlags nDrawMode)
+    {
+        mpBufferDevice->SetDrawMode(nDrawMode);
+    }
 
     // dada read access
     SdrModel& getModel() const

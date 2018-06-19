@@ -352,7 +352,9 @@ protected:
     }
 
     SfxTabDialog*       GetTabDialog() const;
+public:
     void                SetTabDialog(SfxTabDialog* pDialog);
+protected:
 
     SfxTabDialogController* GetDialogController() const;
     void                SetDialogController(SfxTabDialogController* pDialog);
@@ -394,6 +396,12 @@ public:
     css::uno::Reference< css::frame::XFrame > GetFrame();
 
     OString         GetConfigId() const;
+
+    //TODO rename to get_preferred_size when SfxTabPage doesn't inherit from anything
+    Size get_container_size() const
+    {
+        return m_xContainer->get_preferred_size();
+    }
 };
 
 #endif

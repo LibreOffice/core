@@ -41,7 +41,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btnnone">
+              <object class="GtkToggleButton" id="btnnone">
                 <property name="label" translatable="yes" context="areatabpage|btnnone">None</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -54,7 +54,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btncolor">
+              <object class="GtkToggleButton" id="btncolor">
                 <property name="label" translatable="yes" context="areatabpage|btncolor">Color</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -67,7 +67,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btngradient">
+              <object class="GtkToggleButton" id="btngradient">
                 <property name="label" translatable="yes" context="areatabpage|btngradient">Gradient</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -80,7 +80,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btnbitmap">
+              <object class="GtkToggleButton" id="btnbitmap">
                 <property name="label" translatable="yes" context="areatabpage|btnbitmap">Bitmap</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -93,7 +93,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btnpattern">
+              <object class="GtkToggleButton" id="btnpattern">
                 <property name="label" translatable="yes" context="areatabpage|btnpattern">Pattern</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -106,7 +106,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btnhatch">
+              <object class="GtkToggleButton" id="btnhatch">
                 <property name="label" translatable="yes" context="areatabpage|btnhatch">Hatch</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
