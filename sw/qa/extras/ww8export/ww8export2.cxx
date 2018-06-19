@@ -308,10 +308,11 @@ DECLARE_WW8EXPORT_TEST(testTdf111480, "tdf111480.doc")
 DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     tools::Rectangle aRect = pPage->GetObj(0)->GetSnapRect();
-    CPPUNIT_ASSERT( aRect.GetHeight() > aRect.GetWidth() );
+    CPPUNIT_ASSERT(aRect.GetHeight() > aRect.GetWidth());
 }
 
 DECLARE_WW8EXPORT_TEST( testActiveXCheckbox, "checkbox_control.odt" )
