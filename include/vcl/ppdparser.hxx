@@ -273,7 +273,7 @@ public:
 
     // for printer setup
     char*   getStreamableBuffer( sal_uLong& rBytes ) const;
-    void    rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes );
+    void    rebuildFromStreamBuffer(const std::vector<char> &rBuffer);
 
     // convenience
     int getRenderResolution() const;
