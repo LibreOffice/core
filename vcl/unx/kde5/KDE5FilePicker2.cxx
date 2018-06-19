@@ -213,7 +213,8 @@ void SAL_CALL KDE5FilePicker::setDisplayDirectory(const OUString& dir)
         return Q_EMIT setDisplayDirectorySignal(dir);
     }
 
-    _dialog->setDirectory(toQString(dir));
+    QString qDir(toQString(dir));
+    _dialog->setDirectoryUrl(QUrl(qDir));
 }
 
 OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
