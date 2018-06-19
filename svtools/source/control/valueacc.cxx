@@ -1405,6 +1405,25 @@ sal_Int64 SAL_CALL SvtValueItemAcc::getSomething( const uno::Sequence< sal_Int8 
     return nRet;
 }
 
+void SvtValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
+{
+    if( !nEventId )
+        return;
+
+    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
+    accessibility::AccessibleEventObject                                                        aEvtObject;
+
+    aEvtObject.EventId = nEventId;
+    aEvtObject.Source = static_cast<uno::XWeak*>(this);
+    aEvtObject.NewValue = rNewValue;
+    aEvtObject.OldValue = rOldValue;
+
+    for (auto const& tmpListener : aTmpListeners)
+    {
+        tmpListener->notifyEvent( aEvtObject );
+    }
+}
+
 SvtValueSetAcc::SvtValueSetAcc( SvtValueSet* pParent ) :
     ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent ),

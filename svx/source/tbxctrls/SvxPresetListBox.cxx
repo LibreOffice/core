@@ -130,4 +130,82 @@ IMPL_LINK(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
     return false;
 }
 
+PresetListBox::PresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow)
+    : SvtValueSet(std::move(pWindow))
+    , nColCount(3)
+    , aIconSize(60, 64)
+{
+    SetEdgeBlending(true);
+    SetExtraSpacing(4);
+}
+
+void PresetListBox::Resize()
+{
+    DrawLayout();
+    WinBits aWinBits(GetStyle());
+    aWinBits |= WB_VSCROLL;
+    SetStyle(aWinBits);
+    SvtValueSet::Resize();
+}
+
+bool PresetListBox::ContextMenu(const Point& rPos)
+{
+    const sal_uInt16 nIndex = GetSelectedItemId();
+    if(nIndex > 0)
+    {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "svx/ui/presetmenu.ui"));
+        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+        OnMenuItemSelected(xMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPos, Size(1,1))));
+        return true;
+    }
+    return false;
+}
+
+void PresetListBox::DrawLayout()
+{
+    SetColCount(getColumnCount());
+    SetLineCount(5);
+}
+
+template< typename ListType, typename EntryType >
+void PresetListBox::FillPresetListBoxImpl(ListType & pList, sal_uInt32 nStartIndex)
+{
+    const Size aSize( GetIconSize() );
+    BitmapEx aBitmap;
+    for(long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
+    {
+        aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
+        EntryType* pItem = static_cast<EntryType*>( pList.Get(nIndex) );
+        InsertItem(nStartIndex, Image(aBitmap), pItem->GetName());
+    }
+}
+
+void PresetListBox::FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XGradientList, XGradientEntry>( pList, nStartIndex );
+}
+
+void PresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XHatchList, XHatchEntry>( pList, nStartIndex );
+}
+
+void PresetListBox::FillPresetListBox(XBitmapList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XBitmapList, XBitmapEntry >( pList, nStartIndex );
+}
+
+void PresetListBox::FillPresetListBox(XPatternList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XPatternList, XBitmapEntry >( pList, nStartIndex );
+}
+
+void PresetListBox::OnMenuItemSelected(const OString& rIdent)
+{
+    if (rIdent == "rename")
+        maRenameHdl.Call(this);
+    else if (rIdent == "delete")
+        maDeleteHdl.Call(this);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

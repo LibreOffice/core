@@ -1390,6 +1390,13 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual OUString get_accessible_description() const override
+    {
+        AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
+        const char* pStr = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
     virtual void set_tooltip_text(const OUString& rTip) override
     {
         gtk_widget_set_tooltip_text(m_pWidget, OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
@@ -4137,6 +4144,7 @@ private:
     gulong m_nKeyReleaseSignalId;
     gulong m_nStyleUpdatedSignalId;
     gulong m_nQueryTooltip;
+    gulong m_nPopupMenu;
 
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
     {
@@ -4207,6 +4215,19 @@ private:
         gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
         return true;
     }
+    bool signal_popup_menu(const Point& rPos)
+    {
+        return m_aPopupMenuHdl.Call(rPos);
+    }
+    static gboolean signalPopupMenu(GtkWidget* pWidget, gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        SolarMutexGuard aGuard;
+        //center it when we don't know where else to use
+        Point aPos(gtk_widget_get_allocated_width(pWidget) / 2,
+                   gtk_widget_get_allocated_height(pWidget) / 2);
+        return pThis->signal_popup_menu(aPos);
+    }
     static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
@@ -4266,6 +4287,14 @@ private:
         Point aPos(pEvent->x, pEvent->y);
         if (AllSettings::GetLayoutRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
+
+        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
+        {
+            //if handled for context menu, stop processing
+            if (signal_popup_menu(aPos))
+                return true;
+        }
+
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
         MouseEvent aMEvt(aPos, nClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
@@ -4339,6 +4368,7 @@ public:
         , m_nKeyReleaseSignalId(g_signal_connect(m_pDrawingArea,"key-release-event", G_CALLBACK(signalKey), this))
         , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
         , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
+        , m_nPopupMenu(g_signal_connect(m_pDrawingArea, "popup-menu", G_CALLBACK(signalPopupMenu), this))
     {
         gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
@@ -4424,6 +4454,7 @@ public:
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
         if (m_pAccessible)
             g_object_unref(m_pAccessible);
+        g_signal_handler_disconnect(m_pDrawingArea, m_nPopupMenu);
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
         g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyPressSignalId);
@@ -5366,6 +5397,8 @@ void GtkInstanceWindow::help()
 weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
     GtkInstanceWidget* pParentWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
+    if (pParent && !pParentWidget) //remove when complete
+        return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile);
 }
