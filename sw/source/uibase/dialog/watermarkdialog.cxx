@@ -19,36 +19,21 @@
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/ctrltool.hxx>
 
-SwWatermarkDialog::SwWatermarkDialog( vcl::Window* pParent, SfxBindings& rBindings )
-: ModelessDialog( pParent, "WatermarkDialog", "modules/swriter/ui/watermarkdialog.ui" )
-, m_rBindings( rBindings )
+SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings)
+    : GenericDialogController(pParent, "modules/swriter/ui/watermarkdialog.ui", "WatermarkDialog")
+    , m_rBindings(rBindings)
+    , m_xTextInput(m_xBuilder->weld_entry("TextInput"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xFont(m_xBuilder->weld_combo_box_text("FontBox"))
+    , m_xAngle(m_xBuilder->weld_metric_spin_button("Angle", FUNIT_DEGREE))
+    , m_xTransparency(m_xBuilder->weld_metric_spin_button("Transparency", FUNIT_PERCENT))
+    , m_xColor(new ColorListBox(m_xBuilder->weld_menu_button("Color"), m_xDialog.get()))
 {
-    get( m_pTextInput, "TextInput" );
-    get( m_pOKButton, "ok" );
-    get( m_pFont, "FontBox" );
-    get( m_pAngle, "Angle" );
-    get( m_pTransparency, "Transparency" );
-    get( m_pColor, "Color" );
-
     InitFields();
-    Update();
 }
 
 SwWatermarkDialog::~SwWatermarkDialog()
 {
-    disposeOnce();
-}
-
-void SwWatermarkDialog::dispose()
-{
-    m_pFont.clear();
-    m_pAngle.clear();
-    m_pTransparency.clear();
-    m_pColor.clear();
-    m_pTextInput.clear();
-    m_pOKButton.clear();
-
-    ModelessDialog::dispose();
 }
 
 void SwWatermarkDialog::InitFields()
@@ -68,9 +53,14 @@ void SwWatermarkDialog::InitFields()
         pFontList = xFontList.get();
     }
 
-    m_pFont->Fill( pFontList );
+    sal_uInt16 nFontCount = pFontList->GetFontNameCount();
+    for (sal_uInt16 i = 0; i < nFontCount; ++i)
+    {
+        const FontMetric& rFontMetric = pFontList->GetFontName(i);
+        m_xFont->append_text(rFontMetric.GetFamilyName());
+    }
 
-    m_pOKButton->SetClickHdl( LINK( this, SwWatermarkDialog, OKButtonHdl ) );
+    m_xOKButton->connect_clicked(LINK(this, SwWatermarkDialog, OKButtonHdl));
 
     // Get watermark properties
     const SfxPoolItem* pItem;
@@ -80,29 +70,29 @@ void SwWatermarkDialog::InitFields()
     {
         const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>( pItem );
         OUString sText = pWatermark->GetText();
-        m_pTextInput->SetText( sText );
-        m_pFont->SelectEntryPos( m_pFont->GetEntryPos( pWatermark->GetFont() ) );
-        m_pAngle->SetValue( pWatermark->GetAngle() );
-        m_pColor->SelectEntry( pWatermark->GetColor() );
-        m_pTransparency->SetValue( pWatermark->GetTransparency() );
+        m_xTextInput->set_text(sText);
+        m_xFont->set_entry_text(pWatermark->GetFont());
+        m_xAngle->set_value(pWatermark->GetAngle(), FUNIT_DEGREE);
+        m_xColor->SelectEntry( pWatermark->GetColor() );
+        m_xTransparency->set_value(pWatermark->GetTransparency(), FUNIT_PERCENT);
     }
 }
 
-IMPL_LINK_NOARG( SwWatermarkDialog, OKButtonHdl, Button*, void )
+IMPL_LINK_NOARG(SwWatermarkDialog, OKButtonHdl, weld::Button&, void)
 {
-    OUString sText = m_pTextInput->GetText();
+    OUString sText = m_xTextInput->get_text();
 
     css::uno::Sequence<css::beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence(
     {
         { "Text", css::uno::makeAny( sText ) },
-        { "Font", css::uno::makeAny( m_pFont->GetSelectedEntry() ) },
-        { "Angle", css::uno::makeAny( static_cast<sal_Int16>( m_pAngle->GetValue() ) ) },
-        { "Transparency", css::uno::makeAny( static_cast<sal_Int16>( m_pTransparency->GetValue() ) ) },
-        { "Color", css::uno::makeAny( static_cast<sal_uInt32>( m_pColor->GetSelectEntryColor().GetRGBColor() ) ) }
+        { "Font", css::uno::makeAny( m_xFont->get_active_text() ) },
+        { "Angle", css::uno::makeAny( static_cast<sal_Int16>( m_xAngle->get_value(FUNIT_DEGREE) ) ) },
+        { "Transparency", css::uno::makeAny( static_cast<sal_Int16>( m_xTransparency->get_value(FUNIT_PERCENT) ) ) },
+        { "Color", css::uno::makeAny( static_cast<sal_uInt32>( m_xColor->GetSelectEntryColor().GetRGBColor() ) ) }
     } ) );
     comphelper::dispatchCommand( ".uno:Watermark", aPropertyValues );
 
-    Close();
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
