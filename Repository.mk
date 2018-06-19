@@ -66,8 +66,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svdemo \
         fftester \
         svptest \
-        svpclient \
-        pixelctl ) \
+        svpclient ) \
 	$(if $(filter LINUX %BSD SOLARIS,$(OS)), tilebench) \
 	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest \
 	    outdevgrind) \
