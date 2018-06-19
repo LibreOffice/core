@@ -391,6 +391,11 @@ public:
     css::uno::Reference< css::frame::XFrame > GetFrame();
 
     OString         GetConfigId() const;
+
+    Size get_preferred_size() const
+    {
+        return m_xContainer->get_preferred_size();
+    }
 };
 
 #endif

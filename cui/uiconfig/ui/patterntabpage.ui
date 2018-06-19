@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="PatternTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -27,11 +26,26 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="svxcorelo-SvxPresetListBox" id="patternpresetlist">
+                  <object class="GtkScrolledWindow" id="patternpresetlistwin">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="patternpresetlist">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -131,8 +145,8 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="patterntabpage|label4">Pattern Editor:</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -141,7 +155,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-SvxPixelCtl" id="CTL_PIXEL">
+                      <object class="GtkDrawingArea" id="CTL_PIXEL">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
@@ -175,8 +189,10 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="patterntabpage|label5">Foreground Color:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">LB_COLOR</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -185,10 +201,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-SvxColorListBox" id="LB_COLOR">
+                      <object class="GtkMenuButton" id="LB_COLOR">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="receives_default">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -213,8 +232,10 @@
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="patterntabpage|label6">Background Color:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">LB_BACKGROUND_COLOR</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -223,10 +244,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-SvxColorListBox" id="LB_BACKGROUND_COLOR">
+                      <object class="GtkMenuButton" id="LB_BACKGROUND_COLOR">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="receives_default">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -285,17 +309,17 @@
                 <property name="valign">start</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="svxlo-SvxXRectPreview" id="CTL_PREVIEW">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="CTL_PREVIEW-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="patterntabpage|CTL_PREVIEW-atkobject">Example</property>
-                          </object>
-                        </child>
+                  <object class="GtkDrawingArea" id="CTL_PREVIEW">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CTL_PREVIEW-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="patterntabpage|CTL_PREVIEW-atkobject">Example</property>
                       </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
