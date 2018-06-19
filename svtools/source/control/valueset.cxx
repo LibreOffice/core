@@ -3463,16 +3463,27 @@ void SvtValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtV
         }
         else
         {
+            Size aImageSize = pItem->maImage.GetSizePixel();
             Size  aRectSize = aRect.GetSize();
             Point aPos(aRect.Left(), aRect.Top());
-            aPos.AdjustX(aRectSize.Width() / 2 );
+            aPos.AdjustX((aRectSize.Width() - aImageSize.Width()) / 2 );
 
             if (pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
-                aPos.AdjustY(aRectSize.Height() / 2 );
+                aPos.AdjustY((aRectSize.Height() - aImageSize.Height()) / 2 );
 
             DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
             if (!IsEnabled())
                 nImageStyle  |= DrawImageFlags::Disable;
+
+            if (aImageSize.Width()  > aRectSize.Width() ||
+                aImageSize.Height() > aRectSize.Height())
+            {
+                maVirDev->SetClipRegion(vcl::Region(aRect));
+                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+                maVirDev->SetClipRegion();
+            }
+            else
+                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
 
             if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
             {
@@ -3638,6 +3649,18 @@ Size SvtValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesire
     return aSize;
 }
 
+void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
+                           const OUString& rText, size_t nPos,
+                           bool bShowLegend )
+{
+    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    pItem->mnId     = nItemId;
+    pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
+    pItem->maImage  = rImage;
+    pItem->maText   = rText;
+    ImplInsertItem( pItem, nPos );
+}
+
 void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
                            const OUString& rText )
 {
@@ -3769,6 +3792,54 @@ OUString SvtValueSet::GetItemText(sal_uInt16 nItemId) const
         return mItemList[nPos]->maText;
 
     return OUString();
+}
+
+void SvtValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
+{
+    if ( GetStyle() & WB_ITEMBORDER )
+    {
+        mnSpacing = nNewSpacing;
+
+        mbFormat = true;
+        queue_resize();
+        if ( IsReallyVisible() && IsUpdateMode() )
+            Invalidate();
+    }
+}
+
+void SvtValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
+{
+    size_t nPos = GetItemPos( nItemId );
+
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    SvtValueSetItem* pItem = mItemList[nPos];
+
+    // Remember old and new name for accessibility event.
+    Any aOldName;
+    Any aNewName;
+    OUString sString (pItem->maText);
+    aOldName <<= sString;
+    sString = rText;
+    aNewName <<= sString;
+
+    pItem->maText = rText;
+
+    if (!mbFormat && IsReallyVisible() && IsUpdateMode())
+    {
+        sal_uInt16 nTempId = mnSelItemId;
+
+        if (nTempId == nItemId)
+            Invalidate();
+    }
+
+    if (ImplHasAccessibleListeners())
+    {
+        Reference<XAccessible> xAccessible(pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/));
+        SvtValueItemAcc* pValueItemAcc = static_cast<SvtValueItemAcc*>(xAccessible.get());
+        pValueItemAcc->FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, aNewName);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

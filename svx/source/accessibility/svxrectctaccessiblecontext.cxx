@@ -400,6 +400,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
 
     return sal_Int32(mpRepr->GetControlForeground());
 }
+
 sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
 {
     ::SolarMutexGuard aSolarGuard;
@@ -705,6 +706,7 @@ Reference< XAccessible > SAL_CALL RectCtlAccessibleContext::getAccessibleChild( 
 
 Reference< XAccessible > SAL_CALL RectCtlAccessibleContext::getAccessibleParent()
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     if (mpRepr)
         return mpRepr->getAccessibleParent();
     return uno::Reference<css::accessibility::XAccessible>();
@@ -732,6 +734,7 @@ OUString SAL_CALL RectCtlAccessibleContext::getAccessibleName()
 */
 Reference< XAccessibleRelationSet > SAL_CALL RectCtlAccessibleContext::getAccessibleRelationSet()
 {
+    ::osl::MutexGuard   aGuard( m_aMutex );
     if (mpRepr)
         return mpRepr->get_accessible_relation_set();
     return uno::Reference<css::accessibility::XAccessibleRelationSet>();
