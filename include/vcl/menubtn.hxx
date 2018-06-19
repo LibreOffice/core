@@ -64,6 +64,8 @@ public:
     virtual void    Select();
 
     void            ExecuteMenu();
+    bool            MenuShown() const;
+    void            CancelMenu();
 
     //if false then the whole button launches the menu
     //if true, then the button has a separator

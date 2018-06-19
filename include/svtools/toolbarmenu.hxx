@@ -43,9 +43,26 @@ namespace svtools {
 class ToolbarMenuEntry;
 struct ToolbarMenu_Impl;
 
-class SVT_DLLPUBLIC ToolbarPopup : public DockingWindow
+class SVT_DLLPUBLIC ToolbarPopupBase
 {
     friend class ToolbarPopupStatusListener;
+public:
+    ToolbarPopupBase(const css::uno::Reference<css::frame::XFrame>& rFrame);
+    virtual ~ToolbarPopupBase();
+
+protected:
+    void AddStatusListener( const OUString& rCommandURL );
+
+    // Forwarded from XStatusListener (subclasses must override this one to get the status updates):
+    /// @throws css::uno::RuntimeException
+    virtual void statusChanged(const css::frame::FeatureStateEvent& Event );
+
+    css::uno::Reference<css::frame::XFrame>  mxFrame;
+    rtl::Reference<svt::FrameStatusListener> mxStatusListener;
+};
+
+class SVT_DLLPUBLIC ToolbarPopup : public DockingWindow, public ToolbarPopupBase
+{
 public:
     ToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
                  vcl::Window* pParentWindow,
@@ -57,20 +74,11 @@ public:
     virtual void dispose() override;
 
 protected:
-    void AddStatusListener( const OUString& rCommandURL );
-
     bool IsInPopupMode();
     void EndPopupMode();
 
-    // Forwarded from XStatusListener (subclasses must override this one to get the status updates):
-    /// @throws css::uno::RuntimeException
-    virtual void statusChanged(const css::frame::FeatureStateEvent& Event );
-
-    css::uno::Reference< css::frame::XFrame >  mxFrame;
 private:
     void init();
-
-    rtl::Reference< svt::FrameStatusListener > mxStatusListener;
 };
 
 class SVT_DLLPUBLIC ToolbarMenu : public ToolbarPopup

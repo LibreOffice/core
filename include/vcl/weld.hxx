@@ -45,6 +45,8 @@ public:
     virtual bool is_visible() const = 0; //if this widget visibility and all parents is true
     virtual void grab_focus() = 0;
     virtual bool has_focus() const = 0;
+    virtual void set_has_default(bool has_default) = 0;
+    virtual bool get_has_default() const = 0;
     virtual void show() = 0;
     virtual void hide() = 0;
     void show(bool bShow)
@@ -364,25 +366,11 @@ protected:
 
 public:
     virtual void set_label(const OUString& rText) = 0;
+    virtual void set_image(VirtualDevice& rDevice) = 0;
     virtual OUString get_label() const = 0;
     void clicked() { signal_clicked(); }
 
     void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
-};
-
-class VCL_DLLPUBLIC MenuButton : virtual public Button
-{
-protected:
-    Link<const OString&, void> m_aSelectHdl;
-
-    void signal_selected(const OString& rIdent) { m_aSelectHdl.Call(rIdent); }
-
-public:
-    void connect_selected(const Link<const OString&, void>& rLink) { m_aSelectHdl = rLink; }
-    virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
-    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
-    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;
-    virtual OString get_item_help_id(const OString& rIdent) const = 0;
 };
 
 class VCL_DLLPUBLIC ToggleButton : virtual public Button
@@ -432,6 +420,23 @@ public:
     bool get_state_changed_from_saved() const { return m_eSavedValue != get_state(); }
 
     virtual void connect_toggled(const Link<ToggleButton&, void>& rLink) { m_aToggleHdl = rLink; }
+};
+
+class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
+{
+protected:
+    Link<const OString&, void> m_aSelectHdl;
+
+    void signal_selected(const OString& rIdent) { m_aSelectHdl.Call(rIdent); }
+
+public:
+    void connect_selected(const Link<const OString&, void>& rLink) { m_aSelectHdl = rLink; }
+    virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;
+    virtual OString get_item_help_id(const OString& rIdent) const = 0;
+
+    virtual void set_popover(weld::Widget* pPopover) = 0;
 };
 
 class VCL_DLLPUBLIC CheckButton : virtual public ToggleButton
