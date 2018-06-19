@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_b5b91531",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-19T07:21:47Z",
+      "side": 1,
+      "message": "Either remove this entry or fix its comment: I assume nothing derives from awt::Rectangle. Perhaps a class has an inline destructor, so the complete type is needed in the header? i.e. just s/base class //.",
+      "revId": "575aceaea37a0523e54e6ca3d206292d56b6464c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

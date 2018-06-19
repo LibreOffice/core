@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_d5b6913c",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-19T07:21:47Z",
+      "side": 0,
+      "message": "Same here.",
+      "revId": "23fa8a6ed05386ce6e9997747b416279f46ddd5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f581cd4e",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-19T07:21:47Z",
+      "side": 0,
+      "message": "Same.",
+      "revId": "23fa8a6ed05386ce6e9997747b416279f46ddd5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_357c4572",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-19T07:21:47Z",
+      "side": 0,
+      "message": "Same.",
+      "revId": "23fa8a6ed05386ce6e9997747b416279f46ddd5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
