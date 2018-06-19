@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkBox" id="BitmapTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="spacing">6</property>
     <child>
@@ -23,17 +29,35 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkVBox" id="box1">
+              <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="svxcorelo-SvxPresetListBox" id="BITMAP">
+                  <object class="GtkScrolledWindow" id="bitmapwin">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="BITMAP">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -171,7 +195,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="bitmaptabpage|label5">Width:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">width:0%</property>
+                            <property name="mnemonic_widget">width</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -180,7 +204,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="width:0%">
+                          <object class="GtkSpinButton" id="width">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
@@ -197,7 +221,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="bitmaptabpage|label6">Height:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">height:0%</property>
+                            <property name="mnemonic_widget">height</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -206,7 +230,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="height:0%">
+                          <object class="GtkSpinButton" id="height">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
@@ -328,7 +352,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="bitmaptabpage|label10">X-Offset:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">posoffx:0%</property>
+                            <property name="mnemonic_widget">posoffx</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -337,7 +361,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="posoffx:0%">
+                          <object class="GtkSpinButton" id="posoffx">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                           </object>
@@ -353,7 +377,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="bitmaptabpage|label11">Y-Offset:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">posoffy:0%</property>
+                            <property name="mnemonic_widget">posoffy</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -362,7 +386,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="posoffy:0%">
+                          <object class="GtkSpinButton" id="posoffy">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                           </object>
@@ -429,10 +453,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="tileoffmtr:0%">
+                          <object class="GtkSpinButton" id="tileoffmtr">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -498,14 +523,31 @@
                 <property name="valign">start</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="svxlo-SvxXRectPreview" id="CTL_BITMAP_PREVIEW">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="bitmaptabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="CTL_BITMAP_PREVIEW">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="bitmaptabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
