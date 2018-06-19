@@ -413,7 +413,7 @@ bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
     return true;
 }
 
-loplugin::Plugin::Registration< UseUniquePtr > X("useuniqueptr", false);
+loplugin::Plugin::Registration< UseUniquePtr > X("useuniqueptr", true);
 
 }
 
