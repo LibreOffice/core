@@ -89,9 +89,11 @@ SwTableFormatCmp::SwTableFormatCmp( SwFrameFormat *pO, SwFrameFormat *pN, sal_In
 SwTableFormatCmp::~SwTableFormatCmp()
 {
     if (pOld)
+    {
         pOld->Remove(this);
-    if (!pOld->HasWriterListeners())
-        delete pOld;
+        if (!pOld->HasWriterListeners())
+            delete pOld;
+    }
 }
 
 // static
