@@ -103,13 +103,11 @@ void SvxRectCtl::dispose()
     Control::dispose();
 }
 
-
 void SvxRectCtl::Resize()
 {
     Resize_Impl();
     Control::Resize();
 }
-
 
 void SvxRectCtl::Resize_Impl()
 {
@@ -612,7 +610,7 @@ Reference< XAccessible > SvxRectCtl::CreateAccessible()
 
 RectPoint SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
 {
-    return GetRPFromPoint( GetApproxLogPtFromPixPt( Point( r.X, r.Y ) ) );
+    return GetRPFromPoint(GetApproxLogPtFromPixPt(Point(r.X, r.Y )));
 }
 
 BitmapEx& RectCtl::GetRectBitmap()
@@ -1135,14 +1133,11 @@ void RectCtl::DoCompletelyDisable(bool bNew)
 
 css::uno::Reference< css::accessibility::XAccessible > SvxPixelCtl::CreateAccessible()
 {
-    if(!m_xAccess.is())
-    {
-        m_xAccess = new SvxPixelCtlAccessible(*this);
-    }
+    if (!m_xAccess.is())
+        m_xAccess = new SvxPixelCtlAccessible(this);
     return m_xAccess.get();
 }
 
-//Logic Pixel
 long SvxPixelCtl::PointToIndex(const Point &aPt) const
 {
     long nX = aPt.X() * nLines / aRectSize.Width();
@@ -1170,56 +1165,48 @@ long SvxPixelCtl::GetFocusPosIndex() const
     return aFocusPosition.getX() + aFocusPosition.getY() * nLines ;
 }
 
-long SvxPixelCtl::ShowPosition( const Point &pt)
+long SvxPixelCtl::ShowPosition( const Point &rPt)
 {
-    Point aPt = PixelToLogic( pt );
-
-    sal_Int32 nX = aPt.X() * nLines / aRectSize.Width();
-    sal_Int32 nY = aPt.Y() * nLines / aRectSize.Height();
+    sal_Int32 nX = rPt.X() * nLines / aRectSize.Width();
+    sal_Int32 nY = rPt.Y() * nLines / aRectSize.Height();
 
     ChangePixel( nX + nY * nLines );
 
     //Solution:Set new focus position and repaint
-    //Invalidate( Rectangle( aPtTl, aPtBr ) );
     aFocusPosition.setX(nX);
     aFocusPosition.setY(nY);
     Invalidate(tools::Rectangle(Point(0,0),aRectSize));
 
-    vcl::Window *pTabPage = getNonLayoutParent(this);
-    if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
-        static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, RectPoint::MM ); // RectPoint is dummy
+    if (m_pPage)
+        m_pPage->PointChanged(GetDrawingArea(), RectPoint::MM ); // RectPoint is dummy
 
     return GetFocusPosIndex();
 
 }
 
-SvxPixelCtl::SvxPixelCtl(vcl::Window* pParent)
-    : Control(pParent, WB_BORDER)
+SvxPixelCtl::SvxPixelCtl(SvxTabPage* pPage)
+    : m_pPage(pPage)
     , bPaintable(true)
     , aFocusPosition(0,0)
 {
-    SetPixelColor( COL_BLACK );
-    SetBackgroundColor( COL_WHITE );
-    SetLineColor( COL_LIGHTGRAY );
     maPixelData.fill(0);
 }
 
 void SvxPixelCtl::Resize()
 {
-    Control::Resize();
-    aRectSize = GetOutputSize();
+    CustomWidgetController::Resize();
+    aRectSize = GetOutputSizePixel();
 }
 
-Size SvxPixelCtl::GetOptimalSize() const
+void SvxPixelCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(72, 72), MapMode(MapUnit::MapAppFont));
+    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 25,
+                                   pDrawingArea->get_text_height() * 10);
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
-VCL_BUILDER_FACTORY(SvxPixelCtl)
-
-SvxPixelCtl::~SvxPixelCtl( )
+SvxPixelCtl::~SvxPixelCtl()
 {
-    disposeOnce();
 }
 
 // Changes the foreground or Background color
@@ -1253,8 +1240,16 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// Draws the Control (Rectangle with nine circles)
+tools::Rectangle SvxPixelCtl::GetFocusRect()
+{
+    tools::Rectangle aRet;
+    //Draw visual focus when has focus
+    if (HasFocus())
+        aRet = implCalFocusRect(aFocusPosition);
+    return aRet;
+}
 
+// Draws the Control (Rectangle with nine circles)
 void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     if (!aRectSize.Width() || !aRectSize.Height())
@@ -1300,11 +1295,6 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
                 rRenderContext.DrawRect(tools::Rectangle(aPtTl, aPtBr));
             }
         }
-        //Draw visual focus when has focus
-        if (HasFocus())
-        {
-            ShowFocus(implCalFocusRect(aFocusPosition));
-        }
     }
     else
     {
@@ -1330,7 +1320,7 @@ tools::Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
 }
 
 //Solution:Keyboard function
-void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
+bool SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aKeyCode.GetCode();
@@ -1383,8 +1373,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 Invalidate( implCalFocusRect(aFocusPosition) );
                 break;
             default:
-                Control::KeyInput( rKEvt );
-                return;
+                return CustomWidgetController::KeyInput( rKEvt );
         }
         if(m_xAccess.is())
         {
@@ -1407,10 +1396,11 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 break;
             }
         }
+        return true;
     }
     else
     {
-        Control::KeyInput( rKEvt );
+        return CustomWidgetController::KeyInput( rKEvt );
     }
 }
 
@@ -1419,23 +1409,15 @@ void SvxPixelCtl::GetFocus()
 {
     Invalidate(implCalFocusRect(aFocusPosition));
 
-    if(m_xAccess.is())
+    if (m_xAccess.is())
     {
         m_xAccess->NotifyChild(GetFocusPosIndex(),true,false);
     }
-
-    Control::GetFocus();
 }
 
-//Hide focus when lose focus
 void SvxPixelCtl::LoseFocus()
 {
-    HideFocus();
-    if (m_xAccess.is())
-    {
-        m_xAccess->LoseFocus();
-    }
-    Control::LoseFocus();
+    Invalidate();
 }
 
 void SvxPixelCtl::SetXBitmap(const BitmapEx& rBitmapEx)
