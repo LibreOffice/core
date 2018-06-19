@@ -289,6 +289,7 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
         }
 
         filter.read_file(path);
+        aFactory.finalize();
     }
     catch (const std::exception&)
     {
