@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_d055bf1d",
+        "filename": "sw/source/uibase/app/swmodule.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-19T19:37:58Z",
+      "side": 1,
+      "message": "judging by the code in the SwLinguServiceEventListener constructor, it is probable only the final assignment to m_xLinguServiceEventListener needs to be protected, so something like:\n\n    {\n        Reference\u003c..\u003e tmp \u003d new SwLinguServiceEventListener;\n        SolarMutexGuard aGuard;\n        m_xLinguServiceEventListener \u003d tmp;\n    }",
+      "revId": "8523ea18f3555bb3e11fea26a7f88274c492beef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_30129363",
+        "filename": "sw/source/uibase/app/swmodule.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-19T19:37:58Z",
+      "side": 1,
+      "message": "you might need to join() this thread in the SwModule destructor, or the thread might end up touching SwModule stuff after SwModule has shut down, in the unit tests where we start and stop stuff a lot.",
+      "revId": "8523ea18f3555bb3e11fea26a7f88274c492beef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_104f5793",
+        "filename": "sw/source/uibase/app/swmodule.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-19T19:37:58Z",
+      "side": 1,
+      "message": "you might need to drop the SolarMutex here with SolarMutexReleaser,if you implement my advise above",
+      "revId": "8523ea18f3555bb3e11fea26a7f88274c492beef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
