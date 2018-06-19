@@ -351,6 +351,11 @@ public:
         return m_xWidget->GetAccessibleName();
     }
 
+    virtual OUString get_accessible_description() const override
+    {
+        return m_xWidget->GetAccessibleDescription();
+    }
+
     virtual void set_tooltip_text(const OUString& rTip) override
     {
         m_xWidget->SetQuickHelpText(rTip);

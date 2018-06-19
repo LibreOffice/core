@@ -57,6 +57,10 @@ public:
     bool IsEnabled() const { return m_pDrawingArea->get_sensitive(); }
     int GetTextHeight() const { return m_pDrawingArea->get_text_height(); }
     OUString GetAccessibleName() const { return m_pDrawingArea->get_accessible_name(); }
+    OUString GetAccessibleDescription() const
+    {
+        return m_pDrawingArea->get_accessible_description();
+    }
     void CaptureMouse() { m_pDrawingArea->grab_add(); }
     bool IsMouseCaptured() const { return m_pDrawingArea->has_grab(); }
     void EnableRTL(bool bEnable) { m_pDrawingArea->set_direction(bEnable); }
