@@ -75,6 +75,7 @@ struct SvtValueSetItem
     sal_uInt16          mnId;
     sal_uInt8           meType;
     bool                mbVisible;
+    Image               maImage;
     Color               maColor;
     OUString            maText;
     css::uno::Reference< css::accessibility::XAccessible > mxAcc;
@@ -407,6 +408,8 @@ public:
 
     SvtValueItemAcc(SvtValueSetItem* pParent, bool bIsTransientChildrenDisabled);
     virtual ~SvtValueItemAcc() override;
+
+    void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
 
     static SvtValueItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
 

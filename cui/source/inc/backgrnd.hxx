@@ -144,12 +144,12 @@ private:
 
 class SvxBkgTabPage : public SvxAreaTabPage
 {
-    VclPtr<ListBox> m_pTblLBox;
+    std::unique_ptr<weld::ComboBoxText> m_xTblLBox;
     bool        bHighlighting       : 1;
 public:
     using SvxAreaTabPage::DeactivatePage;
 
-    SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxBkgTabPage() override;
     virtual void dispose() override;
 

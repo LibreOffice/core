@@ -1443,16 +1443,14 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
     }
 }
 
-SvxBkgTabPage::SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
-    SvxAreaTabPage( pParent, rInAttrs ),
-    m_pTblLBox(nullptr),
-    bHighlighting(false)
+SvxBkgTabPage::SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SvxAreaTabPage(pParent, rInAttrs)
+    , bHighlighting(false)
 {
-    VclPtr<vcl::Window> pBtn;
-    get(pBtn, "btngradient"); pBtn->Hide();
-    get(pBtn, "btnhatch");    pBtn->Hide();
-    get(pBtn, "btnbitmap");   pBtn->Hide();
-    get(pBtn, "btnpattern");  pBtn->Hide();
+    m_xBtnGradient->hide();
+    m_xBtnHatch->hide();
+    m_xBtnBitmap->hide();
+    m_xBtnPattern->hide();
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = nullptr;
@@ -1483,7 +1481,7 @@ SvxBkgTabPage::~SvxBkgTabPage()
 
 void SvxBkgTabPage::dispose()
 {
-    m_pTblLBox.clear();
+    m_xTblLBox.reset();
     SvxAreaTabPage::dispose();
 }
 
@@ -1501,9 +1499,9 @@ DeactivateRC SvxBkgTabPage::DeactivatePage( SfxItemSet* _pSet )
 bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
-    if ( m_pTblLBox && m_pTblLBox->IsVisible() )
+    if (m_xTblLBox && m_xTblLBox->get_visible())
     {
-        switch( m_pTblLBox->GetSelectedEntryPos() )
+        switch (m_xTblLBox->get_active())
         {
             case TBL_DEST_CELL:
                 nSlot = SID_ATTR_BRUSH;
@@ -1549,10 +1547,9 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     return true;
 }
 
-VclPtr<SfxTabPage> SvxBkgTabPage::Create( TabPageParent pWindow,
-                                           const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxBkgTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxBkgTabPage>::Create( pWindow.pParent, *rAttrs );
+    return VclPtr<SvxBkgTabPage>::Create(pWindow, *rAttrs);
 }
 
 void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -1563,21 +1560,15 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         SvxBackgroundTabFlags nFlags = static_cast<SvxBackgroundTabFlags>(pFlagItem->GetValue());
         if ( nFlags & SvxBackgroundTabFlags::SHOW_TBLCTL )
         {
-            VclPtr<vcl::Window> pBtn;
-            get(pBtn, "btnbitmap");
-            pBtn->Show();
-            get(m_pTblLBox, "tablelb");
-            m_pTblLBox->SelectEntryPos(0);
-            m_pTblLBox->Show();
+            m_xBtnBitmap->show();
+            m_xTblLBox = m_xBuilder->weld_combo_box_text("tablelb");
+            m_xTblLBox->set_active(0);
+            m_xTblLBox->show();
         }
         else if (nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)
             bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
         else if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
-        {
-            VclPtr<vcl::Window> pBtn;
-            get(pBtn, "btnbitmap");
-            pBtn->Show();
-        }
+            m_xBtnBitmap->show();
     }
     SvxAreaTabPage::PageCreated( aSet );
 }
