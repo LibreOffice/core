@@ -2101,7 +2101,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
                                                   VclMessageType::Question, VclButtonsType::YesNo, aMsgStr));
         xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0));
         xBox->set_default_response(RET_NO);
-        if (xBox->run() == RET_NO)
+        if (xBox->run() == RET_YES)
             EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );
 
         GetViewData().GetViewShell()->UpdateInputHandler( true );
