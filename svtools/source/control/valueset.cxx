@@ -2925,7 +2925,7 @@ void SvtValueSet::SetStyle(WinBits nStyle)
     if (nStyle != mnStyle)
     {
         mnStyle = nStyle;
-        mbFormat = false;
+        mbFormat = true;
         Invalidate();
     }
 }

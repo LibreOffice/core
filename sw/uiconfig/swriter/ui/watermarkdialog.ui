@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="angle_adj">
     <property name="upper">359</property>
     <property name="step_increment">1</property>
@@ -17,7 +16,13 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="watermarkdialog|WatermarkDialog">Watermark</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -109,20 +114,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="svtlo-FontNameBox" id="FontBox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -167,6 +163,8 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="watermarkdialog|ColorLabel">Color</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">Color</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -177,6 +175,7 @@
                   <object class="GtkSpinButton" id="Angle">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">angle_adj</property>
                   </object>
                   <packing>
@@ -188,6 +187,7 @@
                   <object class="GtkSpinButton" id="Transparency">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">transparenct_adj</property>
                     <property name="value">50</property>
                   </object>
@@ -197,13 +197,35 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxColorListBox" id="Color">
+                  <object class="GtkMenuButton" id="Color">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="xalign">0</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="FontBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_entry">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
               </object>
