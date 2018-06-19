@@ -1737,7 +1737,10 @@ void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& r
     if ( nBorderWidth > 0 )
     {
         mpFS->startElementNS( XML_a, XML_line, XML_w, I32S(nBorderWidth), FSEND );
-        DrawingML::WriteSolidFill( util::Color(rBorderLine.Color) );
+        if ( rBorderLine.Color == sal_Int32( COL_AUTO ) )
+            mpFS->singleElementNS( XML_a, XML_noFill, FSEND );
+        else
+            DrawingML::WriteSolidFill( util::Color(rBorderLine.Color) );
         mpFS->endElementNS( XML_a, XML_line );
     }
 }
