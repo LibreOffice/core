@@ -351,6 +351,11 @@ public:
         return m_xWidget->GetAccessibleName();
     }
 
+    virtual OUString get_accessible_description() const override
+    {
+        return m_xWidget->GetAccessibleDescription();
+    }
+
     virtual void set_tooltip_text(const OUString& rTip) override
     {
         m_xWidget->SetQuickHelpText(rTip);
@@ -455,7 +460,7 @@ public:
     {
         SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
         assert(pVclWidget);
-        m_xMenu->Execute(pVclWidget->getWidget(), rRect, PopupMenuFlags::ExecuteDown);
+        m_xMenu->Execute(pVclWidget->getWidget(), rRect, PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose);
         return m_xMenu->GetCurItemIdent();
     }
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
@@ -1855,6 +1860,7 @@ private:
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
+    DECL_LINK(PopupMenuHdl, const Point&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
 
 public:
@@ -1873,6 +1879,7 @@ public:
         m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
         m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
         m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
+        m_xDrawingArea->SetPopupMenuHdl(LINK(this, SalInstanceDrawingArea, PopupMenuHdl));
         m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
     }
 
@@ -1930,6 +1937,7 @@ public:
     virtual ~SalInstanceDrawingArea() override
     {
         m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
+        m_xDrawingArea->SetPopupMenuHdl(Link<const Point&, bool>());
         m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
         m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, void>());
         m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, void>());
@@ -1987,6 +1995,11 @@ IMPL_LINK(SalInstanceDrawingArea, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
 {
     m_aStyleUpdatedHdl.Call(*this);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, PopupMenuHdl, const Point&, rPos, bool)
+{
+    return m_aPopupMenuHdl.Call(rPos);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)
