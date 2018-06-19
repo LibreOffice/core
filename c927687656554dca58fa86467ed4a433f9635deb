@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_55b9c1e8",
+        "filename": "sw/source/core/txtnode/ndtxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2139,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-19T10:06:10Z",
+      "side": 1,
+      "message": "this won\u0027t do what you want - if the node has hard attributes you get those here, if not you get the attributes of the style of the node instead.\n\nthere is a GetpSwpItemSet method that returns nullptr if there are no hard attributes.",
+      "revId": "c927687656554dca58fa86467ed4a433f9635deb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_75cebd84",
+        "filename": "sw/source/core/txtnode/ndtxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2149,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-19T10:06:10Z",
+      "side": 1,
+      "message": "hence i would guess this is always true :)",
+      "revId": "c927687656554dca58fa86467ed4a433f9635deb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
