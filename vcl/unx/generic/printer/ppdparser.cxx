@@ -1847,17 +1847,18 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     return pBuffer;
 }
 
-void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
+void PPDContext::rebuildFromStreamBuffer(const std::vector<char> &rBuffer)
 {
     if( ! m_pParser )
         return;
 
     m_aCurrentValues.clear();
 
-    char* pRun = pBuffer;
-    while( nBytes && *pRun )
+    const size_t nBytes = rBuffer.size() - 1;
+    size_t nRun = 0;
+    while (nRun < nBytes && rBuffer[nRun])
     {
-        OString aLine( pRun );
+        OString aLine(rBuffer.data() + nRun);
         sal_Int32 nPos = aLine.indexOf(':');
         if( nPos != -1 )
         {
@@ -1876,8 +1877,7 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
                     << " }");
             }
         }
-        nBytes -= aLine.getLength()+1;
-        pRun += aLine.getLength()+1;
+        nRun += aLine.getLength()+1;
     }
 }
 
