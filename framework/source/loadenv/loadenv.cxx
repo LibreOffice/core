@@ -28,6 +28,7 @@
 #include <services.h>
 #include <comphelper/interaction.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <framework/interaction.hxx>
 #include <comphelper/processfactory.hxx>
@@ -159,11 +160,19 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
     {
         LoadEnv aEnv(xContext);
 
+
+        EFeature loadEnvFeatures = E_WORK_WITH_UI;
+        comphelper::NamedValueCollection aDescriptor( lArgs );
+        // tdf#118238 Only disable UI interaction when loading as hidden
+        if (aDescriptor.get("Hidden") == uno::Any(true) || Application::IsHeadlessModeEnabled())
+            loadEnvFeatures = E_NO_FEATURE;
+
         aEnv.initializeLoading(sURL,
                                lArgs,
                                css::uno::Reference< css::frame::XFrame >(xLoader, css::uno::UNO_QUERY),
                                sTarget,
-                               nFlags);
+                               nFlags,
+                               loadEnvFeatures);
         aEnv.startLoading();
         aEnv.waitWhileLoading(); // wait for ever!
 
