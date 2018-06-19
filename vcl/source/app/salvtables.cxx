@@ -234,6 +234,16 @@ public:
         return m_xWidget->HasFocus();
     }
 
+    virtual void set_has_default(bool has_default) override
+    {
+        m_xWidget->set_property("has-default", OUString::boolean(has_default));
+    }
+
+    virtual bool get_has_default() const override
+    {
+        return m_xWidget->GetStyle() & WB_DEFBUTTON;
+    }
+
     virtual void show() override
     {
         m_xWidget->Show();
@@ -962,6 +972,13 @@ public:
         m_xButton->SetText(rText);
     }
 
+    virtual void set_image(VirtualDevice& rDevice) override
+    {
+        BitmapEx aBitmap(rDevice.GetBitmap(Point(0, 0), rDevice.GetOutputSize()));
+        m_xButton->SetImageAlign(ImageAlign::Left);
+        m_xButton->SetModeImage(Image(aBitmap));
+    }
+
     virtual OUString get_label() const override
     {
         return m_xButton->GetText();
@@ -1009,6 +1026,31 @@ public:
         m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
     }
 
+    virtual void set_active(bool active) override
+    {
+        if (active == get_active())
+            return;
+        if (active)
+            m_xMenuButton->ExecuteMenu();
+        else
+            m_xMenuButton->CancelMenu();
+    }
+
+    virtual bool get_active() const override
+    {
+        return m_xMenuButton->MenuShown();
+    }
+
+    virtual void set_inconsistent(bool /*inconsistent*/) override
+    {
+        //not available
+    }
+
+    virtual bool get_inconsistent() const override
+    {
+        return false;
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
@@ -1031,6 +1073,12 @@ public:
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
         return pMenu->GetHelpId(pMenu->GetItemId(rIdent));
+    }
+
+    virtual void set_popover(weld::Widget* pPopover) override
+    {
+        SalInstanceWidget* pPopoverWidget = dynamic_cast<SalInstanceWidget*>(pPopover);
+        m_xMenuButton->SetPopover(pPopoverWidget ? pPopoverWidget->getWidget() : nullptr);
     }
 
     virtual ~SalInstanceMenuButton() override
