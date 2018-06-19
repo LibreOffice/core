@@ -25,6 +25,7 @@
 #include <unordered_map>
 
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/export/drawingml.hxx>
@@ -216,6 +217,7 @@ public:
 
     void WriteTableCellProperties(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 
+    void WriteBorderLine(const sal_Int32 XML_line, const css::table::BorderLine2& rBorderLine);
     void WriteTableCellBorders(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 
     sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape >& rShape );
