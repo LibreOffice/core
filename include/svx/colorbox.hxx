@@ -119,6 +119,7 @@ public:
     }
 
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
+    NamedColor const & GetSelectedEntry() const { return m_aSelectedColor; }
 
     void SelectEntry(const Color& rColor);
 
@@ -129,6 +130,8 @@ public:
 
     void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
     bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
+
+    void set_sensitive(bool sensitive) { m_xButton->set_sensitive(sensitive); }
 };
 
 /** A wrapper for SvxColorListBox. */
