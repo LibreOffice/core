@@ -1241,6 +1241,18 @@ public:
         return gtk_widget_has_focus(m_pWidget);
     }
 
+    virtual void set_has_default(bool has_default) override
+    {
+        g_object_set(G_OBJECT(m_pWidget), "has-default", has_default, nullptr);
+    }
+
+    virtual bool get_has_default() const override
+    {
+        gboolean has_default(false);
+        g_object_get(G_OBJECT(m_pWidget), "has-default", &has_default, nullptr);
+        return has_default;
+    }
+
     virtual void show() override
     {
         gtk_widget_show(m_pWidget);
@@ -1587,6 +1599,8 @@ public:
         : m_pMenu(pMenu)
         , m_bTakeOwnership(bTakeOwnership)
     {
+        if (!m_pMenu)
+            return;
         gtk_container_foreach(GTK_CONTAINER(m_pMenu), collect, this);
         for (auto& a : m_aMap)
             g_signal_connect(a.second, "activate", G_CALLBACK(signalActivate), this);
@@ -2715,6 +2729,13 @@ public:
         ::set_label(m_pButton, rText);
     }
 
+    virtual void set_image(VirtualDevice& rDevice) override
+    {
+        gtk_button_set_always_show_image(m_pButton, true);
+        gtk_button_set_image_position(m_pButton, GTK_POS_LEFT);
+        gtk_button_set_image(m_pButton, gtk_image_new_from_surface(get_underlying_cairo_surface(rDevice)));
+    }
+
     virtual OUString get_label() const override
     {
         return ::get_label(m_pButton);
@@ -2782,42 +2803,6 @@ bool GtkInstanceDialog::has_click_handler(int nResponse)
     return false;
 }
 
-class GtkInstanceMenuButton : public GtkInstanceButton, public MenuHelper, public virtual weld::MenuButton
-{
-public:
-    GtkInstanceMenuButton(GtkMenuButton* pMenuButton, bool bTakeOwnership)
-        : GtkInstanceButton(GTK_BUTTON(pMenuButton), bTakeOwnership)
-        , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
-    {
-    }
-
-    virtual void set_item_active(const OString& rIdent, bool bActive) override
-    {
-        MenuHelper::set_item_active(rIdent, bActive);
-    }
-
-    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
-    {
-        MenuHelper::set_item_label(rIdent, rLabel);
-    }
-
-    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
-    {
-        MenuHelper::set_item_help_id(rIdent, rHelpId);
-    }
-
-    virtual OString get_item_help_id(const OString& rIdent) const override
-    {
-        return MenuHelper::get_item_help_id(rIdent);
-    }
-
-    virtual void signal_activate(GtkMenuItem* pItem) override
-    {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        signal_selected(OString(pStr, pStr ? strlen(pStr) : 0));
-    }
-};
-
 class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::ToggleButton
 {
 private:
@@ -2876,6 +2861,294 @@ public:
     virtual ~GtkInstanceToggleButton() override
     {
         g_signal_handler_disconnect(m_pToggleButton, m_nSignalId);
+    }
+};
+
+class GtkInstanceMenuButton : public GtkInstanceToggleButton, public MenuHelper, public virtual weld::MenuButton
+{
+private:
+    GtkMenuButton* m_pMenuButton;
+    GtkBox* m_pBox;
+    GtkImage* m_pImage;
+    GtkLabel* m_pLabel;
+    //popover cannot escape dialog under X so stick up own window instead
+    GtkWindow* m_pMenuHack;
+    GtkWidget* m_pPopover;
+    gulong m_nSignalId;
+
+    static void signalToggled(GtkWidget*, gpointer widget)
+    {
+        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->toggle_menu();
+    }
+
+    void do_grab()
+    {
+        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pMenuHack));
+#if GTK_CHECK_VERSION(3, 20, 0)
+        if (gtk_check_version(3, 20, 0) == nullptr)
+        {
+            GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
+            gdk_seat_grab(pSeat, gtk_widget_get_window(GTK_WIDGET(m_pMenuHack)),
+                          GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
+            return;
+        }
+#endif
+        //else older gtk3
+        const int nMask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
+
+        GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
+        GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
+        gdk_device_grab(pPointer, gtk_widget_get_window(GTK_WIDGET(m_pMenuHack)), GDK_OWNERSHIP_NONE,
+                        true, GdkEventMask(nMask), nullptr, gtk_get_current_event_time());
+    }
+
+    void do_ungrab()
+    {
+        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pMenuHack));
+#if GTK_CHECK_VERSION(3, 20, 0)
+        if (gtk_check_version(3, 20, 0) == nullptr)
+        {
+            GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
+            gdk_seat_ungrab(pSeat);
+            return;
+        }
+#endif
+        //else older gtk3
+        GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
+        GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
+        gdk_device_ungrab(pPointer, gtk_get_current_event_time());
+    }
+
+    void toggle_menu()
+    {
+        if (!m_pMenuHack)
+            return;
+        if (!get_active())
+        {
+            do_ungrab();
+
+            gtk_widget_hide(GTK_WIDGET(m_pMenuHack));
+            //put contents back from where the came from
+            GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pMenuHack));
+            g_object_ref(pChild);
+            gtk_container_remove(GTK_CONTAINER(m_pMenuHack), pChild);
+            gtk_container_add(GTK_CONTAINER(m_pPopover), pChild);
+            g_object_unref(pChild);
+        }
+        else
+        {
+            //steal popover contents and smuggle into toplevel display window
+            GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pPopover));
+            g_object_ref(pChild);
+            gtk_container_remove(GTK_CONTAINER(m_pPopover), pChild);
+            gtk_container_add(GTK_CONTAINER(m_pMenuHack), pChild);
+            g_object_unref(pChild);
+
+            //place the toplevel just below its launcher button
+            GtkWidget* pToplevel = gtk_widget_get_toplevel(GTK_WIDGET(m_pMenuButton));
+            gint x, y, absx, absy;
+            gtk_widget_translate_coordinates(GTK_WIDGET(m_pMenuButton), pToplevel, 0, 0, &x, &y);
+            GdkWindow *pWindow = gtk_widget_get_window(pToplevel);
+            gdk_window_get_position(pWindow, &absx, &absy);
+
+            gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), m_pMenuHack);
+            gtk_window_set_transient_for(m_pMenuHack, GTK_WINDOW(pToplevel));
+
+            gtk_widget_show_all(GTK_WIDGET(m_pMenuHack));
+            gtk_window_move(m_pMenuHack, x + absx, y + absy + gtk_widget_get_allocated_height(GTK_WIDGET(m_pMenuButton)));
+
+            gtk_widget_grab_focus(GTK_WIDGET(m_pMenuHack));
+
+            do_grab();
+        }
+    }
+
+    static void signalGrabBroken(GtkWidget*, GdkEventGrabBroken *pEvent, gpointer widget)
+    {
+        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        pThis->grab_broken(pEvent);
+    }
+
+    void grab_broken(GdkEventGrabBroken *event)
+    {
+        if (event->grab_window == nullptr)
+        {
+            set_active(false);
+        }
+        else
+        {
+            //try and regrab, so when we lose the grab to the menu of the color palette
+            //combobox we regain it so the color palette doesn't itself disappear on next
+            //click on the color palette combobox
+            do_grab();
+        }
+    }
+
+    static gboolean signalButtonRelease(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
+    {
+        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        return pThis->button_release(pWidget, pEvent);
+    }
+
+    bool button_release(GtkWidget* pWidget, GdkEventButton* pEvent)
+    {
+        //we want to pop down if the button was released outside our popup
+        gdouble x = pEvent->x_root;
+        gdouble y = pEvent->y_root;
+        gint xoffset, yoffset;
+        gdk_window_get_root_origin(gtk_widget_get_window(pWidget), &xoffset, &yoffset);
+
+        GtkAllocation alloc;
+        gtk_widget_get_allocation(pWidget, &alloc);
+        xoffset += alloc.x;
+        yoffset += alloc.y;
+
+        gtk_widget_get_allocation(GTK_WIDGET(m_pMenuHack), &alloc);
+        gint x1 = alloc.x + xoffset;
+        gint y1 = alloc.y + yoffset;
+        gint x2 = x1 + alloc.width;
+        gint y2 = y1 + alloc.height;
+
+        if (x > x1 && x < x2 && y > y1 && y < y2)
+            return false;
+
+        set_active(false);
+
+        return false;
+    }
+
+    static gboolean keyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
+    {
+        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        return pThis->key_press(pEvent);
+    }
+
+    bool key_press(GdkEventKey* pEvent)
+    {
+        if (pEvent->keyval == GDK_KEY_Escape)
+        {
+            set_active(false);
+            return true;
+        }
+        return false;
+    }
+
+public:
+    GtkInstanceMenuButton(GtkMenuButton* pMenuButton, bool bTakeOwnership)
+        : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(pMenuButton), bTakeOwnership)
+        , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
+        , m_pMenuButton(pMenuButton)
+        , m_pImage(nullptr)
+        , m_pMenuHack(nullptr)
+        , m_pPopover(nullptr)
+        , m_nSignalId(0)
+    {
+        //do it "manually" so we can have the dropdown image in GtkMenuButtons shown
+        //on the right at the same time as this image is shown on the left
+        OString sLabel(gtk_button_get_label(GTK_BUTTON(m_pMenuButton)));
+        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
+        gtk_container_remove(GTK_CONTAINER(m_pMenuButton), pChild);
+
+        m_pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+
+        m_pLabel = GTK_LABEL(gtk_label_new_with_mnemonic(sLabel.getStr()));
+        gtk_label_set_ellipsize(m_pLabel, PANGO_ELLIPSIZE_MIDDLE);
+        gtk_label_set_mnemonic_widget(m_pLabel, GTK_WIDGET(m_pMenuButton));
+        gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pLabel), false, false, 0);
+
+        gtk_box_pack_end(m_pBox, gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
+        gtk_container_add(GTK_CONTAINER(m_pMenuButton), GTK_WIDGET(m_pBox));
+        gtk_widget_show_all(GTK_WIDGET(m_pBox));
+
+#if defined(GDK_WINDOWING_X11)
+        //under wayland a Popover will work to "escape" the parent dialog, not
+        //so under X, so come up with this hack to use a raw GtkWindow
+        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
+        if (GDK_IS_X11_DISPLAY(pDisplay))
+        {
+            m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
+            gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
+            gtk_window_set_modal(m_pMenuHack, true);
+            gtk_window_set_resizable(m_pMenuHack, false);
+            m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(pMenuButton), "toggled", G_CALLBACK(signalToggled), this);
+            g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+            g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+            g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
+        }
+#endif
+    }
+
+    virtual void set_label(const OUString& rText) override
+    {
+        ::set_label(m_pLabel, rText);
+    }
+
+    virtual void set_image(VirtualDevice& rDevice) override
+    {
+        if (!m_pImage)
+        {
+            m_pImage = GTK_IMAGE(gtk_image_new_from_surface(get_underlying_cairo_surface(rDevice)));
+            GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(m_pMenuButton));
+            gint nImageSpacing(0);
+            gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
+            gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, nImageSpacing);
+            gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
+            gtk_widget_show(GTK_WIDGET(m_pImage));
+        }
+        else
+            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(rDevice));
+    }
+
+    virtual void set_item_active(const OString& rIdent, bool bActive) override
+    {
+        MenuHelper::set_item_active(rIdent, bActive);
+    }
+
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
+    {
+        MenuHelper::set_item_label(rIdent, rLabel);
+    }
+
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
+    {
+        MenuHelper::set_item_help_id(rIdent, rHelpId);
+    }
+
+    virtual OString get_item_help_id(const OString& rIdent) const override
+    {
+        return MenuHelper::get_item_help_id(rIdent);
+    }
+
+    virtual void signal_activate(GtkMenuItem* pItem) override
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
+        signal_selected(OString(pStr, pStr ? strlen(pStr) : 0));
+    }
+
+    virtual void set_popover(weld::Widget* pPopover) override
+    {
+        GtkInstanceWidget* pPopoverWidget = dynamic_cast<GtkInstanceWidget*>(pPopover);
+        m_pPopover = pPopoverWidget->getWidget();
+        if (m_pMenuHack)
+        {
+            gtk_menu_button_set_popover(m_pMenuButton, gtk_popover_new(GTK_WIDGET(m_pMenuButton)));
+        }
+        else
+        {
+            gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
+            gtk_widget_show_all(m_pPopover);
+        }
+    }
+
+    virtual ~GtkInstanceMenuButton() override
+    {
+        if (m_pMenuHack)
+        {
+            g_signal_handler_disconnect(m_pMenuButton, m_nSignalId);
+            gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
+        }
     }
 };
 
@@ -3877,7 +4150,7 @@ private:
     void signal_size_allocate(guint nWidth, guint nHeight)
     {
         m_xDevice->SetOutputSizePixel(Size(nWidth, nHeight));
-        m_pSurface = get_underlying_cairo_suface(*m_xDevice);
+        m_pSurface = get_underlying_cairo_surface(*m_xDevice);
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
     }
     static void signalStyleUpdated(GtkWidget*, gpointer widget)
@@ -4707,13 +4980,6 @@ private:
             }
             if (gtk_button_get_use_underline(pButton) && !gtk_button_get_use_stock(pButton))
                 m_aMnemonicButtons.push_back(pButton);
-
-            if (GTK_IS_MENU_BUTTON(pWidget))
-            {
-                gtk_button_set_image(pButton, gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON));
-                gtk_button_set_image_position(pButton, GTK_POS_RIGHT);
-                gtk_button_set_always_show_image(pButton, true);
-            }
         }
         else if (GTK_IS_LABEL(pWidget))
         {
@@ -4816,7 +5082,7 @@ public:
     //gtk impl emulate this by doing this implicitly at weld time
     void auto_add_parentless_widgets_to_container(GtkWidget* pWidget)
     {
-        if (gtk_widget_get_toplevel(pWidget) == pWidget)
+        if (gtk_widget_get_toplevel(pWidget) == pWidget && !GTK_IS_POPOVER(pWidget))
             gtk_container_add(GTK_CONTAINER(m_pParentWidget), pWidget);
     }
 
