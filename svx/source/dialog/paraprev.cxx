@@ -214,8 +214,12 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 ParaPrevWindow::ParaPrevWindow() :
     nLeftMargin     ( 0 ),
     nRightMargin    ( 0 ),
+    nFirstLineOfst  ( 0 ),
+    nUpper          ( 0 ),
+    nLower          ( 0 ),
     eAdjust         ( SvxAdjust::Left ),
-    eLastLine       ( SvxAdjust::Left )
+    eLastLine       ( SvxAdjust::Left ),
+    eLine           ( SvxPrevLineSpace::N1 )
 {
     aSize = Size(11905, 16837);
 }
@@ -268,6 +272,8 @@ void ParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
         if (i == 3)
         {
             rRenderContext.SetFillColor(COL_GRAY);
+            auto nTop = nUpper * aLineSiz.Height() / aSize.Height();
+            aPnt.AdjustY(nTop * 2 );
         }
 
         if (i == 6 )
@@ -276,10 +282,43 @@ void ParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
         if (3 <= i && 6 > i)
         {
             long nLeft = nLeftMargin * aLineSiz.Width() / aSize.Width();
-            aPnt.AdjustX(nLeft );
-            aSiz.AdjustWidth( -nLeft );
+            long nFirst = nFirstLineOfst * aLineSiz.Width() / aSize.Width();
+            long nTmp = nLeft + nFirst;
+
+            if (i == 3)
+            {
+                aPnt.AdjustX(nTmp );
+                aSiz.AdjustWidth( -nTmp );
+            }
+            else
+            {
+                aPnt.AdjustX(nLeft );
+                aSiz.AdjustWidth( -nLeft );
+            }
             long nRight = nRightMargin * aLineSiz.Width() / aSize.Width();
             aSiz.AdjustWidth( -nRight );
+        }
+
+        if (4 == i || 5 == i || 6 == i)
+        {
+            switch (eLine)
+            {
+                case SvxPrevLineSpace::N1:
+                    break;
+                case SvxPrevLineSpace::N115:
+                    aPnt.AdjustY(nH / 6.67 ); // 1/.15 = 6.(6)
+                    break;
+                case SvxPrevLineSpace::N15:
+                    aPnt.AdjustY(nH / 2 );
+                    break;
+                case SvxPrevLineSpace::N2:
+                    aPnt.AdjustY(nH );
+                    break;
+                case SvxPrevLineSpace::Prop:
+                case SvxPrevLineSpace::Min:
+                case SvxPrevLineSpace::Leading:
+                    break;
+            }
         }
 
         aPnt.AdjustY(nH );
@@ -345,6 +384,12 @@ void ParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
         rRenderContext.DrawRect( aRect );
         Lines[i] = aRect;
+
+        if (5 == i)
+        {
+            auto nBottom = nLower * aLineSiz.Height() / aSize.Height();
+            aPnt.AdjustY(nBottom * 2 );
+        }
 
         aPnt.AdjustY(nH );
         // Reset, recalculate for each line
