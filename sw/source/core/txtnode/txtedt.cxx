@@ -1338,12 +1338,6 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
 
     if( bFresh )
     {
-        //! register listener to LinguServiceEvents now in order to get
-        //! notified about relevant changes in the future
-        SwModule *pModule = SW_MOD();
-        if (!pModule->GetLngSvcEvtListener().is())
-            pModule->CreateLngSvcEvtListener();
-
         uno::Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
         SwDoc* pDoc = pNode->GetDoc();
 
