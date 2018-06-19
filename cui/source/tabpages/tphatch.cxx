@@ -49,36 +49,29 @@
 
 using namespace com::sun::star;
 
-SvxHatchTabPage::SvxHatchTabPage
-(
-    vcl::Window* pParent,
-    const SfxItemSet& rInAttrs
-) :
-
-    SvxTabPage          ( pParent, "HatchPage", "cui/ui/hatchpage.ui", rInAttrs ),
-
-    m_rOutAttrs           ( rInAttrs ),
-    m_pnHatchingListState ( nullptr ),
-    m_pnColorListState    ( nullptr ),
-    m_aXFillAttr          ( rInAttrs.GetPool() ),
-    m_rXFSet              ( m_aXFillAttr.GetItemSet() )
+SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pParent, "cui/ui/hatchpage.ui", "HatchPage", rInAttrs)
+    , m_rOutAttrs(rInAttrs)
+    , m_pnHatchingListState(nullptr)
+    , m_pnColorListState(nullptr)
+    , m_aXFillAttr(rInAttrs.GetPool())
+    , m_rXFSet(m_aXFillAttr.GetItemSet())
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("distancemtr", FUNIT_MM))
+    , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FUNIT_DEGREE))
+    , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
+    , m_xLbLineType(m_xBuilder->weld_combo_box_text("linetypelb"))
+    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), GetFrameWeld()))
+    , m_xCbBackgroundColor(m_xBuilder->weld_check_button("backgroundcolor"))
+    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"), GetFrameWeld()))
+    , m_xHatchLB(new PresetListBox(m_xBuilder->weld_scrolled_window("hatchpresetlistwin")))
+    , m_xBtnAdd(m_xBuilder->weld_button("add"))
+    , m_xBtnModify(m_xBuilder->weld_button("modify"))
+    , m_xHatchLBWin(new weld::CustomWeld(*m_xBuilder, "hatchpresetlist", *m_xHatchLB))
+    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "previewctl", m_aCtlPreview))
 {
-    get(m_pMtrDistance, "distancemtr");
-    get(m_pMtrAngle, "anglemtr");
-    get(m_pSliderAngle, "angleslider");
-    get(m_pLbLineType, "linetypelb");
-    get(m_pLbLineColor, "linecolorlb");
-    get(m_pCbBackgroundColor, "backgroundcolor");
-    get(m_pLbBackgroundColor, "backgroundcolorlb");
-    get(m_pHatchLB , "hatchpresetlist");
-    get(m_pCtlPreview, "previewctl");
     Size aSize = getDrawPreviewOptimalSize(this);
-    m_pHatchLB->set_width_request(aSize.Width());
-    m_pHatchLB->set_height_request(aSize.Height());
-    m_pCtlPreview->set_width_request(aSize.Width());
-    m_pCtlPreview->set_height_request(aSize.Height());
-    get(m_pBtnAdd, "add");
-    get(m_pBtnModify, "modify");
+    m_xHatchLBWin->set_size_request(aSize.Width(), aSize.Height());
+    m_xCtlPreview->set_size_request(aSize.Width(), aSize.Height());
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -94,7 +87,7 @@ SvxHatchTabPage::SvxHatchTabPage
             break;
         default: ;//prevent warning
     }
-    SetFieldUnit( *m_pMtrDistance, eFUnit );
+    SetFieldUnit( *m_xMtrDistance, eFUnit );
 
     // determine PoolUnit
     SfxItemPool* pPool = m_rOutAttrs.GetPool();
@@ -104,27 +97,26 @@ SvxHatchTabPage::SvxHatchTabPage
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_HATCH) );
     m_rXFSet.Put( XFillHatchItem(OUString(), XHatch()) );
-    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pHatchLB->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl ) );
-    m_pHatchLB->SetRenameHdl( LINK( this, SvxHatchTabPage, ClickRenameHdl_Impl ) );
-    m_pHatchLB->SetDeleteHdl( LINK( this, SvxHatchTabPage, ClickDeleteHdl_Impl ) );
+    m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_xHatchLB->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl ) );
+    m_xHatchLB->SetRenameHdl( LINK( this, SvxHatchTabPage, ClickRenameHdl_Impl ) );
+    m_xHatchLB->SetDeleteHdl( LINK( this, SvxHatchTabPage, ClickDeleteHdl_Impl ) );
 
-    Link<Edit&,void> aLink = LINK( this, SvxHatchTabPage, ModifiedEditHdl_Impl );
-    Link<ListBox&,void> aLink2 = LINK( this, SvxHatchTabPage, ModifiedListBoxHdl_Impl );
-    m_pMtrDistance->SetModifyHdl( aLink );
-    m_pMtrAngle->SetModifyHdl( aLink );
-    m_pSliderAngle->SetSlideHdl( LINK( this, SvxHatchTabPage, ModifiedSliderHdl_Impl ) );
-    m_pLbLineType->SetSelectHdl( aLink2 );
-    Link<SvxColorListBox&,void> aLink3 = LINK( this, SvxHatchTabPage, ModifiedColorListBoxHdl_Impl );
-    m_pLbLineColor->SetSelectHdl( aLink3 );
-    m_pCbBackgroundColor->SetToggleHdl( LINK( this, SvxHatchTabPage, ToggleHatchBackgroundColor_Impl ) );
-    m_pLbBackgroundColor->SetSelectHdl( LINK( this, SvxHatchTabPage, ModifiedBackgroundHdl_Impl ) );
+    Link<weld::MetricSpinButton&,void> aLink = LINK( this, SvxHatchTabPage, ModifiedEditHdl_Impl );
+    Link<weld::ComboBoxText&,void> aLink2 = LINK( this, SvxHatchTabPage, ModifiedListBoxHdl_Impl );
+    m_xMtrDistance->connect_value_changed( aLink );
+    m_xMtrAngle->connect_value_changed( aLink );
+    m_xSliderAngle->connect_value_changed(LINK(this, SvxHatchTabPage, ModifiedSliderHdl_Impl));
+    m_xLbLineType->connect_changed( aLink2 );
+    Link<ColorListBox&,void> aLink3 = LINK( this, SvxHatchTabPage, ModifiedColorListBoxHdl_Impl );
+    m_xLbLineColor->SetSelectHdl( aLink3 );
+    m_xCbBackgroundColor->connect_toggled( LINK( this, SvxHatchTabPage, ToggleHatchBackgroundColor_Impl ) );
+    m_xLbBackgroundColor->SetSelectHdl( LINK( this, SvxHatchTabPage, ModifiedBackgroundHdl_Impl ) );
 
-    m_pBtnAdd->SetClickHdl( LINK( this, SvxHatchTabPage, ClickAddHdl_Impl ) );
-    m_pBtnModify->SetClickHdl( LINK( this, SvxHatchTabPage, ClickModifyHdl_Impl ) );
+    m_xBtnAdd->connect_clicked( LINK( this, SvxHatchTabPage, ClickAddHdl_Impl ) );
+    m_xBtnModify->connect_clicked( LINK( this, SvxHatchTabPage, ClickModifyHdl_Impl ) );
 
-    m_pCtlPreview->SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-
+    m_aCtlPreview.SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 }
 
 SvxHatchTabPage::~SvxHatchTabPage()
@@ -134,23 +126,17 @@ SvxHatchTabPage::~SvxHatchTabPage()
 
 void SvxHatchTabPage::dispose()
 {
-    m_pMtrDistance.clear();
-    m_pMtrAngle.clear();
-    m_pSliderAngle.clear();
-    m_pLbLineType.clear();
-    m_pLbLineColor.clear();
-    m_pCbBackgroundColor.clear();
-    m_pLbBackgroundColor.clear();
-    m_pHatchLB.clear();
-    m_pCtlPreview.clear();
-    m_pBtnAdd.clear();
-    m_pBtnModify.clear();
+    m_xCtlPreview.reset();
+    m_xHatchLBWin.reset();
+    m_xHatchLB.reset();
+    m_xLbBackgroundColor.reset();
+    m_xLbLineColor.reset();
     SvxTabPage::dispose();
 }
 
 void SvxHatchTabPage::Construct()
 {
-    m_pHatchLB->FillPresetListBox(*m_pHatchingList);
+    m_xHatchLB->FillPresetListBox(*m_pHatchingList);
 }
 
 void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -188,8 +174,8 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         sal_Int32 nPos = SearchHatchList( rSet.Get(XATTR_FILLHATCH).GetName() );
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            sal_uInt16 nId = m_pHatchLB->GetItemId( static_cast<size_t>( nPos ) );
-            m_pHatchLB->SelectItem( nId );
+            sal_uInt16 nId = m_xHatchLB->GetItemId( static_cast<size_t>( nPos ) );
+            m_xHatchLB->SelectItem( nId );
         }
         // colors could have been deleted
         ChangeHatchHdl_Impl();
@@ -200,23 +186,22 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
     if(aBckItem.GetValue())
     {
-        m_pCbBackgroundColor->SetState(TRISTATE_TRUE);
+        m_xCbBackgroundColor->set_state(TRISTATE_TRUE);
         XFillColorItem aColorItem( rSet.Get(XATTR_FILLCOLOR) );
         Color aColor(aColorItem.GetColorValue());
-        m_pLbBackgroundColor->Enable();
-        m_pLbBackgroundColor->SelectEntry(aColor);
+        m_xLbBackgroundColor->set_sensitive(true);
+        m_xLbBackgroundColor->SelectEntry(aColor);
         m_rXFSet.Put( aColorItem );
     }
     else
     {
-        m_pCbBackgroundColor->SetState(TRISTATE_FALSE);
-        m_pLbBackgroundColor->Disable();
+        m_xCbBackgroundColor->set_state(TRISTATE_FALSE);
+        m_xLbBackgroundColor->set_sensitive(false);
     }
 
-    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlPreview->Invalidate();
+    m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_aCtlPreview.Invalidate();
 }
-
 
 DeactivateRC SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -225,7 +210,6 @@ DeactivateRC SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return DeactivateRC::LeavePage;
 }
-
 
 sal_Int32 SvxHatchTabPage::SearchHatchList(const OUString& rHatchName)
 {
@@ -248,32 +232,31 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 {
     std::unique_ptr<XHatch> pXHatch;
     OUString  aString;
-    size_t nPos = m_pHatchLB->IsNoSelection() ? VALUESET_ITEM_NOTFOUND : m_pHatchLB->GetSelectItemPos();
+    size_t nPos = m_xHatchLB->IsNoSelection() ? VALUESET_ITEM_NOTFOUND : m_xHatchLB->GetSelectItemPos();
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
-        aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectedItemId() );
+        aString = m_xHatchLB->GetItemText( m_xHatchLB->GetSelectedItemId() );
     }
     // unidentified hatch has been passed
     else
     {
-        pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
-                    static_cast<css::drawing::HatchStyle>(m_pLbLineType->GetSelectedEntryPos()),
-                    GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
-                    static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
+        pXHatch.reset(new XHatch( m_xLbLineColor->GetSelectEntryColor(),
+                    static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
+                    GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
+                    static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10) ));
     }
     assert( pXHatch && "XHatch couldn't be created" );
     rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
     rSet->Put( XFillHatchItem( aString, *pXHatch ) );
-    rSet->Put( XFillBackgroundItem( m_pCbBackgroundColor->IsChecked() ) );
-    if (m_pCbBackgroundColor->IsChecked())
+    rSet->Put( XFillBackgroundItem( m_xCbBackgroundColor->get_active() ) );
+    if (m_xCbBackgroundColor->get_active())
     {
-        NamedColor aColor = m_pLbBackgroundColor->GetSelectedEntry();
+        NamedColor aColor = m_xLbBackgroundColor->GetSelectedEntry();
         rSet->Put(XFillColorItem(aColor.second, aColor.first));
     }
     return true;
 }
-
 
 void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 {
@@ -281,95 +264,95 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 
     XFillBackgroundItem aBckItem( rSet->Get(XATTR_FILLBACKGROUND) );
     if(aBckItem.GetValue())
-        m_pCbBackgroundColor->SetState(TRISTATE_TRUE);
+        m_xCbBackgroundColor->set_state(TRISTATE_TRUE);
     else
-        m_pCbBackgroundColor->SetState(TRISTATE_FALSE);
+        m_xCbBackgroundColor->set_state(TRISTATE_FALSE);
     m_rXFSet.Put( aBckItem );
 
     XFillColorItem aColItem( rSet->Get(XATTR_FILLCOLOR) );
-    m_pLbBackgroundColor->SelectEntry(aColItem.GetColorValue());
+    m_xLbBackgroundColor->SelectEntry(aColItem.GetColorValue());
     m_rXFSet.Put( aColItem );
 
-    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlPreview->Invalidate();
+    m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_aCtlPreview.Invalidate();
 }
-
 
 VclPtr<SfxTabPage> SvxHatchTabPage::Create( TabPageParent pWindow,
                                             const SfxItemSet* rSet )
 {
-    return VclPtr<SvxHatchTabPage>::Create( pWindow.pParent, *rSet );
+    return VclPtr<SvxHatchTabPage>::Create(pWindow, *rSet);
 }
 
-IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, weld::ComboBoxText&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
     // hatch params have changed, it is no longer one of the presets
-    m_pHatchLB->SetNoSelection();
+    m_xHatchLB->SetNoSelection();
 }
 
-IMPL_LINK( SvxHatchTabPage, ModifiedColorListBoxHdl_Impl, SvxColorListBox&, rListBox, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedColorListBoxHdl_Impl, ColorListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
-    m_pHatchLB->SetNoSelection();
+    m_xHatchLB->SetNoSelection();
 }
 
-IMPL_LINK_NOARG( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, CheckBox&, void )
+IMPL_LINK_NOARG( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, weld::ToggleButton&, void )
 {
-    if(m_pCbBackgroundColor->IsChecked())
-        m_pLbBackgroundColor->Enable();
+    if (m_xCbBackgroundColor->get_active())
+        m_xLbBackgroundColor->set_sensitive(true);
     else
-        m_pLbBackgroundColor->Disable();
-    m_rXFSet.Put( XFillBackgroundItem( m_pCbBackgroundColor->IsChecked() ) );
-    ModifiedBackgroundHdl_Impl(*m_pLbBackgroundColor);
+        m_xLbBackgroundColor->set_sensitive(false);
+    m_rXFSet.Put( XFillBackgroundItem( m_xCbBackgroundColor->get_active() ) );
+    ModifiedBackgroundHdl_Impl(*m_xLbBackgroundColor);
 }
 
-IMPL_LINK_NOARG( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, SvxColorListBox&, void )
+IMPL_LINK_NOARG( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ColorListBox&, void )
 {
     Color aColor(COL_TRANSPARENT);
-    if(m_pCbBackgroundColor->IsChecked())
+    if (m_xCbBackgroundColor->get_active())
     {
-        aColor = m_pLbBackgroundColor->GetSelectEntryColor();
-        m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-        m_pCtlPreview->Invalidate();
+        aColor = m_xLbBackgroundColor->GetSelectEntryColor();
+        m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
+        m_aCtlPreview.Invalidate();
     }
     m_rXFSet.Put(XFillColorItem( OUString(), aColor ));
 
-    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlPreview->Invalidate();
+    m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_aCtlPreview.Invalidate();
 }
 
-IMPL_LINK( SvxHatchTabPage, ModifiedEditHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedEditHdl_Impl, weld::MetricSpinButton&, rEdit, void )
 {
     ModifiedHdl_Impl(&rEdit);
-    m_pHatchLB->SetNoSelection();
+    m_xHatchLB->SetNoSelection();
 }
 
-IMPL_LINK( SvxHatchTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedSliderHdl_Impl, weld::Scale&, rSlider, void )
 {
-    ModifiedHdl_Impl(rSlider);
-    m_pHatchLB->SetNoSelection();
+    ModifiedHdl_Impl(&rSlider);
+    m_xHatchLB->SetNoSelection();
 }
+
 void SvxHatchTabPage::ModifiedHdl_Impl( void const * p )
 {
-    if( p == m_pMtrAngle )
-        m_pSliderAngle->SetThumbPos( m_pMtrAngle->GetValue() );
+    if (p == m_xMtrAngle.get())
+        m_xSliderAngle->set_value(m_xMtrAngle->get_value(FUNIT_NONE));
 
-    if( p == m_pSliderAngle )
-        m_pMtrAngle->SetValue( m_pSliderAngle->GetThumbPos() );
+    if (p == m_xSliderAngle.get())
+        m_xMtrAngle->set_value(m_xSliderAngle->get_value(), FUNIT_NONE);
 
-    XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                    static_cast<css::drawing::HatchStyle>(m_pLbLineType->GetSelectedEntryPos()),
-                    GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
-                    static_cast<long>(m_pMtrAngle->GetValue() * 10) );
+    XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
+                    static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
+                    GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
+                    static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10) );
 
     m_rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
 
-    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlPreview->Invalidate();
+    m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_aCtlPreview.Invalidate();
 }
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl, SvtValueSet*, void)
 {
     ChangeHatchHdl_Impl();
 }
@@ -377,7 +360,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl, ValueSet*, void)
 void SvxHatchTabPage::ChangeHatchHdl_Impl()
 {
     std::unique_ptr<XHatch> pHatch;
-    size_t nPos = m_pHatchLB->GetSelectItemPos();
+    size_t nPos = m_xHatchLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
         pHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
@@ -394,38 +377,38 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
         }
         if( !pHatch )
         {
-            sal_uInt16 nPosition = m_pHatchLB->GetItemId( 0 );
-            m_pHatchLB->SelectItem( nPosition );
+            sal_uInt16 nPosition = m_xHatchLB->GetItemId( 0 );
+            m_xHatchLB->SelectItem( nPosition );
             if( nPosition != 0 )
                 pHatch.reset( new XHatch( m_pHatchingList->GetHatch( 0 )->GetHatch() ) );
         }
     }
     if( pHatch )
     {
-        m_pLbLineType->SelectEntryPos(
+        m_xLbLineType->set_active(
             sal::static_int_cast< sal_Int32 >( pHatch->GetHatchStyle() ) );
-        m_pLbLineColor->SetNoSelection();
-        m_pLbLineColor->SelectEntry( pHatch->GetColor() );
-        SetMetricValue( *m_pMtrDistance, pHatch->GetDistance(), m_ePoolUnit );
+        m_xLbLineColor->SetNoSelection();
+        m_xLbLineColor->SelectEntry( pHatch->GetColor() );
+        SetMetricValue( *m_xMtrDistance, pHatch->GetDistance(), m_ePoolUnit );
         long mHatchAngle = pHatch->GetAngle() / 10;
-        m_pMtrAngle->SetValue( mHatchAngle );
-        m_pSliderAngle->SetThumbPos( mHatchAngle );
+        m_xMtrAngle->set_value(mHatchAngle, FUNIT_NONE);
+        m_xSliderAngle->set_value(mHatchAngle);
 
-        // fill ItemSet and pass it on to m_pCtlPreview
+        // fill ItemSet and pass it on to m_aCtlPreview
         m_rXFSet.Put( XFillHatchItem( OUString(), *pHatch ) );
-        m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+        m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
 
-        m_pCtlPreview->Invalidate();
+        m_aCtlPreview.Invalidate();
         pHatch.reset();
     }
-    m_pMtrDistance->SaveValue();
-    m_pMtrAngle->SaveValue();
-    m_pLbLineType->SaveValue();
-    m_pLbLineColor->SaveValue();
-    m_pLbBackgroundColor->SaveValue();
+    m_xMtrDistance->save_value();
+    m_xMtrAngle->save_value();
+    m_xLbLineType->save_value();
+    m_xLbLineColor->SaveValue();
+    m_xLbBackgroundColor->SaveValue();
 }
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
 {
     OUString aNewName( SvxResId( RID_SVXSTR_HATCH ) );
     OUString aDesc( CuiResId( RID_SVXSTR_DESC_HATCH ) );
@@ -442,7 +425,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetTabDialog()->GetFrameWeld(), aName, aDesc));
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -456,7 +439,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
             break;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
         std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
         if (xWarnBox->run() != RET_OK)
             break;
@@ -465,19 +448,19 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
     if( !nError )
     {
-        XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                        static_cast<css::drawing::HatchStyle>(m_pLbLineType->GetSelectedEntryPos()),
-                        GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
-                        static_cast<long>(m_pMtrAngle->GetValue() * 10) );
+        XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
+                        static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
+                        GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
+                        static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10) );
 
         m_pHatchingList->Insert(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nCount);
 
-        sal_Int32 nId = m_pHatchLB->GetItemId(nCount - 1); // calculate the last ID
-        BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, m_pHatchLB->GetIconSize() );
+        sal_Int32 nId = m_xHatchLB->GetItemId(nCount - 1); // calculate the last ID
+        BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, m_xHatchLB->GetIconSize() );
         // Insert the new entry at the next ID
-        m_pHatchLB->InsertItem( nId + 1, Image(aBitmap), aName );
-        m_pHatchLB->SelectItem( nId + 1 );
-        m_pHatchLB->Resize();
+        m_xHatchLB->InsertItem( nId + 1, Image(aBitmap), aName );
+        m_xHatchLB->SelectItem( nId + 1 );
+        m_xHatchLB->Resize();
 
         *m_pnHatchingListState |= ChangeType::MODIFIED;
 
@@ -485,56 +468,56 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 {
-    sal_uInt16 nId = m_pHatchLB->GetSelectedItemId();
-    size_t nPos = m_pHatchLB->GetSelectItemPos();
+    sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
+    size_t nPos = m_xHatchLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         OUString aName( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetName() );
 
-        XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                        static_cast<css::drawing::HatchStyle>(m_pLbLineType->GetSelectedEntryPos()),
-                         GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
-                        static_cast<long>(m_pMtrAngle->GetValue() * 10) );
+        XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
+                        static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
+                         GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
+                        static_cast<long>(m_xMtrAngle->get_value(FUNIT_NONE) * 10) );
 
         m_pHatchingList->Replace(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 
-        BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pHatchLB->GetIconSize() );
-        m_pHatchLB->RemoveItem( nId );
-        m_pHatchLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
-        m_pHatchLB->SelectItem( nId );
+        BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xHatchLB->GetIconSize() );
+        m_xHatchLB->RemoveItem( nId );
+        m_xHatchLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
+        m_xHatchLB->SelectItem( nId );
 
         // save values for changes recognition (-> method)
-        m_pMtrDistance->SaveValue();
-        m_pMtrAngle->SaveValue();
-        m_pLbLineType->SaveValue();
-        m_pLbLineColor->SaveValue();
-        m_pLbBackgroundColor->SaveValue();
+        m_xMtrDistance->save_value();
+        m_xMtrAngle->save_value();
+        m_xLbLineType->save_value();
+        m_xLbLineColor->SaveValue();
+        m_xLbBackgroundColor->SaveValue();
 
         *m_pnHatchingListState |= ChangeType::MODIFIED;
     }
 }
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
 {
-    sal_uInt16 nId = m_pHatchLB->GetSelectedItemId();
-    size_t nPos = m_pHatchLB->GetSelectItemPos();
+    sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
+    size_t nPos = m_xHatchLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletehatchdialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/querydeletehatchdialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelHatchDialog"));
         if (xQueryBox->run() == RET_YES)
         {
             m_pHatchingList->Remove(nPos);
-            m_pHatchLB->RemoveItem( nId );
-            nId = m_pHatchLB->GetItemId(0);
-            m_pHatchLB->SelectItem( nId );
-            m_pHatchLB->Resize();
+            m_xHatchLB->RemoveItem( nId );
+            nId = m_xHatchLB->GetItemId(0);
+            m_xHatchLB->SelectItem( nId );
+            m_xHatchLB->Resize();
 
-            m_pCtlPreview->Invalidate();
+            m_aCtlPreview.Invalidate();
 
             ChangeHatchHdl_Impl();
 
@@ -543,10 +526,10 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, PresetListBox*, void )
 {
-    sal_uInt16 nId = m_pHatchLB->GetSelectedItemId();
-    size_t nPos = m_pHatchLB->GetSelectItemPos();
+    sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
+    size_t nPos = m_xHatchLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
@@ -554,7 +537,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
         OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetTabDialog()->GetFrameWeld(), aName, aDesc));
 
         bool bLoop = true;
         while( bLoop && pDlg->Execute() == RET_OK )
@@ -568,14 +551,14 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
                 bLoop = false;
                 m_pHatchingList->GetHatch(nPos)->SetName(aName);
 
-                m_pHatchLB->SetItemText(nId, aName);
-                m_pHatchLB->SelectItem( nId );
+                m_xHatchLB->SetItemText(nId, aName);
+                m_xHatchLB->SelectItem( nId );
 
                 *m_pnHatchingListState |= ChangeType::MODIFIED;
             }
             else
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
                 xBox->run();
             }
@@ -595,7 +578,7 @@ void SvxHatchTabPage::PointChanged( weld::DrawingArea*, RectPoint )
 void SvxHatchTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-        m_pCtlPreview->SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+        m_aCtlPreview.SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
     SvxTabPage::DataChanged( rDCEvt );
 }

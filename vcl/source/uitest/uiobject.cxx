@@ -561,7 +561,16 @@ void ButtonUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
     if (rAction == "CLICK")
+    {
+        //Click doesn't call toggle when its a pushbutton tweaked to be a toggle-button
+        if (PushButton *pPushButton = (mxButton->GetStyle() & WB_TOGGLE) ? dynamic_cast<PushButton*>(mxButton.get()) : nullptr)
+        {
+            pPushButton->Check(!pPushButton->IsChecked());
+            pPushButton->Toggle();
+            return;
+        }
         mxButton->Click();
+    }
     else
         WindowUIObject::execute(rAction, rParameters);
 }
