@@ -1506,6 +1506,11 @@ SCROW ScColumn::FindNextVisibleRowWithContent(
 
 void ScColumn::CellStorageModified()
 {
+    // Remove cached values. Given how often this function is called and how (not that) often
+    // the cached values are used, it should be more efficient to just discard everything
+    // instead of trying to figure out each time exactly what to discard.
+    GetDoc()->DiscardFormulaGroupContext();
+
     // TODO: Update column's "last updated" timestamp here.
 
 #if DEBUG_COLUMN_STORAGE
@@ -1563,8 +1568,6 @@ void ScColumn::CellStorageModified()
         while (itAttr != maCellTextAttrs.end() && itAttr->type != sc::element_type_empty)
             ++itAttr;
     }
-#else
-    (void) this; // Avoid "this member function can be declared static [loplugin:staticmethods]"
 #endif
 }
 
@@ -2635,6 +2638,15 @@ bool hasNonEmpty( const sc::FormulaGroupContext::StrArrayType& rArray, SCROW nRo
     return std::any_of(it, itEnd, NonNullStringFinder());
 }
 
+struct ProtectFormulaGroupContext
+{
+    ProtectFormulaGroupContext( ScDocument* d )
+        : doc( d ) { doc->BlockFormulaGroupContextDiscard( true ); }
+    ~ProtectFormulaGroupContext()
+        { doc->BlockFormulaGroupContextDiscard( false ); }
+    ScDocument* doc;
+};
+
 }
 
 formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 )
@@ -2658,6 +2670,12 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
 
         return formula::VectorRefArray(pNum, pStr);
     }
+
+    // ScColumn::CellStorageModified() simply discards the entire cache (FormulaGroupContext)
+    // on any modification. However getting cell values may cause this to be called
+    // if interpreting a cell results in a change to it (not just its result though).
+    // So temporarily block the discarding.
+    ProtectFormulaGroupContext protectContext( GetDoc());
 
     double fNan;
     rtl::math::setNan(&fNan);

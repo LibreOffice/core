@@ -3542,6 +3542,13 @@ std::shared_ptr<sc::FormulaGroupContext>& ScDocument::GetFormulaGroupContext()
     return mpFormulaGroupCxt;
 }
 
+void ScDocument::DiscardFormulaGroupContext()
+{
+    assert(!IsThreadedGroupCalcInProgress());
+    if( !mbFormulaGroupCxtBlockDiscard )
+        mpFormulaGroupCxt.reset();
+}
+
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
