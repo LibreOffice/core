@@ -22,6 +22,30 @@
       "revId": "f1c7975f856aacc808fd9601cf839d8d61cc2caf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_3020d39b",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-19T13:22:44Z",
+      "side": 1,
+      "message": "Not working for me in Linux on master, or in 6.0 on Windows?\n\nusing gtk3 vcl backend on master, which toolkit are you using?",
+      "parentUuid": "5a22e58a_a8745dfd",
+      "range": {
+        "startLine": 494,
+        "startChar": 4,
+        "endLine": 494,
+        "endChar": 27
+      },
+      "revId": "f1c7975f856aacc808fd9601cf839d8d61cc2caf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
