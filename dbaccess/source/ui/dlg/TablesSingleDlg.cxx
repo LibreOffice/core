@@ -43,7 +43,6 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
         "dbaccess/ui/tablesfilterdialog.ui")
     , m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
     , m_bStopExecution(false)
-    , m_pOutSet(_pItems)
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
