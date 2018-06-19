@@ -319,6 +319,8 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
         get(m_pWestFontLanguageFT, "westlangft-nocjk");
         get(m_pWestFontLanguageLB, "westlanglb-nocjk");
         get(m_pWestFontTypeFT, "westfontinfo-nocjk");
+
+        get(m_pWestFontFeaturesButton, "west_features_button-nocjk");
     }
 
     get(m_pEastFrame, "asian");
