@@ -35,18 +35,6 @@
 class SwFieldMgr;
 class SwView;
 
-class TextFilterAutoConvert : public TextFilter
-{
-private:
-    OUString m_sLastGoodText;
-    OUString m_sNone;
-public:
-    TextFilterAutoConvert(const OUString &rNone)
-        : m_sNone(rNone)
-    {
-    }
-    virtual OUString filter(const OUString &rText) override;
-};
 
 class SwCaptionDialog : public SvxStandardDialog
 {

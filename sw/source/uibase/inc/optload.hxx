@@ -43,6 +43,19 @@ public:
     static FieldUnit GetValue(sal_uInt32 i);
 };
 
+class TextFilterAutoConvert : public TextFilter
+{
+private:
+    OUString m_sLastGoodText;
+    OUString m_sNone;
+public:
+    TextFilterAutoConvert(const OUString &rNone)
+        : m_sNone(rNone)
+    {
+    }
+    virtual OUString filter(const OUString &rText) override;
+};
+
 class SwLoadOptPage : public SfxTabPage
 {
 private:
@@ -169,6 +182,8 @@ private:
 
     SwFieldMgr* pMgr;
     bool bHTMLMode;
+
+    TextFilterAutoConvert m_aTextFilter;
 
     DECL_LINK(SelectHdl, ComboBox&, void);
     DECL_LINK(SelectListBoxHdl, ListBox&, void);
