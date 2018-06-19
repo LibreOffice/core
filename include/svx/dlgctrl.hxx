@@ -406,6 +406,11 @@ public:
     // change support
     virtual void StyleUpdated() override;
 
+    void SetDrawMode(DrawModeFlags nDrawMode)
+    {
+        mpBufferDevice->SetDrawMode(nDrawMode);
+    }
+
     // dada read access
     SdrModel& getModel() const
     {

@@ -130,4 +130,109 @@ IMPL_LINK(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
     return false;
 }
 
+PresetListBox::PresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow)
+    : SvtValueSet(std::move(pWindow))
+    , nColCount(3)
+    , aIconSize(60, 64)
+{
+    SetEdgeBlending(true);
+    SetExtraSpacing(4);
+}
+
+void PresetListBox::Resize()
+{
+    DrawLayout();
+    WinBits aWinBits(GetStyle());
+    aWinBits |= WB_VSCROLL;
+    SetStyle(aWinBits);
+    SvtValueSet::Resize();
+}
+
+#if 0
+void PresetListBox::Command( const CommandEvent& rEvent )
+{
+    switch(rEvent.GetCommand())
+    {
+        case CommandEventId::ContextMenu:
+        {
+            const sal_uInt16 nIndex = GetSelectedItemId();
+            if(nIndex > 0)
+            {
+                Point aPos(rEvent.GetMousePosPixel());
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/presetmenu.ui", "");
+                VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
+                FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
+                if(pMenuWindow != nullptr)
+                {
+                    pMenuWindow->SetPopupModeFlags(
+                    pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
+                }
+                pMenu->SetSelectHdl( LINK(this, SvxPresetListBox, OnMenuItemSelected) );
+                pMenu->Execute(this,tools::Rectangle(aPos,Size(1,1)),PopupMenuFlags::ExecuteDown);
+            }
+        }
+        break;
+        default:
+            ValueSet::Command( rEvent );
+            break;
+    }
+}
+#endif
+
+void PresetListBox::DrawLayout()
+{
+    SetColCount(getColumnCount());
+    SetLineCount(5);
+}
+
+template< typename ListType, typename EntryType >
+void PresetListBox::FillPresetListBoxImpl(ListType & pList, sal_uInt32 nStartIndex)
+{
+    const Size aSize( GetIconSize() );
+    BitmapEx aBitmap;
+    for(long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
+    {
+        aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
+        EntryType* pItem = static_cast<EntryType*>( pList.Get(nIndex) );
+        InsertItem(nStartIndex, Image(aBitmap), pItem->GetName());
+    }
+}
+
+void PresetListBox::FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XGradientList, XGradientEntry>( pList, nStartIndex );
+}
+
+void PresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XHatchList, XHatchEntry>( pList, nStartIndex );
+}
+
+void PresetListBox::FillPresetListBox(XBitmapList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XBitmapList, XBitmapEntry >( pList, nStartIndex );
+}
+
+void PresetListBox::FillPresetListBox(XPatternList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XPatternList, XBitmapEntry >( pList, nStartIndex );
+}
+
+IMPL_LINK(PresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
+{
+    if( pMenu == nullptr )
+    {
+        OSL_ENSURE( pMenu != nullptr, "SvxPresetListBox::OnMenuItemSelected : illegal menu!" );
+        return false;
+    }
+    pMenu->Deactivate();
+    OString sIdent = pMenu->GetCurItemIdent();
+    if (sIdent == "rename")
+        maRenameHdl.Call(this);
+    else if (sIdent == "delete")
+        maDeleteHdl.Call(this);
+    return false;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
