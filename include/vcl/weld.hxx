@@ -82,6 +82,8 @@ public:
     virtual void set_accessible_name(const OUString& rName) = 0;
     virtual OUString get_accessible_name() const = 0;
 
+    virtual OUString get_accessible_description() const = 0;
+
     virtual void set_tooltip_text(const OUString& rTip) = 0;
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink)
@@ -845,6 +847,7 @@ protected:
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
     Link<Widget&, void> m_aStyleUpdatedHdl;
+    Link<const Point&, bool> m_aPopupMenuHdl;
     Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
 
@@ -871,6 +874,7 @@ public:
     void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_aKeyPressHdl = rLink; }
     void connect_key_release(const Link<const KeyEvent&, bool>& rLink) { m_aKeyReleaseHdl = rLink; }
     void connect_style_updated(const Link<Widget&, void>& rLink) { m_aStyleUpdatedHdl = rLink; }
+    void connect_popup_menu(const Link<const Point&, bool>& rLink) { m_aPopupMenuHdl = rLink; }
     void connect_focus_rect(const Link<Widget&, tools::Rectangle>& rLink)
     {
         m_aGetFocusRectHdl = rLink;
