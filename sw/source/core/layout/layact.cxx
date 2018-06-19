@@ -2121,11 +2121,12 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
 
     pImp->GetShell()->EnableSmooth( false );
 
-    // First, spellcheck the visible area. Only if there's nothing
-    // to do there, we trigger the IdleFormat.
-    if ( !DoIdleJob( SMART_TAGS, true ) &&
-         !DoIdleJob( ONLINE_SPELLING, true ) &&
-         !DoIdleJob( AUTOCOMPLETE_WORDS, true ) )
+    // First, if the user has been idle for a couple of seconds,
+    // spellcheck the visible area. Only if there's nothing to do
+    // there, we trigger the IdleFormat.
+    if ( !(Application::GetLastInputInterval() > 3000 && (DoIdleJob( SMART_TAGS, true ) ||
+                                                          DoIdleJob( ONLINE_SPELLING, true ) ||
+                                                          DoIdleJob( AUTOCOMPLETE_WORDS, true ))) )
     {
         // Format, then register repaint rectangles with the SwViewShell if necessary.
         // This requires running artificial actions, so we don't get undesired
@@ -2239,7 +2240,8 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             }
         }
 
-        if (!bInterrupt)
+        // Same user idleness requirement as above.
+        if (!bInterrupt && Application::GetLastInputInterval() > 3000)
         {
             if ( !DoIdleJob( WORD_COUNT, false ) )
                 if ( !DoIdleJob( SMART_TAGS, false ) )
