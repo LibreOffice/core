@@ -79,6 +79,7 @@ protected:
     QGridLayout* _layout;
 
     bool allowRemoteUrls;
+    bool mbIsFolderPicker;
 
 public:
     explicit KDE5FilePicker(QFileDialog::FileMode);
