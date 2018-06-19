@@ -33,6 +33,7 @@ public:
     virtual void GetFocus() {}
     virtual void LoseFocus() {}
     virtual void StyleUpdated() { Invalidate(); }
+    virtual bool ContextMenu(const Point&) { return false; }
     virtual bool KeyInput(const KeyEvent&) { return false; }
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
@@ -57,6 +58,10 @@ public:
     bool IsEnabled() const { return m_pDrawingArea->get_sensitive(); }
     int GetTextHeight() const { return m_pDrawingArea->get_text_height(); }
     OUString GetAccessibleName() const { return m_pDrawingArea->get_accessible_name(); }
+    OUString GetAccessibleDescription() const
+    {
+        return m_pDrawingArea->get_accessible_description();
+    }
     void CaptureMouse() { m_pDrawingArea->grab_add(); }
     bool IsMouseCaptured() const { return m_pDrawingArea->has_grab(); }
     void EnableRTL(bool bEnable) { m_pDrawingArea->set_direction(bEnable); }
@@ -74,10 +79,10 @@ public:
     }
     virtual ~CustomWidgetController();
 
-    CustomWidgetController(CustomWidgetController const&) = default;
-    CustomWidgetController(CustomWidgetController&&) = default;
-    CustomWidgetController& operator=(CustomWidgetController const&) = default;
-    CustomWidgetController& operator=(CustomWidgetController&&) = default;
+    CustomWidgetController(CustomWidgetController const&) = delete;
+    CustomWidgetController(CustomWidgetController&&) = delete;
+    CustomWidgetController& operator=(CustomWidgetController const&) = delete;
+    CustomWidgetController& operator=(CustomWidgetController&&) = delete;
 };
 
 class VCL_DLLPUBLIC CustomWeld
@@ -95,6 +100,7 @@ private:
     DECL_LINK(DoLoseFocus, weld::Widget&, void);
     DECL_LINK(DoKeyPress, const KeyEvent&, bool);
     DECL_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
+    DECL_LINK(DoPopupMenu, const Point&, bool);
     DECL_LINK(DoStyleUpdated, weld::Widget&, void);
     DECL_LINK(DoRequestHelp, tools::Rectangle&, OUString);
 

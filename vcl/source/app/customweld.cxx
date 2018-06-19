@@ -30,6 +30,7 @@ CustomWeld::CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
     m_xDrawingArea->connect_key_press(LINK(this, CustomWeld, DoKeyPress));
     m_xDrawingArea->connect_focus_rect(LINK(this, CustomWeld, DoFocusRect));
     m_xDrawingArea->connect_style_updated(LINK(this, CustomWeld, DoStyleUpdated));
+    m_xDrawingArea->connect_popup_menu(LINK(this, CustomWeld, DoPopupMenu));
     m_xDrawingArea->connect_query_tooltip(LINK(this, CustomWeld, DoRequestHelp));
     m_rWidgetController.SetDrawingArea(m_xDrawingArea.get());
 }
@@ -77,6 +78,11 @@ IMPL_LINK_NOARG(CustomWeld, DoFocusRect, weld::Widget&, tools::Rectangle)
 IMPL_LINK_NOARG(CustomWeld, DoStyleUpdated, weld::Widget&, void)
 {
     m_rWidgetController.StyleUpdated();
+}
+
+IMPL_LINK(CustomWeld, DoPopupMenu, const Point&, rPos, bool)
+{
+    return m_rWidgetController.ContextMenu(rPos);
 }
 
 IMPL_LINK(CustomWeld, DoRequestHelp, tools::Rectangle&, rHelpArea, OUString)
