@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_95da5977",
+        "filename": "sw/uiconfig/swxform/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-19T07:36:22Z",
+      "side": 1,
+      "message": "As said previously, please don\u0027t change this one.",
+      "revId": "8611f7b81638c226d2e35104dee497948d28e8fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
