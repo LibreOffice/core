@@ -83,6 +83,7 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     , _extraControls(new QWidget)
     , _layout(new QGridLayout(_extraControls))
     , allowRemoteUrls(false)
+    , mbIsFolderPicker(eMode == QFileDialog::Directory)
 {
     _dialog->setSupportedSchemes({
         QStringLiteral("file"),
@@ -96,13 +97,11 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
 
     _dialog->setFileMode(eMode);
 
-    if (eMode == QFileDialog::Directory)
+    if (mbIsFolderPicker)
     {
         _dialog->setOption(QFileDialog::ShowDirsOnly, true);
         _dialog->setWindowTitle(toQString(VclResId(STR_FPICKER_FOLDER_DEFAULT_TITLE)));
     }
-
-    setMultiSelectionMode(false);
 
     connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
@@ -190,6 +189,9 @@ void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
         SolarMutexReleaser aReleaser;
         return Q_EMIT setMultiSelectionSignal(multiSelect);
     }
+
+    if (mbIsFolderPicker)
+        return;
 
     _dialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles : QFileDialog::ExistingFile);
 }
