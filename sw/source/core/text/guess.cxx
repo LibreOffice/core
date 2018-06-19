@@ -380,12 +380,6 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 aForbidden.beginLine, aForbidden.endLine,
                 rInf.HasForbiddenChars(), bAllowHanging, false );
 
-        //! register listener to LinguServiceEvents now in order to get
-        //! notified about relevant changes in the future
-        SwModule *pModule = SW_MOD();
-        if (!pModule->GetLngSvcEvtListener().is())
-            pModule->CreateLngSvcEvtListener();
-
         // !!! We must have a local copy of the locale, because inside
         // getLineBreak the LinguEventListener can trigger a new formatting,
         // which can corrupt the locale pointer inside pBreakIt.

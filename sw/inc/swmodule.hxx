@@ -237,10 +237,6 @@ public:
     static void  CheckSpellChanges( bool bOnlineSpelling,
                     bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags );
 
-    inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >&
-            GetLngSvcEvtListener();
-    void    CreateLngSvcEvtListener();
-
     css::uno::Reference< css::scanner::XScannerManager2 > const &
             GetScannerManager();
 
@@ -250,12 +246,6 @@ public:
     void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
 };
-
-inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >&
-        SwModule::GetLngSvcEvtListener()
-{
-    return m_xLinguServiceEventListener;
-}
 
 //    Access to SwModule, the View and the shell.
 

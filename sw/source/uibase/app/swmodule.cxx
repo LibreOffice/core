@@ -193,6 +193,8 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
         // at the view options.
         GetColorConfig();
     }
+
+    m_xLinguServiceEventListener = new SwLinguServiceEventListener;
 }
 
 OUString SwResId(const char* pId)
@@ -225,12 +227,6 @@ SwModule::~SwModule()
     CallAutomationApplicationEventSinks( "Quit", aArgs );
     delete m_pErrorHandler;
     EndListening( *SfxGetpApp() );
-}
-
-void SwModule::CreateLngSvcEvtListener()
-{
-    if (!m_xLinguServiceEventListener.is())
-        m_xLinguServiceEventListener = new SwLinguServiceEventListener;
 }
 
 void SwDLL::RegisterFactories()
