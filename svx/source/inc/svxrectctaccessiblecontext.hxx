@@ -545,8 +545,8 @@ typedef ::cppu::ImplHelper3 <   css::accessibility::XAccessible,
                                 css::accessibility::XAccessibleAction
                             >   OAccessibleHelper_Base_3;
 
-class RectCtlChildAccessibleContext : public ::comphelper::OAccessibleComponentHelper,
-                                      public OAccessibleHelper_Base_3
+class RectCtlChildAccessibleContext final : public ::comphelper::OAccessibleComponentHelper,
+                                            public OAccessibleHelper_Base_3
 {
 public:
     RectCtlChildAccessibleContext(
@@ -554,13 +554,6 @@ public:
         const OUString& rName, const OUString& rDescription,
         const tools::Rectangle& rBoundingBox,
         long nIndexInParent );
-protected:
-    virtual ~RectCtlChildAccessibleContext() override;
-
-    // OCommonAccessibleComponent
-    /// implements the calculation of the bounding rectangle - still waiting to be overwritten
-    virtual css::awt::Rectangle implGetBounds(  ) override;
-public:
 
     DECLARE_XINTERFACE( )
     DECLARE_XTYPEPROVIDER( )
@@ -608,10 +601,14 @@ public:
     void setStateChecked(bool bChecked);
     void FireFocusEvent();
 
-protected:
+private:
+    virtual ~RectCtlChildAccessibleContext() override;
+
     virtual void SAL_CALL disposing() override;
 
-private:
+    // OCommonAccessibleComponent
+    /// implements the calculation of the bounding rectangle
+    virtual css::awt::Rectangle implGetBounds(  ) override;
 
     /** Description of this object.  This is not a constant because it can
         be set from the outside.  Furthermore, it changes according to the
