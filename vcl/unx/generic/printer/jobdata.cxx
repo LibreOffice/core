@@ -279,8 +279,9 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
                     nBytes = aStream.ReadBytes(aRemain.data(), nBytes);
                     if (nBytes)
                     {
+                        aRemain.resize(nBytes+1);
                         aRemain[nBytes] = 0;
-                        rJobData.m_aContext.rebuildFromStreamBuffer(aRemain.data(), nBytes);
+                        rJobData.m_aContext.rebuildFromStreamBuffer(aRemain);
                         bContext = true;
                     }
                 }
