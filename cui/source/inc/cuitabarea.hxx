@@ -37,6 +37,7 @@
 
 #define NO_BUTTON_SELECTED -1
 
+class ColorListBox;
 class SdrModel;
 class SvxBitmapCtl;
 class SvxColorListBox;
@@ -46,37 +47,37 @@ class ButtonBox
 {
     private:
         sal_Int32 mnCurrentButton;
-        std::vector< VclPtr<PushButton> > maButtonList;
-        std::map< VclPtr<PushButton>, sal_Int32 > maButtonToPos;
+        std::vector<weld::ToggleButton*> maButtonList;
+        std::map<weld::ToggleButton*, sal_Int32 > maButtonToPos;
         void SelectButtonImpl( sal_Int32 nPos )
         {
             if(mnCurrentButton != NO_BUTTON_SELECTED)
             {
-                maButtonList[mnCurrentButton]->SetPressed(false);
+                maButtonList[mnCurrentButton]->set_active(false);
             }
             mnCurrentButton = nPos;
-            maButtonList[mnCurrentButton]->SetPressed(true);
+            maButtonList[mnCurrentButton]->set_active(true);
         };
     public:
         ButtonBox()
         {
             mnCurrentButton = NO_BUTTON_SELECTED;
         };
-        void AddButton(VclPtr<PushButton> pButton)
+        void AddButton(weld::ToggleButton* pButton)
         {
             maButtonList.push_back(pButton);
             maButtonToPos.insert( std::make_pair(pButton, maButtonList.size() - 1) );
         }
         sal_Int32 GetCurrentButtonPos() { return mnCurrentButton; }
-        sal_Int32 GetButtonPos( VclPtr<PushButton> pButton )
+        sal_Int32 GetButtonPos(weld::ToggleButton* pButton)
         {
-            std::map< VclPtr<PushButton>, sal_Int32 >::const_iterator aBtnPos = maButtonToPos.find(pButton);
+            std::map<weld::ToggleButton*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(pButton);
             if(aBtnPos != maButtonToPos.end())
                 return aBtnPos->second;
             else
                 return -1;
         }
-        void SelectButton( VclPtr<PushButton> pButton)
+        void SelectButton(weld::ToggleButton* pButton)
         {
             sal_Int32 nPos = GetButtonPos(pButton);
             if(nPos != -1)
@@ -224,13 +225,6 @@ class SvxAreaTabPage : public SvxTabPage
     static const sal_uInt16 pAreaRanges[];
 private:
     ScopedVclPtr<SfxTabPage>   m_pFillTabPage;
-    VclPtr<VclBox>             m_pFillTab;
-    VclPtr<PushButton>         m_pBtnNone;
-    VclPtr<PushButton>         m_pBtnColor;
-    VclPtr<PushButton>         m_pBtnGradient;
-    VclPtr<PushButton>         m_pBtnHatch;
-    VclPtr<PushButton>         m_pBtnBitmap;
-    VclPtr<PushButton>         m_pBtnPattern;
     ButtonBox                  maBox;
 
     XColorListRef         m_pColorList;
@@ -254,7 +248,15 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    DECL_LINK(SelectFillTypeHdl_Impl, Button*, void);
+    std::unique_ptr<weld::Container> m_xFillTab;
+    std::unique_ptr<weld::ToggleButton> m_xBtnNone;
+    std::unique_ptr<weld::ToggleButton> m_xBtnColor;
+    std::unique_ptr<weld::ToggleButton> m_xBtnGradient;
+    std::unique_ptr<weld::ToggleButton> m_xBtnHatch;
+    std::unique_ptr<weld::ToggleButton> m_xBtnBitmap;
+    std::unique_ptr<weld::ToggleButton> m_xBtnPattern;
+
+    DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);
 
     template< typename TabPage >
     bool FillItemSet_Impl( SfxItemSet* );
@@ -265,7 +267,7 @@ private:
 public:
     using TabPage::DeactivatePage;
 
-    SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxAreaTabPage() override;
     virtual void dispose() override;
 
@@ -356,25 +358,6 @@ class SvxGradientTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    VclPtr<ListBox>            m_pLbGradientType;
-    VclPtr<FixedText>          m_pFtCenter;
-    VclPtr<MetricField>        m_pMtrCenterX;
-    VclPtr<MetricField>        m_pMtrCenterY;
-    VclPtr<FixedText>          m_pFtAngle;
-    VclPtr<MetricField>        m_pMtrAngle;
-    VclPtr<MetricField>        m_pMtrBorder;
-    VclPtr<Slider>             m_pSliderBorder;
-    VclPtr<SvxColorListBox>    m_pLbColorFrom;
-    VclPtr<MetricField>        m_pMtrColorFrom;
-    VclPtr<SvxColorListBox>    m_pLbColorTo;
-    VclPtr<MetricField>        m_pMtrColorTo;
-    VclPtr<SvxPresetListBox>   m_pGradientLB;
-    VclPtr<NumericField>       m_pMtrIncrement;
-    VclPtr<CheckBox>           m_pCbIncrement;
-    VclPtr<Slider>             m_pSliderIncrement;
-    VclPtr<SvxXRectPreview>    m_pCtlPreview;
-    VclPtr<PushButton>         m_pBtnAdd;
-    VclPtr<PushButton>         m_pBtnModify;
     const SfxItemSet&   m_rOutAttrs;
 
     XColorListRef         m_pColorList;
@@ -386,24 +369,47 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    DECL_LINK( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK( ChangeGradientHdl, ValueSet*, void );
+    XRectPreview m_aCtlPreview;
+    std::unique_ptr<weld::ComboBoxText> m_xLbGradientType;
+    std::unique_ptr<weld::Label> m_xFtCenter;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrCenterX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrCenterY;
+    std::unique_ptr<weld::Label> m_xFtAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrBorder;
+    std::unique_ptr<weld::Scale> m_xSliderBorder;
+    std::unique_ptr<ColorListBox> m_xLbColorFrom;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrColorFrom;
+    std::unique_ptr<ColorListBox> m_xLbColorTo;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrColorTo;
+    std::unique_ptr<PresetListBox> m_xGradientLB;
+    std::unique_ptr<weld::SpinButton> m_xMtrIncrement;
+    std::unique_ptr<weld::CheckButton> m_xCbIncrement;
+    std::unique_ptr<weld::Scale> m_xSliderIncrement;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnModify;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
+    std::unique_ptr<weld::CustomWeld> m_xGradientLBWin;
+
+    DECL_LINK( ClickAddHdl_Impl, weld::Button&, void );
+    DECL_LINK( ClickModifyHdl_Impl, weld::Button&, void );
+    DECL_LINK( ChangeGradientHdl, SvtValueSet*, void );
     void ChangeGradientHdl_Impl();
-    DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK( ModifiedEditHdl_Impl, Edit&, void );
-    DECL_LINK( ModifiedColorListBoxHdl_Impl, SvxColorListBox&, void );
-    DECL_LINK( ModifiedListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK( ChangeAutoStepHdl_Impl, CheckBox&, void );
-    DECL_LINK( ModifiedSliderHdl_Impl, Slider*, void );
+    DECL_LINK( ClickRenameHdl_Impl, PresetListBox*, void );
+    DECL_LINK( ClickDeleteHdl_Impl, PresetListBox*, void );
+    DECL_LINK( ModifiedEditHdl_Impl, weld::SpinButton&, void );
+    DECL_LINK( ModifiedMetricHdl_Impl, weld::MetricSpinButton&, void );
+    DECL_LINK( ModifiedColorListBoxHdl_Impl, ColorListBox&, void );
+    DECL_LINK( ModifiedListBoxHdl_Impl, weld::ComboBoxText&, void );
+    DECL_LINK( ChangeAutoStepHdl_Impl, weld::ToggleButton&, void );
+    DECL_LINK( ModifiedSliderHdl_Impl, weld::Scale&, void );
     void ModifiedHdl_Impl(void const *);
 
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
     sal_Int32 SearchGradientList(const OUString& rGradientName);
 
 public:
-    SvxGradientTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxGradientTabPage() override;
     virtual void dispose() override;
 
