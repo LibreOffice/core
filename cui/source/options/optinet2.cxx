@@ -621,8 +621,7 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
 
 void SvxSecurityTabPage::dispose()
 {
-    delete mpSecOptions;
-    mpSecOptions = nullptr;
+    mpSecOptions.reset();
     mpCertPathDlg.disposeAndClear();
     m_xSecOptDlg.reset();
     m_pSecurityOptionsPB.clear();
@@ -644,7 +643,7 @@ void SvxSecurityTabPage::dispose()
 IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, Button*, void)
 {
     if (!m_xSecOptDlg)
-        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetFrameWeld(), mpSecOptions));
+        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetFrameWeld(), mpSecOptions.get()));
     (void)m_xSecOptDlg->run();
 }
 
