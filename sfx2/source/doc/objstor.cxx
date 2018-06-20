@@ -2247,6 +2247,33 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                     }
                 }
             }
+
+            // tdf#107690 import custom document property _MarkAsFinal as SecurityOptOpenReadonly
+            // (before this fix, LibreOffice opened read-only OOXML documents as editable,
+            // also saved and exported _MarkAsFinal=true silently, resulting unintented read-only
+            // warning info bar in MSO)
+            uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier(GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xDocProps = xPropSupplier->getDocumentProperties() ;
+            uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocProps->getUserDefinedProperties();
+            if (xPropertyContainer.is())
+            {
+                uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
+                if (xPropertySet.is())
+                {
+                    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                    if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("_MarkAsFinal"))
+                    {
+                        if (xPropertySet->getPropertyValue("_MarkAsFinal").get<bool>())
+                        {
+                            uno::Reference< lang::XMultiServiceFactory > xFactory(GetModel(), uno::UNO_QUERY);
+                            uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                            xSettings->setPropertyValue("LoadReadonly", uno::makeAny(true));
+                        }
+                        xPropertyContainer->removeProperty("_MarkAsFinal");
+                    }
+                }
+            }
+
             return bRtn;
         }
         catch (const packages::zip::ZipIOException&)

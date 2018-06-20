@@ -828,7 +828,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
-    rStrm.exportDocumentProperties(xDocProps);
+    rStrm.exportDocumentProperties(xDocProps, pDocShell->IsSecurityOptOpenReadOnly());
     rStrm.exportCustomFragments();
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
