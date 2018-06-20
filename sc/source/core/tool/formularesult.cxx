@@ -274,7 +274,12 @@ namespace {
 inline bool isValue( formula::StackVar sv )
 {
     return sv == formula::svDouble || sv == formula::svError
-        || sv == formula::svEmptyCell;
+        || sv == formula::svEmptyCell
+        // The initial unitialized result value is double 0.0, even if the type
+        // is unknown, so the interpreter asking for it gets that double
+        // instead of having to convert a string which may result in #VALUE!
+        // (otherwise the unknown would be neither error nor double nor string)
+        || sv == formula::svUnknown;
 }
 
 inline bool isString( formula::StackVar sv )
@@ -457,6 +462,8 @@ double ScFormulaResult::GetDouble() const
                     ;   // nothing
             }
         }
+        // Note that we reach here also for the default ctor and
+        // formula::svUnknown from GetType().
         return 0.0;
     }
     if (mbEmpty)
