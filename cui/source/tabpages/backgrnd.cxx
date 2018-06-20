@@ -385,20 +385,17 @@ void SvxBackgroundTabPage::dispose()
     if (pPageImpl)
     {
         delete pPageImpl->pLoadIdle;
-        delete pPageImpl;
-        pPageImpl = nullptr;
+        pPageImpl.reset();
     }
 
-    delete pImportDlg;
-    pImportDlg = nullptr;
+    pImportDlg.reset();
 
     if( pTableBck_Impl)
     {
         delete pTableBck_Impl->pCellBrush;
         delete pTableBck_Impl->pRowBrush;
         delete pTableBck_Impl->pTableBrush;
-        delete pTableBck_Impl;
-        pTableBck_Impl = nullptr;
+        pTableBck_Impl.reset();
     }
 
     m_pAsGrid.clear();
@@ -532,7 +529,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
                 DELETEZ( pTableBck_Impl->pTableBrush);
             }
             else
-                pTableBck_Impl = new SvxBackgroundTable_Impl();
+                pTableBck_Impl.reset( new SvxBackgroundTable_Impl() );
 
             pTableBck_Impl->nActPos = nValue;
 
@@ -1141,7 +1138,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
     bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
     OUString aStrBrowse(get<vcl::Window>("findgraphicsft")->GetText());
-    pImportDlg = new SvxOpenGraphicDialog(aStrBrowse, GetFrameWeld());
+    pImportDlg.reset( new SvxOpenGraphicDialog(aStrBrowse, GetFrameWeld()) );
     if ( bHtml )
         pImportDlg->EnableLink(false);
     pImportDlg->SetPath( aBgdGraphicPath, m_pBtnLink->IsChecked() );
@@ -1163,7 +1160,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
         pPageImpl->pLoadIdle->Start();
     }
     else
-        DELETEZ( pImportDlg );
+        pImportDlg.reset();
 }
 
 /** Delayed loading of the graphic.
@@ -1215,7 +1212,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Timer*, pIdle, void )
             }
 
             FileClickHdl_Impl(m_pBtnLink);
-            DELETEZ( pImportDlg );
+            pImportDlg.reset();
         }
     }
 }
