@@ -1,0 +1,484 @@
+*three* poppler config headers
+
+mkdir build && cd build && cmake .. -DENABLE_DCTDECODER=libjpeg -DHAVE_CAIRO=off -DENABLE_LIBOPENJPEG=none -DENABLE_CMS=none -DENABLE_LIBCURL=off -DENABLE_ZLIB=off -DENABLE_ZLIB_UNCOMPRESS=off -DENABLE_NSS3=off -DENABLE_LIBPNG=off -DENABLE_LIBTIFF=off -DENABLE_SPLASH=off -DENABLE_UTILS=off -DENABLE_CPP=off -DENABLE_GLIB=off -DENABLE_GOBJECT_INTROSPECTION=off -DENABLE_GTK_DOC=off -DENABLE_QT5=off
+
+manually disabled these because cmake failed to do it:
+HAVE_CAIRO
+ENABLE_NSS3
+ENABLE_LIBPNG (twice!)
+ENABLE_LIBTIFF (twice!)
+ENABLE_LIBCURL
+
+diff --git a/config.h b/config.h
+new file mode 100644
+index 0fbd336a..451213f8 100644
+--- /dev/null
++++ b/config.h
+@@ -0,0 +1,248 @@
++/* config.h.  Generated from config.h.cmake by cmake.  */
++
++/* Build against libcurl. */
++/* #undef ENABLE_LIBCURL */
++
++/* Use libjpeg instead of builtin jpeg decoder. */
++#define ENABLE_LIBJPEG 1
++
++/* Use libopenjpeg instead of builtin jpeg2000 decoder. */
++/* #undef ENABLE_LIBOPENJPEG */
++
++/* Build against libtiff. */
++/* #define ENABLE_LIBTIFF 1 */
++
++/* Build against libpng. */
++/* #define ENABLE_LIBPNG 1 */
++
++/* Do not hardcode the library location */
++/* #undef ENABLE_RELOCATABLE */
++
++/* Build against zlib. */
++/* #undef ENABLE_ZLIB */
++
++/* Use zlib instead of builtin zlib decoder to uncompress flate streams. */
++/* #undef ENABLE_ZLIB_UNCOMPRESS */
++
++/* Build against libnss3 for digital signature validation */
++/* #define ENABLE_NSS3 1 */
++
++/* Use cairo for rendering. */
++/* #define HAVE_CAIRO 1 */
++
++/* Do we have any DCT decoder?. */
++#define HAVE_DCT_DECODER 1
++
++/* Do we have any JPX decoder?. */
++/* #undef HAVE_JPX_DECODER */
++
++#if !defined(_WIN32)
++/* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
++   */
++#define HAVE_DIRENT_H 1
++#endif
++
++#if !defined(_WIN32)
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++#endif
++
++/* Define to 1 if you have the <fcntl.h> header file. */
++#define HAVE_FCNTL_H 1
++
++/* Define to 1 if you have the `fseek64' function. */
++/* #undef HAVE_FSEEK64 */
++
++#if !defined(_WIN32)
++/* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
++#define HAVE_FSEEKO 1
++#endif
++
++/* Define to 1 if you have the `ftell64' function. */
++/* #undef HAVE_FTELL64 */
++
++#if !defined(__APPLE__) && !defined(_WIN32)
++/* Define to 1 if you have the `pread64' function. */
++#define HAVE_PREAD64 1
++#endif
++
++#if !defined(__APPLE__) && !defined(_WIN32)
++/* Define to 1 if you have the `lseek64' function. */
++#define HAVE_LSEEK64 1
++#endif
++
++#if !defined(_WIN32)
++/* Defines if gettimeofday is available on your system */
++#define HAVE_GETTIMEOFDAY 1
++#endif
++
++#if !defined(_WIN32)
++/* Defines if gmtime_r is available on your system */
++#define HAVE_GMTIME_R 1
++#endif
++
++#if !defined(_WIN32)
++/* Defines if timegm is available on your system */
++#define HAVE_TIMEGM 1
++#endif
++
++/* Define if you have the iconv() function and it works. */
++/* #undef HAVE_ICONV */
++
++/* Define to 1 if you have the `z' library (-lz). */
++/* #undef HAVE_LIBZ */
++
++#if !defined(_WIN32)
++/* Defines if localtime_r is available on your system */
++#define HAVE_LOCALTIME_R 1
++#endif
++
++#if !defined(_WIN32)
++/* Define to 1 if you have the `mkstemp' function. */
++#define HAVE_MKSTEMP 1
++#endif
++
++#if !defined(_WIN32)
++/* Define to 1 if you have the `rand_r' function. */
++#define HAVE_RAND_R 1
++#endif
++
++#if defined(_WIN32)
++/* Define to 1 if you have the `strcpy_s' function. */
++#define HAVE_STRCPY_S 1
++#endif
++
++#if defined(_WIN32)
++/* Define to 1 if you have the `strcat_s' function. */
++#define HAVE_STRCAT_S 1
++#endif
++
++#if !defined(_WIN32)
++/* Defines if strtok_r is available on your system */
++#define HAVE_STRTOK_R 1
++#endif
++
++/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
++/* #undef HAVE_NDIR_H */
++
++#if !defined(_WIN32)
++/* Define to 1 if you have the `popen' function. */
++#define HAVE_POPEN 1
++#endif
++
++/* Use splash for rendering. */
++/* #undef HAVE_SPLASH */
++
++#if !defined(__APPLE__) && !defined(_WIN32)
++/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
++   */
++#define HAVE_SYS_DIR_H 1
++#endif
++
++#if !defined(__APPLE__) && !defined(_WIN32)
++/* Define to 1 if you have the <sys/mman.h> header file. */
++#define HAVE_SYS_MMAN_H 1
++#endif
++
++/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
++   */
++/* #undef HAVE_SYS_NDIR_H */
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++#if !defined(_WIN32)
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++#endif
++
++/* Define to 1 if you have a big endian machine */
++/* #undef WORDS_BIGENDIAN */
++
++/* Define as const if the declaration of iconv() needs const. */
++#define ICONV_CONST 
++
++/* Enable multithreading support. */
++#define MULTITHREADED 1
++
++/* Generate OPI comments in PS output. */
++#define OPI_SUPPORT 1
++
++/* Name of package */
++#define PACKAGE "poppler"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT "https://bugs.freedesktop.org/enter_bug.cgi?product=poppler"
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "poppler"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "poppler 0.66.0"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "poppler"
++
++/* Define to the home page for this package. */
++#define PACKAGE_URL ""
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "0.66.0"
++
++/* Poppler data dir */
++#define POPPLER_DATADIR "/usr/local/share/poppler"
++
++/* Support for curl based doc builder is compiled in. */
++/* #undef POPPLER_HAS_CURL_SUPPORT */
++
++/* Include support for CMYK rasterization */
++/* #undef SPLASH_CMYK */
++
++/* Enable word list support. */
++#define TEXTOUT_WORD_LIST 1
++
++/* Defines if use cms */
++/* #undef USE_CMS */
++
++/* Use fixed point arithmetic in the Splash backend */
++/* #undef USE_FIXEDPOINT */
++
++/* Use single precision arithmetic in the Splash backend */
++/* #undef USE_FLOAT */
++
++/* Version number of package */
++#define VERSION "0.66.0"
++
++#if defined(__APPLE__)
++#elif defined (_WIN32)
++/* Use win32 font configuration backend */
++#define WITH_FONTCONFIGURATION_WIN32 1
++#else
++/* Use fontconfig font configuration backend */
++#define WITH_FONTCONFIGURATION_FONTCONFIG 1
++#endif
++
++/* OpenJPEG with the OPJ_DPARAMETERS_IGNORE_PCLR_CMAP_CDEF_FLAG flag */
++/* #undef WITH_OPENJPEG_IGNORE_PCLR_CMAP_CDEF_FLAG */
++
++/* MS defined snprintf as deprecated but then added it in Visual Studio 2015. */
++#if defined(_MSC_VER) && _MSC_VER < 1900
++#define snprintf _snprintf
++#endif
++
++//------------------------------------------------------------------------
++// popen
++//------------------------------------------------------------------------
++#if defined(_MSC_VER) || defined(__BORLANDC__)
++#define popen _popen
++#define pclose _pclose
++#endif
++
++/* Number of bits in a file offset, on hosts where this is settable. */
++/* #undef _FILE_OFFSET_BITS */
++
++/* Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2). */
++/* TODO This is wrong, port if needed #undef _LARGEFILE_SOURCE */
++
++/* Define for large files, on AIX-style hosts. */
++/* TODO This is wrong, port if needed #undef _LARGE_FILES */
+diff --git a/poppler/poppler-config.h b/poppler/poppler-config.h
+new file mode 100644
+index 0fbd336a..451213f8 100644
+--- /dev/null
++++ b/poppler/poppler-config.h
+@@ -0,0 +1,168 @@
++//================================================= -*- mode: c++ -*- ====
++//
++// poppler-config.h
++//
++// Copyright 1996-2011 Glyph & Cog, LLC
++//
++//========================================================================
++
++//========================================================================
++//
++// Modified under the Poppler project - http://poppler.freedesktop.org
++//
++// All changes made under the Poppler project to this file are licensed
++// under GPL version 2 or later
++//
++// Copyright (C) 2014 Bogdan Cristea <cristeab@gmail.com>
++// Copyright (C) 2014 Hib Eris <hib@hiberis.nl>
++// Copyright (C) 2016 Tor Lillqvist <tml@collabora.com>
++// Copyright (C) 2017 Adrian Johnson <ajohnson@redneon.com>
++//
++// To see a description of the changes please see the Changelog file that
++// came with your tarball or type make ChangeLog if you are building from git
++//
++//========================================================================
++
++#ifndef POPPLER_CONFIG_H
++#define POPPLER_CONFIG_H
++
++// We duplicate some of the config.h #define's here since they are
++// used in some of the header files we install.  The #ifndef/#endif
++// around #undef look odd, but it's to silence warnings about
++// redefining those symbols.
++
++/* Defines the poppler version. */
++#ifndef POPPLER_VERSION
++#define POPPLER_VERSION "0.66.0"
++#endif
++
++/* Enable multithreading support. */
++#ifndef MULTITHREADED
++#define MULTITHREADED 1
++#endif
++
++/* Use fixedpoint. */
++#ifndef USE_FIXEDPOINT
++/* #undef USE_FIXEDPOINT */
++#endif
++
++/* Use single precision arithmetic in the Splash backend */
++#ifndef USE_FLOAT
++/* #undef USE_FLOAT */
++#endif
++
++/* Include support for OPI comments. */
++#ifndef OPI_SUPPORT
++#define OPI_SUPPORT 1
++#endif
++
++/* Enable word list support. */
++#ifndef TEXTOUT_WORD_LIST
++#define TEXTOUT_WORD_LIST 1
++#endif
++
++/* Support for curl is compiled in. */
++#ifndef POPPLER_HAS_CURL_SUPPORT
++/* #undef POPPLER_HAS_CURL_SUPPORT */
++#endif
++
++/* Use libjpeg instead of builtin jpeg decoder. */
++#ifndef ENABLE_LIBJPEG
++#define ENABLE_LIBJPEG 1
++#endif
++
++/* Build against libtiff. */
++#ifndef ENABLE_LIBTIFF
++/* #define ENABLE_LIBTIFF 1 */
++#endif
++
++/* Build against libpng. */
++#ifndef ENABLE_LIBPNG
++/* #define ENABLE_LIBPNG 1 */
++#endif
++
++/* Use zlib instead of builtin zlib decoder. */
++#ifndef ENABLE_ZLIB
++/* #undef ENABLE_ZLIB */
++#endif
++
++/* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
++   */
++#ifndef HAVE_DIRENT_H
++#if !defined(_WIN32)
++#define HAVE_DIRENT_H 1
++#endif
++#endif
++
++/* Defines if gettimeofday is available on your system */
++#ifndef HAVE_GETTIMEOFDAY
++#if !defined(_WIN32)
++#define HAVE_GETTIMEOFDAY 1
++#endif
++#endif
++
++/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
++#ifndef HAVE_NDIR_H
++/* #undef HAVE_NDIR_H */
++#endif
++
++/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
++   */
++#ifndef HAVE_SYS_DIR_H
++#if !defined(__APPLE__) && !defined(_WIN32)
++#define HAVE_SYS_DIR_H 1
++#endif
++#endif
++
++/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
++   */
++#ifndef HAVE_SYS_NDIR_H
++/* #undef HAVE_SYS_NDIR_H */
++#endif
++
++/* Defines if use cms */
++#ifndef USE_CMS
++/* #undef USE_CMS */
++#endif
++
++// Also, there are preprocessor symbols in the header files
++// that are used but never defined when building poppler using configure
++// or cmake: DISABLE_OUTLINE, DEBUG_MEM,
++// ENABLE_PLUGINS, DEBUG_FORMS
++
++//------------------------------------------------------------------------
++// version
++//------------------------------------------------------------------------
++
++// copyright notice
++#define popplerCopyright "Copyright 2005-2018 The Poppler Developers - http://poppler.freedesktop.org"
++#define xpdfCopyright "Copyright 1996-2011 Glyph & Cog, LLC"
++
++//------------------------------------------------------------------------
++// Win32 stuff
++//------------------------------------------------------------------------
++
++#if defined(_WIN32) && !defined(_MSC_VER)
++#include <windef.h>
++#else
++#define CDECL
++#endif
++
++//------------------------------------------------------------------------
++// Compiler
++//------------------------------------------------------------------------
++
++#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
++#include <stdio.h> // __MINGW_PRINTF_FORMAT is defined in the mingw stdio.h
++#ifdef __MINGW_PRINTF_FORMAT
++#define GCC_PRINTF_FORMAT(fmt_index, va_index) \
++	__attribute__((__format__(__MINGW_PRINTF_FORMAT, fmt_index, va_index)))
++#else
++#define GCC_PRINTF_FORMAT(fmt_index, va_index) \
++	__attribute__((__format__(__printf__, fmt_index, va_index)))
++#endif
++#else
++#define GCC_PRINTF_FORMAT(fmt_index, va_index)
++#endif
++
++#endif /* POPPLER_CONFIG_H */
+diff --git a/cpp/poppler-version.h b/cpp/poppler-version.h
+new file mode 100644
+index 0fbd336a..451213f8 100644
+--- /dev/null
++++ b/cpp/poppler-version.h
+@@ -0,0 +1,39 @@
++/*
++ * Copyright (C) 2009, Pino Toscano <pino@kde.org>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, USA.
++ */
++
++#ifndef POPPLER_VERSION_H
++#define POPPLER_VERSION_H
++
++#include "poppler-global.h"
++
++#define POPPLER_VERSION "0.66.0"
++#define POPPLER_VERSION_MAJOR 0
++#define POPPLER_VERSION_MINOR 66
++#define POPPLER_VERSION_MICRO 0
++
++namespace poppler
++{
++
++POPPLER_CPP_EXPORT std::string version_string();
++POPPLER_CPP_EXPORT unsigned int version_major();
++POPPLER_CPP_EXPORT unsigned int version_minor();
++POPPLER_CPP_EXPORT unsigned int version_micro();
++
++}
++
++#endif
