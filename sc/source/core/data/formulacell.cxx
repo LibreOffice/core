@@ -1610,11 +1610,16 @@ void ScFormulaCell::Interpret()
                 else
                 {
                     bResumeIteration = false;
-                    // Close circle once.
-                    pDocument->IncInterpretLevel();
-                    rRecursionHelper.GetList().back().pCell->InterpretTail( pDocument->GetNonThreadedContext(),
-                                                                            SCITP_CLOSE_ITERATION_CIRCLE);
-                    pDocument->DecInterpretLevel();
+                    // Close circle once. If 'this' is self-referencing only
+                    // (e.g. counter or self-adder) then it is already
+                    // implicitly closed.
+                    if (rRecursionHelper.GetList().size() > 1)
+                    {
+                        pDocument->IncInterpretLevel();
+                        rRecursionHelper.GetList().back().pCell->InterpretTail(
+                                pDocument->GetNonThreadedContext(), SCITP_CLOSE_ITERATION_CIRCLE);
+                        pDocument->DecInterpretLevel();
+                    }
                     // Start at 1, init things.
                     rRecursionHelper.StartIteration();
                     // Mark all cells being in iteration.
