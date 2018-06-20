@@ -16,6 +16,23 @@
       "revId": "71198fe7d9539859883b6226738fbea52a08a5c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_61419b39",
+        "filename": "external/xmlsec/xmlsec1-configure.patch.1",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-20T15:43:32Z",
+      "side": 1,
+      "message": "why are changes to configure.ac split into two blocks? does that make the mess more or less readable? :)",
+      "revId": "71198fe7d9539859883b6226738fbea52a08a5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
