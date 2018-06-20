@@ -26,39 +26,30 @@
 
 namespace comphelper {
 
-SolarMutex::SolarMutex() {}
-
-SolarMutex::~SolarMutex() {}
-
 namespace {
-    static SolarMutex* pSolarMutex = nullptr;
-}
-
-void SolarMutex::setSolarMutex( SolarMutex *pMutex )
-{
-    assert((pMutex && !pSolarMutex) || !pMutex);
-    pSolarMutex = pMutex;
+    static SolarMutex* g_pSolarMutex = nullptr;
 }
 
 SolarMutex *SolarMutex::get()
 {
-    return pSolarMutex;
+    return g_pSolarMutex;
 }
 
-GenericSolarMutex::GenericSolarMutex()
+SolarMutex::SolarMutex()
     : m_nCount( 0 )
     , m_nThreadId( 0 )
     , m_aBeforeReleaseHandler( nullptr )
 {
-    setSolarMutex( this );
+    assert(!g_pSolarMutex);
+    g_pSolarMutex = this;
 }
 
-GenericSolarMutex::~GenericSolarMutex()
+SolarMutex::~SolarMutex()
 {
-    setSolarMutex( nullptr );
+    g_pSolarMutex = nullptr;
 }
 
-void GenericSolarMutex::doAcquire( const sal_uInt32 nLockCount )
+void SolarMutex::doAcquire( const sal_uInt32 nLockCount )
 {
     for ( sal_uInt32 n = nLockCount; n ; --n )
         m_aMutex.acquire();
@@ -66,7 +57,7 @@ void GenericSolarMutex::doAcquire( const sal_uInt32 nLockCount )
     m_nCount += nLockCount;
 }
 
-sal_uInt32 GenericSolarMutex::doRelease( bool bUnlockAll )
+sal_uInt32 SolarMutex::doRelease( bool bUnlockAll )
 {
     if ( m_nCount == 0 )
         std::abort();
@@ -89,12 +80,12 @@ sal_uInt32 GenericSolarMutex::doRelease( bool bUnlockAll )
     return nCount;
 }
 
-bool GenericSolarMutex::IsCurrentThread() const
+bool SolarMutex::IsCurrentThread() const
 {
     return m_nThreadId == osl::Thread::getCurrentIdentifier();
 }
 
-bool GenericSolarMutex::tryToAcquire()
+bool SolarMutex::tryToAcquire()
 {
     if ( m_aMutex.tryToAcquire() )
     {

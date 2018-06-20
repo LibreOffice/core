@@ -360,7 +360,7 @@ sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
     {
         // read m_nCount before doRelease
         bool const isReleased(bUnlockAll || m_nCount == 1);
-        nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
+        nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
         if (isReleased) {
             std::unique_lock<std::mutex> g(m_WakeUpMainMutex);
             m_wakeUpMain = true;

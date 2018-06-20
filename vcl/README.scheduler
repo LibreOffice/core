@@ -130,7 +130,7 @@ Since we just disable the locks when we start running the deferred code in the
 main thread, we won't let the main thread run into stuff, where it would
 normally wait for the SolarMutex.
 
-Eventually this will move into the GenericSolarMutex. KDE / Qt also does main
+Eventually this will move into the SolarMutex. KDE / Qt also does main
 thread redirects using Qt::BlockingQueuedConnection.
 
 == General: processing all current events for DoYield ==

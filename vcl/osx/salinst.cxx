@@ -318,7 +318,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
     ++m_nCount;
     --nLockCount;
 
-    comphelper::GenericSolarMutex::doAcquire( nLockCount );
+    comphelper::SolarMutex::doAcquire( nLockCount );
 }
 
 sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
@@ -331,7 +331,7 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
         std::unique_lock<std::mutex> g(m_runInMainMutex);
         // read m_nCount before doRelease
         bool const isReleased(bUnlockAll || m_nCount == 1);
-        nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
+        nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
         if (isReleased && !pInst->IsMainThread()) {
             m_wakeUpMain = true;
             m_aInMainCondition.notify_all();
@@ -343,7 +343,7 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 bool SalYieldMutex::IsCurrentThread() const
 {
     if ( !GetSalData()->mpInstance->mbNoYieldLock )
-        return comphelper::GenericSolarMutex::IsCurrentThread();
+        return comphelper::SolarMutex::IsCurrentThread();
     else
         return GetSalData()->mpInstance->IsMainThread();
 }

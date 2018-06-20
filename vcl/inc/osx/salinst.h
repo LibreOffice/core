@@ -49,7 +49,7 @@ enum class SalEvent;
 
 typedef void(^RuninmainBlock)(void);
 
-class SalYieldMutex : public comphelper::GenericSolarMutex
+class SalYieldMutex : public comphelper::SolarMutex
 {
 public:
     OSX_RUNINMAIN_MEMBERS
