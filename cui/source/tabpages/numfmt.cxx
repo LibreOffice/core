@@ -286,10 +286,8 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 
 void SvxNumberFormatTabPage::dispose()
 {
-    delete pNumFmtShell;
-    pNumFmtShell = nullptr;
-    delete pNumItem;
-    pNumItem = nullptr;
+    pNumFmtShell.reset();
+    pNumItem.reset();
     m_pFtCategory.clear();
     m_pLbCategory.clear();
     m_pFtFormat.clear();
@@ -430,7 +428,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         if(pNumItem==nullptr)
         {
             bNumItemFlag=true;
-            pNumItem= static_cast<SvxNumberInfoItem *>(pItem->Clone());
+            pNumItem.reset( static_cast<SvxNumberInfoItem *>(pItem->Clone()) );
         }
         else
         {
@@ -502,7 +500,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
             break;
     }
 
-    delete pNumFmtShell;   // delete old shell if applicable (== reset)
+    pNumFmtShell.reset();   // delete old shell if applicable (== reset)
 
     nInitFormat = pValFmtAttr                   // memorize init key
                     ? pValFmtAttr->GetValue()   // (for FillItemSet())
@@ -510,18 +508,18 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
 
     if ( eValType == SvxNumberValueType::String )
-        pNumFmtShell =SvxNumberFormatShell::Create(
+        pNumFmtShell.reset( SvxNumberFormatShell::Create(
                                 pNumItem->GetNumberFormatter(),
                                 pValFmtAttr ? nInitFormat : 0,
                                 eValType,
-                                aValString );
+                                aValString ) );
     else
-        pNumFmtShell =SvxNumberFormatShell::Create(
+        pNumFmtShell.reset( SvxNumberFormatShell::Create(
                                 pNumItem->GetNumberFormatter(),
                                 pValFmtAttr ? nInitFormat : 0,
                                 eValType,
                                 nValDouble,
-                                &aValString );
+                                &aValString ) );
 
 
     bool bUseStarFormat = false;
@@ -1822,7 +1820,7 @@ void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)
     const SvxNumberInfoItem* pNumberInfoItem = aSet.GetItem<SvxNumberInfoItem>(SID_ATTR_NUMBERFORMAT_INFO, false);
     const SfxLinkItem* pLinkItem = aSet.GetItem<SfxLinkItem>(SID_LINK_TYPE, false);
     if (pNumberInfoItem && !pNumItem)
-        pNumItem = static_cast<SvxNumberInfoItem*>(pNumberInfoItem->Clone());
+        pNumItem.reset( static_cast<SvxNumberInfoItem*>(pNumberInfoItem->Clone()) );
     if (pLinkItem)
         fnOkHdl = pLinkItem->GetValue();
 }
