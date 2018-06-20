@@ -583,25 +583,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     Reference< XDriverManager > xManager;
 
-#if ENABLE_FIREBIRD_SDBC
-    bool bNeedMigration = false;
-    if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
-    {
-        OUString sMigrEnvVal;
-        osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
-            &sMigrEnvVal.pData);
-        if(!sMigrEnvVal.isEmpty())
-            bNeedMigration = true;
-        else
-        {
-            MigrationWarnDialog aWarnDlg{nullptr};
-            bNeedMigration = aWarnDlg.run() == RET_OK;
-        }
-        if (bNeedMigration)
-            m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
-    }
-#endif
-
     try {
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
@@ -712,17 +693,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }
-
-#if ENABLE_FIREBIRD_SDBC
-    if( bNeedMigration )
-    {
-        Reference< css::document::XDocumentSubStorageSupplier> xDocSup(
-                m_pImpl->getDocumentSubStorageSupplier() );
-        dbahsql::HsqlImporter importer(xReturn,
-                xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE) );
-        importer.importHsqlDatabase();
-    }
-#endif
 
     return xReturn;
 }
