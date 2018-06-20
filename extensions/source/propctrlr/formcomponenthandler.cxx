@@ -2843,11 +2843,12 @@ namespace pcr
     {
         ::Color aColor;
         OSL_VERIFY( impl_getPropertyValue_throw( impl_getPropertyNameFromId_nothrow( _nColorPropertyId ) ) >>= aColor );
-        SvColorDialog aColorDlg( impl_getDefaultDialogParent_nothrow() );
+        SvColorDialog aColorDlg;
         aColorDlg.SetColor( aColor );
 
         _rClearBeforeDialog.clear();
-        if ( !aColorDlg.Execute() )
+        vcl::Window* pParent = impl_getDefaultDialogParent_nothrow();
+        if (!aColorDlg.Execute(pParent ? pParent->GetFrameWeld() : nullptr))
             return false;
 
         _out_rNewValue <<= aColorDlg.GetColor();

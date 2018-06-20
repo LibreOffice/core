@@ -1060,36 +1060,36 @@ IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl, ValueSet*, void)
 // Fill the SfxItemSet with the settings of the dialog
 IMPL_LINK( SdPublishingDlg, ColorHdl, Button *, pButton, void)
 {
-    SvColorDialog aDlg(this);
+    SvColorDialog aDlg;
 
     if(pButton == pPage6_Back)
     {
         aDlg.SetColor( m_aBackColor );
-        if(aDlg.Execute() == RET_OK )
+        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
             m_aBackColor = aDlg.GetColor();
     }
     else if(pButton == pPage6_Text)
     {
         aDlg.SetColor( m_aTextColor );
-        if(aDlg.Execute() == RET_OK )
+        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
             m_aTextColor = aDlg.GetColor();
     }
     else if(pButton == pPage6_Link)
     {
         aDlg.SetColor( m_aLinkColor );
-        if(aDlg.Execute() == RET_OK )
+        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
             m_aLinkColor = aDlg.GetColor();
     }
     else if(pButton == pPage6_VLink)
     {
         aDlg.SetColor( m_aVLinkColor );
-        if(aDlg.Execute() == RET_OK )
+        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
             m_aVLinkColor = aDlg.GetColor();
     }
     else if(pButton == pPage6_ALink)
     {
         aDlg.SetColor( m_aALinkColor );
-        if(aDlg.Execute() == RET_OK )
+        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
             m_aALinkColor = aDlg.GetColor();
     }
 

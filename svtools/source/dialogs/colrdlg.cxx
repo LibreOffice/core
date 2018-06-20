@@ -29,7 +29,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/colrdlg.hxx>
-#include <vcl/window.hxx>
+#include <vcl/weld.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -37,29 +37,25 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 
 
-SvColorDialog::SvColorDialog( vcl::Window* pWindow )
-: mpParent( pWindow )
-, meMode( svtools::ColorPickerMode::Select )
+SvColorDialog::SvColorDialog()
+    : meMode(svtools::ColorPickerMode::Select)
 {
 }
 
 SvColorDialog::~SvColorDialog()
 {
 }
-
 void SvColorDialog::SetColor( const Color& rColor )
 {
     maColor = rColor;
 }
-
 
 void SvColorDialog::SetMode( svtools::ColorPickerMode eMode )
 {
     meMode = eMode;
 }
 
-
-short SvColorDialog::Execute()
+short SvColorDialog::Execute(weld::Window* pParent)
 {
     short ret = 0;
     try
@@ -67,7 +63,9 @@ short SvColorDialog::Execute()
         const OUString sColor( "Color" );
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-        Reference< css::awt::XWindow > xParent( VCLUnoHelper::GetInterface( mpParent ) );
+        Reference<css::awt::XWindow> xParent;
+        if (pParent)
+            xParent = pParent->GetXWindow();;
 
         Reference< XExecutableDialog > xDialog = css::cui::ColorPicker::createWithParent(xContext, xParent);
         Reference< XPropertyAccess > xPropertyAccess( xDialog, UNO_QUERY_THROW );
