@@ -137,8 +137,7 @@ SvxPatternTabPage::~SvxPatternTabPage()
 
 void SvxPatternTabPage::dispose()
 {
-    delete m_pBitmapCtl;
-    m_pBitmapCtl = nullptr;
+    m_pBitmapCtl.reset();
     m_pCtlPixel.clear();
     m_pLbColor.clear();
     m_pLbBackgroundColor.clear();
