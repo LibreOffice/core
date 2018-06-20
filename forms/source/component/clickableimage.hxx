@@ -66,7 +66,7 @@ namespace frm
         // ImageProducer stuff
         // Store the image in a graphic object to make it accessible via graphic cache using graphic ID.
         css::uno::Reference< css::graphic::XGraphicObject > m_xGraphicObject;
-        SfxMedium*                          m_pMedium;     // Download medium
+        std::unique_ptr<SfxMedium>          m_pMedium;     // Download medium
         rtl::Reference<ImageProducer>       m_xProducer;
         bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
         bool                                m_bProdStarted : 1;

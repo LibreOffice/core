@@ -569,12 +569,7 @@ namespace frm
     void OClickableImageBaseModel::disposing()
     {
         OControlModel::disposing();
-        if (m_pMedium)
-        {
-            delete m_pMedium;
-            m_pMedium = nullptr;
-        }
-
+        m_pMedium.reset();
         m_xProducer.clear();
     }
 
@@ -689,8 +684,7 @@ namespace frm
         else
         {
             pImgProd->SetImage(OUString());
-            delete m_pMedium;
-            m_pMedium = nullptr;
+            m_pMedium.reset();
         }
     }
 
@@ -701,8 +695,7 @@ namespace frm
         {
             // Free the stream at the Producer, before the medium is deleted
             GetImageProducer()->SetImage(OUString());
-            delete m_pMedium;
-            m_pMedium = nullptr;
+            m_pMedium.reset();
         }
 
         // the SfxMedium is not allowed to be created with an invalid URL, so we have to check this first
@@ -713,9 +706,7 @@ namespace frm
 
         if (!rURL.isEmpty() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
        {
-            delete m_pMedium;
-
-            m_pMedium = new SfxMedium(rURL, StreamMode::STD_READ);
+            m_pMedium.reset(new SfxMedium(rURL, StreamMode::STD_READ));
 
             // Find the XModel to get to the Object shell or at least the
             // Referer.
