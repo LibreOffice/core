@@ -340,13 +340,13 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     mbEnableGetPivotData(r.mbEnableGetPivotData)
 {
     if (r.pSaveData)
-        pSaveData = new ScDPSaveData(*r.pSaveData);
+        pSaveData.reset( new ScDPSaveData(*r.pSaveData) );
     if (r.pSheetDesc)
-        pSheetDesc = new ScSheetSourceDesc(*r.pSheetDesc);
+        pSheetDesc.reset( new ScSheetSourceDesc(*r.pSheetDesc) );
     if (r.pImpDesc)
-        pImpDesc = new ScImportSourceDesc(*r.pImpDesc);
+        pImpDesc.reset( new ScImportSourceDesc(*r.pImpDesc) );
     if (r.pServDesc)
-        pServDesc = new ScDPServiceDesc(*r.pServDesc);
+        pServDesc.reset( new ScDPServiceDesc(*r.pServDesc) );
     // xSource (and pOutput) is not copied
 }
 
@@ -370,13 +370,13 @@ ScDPObject& ScDPObject::operator= (const ScDPObject& r)
     mbEnableGetPivotData = r.mbEnableGetPivotData;
 
     if (r.pSaveData)
-        pSaveData = new ScDPSaveData(*r.pSaveData);
+        pSaveData.reset( new ScDPSaveData(*r.pSaveData) );
     if (r.pSheetDesc)
-        pSheetDesc = new ScSheetSourceDesc(*r.pSheetDesc);
+        pSheetDesc.reset( new ScSheetSourceDesc(*r.pSheetDesc) );
     if (r.pImpDesc)
-        pImpDesc = new ScImportSourceDesc(*r.pImpDesc);
+        pImpDesc.reset( new ScImportSourceDesc(*r.pImpDesc) );
     if (r.pServDesc)
-        pServDesc = new ScDPServiceDesc(*r.pServDesc);
+        pServDesc.reset( new ScDPServiceDesc(*r.pServDesc) );
 
     return *this;
 }
@@ -393,10 +393,9 @@ void ScDPObject::SetAllowMove(bool bSet)
 
 void ScDPObject::SetSaveData(const ScDPSaveData& rData)
 {
-    if ( pSaveData != &rData )      // API implementation modifies the original SaveData object
+    if ( pSaveData.get() != &rData )      // API implementation modifies the original SaveData object
     {
-        delete pSaveData;
-        pSaveData = new ScDPSaveData( rData );
+        pSaveData.reset( new ScDPSaveData( rData ) );
     }
 
     InvalidateData();       // re-init source from SaveData
@@ -425,11 +424,10 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     if ( pSheetDesc && rDesc == *pSheetDesc )
         return;             // nothing to do
 
-    DELETEZ( pImpDesc );
-    DELETEZ( pServDesc );
+    pImpDesc.reset();
+    pServDesc.reset();
 
-    delete pSheetDesc;
-    pSheetDesc = new ScSheetSourceDesc(rDesc);
+    pSheetDesc.reset( new ScSheetSourceDesc(rDesc) );
 
     //  make valid QueryParam
 
@@ -450,11 +448,10 @@ void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
     if ( pImpDesc && rDesc == *pImpDesc )
         return;             // nothing to do
 
-    DELETEZ( pSheetDesc );
-    DELETEZ( pServDesc );
+    pSheetDesc.reset();
+    pServDesc.reset();
 
-    delete pImpDesc;
-    pImpDesc = new ScImportSourceDesc(rDesc);
+    pImpDesc.reset( new ScImportSourceDesc(rDesc) );
 
     ClearTableData();      // new source must be created
 }
@@ -464,11 +461,10 @@ void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
     if ( pServDesc && rDesc == *pServDesc )
         return;             // nothing to do
 
-    DELETEZ( pSheetDesc );
-    DELETEZ( pImpDesc );
+    pSheetDesc.reset();
+    pImpDesc.reset();
 
-    delete pServDesc;
-    pServDesc = new ScDPServiceDesc(rDesc);
+    pServDesc.reset( new ScDPServiceDesc(rDesc) );
 
     ClearTableData();      // new source must be created
 }
@@ -536,7 +532,7 @@ void ScDPObject::CreateOutput()
     if (!pOutput)
     {
         bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
-        pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton );
+        pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton ) );
         pOutput->SetHeaderLayout ( mbHeaderLayout );
 
         long nOldRows = nHeaderRows;
@@ -709,7 +705,7 @@ ScDPTableData* ScDPObject::GetTableData()
             if (!pSheetDesc)
             {
                 OSL_FAIL("no source descriptor");
-                pSheetDesc = new ScSheetSourceDesc(pDoc);     // dummy defaults
+                pSheetDesc.reset( new ScSheetSourceDesc(pDoc) );     // dummy defaults
             }
 
             {
@@ -744,7 +740,7 @@ void ScDPObject::CreateObjects()
 {
     if (!xSource.is())
     {
-        DELETEZ( pOutput );     // not valid when xSource is changed
+        pOutput.reset();     // not valid when xSource is changed
 
         if ( pServDesc )
         {
@@ -773,7 +769,7 @@ void ScDPObject::CreateObjects()
     }
     else if (bSettingsChanged)
     {
-        DELETEZ( pOutput );     // not valid when xSource is changed
+        pOutput.reset();     // not valid when xSource is changed
 
         uno::Reference<util::XRefreshable> xRef( xSource, uno::UNO_QUERY );
         if (xRef.is())
@@ -801,16 +797,11 @@ void ScDPObject::InvalidateData()
 
 void ScDPObject::Clear()
 {
-    delete pOutput;
-    delete pSaveData;
-    delete pSheetDesc;
-    delete pImpDesc;
-    delete pServDesc;
-    pOutput = nullptr;
-    pSaveData = nullptr;
-    pSheetDesc = nullptr;
-    pImpDesc = nullptr;
-    pServDesc = nullptr;
+    pOutput.reset();
+    pSaveData.reset();
+    pSheetDesc.reset();
+    pImpDesc.reset();
+    pServDesc.reset();
     ClearTableData();
 }
 
@@ -2094,7 +2085,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     //TODO: use Hierarchy and Level in SaveData !!!!
 
     //  modify pDestObj if set, this object otherwise
-    ScDPSaveData* pModifyData = pDestObj ? ( pDestObj->pSaveData ) : pSaveData;
+    ScDPSaveData* pModifyData = pDestObj ? ( pDestObj->pSaveData.get() ) : pSaveData.get();
     OSL_ENSURE( pModifyData, "no data?" );
     if ( pModifyData )
     {
