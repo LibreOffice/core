@@ -141,8 +141,6 @@ namespace sfx2
     typedef ::std::list< FilterClass >                                  FilterClassList;
     typedef ::std::map< OUString, FilterClassList::iterator >    FilterClassReferrer;
 
-    typedef ::std::vector< OUString >                            StringArray;
-
 
 // = reading of configuration data
 
@@ -219,7 +217,7 @@ namespace sfx2
     };
 
 
-    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames )
+    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, std::vector<OUString>& _rGlobalClassNames )
     {
         _rGlobalClasses.clear();
         _rGlobalClassNames.clear();
@@ -306,7 +304,7 @@ namespace sfx2
     }
 
 
-    void lcl_ReadClassification( FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames, FilterClassList& _rLocalClasses )
+    void lcl_ReadClassification( FilterClassList& _rGlobalClasses, std::vector<OUString>& _rGlobalClassNames, FilterClassList& _rLocalClasses )
     {
 
         // open our config node
@@ -563,7 +561,7 @@ namespace sfx2
 
         // read the classification of filters
         FilterClassList aGlobalClasses, aLocalClasses;
-        StringArray aGlobalClassNames;
+        std::vector<OUString> aGlobalClassNames;
         lcl_ReadClassification( aGlobalClasses, aGlobalClassNames, aLocalClasses );
 
 
@@ -624,7 +622,7 @@ namespace sfx2
                     "sfx2::lcl_GroupAndClassify: invalid all-filters array here!" );
                     // the loop below will work on invalid objects else ...
                 ++aGroupPos;
-                StringArray::iterator aGlobalIter = aGlobalClassNames.begin();
+                auto aGlobalIter = aGlobalClassNames.begin();
                 while   (   ( aGroupPos != _rAllFilters.end() )
                         &&  ( aGlobalIter != aGlobalClassNames.end() )
                         &&  ( *aGlobalIter != aServiceName )

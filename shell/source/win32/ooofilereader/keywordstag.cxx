@@ -43,8 +43,8 @@ void CKeywordsTag::addAttributes(const XmlTagAttributes_t& /*attributes*/)
 
 std::wstring CKeywordsTag::getTagContent( )
 {
-    StringList_t::const_iterator keywords_Iter= m_slKeywords.begin( );
-    StringList_t::const_iterator keywords_Iter_end = m_slKeywords.end( );
+    auto keywords_Iter= m_slKeywords.cbegin( );
+    auto keywords_Iter_end = m_slKeywords.cend( );
 
     std::wstring ret_KeyWord_String = ( keywords_Iter != keywords_Iter_end) ? *keywords_Iter++ : L"";
     for ( ; keywords_Iter != keywords_Iter_end; ++keywords_Iter)

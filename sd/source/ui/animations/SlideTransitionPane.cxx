@@ -662,7 +662,7 @@ void SlideTransitionPane::updateControls()
         }
         else if( aEffect.mbSoundOn && !aEffect.maSound.isEmpty() )
         {
-            tSoundListType::size_type nPos = 0;
+            std::vector<OUString>::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
                 mpLB_SOUND->SelectEntryPos( nPos + 3 );
@@ -747,7 +747,7 @@ void SlideTransitionPane::openSoundFileDialog()
            aFileDialog.Execute() == ERRCODE_NONE )
     {
         OUString aFile = aFileDialog.GetPath();
-        tSoundListType::size_type nPos = 0;
+        std::vector<OUString>::size_type nPos = 0;
         bValidSoundFile = lcl_findSoundInList( maSoundList, aFile, nPos );
 
         if( bValidSoundFile )
@@ -789,7 +789,7 @@ void SlideTransitionPane::openSoundFileDialog()
     {
         if( !maCurrentSoundFile.isEmpty() )
         {
-            tSoundListType::size_type nPos = 0;
+            std::vector<OUString>::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
                 mpLB_SOUND->SelectEntryPos( nPos + 3 );
             else

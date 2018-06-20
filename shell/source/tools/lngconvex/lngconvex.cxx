@@ -146,8 +146,6 @@ private:
     std::ios::iostate m_OldIos;
 };
 
-typedef std::vector<std::string> string_container_t;
-
 class iso_lang_identifier
 {
 public:
@@ -371,7 +369,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
 
 void read_file(
     const std::string& fname,
-    string_container_t& string_container)
+    std::vector<std::string>& string_container)
 {
     std::ifstream file(fname.c_str());
     StreamExceptionsEnabler sexc(file);
@@ -459,7 +457,7 @@ void start_language_section(
     replace the all placeholder and append the
     result to the output file */
 void inflate_rc_template_to_file(
-    std::ostream& os, const string_container_t& rctmpl, Substitutor& substitutor)
+    std::ostream& os, const std::vector<std::string>& rctmpl, Substitutor& substitutor)
 {
     StreamExceptionsEnabler sexc(os);
 
@@ -472,8 +470,8 @@ void inflate_rc_template_to_file(
     {
         substitutor.set_language(iso_lang_identifier(iter->first));
 
-        string_container_t::const_iterator rct_iter = rctmpl.begin();
-        string_container_t::const_iterator rct_iter_end = rctmpl.end();
+        auto rct_iter = rctmpl.cbegin();
+        auto rct_iter_end = rctmpl.cend();
 
         if (!rctmpl.empty())
             start_language_section(oi, iso_lang_identifier(iter->first));
@@ -535,7 +533,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         Substitutor substitutor;
         read_ulf_file(ULF_FILE(cmdline), substitutor);
 
-        string_container_t rc_tmpl;
+        std::vector<std::string> rc_tmpl;
         read_file(RC_TEMPLATE(cmdline), rc_tmpl);
 
         std::ofstream rc_file(RC_FILE(cmdline));
