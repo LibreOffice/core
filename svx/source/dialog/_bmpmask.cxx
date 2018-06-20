@@ -55,13 +55,13 @@
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxBmpMaskChildWindow, SID_BMPMASK )
 
-class ColorWindow : public Control
+class BmpColorWindow : public Control
 {
     Color       aColor;
 
 
 public:
-    explicit ColorWindow(vcl::Window* pParent)
+    explicit BmpColorWindow(vcl::Window* pParent)
         : Control(pParent, WB_BORDER)
         , aColor( COL_WHITE )
     {
@@ -147,14 +147,13 @@ void MaskSet::KeyInput( const KeyEvent& rKEvt )
 
 void MaskSet::onEditColor()
 {
-    std::unique_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParent() ));
+    SvColorDialog aColorDlg;
 
-    pColorDlg->SetColor(GetItemColor(1));
+    aColorDlg.SetColor(GetItemColor(1));
 
-    if( pColorDlg->Execute() )
-        SetItemColor( 1, pColorDlg->GetColor() );
+    if (aColorDlg.Execute(GetFrameWeld()))
+        SetItemColor(1, aColorDlg.GetColor());
 }
-
 
 class MaskData
 {
@@ -310,7 +309,7 @@ IMPL_LINK_NOARG(MaskData, ExecHdl, Button*, void)
             { &aBItem });
 }
 
-void ColorWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& /*Rect*/)
+void BmpColorWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& /*Rect*/)
 {
     rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
     rRenderContext.SetLineColor(aColor);
@@ -361,7 +360,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pTbxPipette->SetItemBits(m_pTbxPipette->GetItemId(0),
         ToolBoxItemBits::AUTOCHECK);
     get(m_pBtnExec, "replace");
-    m_pCtlPipette = VclPtr<ColorWindow>::Create(get<Window>("toolgrid"));
+    m_pCtlPipette = VclPtr<BmpColorWindow>::Create(get<Window>("toolgrid"));
     m_pCtlPipette->Show();
     m_pCtlPipette->set_grid_left_attach(1);
     m_pCtlPipette->set_grid_top_attach(0);
