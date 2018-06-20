@@ -523,6 +523,7 @@ public:
 class ScChangeActionMove : public ScChangeAction
 {
     friend class ScChangeTrack;
+    friend struct std::default_delete<ScChangeActionMove>; // for std::unique_ptr
     friend class ScChangeActionDel;
 
     ScBigRange          aFromRange;
@@ -870,7 +871,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeAction*     pLast;
     ScChangeActionContent*  pFirstGeneratedDelContent;
     std::unique_ptr<ScChangeActionContent*[]> ppContentSlots;
-    ScChangeActionMove*     pLastCutMove;
+    std::unique_ptr<ScChangeActionMove> pLastCutMove;
     ScChangeActionLinkEntry*    pLinkInsertCol;
     ScChangeActionLinkEntry*    pLinkInsertRow;
     ScChangeActionLinkEntry*    pLinkInsertTab;
@@ -1084,11 +1085,7 @@ public:
     void ResetLastCut()
     {
         nStartLastCut = nEndLastCut = 0;
-        if ( pLastCutMove )
-        {
-            delete pLastCutMove;
-            pLastCutMove = nullptr;
-        }
+        pLastCutMove.reset();
     }
     bool HasLastCut() const
     {
