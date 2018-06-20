@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_2157a303",
+        "filename": "external/xmlsec/xmlsec1-configure.patch.1",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-20T15:34:48Z",
+      "side": 1,
+      "message": "could this be causing problems in a --with-system-nss --without-system-xmlsec build?  looks like a flatpak test build is failing that way for me now",
+      "revId": "71198fe7d9539859883b6226738fbea52a08a5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
