@@ -285,8 +285,8 @@ AnnotationWindow::~AnnotationWindow()
 void AnnotationWindow::dispose()
 {
     mpMeta.disposeAndClear();
-    delete mpOutlinerView;
-    delete mpOutliner;
+    mpOutlinerView.reset();
+    mpOutliner.reset();
     mpOutliner = nullptr;
     mpVScrollbar.disposeAndClear();
     mpTextWindow.disposeAndClear();
@@ -316,8 +316,8 @@ void AnnotationWindow::InitControls()
     aSettings.SetStyleSettings(aStyleSettings);
     mpMeta->SetSettings(aSettings);
 
-    mpOutliner = new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject);
-    SdDrawDocument::SetCalcFieldValueHdl( mpOutliner );
+    mpOutliner.reset( new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject) );
+    SdDrawDocument::SetCalcFieldValueHdl( mpOutliner.get() );
     mpOutliner->SetUpdateMode( true );
     Rescale();
 
@@ -328,9 +328,9 @@ void AnnotationWindow::InitControls()
     }
 
     mpTextWindow->EnableRTL( false );
-    mpOutlinerView = new OutlinerView ( mpOutliner, mpTextWindow );
-    mpOutliner->InsertView(mpOutlinerView );
-    mpTextWindow->SetOutlinerView(mpOutlinerView);
+    mpOutlinerView.reset( new OutlinerView ( mpOutliner.get(), mpTextWindow ) );
+    mpOutliner->InsertView(mpOutlinerView.get() );
+    mpTextWindow->SetOutlinerView(mpOutlinerView.get());
     mpOutlinerView->SetOutputArea( PixelToLogic( ::tools::Rectangle(0,0,1,1) ) );
 
     //create Scrollbars
