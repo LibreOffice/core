@@ -39,8 +39,6 @@
 #include <time.h>
 
 namespace /* private */ {
-    typedef std::vector<string_t> string_container_t;
-
     #define TAG_RECENT_FILES "RecentFiles"
     #define TAG_RECENT_ITEM  "RecentItem"
     #define TAG_URI          "URI"
@@ -60,7 +58,7 @@ namespace /* private */ {
         recently_used_item(
             const string_t& uri,
             const string_t& mime_type,
-            const string_container_t& groups) :
+            const std::vector<string_t>& groups) :
             uri_(uri),
             mime_type_(mime_type),
             is_private_(false),
@@ -100,10 +98,10 @@ namespace /* private */ {
 
         bool has_group(const string_t& name) const
         {
-            string_container_t::const_iterator iter_end = groups_.end();
+            auto iter_end = groups_.cend();
             return (has_groups() &&
                     iter_end != std::find_if(
-                        groups_.begin(), iter_end,
+                        groups_.cbegin(), iter_end,
                         [&name](const string_t& s)
                         { return (0 == strcasecmp(s.c_str(), name.c_str())); })
                         // compare two string_t's case insensitive
@@ -127,8 +125,8 @@ namespace /* private */ {
             {
                 write_xml_start_tag(TAG_GROUPS, file, true);
 
-                string_container_t::const_iterator iter = groups_.begin();
-                string_container_t::const_iterator iter_end = groups_.end();
+                auto iter = groups_.cbegin();
+                auto iter_end = groups_.cend();
 
                 for ( ; iter != iter_end; ++iter)
                     write_xml_tag(TAG_GROUP, (*iter), file);
@@ -192,7 +190,7 @@ namespace /* private */ {
         string_t mime_type_;
         time_t timestamp_;
         bool is_private_;
-        string_container_t groups_;
+        std::vector<string_t> groups_;
     };
 
     typedef std::vector<std::unique_ptr<recently_used_item>> recently_used_item_list_t;
@@ -387,7 +385,7 @@ namespace /* private */ {
         }
         else
         {
-            string_container_t groups;
+            std::vector<string_t> groups;
             groups.push_back(GROUP_OOO);
             groups.push_back(GROUP_STAR_OFFICE);
             groups.push_back(GROUP_STAR_SUITE);

@@ -42,7 +42,6 @@
     void dumpParameter();
 #endif
 
-typedef std::vector<std::wstring> StringList_t;
 typedef std::vector<MapiRecipDescW> MapiRecipientList_t;
 typedef std::vector<MapiFileDescW> MapiAttachmentList_t;
 
@@ -55,9 +54,9 @@ namespace /* private */
     std::wstring gFrom;
     std::wstring gSubject;
     std::wstring gBody;
-    StringList_t gTo;
-    StringList_t gCc;
-    StringList_t gBcc;
+    std::vector<std::wstring> gTo;
+    std::vector<std::wstring> gCc;
+    std::vector<std::wstring> gBcc;
     // Keep temp filepath and displayed name
     std::vector<std::pair<std::wstring, std::wstring>> gAttachments;
     int gMapiFlags = 0;
