@@ -115,8 +115,8 @@ private:
     Timer                   aResetWinTimer;
 
 
-    SvxNumberInfoItem*      pNumItem;
-    SvxNumberFormatShell*   pNumFmtShell;
+    std::unique_ptr<SvxNumberInfoItem>    pNumItem;
+    std::unique_ptr<SvxNumberFormatShell> pNumFmtShell;
     sal_uLong               nInitFormat;
     Link<SfxPoolItem const *,void> fnOkHdl;
 
