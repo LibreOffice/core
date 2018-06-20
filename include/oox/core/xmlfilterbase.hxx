@@ -224,7 +224,7 @@ public:
 
         @param xProperties  The document properties to export.
      */
-    void exportDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xProperties );
+    void exportDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xProperties, bool bSecurityOptOpenReadOnly );
 
     /** Write the customXml entries we are preserving (xlsx and pptx only). */
     void exportCustomFragments();
