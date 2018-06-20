@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_e65f6173",
+        "filename": "sw/source/uibase/app/swmodule.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-20T12:43:39Z",
+      "side": 1,
+      "message": "although your deadlock is probably because you are not using\n  SolarMutexReleaser aReleaser;\nhere.",
+      "revId": "f498f0f52a99f3acb0da855de168b24098943271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
