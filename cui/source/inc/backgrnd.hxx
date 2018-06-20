@@ -115,10 +115,10 @@ private:
     OUString    aBgdGraphicPath;
     OUString    aBgdGraphicFilter;
 
-    SvxBackgroundPage_Impl* pPageImpl;
-    SvxOpenGraphicDialog* pImportDlg;
+    std::unique_ptr<SvxBackgroundPage_Impl> pPageImpl;
+    std::unique_ptr<SvxOpenGraphicDialog> pImportDlg;
 
-    SvxBackgroundTable_Impl*    pTableBck_Impl;///< Items for Sw-Table must be corrected
+    std::unique_ptr<SvxBackgroundTable_Impl> pTableBck_Impl;///< Items for Sw-Table must be corrected
     std::unique_ptr<SvxBrushItem> pHighlighting;
 
     void                FillColorValueSets_Impl();
