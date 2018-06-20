@@ -173,30 +173,8 @@ class VCL_DLLPUBLIC GraphicObject
 private:
     Graphic                 maGraphic;
     GraphicAttr             maAttr;
-    Size                    maPrefSize;
-    MapMode                 maPrefMapMode;
-    sal_uLong               mnSizeBytes;
-    GraphicType             meType;
-    OUString                maLink;
-    Link<const GraphicObject*, SvStream*> maSwapStreamHdl;
     OUString                maUserData;
-    std::unique_ptr<Timer>  mxSwapOutTimer;
     std::unique_ptr<GrfSimpleCacheObj> mxSimpleCache;
-    sal_uInt32              mnAnimationLoopCount;
-
-    // a unique increasing ID to be able to say which data change is older
-    sal_uLong               mnDataChangeTimeStamp;
-
-    bool                    mbAutoSwapped   : 1;
-    bool                    mbTransparent   : 1;
-    bool                    mbAnimated      : 1;
-    bool                    mbEPS           : 1;
-    bool                    mbIsInSwapIn    : 1;
-    bool                    mbIsInSwapOut   : 1;
-
-    void                    VCL_DLLPRIVATE ImplAssignGraphicData();
-    static void             VCL_DLLPRIVATE ImplEnsureGraphicManager();
-    void                    VCL_DLLPRIVATE ImplAutoSwapIn();
 
     bool                    VCL_DLLPRIVATE ImplGetCropParams(
                                 OutputDevice* pOut,
@@ -299,12 +277,6 @@ private:
                                 bool                bEnlarge
                             ) const;
 
-                            DECL_LINK( ImplAutoSwapOutHdl, Timer*, void );
-protected:
-
-    SvStream*               GetSwapStream() const;
-    void                    SetSwapState();
-
 public:
                             GraphicObject();
                             GraphicObject( const Graphic& rGraphic );
@@ -315,12 +287,6 @@ public:
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
     bool                    operator==( const GraphicObject& rCacheObj ) const;
     bool                    operator!=( const GraphicObject& rCacheObj ) const { return !( *this == rCacheObj ); }
-
-    bool                    HasSwapStreamHdl() const { return maSwapStreamHdl.IsSet(); }
-    void                    SetSwapStreamHdl(const Link<const GraphicObject*, SvStream*>& rHdl);
-
-    void                    FireSwapInRequest();
-    void                    FireSwapOutRequest();
 
     const Graphic&          GetGraphic() const;
     void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = nullptr);
@@ -361,25 +327,12 @@ public:
     void                    SetAttr( const GraphicAttr& rAttr );
     const GraphicAttr&      GetAttr() const { return maAttr; }
 
-    bool                    HasLink() const { return !maLink.isEmpty(); }
-    void                    SetLink();
-    void                    SetLink( const OUString& rLink );
-    const OUString&         GetLink() const { return maLink; }
-
     bool                    HasUserData() const { return !maUserData.isEmpty(); }
     void                    SetUserData();
     void                    SetUserData( const OUString& rUserData );
     const OUString&         GetUserData() const { return maUserData; }
 
     OString                 GetUniqueID() const;
-
-    bool                    SwapOut();
-    bool                    SwapOut( SvStream* pOStm );
-    bool                    SwapIn();
-
-    bool                    IsInSwapIn() const { return mbIsInSwapIn; }
-    bool                    IsInSwapOut() const { return mbIsInSwapOut; }
-    bool                    IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
 
     GraphicType             GetType() const;
     Size                    GetPrefSize() const;
@@ -462,9 +415,6 @@ public:
         double fTopCrop,
         double fRightCrop,
         double fBottomCrop) const;
-
-    // read access
-    sal_uLong GetDataChangeTimeStamp() const { return mnDataChangeTimeStamp; }
 };
 
 namespace vcl

@@ -418,10 +418,6 @@ namespace sdr
 
             // draft when swapped out
             const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
-            static bool bAllowReplacements(true);
-
-            if(rGraphicObject.IsSwappedOut() && bAllowReplacements)
-                return true;
 
             // draft when no graphic
             if(GraphicType::NONE == rGraphicObject.GetType() || GraphicType::Default == rGraphicObject.GetType())

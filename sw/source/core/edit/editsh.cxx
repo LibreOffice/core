@@ -248,8 +248,7 @@ bool SwEditShell::IsLinkedGrfSwapOut() const
     SwGrfNode *pGrfNode = GetGrfNode_();
     return pGrfNode &&
         ( pGrfNode->IsLinkedFile() &&
-          ( GraphicType::Default == pGrfNode->GetGrfObj().GetType() ||
-            pGrfNode->GetGrfObj().IsSwappedOut()));
+          ( GraphicType::Default == pGrfNode->GetGrfObj().GetType()));
 }
 
 const GraphicObject* SwEditShell::GetGraphicObj() const
