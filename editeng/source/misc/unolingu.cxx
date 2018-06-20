@@ -49,6 +49,8 @@
 #include <linguistic/misc.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
+#include <svtools/strings.hrc>
+#include <unotools/resmgr.hxx>
 
 using namespace ::comphelper;
 using namespace ::linguistic;
@@ -594,7 +596,10 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
     uno::Reference< XSearchableDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (xTmpDicList.is())
     {
-        xIgnoreAll.set( xTmpDicList->getDictionaryByName( "IgnoreAllList" ), UNO_QUERY );
+        std::locale loc(Translate::Create("svt"));
+        xIgnoreAll.set( xTmpDicList->getDictionaryByName(
+                                    Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc) ),
+                                    UNO_QUERY );
     }
     return xIgnoreAll;
 }
