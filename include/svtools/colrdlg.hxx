@@ -21,10 +21,9 @@
 #define INCLUDED_SVTOOLS_COLRDLG_HXX
 
 #include <svtools/svtdllapi.h>
-#include <vcl/vclptr.hxx>
 #include <tools/color.hxx>
 
-namespace vcl { class Window; }
+namespace weld { class Window; }
 
 namespace svtools
 {
@@ -47,7 +46,6 @@ public:
     short           Execute(weld::Window* pParent);
 
 private:
-    VclPtr<vcl::Window> mpParent;
     Color               maColor;
     svtools::ColorPickerMode meMode;
 };
