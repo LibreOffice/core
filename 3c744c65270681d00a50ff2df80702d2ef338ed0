@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_46bbd572",
+        "filename": "sc/qa/uitest/solver/solver.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-20T13:57:21Z",
+      "side": 1,
+      "message": "what\u0027s that sleep for?",
+      "revId": "3c744c65270681d00a50ff2df80702d2ef338ed0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
