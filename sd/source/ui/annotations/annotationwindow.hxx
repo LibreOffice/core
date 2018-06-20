@@ -78,8 +78,8 @@ class AnnotationWindow : public FloatingWindow
         DrawDocShell*           mpDocShell;
         SdDrawDocument*         mpDoc;
 
-        OutlinerView*           mpOutlinerView;
-        ::Outliner*             mpOutliner;
+        std::unique_ptr<OutlinerView> mpOutlinerView;
+        std::unique_ptr<::Outliner>   mpOutliner;
         VclPtr<ScrollBar>       mpVScrollbar;
         css::uno::Reference< css::office::XAnnotation > mxAnnotation;
         bool                    mbReadonly;
@@ -105,8 +105,8 @@ class AnnotationWindow : public FloatingWindow
         void ExecuteSlot( sal_uInt16 nSID );
 
         DrawDocShell*           DocShell()      { return mpDocShell; }
-        OutlinerView*           getView()       { return mpOutlinerView; }
-        ::Outliner*             Engine()        { return mpOutliner; }
+        OutlinerView*           getView()       { return mpOutlinerView.get(); }
+        ::Outliner*             Engine()        { return mpOutliner.get(); }
         SdDrawDocument*         Doc()           { return mpDoc; }
 
         long            GetPostItTextHeight();
