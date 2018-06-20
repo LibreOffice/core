@@ -177,7 +177,7 @@ class ODatabaseForm :public OFormComponents
     rtl::Reference<OGroupManager>   m_pGroupManager;
     ::dbtools::ParameterManager m_aParameterManager;
     ::dbtools::FilterManager    m_aFilterManager;
-    Timer*                      m_pLoadTimer;
+    std::unique_ptr<Timer>      m_pLoadTimer;
 
     rtl::Reference<OFormSubmitResetThread>  m_pThread;
     OUString                    m_sCurrentErrorContext;
