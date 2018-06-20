@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,poppler))
 ifeq ($(SYSTEM_POPPLER),)
 
 $(eval $(call gb_Module_add_targets,poppler,\
-	ExternalProject_poppler \
+	StaticLibrary_poppler \
 	UnpackedTarball_poppler \
 ))
 
