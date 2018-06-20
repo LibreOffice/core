@@ -2693,11 +2693,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,poppler)/fofi/.libs/libfofi$(gb_StaticLibrary_PLAINEXT) \
-	$(call gb_UnpackedTarball_get_dir,poppler)/goo/.libs/libgoo$(gb_StaticLibrary_PLAINEXT) \
-	$(call gb_UnpackedTarball_get_dir,poppler)/poppler/.libs/libpoppler$(gb_StaticLibrary_PLAINEXT) \
-)
+$(call gb_LinkTarget_use_static_libraries,$(1),poppler)
 
 $(call gb_LinkTarget_use_external,$(1),jpeg)
 
