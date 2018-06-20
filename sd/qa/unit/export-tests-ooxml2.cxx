@@ -143,6 +143,7 @@ public:
     void testTdf90627();
     void testTdf104786();
     void testTdf104789();
+    void testOpenDocumentAsReadOnly();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -209,6 +210,7 @@ public:
     CPPUNIT_TEST(testTdf90627);
     CPPUNIT_TEST(testTdf104786);
     CPPUNIT_TEST(testTdf104789);
+    CPPUNIT_TEST(testOpenDocumentAsReadOnly);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1674,6 +1676,16 @@ void SdOOXMLExportTest2::testTdf104789()
     OUString sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("style.opacity"), sAttributeName);
 
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testOpenDocumentAsReadOnly()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/open-as-read-only.pptx"), PPTX);
+    CPPUNIT_ASSERT(xDocShRef->IsSecurityOptOpenReadOnly());
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    CPPUNIT_ASSERT(xDocShRef->IsSecurityOptOpenReadOnly());
     xDocShRef->DoClose();
 }
 
