@@ -75,7 +75,6 @@
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
 
 #include <memory>
 #include <vector>
@@ -567,19 +566,17 @@ void ScDrawStringsVars::RepeatToFill( long nColWidth )
     if ( nRepeatPos == -1 || nRepeatPos > aString.getLength() )
         return;
 
-    const bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
-
     long nCharWidth = pOutput->pFmtDevice->GetTextWidth(OUString(nRepeatChar));
 
-    if ( nCharWidth < 1 || (bIsTiledRendering && nCharWidth < TWIPS_PER_PIXEL)) return;
-
-    if (bPixelToLogic)
-        nColWidth = pOutput->mpRefDevice->PixelToLogic(Size(nColWidth,0)).Width();
+    if ( nCharWidth < 1 || (bPixelToLogic && nCharWidth < pOutput->mpRefDevice->PixelToLogic(Size(1,0)).Width())) return;
 
     // Are there restrictions on the cell type we should filter out here ?
     long nTextWidth = aTextSize.Width();
-    if ( bIsTiledRendering )
+    if ( bPixelToLogic )
+    {
+        nColWidth = pOutput->mpRefDevice->PixelToLogic(Size(nColWidth,0)).Width();
         nTextWidth = pOutput->mpRefDevice->PixelToLogic(Size(nTextWidth,0)).Width();
+    }
 
     long nSpaceToFill = ( nColWidth - nTextWidth );
     if ( nSpaceToFill <= nCharWidth )
