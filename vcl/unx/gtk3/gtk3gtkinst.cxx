@@ -4708,6 +4708,13 @@ private:
             }
             if (gtk_button_get_use_underline(pButton) && !gtk_button_get_use_stock(pButton))
                 m_aMnemonicButtons.push_back(pButton);
+
+            if (GTK_IS_MENU_BUTTON(pWidget))
+            {
+                gtk_button_set_image(pButton, gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON));
+                gtk_button_set_image_position(pButton, GTK_POS_RIGHT);
+                gtk_button_set_always_show_image(pButton, true);
+            }
         }
         else if (GTK_IS_LABEL(pWidget))
         {
