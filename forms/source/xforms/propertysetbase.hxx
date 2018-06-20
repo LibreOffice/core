@@ -181,7 +181,7 @@ private:
     typedef ::std::map< const sal_Int32, css::uno::Any >                                PropertyValueCache;
 
     PropertyArray                   m_aProperties;
-    cppu::IPropertyArrayHelper*     m_pProperties;
+    std::unique_ptr<cppu::IPropertyArrayHelper> m_pProperties;
     PropertyAccessors               m_aAccessors;
     PropertyValueCache              m_aCache;
 
