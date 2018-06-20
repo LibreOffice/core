@@ -592,7 +592,7 @@ private:
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
 
-    SvxBitmapCtl*       m_pBitmapCtl;
+    std::unique_ptr<SvxBitmapCtl> m_pBitmapCtl;
 
     const SfxItemSet&   m_rOutAttrs;
 

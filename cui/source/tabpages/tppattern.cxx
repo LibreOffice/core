@@ -109,7 +109,7 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());
 
-    m_pBitmapCtl = new SvxBitmapCtl;
+    m_pBitmapCtl.reset(new SvxBitmapCtl);
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -137,8 +137,7 @@ SvxPatternTabPage::~SvxPatternTabPage()
 
 void SvxPatternTabPage::dispose()
 {
-    delete m_pBitmapCtl;
-    m_pBitmapCtl = nullptr;
+    m_pBitmapCtl.reset();
     m_pCtlPixel.clear();
     m_pLbColor.clear();
     m_pLbBackgroundColor.clear();
