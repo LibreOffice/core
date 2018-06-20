@@ -16,7 +16,7 @@ import pathlib
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
-#Bug 43693 - Goal Seek: reproducable crash using "target value search"
+#Bug 43693 - Goal Seek: reproducible crash using "target value search"
 
 class tdf43693(UITestCase):
     def test_tdf43693_goalSeek(self):
