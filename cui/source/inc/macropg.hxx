@@ -65,7 +65,7 @@ class SvxMacroTabPage_ : public SfxTabPage
 
     css::uno::Reference< css::container::XNameReplace > m_xAppEvents;
 protected:
-    SvxMacroTabPage_Impl*      mpImpl;
+    std::unique_ptr<SvxMacroTabPage_Impl> mpImpl;
     css::uno::Reference< css::container::XNameReplace > m_xDocEvents;
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
     EventsHash m_appEventsHash;
