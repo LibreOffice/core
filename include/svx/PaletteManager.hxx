@@ -74,7 +74,7 @@ public:
     void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
-    void        PopupColorPicker(vcl::Window* pParent, const OUString& aCommand, const Color& rInitialColor);
+    void        PopupColorPicker(weld::Window* pParent, const OUString& aCommand, const Color& rInitialColor);
 
     void        SetColorSelectFunction(const std::function<void(const OUString&, const NamedColor&)>& aColorSelectFunction);
 

@@ -388,14 +388,14 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
 {
-    std::unique_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParentDialog() ));
+    SvColorDialog aColorDlg;
 
-    pColorDlg->SetColor (aCurrentColor);
-    pColorDlg->SetMode( svtools::ColorPickerMode::Modify );
+    aColorDlg.SetColor (aCurrentColor);
+    aColorDlg.SetMode( svtools::ColorPickerMode::Modify );
 
-    if( pColorDlg->Execute() == RET_OK )
+    if (aColorDlg.Execute(GetFrameWeld()) == RET_OK)
     {
-        Color aPreviewColor = pColorDlg->GetColor();
+        Color aPreviewColor = aColorDlg.GetColor();
         aCurrentColor = aPreviewColor;
         UpdateColorValues( false );
         // fill ItemSet and pass it on to XOut

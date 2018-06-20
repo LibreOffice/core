@@ -357,14 +357,14 @@ void PaletteManager::SetColorSelectFunction(const std::function<void(const OUStr
     maColorSelectFunction = aColorSelectFunction;
 }
 
-void PaletteManager::PopupColorPicker(vcl::Window* pParent, const OUString& aCommand, const Color& rInitialColor)
+void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCommand, const Color& rInitialColor)
 {
     // The calling object goes away during aColorDlg.Execute(), so we must copy this
     OUString aCommandCopy = aCommand;
-    SvColorDialog aColorDlg(pParent);
+    SvColorDialog aColorDlg;
     aColorDlg.SetColor(rInitialColor);
     aColorDlg.SetMode(svtools::ColorPickerMode::Modify);
-    if( aColorDlg.Execute() == RET_OK )
+    if (aColorDlg.Execute(pParent) == RET_OK)
     {
         if (mpBtnUpdater)
             mpBtnUpdater->Update( aColorDlg.GetColor() );
