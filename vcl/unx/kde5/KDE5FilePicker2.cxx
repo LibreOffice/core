@@ -136,6 +136,8 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             &KDE5FilePicker::getCurrentFilterSlot, Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::getSelectedFilesSignal, this,
             &KDE5FilePicker::getSelectedFilesSlot, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getDirectorySignal, this,
+            &KDE5FilePicker::getDirectorySlot, Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
 }
@@ -227,8 +229,7 @@ OUString SAL_CALL KDE5FilePicker::getDisplayDirectory()
         return Q_EMIT getDisplayDirectorySignal();
     }
 
-    OUString dir = toOUString(_dialog->directoryUrl().url());
-    return dir;
+    return implGetDirectory();
 }
 
 uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getFiles()
@@ -432,7 +433,16 @@ OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
     return label;
 }
 
-OUString SAL_CALL KDE5FilePicker::getDirectory() { return OUString(); }
+OUString SAL_CALL KDE5FilePicker::getDirectory()
+{
+    if (qApp->thread() != QThread::currentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return Q_EMIT getDirectorySignal();
+    }
+
+    return implGetDirectory();
+}
 
 void SAL_CALL KDE5FilePicker::setDescription(const OUString&) {}
 
@@ -528,6 +538,12 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case LISTBOX_FILTER_SELECTOR:
             break;
     }
+}
+
+OUString KDE5FilePicker::implGetDirectory()
+{
+    OUString dir = toOUString(_dialog->directoryUrl().url());
+    return dir;
 }
 
 void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
