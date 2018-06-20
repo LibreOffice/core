@@ -132,7 +132,7 @@ const char * const pButtonNames[] =
 class EasyFile
 {
 private:
-    SvStream*   pOStm;
+    std::unique_ptr<SvStream> pOStm;
     bool        bOpen;
 
 public:
@@ -3140,7 +3140,7 @@ ErrCode EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
     createFileName( rUrl, aFileName );
 
     ErrCode nErr = ERRCODE_NONE;
-    pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC );
+    pOStm.reset( ::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC ) );
     if( pOStm )
     {
         bOpen = true;
@@ -3154,11 +3154,10 @@ ErrCode EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
     if( nErr != ERRCODE_NONE )
     {
         bOpen = false;
-        delete pOStm;
-        pOStm = nullptr;
+        pOStm.reset();
     }
 
-    rpStr = pOStm;
+    rpStr = pOStm.get();
 
     return nErr;
 }
@@ -3182,8 +3181,7 @@ void EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
 
 void EasyFile::close()
 {
-    delete pOStm;
-    pOStm = nullptr;
+    pOStm.reset();
     bOpen = false;
 }
 
