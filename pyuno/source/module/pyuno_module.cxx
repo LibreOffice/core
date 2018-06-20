@@ -823,6 +823,33 @@ static PyObject *setCurrentContext(
     return ret.getAcquired();
 }
 
+static PyObject *sal_debug(
+    SAL_UNUSED_PARAMETER PyObject *, SAL_UNUSED_PARAMETER PyObject * args )
+{
+    if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
+        return PyStr_FromString("");
+
+    OUString line = pyString2ustring( PyTuple_GetItem( args, 0 ) );
+
+    SAL_DEBUG(line.toUtf8().getStr());
+
+    return PyStr_FromString("");
+}
+
+static PyObject *sal_info(
+    SAL_UNUSED_PARAMETER PyObject *, SAL_UNUSED_PARAMETER PyObject * args )
+{
+    if( !PyTuple_Check( args ) || PyTuple_Size( args) != 2 )
+        return PyStr_FromString("");
+
+    OUString tag = pyString2ustring( PyTuple_GetItem( args , 0 ) );
+    OUString line = pyString2ustring( PyTuple_GetItem( args, 1 ) );
+
+    SAL_INFO(tag.toUtf8().getStr(), line.toUtf8().getStr());
+
+    return PyStr_FromString("");
+}
+
 }
 
 struct PyMethodDef PyUNOModule_methods [] =
@@ -843,6 +870,8 @@ struct PyMethodDef PyUNOModule_methods [] =
     {"invoke", invoke, METH_VARARGS | METH_KEYWORDS, nullptr},
     {"setCurrentContext", setCurrentContext, METH_VARARGS, nullptr},
     {"getCurrentContext", getCurrentContext, METH_VARARGS, nullptr},
+    {"sal_debug", sal_debug, METH_VARARGS, nullptr},
+    {"sal_info", sal_info, METH_VARARGS, nullptr},
     {nullptr, nullptr, 0, nullptr}
 };
 
