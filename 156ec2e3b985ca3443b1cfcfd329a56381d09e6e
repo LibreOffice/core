@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_89731db1",
+        "filename": "include/svtools/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-06-20T21:18:58Z",
+      "side": 1,
+      "message": "I wonder if this is user friendly enough. Any better ideas?",
+      "range": {
+        "startLine": 361,
+        "startChar": 85,
+        "endLine": 361,
+        "endChar": 109
+      },
+      "revId": "156ec2e3b985ca3443b1cfcfd329a56381d09e6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
