@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_29d06953",
+        "filename": "svl/qa/unit/svl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-20T22:32:32Z",
+      "side": 1,
+      "message": "These date formats can\u0027t be added with this change, they\u0027re part of https://gerrit.libreoffice.org/55767",
+      "range": {
+        "startLine": 1406,
+        "startChar": 0,
+        "endLine": 1414,
+        "endChar": 70
+      },
+      "revId": "de52d9727ed7c79631047a7748dfd9c905cdbb6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
