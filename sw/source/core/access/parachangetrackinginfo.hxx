@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_PARACHANGETRACKINGINFO_HXX
 
 #include <sal/types.h>
+#include <memory>
 
 class SwTextFrame;
 class SwWrongList;
@@ -41,9 +42,9 @@ class SwParaChangeTrackingInfo
 
         const SwTextFrame& mrTextFrame;
 
-        SwWrongList* mpChangeTrackInsertionTextMarkupList;
-        SwWrongList* mpChangeTrackDeletionTextMarkupList;
-        SwWrongList* mpChangeTrackFormatChangeTextMarkupList;
+        std::unique_ptr<SwWrongList> mpChangeTrackInsertionTextMarkupList;
+        std::unique_ptr<SwWrongList> mpChangeTrackDeletionTextMarkupList;
+        std::unique_ptr<SwWrongList> mpChangeTrackFormatChangeTextMarkupList;
 };
 #endif
 
