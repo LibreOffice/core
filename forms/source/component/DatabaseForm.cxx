@@ -2528,7 +2528,7 @@ void SAL_CALL ODatabaseForm::disposing(const EventObject& Source)
 void ODatabaseForm::impl_createLoadTimer()
 {
     OSL_PRECOND( m_pLoadTimer == nullptr, "ODatabaseForm::impl_createLoadTimer: timer already exists!" );
-    m_pLoadTimer = new Timer("DatabaseFormLoadTimer");
+    m_pLoadTimer.reset(new Timer("DatabaseFormLoadTimer"));
     m_pLoadTimer->SetTimeout(100);
     m_pLoadTimer->SetInvokeHandler(LINK(this,ODatabaseForm,OnTimeout));
 }
@@ -2558,7 +2558,7 @@ void SAL_CALL ODatabaseForm::unloading(const EventObject& /*aEvent*/)
 
         if ( m_pLoadTimer && m_pLoadTimer->IsActive() )
             m_pLoadTimer->Stop();
-        DELETEZ( m_pLoadTimer );
+        m_pLoadTimer.reset();
 
         Reference< XRowSet > xParentRowSet( m_xParent, UNO_QUERY_THROW );
         xParentRowSet->removeRowSetListener( this );
@@ -2849,7 +2849,7 @@ void SAL_CALL ODatabaseForm::unload()
     if (!isLoaded())
         return;
 
-    DELETEZ(m_pLoadTimer);
+    m_pLoadTimer.reset();
 
     aGuard.clear();
     EventObject aEvt(static_cast<XWeak*>(this));
