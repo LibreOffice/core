@@ -48,6 +48,8 @@ public:
                                             sal_uInt8 * pBuffer
                                           ) override;
 
+    cairo_surface_t* GetSurface() const { return m_pSurface; }
+
     // SalGeometryProvider
     virtual long GetWidth() const override;
     virtual long GetHeight() const override;

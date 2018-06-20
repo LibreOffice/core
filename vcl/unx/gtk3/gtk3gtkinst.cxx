@@ -3820,7 +3820,6 @@ AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
 
 }
 
-
 class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::DrawingArea
 {
 private:
@@ -3828,7 +3827,6 @@ private:
     a11yref m_xAccessible;
     AtkObject *m_pAccessible;
     ScopedVclPtrInstance<VirtualDevice> m_xDevice;
-    std::vector<unsigned char> m_aBuffer;
     cairo_surface_t* m_pSurface;
     sal_uInt16 m_nLastMouseButton;
     gulong m_nDrawSignalId;
@@ -3876,19 +3874,8 @@ private:
     }
     void signal_size_allocate(guint nWidth, guint nHeight)
     {
-        if (m_pSurface)
-            cairo_surface_destroy(m_pSurface);
-
-        const int nScale = gtk_widget_get_scale_factor(GTK_WIDGET(m_pDrawingArea));
-        const int nStride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nWidth * nScale);
-        m_aBuffer.resize(nHeight * nScale * nStride);
-        m_xDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(),
-                                                          m_aBuffer.data());
-        m_pSurface = cairo_image_surface_create_for_data(m_aBuffer.data(), CAIRO_FORMAT_ARGB32,
-                                                         nWidth * nScale, nHeight * nScale, nStride);
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
-        cairo_surface_set_device_scale(m_pSurface, nScale, nScale);
-#endif
+        m_xDevice->SetOutputSizePixel(Size(nWidth, nHeight));
+        m_pSurface = get_underlying_cairo_suface(*m_xDevice);
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
     }
     static void signalStyleUpdated(GtkWidget*, gpointer widget)
@@ -4138,8 +4125,6 @@ public:
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
         if (m_pAccessible)
             g_object_unref(m_pAccessible);
-        if (m_pSurface)
-            cairo_surface_destroy(m_pSurface);
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
         g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyPressSignalId);
