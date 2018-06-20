@@ -1622,12 +1622,15 @@ void ScFormulaCell::Interpret()
                     }
                     // Start at 1, init things.
                     rRecursionHelper.StartIteration();
-                    // Mark all cells being in iteration.
+                    // Mark all cells being in iteration. Reset results to
+                    // original values, formula cells have been interpreted
+                    // already, discard that step.
                     for (ScFormulaRecursionList::const_iterator aIter(
                                 rRecursionHelper.GetIterationStart()); aIter !=
                             rRecursionHelper.GetIterationEnd(); ++aIter)
                     {
                         ScFormulaCell* pIterCell = (*aIter).pCell;
+                        pIterCell->aResult = (*aIter).aPreviousResult;
                         pIterCell->bIsIterCell = true;
                     }
                 }
@@ -1636,7 +1639,8 @@ void ScFormulaCell::Interpret()
                 for ( ; rRecursionHelper.GetIteration() <= nIterMax && !rDone;
                         rRecursionHelper.IncIteration())
                 {
-                    rDone = true;
+                    rDone = false;
+                    bool bFirst = true;
                     for ( ScFormulaRecursionList::iterator aIter(
                                 rRecursionHelper.GetIterationStart()); aIter !=
                             rRecursionHelper.GetIterationEnd() &&
@@ -1652,7 +1656,15 @@ void ScFormulaCell::Interpret()
                             pIterCell->InterpretTail( pDocument->GetNonThreadedContext(), SCITP_FROM_ITERATION);
                             pDocument->DecInterpretLevel();
                         }
-                        rDone = rDone && !pIterCell->IsDirtyOrInTableOpDirty();
+                        if (bFirst)
+                        {
+                            rDone = !pIterCell->IsDirtyOrInTableOpDirty();
+                            bFirst = false;
+                        }
+                        else if (rDone)
+                        {
+                            rDone = !pIterCell->IsDirtyOrInTableOpDirty();
+                        }
                     }
                     if (rRecursionHelper.IsInReturn())
                     {
@@ -1687,12 +1699,26 @@ void ScFormulaCell::Interpret()
                             pIterCell->bIsIterCell = false;
                             pIterCell->nSeenInIteration = 0;
                             pIterCell->bRunning = (*aIter).bOldRunning;
+                            pIterCell->ResetDirty();
+                            // The difference to Excel is that Excel does not
+                            // produce an error for non-convergence thus a
+                            // delta of 0.001 still works to execute the
+                            // maximum number of iterations and display the
+                            // results no matter if the result anywhere reached
+                            // near delta, but also never indicates whether the
+                            // result actually makes sense in case of
+                            // non-counter context. Calc does check the delta
+                            // in every case. If we wanted to support what
+                            // Excel does then add another option "indicate
+                            // non-convergence error" (default on) and execute
+                            // the following block only if set.
+#if 1
                             // If one cell didn't converge, all cells of this
                             // circular dependency don't, no matter whether
                             // single cells did.
-                            pIterCell->ResetDirty();
                             pIterCell->aResult.SetResultError( FormulaError::NoConvergence);
                             pIterCell->bChanged = true;
+#endif
                         }
                     }
                     // End this iteration and remove entries.
