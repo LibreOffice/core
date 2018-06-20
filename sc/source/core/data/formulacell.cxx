@@ -2598,6 +2598,11 @@ bool ScFormulaCell::IsMultilineResult()
 
 bool ScFormulaCell::NeedsInterpret() const
 {
+    if (bIsIterCell)
+        // Shortcut to force return of current value and not enter Interpret()
+        // as we're looping over all iteration cells.
+        return false;
+
     if (!IsDirtyOrInTableOpDirty())
         return false;
 
