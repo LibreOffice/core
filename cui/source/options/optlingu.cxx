@@ -1029,8 +1029,7 @@ SvxLinguTabPage::~SvxLinguTabPage()
 
 void SvxLinguTabPage::dispose()
 {
-    delete pLinguData;
-    pLinguData = nullptr;
+    pLinguData.reset();
     m_pLinguModulesFT.clear();
     m_pLinguModulesCLB.clear();
     m_pLinguModulesEditPB.clear();
@@ -1060,7 +1059,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         DBG_ASSERT( pLinguData, "pLinguData not yet initialized" );
         if (!pLinguData)
-            pLinguData = new SvxLinguData_Impl;
+            pLinguData.reset( new SvxLinguData_Impl );
 
         // update spellchecker configuration entries
         const LangImplNameTable *pTable = &pLinguData->GetSpellTable();
@@ -1299,7 +1298,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     if (m_pLinguModulesCLB->IsVisible())
     {
         if (!pLinguData)
-            pLinguData = new SvxLinguData_Impl;
+            pLinguData.reset( new SvxLinguData_Impl );
         UpdateModulesBox_Impl();
     }
 
@@ -1459,7 +1458,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
     if (m_pLinguModulesEditPB == pBtn)
     {
         if (!pLinguData)
-            pLinguData = new SvxLinguData_Impl;
+            pLinguData.reset( new SvxLinguData_Impl );
 
         SvxLinguData_Impl   aOldLinguData( *pLinguData );
         ScopedVclPtrInstance< SvxEditModulesDlg > aDlg( this, *pLinguData );
