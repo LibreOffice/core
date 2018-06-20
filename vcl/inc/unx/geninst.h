@@ -28,7 +28,7 @@
 #include <saldatabasic.hxx>
 #include <unx/genprn.h>
 
-class VCL_DLLPUBLIC SalYieldMutex : public comphelper::GenericSolarMutex
+class VCL_DLLPUBLIC SalYieldMutex : public comphelper::SolarMutex
 {
 public:
     SalYieldMutex();

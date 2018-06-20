@@ -86,7 +86,7 @@ void SalAbort( const OUString& rErrorText, bool )
 
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
-class SalYieldMutex : public comphelper::GenericSolarMutex
+class SalYieldMutex : public comphelper::SolarMutex
 {
 public: // for ImplSalYield() and ImplSalYieldMutexAcquireWithWait()
     osl::Condition            m_condition; /// for MsgWaitForMultipleObjects()
@@ -154,7 +154,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
     ++m_nCount;
     --nLockCount;
 
-    comphelper::GenericSolarMutex::doAcquire( nLockCount );
+    comphelper::SolarMutex::doAcquire( nLockCount );
 }
 
 sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
@@ -163,7 +163,7 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
     if ( pInst && pInst->mbNoYieldLock && pInst->IsMainThread() )
         return 1;
 
-    sal_uInt32 nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
+    sal_uInt32 nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
     // wake up ImplSalYieldMutexAcquireWithWait() after release
     if ( 0 == m_nCount )
         m_condition.set();
@@ -178,7 +178,7 @@ bool SalYieldMutex::tryToAcquire()
         if ( pInst->mbNoYieldLock && pInst->IsMainThread() )
             return true;
         else
-            return comphelper::GenericSolarMutex::tryToAcquire();
+            return comphelper::SolarMutex::tryToAcquire();
     }
     else
         return false;
