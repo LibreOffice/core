@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_a6772901",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2826,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-06-20T12:45:48Z",
+      "side": 1,
+      "message": "Is it really elegant to have the push/pop here rather than in InterpretFormulaGroup around the ScDependentsCalculator ? looks like it could happen multiple times during the dependents calculation for no extra good reason ? \u003d)",
+      "revId": "4b7f2d9417fd16c0f6f0d7913e8ae6ed48da7130",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_465f5572",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2851,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-06-20T12:45:48Z",
+      "side": 1,
+      "message": "Can\u0027t we detect this without using pCell by just poking at the RecursionHelper itself ?",
+      "revId": "4b7f2d9417fd16c0f6f0d7913e8ae6ed48da7130",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
