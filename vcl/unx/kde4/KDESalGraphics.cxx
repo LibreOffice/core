@@ -408,7 +408,12 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value), rect );
     }
-    else if (type == ControlType::Editbox || type == ControlType::MultilineEditbox)
+    else if (type == ControlType::Editbox)
+    {
+        lcl_drawFrame( QStyle::PE_PanelLineEdit, m_image.get(),
+             vclStateValue2StateFlag(nControlState, value));
+    }
+    else if (type == ControlType::MultilineEditbox)
     {
         lcl_drawFrame( QStyle::PE_FrameLineEdit, m_image.get(),
                        vclStateValue2StateFlag(nControlState, value));
