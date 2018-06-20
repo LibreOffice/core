@@ -129,7 +129,7 @@ private:
 
     std::unique_ptr<SvLBoxButtonData>   m_xCheckButtonData;
 
-    SvxLinguData_Impl*  pLinguData;
+    std::unique_ptr<SvxLinguData_Impl>  pLinguData;
 
     SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
