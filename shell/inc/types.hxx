@@ -25,8 +25,6 @@
 #include <utility>
 #include <vector>
 
-typedef std::vector<std::wstring> StringList_t;
-
 //+-------------------------------------------------------------------------
 //  Declare:    XmlTagAttributes_t, xml tag attribute struct
 //              XmlTag_t, xml tag including content and attributes.
