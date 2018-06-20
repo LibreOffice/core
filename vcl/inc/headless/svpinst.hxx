@@ -193,6 +193,8 @@ inline void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
     eraseFrame( pFrame );
 }
 
+VCL_DLLPUBLIC cairo_surface_t* get_underlying_cairo_suface(VirtualDevice& rDevice);
+
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
