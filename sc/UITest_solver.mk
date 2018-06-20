@@ -13,8 +13,10 @@ $(eval $(call gb_UITest_add_modules,solver,$(SRCDIR)/sc/qa/uitest,\
 	solver/ \
 ))
 
+# Disable bundled extensions with a hack, so that the alternative solver from --enable-ext-nlpsolver# does not kick in and cause the test's expectations to not be met:
 $(eval $(call gb_UITest_set_defs,solver, \
     TDOC="$(SRCDIR)/sc/qa/uitest/calc_tests/data" \
+    BUNDLED_EXTENSIONS='$$$$BRAND_BASE_DIR/NONE' \
 ))
 
 # vim: set noet sw=4 ts=4:
