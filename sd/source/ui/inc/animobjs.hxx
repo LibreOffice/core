@@ -112,15 +112,15 @@ private:
     VclPtr<ListBox>        m_pLbAdjustment;
     VclPtr<PushButton>     m_pBtnCreateGroup;
 
-    ::std::vector< ::std::pair<BitmapEx*, ::tools::Time*> > m_FrameList;
+    ::std::vector< ::std::pair<BitmapEx, ::tools::Time> > m_FrameList;
     static const size_t EMPTY_FRAMELIST;
     size_t          m_nCurrentFrame;
-    SdDrawDocument* pMyDoc;
+    std::unique_ptr<SdDrawDocument> pMyDoc;
 
     bool            bMovie;
     bool            bAllObjects;
 
-    AnimationControllerItem*    pControllerItem;
+    std::unique_ptr<AnimationControllerItem> pControllerItem;
 
     ScopeLock       maPlayLock;
 
