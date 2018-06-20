@@ -81,17 +81,17 @@ class SC_DLLPUBLIC ScDPObject
 private:
     ScDocument*             pDoc;
                                             // settings
-    ScDPSaveData*           pSaveData;
+    std::unique_ptr<ScDPSaveData> pSaveData;
     OUString aTableName;
     OUString aTableTag;
     ScRange                 aOutRange;
-    ScSheetSourceDesc*      pSheetDesc;     //  for sheet data
-    ScImportSourceDesc*     pImpDesc;       //  for database data
-    ScDPServiceDesc*        pServDesc;      //  for external service
+    std::unique_ptr<ScSheetSourceDesc>  pSheetDesc;     //  for sheet data
+    std::unique_ptr<ScImportSourceDesc> pImpDesc;       //  for database data
+    std::unique_ptr<ScDPServiceDesc> pServDesc;      //  for external service
     std::shared_ptr<ScDPTableData>  mpTableData;
                                             // cached data
     css::uno::Reference<css::sheet::XDimensionsSupplier> xSource;
-    ScDPOutput*             pOutput;
+    std::unique_ptr<ScDPOutput> pOutput;
     long                    nHeaderRows;    // page fields plus filter button
     bool                    mbHeaderLayout:1;  // true : grid, false : standard
     bool                    bAllowMove:1;
@@ -129,7 +129,7 @@ public:
     ScRange GetOutputRangeByType( sal_Int32 nType ) const;
 
     void                SetSaveData(const ScDPSaveData& rData);
-    ScDPSaveData*       GetSaveData() const     { return pSaveData; }
+    ScDPSaveData*       GetSaveData() const     { return pSaveData.get(); }
 
     void                SetOutRange(const ScRange& rRange);
     const ScRange&      GetOutRange() const;
@@ -144,9 +144,9 @@ public:
     void                WriteSourceDataTo( ScDPObject& rDest ) const;
     void                WriteTempDataTo( ScDPObject& rDest ) const;
 
-    const ScSheetSourceDesc* GetSheetDesc() const   { return pSheetDesc; }
-    const ScImportSourceDesc* GetImportSourceDesc() const   { return pImpDesc; }
-    const ScDPServiceDesc* GetDPServiceDesc() const { return pServDesc; }
+    const ScSheetSourceDesc* GetSheetDesc() const   { return pSheetDesc.get(); }
+    const ScImportSourceDesc* GetImportSourceDesc() const   { return pImpDesc.get(); }
+    const ScDPServiceDesc* GetDPServiceDesc() const { return pServDesc.get(); }
 
     css::uno::Reference<css::sheet::XDimensionsSupplier> const & GetSource();
 
