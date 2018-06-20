@@ -22,6 +22,30 @@
       "revId": "f6bd95704e46f53fd976519cc7d916f28a4ddc94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_89aa3dd3",
+        "filename": "sd/source/ui/inc/fuformatpaintbrush.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-06-20T21:33:56Z",
+      "side": 0,
+      "message": "I see this in the output of the script:\n\n$ bin/find-unneeded-includes sd/source/ui/inc/fuformatpaintbrush.hxx \n[IWYU] /home/gabor/src/core/sd/source/ui/inc/fuformatpaintbrush.hxx\nERROR: /home/gabor/src/core/sd/source/ui/inc/fuformatpaintbrush.hxx:26: memory: remove not needed include / forward declaration\nERROR: /home/gabor/src/core/sd/source/ui/inc/fuformatpaintbrush.hxx:25: svl/itemset.hxx: remove not needed include / forward declaration\n\nAlso, Jenkins managed to compile without these, so they are pulled in via futext.hxx.\n\nSure, I could add all includes and class fw declarations exactly as recommended by the full IWYU output but making everyhing self-contained is not my goal for now, only reducing redundancy.",
+      "parentUuid": "5a22e58a_c910b551",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 17
+      },
+      "revId": "f6bd95704e46f53fd976519cc7d916f28a4ddc94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
