@@ -828,6 +828,35 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                         xDocProps->setSubject(aValue);
                     }
                 }
+
+                // tdf#107690 LibreOffice could save silently documents with the
+                // user-defined property _MarkAsFinal=true, resulting an interoperability
+                // problem: unintented read-only warning info bar in MSO. To avoid that
+                // and showing the warning of the original document also in LO, when
+                // _MarkAsFinal=true is defined, we call SetReadOnlyUI(), showing also an
+                // infobar for removing easily this read-only protection (this is the use
+                // case of the heavily used MSO custom property "_MarkAsFinal"), and
+                // change _MarkAsFinal to false immediately.
+                //
+                // TODO: Implement MarkAsFinal LO setting or use LoadReadonly for it
+                // (but that doesn't show infobar in LibreOffice 6.1, only Edit->Edit mode
+                // is available to remove the read-only protection), and move this fix
+                // in a better place.
+                uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocProps->getUserDefinedProperties();
+                if (xPropertyContainer.is())
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
+                    if (xPropertySet.is())
+                    {
+                        aAny = xPropertySet->getPropertyValue("_MarkAsFinal");
+                        if (aAny.has<bool>() && aAny.get<bool>())
+                        {
+                            SetReadOnlyUI();
+                            xPropertySet->setPropertyValue("_MarkAsFinal", Any( false ));
+                        }
+                    }
+
+                }
             }
         }
         catch( Exception& )
