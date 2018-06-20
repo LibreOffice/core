@@ -160,11 +160,11 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     m_pCtlDisplay->Show();
 
     // create new document with page
-    pMyDoc = new SdDrawDocument(DocumentType::Impress, nullptr);
+    pMyDoc.reset( new SdDrawDocument(DocumentType::Impress, nullptr) );
     SdPage* pPage = pMyDoc->AllocSdPage(false);
     pMyDoc->InsertPage(pPage);
 
-    pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pInBindings );
+    pControllerItem.reset( new AnimationControllerItem( SID_ANIMATOR_STATE, this, pInBindings ) );
 
     // as long as not in the resource
     m_pTimeField->SetFormat( TimeFieldFormat::F_SEC_CS );
@@ -204,18 +204,13 @@ AnimationWindow::~AnimationWindow()
 
 void AnimationWindow::dispose()
 {
-    DELETEZ( pControllerItem );
+    pControllerItem.reset();
 
-    for (const std::pair<BitmapEx*, tools::Time*> & i : m_FrameList)
-    {
-        delete i.first;
-        delete i.second;
-    }
     m_FrameList.clear();
     m_nCurrentFrame = EMPTY_FRAMELIST;
 
     // delete the clones
-    delete pMyDoc;
+    pMyDoc.reset();
 
     m_pCtlDisplay.disposeAndClear();
     m_pBtnFirst.clear();
@@ -271,7 +266,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
     {
         for (size_t i = 0; i < nCount; ++i)
         {
-            aTime += *m_FrameList[i].second;
+            aTime += m_FrameList[i].second;
         }
         nFullTime  = aTime.GetMSFromTime();
     }
@@ -309,11 +304,10 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
 
         if( m_pRbtBitmap->IsChecked() )
         {
-            tools::Time *const pTime = m_FrameList[i].second;
-            assert(pTime);
+            tools::Time const & rTime = m_FrameList[i].second;
 
-            m_pTimeField->SetTime( *pTime );
-            sal_uLong nTime = pTime->GetMSFromTime();
+            m_pTimeField->SetTime( rTime );
+            sal_uLong nTime = rTime.GetMSFromTime();
 
             WaitInEffect( nTime, nTmpTime, pProgress );
             nTmpTime += nTime;
@@ -387,9 +381,8 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, Button*, p, void )
         sal_uLong n = static_cast<sal_uLong>(m_pNumFldBitmap->GetValue());
         if( n > 0 )
         {
-            tools::Time *const pTime = m_FrameList[n - 1].second;
-            if( pTime )
-                m_pTimeField->SetTime( *pTime );
+            tools::Time const & rTime = m_FrameList[n - 1].second;
+            m_pTimeField->SetTime( rTime );
         }
         m_pTimeField->Enable();
         m_pLbLoopCount->Enable();
@@ -415,8 +408,6 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
     // tdf#95298 check m_nCurrentFrame for EMPTY_FRAMELIST to avoid out-of-bound array access
     if (pBtn == m_pBtnRemoveBitmap && EMPTY_FRAMELIST  != m_nCurrentFrame)
     {
-        delete m_FrameList[m_nCurrentFrame].first;
-        delete m_FrameList[m_nCurrentFrame].second;
         m_FrameList.erase(m_FrameList.begin() + m_nCurrentFrame);
 
         pObject = pPage->GetObj(m_nCurrentFrame);
@@ -449,8 +440,6 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
             for (size_t i = m_FrameList.size(); i > 0; )
             {
                 --i;
-                delete m_FrameList[i].first;
-
                 pObject = pPage->GetObj( i );
                 if( pObject )
                 {
@@ -459,8 +448,6 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
                     SdrObject::Free( pObject );
                     //pPage->RecalcObjOrdNums();
                 }
-
-                delete m_FrameList[i].second;
             }
             m_FrameList.clear();
             m_nCurrentFrame = EMPTY_FRAMELIST;
@@ -510,9 +497,9 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl, Edit&, void)
 {
     sal_uLong nPos = static_cast<sal_uLong>(m_pNumFldBitmap->GetValue() - 1);
 
-    tools::Time *const pTime = m_FrameList[nPos].second;
+    tools::Time & rTime = m_FrameList[nPos].second;
 
-    *pTime = m_pTimeField->GetTime();
+    rTime = m_pTimeField->GetTime();
 }
 
 void AnimationWindow::UpdateControl(bool const bDisableCtrls)
@@ -520,7 +507,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     // tdf#95298 check m_nCurrentFrame for EMPTY_FRAMELIST to avoid out-of-bound array access
     if (!m_FrameList.empty() && EMPTY_FRAMELIST != m_nCurrentFrame)
     {
-        BitmapEx aBmp(*m_FrameList[m_nCurrentFrame].first);
+        BitmapEx & rBmp(m_FrameList[m_nCurrentFrame].first);
 
         SdPage* pPage = pMyDoc->GetSdPage(0, PageKind::Standard);
         SdrObject *const pObject = pPage->GetObj(m_nCurrentFrame);
@@ -542,10 +529,10 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
                 : sd::OUTPUT_DRAWMODE_COLOR );
             pVD->Erase();
             pObject->SingleObjectPainter( *pVD.get() );
-            aBmp = pVD->GetBitmapEx( aObjRect.TopLeft(), aObjSize );
+            rBmp = pVD->GetBitmapEx( aObjRect.TopLeft(), aObjSize );
         }
 
-        m_pCtlDisplay->SetBitmapEx(&aBmp);
+        m_pCtlDisplay->SetBitmapEx(&rBmp);
     }
     else
     {
@@ -652,8 +639,8 @@ Fraction AnimationWindow::GetScale()
         Size aBmpSize(0, 0);
         for (size_t i = 0; i < nCount; i++)
         {
-            BitmapEx *const pBitmap = m_FrameList[i].first;
-            Size aTempSize( pBitmap->GetBitmap().GetSizePixel() );
+            BitmapEx const & rBitmap = m_FrameList[i].first;
+            Size aTempSize( rBitmap.GetBitmap().GetSizePixel() );
             aBmpSize.setWidth( std::max( aBmpSize.Width(), aTempSize.Width() ) );
             aBmpSize.setHeight( std::max( aBmpSize.Height(), aTempSize.Height() ) );
         }
@@ -739,9 +726,6 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     {
                         const AnimationBitmap& rAnimBmp = aAnimation.Get( i );
 
-                        BitmapEx *const pBitmapEx =
-                            new BitmapEx(rAnimBmp.aBmpEx);
-
                         // LoopCount
                         if( i == 0 )
                         {
@@ -754,11 +738,11 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         }
 
                         long nTime = rAnimBmp.nWait;
-                        ::tools::Time* pTime = new ::tools::Time( 0, 0, nTime / 100, nTime % 100 );
+                        ::tools::Time aTime( 0, 0, nTime / 100, nTime % 100 );
                         size_t nIndex = m_nCurrentFrame + 1;
                         m_FrameList.insert(
                                 m_FrameList.begin() + nIndex,
-                                ::std::make_pair(pBitmapEx, pTime));
+                                ::std::make_pair(rAnimBmp.aBmpEx, aTime));
 
                         // increment => next one inserted after this one
                         ++m_nCurrentFrame;
@@ -777,12 +761,11 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 for( size_t nObject = 0; nObject < pObjList->GetObjCount(); ++nObject )
                 {
                     SdrObject* pSnapShot(pObjList->GetObj(nObject));
-                    BitmapEx *const pBitmapEx = new BitmapEx(SdrExchangeView::GetObjGraphic(*pSnapShot).GetBitmapEx());
-                    ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
+                    BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pSnapShot).GetBitmapEx());
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                             m_FrameList.begin() + nIndex,
-                            ::std::make_pair(pBitmapEx, pTime));
+                            ::std::make_pair(aBitmapEx, m_pTimeField->GetTime()));
 
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;
@@ -798,15 +781,14 @@ void AnimationWindow::AddObj (::sd::View& rView )
         // also one single animated object
         if( !bAnimObj && !( bAllObjects && nMarkCount > 1 ) )
         {
-            BitmapEx *const pBitmapEx =
-                new BitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
+            BitmapEx aBitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
 
-            ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
+            ::tools::Time aTime( m_pTimeField->GetTime() );
 
             size_t nIndex = m_nCurrentFrame + 1;
             m_FrameList.insert(
                     m_FrameList.begin() + nIndex,
-                    ::std::make_pair(pBitmapEx, pTime));
+                    ::std::make_pair(aBitmapEx, aTime));
         }
 
         // one single object
@@ -828,12 +810,11 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 {
                     // Clone
                     SdrObject* pObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj());
-                    BitmapEx *const pBitmapEx = new BitmapEx(SdrExchangeView::GetObjGraphic(*pObject).GetBitmapEx());
-                    ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
+                    BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pObject).GetBitmapEx());
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                         m_FrameList.begin() + nIndex,
-                        ::std::make_pair(pBitmapEx, pTime));
+                        ::std::make_pair(aBitmapEx, m_pTimeField->GetTime()));
 
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;
@@ -899,7 +880,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     // find biggest bitmap
     for (size_t i = 0; i < nCount; ++i)
     {
-        const BitmapEx& rBmpEx = *m_FrameList[i].first;
+        const BitmapEx& rBmpEx = m_FrameList[i].first;
         const Graphic   aGraphic( rBmpEx );
         Size            aTmpSizeLog;
         const Size      aTmpSizePix( rBmpEx.GetSizePixel() );
@@ -926,14 +907,14 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
         for (size_t i = 0; i < nCount; ++i)
         {
-            tools::Time *const pTime = m_FrameList[i].second;
-            long  nTime = pTime->GetNanoSec();
-            nTime += pTime->GetSec() * 100;
+            tools::Time const & rTime = m_FrameList[i].second;
+            long  nTime = rTime.GetNanoSec();
+            nTime += rTime.GetSec() * 100;
 
-            BitmapEx const*const pBitmapEx = m_FrameList[i].first;
+            BitmapEx const & rBitmapEx = m_FrameList[i].first;
 
             // calculate offset for the specified direction
-            const Size aBitmapSize( pBitmapEx->GetSizePixel() );
+            const Size aBitmapSize( rBitmapEx.GetSizePixel() );
 
             switch( eBA )
             {
@@ -986,7 +967,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != m_pLbLoopCount->GetEntryCount() - 1 ) // endless
                 nLoopCount = m_pLbLoopCount->GetSelectedEntry().toUInt32();
 
-            aAnimBmp.aBmpEx = *pBitmapEx;
+            aAnimBmp.aBmpEx = rBitmapEx;
             aAnimBmp.aPosPix = aPt;
             aAnimBmp.aSizePix = aBitmapSize;
             aAnimBmp.nWait = nTime;
