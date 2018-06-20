@@ -25,6 +25,9 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -256,6 +259,32 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
         }
 
         pStream.reset();
+
+        // tdf#107690 import custom document property _MarkAsFinal as SecurityOptOpenReadonly
+        // (before this fix, LibreOffice opened read-only OOXML documents as editable,
+        // also saved and exported _MarkAsFinal=true silently, resulting unintented read-only
+        // warning info bar in MSO)
+        uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier( m_xDstDoc, uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps = xPropSupplier->getDocumentProperties() ;
+        uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocProps->getUserDefinedProperties();
+        if (xPropertyContainer.is())
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
+            if (xPropertySet.is())
+            {
+                uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("_MarkAsFinal"))
+                {
+                    if (xPropertySet->getPropertyValue("_MarkAsFinal").get<bool>())
+                    {
+                        uno::Reference< lang::XMultiServiceFactory > xFactory(m_xDstDoc, uno::UNO_QUERY);
+                        uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                        xSettings->setPropertyValue("LoadReadonly", uno::makeAny(true));
+                    }
+                    xPropertyContainer->removeProperty("_MarkAsFinal");
+                }
+            }
+        }
 
         return true;
     }
