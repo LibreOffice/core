@@ -28,7 +28,7 @@
 
 #include <memory>
 
-#define RET_ALL     10
+#define RET_ALL     100
 
 // we only need forward decl here
 namespace com { namespace sun { namespace star {
