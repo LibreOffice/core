@@ -40,8 +40,6 @@
 #include <memory>
 #include <vector>
 
-#include <svtools/framestatuslistener.hxx>
-
 namespace svtools {
 
 struct ToolbarMenu_Impl;
@@ -241,8 +239,6 @@ struct ToolbarMenu_Impl
 {
     ToolbarMenu& mrMenu;
 
-    css::uno::Reference< css::frame::XFrame >              mxFrame;
-    rtl::Reference< svt::FrameStatusListener >             mxStatusListener;
     rtl::Reference< ToolbarMenuAcc >                       mxAccessible;
     css::uno::Reference< css::accessibility::XAccessible > mxOldSelection;
 
@@ -260,7 +256,7 @@ struct ToolbarMenu_Impl
 
     Link<ToolbarMenu*,void>          maSelectHdl;
 
-    ToolbarMenu_Impl( ToolbarMenu& rMenu, const css::uno::Reference< css::frame::XFrame >& xFrame );
+    ToolbarMenu_Impl( ToolbarMenu& rMenu );
     ~ToolbarMenu_Impl();
 
     void setAccessible( ToolbarMenuAcc* pAccessible );
