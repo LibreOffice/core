@@ -157,6 +157,7 @@ public:
 private:
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);
+    OUString implGetDirectory();
 
     // emit XFilePickerListener controlStateChanged event
     void filterChanged();
@@ -171,6 +172,7 @@ Q_SIGNALS:
     void setDefaultNameSignal(const OUString& rName);
     void setDisplayDirectorySignal(const OUString& rDir);
     OUString getDisplayDirectorySignal();
+    OUString getDirectorySignal();
     void setValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction,
                         const css::uno::Any& rValue);
     css::uno::Any getValueSignal(sal_Int16 nControlId, sal_Int16 nControlAction);
@@ -189,7 +191,8 @@ private Q_SLOTS:
     void setTitleSlot(const OUString& rTitle) { return setTitle(rTitle); }
     void setDefaultNameSlot(const OUString& rName) { return setDefaultName(rName); }
     void setDisplayDirectorySlot(const OUString& rDir) { return setDisplayDirectory(rDir); }
-    OUString getDisplayDirectorySlot() { return getDisplayDirectory(); }
+    OUString getDisplayDirectorySlot() { return implGetDirectory(); }
+    OUString getDirectorySlot() { return implGetDirectory(); }
     void setValueSlot(sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue)
     {
         return setValue(nControlId, nControlAction, rValue);
