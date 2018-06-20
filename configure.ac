@@ -11699,6 +11699,9 @@ if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE"; then
         done
 
         AC_MSG_CHECKING([if $ANT works])
+        mkdir -p conftest.dir
+        a_cwd=$(pwd)
+        cd conftest.dir
         cat > conftest.java << EOF
         public class conftest {
             int testmethod(int a, int b) {
@@ -11733,7 +11736,8 @@ EOF
             cat conftest.xml >&5
             AC_MSG_ERROR([Ant does not work - Some Java projects will not build!])
         fi
-        rm -f conftest* core core.* *.core
+        cd "$a_cwd"
+        rm -fr conftest.dir
     fi
     if test -z "$ANT_HOME"; then
         ANT_HOME="NO_ANT_HOME"
