@@ -357,7 +357,19 @@ void PowerPointExport::writeDocumentProperties()
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
     if (xDocProps.is())
-        exportDocumentProperties(xDocProps);
+    {
+        bool bSecurityOptOpenReadOnly = false;
+        uno::Reference< lang::XMultiServiceFactory > xFactory(mXModel, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        try
+        {
+            xSettings->getPropertyValue("LoadReadonly") >>= bSecurityOptOpenReadOnly;
+        }
+        catch( Exception& )
+        {
+        }
+        exportDocumentProperties(xDocProps, bSecurityOptOpenReadOnly);
+    }
 
     exportCustomFragments();
 }
