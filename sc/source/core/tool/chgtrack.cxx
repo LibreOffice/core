@@ -2152,7 +2152,7 @@ void ScChangeTrack::DtorClear()
     {
         delete itChangeAction->second;
     }
-    delete pLastCutMove;
+    pLastCutMove.reset();
     ClearMsgQueue();
 }
 
@@ -2719,7 +2719,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
     if ( eClipMode == SC_CACM_CUT )
     {
         ResetLastCut();
-        pLastCutMove = new ScChangeActionMove( rRange, rRange, this );
+        pLastCutMove.reset(new ScChangeActionMove( rRange, rRange, this ));
         SetLastCutMoveRange( rRange, pRefDoc );
     }
     SCCOL nCol1;
@@ -2767,8 +2767,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
         LookUpContents( aRange, pRefDoc, 0, 0, 0 );
         pLastCutMove->SetStartLastCut( nStartLastCut );
         pLastCutMove->SetEndLastCut( nEndLastCut );
-        Append( pLastCutMove );
-        pLastCutMove = nullptr;
+        Append( pLastCutMove.release() );
         ResetLastCut();
         SetInPasteCut( false );
     }
@@ -3197,7 +3196,7 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
                     ResetLastCut();
                     nStartLastCut = nStart;
                     nEndLastCut = nEnd;
-                    pLastCutMove = pMove;
+                    pLastCutMove.reset(pMove);
                     SetLastCutMoveRange(
                         pMove->GetFromRange().MakeRange(), pDoc );
                 }
@@ -3673,7 +3672,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
     else if ( eActType == SC_CAT_MOVE )
     {
         ScChangeActionMove* pActMove = static_cast<ScChangeActionMove*>(pAct);
-        bool bLastCutMove = ( pActMove == pLastCutMove );
+        bool bLastCutMove = ( pActMove == pLastCutMove.get() );
         const ScBigRange& rTo = pActMove->GetBigRange();
         const ScBigRange& rFrom = pActMove->GetFromRange();
         if ( !bUndo )
