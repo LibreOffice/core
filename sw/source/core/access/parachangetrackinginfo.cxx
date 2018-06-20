@@ -33,13 +33,13 @@
 
 namespace {
     void initChangeTrackTextMarkupLists( const SwTextFrame& rTextFrame,
-                                         SwWrongList*& opChangeTrackInsertionTextMarkupList,
-                                         SwWrongList*& opChangeTrackDeletionTextMarkupList,
-                                         SwWrongList*& opChangeTrackFormatChangeTextMarkupList )
+                                         std::unique_ptr<SwWrongList>& opChangeTrackInsertionTextMarkupList,
+                                         std::unique_ptr<SwWrongList>& opChangeTrackDeletionTextMarkupList,
+                                         std::unique_ptr<SwWrongList>& opChangeTrackFormatChangeTextMarkupList )
     {
-        opChangeTrackInsertionTextMarkupList = new SwWrongList( WRONGLIST_CHANGETRACKING );
-        opChangeTrackDeletionTextMarkupList = new SwWrongList( WRONGLIST_CHANGETRACKING );
-        opChangeTrackFormatChangeTextMarkupList = new SwWrongList( WRONGLIST_CHANGETRACKING );
+        opChangeTrackInsertionTextMarkupList.reset( new SwWrongList( WRONGLIST_CHANGETRACKING ) );
+        opChangeTrackDeletionTextMarkupList.reset( new SwWrongList( WRONGLIST_CHANGETRACKING ) );
+        opChangeTrackFormatChangeTextMarkupList.reset( new SwWrongList( WRONGLIST_CHANGETRACKING ) );
 
         if (!rTextFrame.GetTextNodeFirst())
         {
@@ -107,17 +107,17 @@ namespace {
             {
                 case nsRedlineType_t::REDLINE_INSERT:
                 {
-                    pMarkupList = opChangeTrackInsertionTextMarkupList;
+                    pMarkupList = opChangeTrackInsertionTextMarkupList.get();
                 }
                 break;
                 case nsRedlineType_t::REDLINE_DELETE:
                 {
-                    pMarkupList = opChangeTrackDeletionTextMarkupList;
+                    pMarkupList = opChangeTrackDeletionTextMarkupList.get();
                 }
                 break;
                 case nsRedlineType_t::REDLINE_FORMAT:
                 {
-                    pMarkupList = opChangeTrackFormatChangeTextMarkupList;
+                    pMarkupList = opChangeTrackFormatChangeTextMarkupList.get();
                 }
                 break;
                 default:
@@ -157,14 +157,9 @@ SwParaChangeTrackingInfo::~SwParaChangeTrackingInfo()
 
 void SwParaChangeTrackingInfo::reset()
 {
-    delete mpChangeTrackInsertionTextMarkupList;
-    mpChangeTrackInsertionTextMarkupList = nullptr;
-
-    delete mpChangeTrackDeletionTextMarkupList;
-    mpChangeTrackDeletionTextMarkupList = nullptr;
-
-    delete mpChangeTrackFormatChangeTextMarkupList;
-    mpChangeTrackFormatChangeTextMarkupList = nullptr;
+    mpChangeTrackInsertionTextMarkupList.reset();
+    mpChangeTrackDeletionTextMarkupList.reset();
+    mpChangeTrackFormatChangeTextMarkupList.reset();
 }
 
 const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( const sal_Int32 nTextMarkupType )
@@ -187,17 +182,17 @@ const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( co
     {
         case css::text::TextMarkupType::TRACK_CHANGE_INSERTION:
         {
-            pChangeTrackingTextMarkupList = mpChangeTrackInsertionTextMarkupList;
+            pChangeTrackingTextMarkupList = mpChangeTrackInsertionTextMarkupList.get();
         }
         break;
         case css::text::TextMarkupType::TRACK_CHANGE_DELETION:
         {
-            pChangeTrackingTextMarkupList = mpChangeTrackDeletionTextMarkupList;
+            pChangeTrackingTextMarkupList = mpChangeTrackDeletionTextMarkupList.get();
         }
         break;
         case css::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE:
         {
-            pChangeTrackingTextMarkupList = mpChangeTrackFormatChangeTextMarkupList;
+            pChangeTrackingTextMarkupList = mpChangeTrackFormatChangeTextMarkupList.get();
         }
         break;
         default:
