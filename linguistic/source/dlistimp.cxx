@@ -37,6 +37,8 @@
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <svtools/strings.hrc>
+#include <unotools/resmgr.hxx>
 
 #include "defs.hxx"
 #include "dlistimp.hxx"
@@ -611,8 +613,9 @@ void DicList::CreateDicList()
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
+    std::locale loc(Translate::Create("svt"));
     uno::Reference< XDictionary > xIgnAll(
-            createDictionary( "IgnoreAllList", LinguLanguageToLocale( LANGUAGE_NONE ),
+            createDictionary( Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc), LinguLanguageToLocale( LANGUAGE_NONE ),
                               DictionaryType_POSITIVE, OUString() ) );
     if (xIgnAll.is())
     {
