@@ -197,7 +197,6 @@ OUString XMLFontAutoStylePool::Add(
                                                 nFamily, nPitch, eEnc );
         m_pFontAutoStylePool->insert( pEntry );
         m_aNames.insert(sName);
-        printf ("%s\n", sName.toUtf8().getStr());
     }
 
     return sPoolName;
