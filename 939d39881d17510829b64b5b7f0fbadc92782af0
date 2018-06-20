@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_e96c919e",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-20T23:34:07Z",
+      "side": 1,
+      "message": "This still constructs aPreAutoCorrectString expensively from GetEditText(mpEditEngine.get()) instead of from aString.",
+      "range": {
+        "startLine": 2631,
+        "startChar": 35,
+        "endLine": 2631,
+        "endChar": 66
+      },
+      "revId": "939d39881d17510829b64b5b7f0fbadc92782af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_096acd80",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2933,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-20T23:34:07Z",
+      "side": 1,
+      "message": "Because of short-circuit boolean evaluation, test the least expensive condition first, so\n\n if (bInsertPreCorrectedString \u0026\u0026 aString !\u003d aPreAutoCorrectString)",
+      "range": {
+        "startLine": 2933,
+        "startChar": 17,
+        "endLine": 2933,
+        "endChar": 79
+      },
+      "revId": "939d39881d17510829b64b5b7f0fbadc92782af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_2905c9c1",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-20T23:34:07Z",
+      "side": 1,
+      "message": "Please use proper indenting, also keeping the one blank line wouldn\u0027t hurt.. ;)",
+      "range": {
+        "startLine": 2941,
+        "startChar": 0,
+        "endLine": 2948,
+        "endChar": 46
+      },
+      "revId": "939d39881d17510829b64b5b7f0fbadc92782af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
