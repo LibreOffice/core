@@ -220,7 +220,7 @@ SvxMacroTabPage_::SvxMacroTabPage_(vcl::Window* pParent, const OString& rID,
     bAppEvents(false),
     bInitialized(false)
 {
-    mpImpl = new SvxMacroTabPage_Impl( rAttrSet );
+    mpImpl.reset( new SvxMacroTabPage_Impl( rAttrSet ) );
 }
 
 SvxMacroTabPage_::~SvxMacroTabPage_()
@@ -230,7 +230,7 @@ SvxMacroTabPage_::~SvxMacroTabPage_()
 
 void SvxMacroTabPage_::dispose()
 {
-    DELETEZ( mpImpl );
+    mpImpl.reset();
     SfxTabPage::dispose();
 }
 
@@ -571,7 +571,7 @@ IMPL_LINK_NOARG( SvxMacroTabPage_, DoubleClickHdl_Impl, SvTreeListBox*, bool)
 // handler for double click on the listbox, and for the assign/delete buttons
 void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton* pBtn )
 {
-    SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
+    SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl.get();
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();
     if( !pE || LISTBOX_ENTRY_NOTFOUND == rListBox.GetModel()->GetAbsPos( pE ) )
