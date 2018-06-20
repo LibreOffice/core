@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_8165b7e2",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5868,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2018-06-20T15:59:13Z",
+      "side": 1,
+      "message": "InitFlags() is missing here (ScSingleRefData sucks this way for obsolete C++ reasons).",
+      "range": {
+        "startLine": 5868,
+        "startChar": 4,
+        "endLine": 5868,
+        "endChar": 31
+      },
+      "revId": "4c2b062dee1cbb4a0f56d6e545ade94687fa39fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_6168bbbb",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5883,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2018-06-20T15:59:13Z",
+      "side": 1,
+      "message": "Note that this is usually written as assert() :).",
+      "range": {
+        "startLine": 5883,
+        "startChar": 0,
+        "endLine": 5883,
+        "endChar": 58
+      },
+      "revId": "4c2b062dee1cbb4a0f56d6e545ade94687fa39fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
