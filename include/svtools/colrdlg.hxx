@@ -36,7 +36,7 @@ namespace svtools
 class SVT_DLLPUBLIC SvColorDialog final
 {
 public:
-    SvColorDialog( vcl::Window* pParent );
+    SvColorDialog();
     ~SvColorDialog();
 
     void            SetColor( const Color& rColor );
@@ -44,7 +44,7 @@ public:
 
     void            SetMode( svtools::ColorPickerMode eMode );
 
-    short           Execute();
+    short           Execute(weld::Window* pParent);
 
 private:
     VclPtr<vcl::Window> mpParent;
