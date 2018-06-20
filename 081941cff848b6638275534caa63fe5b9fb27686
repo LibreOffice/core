@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a22e58a_e6cf61b1",
+        "filename": "cui/source/customize/SvxToolbarConfigPage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-06-20T09:32:33Z",
+      "side": 1,
+      "message": "I don\u0027t think it exists a better way. With this you\u0027ll postpone this problem until we will try to get rid of BitmapEx constructors that take Bitmap as parameter, which is fine for me. I imagine we would need a new function on BitmapEx for this - makeTransparent or something like that, that will convert a color to transparency + handle the case where alpha bitmap already exists.",
+      "parentUuid": "5a22e58a_dfe7a3aa",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a22e58a_ffec5f91",
         "filename": "drawinglayer/source/primitive2d/graphicprimitivehelper2d.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-06-06T18:31:58Z",
       "side": 1,
       "message": "and this",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_46467524",
+        "filename": "drawinglayer/source/primitive2d/graphicprimitivehelper2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-06-20T09:32:33Z",
+      "side": 1,
+      "message": "Nah.. this is really awful anyway. We have handle two virtual devices, one for color and one for alpha / mask but VirtualDevice already supports alpha so I don\u0027t understand the complexity here. \nWe\u0027ll need to resolve this when we get more serious with the support of native alpha in OutputDevice, then all this code can just disappear.",
+      "parentUuid": "5a22e58a_ffec5f91",
       "revId": "081941cff848b6638275534caa63fe5b9fb27686",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a22e58a_a65569c7",
+        "filename": "drawinglayer/source/processor2d/vclhelperbufferdevice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-06-20T09:32:33Z",
+      "side": 1,
+      "message": "Nah.. same as previous comment - this is quite awful.",
+      "parentUuid": "5a22e58a_1f021b3f",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a22e58a_3fffd735",
         "filename": "drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2018-06-06T18:31:58Z",
       "side": 1,
       "message": "and this",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_c65265dd",
+        "filename": "drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2058,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-06-20T09:32:33Z",
+      "side": 1,
+      "message": "yeah.. this things make me dizzy. You can\u0027t do it better without rethinking what is doing.",
+      "parentUuid": "5a22e58a_3fffd735",
       "revId": "081941cff848b6638275534caa63fe5b9fb27686",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5a22e58a_e65da1ed",
+        "filename": "drawinglayer/source/tools/converters.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-06-20T09:32:33Z",
+      "side": 1,
+      "message": "Yeah again this processing of color and alpha separately - you can\u0027t do anything about it nd needs to be rewritten when we get native alpha support.",
+      "parentUuid": "5a22e58a_5ffc933e",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a22e58a_7ff94f4d",
         "filename": "svx/source/dialog/svxruler.cxx",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2018-06-06T18:31:58Z",
       "side": 1,
       "message": "and this",
+      "revId": "081941cff848b6638275534caa63fe5b9fb27686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_06639db2",
+        "filename": "svx/source/dialog/svxruler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3378,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-06-20T09:32:33Z",
+      "side": 1,
+      "message": "Same as first comment.",
+      "parentUuid": "5a22e58a_7ff94f4d",
       "revId": "081941cff848b6638275534caa63fe5b9fb27686",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
