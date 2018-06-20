@@ -89,7 +89,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMaskChildWindow : public SfxChildWindo
 
 class MaskData;
 class MaskSet;
-class ColorWindow;
+class BmpColorWindow;
 class SvxColorListBox;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
@@ -98,7 +98,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     friend class MaskSet;
 
     VclPtr<ToolBox>            m_pTbxPipette;
-    VclPtr<ColorWindow>        m_pCtlPipette;
+    VclPtr<BmpColorWindow>     m_pCtlPipette;
     VclPtr<PushButton>         m_pBtnExec;
 
     VclPtr<CheckBox>           m_pCbx1;

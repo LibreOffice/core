@@ -2100,10 +2100,10 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
     {
         //Open a color picker based on SvColorDialog
         ::Color aColor( mnUserPaintColor );
-        SvColorDialog aColorDlg( mpShowWindow);
+        SvColorDialog aColorDlg;
         aColorDlg.SetColor( aColor );
 
-        if (aColorDlg.Execute() )
+        if (aColorDlg.Execute(mpShowWindow->GetFrameWeld()))
         {
             aColor = aColorDlg.GetColor();
             setPenColor(sal_Int32(aColor));

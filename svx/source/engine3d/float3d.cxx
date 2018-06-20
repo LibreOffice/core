@@ -2506,10 +2506,9 @@ IMPL_LINK( Svx3DWin, ClickHdl, Button *, pButton, void )
     }
 }
 
-
 IMPL_LINK( Svx3DWin, ClickColorHdl, Button *, pBtn, void)
 {
-    SvColorDialog aColorDlg( this );
+    SvColorDialog aColorDlg;
     SvxColorListBox* pLb;
 
     if( pBtn == m_pBtnLightColor )
@@ -2526,7 +2525,7 @@ IMPL_LINK( Svx3DWin, ClickColorHdl, Button *, pBtn, void)
     Color aColor = pLb->GetSelectEntryColor();
 
     aColorDlg.SetColor( aColor );
-    if( aColorDlg.Execute() == RET_OK )
+    if( aColorDlg.Execute(GetFrameWeld()) == RET_OK )
     {
         aColor = aColorDlg.GetColor();
         LBSelectColor(pLb, aColor);
