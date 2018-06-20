@@ -217,6 +217,8 @@
                         <property name="can_focus">False</property>
                         <property name="margin_bottom">3</property>
                         <property name="label" translatable="yes" context="colorpage|label22">Custom Palette</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">colorset</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
