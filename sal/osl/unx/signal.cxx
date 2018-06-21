@@ -315,7 +315,10 @@ bool onDeInitSignal()
 
     /* Initialize the rest of the signals */
     for (int i = NoSignals - 1; i >= 0; i--)
-        if (Signals[i].Action != ACT_SYSTEM)
+        if (Signals[i].Action != ACT_SYSTEM
+            && ((bSetSEGVHandler || Signals[i].Signal != SIGSEGV)
+                && (bSetWINCHHandler || Signals[i].Signal != SIGWINCH)
+                && (bSetILLHandler || Signals[i].Signal != SIGILL)))
         {
             if (Signals[i].siginfo) {
                 act.sa_sigaction = reinterpret_cast<Handler2>(
