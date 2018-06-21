@@ -18,6 +18,8 @@
  */
 
 #include <scitems.hxx>
+#include <scextopt.hxx>
+#include <autonamecache.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editeng.hxx>
@@ -234,7 +236,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mxPoolHelper = new ScPoolHelper( this );
 
         pBASM.reset( new ScBroadcastAreaSlotMachine( this ) );
-        pChartListenerCollection = new ScChartListenerCollection( this );
+        pChartListenerCollection.reset( new ScChartListenerCollection( this ) );
         pRefreshTimerControl.reset( new ScRefreshTimerControl );
     }
     else
@@ -383,7 +385,7 @@ ScDocument::~ScDocument()
 
     ScAddInAsync::RemoveDocument( this );
     ScAddInListener::RemoveDocument( this );
-    DELETEZ( pChartListenerCollection);   // before pBASM because of potential Listener!
+    pChartListenerCollection.reset();   // before pBASM because of potential Listener!
 
     DELETEZ(maNonThreaded.pLookupCacheMapImpl);  // before pBASM because of listeners
     DELETEZ(maThreadSpecific.pLookupCacheMapImpl);
