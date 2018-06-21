@@ -177,11 +177,11 @@
     </rng:element>
   </rng:define>
   <rng:define name="key-derivation-attlist">
- <rng:choice>
+    <rng:choice>
       <rng:attribute name="manifest:key-derivation-name">
            <rng:value>PGP</rng:value>
       </rng:attribute>
-<rng:interleave>
+      <rng:interleave>
         <rng:attribute name="manifest:key-derivation-name">
           <rng:choice>
             <rng:value>PBKDF2</rng:value>
@@ -194,7 +194,7 @@
         <rng:attribute name="manifest:iteration-count">
           <rng:ref name="nonNegativeInteger"/>
         </rng:attribute>
-    <rng:optional>
+        <rng:optional>
           <rng:attribute name="manifest:key-size">
             <rng:ref name="nonNegativeInteger"/>
           </rng:attribute>
@@ -205,9 +205,9 @@
   <rng:define name="manifest">
     <rng:element name="manifest:manifest">
       <rng:ref name="manifest-attlist"/>
-       <rng:zeroOrMore>
+      <rng:zeroOrMore>
         <rng:ref name="encrypted-key"/>
-             </rng:zeroOrMore>
+      </rng:zeroOrMore>
     <!-- https://issues.oasis-open.org/browse/OFFICE-3940 -->
       <rng:oneOrMore>
         <rng:ref name="file-entry"/>
@@ -221,7 +221,7 @@
   </rng:define>
   <rng:define name="namespacedToken">
     <rng:data type="QName">
-      <rng:param name="pattern">[^:]:[^:]</rng:param>
+      <rng:param name="pattern">[^:]+:[^:]+</rng:param>
     </rng:data>
   </rng:define>
   <rng:define name="nonNegativeInteger">
