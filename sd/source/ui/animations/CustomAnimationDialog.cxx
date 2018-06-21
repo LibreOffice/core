@@ -2167,9 +2167,9 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
     sal_uInt16 nTimingId = mpTabControl->GetPageId("timing");
     sal_uInt16 nTextAnimId = mpTabControl->GetPageId("textanim");
 
-    mpEffectTabPage = VclPtr<CustomAnimationEffectTabPage>::Create( mpTabControl, mpSet );
+    mpEffectTabPage = VclPtr<CustomAnimationEffectTabPage>::Create( mpTabControl, mpSet.get() );
     mpTabControl->SetTabPage( nEffectId, mpEffectTabPage );
-    mpDurationTabPage = VclPtr<CustomAnimationDurationTabPage>::Create( mpTabControl, mpSet );
+    mpDurationTabPage = VclPtr<CustomAnimationDurationTabPage>::Create( mpTabControl, mpSet.get() );
     mpTabControl->SetTabPage( nTimingId, mpDurationTabPage );
 
     bool bHasText = false;
@@ -2178,7 +2178,7 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
 
     if( bHasText )
     {
-        mpTextAnimTabPage = VclPtr<CustomAnimationTextAnimTabPage>::Create( mpTabControl, mpSet );
+        mpTextAnimTabPage = VclPtr<CustomAnimationTextAnimTabPage>::Create( mpTabControl, mpSet.get() );
         mpTabControl->SetTabPage( nTextAnimId, mpTextAnimTabPage );
     }
     else
@@ -2202,8 +2202,8 @@ void CustomAnimationDialog::dispose()
     mpDurationTabPage.disposeAndClear();
     mpTextAnimTabPage.disposeAndClear();
 
-    delete mpSet;
-    delete mpResultSet;
+    mpSet.reset();
+    mpResultSet.reset();
 
     mpTabControl.clear();
     TabDialog::dispose();
@@ -2211,23 +2211,21 @@ void CustomAnimationDialog::dispose()
 
 STLPropertySet* CustomAnimationDialog::getResultSet()
 {
-    delete mpResultSet;
-
     mpResultSet = createDefaultSet();
 
-    mpEffectTabPage->update( mpResultSet );
-    mpDurationTabPage->update( mpResultSet );
+    mpEffectTabPage->update( mpResultSet.get() );
+    mpDurationTabPage->update( mpResultSet.get() );
     if( mpTextAnimTabPage )
-        mpTextAnimTabPage->update( mpResultSet );
+        mpTextAnimTabPage->update( mpResultSet.get() );
 
-    return mpResultSet;
+    return mpResultSet.get();
 }
 
-STLPropertySet* CustomAnimationDialog::createDefaultSet()
+std::unique_ptr<STLPropertySet> CustomAnimationDialog::createDefaultSet()
 {
     Any aEmpty;
 
-    STLPropertySet* pSet = new STLPropertySet();
+    std::unique_ptr<STLPropertySet> pSet(new STLPropertySet());
     pSet->setPropertyDefaultValue( nHandleMaxParaDepth, makeAny( sal_Int32(-1) ) );
 
     pSet->setPropertyDefaultValue( nHandleHasAfterEffect, makeAny( false ) );
