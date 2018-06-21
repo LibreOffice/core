@@ -3875,7 +3875,7 @@ private:
     void signal_size_allocate(guint nWidth, guint nHeight)
     {
         m_xDevice->SetOutputSizePixel(Size(nWidth, nHeight));
-        m_pSurface = get_underlying_cairo_suface(*m_xDevice);
+        m_pSurface = get_underlying_cairo_surface(*m_xDevice);
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
     }
     static void signalStyleUpdated(GtkWidget*, gpointer widget)
