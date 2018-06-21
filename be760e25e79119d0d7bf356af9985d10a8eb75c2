@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_8ce24b02",
+        "filename": "basctl/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-21T13:36:28Z",
+      "side": 1,
+      "message": "So I\u0027ve been unable to find out where in UI is this string used ...",
+      "revId": "be760e25e79119d0d7bf356af9985d10a8eb75c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_ace70711",
+        "filename": "sc/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-21T13:36:28Z",
+      "side": 1,
+      "message": "and the same with this one ... have you?\n(I\u0027m asking because I\u0027m not sure if \u0027Pages\u0027 is the right replacement here",
+      "revId": "be760e25e79119d0d7bf356af9985d10a8eb75c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
