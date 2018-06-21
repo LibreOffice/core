@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="menu">
@@ -79,7 +79,7 @@
       <object class="GtkMenuItem" id="paste">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="gallerymenu2|paste">_Insert</property>
+        <property name="label" translatable="yes" context="gallerymenu2|paste">_Paste</property>
         <property name="use_underline">True</property>
       </object>
     </child>
