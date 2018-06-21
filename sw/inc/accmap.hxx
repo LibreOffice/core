@@ -91,14 +91,14 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 {
     mutable ::osl::Mutex maMutex;
     ::osl::Mutex maEventMutex;
-    SwAccessibleContextMap_Impl *mpFrameMap;
-    SwAccessibleShapeMap_Impl *mpShapeMap;
+    std::unique_ptr<SwAccessibleContextMap_Impl> mpFrameMap;
+    std::unique_ptr<SwAccessibleShapeMap_Impl> mpShapeMap;
     SwShapeList_Impl mvShapes;
-    SwAccessibleEventList_Impl *mpEvents;
-    SwAccessibleEventMap_Impl *mpEventMap;
+    std::unique_ptr<SwAccessibleEventList_Impl> mpEvents;
+    std::unique_ptr<SwAccessibleEventMap_Impl> mpEventMap;
     // #i27301 data structure to keep information about
     // accessible paragraph, which have a selection.
-    SwAccessibleSelectedParas_Impl* mpSelectedParas;
+    std::unique_ptr<SwAccessibleSelectedParas_Impl> mpSelectedParas;
     SwViewShell *mpVSh;
     /// for page preview: store preview data, VisArea, and mapping of
     /// preview-to-display coordinates
@@ -135,7 +135,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 
         Important note: method has to used inside a mutual exclusive section
     */
-    SwAccessibleSelectedParas_Impl* BuildSelectedParas();
+    std::unique_ptr<SwAccessibleSelectedParas_Impl> BuildSelectedParas();
 
 public:
 
