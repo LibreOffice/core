@@ -1301,8 +1301,7 @@ void SAL_CALL ColorPicker::setTitle( const OUString& sTitle )
 
 sal_Int16 SAL_CALL ColorPicker::execute()
 {
-    VclPtr<vcl::Window> xWin(VCLUnoHelper::GetWindow(mxParent));
-    std::unique_ptr<ColorPickerDialog> xDlg(new ColorPickerDialog(xWin ? xWin->GetFrameWeld() : nullptr, mnColor, mnMode));
+    std::unique_ptr<ColorPickerDialog> xDlg(new ColorPickerDialog(Application::GetFrameWeld(mxParent), mnColor, mnMode));
     sal_Int16 ret = xDlg->run();
     if (ret)
         mnColor = xDlg->GetColor();
