@@ -254,8 +254,8 @@ private:
         std::set<OUString>      aFormatText;
         std::map<LanguageType, DoubleStringArray>
                                 aDoubleStringTable;
-        CollatorWrapper*        pCompareClass;
-        CharClass*              pCharClass;
+        std::unique_ptr<CollatorWrapper>  pCompareClass;
+        std::unique_ptr<CharClass>        pCharClass;
         LanguageType            eLang;
 
         bool bHasSelectionText;
@@ -320,7 +320,7 @@ private:
     VclPtr<CheckBox>       m_pAutoCapsCB;
 
     StringsTable    aStringsTable;
-    CollatorWrapper* pCompareClass;
+    std::unique_ptr<CollatorWrapper> pCompareClass;
     LanguageType    eLang;
 
     DECL_LINK(NewDelButtonHdl, Button*, void);
