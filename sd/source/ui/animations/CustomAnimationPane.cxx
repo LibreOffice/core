@@ -2153,6 +2153,16 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
         {
             CustomAnimationEffectPtr pEffect = (*aIter++);
 
+            // Dispose the deprecated motion path tag. It will be rebuilt later.
+            if (pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH)
+            {
+                for (auto const& xTag: maMotionPathTags)
+                {
+                    if(xTag->getEffect() == pEffect && !xTag->isDisposed())
+                        xTag->Dispose();
+                }
+            }
+
             EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
             if( !pEffectSequence )
                 pEffectSequence = mpMainSequence.get();
