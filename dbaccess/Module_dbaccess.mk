@@ -36,7 +36,7 @@ ifneq ($(OS),IOS)
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_firebird_test \
-	CppunitTest_dbaccess_hsqlbinary_import \
+    $(if,$(ENABLE_JAVA),CppunitTest_dbaccess_hsqlbinary_import) \
 ))
 endif
 
