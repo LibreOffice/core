@@ -20,6 +20,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_fontfeature, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_fontfeature,boost_headers))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_package,vcl_fontfeature,fonts_libertineg))
+endif
+
 $(eval $(call gb_CppunitTest_use_libraries,vcl_fontfeature, \
 	comphelper \
 	cppu \
