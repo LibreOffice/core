@@ -578,26 +578,18 @@ static void ImplDeleteConfigData( ImplConfigData* pData )
     pData->mpFirstGroup = nullptr;
 }
 
-static ImplConfigData* ImplGetConfigData( const OUString& rFileName )
+static std::unique_ptr<ImplConfigData> ImplGetConfigData( const OUString& rFileName )
 {
-    ImplConfigData* pData;
-
-    pData                   = new ImplConfigData;
+    std::unique_ptr<ImplConfigData> pData(new ImplConfigData);
     pData->maFileName       = rFileName;
     pData->mpFirstGroup     = nullptr;
     pData->mnDataUpdateId   = 0;
     pData->meLineEnd        = LINEEND_CRLF;
     pData->mbRead           = false;
     pData->mbIsUTF8BOM      = false;
-    ImplReadConfig( pData );
+    ImplReadConfig( pData.get() );
 
     return pData;
-}
-
-static void ImplFreeConfigData( ImplConfigData* pDelData )
-{
-    ImplDeleteConfigData( pDelData );
-    delete pDelData;
 }
 
 bool Config::ImplUpdateConfig() const
@@ -605,8 +597,8 @@ bool Config::ImplUpdateConfig() const
     // Re-read file if timestamp differs
     if ( mpData->mnTimeStamp != ImplSysGetConfigTimeStamp( maFileName ) )
     {
-        ImplDeleteConfigData( mpData );
-        ImplReadConfig( mpData );
+        ImplDeleteConfigData( mpData.get() );
+        ImplReadConfig( mpData.get() );
         mpData->mnDataUpdateId++;
         return true;
     }
@@ -667,7 +659,7 @@ Config::~Config()
     SAL_INFO("tools.generic", "Config::~Config()" );
 
     Flush();
-    ImplFreeConfigData( mpData );
+    ImplDeleteConfigData( mpData.get() );
 }
 
 void Config::SetGroup(const OString& rGroup)
@@ -973,7 +965,7 @@ OString Config::ReadKey(sal_uInt16 nKey) const
 void Config::Flush()
 {
     if ( mpData->mbModified )
-        ImplWriteConfig( mpData );
+        ImplWriteConfig( mpData.get() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

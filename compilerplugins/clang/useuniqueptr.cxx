@@ -68,6 +68,8 @@ public:
 
     bool VisitCXXMethodDecl(const CXXMethodDecl* );
     bool VisitCompoundStmt(const CompoundStmt* );
+    bool VisitCXXDeleteExpr(const CXXDeleteExpr* );
+    bool TraverseFunctionDecl(FunctionDecl* );
 private:
     void CheckCompoundStmt(const CXXMethodDecl*, const CompoundStmt* );
     void CheckForUnconditionalDelete(const CXXMethodDecl*, const CompoundStmt* );
@@ -79,6 +81,7 @@ private:
     void CheckParenExpr(const CXXMethodDecl*, const ParenExpr*);
     void CheckDeleteExpr(const CXXMethodDecl*, const CXXDeleteExpr*,
         const MemberExpr*, StringRef message);
+    FunctionDecl const * mpCurrentFunctionDecl = nullptr;
 };
 
 bool UseUniquePtr::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
@@ -410,6 +413,65 @@ bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
         "var is here",
         varDecl->getLocStart())
         << varDecl->getSourceRange();
+    return true;
+}
+
+bool UseUniquePtr::TraverseFunctionDecl(FunctionDecl* functionDecl)
+{
+    if (ignoreLocation(functionDecl))
+        return true;
+
+    auto oldCurrent = mpCurrentFunctionDecl;
+    mpCurrentFunctionDecl = functionDecl;
+    bool ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
+    mpCurrentFunctionDecl = oldCurrent;
+
+    return ret;
+}
+
+bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
+{
+    if (!mpCurrentFunctionDecl)
+        return true;
+    if (ignoreLocation(mpCurrentFunctionDecl))
+        return true;
+    if (isInUnoIncludeFile(mpCurrentFunctionDecl->getCanonicalDecl()->getLocStart()))
+        return true;
+    if (mpCurrentFunctionDecl->getIdentifier())
+    {
+        auto name = mpCurrentFunctionDecl->getName();
+        if (name == "delete_IncludesCollection" || name == "convertName"
+            || name == "createNamedType"
+            || name == "typelib_typedescriptionreference_release" || name == "deleteExceptions"
+            || name == "uno_threadpool_destroy"
+            || name == "AddRanges_Impl"
+            || name == "DestroySalInstance"
+            || name == "ImplHandleUserEvent"
+            || name == "releaseDecimalPtr" // TODO, basic
+            || name == "replaceAndReset" // TODO, connectivity
+            || name == "intrusive_ptr_release"
+            || name == "FreeParaList"
+            || name == "DeleteSdrUndoAction" // TODO, sc
+            || name == "lcl_MergeGCBox" || name == "lcl_MergeGCLine" || name == "lcl_DelHFFormat")
+            return true;
+    }
+
+    auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts());
+    if (!declRefExpr)
+        return true;
+    auto varDecl = dyn_cast<ParmVarDecl>(declRefExpr->getDecl());
+    if (!varDecl)
+        return true;
+
+    /*
+    Sometimes we can pass the param as std::unique_ptr<T>& or std::unique_ptr, sometimes the method
+    just needs to be inlined, which normally exposes more simplification.
+    */
+    report(
+        DiagnosticsEngine::Warning,
+        "calling delete on a pointer param, should be either whitelisted here or simplified",
+        deleteExpr->getLocStart())
+        << deleteExpr->getSourceRange();
     return true;
 }
 

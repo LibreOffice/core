@@ -40,13 +40,13 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
                                       sal_uInt16& rNamedWidth,
                                       bool& rHasColor, Color& rColor );
 
-bool sw_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
+bool sw_frmitems_setXMLBorder( std::unique_ptr<editeng::SvxBorderLine>& rpLine,
                                     bool bHasStyle, sal_uInt16 nStyle,
                                     bool bHasWidth, sal_uInt16 nWidth,
                                     sal_uInt16 nNamedWidth,
                                     bool bHasColor, const Color& rColor );
 
-void sw_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
+void sw_frmitems_setXMLBorder( std::unique_ptr<editeng::SvxBorderLine>& rpLine,
                                 sal_uInt16 nWidth, sal_uInt16 nOutWidth,
                                 sal_uInt16 nInWidth, sal_uInt16 nDistance );
 

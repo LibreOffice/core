@@ -172,4 +172,8 @@ class Foo14 {
         }
     }
 };
+void Foo15(int * p)
+{
+    delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted here or simplified [loplugin:useuniqueptr]}}
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
