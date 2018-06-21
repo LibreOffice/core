@@ -227,11 +227,6 @@ SvxLineTabPage::~SvxLineTabPage()
 
 void SvxLineTabPage::dispose()
 {
-    for (SvxBmpItemInfo* pInfo : m_aGrfBrushItems)
-    {
-        delete pInfo->pBrushItem;
-        delete pInfo;
-    }
     m_aGrfBrushItems.clear();
 
     m_pBoxColor.clear();
@@ -294,19 +289,17 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
                 pUIName = &aPhysicalName;
             }
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(grfName, "", GPOS_AREA, SID_ATTR_BRUSH);
-
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
-            pInfo->pBrushItem = pBrushItem;
+            pInfo->pBrushItem.reset(new SvxBrushItem(grfName, "", GPOS_AREA, SID_ATTR_BRUSH));
             pInfo->nItemId = static_cast<sal_uInt16>(MN_GALLERY_ENTRY + i);
             if ( i < m_aGrfBrushItems.size() )
             {
-                m_aGrfBrushItems.insert( m_aGrfBrushItems.begin() + i, pInfo );
+                m_aGrfBrushItems.insert( m_aGrfBrushItems.begin() + i, std::unique_ptr<SvxBmpItemInfo>(pInfo) );
             } else
             {
-                m_aGrfBrushItems.push_back( pInfo );
+                m_aGrfBrushItems.emplace_back( pInfo );
             }
-            const Graphic* pGraphic = pBrushItem->GetGraphic();
+            const Graphic* pGraphic = pInfo->pBrushItem->GetGraphic();
 
             if(pGraphic)
             {
@@ -393,15 +386,13 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
             pObj=pPage->RemoveObject(1);
             SdrObject::Free(pObj);
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH);
-
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
-            pInfo->pBrushItem = pBrushItem;
+            pInfo->pBrushItem.reset(new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH));
             pInfo->nItemId = static_cast<sal_uInt16>(MN_GALLERY_ENTRY + i + m_nNumMenuGalleryItems);
             if ( static_cast<size_t>(m_nNumMenuGalleryItems + i) < m_aGrfBrushItems.size() ) {
-                m_aGrfBrushItems.insert( m_aGrfBrushItems.begin() + m_nNumMenuGalleryItems + i, pInfo );
+                m_aGrfBrushItems.insert( m_aGrfBrushItems.begin() + m_nNumMenuGalleryItems + i, std::unique_ptr<SvxBmpItemInfo>(pInfo) );
             } else {
-                m_aGrfBrushItems.push_back( pInfo );
+                m_aGrfBrushItems.emplace_back( pInfo );
             }
 
             Size aSize(aBitmapEx.GetSizePixel());
@@ -448,7 +439,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton const * pButton)
             m_nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
             bResetSize = true;
         }
-        SvxBmpItemInfo* pInfo = m_aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ];
+        SvxBmpItemInfo* pInfo = m_aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ].get();
         pGraphic = pInfo->pBrushItem->GetGraphic();
     }
     else switch(nItemId)
