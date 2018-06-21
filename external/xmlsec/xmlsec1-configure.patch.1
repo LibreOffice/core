@@ -49,19 +49,8 @@ index 951b3ebe..83fe34cb 100644
  
  XMLSEC_NO_NSS="1"
  NSPR_INCLUDE_PATH=
-@@ -896,6 +909,7 @@ if test "z$with_nss" = "zno" -o "z$with_nspr" = "zno" ; then
+@@ -907,8 +921,8 @@ if test "z$NSPR_FOUND" = "zno" -a "z$with_nspr" != "z" -a "z$with_nspr" != "zyes
  fi
- 
- dnl Priority 1: User specifies the path to installation
-+with_nspr="${WORKDIR}/UnpackedTarball/nss/dist/out"
- if test "z$NSPR_FOUND" = "zno" -a "z$with_nspr" != "z" -a "z$with_nspr" != "zyes" ; then
-     AC_MSG_CHECKING(for nspr library installation in "$with_nspr" folder)
-     if test -f "$with_nspr/include/$NSPR_INCLUDE_MARKER" -a -f "$with_nspr/lib/$NSPR_LIB_MARKER" ; then
-@@ -907,10 +921,11 @@ if test "z$NSPR_FOUND" = "zno" -a "z$with_nspr" != "z" -a "z$with_nspr" != "zyes
-         AC_MSG_ERROR([not found: "$with_nspr/include/$NSPR_INCLUDE_MARKER" and/or "$with_nspr/lib/$NSPR_LIB_MARKER" files don't exist), typo?])
-     fi
- fi
-+with_nss="${WORKDIR}/UnpackedTarball/nss/dist/public"
  if test "z$NSS_FOUND" = "zno" -a "z$with_nss" != "z" -a "z$with_nss" != "zyes" ; then
      AC_MSG_CHECKING(for nss library installation in "$with_nss" folder)
 -    if test -f "$with_nss/include/$NSS_INCLUDE_MARKER" -a -f "$with_nss/lib/$NSS_LIB_MARKER" ; then

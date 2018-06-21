@@ -43,6 +43,8 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 			--without-openssl \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(SYSTEM_NSS),,$(if $(filter MACOSX,$(OS)),--disable-pkgconfig)) \
+			$(if $(SYSTEM_NSS),,--with-nss=$(call gb_UnpackedTarball_get_dir,nss)/dist/public) \
+			$(if $(SYSTEM_NSS),,--with-nspr=$(call gb_UnpackedTarball_get_dir,nss)/dist/out) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include" \
 			LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),",-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN)) \
