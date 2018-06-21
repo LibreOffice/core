@@ -23,7 +23,8 @@ namespace font
 {
 constexpr sal_uInt32 featureCode(const char sFeature[4])
 {
-    return sFeature[0] << 24 | sFeature[1] << 16 | sFeature[2] << 8 | sFeature[3] << 0;
+    return static_cast<sal_uInt32>(sFeature[0]) << 24U | static_cast<sal_uInt32>(sFeature[1]) << 16U
+           | static_cast<sal_uInt32>(sFeature[2]) << 8U | static_cast<sal_uInt32>(sFeature[3]);
 }
 
 VCL_DLLPUBLIC OUString featureCodeAsString(sal_uInt32 nFeature);
