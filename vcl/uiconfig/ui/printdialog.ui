@@ -116,7 +116,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="moreoptions">
+              <object class="GtkButton" id="moreoptionsbtn">
                 <property name="label" translatable="yes" context="printdialog|moreoptions">More Options...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
