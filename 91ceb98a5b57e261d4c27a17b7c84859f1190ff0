@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_6cb42ff2",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-21T13:43:10Z",
+      "side": 1,
+      "message": "Are all those widgets grouped in 1 widget container? (grid, hbox, vbox) If yes, you may make the code less verbose by doing only 1 Enable() over the group container. If no, ignore me",
+      "revId": "91ceb98a5b57e261d4c27a17b7c84859f1190ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
