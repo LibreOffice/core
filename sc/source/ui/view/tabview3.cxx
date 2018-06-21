@@ -1810,7 +1810,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         }
 
         ScSplitPos eOldActive = aViewData.GetActivePart();      // before switching
-        bool bFocus = pGridWin[eOldActive]->HasFocus();
+        bool bFocus = pGridWin[eOldActive] && pGridWin[eOldActive]->HasFocus();
 
         aViewData.SetTabNo( nTab );
         // UpdateShow before SetCursor, so that UpdateAutoFillMark finds the correct
