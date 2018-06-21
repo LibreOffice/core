@@ -945,9 +945,9 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
     osl::MutexGuard aGuard( maEventMutex );
 
     if( !mpEvents )
-        mpEvents = new SwAccessibleEventList_Impl;
+        mpEvents.reset(new SwAccessibleEventList_Impl);
     if( !mpEventMap )
-        mpEventMap = new SwAccessibleEventMap_Impl;
+        mpEventMap.reset(new SwAccessibleEventMap_Impl);
 
     if( mpEvents->IsFiring() )
     {
@@ -1694,13 +1694,10 @@ SwAccessibleMap::~SwAccessibleMap()
                 "Frame map should be empty after disposing the root frame");
         assert((!mpShapeMap || mpShapeMap->empty()) &&
                 "Object map should be empty after disposing the root frame");
-        delete mpFrameMap;
-        mpFrameMap = nullptr;
-        delete mpShapeMap;
-        mpShapeMap = nullptr;
+        mpFrameMap.reset();
+        mpShapeMap.reset();
         mvShapes.clear();
-        delete mpSelectedParas;
-        mpSelectedParas = nullptr;
+        mpSelectedParas.reset();
     }
 
     mpPreview.reset();
@@ -1709,10 +1706,8 @@ SwAccessibleMap::~SwAccessibleMap()
         osl::MutexGuard aGuard( maEventMutex );
         assert(!mpEvents);
         assert(!mpEventMap);
-        delete mpEventMap;
-        mpEventMap = nullptr;
-        delete mpEvents;
-        mpEvents = nullptr;
+        mpEventMap.reset();
+        mpEvents.reset();
     }
     mpVSh->GetLayout()->RemoveAccessibleShell();
 }
@@ -1728,7 +1723,7 @@ uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView_(
 
         if( !mpFrameMap )
         {
-            mpFrameMap = new SwAccessibleContextMap_Impl;
+            mpFrameMap.reset(new SwAccessibleContextMap_Impl);
 #if OSL_DEBUG_LEVEL > 0
             mpFrameMap->mbLocked = false;
 #endif
@@ -1811,7 +1806,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
         osl::MutexGuard aGuard( maMutex );
 
         if( !mpFrameMap && bCreate )
-            mpFrameMap = new SwAccessibleContextMap_Impl;
+            mpFrameMap.reset(new SwAccessibleContextMap_Impl);
         if( mpFrameMap )
         {
             SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->find( pFrame );
@@ -1951,7 +1946,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
         osl::MutexGuard aGuard( maMutex );
 
         if( !mpShapeMap && bCreate )
-            mpShapeMap = new SwAccessibleShapeMap_Impl( this );
+            mpShapeMap.reset(new SwAccessibleShapeMap_Impl( this ));
         if( mpShapeMap )
         {
             SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->find( pObj );
@@ -2126,8 +2121,7 @@ void SwAccessibleMap::RemoveContext( const SwFrame *pFrame )
 
             if( mpFrameMap->empty() )
             {
-                delete mpFrameMap;
-                mpFrameMap = nullptr;
+                mpFrameMap.reset();
             }
         }
     }
@@ -2151,8 +2145,7 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
 
             if( mpShapeMap && mpShapeMap->empty() )
             {
-                delete mpShapeMap;
-                mpShapeMap = nullptr;
+                mpShapeMap.reset();
             }
         }
     }
@@ -3016,11 +3009,8 @@ void SwAccessibleMap::FireEvents()
             for( auto const& aEvent : *mpEvents )
                  FireEvent(aEvent);
 
-            delete mpEventMap;
-            mpEventMap = nullptr;
-
-            delete mpEvents;
-            mpEvents = nullptr;
+            mpEventMap.reset();
+            mpEvents.reset();
         }
     }
     {
@@ -3116,7 +3106,7 @@ bool SwAccessibleMap::ReplaceChild (
         osl::MutexGuard aGuard( maMutex );
 
         if( !mpShapeMap )
-            mpShapeMap = new SwAccessibleShapeMap_Impl( this );
+            mpShapeMap.reset(new SwAccessibleShapeMap_Impl( this ));
 
         // create the new child
         ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
@@ -3272,7 +3262,7 @@ Size SwAccessibleMap::GetPreviewPageSize(sal_uInt16 const nPreviewPageNum) const
     which have a selection
     Important note: method has to be used inside a mutual exclusive section
 */
-SwAccessibleSelectedParas_Impl* SwAccessibleMap::BuildSelectedParas()
+std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedParas()
 {
     // no accessible contexts, no selection
     if ( !mpFrameMap )
@@ -3302,7 +3292,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::BuildSelectedParas()
         return nullptr;
     }
 
-    SwAccessibleSelectedParas_Impl* pRetSelectedParas( nullptr );
+    std::unique_ptr<SwAccessibleSelectedParas_Impl> pRetSelectedParas;
 
     // loop on all cursors
     SwPaM* pRingStart = pCursor;
@@ -3342,8 +3332,8 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::BuildSelectedParas()
                                                 : -1 );
                                 if ( !pRetSelectedParas )
                                 {
-                                    pRetSelectedParas =
-                                            new SwAccessibleSelectedParas_Impl;
+                                    pRetSelectedParas.reset(
+                                            new SwAccessibleSelectedParas_Impl);
                                 }
                                 pRetSelectedParas->emplace( xWeakAcc, aDataEntry );
                             }
@@ -3364,7 +3354,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
     osl::MutexGuard aGuard( maMutex );
 
     // keep previously known selected paragraphs
-    SwAccessibleSelectedParas_Impl* pPrevSelectedParas( mpSelectedParas );
+    std::unique_ptr<SwAccessibleSelectedParas_Impl> pPrevSelectedParas( std::move(mpSelectedParas) );
 
     // determine currently selected paragraphs
     mpSelectedParas = BuildSelectedParas();
@@ -3457,8 +3447,6 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                 }
             }
         }
-
-        delete pPrevSelectedParas;
     }
 }
 
