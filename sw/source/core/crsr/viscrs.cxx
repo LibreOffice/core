@@ -335,7 +335,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
 #if HAVE_FEATURE_DESKTOP
         // get new rects
         std::vector< basegfx::B2DRange > aNewRanges;
-
+        aNewRanges.reserve(size());
         for(size_type a = 0; a < size(); ++a)
         {
             const SwRect aNextRect((*this)[a]);
@@ -414,6 +414,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
             }
 
             std::vector<OString> aRect;
+            aRect.reserve(size());
             for (size_type i = 0; i < size(); ++i)
             {
                 const SwRect& rRect = (*this)[i];
