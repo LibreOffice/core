@@ -148,11 +148,11 @@ public:
 
     STLPropertySet* getResultSet();
 
-    static STLPropertySet* createDefaultSet();
+    static std::unique_ptr<STLPropertySet> createDefaultSet();
 
 private:
-    STLPropertySet* mpSet;
-    STLPropertySet* mpResultSet;
+    std::unique_ptr<STLPropertySet> mpSet;
+    std::unique_ptr<STLPropertySet> mpResultSet;
 
     VclPtr<TabControl> mpTabControl;
 

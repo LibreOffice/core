@@ -109,7 +109,7 @@ private:
     void moveSelection( bool bUp );
     void onPreview( bool bForcePreview );
 
-    STLPropertySet* createSelectionSet();
+    std::unique_ptr<STLPropertySet> createSelectionSet();
     void changeSelection( STLPropertySet const * pResultSet, STLPropertySet const * pOldSet );
 
     static css::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
