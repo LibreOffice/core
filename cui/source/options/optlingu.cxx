@@ -1710,7 +1710,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
     get(m_pLanguageLB, "language");
     m_pLanguageLB->SetStyle(m_pLanguageLB->GetStyle() | WB_SORT);
 
-    pDefaultLinguData = new SvxLinguData_Impl( rLinguData );
+    pDefaultLinguData.reset( new SvxLinguData_Impl( rLinguData ) );
 
     m_pModulesCLB->SetStyle( m_pModulesCLB->GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL );
     m_pModulesCLB->SetForceMakeVisible(true);
@@ -1762,8 +1762,7 @@ SvxEditModulesDlg::~SvxEditModulesDlg()
 
 void SvxEditModulesDlg::dispose()
 {
-    delete pDefaultLinguData;
-    pDefaultLinguData = nullptr;
+    pDefaultLinguData.reset();
     m_pLanguageLB.clear();
     for(sal_uLong i = 0; i < m_pModulesCLB->GetEntryCount(); i++)
         delete static_cast<ModuleUserData_Impl*>(m_pModulesCLB->GetEntry(i)->GetUserData());
