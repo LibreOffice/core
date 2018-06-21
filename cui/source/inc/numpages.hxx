@@ -89,8 +89,8 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
 
     VclPtr<SvxNumValueSet>  m_pExamplesVS;
     SvxNumSettingsArr_Impl  aNumSettingsArr;
-    SvxNumRule*             pActNum;
-    SvxNumRule*             pSaveNum;
+    std::unique_ptr<SvxNumRule> pActNum;
+    std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16              nActNumLvl;
     bool                    bModified   : 1;
     bool                    bPreset     : 1;
@@ -122,8 +122,8 @@ class SvxBulletPickTabPage final : public SfxTabPage
     using TabPage::DeactivatePage;
 
     VclPtr<SvxNumValueSet>     m_pExamplesVS;
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
+    std::unique_ptr<SvxNumRule> pActNum;
+    std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16          nActNumLvl;
     bool                bModified   : 1;
     bool                bPreset     : 1;
@@ -164,8 +164,8 @@ class SvxNumPickTabPage final : public SfxTabPage
 
     SvxNumSettingsArr_Impl  aNumSettingsArrays[NUM_VALUSET_COUNT];  // is initialized with the five formats
 
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
+    std::unique_ptr<SvxNumRule> pActNum;
+    std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16              nActNumLvl;
     sal_uInt16              nNumItemId;
     bool                bModified   : 1;
@@ -207,8 +207,8 @@ class SvxBitmapPickTabPage final : public SfxTabPage
 
     std::vector<OUString> aGrfNames;
 
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
+    std::unique_ptr<SvxNumRule> pActNum;
+    std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16              nActNumLvl;
     sal_uInt16              nNumItemId;
     MapUnit             eCoreUnit;
@@ -283,8 +283,8 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     Timer           aInvalidateTimer;
 
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
+    std::unique_ptr<SvxNumRule> pActNum;
+    std::unique_ptr<SvxNumRule> pSaveNum;
 
     Size                aInitSize[SVX_MAX_NUM];
 
@@ -391,8 +391,8 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     VclPtr<SvxNumberingPreview> m_pPreviewWIN;
 
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
+    std::unique_ptr<SvxNumRule> pActNum;
+    std::unique_ptr<SvxNumRule> pSaveNum;
 
     sal_uInt16              nActNumLvl;
     sal_uInt16              nNumItemId;
