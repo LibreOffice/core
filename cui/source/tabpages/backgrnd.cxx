@@ -161,7 +161,7 @@ private:
     void recalcDrawPos();
 
     bool            bIsBmp;
-    Bitmap*         pBitmap;
+    std::unique_ptr<Bitmap> pBitmap;
     Point           aDrawPos;
     Size            aDrawSize;
     ::tools::Rectangle       aDrawRect;
@@ -195,8 +195,7 @@ BackgroundPreviewImpl::~BackgroundPreviewImpl()
 
 void BackgroundPreviewImpl::dispose()
 {
-    delete pBitmap;
-    pBitmap = nullptr;
+    pBitmap.reset();
     vcl::Window::dispose();
 }
 
@@ -218,9 +217,9 @@ void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
         if (pNewBitmap && pBitmap)
             *pBitmap = *pNewBitmap;
         else if (pNewBitmap && !pBitmap)
-            pBitmap = new Bitmap(*pNewBitmap);
+            pBitmap.reset( new Bitmap(*pNewBitmap) );
         else if (!pNewBitmap)
-            DELETEZ(pBitmap);
+            pBitmap.reset();
 
         recalcDrawPos();
 
