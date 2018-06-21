@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_cc5b6353",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-06-21T17:36:20Z",
+      "side": 1,
+      "message": "I guess, there’s not a lot of sense in linking to this page in permanent commit messages if we’re removing it anyway ;)",
+      "revId": "a28d4cfde49ae8e7f566f3c7d575cc34d960cffa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
