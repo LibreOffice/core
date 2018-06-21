@@ -41,11 +41,6 @@ namespace com{namespace sun{ namespace star{
 
 class SvxBrushItem;
 class SvxNumRule;
-struct SvxBmpItemInfo
-{
-    SvxBrushItem*   pBrushItem;
-    sal_uInt16          nItemId;
-};
 
 enum class NumberingPageType
 {
