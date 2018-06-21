@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a22e58a_09facd42",
+        "filename": "external/xmlsec/xmlsec1-configure.patch.1",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-21T08:24:45Z",
+      "side": 1,
+      "message": "I\u0027ll try to reproduce \u0026 fix that combination, this is not something I considered. Sadly upstream reworked configure.ac quite heavily, so I had to redo this patch (inherited from OOo).",
+      "parentUuid": "5a22e58a_2157a303",
+      "revId": "71198fe7d9539859883b6226738fbea52a08a5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a22e58a_61419b39",
         "filename": "external/xmlsec/xmlsec1-configure.patch.1",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-06-20T15:43:32Z",
       "side": 1,
       "message": "why are changes to configure.ac split into two blocks? does that make the mess more or less readable? :)",
+      "revId": "71198fe7d9539859883b6226738fbea52a08a5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_2995c9e3",
+        "filename": "external/xmlsec/xmlsec1-configure.patch.1",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-21T08:24:45Z",
+      "side": 1,
+      "message": "This last hunk is only needed on macOS, so it was not part of the original patch I create on Linux. It\u0027s also something that (I hope) easy to upstream, so this separate part can be dropped on the next upstream release.",
+      "parentUuid": "5a22e58a_61419b39",
       "revId": "71198fe7d9539859883b6226738fbea52a08a5c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
