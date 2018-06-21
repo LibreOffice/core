@@ -1116,6 +1116,11 @@ libo_FUZZ_ARG_ENABLE(debug,
         [Include debugging information, disable compiler optimization and inlining plus
          extra debugging code like assertions. Extra large build! (enables -g compiler flag).]))
 
+libo_FUZZ_ARG_ENABLE(split-debug,
+    AS_HELP_STRING([--enable-split-debug],
+        [Uses split debug information (-gsplit-dwarf compile flag). Saves disk space and build time,
+         but requires tools that support it (both build tools and debuggers).]))
+
 libo_FUZZ_ARG_ENABLE(sal-log,
     AS_HELP_STRING([--enable-sal-log],
         [Make SAL_INFO and SAL_WARN calls do something even in a non-debug build.]))
@@ -3863,6 +3868,23 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
+
+if test "$enable_split_debug" = yes; then
+    HAVE_GSPLIT_DWARF=
+    if test "$GCC" = "yes"; then
+        AC_MSG_CHECKING([whether $CC supports -gsplit-dwarf])
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -gsplit-dwarf"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_SPLIT_DWARF=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+        if test "$HAVE_GCC_SPLIT_DWARF" = "TRUE"; then
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_RESULT([no])
+        fi
+    fi
+    AC_SUBST(HAVE_GCC_SPLIT_DWARF)
+fi
 
 if test "$enable_sal_log" = yes; then
     ENABLE_SAL_LOG=TRUE
