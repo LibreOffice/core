@@ -880,9 +880,9 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
     bSWriter = pMod == SfxModule::GetActiveModule();
 
     LanguageTag aLanguageTag( eLastDialogLanguage );
-    pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
+    pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
     pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
-    pCharClass = new CharClass( aLanguageTag );
+    pCharClass.reset( new CharClass( aLanguageTag ) );
 
     static long const aTabs[] = { 1, 61 };
     m_pReplaceTLB->SetTabs( SAL_N_ELEMENTS(aTabs), aTabs );
@@ -913,10 +913,8 @@ void OfaAutocorrReplacePage::dispose()
     aDoubleStringTable.clear();
     aChangesTable.clear();
 
-    delete pCompareClass;
-    pCompareClass = nullptr;
-    delete pCharClass;
-    pCharClass = nullptr;
+    pCompareClass.reset();
+    pCharClass.reset();
 
     m_pTextOnlyCB.clear();
     m_pShortED.clear();
@@ -1099,13 +1097,11 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
     {
         RefillReplaceBox(false, eLang, eSet);
         eLastDialogLanguage = eSet;
-        delete pCompareClass;
-        delete pCharClass;
 
         LanguageTag aLanguageTag( eLastDialogLanguage );
-        pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
+        pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
         pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
-        pCharClass = new CharClass( aLanguageTag );
+        pCharClass.reset( new CharClass( aLanguageTag ) );
         ModifyHdl(*m_pShortED);
     }
 }
@@ -1399,7 +1395,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(vcl::Window* pParent, const SfxItem
     get(m_pAutoCapsCB, "autodouble");
 
     css::lang::Locale aLcl( LanguageTag::convertToLocale(eLastDialogLanguage ));
-    pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
+    pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
     pCompareClass->loadDefaultCollator( aLcl, 0 );
 
     m_pNewAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
@@ -1424,7 +1420,7 @@ OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 void OfaAutocorrExceptPage::dispose()
 {
     aStringsTable.clear();
-    delete pCompareClass;
+    pCompareClass.reset();
     m_pAbbrevED.clear();
     m_pAbbrevLB.clear();
     m_pNewAbbrevPB.clear();
@@ -1570,8 +1566,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         // save old settings and fill anew
         RefillReplaceBoxes(false, eLang, eSet);
         eLastDialogLanguage = eSet;
-        delete pCompareClass;
-        pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
+        pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
         pCompareClass->loadDefaultCollator( LanguageTag::convertToLocale( eLastDialogLanguage ), 0 );
         ModifyHdl(*m_pAbbrevED);
         ModifyHdl(*m_pDoubleCapsED);
