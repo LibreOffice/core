@@ -249,7 +249,7 @@ namespace sfx2
             // check whether the document is signed with trusted certificate
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
-                // the trusted macro check will also retrieve the signature state ( small optimization )
+                // the trusted macro check will also retrieve the signature state (small optimization)
                 sal_Bool bHasTrustedMacroSignature = m_pData->m_rDocumentAccess.hasTrustedScriptingSignature( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN );
 
                 sal_uInt16 nSignatureState = m_pData->m_rDocumentAccess.getScriptingSignatureState();
@@ -296,7 +296,7 @@ namespace sfx2
             }
         }
 
-        // conformation is required
+        // confirmation is required
         sal_Bool bSecure = sal_False;
 
         if ( eAutoConfirm == eNoAutoConfirm )
