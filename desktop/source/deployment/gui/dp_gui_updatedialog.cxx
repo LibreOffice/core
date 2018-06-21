@@ -548,14 +548,8 @@ void UpdateDialog::dispose()
 {
     storeIgnoredUpdates();
 
-    for (auto const& listboxEntry : m_ListboxEntries)
-    {
-        delete listboxEntry;
-    }
-    for (auto const& ignoredUpdate : m_ignoredUpdates)
-    {
-        delete ignoredUpdate;
-    }
+    m_ListboxEntries.clear();
+    m_ignoredUpdates.clear();
     m_pUpdates.disposeAndClear();
     m_pchecking.clear();
     m_pthrobber.clear();
@@ -719,7 +713,7 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( ENABLED_UPDATE, nIndex, name );
 
     m_enabledUpdates.push_back( data );
-    m_ListboxEntries.push_back( pEntry );
+    m_ListboxEntries.emplace_back( pEntry );
 
     if ( ! isIgnoredUpdate( pEntry ) )
     {
@@ -742,7 +736,7 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate const & data 
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( DISABLED_UPDATE, nIndex, data.name );
 
     m_disabledUpdates.push_back( data );
-    m_ListboxEntries.push_back( pEntry );
+    m_ListboxEntries.emplace_back( pEntry );
 
     isIgnoredUpdate( pEntry );
     addAdditional( pEntry, SvLBoxButtonKind::DisabledCheckbox );
@@ -755,7 +749,7 @@ void UpdateDialog::addSpecificError( UpdateDialog::SpecificError const & data )
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( SPECIFIC_ERROR, nIndex, data.name );
 
     m_specificErrors.push_back( data );
-    m_ListboxEntries.push_back( pEntry );
+    m_ListboxEntries.emplace_back( pEntry );
 
     addAdditional( pEntry, SvLBoxButtonKind::StaticImage);
 }
@@ -976,7 +970,7 @@ void UpdateDialog::getIgnoredUpdates()
         uno::Any aPropValue( uno::Reference< beans::XPropertySet >( xNameAccess->getByName( aIdentifier ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
         aPropValue >>= aVersion;
         IgnoredUpdate *pData = new IgnoredUpdate( aIdentifier, aVersion );
-        m_ignoredUpdates.push_back( pData );
+        m_ignoredUpdates.emplace_back( pData );
     }
 }
 
@@ -1106,7 +1100,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index const *pIndex, bool bIg
         if ( bIgnore && !bFound )
         {
             IgnoredUpdate *pData = new IgnoredUpdate( aExtensionID, aVersion );
-            m_ignoredUpdates.push_back( pData );
+            m_ignoredUpdates.emplace_back( pData );
         }
     }
 }
@@ -1222,7 +1216,7 @@ IMPL_LINK_NOARG(UpdateDialog, allHandler, CheckBox&, void)
         for (auto const& listboxEntry : m_ListboxEntries)
         {
             if ( listboxEntry->m_bIgnored || ( listboxEntry->m_eKind != ENABLED_UPDATE ) )
-                insertItem( listboxEntry, SvLBoxButtonKind::DisabledCheckbox );
+                insertItem( listboxEntry.get(), SvLBoxButtonKind::DisabledCheckbox );
         }
     }
     else
