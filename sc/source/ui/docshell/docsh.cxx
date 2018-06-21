@@ -134,6 +134,7 @@
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
 #include <refupdatecontext.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <vector>
@@ -2380,7 +2381,10 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         {
             ScExtDocOptions* pExtDocOpt = m_aDocument.GetExtDocOptions();
             if( !pExtDocOpt )
-                m_aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
+            {
+                m_aDocument.SetExtDocOptions( o3tl::make_unique<ScExtDocOptions>() );
+                pExtDocOpt = m_aDocument.GetExtDocOptions();
+            }
             pViewShell->GetViewData().WriteExtOptions( *pExtDocOpt );
 
             /*  #i104990# If the imported document contains a medium

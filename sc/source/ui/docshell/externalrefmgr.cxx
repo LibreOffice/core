@@ -60,6 +60,7 @@
 #include <columnspanset.hxx>
 #include <column.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <algorithm>
@@ -2543,8 +2544,8 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     ScExtDocOptions* pExtOptNew = rSrcDoc.GetExtDocOptions();
     if (!pExtOptNew)
     {
-        pExtOptNew = new ScExtDocOptions;
-        rSrcDoc.SetExtDocOptions(pExtOptNew);
+        rSrcDoc.SetExtDocOptions(o3tl::make_unique<ScExtDocOptions>());
+        pExtOptNew = rSrcDoc.GetExtDocOptions();
     }
     pExtOptNew->GetDocSettings().mnLinkCnt = nLinkCount + 1;
 

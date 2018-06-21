@@ -404,18 +404,17 @@ void ScDocument::StopTemporaryChartLock()
 }
 
 void ScDocument::SetChartListenerCollection(
-            ScChartListenerCollection* pNewChartListenerCollection,
+            std::unique_ptr<ScChartListenerCollection> pNewChartListenerCollection,
             bool bSetChartRangeLists )
 {
-    ScChartListenerCollection* pOld = pChartListenerCollection;
-    pChartListenerCollection = pNewChartListenerCollection;
+    std::unique_ptr<ScChartListenerCollection> pOld = std::move(pChartListenerCollection);
+    pChartListenerCollection = std::move(pNewChartListenerCollection);
     if ( pChartListenerCollection )
     {
         if ( pOld )
             pChartListenerCollection->SetDiffDirty( *pOld, bSetChartRangeLists );
         pChartListenerCollection->StartAllListeners();
     }
-    delete pOld;
 }
 
 void ScDocument::SetScenario( SCTAB nTab, bool bFlag )
@@ -1983,15 +1982,14 @@ tools::Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL 
     return aRect;
 }
 
-void ScDocument::SetExtDocOptions( ScExtDocOptions* pNewOptions )
+void ScDocument::SetExtDocOptions( std::unique_ptr<ScExtDocOptions> pNewOptions )
 {
-    delete pExtDocOptions;
-    pExtDocOptions = pNewOptions;
+    pExtDocOptions = std::move(pNewOptions);
 }
 
-void ScDocument::SetClipOptions(const ScClipOptions& rClipOptions)
+void ScDocument::SetClipOptions(std::unique_ptr<ScClipOptions> pClipOptions)
 {
-    mpClipOptions = o3tl::make_unique<ScClipOptions>(rClipOptions);
+    mpClipOptions = std::move(pClipOptions);
 }
 
 void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,

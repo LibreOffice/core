@@ -231,9 +231,9 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 // Copy document properties from pObjectShell to pClipDoc (to its clip options, as it has no object shell).
                 uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(pObjectShell->GetModel(), uno::UNO_QUERY);
                 uno::Reference<util::XCloneable> xCloneable(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
-                ScClipOptions aOptions;
-                aOptions.m_xDocumentProperties.set(xCloneable->createClone(), uno::UNO_QUERY);
-                pClipDoc->SetClipOptions(aOptions);
+                std::unique_ptr<ScClipOptions> pOptions(new ScClipOptions);
+                pOptions->m_xDocumentProperties.set(xCloneable->createClone(), uno::UNO_QUERY);
+                pClipDoc->SetClipOptions(std::move(pOptions));
             }
 
             pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, bIncludeObjects );

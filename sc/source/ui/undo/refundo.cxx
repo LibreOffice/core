@@ -33,6 +33,7 @@
 #include <unoreflist.hxx>
 #include <scopetools.hxx>
 #include <refupdatecontext.hxx>
+#include <o3tl/make_unique.hxx>
 
 ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     pDBCollection(nullptr),
@@ -166,7 +167,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
 
     // bUndoRefFirst is bSetChartRangeLists
     if ( pChartListenerCollection )
-        pDoc->SetChartListenerCollection( new ScChartListenerCollection(
+        pDoc->SetChartListenerCollection( o3tl::make_unique<ScChartListenerCollection>(
             *pChartListenerCollection ), bUndoRefFirst );
 
     if (pDBCollection || pRangeName)
