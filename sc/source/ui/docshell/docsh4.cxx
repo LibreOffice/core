@@ -114,6 +114,8 @@ using namespace ::com::sun::star;
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <helpids.h>
 
+#include <svx/unobrushitemhelper.hxx>
+
 void ScDocShell::ReloadAllLinks()
 {
     m_aDocument.SetLinkFormulaNeedingCheck(false);
@@ -1688,6 +1690,11 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                             aOldData.InitFromStyle( pStyleSheet );
 
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
+                        rStyleSet.MergeRange( XATTR_FILL_FIRST, XATTR_FILL_LAST );
+
+                        sal_uInt16 nWhich = pStylePool->GetPool().GetWhich( ATTR_BACKGROUND );
+                        SvxBrushItem aBrushItem( static_cast<const SvxBrushItem&>( rStyleSet.Get( nWhich ) ) );
+                        setSvxBrushItemAsFillAttributesToTargetSet( aBrushItem, rStyleSet );
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
@@ -1731,6 +1738,11 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                             rReq.Done();
                         }
                         pDlg.disposeAndClear();
+
+                        // We don't need these anymore and if not removed will cause assert(rItem.GetRefCount()...)
+                        // in SfxItemPool::Remove when bitmap is used for page background
+                        for ( nWhich = XATTR_FILL_FIRST; nWhich <= XATTR_FILL_LAST; nWhich++ )
+                            rStyleSet.ClearItem( nWhich );
                     }
                 }
             }
