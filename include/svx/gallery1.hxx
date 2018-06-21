@@ -86,10 +86,6 @@ class GalleryThemeCacheEntry;
 
 class SVX_DLLPUBLIC Gallery : public SfxBroadcaster
 {
-    // only for gengal utility!
-    friend Gallery* createGallery( const OUString& );
-    friend void     disposeGallery( Gallery* );
-
     typedef std::vector<GalleryThemeCacheEntry*> GalleryCacheThemeList;
 
 private:
@@ -108,12 +104,13 @@ private:
     SAL_DLLPRIVATE GalleryTheme* ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
     SAL_DLLPRIVATE void         ImplDeleteCachedTheme( GalleryTheme const * pTheme );
 
-                                Gallery( const OUString& rMultiPath );
-                                virtual ~Gallery() override;
     Gallery&                    operator=( Gallery const & ) = delete; // MSVC2015 workaround
                                 Gallery( Gallery const & ) = delete; // MSVC2015 workaround
 
 public:
+                                // only for gengal utility!
+                                Gallery( const OUString& rMultiPath );
+                                virtual ~Gallery() override;
 
     static Gallery*             GetGalleryInstance();
 
