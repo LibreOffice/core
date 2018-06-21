@@ -705,12 +705,9 @@ OfaViewTabPage::~OfaViewTabPage()
 
 void OfaViewTabPage::dispose()
 {
-    delete mpDrawinglayerOpt;
-    mpDrawinglayerOpt = nullptr;
-    delete pCanvasSettings;
-    pCanvasSettings = nullptr;
-    delete pAppearanceCfg;
-    pAppearanceCfg = nullptr;
+    mpDrawinglayerOpt.reset();
+    pCanvasSettings.reset();
+    pAppearanceCfg.reset();
     m_pIconSizeLB.clear();
     m_pSidebarIconSizeLB.clear();
     m_pNotebookbarIconSizeLB.clear();
@@ -1290,8 +1287,7 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
 
 void OfaLanguagesTabPage::dispose()
 {
-    delete pLangConfig;
-    pLangConfig = nullptr;
+    pLangConfig.reset();
     m_pUserInterfaceLB.clear();
     m_pLocaleSettingFT.clear();
     m_pLocaleSettingLB.clear();
