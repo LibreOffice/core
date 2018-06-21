@@ -62,7 +62,7 @@ using namespace ::com::sun::star;
 
 SfxBroadcaster* ScDocument::GetDrawBroadcaster()
 {
-    return mpDrawLayer;
+    return mpDrawLayer.get();
 }
 
 void ScDocument::BeginDrawUndo()
@@ -117,7 +117,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         OUString aName;
         if ( mpShell && !mpShell->IsLoading() )       // don't call GetTitle while loading
             aName = mpShell->GetTitle();
-        mpDrawLayer = new ScDrawLayer( this, aName );
+        mpDrawLayer.reset(new ScDrawLayer( this, aName ));
 
         sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
         if (pMgr)
@@ -250,8 +250,7 @@ void ScDocument::DeleteDrawLayer()
             pLocalPool->SetSecondaryPool(nullptr);
         }
     }
-    delete mpDrawLayer;
-    mpDrawLayer = nullptr;
+    mpDrawLayer.reset();
 }
 
 bool ScDocument::DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const
