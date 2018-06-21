@@ -216,6 +216,7 @@ private:
 
 public:
     void            SetLink( const GfxLink& );
+    void            SetSharedLink(const std::shared_ptr<GfxLink>& pGfxLink);
     GfxLink         GetLink() const;
     bool            IsLink() const;
 
