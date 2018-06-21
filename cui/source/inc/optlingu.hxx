@@ -67,7 +67,7 @@ class SvxEditModulesDlg : public ModalDialog
     OUString            sThes;
     OUString            sGrammar;
 
-    SvxLinguData_Impl*  pDefaultLinguData;
+    std::unique_ptr<SvxLinguData_Impl>  pDefaultLinguData;
     SvxLinguData_Impl&  rLinguData;
 
     std::unique_ptr<SvLBoxButtonData>   m_xCheckButtonData;
