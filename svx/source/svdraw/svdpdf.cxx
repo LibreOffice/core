@@ -1113,7 +1113,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     aPolyPoly.transform(aTransform);
 
     float fWidth = 1;
-    FPDFPath_GetStrokeWidth(pPageObject, &fWidth);
+    FPDFPageObj_GetStrokeWidth(pPageObject, &fWidth);
     const double dWidth = 0.5 * fabs(sqrt2(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     mnLineWidth = lcl_ToLogic(lcl_PointToPixel(dWidth));
 
