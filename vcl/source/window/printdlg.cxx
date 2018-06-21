@@ -78,6 +78,48 @@ namespace {
    }
 }
 
+MoreOptionsDialog::MoreOptionsDialog( VclPtr<PrintDialog> i_pParent )
+    : ModalDialog(i_pParent, "MoreOptionsDialog", "vcl/ui/moreoptionsdialog.ui")
+    , mpParent( i_pParent )
+{
+    get(mpOKButton, "ok");
+    get(mpCancelButton, "cancel");
+    get(mpSingleJobsBox, "singlejobs");
+
+    mpSingleJobsBox->Check( mpParent->isSingleJobs() );
+
+    mpOKButton->SetClickHdl( LINK( this, MoreOptionsDialog, ClickHdl ) );
+    mpCancelButton->SetClickHdl( LINK( this, MoreOptionsDialog, ClickHdl ) );
+}
+
+MoreOptionsDialog::~MoreOptionsDialog()
+{
+    disposeOnce();
+}
+
+void MoreOptionsDialog::dispose()
+{
+    mpOKButton.clear();
+    mpCancelButton.clear();
+    mpSingleJobsBox.clear();
+    mpParent.clear();
+    ModalDialog::dispose();
+}
+
+IMPL_LINK ( MoreOptionsDialog, ClickHdl, Button*, pButton, void )
+{
+    if ( pButton == mpOKButton )
+    {
+        mpParent->mbSingleJobs = mpSingleJobsBox->IsChecked();
+        EndDialog( RET_OK );
+    }
+    else if ( pButton == mpCancelButton )
+    {
+        EndDialog( RET_CANCEL );
+    }
+}
+
+
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
     , maMtf()
@@ -496,11 +538,12 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
 , maNoCollateBmp(SV_PRINT_NOCOLLATE_BMP)
 , mnCollateUIMode(0)
 , mbShowLayoutFrame( true )
+, mbSingleJobs( false )
 {
-
     get(mpOKButton, "ok");
     get(mpCancelButton, "cancel");
     get(mpHelpButton, "help");
+    get(mpMoreOptionsBtn, "moreoptionsbtn");
     get(mpTabCtrl, "tabcontrol");
     get(mpPageLayoutFrame, "layoutframe");
     get(mpForwardBtn, "forward");
@@ -620,6 +663,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     mpCancelButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpHelpButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpSetupButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    mpMoreOptionsBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpBackwardBtn->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpForwardBtn->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpPreviewBox->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -667,6 +711,7 @@ void PrintDialog::dispose()
     mpOKButton.clear();
     mpCancelButton.clear();
     mpHelpButton.clear();
+    mpMoreOptionsBtn.clear();
     maPController.reset();
     maControlToPropertyMap.clear();
     maControlToNumValMap.clear();
@@ -696,6 +741,7 @@ void PrintDialog::dispose()
     mpNupOrderWin.clear();
     mpNupOrderTxt.clear();
     mpBorderCB.clear();
+    mpMoreOptionsDlg.disposeAndClear();
     ModalDialog::dispose();
 }
 
@@ -1629,6 +1675,11 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
     else if( pButton == mpBorderCB )
     {
         updateNup();
+    }
+    else if ( pButton == mpMoreOptionsBtn )
+    {
+        mpMoreOptionsDlg = VclPtr< MoreOptionsDialog >::Create( this );
+        mpMoreOptionsDlg->Execute();
     }
     else
     {

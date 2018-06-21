@@ -35,9 +35,27 @@
 
 namespace vcl
 {
+    class MoreOptionsDialog : public ModalDialog
+    {
+        VclPtr<PrintDialog>                     mpParent;
+        VclPtr<OKButton>                        mpOKButton;
+        VclPtr<CancelButton>                    mpCancelButton;
+        VclPtr<CheckBox>                        mpSingleJobsBox;
+
+        DECL_LINK( ClickHdl, Button*, void );
+
+    public:
+
+        MoreOptionsDialog( VclPtr<PrintDialog> i_pParent );
+        virtual ~MoreOptionsDialog() override;
+        virtual void dispose() override;
+    };
+
     class PrintDialog : public ModalDialog
     {
+        friend class MoreOptionsDialog;
     public:
+
         class PrintPreviewWindow : public vcl::Window
         {
             GDIMetaFile         maMtf;
@@ -98,6 +116,7 @@ namespace vcl
 
         bool isPrintToFile();
         bool isCollate();
+        bool isSingleJobs() const { return mbSingleJobs; };
         bool hasPreview();
 
         void previewForward();
@@ -108,6 +127,8 @@ namespace vcl
         std::unique_ptr<VclBuilder>             mpCustomOptionsUIBuilder;
 
         std::shared_ptr<PrinterController>      maPController;
+
+        VclPtr< MoreOptionsDialog >             mpMoreOptionsDlg;
 
         VclPtr<TabControl>                      mpTabCtrl;
         VclPtr<VclFrame>                        mpPageLayoutFrame;
@@ -126,6 +147,7 @@ namespace vcl
         VclPtr<OKButton>                        mpOKButton;
         VclPtr<CancelButton>                    mpCancelButton;
         VclPtr<HelpButton>                      mpHelpButton;
+        VclPtr<PushButton>                      mpMoreOptionsBtn;
 
         VclPtr<PushButton>                      mpBackwardBtn;
         VclPtr<PushButton>                      mpForwardBtn;
@@ -184,6 +206,7 @@ namespace vcl
         Size                                    maFirstPageSize;
 
         bool                                    mbShowLayoutFrame;
+        bool                                    mbSingleJobs;
 
         DECL_LINK( ClickHdl, Button*, void );
         DECL_LINK( SelectHdl, ListBox&, void );
