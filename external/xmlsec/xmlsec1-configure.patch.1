@@ -1,4 +1,4 @@
-From d986998536465ad4244f5b2936bf704485f8906c Mon Sep 17 00:00:00 2001
+From e0474268989c73aa2a1d958d0c73c906203f9df9 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:06:19 +0100
 Subject: [PATCH] xmlsec1-configure.patch
@@ -9,15 +9,27 @@ Conflicts:
 	configure.ac
 	win32/Makefile.msvc
 ---
- configure.ac        | 35 ++++++++++++++++++++++++++++++-----
+ configure.ac        | 44 ++++++++++++++++++++++++++++++++++++++------
  win32/Makefile.msvc |  2 +-
- 2 files changed, 31 insertions(+), 6 deletions(-)
+ 2 files changed, 39 insertions(+), 7 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 951b3ebe..83fe34cb 100644
+index 951b3ebe..3fd7ba08 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -863,15 +863,28 @@ NSS_MIN_VERSION="3.11.1"
+@@ -165,7 +165,10 @@ dnl ==========================================================================
+ dnl Hack for autoconf version mismatch
+ dnl ==========================================================================
+ if test "z$shrext" = "z" ; then
+-    shrext=$shrext_cmds
++    AC_MSG_CHECKING(for shared library suffix)
++    module=no
++    eval shrext=$shrext_cmds
++    AC_MSG_RESULT($shrext)
+ fi
+ 
+ dnl ==========================================================================
+@@ -863,15 +866,28 @@ NSS_MIN_VERSION="3.11.1"
  NSPR_MIN_VERSION="4.4.1"
  SEAMONKEY_MIN_VERSION="1.0"
  MOZILLA_MIN_VERSION="1.4"
@@ -49,19 +61,23 @@ index 951b3ebe..83fe34cb 100644
  
  XMLSEC_NO_NSS="1"
  NSPR_INCLUDE_PATH=
-@@ -896,6 +909,7 @@ if test "z$with_nss" = "zno" -o "z$with_nspr" = "zno" ; then
+@@ -896,6 +912,9 @@ if test "z$with_nss" = "zno" -o "z$with_nspr" = "zno" ; then
  fi
  
  dnl Priority 1: User specifies the path to installation
-+with_nspr="${WORKDIR}/UnpackedTarball/nss/dist/out"
++if test "z$SYSTEM_NSS" = "z"; then
++    with_nspr="${WORKDIR}/UnpackedTarball/nss/dist/out"
++fi
  if test "z$NSPR_FOUND" = "zno" -a "z$with_nspr" != "z" -a "z$with_nspr" != "zyes" ; then
      AC_MSG_CHECKING(for nspr library installation in "$with_nspr" folder)
      if test -f "$with_nspr/include/$NSPR_INCLUDE_MARKER" -a -f "$with_nspr/lib/$NSPR_LIB_MARKER" ; then
-@@ -907,10 +921,11 @@ if test "z$NSPR_FOUND" = "zno" -a "z$with_nspr" != "z" -a "z$with_nspr" != "zyes
+@@ -907,10 +926,13 @@ if test "z$NSPR_FOUND" = "zno" -a "z$with_nspr" != "z" -a "z$with_nspr" != "zyes
          AC_MSG_ERROR([not found: "$with_nspr/include/$NSPR_INCLUDE_MARKER" and/or "$with_nspr/lib/$NSPR_LIB_MARKER" files don't exist), typo?])
      fi
  fi
-+with_nss="${WORKDIR}/UnpackedTarball/nss/dist/public"
++if test "z$SYSTEM_NSS" = "z"; then
++    with_nss="${WORKDIR}/UnpackedTarball/nss/dist/public"
++fi
  if test "z$NSS_FOUND" = "zno" -a "z$with_nss" != "z" -a "z$with_nss" != "zyes" ; then
      AC_MSG_CHECKING(for nss library installation in "$with_nss" folder)
 -    if test -f "$with_nss/include/$NSS_INCLUDE_MARKER" -a -f "$with_nss/lib/$NSS_LIB_MARKER" ; then
@@ -71,7 +87,7 @@ index 951b3ebe..83fe34cb 100644
          NSS_LIB_PATH="$with_nss/lib"
          NSS_FOUND="yes"
          AC_MSG_RESULT([yes])
-@@ -935,6 +950,16 @@ dnl     seamonkey-nspr and seamonkey-nss
+@@ -935,6 +957,16 @@ dnl     seamonkey-nspr and seamonkey-nss
  dnl     mozilla-nspr and mozilla-nss
  dnl     xulrunner-nspr and xulrunner-nss
  dnl     nspr and nss
@@ -102,21 +118,5 @@ index 0689f11b..e7cd5c38 100644
  
  XMLSEC_MSCRYPTO_SOLIBS  = kernel32.lib user32.lib gdi32.lib Crypt32.lib Advapi32.lib
 -- 
-2.16.3
+2.16.4
 
-diff --git a/configure.ac b/configure.ac
-index 951b3ebe..b66bdc10 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -165,7 +165,10 @@ dnl ==========================================================================
- dnl Hack for autoconf version mismatch
- dnl ==========================================================================
- if test "z$shrext" = "z" ; then
--    shrext=$shrext_cmds
-+    AC_MSG_CHECKING(for shared library suffix)
-+    module=no
-+    eval shrext=$shrext_cmds
-+    AC_MSG_RESULT($shrext)
- fi
- 
- dnl ==========================================================================
