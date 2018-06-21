@@ -8,6 +8,7 @@
  */
 
 #include <test/bootstrapfixture.hxx>
+#include <config_test.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
