@@ -78,7 +78,11 @@ public:
 
 /*************************************************************************/
 
-struct SvxBmpItemInfo;
+struct SvxBmpItemInfo
+{
+    std::unique_ptr<SvxBrushItem> pBrushItem;
+    sal_uInt16          nItemId;
+};
 
 class SvxLineTabPage : public SvxTabPage
 {
@@ -132,7 +136,7 @@ private:
     VclPtr<MetricField>        m_pSymbolHeightMF;
     VclPtr<CheckBox>           m_pSymbolRatioCB;
     std::vector<OUString>      m_aGrfNames;
-    std::vector< SvxBmpItemInfo* >
+    std::vector< std::unique_ptr<SvxBmpItemInfo> >
                                m_aGrfBrushItems;
     bool                m_bLastWidthModified;
     Size                m_aSymbolLastSize;
