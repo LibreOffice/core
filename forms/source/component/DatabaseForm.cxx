@@ -2904,13 +2904,13 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
 
     DocumentModifyGuard aModifyGuard( *this );
         // ensures the document is not marked as "modified" just because we change some control's content during
-        // reloading ...
+        // reloading...
 
     EventObject aEvent(static_cast<XWeak*>(this));
     {
         // only if there is no approve listener we can post the event at this time
         // otherwise see approveRowsetChange
-        // the approvement is done by the aggregate
+        // the approval is done by the aggregate
         if (!m_aRowSetApproveListeners.getLength())
         {
             ::comphelper::OInterfaceIteratorHelper2 aIter(m_aLoadListeners);
