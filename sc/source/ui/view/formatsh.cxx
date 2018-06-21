@@ -86,6 +86,8 @@
 
 #include <memory>
 
+#include <svx/unobrushitemhelper.hxx>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -857,6 +859,13 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 pTabViewShell->SetInFormatDialog(true);
 
+                SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
+                rStyleSet.MergeRange( XATTR_FILL_FIRST, XATTR_FILL_LAST );
+
+                sal_uInt16 nWhich = pStylePool->GetPool().GetWhich( ATTR_BACKGROUND );
+                SvxBrushItem aBrushItem( static_cast<const SvxBrushItem&>( rStyleSet.Get( nWhich ) ) );
+                setSvxBrushItemAsFillAttributesToTargetSet( aBrushItem, rStyleSet );
+
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 pDlg.disposeAndReset(pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc ));
@@ -941,6 +950,11 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         pDocSh->PostPaintGridAll();
                     }
                 }
+
+                // If these are not removed from the set an assert(rItem.GetRefCount()...) happens
+                // in SfxItemPool::Remove when bitmap is used for page background
+                for ( nWhich = XATTR_FILL_FIRST; nWhich <= XATTR_FILL_LAST; nWhich++ )
+                    rStyleSet.ClearItem( nWhich );
             }
         }
 

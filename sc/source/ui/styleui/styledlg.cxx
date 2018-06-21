@@ -102,9 +102,9 @@ ScStyleDlg::ScStyleDlg( vcl::Window*             pParent,
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
                 AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-                m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ), "GetTabPageRangesFunc fail!");
+                m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ) );
                 m_nHeaderId = AddTabPage("header", &ScHeaderPage::Create,      &ScHeaderPage::GetRanges );
                 m_nFooterId = AddTabPage("footer", &ScFooterPage::Create,      &ScFooterPage::GetRanges );
                 AddTabPage("sheet", &ScTablePage::Create,     &ScTablePage::GetRanges );
