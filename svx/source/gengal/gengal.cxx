@@ -56,28 +56,12 @@ protected:
     void DeInit() override;
 };
 
-Gallery* createGallery( const OUString& rURL )
-{
-    return new Gallery( rURL );
-}
-
-void disposeGallery( Gallery* pGallery )
-{
-    delete pGallery;
-}
-
 static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL,
                          const OUString& aDestDir, std::vector<INetURLObject> &rFiles,
                          bool bRelativeURLs )
 {
-    Gallery* pGallery;
+    std::unique_ptr<Gallery> pGallery(new Gallery( aGalleryURL ));
 
-    pGallery = createGallery( aGalleryURL );
-    if (!pGallery ) {
-            fprintf( stderr, "Couldn't create '%s'\n",
-                     OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-            exit( 1 );
-    }
     fprintf( stderr, "Work on gallery '%s'\n",
              OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -127,8 +111,6 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
     }
 
     pGallery->ReleaseTheme( pGalTheme, aListener );
-
-    disposeGallery( pGallery );
 }
 
 static int PrintHelp()
