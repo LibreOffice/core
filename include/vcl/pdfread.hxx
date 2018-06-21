@@ -31,6 +31,11 @@ class Graphic;
 
 namespace vcl
 {
+/// Fills the rBitmaps vector with rendered pages.
+VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
+                                      const size_t nFirstPage = 0, int nPages = 1,
+                                      const double fResolutionDPI = 96.);
+
 /// Imports a PDF stream into rGraphic as a GDIMetaFile.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, size_t nPageIndex,
                              css::uno::Sequence<sal_Int8>& rPdfData,
