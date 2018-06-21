@@ -21,6 +21,7 @@
 
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
+#include <memory>
 
 struct ImplConfigData;
 struct ImplGroupData;
@@ -30,7 +31,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Config
 private:
     OUString            maFileName;
     OString             maGroupName;
-    ImplConfigData*     mpData;
+    std::unique_ptr<ImplConfigData> mpData;
     ImplGroupData*      mpActGroup;
     sal_uInt32          mnDataUpdateId;
 

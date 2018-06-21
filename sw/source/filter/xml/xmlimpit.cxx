@@ -224,32 +224,24 @@ SvXMLImportItemMapper::finished(SfxItemSet &, SvXMLUnitConverter const&) const
 
 struct BoxHolder
 {
-    SvxBorderLine* pTop;
-    SvxBorderLine* pBottom;
-    SvxBorderLine* pLeft;
-    SvxBorderLine* pRight;
+    std::unique_ptr<SvxBorderLine> pTop;
+    std::unique_ptr<SvxBorderLine> pBottom;
+    std::unique_ptr<SvxBorderLine> pLeft;
+    std::unique_ptr<SvxBorderLine> pRight;
 
     BoxHolder(BoxHolder const&) = delete;
     BoxHolder& operator=(BoxHolder const&) = delete;
 
     explicit BoxHolder(SvxBoxItem const & rBox)
     {
-        pTop    = rBox.GetTop() == nullptr ?
-            nullptr : new SvxBorderLine( *rBox.GetTop() );
-        pBottom = rBox.GetBottom() == nullptr ?
-            nullptr : new SvxBorderLine( *rBox.GetBottom() );
-        pLeft   = rBox.GetLeft() == nullptr ?
-            nullptr : new SvxBorderLine( *rBox.GetLeft() );
-        pRight  = rBox.GetRight() == nullptr ?
-            nullptr : new SvxBorderLine( *rBox.GetRight() );
-    }
-
-    ~BoxHolder()
-    {
-        delete pTop;
-        delete pBottom;
-        delete pLeft;
-        delete pRight;
+        if (rBox.GetTop())
+            pTop.reset(new SvxBorderLine( *rBox.GetTop() ));
+        if (rBox.GetBottom())
+            pBottom.reset(new SvxBorderLine( *rBox.GetBottom() ));
+        if (rBox.GetLeft())
+            pLeft.reset(new SvxBorderLine( *rBox.GetLeft() ));
+        if (rBox.GetRight())
+            pRight.reset(new SvxBorderLine( *rBox.GetRight() ));
     }
 };
 
@@ -576,10 +568,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 break;
             }
 
-            rBox.SetLine( aBoxes.pTop,    SvxBoxItemLine::TOP    );
-            rBox.SetLine( aBoxes.pBottom, SvxBoxItemLine::BOTTOM );
-            rBox.SetLine( aBoxes.pLeft,   SvxBoxItemLine::LEFT   );
-            rBox.SetLine( aBoxes.pRight,  SvxBoxItemLine::RIGHT  );
+            rBox.SetLine( aBoxes.pTop.get(),    SvxBoxItemLine::TOP    );
+            rBox.SetLine( aBoxes.pBottom.get(), SvxBoxItemLine::BOTTOM );
+            rBox.SetLine( aBoxes.pLeft.get(),   SvxBoxItemLine::LEFT   );
+            rBox.SetLine( aBoxes.pRight.get(),  SvxBoxItemLine::RIGHT  );
 
             bOk = true;
         }
