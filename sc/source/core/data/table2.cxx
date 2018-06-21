@@ -1129,19 +1129,20 @@ void ScTable::CopyToTable(
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
 
+    bool bIsUndoDoc = pDestTab->pDocument->IsUndo();
     if (nFlags != InsertDeleteFlags::NONE)
     {
         InsertDeleteFlags nTempFlags( nFlags &
                 ~InsertDeleteFlags( InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES));
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyToColumn(rCxt, nRow1, nRow2, nTempFlags, bMarked,
+            aCol[i].CopyToColumn(rCxt, nRow1, nRow2, bIsUndoDoc ? nFlags : nTempFlags, bMarked,
                                 pDestTab->aCol[i], pMarkData, bAsLink, bGlobalNamesToLocal);
     }
 
     if (!bColRowFlags)      // Column widths/Row heights/Flags
         return;
 
-    if(pDestTab->pDocument->IsUndo() && (nFlags & InsertDeleteFlags::ATTRIB))
+    if(bIsUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB))
     {
         pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
     }
@@ -1249,7 +1250,7 @@ void ScTable::CopyToTable(
     if(nFlags & InsertDeleteFlags::OUTLINE) // also only when bColRowFlags
         pDestTab->SetOutlineTable( pOutlineTable.get() );
 
-    if (bCopyCaptions && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)))
+    if (!bIsUndoDoc && bCopyCaptions && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)))
     {
         bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
         CopyCaptionsToTable( nCol1, nRow1, nCol2, nRow2, pDestTab, bCloneCaption);
