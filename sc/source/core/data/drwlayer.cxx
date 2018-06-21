@@ -451,11 +451,6 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
-            if ( IsNoteCaption( pOldObject ) )
-            {
-                pOldObject = aIter.Next();
-                continue;
-            }
             ScDrawObjData* pOldData = GetObjData(pOldObject);
             if (pOldData)
             {
