@@ -1321,7 +1321,9 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
         ocInfo,
         ocStyle,
         ocDBSum,
-        ocExternal
+        ocExternal,
+        ocDde,
+        ocWebservice
     });
 
     // Don't enable threading once we decided to disable it.
