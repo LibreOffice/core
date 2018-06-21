@@ -18,7 +18,8 @@ pdfium_patches += 0001-svx-import-PDF-text-using-PDFium.patch.2
 pdfium_patches += 0002-svx-more-accurate-PDF-text-importing.patch.2
 pdfium_patches += 0003-svx-import-PDF-images-as-BGRA.patch.2
 pdfium_patches += 0004-svx-support-PDF-text-color.patch.2
-pdfium_patches += 0005-svx-support-Paths-in-PDFs-while-importing.patch.2
+# Backport of <https://pdfium-review.googlesource.com/32770>.
+pdfium_patches += 0005-svx-support-Paths-in-PDFs-while-importing.patch.1
 pdfium_patches += 0006-svx-improve-path-importing-from-PDF.patch.2
 pdfium_patches += 0007-svx-improved-text-importing-from-PDF.patch.2
 pdfium_patches += 0008-svx-correct-the-positioning-of-PDF-Paths-and-the-str.patch.2

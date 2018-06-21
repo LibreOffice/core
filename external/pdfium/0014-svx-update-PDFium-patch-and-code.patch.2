@@ -87,51 +87,6 @@ index 29c8b01..a52e1a9 100644
    }
  
    return nullptr;
-diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
-index e14b2a5..4351649 100644
---- a/pdfium/public/fpdf_edit.h
-+++ b/pdfium/public/fpdf_edit.h
-@@ -660,32 +660,32 @@ FPDFPageObj_GetStrokeColor(FPDF_PAGEOBJECT page_object,
-                            unsigned int* B,
-                            unsigned int* A);
- 
--// Set the stroke width of a path.
-+// Get the stroke width of a path.
- //
- // path   - the handle to the path object.
- // width  - the width of the stroke.
- //
- // Returns TRUE on success
- FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
--FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width);
-+FPDFPath_GetStrokeWidth(FPDF_PAGEOBJECT path, float* width);
- 
--// Set the stroke width of a page object.
-+// Set the stroke width of a path.
- //
--// path   - the handle to the page object.
-+// path   - the handle to the path object.
- // width  - the width of the stroke.
- //
- // Returns TRUE on success
- FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
--FPDFPageObj_SetStrokeWidth(FPDF_PAGEOBJECT page_object, float width);
-+FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width);
- 
--// Get the stroke width of a path.
-+// Set the stroke width of a page object.
- //
--// path   - the handle to the path object.
-+// path   - the handle to the page object.
- // width  - the width of the stroke.
- //
- // Returns TRUE on success
- FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
--FPDFPath_GetStrokeWidth(FPDF_PAGEOBJECT path, float* width);
-+FPDFPageObj_SetStrokeWidth(FPDF_PAGEOBJECT page_object, float width);
- 
- // Set the line join of |page_object|.
- //
 -- 
 2.16.3
 
