@@ -156,18 +156,13 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
         {
             sal_Int8    nAction = DND_ACTION_COPY;
-            SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
-            bool bSelectionReplaced(false);
+            SdrObject* pPickObj;
 
-            if( pPickObj )
+            if( ( ( pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() ) ) && mbReplaceExistingImage ) || (pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC ) ) )
             {
                 nAction = DND_ACTION_LINK;
-            }
-            else if(mbReplaceExistingImage && mpView->GetMarkedObjectCount() == 1)
-            {
-                pPickObj = mpView->GetMarkedObjectByIndex(0);
-                nAction = DND_ACTION_MOVE;
-                bSelectionReplaced = true;
+            } else {
+                pPickObj = nullptr;
             }
 
             Point aPos;
@@ -202,11 +197,6 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
                     aReferer = mpDocSh->GetMedium()->GetName();
                 }
                 pGrafObj->SetGraphicLink(aFileName, aReferer, aFilterName);
-            }
-
-            if(bSelectionReplaced && pGrafObj)
-            {
-                mpView->MarkObj(pGrafObj, mpView->GetSdrPageView());
             }
         }
     }
