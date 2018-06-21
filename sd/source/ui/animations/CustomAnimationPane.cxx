@@ -919,7 +919,7 @@ void CustomAnimationPane::UpdateLook()
     }
 }
 
-void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
+void addValue( std::unique_ptr<STLPropertySet>& pSet, sal_Int32 nHandle, const Any& rValue )
 {
     switch( pSet->getPropertyState( nHandle ) )
     {
@@ -1124,9 +1124,9 @@ static bool hasVisibleShape( const Reference< XShape >& xShape )
     return true;
 }
 
-STLPropertySet* CustomAnimationPane::createSelectionSet()
+std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
 {
-    STLPropertySet* pSet = CustomAnimationDialog::createDefaultSet();
+    std::unique_ptr<STLPropertySet> pSet = CustomAnimationDialog::createDefaultSet();
 
     pSet->setPropertyValue( nHandleCurrentPage, makeAny( mxCurrentPage ) );
 
@@ -1649,13 +1649,13 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
 void CustomAnimationPane::showOptions(const OString& sPage)
 {
-    STLPropertySet* pSet = createSelectionSet();
+    std::unique_ptr<STLPropertySet> pSet = createSelectionSet();
 
-    VclPtrInstance< CustomAnimationDialog > pDlg(this, pSet, sPage);
+    VclPtrInstance< CustomAnimationDialog > pDlg(this, pSet.get(), sPage);
     if( pDlg->Execute() )
     {
         addUndo();
-        changeSelection( pDlg->getResultSet(), pSet );
+        changeSelection( pDlg->getResultSet(), pSet.get() );
         updateControls();
     }
 }
