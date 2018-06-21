@@ -2381,7 +2381,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
                     tools::Rectangle aDestRect = pTransClip->GetMMRect( 0, 0,
                             static_cast<SCCOL>(aClipRange.aEnd.Row() - aClipRange.aStart.Row()),
                             static_cast<SCROW>(aClipRange.aEnd.Col() - aClipRange.aStart.Col()), i );
-                    pTransClip->mpDrawLayer->CopyFromClip( mpDrawLayer, i, aSourceRect, ScAddress(0,0,i), aDestRect );
+                    pTransClip->mpDrawLayer->CopyFromClip( mpDrawLayer.get(), i, aSourceRect, ScAddress(0,0,i), aDestRect );
                 }
             }
 
@@ -2649,7 +2649,7 @@ void ScDocument::CopyBlockFromClip(
                     tools::Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
                                     nCol1-nDx, nRow1-nDy, nCol2-nDx, nRow2-nDy, nClipTab );
                     tools::Rectangle aDestRect = GetMMRect( nCol1, nRow1, nCol2, nRow2, i );
-                    mpDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer, nClipTab, aSourceRect,
+                    mpDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer.get(), nClipTab, aSourceRect,
                                                 ScAddress( nCol1, nRow1, i ), aDestRect );
                 }
             }
@@ -3984,7 +3984,7 @@ void ScDocument::CompileXML()
 
     // set AutoNameCache to speed up automatic name lookup
     OSL_ENSURE( !pAutoNameCache, "AutoNameCache already set" );
-    pAutoNameCache = new ScAutoNameCache( this );
+    pAutoNameCache.reset( new ScAutoNameCache( this ) );
 
     if (pRangeName)
         pRangeName->CompileUnresolvedXML(aCxt);
@@ -3998,7 +3998,7 @@ void ScDocument::CompileXML()
     );
     StartAllListeners();
 
-    DELETEZ( pAutoNameCache );  // valid only during CompileXML, where cell contents don't change
+    pAutoNameCache.reset();  // valid only during CompileXML, where cell contents don't change
 
     if ( pValidationList )
     {
@@ -6731,10 +6731,9 @@ bool ScDocument::ContainsNotesInRange( const ScRangeList& rRangeList ) const
     return false;
 }
 
-void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )
+void ScDocument::SetAutoNameCache( std::unique_ptr<ScAutoNameCache> pCache )
 {
-    delete pAutoNameCache;
-    pAutoNameCache = pCache;
+    pAutoNameCache = std::move(pCache);
 }
 
 thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;

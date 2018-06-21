@@ -366,7 +366,7 @@ private:
     SfxObjectShell*     mpShell;
     VclPtr<SfxPrinter>  mpPrinter;
     VclPtr<VirtualDevice> mpVirtualDevice_100th_mm;
-    ScDrawLayer*        mpDrawLayer;                    // SdrModel
+    std::unique_ptr<ScDrawLayer> mpDrawLayer;           // SdrModel
     rtl::Reference<XColorList> pColorList;
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable* pFormatExchangeList;    // for application of number formats
@@ -382,7 +382,7 @@ private:
     ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack (start)
     ScFormulaCell*      pEOFormulaTrack;                // BroadcastTrack (end), last cell
     std::unique_ptr<ScBroadcastAreaSlotMachine> pBASM;                  // BroadcastAreas
-    ScChartListenerCollection* pChartListenerCollection;
+    std::unique_ptr<ScChartListenerCollection> pChartListenerCollection;
     std::unique_ptr<SvMemoryStream>     pClipData;
     std::unique_ptr<ScDetOpList>        pDetOpList;
     std::unique_ptr<ScChangeTrack>      pChangeTrack;
@@ -414,13 +414,13 @@ private:
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
-    ScViewOptions*      pViewOptions;                   // view options
-    ScDocOptions*       pDocOptions;                    // document options
-    ScExtDocOptions*    pExtDocOptions;                 // for import etc.
+    std::unique_ptr<ScViewOptions>   pViewOptions;      // view options
+    std::unique_ptr<ScDocOptions>    pDocOptions;       // document options
+    std::unique_ptr<ScExtDocOptions> pExtDocOptions;    // for import etc.
     std::unique_ptr<ScClipOptions> mpClipOptions;       // clipboard options
     std::unique_ptr<ScConsolidateParam> pConsolidateDlgData;
 
-    ScAutoNameCache*    pAutoNameCache;                 // for automatic name lookup during CompileXML
+    std::unique_ptr<ScAutoNameCache> pAutoNameCache;    // for automatic name lookup during CompileXML
 
     std::unique_ptr<SfxItemSet> pPreviewFont; // convert to std::unique_ptr or whatever
     ScStyleSheet*       pPreviewCellStyle;
@@ -591,11 +591,11 @@ public:
     SC_DLLPUBLIC void                   SetViewOptions( const ScViewOptions& rOpt );
     void                                SetPrintOptions();
 
-    ScExtDocOptions*            GetExtDocOptions()  { return pExtDocOptions; }
-    SC_DLLPUBLIC void           SetExtDocOptions( ScExtDocOptions* pNewOptions );
+    ScExtDocOptions*            GetExtDocOptions()  { return pExtDocOptions.get(); }
+    SC_DLLPUBLIC void           SetExtDocOptions( std::unique_ptr<ScExtDocOptions> pNewOptions );
 
     ScClipOptions*              GetClipOptions()    { return mpClipOptions.get(); }
-    void                        SetClipOptions(const ScClipOptions& rClipOptions);
+    void                        SetClipOptions(std::unique_ptr<ScClipOptions> pClipOptions);
 
     SC_DLLPUBLIC void           GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
     void                        SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
@@ -992,8 +992,8 @@ public:
 
     SfxBindings*                    GetViewBindings();
     SfxObjectShell*                 GetDocumentShell() const    { return mpShell; }
-    SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return mpDrawLayer;  }
-    SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return mpDrawLayer;  }
+    SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return mpDrawLayer.get();  }
+    SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return mpDrawLayer.get();  }
     SfxBroadcaster*                 GetDrawBroadcaster();       // to avoid header
     void                            BeginDrawUndo();
 
@@ -1269,7 +1269,7 @@ public:
      */
     bool CompileErrorCells(FormulaError nErrCode);
 
-    ScAutoNameCache*     GetAutoNameCache()     { return pAutoNameCache; }
+    ScAutoNameCache*     GetAutoNameCache()     { return pAutoNameCache.get(); }
     void                 SetPreviewFont( std::unique_ptr<SfxItemSet> pFontSet );
     SfxItemSet*          GetPreviewFont() { return pPreviewFont.get(); }
     SfxItemSet*          GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab );
@@ -1278,7 +1278,7 @@ public:
     ScStyleSheet*        GetPreviewCellStyle() { return pPreviewCellStyle; }
     ScStyleSheet*        GetPreviewCellStyle( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void                 SetPreviewCellStyle( ScStyleSheet* pStyle ) { pPreviewCellStyle = pStyle; }
-    SC_DLLPUBLIC  void   SetAutoNameCache(  ScAutoNameCache* pCache );
+    SC_DLLPUBLIC  void   SetAutoNameCache(  std::unique_ptr<ScAutoNameCache> pCache );
 
                     /** Creates a ScLookupCache cache for the range if it
                         doesn't already exist. */
@@ -2045,8 +2045,8 @@ public:
     bool            GetNoListening() const { return bNoListening; }
     ScBroadcastAreaSlotMachine* GetBASM() const { return pBASM.get(); }
 
-    SC_DLLPUBLIC ScChartListenerCollection* GetChartListenerCollection() const { return pChartListenerCollection;}
-    void                  SetChartListenerCollection( ScChartListenerCollection*,
+    SC_DLLPUBLIC ScChartListenerCollection* GetChartListenerCollection() const { return pChartListenerCollection.get(); }
+    void                  SetChartListenerCollection( std::unique_ptr<ScChartListenerCollection>,
                                                        bool bSetChartRangeLists );
     void                  UpdateChart( const OUString& rName );
     void                  RestoreChartListener( const OUString& rName );

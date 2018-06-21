@@ -106,15 +106,15 @@ inline sal_uInt16 getScaleValue(SfxStyleSheetBase& rStyle, sal_uInt16 nWhich)
 
 void ScDocument::ImplCreateOptions()
 {
-    pDocOptions  = new ScDocOptions();
-    pViewOptions = new ScViewOptions();
+    pDocOptions.reset( new ScDocOptions() );
+    pViewOptions.reset( new ScViewOptions() );
 }
 
 void ScDocument::ImplDeleteOptions()
 {
-    delete pDocOptions;
-    delete pViewOptions;
-    delete pExtDocOptions;
+    pDocOptions.reset();
+    pViewOptions.reset();
+    pExtDocOptions.reset();
 }
 
 SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)

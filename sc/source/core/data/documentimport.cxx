@@ -173,7 +173,7 @@ void ScDocumentImport::setSheetName(SCTAB nTab, const OUString& rName)
 void ScDocumentImport::setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uInt16 nDay)
 {
     if (!mpImpl->mrDoc.pDocOptions)
-        mpImpl->mrDoc.pDocOptions = new ScDocOptions;
+        mpImpl->mrDoc.pDocOptions.reset( new ScDocOptions );
 
     mpImpl->mrDoc.pDocOptions->SetDate(nDay, nMonth, nYear);
 }

@@ -536,8 +536,8 @@ ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
     ScExtDocOptions*    pExtDocOpt = rDoc.GetExtDocOptions();
     if( !pExtDocOpt )
     {
-        pExtDocOpt = new ScExtDocOptions;
-        rDoc.SetExtDocOptions( pExtDocOpt );
+        rDoc.SetExtDocOptions( o3tl::make_unique<ScExtDocOptions>() );
+        pExtDocOpt = rDoc.GetExtDocOptions();
     }
     pExtDocOpt->GetDocSettings().mnLinkCnt = nRekCnt;
 

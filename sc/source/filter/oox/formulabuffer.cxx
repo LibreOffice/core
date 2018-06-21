@@ -23,6 +23,7 @@
 #include <tokenstringcontext.hxx>
 #include <oox/token/tokens.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sheet;
@@ -343,7 +344,7 @@ void FormulaBuffer::finalizeImport()
     ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
 
     ScDocumentImport& rDoc = getDocImport();
-    rDoc.getDoc().SetAutoNameCache(new ScAutoNameCache(&rDoc.getDoc()));
+    rDoc.getDoc().SetAutoNameCache(o3tl::make_unique<ScAutoNameCache>(&rDoc.getDoc()));
     ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
 
     SCTAB nTabCount = rDoc.getDoc().GetTableCount();

@@ -158,7 +158,7 @@ void ScTable::CopyOneCellFromClip(
                 rSrcStartPos.Col(), rSrcStartPos.Row(), rSrcEndPos.Col(), rSrcEndPos.Row(),
                 rSrcStartPos.Tab());
             tools::Rectangle aDestRect = GetDoc().GetMMRect(nCol1, nRow1, nCol2, nRow2, nTab);
-            pDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer, rSrcStartPos.Tab(),
+            pDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer.get(), rSrcStartPos.Tab(),
                                      aSourceRect, ScAddress(nCol1, nRow1, nTab), aDestRect);
         }
     }
