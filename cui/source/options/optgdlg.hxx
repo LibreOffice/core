@@ -112,9 +112,9 @@ private:
     sal_Int32      nNotebookbarSizeLB_InitialSelection;
     sal_Int32      nStyleLB_InitialSelection;
 
-    SvtTabAppearanceCfg*    pAppearanceCfg;
-    CanvasSettings*         pCanvasSettings;
-    SvtOptionsDrawinglayer* mpDrawinglayerOpt;
+    std::unique_ptr<SvtTabAppearanceCfg>    pAppearanceCfg;
+    std::unique_ptr<CanvasSettings>         pCanvasSettings;
+    std::unique_ptr<SvtOptionsDrawinglayer> mpDrawinglayerOpt;
     std::unique_ptr<svt::OpenGLCfg> mpOpenGLConfig;
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
@@ -160,7 +160,7 @@ class OfaLanguagesTabPage : public SfxTabPage
 
     bool        m_bOldAsian;
     bool        m_bOldCtl;
-    LanguageConfig_Impl*    pLangConfig;
+    std::unique_ptr<LanguageConfig_Impl> pLangConfig;
 
     OUString        m_sUserLocaleValue;
     OUString        m_sSystemDefaultString;
