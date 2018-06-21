@@ -259,6 +259,8 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("paste"));
     }
 
+    mpPopupMenu->SetItemText(mpPopupMenu->GetItemId("paste"), Button::GetStandardText(StandardButtonType::Paste));
+
     // update status
     css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider(
         GalleryBrowser2::GetFrame(), css::uno::UNO_QUERY );
