@@ -543,22 +543,31 @@ $(WORKDIR)/Clean/LinkTarget/% :
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dwo_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dwo_target,$(object))) \
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_dep_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_dwo_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dwo_target,$(object))) \
 		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_target,$(object))) \
 		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_dep_target,$(object))) \
+		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_dwo_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dep_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dwo_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dwo_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dwo_target,$(object))) \
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dwo_target,$(object))) \
 		$(call gb_LinkTarget_get_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_dep_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_headers_target,$(LINKTARGET)) \

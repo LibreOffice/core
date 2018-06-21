@@ -188,6 +188,10 @@ else
 gb_DEBUGINFO_FLAGS=-g2
 endif
 
+ifeq ($(HAVE_GCC_SPLIT_DWARF),TRUE)
+gb_DEBUGINFO_FLAGS+=-gsplit-dwarf
+endif
+
 ifeq ($(HAVE_GCC_FINLINE_LIMIT),TRUE)
 FINLINE_LIMIT0=-finline-limit=0
 endif
