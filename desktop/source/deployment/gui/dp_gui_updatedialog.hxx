@@ -194,8 +194,8 @@ private:
     std::vector< dp_gui::UpdateData > m_enabledUpdates;
     std::vector< UpdateDialog::DisabledUpdate > m_disabledUpdates;
     std::vector< UpdateDialog::SpecificError > m_specificErrors;
-    std::vector< UpdateDialog::IgnoredUpdate* > m_ignoredUpdates;
-    std::vector< Index* > m_ListboxEntries;
+    std::vector< std::unique_ptr<UpdateDialog::IgnoredUpdate> > m_ignoredUpdates;
+    std::vector< std::unique_ptr<Index> > m_ListboxEntries;
     std::vector< dp_gui::UpdateData > & m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
     css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;

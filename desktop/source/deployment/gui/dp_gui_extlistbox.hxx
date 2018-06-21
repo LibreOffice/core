@@ -140,8 +140,8 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     std::vector< TEntry_Impl > m_vEntries;
     std::vector< TEntry_Impl > m_vRemovedEntries;
 
-    css::lang::Locale    *m_pLocale;
-    CollatorWrapper      *m_pCollator;
+    std::unique_ptr<css::lang::Locale> m_pLocale;
+    std::unique_ptr<CollatorWrapper>   m_pCollator;
 
     //Holds weak references to extensions to which is we have added an XEventListener
     std::vector< css::uno::WeakReference<
