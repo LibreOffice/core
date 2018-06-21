@@ -77,6 +77,27 @@ namespace {
    }
 }
 
+PrintDialog::MoreOptionsDialog::MoreOptionsDialog( vcl::Window* i_pParent )
+    : ModalDialog(i_pParent, "MoreOptionsDialog", "vcl/ui/moreoptionsdialog.ui")
+{
+    get(mpOKButton, "ok");
+    get(mpCancelButton, "cancel");
+    get(mpSingleJobsBox, "singlejobs");
+}
+
+PrintDialog::MoreOptionsDialog::~MoreOptionsDialog()
+{
+    disposeOnce();
+}
+
+void PrintDialog::MoreOptionsDialog::dispose()
+{
+    mpOKButton.clear();
+    mpCancelButton.clear();
+    mpSingleJobsBox.clear();
+    ModalDialog::dispose();
+}
+
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
     , maMtf()
@@ -495,11 +516,12 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
 , maNoCollateBmp(SV_PRINT_NOCOLLATE_BMP)
 , mnCollateUIMode(0)
 , mbShowLayoutFrame( true )
+, mbSingleJobs( false )
 {
-
     get(mpOKButton, "ok");
     get(mpCancelButton, "cancel");
     get(mpHelpButton, "help");
+    get(mpMoreOptionsBtn, "moreoptionsbtn");
     get(mpTabCtrl, "tabcontrol");
     get(mpPageLayoutFrame, "layoutframe");
     get(mpForwardBtn, "forward");
@@ -533,7 +555,6 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     get(mpSheetMarginEdt, "sheetmarginsb");
     get(mpSheetMarginTxt2, "sheetmargintxt2");
     get(mpBorderCB, "bordercb");
-
     // save printbutton text, gets exchanged occasionally with print to file
     maPrintText = mpOKButton->GetText();
 
@@ -618,10 +639,13 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     mpCancelButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpHelpButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpSetupButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    mpMoreOptionsBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpBackwardBtn->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpForwardBtn->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpPreviewBox->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpBorderCB->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    //mpMoreOptionsDlg->mpOKButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
+    //mpMoreOptionsDlg->mpCancelButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
 
     // setup toggle hdl
     mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
@@ -1607,6 +1631,16 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
     else if( pButton == mpBorderCB )
     {
         updateNup();
+    }
+    else if ( pButton == mpMoreOptionsBtn )
+    {
+        mpMoreOptionsDlg = VclPtr< MoreOptionsDialog >::Create( nullptr );
+        mpMoreOptionsDlg->Execute();
+    }
+    else if ( pButton == mpMoreOptionsDlg->mpOKButton )
+    {
+        mbSingleJobs = mpMoreOptionsDlg->mpSingleJobsBox->IsChecked();
+        mpMoreOptionsDlg->EndDialog( RET_OK );
     }
     else
     {

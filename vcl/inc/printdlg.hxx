@@ -38,6 +38,19 @@ namespace vcl
     class PrintDialog : public ModalDialog
     {
     public:
+
+        class MoreOptionsDialog : public ModalDialog
+        {
+        public:
+            VclPtr<OKButton>                        mpOKButton;
+            VclPtr<CancelButton>                    mpCancelButton;
+            VclPtr<CheckBox>                        mpSingleJobsBox;
+
+            MoreOptionsDialog( vcl::Window* i_pParent );
+            virtual ~MoreOptionsDialog() override;
+            virtual void dispose() override;
+        };
+
         class PrintPreviewWindow : public vcl::Window
         {
             GDIMetaFile         maMtf;
@@ -98,6 +111,7 @@ namespace vcl
 
         bool isPrintToFile();
         bool isCollate();
+        bool isSingleJobs() const { return mbSingleJobs; };
         bool hasPreview();
 
         void previewForward();
@@ -108,6 +122,8 @@ namespace vcl
         std::unique_ptr<VclBuilder>             mpCustomOptionsUIBuilder;
 
         std::shared_ptr<PrinterController>      maPController;
+
+        VclPtr< MoreOptionsDialog >             mpMoreOptionsDlg;
 
         VclPtr<TabControl>                      mpTabCtrl;
         VclPtr<VclFrame>                        mpPageLayoutFrame;
@@ -126,6 +142,7 @@ namespace vcl
         VclPtr<OKButton>                        mpOKButton;
         VclPtr<CancelButton>                    mpCancelButton;
         VclPtr<HelpButton>                      mpHelpButton;
+        VclPtr<PushButton>                      mpMoreOptionsBtn;
 
         VclPtr<PushButton>                      mpBackwardBtn;
         VclPtr<PushButton>                      mpForwardBtn;
@@ -183,6 +200,7 @@ namespace vcl
         Size                                    maFirstPageSize;
 
         bool                                    mbShowLayoutFrame;
+        bool                                    mbSingleJobs;
 
         DECL_LINK( ClickHdl, Button*, void );
         DECL_LINK( SelectHdl, ListBox&, void );
