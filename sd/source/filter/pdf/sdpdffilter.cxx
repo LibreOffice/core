@@ -111,7 +111,7 @@ bool SdPdfFilter::Import()
     const size_t nGraphicContentSize = aPdfData.getLength();
     std::unique_ptr<sal_uInt8[]> pGraphicContent(new sal_uInt8[nGraphicContentSize]);
     memcpy(pGraphicContent.get(), aPdfData.get(), nGraphicContentSize);
-    GfxLink aGfxLink(std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf);
+    std::shared_ptr<GfxLink> pGfxLink = std::make_shared<GfxLink>(std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf);
     auto pPdfData = std::make_shared<uno::Sequence<sal_Int8>>(aPdfData);
 
     mrDocument.CreateFirstPages();
@@ -127,7 +127,7 @@ bool SdPdfFilter::Import()
         Graphic aGraphic(aBitmap);
         aGraphic.setPdfData(pPdfData);
         aGraphic.setPageNumber(nPageNumber);
-        aGraphic.SetLink(aGfxLink);
+        aGraphic.SetSharedLink(pGfxLink);
         aGraphic.setOriginURL(aFileName);
 
         // Create the page and insert the Graphic.
