@@ -220,10 +220,8 @@ SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 
 void SvxSingleNumPickTabPage::dispose()
 {
-    delete pActNum;
-    pActNum = nullptr;
-    delete pSaveNum;
-    pSaveNum = nullptr;
+    pActNum.reset();
+    pSaveNum.reset();
     m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
@@ -261,8 +259,7 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        delete pSaveNum;
-        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -270,7 +267,7 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pExamplesVS->SetNoSelection();
     }
 
-    if(pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset))
+    if(pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset))
     {
         m_pExamplesVS->SelectItem(1);
         NumSelectHdl_Impl(m_pExamplesVS);
@@ -306,11 +303,10 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
         }
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    delete pSaveNum;
-    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     if(!pActNum)
-        pActNum = new  SvxNumRule(*pSaveNum);
+        pActNum.reset( new SvxNumRule(*pSaveNum) );
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
 }
@@ -386,10 +382,8 @@ SvxBulletPickTabPage::~SvxBulletPickTabPage()
 
 void SvxBulletPickTabPage::dispose()
 {
-    delete pActNum;
-    pActNum = nullptr;
-    delete pSaveNum;
-    pSaveNum = nullptr;
+    pActNum.reset();
+    pSaveNum.reset();
     m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
@@ -426,8 +420,7 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        delete pSaveNum;
-        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -435,7 +428,7 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pExamplesVS->SetNoSelection();
     }
 
-    if(pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset))
+    if(pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset))
     {
         m_pExamplesVS->SelectItem(1);
         NumSelectHdl_Impl(m_pExamplesVS);
@@ -470,11 +463,10 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    delete pSaveNum;
-    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     if(!pActNum)
-        pActNum = new  SvxNumRule(*pSaveNum);
+        pActNum.reset( new SvxNumRule(*pSaveNum) );
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
 }
@@ -585,10 +577,8 @@ SvxNumPickTabPage::~SvxNumPickTabPage()
 
 void SvxNumPickTabPage::dispose()
 {
-    delete pActNum;
-    pActNum = nullptr;
-    delete pSaveNum;
-    pSaveNum = nullptr;
+    pActNum.reset();
+    pSaveNum.reset();
     m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
@@ -625,8 +615,7 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        delete pSaveNum;
-        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -634,7 +623,7 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pExamplesVS->SetNoSelection();
     }
 
-    if(pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset))
+    if(pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset))
     {
         m_pExamplesVS->SelectItem(1);
         NumSelectHdl_Impl(m_pExamplesVS);
@@ -669,11 +658,10 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    delete pSaveNum;
-    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     if(!pActNum)
-        pActNum = new  SvxNumRule(*pSaveNum);
+        pActNum.reset( new SvxNumRule(*pSaveNum) );
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
 
@@ -835,10 +823,8 @@ SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 
 void SvxBitmapPickTabPage::dispose()
 {
-    delete pActNum;
-    pActNum = nullptr;
-    delete pSaveNum;
-    pSaveNum = nullptr;
+    pActNum.reset();
+    pSaveNum.reset();
     m_pBtBrowseFile.clear();
     m_pErrorText.clear();
     m_pExamplesVS.clear();
@@ -866,8 +852,7 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        delete pSaveNum;
-        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -876,7 +861,7 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
 
     if(!aGrfNames.empty() &&
-        (pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset)))
+        (pActNum && (lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset)))
     {
         m_pExamplesVS->SelectItem(1);
         NumSelectHdl_Impl(m_pExamplesVS);
@@ -927,11 +912,10 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    delete pSaveNum;
-    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     if(!pActNum)
-        pActNum = new  SvxNumRule(*pSaveNum);
+        pActNum.reset( new SvxNumRule(*pSaveNum) );
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
 }
@@ -1195,10 +1179,8 @@ SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 
 void SvxNumOptionsTabPage::dispose()
 {
-    delete pActNum;
-    pActNum = nullptr;
-    delete pSaveNum;
-    pSaveNum = nullptr;
+    pActNum.reset();
+    pSaveNum.reset();
     m_pLevelLB.clear();
     m_pFmtLB.clear();
     m_pSeparatorFT.clear();
@@ -1264,8 +1246,7 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        delete pSaveNum;
-        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
 
     bModified = (!pActNum->Get( 0 ) || bPreset);
@@ -1329,8 +1310,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    delete pSaveNum;
-    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     // insert levels
     if(!m_pLevelLB->GetEntryCount())
@@ -1366,10 +1346,10 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     m_pLevelLB->SetUpdateMode(true);
 
     if(!pActNum)
-        pActNum = new  SvxNumRule(*pSaveNum);
+        pActNum.reset( new SvxNumRule(*pSaveNum) );
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
-    m_pPreviewWIN->SetNumRule(pActNum);
+    m_pPreviewWIN->SetNumRule(pActNum.get());
     m_pSameLevelCB->Check(pActNum->IsContinuousNumbering());
 
     SfxObjectShell* pShell;
@@ -2674,10 +2654,8 @@ SvxNumPositionTabPage::~SvxNumPositionTabPage()
 
 void SvxNumPositionTabPage::dispose()
 {
-    delete pActNum;
-    pActNum = nullptr;
-    delete pSaveNum;
-    pSaveNum = nullptr;
+    pActNum.reset();
+    pSaveNum.reset();
     m_pLevelLB.clear();
     m_pDistBorderFT.clear();
     m_pDistBorderMF.clear();
@@ -2935,8 +2913,7 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
-        delete pSaveNum;
-        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+        pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
     }
     bModified = (!pActNum->Get( 0 ) || bPreset);
     if(*pSaveNum != *pActNum ||
@@ -3010,8 +2987,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
 
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    delete pSaveNum;
-    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+    pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     // insert levels
     if(!m_pLevelLB->GetEntryCount())
@@ -3048,10 +3024,10 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
     m_pLevelLB->SetUpdateMode(true);
 
     if(!pActNum)
-        pActNum = new  SvxNumRule(*pSaveNum);
+        pActNum.reset( new SvxNumRule(*pSaveNum) );
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
-    m_pPreviewWIN->SetNumRule(pActNum);
+    m_pPreviewWIN->SetNumRule(pActNum.get());
 
     InitPosAndSpaceMode();
     ShowControlsDependingOnPosAndSpaceMode();
