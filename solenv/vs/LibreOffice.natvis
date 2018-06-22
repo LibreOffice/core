@@ -88,7 +88,7 @@
     <DisplayString>X:{nA}, Y:{nB}</DisplayString>
   </Type>
   <Type Name="Size">
-    <DisplayString>Width:{nA}, Height:{nB}</DisplayString>
+    <DisplayString>W:{nA}, H:{nB}</DisplayString>
   </Type>
   <Type Name="Range">
     <DisplayString>Min:{nA}, Max:{nB}</DisplayString>
@@ -401,6 +401,53 @@
         <ValueNode>*mProperties[$i]</ValueNode>
       </IndexListItems>
       <Item Name='Type'>maType</Item>
+    </Expand>
+  </Type>
+  <Type Name='SwFrame'>
+    <DisplayString IncludeView='min'>{mnFrameType,en} of {mpUpper->mnFrameType,en} {(void*)mpUpper}</DisplayString>
+    <DisplayString Condition='!mpUpper'>{{{mnFrameType,en}}}</DisplayString>
+    <DisplayString>{{{*this,view(min)}}}</DisplayString>
+    <Expand>
+      <Synthetic Name='Frame'>
+        <DisplayString>Area: {maFrameArea}; Print Area: {maFramePrintArea}</DisplayString>
+        <Expand>
+          <Item Name='Area'>maFrameArea</Item>
+          <Item Name='Print Area'>maFramePrintArea</Item>
+        </Expand>
+      </Synthetic>
+      <Item Name='Upper'>mpUpper</Item>
+    </Expand>
+  </Type>
+  <Type Name='SwLayoutFrame'>
+    <DisplayString>{(SwFrame&amp;)*this}</DisplayString>
+    <Expand>
+      <ExpandedItem>(SwFrame&amp;)(*this)</ExpandedItem>
+      <Synthetic Name='Lowers' Condition='m_pLower'>
+        <Expand>
+          <CustomListItems>
+            <Variable Name="pChild" InitialValue="m_pLower"/>
+            <Loop>
+              <Break Condition="!pChild"/>
+              <Item>pChild</Item>
+              <Exec>pChild = pChild->mpNext</Exec>
+            </Loop>
+          </CustomListItems>
+        </Expand>
+      </Synthetic>
+    </Expand>
+  </Type>
+  <Type Name="SwRowFrame">
+    <DisplayString Condition="m_bIsRepeatedHeadline">{{Headline {(SwFrame&amp;)*this,view(min)}}}</DisplayString>
+    <DisplayString>{(SwFrame&amp;)*this}</DisplayString>
+    <Expand>
+      <ExpandedItem>(SwLayoutFrame&amp;)(*this)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="SwTabFrame">
+    <DisplayString Condition="m_pPrecede">{{Follow {(SwFrame&amp;)*this,view(min)}}}</DisplayString>
+    <DisplayString>{(SwFrame&amp;)*this}</DisplayString>
+    <Expand>
+      <ExpandedItem>(SwLayoutFrame&amp;)(*this)</ExpandedItem>
     </Expand>
   </Type>
 </AutoVisualizer>
