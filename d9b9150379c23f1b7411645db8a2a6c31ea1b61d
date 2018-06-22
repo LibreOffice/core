@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_b27cc221",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3406,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-22T18:16:38Z",
+      "side": 1,
+      "message": "this looks like it\u0027s assuming that these two functions lcl_convertIntoFullWidth/lcl_convertIntoHalfWidth will never both be used inside the same instance of LO ? Since after this change you will only have one instance of TransliterationWrapper around, initialised to whatever mode was first used",
+      "revId": "d9b9150379c23f1b7411645db8a2a6c31ea1b61d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
