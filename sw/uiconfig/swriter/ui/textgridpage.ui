@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentCHARSPERLINE">
     <property name="lower">1</property>
     <property name="upper">233</property>
@@ -17,6 +16,20 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentMetric">
+    <property name="lower">1</property>
+    <property name="upper">5600</property>
+    <property name="value">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentMetric1">
+    <property name="lower">1</property>
+    <property name="upper">5600</property>
+    <property name="value">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentMetric2">
     <property name="lower">1</property>
     <property name="upper">5600</property>
     <property name="value">10</property>
@@ -61,7 +74,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radioRB_LINESGRID</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -77,7 +89,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radioRB_CHARSGRID</property>
+                        <property name="group">radioRB_NOGRID</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -125,7 +137,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="swlo-SwPageGridExample" id="drawingareaWN_EXAMPLE">
+                  <object class="GtkDrawingArea" id="drawingareaWN_EXAMPLE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
@@ -285,10 +297,11 @@
                         <property name="column_spacing">12</property>
                         <property name="row_homogeneous">True</property>
                         <child>
-                          <object class="GtkSpinButton" id="spinMF_CHARWIDTH:0pt">
+                          <object class="GtkSpinButton" id="spinMF_CHARWIDTH">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="adjustment">adjustmentMetric</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentMetric2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -302,7 +315,7 @@
                             <property name="halign">start</property>
                             <property name="label" translatable="yes" context="textgridpage|labelFT_CHARWIDTH">Character _width:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMF_CHARWIDTH:0pt</property>
+                            <property name="mnemonic_widget">spinMF_CHARWIDTH</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -316,7 +329,7 @@
                             <property name="halign">start</property>
                             <property name="label" translatable="yes" context="textgridpage|labelFT_RUBYSIZE">Max. Ruby text size:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMF_RUBYSIZE:0pt</property>
+                            <property name="mnemonic_widget">spinMF_RUBYSIZE</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -324,10 +337,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinMF_RUBYSIZE:0pt">
+                          <object class="GtkSpinButton" id="spinMF_RUBYSIZE">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="adjustment">adjustmentMetric</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentMetric1</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -341,7 +355,7 @@
                             <property name="halign">start</property>
                             <property name="label" translatable="yes" context="textgridpage|labelFT_TEXTSIZE">Max. base text size:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinMF_TEXTSIZE:0pt</property>
+                            <property name="mnemonic_widget">spinMF_TEXTSIZE</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -349,9 +363,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinMF_TEXTSIZE:0pt">
+                          <object class="GtkSpinButton" id="spinMF_TEXTSIZE">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentMetric</property>
                           </object>
                           <packing>
@@ -378,9 +393,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -435,8 +450,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
                     <property name="halign">start</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0.14000000059604645</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -451,9 +466,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -477,11 +492,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxColorListBox" id="listLB_COLOR">
+                  <object class="GtkMenuButton" id="listLB_COLOR">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
