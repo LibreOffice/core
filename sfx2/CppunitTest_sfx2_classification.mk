@@ -28,8 +28,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_classification, \
 
 $(eval $(call gb_CppunitTest_use_external,sfx2_classification,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sfx2_classification))
-
 $(eval $(call gb_CppunitTest_use_ure,sfx2_classification))
 $(eval $(call gb_CppunitTest_use_vcl,sfx2_classification))
 
