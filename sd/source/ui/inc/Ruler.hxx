@@ -51,7 +51,7 @@ public:
 
 private:
     DrawViewShell* pDrViewShell;
-    RulerCtrlItem* pCtrlItem;
+    std::unique_ptr<RulerCtrlItem> pCtrlItem;
     bool bHorz;
 
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
