@@ -132,11 +132,8 @@ void ScFuncDesc::Clear()
     maDefArgDescs.clear();
     pDefArgFlags = nullptr;
 
-    delete pFuncName;
-    pFuncName = nullptr;
-
-    delete pFuncDesc;
-    pFuncDesc = nullptr;
+    pFuncName.reset();
+    pFuncDesc.reset();
 
     nFIndex = 0;
     nCategory = 0;
@@ -885,14 +882,14 @@ ScFunctionList::ScFunctionList()
         pLegacyFuncData->getParamDesc( aArgName, aArgDesc, 0 );
         pDesc->nFIndex     = nNextId++; //  ??? OpCode vergeben
         pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
-        pDesc->pFuncName   = new OUString(pLegacyFuncData->GetInternalName().toAsciiUpperCase());
+        pDesc->pFuncName.reset(new OUString(pLegacyFuncData->GetInternalName().toAsciiUpperCase()));
 
         OUStringBuffer aBuf(aArgDesc);
         aBuf.append('\n');
         aBuf.append("( AddIn: ");
         aBuf.append(pLegacyFuncData->GetModuleName());
         aBuf.append(" )");
-        pDesc->pFuncDesc = new OUString(aBuf.makeStringAndClear());
+        pDesc->pFuncDesc.reset(new OUString(aBuf.makeStringAndClear()));
 
         pDesc->nArgCount   = nArgs;
         if (nArgs)
@@ -1244,8 +1241,8 @@ ScFuncRes::ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc* pDesc, bool& rbSu
         }
     }
 
-    pDesc->pFuncName = new OUString(ScCompiler::GetNativeSymbol(static_cast<OpCode>(nOpCode)));
-    pDesc->pFuncDesc = new OUString(ScResId(rEntry.pResource[0]));
+    pDesc->pFuncName.reset(new OUString(ScCompiler::GetNativeSymbol(static_cast<OpCode>(nOpCode))));
+    pDesc->pFuncDesc.reset(new OUString(ScResId(rEntry.pResource[0])));
 
     if (nArgs)
     {
