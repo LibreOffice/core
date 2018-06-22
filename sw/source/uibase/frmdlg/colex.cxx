@@ -194,6 +194,159 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     Invalidate();
 }
 
+void PageExample::UpdateExample( const SfxItemSet& rSet )
+{
+    if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR))
+    {
+        const SvxFrameDirectionItem& rDirItem = rSet.Get(RES_FRAMEDIR);
+        m_bVertical = rDirItem.GetValue() == SvxFrameDirection::Vertical_RL_TB||
+                    rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
+    }
+
+    SfxItemPool* pPool = rSet.GetPool();
+    sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
+    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
+    {
+        // alignment
+        const SvxPageItem* pPage = static_cast<const SvxPageItem*>(&rSet.Get( nWhich ));
+
+        if ( pPage )
+            SetUsage( pPage->GetPageUsage() );
+    }
+
+    nWhich = pPool->GetWhich( SID_ATTR_PAGE_SIZE );
+
+    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
+    {
+        // orientation and size from PageItem
+        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get( nWhich ));
+        SetSize( rSize.GetSize() );
+    }
+    nWhich = RES_LR_SPACE;
+    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
+    {
+        // set left and right border
+        const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get( nWhich ));
+
+        SetLeft( rLRSpace.GetLeft() );
+        SetRight( rLRSpace.GetRight() );
+    }
+    else
+    {
+        SetLeft( 0 );
+        SetRight( 0 );
+    }
+
+    nWhich = RES_UL_SPACE;
+
+    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
+    {
+        // set upper and lower border
+        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get( nWhich ));
+
+        SetTop( rULSpace.GetUpper() );
+        SetBottom( rULSpace.GetLower() );
+    }
+    else
+    {
+        SetTop( 0 );
+        SetBottom( 0 );
+    }
+
+    // evaluate header-attributes
+    const SfxPoolItem* pItem;
+    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
+            false, &pItem ) )
+    {
+        const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+        const SfxBoolItem& rHeaderOn =
+            static_cast<const SfxBoolItem&>(rHeaderSet.Get( pPool->GetWhich( SID_ATTR_PAGE_ON ) ) );
+
+        if ( rHeaderOn.GetValue() )
+        {
+            const SvxSizeItem& rSize =
+                static_cast<const SvxSizeItem&>(rHeaderSet.Get(pPool->GetWhich(SID_ATTR_PAGE_SIZE)));
+
+            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rHeaderSet.Get(
+                                        pPool->GetWhich(SID_ATTR_ULSPACE)));
+            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rHeaderSet.Get(
+                                        pPool->GetWhich(SID_ATTR_LRSPACE)));
+
+            SetHdHeight( rSize.GetSize().Height() - rUL.GetLower());
+            SetHdDist( rUL.GetLower() );
+            SetHdLeft( rLR.GetLeft() );
+            SetHdRight( rLR.GetRight() );
+            SetHeader( true );
+
+            if(SfxItemState::SET == rHeaderSet.GetItemState(RES_BACKGROUND))
+            {
+                // create FillAttributes from SvxBrushItem //SetHdColor(rItem.GetColor());
+                const SvxBrushItem& rItem = rHeaderSet.Get(RES_BACKGROUND);
+                SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setHeaderFillAttributes(
+                    std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
+                            aTempSet));
+            }
+        }
+        else
+            SetHeader( false );
+    }
+
+    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
+            false, &pItem ) )
+    {
+        const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+        const SfxBoolItem& rFooterOn = rFooterSet.Get( SID_ATTR_PAGE_ON );
+
+        if ( rFooterOn.GetValue() )
+        {
+            const SvxSizeItem& rSize =
+                static_cast<const SvxSizeItem&>(rFooterSet.Get( pPool->GetWhich( SID_ATTR_PAGE_SIZE ) ));
+
+            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rFooterSet.Get(
+                                        pPool->GetWhich( SID_ATTR_ULSPACE ) ));
+            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rFooterSet.Get(
+                                        pPool->GetWhich( SID_ATTR_LRSPACE ) ));
+
+            SetFtHeight( rSize.GetSize().Height() - rUL.GetUpper());
+            SetFtDist( rUL.GetUpper() );
+            SetFtLeft( rLR.GetLeft() );
+            SetFtRight( rLR.GetRight() );
+            SetFooter( true );
+
+            if( rFooterSet.GetItemState( RES_BACKGROUND ) == SfxItemState::SET )
+            {
+                // create FillAttributes from SvxBrushItem //SetFtColor(rItem.GetColor());
+                const SvxBrushItem& rItem = rFooterSet.Get(RES_BACKGROUND);
+                SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setFooterFillAttributes(
+                    std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
+                            aTempSet));
+            }
+        }
+        else
+            SetFooter( false );
+    }
+
+    if(SfxItemState::SET == rSet.GetItemState(RES_BACKGROUND, false, &pItem))
+    {
+        // create FillAttributes from SvxBrushItem
+        const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
+        SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+
+        setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+        setPageFillAttributes(
+            std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
+                    aTempSet));
+    }
+
+    Invalidate();
+}
+
 void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
                             const bool bSecond, const bool bEnabled)
 {
@@ -617,5 +770,119 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 }
 
 VCL_BUILDER_FACTORY(SwPageGridExample)
+
+PageGridExample::~PageGridExample()
+{
+    delete pGridItem;
+}
+
+void PageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
+                                 const bool bSecond, const bool bEnabled)
+{
+    PageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
+
+    if (!pGridItem || !pGridItem->GetGridType())
+        return;
+
+    //paint the grid now
+    Color aLineColor = pGridItem->GetColor();
+    if (aLineColor == COL_AUTO)
+    {
+        aLineColor = rRenderContext.GetFillColor();
+        aLineColor.Invert();
+    }
+    rRenderContext.SetLineColor(aLineColor);
+    long nL = GetLeft();
+    long nR = GetRight();
+
+    if (GetUsage() == SvxPageUsage::Mirror && !bSecond)
+    {
+        // rotate for mirrored
+        nL = GetRight();
+        nR = GetLeft();
+    }
+
+    tools::Rectangle aRect;
+    aRect.SetRight( rOrg.X() + GetSize().Width() - nR );
+    aRect.SetLeft( rOrg.X() + nL );
+    aRect.SetTop( rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist() );
+    aRect.SetBottom( rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist() );
+
+    //increase the values to get a 'viewable' preview
+    sal_Int32 nBaseHeight = pGridItem->GetBaseHeight() * 3;
+    sal_Int32 nRubyHeight = pGridItem->GetRubyHeight() * 3;
+
+    //detect height of rectangles
+    tools::Rectangle aRubyRect(aRect.TopLeft(),
+                m_bVertical ?
+                Size(nRubyHeight, aRect.GetHeight()) :
+                Size(aRect.GetWidth(), nRubyHeight));
+    tools::Rectangle aCharRect(aRect.TopLeft(),
+                m_bVertical ?
+                Size(nBaseHeight, aRect.GetHeight()) :
+                Size(aRect.GetWidth(), nBaseHeight));
+
+    sal_Int32 nLineHeight = nBaseHeight + nRubyHeight;
+
+    //detect count of rectangles
+    sal_Int32 nLines = (m_bVertical ? aRect.GetWidth(): aRect.GetHeight()) / nLineHeight;
+    if (nLines > pGridItem->GetLines())
+        nLines = pGridItem->GetLines();
+
+    // determine start position
+    if (m_bVertical)
+    {
+        sal_Int16 nXStart = static_cast<sal_Int16>(aRect.GetWidth() / 2 - nLineHeight * nLines /2);
+        aRubyRect.Move(nXStart, 0);
+        aCharRect.Move(nXStart, 0);
+    }
+    else
+    {
+        sal_Int16 nYStart = static_cast<sal_Int16>(aRect.GetHeight() / 2 - nLineHeight * nLines /2);
+        aRubyRect.Move(0, nYStart);
+        aCharRect.Move(0, nYStart);
+    }
+
+    if (pGridItem->IsRubyTextBelow())
+        m_bVertical ? aRubyRect.Move(nBaseHeight, 0) : aRubyRect.Move(0, nBaseHeight);
+    else
+        m_bVertical ? aCharRect.Move(nRubyHeight, 0) : aCharRect.Move(0, nRubyHeight);
+
+    //vertical lines
+    bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
+    rRenderContext.SetFillColor(COL_TRANSPARENT);
+    sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
+    sal_Int32 nYMove = m_bVertical ? 0 : nLineHeight;
+    for (sal_Int32 nLine = 0; nLine < nLines; nLine++)
+    {
+        rRenderContext.DrawRect(aRubyRect);
+        rRenderContext.DrawRect(aCharRect);
+        if (bBothLines)
+        {
+            Point aStart = aCharRect.TopLeft();
+            Point aEnd = m_bVertical ? aCharRect.TopRight() : aCharRect.BottomLeft();
+            while (m_bVertical ? aStart.Y() < aRect.Bottom(): aStart.X() < aRect.Right())
+            {
+                rRenderContext.DrawLine(aStart, aEnd);
+                if(m_bVertical)
+                    aStart.setY( aEnd.AdjustY(nBaseHeight ) );
+                else
+                    aStart.setX( aEnd.AdjustX(nBaseHeight ) );
+            }
+        }
+        aRubyRect.Move(nXMove, nYMove);
+        aCharRect.Move(nXMove, nYMove);
+    }
+
+}
+
+void PageGridExample::UpdateExample( const SfxItemSet& rSet )
+{
+    DELETEZ(pGridItem);
+    //get the grid information
+    if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID))
+        pGridItem = static_cast<SwTextGridItem*>(rSet.Get(RES_TEXTGRID).Clone());
+    PageExample::UpdateExample(rSet);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
