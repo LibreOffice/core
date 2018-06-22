@@ -1371,14 +1371,7 @@ void ImpGraphic::ImplSetSharedLink(const std::shared_ptr<GfxLink>& pGfxLink)
     mpGfxLink = pGfxLink;
 
     if (mpGfxLink->IsNative())
-    {
         mpGfxLink->SwapOut();
-
-        // Swap out the graphic as well.
-        //FIXME: move to own function, such as SetPrepared().
-        meType = GraphicType::Bitmap;
-        ImplSwapOut();
-    }
 }
 
 GfxLink ImpGraphic::ImplGetLink()
