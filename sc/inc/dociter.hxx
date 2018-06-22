@@ -37,6 +37,7 @@ class ScPatternAttr;
 class ScAttrArray;
 class ScAttrIterator;
 class ScFlatBoolRowSegments;
+struct ScInterpreterContext;
 class ScMatrix;
 struct ScDBQueryParamBase;
 struct ScQueryParam;
@@ -52,6 +53,7 @@ class ScValueIterator            // walk through all values in an area
     typedef sc::CellStoreType::const_position_type PositionType;
 
     ScDocument*     pDoc;
+    ScInterpreterContext* pContext;
     const ScAttrArray*  pAttrArray;
     sal_uInt32      nNumFormat;     // for CalcAsShown
     sal_uInt32      nNumFmtIndex;
@@ -92,6 +94,8 @@ public:
 
     /// Does NOT reset rValue if no value found!
     bool GetNext( double& rValue, FormulaError& rErr );
+
+    void SetInterpreterContext( ScInterpreterContext* context ) { pContext = context; }
 };
 
 class ScDBQueryDataIterator
