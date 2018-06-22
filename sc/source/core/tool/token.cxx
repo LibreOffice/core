@@ -1356,7 +1356,7 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
             case svExternalDoubleRef:
             case svExternalSingleRef:
                 SAL_INFO("sc.core.formulagroup", "opcode ocPush: variable type " << StackVarEnumToString(r.GetType())
-                    << " disables threaded calculcation of formula group");
+                    << " disables threaded calculation of formula group");
                 mbThreadingEnabled = false;
                 return;
             default:
