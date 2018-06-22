@@ -48,9 +48,9 @@ TextToPronounce_zh::getPronounce(const sal_Unicode ch)
     return emptyString;
 }
 
-OUString SAL_CALL
-TextToPronounce_zh::folding(const OUString & inStr, sal_Int32 startPos,
-        sal_Int32 nCount, Sequence< sal_Int32 > & offset)
+OUString
+TextToPronounce_zh::foldingImpl(const OUString & inStr, sal_Int32 startPos,
+        sal_Int32 nCount, Sequence< sal_Int32 > & offset, bool useOffset)
 {
     OUStringBuffer sb;
     const sal_Unicode * chArr = inStr.getStr() + startPos;
