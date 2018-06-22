@@ -77,7 +77,7 @@ void decBlock(std::pair<Iter, size_t>& rPos)
 
 void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrArray*& rpArr,
         SCROW& nAttrEndRow, const ScAttrArray* pNewArr, SCROW nRow,
-        const ScDocument* pDoc )
+        const ScDocument* pDoc, ScInterpreterContext* pContext = nullptr )
 {
     if ( rpArr != pNewArr || nAttrEndRow < nRow )
     {
@@ -90,7 +90,7 @@ void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrArray*& r
             nRowEnd = MAXROW;
         }
 
-        nFormat = pPattern->GetNumberFormat( pDoc->GetFormatTable() );
+        nFormat = pPattern->GetNumberFormat( pContext ? pContext->GetFormatTable() : pDoc->GetFormatTable() );
         rpArr = pNewArr;
         nAttrEndRow = nRowEnd;
     }
@@ -99,6 +99,7 @@ void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrArray*& r
 ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
             SubtotalFlags nSubTotalFlags, bool bTextZero )
     : pDoc(pDocument)
+    , pContext(nullptr)
     , pAttrArray(nullptr)
     , nNumFormat(0) // Initialized in GetNumberFormat
     , nNumFmtIndex(0)
@@ -205,8 +206,8 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
                 if (bCalcAsShown)
                 {
                     ScAttrArray_IterGetNumberFormat(nNumFormat, pAttrArray,
-                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, pDoc);
-                    rValue = pDoc->RoundValueAsShown(rValue, nNumFormat);
+                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, pDoc, pContext);
+                    rValue = pDoc->RoundValueAsShown(rValue, nNumFormat, pContext);
                 }
                 return true; // Found it!
             }
