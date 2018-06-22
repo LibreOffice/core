@@ -73,7 +73,7 @@ Ruler::Ruler( DrawViewShell& rViewSh, vcl::Window* pParent, ::sd::Window* pWin, 
     , pDrViewShell(&rViewSh)
 {
     rBindings.EnterRegistrations();
-    pCtrlItem = new RulerCtrlItem(*this, rBindings);
+    pCtrlItem.reset( new RulerCtrlItem(*this, rBindings) );
     rBindings.LeaveRegistrations();
 
     if ( nWinStyle & WB_HSCROLL )
@@ -97,7 +97,7 @@ void Ruler::dispose()
 {
     SfxBindings& rBindings = pCtrlItem->GetBindings();
     rBindings.EnterRegistrations();
-    DELETEZ( pCtrlItem );
+    pCtrlItem.reset();
     rBindings.LeaveRegistrations();
     SvxRuler::dispose();
 }
