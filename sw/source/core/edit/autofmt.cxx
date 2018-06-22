@@ -2110,6 +2110,16 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
 
     bool bReplaceStyles = !m_aFlags.bAFormatByInput || m_aFlags.bReplaceStyles;
 
+    static SvxAutoCorrect* lcl_IsAutoCorr()
+    {
+        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
+        if( pACorr && !pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
+                                ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber |
+                                ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr | ACFlags::Autocorrect ))
+            pACorr = nullptr;
+        return pACorr;
+    }
+
     const SwTextNode* pNxtNd = nullptr;
     bool bNxtEmpty = false;
     bool bNxtAlpha = false;
@@ -2611,6 +2621,9 @@ void SwEditShell::AutoFormatBySplitNode()
 
         SwAutoFormat aFormat( this, aAFFlags, &pCursor->GetMark()->nNode,
                                 &pCursor->GetPoint()->nNode );
+        SvxAutoCorrect* pACorr = lcl_IsAutoCorr();
+        if( pACorr )
+            AutoCorrect( *pACorr,false, u'\0' );
 
         //JP 30.09.96: DoTable() builds on PopCursor and MoveCursor!
         Pop(PopMode::DeleteCurrent);
