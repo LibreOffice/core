@@ -137,7 +137,7 @@ OString loadFile(const OUString& rURL)
 }
 #endif
 
-void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFormat eFormat )
+void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFormat eFormat) const
 {
 #if HAVE_EXPORT_VALIDATION
     OUString var;
@@ -166,12 +166,23 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     CPPUNIT_ASSERT_MESSAGE(
         OUString("empty get env var " + var).toUtf8().getStr(),
         !aValidator.isEmpty());
-    aValidator += " ";
+
+    if (eFormat == test::ODF)
+    {
+        aValidator += " -e -M "
+            + m_directories.getPathFromSrc("/schema/libreoffice/OpenDocument-manifest-schema-v1.3+libreoffice.rng")
+            + " -D "
+            + m_directories.getPathFromSrc("/schema/libreoffice/OpenDocument-dsig-schema-v1.3+libreoffice.rng")
+            + " -O "
+            + m_directories.getPathFromSrc("/schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng")
+            + " -m "
+            + m_directories.getPathFromSrc("/schema/mathml2/mathml2.xsd");
+    }
 
     utl::TempFile aOutput;
     aOutput.EnableKillingFile();
     OUString aOutputFile = aOutput.GetFileName();
-    OUString aCommand = aValidator + rPath + " > " + aOutputFile;
+    OUString aCommand = aValidator + " " + rPath + " > " + aOutputFile;
 
     int returnValue = system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
