@@ -159,7 +159,6 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
     mrViewContact(rViewContact),
     maObjectRange(),
     mxPrimitive2DSequence(),
-    mpPrimitiveAnimation(nullptr),
     mbLazyInvalidate(false)
 {
     // make the ViewContact remember me

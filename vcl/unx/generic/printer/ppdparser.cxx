@@ -241,9 +241,6 @@ namespace psp
     public:
         std::vector< std::unique_ptr<PPDParser> > aAllParsers;
         std::unique_ptr<std::unordered_map< OUString, OUString >> pAllPPDFiles;
-        PPDCache()
-            : pAllPPDFiles(nullptr)
-        {}
     };
 }
 
@@ -276,9 +273,7 @@ public:
     const OUString& GetFileName() const { return maFileName; }
 };
 
-PPDDecompressStream::PPDDecompressStream( const OUString& i_rFile ) :
-    mpFileStream( nullptr ),
-    mpMemStream( nullptr )
+PPDDecompressStream::PPDDecompressStream( const OUString& i_rFile )
 {
     Open( i_rFile );
 }

@@ -1210,7 +1210,7 @@ std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(siz
 
 std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(const OUString& rName)
 {
-    std::unique_ptr<SwTableAutoFormat> pRet(nullptr);
+    std::unique_ptr<SwTableAutoFormat> pRet;
     for (auto iter = m_pImpl->m_AutoFormats.begin();
          iter != m_pImpl->m_AutoFormats.end(); ++iter)
     {

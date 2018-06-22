@@ -1070,8 +1070,7 @@ ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter(const OUString& rFilterPath
 namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
 
 GraphicFilter::GraphicFilter( bool bConfig )
-    : pErrorEx(nullptr)
-    , bUseConfig(bConfig)
+    : bUseConfig(bConfig)
 {
     ImplInit();
 }

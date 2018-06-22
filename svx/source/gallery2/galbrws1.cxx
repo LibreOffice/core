@@ -111,7 +111,6 @@ GalleryBrowser1::GalleryBrowser1(
     mpThemes              ( VclPtr<GalleryThemeListBox>::Create( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
     mpGallery             ( pGallery ),
     mpExchangeData        ( new ExchangeData ),
-    mpThemePropsDlgItemSet( nullptr ),
     aImgNormal            ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) ),
     aImgDefault           ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) ),
     aImgReadOnly          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) ),

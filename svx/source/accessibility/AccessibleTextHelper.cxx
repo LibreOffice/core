@@ -236,7 +236,6 @@ namespace accessibility
     };
 
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
-        mxFrontEnd( nullptr ),
         maLastSelection( EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND,EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND ),
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),

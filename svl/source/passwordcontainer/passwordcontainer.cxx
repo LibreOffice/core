@@ -369,8 +369,7 @@ void StorageItem::ImplCommit()
 }
 
 
-PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory ):
-    m_pStorageFile( nullptr )
+PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory )
 {
     // m_pStorageFile->Notify() can be called
     ::osl::MutexGuard aGuard( mMutex );

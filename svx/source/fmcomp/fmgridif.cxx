@@ -1038,8 +1038,6 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             ,m_aMode( getDataModeIdentifier() )
             ,m_nCursorListening(0)
             ,m_bInterceptingDispatch(false)
-            ,m_pStateCache(nullptr)
-            ,m_pDispatchers(nullptr)
             ,m_xContext(_rxContext)
 {
     // Create must be called after this constructor

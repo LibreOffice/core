@@ -103,7 +103,6 @@ class ThreadManager final
 
             tThreadData()
                 : nThreadID( 0 ),
-                  pThread( nullptr ),
                   aJob()
             {}
         };

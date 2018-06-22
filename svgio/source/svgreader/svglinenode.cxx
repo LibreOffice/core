@@ -33,8 +33,7 @@ namespace svgio
             maX1(0),
             maY1(0),
             maX2(0),
-            maY2(0),
-            mpaTransform(nullptr)
+            maY2(0)
         {
         }
 

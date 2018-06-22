@@ -51,7 +51,6 @@ using namespace ::com::sun::star::frame;
 
 SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage)
 :   FmFormPage(rNewModel, bMasterPage),
-    pGridLst( nullptr ),
     pDoc(&rNewModel.GetDoc())
 {
 }

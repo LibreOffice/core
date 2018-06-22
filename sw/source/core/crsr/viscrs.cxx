@@ -247,9 +247,7 @@ SwSelPaintRects::SwSelPaintRects( const SwCursorShell& rCSh )
     : SwRects()
     , m_pCursorShell( &rCSh )
 #if HAVE_FEATURE_DESKTOP
-    , m_pCursorOverlay(nullptr)
     , m_bShowTextInputFieldOverlay(true)
-    , m_pTextInputFieldOverlay(nullptr)
 #endif
 {
 }

@@ -198,8 +198,7 @@ public:
 
 FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     nCount(0),
-    aPropInfos(),
-    pApiNames( nullptr )
+    aPropInfos()
 {
 }
 

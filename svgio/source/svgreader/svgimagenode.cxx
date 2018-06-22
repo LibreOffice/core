@@ -45,7 +45,6 @@ namespace svgio
         :   SvgNode(SVGTokenRect, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maSvgAspectRatio(),
-            mpaTransform(nullptr),
             maX(0),
             maY(0),
             maWidth(0),
