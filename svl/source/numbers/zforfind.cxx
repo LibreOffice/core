@@ -70,14 +70,6 @@ static const sal_Int16 kDefaultEra = 1;     // Gregorian CE, positive year
 
 ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         :
-        pUpperMonthText( nullptr ),
-        pUpperAbbrevMonthText( nullptr ),
-        pUpperGenitiveMonthText( nullptr ),
-        pUpperGenitiveAbbrevMonthText( nullptr ),
-        pUpperPartitiveMonthText( nullptr ),
-        pUpperPartitiveAbbrevMonthText( nullptr ),
-        pUpperDayText( nullptr ),
-        pUpperAbbrevDayText( nullptr ),
         bTextInitialized( false ),
         bScanGenitiveMonths( false ),
         bScanPartitiveMonths( false ),

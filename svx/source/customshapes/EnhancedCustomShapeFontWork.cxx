@@ -959,7 +959,7 @@ SdrObject* CreateSdrObjectFromParagraphOutlines(
     return pRet;
 }
 
-Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::mxBreakIterator = nullptr;
+Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::mxBreakIterator;
 
 Reference < i18n::XBreakIterator > const & EnhancedCustomShapeFontWork::GetBreakIterator()
 {

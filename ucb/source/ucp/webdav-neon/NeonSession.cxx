@@ -162,23 +162,23 @@ struct NeonRequestContext
     DAVResource *                          pResource;
 
     explicit NeonRequestContext( uno::Reference< io::XOutputStream > const & xOutStrm )
-    : xOutputStream( xOutStrm ), xInputStream( nullptr ),
+    : xOutputStream( xOutStrm ),
       pHeaderNames( nullptr ), pResource( nullptr ) {}
 
     explicit NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm )
-    : xOutputStream( nullptr ), xInputStream( xInStrm ),
+    : xInputStream( xInStrm ),
       pHeaderNames( nullptr ), pResource( nullptr ) {}
 
     NeonRequestContext( uno::Reference< io::XOutputStream > const & xOutStrm,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource )
-    : xOutputStream( xOutStrm ), xInputStream( nullptr ),
+    : xOutputStream( xOutStrm ),
       pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
 
     NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource )
-    : xOutputStream( nullptr ), xInputStream( xInStrm ),
+    : xInputStream( xInStrm ),
       pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
 
     void ResponseBlockReader(const char * inBuf, size_t inLen)

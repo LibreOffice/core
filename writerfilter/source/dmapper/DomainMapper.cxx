@@ -2543,7 +2543,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             const PropertyMapPtr pParagraphProps = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
             if( pParagraphProps && pParagraphProps->isSet(PROP_PARA_STYLE_NAME) )
             {
-                StyleSheetEntryPtr pStyle = nullptr;
+                StyleSheetEntryPtr pStyle;
                 OUString sStyleName;
                 pParagraphProps->getProperty(PROP_PARA_STYLE_NAME)->second >>= sStyleName;
                 if( !sStyleName.isEmpty() && GetStyleSheetTable() )

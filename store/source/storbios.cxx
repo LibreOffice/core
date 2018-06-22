@@ -531,9 +531,7 @@ OStorePageBIOS::AceCache::destroy (OStorePageBIOS::Ace * ace)
  * OStorePageBIOS.
  */
 OStorePageBIOS::OStorePageBIOS()
-    : m_xLockBytes (nullptr),
-      m_pSuper     (nullptr),
-      m_bWriteable (false)
+    : m_bWriteable (false)
 {
 }
 

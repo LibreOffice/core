@@ -43,7 +43,7 @@ struct LockEntrySequenceParseContext
     bool hasType;
 
     LockEntrySequenceParseContext()
-    : pEntry( nullptr ), hasScope( false ), hasType( false ) {}
+    : hasScope( false ), hasType( false ) {}
 };
 
 #define STATE_TOP (1)

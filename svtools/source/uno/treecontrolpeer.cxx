@@ -140,7 +140,6 @@ TreeControlPeer::TreeControlPeer()
     , mbIsRootDisplayed(false)
     , mpTreeImpl( nullptr )
     , mnEditLock( 0 )
-    , mpTreeNodeMap( nullptr )
 {
 }
 

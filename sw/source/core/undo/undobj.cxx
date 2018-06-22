@@ -690,7 +690,6 @@ SwRewriter SwUndo::GetRewriter() const
 }
 
 SwUndoSaveContent::SwUndoSaveContent()
-    : pHistory( nullptr )
 {}
 
 SwUndoSaveContent::~SwUndoSaveContent() COVERITY_NOEXCEPT_FALSE
@@ -1182,7 +1181,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
 // save a complete section into UndoNodes array
 SwUndoSaveSection::SwUndoSaveSection()
-    : pRedlSaveData( nullptr ), nMvLen( 0 ), nStartPos( ULONG_MAX )
+    : nMvLen( 0 ), nStartPos( ULONG_MAX )
 {
 }
 

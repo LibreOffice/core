@@ -79,7 +79,6 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTextObj::CreateObjectSpecificViewC
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
 :   SdrAttrObj(rSdrModel),
-    mpText(nullptr),
     pEdtOutl(nullptr),
     eTextKind(OBJ_TEXT)
 {
@@ -102,7 +101,6 @@ SdrTextObj::SdrTextObj(
     const tools::Rectangle& rNewRect)
 :   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
-    mpText(nullptr),
     pEdtOutl(nullptr),
     eTextKind(OBJ_TEXT)
 {
@@ -125,7 +123,6 @@ SdrTextObj::SdrTextObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewTextKind)
 :   SdrAttrObj(rSdrModel),
-    mpText(nullptr),
     pEdtOutl(nullptr),
     eTextKind(eNewTextKind)
 {
@@ -149,7 +146,6 @@ SdrTextObj::SdrTextObj(
     const tools::Rectangle& rNewRect)
 :   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
-    mpText(nullptr),
     pEdtOutl(nullptr),
     eTextKind(eNewTextKind)
 {

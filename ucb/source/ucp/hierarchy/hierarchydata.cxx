@@ -56,7 +56,7 @@ struct HierarchyEntry::iterator_Impl
     uno::Sequence< OUString>                          names;
     sal_Int32                                              pos;
     iterator_Impl()
-    : officeDirs( nullptr ), pos( -1 /* before first */ ) {};
+    : pos( -1 /* before first */ ) {};
 };
 
 

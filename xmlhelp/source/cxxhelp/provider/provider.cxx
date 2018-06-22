@@ -46,7 +46,6 @@ ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >
     : ::ucbhelper::ContentProviderImplHelper( rxContext )
     , isInitialized( false )
     , m_aScheme(MYUCP_URL_SCHEME)
-    , m_pDatabases( nullptr )
 {
 }
 

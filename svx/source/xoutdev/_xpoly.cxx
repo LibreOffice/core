@@ -39,9 +39,7 @@
 
 
 ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
-    : pPointAry(nullptr)
-    , pFlagAry(nullptr)
-    , pOldPointAry(nullptr)
+    : pOldPointAry(nullptr)
     , bDeleteOldPoints(false)
     , nSize(0)
     , nResize(_nResize)
@@ -51,9 +49,7 @@ ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
 }
 
 ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
-    : pPointAry(nullptr)
-    , pFlagAry(nullptr)
-    , pOldPointAry(nullptr)
+    : pOldPointAry(nullptr)
     , bDeleteOldPoints(false)
     , nSize(0)
     , nResize(rImpXPoly.nResize)

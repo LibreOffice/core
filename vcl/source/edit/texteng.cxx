@@ -65,13 +65,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 TextEngine::TextEngine()
-    : mpDoc {nullptr}
-    , mpTEParaPortions {nullptr}
-    , mpViews {nullptr}
-    , mpActiveView {nullptr}
-    , mpUndoManager {nullptr}
-    , mpIdleFormatter {nullptr}
-    , mpLocaleDataWrapper {nullptr}
+    : mpActiveView {nullptr}
     , maTextColor {COL_BLACK}
     , mnMaxTextLen {0}
     , mnMaxTextWidth {0}

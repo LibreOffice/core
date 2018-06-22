@@ -183,9 +183,7 @@ Menu::Menu()
       nTextPos(0),
       bCanceled(false),
       bInCallback(false),
-      bKilled(false),
-      mpLayoutData(nullptr),
-      mpSalMenu(nullptr)
+      bKilled(false)
 {
 }
 

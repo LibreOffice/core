@@ -50,7 +50,6 @@ namespace svgio
             maFy(),
             maGradientUnits(objectBoundingBox),
             maSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad),
-            mpaGradientTransform(nullptr),
             mbResolvingLink(false),
             maXLink(),
             mpXLink(nullptr)

@@ -229,9 +229,7 @@ FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponent
     : m_xContext(context),
       maMutex(),
       maThreads(),
-      mpCancelJobsThread( nullptr ),
       mpTerminateOfficeThread( nullptr ),
-      mpPauseThreadStarting( nullptr ),
       mbRegisteredAtDesktop( false )
 {
 

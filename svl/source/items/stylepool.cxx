@@ -47,7 +47,6 @@ namespace {
         Node() // root node Ctor
             : mChildren(),
               maItemSet(),
-              mpItem( nullptr ),
               mpUpper( nullptr ),
               mbIsItemIgnorable( false )
         {}

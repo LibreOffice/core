@@ -460,8 +460,6 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference<XInputStream> const& xStrea
     : mxStream(xStream)
     , mxSeekable(xStream, UNO_QUERY)
     , maData(0)
-    , mpOLEStorage(nullptr)
-    , mpZipStorage(nullptr)
     , mbCheckedOLE(false)
     , mbCheckedZip(false)
     , mnLength(0)
