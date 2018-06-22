@@ -34,6 +34,7 @@
 // which confuses clang plugins.
 #undef bool
 #include <map>
+#include <memory>
 
 class SfxItemSet;
 class SfxViewShell;
@@ -887,7 +888,7 @@ struct ScConsolidateParam
     SCTAB           nTab;
     ScSubTotalFunc  eFunction;
     sal_uInt16      nDataAreaCount;         // number of data areas
-    ScArea**        ppDataAreas;            // array of pointers into data areas
+    std::unique_ptr<ScArea[]> pDataAreas; // array of pointers into data areas
     bool            bByCol;
     bool            bByRow;
     bool            bReferenceData;         // reference source data
@@ -900,7 +901,7 @@ struct ScConsolidateParam
     bool                operator==      ( const ScConsolidateParam& r ) const;
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
-    void                SetAreas        ( ScArea* const* ppAreas, sal_uInt16 nCount );
+    void                SetAreas        ( std::unique_ptr<ScArea[]> pAreas, sal_uInt16 nCount );
 };
 
 extern SfxViewShell* pScActiveViewShell;

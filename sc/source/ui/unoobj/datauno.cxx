@@ -843,22 +843,19 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScConsolidationDescriptor::getSo
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = aParam.nDataAreaCount;
-    if (!aParam.ppDataAreas)
+    if (!aParam.pDataAreas)
         nCount = 0;
     table::CellRangeAddress aRange;
     uno::Sequence<table::CellRangeAddress> aSeq(nCount);
     table::CellRangeAddress* pAry = aSeq.getArray();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        ScArea* pArea = aParam.ppDataAreas[i];
-        if (pArea)
-        {
-            aRange.Sheet        = pArea->nTab;
-            aRange.StartColumn  = pArea->nColStart;
-            aRange.StartRow     = pArea->nRowStart;
-            aRange.EndColumn    = pArea->nColEnd;
-            aRange.EndRow       = pArea->nRowEnd;
-        }
+        ScArea const & rArea = aParam.pDataAreas[i];
+        aRange.Sheet        = rArea.nTab;
+        aRange.StartColumn  = rArea.nColStart;
+        aRange.StartRow     = rArea.nRowStart;
+        aRange.EndColumn    = rArea.nColEnd;
+        aRange.EndRow       = rArea.nRowEnd;
         pAry[i] = aRange;
     }
     return aSeq;
@@ -872,17 +869,14 @@ void SAL_CALL ScConsolidationDescriptor::setSources(
     if (nCount)
     {
         const table::CellRangeAddress* pAry = aSources.getConstArray();
-        std::unique_ptr<ScArea*[]> pNew(new ScArea*[nCount]);
+        std::unique_ptr<ScArea[]> pNew(new ScArea[nCount]);
         sal_uInt16 i;
         for (i=0; i<nCount; i++)
-            pNew[i] = new ScArea( pAry[i].Sheet,
+            pNew[i] = ScArea( pAry[i].Sheet,
                     static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow,
                     static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow );
 
-        aParam.SetAreas( pNew.get(), nCount );    // copy everything
-
-        for (i=0; i<nCount; i++)
-            delete pNew[i];
+        aParam.SetAreas( std::move(pNew), nCount );    // copy everything
     }
     else
         aParam.ClearDataAreas();
