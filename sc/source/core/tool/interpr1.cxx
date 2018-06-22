@@ -3386,31 +3386,24 @@ void ScInterpreter::ScChar()
  * Takashi Nakamoto <bluedwarf@ooo>
  * erAck: added Excel compatibility conversions as seen in issue's test case. */
 
+static utl::TransliterationWrapper& lcl_createTransliterationWrapper( const OUString& module )
+{
+    static utl::TransliterationWrapper trans( ::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
+    trans.loadModuleByImplName( module, LANGUAGE_SYSTEM );
+    return trans;
+}
+
 static OUString lcl_convertIntoHalfWidth( const OUString & rStr )
 {
-    static bool bFirstASCCall = true;
-    static utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
-
-    if( bFirstASCCall )
-    {
-        aTrans.loadModuleByImplName( "FULLWIDTH_HALFWIDTH_LIKE_ASC", LANGUAGE_SYSTEM );
-        bFirstASCCall = false;
-    }
-
+    // Make the initialization thread-safe. Since another function needs to be called, move it all to another
+    // function and thread-safely initialize this static reference.
+    static utl::TransliterationWrapper& aTrans( lcl_createTransliterationWrapper( "FULLWIDTH_HALFWIDTH_LIKE_ASC" ));
     return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ) );
 }
 
 static OUString lcl_convertIntoFullWidth( const OUString & rStr )
 {
-    static bool bFirstJISCall = true;
-    static utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
-
-    if( bFirstJISCall )
-    {
-        aTrans.loadModuleByImplName( "HALFWIDTH_FULLWIDTH_LIKE_JIS", LANGUAGE_SYSTEM );
-        bFirstJISCall = false;
-    }
-
+    static utl::TransliterationWrapper& aTrans( lcl_createTransliterationWrapper( "HALFWIDTH_FULLWIDTH_LIKE_JIS" ));
     return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ) );
 }
 
