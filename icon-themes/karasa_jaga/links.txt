@@ -42,6 +42,7 @@ cmd/32/closepreview.png cmd/32/closedoc.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/commontaskbarvisible.png cmd/32/autoformat.png
+cmd/32/config.png cmd/32/choosecontrols.png
 cmd/32/connectortoolbox.png cmd/32/connector.png
 cmd/32/datafilterhideautofilter.png cmd/32/removefiltersort.png
 cmd/32/dataproviderrefresh.png cmd/32/calculate.png
@@ -304,6 +305,7 @@ cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_commontaskbarvisible.png cmd/lc_autoformat.png
+cmd/lc_config.png cmd/lc_choosecontrols.png
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
 cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
 cmd/lc_dataproviderrefresh.png cmd/lc_calculate.png
@@ -515,6 +517,7 @@ cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
+cmd/sc_config.png cmd/sc_choosecontrols.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
 cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
 cmd/sc_dataproviderrefresh.png cmd/sc_calculate.png
@@ -700,6 +703,8 @@ framework/res/extension.png cmd/lc_addons.png
 framework/res/info_26.png cmd/lc_helpindex.png
 reportdesign/res/sc30768.png cmd/sc_upsearch.png
 reportdesign/res/sc30769.png cmd/sc_downsearch.png
+reportdesign/res/sx11047.png cmd/sc_basicshapes.diamond.png
+reportdesign/res/sx12452.png cmd/sc_actionmode.png
 reportdesign/res/sx12453.png cmd/lc_animationeffects.png
 reportdesign/res/sx12594.png cmd/sc_insertformula.png
 res/extension_plus_26.png cmd/lc_addons.png
