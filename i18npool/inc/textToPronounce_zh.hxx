@@ -41,8 +41,8 @@ public:
 #endif
         virtual ~TextToPronounce_zh() override;
 
-        OUString SAL_CALL
-        folding(const OUString & inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 > & offset) override;
+        OUString
+        foldingImpl(const OUString & inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 > & offset, bool useOffset) override;
 
         sal_Int16 SAL_CALL getType() override;
 

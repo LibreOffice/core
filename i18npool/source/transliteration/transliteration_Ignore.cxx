@@ -78,12 +78,12 @@ transliteration_Ignore::getType()
 }
 
 
-OUString SAL_CALL
-transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset  )
+OUString
+transliteration_Ignore::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+        Sequence< sal_Int32 >& offset, bool useOffset)
 {
     // The method folding is defined in a sub class.
-    return folding( inStr, startPos, nCount, offset);
+    return foldingImpl( inStr, startPos, nCount, offset, useOffset);
 }
 
 Sequence< OUString >
@@ -114,9 +114,9 @@ transliteration_Ignore::transliterateRange( const OUString& str1, const OUString
     return r;
 }
 
-OUString SAL_CALL
-transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
-    sal_Int32 nCount, Sequence< sal_Int32 >& offset)
+OUString
+transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
+    sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
