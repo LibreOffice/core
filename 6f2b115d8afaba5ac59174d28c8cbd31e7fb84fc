@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_6fdd0142",
+        "filename": "sw/uiconfig/sweb/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-06-22T06:33:47Z",
+      "side": 0,
+      "message": "IME hasn\u0027t been removed from sw so we better keep it in the variants.",
+      "range": {
+        "startLine": 128,
+        "startChar": 5,
+        "endLine": 128,
+        "endChar": 57
+      },
+      "revId": "6f2b115d8afaba5ac59174d28c8cbd31e7fb84fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
