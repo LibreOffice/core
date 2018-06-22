@@ -43,6 +43,20 @@ public:
     void UpdateExample( const SfxItemSet& rSet );
 };
 
+class SW_DLLPUBLIC PageExample : public PageWindow
+{
+protected:
+    bool            m_bVertical;
+public:
+    PageExample()
+        : m_bVertical(false)
+    {
+        SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));
+    }
+
+    void UpdateExample( const SfxItemSet& rSet );
+};
+
 class SwTextGridItem;
 
 class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
@@ -63,6 +77,24 @@ public:
     virtual void dispose() override;
     void UpdateExample( const SfxItemSet& rSet );
 };
+
+class SW_DLLPUBLIC PageGridExample : public PageExample
+{
+    SwTextGridItem*     pGridItem;
+protected:
+    virtual void DrawPage(vcl::RenderContext& rRenderContext,
+                          const Point& rPoint,
+                          const bool bSecond,
+                          const bool bEnabled) override;
+public:
+    PageGridExample()
+        : pGridItem(nullptr)
+    {}
+
+    virtual ~PageGridExample() override;
+    void UpdateExample( const SfxItemSet& rSet );
+};
+
 
 class SW_DLLPUBLIC SwColExample : public SwPageExample
 {
