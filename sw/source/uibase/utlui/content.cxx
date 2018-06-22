@@ -243,6 +243,29 @@ static const char* STR_CONTENT_TYPE_SINGLE_ARY[] =
     STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
 };
 
+namespace
+{
+    bool checkVisibilityChanged(
+        const SwContentArr& rSwContentArrA,
+        const SwContentArr& rSwContentArrB)
+    {
+        if(rSwContentArrA.size() != rSwContentArrB.size())
+        {
+            return true;
+        }
+
+        for(size_t a(0); a < rSwContentArrA.size(); a++)
+        {
+            if(rSwContentArrA[a]->IsInvisible() != rSwContentArrB[a]->IsInvisible())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+} // end of anonymous namespace
+
 SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 nLevel) :
     SwTypeNumber(CTYPE_CTT),
     pWrtShell(pShell),
@@ -324,7 +347,6 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         {
             SwContentArr*   pOldMember = nullptr;
             size_t nOldRegionCount = 0;
-            bool bInvalidate = false;
             if(!pMember)
                 pMember.reset( new SwContentArr );
             else if(!pMember->empty())
@@ -362,12 +384,6 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
                     pMember->insert(pCnt);
-
-                    const size_t nPos = pMember->size() - 1;
-                    if(nOldRegionCount > nPos &&
-                        ((*pOldMember)[nPos])->IsInvisible()
-                                != pCnt->IsInvisible())
-                            bInvalidate = true;
                 }
             }
             nMemberCount = pMember->size();
@@ -376,10 +392,19 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             bDelete = false;
             if(pOldMember)
             {
+                if(nullptr != pbInvalidateWindow)
+                {
+                    // need to check visibility (and equal entry number) after
+                    // creation due to a sorted liszt being used here (before,
+                    // entries with same index were compared already at creation
+                    // time what worked before a sorted list was used)
+                    *pbInvalidateWindow = checkVisibilityChanged(
+                        *pOldMember,
+                        *pMember);
+                }
+
                 pOldMember->DeleteAndDestroyAll();
                 delete pOldMember;
-                if(pbInvalidateWindow && bInvalidate)
-                    *pbInvalidateWindow = true;
             }
         }
         break;
@@ -661,12 +686,17 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
                     pMember->insert(pCnt);
+                }
 
-                    const size_t nPos = pMember->size() - 1;
-                    if(nOldMemberCount > nPos &&
-                        (*pOldMember)[nPos]->IsInvisible()
-                                != pCnt->IsInvisible())
-                            *pbLevelOrVisibilityChanged = true;
+                if(nullptr != pbLevelOrVisibilityChanged)
+                {
+                    // need to check visibility (and equal entry number) after
+                    // creation due to a sorted liszt being used here (before,
+                    // entries with same index were compared already at creation
+                    // time what worked before a sorted list was used)
+                    *pbLevelOrVisibilityChanged = checkVisibilityChanged(
+                        *pOldMember,
+                        *pMember);
                 }
             }
             nMemberCount = pMember->size();
