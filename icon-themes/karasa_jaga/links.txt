@@ -42,6 +42,7 @@ cmd/32/closepreview.png cmd/32/closedoc.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/commontaskbarvisible.png cmd/32/autoformat.png
+cmd/32/config.png cmd/32/choosecontrols.png
 cmd/32/connectortoolbox.png cmd/32/connector.png
 cmd/32/datafilterhideautofilter.png cmd/32/removefiltersort.png
 cmd/32/dataproviderrefresh.png cmd/32/calculate.png
@@ -72,9 +73,11 @@ cmd/32/fontworkalignmentfloater.png cmd/32/alignhorizontalcenter.png
 cmd/32/fontworkcharacterspacingfloater.png cmd/32/spacing.png
 cmd/32/formatbulletsmenu.png cmd/32/defaultbullet.png
 cmd/32/formatframemenu.png cmd/32/inserttextframe.png
+cmd/32/formatgroup.png cmd/32/group.png
 cmd/32/formatimagemenu.png cmd/32/graphic.png
 cmd/32/formatspacingmenu.png cmd/32/spacepara15.png
 cmd/32/formattextmenu.png cmd/32/text.png
+cmd/32/formatungroup.png cmd/32/ungroup.png
 cmd/32/fr/underlinesimple.png cmd/32/fr/underline.png
 cmd/32/functionbox.png cmd/32/insertformula.png
 cmd/32/functiondialog.png cmd/32/insertformula.png
@@ -198,7 +201,9 @@ cmd/32/shapeslinemenu.png cmd/32/line.png
 cmd/32/shapesmenu.png cmd/32/basicshapes.rectangle.png
 cmd/32/sheetcommentmenu.png cmd/32/insertannotation.png
 cmd/32/showgraphics.png cmd/32/graphic.png
+cmd/32/showpropbrowser.png cmd/32/showbrowser.png
 cmd/32/showruler.png cmd/32/ruler.png
+cmd/32/sidebarmenu.png cmd/32/sidebar.png
 cmd/32/sl/underlinesimple.png cmd/32/sl/underline.png
 cmd/32/slidechangewindow.png cmd/32/dia.png
 cmd/32/slidesetup.png cmd/32/pagedialog.png
@@ -304,6 +309,7 @@ cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_commontaskbarvisible.png cmd/lc_autoformat.png
+cmd/lc_config.png cmd/lc_choosecontrols.png
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
 cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
 cmd/lc_dataproviderrefresh.png cmd/lc_calculate.png
@@ -333,9 +339,11 @@ cmd/lc_fontworkalignmentfloater.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_fontworkcharacterspacingfloater.png cmd/lc_spacing.png
 cmd/lc_formatbulletsmenu.png cmd/lc_defaultbullet.png
 cmd/lc_formatframemenu.png cmd/lc_inserttextframe.png
+cmd/lc_formatgroup.png cmd/lc_group.png
 cmd/lc_formatimagemenu.png cmd/lc_graphic.png
 cmd/lc_formatspacingmenu.png cmd/lc_spacepara15.png
 cmd/lc_formattextmenu.png cmd/lc_text.png
+cmd/lc_formatungroup.png cmd/lc_ungroup.png
 cmd/lc_functionbox.png cmd/lc_insertformula.png
 cmd/lc_functiondialog.png cmd/lc_insertformula.png
 cmd/lc_gotoendofdoc.png cmd/lc_lastpage.png
@@ -445,7 +453,9 @@ cmd/lc_shapeslinemenu.png cmd/lc_line.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_sheetcommentmenu.png cmd/lc_insertannotation.png
 cmd/lc_showgraphics.png cmd/lc_graphic.png
+cmd/lc_showpropbrowser.png cmd/lc_showbrowser.png
 cmd/lc_showruler.png cmd/lc_ruler.png
+cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
 cmd/lc_slidechangewindow.png cmd/lc_dia.png
 cmd/lc_slidesetup.png cmd/lc_pagedialog.png
 cmd/lc_sortdialog.png cmd/lc_datasort.png
@@ -515,6 +525,7 @@ cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
+cmd/sc_config.png cmd/sc_choosecontrols.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
 cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
 cmd/sc_dataproviderrefresh.png cmd/sc_calculate.png
@@ -544,9 +555,11 @@ cmd/sc_fontworkalignmentfloater.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_fontworkcharacterspacingfloater.png cmd/sc_spacing.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatframemenu.png cmd/sc_inserttextframe.png
+cmd/sc_formatgroup.png cmd/sc_group.png
 cmd/sc_formatimagemenu.png cmd/sc_graphic.png
 cmd/sc_formatspacingmenu.png cmd/sc_spacepara15.png
 cmd/sc_formattextmenu.png cmd/sc_text.png
+cmd/sc_formatungroup.png cmd/sc_ungroup.png
 cmd/sc_functionbox.png cmd/sc_insertformula.png
 cmd/sc_functiondialog.png cmd/sc_insertformula.png
 cmd/sc_gotoendofdoc.png cmd/sc_lastpage.png
@@ -656,7 +669,9 @@ cmd/sc_shapeslinemenu.png cmd/sc_line.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
 cmd/sc_showgraphics.png cmd/sc_graphic.png
+cmd/sc_showpropbrowser.png cmd/sc_showbrowser.png
 cmd/sc_showruler.png cmd/sc_ruler.png
+cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
 cmd/sc_slidechangewindow.png cmd/sc_dia.png
 cmd/sc_slidesetup.png cmd/sc_pagedialog.png
 cmd/sc_sortdialog.png cmd/sc_datasort.png
@@ -700,6 +715,8 @@ framework/res/extension.png cmd/lc_addons.png
 framework/res/info_26.png cmd/lc_helpindex.png
 reportdesign/res/sc30768.png cmd/sc_upsearch.png
 reportdesign/res/sc30769.png cmd/sc_downsearch.png
+reportdesign/res/sx11047.png cmd/sc_basicshapes.diamond.png
+reportdesign/res/sx12452.png cmd/sc_actionmode.png
 reportdesign/res/sx12453.png cmd/lc_animationeffects.png
 reportdesign/res/sx12594.png cmd/sc_insertformula.png
 res/extension_plus_26.png cmd/lc_addons.png
@@ -867,7 +884,7 @@ res/sx10705.png cmd/sc_timefield.png
 res/sx10706.png cmd/sc_numericfield.png
 res/sx10707.png cmd/sc_currencyfield.png
 res/sx10708.png cmd/sc_patternfield.png
-res/sx10710.png cmd/sc_insertgraphic.png
+res/sx10710.png cmd/sc_imagecontrol.png
 res/sx10715.png cmd/sc_datafilterstandardfilter.png
 res/sx10728.png cmd/sc_formattedfield.png
 res/sx10768.png cmd/sc_scrollbar.png
