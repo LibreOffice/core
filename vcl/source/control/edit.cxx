@@ -127,7 +127,6 @@ struct Impl_IMEInfos
 
 Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos)
     : aOldTextAfterStartPos(rOldTextAfterStartPos),
-    pAttribs(nullptr),
     nPos(nP),
     nLen(0),
     bCursor(true),

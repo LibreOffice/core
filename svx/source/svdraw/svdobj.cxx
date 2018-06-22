@@ -166,7 +166,6 @@ SdrObjUserData::SdrObjUserData(const SdrObjUserData& rData) :
 SdrObjUserData::~SdrObjUserData() {}
 
 SdrObjGeoData::SdrObjGeoData():
-    pGPL(nullptr),
     bMovProt(false),
     bSizProt(false),
     bNoPrint(false),
@@ -352,15 +351,11 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
 :   mpFillGeometryDefiningShape(nullptr)
     ,mrSdrModelFromSdrObject(rSdrModel)
     ,pUserCall(nullptr)
-    ,pPlusData(nullptr)
     ,mpImpl(new Impl)
     ,mpParentOfSdrObject(nullptr)
     ,nOrdNum(0)
-    ,pGrabBagItem(nullptr)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
-    ,mpProperties(nullptr)
-    ,mpViewContact(nullptr)
     ,mpSvxShape( nullptr )
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)

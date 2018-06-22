@@ -50,8 +50,7 @@ namespace ucbhelper {
 ResultSetImplHelper::ResultSetImplHelper(
     const uno::Reference< uno::XComponentContext >& rxContext,
     const css::ucb::OpenCommandArgument2& rCommand )
-: m_pDisposeEventListeners( nullptr ),
-  m_bStatic( false ),
+: m_bStatic( false ),
   m_bInitDone( false ),
   m_aCommand( rCommand ),
   m_xContext( rxContext )

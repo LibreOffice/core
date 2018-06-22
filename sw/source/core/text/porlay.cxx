@@ -661,7 +661,7 @@ void SwLineLayout::ResetFlags()
 }
 
 SwLineLayout::SwLineLayout()
-    : m_pNext( nullptr ), m_pLLSpaceAdd( nullptr ), m_pKanaComp( nullptr ), m_nRealHeight( 0 ),
+    : m_pNext( nullptr ), m_nRealHeight( 0 ),
       m_bUnderscore( false )
 {
     ResetFlags();

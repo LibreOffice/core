@@ -226,7 +226,6 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
                               LanguageType eDfltLang,
                               sal_uInt16 nCSS1Script )
     : pFormat(pF)
-    , pItemSet(nullptr)
     , nLeftMargin(0)
     , nRightMargin(0)
     , nFirstLineIndent(0)

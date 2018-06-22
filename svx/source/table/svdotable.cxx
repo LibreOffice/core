@@ -257,7 +257,6 @@ std::vector<sal_Int32> SdrTableObjImpl::lastColWidths;
 
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( nullptr )
-, mpLayouter( nullptr )
 , mbSkipChangeLayout(false)
 {
 }

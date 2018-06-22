@@ -81,8 +81,7 @@ bool convert( TaskManager* pShell,
 XRow_impl::XRow_impl( TaskManager* pMyShell,const uno::Sequence< uno::Any >& seq )
     : m_aValueMap( seq ),
       m_nWasNull(false),
-      m_pMyShell( pMyShell ),
-      m_xTypeConverter( nullptr )
+      m_pMyShell( pMyShell )
 {
 }
 

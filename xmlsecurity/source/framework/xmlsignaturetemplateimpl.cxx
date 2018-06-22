@@ -30,8 +30,7 @@ using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 
 XMLSignatureTemplateImpl::XMLSignatureTemplateImpl()
-    :m_xTemplate( nullptr ),
-     m_nStatus ( css::xml::crypto::SecurityOperationStatus_UNKNOWN )
+    :m_nStatus ( css::xml::crypto::SecurityOperationStatus_UNKNOWN )
 {
 }
 

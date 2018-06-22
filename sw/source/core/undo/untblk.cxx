@@ -34,7 +34,7 @@
 
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId, rPam.GetDoc() ), SwUndRng( rPam ),
-    pTextFormatColl( nullptr ), pLastNdColl(nullptr), pFrameFormats( nullptr ), pRedlData( nullptr ),
+    pTextFormatColl( nullptr ), pLastNdColl(nullptr),
     bSttWasTextNd( true ), nNdDiff( 0 ), nSetPos( 0 )
 {
     pHistory.reset( new SwHistory );

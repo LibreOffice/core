@@ -141,8 +141,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
 }
 
 ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments)
-: m_pListenersContainer( nullptr )
-, m_bDisposed( false )
+: m_bDisposed( false )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_refCount )

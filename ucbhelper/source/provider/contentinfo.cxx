@@ -42,7 +42,6 @@ PropertySetInfo::PropertySetInfo(
     const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
     ContentImplHelper* pContent )
 : m_xEnv( rxEnv ),
-  m_pProps( nullptr ),
   m_pContent( pContent )
 {
 }
@@ -211,7 +210,6 @@ CommandProcessorInfo::CommandProcessorInfo(
     const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
     ContentImplHelper* pContent )
 : m_xEnv( rxEnv ),
-  m_pCommands( nullptr ),
   m_pContent( pContent )
 {
 }

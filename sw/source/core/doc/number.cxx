@@ -1123,8 +1123,7 @@ namespace numfunc
           msFontname( OUString("OpenSymbol") ),
           mbUserDefinedFontname( false ),
           meFontWeight( WEIGHT_DONTKNOW ),
-          meFontItalic( ITALIC_NONE ),
-          mpFont( nullptr )
+          meFontItalic( ITALIC_NONE )
     {
         SetToDefault();
         LoadConfig();

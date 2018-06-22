@@ -1633,15 +1633,8 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
 */
 
 SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
-    mpFrameMap( nullptr ),
-    mpShapeMap( nullptr ),
-    mpEvents( nullptr ),
-    mpEventMap( nullptr ),
-    mpSelectedParas( nullptr ),
     mpVSh( pSh ),
-    mpPreview( nullptr ),
     mbShapeSelected( false ),
-    mpSeletedFrameMap(nullptr),
     maDocName(SwAccessibleContext::GetResource(STR_ACCESS_DOC_NAME))
 {
     pSh->GetLayout()->AddAccessibleShell();
