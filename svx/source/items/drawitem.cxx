@@ -268,8 +268,7 @@ SfxPoolItem* SvxPatternListItem::Clone( SfxItemPool * ) const
 
 QUERY_PUT_IMPL( SvxPatternListItem, PatternList )
 
-SvxDashListItem::SvxDashListItem() :
-    pDashList( nullptr )
+SvxDashListItem::SvxDashListItem()
 {
 }
 

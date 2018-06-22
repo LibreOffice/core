@@ -431,7 +431,6 @@ void ODbaseTable::fillColumns()
 
 ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConnection)
     : ODbaseTable_BASE(_pTables,_pConnection)
-    , m_pMemoStream(nullptr)
 {
     // initialize the header
     memset(&m_aHeader, 0, sizeof(m_aHeader));
@@ -450,7 +449,6 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
                        Description,
                        SchemaName,
                        CatalogName)
-    , m_pMemoStream(nullptr)
 {
     memset(&m_aHeader, 0, sizeof(m_aHeader));
     m_eEncoding = getConnection()->getTextEncoding();

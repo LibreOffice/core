@@ -1066,7 +1066,7 @@ struct PersistentPropertySet_Impl
 
     PersistentPropertySet_Impl( PropertySetRegistry& rCreator,
                                 const OUString& rKey )
-    : m_pCreator( &rCreator ), m_pInfo( nullptr ), m_aKey( rKey )
+    : m_pCreator( &rCreator ), m_aKey( rKey )
     {
     }
 };
@@ -2073,8 +2073,7 @@ PropertySetRegistry& PersistentPropertySet::getPropertySetRegistry()
 
 PropertySetInfo_Impl::PropertySetInfo_Impl(
                         PersistentPropertySet* pOwner )
-: m_pProps( nullptr ),
-  m_pOwner( pOwner )
+: m_pOwner( pOwner )
 {
 }
 

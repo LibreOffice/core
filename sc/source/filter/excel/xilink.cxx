@@ -338,8 +338,7 @@ const ScMatrix& XclImpExtName::MOper::GetCache() const
 }
 
 XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv )
-    : mpMOper(nullptr)
-    , mnStorageId(0)
+    : mnStorageId(0)
 {
     sal_uInt16 nFlags(0);
     sal_uInt8 nLen(0);

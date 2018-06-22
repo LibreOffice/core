@@ -112,7 +112,7 @@ PrintFontManager::PrintFont::PrintFont()
 }
 
 GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance *const pInstance)
-    : m_eType(t), m_pDisplay(nullptr), m_pPrintFontManager(nullptr)
+    : m_eType(t)
 {
     m_pInstance = pInstance; SetSalData(this);
 }

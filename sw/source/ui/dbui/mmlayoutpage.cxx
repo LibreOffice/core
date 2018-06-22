@@ -77,7 +77,6 @@ using namespace ::com::sun::star::view;
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, "MMLayoutPage",
         "modules/swriter/ui/mmlayoutpage.ui")
-    , m_pExampleFrame(nullptr)
     , m_pExampleWrtShell(nullptr)
     , m_pAddressBlockFormat(nullptr)
     , m_bIsGreetingInserted(false)

@@ -72,7 +72,6 @@ X11SalGraphics::X11SalGraphics():
     m_pFrame(nullptr),
     m_pVDev(nullptr),
     m_pColormap(nullptr),
-    m_pDeleteColormap(nullptr),
     hDrawable_(None),
     m_nXScreen( 0 ),
     m_pXRenderFormat(nullptr),

@@ -231,7 +231,6 @@ bool createContentProviderData(
 UniversalContentBroker::UniversalContentBroker(
     const Reference< css::uno::XComponentContext >& xContext )
 : m_xContext( xContext ),
-  m_pDisposeEventListeners( nullptr ),
   m_nCommandId( 0 )
 {
     OSL_ENSURE( m_xContext.is(),

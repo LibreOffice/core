@@ -75,8 +75,6 @@ void OInterceptor::dispose()
 OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     :m_pContentHolder( _pContentHolder )
     ,m_aInterceptedURL(7)
-    ,m_pDisposeEventListeners(nullptr)
-    ,m_pStatCL(nullptr)
 {
 
     OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");

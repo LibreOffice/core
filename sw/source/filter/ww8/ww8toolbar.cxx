@@ -783,7 +783,6 @@ bool PlfMcd::Read(SvStream &rS)
 
 PlfAcd::PlfAcd() :
  iMac(0)
-,rgacd(nullptr)
 {
 }
 
@@ -819,7 +818,6 @@ bool PlfAcd::Read( SvStream &rS)
 
 PlfKme::PlfKme() :
  iMac( 0 )
-,rgkme( nullptr )
 {
 }
 
@@ -865,7 +863,6 @@ bool TcgSttbf::Read( SvStream &rS)
 TcgSttbfCore::TcgSttbfCore() : fExtend( 0 )
 ,cData( 0 )
 ,cbExtra( 0 )
-,dataItems( nullptr )
 {
 }
 
@@ -895,7 +892,6 @@ bool TcgSttbfCore::Read( SvStream& rS )
 
 MacroNames::MacroNames() :
  iMac( 0 )
-,rgNames( nullptr )
 {
 }
 

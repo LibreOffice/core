@@ -23,7 +23,7 @@ namespace dbahsql
 class HsqlRowInputStream
 {
 private:
-    std::unique_ptr<SvStream> m_pStream = nullptr;
+    std::unique_ptr<SvStream> m_pStream;
 
 protected:
     OUString readString();

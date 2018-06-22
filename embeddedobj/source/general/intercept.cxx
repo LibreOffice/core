@@ -48,8 +48,7 @@ void Interceptor::DisconnectDocHolder()
 }
 
 Interceptor::Interceptor( DocumentHolder* pDocHolder )
-    : m_pDocHolder( pDocHolder ),
-      m_pStatCL(nullptr)
+    : m_pDocHolder( pDocHolder )
 {
     m_aInterceptedURL[0] = ".uno:Save";
     m_aInterceptedURL[1] = ".uno:SaveAll";

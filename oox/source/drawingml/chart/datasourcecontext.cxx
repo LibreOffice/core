@@ -40,8 +40,7 @@ using namespace ::com::sun::star;
 
 DoubleSequenceContext::DoubleSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel ) :
     DataSequenceContextBase( rParent, rModel ),
-    mnPtIndex( -1 ),
-    mpNumberFormatter( nullptr )
+    mnPtIndex( -1 )
 {
 }
 

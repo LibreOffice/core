@@ -171,7 +171,6 @@ SfxItemSet::SfxItemSet(
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
     : m_pPool(&rPool)
     , m_pParent(nullptr)
-    , m_pItems(nullptr)
     , m_pWhichRanges(nullptr)
     , m_nCount(0)
 {

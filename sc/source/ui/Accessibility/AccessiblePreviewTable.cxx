@@ -50,8 +50,7 @@ ScAccessiblePreviewTable::ScAccessiblePreviewTable( const css::uno::Reference<cs
                             ScPreviewShell* pViewShell, sal_Int32 nIndex ) :
     ScAccessibleContextBase( rxParent, AccessibleRole::TABLE ),
     mpViewShell( pViewShell ),
-    mnIndex( nIndex ),
-    mpTableInfo( nullptr )
+    mnIndex( nIndex )
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);

@@ -35,10 +35,8 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 MultiPropertySetHelper::MultiPropertySetHelper(
     const sal_Char** pNames ) :
-        pPropertyNames( nullptr ),
         nLength( 0 ),
         aPropertySequence(),
-        pSequenceIndex( nullptr ),
         aValues(),
         pValues( nullptr )
 {

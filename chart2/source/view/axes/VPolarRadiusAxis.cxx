@@ -130,7 +130,7 @@ void VPolarRadiusAxis::createShapes()
     TickFactory aAngleTickFactory( rAngleScale, rAngleIncrement );
     aAngleTickFactory.getAllTicks( aAngleTickInfos );
 
-    uno::Reference< XScaling > xInverseScaling( nullptr );
+    uno::Reference< XScaling > xInverseScaling;
     if( rAngleScale.Scaling.is() )
         xInverseScaling = rAngleScale.Scaling->getInverseScaling();
 

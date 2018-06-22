@@ -62,7 +62,6 @@
 
 XFTableStyle::XFTableStyle()
     : m_fWidth(2)
-    , m_pBGImage(nullptr)
     , m_eAlign(enumXFAlignStart)
 {}
 

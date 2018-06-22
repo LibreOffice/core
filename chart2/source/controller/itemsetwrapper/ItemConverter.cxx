@@ -37,7 +37,6 @@ ItemConverter::ItemConverter(
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool ) :
         m_xPropertySet( rPropertySet ),
-        m_xPropertySetInfo( nullptr ),
         m_rItemPool( rItemPool )
 {
     resetPropertySet( m_xPropertySet );

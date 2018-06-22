@@ -61,9 +61,6 @@ XResultSet_impl::XResultSet_impl( TaskManager* pMyShell,
     , m_aFolder( aUnqPath )
     , m_sProperty( seq )
     , m_sSortingInfo( seqSort )
-    , m_pDisposeEventListeners( nullptr )
-    , m_pRowCountListeners( nullptr )
-    , m_pIsFinalListeners( nullptr )
     , m_nErrorCode( TASKHANDLER_NO_ERROR )
     , m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {

@@ -971,7 +971,6 @@ static bool UCBOpenContentSync_(
 
 UcbLockBytes::UcbLockBytes()
     : m_aExpireDate( DateTime::EMPTY )
-    , m_xInputStream (nullptr)
     , m_nError( ERRCODE_NONE )
     , m_bTerminated  (false)
     , m_bDontClose( false )

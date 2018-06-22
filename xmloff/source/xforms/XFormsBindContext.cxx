@@ -67,8 +67,7 @@ XFormsBindContext::XFormsBindContext(
     const OUString& rLocalName,
     const Reference<XModel2>& xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
-        mxModel( xModel ),
-        mxBinding( nullptr )
+        mxModel( xModel )
 {
     // attach binding to model
     mxBinding = mxModel->createBinding();

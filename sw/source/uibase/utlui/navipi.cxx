@@ -598,7 +598,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
                                vcl::Window* pParent)
     : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", nullptr)
     , SfxControllerItem(SID_DOCFULLNAME, *_pBindings)
-    , m_pxObjectShell(nullptr)
     , m_pContentView(nullptr)
     , m_pContentWrtShell(nullptr)
     , m_pActContView(nullptr)

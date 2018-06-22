@@ -174,8 +174,7 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
     mnFontId( nFontId ),
-    maDevFontAttributes( rDevFontAttributes ),
-    mxFontCharMap( nullptr )
+    maDevFontAttributes( rDevFontAttributes )
 {
     // prefer font with low ID
     maDevFontAttributes.IncreaseQualityBy( 10000 - nFontId );

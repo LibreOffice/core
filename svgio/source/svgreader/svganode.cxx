@@ -27,8 +27,7 @@ namespace svgio
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGTokenA, rDocument, pParent),
-            maSvgStyleAttributes(*this),
-            mpaTransform(nullptr)
+            maSvgStyleAttributes(*this)
         {
         }
 

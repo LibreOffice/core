@@ -144,7 +144,6 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    bool _bUseHardRef)
                    : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
     ,m_pMediator(nullptr)
-    ,m_xDrvColumns(nullptr)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
     ,m_bInitialized(false)

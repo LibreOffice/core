@@ -123,8 +123,6 @@ MediaWindowImpl::MediaWindowImpl(vcl::Window* pParent, MediaWindow* pMediaWindow
     , DragSourceHelper(this)
     , mpMediaWindow(pMediaWindow)
     , mpMediaWindowControl(bInternalMediaControl ? VclPtr<MediaWindowControl>::Create(this) : nullptr)
-    , mpEmptyBmpEx(nullptr)
-    , mpAudioBmpEx(nullptr)
 {
     if (mpMediaWindowControl)
     {

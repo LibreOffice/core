@@ -522,7 +522,6 @@ ToolBarManager::Implementation::Implementation (
       mbIsValid(false),
       maToolBarList(),
       maToolBarShellList(),
-      mxLayouter(nullptr),
       mnLockCount(0),
       mbPreUpdatePending(false),
       mbPostUpdatePending(false),

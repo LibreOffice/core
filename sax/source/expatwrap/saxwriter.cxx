@@ -939,8 +939,7 @@ class SAXWriter :
 {
 public:
     SAXWriter()
-        : m_pSaxWriterHelper(nullptr)
-        , m_bDocStarted(false)
+        : m_bDocStarted(false)
         , m_bIsCDATA(false)
         , m_bForceLineBreak(false)
         , m_bAllowLineBreak(false)

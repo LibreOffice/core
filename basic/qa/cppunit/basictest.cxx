@@ -74,7 +74,7 @@ void MacroSnippet::LoadSourceFromFile( const OUString& sMacroFileURL )
 
 SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rArgs )
 {
-    SbxVariableRef pReturn = nullptr;
+    SbxVariableRef pReturn;
     if ( !Compile() )
         return pReturn;
     SbMethod* pMeth = mpMod.is() ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxClassType::Method )) : nullptr;

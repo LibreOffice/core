@@ -73,7 +73,6 @@ ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
     , nCount(0)
     , aParent(pParent)
     , rIndex(rInd)
-    , ppNodes(nullptr)
 {
     sal_uInt16 nT = rIndex.getHeader().db_maxkeys;
     ppNodes.reset( new ONDXNode[nT] );

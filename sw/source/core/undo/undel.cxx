@@ -98,8 +98,6 @@ SwUndoDelete::SwUndoDelete(
     bool bCalledByTableCpy )
     : SwUndo(SwUndoId::DELETE, rPam.GetDoc()),
     SwUndRng( rPam ),
-    m_pMvStt( nullptr ),
-    m_pRedlSaveData(nullptr),
     m_nNode(0),
     m_nNdDiff(0),
     m_nSectDiff(0),

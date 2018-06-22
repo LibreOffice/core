@@ -60,7 +60,6 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     const AttributeList& rAttribs, TextBodyProperties& rTextBodyProp )
 : ContextHandler2( rParent )
 , mrTextBodyProp( rTextBodyProp )
-, mpShapePtr( nullptr )
 {
     // ST_TextWrappingType
     sal_Int32 nWrappingType = rAttribs.getToken( XML_wrap, XML_square );

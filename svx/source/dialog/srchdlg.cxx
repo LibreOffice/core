@@ -266,12 +266,7 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     , bSet(false)
     , bConstruct(true)
     , nModifyFlag(ModifyFlags::NONE)
-    , pSearchList(nullptr)
     , pReplaceList(new SearchAttrItemList)
-    , pSearchItem(nullptr)
-    , pSearchController(nullptr)
-    , pOptionsController(nullptr)
-    , pFamilyController(nullptr)
     , nTransliterationFlags(TransliterationFlags::NONE)
 {
     get(m_pSearchFrame, "searchframe");

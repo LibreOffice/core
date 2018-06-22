@@ -1305,7 +1305,6 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool* pPool, SfxStyleFamily eFamily, SwDoc* 
     , m_bIsDescriptor(false)
     , m_bIsConditional(lcl_InitConditional(pPool, eFamily, rStyleName))
     , m_pBasePool(pPool)
-    , m_pPropertiesImpl(nullptr)
 { }
 
 SwXStyle::~SwXStyle()
@@ -1468,7 +1467,6 @@ public:
         : m_rDoc(rSwDoc)
         , m_pOldPageDesc(nullptr)
         , m_pItemSet(nullptr)
-        , m_pMyItemSet(nullptr)
         , m_rStyleName(rName)
         , m_pParentStyle(pParentStyle)
     { }
@@ -4279,7 +4277,7 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 }
 
 SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, SwTableAutoFormat* pTableAutoFormat) :
-    m_pDocShell(pDocShell), m_pTableAutoFormat(pTableAutoFormat), m_pTableAutoFormat_Impl(nullptr), m_bPhysical(true)
+    m_pDocShell(pDocShell), m_pTableAutoFormat(pTableAutoFormat), m_bPhysical(true)
 {
     UpdateCellStylesMapping();
 }
@@ -4634,7 +4632,6 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceName
 SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle) :
     m_pDocShell(pDocShell),
     m_pBoxAutoFormat(pBoxAutoFormat),
-    m_pBoxAutoFormat_Impl(nullptr),
     m_sParentStyle(sParentStyle),
     m_bPhysical(true)
 { }

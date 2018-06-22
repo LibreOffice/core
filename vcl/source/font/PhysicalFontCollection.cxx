@@ -63,7 +63,6 @@ PhysicalFontCollection::PhysicalFontCollection()
     : mbMatchData( false )
     , mpPreMatchHook( nullptr )
     , mpFallbackHook( nullptr )
-    , mpFallbackList( nullptr )
     , mnFallbackCount( -1 )
 {}
 

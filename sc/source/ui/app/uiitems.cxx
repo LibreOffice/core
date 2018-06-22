@@ -166,7 +166,6 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           ScViewData*           ptrViewData,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
-        mpQueryData(nullptr),
         pViewData   ( ptrViewData ),
         bIsAdvanced ( false )
 {
@@ -179,7 +178,6 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
 ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
-        mpQueryData(nullptr),
         pViewData   ( nullptr ),
         bIsAdvanced ( false )
 {
@@ -287,8 +285,7 @@ bool ScSubTotalItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberUd */ 
  * Transporter for the UserLIst dialog
  */
 ScUserListItem::ScUserListItem( sal_uInt16 nWhichP )
-    :   SfxPoolItem ( nWhichP ),
-        pUserList   ( nullptr )
+    :   SfxPoolItem ( nWhichP )
 {
 }
 

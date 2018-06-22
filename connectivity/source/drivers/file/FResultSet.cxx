@@ -75,10 +75,7 @@ IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","c
 
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
-                        ,m_aAssignValues(nullptr)
                         ,m_aSkipDeletedSet(this)
-                        ,m_pFileSet(nullptr)
-                        ,m_pSortIndex(nullptr)
                         ,m_pParseTree(pStmt->getParseTree())
                         ,m_pSQLAnalyzer(nullptr)
                         ,m_aSQLIterator(_aSQLIterator)
@@ -87,7 +84,6 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nFetchDirection(FetchDirection::FORWARD)
                         ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
                         ,m_xStatement(*pStmt)
-                        ,m_xMetaData(nullptr)
                         ,m_nRowPos(-1)
                         ,m_nFilePos(0)
                         ,m_nLastVisitedPos(-1)

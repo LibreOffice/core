@@ -1822,8 +1822,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     if( replace == maChildren.end() )
         throw NoSuchElementException();
 
-    Reference< XInterface > xNull( nullptr );
-    oldChild->setParent( xNull );
+    oldChild->setParent( Reference< XInterface >() );
 
     (*replace) = newChild;
 
@@ -1846,8 +1845,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
     if( old == maChildren.end() )
         throw NoSuchElementException();
 
-    Reference< XInterface > xNull( nullptr );
-    oldChild->setParent( xNull );
+    oldChild->setParent( Reference< XInterface >() );
 
     maChildren.erase( old );
 

@@ -144,9 +144,6 @@ namespace {
 
 SwParaChangeTrackingInfo::SwParaChangeTrackingInfo( const SwTextFrame& rTextFrame )
     : mrTextFrame( rTextFrame )
-    , mpChangeTrackInsertionTextMarkupList( nullptr )
-    , mpChangeTrackDeletionTextMarkupList( nullptr )
-    , mpChangeTrackFormatChangeTextMarkupList( nullptr )
 {
 }
 

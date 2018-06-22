@@ -322,10 +322,7 @@ namespace drawinglayer
         GeoTexSvxMultiHatch::GeoTexSvxMultiHatch(
             const primitive3d::HatchTexturePrimitive3D& rPrimitive,
             double fLogicPixelSize)
-        :   mfLogicPixelSize(fLogicPixelSize),
-            mp0(nullptr),
-            mp1(nullptr),
-            mp2(nullptr)
+        :   mfLogicPixelSize(fLogicPixelSize)
         {
             const attribute::FillHatchAttribute& rHatch(rPrimitive.getHatch());
             const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());

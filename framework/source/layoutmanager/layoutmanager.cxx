@@ -121,7 +121,6 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_xModuleManager( ModuleManager::create( xContext ))
         , m_xUIElementFactoryManager( ui::theUIElementFactoryManager::get(xContext) )
         , m_xPersistentWindowStateSupplier( ui::theWindowStateConfiguration::get( xContext ) )
-        , m_pGlobalSettings( nullptr )
         , m_aListenerContainer( m_aMutex )
 {
     // Initialize statusbar member

@@ -93,9 +93,7 @@ private:
 };
 
 FontCfgWrapper::FontCfgWrapper()
-    :
-        m_pOutlineSet( nullptr ),
-        m_pLanguageTag( nullptr )
+    : m_pOutlineSet( nullptr )
 {
     FcInit();
 }

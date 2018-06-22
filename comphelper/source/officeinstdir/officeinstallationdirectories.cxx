@@ -80,9 +80,7 @@ static OUString const g_aUserDirMacro("$(userdataurl)");
 
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
-: m_xCtx( xCtx ),
-  m_pOfficeBrandDir( nullptr ),
-  m_pUserDir( nullptr )
+: m_xCtx( xCtx )
 {
 }
 

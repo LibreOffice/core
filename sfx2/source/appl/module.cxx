@@ -54,7 +54,6 @@ public:
 };
 
 SfxModule_Impl::SfxModule_Impl()
- : pSlotPool(nullptr), pTbxCtrlFac(nullptr), pStbCtrlFac(nullptr), pFactArr(nullptr)
 {
 }
 

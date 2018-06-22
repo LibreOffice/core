@@ -192,11 +192,7 @@ ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
     nUsedHierarchy( -1 ),
     nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bRepeatItemLabels( false ),
-    bSubTotalDefault( true ),
-    pReferenceValue( nullptr ),
-    pSortInfo( nullptr ),
-    pAutoShowInfo( nullptr ),
-    pLayoutInfo( nullptr )
+    bSubTotalDefault( true )
 {
 }
 
@@ -723,7 +719,6 @@ void ScDPSaveDimension::Dump(int nIndent) const
 #endif
 
 ScDPSaveData::ScDPSaveData() :
-    pDimensionData( nullptr ),
     nColumnGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nRowGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nIgnoreEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
@@ -742,8 +737,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
     mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
-    mpGrandTotalName(r.mpGrandTotalName),
-    mpDimOrder(nullptr)
+    mpGrandTotalName(r.mpGrandTotalName)
 {
     if ( r.pDimensionData )
         pDimensionData.reset( new ScDPDimensionSaveData( *r.pDimensionData ) );

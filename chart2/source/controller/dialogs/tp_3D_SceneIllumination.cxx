@@ -209,7 +209,6 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window*
                 : TabPage ( pWindow
                           ,"tp_3D_SceneIllumination"
                           ,"modules/schart/ui/tp_3D_SceneIllumination.ui")
-                , m_pLightSourceInfoList(nullptr)
                 , m_xSceneProperties( xSceneProperties )
                 , m_aTimerTriggeredControllerLock( xChartModel )
                 , m_bInCommitToModel( false )

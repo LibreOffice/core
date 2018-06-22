@@ -1452,7 +1452,6 @@ SfxViewFrame::SfxViewFrame
     SfxObjectShell*     pObjShell
 )
     : m_pImpl( new SfxViewFrame_Impl( rFrame ) )
-    , m_pDispatcher(nullptr)
     , m_pBindings( new SfxBindings )
     , m_nAdjustPosPixelLock( 0 )
 {

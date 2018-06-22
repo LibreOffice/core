@@ -97,7 +97,6 @@ SwHHCWrapper::SwHHCWrapper(
     , m_pView( pSwView )
     , m_pWin( &pSwView->GetEditWin() )
     , m_rWrtShell( pSwView->GetWrtShell() )
-    , m_pConvArgs( nullptr )
     , m_nLastPos( 0 )
     , m_nUnitOffset( 0 )
     , m_nPageCount( 0 )

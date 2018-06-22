@@ -102,7 +102,6 @@ namespace fileaccess
                   m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
                   m_nMinorCode( TASKHANDLER_NO_ERROR ),
-                  m_xInteractionHandler( nullptr ),
                   m_xCommandEnvironment( xCommandEnv )
             {
             }

@@ -29,9 +29,7 @@ void Bundle::SetColor( sal_uInt32 nColor )
 }
 
 FontEntry::FontEntry() :
-    pFontName       ( nullptr ),
     eCharSetType    ( CST_CCOMPLETE ),
-    pCharSetValue   ( nullptr ),
     nFontType       ( 0 )
 {
 }

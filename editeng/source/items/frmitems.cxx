@@ -2241,8 +2241,6 @@ bool SvxBoxItem::HasBorder( bool bTreatPaddingAsBorder ) const
 
 SvxBoxInfoItem::SvxBoxInfoItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
-    pHori   ( nullptr ),
-    pVert   ( nullptr ),
     mbEnableHor( false ),
     mbEnableVer( false ),
     nDefDist( 0 )
@@ -2877,10 +2875,7 @@ bool SvxFormatKeepItem::GetPresentation
 
 
 SvxLineItem::SvxLineItem( const sal_uInt16 nId ) :
-
-    SfxPoolItem ( nId ),
-
-    pLine( nullptr )
+    SfxPoolItem ( nId )
 {
 }
 

@@ -702,7 +702,6 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
                             const ScRange* pOld, bool bSize, const ScRange* pAdvSrc ) :
     ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
                                          rParam.nCol2, rParam.nRow2, nNewTab ) ),
-    pDrawUndo( nullptr ),
     nTab( nNewTab ),
     aQueryParam( rParam ),
     xUndoDoc( std::move(pNewUndoDoc) ),

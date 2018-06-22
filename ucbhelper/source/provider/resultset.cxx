@@ -165,8 +165,6 @@ inline ResultSet_Impl::ResultSet_Impl(
   m_xEnv( rxEnv ),
   m_aProperties( rProperties ),
   m_xDataSupplier( rDataSupplier ),
-  m_pDisposeEventListeners( nullptr ),
-  m_pPropertyChangeListeners( nullptr ),
   m_nPos( 0 ), // Position is one-based. Zero means: before first element.
   m_bWasNull( false ),
   m_bAfterLast( false )

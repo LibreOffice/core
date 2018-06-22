@@ -234,8 +234,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "NumberingFormatPage",
         "cui/ui/numberingformatpage.ui", &rCoreAttrs)
-    , pNumItem(nullptr)
-    , pNumFmtShell(nullptr)
     , nInitFormat(ULONG_MAX)
     , sAutomaticEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
     , pLastActivWindow(nullptr)

@@ -72,7 +72,6 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     , mpHostAppData(nullptr)
     , mbIsTitlePossible(false)
     , mpSdrPage( nullptr )
-    , mpSolverContainer( nullptr )
 {
 }
 

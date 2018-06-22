@@ -1747,7 +1747,6 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , m_sInitials( rInitials )
     , m_sName( rName )
     , m_aDateTime( rDateTime )
-    , mpText( nullptr )
 {
     m_nPostItId = nPostItId == 0 ? m_nLastPostItId++ : nPostItId;
 }

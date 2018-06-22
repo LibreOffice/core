@@ -117,7 +117,6 @@ namespace xmloff
 
     //= OFormsRootExport
     OFormsRootExport::OFormsRootExport( SvXMLExport& _rExp )
-        :m_pImplElement(nullptr)
     {
         addModelAttributes(_rExp);
 

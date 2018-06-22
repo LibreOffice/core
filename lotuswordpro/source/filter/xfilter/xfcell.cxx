@@ -67,7 +67,6 @@
 
 XFCell::XFCell()
     : m_pOwnerRow(nullptr)
-    , m_pSubTable(nullptr)
     , m_nCol(0)
     , m_nColSpaned(1)
     , m_nRepeated(0)

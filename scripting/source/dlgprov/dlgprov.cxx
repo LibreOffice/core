@@ -196,7 +196,6 @@ namespace dlgprov
 
     DialogProviderImpl::DialogProviderImpl( const Reference< XComponentContext >& rxContext )
         :m_xContext( rxContext )
-        ,m_xModel( nullptr )
     {
     }
 

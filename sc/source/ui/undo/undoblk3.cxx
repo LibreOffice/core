@@ -72,7 +72,6 @@ ScUndoDeleteContents::ScUndoDeleteContents(
         aRange      ( rRange ),
         aMarkData   ( rMark ),
         pUndoDoc    ( std::move(pNewUndoDoc) ),
-        pDrawUndo   ( nullptr ),
         nFlags      ( nNewFlags ),
         bMulti      ( bNewMulti )   // unnecessary
 {

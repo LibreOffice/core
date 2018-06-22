@@ -130,7 +130,6 @@ SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFont
     : mrExport( rExport )
     , mrFontExport( rFontExport )
     , mrCurrentState( rCurState )
-    , mpElemFont( nullptr )
 {
 }
 
@@ -455,9 +454,6 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport,  SVGAttributeWriter& rAttribut
   mrCurrentTextPortion(),
   mpTextEmbeddedBitmapMtf( nullptr ),
   mpTargetMapMode( nullptr ),
-  mpTextShapeElem( nullptr ),
-  mpTextParagraphElem( nullptr ),
-  mpTextPositionElem( nullptr ),
   mnLeftTextPortionLength( 0 ),
   maTextPos(0,0),
   mnTextWidth(0),

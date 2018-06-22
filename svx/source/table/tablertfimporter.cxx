@@ -70,7 +70,7 @@ struct RTFCellInfo
     sal_Int32           mnRowSpan;
     std::shared_ptr< RTFCellInfo > mxVMergeCell;
 
-    explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnCellX(0), mnRowSpan(1), mxVMergeCell(nullptr) {}
+    explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnCellX(0), mnRowSpan(1) {}
 };
 
 typedef std::shared_ptr< RTFCellInfo > RTFCellInfoPtr;
@@ -144,7 +144,6 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 , mpActDefault( nullptr )
 , mpDefMerge( nullptr )
 , mxTable( rTableObj.getTable() )
-, mxLastRow( nullptr )
 {
     mpOutliner->SetUpdateMode(true);
     mpOutliner->SetStyleSheet( 0, mrTableObj.GetStyleSheet() );

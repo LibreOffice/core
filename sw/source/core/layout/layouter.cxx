@@ -201,12 +201,6 @@ void SwLooping::Control( SwPageFrame* pPage )
 }
 
 SwLayouter::SwLayouter()
-        : mpEndnoter( nullptr ),
-          mpLooping( nullptr ),
-          // #i28701#
-          mpMovedFwdFrames( nullptr ),
-          // #i35911#
-          mpObjsTmpConsiderWrapInfl( nullptr )
 {
 }
 

@@ -395,8 +395,7 @@ MenuSaveInData::MenuSaveInData(
         m_aMenuResourceURL(
             ITEM_MENUBAR_URL  ),
         m_aDescriptorContainer(
-            ITEM_DESCRIPTOR_CONTAINER  ),
-        pRootEntry( nullptr )
+            ITEM_DESCRIPTOR_CONTAINER  )
 {
     try
     {
@@ -1887,7 +1886,6 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     weld::Window* pParent, SvxEntries* entries,
     SvxConfigEntry const * selection, bool bCreateMenu )
     : GenericDialogController(pParent, "cui/ui/movemenu.ui", "MoveMenuDialog")
-    , mpEntries(nullptr)
     , m_xMenuBox(m_xBuilder->weld_widget("namebox"))
     , m_xMenuNameEdit(m_xBuilder->weld_entry("menuname"))
     , m_xMenuListBox(m_xBuilder->weld_tree_view("menulist"))
@@ -2034,7 +2032,6 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
     , bIsModified( false )
     , bIsVisible( true )
     , nStyle( 0 )
-    , mpEntries( nullptr )
 {
     if (bPopUp)
     {
@@ -2075,7 +2072,6 @@ ToolbarSaveInData::ToolbarSaveInData(
     bool docConfig ) :
 
     SaveInData              ( xCfgMgr, xParentCfgMgr, aModuleId, docConfig ),
-    pRootEntry              ( nullptr ),
     m_aDescriptorContainer  ( ITEM_DESCRIPTOR_CONTAINER  )
 
 {

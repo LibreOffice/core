@@ -28,14 +28,14 @@ namespace xmloff
 
     namespace
     {
-        static PPropertyHandler s_pVCLDateHandler = nullptr;
-        static PPropertyHandler s_pVCLTimeHandler = nullptr;
+        static PPropertyHandler s_pVCLDateHandler;
+        static PPropertyHandler s_pVCLTimeHandler;
     }
 
     //= FormHandlerFactory
     PPropertyHandler FormHandlerFactory::getFormPropertyHandler( const PropertyId i_propertyId )
     {
-        PPropertyHandler pHandler( nullptr );
+        PPropertyHandler pHandler;
 
         switch ( i_propertyId )
         {

@@ -27,10 +27,7 @@ namespace chart
 using namespace css;
 
 VButton::VButton()
-    : m_xShapeFactory(nullptr)
-    , m_xTarget(nullptr)
-    , m_xShape(nullptr)
-    , m_bShowArrow(true)
+    : m_bShowArrow(true)
     , m_nArrowColor(0x00000000)
     , m_nBGColor(0x00E6E6E6)
 {

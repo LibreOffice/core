@@ -75,8 +75,6 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
                rInAttrs ),
     m_rOutAttrs (rInAttrs ),
 
-    m_pBitmapList( nullptr ),
-
     m_pnBitmapListState( nullptr ),
     m_fObjectWidth(0.0),
     m_fObjectHeight(0.0),

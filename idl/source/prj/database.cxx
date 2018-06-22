@@ -46,7 +46,6 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( false )
     , nUniqueId( 0 )
     , nVerbosity( rCmd.nVerbosity )
-    , pIdTable( nullptr )
 {
     sSlotMapFile = rCmd.aSlotMapFile;
 }

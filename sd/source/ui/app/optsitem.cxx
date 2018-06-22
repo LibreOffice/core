@@ -76,7 +76,6 @@ bool SdOptionsItem::PutProperties( const Sequence< OUString >& rNames, const Seq
 
 SdOptionsGeneric::SdOptionsGeneric(bool bImpress, const OUString& rSubTree)
     : maSubTree(rSubTree)
-    , mpCfgItem( nullptr)
     , mbImpress(bImpress)
     , mbInit(rSubTree.isEmpty())
     , mbEnableModify(false)

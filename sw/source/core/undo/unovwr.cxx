@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
     : SwUndo(SwUndoId::OVERWRITE, pDoc),
-      pRedlSaveData( nullptr ), bGroup( false )
+      bGroup( false )
 {
     if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {

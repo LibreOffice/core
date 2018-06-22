@@ -4948,11 +4948,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     DragSourceHelper( this ),
 
     m_eBufferLanguage(LANGUAGE_DONTKNOW),
-    m_pApplyTempl(nullptr),
-    m_pAnchorMarker( nullptr ),
-    m_pUserMarker( nullptr ),
     m_pUserMarkerObj( nullptr ),
-    m_pShadCursor( nullptr ),
 
     m_rView( rMyView ),
 

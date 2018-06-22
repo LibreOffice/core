@@ -264,7 +264,6 @@ namespace drawinglayer
             mfDiagonal(fDiagonal),
             mfBackScale(fBackScale),
             mfRotation(fRotation),
-            mpLastRLGViewInformation(nullptr),
             mbSmoothNormals(bSmoothNormals),
             mbSmoothLids(bSmoothLids),
             mbCharacterMode(bCharacterMode),

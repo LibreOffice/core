@@ -1098,7 +1098,6 @@ namespace svx
     HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(vcl::Window* _pParent)
         : ModalDialog( _pParent, "HangulHanjaOptDialog",
             "cui/ui/hangulhanjaoptdialog.ui" )
-        , m_xConversionDictionaryList(nullptr)
     {
         get(m_pDictsLB, "dicts");
         get(m_pIgnorepostCB, "ignorepost");
@@ -1723,7 +1722,6 @@ namespace svx
         ,m_aEditHintText        ( CuiResId(RID_SVXSTR_EDITHINT) )
         ,m_rDictList            ( _rDictList )
         ,m_nCurrentDict         ( 0xFFFFFFFF )
-        ,m_pSuggestions         ( nullptr )
         ,m_nTopPos              ( 0 )
         ,m_bModifiedSuggestions ( false )
         ,m_bModifiedOriginal    ( false )

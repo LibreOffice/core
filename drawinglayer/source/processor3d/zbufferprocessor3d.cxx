@@ -526,9 +526,7 @@ namespace drawinglayer
             sal_uInt32 nStopLine)
         :   DefaultProcessor3D(rViewInformation3D, rSdrSceneAttribute, rSdrLightingAttribute),
             maInvEyeToView(),
-            mpZBufferRasterConverter3D(nullptr),
             mnAntiAlialize(nAntiAlialize),
-            mpRasterPrimitive3Ds(nullptr),
             mnStartLine(nStartLine),
             mnStopLine(nStopLine)
         {

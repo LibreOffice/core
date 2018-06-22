@@ -1018,8 +1018,6 @@ OUString SdrUndoObjOrdNum::GetComment() const
 
 SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
     : SdrUndoObj(rNewObj)
-    , pOldText(nullptr)
-    , pNewText(nullptr)
     , bNewTextAvailable(false)
     , bEmptyPresObj(false)
     , mnText(nText)
@@ -1415,7 +1413,6 @@ SdrUndoPageList::~SdrUndoPageList()
 
 SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
     : SdrUndoPageList(rNewPg)
-    , pUndoGroup(nullptr)
     , mbHasFillBitmap(false)
 {
     bItsMine = true;

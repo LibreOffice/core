@@ -370,7 +370,6 @@ XRMResMerge::XRMResMerge(
     const OString &rMergeSource, const OString &rOutputFile,
     const OString &rFilename )
                 : XRMResParser(),
-                pMergeDataFile( nullptr ),
                 sFilename( rFilename )
 {
     if (!rMergeSource.isEmpty() && sLanguage.equalsIgnoreAsciiCase("ALL"))

@@ -113,10 +113,6 @@ public:
 
 TGAReader::TGAReader(SvStream &rTGA)
     : m_rTGA(rTGA)
-    , mpFileHeader(nullptr)
-    , mpFileFooter(nullptr)
-    , mpExtension(nullptr)
-    , mpColorMap(nullptr)
     , mbStatus(true)
     , mnTGAVersion(1)
     , mnDestBitDepth(8)

@@ -88,7 +88,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * ucpfile_component_getFactory(
 FileProvider::FileProvider( const Reference< XComponentContext >& rxContext )
     : m_xContext(rxContext)
     , m_FileSystemNotation(FileSystemNotation::UNKNOWN_NOTATION)
-    , m_pMyShell(nullptr)
 {
 }
 

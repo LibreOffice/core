@@ -865,11 +865,8 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 
 ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, vcl::Window* pWin, bool isClone)
     :
-    mpViewForwarder(nullptr),
-    mpEditViewForwarder(nullptr),
     mpEditView(pEditView),
     mpEditEngine(pEditView ? pEditView->GetEditEngine() : nullptr),
-    mpForwarder(nullptr),
     mpWindow(pWin)
 {
     // If the object is cloned, do NOT add notify hdl.
@@ -1133,7 +1130,6 @@ void ScAccessibleEditLineTextData::EndEdit()
 ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
                             const ScAddress& rP)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
-    mpViewForwarder(nullptr),
     mpViewShell(pViewShell)
 {
 }
@@ -1202,7 +1198,6 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
             const OUString& rText, const ScAddress& rP, bool bColHeader, bool bRowHeader)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
-    mpViewForwarder(nullptr),
     mpViewShell(pViewShell),
     maText(rText),
     mbColHeader(bColHeader),
@@ -1303,8 +1298,6 @@ ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShel
     :
     mpViewForwarder(nullptr),
     mpViewShell(pViewShell),
-    mpEditEngine(nullptr),
-    mpForwarder(nullptr),
     mpDocSh(nullptr),
     mpEditObj(pEditObj),
     mbHeader(bHeader),
@@ -1416,8 +1409,6 @@ ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
     :
     mpViewForwarder(nullptr),
     mpViewShell(pViewShell),
-    mpEditEngine(nullptr),
-    mpForwarder(nullptr),
     mpDocSh(nullptr),
     msText(sText),
     maCellPos(aCellPos),

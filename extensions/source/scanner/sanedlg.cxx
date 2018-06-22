@@ -211,7 +211,6 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
         mbScanEnabled( bScanEnabled ),
         mnCurrentOption(0),
         mnCurrentElement(0),
-        mpRange(nullptr),
         mfMin(0.0),
         mfMax(0.0),
         doScan(false)

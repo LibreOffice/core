@@ -107,7 +107,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
                                )
     :svt::RoadmapWizard( _pParent )
 
-    , m_pOutSet(nullptr)
     , m_bIsConnectable( false)
     , m_sRM_IntroText( DBA_RES( STR_PAGETITLE_INTROPAGE ) )
     , m_sRM_dBaseText( DBA_RES( STR_PAGETITLE_DBASE ) )

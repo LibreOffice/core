@@ -58,7 +58,6 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, con
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
-    , mxThemeDom(nullptr)
     , mbIsSubstream(false)
     , mbSkipImages(bSkipImages)
     , mnPercentSize(0)

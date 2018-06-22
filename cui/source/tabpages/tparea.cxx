@@ -88,12 +88,6 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
                 "AreaTabPage",
                 "cui/ui/areatabpage.ui",
                rInAttrs ),
-    m_pFillTabPage( nullptr ),
-    m_pColorList( nullptr ),
-    m_pGradientList( nullptr ),
-    m_pHatchingList( nullptr ),
-    m_pBitmapList( nullptr ),
-    m_pPatternList( nullptr ),
 
     // local fixed not o be changed values for local pointers
     maFixed_ChangeType(ChangeType::NONE),

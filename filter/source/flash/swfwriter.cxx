@@ -44,8 +44,6 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     mnDocXScale( static_cast<double>(nTWIPWidthOutput) / mnDocWidth ),
     mnDocYScale( static_cast<double>(nTWIPHeightOutput) / mnDocHeight ),
     mpClipPolyPolygon( nullptr ),
-    mpTag( nullptr ),
-    mpSprite( nullptr ),
     mnNextId( 1 ),
     mnFrames( 0 ),
     mnGlobalTransparency(0),

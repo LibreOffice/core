@@ -245,7 +245,6 @@ void LwpFontTableEntry::RegisterFontDecl()
 
 LwpFontTable::LwpFontTable()
     : m_nCount(0)
-    , m_pFontEntries(nullptr)
 {}
 
 void LwpFontTable::Read(LwpObjectStream *pStrm)
@@ -358,7 +357,6 @@ bool LwpFontNameEntry::IsBackgroundColorOverridden()
 
 LwpFontNameManager::LwpFontNameManager()
     : m_nCount(0)
-    , m_pFontNames(nullptr)
 {}
 
 LwpFontNameManager::~LwpFontNameManager()

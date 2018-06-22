@@ -246,7 +246,6 @@ class LwpFontAttrManager
 public:
     LwpFontAttrManager()
         : m_nCount(0)
-        , m_pFontAttrs(nullptr)
         {}
     ~LwpFontAttrManager();
 public:

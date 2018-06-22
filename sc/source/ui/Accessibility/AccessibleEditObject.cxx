@@ -62,7 +62,6 @@ ScAccessibleEditObject::ScAccessibleEditObject(
         const OUString& rDescription, EditObjectType eObjectType)
     :
     ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME),
-    mpTextHelper(nullptr),
     mpEditView(pEditView),
     mpWindow(pWin),
     meObjectType(eObjectType),

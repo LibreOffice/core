@@ -44,8 +44,6 @@ AccessibleContextBase::AccessibleContextBase (
         const uno::Reference<XAccessible>& rxParent,
         const sal_Int16 aRole)
     :   WeakComponentImplHelper(MutexOwner::maMutex),
-        mxStateSet (nullptr),
-        mxRelationSet (nullptr),
         mxParent(rxParent),
         msDescription(),
         meDescriptionOrigin(NotSet),

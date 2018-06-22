@@ -1494,7 +1494,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                 DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
 
-        uno::Reference< chart2::XChartTypeTemplate > xTemplate(nullptr);
+        uno::Reference< chart2::XChartTypeTemplate > xTemplate;
         if( aTemplateAndService.second == "com.sun.star.chart2.template.ColumnWithLine" )
         {
             if( nNewValue != 0 )

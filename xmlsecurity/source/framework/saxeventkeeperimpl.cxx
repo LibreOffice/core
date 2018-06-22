@@ -39,8 +39,7 @@ namespace cssxs = com::sun::star::xml::sax;
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SAXEventKeeperImpl"
 
 SAXEventKeeperImpl::SAXEventKeeperImpl( )
-    :m_pRootBufferNode(nullptr),
-     m_pCurrentBufferNode(nullptr),
+    :m_pCurrentBufferNode(nullptr),
      m_nNextElementMarkId(1),
      m_pNewBlocker(nullptr),
      m_pCurrentBlockingBufferNode(nullptr),

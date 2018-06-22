@@ -65,7 +65,6 @@ ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   const OUString& rNewName) :
     ScSimpleUndo( pNewDocShell ),
     sNewName( rNewName ),
-    pDrawUndo( nullptr ),
     nTab( nTabNum ),
     bAppend( bApp )
 {
@@ -157,7 +156,6 @@ ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
                                         const std::vector<OUString>& newNameList) :
     ScSimpleUndo( pNewDocShell ),
-    pDrawUndo( nullptr ),
     aNameList( newNameList ),
     nTab( nTabNum )
 {
@@ -573,8 +571,7 @@ ScUndoCopyTab::ScUndoCopyTab(
     ScSimpleUndo( pNewDocShell ),
     mpOldTabs(pOldTabs),
     mpNewTabs(pNewTabs),
-    mpNewNames(pNewNames),
-    pDrawUndo( nullptr )
+    mpNewNames(pNewNames)
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 
@@ -784,8 +781,7 @@ ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
     aName( rN ),
     aComment( rC ),
     aColor( rCol ),
-    nFlags( nF ),
-    pDrawUndo( nullptr )
+    nFlags( nF )
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
@@ -864,7 +860,6 @@ ScUndoImportTab::ScUndoImportTab(ScDocShell* pShell,
     : ScSimpleUndo(pShell)
     , nTab(nNewTab)
     , nCount(nNewCount)
-    , pDrawUndo(nullptr)
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }

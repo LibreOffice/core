@@ -77,7 +77,6 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     m_aFieldPosition(),
     m_aAttrFieldType(),
     m_aPortionAttrs(),
-    m_pSentences( nullptr ),
     m_nBeforePortions( 0 ),
     m_bFinished( false )
 {

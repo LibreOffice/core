@@ -232,7 +232,7 @@ bool SwImpBlocks::PutMuchEntries( bool )
 }
 
 SwTextBlocks::SwTextBlocks( const OUString& rFile )
-    : pImp( nullptr ), nErr( 0 )
+    : nErr( 0 )
 {
     INetURLObject aObj(rFile);
     const OUString sFileName = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );

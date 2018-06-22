@@ -76,8 +76,7 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
 }
 
 ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment):
-    WorksheetContextBase(rFragment),
-    mpCurrentRule(nullptr)
+    WorksheetContextBase(rFragment)
 {
 }
 

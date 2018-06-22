@@ -280,7 +280,6 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mbRunning(false),
     mbValuesInLine(false),
     mbRefreshOnEmptyLine(false),
-    mpLines(nullptr),
     mnLinesCount(0),
     mnLinesSinceRefresh(0),
     mfLastRefreshTime(0.0),

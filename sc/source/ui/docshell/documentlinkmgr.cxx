@@ -43,7 +43,7 @@ struct DocumentLinkManagerImpl
     const DocumentLinkManagerImpl& operator=(const DocumentLinkManagerImpl&) = delete;
 
     explicit DocumentLinkManagerImpl(SfxObjectShell* pShell)
-        : mpShell(pShell), mpDataStream(nullptr), mpLinkManager(nullptr) {}
+        : mpShell(pShell), mpLinkManager(nullptr) {}
 
     ~DocumentLinkManagerImpl()
     {

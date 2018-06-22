@@ -36,14 +36,7 @@
 #include <o3tl/make_unique.hxx>
 
 ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
-    pDBCollection(nullptr),
-    pRangeName(nullptr),
-    pPrintRanges(pDoc->CreatePrintRangeSaver()),
-    pDPCollection(nullptr),
-    pDetOpList(nullptr),
-    pChartListenerCollection(nullptr),
-    pAreaLinks(nullptr),
-    pUnoRefs(nullptr)
+    pPrintRanges(pDoc->CreatePrintRangeSaver())
 {
     const ScDBCollection* pOldDBColl = pDoc->GetDBCollection();
     if (pOldDBColl && !pOldDBColl->empty())

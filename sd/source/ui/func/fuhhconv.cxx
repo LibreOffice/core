@@ -202,7 +202,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
             if( xInit.is() )
             {
                 //  initialize dialog
-                Reference< awt::XWindow > xDialogParentWindow(nullptr);
+                Reference< awt::XWindow > xDialogParentWindow;
                 Sequence<Any> aSeq(comphelper::InitAnyPropertySequence(
                 {
                     {"ParentWindow", uno::Any(xDialogParentWindow)}

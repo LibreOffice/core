@@ -101,7 +101,6 @@ OResultSet::OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* p
     , m_aRow(nullptr)
     , m_pMysql(rConn.getMysqlConnection())
     , m_aStatement(static_cast<OWeakObject*>(pStmt))
-    , m_xMetaData(nullptr)
     , m_pResult(pResult)
     , fieldCount(0)
     , m_encoding(_encoding)

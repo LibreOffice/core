@@ -89,18 +89,15 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
 /// CTor for the core internals
 SwViewShellImp::SwViewShellImp( SwViewShell *pParent ) :
     m_pShell( pParent ),
-    m_pDrawView( nullptr ),
     m_pSdrPageView( nullptr ),
     m_pFirstVisiblePage( nullptr ),
     m_pLayAction( nullptr ),
     m_pIdleAct( nullptr ),
-    m_pAccessibleMap( nullptr ),
     m_bFirstPageInvalid( true ),
     m_bResetHdlHiddenPaint( false ),
     m_bSmoothUpdate( false ),
     m_bStopSmooth( false ),
-    m_nRestoreActions( 0 ),
-    m_pPagePreviewLayout( nullptr )
+    m_nRestoreActions( 0 )
 {
 }
 

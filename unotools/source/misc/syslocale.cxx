@@ -59,7 +59,7 @@ private:
     void                        setDateAcceptancePatternsConfig();
 };
 
-SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(nullptr)
+SvtSysLocale_Impl::SvtSysLocale_Impl()
 {
     pLocaleData.reset(new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() ));
     setDateAcceptancePatternsConfig();
