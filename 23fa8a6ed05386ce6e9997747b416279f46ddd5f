@@ -68,6 +68,23 @@
       "revId": "23fa8a6ed05386ce6e9997747b416279f46ddd5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_52638eb1",
+        "filename": "chart2/inc/ChartView.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-22T15:31:41Z",
+      "side": 0,
+      "message": "Ugh, shame on us for not catching that replacing includes with fwd decls here is not OK.",
+      "revId": "23fa8a6ed05386ce6e9997747b416279f46ddd5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
