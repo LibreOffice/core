@@ -11,8 +11,9 @@
 #ifndef INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
 #define INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
 
-#include <filter/msfilter/mscodec.hxx>
+#include <oox/dllapi.h>
 #include <oox/crypto/CryptoEngine.hxx>
+#include <filter/msfilter/mscodec.hxx>
 #include <rtl/digest.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -25,7 +26,7 @@ namespace oox {
 namespace oox {
 namespace core {
 
-class Standard2007Engine : public CryptoEngine
+class OOX_DLLPUBLIC Standard2007Engine : public CryptoEngine
 {
     msfilter::StandardEncryptionInfo mInfo;
 
