@@ -206,8 +206,8 @@ public:
         ParameterFlags() : bOptional(false) {}
     };
 
-    OUString      *pFuncName;              /**< Function name */
-    OUString      *pFuncDesc;              /**< Description of function */
+    std::unique_ptr<OUString> pFuncName;          /**< Function name */
+    std::unique_ptr<OUString> pFuncDesc;          /**< Description of function */
     std::vector<OUString> maDefArgNames;          /**< Parameter name(s) */
     std::vector<OUString> maDefArgDescs;          /**< Description(s) of parameter(s) */
     ParameterFlags       *pDefArgFlags;           /**< Flags for each parameter */
