@@ -27,20 +27,20 @@ private:
 public:
     Directories();
 
-    const OUString& getSrcRootURL()       { return m_aSrcRootURL; }
-    const OUString& getSrcRootPath()      { return m_aSrcRootPath; }
+    const OUString& getSrcRootURL()  const { return m_aSrcRootURL; }
+    const OUString& getSrcRootPath() const { return m_aSrcRootPath; }
 
     // return a URL to a given path from the source directory
-    OUString getURLFromSrc( const OUString& rPath );
+    OUString getURLFromSrc(const OUString& rPath) const;
 
     // return a Path to a given path from the source directory
-    OUString getPathFromSrc( const OUString& rPath );
+    OUString getPathFromSrc(const OUString& rPath) const;
 
     // return a URL to a given path from the workdir directory
-    OUString getURLFromWorkdir( const OUString &rPath );
+    OUString getURLFromWorkdir(const OUString &rPath) const;
 
     // return a Path to a given path from the workdir directory
-    OUString getPathFromWorkdir( const OUString &rPath );
+    OUString getPathFromWorkdir(const OUString &rPath) const;
 };
 
 }
