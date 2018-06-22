@@ -1308,7 +1308,7 @@ bool ScTokenArray::AddFormulaToken(
     return bError;
 }
 
-void ScTokenArray::CheckForThreading( OpCode eOp  )
+void ScTokenArray::CheckForThreading( const FormulaToken& r )
 {
     static const std::set<OpCode> aThreadedCalcBlackList({
         ocIndirect,
@@ -1333,28 +1333,47 @@ void ScTokenArray::CheckForThreading( OpCode eOp  )
 
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
 
-    if (!bThreadingProhibited)
+    if (bThreadingProhibited)
     {
-        if (aThreadedCalcBlackList.count(eOp))
+        mbThreadingEnabled = false;
+        return;
+    }
+
+    OpCode eOp = r.GetOpCode();
+
+    if (aThreadedCalcBlackList.count(eOp))
+    {
+        SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
+            << "(" << int(eOp) << ") disables threaded calculation of formula group");
+        mbThreadingEnabled = false;
+        return;
+    }
+
+    if (eOp == ocPush)
+    {
+        switch (r.GetType())
         {
-            SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
-                << "(" << int(eOp) << ") disables threaded calculation of formula group");
-            mbThreadingEnabled = false;
+            case svExternalDoubleRef:
+            case svExternalSingleRef:
+                SAL_INFO("sc.core.formulagroup", "opcode ocPush: variable type " << StackVarEnumToString(r.GetType())
+                    << " disables threaded calculcation of formula group");
+                mbThreadingEnabled = false;
+                return;
+            default:
+                break;
         }
     }
-    else
-        mbThreadingEnabled = false;
 }
 
 void ScTokenArray::CheckToken( const FormulaToken& r )
 {
-    OpCode eOp = r.GetOpCode();
-
     if (mbThreadingEnabled)
-        CheckForThreading(eOp);
+        CheckForThreading(r);
 
     if (IsFormulaVectorDisabled())
         return; // It's already disabled.  No more checking needed.
+
+    OpCode eOp = r.GetOpCode();
 
     if (SC_OPCODE_START_FUNCTION <= eOp && eOp < SC_OPCODE_STOP_FUNCTION)
     {
