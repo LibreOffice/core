@@ -84,27 +84,21 @@ void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ 
         pConsParam->eFunction = eFunction;
 
         sal_uInt16 nCount = static_cast<sal_uInt16>(std::min( ScRangeStringConverter::GetTokenCount( sSourceList ), sal_Int32(0xFFFF) ));
-        ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : nullptr;
-        if( ppAreas )
+        if( nCount )
         {
+            std::unique_ptr<ScArea[]> ppAreas(new ScArea[ nCount ]);
             sal_Int32 nOffset = 0;
             sal_uInt16 nIndex;
             for( nIndex = 0; nIndex < nCount; ++nIndex )
             {
-                ppAreas[ nIndex ] = new ScArea;
                 if ( !ScRangeStringConverter::GetAreaFromString(
-                    *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
+                    ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
                 {
                     //! handle error
                 }
             }
 
-            pConsParam->SetAreas( ppAreas, nCount );
-
-            // array is copied in SetAreas
-            for( nIndex = 0; nIndex < nCount; ++nIndex )
-                delete ppAreas[nIndex];
-            delete[] ppAreas;
+            pConsParam->SetAreas( std::move(ppAreas), nCount );
         }
 
         pConsParam->bByCol = pConsParam->bByRow = false;

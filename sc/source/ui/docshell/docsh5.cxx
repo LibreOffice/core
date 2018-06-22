@@ -511,13 +511,13 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
     bool bErr = false;
     for (nPos=0; nPos<rParam.nDataAreaCount; nPos++)
     {
-        ScArea* pArea = rParam.ppDataAreas[nPos];
-        nColSize = std::max( nColSize, SCCOL( pArea->nColEnd - pArea->nColStart + 1 ) );
-        nRowSize = std::max( nRowSize, SCROW( pArea->nRowEnd - pArea->nRowStart + 1 ) );
+        ScArea const & rArea = rParam.pDataAreas[nPos];
+        nColSize = std::max( nColSize, SCCOL( rArea.nColEnd - rArea.nColStart + 1 ) );
+        nRowSize = std::max( nRowSize, SCROW( rArea.nRowEnd - rArea.nRowStart + 1 ) );
 
                                         // test if source data were moved
         if (rParam.bReferenceData)
-            if (pArea->nTab == rParam.nTab && pArea->nRowEnd >= rParam.nRow)
+            if (rArea.nTab == rParam.nTab && rArea.nRowEnd >= rParam.nRow)
                 bErr = true;
     }
 
@@ -546,17 +546,17 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
     if ( rParam.bByCol || rParam.bByRow )
         for (nPos=0; nPos<rParam.nDataAreaCount; nPos++)
         {
-            ScArea* pArea = rParam.ppDataAreas[nPos];
-            aData.AddFields( &m_aDocument, pArea->nTab, pArea->nColStart, pArea->nRowStart,
-                                                        pArea->nColEnd, pArea->nRowEnd );
+            ScArea const & rArea = rParam.pDataAreas[nPos];
+            aData.AddFields( &m_aDocument, rArea.nTab, rArea.nColStart, rArea.nRowStart,
+                                                       rArea.nColEnd, rArea.nRowEnd );
         }
     aData.DoneFields();
     for (nPos=0; nPos<rParam.nDataAreaCount; nPos++)
     {
-        ScArea* pArea = rParam.ppDataAreas[nPos];
-        aData.AddData( &m_aDocument, pArea->nTab, pArea->nColStart, pArea->nRowStart,
-                                                    pArea->nColEnd, pArea->nRowEnd );
-        aData.AddName( lcl_GetAreaName(&m_aDocument,pArea) );
+        ScArea const & rArea = rParam.pDataAreas[nPos];
+        aData.AddData( &m_aDocument, rArea.nTab, rArea.nColStart, rArea.nRowStart,
+                                                 rArea.nColEnd, rArea.nRowEnd );
+        aData.AddName( lcl_GetAreaName(&m_aDocument, &rArea) );
     }
 
     aData.GetSize( nColSize, nRowSize );

@@ -105,41 +105,23 @@ bool ScImportParam::operator==( const ScImportParam& rOther ) const
 
 // struct ScConsolidateParam:
 
-ScConsolidateParam::ScConsolidateParam() :
-    ppDataAreas( nullptr )
+ScConsolidateParam::ScConsolidateParam()
 {
     Clear();
 }
 
-ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
-        nCol(r.nCol),nRow(r.nRow),nTab(r.nTab),
-        eFunction(r.eFunction),nDataAreaCount(0),
-        ppDataAreas( nullptr ),
-        bByCol(r.bByCol),bByRow(r.bByRow),bReferenceData(r.bReferenceData)
+ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r )
 {
-    if ( r.nDataAreaCount > 0 )
-    {
-        nDataAreaCount = r.nDataAreaCount;
-        ppDataAreas = new ScArea*[nDataAreaCount];
-        for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
-            ppDataAreas[i] = new ScArea( *(r.ppDataAreas[i]) );
-    }
+    operator=(r);
 }
 
 ScConsolidateParam::~ScConsolidateParam()
 {
-    ClearDataAreas();
 }
 
 void ScConsolidateParam::ClearDataAreas()
 {
-    if ( ppDataAreas )
-    {
-        for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
-            delete ppDataAreas[i];
-        delete [] ppDataAreas;
-        ppDataAreas = nullptr;
-    }
+    pDataAreas.reset();
     nDataAreaCount = 0;
 }
 
@@ -163,8 +145,16 @@ ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
     bByRow          = r.bByRow;
     bReferenceData  = r.bReferenceData;
     eFunction       = r.eFunction;
-    SetAreas( r.ppDataAreas, r.nDataAreaCount );
-
+    nDataAreaCount  = r.nDataAreaCount;
+    if ( r.nDataAreaCount > 0 )
+    {
+        nDataAreaCount = r.nDataAreaCount;
+        pDataAreas.reset( new ScArea[nDataAreaCount] );
+        for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
+            pDataAreas[i] = r.pDataAreas[i];
+    }
+    else
+        pDataAreas.reset();
     return *this;
 }
 
@@ -180,27 +170,21 @@ bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
                  && (eFunction      == r.eFunction);
 
     if ( nDataAreaCount == 0 )
-        bEqual = bEqual && (ppDataAreas == nullptr) && (r.ppDataAreas == nullptr);
+        bEqual = bEqual && (pDataAreas == nullptr) && (r.pDataAreas == nullptr);
     else
-        bEqual = bEqual && (ppDataAreas != nullptr) && (r.ppDataAreas != nullptr);
+        bEqual = bEqual && (pDataAreas != nullptr) && (r.pDataAreas != nullptr);
 
     if ( bEqual && (nDataAreaCount > 0) )
         for ( sal_uInt16 i=0; i<nDataAreaCount && bEqual; i++ )
-            bEqual = *(ppDataAreas[i]) == *(r.ppDataAreas[i]);
+            bEqual = pDataAreas[i] == r.pDataAreas[i];
 
     return bEqual;
 }
 
-void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
+void ScConsolidateParam::SetAreas( std::unique_ptr<ScArea[]> pAreas, sal_uInt16 nCount )
 {
-    ClearDataAreas();
-    if ( ppAreas && nCount > 0 )
-    {
-        ppDataAreas = new ScArea*[nCount];
-        for ( sal_uInt16 i=0; i<nCount; i++ )
-            ppDataAreas[i] = new ScArea( *(ppAreas[i]) );
-        nDataAreaCount = nCount;
-    }
+    pDataAreas = std::move(pAreas);
+    nDataAreaCount = nCount;
 }
 
 // struct ScSolveParam
