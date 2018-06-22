@@ -231,6 +231,7 @@ IMPL_LINK(Condition, DropdownClick, ToolBox*, pToolBox, void)
                            nSlotId,
                            nullptr,
                            pToolBox,
+                           false,
                            m_aColorWrapper);
 
     m_pColorFloat->EnableDocking();
