@@ -114,15 +114,14 @@ ScConsolidateParam::ScConsolidateParam() :
 ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
         nCol(r.nCol),nRow(r.nRow),nTab(r.nTab),
         eFunction(r.eFunction),nDataAreaCount(0),
-        ppDataAreas( nullptr ),
         bByCol(r.bByCol),bByRow(r.bByRow),bReferenceData(r.bReferenceData)
 {
     if ( r.nDataAreaCount > 0 )
     {
         nDataAreaCount = r.nDataAreaCount;
-        ppDataAreas = new ScArea*[nDataAreaCount];
+        ppDataAreas.reset( new std::unique_ptr<ScArea>[nDataAreaCount] );
         for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
-            ppDataAreas[i] = new ScArea( *(r.ppDataAreas[i]) );
+            ppDataAreas[i].reset(new ScArea( *(r.ppDataAreas[i]) ));
     }
 }
 
@@ -133,13 +132,7 @@ ScConsolidateParam::~ScConsolidateParam()
 
 void ScConsolidateParam::ClearDataAreas()
 {
-    if ( ppDataAreas )
-    {
-        for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
-            delete ppDataAreas[i];
-        delete [] ppDataAreas;
-        ppDataAreas = nullptr;
-    }
+    ppDataAreas.reset();
     nDataAreaCount = 0;
 }
 
@@ -163,7 +156,7 @@ ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
     bByRow          = r.bByRow;
     bReferenceData  = r.bReferenceData;
     eFunction       = r.eFunction;
-    SetAreas( r.ppDataAreas, r.nDataAreaCount );
+    SetAreas( r.ppDataAreas.get(), r.nDataAreaCount );
 
     return *this;
 }
@@ -191,14 +184,14 @@ bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
     return bEqual;
 }
 
-void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
+void ScConsolidateParam::SetAreas( std::unique_ptr<ScArea> const* ppAreas, sal_uInt16 nCount )
 {
     ClearDataAreas();
     if ( ppAreas && nCount > 0 )
     {
-        ppDataAreas = new ScArea*[nCount];
+        ppDataAreas.reset(new std::unique_ptr<ScArea>[nCount]);
         for ( sal_uInt16 i=0; i<nCount; i++ )
-            ppDataAreas[i] = new ScArea( *(ppAreas[i]) );
+            ppDataAreas[i].reset(new ScArea( *(ppAreas[i]) ));
         nDataAreaCount = nCount;
     }
 }
