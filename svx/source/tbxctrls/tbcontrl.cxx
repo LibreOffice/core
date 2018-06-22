@@ -1370,9 +1370,11 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
                          const Reference< XFrame >& rFrame,
                          weld::Window*              pParentWindow,
                          weld::MenuButton*          pMenuButton,
+                         bool                       bInterimBuilder,
                          std::function<void(const OUString&, const NamedColor&)> const & aFunction)
     : ToolbarPopupBase(rFrame)
-    , m_xBuilder(Application::CreateBuilder(pMenuButton, "svx/ui/colorwindow.ui"))
+    , m_xBuilder(bInterimBuilder ? Application::CreateInterimBuilder(pMenuButton, "svx/ui/colorwindow.ui")
+                                 : Application::CreateBuilder(pMenuButton, "svx/ui/colorwindow.ui"))
     , theSlotId(nSlotId)
     , mpParentWindow(pParentWindow)
     , mpMenuButton(pMenuButton)
@@ -3740,11 +3742,12 @@ void SvxColorListBox::SelectEntry(const Color& rColor)
     ShowPreview(m_aSelectedColor);
 }
 
-ColorListBox::ColorListBox(weld::MenuButton* pControl, weld::Window* pTopLevel)
+ColorListBox::ColorListBox(weld::MenuButton* pControl, weld::Window* pTopLevel, bool bInterimBuilder)
     : m_xButton(pControl)
     , m_pTopLevel(pTopLevel)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
+    , m_bInterimBuilder(bInterimBuilder)
 {
     m_aSelectedColor = GetAutoColor(0);
     LockWidthRequest();
@@ -3777,6 +3780,7 @@ void ColorListBox::createColorWindow()
                             xFrame,
                             m_pTopLevel,
                             m_xButton.get(),
+                            m_bInterimBuilder,
                             m_aColorWrapper));
 
     SetNoSelection();
@@ -3796,6 +3800,8 @@ void ColorListBox::Selected(const NamedColor& rColor)
 {
     ShowPreview(rColor);
     m_aSelectedColor = rColor;
+    if (m_aSelectedLink.IsSet())
+        m_aSelectedLink.Call(*this);
 }
 
 //to avoid the box resizing every time the color is changed to
