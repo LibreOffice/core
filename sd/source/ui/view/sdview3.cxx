@@ -447,7 +447,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 if( (mnDragSrcPgNum != SDRPAGE_NOTFOUND) && (mnDragSrcPgNum != pPV->GetPage()->GetPageNum()) )
                                 {
-                                    pMarkList = mpDragSrcMarkList;
+                                    pMarkList = mpDragSrcMarkList.get();
                                 }
                                 else
                                 {
@@ -593,7 +593,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 for(ImpRememberOrigAndClone* p : aConnectorContainer)
                                     delete p;
 
-                                if( pMarkList != mpDragSrcMarkList )
+                                if( pMarkList != mpDragSrcMarkList.get() )
                                     delete pMarkList;
 
                                 bReturn = true;
