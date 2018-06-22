@@ -345,6 +345,7 @@ public:
     void testTdf116789();
     void testTdf117225();
     void testTdf91801();
+    void testTdf51223();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -541,6 +542,7 @@ public:
     CPPUNIT_TEST(testTdf116789);
     CPPUNIT_TEST(testTdf117225);
     CPPUNIT_TEST(testTdf91801);
+    CPPUNIT_TEST(testTdf51223);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6311,6 +6313,19 @@ void SwUiWriterTest::testTdf91801()
     CPPUNIT_ASSERT_EQUAL(555.0, xCell->getValue());
 }
 
+void SwUiWriterTest::testTdf51223()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    pWrtShell->Insert("i");
+    pWrtShell->SplitNode(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("I"), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("i"), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
