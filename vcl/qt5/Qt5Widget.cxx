@@ -199,9 +199,18 @@ void VclQtMixinBase::mixinShowEvent(QShowEvent*)
     m_pFrame->CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-void VclQtMixinBase::mixinCloseEvent(QCloseEvent* /*pEvent*/)
+void VclQtMixinBase::mixinCloseEvent(QCloseEvent* pEvent)
 {
-    m_pFrame->CallCallback(SalEvent::Close, nullptr);
+    bool bRet = false;
+    bRet = m_pFrame->CallCallback(SalEvent::Close, nullptr);
+
+    if (bRet)
+        pEvent->accept();
+    // SalEvent::Close returning false may mean that user has vetoed
+    // closing the frame ("you have unsaved changes" dialog for example)
+    // We should't process the event in such case
+    else
+        pEvent->ignore();
 }
 
 static sal_uInt16 GetKeyCode(int keyval)
