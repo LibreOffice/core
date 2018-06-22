@@ -68,23 +68,18 @@ blobs to avoid needlessly complicating the Calc logic.
 */
 struct AutoFormatSwBlob
 {
-    sal_uInt8 *pData;
+    std::unique_ptr<sal_uInt8[]> pData;
     std::size_t size;
 
-    AutoFormatSwBlob() : pData(nullptr), size(0)
+    AutoFormatSwBlob() : size(0)
     {
     }
     AutoFormatSwBlob(const AutoFormatSwBlob&) = delete;
     const AutoFormatSwBlob& operator=(const AutoFormatSwBlob&) = delete;
-    ~AutoFormatSwBlob()
-    {
-        Reset();
-    }
 
     void Reset()
     {
-        delete[] pData;
-        pData = nullptr;
+        pData.reset();
         size = 0;
     }
 };

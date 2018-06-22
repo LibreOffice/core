@@ -97,9 +97,9 @@ namespace
         // since it (naturally) doesn't have any writer-specific data to write.
         if (blobSize)
         {
-            blob.pData = new sal_uInt8[blobSize];
+            blob.pData.reset(new sal_uInt8[blobSize]);
             blob.size = static_cast<std::size_t>(blobSize);
-            stream.ReadBytes(blob.pData, blob.size);
+            stream.ReadBytes(blob.pData.get(), blob.size);
         }
 
         return stream;
@@ -111,7 +111,7 @@ namespace
         const sal_uInt64 endOfBlob = stream.Tell() + sizeof(sal_uInt64) + blob.size;
         stream.WriteUInt64( endOfBlob );
         if (blob.size)
-            stream.WriteBytes(blob.pData, blob.size);
+            stream.WriteBytes(blob.pData.get(), blob.size);
 
         return stream;
     }
