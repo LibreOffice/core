@@ -283,19 +283,17 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
         return 0;
 
     // Copy into PdfData
-    uno::Sequence<sal_Int8> aPdfData;
     aMemoryStream.Seek(STREAM_SEEK_TO_END);
-    aPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.Tell());
+    auto pPdfData = std::make_shared<css::uno::Sequence<sal_Int8>>(aMemoryStream.Tell());
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(aPdfData.getArray(), aPdfData.getLength());
+    aMemoryStream.ReadBytes(pPdfData->getArray(), pPdfData->getLength());
 
     // Prepare the link with the PDF stream.
-    const size_t nGraphicContentSize = aPdfData.getLength();
+    const size_t nGraphicContentSize = pPdfData->getLength();
     std::unique_ptr<sal_uInt8[]> pGraphicContent(new sal_uInt8[nGraphicContentSize]);
-    memcpy(pGraphicContent.get(), aPdfData.get(), nGraphicContentSize);
+    memcpy(pGraphicContent.get(), pPdfData->get(), nGraphicContentSize);
     std::shared_ptr<GfxLink> pGfxLink(std::make_shared<GfxLink>(
         std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf));
-    auto pPdfData = std::make_shared<uno::Sequence<sal_Int8>>(aPdfData);
 
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
@@ -306,7 +304,7 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
 
     // Load the buffer using pdfium.
     FPDF_DOCUMENT pPdfDocument
-        = FPDF_LoadMemDocument(aPdfData.getArray(), aPdfData.getLength(), /*password=*/nullptr);
+        = FPDF_LoadMemDocument(pPdfData->getArray(), pPdfData->getLength(), /*password=*/nullptr);
     if (!pPdfDocument)
         return 0;
 
