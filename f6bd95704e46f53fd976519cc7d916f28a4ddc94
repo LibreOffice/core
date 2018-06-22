@@ -46,6 +46,30 @@
       "revId": "f6bd95704e46f53fd976519cc7d916f28a4ddc94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_12c2f633",
+        "filename": "sd/source/ui/inc/fuformatpaintbrush.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2018-06-22T19:12:42Z",
+      "side": 0,
+      "message": "odd, my find-unneeded-includes doesn\u0027t list itemset.hxx. And I thought the implicit destructor of FuFormatPaintBrush\nneeds SfxItemSet to be complete.",
+      "parentUuid": "5a22e58a_89aa3dd3",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 17
+      },
+      "revId": "f6bd95704e46f53fd976519cc7d916f28a4ddc94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
