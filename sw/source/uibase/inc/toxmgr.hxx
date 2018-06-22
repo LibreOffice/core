@@ -73,7 +73,6 @@ public:
     // single argument ctors shall be explicit.
     explicit SwTOXDescription(TOXTypes eType) :
         m_eTOXType(eType),
-        m_pForm(nullptr),
         m_nContent(SwTOXElement::Mark | SwTOXElement::OutlineLevel),
         m_nIndexOptions(SwTOIOptions::SameEntry|SwTOIOptions::FF|SwTOIOptions::CaseSensitive),
         m_nOLEOptions(SwTOOElements::NONE),

@@ -219,7 +219,6 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps 
     ,mnListenerLockLevel( 0 )
     ,mnWritingMode( WritingMode2::CONTEXT )
     ,mnContextWritingMode( WritingMode2::CONTEXT )
-    ,mpPropHelper( nullptr )
 {
 }
 
@@ -330,7 +329,6 @@ void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window const * pWi
 }
 
 VCLXWindow::VCLXWindow( bool _bWithDefaultProps )
-    :mpImpl( nullptr )
 {
     mpImpl.reset( new VCLXWindowImpl( *this, _bWithDefaultProps ) );
 }

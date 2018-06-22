@@ -803,7 +803,6 @@ OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnl
     : FloatingWindow(_pParent, "FloatingSort", "modules/dbreport/ui/floatingsort.ui")
     , OPropertyChangeListener(m_aMutex)
     , m_pController(_pController)
-    , m_pCurrentGroupListener(nullptr)
     , m_xGroups(m_pController->getReportDefinition()->getGroups())
     , m_bReadOnly(_bReadOnly)
 {

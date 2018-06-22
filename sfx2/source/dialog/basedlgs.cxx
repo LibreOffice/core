@@ -124,8 +124,7 @@ void SfxModalDialog::GetDialogData_Impl()
 
 SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription )
 :   ModalDialog(pParent, rID, rUIXMLDescription),
-    pInputSet(nullptr),
-    pOutputSet(nullptr)
+    pInputSet(nullptr)
 {
     GetDialogData_Impl();
 }

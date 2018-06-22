@@ -230,8 +230,7 @@ VectorGraphicData::VectorGraphicData(
     maSequence(),
     maReplacement(),
     mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType),
-    mpExternalHeader(nullptr)
+    meVectorGraphicDataType(eVectorDataType)
 {
 }
 
@@ -245,8 +244,7 @@ VectorGraphicData::VectorGraphicData(
     maSequence(),
     maReplacement(),
     mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType),
-    mpExternalHeader(nullptr)
+    meVectorGraphicDataType(eVectorDataType)
 {
     SvFileStream rIStm(rPath, StreamMode::STD_READ);
     if(rIStm.GetError())

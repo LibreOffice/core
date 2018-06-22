@@ -244,8 +244,7 @@ namespace pdfi
     protected:
         PageElement( Element* pParent, sal_Int32 nPageNr )
         : Element( pParent ), PageNumber( nPageNr ), Hyperlinks(),
-        TopMargin( 0.0 ), BottomMargin( 0.0 ), LeftMargin( 0.0 ), RightMargin( 0.0 ),
-        HeaderElement( nullptr ), FooterElement( nullptr )
+        TopMargin( 0.0 ), BottomMargin( 0.0 ), LeftMargin( 0.0 ), RightMargin( 0.0 )
         {}
     private:
         // helper method for resolveHyperlinks

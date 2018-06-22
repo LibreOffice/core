@@ -337,7 +337,7 @@ static SbxVariableRef Element
 
 SbxVariable* SbxObject::Execute( const OUString& rTxt )
 {
-    SbxVariableRef pVar = nullptr;
+    SbxVariableRef pVar;
     const sal_Unicode* p = rTxt.getStr();
     for( ;; )
     {
@@ -366,7 +366,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
 
 SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
 {
-    SbxVariableRef pVar = nullptr;
+    SbxVariableRef pVar;
     const sal_Unicode* p = rName.getStr();
     p = SkipWhitespace( p );
     if( !*p )

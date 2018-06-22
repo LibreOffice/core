@@ -1504,8 +1504,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     drawing::Direction3D aPreferredAspectRatio =
         rParam.mpSeriesPlotterContainer->getPreferredAspectRatio();
 
-    uno::Reference< drawing::XShapes > xSeriesTargetInFrontOfAxis(nullptr);
-    uno::Reference< drawing::XShapes > xSeriesTargetBehindAxis(nullptr);
+    uno::Reference< drawing::XShapes > xSeriesTargetInFrontOfAxis;
+    uno::Reference< drawing::XShapes > xSeriesTargetBehindAxis;
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
     bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
     {//create diagram
@@ -1600,7 +1600,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     for( std::unique_ptr<VSeriesPlotter>& aPlotter : rSeriesPlotterList )
     {
         VSeriesPlotter* pSeriesPlotter = aPlotter.get();
-        uno::Reference< drawing::XShapes > xSeriesTarget(nullptr);
+        uno::Reference< drawing::XShapes > xSeriesTarget;
         if( pSeriesPlotter->WantToPlotInFrontOfAxisLine() )
             xSeriesTarget = xSeriesTargetInFrontOfAxis;
         else
@@ -2435,7 +2435,7 @@ void lcl_removeEmptyGroupShapes( const Reference< drawing::XShapes>& xParent )
     for( sal_Int32 nN = xParent->getCount(); nN--; )
     {
         uno::Any aAny = xParent->getByIndex( nN );
-        Reference< drawing::XShapes> xShapes(nullptr);
+        Reference< drawing::XShapes> xShapes;
         if( aAny >>= xShapes )
             lcl_removeEmptyGroupShapes( xShapes );
         if( xShapes.is() && xShapes->getCount()==0 )

@@ -101,8 +101,7 @@ void DragSourceHelper::StartDrag( sal_Int8, const Point& )
 
 
 DropTargetHelper::DropTargetListener::DropTargetListener( DropTargetHelper& rDropTargetHelper ) :
-    mrParent( rDropTargetHelper ),
-    mpLastDragOverEvent( nullptr )
+    mrParent( rDropTargetHelper )
 {
 }
 

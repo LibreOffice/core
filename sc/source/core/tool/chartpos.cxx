@@ -44,7 +44,6 @@ namespace
 ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP) :
         pDocument( pDoc ),
-        pPositionMap( nullptr ),
         eGlue( ScChartGlue::NA ),
         nStartCol(0),
         nStartRow(0),
@@ -59,7 +58,6 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
 ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rRangeList ) :
         aRangeListRef( rRangeList ),
         pDocument( pDoc ),
-        pPositionMap( nullptr ),
         eGlue( ScChartGlue::NA ),
         nStartCol(0),
         nStartRow(0),
@@ -74,7 +72,6 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rR
 ScChartPositioner::ScChartPositioner( const ScChartPositioner& rPositioner ) :
         aRangeListRef( rPositioner.aRangeListRef ),
         pDocument(rPositioner.pDocument),
-        pPositionMap( nullptr ),
         eGlue(rPositioner.eGlue),
         nStartCol(rPositioner.nStartCol),
         nStartRow(rPositioner.nStartRow),

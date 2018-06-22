@@ -572,8 +572,7 @@ XclExpAutofilterinfo::XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nS
 ExcFilterCondition::ExcFilterCondition() :
         nType( EXC_AFTYPE_NOTUSED ),
         nOper( EXC_AFOPER_EQUAL ),
-        fVal( 0.0 ),
-        pText( nullptr )
+        fVal( 0.0 )
 {
 }
 

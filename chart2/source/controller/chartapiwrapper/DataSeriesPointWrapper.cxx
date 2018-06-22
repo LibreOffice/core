@@ -447,7 +447,6 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(const std::shared_ptr<Chart2Model
     , m_nSeriesIndexInNewAPI( -1 )
     , m_nPointIndex( -1 )
     , m_bLinesAllowed(true)
-    , m_xDataSeries(nullptr)
 {
     //need initialize call afterwards
 }
@@ -487,7 +486,6 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(eType _eType,
     , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )
     , m_nPointIndex( (_eType == DATA_POINT) ? nPointIndex : -1 )
     , m_bLinesAllowed( false )
-    , m_xDataSeries(nullptr)
 {
 }
 

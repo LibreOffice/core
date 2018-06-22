@@ -41,8 +41,7 @@ namespace sdr
         }
 
         EmptyProperties::EmptyProperties(SdrObject& rObj)
-        :   BaseProperties(rObj),
-            mpEmptyItemSet(nullptr)
+        :   BaseProperties(rObj)
         {
         }
 

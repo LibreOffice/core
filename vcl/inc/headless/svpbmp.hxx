@@ -29,7 +29,6 @@ class VCL_DLLPUBLIC SvpSalBitmap : public SalBitmap
 {
     std::unique_ptr<BitmapBuffer> mpDIB;
 public:
-    SvpSalBitmap() : mpDIB(nullptr) {}
     virtual ~SvpSalBitmap() override;
 
     // SalBitmap

@@ -1071,7 +1071,6 @@ void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCo
 
 FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
-                  ,m_pModel( nullptr )
                   ,m_pEditingCurrently( nullptr )
                   ,m_aControlExchange( this )
                   ,m_aTimerCounter( 0 )

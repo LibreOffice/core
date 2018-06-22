@@ -316,7 +316,7 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
         SAL_WARN("chart2", "Exception caught. " << e );
     }
 
-    uno::Reference< drawing::XShape > xShape(nullptr);
+    uno::Reference< drawing::XShape > xShape;
     switch( nGeometry3D )
     {
         case DataPointGeometry3D::CYLINDER:

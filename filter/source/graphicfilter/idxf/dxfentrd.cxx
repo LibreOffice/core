@@ -655,8 +655,7 @@ DXFHatchEntity::DXFHatchEntity() :
     nHatchDoubleFlag( 0 ),
     nHatchPatternDefinitionLines( 0 ),
     fPixelSize( 1.0 ),
-    nNumberOfSeedPoints( 0 ),
-    pBoundaryPathData( nullptr )
+    nNumberOfSeedPoints( 0 )
 {
 }
 

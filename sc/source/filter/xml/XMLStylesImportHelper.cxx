@@ -40,8 +40,7 @@ sal_Int32 ScMyStyleNumberFormats::GetStyleNumberFormat(const OUString& rStyleNam
         return aItr->nNumberFormat;
 }
 
-ScMyStyleRanges::ScMyStyleRanges() :
-    pCurrencyList(nullptr)
+ScMyStyleRanges::ScMyStyleRanges()
 {
 }
 

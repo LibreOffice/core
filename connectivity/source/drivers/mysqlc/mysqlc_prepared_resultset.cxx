@@ -75,7 +75,6 @@ OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* p
     , OPropertySetHelper(OPreparedResultSet_BASE::rBHelper)
     , m_rConnection(rConn)
     , m_aStatement(static_cast<OWeakObject*>(pPrepared))
-    , m_xMetaData(nullptr)
     , m_pStmt(pStmt)
     , m_encoding(rConn.getConnectionEncoding())
 {

@@ -68,8 +68,7 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
     css::uno::Sequence< css::beans::PropertyValue > m_aPrintOptions;
 
     explicit IMPL_PrintListener_DataContainer( ::osl::Mutex& aMutex)
-            :   m_pObjectShell          ( nullptr )
-            ,   m_aInterfaceContainer   ( aMutex )
+            :   m_aInterfaceContainer   ( aMutex )
     {
     }
 

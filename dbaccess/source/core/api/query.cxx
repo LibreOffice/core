@@ -73,7 +73,6 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     ,ODataSettings(OContentHelper::rBHelper,true)
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_xConnection(_rxConn)
-    ,m_pColumnMediator( nullptr )
     ,m_pWarnings( nullptr )
     ,m_eDoingCurrently(NONE)
 {

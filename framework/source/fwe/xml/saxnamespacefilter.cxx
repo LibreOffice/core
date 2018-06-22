@@ -36,7 +36,6 @@ using namespace ::com::sun::star::uno;
 namespace framework{
 
 SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler > const & rSax1DocumentHandler ) :
-     m_xLocator( nullptr ),
      xDocumentHandler( rSax1DocumentHandler ),
      m_aXMLAttributeNamespace( "xmlns" ),
      m_aXMLAttributeType( "CDATA" )

@@ -48,7 +48,6 @@ using namespace ::com::sun::star;
 OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& rxContext )
 : m_aMutexHolder( new comphelper::RefCountedMutex )
 , m_xContext( rxContext )
-, m_pListenersContainer( nullptr )
 , m_bDisposed( false )
 , m_bOwnContent( false )
 {

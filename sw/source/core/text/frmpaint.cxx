@@ -97,7 +97,6 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
     , aRect( rRct )
     , pTextFrame( pFrame )
     , pSh( pVwSh )
-    , pFnt( nullptr )
     , rLineInf( rLnInf )
     , nX(0)
     , nRedX(0)

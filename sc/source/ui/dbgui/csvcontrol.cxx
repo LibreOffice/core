@@ -60,7 +60,6 @@ ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
     VclReferenceBase(),
     Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
     mrData( rParent.GetLayoutData() ),
-    mxAccessible( nullptr ),
     mbValidGfx( false )
 {
 }
@@ -68,7 +67,6 @@ ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
 ScCsvControl::ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits ) :
     Control( pParent, nBits ),
     mrData( rData ),
-    mxAccessible( nullptr ),
     mbValidGfx( false )
 {
 }

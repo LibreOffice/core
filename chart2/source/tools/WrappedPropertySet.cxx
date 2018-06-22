@@ -34,9 +34,6 @@ using ::com::sun::star::uno::Any;
 
 WrappedPropertySet::WrappedPropertySet()
                     : MutexContainer()
-                    , m_xInfo(nullptr)
-                    , m_pPropertyArrayHelper(nullptr)
-                    , m_pWrappedPropertyMap(nullptr)
 {
 }
 WrappedPropertySet::~WrappedPropertySet()

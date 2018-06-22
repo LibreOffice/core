@@ -639,7 +639,6 @@ The following structure describes the permissions used in PDF security
                 DPIx( 0 ),
                 DPIy( 0 ),
                 ColorMode( PDFWriter::DrawColor ),
-                SignCertificate( nullptr ),
                 UseReferenceXObject( false )
         {}
     };

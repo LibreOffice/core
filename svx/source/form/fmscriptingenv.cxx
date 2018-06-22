@@ -890,8 +890,7 @@ namespace svxform
     }
 
     FormScriptingEnvironment::FormScriptingEnvironment( FmFormModel& _rModel )
-        :m_pScriptListener( nullptr )
-        ,m_rFormModel( _rModel )
+        :m_rFormModel( _rModel )
         ,m_bDisposed( false )
     {
         m_pScriptListener = ListenerImplementation( new FormScriptListener( this ) );

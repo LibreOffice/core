@@ -41,9 +41,6 @@ namespace i18npool {
 cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) :
         trans( new Transliteration_casemapping() ),
         m_xContext( rxContext ),
-        pTable( nullptr ),
-        pStart( nullptr ),
-        pCont( nullptr ),
         nStartTypes( 0 ),
         nContTypes( 0 ),
         eState( ssGetChar ),

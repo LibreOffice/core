@@ -53,8 +53,6 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
 
     ,m_aStatementHandle(_pConnection->createStatementHandle())
     ,m_aStatement(nullptr)
-    ,m_xMetaData(nullptr)
-    ,m_pRowStatusArray(nullptr)
     ,m_pConnection(_pConnection)
     ,m_nTextEncoding(_pConnection->getTextEncoding())
     ,m_nRowPos(-1)

@@ -100,7 +100,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
 }
 
 LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
-    : LwpFrib(pPara), m_bLastFrib(false), m_pMasterPage(nullptr)
+    : LwpFrib(pPara), m_bLastFrib(false)
 {
 }
 

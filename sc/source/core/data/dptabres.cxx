@@ -942,8 +942,6 @@ ScDPResultMember::ScDPResultMember(
     const ScDPResultData* pData, const ScDPParentDimData& rParentDimData ) :
     pResultData( pData ),
        aParentDimData( rParentDimData ),
-    pChildDimension( nullptr ),
-    pDataRoot( nullptr ),
     bHasElements( false ),
     bForceSubTotal( false ),
     bHasHiddenDetails( false ),
@@ -957,8 +955,6 @@ ScDPResultMember::ScDPResultMember(
 ScDPResultMember::ScDPResultMember(
     const ScDPResultData* pData, bool bForceSub ) :
     pResultData( pData ),
-        pChildDimension( nullptr ),
-    pDataRoot( nullptr ),
     bHasElements( false ),
     bForceSubTotal( bForceSub ),
     bHasHiddenDetails( false ),
@@ -1832,8 +1828,7 @@ void ScDPResultMember::FillVisibilityData(ScDPResultVisibilityData& rData) const
 
 ScDPDataMember::ScDPDataMember( const ScDPResultData* pData, const ScDPResultMember* pRes ) :
     pResultData( pData ),
-    pResultMember( pRes ),
-    pChildDimension( nullptr )
+    pResultMember( pRes )
 {
     // pResultMember is 0 for root members
 }

@@ -173,7 +173,6 @@ void UndoReplaceObject::Redo()
 
 UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
 : SdrUndoObjSetText( rObject, nText )
-, mpUndoAnimation(nullptr)
 , mbNewEmptyPresObj(false)
 , mxSdrObject( &rObject )
 {

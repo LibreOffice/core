@@ -213,7 +213,6 @@ public:
                                 OnDemandTransliterationWrapper()
                                     : eLanguage( LANGUAGE_SYSTEM )
                                     , nType(TransliterationFlags::NONE)
-                                    , pPtr(nullptr)
                                     , bValid(false)
                                     , bInitialized(false)
                                     {}
@@ -268,7 +267,6 @@ class OnDemandNativeNumberWrapper
 
 public:
                                 OnDemandNativeNumberWrapper()
-                                    : pPtr(nullptr)
                                     {}
 
             void                init(

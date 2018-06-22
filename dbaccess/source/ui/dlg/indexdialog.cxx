@@ -163,7 +163,6 @@ namespace dbaui
                                     const Reference< XComponentContext >& _rxContext)
         :ModalDialog( _pParent, "IndexDesignDialog", "dbaccess/ui/indexdesigndialog.ui")
         ,m_xConnection(_rxConnection)
-        ,m_pIndexes(nullptr)
         ,m_pPreviousSelection(nullptr)
         ,m_bEditAgain(false)
         ,m_xContext(_rxContext)

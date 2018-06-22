@@ -47,8 +47,7 @@ ScAccessiblePreviewCell::ScAccessiblePreviewCell( const css::uno::Reference<css:
                             const ScAddress& rCellAddress,
                             sal_Int32 nIndex ) :
     ScAccessibleCellBase( rxParent, ( pViewShell ? &pViewShell->GetDocument() : nullptr ), rCellAddress, nIndex ),
-    mpViewShell( pViewShell ),
-    mpTextHelper(nullptr)
+    mpViewShell( pViewShell )
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);

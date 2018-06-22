@@ -56,7 +56,6 @@ static bool bLastRelative = false;
 //merged
 SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/outlinepositionpage.ui", "OutlinePositionPage", &rSet)
-    , pActNum(nullptr)
     , pSaveNum(nullptr)
     , pWrtSh(nullptr)
     , pOutlineDlg(nullptr)

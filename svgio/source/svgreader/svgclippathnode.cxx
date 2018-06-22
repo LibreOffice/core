@@ -35,7 +35,6 @@ namespace svgio
             SvgNode* pParent)
         :   SvgNode(SVGTokenClipPathNode, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpaTransform(nullptr),
             maClipPathUnits(userSpaceOnUse)
         {
         }

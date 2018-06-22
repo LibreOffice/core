@@ -354,7 +354,7 @@ Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
 
 SbMethodRef DocObjectWrapper::getMethod( const OUString& aName )
 {
-    SbMethodRef pMethod = nullptr;
+    SbMethodRef pMethod;
     if ( m_pMod )
     {
         SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
@@ -369,7 +369,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName )
 
 SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName )
 {
-    SbPropertyRef pProperty = nullptr;
+    SbPropertyRef pProperty;
     if ( m_pMod )
     {
         SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
@@ -423,7 +423,7 @@ bool getDefaultVBAMode( StarBASIC* pb )
 
 SbModule::SbModule( const OUString& rName, bool bVBACompat )
          : SbxObject( "StarBASICModule" ),
-           pImage( nullptr ), pBreaks( nullptr ), pClassData( nullptr ), mbVBACompat( bVBACompat ),  pDocObject( nullptr ), bIsProxyModule( false )
+           mbVBACompat( bVBACompat ), bIsProxyModule( false )
 {
     SetName( rName );
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );

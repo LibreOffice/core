@@ -982,8 +982,6 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "OptAppearancePage", "cui/ui/optappearancepage.ui", &rCoreSet)
     , bFillItemSetCalled(false)
-    , pColorConfig(nullptr)
-    , pExtColorConfig(nullptr)
 {
     get(m_pColorSchemeLB, "colorschemelb");
     m_pColorSchemeLB->SetStyle(m_pColorSchemeLB->GetStyle() | WB_SORT);

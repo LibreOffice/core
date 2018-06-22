@@ -188,7 +188,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
-    Reference< XTablesSupplier > xTab = nullptr;
+    Reference< XTablesSupplier > xTab;
     Reference< css::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
     if(xTunnel.is())
     {

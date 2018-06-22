@@ -94,7 +94,6 @@ void ScChartListener::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
 ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
     SvtListener(),
-    mpExtRefListener(nullptr),
     mpTokens(new vector<ScTokenRef>),
     maName(rName),
     mpDoc( pDocP ),
@@ -106,7 +105,6 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
 
 ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, std::unique_ptr<vector<ScTokenRef>> pTokens ) :
     SvtListener(),
-    mpExtRefListener(nullptr),
     mpTokens(std::move(pTokens)),
     maName(rName),
     mpDoc( pDocP ),
@@ -117,7 +115,6 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, std:
 
 ScChartListener::ScChartListener( const ScChartListener& r ) :
     SvtListener(),
-    mpExtRefListener(nullptr),
     mpTokens(new vector<ScTokenRef>(*r.mpTokens)),
     maName(r.maName),
     mpDoc( r.mpDoc ),

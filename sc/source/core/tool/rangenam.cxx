@@ -52,7 +52,6 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const FormulaGrammar::Grammar eGrammar ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->uppercase( rName ) ),
-                pCode       ( nullptr ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),

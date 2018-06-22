@@ -66,7 +66,6 @@ XFCellStyle::XFCellStyle()
     : m_eHoriAlign(enumXFAlignNone)
     , m_eVertAlign(enumXFAlignNone)
     , m_fTextIndent(0)
-    , m_pBorders(nullptr)
     , m_bWrapText(false)
 {}
 

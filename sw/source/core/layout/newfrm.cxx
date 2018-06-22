@@ -360,9 +360,7 @@ SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     mpLastPage( nullptr ),
     mpCurrShell( pSh ),
     mpWaitingCurrShell( nullptr ),
-    mpCurrShells(nullptr),
     mpDrawPage( nullptr ),
-    mpDestroy( nullptr ),
     mnPhyPageNums( 0 ),
     mnAccessibleShells( 0 )
 {

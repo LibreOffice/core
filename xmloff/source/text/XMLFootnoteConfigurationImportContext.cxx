@@ -130,7 +130,6 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
 :   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG)
 ,   sNumFormat("1")
 ,   sNumSync("false")
-,   pAttrTokenMap(nullptr)
 ,   nOffset(0)
 ,   nNumbering(FootnoteNumbering::PER_PAGE)
 ,   bPosition(false)

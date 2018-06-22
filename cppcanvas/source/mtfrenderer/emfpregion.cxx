@@ -48,7 +48,6 @@ namespace cppcanvas
     {
         EMFPRegion::EMFPRegion()
             : parts(0)
-            , combineMode(nullptr)
             , initialState(0)
             , ix(0.0)
             , iy(0.0)

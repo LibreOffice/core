@@ -226,7 +226,7 @@ void VAxisBase::removeTextShapesFromTicks()
 
 void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
 {
-    Reference< XScaling > xInverseScaling( nullptr );
+    Reference< XScaling > xInverseScaling;
     if( m_aScale.Scaling.is() )
         xInverseScaling = m_aScale.Scaling->getInverseScaling();
 

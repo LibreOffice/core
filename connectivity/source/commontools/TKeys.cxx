@@ -50,7 +50,7 @@ OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
 
 sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
 {
-    sdbcx::ObjectType xRet = nullptr;
+    sdbcx::ObjectType xRet;
 
     if(!_rName.isEmpty())
     {

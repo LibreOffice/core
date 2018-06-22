@@ -168,8 +168,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
 // copy ctor, clones all static defaults
 XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool)
 :   SfxItemPool(rPool, true),
-    mpLocalPoolDefaults(nullptr),
-    mpLocalItemInfos(nullptr)
+    mpLocalPoolDefaults(nullptr)
 {
 }
 

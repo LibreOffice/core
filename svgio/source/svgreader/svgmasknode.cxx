@@ -40,7 +40,6 @@ namespace svgio
             maY(SvgNumber(-10.0, Unit_percent, true)),
             maWidth(SvgNumber(120.0, Unit_percent, true)),
             maHeight(SvgNumber(120.0, Unit_percent, true)),
-            mpaTransform(nullptr),
             maMaskUnits(objectBoundingBox),
             maMaskContentUnits(userSpaceOnUse)
         {

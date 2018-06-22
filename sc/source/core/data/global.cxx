@@ -96,7 +96,7 @@ std::atomic<CollatorWrapper*> ScGlobal::pCollator(nullptr);
 std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pTransliteration(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pCaseTransliteration(nullptr);
-css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = nullptr;
+css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 OUString*       ScGlobal::pEmptyOUString = nullptr;
 OUString*       ScGlobal::pStrClipDocName = nullptr;

@@ -107,7 +107,6 @@ void PrinterInfoManager::release()
 }
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
-    m_pQueueInfo( nullptr ),
     m_eType( eType ),
     m_bUseIncludeFeature( false ),
     m_bUseJobPatch( true ),

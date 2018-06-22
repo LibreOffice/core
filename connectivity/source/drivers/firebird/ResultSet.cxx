@@ -69,7 +69,6 @@ OResultSet::OResultSet(Connection* pConnection,
     , m_pConnection(pConnection)
     , m_rMutex(rMutex)
     , m_xStatement(xStatement)
-    , m_xMetaData(nullptr)
     , m_pSqlda(pSqlda)
     , m_statementHandle(aStatementHandle)
     , m_bWasNull(false)

@@ -47,7 +47,7 @@ sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
         sTableName,
         _rName);
 
-    sdbcx::ObjectType xRet = nullptr;
+    sdbcx::ObjectType xRet;
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

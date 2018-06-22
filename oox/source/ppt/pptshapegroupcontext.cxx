@@ -59,7 +59,6 @@ PPTShapeGroupContext::PPTShapeGroupContext(
 : ShapeGroupContext( rParent, pMasterShapePtr, pGroupShapePtr )
 , mpSlidePersistPtr( rSlidePersistPtr )
 , meShapeLocation( eShapeLocation )
-, pGraphicShape( nullptr )
 {
 }
 

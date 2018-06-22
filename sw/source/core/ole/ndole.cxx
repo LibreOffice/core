@@ -765,8 +765,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     m_pOLENode( nullptr ),
     m_xOLERef( xObj ),
     m_aPrimitive2DSequence(),
-    m_aRange(),
-    m_pDeflateData(nullptr)
+    m_aRange()
 {
     m_xOLERef.Lock();
     if ( xObj.is() )
@@ -780,8 +779,7 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     m_pOLENode( nullptr ),
     m_aName( rString ),
     m_aPrimitive2DSequence(),
-    m_aRange(),
-    m_pDeflateData(nullptr)
+    m_aRange()
 {
     m_xOLERef.Lock();
     m_xOLERef.SetViewAspect( nAspect );

@@ -69,7 +69,6 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
         , m_nChangingControlCalls(0)
         , m_bIsDirty(false)
         , m_aLastValidRangeString()
-        , m_xCurrentChartTypeTemplate(nullptr)
         , m_pTemplateProvider(pTemplateProvider)
         , m_rDialogModel( rDialogModel )
         , m_pParentDialog( pParentDialog )

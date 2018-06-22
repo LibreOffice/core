@@ -44,9 +44,7 @@ using namespace com::sun::star;
 
 Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle)
 :   Control(pParent, nStyle),
-    mpModel(nullptr),
     mpFmPage(nullptr),
-    mp3DView(nullptr),
     mpScene(nullptr),
     mp3DObj(nullptr),
     mnObjectType(SvxPreviewObjectType::SPHERE)

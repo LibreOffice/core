@@ -62,8 +62,7 @@ sal_Int32 ScSheetEvents::GetVbaDocumentEventId(ScSheetEventId nEvent)
     return (nSheetEventId != NO_EVENT) ? (nSheetEventId + USERDEFINED_START) : NO_EVENT;
 }
 
-ScSheetEvents::ScSheetEvents() :
-    mpScriptNames(nullptr)
+ScSheetEvents::ScSheetEvents()
 {
 }
 
@@ -77,8 +76,7 @@ void ScSheetEvents::Clear()
     mpScriptNames.reset();
 }
 
-ScSheetEvents::ScSheetEvents(const ScSheetEvents& rOther) :
-    mpScriptNames(nullptr)
+ScSheetEvents::ScSheetEvents(const ScSheetEvents& rOther)
 {
     *this = rOther;
 }

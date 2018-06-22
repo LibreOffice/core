@@ -44,8 +44,7 @@ using namespace vcl;
 #define TB_SEP_SIZE     8  // Separator size
 
 
-ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
-        m_pLayoutData( nullptr )
+ImplToolBoxPrivateData::ImplToolBoxPrivateData()
 {
     meButtonSize = ToolBoxButtonSize::DontCare;
     mpMenu = VclPtr<PopupMenu>::Create();

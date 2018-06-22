@@ -567,7 +567,6 @@ const CCIHuffmanTableEntry CCIUncompTableSave[CCIUncompTableSize]={
 CCIDecompressor::CCIDecompressor( sal_uLong nOpts, sal_uInt32 nImageWidth ) :
     bTableBad   ( false ),
     bStatus     ( false ),
-    pByteSwap   ( nullptr ),
     pIStream    ( nullptr ),
     nEOLCount   ( 0 ),
     nWidth      ( nImageWidth ),
@@ -575,7 +574,6 @@ CCIDecompressor::CCIDecompressor( sal_uLong nOpts, sal_uInt32 nImageWidth ) :
     bFirstEOL   ( false ),
     nInputBitsBuf( 0 ),
     nInputBitsBufSize( 0 ),
-    pLastLine   ( nullptr ),
     nLastLineSize( 0 )
 {
     if ( nOpts & CCI_OPTION_INVERSEBITORDER )

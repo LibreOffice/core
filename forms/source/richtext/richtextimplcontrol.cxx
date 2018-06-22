@@ -49,7 +49,6 @@ namespace frm
         ,m_pVScroll             ( nullptr                )
         ,m_pScrollCorner        ( nullptr                )
         ,m_pEngine              ( _pEngine            )
-        ,m_pView                ( nullptr                )
         ,m_pTextAttrListener    ( _pTextAttrListener  )
         ,m_pSelectionListener   ( _pSelectionListener )
         ,m_bHasEverBeenShown    ( false               )

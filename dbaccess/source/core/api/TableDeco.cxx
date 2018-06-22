@@ -64,7 +64,6 @@ ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnect
     ,m_xMetaData( _rxConnection.is() ? _rxConnection->getMetaData() : Reference< XDatabaseMetaData >() )
     ,m_xNumberFormats( _rxNumberFormats )
     ,m_nPrivileges(-1)
-    ,m_pColumns(nullptr)
 {
     ODataSettings::registerPropertiesFor(this);
 }

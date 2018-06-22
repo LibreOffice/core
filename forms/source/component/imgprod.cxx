@@ -157,8 +157,7 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
 
 
 ImageProducer::ImageProducer()
-    : mpStm(nullptr)
-    , mnTransIndex(0)
+    : mnTransIndex(0)
     , mbConsInit(false)
 {
     mpGraphic.reset( new Graphic );

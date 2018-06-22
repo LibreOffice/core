@@ -751,10 +751,8 @@ WindowImpl::~WindowImpl()
 }
 
 ImplWinData::ImplWinData() :
-    mpExtOldAttrAry(nullptr),
     mnCursorExtWidth(0),
     mbVertical(false),
-    mpCompositionCharRects(nullptr),
     mnCompositionCharRects(0),
     mnTrackFlags(ShowTrackFlags::NONE),
     mnIsTopWindow(sal_uInt16(~0)), // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())

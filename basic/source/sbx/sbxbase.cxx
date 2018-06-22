@@ -36,7 +36,6 @@
 
 SbxAppData::SbxAppData()
     : eErrCode(ERRCODE_NONE)
-    , pBasicFormater(nullptr)
     , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
 {
 }

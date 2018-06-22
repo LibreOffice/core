@@ -26,8 +26,7 @@
 
 ScMarkArray::ScMarkArray() :
     nCount( 0 ),
-    nLimit( 0 ),
-    pData( nullptr )
+    nLimit( 0 )
 {
     // special case "no marks" with pData = NULL
 }

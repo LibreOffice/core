@@ -232,8 +232,7 @@ void JNI_compound_type_info::destroy( JNIEnv * jni_env )
 JNI_compound_type_info::JNI_compound_type_info(
     JNI_context const & jni, typelib_TypeDescription * td_ )
     : JNI_type_info( jni, td_ ),
-      m_exc_ctor( nullptr ),
-      m_fields( nullptr )
+      m_exc_ctor( nullptr )
 {
     assert( m_td.get()->eTypeClass == typelib_TypeClass_STRUCT ||
                 m_td.get()->eTypeClass == typelib_TypeClass_EXCEPTION );

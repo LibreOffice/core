@@ -29,12 +29,6 @@ namespace vcl
     {
         mutable std::unique_ptr<ControlLayoutData>  mpLayoutData;
         VclPtr<OutputDevice>        mpReferenceDevice;
-
-        ImplControlData()
-            :mpLayoutData( nullptr )
-            ,mpReferenceDevice( nullptr )
-        {
-        }
     };
 
 } // namespace vcl

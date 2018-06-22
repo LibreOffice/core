@@ -46,7 +46,7 @@ struct LockSequenceParseContext
     bool hasTimeout;
 
     LockSequenceParseContext()
-    : pLock( nullptr ), hasLockScope( false ), hasLockType( false ),
+    : hasLockScope( false ), hasLockType( false ),
       hasDepth( false ), hasHREF( false ), hasTimeout( false ) {}
 };
 

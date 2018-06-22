@@ -42,7 +42,7 @@ class SwDropPortionPart
 
 public:
     SwDropPortionPart( SwFont& rFont, const TextFrameIndex nL )
-            : pFollow( nullptr ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
+            : pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
     ~SwDropPortionPart();
 
     SwDropPortionPart* GetFollow() const { return pFollow.get(); };

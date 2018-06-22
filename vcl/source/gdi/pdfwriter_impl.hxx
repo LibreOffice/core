@@ -260,8 +260,7 @@ public:
         ReferenceXObjectEmit m_aReferenceXObject;
 
         JPGEmit()
-            : m_pStream(nullptr)
-            , m_nObject(0)
+            : m_nObject(0)
             , m_bTrueColor(false)
         {
         }

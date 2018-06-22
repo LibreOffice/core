@@ -45,7 +45,6 @@ using namespace ::com::sun::star::chart2;
 PlottingPositionHelper::PlottingPositionHelper()
         : m_aScales()
         , m_aMatrixScreenToScene()
-        , m_xTransformationLogicToScene(nullptr)
         , m_bSwapXAndY( false )
         , m_nXResolution( 1000 )
         , m_nYResolution( 1000 )
@@ -62,7 +61,7 @@ PlottingPositionHelper::PlottingPositionHelper()
 PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rSource )
         : m_aScales( rSource.m_aScales )
         , m_aMatrixScreenToScene( rSource.m_aMatrixScreenToScene )
-        , m_xTransformationLogicToScene( nullptr ) //should be recalculated
+        // m_xTransformationLogicToScene( nullptr ) //should be recalculated
         , m_bSwapXAndY( rSource.m_bSwapXAndY )
         , m_nXResolution( rSource.m_nXResolution )
         , m_nYResolution( rSource.m_nYResolution )

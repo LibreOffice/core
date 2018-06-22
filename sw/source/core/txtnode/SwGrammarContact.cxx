@@ -59,7 +59,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 
-SwGrammarContact::SwGrammarContact() : mpProxyList(nullptr), mbFinished( false )
+SwGrammarContact::SwGrammarContact() : mbFinished( false )
 {
     aTimer.SetTimeout( 2000 );  // Repaint of grammar check after 'setChecked'
     aTimer.SetInvokeHandler( LINK(this, SwGrammarContact, TimerRepaint) );

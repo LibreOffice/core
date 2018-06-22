@@ -44,8 +44,7 @@ Chart2ModelContact::Chart2ModelContact(
     const Reference< uno::XComponentContext > & xContext ) :
         m_xContext( xContext ),
         m_xChartModel( nullptr ),
-        mpModel( nullptr ),
-        m_xChartView(nullptr)
+        mpModel( nullptr )
 {
 }
 

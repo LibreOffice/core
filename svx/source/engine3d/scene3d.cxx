@@ -175,7 +175,6 @@ E3dScene::E3dScene(SdrModel& rSdrModel)
 :   E3dObject(rSdrModel),
     SdrObjList(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
-    mp3DDepthRemapper(nullptr),
     bDrawOnlySelected(false),
     mbSkipSettingDirty(false)
 {

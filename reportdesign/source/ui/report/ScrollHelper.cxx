@@ -50,7 +50,6 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     ,m_aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
     ,m_pParent(_pDesignView)
     ,m_aReportWindow(VclPtr<rptui::OReportWindow>::Create(this,m_pParent))
-    ,m_pReportDefinitionMultiPlexer(nullptr)
 {
     SetMapMode( MapMode( MapUnit::Map100thMM ) );
 

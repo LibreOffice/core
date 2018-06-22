@@ -61,7 +61,7 @@ public:
     static SfxPoolItem* CreateDefault();
 
     SvxHyperlinkItem( sal_uInt16 _nWhich = SID_HYPERLINK_GETLINK ):
-                SfxPoolItem(_nWhich), pMacroTable(nullptr) { eType = HLINK_DEFAULT; nMacroEvents=HyperDialogEvent::NONE; };
+                SfxPoolItem(_nWhich) { eType = HLINK_DEFAULT; nMacroEvents=HyperDialogEvent::NONE; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
     SvxHyperlinkItem( sal_uInt16 nWhich, const OUString& rName, const OUString& rURL,
                                     const OUString& rTarget, const OUString& rIntName,

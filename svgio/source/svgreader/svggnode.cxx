@@ -28,8 +28,7 @@ namespace svgio
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(aType, rDocument, pParent),
-            maSvgStyleAttributes(*this),
-            mpaTransform(nullptr)
+            maSvgStyleAttributes(*this)
         {
             OSL_ENSURE(aType == SVGTokenDefs || aType == SVGTokenG, "SvgGNode should only be used for Group and Defs (!)");
         }

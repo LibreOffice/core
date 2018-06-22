@@ -452,14 +452,14 @@ void LinguMgrExitLstnr::AtExit()
 
 LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = nullptr;
 bool                            LinguMgr::bExiting      = false;
-uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr    = nullptr;
-uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = nullptr;
-uno::Reference< XHyphenator >       LinguMgr::xHyph         = nullptr;
-uno::Reference< XThesaurus >        LinguMgr::xThes         = nullptr;
-uno::Reference< XSearchableDictionaryList >   LinguMgr::xDicList      = nullptr;
-uno::Reference< XLinguProperties >  LinguMgr::xProp         = nullptr;
-uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = nullptr;
-uno::Reference< XDictionary >       LinguMgr::xChangeAll    = nullptr;
+uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr;
+uno::Reference< XSpellChecker1 >    LinguMgr::xSpell;
+uno::Reference< XHyphenator >       LinguMgr::xHyph;
+uno::Reference< XThesaurus >        LinguMgr::xThes;
+uno::Reference< XSearchableDictionaryList >   LinguMgr::xDicList;
+uno::Reference< XLinguProperties >  LinguMgr::xProp;
+uno::Reference< XDictionary >       LinguMgr::xIgnoreAll;
+uno::Reference< XDictionary >       LinguMgr::xChangeAll;
 
 
 uno::Reference< XLinguServiceManager2 > LinguMgr::GetLngSvcMgr()

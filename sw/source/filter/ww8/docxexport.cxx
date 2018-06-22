@@ -1555,15 +1555,11 @@ void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr const & pFS )
 DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam, bool bDocm )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
-      m_pAttrOutput( nullptr ),
-      m_pSections( nullptr ),
       m_nHeaders( 0 ),
       m_nFooters( 0 ),
       m_nOLEObjects( 0 ),
       m_nActiveXControls( 0 ),
       m_nHeadersFootersInSection(0),
-      m_pVMLExport( nullptr ),
-      m_pSdrExport( nullptr ),
       m_bDocm(bDocm)
 {
     // Write the document properties

@@ -3771,7 +3771,6 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpre
     , mpLinkManager(pDok->GetLinkManager())
     , mrStrPool(pDoc->GetSharedStringPool())
     , pJumpMatrix(nullptr)
-    , pTokenMatrixMap(nullptr)
     , pMyFormulaCell(pCell)
     , pFormatter(rContext.GetFormatTable())
     , pCur(nullptr)

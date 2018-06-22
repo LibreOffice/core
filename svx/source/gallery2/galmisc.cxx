@@ -377,9 +377,7 @@ void GalleryProgress::Update( sal_Int32 nVal, sal_Int32 nMaxVal )
 GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObjectPos, bool bLazy ) :
     mpTheme( pTheme ),
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
-    mnObjectPos( nObjectPos ),
-    mpGraphicObject( nullptr ),
-    mpURL( nullptr )
+    mnObjectPos( nObjectPos )
 {
 
     InitData( bLazy );

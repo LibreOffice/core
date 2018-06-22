@@ -760,7 +760,7 @@ void LwpFrameLink::Read(LwpObjectStream* pStrm)
 }
 
 LwpFrameLayout::LwpFrameLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
-    : LwpPlacableLayout(objHdr, pStrm), m_pFrame(nullptr), m_bGettingMaxWidth(false)
+    : LwpPlacableLayout(objHdr, pStrm), m_bGettingMaxWidth(false)
 {
 }
 
@@ -1021,7 +1021,6 @@ void LwpFrameLayout::ApplyGraphicSize(XFFrame * pXFFrame)
 
 LwpGroupLayout::LwpGroupLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
-    , m_pFrame(nullptr)
 {
 
 }

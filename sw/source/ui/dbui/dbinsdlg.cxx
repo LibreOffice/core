@@ -191,8 +191,6 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     , aDBData(rData)
     , sNoTmpl(SwResId(SW_STR_NONE))
     , pView(&rView)
-    , pTableSet(nullptr)
-    , pRep(nullptr)
 {
     get(m_pRbAsTable, "astable");
     get(m_pRbAsField, "asfields");

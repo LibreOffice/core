@@ -130,10 +130,6 @@ public:
 
 ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter )
     : mpFormatter(pFormatter)
-    , mpBase(nullptr)
-    , mpTrend(nullptr)
-    , mpPerIdx(nullptr)
-    , mpForecast(nullptr)
     , mnSmplInPrd(0)
     , mfStepSize(0.0)
     , mfAlpha(0.0)

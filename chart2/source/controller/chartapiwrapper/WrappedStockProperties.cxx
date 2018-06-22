@@ -149,7 +149,7 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
 
 uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
 {
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate(nullptr);
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate;
 
     if(!xFactory.is())
         return xTemplate;
@@ -213,7 +213,7 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
 }
 uno::Reference< chart2::XChartTypeTemplate > WrappedUpDownProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
 {
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate(nullptr);
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate;
     if( bNewValue ) //add open series
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockLowHighClose" )

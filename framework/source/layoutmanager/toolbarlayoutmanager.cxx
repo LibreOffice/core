@@ -60,7 +60,6 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_pParentLayouter( pParentLayouter ),
     m_eDockOperation( DOCKOP_ON_COLROW ),
     m_ePreviewDetection( PREVIEWFRAME_UNKNOWN ),
-    m_pAddonOptions( nullptr ),
     m_bComponentAttached( false ),
     m_bLayoutDirty( false ),
     m_bGlobalSettings( false ),

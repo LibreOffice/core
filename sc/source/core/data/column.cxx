@@ -89,7 +89,6 @@ ScColumn::ScColumn() :
     maBroadcasters(MAXROWCOUNT),
     maCellsEvent(this),
     maCells(maCellsEvent),
-    pAttrArray( nullptr ),
     mnBlkCountFormula(0),
     nCol( 0 ),
     nTab( 0 )

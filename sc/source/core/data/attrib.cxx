@@ -377,18 +377,12 @@ void ScProtectionAttr::SetHidePrint( bool bHPrint)
  * ScPageHFItem - Dates from the Head and Foot lines
  */
 ScPageHFItem::ScPageHFItem( sal_uInt16 nWhichP )
-    :   SfxPoolItem ( nWhichP ),
-        pLeftArea   ( nullptr ),
-        pCenterArea ( nullptr ),
-        pRightArea  ( nullptr )
+    :   SfxPoolItem ( nWhichP )
 {
 }
 
 ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        pLeftArea   ( nullptr ),
-        pCenterArea ( nullptr ),
-        pRightArea  ( nullptr )
+    :   SfxPoolItem ( rItem )
 {
     if ( rItem.pLeftArea )
         pLeftArea = rItem.pLeftArea->Clone();

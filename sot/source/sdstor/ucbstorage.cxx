@@ -110,7 +110,6 @@ protected:
 
 FileStreamWrapper_Impl::FileStreamWrapper_Impl( const OUString& rName )
     : m_aURL( rName )
-    , m_pSvStream(nullptr)
 {
     // if no URL is provided the stream is empty
 }
@@ -622,7 +621,6 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
     : m_pAntiImpl( pStream )
     , m_aURL( rName )
     , m_pContent( nullptr )
-    , m_pStream( nullptr )
     , m_nError( ERRCODE_NONE )
     , m_nMode( nMode )
     , m_bSourceRead( !( nMode & StreamMode::TRUNC ) )

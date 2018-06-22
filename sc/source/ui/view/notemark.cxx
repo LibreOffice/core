@@ -48,7 +48,6 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     m_bLeft( bLeftEdge ),
     m_bByKeyboard( bKeyboard ),
     m_pDrawView ( pDrawViewP ),
-    m_pModel( nullptr ),
     m_bVisible( false )
 {
     Size aSizePixel = m_pWindow->GetOutputSizePixel();

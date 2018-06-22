@@ -60,10 +60,6 @@
 #include <xfilter/xfconfigmanager.hxx>
 
 XFConfigManager::XFConfigManager()
-    : m_pLineNumberConfig(nullptr)
-    , m_pFootnoteConfig(nullptr)
-    , m_pEndnoteConfig(nullptr)
-
 {
 }
 

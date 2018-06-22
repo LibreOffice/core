@@ -66,8 +66,6 @@ namespace dbaui
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XComponentContext >& _rxORB)
                     :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand, _rxConnection )
-        ,m_pHtml(nullptr)
-        ,m_pRtf(nullptr)
     {
         osl_atomic_increment( &m_refCount );
         lcl_setListener( _rxConnection, this, true );
@@ -85,8 +83,6 @@ namespace dbaui
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XComponentContext >& _rxORB)
         :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand)
-        ,m_pHtml(nullptr)
-        ,m_pRtf(nullptr)
     {
         m_pHtml.set( new OHTMLImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
         m_pRtf.set( new ORTFImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
@@ -97,8 +93,6 @@ namespace dbaui
                                     const bool i_bBookmarkSelection,
                                     const Reference< XComponentContext >& i_rORB )
         :ODataAccessObjectTransferable( i_rAliveForm )
-        ,m_pHtml(nullptr)
-        ,m_pRtf(nullptr)
     {
         OSL_PRECOND( i_rORB.is(), "ODataClipboard::ODataClipboard: having no factory is not good ..." );
 

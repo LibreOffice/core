@@ -41,7 +41,6 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const OUString& rBaseURL, SvKeyVa
     : HTMLParser( rIn, true ),
     aBaseURL( rBaseURL ),
     mpEditEngine(nullptr),
-    pCurAnchor(nullptr),
     bInPara(false),
     bWasInPara(false),
     bFieldsInserted(false),

@@ -38,7 +38,6 @@ using namespace ::com::sun::star::container;
 OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
 : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
                 ,m_pConnection(_pConnection)
-                ,m_pFileStream(nullptr)
                 ,m_nFilePos(0)
                 ,m_nBufferSize(0)
                 ,m_bWriteable(false)
@@ -60,7 +59,6 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                      SchemaName,
                      CatalogName)
     , m_pConnection(_pConnection)
-    , m_pFileStream(nullptr)
     , m_nFilePos(0)
     , m_nBufferSize(0)
     , m_bWriteable(false)

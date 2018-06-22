@@ -450,7 +450,6 @@ namespace frm
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
         ,OPropertyChangeListener(m_aMutex)
         ,m_xGraphicObject()
-        ,m_pMedium(nullptr)
         ,m_bDispatchUrlInternal(false)
         ,m_bProdStarted(false)
     {
@@ -463,7 +462,6 @@ namespace frm
         :OControlModel( _pOriginal, _rxFactory )
         ,OPropertyChangeListener( m_aMutex )
         ,m_xGraphicObject( _pOriginal->m_xGraphicObject )
-        ,m_pMedium( nullptr )
         ,m_bDispatchUrlInternal(false)
         ,m_bProdStarted( false )
     {

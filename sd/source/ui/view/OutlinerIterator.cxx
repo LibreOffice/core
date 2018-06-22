@@ -516,8 +516,7 @@ ViewIteratorImpl::ViewIteratorImpl (
     bool bDirectionIsForward)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward),
       mbPageChangeOccurred(false),
-      mpPage(nullptr),
-      mpObjectIterator(nullptr)
+      mpPage(nullptr)
 {
     SetPage (nPageIndex);
 }
@@ -531,8 +530,7 @@ ViewIteratorImpl::ViewIteratorImpl (
     EditMode eEditMode)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward, ePageKind, eEditMode),
       mbPageChangeOccurred(false),
-      mpPage(nullptr),
-      mpObjectIterator(nullptr)
+      mpPage(nullptr)
 {
     SetPage (nPageIndex);
 }

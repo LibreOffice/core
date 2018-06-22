@@ -46,7 +46,6 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
                                       const uno::Sequence< sal_Int8 >& aClassID,
                                       const OUString& aClassName )
 : m_pOleComponent( nullptr )
-, m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
@@ -79,7 +78,6 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 // will be retrieved from the entry, during construction it is unknown
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory, bool bLink )
 : m_pOleComponent( nullptr )
-, m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )

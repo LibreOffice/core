@@ -40,8 +40,7 @@ using namespace ::com::sun::star;
 
 
 OInstanceLocker::OInstanceLocker()
-: m_pListenersContainer( nullptr )
-, m_bDisposed( false )
+: m_bDisposed( false )
 , m_bInitialized( false )
 {
 }

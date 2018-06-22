@@ -284,8 +284,7 @@ public:
             bIsParentData( false ),
             bIsModified( false ),
             bIsVisible( true ),
-            nStyle( 0 ),
-            mpEntries( nullptr )
+            nStyle( 0 )
     {}
 
     ~SvxConfigEntry();

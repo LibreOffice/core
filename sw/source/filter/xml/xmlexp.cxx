@@ -87,8 +87,6 @@ SwXMLExport::SwXMLExport(
     OUString const & implementationName, SvXMLExportFlags nExportFlags)
 :   SvXMLExport( util::MeasureUnit::INCH, rContext, implementationName, XML_TEXT,
         nExportFlags ),
-    m_pTableItemMapper( nullptr ),
-    m_pTableLines( nullptr ),
     m_bBlock( false ),
     m_bShowProgress( true ),
     m_bSavedShowChanges( false ),

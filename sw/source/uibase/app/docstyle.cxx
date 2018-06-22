@@ -102,7 +102,6 @@ public:
 };
 
 SwImplShellAction::SwImplShellAction( SwDoc& rDoc )
-    : pCurrSh( nullptr )
 {
     if( rDoc.GetDocShell() )
         pSh = rDoc.GetDocShell()->GetWrtShell();

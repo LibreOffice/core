@@ -54,14 +54,9 @@ namespace cppcanvas
             , areaHeight(0.0)
             , hasTransformation(false)
             , blendPoints(0)
-            , blendPositions(nullptr)
             , blendFactors(nullptr)
             , colorblendPoints(0)
-            , colorblendPositions(nullptr)
-            , colorblendColors(nullptr)
             , surroundColorsNumber(0)
-            , surroundColors(nullptr)
-            , path(nullptr)
             , hatchStyle(HatchStyleHorizontal)
         {
         }

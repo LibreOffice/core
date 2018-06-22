@@ -126,16 +126,14 @@ static const OUStringLiteral gaReplacementGraphicsContainerStorageName60( XML_CO
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     mpDocPersist( nullptr ),
-    meCreateMode( SvXMLEmbeddedObjectHelperMode::Read ),
-    mpStreamMap( nullptr )
+    meCreateMode( SvXMLEmbeddedObjectHelperMode::Read )
 {
 }
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHelper& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
     WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     mpDocPersist( nullptr ),
-    meCreateMode( SvXMLEmbeddedObjectHelperMode::Read ),
-    mpStreamMap( nullptr )
+    meCreateMode( SvXMLEmbeddedObjectHelperMode::Read )
 {
     Init( nullptr, rDocPersist, eCreateMode );
 }

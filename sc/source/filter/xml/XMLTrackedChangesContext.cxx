@@ -691,7 +691,6 @@ ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
     sLName(rLName),
     sText(),
     pChangeCellContext(pTempChangeCellContext),
-    pTextPContext(nullptr),
     nPrefix(nPrfx)
 {
     // here are no attributes

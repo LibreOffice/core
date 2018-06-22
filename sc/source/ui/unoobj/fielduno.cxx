@@ -192,7 +192,6 @@ ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
     , eMode(SC_UNO_COLLECT_NONE)
     , nFieldCount(0)
     , mnFieldType(text::textfield::Type::UNSPECIFIED)
-    , pFound(nullptr)
     , nFieldPar(0)
     , nFieldPos(0)
     , nFieldIndex(0)
@@ -1066,7 +1065,7 @@ ScEditFieldObj::ScEditFieldObj(
     pPropSet(nullptr),
     mpEditSource(std::move(pEditSrc)),
     aSelection(rSel),
-    meType(eType), mpData(nullptr), mpContent(rContent), mnNumFormat(0), mbIsDate(false), mbIsFixed(false)
+    meType(eType), mpContent(rContent), mnNumFormat(0), mbIsDate(false), mbIsFixed(false)
 {
     switch (meType)
     {

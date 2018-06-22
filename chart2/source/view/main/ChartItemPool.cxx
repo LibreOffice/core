@@ -180,7 +180,7 @@ ChartItemPool::ChartItemPool():
 }
 
 ChartItemPool::ChartItemPool(const ChartItemPool& rPool):
-    SfxItemPool(rPool), pItemInfos(nullptr)
+    SfxItemPool(rPool)
 {
 }
 

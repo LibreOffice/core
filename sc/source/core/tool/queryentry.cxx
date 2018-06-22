@@ -40,8 +40,6 @@ ScQueryEntry::ScQueryEntry() :
     nField(0),
     eOp(SC_EQUAL),
     eConnect(SC_AND),
-    pSearchParam(nullptr),
-    pSearchText(nullptr),
     maQueryItems(1)
 {
 }
@@ -51,8 +49,6 @@ ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
     nField(r.nField),
     eOp(r.eOp),
     eConnect(r.eConnect),
-    pSearchParam(nullptr),
-    pSearchText(nullptr),
     maQueryItems(r.maQueryItems)
 {
 }

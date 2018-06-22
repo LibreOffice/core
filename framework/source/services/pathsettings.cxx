@@ -441,7 +441,6 @@ PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentConte
     : PathSettings_BASE(m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     ,   m_xContext (xContext)
-    ,   m_pPropHelp(nullptr    )
 {
 }
 

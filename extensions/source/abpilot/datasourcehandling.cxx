@@ -307,7 +307,6 @@ namespace abp
 
 
     ODataSource::ODataSource( const ODataSource& _rSource )
-        :m_pImpl( nullptr )
     {
         *this = _rSource;
     }

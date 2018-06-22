@@ -59,7 +59,6 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
     m_xParent( xParent ),
     m_pExtMgrDialog( nullptr ),
     m_pUpdReqDialog( nullptr ),
-    m_pExecuteCmdQueue( nullptr ),
     m_bModified(false)
 {
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );

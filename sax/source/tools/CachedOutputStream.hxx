@@ -47,7 +47,6 @@ public:
                          , mpCache(mnMaximumSize)
                          , pSeq(mpCache.get())
                          , mbWriteToOutStream(true)
-                         , mpForMerge(nullptr)
     {}
 
     const css::uno::Reference< css::io::XOutputStream >& getOutputStream() const

@@ -309,12 +309,7 @@ bool ScDPServiceDesc::operator== ( const ScDPServiceDesc& rOther ) const
 
 ScDPObject::ScDPObject( ScDocument* pD ) :
     pDoc( pD ),
-    pSaveData( nullptr ),
-    pSheetDesc( nullptr ),
-    pImpDesc( nullptr ),
-    pServDesc( nullptr ),
     mpTableData(static_cast<ScDPTableData*>(nullptr)),
-    pOutput( nullptr ),
     nHeaderRows( 0 ),
     mbHeaderLayout(false),
     bAllowMove(false),
@@ -325,15 +320,10 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
 
 ScDPObject::ScDPObject(const ScDPObject& r) :
     pDoc( r.pDoc ),
-    pSaveData( nullptr ),
     aTableName( r.aTableName ),
     aTableTag( r.aTableTag ),
     aOutRange( r.aOutRange ),
-    pSheetDesc( nullptr ),
-    pImpDesc( nullptr ),
-    pServDesc( nullptr ),
     mpTableData(static_cast<ScDPTableData*>(nullptr)),
-    pOutput( nullptr ),
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),
     bAllowMove(false),
@@ -2817,7 +2807,7 @@ std::vector<OUString> ScDPObject::GetRegisteredSources()
 uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPServiceDesc& rDesc )
 {
     OUString aImplName = rDesc.aServiceName;
-    uno::Reference<sheet::XDimensionsSupplier> xRet = nullptr;
+    uno::Reference<sheet::XDimensionsSupplier> xRet;
 
     uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc(xManager, uno::UNO_QUERY);

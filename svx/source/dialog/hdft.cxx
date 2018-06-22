@@ -133,7 +133,6 @@ SvxFooterPage::SvxFooterPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
 SvxHFPage::SvxHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 nSetId)
     : SfxTabPage(pParent, "svx/ui/headfootformatpage.ui", "HFFormatPage", &rSet)
     , nId(nSetId)
-    , pBBSet(nullptr)
     , mbDisableQueryBox(false)
     , mbEnableDrawingLayerFillStyles(false)
     , m_xCntSharedBox(m_xBuilder->weld_check_button("checkSameLR"))

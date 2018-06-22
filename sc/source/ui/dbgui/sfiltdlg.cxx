@@ -58,16 +58,13 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     :   ScAnyRefDlg ( pB, pCW, pParent, "AdvancedFilterDialog", "modules/scalc/ui/advancedfilterdialog.ui" ),
 
         aStrUndefined   ( ScResId(SCSTR_UNDEFINED) ),
-        pOptionsMgr     ( nullptr ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( static_cast<const ScQueryItem&>(
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),
-        pOutItem        ( nullptr ),
         pViewData       ( nullptr ),
         pDoc            ( nullptr ),
         pRefInputEdit   ( nullptr ),
-        bRefInputMode   ( false ),
-        pIdle          ( nullptr )
+        bRefInputMode   ( false )
 {
         get(pLbFilterArea,"lbfilterarea");
         get(pEdFilterArea,"edfilterarea");

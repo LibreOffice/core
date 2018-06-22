@@ -129,7 +129,6 @@ namespace dbaccess
 ORowSet::ORowSet( const Reference< css::uno::XComponentContext >& _rxContext )
     :ORowSet_BASE1(m_aMutex)
     ,ORowSetBase( _rxContext, ORowSet_BASE1::rBHelper, &m_aMutex )
-    ,m_pParameters( nullptr )
     ,m_aPrematureParamValues(new ORowSetValueVector)
     ,m_aParameterValueForCache(new ORowSetValueVector)
     ,m_aRowsetListeners(*m_pMutex)

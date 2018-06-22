@@ -487,7 +487,6 @@ ExtraPortionInfo::ExtraPortionInfo()
 , nAsianCompressionTypes(AsianCompressionFlags::Normal)
 , bFirstCharIsRightPunktuation(false)
 , bCompressed(false)
-, pOrgDXArray(nullptr)
 , lineBreaksList()
 {
 }

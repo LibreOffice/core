@@ -223,10 +223,6 @@ void ScUnoAddInFuncData::SetCallerPos( long nNewPos )
 
 ScUnoAddInCollection::ScUnoAddInCollection() :
     nFuncCount( 0 ),
-    ppFuncData( nullptr ),
-    pExactHashMap( nullptr ),
-    pNameHashMap( nullptr ),
-    pLocalHashMap( nullptr ),
     bInitialized( false )
 {
 }
