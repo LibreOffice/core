@@ -362,9 +362,6 @@
     <glade-widget-class title="Paragraph Preview" name="svxlo-SvxParaPrevWindow"
                         generic-name="Paragraph Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Page Preview" name="swlo-SwPageGridExample"
-                        generic-name="Grid Page Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Page Preview" name="swlo-SwColExample"
                         generic-name="Page Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

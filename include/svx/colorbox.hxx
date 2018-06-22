@@ -96,9 +96,12 @@ private:
     std::unique_ptr<ColorWindow> m_xColorWindow;
     std::unique_ptr<weld::MenuButton> m_xButton;
     weld::Window* m_pTopLevel;
+    Link<ColorListBox&, void> m_aSelectedLink;
     ListBoxColorWrapper m_aColorWrapper;
     Color m_aAutoDisplayColor;
+    Color m_aSaveColor;
     NamedColor m_aSelectedColor;
+    bool m_bInterimBuilder;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
 
@@ -107,8 +110,13 @@ private:
     void LockWidthRequest();
     ColorWindow* getColorWindow() const;
 public:
-    ColorListBox(weld::MenuButton* pControl, weld::Window* pWindow);
+    ColorListBox(weld::MenuButton* pControl, weld::Window* pWindow, bool bInterimBuilder = false);
     ~ColorListBox();
+
+    void SetSelectHdl(const Link<ColorListBox&, void>& rLink)
+    {
+        m_aSelectedLink = rLink;
+    }
 
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
 
@@ -118,6 +126,9 @@ public:
 
     void ShowPreview(const NamedColor &rColor);
     void EnsurePaletteManager();
+
+    void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
+    bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 };
 
 /** A wrapper for SvxColorListBox. */
