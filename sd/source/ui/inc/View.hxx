@@ -238,9 +238,9 @@ protected:
     SdDrawDocument&         mrDoc;
     DrawDocShell*           mpDocSh;
     ViewShell*              mpViewSh;
-    SdrMarkList*            mpDragSrcMarkList;
+    std::unique_ptr<SdrMarkList> mpDragSrcMarkList;
     SdrObject*              mpDropMarkerObj;
-    SdrDropMarkerOverlay*   mpDropMarker;
+    std::unique_ptr<SdrDropMarkerOverlay> mpDropMarker;
     sal_uInt16              mnDragSrcPgNum;
     Point                   maDropPos;
     ::std::vector<OUString> maDropFileVector;

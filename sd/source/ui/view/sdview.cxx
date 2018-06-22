@@ -146,11 +146,7 @@ View::View(
 
 void View::ImplClearDrawDropMarker()
 {
-    if(mpDropMarker)
-    {
-        delete mpDropMarker;
-        mpDropMarker = nullptr;
-    }
+    mpDropMarker.reset();
 }
 
 View::~View()
@@ -531,7 +527,7 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
         /* Drag&Drop is in progress
            Source and destination page are different:
            we use the saved mark list */
-        pMarkList = mpDragSrcMarkList;
+        pMarkList = mpDragSrcMarkList.get();
     }
     else
     {
@@ -577,7 +573,7 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
         }
     }
 
-    if (pMarkList != mpDragSrcMarkList)
+    if (pMarkList != mpDragSrcMarkList.get())
     {
        delete pMarkList;
     }
