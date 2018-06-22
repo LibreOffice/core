@@ -966,7 +966,7 @@ static void lcl_UpdateFunctionList( const ScFunctionList& rFunctionList, const S
     for (sal_uLong nPos=0; nPos<nCount; nPos++)
     {
         const ScFuncDesc* pDesc = rFunctionList.GetFunction( nPos );
-        if ( pDesc && pDesc->pFuncName && *pDesc->pFuncName == aCompare )
+        if ( pDesc && pDesc->mxFuncName && *pDesc->mxFuncName == aCompare )
         {
             ScUnoAddInCollection::FillFunctionDescFromData( rFuncData, *const_cast<ScFuncDesc*>(pDesc) );
             break;
@@ -1233,14 +1233,14 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     // nFIndex is set from outside
 
-    rDesc.pFuncName = new OUString( rFuncData.GetUpperLocal() );     //TODO: upper?
+    rDesc.mxFuncName = rFuncData.GetUpperLocal();     //TODO: upper?
     rDesc.nCategory = rFuncData.GetCategory();
     rDesc.sHelpId = rFuncData.GetHelpId();
 
     OUString aDesc = rFuncData.GetDescription();
     if (aDesc.isEmpty())
         aDesc = rFuncData.GetLocalName();      // use name if no description is available
-    rDesc.pFuncDesc = new OUString( aDesc );
+    rDesc.mxFuncDesc = aDesc ;
 
     // AddInArgumentType_CALLER is already left out in FuncData
 

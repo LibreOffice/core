@@ -535,12 +535,12 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
     pArray[1].Value <<= static_cast<sal_Int32>(rDesc.nCategory);
 
     pArray[2].Name = SC_UNONAME_NAME;
-    if (rDesc.pFuncName)
-        pArray[2].Value <<= *rDesc.pFuncName;
+    if (rDesc.mxFuncName)
+        pArray[2].Value <<= *rDesc.mxFuncName;
 
     pArray[3].Name = SC_UNONAME_DESCRIPTION;
-    if (rDesc.pFuncDesc)
-        pArray[3].Value <<= *rDesc.pFuncDesc;
+    if (rDesc.mxFuncDesc)
+        pArray[3].Value <<= *rDesc.mxFuncDesc;
 
     pArray[4].Name = SC_UNONAME_ARGUMENTS;
     if (!rDesc.maDefArgNames.empty() && !rDesc.maDefArgDescs.empty() && rDesc.pDefArgFlags )
@@ -611,7 +611,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
     {
         const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
         //! Case-insensitiv ???
-        if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
+        if ( pDesc && pDesc->mxFuncName && aName == *pDesc->mxFuncName )
         {
             uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
             lcl_FillSequence( aSeq, *pDesc );
@@ -689,8 +689,8 @@ uno::Sequence<OUString> SAL_CALL ScFunctionListObj::getElementNames()
         for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-            if ( pDesc && pDesc->pFuncName )
-                pAry[nIndex] = *pDesc->pFuncName;
+            if ( pDesc && pDesc->mxFuncName )
+                pAry[nIndex] = *pDesc->mxFuncName;
         }
         return aSeq;
     }
@@ -708,7 +708,7 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             //! Case-insensitiv ???
-            if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
+            if ( pDesc && pDesc->mxFuncName && aName == *pDesc->mxFuncName )
                 return true;
         }
     }

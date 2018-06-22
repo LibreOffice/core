@@ -189,7 +189,7 @@ void ScFunctionWin::SetDescription()
         aBuf.append(":\n\n");
         aBuf.append(pDesc->GetParamList());
         aBuf.append("\n\n");
-        aBuf.append(*pDesc->pFuncDesc);
+        aBuf.append(*pDesc->mxFuncDesc);
 
         aFiFuncDesc->SetText(aBuf.makeStringAndClear());
         aFiFuncDesc->StateChanged(StateChangedType::Text);
@@ -230,7 +230,7 @@ void ScFunctionWin::UpdateFunctionList()
         while ( pDesc )
         {
             aFuncList->SetEntryData(
-                aFuncList->InsertEntry( *(pDesc->pFuncName) ),
+                aFuncList->InsertEntry( *(pDesc->mxFuncName) ),
                 const_cast<ScFuncDesc *>(pDesc) );
             pDesc = pFuncMgr->Next();
         }
