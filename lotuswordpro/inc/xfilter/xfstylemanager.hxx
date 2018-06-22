@@ -133,7 +133,7 @@ private:
     XFStyleContainer    s_aTableCellStyles;
     XFStyleContainer    s_aTableRowStyles;
     XFStyleContainer    s_aTableColStyles;
-    IXFStyle            *s_pOutlineStyle;
+    std::unique_ptr<IXFStyle> s_pOutlineStyle;
     XFStyleContainer s_aRubyStyles;
 };
 
