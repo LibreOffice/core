@@ -415,7 +415,7 @@ void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventLi
 SdLayerManager::SdLayerManager( SdXImpressDocument& rMyModel ) throw()
 :mpModel( &rMyModel)
 {
-    mpLayers = new SvUnoWeakContainer;
+    mpLayers.reset(new SvUnoWeakContainer);
 }
 
 SdLayerManager::~SdLayerManager() throw()
@@ -433,9 +433,7 @@ void SAL_CALL SdLayerManager::dispose(  )
     if( mpLayers )
     {
         mpLayers->dispose();
-
-        delete mpLayers;
-        mpLayers = nullptr;
+        mpLayers.reset();
     }
 }
 
