@@ -55,6 +55,8 @@ class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenAr
     bool mbOpenCLEnabled : 1;
     bool mbThreadingEnabled : 1;
 
+    void CheckForThreading( const formula::FormulaToken& r );
+
 public:
     ScTokenArray();
     /** Assignment with incrementing references of FormulaToken entries
@@ -97,7 +99,6 @@ public:
         svl::SharedStringPool& rSPool,
         formula::ExternalReferenceHelper* _pRef) override;
     virtual void CheckToken( const formula::FormulaToken& r ) override;
-    void CheckForThreading( OpCode eOp );
     virtual formula::FormulaToken* AddOpCode( OpCode eCode ) override;
     /** ScSingleRefToken with ocPush. */
     formula::FormulaToken* AddSingleReference( const ScSingleRefData& rRef );
