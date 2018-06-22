@@ -36,7 +36,7 @@ public:
 
 void FontFeatureTest::testGetFontFeatures()
 {
-// "Linux Libertine G" is a font bundeled with LO, but sometimes the
+// "Linux Libertine G" is a font bundled with LO, but sometimes the
 // bundled fonts aren't available so we need to disable test in that case
 #if !TEST_FONTS_MISSING
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
