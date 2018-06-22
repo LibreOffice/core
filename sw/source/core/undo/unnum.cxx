@@ -33,23 +33,22 @@ SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
                             const SwDoc* pDoc,
                             SwUndoId nUndoId)
     : SwUndo( nUndoId, pDoc ),
-    aNumRule( rNewRule ), pHistory( nullptr ),
+    aNumRule( rNewRule ),
     pOldNumRule( new SwNumRule( rOldRule )), nLRSavePos( 0 )
 {
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
     : SwUndo( SwUndoId::INSNUM, rPam.GetDoc() ), SwUndRng( rPam ),
-    aNumRule( rRule ), pHistory( nullptr ),
-    pOldNumRule( nullptr ), nLRSavePos( 0 )
+    aNumRule( rRule ),
+    nLRSavePos( 0 )
 {
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const OUString& rReplaceRule )
     : SwUndo( SwUndoId::INSNUM, rPos.nNode.GetNode().GetDoc() ),
-    aNumRule( rRule ), pHistory( nullptr ),
-    pOldNumRule( nullptr ),
+    aNumRule( rRule ),
     sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
     // No selection!

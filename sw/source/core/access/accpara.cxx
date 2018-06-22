@@ -534,8 +534,6 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     : SwClient( const_cast<SwTextNode*>(rTextFrame.GetTextNode()) ) // #i108125#
     , SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )
     , m_sDesc()
-    , m_pPortionData( nullptr )
-    , m_pHyperTextData( nullptr )
     , m_nOldCaretPos( -1 )
     , m_bIsHeading( false )
     //Get the real heading level, Heading1 ~ Heading10

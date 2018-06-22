@@ -708,7 +708,6 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
                               sal_uInt16 *pWhichIds, sal_uInt16 nWhichIds ) :
     CSS1Parser(),
     sBaseURL( rBaseURL ),
-    pSheetItemSet(nullptr),
     pItemSet(nullptr),
     pPropInfo( nullptr ),
     nMinFixLineSpace(  MM50/2 ),

@@ -48,7 +48,6 @@ SwFormatField::SwFormatField( sal_uInt16 nWhich )
     : SfxPoolItem( nWhich )
     , SwModify(nullptr)
     , SfxBroadcaster()
-    , mpField( nullptr )
     , mpTextField( nullptr )
 {
 }
@@ -86,7 +85,6 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
     : SfxPoolItem( rAttr )
     , SwModify(nullptr)
     , SfxBroadcaster()
-    , mpField( nullptr )
     , mpTextField( nullptr )
 {
     if ( rAttr.mpField )

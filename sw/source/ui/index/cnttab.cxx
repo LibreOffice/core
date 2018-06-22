@@ -219,7 +219,6 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
         "modules/swriter/ui/tocdialog.ui", &rSet)
     , m_pMgr( new SwTOXMgr( &rShell ) )
     , m_rWrtShell(rShell)
-    , m_pExampleFrame(nullptr)
     , m_pParamTOXBase(pCurTOX)
     , m_sUserDefinedIndex(SwResId(STR_USER_DEFINED_INDEX))
     , m_nInitialTOXType(nToxType)
@@ -762,7 +761,6 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, Button*, pBtn, void)
 SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocIndexPage",
         "modules/swriter/ui/tocindexpage.ui", &rAttrSet)
-    , pIndexRes(nullptr)
     , sAutoMarkType(SwResId(STR_AUTOMARK_TYPE))
     , m_bWaitingInitialSettings(true)
 {
@@ -3614,7 +3612,6 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
 SwTOXStylesTabPage::SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet )
     : SfxTabPage(pParent, "TocStylesPage",
         "modules/swriter/ui/tocstylespage.ui", &rAttrSet)
-    , m_pCurrentForm(nullptr)
 {
     get(m_pLevelLB, "levels");
     get(m_pAssignBT, "assign");
