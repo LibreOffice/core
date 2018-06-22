@@ -1397,6 +1397,7 @@ public:
 
     static weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString &rUIFile);
     static weld::Builder* CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile); //for the duration of same SfxTabPages in mixed parent types
+    static weld::Builder* CreateInterimBuilder(weld::Widget* pParent, const OUString &rUIFile); //for the duration of same SfxTabPages in mixed parent types
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage);
