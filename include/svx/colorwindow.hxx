@@ -69,6 +69,7 @@ private:
     BorderColorStatus&  mrBorderColorStatus;
 
     ColorSelectFunction maColorSelectFunction;
+    bool mbReuseParentForPicker;
 
     DECL_LINK( SelectHdl, ValueSet*, void );
     DECL_LINK( SelectPaletteHdl, ListBox&, void);
@@ -86,6 +87,11 @@ public:
                    sal_uInt16 nSlotId,
                    const css::uno::Reference< css::frame::XFrame >& rFrame,
                    vcl::Window* pParentWindow,
+                   // tdf#118251 When true, reuse pParentWindow as the parent of the color picker
+                   // that appears from the 'custom color' button. When false use the window of
+                   // rFrame. true is helpful when launched from a dialog, false for launched
+                   // from a toolbar
+                   bool bReuseParentForPicker,
                    ColorSelectFunction const& rColorSelectFunction);
     virtual ~SvxColorWindow() override;
     virtual void        dispose() override;

@@ -1257,6 +1257,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
                                sal_uInt16                 nSlotId,
                                const Reference< XFrame >& rFrame,
                                vcl::Window*               pParentWindow,
+                               bool                       bReuseParentForPicker,
                                std::function<void(const OUString&, const NamedColor&)> const & aFunction):
 
     ToolbarPopup( rFrame, pParentWindow, "palette_popup_window", "svx/ui/colorwindow.ui" ),
@@ -1265,7 +1266,8 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     mxParentWindow(pParentWindow),
     mxPaletteManager( rPaletteManager ),
     mrBorderColorStatus( rBorderColorStatus ),
-    maColorSelectFunction(aFunction)
+    maColorSelectFunction(aFunction),
+    mbReuseParentForPicker(bReuseParentForPicker)
 {
     get(mpPaletteListBox,     "palette_listbox");
     get(mpButtonAutoColor,    "auto_color_button");
@@ -1513,7 +1515,18 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
 
     if ( IsInPopupMode() )
         EndPopupMode();
-    mxPaletteManager->PopupColorPicker(mxParentWindow->GetFrameWeld(), maCommand, GetSelectEntryColor().first);
+
+    weld::Window* pParentFrame;
+    if (mbReuseParentForPicker)
+    {
+        pParentFrame = mxParentWindow->GetFrameWeld();
+    }
+    else
+    {
+        const css::uno::Reference<css::awt::XWindow> xParent(mxFrame->getContainerWindow(), uno::UNO_QUERY);
+        pParentFrame = Application::GetFrameWeld(xParent);
+    }
+    mxPaletteManager->PopupColorPicker(pParentFrame, maCommand, GetSelectEntryColor().first);
 }
 
 void SvxColorWindow::StartSelection()
@@ -2872,6 +2885,7 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
                             m_nSlotId,
                             m_xFrame,
                             pParent,
+                            false,
                             m_aColorSelectFunction);
 
     OUString aWindowTitle = vcl::CommandInfoProvider::GetLabelForCommand( m_aCommandURL, m_sModuleName );
@@ -3392,6 +3406,7 @@ void SvxColorListBox::createColorWindow()
                             m_nSlotId,
                             xFrame,
                             this,
+                            true,
                             m_aColorWrapper);
 
     m_xColorWindow->AddEventListener(LINK(this, SvxColorListBox, WindowEventListener));
