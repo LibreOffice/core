@@ -71,8 +71,7 @@ bool SdPdfFilter::Import()
         const Size& aSize = aPair.second;
 
         const sal_Int32 nPageNumber = rGraphic.getPageNumber();
-        if (nPageNumber < 0 || static_cast<size_t>(nPageNumber) >= aGraphics.size())
-            continue; // Page is out of range
+        assert(nPageNumber >= 0 && static_cast<size_t>(nPageNumber) < rGraphics.size());
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber, PageKind::Standard);
