@@ -80,11 +80,7 @@ XFStyleManager::~XFStyleManager()
 
 void    XFStyleManager::Reset()
 {
-    if( s_pOutlineStyle )
-    {
-        delete s_pOutlineStyle;
-        s_pOutlineStyle = nullptr;
-    }
+    s_pOutlineStyle.reset();
 
     s_aStdTextStyles.Reset();
     s_aStdParaStyles.Reset();
@@ -203,8 +199,7 @@ IXFStyleRet XFStyleManager::AddStyle(std::unique_ptr<IXFStyle> pStyle)
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleOutline )
     {
-        delete s_pOutlineStyle;
-        s_pOutlineStyle = pStyle.release();
+        s_pOutlineStyle = std::move(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleStrokeDash )
     {
@@ -265,7 +260,7 @@ IXFStyle*   XFStyleManager::FindStyle(const OUString& name)
     if( pStyle )
         return pStyle;
     if(s_pOutlineStyle && s_pOutlineStyle->GetStyleName() == name )
-        return s_pOutlineStyle;
+        return s_pOutlineStyle.get();
     pStyle = s_aStdStrokeDashStyles.FindStyle(name);
     if( pStyle )
         return pStyle;
