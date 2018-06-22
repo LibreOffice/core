@@ -85,7 +85,7 @@ private:
     std::map<LwpFrib*,OUString>* m_pFribMap;
     std::map<LwpFrib*,OUString> m_DocFribMap;
     std::map<LwpFrib*,OUString> m_HeadFootFribMap;
-    std::vector<XFChangeRegion*> m_ChangeList;
+    std::vector<rtl::Reference<XFChangeRegion>> m_ChangeList;
     sal_uInt32 m_nCounter;
 };
 
