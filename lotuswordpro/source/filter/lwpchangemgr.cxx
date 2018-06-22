@@ -146,10 +146,6 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
 
     pStream->EndElement("text:tracked-changes");
 
-    for (auto const& elem : m_ChangeList)
-    {
-        delete elem;
-    }
     m_ChangeList.clear();
 }
 void LwpChangeMgr::SetHeadFootFribMap(bool bFlag)
