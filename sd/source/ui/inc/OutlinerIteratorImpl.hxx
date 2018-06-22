@@ -203,7 +203,7 @@ private:
     /// Pointer to the page associated with the current page index. May be NULL.
     SdPage* mpPage;
     /// Iterator of all objects on the current page.
-    SdrObjListIter* mpObjectIterator;
+    std::unique_ptr<SdrObjListIter> mpObjectIterator;
 
     // Don't use this operator.
     ViewIteratorImpl& operator= (const ViewIteratorImpl&) = delete;
