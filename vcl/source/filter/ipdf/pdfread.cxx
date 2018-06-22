@@ -312,6 +312,9 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
     if (nPageCount <= 0)
         return 0;
 
+    // dummy Bitmap
+    Bitmap aBitmap(Size(1, 1), 24);
+
     for (size_t nPageIndex = 0; nPageIndex < static_cast<size_t>(nPageCount); ++nPageIndex)
     {
         double fPageWidth = 0;
@@ -323,9 +326,11 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
         const size_t nPageWidth = pointToPixel(fPageWidth, fResolutionDPI);
         const size_t nPageHeight = pointToPixel(fPageHeight, fResolutionDPI);
 
-        // Create the Graphic and link the original PDF stream.
-        Graphic aGraphic;
-        aGraphic.setPdfData(pPdfData); // TODO: Skip if unchanged.
+        // Create the Graphic with a dummy Bitmap and link the original PDF stream.
+        // We swap out this Graphic as soon as possible, and a later swap in
+        // actually renders the correct Bitmap on demand.
+        Graphic aGraphic(aBitmap);
+        aGraphic.setPdfData(pPdfData);
         aGraphic.setPageNumber(nPageIndex);
         aGraphic.SetGfxLink(pGfxLink);
 
