@@ -49,7 +49,7 @@ private:
 
     Pointer                 maPtr;
     SdrObject*              mpRefObj;
-    SdrDropMarkerOverlay*   mpOverlay;
+    std::unique_ptr<SdrDropMarkerOverlay> mpOverlay;
 
     FuDisplayOrder (
         ViewShell* pViewSh,
