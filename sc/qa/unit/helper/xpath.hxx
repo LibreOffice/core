@@ -32,6 +32,8 @@
 
 using namespace com::sun::star;
 
+class ScBootstrapFixture;
+
 namespace XPathHelper
 {
     /**
@@ -44,7 +46,7 @@ namespace XPathHelper
      *      test several files in the same exported xml file you need to export the file manually
      *      and call the parseExport method that takes a TempFile
      */
-    SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport(ScDocShell& rShell, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
+    SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport2(ScBootstrapFixture &, ScDocShell& rShell, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
             const OUString& rFile, sal_Int32 nFormat);
 
     /**

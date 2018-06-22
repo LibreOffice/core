@@ -54,7 +54,7 @@ public:
 
   virtual void setUp() override;
 
-  static void validate(const OUString& rURL, ValidationFormat);
+  void validate(const OUString& rURL, ValidationFormat) const;
 };
 
 }
