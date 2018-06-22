@@ -645,7 +645,6 @@ namespace {
 
 PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterController>& i_rController )
     : ModalDialog(i_pParent, "PrintDialog", "vcl/ui/printdialog.ui")
-    , mpCustomOptionsUIBuilder(nullptr)
     , maPController( i_rController )
     , maNUpPage(m_pUIBuilder.get())
     , maJobPage(m_pUIBuilder.get())

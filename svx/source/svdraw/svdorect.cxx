@@ -64,8 +64,7 @@ std::unique_ptr<sdr::contact::ViewContact> SdrRectObj::CreateObjectSpecificViewC
 
 
 SdrRectObj::SdrRectObj(SdrModel& rSdrModel)
-:   SdrTextObj(rSdrModel),
-    mpXPoly(nullptr)
+:   SdrTextObj(rSdrModel)
 {
     bClosedObj=true;
 }
@@ -73,8 +72,7 @@ SdrRectObj::SdrRectObj(SdrModel& rSdrModel)
 SdrRectObj::SdrRectObj(
     SdrModel& rSdrModel,
     const tools::Rectangle& rRect)
-:   SdrTextObj(rSdrModel, rRect),
-    mpXPoly(nullptr)
+:   SdrTextObj(rSdrModel, rRect)
 {
     bClosedObj=true;
 }
@@ -82,8 +80,7 @@ SdrRectObj::SdrRectObj(
 SdrRectObj::SdrRectObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewTextKind)
-:   SdrTextObj(rSdrModel, eNewTextKind),
-    mpXPoly(nullptr)
+:   SdrTextObj(rSdrModel, eNewTextKind)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -95,8 +92,7 @@ SdrRectObj::SdrRectObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewTextKind,
     const tools::Rectangle& rRect)
-:   SdrTextObj(rSdrModel, eNewTextKind, rRect),
-    mpXPoly(nullptr)
+:   SdrTextObj(rSdrModel, eNewTextKind, rRect)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,

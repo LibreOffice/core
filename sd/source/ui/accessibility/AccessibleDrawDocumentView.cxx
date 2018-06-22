@@ -86,8 +86,7 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
     : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
-      mpSdViewSh( pViewShell ),
-      mpChildrenManager (nullptr)
+      mpSdViewSh( pViewShell )
 {
     UpdateAccessibleName();
 }

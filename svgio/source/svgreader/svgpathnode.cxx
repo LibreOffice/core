@@ -29,8 +29,6 @@ namespace svgio
             SvgNode* pParent)
         :   SvgNode(SVGTokenPath, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpPolyPolygon(nullptr),
-            mpaTransform(nullptr),
             maPathLength()
         {
         }

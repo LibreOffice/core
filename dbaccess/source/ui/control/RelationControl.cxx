@@ -132,8 +132,6 @@ namespace dbaui
             BrowserMode::AUTOSIZE_LASTCOL)
         , m_pBoxControl(nullptr)
         , m_nDataPos(0)
-        , m_xSourceDef(nullptr)
-        , m_xDestDef(nullptr)
     {
     }
 

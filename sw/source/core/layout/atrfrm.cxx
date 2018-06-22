@@ -1723,7 +1723,6 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
 // Partially implemented inline in hxx
 SwFormatURL::SwFormatURL() :
     SfxPoolItem( RES_URL ),
-    m_pMap( nullptr ),
     m_bIsServerMap( false )
 {
 }
@@ -2841,7 +2840,6 @@ void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) cons
 
 SwFlyFrameFormat::SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrame )
     : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
-    , m_pContact(nullptr)
 {}
 
 SwFlyFrameFormat::~SwFlyFrameFormat()

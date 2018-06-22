@@ -32,8 +32,6 @@ namespace svgio
             bool bIsPolyline)
         :   SvgNode(SVGTokenPolygon, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpPolygon(nullptr),
-            mpaTransform(nullptr),
             mbIsPolyline(bIsPolyline)
         {
         }

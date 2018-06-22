@@ -245,7 +245,6 @@ SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, 
 :   mpOutputDevice(&rOut),
     mpWindow(pWindow),
     mrPaintView(rNewPaintView),
-    mpPreRenderDevice(nullptr),
     mbTemporaryTarget(false) // #i72889#
 {
 }

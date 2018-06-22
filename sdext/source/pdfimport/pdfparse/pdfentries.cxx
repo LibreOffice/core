@@ -95,8 +95,7 @@ using namespace pdfparse;
 
 EmitContext::EmitContext( const PDFContainer* pTop ) :
     m_bDeflate( false ),
-    m_bDecrypt( false ),
-    m_pImplData( nullptr )
+    m_bDecrypt( false )
 {
     if( pTop )
         m_pImplData.reset( new EmitImplData( pTop ) );

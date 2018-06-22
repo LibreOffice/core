@@ -115,8 +115,8 @@ void CandleStickChart::createShapes()
         {
             m_xChartTypeModelProps->getPropertyValue( "ShowFirst" ) >>= bShowFirst;
 
-            uno::Reference< beans::XPropertySet > xWhiteDayProps(nullptr);
-            uno::Reference< beans::XPropertySet > xBlackDayProps(nullptr);
+            uno::Reference< beans::XPropertySet > xWhiteDayProps;
+            uno::Reference< beans::XPropertySet > xBlackDayProps;
             m_xChartTypeModelProps->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
             m_xChartTypeModelProps->getPropertyValue( "WhiteDay" ) >>= xWhiteDayProps;
             m_xChartTypeModelProps->getPropertyValue( "BlackDay" ) >>= xBlackDayProps;
@@ -213,7 +213,7 @@ void CandleStickChart::createShapes()
                         xLossGainTarget = xLossTarget;
 
                     uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint( nIndex ));
-                    uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(nullptr);
+                    uno::Reference< drawing::XShapes > xPointGroupShape_Shapes;
                     {
                         OUString aPointCID = ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nIndex );
                         uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes( getSeriesGroupShape(pSeries.get(), xSeriesTarget) );

@@ -166,7 +166,6 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
 }
 
 ScFunctionAccess::ScFunctionAccess() :
-    pOptions( nullptr ),
     aPropertyMap( ScDocOptionsHelper::GetPropertyMap() ),
     mbArray( true ),    // default according to behaviour of older Office versions
     mbValid( true )

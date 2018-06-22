@@ -508,7 +508,6 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
 ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext >& rxContext,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
     m_xContext( rxContext )
     , m_pOwner(pOwner)
-    , m_pDefaultImageList( nullptr )
     , m_aResourceString( "private:resource/images/moduleimages" )
     , m_aListenerContainer( m_mutex )
     , m_bUseGlobal(_bUseGlobal)

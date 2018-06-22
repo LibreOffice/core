@@ -28,8 +28,7 @@
 #include <stlpool.hxx>
 
 ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
-:pFormTable(nullptr)
-,pEditPool(nullptr)
+:pEditPool(nullptr)
 ,pEnginePool(nullptr)
 ,m_pSourceDoc(pSourceDoc)
 {

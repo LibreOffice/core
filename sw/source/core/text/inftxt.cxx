@@ -87,8 +87,7 @@ using namespace ::com::sun::star::beans;
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
 
 SwLineInfo::SwLineInfo()
-    : pRuler( nullptr ),
-      pSpace( nullptr ),
+    : pSpace( nullptr ),
       nVertAlign( SvxParaVertAlignItem::Align::Automatic ),
       nDefTabStop( 0 ),
       bListTabStopIncluded( false ),

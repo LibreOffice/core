@@ -14,10 +14,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <vcl/outdev.hxx>
 
-SdrObjPlusData::SdrObjPlusData():
-    pBroadcast(nullptr),
-    pUserDataList(nullptr),
-    pGluePoints(nullptr)
+SdrObjPlusData::SdrObjPlusData()
 {
 }
 

@@ -69,8 +69,6 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
       // On changes of the DragType: adjust SelectionMode of TLB!
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
     , mpBindings ( pInBindings )
-    , mpNavigatorCtrlItem( nullptr )
-    , mpPageNameCtrlItem( nullptr )
 {
     get(maToolbox, "toolbox");
     get(maTlbObjects, "tree");

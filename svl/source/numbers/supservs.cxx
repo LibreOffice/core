@@ -39,8 +39,7 @@ using namespace ::utl;
 
 
 SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const css::uno::Reference< css::uno::XComponentContext >& _rxORB)
-    :m_pOwnFormatter(nullptr)
-    ,m_xORB(_rxORB)
+    :m_xORB(_rxORB)
 {
 }
 

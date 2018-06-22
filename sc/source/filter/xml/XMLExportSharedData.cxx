@@ -26,11 +26,7 @@ using namespace com::sun::star;
 ScMySharedData::ScMySharedData(const sal_Int32 nTempTableCount) :
     nLastColumns(nTempTableCount, 0),
     nLastRows(nTempTableCount, 0),
-    pTableShapes(nullptr),
-    pDrawPages(nullptr),
-    pShapesContainer(nullptr),
     pDetectiveObjContainer(new ScMyDetectiveObjContainer()),
-    pNoteShapes(nullptr),
     nTableCount(nTempTableCount)
 {
 }

@@ -64,7 +64,6 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     : ToolBox(pParent, WB_3DLOOK|WB_BORDER)
     , aPos(VclPtr<Edit>::Create(this, WB_3DLOOK|WB_CENTER|WB_BORDER|WB_READONLY))
     , aEdit(VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION))
-    , pMgr(nullptr)
     , pWrtShell(nullptr)
     , pView(nullptr)
     , aCurrentTableName(aEmptyOUStr)

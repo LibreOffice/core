@@ -2373,7 +2373,6 @@ void SwFramePage::EnableVerticalPositioning( bool bEnable )
 SwGrfExtPage::SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "PicturePage",
         "modules/swriter/ui/picturepage.ui", &rSet)
-    , pGrfDlg(nullptr)
     , bHtmlMode(false)
 {
     get(m_pMirror, "flipframe");

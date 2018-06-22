@@ -592,7 +592,7 @@ void EditUndoSetAttribs::ImpSetSelection()
 
 EditUndoTransliteration::EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, TransliterationFlags nM) :
     EditUndo(EDITUNDO_TRANSLITERATE, pEE),
-    aOldESel(rESel), nMode(nM), pTxtObj(nullptr) {}
+    aOldESel(rESel), nMode(nM) {}
 
 EditUndoTransliteration::~EditUndoTransliteration()
 {

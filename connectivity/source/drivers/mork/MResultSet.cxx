@@ -69,7 +69,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_pStatement(pStmt)
     ,m_xStatement(*pStmt)
-    ,m_xMetaData(nullptr)
     ,m_nRowPos(0)
     ,m_bWasNull(false)
     ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
@@ -80,7 +79,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,m_CurrentRowCount(0)
     ,m_nParamIndex(0)
     ,m_bIsAlwaysFalseQuery(false)
-    ,m_pKeySet(nullptr)
     ,m_bIsReadOnly(TRISTATE_INDET)
 {
     //m_aQuery.setMaxNrOfReturns(pStmt->getOwnConnection()->getMaxResultRecords());

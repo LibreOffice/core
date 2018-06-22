@@ -47,7 +47,6 @@ private:
 };
 
 Test::Test()
-    : pExport( nullptr )
 {
 }
 

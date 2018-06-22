@@ -93,7 +93,6 @@ struct MigrationItem
     css::uno::Reference< css::container::XIndexContainer > m_xPopupMenu;
 
     MigrationItem()
-        :m_xPopupMenu(nullptr)
     {
     }
 

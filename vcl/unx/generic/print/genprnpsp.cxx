@@ -459,7 +459,6 @@ OUString SalGenericInstance::GetDefaultPrinter()
 }
 
 PspSalInfoPrinter::PspSalInfoPrinter()
-    : m_pGraphics( nullptr )
 {
 }
 

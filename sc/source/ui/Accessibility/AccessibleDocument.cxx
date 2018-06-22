@@ -1378,7 +1378,6 @@ ScAccessibleDocument::ScAccessibleDocument(
     : ScAccessibleDocumentBase(rxParent),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
-    mpChildrenShapes(nullptr),
     mpTempAccEdit(nullptr),
     mbCompleteSheetSelected(false)
 {
@@ -1684,7 +1683,7 @@ void SAL_CALL ScAccessibleDocument::release()
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoint(
         const awt::Point& rPoint )
 {
-    uno::Reference<XAccessible> xAccessible = nullptr;
+    uno::Reference<XAccessible> xAccessible;
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;

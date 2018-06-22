@@ -1264,7 +1264,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                         rMergeDescriptor.pMailMergeConfigItem->GetTargetView() : nullptr;
     SwWrtShell*       pTargetShell    = nullptr;
     SwDoc*            pTargetDoc      = nullptr;
-    SfxObjectShellRef xTargetDocShell = nullptr;
+    SfxObjectShellRef xTargetDocShell;
 
     std::unique_ptr< utl::TempFile > aTempFile;
     sal_uInt16 nStartingPageNo = 0;

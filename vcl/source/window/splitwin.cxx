@@ -106,7 +106,6 @@ ImplSplitItem::ImplSplitItem()
     , mnOldSplitSize(0)
     , mnOldWidth(0)
     , mnOldHeight(0)
-    , mpSet(nullptr)
     , mnId(0)
     , mnBits(SplitWindowItemFlags::NONE)
     , mbFixed(false)
@@ -117,7 +116,6 @@ ImplSplitItem::ImplSplitItem()
 }
 
 ImplSplitSet::ImplSplitSet() :
-    mpWallpaper( nullptr ),
     mnLastSize( 0 ),
     mnSplitSize( SPLITWIN_SPLITSIZE ),
     mnId( 0 ),

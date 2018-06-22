@@ -614,8 +614,7 @@ SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrame, SwWrtShell *pSh)
     : rStatGlossaries( *::GetGlossaries() ),
     aCurGrp( SwGlossaries::GetDefName() ),
     pViewFrame( pVwFrame ),
-    pWrtShell( pSh ),
-    pCurGrp( nullptr )
+    pWrtShell( pSh )
 {
 }
 

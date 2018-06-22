@@ -99,9 +99,7 @@ public:
     bool IsValid();
 };
 
-XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition() :
-    xRange(nullptr),
-    pIndex(nullptr)
+XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition()
 {
 }
 

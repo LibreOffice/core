@@ -1231,7 +1231,6 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
                       const SwFontScript nGivenScriptType )
     : pInf( &const_cast<SwTextSizeInfo&>(rInf) )
     , pFnt( nullptr )
-    , pOld( nullptr )
 {
     if( pTextFootnote && rInf.GetTextFrame() )
     {

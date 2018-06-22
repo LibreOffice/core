@@ -583,8 +583,6 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 SwInsertConfig::SwInsertConfig(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Insert") : OUString("Office.Writer/Insert"),
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
-    m_pCapOptions(nullptr),
-    m_pOLEMiscOpt(nullptr),
     m_bInsWithCaption( false ),
     m_bCaptionOrderNumberingFirst( false ),
     m_aInsTableOpts(SwInsertTableFlags::NONE,0),

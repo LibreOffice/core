@@ -227,7 +227,6 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     ,m_xMetaData(_xConnection->getMetaData())
     ,m_xConnectionTables( _rxTables )
     ,m_aContext( _rContext )
-    ,m_pTables(nullptr)
     ,m_nBoolCompareMode( BooleanComparisonMode::EQUAL_INTEGER )
     ,m_nCommandType(CommandType::COMMAND)
 {

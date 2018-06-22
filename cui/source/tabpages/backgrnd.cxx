@@ -170,7 +170,6 @@ private:
 BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
     : Window(pParent, WB_BORDER)
     , bIsBmp(false)
-    , pBitmap(nullptr)
     , aDrawRect(Point(0,0), GetOutputSizePixel())
 {
     SetBorderStyle(WindowBorderStyle::MONO);
@@ -321,9 +320,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     , bCharBackColor(false)
     , m_bColorSelected(false)
     , pPageImpl(new SvxBackgroundPage_Impl)
-    , pImportDlg(nullptr)
-    , pTableBck_Impl(nullptr)
-    , pHighlighting(nullptr)
 {
     get(m_pAsGrid, "asgrid");
     get(m_pSelectTxt, "asft");
@@ -902,7 +898,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = nullptr;
-    XColorListRef pColorTable = nullptr;
+    XColorListRef pColorTable;
     if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
     {
         pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
@@ -1457,7 +1453,7 @@ SvxBkgTabPage::SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs )
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = nullptr;
 
-    XColorListRef pColorTable = nullptr;
+    XColorListRef pColorTable;
     if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
     {
         pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
@@ -1466,7 +1462,7 @@ SvxBkgTabPage::SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs )
     if ( !pColorTable.is() )
         pColorTable = XColorList::CreateStdColorList();
 
-    XBitmapListRef pBitmapList = nullptr;
+    XBitmapListRef pBitmapList;
     if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem( SID_BITMAP_LIST ) ) ) )
     {
         pBitmapList = static_cast<const SvxBitmapListItem*>(pItem)->GetBitmapList();

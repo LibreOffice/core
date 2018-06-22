@@ -265,8 +265,6 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 , mrManager( rManager )
 , mpDocShell( pDocShell )
 , mpDoc( pDocShell->GetDoc() )
-, mpOutlinerView(nullptr)
-, mpOutliner(nullptr)
 , mpVScrollbar(nullptr)
 , mbReadonly(pDocShell->IsReadOnly())
 , mbProtected(false)

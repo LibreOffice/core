@@ -92,8 +92,7 @@ using namespace package_ucp;
 // ContentProvider Implementation.
 ContentProvider::ContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
-: ::ucbhelper::ContentProviderImplHelper( rxContext ),
-  m_pPackages( nullptr )
+: ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
 

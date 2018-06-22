@@ -242,7 +242,6 @@ TextFrameIndex SwBidiPortion::GetSpaceCnt(const SwTextSizeInfo &rInf) const
 SwDoubleLinePortion::SwDoubleLinePortion(
         SwDoubleLinePortion& rDouble, TextFrameIndex const nEnd)
     : SwMultiPortion(nEnd)
-    , pBracket(nullptr)
     , nLineDiff(0)
     , nBlank1(0)
     , nBlank2(0)

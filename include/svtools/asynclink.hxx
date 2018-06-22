@@ -51,19 +51,15 @@ public:
     AsynchronLink( const Link<void*,void>& rLink )
         : _aLink( rLink )
         , _nEventId( nullptr )
-        , _pIdle( nullptr )
         , _bInCall( false )
         , _pDeleted( nullptr )
         , _pArg( nullptr )
-        , _pMutex( nullptr )
     {}
     AsynchronLink()
         : _nEventId( nullptr )
-        , _pIdle( nullptr )
         , _bInCall( false )
         , _pDeleted( nullptr )
         , _pArg( nullptr )
-        , _pMutex( nullptr )
     {}
     ~AsynchronLink();
 

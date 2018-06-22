@@ -416,8 +416,7 @@ namespace svt
 
 
     TemplateFolderCacheImpl::TemplateFolderCacheImpl( bool _bAutoStoreState )
-        :m_pCacheStream         ( nullptr )
-        ,m_bNeedsUpdate         ( true )
+        :m_bNeedsUpdate         ( true )
         ,m_bKnowState           ( false )
         ,m_bValidCurrentState   ( false )
         ,m_bAutoStoreState      ( _bAutoStoreState )

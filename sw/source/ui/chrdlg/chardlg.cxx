@@ -133,7 +133,6 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
 SwCharURLPage::SwCharURLPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "modules/swriter/ui/charurlpage.ui", "CharURLPage", &rCoreSet)
-    , pINetItem(nullptr)
     , bModified(false)
     , m_xURLED(m_xBuilder->weld_entry("urled"))
     , m_xTextFT(m_xBuilder->weld_label("textft"))

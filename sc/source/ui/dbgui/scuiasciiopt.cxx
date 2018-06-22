@@ -282,7 +282,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
         mpDatStream  ( pInStream ),
         mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
 
-        mpRowPosArray( nullptr ),
         mnRowPosCount(0),
 
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),

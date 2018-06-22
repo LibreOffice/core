@@ -1213,7 +1213,6 @@ struct ImplPPTTextObj : public salhelper::SimpleReferenceObject
     explicit ImplPPTTextObj( PptSlidePersistEntry& rPersistEntry )
         : mnShapeId(0)
         , mnShapeMaster(0)
-        , mpPlaceHolderAtom(nullptr)
         , mnInstance(TSS_Type::PageTitle)
         , mnDestinationInstance(TSS_Type::PageTitle)
         , meShapeType(mso_sptMin)

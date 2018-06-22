@@ -180,7 +180,6 @@ void SfxVersionsTabListBox_Impl::setColSizes()
 SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersionOnClose )
     : SfxModalDialog(nullptr, "VersionsOfDialog", "sfx/ui/versionsofdialog.ui")
     , pViewFrame(pVwFrame)
-    , m_pTable(nullptr)
     , m_bIsSaveVersionOnClose(bIsSaveVersionOnClose)
 {
     get(m_pSaveButton, "save");
@@ -497,7 +496,6 @@ IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, weld::Button&, rButton, void)
 SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )
     : SfxModalDialog(nullptr, "VersionsCmisDialog", "sfx/ui/versionscmis.ui")
     , pViewFrame(pVwFrame)
-    , m_pTable(nullptr)
 {
     get(m_pOpenButton, "open");
     get(m_pViewButton, "show");

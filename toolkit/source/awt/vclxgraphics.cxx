@@ -61,7 +61,6 @@ IMPL_XTYPEPROVIDER_END
 VCLXGraphics::VCLXGraphics()
     : mpOutputDevice(nullptr)
     , meRasterOp(RasterOp::OverPaint)
-    , mpClipRegion(nullptr)
 {
 }
 

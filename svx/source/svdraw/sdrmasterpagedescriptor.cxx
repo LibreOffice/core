@@ -30,8 +30,7 @@ namespace sdr
 {
     MasterPageDescriptor::MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage)
     :   maOwnerPage(aOwnerPage),
-        maUsedPage(aUsedPage),
-        mpViewContact(nullptr)
+        maUsedPage(aUsedPage)
     {
         // all layers visible
         maVisibleLayers.SetAll();

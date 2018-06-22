@@ -58,8 +58,6 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
                                                         sal_uInt16 nId,
                                                         ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pStyleItem      ( nullptr ),
-    pDashItem       ( nullptr ),
     bUpdate         ( false )
 {
     addStatusListener( ".uno:LineDash");

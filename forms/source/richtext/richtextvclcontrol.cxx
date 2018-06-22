@@ -43,7 +43,6 @@ namespace frm
     RichTextControl::RichTextControl( RichTextEngine* _pEngine, vcl::Window* _pParent, WinBits _nStyle,
         ITextAttributeListener* _pTextAttribListener, ITextSelectionListener* _pSelectionListener )
         :Control( _pParent, implInitStyle( _nStyle ) )
-        ,m_pImpl( nullptr )
     {
         implInit( _pEngine, _pTextAttribListener, _pSelectionListener );
     }

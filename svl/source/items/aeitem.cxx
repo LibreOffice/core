@@ -33,8 +33,7 @@ class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl> {};
 
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
-    SfxAllEnumItem_Base(which, nVal),
-    pValues( nullptr )
+    SfxAllEnumItem_Base(which, nVal)
 {
     InsertValue( nVal );
 }

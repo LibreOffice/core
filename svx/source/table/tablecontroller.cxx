@@ -175,7 +175,6 @@ SvxTableController::SvxTableController(
 :   mbCellSelectionMode(false)
     ,mbHasJustMerged(false)
     ,mbLeftButtonDown(false)
-    ,mpSelectionOverlay(nullptr)
     ,mrView(rView)
     ,mxTableObj(const_cast< SdrTableObj* >(&rObj))
     ,mnUpdateEvent( nullptr )

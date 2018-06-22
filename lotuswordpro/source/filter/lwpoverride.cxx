@@ -363,10 +363,6 @@ LwpSpacingOverride::~LwpSpacingOverride()
 
 LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
     : LwpOverride(rOther)
-    , m_pSpacing(nullptr)
-    , m_pAboveLineSpacing(nullptr)
-    , m_pParaSpacingAbove(nullptr)
-    , m_pParaSpacingBelow(nullptr)
 {
     m_pSpacing.reset( ::clone(rOther.m_pSpacing.get()) );
     m_pAboveLineSpacing.reset( ::clone(rOther.m_pAboveLineSpacing.get()) );

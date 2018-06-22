@@ -101,7 +101,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
 void XSecController::addSignature()
 {
-    cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener = nullptr;
+    cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener;
     sal_Int32 nSignatureId = 0;
 
 
@@ -466,7 +466,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
      */
     {
         bool bJustChainingOn = false;
-        cssu::Reference< cssxs::XDocumentHandler > xHandler = nullptr;
+        cssu::Reference< cssxs::XDocumentHandler > xHandler;
 
         int i,j;
         int sigNum = m_vInternalSignatureInformations.size();

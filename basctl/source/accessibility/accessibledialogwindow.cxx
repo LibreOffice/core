@@ -49,7 +49,6 @@ using namespace ::comphelper;
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
     :pDlgEdObj( _pDlgEdObj )
-    ,rxAccessible( nullptr )
 {
 }
 

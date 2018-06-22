@@ -77,8 +77,7 @@ public:
 };
 
 SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
-: mpEditEngine( pEditEngine ),
-  mpTextForwarder(nullptr)
+: mpEditEngine( pEditEngine )
 {
 }
 

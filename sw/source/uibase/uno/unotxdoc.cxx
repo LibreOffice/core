@@ -444,8 +444,6 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
     mxLinkTargetSupplier(),
     mxXRedlines(),
     m_pHiddenViewFrame(nullptr),
-    m_pPrintUIOptions( nullptr ),
-    m_pRenderData( nullptr ),
     // #i117783#
     bApplyPagePrintSettingsFromXPagePrintable( false )
 {

@@ -52,7 +52,6 @@ private:
 };
 
 Test::Test()
-    : m_pDoc(nullptr)
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
 

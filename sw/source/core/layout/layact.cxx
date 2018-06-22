@@ -251,7 +251,6 @@ SwLayAction::SwLayAction( SwRootFrame *pRt, SwViewShellImp *pI ) :
     m_pRoot( pRt ),
     m_pImp( pI ),
     m_pOptTab( nullptr ),
-    m_pWait( nullptr ),
     m_nPreInvaPage( USHRT_MAX ),
     m_nStartTicks( std::clock() ),
     m_nInputType( VclInputFlags::NONE ),

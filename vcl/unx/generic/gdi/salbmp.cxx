@@ -65,9 +65,7 @@ ImplSalBitmapCache* X11SalBitmap::mpCache = nullptr;
 sal_uLong           X11SalBitmap::mnCacheInstCount = 0;
 
 X11SalBitmap::X11SalBitmap()
-    : mpDIB( nullptr )
-    , mpDDB( nullptr )
-    , mbGrey( false )
+    : mbGrey( false )
 {
 }
 

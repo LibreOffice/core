@@ -41,7 +41,6 @@ SwNoTextNode::SwNoTextNode( const SwNodeIndex & rWhere,
                   SwGrfFormatColl *pGrfColl,
                   SwAttrSet const * pAutoAttr ) :
     SwContentNode( rWhere, nNdType, pGrfColl ),
-    m_pContour( nullptr ),
     m_bAutomaticContour( false ),
     m_bContourMapModeValid( true ),
     m_bPixelContour( false )

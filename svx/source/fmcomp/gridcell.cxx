@@ -1053,8 +1053,6 @@ void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
 
 DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
-            ,m_pEdit( nullptr )
-            ,m_pPainterImplementation( nullptr )
             ,m_bIsSimpleEdit( true )
 {
 }

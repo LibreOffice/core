@@ -91,7 +91,6 @@ long DdeConnection::GetError()
 DdeConnection::DdeConnection( const OUString&, const OUString& )
     : pService(nullptr)
     , pTopic(nullptr)
-    , pImp(nullptr)
 {
 }
 

@@ -650,7 +650,6 @@ Size SwColumnOnlyExample::GetOptimalSize() const
 }
 
 SwPageGridExample::SwPageGridExample()
-    : pGridItem(nullptr)
 {
 }
 

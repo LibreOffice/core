@@ -190,7 +190,6 @@ SfxRequest::SfxRequest
 */
 
 :   nSlot(nSlotId),
-    pArgs(nullptr),
     pImpl( new SfxRequest_Impl(this) )
 {
     pImpl->bDone = false;
@@ -223,7 +222,6 @@ SfxRequest::SfxRequest
 // creates a SfxRequest without arguments
 
 :   nSlot(nSlotId),
-    pArgs(nullptr),
     pImpl( new SfxRequest_Impl(this) )
 {
     pImpl->bDone = false;

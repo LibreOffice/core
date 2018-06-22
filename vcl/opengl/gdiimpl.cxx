@@ -69,8 +69,7 @@ public:
 };
 
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider *pProvider)
-    : mpContext(nullptr)
-    , mrParent(rParent)
+    : mrParent(rParent)
     , mpProvider(pProvider)
     , mpProgram(nullptr)
     , mpFlush(new OpenGLFlushIdle(this))

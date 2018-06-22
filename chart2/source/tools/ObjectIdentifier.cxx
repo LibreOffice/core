@@ -243,13 +243,11 @@ void lcl_getDiagramAndCooSys( const OUString& rObjectCID
 
 ObjectIdentifier::ObjectIdentifier()
     :m_aObjectCID( OUString() )
-    ,m_xAdditionalShape( nullptr )
 {
 }
 
 ObjectIdentifier::ObjectIdentifier( const OUString& rObjectCID )
     :m_aObjectCID( rObjectCID )
-    ,m_xAdditionalShape( nullptr )
 {
 }
 
@@ -261,7 +259,6 @@ ObjectIdentifier::ObjectIdentifier( const Reference< drawing::XShape >& rxShape 
 
 ObjectIdentifier::ObjectIdentifier( const Any& rAny )
     :m_aObjectCID( OUString() )
-    ,m_xAdditionalShape( nullptr )
 {
     const uno::Type& rType = rAny.getValueType();
     if ( rType == cppu::UnoType<OUString>::get() )
@@ -1212,7 +1209,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
     if(!xChartModel.is())
         return nullptr;
 
-    Reference< beans::XPropertySet > xObjectProperties = nullptr;
+    Reference< beans::XPropertySet > xObjectProperties;
     try
     {
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
@@ -1408,7 +1405,7 @@ Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
                 const OUString& rObjectCID
                 , const Reference< frame::XModel >& xChartModel )
 {
-    Reference< XDataSeries > xSeries(nullptr);
+    Reference< XDataSeries > xSeries;
 
     Reference< XDiagram > xDiagram;
     Reference< XCoordinateSystem > xCooSys;

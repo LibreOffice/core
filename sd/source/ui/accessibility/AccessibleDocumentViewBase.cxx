@@ -73,7 +73,6 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
                                      AccessibleRole::DOCUMENT),
       mpWindow (pSdWindow),
       mxController (rxController),
-      mxModel (nullptr),
       maViewForwarder (
         static_cast<SdrPaintView*>(pViewShell->GetView()),
         *pSdWindow)

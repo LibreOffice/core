@@ -100,7 +100,6 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_bShowAxisOrigin(false)
         , m_bIsCrossingAxisIsCategoryAxis(false)
         , m_aCategories()
-        , m_xChartDocument( nullptr )
         , m_bComplexCategoriesAxis( false )
         , m_nNbPoints( 0 )
 {
@@ -330,8 +329,6 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
     , m_pNumberFormatter(nullptr)
-    , m_pSymbolShapeProperties(nullptr)
-    , m_pAutoSymbolGraphic(nullptr)
     , m_fAxisMinorStepWidthForErrorBarDecimals(0.1)
     , m_bOKPressed(false)
 {

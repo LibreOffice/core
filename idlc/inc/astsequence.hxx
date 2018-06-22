@@ -27,7 +27,6 @@ public:
     AstSequence(AstType const * pMemberType, AstScope* pScope)
         : AstType(NT_sequence, OString("[]")+pMemberType->getScopedName(), pScope)
         , m_pMemberType(pMemberType)
-        , m_pRelativName(nullptr)
     {}
 
     AstType const * getMemberType() const

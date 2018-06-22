@@ -35,8 +35,7 @@ using namespace com::sun::star::uno;
 namespace sw {
 
 DocumentChartDataProviderManager::DocumentChartDataProviderManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
-                                                                                        maChartDataProviderImplRef(),
-                                                                                        mpChartControllerHelper( nullptr )
+                                                                                        maChartDataProviderImplRef()
 {
 
 }

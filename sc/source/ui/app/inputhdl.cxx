@@ -589,12 +589,8 @@ static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
 
 ScInputHandler::ScInputHandler()
     :   pInputWin( nullptr ),
-        mpEditEngine( nullptr ),
         pTableView( nullptr ),
         pTopView( nullptr ),
-        pColumnData( nullptr ),
-        pFormulaData( nullptr ),
-        pFormulaDataPara( nullptr ),
         pTipVisibleParent( nullptr ),
         nTipVisible( nullptr ),
         pTipVisibleSecParent( nullptr ),
@@ -624,10 +620,6 @@ ScInputHandler::ScInputHandler()
         aScaleY( 1,1 ),
         pRefViewSh( nullptr ),
         pLastPattern( nullptr ),
-        pEditDefaults( nullptr ),
-        pLastState( nullptr ),
-        pDelayTimer( nullptr ),
-        pRangeFindList( nullptr ),
         maFormulaChar()
 {
     //  The InputHandler is constructed with the view, so SfxViewShell::Current
@@ -4049,7 +4041,6 @@ ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
 }
 
 ScInputHdlState::ScInputHdlState( const ScInputHdlState& rCpy )
-    :   pEditData   ( nullptr )
 {
     *this = rCpy;
 }

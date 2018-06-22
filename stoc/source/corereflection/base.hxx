@@ -213,7 +213,6 @@ public:
                            const OUString & rName, typelib_TypeClass eTypeClass,
                            typelib_TypeDescription * pTypeDescr )
         : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
-        , _pSortedMemberInit( nullptr )
         , _nMethods( 0 )
         , _nAttributes( 0 )
         {}
@@ -249,7 +248,6 @@ public:
                           const OUString & rName, typelib_TypeClass eTypeClass,
                           typelib_TypeDescription * pTypeDescr )
         : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
-        , _pFields( nullptr )
         {}
     virtual ~CompoundIdlClassImpl() override;
 
@@ -312,7 +310,6 @@ public:
                       const OUString & rName, typelib_TypeClass eTypeClass,
                       typelib_TypeDescription * pTypeDescr )
         : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
-        , _pFields( nullptr )
         {}
     virtual ~EnumIdlClassImpl() override;
 

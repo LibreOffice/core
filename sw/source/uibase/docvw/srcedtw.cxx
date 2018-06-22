@@ -236,8 +236,6 @@ private:
 SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView ) :
     Window( pParent, WB_BORDER|WB_CLIPCHILDREN ),
 
-    m_pTextEngine(nullptr),
-
     m_pOutWin(nullptr),
     m_pHScrollbar(nullptr),
     m_pVScrollbar(nullptr),

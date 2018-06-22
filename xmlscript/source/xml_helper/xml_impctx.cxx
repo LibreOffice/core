@@ -179,8 +179,7 @@ DocumentHandlerImpl::DocumentHandlerImpl(
       m_aLastURI_lookup( "<<< unknown URI >>>" ),
       m_nLastPrefix_lookup( UID_UNKNOWN ),
       m_aLastPrefix_lookup( "<<< unknown URI >>>" ),
-      m_nSkipElements( 0 ),
-      m_pMutex( nullptr )
+      m_nSkipElements( 0 )
 {
     m_elements.reserve( 10 );
 

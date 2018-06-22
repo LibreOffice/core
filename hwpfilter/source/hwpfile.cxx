@@ -49,11 +49,9 @@ HWPFile::HWPFile()
     , linenumber(0)
     , info_block_len(0)
     , error_code(HWP_NoError)
-    , oledata(nullptr)
     , readdepth(0)
     , m_nCurrentPage(1)
     , m_nMaxSettedPage(0)
-    , hiodev(nullptr)
     , currenthyper(0)
 {
     SetCurrentDoc(this);

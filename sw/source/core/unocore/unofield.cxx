@@ -1103,7 +1103,6 @@ struct SwFieldProperties_Impl
     SwFieldProperties_Impl():
         aDate( Date::EMPTY ),
         fDouble(0.),
-        pDateTime(nullptr),
         nSubType(0),
         nFormat(0),
         nUSHORT1(0),

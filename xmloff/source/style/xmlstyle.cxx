@@ -747,8 +747,7 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                         const OUString& rLName,
                                         const uno::Reference< xml::sax::XAttributeList > &, bool bAuto ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    mpImpl( new SvXMLStylesContext_Impl( bAuto ) ),
-    mpStyleStylesElemTokenMap( nullptr )
+    mpImpl( new SvXMLStylesContext_Impl( bAuto ) )
 {
 }
 

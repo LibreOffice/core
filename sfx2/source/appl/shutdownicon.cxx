@@ -180,7 +180,6 @@ ShutdownIcon::ShutdownIcon( const css::uno::Reference< XComponentContext > & rxC
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
     m_bSystemDialogs( false ),
-    m_pFileDlg( nullptr ),
     m_xContext( rxContext ),
     m_bInitialized( false )
 {

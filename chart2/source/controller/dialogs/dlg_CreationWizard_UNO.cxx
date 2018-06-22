@@ -39,9 +39,7 @@ using namespace ::com::sun::star;
 
 CreationWizardUnoDlg::CreationWizardUnoDlg( const uno::Reference< uno::XComponentContext >& xContext )
                     : OComponentHelper( m_aMutex )
-                    , m_xChartModel( nullptr )
                     , m_xCC( xContext )
-                    , m_xParentWindow( nullptr )
                     , m_pDialog( nullptr )
                     , m_bUnlockControllersOnExecute(false)
 {

@@ -31,7 +31,6 @@ namespace chart
 
 SchLayoutTabPage::SchLayoutTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs)
      : SfxTabPage(pWindow, "tp_ChartType", "modules/schart/ui/tp_ChartType.ui", &rInAttrs)
-     , m_pGeometryResources(nullptr)
 {
     m_pGeometryResources.reset(new BarGeometryResources( this ));
 }

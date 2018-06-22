@@ -863,9 +863,6 @@ std::unique_ptr<EditTextObject> ScEditEngineTextObj::CreateTextObject()
 ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     pDocShell( pDocSh ),
     aCellPos( rP ),
-    pEditEngine( nullptr ),
-    pForwarder( nullptr ),
-    pOriginalSource( nullptr ),
     bDataValid( false ),
     bInUpdate( false ),
     bDirty( false ),

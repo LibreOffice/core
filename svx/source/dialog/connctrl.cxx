@@ -38,7 +38,6 @@
 SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
     , pEdgeObj(nullptr)
-    , pSdrPage(nullptr)
     , pView(nullptr)
 {
     SetMapMode(MapMode(MapUnit::Map100thMM));

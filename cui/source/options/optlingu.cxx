@@ -948,9 +948,7 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     sNumPreBreak    (CuiResId(RID_SVXSTR_NUM_PRE_BREAK)),
     sNumPostBreak   (CuiResId(RID_SVXSTR_NUM_POST_BREAK)),
     sHyphAuto       (CuiResId(RID_SVXSTR_HYPH_AUTO)),
-    sHyphSpecial    (CuiResId(RID_SVXSTR_HYPH_SPECIAL)),
-
-    pLinguData(nullptr)
+    sHyphSpecial    (CuiResId(RID_SVXSTR_HYPH_SPECIAL))
 {
     get(m_pLinguModulesFT, "lingumodulesft");
     get(m_pLinguModulesCLB, "lingumodules");

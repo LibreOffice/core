@@ -262,7 +262,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
     const ChartTypeParameter& rParameter
     , const uno::Reference< lang::XMultiServiceFactory >& xTemplateManager ) const
 {
-    uno::Reference< XChartTypeTemplate > xTemplate(nullptr);
+    uno::Reference< XChartTypeTemplate > xTemplate;
 
     OUString aServiceName( getServiceNameForParameter( rParameter ) );
     if(!aServiceName.isEmpty())

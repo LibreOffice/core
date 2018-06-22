@@ -33,8 +33,6 @@
 
 OutDevState::OutDevState()
     : mbMapActive(false)
-    , mpClipRegion(nullptr)
-    , mpFont(nullptr)
     , meTextAlign(ALIGN_TOP)
     , meRasterOp(RasterOp::OverPaint)
     , mnTextLayoutMode(ComplexTextLayoutFlags::Default)

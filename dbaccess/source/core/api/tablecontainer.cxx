@@ -103,7 +103,6 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  std::atomic<std::size_t>& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_nInAppend)
     ,m_xTableDefinitions(_xTableDefinitions)
-    ,m_pTableMediator( nullptr )
 {
 }
 

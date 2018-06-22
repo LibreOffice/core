@@ -232,12 +232,10 @@ INetMIMEMessageStream::INetMIMEMessageStream(
     pSourceMsg(pMsg),
     bHeaderGenerated(headerGenerated),
     mvBuffer(BUFFER_SIZE),
-    pMsgStrm(nullptr),
     pMsgRead(nullptr),
     pMsgWrite(nullptr),
     done(false),
-    nChildIndex(0),
-    pChildStrm(nullptr)
+    nChildIndex(0)
 {
     assert(pMsg != nullptr);
     maMsgBuffer.SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);

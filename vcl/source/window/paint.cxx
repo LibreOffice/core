@@ -211,7 +211,6 @@ public:
 
 PaintHelper::PaintHelper(vcl::Window *pWindow, ImplPaintFlags nPaintFlags)
     : m_pWindow(pWindow)
-    , m_pChildRegion(nullptr)
     , m_nPaintFlags(nPaintFlags)
     , m_bPop(false)
     , m_bRestoreCursor(false)

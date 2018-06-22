@@ -27,8 +27,7 @@ ScExportBase::ScExportBase( SvStream& rStrmP, ScDocument* pDocP,
             rStrm( rStrmP ),
             aRange( rRangeP ),
             pDoc( pDocP ),
-            pFormatter( pDocP->GetFormatTable() ),
-            pEditEngine( nullptr )
+            pFormatter( pDocP->GetFormatTable() )
 {
 }
 

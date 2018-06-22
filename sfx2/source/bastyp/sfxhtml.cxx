@@ -63,7 +63,6 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, bool bIsNewDoc,
                               SfxMedium *pMed )
     : HTMLParser(rStream, bIsNewDoc)
     , pMedium(pMed)
-    , pDLMedium(nullptr)
     , eScriptType(STARBASIC)
 {
     DBG_ASSERT( RTL_TEXTENCODING_UTF8 == GetSrcEncoding( ),

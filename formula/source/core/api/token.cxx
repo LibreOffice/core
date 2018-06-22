@@ -557,7 +557,6 @@ bool FormulaTokenArray::HasOpCodes(const unordered_opcode_set& rOpCodes) const
 }
 
 FormulaTokenArray::FormulaTokenArray() :
-    pCode(nullptr),
     pRPN(nullptr),
     nLen(0),
     nRPN(0),

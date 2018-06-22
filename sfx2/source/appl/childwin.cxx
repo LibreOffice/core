@@ -44,7 +44,6 @@ SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID
     : pCtor(pTheCtor)
     , nId( nID )
     , nPos(n)
-    , pArr( nullptr )
 {}
 
 SfxChildWinFactory::~SfxChildWinFactory()

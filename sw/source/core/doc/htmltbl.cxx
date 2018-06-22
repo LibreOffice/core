@@ -115,7 +115,6 @@ SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
 SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
     sal_uLong nMin, sal_uLong nMax, sal_uInt16 nRw, sal_uInt16 nColumn, sal_uInt16 nColSp ):
     nRow( nRw ), nCol( nColumn ), nColSpan( nColSp ),
-    pNext( nullptr ),
     nMinNoAlign( nMin ), nMaxNoAlign( nMax )
 {}
 

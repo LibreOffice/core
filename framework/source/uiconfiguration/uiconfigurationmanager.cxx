@@ -670,8 +670,7 @@ void UIConfigurationManager::impl_Initialize()
 }
 
 UIConfigurationManager::UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext ) :
-    m_xDocConfigStorage( nullptr )
-    , m_bReadOnly( true )
+      m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
     , m_aXMLPostfix( ".xml" )

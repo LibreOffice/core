@@ -61,9 +61,7 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             nPolyEdit       ( 0 ),
             bEditMode       ( false ),
             mbSdrMode       ( false ),
-            mbInIdleUpdate  ( false ),
-            pModel          ( nullptr ),
-            pView           ( nullptr )
+            mbInIdleUpdate  ( false )
 {
     pUserCall.reset(new GraphCtrlUserCall( *this ));
     aUpdateIdle.SetPriority( TaskPriority::LOWEST );

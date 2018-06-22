@@ -33,8 +33,7 @@ namespace svgio
             maCx(0),
             maCy(0),
             maRx(0),
-            maRy(0),
-            mpaTransform(nullptr)
+            maRy(0)
         {
         }
 

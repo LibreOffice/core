@@ -1915,9 +1915,6 @@ SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
     aModifiedDate( Date::EMPTY ),
     aModifiedTime( tools::Time::EMPTY ),
     aLastCheckTime( tools::Time::EMPTY ),
-    pCplStt_ExcptLst( nullptr ),
-    pWrdStt_ExcptLst( nullptr ),
-    pAutocorr_List( nullptr ),
     rAutoCorrect(rParent),
     nFlags(ACFlags::NONE)
 {

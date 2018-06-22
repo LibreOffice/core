@@ -829,9 +829,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
 ModuleUIConfigurationManager::ModuleUIConfigurationManager(
         const Reference< XComponentContext >& xContext,
         const css::uno::Sequence< css::uno::Any >& aArguments)
-    : m_xDefaultConfigStorage( nullptr )
-    , m_xUserConfigStorage( nullptr )
-    , m_bReadOnly( true )
+    : m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
     , m_aXMLPostfix( ".xml" )

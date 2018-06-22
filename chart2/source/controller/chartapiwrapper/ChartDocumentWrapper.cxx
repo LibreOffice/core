@@ -910,7 +910,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
                 if( xInit.is() )
                 {
                     uno::Any aParam;
-                    uno::Reference< css::chart::XChartDocument > xDoc( nullptr );
+                    uno::Reference< css::chart::XChartDocument > xDoc;
                     aParam <<= xDoc;
                     uno::Sequence< uno::Any > aSeq( &aParam, 1 );
                     xInit->initialize( aSeq );

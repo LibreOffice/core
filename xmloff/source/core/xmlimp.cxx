@@ -397,7 +397,6 @@ SvXMLImport::SvXMLImport(
     mnErrorFlags(SvXMLErrorFlags::NO),
     isFastContext( false ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
-    mxFastDocumentHandler( nullptr ),
     mbIsFormsSupported( true ),
     mbIsTableShapeSupported( false )
 {

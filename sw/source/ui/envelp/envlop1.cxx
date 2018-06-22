@@ -125,8 +125,6 @@ SwEnvDlg::SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
     , aEnvItem(static_cast<const SwEnvItem&>( rSet.Get(FN_ENVELOP)))
     , pSh(pWrtSh)
     , pPrinter(pPrt)
-    , pAddresseeSet(nullptr)
-    , pSenderSet(nullptr)
     , m_xModify(m_xBuilder->weld_button("modify"))
 {
     if (!bInsert)

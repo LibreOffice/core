@@ -37,7 +37,6 @@ namespace svgio
             SvgNode* pParent)
         :   SvgNode(SVGTokenSvg, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpViewBox(nullptr),
             maSvgAspectRatio(),
             maX(),
             maY(),

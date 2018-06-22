@@ -55,7 +55,6 @@ FmFormModel::FmFormModel(
 :   SdrModel(
         pPool,
         pPers)
-    , m_pImpl(nullptr)
     , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)
     , m_bAutoControlFocus(false)

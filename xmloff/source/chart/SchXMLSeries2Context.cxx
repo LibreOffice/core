@@ -261,7 +261,6 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mrAxes( rAxes ),
         mrStyleVector( rStyleVector ),
         mrRegressionStyleVector( rRegressionStyleVector ),
-        m_xSeries(nullptr),
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( 0 ),
         m_bStockHasVolume( bStockHasVolume ),

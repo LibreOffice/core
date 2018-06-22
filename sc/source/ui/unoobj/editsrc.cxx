@@ -110,8 +110,6 @@ ScEditEngineDefaulter* ScCellEditSource::GetEditEngine()
 ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
     pDocShell( pDocSh ),
     aCellPos( rP ),
-    pEditEngine( nullptr ),
-    pForwarder( nullptr ),
     bDataValid( false )
 {
     if (pDocShell)

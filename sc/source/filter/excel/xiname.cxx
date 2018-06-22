@@ -39,8 +39,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mnXclTab( EXC_NAME_GLOBAL ),
     mnNameIndex( nXclNameIdx ),
     mbVBName( false ),
-    mbMacro( false ),
-    mpTokensData( nullptr )
+    mbMacro( false )
 {
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 

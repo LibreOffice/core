@@ -85,8 +85,6 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     , bPhoneticED2_ChangedByUser(false)
     , nLangForPhoneticReading(LANGUAGE_CHINESE_SIMPLIFIED)
     , bIsPhoneticReadingEnabled(false)
-    , xExtendedIndexEntrySupplier(nullptr)
-    , pTOXMgr(nullptr)
     , pSh(&rWrtShell)
 {
     rDialog.get(m_pFrame, "frame");

@@ -108,7 +108,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
             const SwInsertFlags nInsertFlags,
             bool bWDelim )
-    : SwUndo(SwUndoId::TYPING, rNd.GetNode().GetDoc()), pRedlData( nullptr ),
+    : SwUndo(SwUndoId::TYPING, rNd.GetNode().GetDoc()),
         nNode( rNd.GetIndex() ), nContent(nCnt), nLen(nL),
         bIsWordDelim( bWDelim ), bIsAppend( false )
     , m_bWithRsid(false)
@@ -119,7 +119,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
 
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     : SwUndo(SwUndoId::SPLITNODE, rNd.GetNode().GetDoc()),
-        pRedlData( nullptr ), nNode( rNd.GetIndex() ), nContent(0), nLen(1),
+        nNode( rNd.GetIndex() ), nContent(0), nLen(1),
         bIsWordDelim( false ), bIsAppend( true )
     , m_bWithRsid(false)
     , m_nInsertFlags(SwInsertFlags::EMPTYEXPAND)

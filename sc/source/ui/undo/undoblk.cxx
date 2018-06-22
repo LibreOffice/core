@@ -78,8 +78,7 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
     pTabs( std::move(pNewTabs) ),
     pScenarios( std::move(pNewScenarios) ),
     eCmd( eNewCmd ),
-    bPartOfPaste( bNewPartOfPaste ),
-    pPasteUndo( nullptr )
+    bPartOfPaste( bNewPartOfPaste )
 {
     if (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER)            // whole row?
     {
@@ -911,7 +910,6 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
     pRedoDoc( std::move(pNewRedoDoc) ),
     nFlags( nNewFlags ),
     pRefUndoData( std::move(pRefData) ),
-    pRefRedoData( nullptr ),
     bRedoFilled( bRedoIsFilled )
 {
     if ( pRefUndoData )
@@ -2099,8 +2097,7 @@ ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& 
                             ScDocumentUniquePtr pNewUndoDoc, const sal_uInt16* pW ) :
     ScBlockUndo( pNewDocShell, lcl_GetMultiMarkRange(rMark), SC_UNDO_AUTOHEIGHT ),
     aMarkData( rMark ),
-    pUndoDoc( std::move(pNewUndoDoc) ),
-    pWhich( nullptr )
+    pUndoDoc( std::move(pNewUndoDoc) )
 {
     OSL_ENSURE( pW, "ScUndoClearItems: Which-Pointer is Null" );
 

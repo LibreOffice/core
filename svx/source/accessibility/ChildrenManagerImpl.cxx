@@ -1009,7 +1009,6 @@ void ChildrenManagerImpl::UnregisterAsDisposeListener (
 // AccessibleChildDescriptor
 ChildDescriptor::ChildDescriptor (const Reference<drawing::XShape>& xShape)
     : mxShape (xShape),
-      mxAccessibleShape (nullptr),
       mbCreateEventPending (true)
 {
     // Empty.
@@ -1017,8 +1016,7 @@ ChildDescriptor::ChildDescriptor (const Reference<drawing::XShape>& xShape)
 
 
 ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShape)
-    : mxShape (nullptr),
-      mxAccessibleShape (rxAccessibleShape),
+    : mxAccessibleShape (rxAccessibleShape),
       mbCreateEventPending (true)
 {
     // Make sure that the accessible object has the <const>VISIBLE</const>

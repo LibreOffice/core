@@ -236,7 +236,6 @@ struct EmbeddedObjectRef_Impl
 
     EmbeddedObjectRef_Impl() :
         pContainer(nullptr),
-        pGraphic(nullptr),
         nViewAspect(embed::Aspects::MSOLE_CONTENT),
         bIsLocked(false),
         bNeedUpdate(false),
@@ -250,7 +249,6 @@ struct EmbeddedObjectRef_Impl
         aPersistName(r.aPersistName),
         aMediaType(r.aMediaType),
         pContainer(r.pContainer),
-        pGraphic(nullptr),
         nViewAspect(r.nViewAspect),
         bIsLocked(r.bIsLocked),
         bNeedUpdate(r.bNeedUpdate),

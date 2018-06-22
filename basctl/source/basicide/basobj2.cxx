@@ -206,7 +206,6 @@ namespace
 
         MacroExecutionData()
             :aDocument( ScriptDocument::NoDocument )
-            ,xMethod( nullptr )
         {
         }
     };

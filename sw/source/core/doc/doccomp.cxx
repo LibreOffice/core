@@ -101,7 +101,7 @@ private:
 
 public:
     CompareData(SwDoc& rD, bool bRecordDiff)
-        : rDoc( rD ), pIndex( nullptr ), pChangedFlag( nullptr )
+        : rDoc( rD )
         , m_bRecordDiff(bRecordDiff)
     {
     }
@@ -751,7 +751,7 @@ void Compare::CheckDiscard( sal_uLong nLen, sal_Char* pDiscard )
 }
 
 Compare::MovedData::MovedData( CompareData& rData, const sal_Char* pDiscard )
-    : pIndex( nullptr ), pLineNum( nullptr ), nCount( 0 )
+    : nCount( 0 )
 {
     sal_uLong nLen = rData.GetLineCount();
     sal_uLong n;

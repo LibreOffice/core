@@ -35,7 +35,6 @@ namespace svgio
             SvgNode* pParent)
         :   SvgNode(SVGTokenText, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpaTransform(nullptr),
             maSvgTextPositions()
         {
         }

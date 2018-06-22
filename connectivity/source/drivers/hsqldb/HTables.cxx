@@ -60,7 +60,7 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
         aCatalog <<= sCatalog;
     Reference< XResultSet > xResult = m_xMetaData->getTables(aCatalog,sSchema,sTable,sTableTypes);
 
-    sdbcx::ObjectType xRet = nullptr;
+    sdbcx::ObjectType xRet;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

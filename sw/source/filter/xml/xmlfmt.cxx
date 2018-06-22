@@ -355,8 +355,7 @@ SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_uInt16 nFamily,
         SvXMLStylesContext& rStyles ) :
-    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
-    pConditions( nullptr )
+    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily )
 {
 }
 
@@ -523,7 +522,6 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
         SvXMLStylesContext& rStylesC,
         sal_uInt16 nFamily ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily ),
-    pItemSet( nullptr ),
     pTextStyle( nullptr ),
     rStyles( rStylesC ),
     bHasMasterPageName( false ),

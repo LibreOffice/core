@@ -317,7 +317,6 @@ SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
         "modules/swriter/ui/editsectiondialog.ui")
     , m_bSubRegionsFilled(false)
     , rSh(rWrtSh)
-    , m_pDocInserter(nullptr)
     , bDontCheckPasswd(true)
 {
     get(m_pCurName, "curname");
@@ -1513,7 +1512,6 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     : SfxTabPage(pParent, "SectionPage",
         "modules/swriter/ui/sectionpage.ui", &rAttrSet)
     , m_pWrtSh(nullptr)
-    , m_pDocInserter(nullptr)
 {
     get(m_pCurName, "sectionnames");
     m_pCurName->SetStyle(m_pCurName->GetStyle() | WB_SORT);

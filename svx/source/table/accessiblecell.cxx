@@ -52,7 +52,6 @@ AccessibleCell::AccessibleCell( const css::uno::Reference< css::accessibility::X
 : AccessibleCellBase( rxParent, AccessibleRole::TABLE_CELL )
 , maShapeTreeInfo( rShapeTreeInfo )
 , mnIndexInParent( nIndex )
-, mpText( nullptr )
 , mxCell( rCell )
 {
     //Init the pAccTable var

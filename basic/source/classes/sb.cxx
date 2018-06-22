@@ -1952,8 +1952,8 @@ static const char pItemStr[]    = "Item";
 static const char pRemoveStr[]  = "Remove";
 static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
-SbxInfoRef BasicCollection::xAddInfo = nullptr;
-SbxInfoRef BasicCollection::xItemInfo = nullptr;
+SbxInfoRef BasicCollection::xAddInfo;
+SbxInfoRef BasicCollection::xItemInfo;
 
 BasicCollection::BasicCollection( const OUString& rClass )
              : SbxObject( rClass )

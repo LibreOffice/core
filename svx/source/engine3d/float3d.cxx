@@ -92,15 +92,10 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , aImgLightOff(BitmapEx(RID_SVXBMP_LAMP_OFF))
     , bUpdate(false)
     , eViewType(ViewType3D::Geo)
-    , pModel(nullptr)
     , pVDev(nullptr)
     , pBindings(pInBindings)
-    , pControllerItem(nullptr)
-    , pConvertTo3DItem(nullptr)
-    , pConvertTo3DLatheItem(nullptr)
     , mpImpl(new Svx3DWinImpl)
     , ePoolUnit(MapUnit::MapMM)
-    , mpRemember2DAttributes(nullptr)
 {
     get(m_pBtnGeo, "geometry");
     get(m_pBtnRepresentation, "representation");

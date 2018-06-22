@@ -639,7 +639,6 @@ ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
 
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
         ScDocument* pDocument ) :
-    pBCAlways( nullptr ),
     pDoc( pDocument ),
     pUpdateChain( nullptr ),
     pEOUpdateChain( nullptr ),

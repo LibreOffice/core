@@ -79,7 +79,6 @@ FlashExporter::FlashExporter(
     , mxSelectedDrawPage(rxSelectedDrawPage)
     , mbExportSelection(false)
 
-    , mpWriter(nullptr)
     , mnDocWidth(0)
     , mnDocHeight(0)
     , mnJPEGcompressMode(nJPEGCompressMode)

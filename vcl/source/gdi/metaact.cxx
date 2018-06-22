@@ -1056,7 +1056,6 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
 MetaTextArrayAction::MetaTextArrayAction() :
     MetaAction  ( MetaActionType::TEXTARRAY ),
-    mpDXAry     ( nullptr ),
     mnIndex     ( 0 ),
     mnLen       ( 0 )
 {}

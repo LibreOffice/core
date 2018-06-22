@@ -1181,8 +1181,7 @@ void ScDPSource::DumpResults() const
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPSource )
 
 ScDPDimensions::ScDPDimensions( ScDPSource* pSrc ) :
-    pSource( pSrc ),
-    ppDims( nullptr )
+    pSource( pSrc )
 {
     //TODO: hold pSource
 
@@ -1298,7 +1297,6 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     nFunction( ScGeneralFunction::SUM ),     // sum is default
     nSourceDim( -1 ),
     bHasSelectedPage( false ),
-    pSelectedData( nullptr ),
     mbHasHiddenMember(false)
 {
     //TODO: hold pSource
@@ -1633,8 +1631,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPDimension )
 
 ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
-    nDim( nD ),
-    ppHiers( nullptr )
+    nDim( nD )
 {
     //TODO: hold pSource
 }
@@ -1777,8 +1774,7 @@ void SAL_CALL ScDPHierarchy::setName( const OUString& /* rNewName */ )
 ScDPLevels::ScDPLevels( ScDPSource* pSrc, long nD, long nH ) :
     pSource( pSrc ),
     nDim( nD ),
-    nHier( nH ),
-    ppLevs( nullptr )
+    nHier( nH )
 {
     //TODO: hold pSource
 

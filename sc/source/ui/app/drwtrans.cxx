@@ -76,11 +76,9 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                                         const TransferableObjectDescriptor& rDesc ) :
     m_pModel( std::move(pClipModel) ),
     m_aObjDesc( rDesc ),
-    m_pBookmark( nullptr ),
     m_bGraphic( false ),
     m_bGrIsBit( false ),
     m_bOleObj( false ),
-    m_pDragSourceView( nullptr ),
     m_nDragSourceFlags( ScDragSrc::Undefined ),
     m_bDragWasInternal( false ),
     maShellID(SfxObjectShell::CreateShellID(pContainerShell))

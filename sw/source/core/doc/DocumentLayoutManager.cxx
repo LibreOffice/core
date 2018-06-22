@@ -49,8 +49,7 @@ namespace sw
 
 DocumentLayoutManager::DocumentLayoutManager( SwDoc& i_rSwdoc ) :
     m_rDoc( i_rSwdoc ),
-    mpCurrentView( nullptr ),
-    mpLayouter( nullptr )
+    mpCurrentView( nullptr )
 {
 }
 

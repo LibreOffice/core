@@ -122,9 +122,7 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
 
 CachedContentResultSet::CCRS_Cache::CCRS_Cache(
     const Reference< XContentIdentifierMapping > & xMapping )
-    : m_pResult( nullptr )
-    , m_xContentIdentifierMapping( xMapping )
-    , m_pMappedReminder( nullptr )
+    : m_xContentIdentifierMapping( xMapping )
 {
 }
 
@@ -425,8 +423,7 @@ static const char g_sPropertyNameForFetchDirection[] = "FetchDirection";
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > const & xInfo )
-        : m_pProperties( nullptr )
-        , m_nFetchSizePropertyHandle( -1 )
+        : m_nFetchSizePropertyHandle( -1 )
         , m_nFetchDirectionPropertyHandle( -1 )
 {
     //initialize list of properties:
@@ -640,8 +637,6 @@ CachedContentResultSet::CachedContentResultSet(
                 : ContentResultSetWrapper( xOrigin )
 
                 , m_xContext( rxContext )
-                , m_xFetchProvider( nullptr )
-                , m_xFetchProviderForContentAccess( nullptr )
 
                 , m_xContentIdentifierMapping( xContentIdentifierMapping )
                 , m_nRow( 0 ) // Position is one-based. Zero means: before first element.
@@ -662,7 +657,6 @@ CachedContentResultSet::CachedContentResultSet(
                 , m_aCacheContentIdentifier( m_xContentIdentifierMapping )
                 , m_aCacheContent( m_xContentIdentifierMapping )
                 , m_bTriedToGetTypeConverter( false )
-                , m_xTypeConverter( nullptr )
 {
     m_xFetchProvider.set( m_xResultSetOrigin, UNO_QUERY );
     OSL_ENSURE( m_xFetchProvider.is(), "interface XFetchProvider is required" );

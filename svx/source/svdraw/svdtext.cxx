@@ -29,8 +29,7 @@
 #include <memory>
 
 SdrText::SdrText( SdrTextObj& rObject )
-: mpOutlinerParaObject( nullptr )
-, mrObject( rObject )
+: mrObject( rObject )
 , mbPortionInfoChecked( false )
 {
     OSL_ENSURE(&mrObject, "SdrText created without SdrTextObj (!)");

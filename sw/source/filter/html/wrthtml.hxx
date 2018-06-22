@@ -227,7 +227,6 @@ struct SwHTMLFormatInfo
     // ctor for a dummy to search
     explicit SwHTMLFormatInfo( const SwFormat *pF ) :
         pFormat( pF ),
-        pItemSet( nullptr ),
         nLeftMargin( 0 ),
         nRightMargin( 0 ),
         nFirstLineIndent(0),

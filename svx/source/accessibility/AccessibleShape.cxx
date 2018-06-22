@@ -104,11 +104,9 @@ AccessibleShape::AccessibleShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
     : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
-      mpChildrenManager(nullptr),
       mxShape (rShapeInfo.mxShape),
       maShapeTreeInfo (rShapeTreeInfo),
       m_nIndexInParent(-1),
-      mpText (nullptr),
       mpParent (rShapeInfo.mpChildrenManager)
 {
     m_pShape = GetSdrObjectFromXShape(mxShape);

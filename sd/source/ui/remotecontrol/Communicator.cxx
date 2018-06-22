@@ -31,9 +31,7 @@ using namespace osl;
 
 Communicator::Communicator( std::unique_ptr<IBluetoothSocket> pSocket ):
     Thread( "CommunicatorThread" ),
-    mpSocket( std::move(pSocket) ),
-    pTransmitter( nullptr ),
-    mListener( nullptr )
+    mpSocket( std::move(pSocket) )
 {
 }
 

@@ -672,8 +672,7 @@ void SwAccessibleTable::GetStates(
 SwAccessibleTable::SwAccessibleTable(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwTabFrame* pTabFrame  ) :
-    SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrame ),
-    mpTableData( nullptr )
+    SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrame )
 {
     const SwFrameFormat *pFrameFormat = pTabFrame->GetFormat();
     const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );

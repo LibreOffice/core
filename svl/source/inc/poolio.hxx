@@ -85,7 +85,6 @@ struct SfxItemPool_Impl
         , mpStaticDefaults(nullptr)
         , mpMaster(pMaster)
         , mpSecondary(nullptr)
-        , mpPoolRanges(nullptr)
         , mnStart(nStart)
         , mnEnd(nEnd)
         , eDefMetric(MapUnit::MapCM)

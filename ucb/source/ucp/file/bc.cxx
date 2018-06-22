@@ -87,14 +87,9 @@ BaseContent::BaseContent( TaskManager* pMyShell,
                           const OUString& parentName,
                           bool bFolder )
     : m_pMyShell( pMyShell ),
-      m_xContentIdentifier( nullptr ),
       m_aUncPath( parentName ),
       m_bFolder( bFolder ),
-      m_nState( JustInserted ),
-      m_pDisposeEventListeners( nullptr ),
-      m_pContentEventListeners( nullptr ),
-      m_pPropertySetInfoChangeListeners( nullptr ),
-      m_pPropertyListener( nullptr )
+      m_nState( JustInserted )
 {
     m_pMyShell->m_pProvider->acquire();
     // No registering, since we have no name
@@ -110,11 +105,7 @@ BaseContent::BaseContent( TaskManager* pMyShell,
       m_xContentIdentifier( xContentIdentifier ),
       m_aUncPath( aUncPath ),
       m_bFolder( false ),
-      m_nState( FullFeatured ),
-      m_pDisposeEventListeners( nullptr ),
-      m_pContentEventListeners( nullptr ),
-      m_pPropertySetInfoChangeListeners( nullptr ),
-      m_pPropertyListener( nullptr )
+      m_nState( FullFeatured )
 {
     m_pMyShell->m_pProvider->acquire();
     m_pMyShell->registerNotifier( m_aUncPath,this );
@@ -896,7 +887,7 @@ BaseContent::open(
     sal_Int32 nMyCommandIdentifier,
     const OpenCommandArgument2& aCommandArgument )
 {
-    Reference< XDynamicResultSet > retValue( nullptr );
+    Reference< XDynamicResultSet > retValue;
 
     if( m_nState & Deleted )
     {

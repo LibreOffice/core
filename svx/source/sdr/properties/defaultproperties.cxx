@@ -45,8 +45,7 @@ namespace sdr
         }
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
-        :   BaseProperties(rObj),
-            mpItemSet(nullptr)
+        :   BaseProperties(rObj)
         {
         }
 

@@ -65,7 +65,6 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
 
     aXLineAttr          ( rInAttrs.GetPool() ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
-    pLineEndList        ( nullptr ),
     pnLineEndListState  ( nullptr ),
     pPageType           ( nullptr ),
     nDlgType            ( 0 ),

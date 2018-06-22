@@ -26,8 +26,7 @@ using utl::ConfigurationBroadcaster;
 utl::ConfigurationListener::~ConfigurationListener() {}
 
 ConfigurationBroadcaster::ConfigurationBroadcaster()
-: mpList(nullptr)
-, m_nBroadcastBlocked( 0 )
+: m_nBroadcastBlocked( 0 )
 , m_nBlockedHint( ConfigurationHints::NONE )
 {
 }

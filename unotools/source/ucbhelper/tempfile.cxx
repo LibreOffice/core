@@ -351,8 +351,7 @@ OUString TempFile::CreateTempName()
 }
 
 TempFile::TempFile( const OUString* pParent, bool bDirectory )
-    : pStream( nullptr )
-    , bIsDirectory( bDirectory )
+    : bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
     aName = CreateTempName_Impl( pParent, true, bDirectory );
@@ -361,8 +360,7 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
 TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero,
                     const OUString* pExtension, const OUString* pParent,
                     bool bCreateParentDirs )
-    : pStream( nullptr )
-    , bIsDirectory( false )
+    : bIsDirectory( false )
     , bKillingFileEnabled( false )
 {
     SequentialTokens t(_bStartWithZero);

@@ -2871,7 +2871,6 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                                   bool bHd, bool bReadOpt ) :
     SectionSaveStruct( rParser ),
     m_pCurrCnts( nullptr ),
-    m_pNoBreakEndNodeIndex( nullptr ),
     m_nValue( 0.0 ),
     m_nNumFormat( 0 ),
     m_nRowSpan( 1 ),

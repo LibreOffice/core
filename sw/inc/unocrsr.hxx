@@ -107,7 +107,6 @@ namespace sw
     {
         public:
             UnoCursorPointer()
-                : m_pCursor(nullptr)
            {}
             UnoCursorPointer(std::shared_ptr<SwUnoCursor> const & pCursor)
                 : m_pCursor(pCursor)

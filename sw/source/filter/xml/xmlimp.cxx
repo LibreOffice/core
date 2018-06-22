@@ -416,10 +416,6 @@ SwXMLImport::SwXMLImport(
     const uno::Reference< uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport( rContext, implementationName, nImportFlags ),
-    m_pTableItemMapper( nullptr ),
-    m_pDocElemTokenMap( nullptr ),
-    m_pTableElemTokenMap( nullptr ),
-    m_pTableCellAttrTokenMap( nullptr ),
     m_nStyleFamilyMask( SfxStyleFamily::All ),
     m_bLoadDoc( true ),
     m_bInsert( false ),

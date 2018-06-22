@@ -32,7 +32,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                         const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                         sal_uInt16 nCacheSz, sal_uInt16 nLft, sal_uInt16 nRght,
                         bool bSimpl, bool bInnr, bool bVert ) :
-    pBound( nullptr ),
     nCacheSize( nCacheSz ),
     nRight( nRght ),
     nLeft( nLft ),

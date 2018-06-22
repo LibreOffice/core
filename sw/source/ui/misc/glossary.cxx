@@ -183,7 +183,6 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame const * pViewFrame,
     : SvxStandardDialog(&pViewFrame->GetWindow(), "AutoTextDialog",
         "modules/swriter/ui/autotext.ui")
     , sReadonlyPath(SwResId(STR_READONLY_PATH))
-    , pExampleFrame(nullptr)
     , pGlossaryHdl(pGlosHdl)
     , bResume(false)
     , bSelection(pWrtShell->IsSelection())

@@ -181,8 +181,7 @@ struct SvLinkSource_Impl
     bool                    m_bIsReadOnly;
 
     SvLinkSource_Impl()
-        : pTimer(nullptr)
-        , nTimeout(3000)
+        : nTimeout(3000)
         , m_bIsReadOnly(false)
     {
     }

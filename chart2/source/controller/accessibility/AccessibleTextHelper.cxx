@@ -46,7 +46,6 @@ namespace chart
 AccessibleTextHelper::AccessibleTextHelper(
     DrawViewWrapper * pDrawViewWrapper ) :
         impl::AccessibleTextHelper_Base( m_aMutex ),
-        m_pTextHelper( nullptr ),
         m_pDrawViewWrapper( pDrawViewWrapper )
 {}
 

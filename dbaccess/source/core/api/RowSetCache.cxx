@@ -91,8 +91,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
     ,m_aContext( _rContext )
-    ,m_pMatrix(nullptr)
-    ,m_pInsertMatrix(nullptr)
     ,m_nFetchSize(0)
     ,m_nRowCount(0)
     ,m_nPrivileges( Privilege::SELECT )
