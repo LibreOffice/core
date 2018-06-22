@@ -42,7 +42,7 @@ namespace oox {
 
     The binary data in the stream is written in little-endian format.
  */
-class BinaryOutputStream : public virtual BinaryStreamBase
+class OOX_DLLPUBLIC BinaryOutputStream : public virtual BinaryStreamBase
 {
 public:
     /** Derived classes implement writing the contents of the passed data
@@ -125,7 +125,7 @@ void BinaryOutputStream::writeValue( Type nValue )
 
     The binary data in the stream is written in little-endian format.
  */
-class BinaryXOutputStream : public BinaryXSeekableStream, public BinaryOutputStream
+class OOX_DLLPUBLIC BinaryXOutputStream : public BinaryXSeekableStream, public BinaryOutputStream
 {
 public:
     /** Constructs the wrapper object for the passed output stream.
