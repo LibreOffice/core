@@ -342,7 +342,7 @@ public:
     void testHtmlCopyImages();
     void testTdf116789();
     void testTdf117225();
-
+    void testTdf51223();
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
@@ -535,6 +535,7 @@ public:
     CPPUNIT_TEST(testHtmlCopyImages);
     CPPUNIT_TEST(testTdf116789);
     CPPUNIT_TEST(testTdf117225);
+    CPPUNIT_TEST(testTdf51223);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1505,7 +1506,19 @@ void SwUiWriterTest::testAutoCorr()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
 }
+void SwUiWriterTest::testTdf51223()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    pWrtShell->Insert("i");
+    pWrtShell->SplitNode(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("I"), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("i"), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
+}
 void SwUiWriterTest::testTdf83260()
 {
     SwDoc* const pDoc(createDoc("tdf83260-1.odt"));
