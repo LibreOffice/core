@@ -1851,8 +1851,7 @@ KEYINPUT_CHECKTABLE:
                                     SelectionType::TableCell | SelectionType::DrawObject |
                                     SelectionType::DrawObjectEditMode)) )
                         {
-                            eKeyState = SwKeyState::CheckAutoCorrect;
-                            eNextKeyState = SwKeyState::AutoFormatByInput;
+                            eKeyState = SwKeyState::AutoFormatByInput;
                         }
                         else
                         {
