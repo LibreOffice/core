@@ -105,17 +105,33 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
 
     connect(_dialog, &QFileDialog::filterSelected, this, &KDE5FilePicker::filterChanged);
     connect(_dialog, &QFileDialog::fileSelected, this, &KDE5FilePicker::selectionChanged);
-    connect(this, &KDE5FilePicker::setTitleSignal /*(const OUString&)*/, this,
-            &KDE5FilePicker::setTitleSlot /*(const OUString&)*/, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setDefaultNameSignal, this, &KDE5FilePicker::setDefaultNameSlot,
+
+    // XExecutableDialog
+    connect(this, &KDE5FilePicker::setTitleSignal, this, &KDE5FilePicker::setTitleSlot,
             Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setDisplayDirectorySignal /*(const OUString&)*/, this,
-            &KDE5FilePicker::setDisplayDirectorySlot /*(const OUString&)*/,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getDisplayDirectorySignal, this,
-            &KDE5FilePicker::getDisplayDirectorySlot, Qt::BlockingQueuedConnection);
+    // XFilePicker
     connect(this, &KDE5FilePicker::setMultiSelectionSignal, this,
             &KDE5FilePicker::setMultiSelectionSlot, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::setDefaultNameSignal, this, &KDE5FilePicker::setDefaultNameSlot,
+            Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::setDisplayDirectorySignal, this,
+            &KDE5FilePicker::setDisplayDirectorySlot, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getDisplayDirectorySignal, this,
+            &KDE5FilePicker::getDisplayDirectorySlot, Qt::BlockingQueuedConnection);
+    // XFolderPicker
+    connect(this, &KDE5FilePicker::getDirectorySignal, this, &KDE5FilePicker::getDirectorySlot,
+            Qt::BlockingQueuedConnection);
+    // XFilterManager
+    connect(this, &KDE5FilePicker::appendFilterSignal, this, &KDE5FilePicker::appendFilterSlot,
+            Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::setCurrentFilterSignal, this,
+            &KDE5FilePicker::setCurrentFilterSlot, Qt::BlockingQueuedConnection);
+    connect(this, &KDE5FilePicker::getCurrentFilterSignal, this,
+            &KDE5FilePicker::getCurrentFilterSlot, Qt::BlockingQueuedConnection);
+    // XFilterGroupManager
+    connect(this, &KDE5FilePicker::appendFilterGroupSignal, this,
+            &KDE5FilePicker::appendFilterGroupSlot, Qt::BlockingQueuedConnection);
+    // XFilePickerControlAccess
     connect(this, &KDE5FilePicker::setValueSignal, this, &KDE5FilePicker::setValueSlot,
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::getValueSignal, this, &KDE5FilePicker::getValueSlot,
@@ -126,18 +142,9 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
             Qt::BlockingQueuedConnection);
     connect(this, &KDE5FilePicker::enableControlSignal, this, &KDE5FilePicker::enableControlSlot,
             Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::appendFilterSignal, this, &KDE5FilePicker::appendFilterSlot,
-            Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::appendFilterGroupSignal, this,
-            &KDE5FilePicker::appendFilterGroupSlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::setCurrentFilterSignal, this,
-            &KDE5FilePicker::setCurrentFilterSlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getCurrentFilterSignal, this,
-            &KDE5FilePicker::getCurrentFilterSlot, Qt::BlockingQueuedConnection);
+    // XFilePicker2
     connect(this, &KDE5FilePicker::getSelectedFilesSignal, this,
             &KDE5FilePicker::getSelectedFilesSlot, Qt::BlockingQueuedConnection);
-    connect(this, &KDE5FilePicker::getDirectorySignal, this,
-            &KDE5FilePicker::getDirectorySlot, Qt::BlockingQueuedConnection);
 
     qApp->installEventFilter(this);
 }
@@ -161,6 +168,7 @@ void SAL_CALL KDE5FilePicker::removeFilePickerListener(const uno::Reference<XFil
     m_xListener.clear();
 }
 
+// XExecutableDialog
 void SAL_CALL KDE5FilePicker::setTitle(const OUString& title)
 {
     if (qApp->thread() != QThread::currentThread())
@@ -184,6 +192,7 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
     return _dialog->exec() == QFileDialog::Accepted ? 1 : 0;
 }
 
+// XFilePicker
 void SAL_CALL KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
 {
     if (qApp->thread() != QThread::currentThread())
@@ -240,6 +249,7 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getFiles()
     return seq;
 }
 
+// XFilePicker2
 uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
 {
     if (qApp->thread() != QThread::currentThread())
@@ -260,6 +270,7 @@ uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSelectedFiles()
     return seq;
 }
 
+// XFilterManager
 void SAL_CALL KDE5FilePicker::appendFilter(const OUString& title, const OUString& filter)
 {
     if (qApp->thread() != QThread::currentThread())
@@ -312,6 +323,7 @@ OUString SAL_CALL KDE5FilePicker::getCurrentFilter()
     return filter;
 }
 
+// XFilterGroupManager
 void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
                                                 const uno::Sequence<beans::StringPair>& filters)
 {
@@ -329,6 +341,7 @@ void SAL_CALL KDE5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
     }
 }
 
+// XFilePickerControlAccess
 void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                        const uno::Any& value)
 {
@@ -433,6 +446,7 @@ OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
     return label;
 }
 
+// XFolderPicker
 OUString SAL_CALL KDE5FilePicker::getDirectory()
 {
     if (qApp->thread() != QThread::currentThread())
@@ -546,6 +560,7 @@ OUString KDE5FilePicker::implGetDirectory()
     return dir;
 }
 
+// XInitialization
 void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
 {
     // parameter checking
@@ -665,11 +680,13 @@ void SAL_CALL KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
     setTitle(VclResId(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));
 }
 
+// XCancellable
 void SAL_CALL KDE5FilePicker::cancel()
 {
     // TODO
 }
 
+// XEventListener
 void KDE5FilePicker::disposing(const lang::EventObject& rEvent)
 {
     uno::Reference<XFilePickerListener> xFilePickerListener(rEvent.Source, uno::UNO_QUERY);
@@ -680,6 +697,7 @@ void KDE5FilePicker::disposing(const lang::EventObject& rEvent)
     }
 }
 
+// XServiceInfo
 OUString SAL_CALL KDE5FilePicker::getImplementationName()
 {
     return OUString("com.sun.star.ui.dialogs.KDE5FilePicker");
