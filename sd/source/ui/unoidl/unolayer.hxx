@@ -165,7 +165,7 @@ public:
 
 private:
     SdXImpressDocument* mpModel;
-    SvUnoWeakContainer* mpLayers;
+    std::unique_ptr<SvUnoWeakContainer> mpLayers;
 
     ::sd::View* GetView() const throw();
     ::sd::DrawDocShell* GetDocShell() const throw() { return mpModel->mpDocShell; }
