@@ -951,7 +951,8 @@ OUString ListBoxUIObject::get_action(VclEventId nEvent) const
     {
         sal_Int32 nPos = mxListBox->GetSelectedEntryPos();
         return this->get_type() + " Action:SELECT Id:" + mxListBox->get_id() +
-            " POS:" + OUString::number(nPos) + " Parent:" + get_top_parent(mxListBox)->get_id();
+            " Parent:" + get_top_parent(mxListBox)->get_id() +
+            " {\"POS\": \"" + OUString::number(nPos) + "\"}";
     }
     else if (nEvent == VclEventId::ListboxFocus)
     {
@@ -1026,8 +1027,9 @@ OUString ComboBoxUIObject::get_action(VclEventId nEvent) const
     {
         sal_Int32 nPos = mxComboBox->GetSelectedEntryPos();
         return this->get_type() + " Action:SELECT Id:" +
-                mxComboBox->get_id() + " POS:" + OUString::number(nPos) +
-                " Parent:" + get_top_parent(mxComboBox)->get_id();
+                mxComboBox->get_id() +
+                " Parent:" + get_top_parent(mxComboBox)->get_id() +
+                " {\"POS\": \"" + OUString::number(nPos) + "\"}";
     }
     else
         return WindowUIObject::get_action(nEvent);
@@ -1177,8 +1179,8 @@ OUString TabControlUIObject::get_action(VclEventId nEvent) const
     {
         sal_Int32 nPageId = mxTabControl->GetCurPageId();
         return this->get_type() + " Action:SELECT Id:" + mxTabControl->get_id() +
-            " POS:" + OUString::number(mxTabControl->GetPagePos(nPageId)) +
-            " Parent:" + get_top_parent(mxTabControl)->get_id();
+            " Parent:" + get_top_parent(mxTabControl)->get_id() +
+            " {\"POS\": \"" + OUString::number(mxTabControl->GetPagePos(nPageId)) + "\"}";
     }
     else
         return WindowUIObject::get_action(nEvent);
