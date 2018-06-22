@@ -108,7 +108,7 @@ bool SdPdfFilter::Import()
 
     // Add as many pages as we need up-front.
     mrDocument.CreateFirstPages();
-    for (int i = 0; i < aGraphics.size() - 1; ++i)
+    for (size_t i = 0; i < aGraphics.size() - 1; ++i)
     {
         mrDocument.DuplicatePage(0);
     }
@@ -119,8 +119,7 @@ bool SdPdfFilter::Import()
         const Size& aSize = aPair.second;
 
         const sal_Int32 nPageNumber = aGraphic.getPageNumber();
-        if (nPageNumber < 0 || nPageNumber >= aGraphics.size())
-            continue; // Page is out of range
+        assert(nPageNumber >= 0 && nPageNumber < static_cast<sal_Int32>(aGraphics.size()));
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber, PageKind::Standard);
