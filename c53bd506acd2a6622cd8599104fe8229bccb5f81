@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_6f8341cd",
+        "filename": "instsetoo_native/CustomTarget_setup.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-22T11:00:29Z",
+      "side": 1,
+      "message": "these variables are potentially a problem - all of the makefiles use the same namespace, so it\u0027s very easy to accidentally overwrite a variable from one makefile in another one.\n\nin this case i think it\u0027s best to just get rid of the variables / copy the values.\n\nhopefully at some point i\u0027ll have time to remove all of the pre-4.0 stuff everywhere \u0026 we can require make 4.0 and simplify things...",
+      "revId": "c53bd506acd2a6622cd8599104fe8229bccb5f81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_af6d3934",
+        "filename": "instsetoo_native/CustomTarget_setup.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-22T11:00:29Z",
+      "side": 1,
+      "message": "this name is a bit misleading - \"odk\" is the name of the module / top-level directory, so please replace it with \"instsetoo_native\" (typically the module name is used for \"namespacing\")",
+      "revId": "c53bd506acd2a6622cd8599104fe8229bccb5f81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
