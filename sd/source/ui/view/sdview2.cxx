@@ -355,7 +355,7 @@ void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
                 static_cast<FuDraw*>(xFunction.get())->ForcePointer();
         }
 
-        mpDragSrcMarkList = new SdrMarkList(GetMarkedObjectList());
+        mpDragSrcMarkList.reset( new SdrMarkList(GetMarkedObjectList()) );
         mnDragSrcPgNum = GetSdrPageView()->GetPage()->GetPageNum();
 
         if( IsUndoEnabled() )
@@ -426,8 +426,7 @@ void View::DragFinished( sal_Int8 nDropAction )
     if (bUndo && mpDragSrcMarkList)
         EndUndo();
     mnDragSrcPgNum = SDRPAGE_NOTFOUND;
-    delete mpDragSrcMarkList;
-    mpDragSrcMarkList = nullptr;
+    mpDragSrcMarkList.reset();
 }
 
 sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
@@ -552,7 +551,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
                             if(mpDropMarkerObj)
                             {
-                                mpDropMarker = new SdrDropMarkerOverlay(*this, *mpDropMarkerObj);
+                                mpDropMarker.reset( new SdrDropMarkerOverlay(*this, *mpDropMarkerObj) );
                             }
                         }
 
