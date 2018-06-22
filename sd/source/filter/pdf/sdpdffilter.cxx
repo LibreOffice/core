@@ -86,8 +86,14 @@ bool SdPdfFilter::Import()
         pPage->SetSize(aGrfSize);
         Point aPos(0, 0);
 
-        pPage->InsertObject(new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
-                                           tools::Rectangle(aPos, aGrfSize)));
+        SdrGrafObj* pSdrGrafObj = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
+                                                 tools::Rectangle(aPos, aGrfSize));
+        pPage->InsertObject(pSdrGrafObj);
+
+        // we know that the initial bitmap we provided was just a placeholder,
+        // we need to swap it out, so that on the next swap in, we render the
+        // correct one
+        // const_cast<GraphicObject&>(pSdrGrafObj->GetGraphicObject()).SwapOut();
     }
 
     return true;
