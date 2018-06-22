@@ -158,10 +158,10 @@ static struct DebugCalculation
             mvPos.back().maResult = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 2, '.', true);
     }
 
-    void storeResultError( const sal_uInt16& nErr )
+    void storeResultError( FormulaError nErr )
     {
         if (mbActive && !mvPos.empty())
-            mvPos.back().maResult = "Err:" + OUString::number( nErr);
+            mvPos.back().maResult = "Err:" + OUString::number( int( nErr ));
     }
 
     void enterGroup()
@@ -1772,7 +1772,8 @@ void ScFormulaCell::Interpret()
     }
 
 #if DEBUG_CALCULATION
-    if (sal_uInt16 nErr = aResult.GetResultError())
+    FormulaError nErr = aResult.GetResultError();
+    if (nErr != FormulaError::NONE)
         aDC.storeResultError( nErr);
     else if (aResult.IsValue())
         aDC.storeResult( aResult.GetDouble());
