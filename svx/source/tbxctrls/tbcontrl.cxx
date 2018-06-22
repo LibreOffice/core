@@ -1371,9 +1371,11 @@ ColorWindow::ColorWindow(const OUString&            rCommand,
                          const Reference< XFrame >& rFrame,
                          weld::Window*              pParentWindow,
                          weld::MenuButton*          pMenuButton,
+                         bool                       bInterimBuilder,
                          std::function<void(const OUString&, const NamedColor&)> const & aFunction)
     : ToolbarPopupBase(rFrame)
-    , m_xBuilder(Application::CreateBuilder(pMenuButton, "svx/ui/colorwindow.ui"))
+    , m_xBuilder(bInterimBuilder ? Application::CreateInterimBuilder(pMenuButton, "svx/ui/colorwindow.ui")
+                                 : Application::CreateBuilder(pMenuButton, "svx/ui/colorwindow.ui"))
     , theSlotId(nSlotId)
     , maCommand(rCommand)
     , mpParentWindow(pParentWindow)
@@ -1749,6 +1751,15 @@ bool SvxColorWindow::IsNoSelection() const
     if (!mpRecentColorSet->IsNoSelection())
         return false;
     return !mpButtonAutoColor->IsVisible() && !mpButtonNoneColor->IsVisible();
+}
+
+bool ColorWindow::IsNoSelection() const
+{
+    if (!mxColorSet->IsNoSelection())
+        return false;
+    if (!mxRecentColorSet->IsNoSelection())
+        return false;
+    return !mxButtonAutoColor->get_visible() && !mxButtonNoneColor->get_visible();
 }
 
 void SvxColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -3748,13 +3759,14 @@ void SvxColorListBox::SelectEntry(const Color& rColor)
     ShowPreview(m_aSelectedColor);
 }
 
-ColorListBox::ColorListBox(weld::MenuButton* pControl, weld::Window* pTopLevel)
+ColorListBox::ColorListBox(weld::MenuButton* pControl, weld::Window* pTopLevel, bool bInterimBuilder)
     : m_xButton(pControl)
     , m_pTopLevel(pTopLevel)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
     , m_nSlotId(0)
     , m_bShowNoneButton(false)
+    , m_bInterimBuilder(bInterimBuilder)
 {
     m_aSelectedColor = GetAutoColor(m_nSlotId);
     LockWidthRequest();
@@ -3788,6 +3800,7 @@ void ColorListBox::createColorWindow()
                             xFrame,
                             m_pTopLevel,
                             m_xButton.get(),
+                            m_bInterimBuilder,
                             m_aColorWrapper));
 
     SetNoSelection();
