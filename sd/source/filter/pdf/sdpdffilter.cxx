@@ -115,15 +115,15 @@ bool SdPdfFilter::Import()
 
     for (std::pair<Graphic, Size>& aPair : aGraphics)
     {
-        const Graphic& aGraphic = aPair.first;
+        const Graphic& rGraphic = aPair.first;
         const Size& aSize = aPair.second;
 
-        const sal_Int32 nPageNumber = aGraphic.getPageNumber();
+        const sal_Int32 nPageNumber = rGraphic.getPageNumber();
         assert(nPageNumber >= 0 && nPageNumber < static_cast<sal_Int32>(aGraphics.size()));
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber, PageKind::Standard);
-        Size aGrfSize(OutputDevice::LogicToLogic(aSize, aGraphic.GetPrefMapMode(),
+        Size aGrfSize(OutputDevice::LogicToLogic(aSize, rGraphic.GetPrefMapMode(),
                                                  MapMode(MapUnit::Map100thMM)));
 
         // Resize to original size based on 72 dpi to preserve page size.
@@ -134,7 +134,13 @@ bool SdPdfFilter::Import()
         pPage->SetSize(aGrfSize);
         Point aPos(0, 0);
 
-        pPage->InsertObject(new SdrGrafObj(aGraphic, tools::Rectangle(aPos, aGrfSize)));
+        SdrGrafObj* pSdrGrafObj = new SdrGrafObj(rGraphic, tools::Rectangle(aPos, aGrfSize));
+        pPage->InsertObject(pSdrGrafObj);
+
+        // we know that the initial bitmap we provided was just a placeholder,
+        // we need to swap it out, so that on the next swap in, we render the
+        // correct one
+        const_cast<GraphicObject&>(pSdrGrafObj->GetGraphicObject()).SwapOut();
     }
 
     return true;

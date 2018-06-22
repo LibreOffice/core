@@ -80,6 +80,16 @@ GraphicID::GraphicID( const GraphicObject& rObj )
                 mnID3 = basegfx::fround(rRange.getHeight());
                 mnID4 = vcl_get_checksum(0, rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
             }
+            else if (rGraphic.hasPdfData())
+            {
+                std::shared_ptr<css::uno::Sequence<sal_Int8>> pPdfData = rGraphic.getPdfData();
+                const BitmapEx& rBmpEx = rGraphic.GetBitmapEx();
+
+                mnID1 |= (rGraphic.getPageNumber() & 0x0fffffff);
+                mnID2 = rBmpEx.GetSizePixel().Width();
+                mnID3 = rBmpEx.GetSizePixel().Height();
+                mnID4 = vcl_get_checksum(0, pPdfData->getConstArray(), pPdfData->getLength());
+            }
             else if( rGraphic.IsAnimated() )
             {
                 const Animation aAnimation( rGraphic.GetAnimation() );
