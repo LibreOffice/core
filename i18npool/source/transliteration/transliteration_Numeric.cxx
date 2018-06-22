@@ -35,8 +35,8 @@ sal_Int16 SAL_CALL transliteration_Numeric::getType()
     return TransliterationType::NUMERIC;
 }
 
-OUString SAL_CALL
-    transliteration_Numeric::folding( const OUString& /*inStr*/, sal_Int32 /*startPos*/, sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/ )
+OUString
+    transliteration_Numeric::foldingImpl( const OUString& /*inStr*/, sal_Int32 /*startPos*/, sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/, bool )
 {
     throw RuntimeException();
 }
@@ -59,7 +59,7 @@ Sequence< OUString > SAL_CALL
 
 OUString
 transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset )
+        Sequence< sal_Int32 >& offset, bool useOffset )
 {
     sal_Int32 number = -1, j = 0, endPos = startPos + nCount;
 
@@ -111,12 +111,12 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
     return OUString( pStr, SAL_NO_ACQUIRE );
 }
 
-OUString SAL_CALL
-transliteration_Numeric::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset )
+OUString
+transliteration_Numeric::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+        Sequence< sal_Int32 >& offset, bool useOffset )
 {
     if (tableSize)
-        return transliterateBullet( inStr, startPos, nCount, offset);
+        return transliterateBullet( inStr, startPos, nCount, offset, useOffset);
     else
         return rtl::Reference<NativeNumberSupplierService>(new NativeNumberSupplierService(useOffset))->getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, offset );
 }

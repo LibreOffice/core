@@ -35,17 +35,14 @@ halfwidthToFullwidth::halfwidthToFullwidth()
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH";
 }
 
-OUString SAL_CALL
-halfwidthToFullwidth::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
+OUString
+halfwidthToFullwidth::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
-    bool _useOffset = useOffset;
     // One to One mapping
-    useOffset = false;
-    const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
-    useOffset = _useOffset;
+    const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, offset, false);
 
     // Composition: KA + voice-mark --> GA
-    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
+    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, useOffset );
 }
 
 halfwidthKatakanaToFullwidthKatakana::halfwidthKatakanaToFullwidthKatakana()
@@ -56,17 +53,14 @@ halfwidthKatakanaToFullwidthKatakana::halfwidthKatakanaToFullwidthKatakana()
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTHKATAKANA_FULLWIDTHKATAKANA";
 }
 
-OUString SAL_CALL
-halfwidthKatakanaToFullwidthKatakana::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
+OUString
+halfwidthKatakanaToFullwidthKatakana::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
-    bool _useOffset = useOffset;
     // One to One mapping
-    useOffset = false;
-    const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
-    useOffset = _useOffset;
+    const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, offset, false);
 
     // Composition: KA + voice-mark --> GA
-    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
+    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, useOffset );
 }
 
 halfwidthToFullwidthLikeJIS::halfwidthToFullwidthLikeJIS()
@@ -77,17 +71,14 @@ halfwidthToFullwidthLikeJIS::halfwidthToFullwidthLikeJIS()
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH_LIKE_JIS";
 }
 
-OUString SAL_CALL
-halfwidthToFullwidthLikeJIS::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
+OUString
+halfwidthToFullwidthLikeJIS::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
-    bool _useOffset = useOffset;
     // One to One mapping
-    useOffset = false;
-    const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
-    useOffset = _useOffset;
+    const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, offset, false);
 
     // Composition: KA + voice-mark --> GA
-    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset, WIDTHFOLDNIG_DONT_USE_COMBINED_VU );
+    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, useOffset, WIDTHFOLDNIG_DONT_USE_COMBINED_VU );
 }
 
 
