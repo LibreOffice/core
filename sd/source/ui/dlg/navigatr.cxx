@@ -106,8 +106,8 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
 
 void SdNavigatorWin::SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest)
 {
-    mpNavigatorCtrlItem = new SdNavigatorControllerItem(SID_NAVIGATOR_STATE, this, mpBindings, rUpdateRequest);
-    mpPageNameCtrlItem = new SdPageNameControllerItem(SID_NAVIGATOR_PAGENAME, this, mpBindings);
+    mpNavigatorCtrlItem.reset( new SdNavigatorControllerItem(SID_NAVIGATOR_STATE, this, mpBindings, rUpdateRequest) );
+    mpPageNameCtrlItem.reset( new SdPageNameControllerItem(SID_NAVIGATOR_PAGENAME, this, mpBindings) );
 
     // InitTlb; is initiated over Slot
     if (rUpdateRequest)
@@ -121,8 +121,8 @@ SdNavigatorWin::~SdNavigatorWin()
 
 void SdNavigatorWin::dispose()
 {
-    DELETEZ(mpNavigatorCtrlItem);
-    DELETEZ(mpPageNameCtrlItem);
+    mpNavigatorCtrlItem.reset();
+    mpPageNameCtrlItem.reset();
     maToolbox.clear();
     maTlbObjects.clear();
     maLbDocs.clear();

@@ -120,8 +120,8 @@ private:
     NavigatorDragType           meDragType;
     std::vector<NavDocInfo>     maDocList;
     SfxBindings*                mpBindings;
-    SdNavigatorControllerItem*  mpNavigatorCtrlItem;
-    SdPageNameControllerItem*   mpPageNameCtrlItem;
+    std::unique_ptr<SdNavigatorControllerItem>  mpNavigatorCtrlItem;
+    std::unique_ptr<SdPageNameControllerItem>   mpPageNameCtrlItem;
 
     /** This flag controls whether all shapes or only the named shapes are
         shown.
