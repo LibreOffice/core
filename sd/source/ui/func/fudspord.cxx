@@ -41,16 +41,11 @@ FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::Vi
 
 FuDisplayOrder::~FuDisplayOrder()
 {
-    implClearOverlay();
 }
 
 void FuDisplayOrder::implClearOverlay()
 {
-    if(mpOverlay)
-    {
-        delete mpOverlay;
-        mpOverlay = nullptr;
-    }
+    mpOverlay.reset();
 }
 
 rtl::Reference<FuPoor> FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
@@ -81,7 +76,7 @@ bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
             implClearOverlay();
 
             // create new one
-            mpOverlay = new SdrDropMarkerOverlay(*mpView, *pPickObj);
+            mpOverlay.reset( new SdrDropMarkerOverlay(*mpView, *pPickObj) );
 
             // remember referenced object
             mpRefObj = pPickObj;
