@@ -32,8 +32,8 @@ public:
     // Methods which are shared.
     sal_Int16 SAL_CALL getType() override;
 
-    OUString SAL_CALL transliterate(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        css::uno::Sequence< sal_Int32 >& offset) override;
+    OUString transliterateImpl(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+        css::uno::Sequence< sal_Int32 >& offset, bool useOffset) override;
 
         OUString SAL_CALL
         transliterateChar2String( sal_Unicode inChar) override;
@@ -41,8 +41,8 @@ public:
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar) override;
 
-    OUString SAL_CALL folding(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        css::uno::Sequence< sal_Int32 >& offset) override;
+    OUString foldingImpl(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+        css::uno::Sequence< sal_Int32 >& offset, bool useOffset) override;
 
     sal_Bool SAL_CALL equals(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
@@ -85,7 +85,8 @@ class Transliteration_titlecase : public Transliteration_body
 public:
     Transliteration_titlecase();
 
-    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset  ) override;
+    virtual OUString transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+                                        css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
 };
 
 class Transliteration_sentencecase : public Transliteration_body
@@ -93,7 +94,8 @@ class Transliteration_sentencecase : public Transliteration_body
 public:
     Transliteration_sentencecase();
 
-    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset  ) override;
+    virtual OUString transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+                                        css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
 };
 
 }

@@ -30,9 +30,9 @@ sal_Int16 SAL_CALL transliteration_OneToOne::getType()
         return TransliterationType::ONE_TO_ONE;
 }
 
-OUString SAL_CALL
-transliteration_OneToOne::folding( const OUString& /*inStr*/, sal_Int32 /*startPos*/,
-        sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/)
+OUString
+transliteration_OneToOne::foldingImpl( const OUString& /*inStr*/, sal_Int32 /*startPos*/,
+        sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/, bool)
 {
         throw RuntimeException();
 }
@@ -50,9 +50,9 @@ transliteration_OneToOne::transliterateRange( const OUString& /*str1*/, const OU
     throw RuntimeException();
 }
 
-OUString SAL_CALL
-transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startPos,
-    sal_Int32 nCount, Sequence< sal_Int32 >& offset)
+OUString
+transliteration_OneToOne::transliterateImpl( const OUString& inStr, sal_Int32 startPos,
+    sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.

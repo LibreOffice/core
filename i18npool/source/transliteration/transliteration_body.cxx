@@ -89,10 +89,10 @@ static MappingType lcl_getMappingTypeForToggleCase( MappingType nMappingType, sa
     return nRes;
 }
 
-OUString SAL_CALL
-Transliteration_body::transliterate(
+OUString
+Transliteration_body::transliterateImpl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset)
+    Sequence< sal_Int32 >& offset, bool useOffset)
 {
     const sal_Unicode *in = inStr.getStr() + startPos;
 
@@ -202,11 +202,11 @@ Transliteration_body::transliterateChar2Char( sal_Unicode inChar )
     return map.map[0];
 }
 
-OUString SAL_CALL
-Transliteration_body::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset)
+OUString
+Transliteration_body::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    Sequence< sal_Int32 >& offset, bool useOffset)
 {
-    return transliterate(inStr, startPos, nCount, offset);
+    return transliterateImpl(inStr, startPos, nCount, offset, useOffset);
 }
 
 Transliteration_casemapping::Transliteration_casemapping()
@@ -304,9 +304,9 @@ static OUString transliterate_titlecase_Impl(
 
 // this function expects to be called on a word-by-word basis,
 // namely that startPos points to the first char of the word
-OUString SAL_CALL Transliteration_titlecase::transliterate(
+OUString Transliteration_titlecase::transliterateImpl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset )
+    Sequence< sal_Int32 >& offset, bool )
 {
     return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
 }
@@ -320,9 +320,9 @@ Transliteration_sentencecase::Transliteration_sentencecase()
 
 // this function expects to be called on a sentence-by-sentence basis,
 // namely that startPos points to the first word (NOT first char!) in the sentence
-OUString SAL_CALL Transliteration_sentencecase::transliterate(
+OUString Transliteration_sentencecase::transliterateImpl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset )
+    Sequence< sal_Int32 >& offset, bool )
 {
     return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
 }

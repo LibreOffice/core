@@ -79,8 +79,8 @@ i18nutil::OneToOneMappingTable_t const ignoreIterationMark_ja_JP_mappingTable[] 
 };
 
 
-OUString SAL_CALL
-ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
+OUString
+ignoreIterationMark_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
     i18nutil::oneToOneMapping aTable(ignoreIterationMark_ja_JP_mappingTable, sizeof(ignoreIterationMark_ja_JP_mappingTable));
 

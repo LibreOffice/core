@@ -28,11 +28,11 @@ using namespace com::sun::star::lang;
 
 namespace i18npool {
 
-OUString SAL_CALL
-ignoreKana::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
+OUString
+ignoreKana::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
     rtl::Reference< hiraganaToKatakana > t1(new hiraganaToKatakana);
-    return t1->transliterate(inStr, startPos, nCount, offset);
+    return t1->transliterateImpl(inStr, startPos, nCount, offset, useOffset);
 }
 
 Sequence< OUString > SAL_CALL
