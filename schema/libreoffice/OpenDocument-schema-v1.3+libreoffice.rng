@@ -7693,7 +7693,11 @@
   <rng:define name="office-document-common-attrs">
     <rng:interleave>
       <rng:attribute name="office:version">
+    <!-- FIXME remove this hack once we write 1.3 -->
+        <rng:choice>
+        <rng:value>1.2</rng:value>
         <rng:value>1.3</rng:value>
+        </rng:choice>
       </rng:attribute>
       <rng:optional>
         <rng:attribute name="grddl:transformation">
