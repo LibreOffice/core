@@ -98,8 +98,6 @@ public:
 
 // class ScFuncDesc:
 ScFuncDesc::ScFuncDesc() :
-        pFuncName       (nullptr),
-        pFuncDesc       (nullptr),
         pDefArgFlags    (nullptr),
         nFIndex         (0),
         nCategory       (0),
@@ -132,11 +130,8 @@ void ScFuncDesc::Clear()
     maDefArgDescs.clear();
     pDefArgFlags = nullptr;
 
-    delete pFuncName;
-    pFuncName = nullptr;
-
-    delete pFuncDesc;
-    pFuncDesc = nullptr;
+    mxFuncName.reset();
+    mxFuncDesc.reset();
 
     nFIndex = 0;
     nCategory = 0;
@@ -228,9 +223,9 @@ OUString ScFuncDesc::getSignature() const
 {
     OUStringBuffer aSig;
 
-    if(pFuncName)
+    if(mxFuncName)
     {
-        aSig.append(*pFuncName);
+        aSig.append(*mxFuncName);
 
         OUString aParamList = GetParamList();
         if( !aParamList.isEmpty() )
@@ -253,9 +248,9 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
 
     OUStringBuffer aFormula;
 
-    if(pFuncName)
+    if(mxFuncName)
     {
-        aFormula.append( *pFuncName );
+        aFormula.append( *mxFuncName );
 
         aFormula.append( "(" );
         if ( nArgCount > 0 && !_aArguments.empty() && !_aArguments[0].isEmpty())
@@ -299,8 +294,8 @@ sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
 OUString ScFuncDesc::getFunctionName() const
 {
     OUString sRet;
-    if ( pFuncName )
-        sRet = *pFuncName;
+    if ( mxFuncName )
+        sRet = *mxFuncName;
     return sRet;
 }
 
@@ -312,8 +307,8 @@ const formula::IFunctionCategory* ScFuncDesc::getCategory() const
 OUString ScFuncDesc::getDescription() const
 {
     OUString sRet;
-    if ( pFuncDesc )
-        sRet = *pFuncDesc;
+    if ( mxFuncDesc )
+        sRet = *mxFuncDesc;
     return sRet;
 }
 
@@ -349,10 +344,10 @@ void ScFuncDesc::initArgumentInfo()  const
     // get the full argument description
     // (add-in has to be instantiated to get the type information)
 
-    if ( bIncomplete && pFuncName )
+    if ( bIncomplete && mxFuncName )
     {
         ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
-        OUString aIntName(rAddIns.FindFunction( *pFuncName, true ));         // pFuncName is upper-case
+        OUString aIntName(rAddIns.FindFunction( *mxFuncName, true ));         // pFuncName is upper-case
 
         if ( !aIntName.isEmpty() )
         {
@@ -407,7 +402,7 @@ bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
 
 bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 {
-    return (ScGlobal::GetCaseCollator()->compareString(*a->pFuncName, *b->pFuncName ) < 0);
+    return (ScGlobal::GetCaseCollator()->compareString(*a->mxFuncName, *b->mxFuncName ) < 0);
 }
 
 #define ENTRY(CODE) CODE, SAL_N_ELEMENTS(CODE)
@@ -850,7 +845,7 @@ ScFunctionList::ScFunctionList()
                 pDesc->nFIndex = i;
                 tmpFuncVector.push_back(pDesc);
 
-                nStrLen = (*(pDesc->pFuncName)).getLength();
+                nStrLen = pDesc->mxFuncName->getLength();
                 if (nStrLen > nMaxFuncNameLen)
                     nMaxFuncNameLen = nStrLen;
             }
@@ -885,14 +880,14 @@ ScFunctionList::ScFunctionList()
         pLegacyFuncData->getParamDesc( aArgName, aArgDesc, 0 );
         pDesc->nFIndex     = nNextId++; //  ??? OpCode vergeben
         pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
-        pDesc->pFuncName   = new OUString(pLegacyFuncData->GetInternalName().toAsciiUpperCase());
+        pDesc->mxFuncName = pLegacyFuncData->GetInternalName().toAsciiUpperCase();
 
         OUStringBuffer aBuf(aArgDesc);
         aBuf.append('\n');
         aBuf.append("( AddIn: ");
         aBuf.append(pLegacyFuncData->GetModuleName());
         aBuf.append(" )");
-        pDesc->pFuncDesc = new OUString(aBuf.makeStringAndClear());
+        pDesc->mxFuncDesc = aBuf.makeStringAndClear();
 
         pDesc->nArgCount   = nArgs;
         if (nArgs)
@@ -962,7 +957,7 @@ ScFunctionList::ScFunctionList()
         }
 
         tmpFuncVector.push_back(pDesc);
-        nStrLen = (*(pDesc->pFuncName)).getLength();
+        nStrLen = pDesc->mxFuncName->getLength();
         if ( nStrLen > nMaxFuncNameLen)
             nMaxFuncNameLen = nStrLen;
     }
@@ -979,7 +974,7 @@ ScFunctionList::ScFunctionList()
         if ( pUnoAddIns->FillFunctionDesc( nFunc, *pDesc ) )
         {
             tmpFuncVector.push_back(pDesc);
-            nStrLen = (*(pDesc->pFuncName)).getLength();
+            nStrLen = pDesc->mxFuncName->getLength();
             if (nStrLen > nMaxFuncNameLen)
                 nMaxFuncNameLen = nStrLen;
         }
@@ -1244,8 +1239,8 @@ ScFuncRes::ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc* pDesc, bool& rbSu
         }
     }
 
-    pDesc->pFuncName = new OUString(ScCompiler::GetNativeSymbol(static_cast<OpCode>(nOpCode)));
-    pDesc->pFuncDesc = new OUString(ScResId(rEntry.pResource[0]));
+    pDesc->mxFuncName = ScCompiler::GetNativeSymbol(static_cast<OpCode>(nOpCode));
+    pDesc->mxFuncDesc = ScResId(rEntry.pResource[0]);
 
     if (nArgs)
     {

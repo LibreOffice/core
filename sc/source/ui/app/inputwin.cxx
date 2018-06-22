@@ -1938,11 +1938,11 @@ void ScPosWnd::FillFunctions()
             for (sal_uLong j=0; j<nListCount; j++)
             {
                 const ScFuncDesc* pDesc = pFuncList->GetFunction( j );
-                if ( pDesc->nFIndex == nId && pDesc->pFuncName )
+                if ( pDesc->nFIndex == nId && pDesc->mxFuncName )
                 {
-                    InsertEntry( *pDesc->pFuncName );
+                    InsertEntry( *pDesc->mxFuncName );
                     if (aFirstName.isEmpty())
-                        aFirstName = *pDesc->pFuncName;
+                        aFirstName = *pDesc->mxFuncName;
                     break; // Stop searching
                 }
             }

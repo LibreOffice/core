@@ -828,17 +828,17 @@ void ScInputHandler::GetFormulaData()
         for(sal_uLong i=0;i<nListCount;i++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
-            if ( pDesc->pFuncName )
+            if ( pDesc->mxFuncName )
             {
-                const sal_Unicode* pName = pDesc->pFuncName->getStr();
-                const sal_Int32 nLen = pDesc->pFuncName->getLength();
+                const sal_Unicode* pName = pDesc->mxFuncName->getStr();
+                const sal_Int32 nLen = pDesc->mxFuncName->getLength();
                 // fdo#75264 fill maFormulaChar with all characters used in formula names
                 for ( sal_Int32 j = 0; j < nLen; j++ )
                 {
                     sal_Unicode c = pName[ j ];
                     maFormulaChar.insert( c );
                 }
-                OUString aFuncName = *pDesc->pFuncName + aParenthesesReplacement;
+                OUString aFuncName = *pDesc->mxFuncName + aParenthesesReplacement;
                 pFormulaData->insert(ScTypedStrData(aFuncName, 0.0, ScTypedStrData::Standard));
                 pDesc->initArgumentInfo();
                 OUString aEntry = pDesc->getSignature();

@@ -27,6 +27,7 @@
 #include <formula/IFunctionDescription.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <boost/optional.hpp>
 #include <map>
 #include <memory>
 
@@ -206,8 +207,8 @@ public:
         ParameterFlags() : bOptional(false) {}
     };
 
-    OUString      *pFuncName;              /**< Function name */
-    OUString      *pFuncDesc;              /**< Description of function */
+    boost::optional<OUString> mxFuncName;         /**< Function name */
+    boost::optional<OUString> mxFuncDesc;         /**< Description of function */
     std::vector<OUString> maDefArgNames;          /**< Parameter name(s) */
     std::vector<OUString> maDefArgDescs;          /**< Description(s) of parameter(s) */
     ParameterFlags       *pDefArgFlags;           /**< Flags for each parameter */
