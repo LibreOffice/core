@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_f2763a3d",
+        "filename": "pyuno/source/module/pyuno_module.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-22T18:18:17Z",
+      "side": 1,
+      "message": "the SAL_UNUSED_PARAMETER on args is unnecessary",
+      "revId": "350cad0aa8c3749bdd4a55a9b2ed587386060187",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
