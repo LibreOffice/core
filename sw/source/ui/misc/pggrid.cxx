@@ -41,73 +41,56 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 
-SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
-    SfxTabPage(pParent, "TextGridPage", "modules/swriter/ui/textgridpage.ui", &rSet),
-    m_nRubyUserValue(0),
-    m_bRubyUserValue(false),
-    m_aPageSize(MM50, MM50),
-    m_bVertical(false),
-    m_bSquaredMode(false),
-    m_bHRulerChanged( false ),
-    m_bVRulerChanged( false )
+SwTextGridPage::SwTextGridPage(TabPageParent pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/textgridpage.ui", "TextGridPage", &rSet)
+    , m_nRubyUserValue(0)
+    , m_bRubyUserValue(false)
+    , m_aPageSize(MM50, MM50)
+    , m_bVertical(false)
+    , m_bSquaredMode(false)
+    , m_bHRulerChanged(false)
+    , m_bVRulerChanged(false)
+    , m_xNoGridRB(m_xBuilder->weld_radio_button("radioRB_NOGRID"))
+    , m_xLinesGridRB(m_xBuilder->weld_radio_button("radioRB_LINESGRID"))
+    , m_xCharsGridRB(m_xBuilder->weld_radio_button("radioRB_CHARSGRID"))
+    , m_xSnapToCharsCB(m_xBuilder->weld_check_button("checkCB_SNAPTOCHARS"))
+    , m_xExampleWN(new weld::CustomWeld(*m_xBuilder, "drawingareaWN_EXAMPLE", m_aExampleWN))
+    , m_xLayoutFL(m_xBuilder->weld_widget("frameFL_LAYOUT"))
+    , m_xLinesPerPageNF(m_xBuilder->weld_spin_button("spinNF_LINESPERPAGE"))
+    , m_xLinesRangeFT(m_xBuilder->weld_label("labelFT_LINERANGE"))
+    , m_xTextSizeMF(m_xBuilder->weld_metric_spin_button("spinMF_TEXTSIZE", FUNIT_POINT))
+    , m_xCharsPerLineFT(m_xBuilder->weld_label("labelFT_CHARSPERLINE"))
+    , m_xCharsPerLineNF(m_xBuilder->weld_spin_button("spinNF_CHARSPERLINE"))
+    , m_xCharsRangeFT(m_xBuilder->weld_label("labelFT_CHARRANGE"))
+    , m_xCharWidthFT(m_xBuilder->weld_label("labelFT_CHARWIDTH"))
+    , m_xCharWidthMF(m_xBuilder->weld_metric_spin_button("spinMF_CHARWIDTH", FUNIT_POINT))
+    , m_xRubySizeFT(m_xBuilder->weld_label("labelFT_RUBYSIZE"))
+    , m_xRubySizeMF(m_xBuilder->weld_metric_spin_button("spinMF_RUBYSIZE", FUNIT_POINT))
+    , m_xRubyBelowCB(m_xBuilder->weld_check_button("checkCB_RUBYBELOW"))
+    , m_xDisplayFL(m_xBuilder->weld_widget("frameFL_DISPLAY"))
+    , m_xDisplayCB(m_xBuilder->weld_check_button("checkCB_DISPLAY"))
+    , m_xPrintCB(m_xBuilder->weld_check_button("checkCB_PRINT"))
+    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("listLB_COLOR"), GetFrameWeld(), true))
 {
-    get(m_pNoGridRB,"radioRB_NOGRID");
-    get(m_pLinesGridRB,"radioRB_LINESGRID");
-    get(m_pCharsGridRB,"radioRB_CHARSGRID");
-    get(m_pSnapToCharsCB,"checkCB_SNAPTOCHARS");
+    Link<weld::SpinButton&,void> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
+    m_xCharsPerLineNF->connect_value_changed(aLink);
+    m_xLinesPerPageNF->connect_value_changed(aLink);
 
-    get(m_pExampleWN,"drawingareaWN_EXAMPLE");
-    get(m_pLayoutFL,"frameFL_LAYOUT");
+    Link<weld::MetricSpinButton&,void> aSizeLink = LINK(this, SwTextGridPage, TextSizeChangedHdl);
+    m_xTextSizeMF->connect_value_changed(aSizeLink);
+    m_xRubySizeMF->connect_value_changed(aSizeLink);
+    m_xCharWidthMF->connect_value_changed(aSizeLink);
 
-    get(m_pLinesPerPageNF,"spinNF_LINESPERPAGE");
-    get(m_pLinesRangeFT,"labelFT_LINERANGE");
+    Link<weld::ToggleButton&,void> aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
+    m_xNoGridRB->connect_toggled(aGridTypeHdl);
+    m_xLinesGridRB->connect_toggled(aGridTypeHdl);
+    m_xCharsGridRB->connect_toggled(aGridTypeHdl);
 
-    get(m_pTextSizeMF,"spinMF_TEXTSIZE");
-    get(m_pCharsPerLineFT,"labelFT_CHARSPERLINE");
-    get(m_pCharsPerLineNF,"spinNF_CHARSPERLINE");
-    get(m_pCharsRangeFT,"labelFT_CHARRANGE");
-    get(m_pCharWidthFT,"labelFT_CHARWIDTH");
-    get(m_pCharWidthMF,"spinMF_CHARWIDTH");
-    get(m_pRubySizeFT,"labelFT_RUBYSIZE");
-    get(m_pRubySizeMF,"spinMF_RUBYSIZE");
-    get(m_pRubyBelowCB,"checkCB_RUBYBELOW");
+    m_xColorLB->SetSelectHdl(LINK(this, SwTextGridPage, ColorModifyHdl));
+    m_xPrintCB->connect_toggled(LINK(this, SwTextGridPage, GridModifyClickHdl));
+    m_xRubyBelowCB->connect_toggled(LINK(this, SwTextGridPage, GridModifyClickHdl));
 
-    get(m_pDisplayFL,"frameFL_DISPLAY");
-    get(m_pDisplayCB,"checkCB_DISPLAY");
-    get(m_pPrintCB,"checkCB_PRINT");
-    get(m_pColorLB,"listLB_COLOR");
-
-    Link<SpinField&,void> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
-    Link<Control&,void> aLink2 = LINK(this, SwTextGridPage, CharorLineLoseFocusdHdl);
-    m_pCharsPerLineNF->SetUpHdl(aLink);
-    m_pCharsPerLineNF->SetDownHdl(aLink);
-    m_pCharsPerLineNF->SetLoseFocusHdl(aLink2);
-    m_pLinesPerPageNF->SetUpHdl(aLink);
-    m_pLinesPerPageNF->SetDownHdl(aLink);
-    m_pLinesPerPageNF->SetLoseFocusHdl(aLink2);
-
-    Link<SpinField&,void> aSizeLink = LINK(this, SwTextGridPage, TextSizeChangedHdl);
-    Link<Control&,void> aSizeLink2 = LINK(this, SwTextGridPage, TextSizeLoseFocusHdl);
-    m_pTextSizeMF->SetUpHdl(aSizeLink);
-    m_pTextSizeMF->SetDownHdl(aSizeLink);
-    m_pTextSizeMF->SetLoseFocusHdl(aSizeLink2);
-    m_pRubySizeMF->SetUpHdl(aSizeLink);
-    m_pRubySizeMF->SetDownHdl(aSizeLink);
-    m_pRubySizeMF->SetLoseFocusHdl(aSizeLink2);
-    m_pCharWidthMF->SetUpHdl(aSizeLink);
-    m_pCharWidthMF->SetDownHdl(aSizeLink);
-    m_pCharWidthMF->SetLoseFocusHdl(aSizeLink2);
-
-    Link<Button*,void> aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
-    m_pNoGridRB->SetClickHdl(aGridTypeHdl);
-    m_pLinesGridRB->SetClickHdl(aGridTypeHdl);
-    m_pCharsGridRB->SetClickHdl(aGridTypeHdl);
-
-    m_pColorLB->SetSelectHdl(LINK(this, SwTextGridPage, ColorModifyHdl));
-    m_pPrintCB->SetClickHdl(LINK(this, SwTextGridPage, GridModifyClickHdl));
-    m_pRubyBelowCB->SetClickHdl(LINK(this, SwTextGridPage, GridModifyClickHdl));
-
-    m_pDisplayCB->SetClickHdl(LINK(this, SwTextGridPage, DisplayGridHdl));
+    m_xDisplayCB->connect_toggled(LINK(this, SwTextGridPage, DisplayGridHdl));
 
     //Get the default paper mode
     SwView *pView   = ::GetActiveView();
@@ -122,21 +105,21 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     if( m_bSquaredMode )
     {
 
-        m_pRubySizeFT->Show();
-        m_pRubySizeMF->Show();
-        m_pRubyBelowCB->Show();
-        m_pSnapToCharsCB->Hide();
-        m_pCharWidthFT->Hide();
-        m_pCharWidthMF->Hide();
+        m_xRubySizeFT->show();
+        m_xRubySizeMF->show();
+        m_xRubyBelowCB->show();
+        m_xSnapToCharsCB->hide();
+        m_xCharWidthFT->hide();
+        m_xCharWidthMF->hide();
     }
     else
     {
-        m_pRubySizeFT->Hide();
-        m_pRubySizeMF->Hide();
-        m_pRubyBelowCB->Hide();
-        m_pSnapToCharsCB->Show();
-        m_pCharWidthFT->Show();
-        m_pCharWidthMF->Show();
+        m_xRubySizeFT->hide();
+        m_xRubySizeMF->hide();
+        m_xRubyBelowCB->hide();
+        m_xSnapToCharsCB->show();
+        m_xCharWidthFT->show();
+        m_xCharWidthMF->show();
     }
 }
 
@@ -147,50 +130,30 @@ SwTextGridPage::~SwTextGridPage()
 
 void SwTextGridPage::dispose()
 {
-    m_pNoGridRB.clear();
-    m_pLinesGridRB.clear();
-    m_pCharsGridRB.clear();
-    m_pSnapToCharsCB.clear();
-    m_pExampleWN.clear();
-    m_pLayoutFL.clear();
-    m_pLinesPerPageNF.clear();
-    m_pLinesRangeFT.clear();
-    m_pTextSizeMF.clear();
-    m_pCharsPerLineFT.clear();
-    m_pCharsPerLineNF.clear();
-    m_pCharsRangeFT.clear();
-    m_pCharWidthFT.clear();
-    m_pCharWidthMF.clear();
-    m_pRubySizeFT.clear();
-    m_pRubySizeMF.clear();
-    m_pRubyBelowCB.clear();
-    m_pDisplayFL.clear();
-    m_pDisplayCB.clear();
-    m_pPrintCB.clear();
-    m_pColorLB.clear();
+    m_xColorLB.reset();
     SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwTextGridPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwTextGridPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwTextGridPage>::Create(pParent, *rSet);
 }
 
 bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
-    if(m_pNoGridRB->IsValueChangedFromSaved() ||
-        m_pLinesGridRB->IsValueChangedFromSaved() ||
-        m_pLinesPerPageNF->IsValueChangedFromSaved() ||
-        m_pTextSizeMF->IsValueChangedFromSaved() ||
-        m_pCharsPerLineNF->IsValueChangedFromSaved() ||
-        m_pSnapToCharsCB->IsValueChangedFromSaved() ||
-        m_pRubySizeMF->IsValueChangedFromSaved() ||
-        m_pCharWidthMF->IsValueChangedFromSaved() ||
-        m_pRubyBelowCB->IsValueChangedFromSaved() ||
-        m_pDisplayCB->IsValueChangedFromSaved() ||
-        m_pPrintCB->IsValueChangedFromSaved() ||
-        m_pColorLB->IsValueChangedFromSaved())
+    if (m_xNoGridRB->get_state_changed_from_saved() ||
+        m_xLinesGridRB->get_state_changed_from_saved() ||
+        m_xLinesPerPageNF->get_value_changed_from_saved() ||
+        m_xTextSizeMF->get_value_changed_from_saved() ||
+        m_xCharsPerLineNF->get_value_changed_from_saved() ||
+        m_xSnapToCharsCB->get_state_changed_from_saved() ||
+        m_xRubySizeMF->get_value_changed_from_saved() ||
+        m_xCharWidthMF->get_value_changed_from_saved() ||
+        m_xRubyBelowCB->get_state_changed_from_saved() ||
+        m_xDisplayCB->get_state_changed_from_saved() ||
+        m_xPrintCB->get_state_changed_from_saved() ||
+        m_xColorLB->IsValueChangedFromSaved())
     {
         PutGridItem(*rSet);
         bRet = true;
@@ -210,51 +173,51 @@ void    SwTextGridPage::Reset(const SfxItemSet *rSet)
     if(SfxItemState::DEFAULT <= rSet->GetItemState(RES_TEXTGRID))
     {
         const SwTextGridItem& rGridItem = rSet->Get(RES_TEXTGRID);
-        RadioButton* pButton = nullptr;
+        weld::RadioButton* pButton = nullptr;
         switch(rGridItem.GetGridType())
         {
-            case GRID_NONE :        pButton = m_pNoGridRB;    break;
-            case GRID_LINES_ONLY  : pButton = m_pLinesGridRB; break;
-            default:                pButton = m_pCharsGridRB;
+            case GRID_NONE :        pButton = m_xNoGridRB.get();    break;
+            case GRID_LINES_ONLY  : pButton = m_xLinesGridRB.get(); break;
+            default:                pButton = m_xCharsGridRB.get();
         }
-        pButton->Check();
-        m_pDisplayCB->Check(rGridItem.IsDisplayGrid());
-        GridTypeHdl(pButton);
-        m_pSnapToCharsCB->Check(rGridItem.IsSnapToChars());
-        m_pLinesPerPageNF->SetValue(rGridItem.GetLines());
-        SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
+        pButton->set_active(true);
+        m_xDisplayCB->set_active(rGridItem.IsDisplayGrid());
+        GridTypeHdl(*pButton);
+        m_xSnapToCharsCB->set_active(rGridItem.IsSnapToChars());
+        m_xLinesPerPageNF->set_value(rGridItem.GetLines());
+        SetLinesOrCharsRanges(*m_xLinesRangeFT , m_xLinesPerPageNF->get_max());
         m_nRubyUserValue = rGridItem.GetBaseHeight();
         m_bRubyUserValue = true;
-        m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(m_nRubyUserValue), FUNIT_TWIP);
-        m_pRubySizeMF->SetValue(m_pRubySizeMF->Normalize(rGridItem.GetRubyHeight()), FUNIT_TWIP);
-        m_pCharWidthMF->SetValue(m_pCharWidthMF->Normalize(rGridItem.GetBaseWidth()), FUNIT_TWIP);
-        m_pRubyBelowCB->Check(rGridItem.IsRubyTextBelow());
-        m_pPrintCB->Check(rGridItem.IsPrintGrid());
-        m_pColorLB->SelectEntry(rGridItem.GetColor());
+        m_xTextSizeMF->set_value(m_xTextSizeMF->normalize(m_nRubyUserValue), FUNIT_TWIP);
+        m_xRubySizeMF->set_value(m_xRubySizeMF->normalize(rGridItem.GetRubyHeight()), FUNIT_TWIP);
+        m_xCharWidthMF->set_value(m_xCharWidthMF->normalize(rGridItem.GetBaseWidth()), FUNIT_TWIP);
+        m_xRubyBelowCB->set_active(rGridItem.IsRubyTextBelow());
+        m_xPrintCB->set_active(rGridItem.IsPrintGrid());
+        m_xColorLB->SelectEntry(rGridItem.GetColor());
     }
     UpdatePageSize(*rSet);
 
-    m_pNoGridRB->SaveValue();
-    m_pLinesGridRB->SaveValue();
-    m_pSnapToCharsCB->SaveValue();
-    m_pLinesPerPageNF->SaveValue();
-    m_pTextSizeMF->SaveValue();
-    m_pCharsPerLineNF->SaveValue();
-    m_pRubySizeMF->SaveValue();
-    m_pCharWidthMF->SaveValue();
-    m_pRubyBelowCB->SaveValue();
-    m_pDisplayCB->SaveValue();
-    m_pPrintCB->SaveValue();
-    m_pColorLB->SaveValue();
+    m_xNoGridRB->save_state();
+    m_xLinesGridRB->save_state();
+    m_xSnapToCharsCB->save_state();
+    m_xLinesPerPageNF->save_value();
+    m_xTextSizeMF->save_value();
+    m_xCharsPerLineNF->save_value();
+    m_xRubySizeMF->save_value();
+    m_xCharWidthMF->save_value();
+    m_xRubyBelowCB->save_state();
+    m_xDisplayCB->save_state();
+    m_xPrintCB->save_state();
+    m_xColorLB->SaveValue();
 }
 
 void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
 {
-    m_pExampleWN->Hide();
-    m_pExampleWN->UpdateExample( rSet );
+    m_aExampleWN.Hide();
+    m_aExampleWN.UpdateExample(rSet);
     UpdatePageSize(rSet);
-    m_pExampleWN->Show();
-    m_pExampleWN->Invalidate();
+    m_aExampleWN.Show();
+    m_aExampleWN.Invalidate();
 }
 
 DeactivateRC SwTextGridPage::DeactivatePage( SfxItemSet* )
@@ -265,20 +228,20 @@ DeactivateRC SwTextGridPage::DeactivatePage( SfxItemSet* )
 void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
 {
         SwTextGridItem aGridItem;
-        aGridItem.SetGridType(m_pNoGridRB->IsChecked() ? GRID_NONE :
-            m_pLinesGridRB->IsChecked() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
-        aGridItem.SetSnapToChars(m_pSnapToCharsCB->IsChecked());
-        aGridItem.SetLines( static_cast< sal_uInt16 >(m_pLinesPerPageNF->GetValue()) );
+        aGridItem.SetGridType(m_xNoGridRB->get_active() ? GRID_NONE :
+            m_xLinesGridRB->get_active() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
+        aGridItem.SetSnapToChars(m_xSnapToCharsCB->get_active());
+        aGridItem.SetLines( static_cast< sal_uInt16 >(m_xLinesPerPageNF->get_value()) );
         aGridItem.SetBaseHeight( static_cast< sal_uInt16 >(
             m_bRubyUserValue ? m_nRubyUserValue :
-                m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP))) );
-        aGridItem.SetRubyHeight( static_cast< sal_uInt16 >(m_pRubySizeMF->Denormalize(m_pRubySizeMF->GetValue(FUNIT_TWIP))) );
-        aGridItem.SetBaseWidth( static_cast< sal_uInt16 >(m_pCharWidthMF->Denormalize(m_pCharWidthMF->GetValue(FUNIT_TWIP))) );
-        aGridItem.SetRubyTextBelow(m_pRubyBelowCB->IsChecked());
+                m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FUNIT_TWIP))) );
+        aGridItem.SetRubyHeight( static_cast< sal_uInt16 >(m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FUNIT_TWIP))) );
+        aGridItem.SetBaseWidth( static_cast< sal_uInt16 >(m_xCharWidthMF->denormalize(m_xCharWidthMF->get_value(FUNIT_TWIP))) );
+        aGridItem.SetRubyTextBelow(m_xRubyBelowCB->get_active());
         aGridItem.SetSquaredMode(m_bSquaredMode);
-        aGridItem.SetDisplayGrid(m_pDisplayCB->IsChecked());
-        aGridItem.SetPrintGrid(m_pPrintCB->IsChecked());
-        aGridItem.SetColor(m_pColorLB->GetSelectEntryColor());
+        aGridItem.SetDisplayGrid(m_xDisplayCB->get_active());
+        aGridItem.SetPrintGrid(m_xPrintCB->get_active());
+        aGridItem.SetColor(m_xColorLB->GetSelectEntryColor());
         rSet.Put(aGridItem);
 
         SwView * pView = ::GetActiveView();
@@ -289,8 +252,8 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
                 m_bHRulerChanged = true;
             }
             m_bVRulerChanged = true;
-            pView->GetHRuler().SetCharWidth(static_cast<long>(m_pCharWidthMF->GetValue(FUNIT_TWIP)/56.7));
-            pView->GetVRuler().SetLineHeight(static_cast<long>(m_pTextSizeMF->GetValue(FUNIT_TWIP)/56.7));
+            pView->GetHRuler().SetCharWidth(static_cast<long>(m_xCharWidthMF->get_value(FUNIT_TWIP)/56.7));
+            pView->GetVRuler().SetLineHeight(static_cast<long>(m_xTextSizeMF->get_value(FUNIT_TWIP)/56.7));
         }
 }
 
@@ -333,38 +296,37 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
 
     sal_Int32 nTextSize = static_cast< sal_Int32 >(m_bRubyUserValue ?
                 m_nRubyUserValue :
-                    m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
+                    m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FUNIT_TWIP)));
 
     if ( m_bSquaredMode )
     {
-        m_pCharsPerLineNF->SetValue(m_aPageSize.Width() / nTextSize);
-    m_pCharsPerLineNF->SetMax( m_pCharsPerLineNF->GetValue() );
-        m_pLinesPerPageNF->SetMax( m_aPageSize.Height() /
-    (   m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)) +
-                m_pRubySizeMF->Denormalize(m_pRubySizeMF->GetValue(FUNIT_TWIP))));
-        SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
-        SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
+        m_xCharsPerLineNF->set_value(m_aPageSize.Width() / nTextSize);
+        m_xCharsPerLineNF->set_max(m_xCharsPerLineNF->get_value());
+        m_xLinesPerPageNF->set_max(m_aPageSize.Height() /
+        (   m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FUNIT_TWIP)) +
+                    m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FUNIT_TWIP))));
+        SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
+        SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
     }
     else
     {
-        sal_Int32 nTextWidth = static_cast< sal_Int32 >(m_pCharWidthMF->Denormalize(m_pCharWidthMF->GetValue(FUNIT_TWIP)));
-        m_pLinesPerPageNF->SetValue(m_aPageSize.Height() / nTextSize);
+        sal_Int32 nTextWidth = static_cast< sal_Int32 >(m_xCharWidthMF->denormalize(m_xCharWidthMF->get_value(FUNIT_TWIP)));
+        m_xLinesPerPageNF->set_value(m_aPageSize.Height() / nTextSize);
         if (nTextWidth)
-            m_pCharsPerLineNF->SetValue(m_aPageSize.Width() / nTextWidth);
+            m_xCharsPerLineNF->set_value(m_aPageSize.Width() / nTextWidth);
         else
-            m_pCharsPerLineNF->SetValue( 45 );
-    SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
-    SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
+            m_xCharsPerLineNF->set_value(45);
+        SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
+        SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
     }
-
 }
 
-void SwTextGridPage::SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue )
+void SwTextGridPage::SetLinesOrCharsRanges(weld::Label& rField, const sal_Int32 nValue )
 {
     OUString aFieldStr("( 1 -");
     aFieldStr += OUString::number(nValue);
     aFieldStr += " )";
-    rField.SetText( aFieldStr );
+    rField.set_label(aFieldStr);
 }
 
 const sal_uInt16* SwTextGridPage::GetRanges()
@@ -375,21 +337,17 @@ const sal_uInt16* SwTextGridPage::GetRanges()
     return aPageRg;
 }
 
-IMPL_LINK(SwTextGridPage, CharorLineLoseFocusdHdl, Control&, rControl, void)
-{
-    CharorLineChangedHdl(static_cast<SpinField&>(rControl));
-}
-IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
+IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, weld::SpinButton&, rField, void)
 {
     //if in squared mode
     if ( m_bSquaredMode )
     {
-        if(m_pCharsPerLineNF == &rField)
+        if (m_xCharsPerLineNF.get() == &rField)
         {
-            auto nValue = m_pCharsPerLineNF->GetValue();
+            auto nValue = m_xCharsPerLineNF->get_value();
             assert(nValue && "div-by-zero");
             auto nWidth = m_aPageSize.Width() / nValue;
-            m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(nWidth), FUNIT_TWIP);
+            m_xTextSizeMF->set_value(m_xTextSizeMF->normalize(nWidth), FUNIT_TWIP);
             //prevent rounding errors in the MetricField by saving the used value
             m_nRubyUserValue = nWidth;
             m_bRubyUserValue = true;
@@ -398,133 +356,129 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
         //set maximum line per page
         {
             sal_Int32 nMaxLines = static_cast< sal_Int32 >(m_aPageSize.Height() /
-                (   m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)) +
-                    m_pRubySizeMF->Denormalize(m_pRubySizeMF->GetValue(FUNIT_TWIP))));
-            m_pLinesPerPageNF->SetMax(nMaxLines);
+                (   m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FUNIT_TWIP)) +
+                    m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FUNIT_TWIP))));
+            m_xLinesPerPageNF->set_max(nMaxLines);
         }
-        SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
-        SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
+        SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
+        SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
     }
     else//in normal mode
     {
-        if (m_pLinesPerPageNF == &rField)
+        if (m_xLinesPerPageNF.get() == &rField)
         {
-            auto nValue = m_pLinesPerPageNF->GetValue();
+            auto nValue = m_xLinesPerPageNF->get_value();
             assert(nValue && "div-by-zero");
             auto nHeight = m_aPageSize.Height() / nValue;
-            m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(nHeight), FUNIT_TWIP);
-            m_pRubySizeMF->SetValue(0, FUNIT_TWIP);
-            SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
+            m_xTextSizeMF->set_value(m_xTextSizeMF->normalize(nHeight), FUNIT_TWIP);
+            m_xRubySizeMF->set_value(0, FUNIT_TWIP);
+            SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
 
             m_nRubyUserValue = nHeight;
             m_bRubyUserValue = true;
         }
-        else if (m_pCharsPerLineNF == &rField)
+        else if (m_xCharsPerLineNF.get() == &rField)
         {
-            auto nValue = m_pCharsPerLineNF->GetValue();
+            auto nValue = m_xCharsPerLineNF->get_value();
             assert(nValue && "div-by-zero");
             auto nWidth = m_aPageSize.Width() / nValue;
-            m_pCharWidthMF->SetValue(m_pCharWidthMF->Normalize(nWidth), FUNIT_TWIP);
-            SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
+            m_xCharWidthMF->set_value(m_xCharWidthMF->normalize(nWidth), FUNIT_TWIP);
+            SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
         }
     }
     GridModifyHdl();
 }
 
-IMPL_LINK(SwTextGridPage, TextSizeLoseFocusHdl, Control&, rControl, void)
-{
-    TextSizeChangedHdl(static_cast<SpinField&>(rControl));
-}
-IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField&, rField, void)
+IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, weld::MetricSpinButton&, rField, void)
 {
     //if in squared mode
     if( m_bSquaredMode )
     {
-        if (m_pTextSizeMF == &rField)
+        if (m_xTextSizeMF.get() == &rField)
         {
             m_bRubyUserValue = false;
 
             // fdo#50941: set maximum characters per line
-            sal_Int32 nTextSize = static_cast< sal_Int32 >(m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
+            sal_Int32 nTextSize = static_cast< sal_Int32 >(m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FUNIT_TWIP)));
             if (nTextSize > 0)
             {
                 sal_Int32 nMaxChars = m_aPageSize.Width() / nTextSize;
-                m_pCharsPerLineNF->SetValue(nMaxChars);
-                m_pCharsPerLineNF->SetMax(nMaxChars);
-                SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
+                m_xCharsPerLineNF->set_value(nMaxChars);
+                m_xCharsPerLineNF->set_max(nMaxChars);
+                SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
             }
         }
         //set maximum line per page
         {
             sal_Int32 nMaxLines = static_cast< sal_Int32 >(m_aPageSize.Height() /
-                (   m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)) +
-                    m_pRubySizeMF->Denormalize(m_pRubySizeMF->GetValue(FUNIT_TWIP))));
-            m_pLinesPerPageNF->SetMax(nMaxLines);
-            SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
+                (   m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FUNIT_TWIP)) +
+                    m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FUNIT_TWIP))));
+            m_xLinesPerPageNF->set_max(nMaxLines);
+            SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
         }
     }
     else
     {
-        if (m_pTextSizeMF == &rField)
+        if (m_xTextSizeMF.get() == &rField)
         {
-            sal_Int32 nTextSize = static_cast< sal_Int32 >(m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
-            m_pLinesPerPageNF->SetValue(m_aPageSize.Height() / nTextSize);
+            sal_Int32 nTextSize = static_cast< sal_Int32 >(m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FUNIT_TWIP)));
+            m_xLinesPerPageNF->set_value(m_aPageSize.Height() / nTextSize);
             m_bRubyUserValue = false;
-            SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
+            SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
         }
-        else if (m_pCharWidthMF == &rField)
+        else if (m_xCharWidthMF.get() == &rField)
         {
-            sal_Int32 nTextWidth = static_cast< sal_Int32 >(m_pCharWidthMF->Denormalize(m_pCharWidthMF->GetValue(FUNIT_TWIP)));
+            sal_Int32 nTextWidth = static_cast< sal_Int32 >(m_xCharWidthMF->denormalize(m_xCharWidthMF->get_value(FUNIT_TWIP)));
             sal_Int32 nMaxChar = 45 ;
             if (nTextWidth)
                 nMaxChar = m_aPageSize.Width() / nTextWidth;
-            m_pCharsPerLineNF->SetValue( nMaxChar );
-            SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
+            m_xCharsPerLineNF->set_value( nMaxChar );
+            SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
         }
         //rubySize is disabled
     }
     GridModifyHdl();
 }
 
-IMPL_LINK(SwTextGridPage, GridTypeHdl, Button*, pButton, void)
+IMPL_LINK(SwTextGridPage, GridTypeHdl, weld::ToggleButton&, rButton, void)
 {
-    bool bEnable = m_pNoGridRB.get() != pButton;
-    m_pLayoutFL->Enable(bEnable);
-    m_pDisplayFL->Enable(bEnable);
+    bool bEnable = m_xNoGridRB.get() != &rButton;
+    m_xLayoutFL->set_sensitive(bEnable);
+    m_xDisplayFL->set_sensitive(bEnable);
 
     //one special case
-    if(bEnable)
-        DisplayGridHdl(m_pDisplayCB);
+    if (bEnable)
+        DisplayGridHdl(*m_xDisplayCB);
 
-    bEnable = m_pCharsGridRB == pButton;
-    m_pSnapToCharsCB->Enable(bEnable);
+    bEnable = m_xCharsGridRB.get() == &rButton;
+    m_xSnapToCharsCB->set_sensitive(bEnable);
 
-    bEnable = m_pLinesGridRB == pButton;
-    if(bEnable && !m_bSquaredMode )
+    bEnable = m_xLinesGridRB.get() == &rButton;
+    if (bEnable && !m_bSquaredMode)
     {
-        m_pCharsPerLineFT->Enable(false);
-        m_pCharsPerLineNF->Enable(false);
-        m_pCharsRangeFT->Enable(false);
-        m_pCharWidthFT->Enable(false);
-        m_pCharWidthMF->Enable(false);
+        m_xCharsPerLineFT->set_sensitive(false);
+        m_xCharsPerLineNF->set_sensitive(false);
+        m_xCharsRangeFT->set_sensitive(false);
+        m_xCharWidthFT->set_sensitive(false);
+        m_xCharWidthMF->set_sensitive(false);
     }
 
     GridModifyHdl();
 }
 
-IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl, Button*, void)
+IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl, weld::ToggleButton&, void)
 {
-    bool bChecked = m_pDisplayCB->IsChecked();
-    m_pPrintCB->Enable(bChecked);
-    m_pPrintCB->Check(bChecked);
+    bool bChecked = m_xDisplayCB->get_active();
+    m_xPrintCB->set_sensitive(bChecked);
+    m_xPrintCB->set_active(bChecked);
 }
 
-IMPL_LINK_NOARG(SwTextGridPage, GridModifyClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwTextGridPage, GridModifyClickHdl, weld::ToggleButton&, void)
 {
     GridModifyHdl();
 }
 
-IMPL_LINK_NOARG(SwTextGridPage, ColorModifyHdl, SvxColorListBox&, void)
+IMPL_LINK_NOARG(SwTextGridPage, ColorModifyHdl, ColorListBox&, void)
 {
     GridModifyHdl();
 }
@@ -537,7 +491,7 @@ void SwTextGridPage::GridModifyHdl()
     if(pExSet)
         aSet.Put(*pExSet);
     PutGridItem(aSet);
-    m_pExampleWN->UpdateExample(aSet);
+    m_aExampleWN.UpdateExample(aSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

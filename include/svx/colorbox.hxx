@@ -99,6 +99,7 @@ private:
     ListBoxColorWrapper m_aColorWrapper;
     Color m_aAutoDisplayColor;
     NamedColor m_aSelectedColor;
+    bool m_bInterimBuilder;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
 
@@ -107,7 +108,7 @@ private:
     void LockWidthRequest();
     ColorWindow* getColorWindow() const;
 public:
-    ColorListBox(weld::MenuButton* pControl, weld::Window* pWindow);
+    ColorListBox(weld::MenuButton* pControl, weld::Window* pWindow, bool bInterimBuilder = false);
     ~ColorListBox();
 
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
