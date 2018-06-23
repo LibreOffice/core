@@ -98,15 +98,16 @@ void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript
         m_rFontFeatures.emplace_back();
         vcl::font::Feature& rFeature = m_rFontFeatures.back();
         rFeature.m_aID = { aFeatureTag, aScriptTag, aLanguageTag };
-        bool bResult = collectGraphiteFeatureDefinition(rFeature);
-        if (!bResult)
+
+        FeatureDefinition aDefinition
+            = OpenTypeFeatureDefinitonList::get().getDefinition(aFeatureTag);
+        if (aDefinition)
         {
-            FeatureDefinition aDefinition
-                = OpenTypeFeatureDefinitonList::get().getDefinition(aFeatureTag);
-            if (aDefinition)
-            {
-                rFeature.m_aDefinition = vcl::font::FeatureDefinition(aDefinition);
-            }
+            rFeature.m_aDefinition = vcl::font::FeatureDefinition(aDefinition);
+        }
+        else
+        {
+            collectGraphiteFeatureDefinition(rFeature);
         }
     }
 }
