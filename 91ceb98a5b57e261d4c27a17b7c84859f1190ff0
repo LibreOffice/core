@@ -16,6 +16,24 @@
       "revId": "91ceb98a5b57e261d4c27a17b7c84859f1190ff0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f2fc7a40",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1001708
+      },
+      "writtenOn": "2018-06-23T02:32:24Z",
+      "side": 1,
+      "message": "Those widgets are in the same grid, but there are other widgets in that grid that are not addressed in enableNupControl(). Therefore, disabling the whole grid container would cause undesired behavior.",
+      "parentUuid": "5a22e58a_6cb42ff2",
+      "revId": "91ceb98a5b57e261d4c27a17b7c84859f1190ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
