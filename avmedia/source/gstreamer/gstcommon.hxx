@@ -41,6 +41,6 @@
 
 #define WM_GRAPHNOTIFY (WM_USER + 567)
 
-#endif // _GSTCOMMOM_HXX
+#endif // _GSTCOMMON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
