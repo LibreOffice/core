@@ -16,6 +16,24 @@
       "revId": "350cad0aa8c3749bdd4a55a9b2ed587386060187",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_d2adbe32",
+        "filename": "pyuno/source/module/pyuno_module.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2018-06-23T06:07:47Z",
+      "side": 1,
+      "message": "There are several similar cases already in the file, so I just followed conventions of surrounding, existing code. Consistency! ;)",
+      "parentUuid": "5a22e58a_f2763a3d",
+      "revId": "350cad0aa8c3749bdd4a55a9b2ed587386060187",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
