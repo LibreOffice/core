@@ -393,7 +393,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 if(nullptr != pbInvalidateWindow)
                 {
                     // need to check visibility (and equal entry number) after
-                    // creation due to a sorted liszt being used here (before,
+                    // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
                     // time what worked before a sorted list was used)
                     *pbInvalidateWindow = checkVisibilityChanged(
@@ -689,7 +689,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 if(nullptr != pbLevelOrVisibilityChanged)
                 {
                     // need to check visibility (and equal entry number) after
-                    // creation due to a sorted liszt being used here (before,
+                    // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
                     // time what worked before a sorted list was used)
                     *pbLevelOrVisibilityChanged = checkVisibilityChanged(
