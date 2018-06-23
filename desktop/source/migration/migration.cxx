@@ -240,10 +240,9 @@ bool MigrationImpl::doMigration()
             if (sModuleIdentifier.isEmpty())
                 continue;
 
-            uno::Sequence< uno::Any > lArgs(2);
-            OUString aOldCfgDataPath = m_aInfo.userdata + "/user/config/soffice.cfg/modules/";
-            lArgs[0] <<= aOldCfgDataPath + i.sModuleShortName;
-            lArgs[1] <<= embed::ElementModes::READ;
+
+            OUString aOldCfgDataPath = m_aInfo.userdata + "/user/config/soffice.cfg/modules/" + i.sModuleShortName;
+            uno::Sequence< uno::Any > lArgs {uno::makeAny(aOldCfgDataPath), uno::makeAny(embed::ElementModes::READ)};
 
             uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
             uno::Reference< lang::XSingleServiceFactory > xStorageFactory(embed::FileSystemStorageFactory::create(xContext));
@@ -769,8 +768,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
                 comphelper::getProcessComponentContext()));
 
         // access the provider
-        uno::Sequence< uno::Any > theArgs(1);
-        theArgs[ 0 ] <<= sConfigURL;
+        uno::Sequence< uno::Any > theArgs {uno::makeAny(sConfigURL)};
         xNameAccess.set(
             theConfigProvider->createInstanceWithArguments(
                 sAccessSrvc, theArgs ), uno::UNO_QUERY_THROW );
@@ -870,9 +868,8 @@ std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules(
     const OUString MENUBAR("menubar");
     const OUString TOOLBAR("toolbar");
 
-    uno::Sequence< uno::Any > lArgs(2);
-    lArgs[0] <<= m_aInfo.userdata + "/user/config/soffice.cfg/modules";
-    lArgs[1] <<= embed::ElementModes::READ;
+    uno::Sequence< uno::Any > lArgs {uno::makeAny(m_aInfo.userdata + "/user/config/soffice.cfg/modules"),
+                                     uno::makeAny(embed::ElementModes::READ)};
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
         embed::FileSystemStorageFactory::create(comphelper::getProcessComponentContext()));
@@ -1046,17 +1043,14 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                 }
             }
 
-        } while (nIndex>=0);
+        } while (nIndex >= 0);
 
         if (nIndex == -1) {
-            uno::Sequence< beans::PropertyValue > aPropSeq(3);
-
-            aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-            aPropSeq[0].Value <<= elem.m_sCommandURL;
-            aPropSeq[1].Name = ITEM_DESCRIPTOR_LABEL;
-            aPropSeq[1].Value <<= retrieveLabelFromCommand(elem.m_sCommandURL, sModuleIdentifier);
-            aPropSeq[2].Name = ITEM_DESCRIPTOR_CONTAINER;
-            aPropSeq[2].Value <<= elem.m_xPopupMenu;
+            uno::Sequence< beans::PropertyValue > aPropSeq {
+                beans::PropertyValue(ITEM_DESCRIPTOR_COMMANDURL, 0, uno::makeAny(elem.m_sCommandURL), beans::PropertyState_DIRECT_VALUE),
+                beans::PropertyValue(ITEM_DESCRIPTOR_LABEL, 0, uno::makeAny(retrieveLabelFromCommand(elem.m_sCommandURL, sModuleIdentifier)), beans::PropertyState_DIRECT_VALUE),
+                beans::PropertyValue(ITEM_DESCRIPTOR_CONTAINER, 0, uno::makeAny(elem.m_xPopupMenu), beans::PropertyState_DIRECT_VALUE)
+            };
 
             if (elem.m_sPrevSibling.isEmpty())
                 xTemp->insertByIndex(0, uno::makeAny(aPropSeq));
