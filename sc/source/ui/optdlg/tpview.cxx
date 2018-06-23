@@ -92,6 +92,8 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
     pGuideLineCB->SetClickHdl(aCBHdl);
     pRowColHeaderCB->SetClickHdl(aCBHdl);
 
+    pColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
+    pColorLB->SetAutoDisplayColor(SC_STD_GRIDCOLOR);
 }
 
 ScTpContentOptions::~ScTpContentOptions()
@@ -155,6 +157,11 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         pGuideLineCB   ->IsValueChangedFromSaved())
     {
         NamedColor aNamedColor = pColorLB->GetSelectedEntry();
+        if (aNamedColor.first == COL_AUTO)
+        {
+            aNamedColor.first = SC_STD_GRIDCOLOR;
+            aNamedColor.second.clear();
+        }
         pLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
         rCoreSet->Put(ScTpViewItem(*pLocalOptions));
         bRet = true;
@@ -310,7 +317,7 @@ void ScTpContentOptions::InitGridOpt()
     Color     aCol    = pLocalOptions->GetGridColor( &aName );
 
     if (aName.trim().isEmpty() && aCol == SC_STD_GRIDCOLOR)
-        aName = ScResId(STR_GRIDCOLOR);
+        aCol = COL_AUTO;
 
     pColorLB->SelectEntry(std::make_pair(aCol, aName));
 }
