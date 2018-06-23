@@ -92,6 +92,7 @@ public:
 
         mfBestFitness = std::numeric_limits<float>::lowest();
 
+        maSwarm.reserve(mnNumOfParticles);
         for (size_t i = 0; i < mnNumOfParticles; i++)
         {
             maSwarm.emplace_back(mnDimensionality);
