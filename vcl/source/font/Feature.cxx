@@ -76,9 +76,11 @@ FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, OUString const& rDescript
 {
 }
 
-FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID)
+FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID,
+                                     OUString const& rNumericPart)
     : m_nCode(nCode)
     , m_pDescriptionID(pDescriptionID)
+    , m_sNumericPart(rNumericPart)
     , m_eType(FeatureParameterType::BOOL)
 {
 }
@@ -100,11 +102,20 @@ const std::vector<FeatureParameter>& FeatureDefinition::getEnumParameters() cons
 OUString FeatureDefinition::getDescription() const
 {
     if (m_pDescriptionID)
-        return VclResId(m_pDescriptionID);
+    {
+        OUString sTranslatedDescription = VclResId(m_pDescriptionID);
+        if (!m_sNumericPart.isEmpty())
+            return sTranslatedDescription.replaceFirst("%1", m_sNumericPart);
+        return sTranslatedDescription;
+    }
     else if (!m_sDescription.isEmpty())
+    {
         return m_sDescription;
+    }
     else
+    {
         return vcl::font::featureCodeAsString(m_nCode);
+    }
 }
 
 sal_uInt32 FeatureDefinition::getCode() const { return m_nCode; }
