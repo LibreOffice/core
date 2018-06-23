@@ -76,6 +76,7 @@ public:
         // Initialize population with individuals that have been initialized with uniform random
         // noise
         // uniform noise means random value inside your search space
+        maPopulation.reserve(mnPopulationSize);
         for (size_t i = 0; i < mnPopulationSize; ++i)
         {
             maPopulation.emplace_back();
