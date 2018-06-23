@@ -3077,6 +3077,7 @@ max-numerator-digits
 zeros-numerator-digits
 zeros-denominator-digits
 integer-fraction-delimiter
+max-blank-integer-digits
 reference-language
 newline
 creator-initials
