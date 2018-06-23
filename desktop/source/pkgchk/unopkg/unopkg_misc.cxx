@@ -353,16 +353,13 @@ Reference<XComponentContext> connectToOffice(
     Reference<XComponentContext> const & xLocalComponentContext,
     bool verbose )
 {
-    Sequence<OUString> args( 3 );
-    args[ 0 ] = "--nologo";
-    args[ 1 ] = "--nodefault";
-
     OUString pipeId( ::dp_misc::generateRandomPipeId() );
     OUStringBuffer buf;
     buf.append( "--accept=pipe,name=" );
     buf.append( pipeId );
     buf.append( ";urp;" );
-    args[ 2 ] = buf.makeStringAndClear();
+
+    Sequence<OUString> args { "--nologo", "--nodefault", buf.makeStringAndClear() };
     OUString appURL( getExecutableDir() + "/soffice" );
 
     if (verbose)
