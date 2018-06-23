@@ -239,7 +239,6 @@
 #define STR_LONG_ERR_NO_CONV                    NC_("STR_LONG_ERR_NO_CONV", "Error: Calculation does not converge")
 /* END error constants and error strings. */
 
-#define STR_GRIDCOLOR                           NC_("STR_GRIDCOLOR", "Grid color")
 #define STR_CELL_FILTER                         NC_("STR_CELL_FILTER", "Filter")
 #define STR_TARGETNOTFOUND                      NC_("STR_TARGETNOTFOUND", "The target database range does not exist.")
 #define STR_INVALID_EPS                         NC_("STR_INVALID_EPS", "Invalid increment")
