@@ -100,6 +100,7 @@ void SAL_CALL LpsolveSolver::solve()
     // collect variables in vector (?)
 
     std::vector<table::CellAddress> aVariableCells;
+    aVariableCells.reserve(maVariables.getLength());
     for (sal_Int32 nPos=0; nPos<maVariables.getLength(); nPos++)
         aVariableCells.push_back( maVariables[nPos] );
     size_t nVariables = aVariableCells.size();
