@@ -12,6 +12,8 @@
 #include <font/OpenTypeFeatureStrings.hrc>
 #include <svdata.hxx>
 
+#include <rtl/character.hxx>
+
 namespace vcl
 {
 namespace font
@@ -32,15 +34,6 @@ void OpenTypeFeatureDefinitonListPrivate::init()
         { featureCode("cpct"), STR_FONT_FEATURE_ID_CPCT },
         { featureCode("cpsp"), STR_FONT_FEATURE_ID_CPSP },
         { featureCode("cswh"), STR_FONT_FEATURE_ID_CSWH },
-        { featureCode("cv01"), STR_FONT_FEATURE_ID_CV01 },
-        { featureCode("cv02"), STR_FONT_FEATURE_ID_CV02 },
-        { featureCode("cv03"), STR_FONT_FEATURE_ID_CV03 },
-        { featureCode("cv04"), STR_FONT_FEATURE_ID_CV04 },
-        { featureCode("cv05"), STR_FONT_FEATURE_ID_CV05 },
-        { featureCode("cv06"), STR_FONT_FEATURE_ID_CV06 },
-        { featureCode("cv07"), STR_FONT_FEATURE_ID_CV07 },
-        { featureCode("cv08"), STR_FONT_FEATURE_ID_CV08 },
-        { featureCode("cv09"), STR_FONT_FEATURE_ID_CV09 },
         { featureCode("dcap"), STR_FONT_FEATURE_ID_DCAP },
         { featureCode("dlig"), STR_FONT_FEATURE_ID_DLIG },
         { featureCode("dnom"), STR_FONT_FEATURE_ID_DNOM },
@@ -88,26 +81,6 @@ void OpenTypeFeatureDefinitonListPrivate::init()
         { featureCode("sinf"), STR_FONT_FEATURE_ID_SINF },
         { featureCode("smcp"), STR_FONT_FEATURE_ID_SMCP },
         { featureCode("smpl"), STR_FONT_FEATURE_ID_SMPL },
-        { featureCode("ss01"), STR_FONT_FEATURE_ID_SS01 },
-        { featureCode("ss02"), STR_FONT_FEATURE_ID_SS02 },
-        { featureCode("ss03"), STR_FONT_FEATURE_ID_SS03 },
-        { featureCode("ss04"), STR_FONT_FEATURE_ID_SS04 },
-        { featureCode("ss05"), STR_FONT_FEATURE_ID_SS05 },
-        { featureCode("ss06"), STR_FONT_FEATURE_ID_SS06 },
-        { featureCode("ss07"), STR_FONT_FEATURE_ID_SS07 },
-        { featureCode("ss08"), STR_FONT_FEATURE_ID_SS08 },
-        { featureCode("ss09"), STR_FONT_FEATURE_ID_SS09 },
-        { featureCode("ss10"), STR_FONT_FEATURE_ID_SS10 },
-        { featureCode("ss11"), STR_FONT_FEATURE_ID_SS11 },
-        { featureCode("ss12"), STR_FONT_FEATURE_ID_SS12 },
-        { featureCode("ss13"), STR_FONT_FEATURE_ID_SS13 },
-        { featureCode("ss14"), STR_FONT_FEATURE_ID_SS14 },
-        { featureCode("ss15"), STR_FONT_FEATURE_ID_SS15 },
-        { featureCode("ss16"), STR_FONT_FEATURE_ID_SS16 },
-        { featureCode("ss17"), STR_FONT_FEATURE_ID_SS17 },
-        { featureCode("ss18"), STR_FONT_FEATURE_ID_SS18 },
-        { featureCode("ss19"), STR_FONT_FEATURE_ID_SS19 },
-        { featureCode("ss20"), STR_FONT_FEATURE_ID_SS20 },
         { featureCode("subs"), STR_FONT_FEATURE_ID_SUBS },
         { featureCode("sups"), STR_FONT_FEATURE_ID_SUPS },
         { featureCode("swsh"), STR_FONT_FEATURE_ID_SWSH },
@@ -149,8 +122,62 @@ void OpenTypeFeatureDefinitonListPrivate::init()
     });
 }
 
+namespace
+{
+bool isCharacterVariantCode(sal_uInt32 nFeatureCode)
+{
+    return sal_Char((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 'c'
+           && sal_Char((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 'v';
+}
+
+bool isStylisticSetCode(sal_uInt32 nFeatureCode)
+{
+    return sal_Char((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 's'
+           && sal_Char((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 's';
+}
+
+OUString getNumericLowerPart(sal_uInt32 nFeatureCode)
+{
+    sal_Char cChar1((sal_uInt32(nFeatureCode) >> 8) & 0xFF);
+    sal_Char cChar2((sal_uInt32(nFeatureCode) >> 0) & 0xFF);
+
+    if (rtl::isAsciiDigit(static_cast<unsigned char>(cChar1))
+        && rtl::isAsciiDigit(static_cast<unsigned char>(cChar2)))
+    {
+        return OUString(cChar1) + OUString(cChar2);
+    }
+    return OUString();
+}
+
+} // end anonymous namespace
+
+bool OpenTypeFeatureDefinitonListPrivate::isSpecialFeatureCode(sal_uInt32 nFeatureCode)
+{
+    return isCharacterVariantCode(nFeatureCode) || isStylisticSetCode(nFeatureCode);
+}
+
+FeatureDefinition
+OpenTypeFeatureDefinitonListPrivate::handleSpecialFeatureCode(sal_uInt32 nFeatureCode)
+{
+    FeatureDefinition aFeatureDefinition;
+    OUString sNumericPart = getNumericLowerPart(nFeatureCode);
+    if (!sNumericPart.isEmpty())
+    {
+        if (isCharacterVariantCode(nFeatureCode))
+            aFeatureDefinition = { nFeatureCode, STR_FONT_FEATURE_ID_SSXX, sNumericPart };
+        else if (isStylisticSetCode(nFeatureCode))
+            aFeatureDefinition = { nFeatureCode, STR_FONT_FEATURE_ID_CVXX, sNumericPart };
+    }
+    return aFeatureDefinition;
+}
+
 FeatureDefinition OpenTypeFeatureDefinitonListPrivate::getDefinition(sal_uInt32 nFeatureCode)
 {
+    if (isSpecialFeatureCode(nFeatureCode))
+    {
+        return handleSpecialFeatureCode(nFeatureCode);
+    }
+
     if (m_aCodeToIndex.find(nFeatureCode) != m_aCodeToIndex.end())
     {
         size_t nIndex = m_aCodeToIndex.at(nFeatureCode);

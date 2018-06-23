@@ -56,6 +56,7 @@ private:
     sal_uInt32 m_nCode;
     OUString m_sDescription;
     const char* m_pDescriptionID;
+    OUString m_sNumericPart;
     FeatureParameterType m_eType;
     // the index of the parameter defines the enum value, string is the description
     std::vector<FeatureParameter> m_aEnumParameters;
@@ -66,7 +67,8 @@ public:
                       FeatureParameterType eType = FeatureParameterType::BOOL,
                       std::vector<FeatureParameter> const& rEnumParameters
                       = std::vector<FeatureParameter>{});
-    FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID);
+    FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID,
+                      OUString const& rNumericPart = OUString());
     FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID,
                       std::vector<FeatureParameter> aEnumParameters);
 
