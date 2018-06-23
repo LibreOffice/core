@@ -442,7 +442,7 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
     LwpListList* pList = nullptr;
     if(pLast)
     {
-        // We're at the end of Last's list (not Liszt's list).
+        // We're at the end of Last's list (not list's list).
         // Start with the next active list
         pList = dynamic_cast<LwpListList*>(pLast->GetListList().obj().get());
         pList= GetNextActiveListList(pList);
