@@ -43,7 +43,6 @@ class SVX_DLLPUBLIC PaletteManager
     svx::ToolboxButtonColorUpdater* mpBtnUpdater;
 
     XColorListRef           pColorList;
-    Color                   mLastColor;
     std::deque<NamedColor>  maRecentColors;
     std::vector<std::unique_ptr<Palette>> m_Palettes;
 
@@ -68,9 +67,6 @@ public:
 
     long        GetColorCount();
     long        GetRecentColorCount();
-
-    const Color& GetLastColor();
-    void        SetLastColor(const Color& rLastColor);
     void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
