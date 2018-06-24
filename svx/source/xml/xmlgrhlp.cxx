@@ -402,11 +402,9 @@ bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
 
     if( !aURLStr.isEmpty() )
     {
-        aURLStr = aURLStr.getToken( comphelper::string::getTokenCount(aURLStr, ':') - 1, ':' );
+        aURLStr = aURLStr.copy(aURLStr.lastIndexOf(':')+1);
 
-        const sal_uInt32 nTokenCount = comphelper::string::getTokenCount(aURLStr, '/');
-
-        if( 1 == nTokenCount )
+        if( comphelper::string::getTokenCount(aURLStr, '/') == 1 )
         {
             rPictureStorageName = XML_GRAPHICSTORAGE_NAME;
             rPictureStreamName = aURLStr;
