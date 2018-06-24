@@ -207,6 +207,7 @@ public:
 
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
+    void testNumberFormatODS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -313,6 +314,7 @@ public:
 
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
+    CPPUNIT_TEST(testNumberFormatODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4021,6 +4023,30 @@ void ScExportTest::testHyperlinkTargetFrameODS()
     OUString aTargetFrameExport = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "target-frame-name");
     CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrameExport);
+}
+
+void ScExportTest::testNumberFormatODS()
+{
+    ScDocShellRef xDocSh = loadDoc("testIntegerNumFormat.", FORMAT_FODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xDocSh.is() );
+
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    sal_uInt32 nNumberFormat;
+    const sal_Int32 nCountFormats = 17;
+    const OUString aExpectedFormatStr[nCountFormats] = { "\"format=\"000000", "\"format=\"??????", "\"format=\"??0000",
+                "\"format=\"000,000", "\"format=\"???,???", "\"format=\"??0,000",
+                "\"format=\"000\" \"?/?", "\"format=\"???\" \"?/?", "\"format=\"?00\" \"?/?",
+                "\"format=\"0,000\" \"?/?", "\"format=\"?,???\" \"?/?", "\"format=\"?,?00\" \"?/?",
+                "\"format=\"0E+00", "\"format=\"?E+00", "\"format=\"000E+00", "\"format=\"???E+00", "\"format=\"?00E+00" };
+    for ( sal_Int32 i = 0 ; i < nCountFormats ; i++)
+    {
+        rDoc.GetNumberFormat(i+1, 2, 0, nNumberFormat);
+        const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);
+        const OUString& rFormatStr = pNumberFormat->GetFormatstring();
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format modified during export/import", aExpectedFormatStr[i], rFormatStr);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
