@@ -2767,7 +2767,6 @@ com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation(
 SvxColorToolBoxControl::SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :
     ImplInheritanceHelper( rContext, nullptr, OUString() ),
     m_bSplitButton(true),
-    m_bIsNoFill(false),
     m_nSlotId(0),
     m_aColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
@@ -2892,9 +2891,6 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
 
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 {
-    if (m_xBtnUpdater->GetCurrentColor() != rColor.first)
-        m_bIsNoFill = false;
-
     m_xBtnUpdater->Update(rColor.first);
     if (m_xPaletteManager)
         m_xPaletteManager->SetLastColor(rColor.first);
@@ -2957,11 +2953,8 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     Color aColor = m_xPaletteManager->GetLastColor();
 
     auto aArgs( comphelper::InitPropertySequence( {
-        { m_aCommandURL.copy(5), css::uno::makeAny( COL_TRANSPARENT ) }
+        { m_aCommandURL.copy(5), css::uno::makeAny(aColor) }
     } ) );
-    if (!m_bIsNoFill)
-        aArgs[0].Value <<= sal_Int32( m_xPaletteManager->GetLastColor() );
-    m_bIsNoFill = !m_bIsNoFill;
     dispatchCommand( aCommand, aArgs );
 
     OUString sColorName = ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
