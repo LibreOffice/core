@@ -2767,7 +2767,7 @@ com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation(
 SvxColorToolBoxControl::SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :
     ImplInheritanceHelper( rContext, nullptr, OUString() ),
     m_bSplitButton(true),
-    m_bIsNoFill(false),
+    m_aActiveDocumentColor(COL_TRANSPARENT),
     m_nSlotId(0),
     m_aColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
@@ -2851,7 +2851,6 @@ void SvxColorToolBoxControl::EnsurePaletteManager()
     {
         m_xPaletteManager.reset(new PaletteManager);
         m_xPaletteManager->SetBtnUpdater(m_xBtnUpdater.get());
-        m_xPaletteManager->SetLastColor(m_xBtnUpdater->GetCurrentColor());
     }
 }
 
@@ -2892,12 +2891,7 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
 
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 {
-    if (m_xBtnUpdater->GetCurrentColor() != rColor.first)
-        m_bIsNoFill = false;
-
     m_xBtnUpdater->Update(rColor.first);
-    if (m_xPaletteManager)
-        m_xPaletteManager->SetLastColor(rColor.first);
 }
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -2911,22 +2905,20 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
         pToolBox->EnableItem( nId, rEvent.IsEnabled );
 
     bool bValue;
-    if ( !m_bSplitButton )
-    {
-        Color aColor( COL_TRANSPARENT );
+    Color aColor( COL_TRANSPARENT );
 
-        if ( m_aBorderColorStatus.statusChanged( rEvent ) )
-        {
-            aColor = m_aBorderColorStatus.GetColor();
-        }
-        else if ( rEvent.IsEnabled )
-        {
-            rEvent.State >>= aColor;
-        }
-        m_xBtnUpdater->Update( aColor );
-        if (m_xPaletteManager)
-            m_xPaletteManager->SetLastColor(aColor);
+    if ( m_aBorderColorStatus.statusChanged( rEvent ) )
+    {
+        aColor = m_aBorderColorStatus.GetColor();
     }
+    else if ( rEvent.IsEnabled )
+    {
+        rEvent.State >>= aColor;
+    }
+    m_aActiveDocumentColor = aColor;
+
+    if ( !m_bSplitButton )
+        m_xBtnUpdater->Update( aColor );
     else if ( rEvent.State >>= bValue )
         pToolBox->CheckItem( nId, bValue );
 }
@@ -2953,17 +2945,16 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
             break;
     }
 
-    EnsurePaletteManager();
-    Color aColor = m_xPaletteManager->GetLastColor();
+    Color aColor = m_xBtnUpdater->GetCurrentColor();
+    if (aColor == m_aActiveDocumentColor)
+        aColor = COL_TRANSPARENT;
 
     auto aArgs( comphelper::InitPropertySequence( {
-        { m_aCommandURL.copy(5), css::uno::makeAny( COL_TRANSPARENT ) }
+        { m_aCommandURL.copy(5), css::uno::makeAny(aColor) }
     } ) );
-    if (!m_bIsNoFill)
-        aArgs[0].Value <<= sal_Int32( m_xPaletteManager->GetLastColor() );
-    m_bIsNoFill = !m_bIsNoFill;
     dispatchCommand( aCommand, aArgs );
 
+    EnsurePaletteManager();
     OUString sColorName = ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
     m_xPaletteManager->AddRecentColor(aColor, sColorName);
 }
@@ -2987,8 +2978,7 @@ void SvxColorToolBoxControl::updateImage()
     if ( !!aImage )
     {
         pToolBox->SetItemImage( nId, aImage );
-        EnsurePaletteManager();
-        m_xBtnUpdater->Update(m_xPaletteManager->GetLastColor(), true);
+        m_xBtnUpdater->Update(m_xBtnUpdater->GetCurrentColor(), true);
     }
 }
 
@@ -3300,7 +3290,6 @@ void SvxColorListBox::EnsurePaletteManager()
     {
         m_xPaletteManager.reset(new PaletteManager);
         m_xPaletteManager->SetColorSelectFunction(std::ref(m_aColorWrapper));
-        m_xPaletteManager->SetLastColor(m_aSelectedColor.first);
     }
 }
 
@@ -3415,8 +3404,7 @@ void SvxColorListBox::createColorWindow()
 void SvxColorListBox::Selected(const NamedColor& rColor)
 {
     ShowPreview(rColor);
-    if (m_xPaletteManager)
-        m_xPaletteManager->SetLastColor(rColor.first);
+
     m_aSelectedColor = rColor;
     if (m_aSelectedLink.IsSet())
         m_aSelectedLink.Call(*this);

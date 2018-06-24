@@ -1228,6 +1228,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.SetAttrItem( aGrabBag );
                     }
                     rWrtSh.EndUndo( SwUndoId::INSATTR );
+
+                    SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
+                    rBindings.Update(SID_ATTR_CHAR_COLOR_BACKGROUND);
                 }
                 else
                     rWrtSh.SetAttrItem(
