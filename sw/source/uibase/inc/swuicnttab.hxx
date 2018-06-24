@@ -236,11 +236,6 @@ public:
 
 class SwTokenWindow : public VclHBox, public VclBuilderContainer
 {
-    typedef std::vector<VclPtr<Control> >::iterator ctrl_iterator;
-    typedef std::vector<VclPtr<Control> >::const_iterator ctrl_const_iterator;
-    typedef std::vector<VclPtr<Control> >::reverse_iterator ctrl_reverse_iterator;
-    typedef std::vector<VclPtr<Control> >::const_reverse_iterator ctrl_const_reverse_iterator;
-
     VclPtr<Button> m_pLeftScrollWin;
     VclPtr<vcl::Window> m_pCtrlParentWin;
     VclPtr<Button> m_pRightScrollWin;

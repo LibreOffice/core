@@ -891,9 +891,8 @@ std::vector< const wwFont* > wwFontHelper::AsVector() const
 {
     std::vector<const wwFont *> aFontList( maFonts.size() );
 
-    typedef std::map<wwFont, sal_uInt16>::const_iterator myiter;
-    myiter aEnd = maFonts.end();
-    for ( myiter aIter = maFonts.begin(); aIter != aEnd; ++aIter )
+    auto aEnd = maFonts.cend();
+    for ( auto aIter = maFonts.cbegin(); aIter != aEnd; ++aIter )
         aFontList[aIter->second] = &aIter->first;
 
     return aFontList;
@@ -2163,7 +2162,6 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     OSL_ENSURE( aCps.size() + 2 == pTextPos->Count(), "WritePlc: DeSync" );
 
     std::vector<std::pair<OUString,OUString> > aStrArr;
-    typedef std::vector<std::pair<OUString,OUString> >::iterator myiter;
     WW8Fib& rFib = *rWrt.pFib;              // n+1-th CP-Pos according to the manual
     bool bWriteCP = true;
 
@@ -2193,7 +2191,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
                 //sort and remove duplicates
                 std::sort(aStrArr.begin(), aStrArr.end(),&lcl_AuthorComp);
-                myiter aIter = std::unique(aStrArr.begin(), aStrArr.end());
+                auto aIter = std::unique(aStrArr.begin(), aStrArr.end());
                 aStrArr.erase(aIter, aStrArr.end());
 
                 // Also sort the start and end positions. We need to reference
@@ -2376,7 +2374,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
 
                 //aStrArr is sorted
-                myiter aIter = std::lower_bound(aStrArr.begin(),
+                auto aIter = std::lower_bound(aStrArr.begin(),
                         aStrArr.end(), std::pair<OUString,OUString>(rAtn.msOwner,OUString()),
                         &lcl_AuthorComp);
                 OSL_ENSURE(aIter != aStrArr.end() && aIter->first == rAtn.msOwner,

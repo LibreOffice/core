@@ -791,7 +791,6 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
      from a copy of the aOfsNumsXCH.
     */
     std::vector<sal_uInt8> aOfsNumsXCH;
-    typedef std::vector<sal_uInt8>::iterator myIter;
     aOfsNumsXCH.reserve(nMaxLevel);
 
     for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
@@ -814,8 +813,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             }
         }
     }
-    myIter aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
-    myIter aEnd = aOfsNumsXCH.end();
+    auto aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
+    auto aEnd = aOfsNumsXCH.end();
     // #i60633# - suppress access on <aOfsNumsXCH.end()>
     if ( aIter != aEnd )
     {

@@ -880,15 +880,15 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 void SwWW8WrGrf::Write()
 {
     SvStream& rStrm = *rWrt.pDataStrm;
-    myiter aEnd = maDetails.end();
-    for (myiter aIter = maDetails.begin(); aIter != aEnd; ++aIter)
+    auto aEnd = maDetails.end();
+    for (auto aIter = maDetails.begin(); aIter != aEnd; ++aIter)
     {
         sal_uInt32 nPos = rStrm.Tell();                 // align to 4 Bytes
         if( nPos & 0x3 )
             SwWW8Writer::FillCount( rStrm, 4 - ( nPos & 0x3 ) );
 
         bool bDuplicated = false;
-        for (myiter aIter2 = maDetails.begin(); aIter2 != aIter; ++aIter2)
+        for (auto aIter2 = maDetails.begin(); aIter2 != aIter; ++aIter2)
         {
             if (*aIter2 == *aIter)
             {

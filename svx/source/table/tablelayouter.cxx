@@ -505,7 +505,6 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
 
 typedef std::vector< CellRef > MergeableCellVector;
 typedef std::vector< MergeableCellVector > MergeVector;
-typedef std::vector< sal_Int32 > Int32Vector;
 
 
 void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
@@ -516,7 +515,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
         return;
 
     MergeVector aMergedCells( nColCount );
-    Int32Vector aOptimalColumns;
+    std::vector<sal_Int32> aOptimalColumns;
 
     const OUString sOptimalSize("OptimalSize");
 
@@ -591,7 +590,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
         sal_Int32 nLeft = rArea.getWidth() - nCurrentWidth;
         sal_Int32 nDistribute = nLeft / aOptimalColumns.size();
 
-        Int32Vector::iterator iter( aOptimalColumns.begin() );
+        auto iter( aOptimalColumns.begin() );
         while( iter != aOptimalColumns.end() )
         {
             sal_Int32 nOptCol = (*iter++);
@@ -670,7 +669,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
     Reference< XTableRows > xRows( mxTable->getRows() );
 
     MergeVector aMergedCells( nRowCount );
-    Int32Vector aOptimalRows;
+    std::vector<sal_Int32> aOptimalRows;
 
     const OUString sOptimalSize("OptimalSize");
 
@@ -751,7 +750,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
         sal_Int32 nLeft = rArea.getHeight() - nCurrentHeight;
         sal_Int32 nDistribute = nLeft / aOptimalRows.size();
 
-        Int32Vector::iterator iter( aOptimalRows.begin() );
+        auto iter( aOptimalRows.begin() );
         while( iter != aOptimalRows.end() )
         {
             sal_Int32 nOptRow = (*iter++);

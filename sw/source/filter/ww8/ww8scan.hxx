@@ -601,7 +601,6 @@ private:
         == 10     : 18549 pap, 47 chp
         == 5      : 18515 pap, 47 chp
     */
-    typedef std::list<WW8Fkp*>::iterator myiter;
     std::list<WW8Fkp*> maFkpCache;
     enum Limits {eMaxCache = 50000};
 

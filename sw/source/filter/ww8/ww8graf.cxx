@@ -753,9 +753,8 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
     for (size_t nI = m_xCtrlStck->size(); nI > nCurrentCount; --nI)
         m_xCtrlStck->DeleteAndDestroy(nI-1);
 
-    typedef std::deque<Chunk>::iterator myIter;
-    myIter aEnd = aChunks.end();
-    for (myIter aIter = aChunks.begin(); aIter != aEnd; ++aIter)
+    auto aEnd = aChunks.end();
+    for (auto aIter = aChunks.begin(); aIter != aEnd; ++aIter)
     {
         ESelection aSel(GetESelection(*m_pDrawEditEngine, aIter->GetStartPos()-nStartCp,
             aIter->GetEndPos()-nStartCp));
@@ -778,7 +777,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
             m_pDrawEditEngine->QuickInsertText(aString, aSel);
             nChanged = nOrigLen - aString.getLength();
         }
-        for (myIter aIter2 = aIter+1; aIter2 != aEnd; ++aIter2)
+        for (auto aIter2 = aIter+1; aIter2 != aEnd; ++aIter2)
             aIter2->Adjust(nChanged);
     }
 

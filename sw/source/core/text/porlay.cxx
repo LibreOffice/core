@@ -1456,13 +1456,13 @@ sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTextNode& rNode, OUStringBuffe
 {
     assert(rNode.GetText().getLength() == rText.getLength());
 
-    PositionList aList;
+    std::vector<sal_Int32> aList;
     sal_Int32 nHiddenStart;
     sal_Int32 nHiddenEnd;
     sal_Int32 nNumOfHiddenChars = 0;
     GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
-    PositionList::const_reverse_iterator rFirst( aList.end() );
-    PositionList::const_reverse_iterator rLast( aList.begin() );
+    auto rFirst( aList.crbegin() );
+    auto rLast( aList.crend() );
     while ( rFirst != rLast )
     {
         nHiddenEnd = *(rFirst++);
@@ -1488,12 +1488,12 @@ sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTextNode& rNode, OUStringBuffe
 // Takes a SwTextNode and deletes the hidden ranges from the node.
 void SwScriptInfo::DeleteHiddenRanges( SwTextNode& rNode )
 {
-    PositionList aList;
+    std::vector<sal_Int32> aList;
     sal_Int32 nHiddenStart;
     sal_Int32 nHiddenEnd;
     GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
-    PositionList::const_reverse_iterator rFirst( aList.end() );
-    PositionList::const_reverse_iterator rLast( aList.begin() );
+    auto rFirst( aList.crbegin() );
+    auto rLast( aList.crend() );
     while ( rFirst != rLast )
     {
         nHiddenEnd = *(rFirst++);
@@ -1506,7 +1506,7 @@ void SwScriptInfo::DeleteHiddenRanges( SwTextNode& rNode )
 
 bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nPos,
                                            sal_Int32& rnStartPos, sal_Int32& rnEndPos,
-                                           PositionList* pList )
+                                           std::vector<sal_Int32>* pList )
 {
     rnStartPos = COMPLETE_STRING;
     rnEndPos = 0;

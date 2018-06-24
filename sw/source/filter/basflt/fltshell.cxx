@@ -305,7 +305,7 @@ void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
     OSL_ENSURE(nCnt < m_Entries.size(), "Out of range!");
     if (nCnt < m_Entries.size())
     {
-        myEIter aElement = m_Entries.begin() + nCnt;
+        auto aElement = m_Entries.begin() + nCnt;
         m_Entries.erase(aElement);
     }
     //Clear the para end position recorded in reader intermittently for the least impact on loading performance
@@ -377,7 +377,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
         (RES_FLTRATTR_BEGIN <= nAttrId && sal_uInt16(RES_FLTRATTR_END) > nAttrId),
         "Wrong id for attribute");
 
-    myEIter aI = m_Entries.begin();
+    auto aI = m_Entries.begin();
     while (aI != m_Entries.end())
     {
         bool bLastEntry = aI == m_Entries.end() - 1;

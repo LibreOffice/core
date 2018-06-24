@@ -2824,7 +2824,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
     if(m_pForm)
     {
-        for (ctrl_iterator iter = m_aControlList.begin(); iter != m_aControlList.end(); ++iter)
+        for (auto iter = m_aControlList.begin(); iter != m_aControlList.end(); ++iter)
             iter->disposeAndClear();
         //apply current level settings to the form
         for (auto it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
@@ -3027,8 +3027,8 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         const Control* pControl = nullptr;
         const Control* pExchange = nullptr;
 
-        ctrl_const_iterator it = m_aControlList.begin();
-        for( ; it != m_aControlList.end() && m_pActiveCtrl != (*it); ++it )
+        auto it = m_aControlList.cbegin();
+        for( ; it != m_aControlList.cend() && m_pActiveCtrl != (*it); ++it )
         {
             pControl = *it;
 
@@ -3059,7 +3059,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
 
         if(!bPreStartLinkFound && !bPreEndLinkFound)
         {
-            for( ; it != m_aControlList.end(); ++it )
+            for( ; it != m_aControlList.cend(); ++it )
             {
                 pControl = *it;
 
@@ -3119,7 +3119,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
 
     //if the active control is text then insert a new button at the selection
     //else replace the button
-    ctrl_iterator iterActive = std::find(m_aControlList.begin(),
+    auto iterActive = std::find(m_aControlList.begin(),
                                          m_aControlList.end(), m_pActiveCtrl);
 
     assert(iterActive != m_aControlList.end());
@@ -3209,7 +3209,7 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
     if(bInternalCall && TOX_AUTHORITIES == m_pForm->GetTOXType())
         m_pParent->PreTokenButtonRemoved(pDel->GetFormToken());
 
-    ctrl_iterator it = std::find(m_aControlList.begin(), m_aControlList.end(), pDel);
+    auto it = std::find(m_aControlList.begin(), m_aControlList.end(), pDel);
 
     assert(it != m_aControlList.end()); //Control does not exist!
     if (it == m_aControlList.end())
@@ -3221,7 +3221,7 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
     if (it == m_aControlList.begin() || it == m_aControlList.end() - 1)
         return;
 
-    ctrl_iterator itLeft = it, itRight = it;
+    auto itLeft = it, itRight = it;
     --itLeft;
     ++itRight;
     VclPtr<Control> pLeftEdit = *itLeft;
@@ -3247,7 +3247,7 @@ void SwTokenWindow::AdjustPositions()
 {
     if(m_aControlList.size() > 1)
     {
-        ctrl_iterator it = m_aControlList.begin();
+        auto it = m_aControlList.begin();
         Control* pCtrl = it->get();
         ++it;
 
@@ -3334,7 +3334,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
     if(pBtn == m_pLeftScrollWin)
     {
         //find the first completely visible control (left edge visible)
-        for (ctrl_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
+        for (auto it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
         {
             Control *pCtrl = it->get();
 
@@ -3350,7 +3350,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
                 else
                 {
                     //move the left neighbor to the start position
-                    ctrl_iterator itLeft = it;
+                    auto itLeft = it;
                     --itLeft;
                     Control *pLeft = itLeft->get();
 
@@ -3364,7 +3364,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
     else
     {
         //find the first completely visible control (right edge visible)
-        for (ctrl_reverse_iterator it = m_aControlList.rbegin(); it != m_aControlList.rend(); ++it)
+        for (auto it = m_aControlList.rbegin(); it != m_aControlList.rend(); ++it)
         {
             Control *pCtrl = it->get();
 
@@ -3376,7 +3376,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
                 if (it != m_aControlList.rbegin())
                 {
                     //move the right neighbor  to the right edge right aligned
-                    ctrl_reverse_iterator itRight = it;
+                    auto itRight = it;
                     --itRight;
                     Control *pRight = itRight->get();
                     nMove = nSpace - pRight->GetPosPixel().X() - pRight->GetSizePixel().Width();
@@ -3408,7 +3408,7 @@ OUString SwTokenWindow::GetPattern() const
 {
     OUString sRet;
 
-    for (ctrl_const_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
+    for (auto it = m_aControlList.cbegin(); it != m_aControlList.cend(); ++it)
     {
         const Control *pCtrl = *it;
 
@@ -3428,7 +3428,7 @@ bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     bool bRet = false;
 
-    for (ctrl_const_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
+    for (auto it = m_aControlList.cbegin(); it != m_aControlList.cend(); ++it)
     {
         const Control *pCtrl = *it;
 
@@ -3494,18 +3494,18 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit&, rEdit, void)
 
 IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit&, rEdit, void)
 {
-    ctrl_iterator it = std::find(m_aControlList.begin(),m_aControlList.end(),&rEdit);
+    auto it = std::find(m_aControlList.begin(),m_aControlList.end(),&rEdit);
 
     if (it == m_aControlList.end())
         return;
 
-    ctrl_iterator itTest = it;
+    auto itTest = it;
     ++itTest;
 
     if ((it != m_aControlList.begin() && !rEdit.IsNextControl()) ||
         (itTest != m_aControlList.end() && rEdit.IsNextControl()))
     {
-        ctrl_iterator iterFocus = it;
+        auto iterFocus = it;
         rEdit.IsNextControl() ? ++iterFocus : --iterFocus;
 
         Control *pCtrlFocus = iterFocus->get();
@@ -3530,19 +3530,19 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, Control&, rControl, void)
 
 IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
 {
-    ctrl_iterator it = std::find(m_aControlList.begin(),m_aControlList.end(),&rBtn);
+    auto it = std::find(m_aControlList.begin(),m_aControlList.end(),&rBtn);
 
     if (it == m_aControlList.end())
         return;
 
-    ctrl_iterator itTest = it;
+    auto itTest = it;
     ++itTest;
 
     if (!rBtn.IsNextControl() || (itTest != m_aControlList.end() && rBtn.IsNextControl()))
     {
         bool isNext = rBtn.IsNextControl();
 
-        ctrl_iterator iterFocus = it;
+        auto iterFocus = it;
         isNext ? ++iterFocus : --iterFocus;
 
         Control *pCtrlFocus = iterFocus->get();
@@ -3568,7 +3568,7 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, Control&, rControl, void )
 {
     SwTOXButton* pBtn = static_cast<SwTOXButton*>(&rControl);
-    for (ctrl_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
+    for (auto it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
     {
         Control *pControl = it->get();
 
@@ -3615,7 +3615,7 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
     }
 
     sal_uInt32 nIndex = 0;
-    for (ctrl_const_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
+    for (auto it = m_aControlList.cbegin(); it != m_aControlList.cend(); ++it)
     {
         const Control* pControl = *it;
         const SwFormToken& rNewToken = WindowType::EDIT == pControl->GetType()
