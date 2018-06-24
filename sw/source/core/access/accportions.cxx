@@ -724,10 +724,8 @@ bool SwAccessiblePortionData::IsZeroCorePositionData()
 
 bool SwAccessiblePortionData::IsIndexInFootnode(sal_Int32 nIndex)
 {
-    VEC_PAIR_POS::iterator vi =m_vecPairPos.begin();
-    for (;vi != m_vecPairPos.end() ; ++vi)
+    for (const auto & pairPos : m_vecPairPos)
     {
-        const PAIR_POS &pairPos = *vi;
         if(nIndex >= pairPos.first && nIndex < pairPos.second )
         {
             return true;

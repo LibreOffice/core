@@ -51,7 +51,6 @@ private:
     typedef std::vector<EscherShape>::iterator myeiter;
 
     std::vector<short> maDrawHeight;
-    typedef std::vector<short>::iterator myditer;
 
     std::stack<sal_uInt16> maIndexes;
 

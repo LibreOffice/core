@@ -99,12 +99,11 @@ class ModelToViewHelper
         bool m_bVisible;
     };
     typedef std::vector< ConversionMapEntry > ConversionMap;
-    typedef std::vector<sal_Int32> Positions;
 
     ConversionMap m_aMap;
     /// store positions of fields and footnotes for grammar checkers
-    Positions m_FieldPositions;
-    Positions m_FootnotePositions;
+    std::vector<sal_Int32> m_FieldPositions;
+    std::vector<sal_Int32> m_FootnotePositions;
 
     OUString m_aRetText;
 
@@ -163,8 +162,8 @@ public:
     ModelPosition ConvertToModelPosition( sal_Int32 nViewPos ) const;
 
     const OUString& getViewText() const { return m_aRetText; }
-    Positions const& getFieldPositions() const { return m_FieldPositions; }
-    Positions const& getFootnotePositions() const { return m_FootnotePositions;}
+    std::vector<sal_Int32> const& getFieldPositions() const { return m_FieldPositions; }
+    std::vector<sal_Int32> const& getFootnotePositions() const { return m_FootnotePositions;}
 };
 
 #endif

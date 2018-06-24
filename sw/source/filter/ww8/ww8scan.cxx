@@ -3061,7 +3061,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
         pFkp->Reset(GetStartFc());
     else
     {
-        myiter aIter =
+        auto aIter =
             std::find_if(maFkpCache.begin(), maFkpCache.end(), SamePos(nPo));
         if (aIter != maFkpCache.end())
         {
@@ -3111,8 +3111,8 @@ WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTableSt,
 
 WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
 {
-    myiter aEnd = maFkpCache.end();
-    for (myiter aIter = maFkpCache.begin(); aIter != aEnd; ++aIter)
+    auto aEnd = maFkpCache.end();
+    for (auto aIter = maFkpCache.begin(); aIter != aEnd; ++aIter)
         delete *aIter;
     delete pPLCF;
     delete pPCDAttrs;

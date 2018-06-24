@@ -61,8 +61,7 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t m_aFieldPosition;
     Positions_t m_aAttrFieldType;
 
-    typedef std::vector<sal_uInt8> PortionAttrs_t;
-    PortionAttrs_t m_aPortionAttrs;   /// additional portion attributes
+    std::vector<sal_uInt8> m_aPortionAttrs;   /// additional portion attributes
 
     std::unique_ptr<Positions_t> m_pSentences;    /// positions of sentence breaks
 
@@ -168,9 +167,7 @@ public:
     bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
                                sal_Int32& nCoreStart, sal_Int32& nCoreEnd ) const;
 private:
-    typedef std::pair<sal_Int32,sal_Int32> PAIR_POS;
-    typedef std::vector<PAIR_POS> VEC_PAIR_POS;
-    VEC_PAIR_POS m_vecPairPos;
+    std::vector< std::pair<sal_Int32,sal_Int32> > m_vecPairPos;
 };
 
 #endif

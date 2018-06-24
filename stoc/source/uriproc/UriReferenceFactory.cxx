@@ -211,10 +211,8 @@ css::uno::Reference< css::uri::XUriReference > parseGeneric(
         scheme, isHierarchical, hasAuthority, authority, path, hasQuery, query);
 }
 
-typedef std::vector< sal_Int32 > Segments;
-
 void processSegments(
-    Segments & segments,
+    std::vector<sal_Int32> & segments,
     css::uno::Reference< css::uri::XUriReference > const & uriReference,
     bool base, bool processSpecialSegments)
 {
@@ -406,7 +404,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             abs.append(baseUriReference->getAuthority());
         }
         if (uriReference->hasRelativePath()) {
-            Segments segments;
+            std::vector<sal_Int32> segments;
             processSegments(
                 segments, baseUriReference, true, processSpecialBaseSegments);
             processSegments(segments, uriReference, false, true);
@@ -420,8 +418,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             if (slash) {
                 abs.append('/');
             }
-            for (Segments::iterator i(segments.begin()); i != segments.end();
-                 ++i)
+            for (auto i(segments.begin()); i != segments.end(); ++i)
             {
                 if (*i < -1) {
                     OUString segment(

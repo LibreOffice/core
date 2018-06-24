@@ -125,7 +125,6 @@ private:
     SwFltControlStack& operator=(SwFltControlStack const&) = delete;
 
     typedef std::deque<std::unique_ptr<SwFltStackEntry>> Entries;
-    typedef Entries::iterator myEIter;
     Entries m_Entries;
 
     sal_uLong nFieldFlags;

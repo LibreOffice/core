@@ -216,8 +216,8 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
  */
 sal_uLong wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 {
-    myditer aIter = maDrawHeight.begin();
-    myditer aEnd = maDrawHeight.end();
+    auto aIter = maDrawHeight.begin();
+    auto aEnd = maDrawHeight.end();
 
     while (aIter != aEnd)
     {

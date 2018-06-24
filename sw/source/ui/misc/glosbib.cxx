@@ -138,8 +138,7 @@ void SwGlossaryGroupDlg::Apply()
 
     OUString aActGroup = SwGlossaryDlg::GetCurrGroup();
 
-    for (OUVector_t::const_iterator it(m_RemovedArr.begin());
-            it != m_RemovedArr.end(); ++it)
+    for (auto it(m_RemovedArr.cbegin()); it != m_RemovedArr.cend(); ++it)
     {
         const OUString sDelGroup = it->getToken(0, '\t');
         if( sDelGroup == aActGroup )
@@ -166,8 +165,7 @@ void SwGlossaryGroupDlg::Apply()
     }
 
     //don't rename before there was one
-    for (OUVector_t::const_iterator it(m_RenamedArr.begin());
-            it != m_RenamedArr.end(); ++it)
+    for (auto it(m_RenamedArr.cbegin()); it != m_RenamedArr.cend(); ++it)
     {
         OUString const sOld(it->getToken(0, RENAME_TOKEN_DELIM));
         OUString sNew(it->getToken(1, RENAME_TOKEN_DELIM));
@@ -178,8 +176,7 @@ void SwGlossaryGroupDlg::Apply()
             sCreatedGroup = sNew;
         }
     }
-    for (OUVector_t::const_iterator it(m_InsertedArr.begin());
-            it != m_InsertedArr.end(); ++it)
+    for (auto it(m_InsertedArr.cbegin()); it != m_InsertedArr.cend(); ++it)
     {
         OUString sNewGroup = *it;
         OUString sNewTitle = sNewGroup.getToken(0, GLOS_DELIM);
@@ -246,8 +243,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton, void )
     OUString const sEntry(pUserData->sGroupName);
     // if the name to be deleted is among the new ones - get rid of it
     bool bDelete = true;
-    for (OUVector_t::iterator it(m_InsertedArr.begin());
-            it != m_InsertedArr.end(); ++it)
+    for (auto it(m_InsertedArr.begin()); it != m_InsertedArr.end(); ++it)
     {
         if (*it == sEntry)
         {
@@ -260,8 +256,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton, void )
     // it should probably be renamed?
     if(bDelete)
     {
-        for (OUVector_t::iterator it(m_RenamedArr.begin());
-                it != m_RenamedArr.end(); ++it)
+        for (auto it(m_RenamedArr.begin()); it != m_RenamedArr.end(); ++it)
         {
             if (it->getToken(0, RENAME_TOKEN_DELIM) == sEntry)
             {
@@ -297,8 +292,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, Button*, void)
 
     // if the name to be renamed is among the new ones - replace
     bool bDone = false;
-    for (OUVector_t::iterator it(m_InsertedArr.begin());
-            it != m_InsertedArr.end(); ++it)
+    for (auto it(m_InsertedArr.begin()); it != m_InsertedArr.end(); ++it)
     {
         if (*it == sEntry)
         {
@@ -391,8 +385,7 @@ bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
     // as well! Because for non existing region names ReadOnly issues
     // true.
 
-    for (OUVector_t::const_iterator it(m_InsertedArr.begin());
-            it != m_InsertedArr.end(); ++it)
+    for (auto it(m_InsertedArr.cbegin()); it != m_InsertedArr.cend(); ++it)
     {
         if (*it == rGroup)
         {

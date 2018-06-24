@@ -1376,7 +1376,6 @@ private:
     WW8Export& rWrt;
 
     std::vector<GraphicDetails> maDetails;
-    typedef std::vector<GraphicDetails>::iterator myiter;
     sal_uInt16 mnIdx;       // index in file positions
 
     static void WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,

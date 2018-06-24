@@ -31,7 +31,6 @@ class SwTextNode;
 class SwTextFrame;
 class Point;
 class MultiSelection;
-typedef std::vector< sal_Int32 > PositionList;
 enum class SwFontScript;
 namespace sw { struct MergedPara; }
 
@@ -222,7 +221,7 @@ public:
 */
     static bool GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nPos,
                                         sal_Int32& rnStartPos, sal_Int32& rnEndPos,
-                                        PositionList* pList = nullptr );
+                                        std::vector<sal_Int32>* pList = nullptr );
     bool GetBoundsOfHiddenRange(TextFrameIndex nPos, TextFrameIndex & rnStartPos,
                                 TextFrameIndex & rnEndPos) const;
 
