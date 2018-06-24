@@ -43,7 +43,6 @@ PaletteManager::PaletteManager() :
     mnCurrentPalette(0),
     mnColorCount(0),
     mpBtnUpdater(nullptr),
-    mLastColor(COL_AUTO),
     maColorSelectFunction(PaletteManager::DispatchColorCommand),
     m_context(comphelper::getProcessComponentContext())
 {
@@ -307,16 +306,6 @@ long PaletteManager::GetRecentColorCount()
     return maRecentColors.size();
 }
 
-const Color& PaletteManager::GetLastColor()
-{
-    return mLastColor;
-}
-
-void PaletteManager::SetLastColor(const Color& rLastColor)
-{
-    mLastColor = rLastColor;
-}
-
 void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& rName, bool bFront)
 {
     auto itColor = std::find_if(maRecentColors.begin(),
@@ -348,8 +337,6 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
 void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
 {
     mpBtnUpdater = pBtnUpdater;
-    if (mpBtnUpdater)
-        mLastColor = mpBtnUpdater->GetCurrentColor();
 }
 
 void PaletteManager::SetColorSelectFunction(const std::function<void(const OUString&, const NamedColor&)>& aColorSelectFunction)
@@ -366,12 +353,12 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
     aColorDlg.SetMode(svtools::ColorPickerMode::Modify);
     if (aColorDlg.Execute(pParent) == RET_OK)
     {
+        Color aLastColor = aColorDlg.GetColor();
         if (mpBtnUpdater)
-            mpBtnUpdater->Update( aColorDlg.GetColor() );
-        mLastColor = aColorDlg.GetColor();
-        OUString sColorName = ("#" + mLastColor.AsRGBHexString().toAsciiUpperCase());
-        NamedColor aNamedColor = std::make_pair(mLastColor, sColorName);
-        AddRecentColor(mLastColor, sColorName);
+            mpBtnUpdater->Update(aLastColor);
+        OUString sColorName = ("#" + aLastColor.AsRGBHexString().toAsciiUpperCase());
+        NamedColor aNamedColor = std::make_pair(aLastColor, sColorName);
+        AddRecentColor(aLastColor, sColorName);
         maColorSelectFunction(aCommandCopy, aNamedColor);
     }
 }
