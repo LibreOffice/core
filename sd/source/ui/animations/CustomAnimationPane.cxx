@@ -1759,8 +1759,8 @@ void CustomAnimationPane::onAdd()
         maViewSelection >>= xShapes;
 
         sal_Int32 nCount = xShapes->getCount();
-        sal_Int32 nIndex;
-        for( nIndex = 0; nIndex < nCount; nIndex++ )
+        aTargets.reserve( nCount );
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
             Any aTarget( xShapes->getByIndex( nIndex ) );
             aTargets.push_back( aTarget );
