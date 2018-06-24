@@ -15,10 +15,40 @@
 
 #include <comphelper/string.hxx>
 
+#include <orcusfilters.hxx>
+#include <orcus/xml_structure_tree.hpp>
+#include <orcus/xml_namespace.hpp>
+#include <filter.hxx>
+
 #include <vcl/lstbox.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
+#include <svtools/treelistbox.hxx>
+
+#include <anyrefdg.hxx>
+#include <orcusxml.hxx>
+
+#include <set>
+#include <memory>
+#include <vector>
+
+#include <unotools/pathoptions.hxx>
+#include <tools/urlobj.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
+#include <sfx2/objsh.hxx>
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 constexpr int MENU_START = 0;
 constexpr int MENU_COLUMN = 1;
+
+class ScOrcusXMLContext;
 
 class ScDataProviderBaseControl : public VclContainer,
                                     public VclBuilderContainer
@@ -28,6 +58,11 @@ class ScDataProviderBaseControl : public VclContainer,
     VclPtr<Edit> maEditURL;
     VclPtr<Edit> maEditID;
     VclPtr<PushButton> mpApplyBtn;
+
+    VclPtr<VclContainer> mpMapGrid;
+
+    VclPtr<SvTreeListBox> mpLbTree;
+    VclPtr<PushButton> mpXmlImportBtn;
 
     bool mbDirty;
     OUString maOldProvider;
@@ -40,8 +75,34 @@ class ScDataProviderBaseControl : public VclContainer,
     DECL_LINK(IDEditHdl, Edit&, void);
     DECL_LINK(URLEditHdl, Edit&, void);
     DECL_LINK(ApplyBtnHdl, Button*, void);
+    DECL_LINK(mpXmlImportBtnHdl, Button*, void);
 
     void updateApplyBtn(bool bValidConfig);
+    void LoadSourceFileStructure(const OUString& rPath);
+    void TreeItemSelected();
+    void DefaultElementSelected(SvTreeListEntry& rEntry);
+    void RepeatElementSelected(SvTreeListEntry& rEntry);
+    void AttributeSelected(SvTreeListEntry& rEntry);
+
+    void SetNonLinkable();
+    void SetSingleLinkable();
+    void SetRangeLinkable();
+    void SelectAllChildEntries(SvTreeListEntry& rEntry);
+
+    bool IsParentDirty(SvTreeListEntry* pEntry) const;
+
+    bool IsChildrenDirty(SvTreeListEntry* pEntry) const;
+
+    ScOrcusXMLTreeParam maXMLParam;
+    std::set<const SvTreeListEntry*> maCellLinks;
+    std::set<const SvTreeListEntry*> maRangeLinks;
+    std::vector<SvTreeListEntry*> maHighlightedEntries;
+    SvTreeListEntry* mpCurRefEntry;
+    std::unique_ptr<ScOrcusXMLContext> mpXMLContext;
+    ScDocument* mpDoc;
+
+    DECL_LINK(TreeItemSelectHdl, SvTreeListBox*, void);
+
 
 public:
     ScDataProviderBaseControl(vcl::Window* pParent, const Link<Window*, void>& rImportCallback);
@@ -53,8 +114,159 @@ public:
 
     void isValid();
 
+
     sc::ExternalDataSource getDataSource(ScDocument* pDoc);
 };
+
+namespace {
+
+bool isAttribute(const SvTreeListEntry& rEntry)
+{
+    const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
+    if (!pUserData)
+        return false;
+
+    return pUserData->meType == ScOrcusXMLTreeParam::Attribute;
+}
+
+OUString getXPath(
+    const SvTreeListBox& rTree, const SvTreeListEntry& rEntry, std::vector<size_t>& rNamespaces)
+{
+    OUStringBuffer aBuf;
+    for (const SvTreeListEntry* p = &rEntry; p; p = rTree.GetParent(p))
+    {
+        const SvLBoxItem* pItem = p->GetFirstItem(SvLBoxItemType::String);
+        if (!pItem)
+            continue;
+
+        // Collect used namespace.
+        const ScOrcusXMLTreeParam::EntryData* pData = ScOrcusXMLTreeParam::getUserData(*p);
+        if (pData)
+            rNamespaces.push_back(pData->mnNamespaceID);
+
+        const SvLBoxString* pStr = static_cast<const SvLBoxString*>(pItem);
+        aBuf.insert(0, pStr->GetText());
+        aBuf.insert(0, isAttribute(*p) ? '@' : '/');
+    }
+
+    return aBuf.makeStringAndClear();
+}
+
+/**
+ * Pick only the leaf elements.
+ */
+void getFieldLinks(
+    ScOrcusImportXMLParam::RangeLink& rRangeLink, std::vector<size_t>& rNamespaces,
+    const SvTreeListBox& rTree, const SvTreeListEntry& rEntry)
+{
+    const SvTreeListEntries& rChildren = rEntry.GetChildEntries();
+    if (rChildren.empty())
+        // No more children.  We're done.
+        return;
+
+    for (auto const& it : rChildren)
+    {
+        const SvTreeListEntry& rChild = *it;
+        OUString aPath = getXPath(rTree, rChild, rNamespaces);
+        const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rChild);
+
+        if (pUserData && pUserData->mbLeafNode)
+        {
+            if (!aPath.isEmpty())
+                // XPath should never be empty anyway, but it won't hurt to check...
+                rRangeLink.maFieldPaths.push_back(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
+        }
+
+        // Walk recursively.
+        getFieldLinks(rRangeLink, rNamespaces, rTree, rChild);
+    }
+}
+
+void removeDuplicates(std::vector<size_t>& rArray)
+{
+    std::sort(rArray.begin(), rArray.end());
+    std::vector<size_t>::iterator it = std::unique(rArray.begin(), rArray.end());
+    rArray.erase(it, rArray.end());
+}
+
+
+}
+
+void ScDataProviderBaseControl::SetNonLinkable()
+{
+    mpMapGrid->Disable();
+}
+
+void ScDataProviderBaseControl::SetSingleLinkable()
+{
+    mpMapGrid->Enable();
+}
+
+void ScDataProviderBaseControl::SetRangeLinkable()
+{
+    mpMapGrid->Enable();
+}
+
+void ScDataProviderBaseControl::SelectAllChildEntries(SvTreeListEntry& rEntry)
+{
+    SvTreeListEntries& rChildren = rEntry.GetChildEntries();
+    for (auto const& it : rChildren)
+    {
+        SvTreeListEntry& r = *it;
+        SelectAllChildEntries(r); // select recursively.
+        SvViewDataEntry* p = mpLbTree->GetViewDataEntry(&r);
+        p->SetHighlighted(true);
+        mpLbTree->Invalidate();
+        maHighlightedEntries.push_back(&r);
+    }
+}
+
+bool ScDataProviderBaseControl::IsChildrenDirty(SvTreeListEntry* pEntry) const
+{
+    for (SvTreeListEntry* pChild = mpLbTree->FirstChild(pEntry); pChild; pChild = SvTreeListBox::NextSibling(pChild))
+    {
+        ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
+        OSL_ASSERT(pUserData);
+        if (pUserData->maLinkedPos.IsValid())
+            // Already linked.
+            return true;
+
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
+            // We don't support linking of nested repeat elements (yet).
+            return true;
+
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementDefault)
+        {
+            // Check recursively.
+            if (IsChildrenDirty(pChild))
+                return true;
+        }
+    }
+
+    return false;
+}
+
+bool ScDataProviderBaseControl::IsParentDirty(SvTreeListEntry* pEntry) const
+{
+    SvTreeListEntry* pParent = mpLbTree->GetParent(pEntry);
+    while (pParent)
+    {
+        ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
+        assert(pUserData);
+        if (pUserData->maLinkedPos.IsValid())
+        {
+            // This parent is already linked.
+            return true;
+        }
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
+        {
+            // This is a repeat element.
+            return true;
+        }
+        pParent = mpLbTree->GetParent(pParent);
+    }
+    return false;
+}
 
 ScDataProviderBaseControl::ScDataProviderBaseControl(vcl::Window* pParent,
         const Link<Window*, void>& rImportCallback):
@@ -68,6 +280,12 @@ ScDataProviderBaseControl::ScDataProviderBaseControl(vcl::Window* pParent,
     get(maProviderList, "provider_lst");
     get(maEditURL, "ed_url");
     get(maEditID, "ed_id");
+     get(mpMapGrid, "mapgrid");
+    get(mpLbTree, "tree");
+    Size aTreeSize(mpLbTree->LogicToPixel(Size(130, 120), MapMode(MapUnit::MapAppFont)));
+    mpLbTree->set_width_request(aTreeSize.Width());
+    mpLbTree->set_height_request(aTreeSize.Height());
+    get(mpXmlImportBtn, "xml_import");
 
     auto aDataProvider = sc::DataProviderFactory::getDataProviders();
     for (auto& rDataProvider : aDataProvider)
@@ -89,6 +307,9 @@ ScDataProviderBaseControl::ScDataProviderBaseControl(vcl::Window* pParent,
     mpApplyBtn->SetModeImage(Image(BitmapEx("sc/res/xml_element.png")));
     mpApplyBtn->Show();
     mpApplyBtn->SetClickHdl(LINK(this, ScDataProviderBaseControl, ApplyBtnHdl));
+
+    mpLbTree->SetSelectHdl(LINK(this, ScDataProviderBaseControl, TreeItemSelectHdl));
+
     SetSizePixel(GetOptimalSize());
     isValid();
 }
@@ -98,6 +319,212 @@ ScDataProviderBaseControl::~ScDataProviderBaseControl()
     disposeOnce();
 }
 
+void ScDataProviderBaseControl::LoadSourceFileStructure(const OUString& rPath)
+{
+    ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+    if (!pOrcus)
+        return;
+
+    mpXMLContext.reset(pOrcus->createXMLContext(*mpDoc, rPath));
+    if (!mpXMLContext)
+        return;
+
+    mpXMLContext->loadXMLStructure(*mpLbTree, maXMLParam);
+}
+
+
+namespace {
+
+class UnhighlightEntry
+{
+    SvTreeListBox& mrTree;
+public:
+    explicit UnhighlightEntry(SvTreeListBox& rTree) : mrTree(rTree) {}
+
+    void operator() (const SvTreeListEntry* p)
+    {
+        SvViewDataEntry* pView = mrTree.GetViewDataEntry(p);
+        if (!pView)
+            return;
+
+        pView->SetHighlighted(false);
+        mrTree.Invalidate();
+    }
+};
+
+/**
+ * When the current entry is a direct or indirect child of a mappable
+ * repeat element entry, that entry becomes the reference entry.
+ * Otherwise the reference entry equals the current entry.  A reference
+ * entry is the entry that stores mapped cell position.
+ */
+SvTreeListEntry* getReferenceEntry(const SvTreeListBox& rTree, SvTreeListEntry* pCurEntry)
+{
+    SvTreeListEntry* pParent = rTree.GetParent(pCurEntry);
+    SvTreeListEntry* pRefEntry = nullptr;
+    while (pParent)
+    {
+        ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
+        OSL_ASSERT(pUserData);
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
+        {
+            // This is a repeat element.
+            if (pRefEntry)
+            {
+                // Second repeat element encountered. Not good.
+                return pCurEntry;
+            }
+
+            pRefEntry = pParent;
+        }
+        pParent = rTree.GetParent(pParent);
+    }
+
+    return pRefEntry ? pRefEntry : pCurEntry;
+}
+
+}
+
+
+void ScDataProviderBaseControl::TreeItemSelected()
+{
+    SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
+    if (!pEntry)
+        return;
+
+    if (!maHighlightedEntries.empty())
+    {
+        // Remove highlights from all previously highlighted entries (if any).
+        std::for_each(maHighlightedEntries.begin(), maHighlightedEntries.end(), UnhighlightEntry(*mpLbTree));
+        maHighlightedEntries.clear();
+    }
+
+    mpCurRefEntry = getReferenceEntry(*mpLbTree, pEntry);
+
+    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mpCurRefEntry);
+    OSL_ASSERT(pUserData);
+
+    //maRangeLinks.insert(mpCurRefEntry);
+    //maCellLinks.insert(mpCurRefEntry);
+
+    switch (pUserData->meType)
+    {
+        case ScOrcusXMLTreeParam::Attribute:
+            AttributeSelected(*mpCurRefEntry);
+        break;
+        case ScOrcusXMLTreeParam::ElementDefault:
+            DefaultElementSelected(*mpCurRefEntry);
+        break;
+        case ScOrcusXMLTreeParam::ElementRepeat:
+            RepeatElementSelected(*mpCurRefEntry);
+        break;
+        default:
+            ;
+    }
+}
+
+
+
+void ScDataProviderBaseControl::AttributeSelected(SvTreeListEntry& rEntry)
+{
+    // Check all its parent elements and make sure non of them are linked nor
+    // repeat elements.  In attribute's case, it's okay to have the immediate
+    // parent element linked (but not range-linked).
+
+    SvTreeListEntry* pParent = mpLbTree->GetParent(&rEntry);
+    OSL_ASSERT(pParent); // attribute should have a parent element.
+
+    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
+    OSL_ASSERT(pUserData);
+    if (pUserData->maLinkedPos.IsValid() && pUserData->mbRangeParent)
+    {
+        // Parent element is range-linked.  Bail out.
+        SetNonLinkable();
+        return;
+    }
+
+    if (IsParentDirty(&rEntry))
+    {
+        SetNonLinkable();
+        return;
+    }
+
+    SetSingleLinkable();
+}
+
+void ScDataProviderBaseControl::RepeatElementSelected(SvTreeListEntry& rEntry)
+{
+    // Check all its parents first.
+
+    if (IsParentDirty(&rEntry))
+    {
+        SetNonLinkable();
+        return;
+    }
+
+    // Check all its child elements / attributes and make sure non of them are
+    // linked or repeat elements.  In the future we will support range linking
+    // of repeat element who has another repeat elements. But first I need to
+    // support that scenario in orcus.
+
+    if (IsChildrenDirty(&rEntry))
+    {
+        SetNonLinkable();
+        return;
+    }
+
+    SvViewDataEntry* p = mpLbTree->GetViewDataEntry(&rEntry);
+    if (!p->IsHighlighted())
+    {
+        // Highlight the entry if not highlighted already.  This can happen
+        // when the current entry is a child entry of a repeat element entry.
+        p->SetHighlighted(true);
+        mpLbTree->Invalidate();
+        maHighlightedEntries.push_back(&rEntry);
+    }
+
+    SelectAllChildEntries(rEntry);
+    SetRangeLinkable();
+}
+
+void ScDataProviderBaseControl::DefaultElementSelected(SvTreeListEntry& rEntry)
+{
+
+    if (mpLbTree->GetChildCount(&rEntry) > 0)
+    {
+        // Only an element with no child elements (leaf element) can be linked.
+        bool bHasChild = false;
+        for (SvTreeListEntry* pChild = mpLbTree->FirstChild(&rEntry); pChild; pChild = SvTreeListBox::NextSibling(pChild))
+        {
+            ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
+            OSL_ASSERT(pUserData);
+            if (pUserData->meType != ScOrcusXMLTreeParam::Attribute)
+            {
+                // This child is not an attribute. Bail out.
+                bHasChild = true;
+                break;
+            }
+        }
+
+        if (bHasChild)
+        {
+            SetNonLinkable();
+            return;
+        }
+    }
+
+    // Check all its parents and make sure non of them are range-linked nor
+    // repeat elements.
+    if (IsParentDirty(&rEntry))
+    {
+        SetNonLinkable();
+        return;
+    }
+
+    SetSingleLinkable();
+}
+
+
 void ScDataProviderBaseControl::dispose()
 {
     maEditID.clear();
@@ -105,6 +532,9 @@ void ScDataProviderBaseControl::dispose()
     maProviderList.clear();
     mpApplyBtn.disposeAndClear();
     maGrid.clear();
+    mpMapGrid.clear();
+    mpLbTree.clear();
+    mpXmlImportBtn.disposeAndClear();
     disposeBuilder();
     VclContainer::dispose();
 }
@@ -149,6 +579,86 @@ sc::ExternalDataSource ScDataProviderBaseControl::getDataSource(ScDocument* pDoc
 
     OUString aID = maEditID->GetText();
     aSource.setID(aID);
+
+    if(aProvider == "org.libreoffice.calc.xml"){
+
+        OUString aRefStr = "A1";
+
+        // Check if the address is valid
+        ScAddress aLinkedPos;
+        ScRefFlags nRes = aLinkedPos.Parse(aRefStr, pDoc, pDoc->GetAddressConvention());
+        bool bValid = ( (nRes & ScRefFlags::VALID) == ScRefFlags::VALID );
+
+
+        if (!bValid)
+            aLinkedPos.SetInvalid();
+
+        OSL_ASSERT(mpCurRefEntry);
+
+        ScOrcusXMLTreeParam::EntryData* pUserData1 = ScOrcusXMLTreeParam::getUserData(*mpCurRefEntry);
+
+
+        OSL_ASSERT(pUserData1);
+
+        bool bRepeatElem = pUserData1->meType == ScOrcusXMLTreeParam::ElementRepeat;
+        pUserData1->maLinkedPos = aLinkedPos;
+        pUserData1->mbRangeParent = aLinkedPos.IsValid() && bRepeatElem;
+
+        if (bRepeatElem)
+        {
+            if (bValid)
+                maRangeLinks.insert(mpCurRefEntry);
+            else
+                maRangeLinks.erase(mpCurRefEntry);
+        }
+        else
+        {
+            if (bValid)
+                maCellLinks.insert(mpCurRefEntry);
+            else
+                maCellLinks.erase(mpCurRefEntry);
+        }
+
+       ScOrcusImportXMLParam aParam;
+
+        // Convert single cell links.
+        {
+            std::set<const SvTreeListEntry*>::const_iterator it = maCellLinks.begin(), itEnd = maCellLinks.end();
+            for (; it != itEnd; ++it)
+            {
+                const SvTreeListEntry& rEntry = **it;
+                OUString aPath = getXPath(*mpLbTree, rEntry, aParam.maNamespaces);
+                const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
+
+                aParam.maCellLinks.emplace_back(
+                        pUserData->maLinkedPos, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
+            }
+        }
+
+        // Convert range links. For now, an element with range link takes all its
+        // child elements as its fields.
+        {
+            std::set<const SvTreeListEntry*>::const_iterator it = maRangeLinks.begin(), itEnd = maRangeLinks.end();
+            for (; it != itEnd; ++it)
+            {
+                const SvTreeListEntry& rEntry = **it;
+                const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
+
+                ScOrcusImportXMLParam::RangeLink aRangeLink;
+                aRangeLink.maPos = pUserData->maLinkedPos;
+
+                // Go through all its child elements.
+                getFieldLinks(aRangeLink, aParam.maNamespaces, *mpLbTree, rEntry);
+
+                aParam.maRangeLinks.push_back(aRangeLink);
+            }
+        }
+
+        // Remove duplicate namespace IDs.
+        removeDuplicates(aParam.maNamespaces);
+
+        aSource.setXMLImportParam(aParam);
+    }
     return aSource;
 }
 
@@ -183,6 +693,17 @@ IMPL_LINK_NOARG(ScDataProviderBaseControl, ProviderSelectHdl, ListBox&, void)
     maOldProvider = maProviderList->GetSelectedEntry();
 }
 
+
+IMPL_LINK_NOARG(ScDataProviderBaseControl, mpXmlImportBtnHdl, Button*, void)
+{
+    maImportCallback.Call(this);
+}
+
+IMPL_LINK_NOARG(ScDataProviderBaseControl, TreeItemSelectHdl, SvTreeListBox*, void)
+{
+    TreeItemSelected();
+}
+
 IMPL_LINK_NOARG(ScDataProviderBaseControl, IDEditHdl, Edit&, void)
 {
     isValid();
@@ -199,9 +720,24 @@ IMPL_LINK_NOARG(ScDataProviderBaseControl, URLEditHdl, Edit&, void)
 
 IMPL_LINK_NOARG(ScDataProviderBaseControl, ApplyBtnHdl, Button*, void)
 {
-    mbDirty = false;
-    updateApplyBtn(true);
-    maImportCallback.Call(this);
+     OUString aProvider = maProviderList->GetSelectedEntry();
+    if(aProvider != "org.libreoffice.calc.xml"){
+        mbDirty = false;
+        updateApplyBtn(true);
+        maImportCallback.Call(this);
+    }
+    else {
+        OUString aURL = maEditURL->GetText();
+        LoadSourceFileStructure(aURL);
+        mpXmlImportBtn->SetQuickHelpText("Import XML");
+        mpXmlImportBtn->SetControlForeground(COL_GREEN);
+        mpXmlImportBtn->SetControlBackground(COL_GREEN);
+        mpXmlImportBtn->SetBackground(Wallpaper(COL_LIGHTGREEN));
+        mpXmlImportBtn->SetModeImage(Image(BitmapEx("sc/res/xml_element.png")));
+        mpXmlImportBtn->Show();
+        mpXmlImportBtn->SetClickHdl(LINK(this, ScDataProviderBaseControl, mpXmlImportBtnHdl));
+
+    }
 }
 
 namespace {
