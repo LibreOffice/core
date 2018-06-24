@@ -161,3 +161,6 @@ sc/uiconfig/scalc/ui/xmlsourcedialog.ui://GtkLabel[@id='label5'] orphan-label
 sc/uiconfig/scalc/ui/xmlsourcedialog.ui://foruilo-RefEdit[@id='edit'] no-labelled-by
 sc/uiconfig/scalc/ui/ztestdialog.ui://foruilo-RefEdit[@id='variable2-range-edit'] duplicate-mnemonic
 sc/uiconfig/scalc/ui/ztestdialog.ui://foruilo-RefEdit[@id='output-range-edit'] no-labelled-by
+sc/uiconfig/scalc/ui/dataproviderentry.ui://GtkEntry[@id='ed_url'] no-labelled-by
+sc/uiconfig/scalc/ui/dataproviderentry.ui://GtkEntry[@id='ed_id'] no-labelled-by
+sc/uiconfig/scalc/ui/dataproviderentry.ui://GtkButton[@id='xml_import'] button-no-label
