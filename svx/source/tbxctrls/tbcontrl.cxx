@@ -2850,7 +2850,6 @@ void SvxColorToolBoxControl::EnsurePaletteManager()
     {
         m_xPaletteManager.reset(new PaletteManager);
         m_xPaletteManager->SetBtnUpdater(m_xBtnUpdater.get());
-        m_xPaletteManager->SetLastColor(m_xBtnUpdater->GetCurrentColor());
     }
 }
 
@@ -2892,8 +2891,6 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 {
     m_xBtnUpdater->Update(rColor.first);
-    if (m_xPaletteManager)
-        m_xPaletteManager->SetLastColor(rColor.first);
 }
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -2920,8 +2917,6 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
             rEvent.State >>= aColor;
         }
         m_xBtnUpdater->Update( aColor );
-        if (m_xPaletteManager)
-            m_xPaletteManager->SetLastColor(aColor);
     }
     else if ( rEvent.State >>= bValue )
         pToolBox->CheckItem( nId, bValue );
@@ -2937,6 +2932,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     }
 
     OUString aCommand = m_aCommandURL;
+    Color aColor = m_xBtnUpdater->GetCurrentColor();
 
     switch( m_nSlotId )
     {
@@ -2949,14 +2945,12 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
             break;
     }
 
-    EnsurePaletteManager();
-    Color aColor = m_xPaletteManager->GetLastColor();
-
     auto aArgs( comphelper::InitPropertySequence( {
         { m_aCommandURL.copy(5), css::uno::makeAny(aColor) }
     } ) );
     dispatchCommand( aCommand, aArgs );
 
+    EnsurePaletteManager();
     OUString sColorName = ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
     m_xPaletteManager->AddRecentColor(aColor, sColorName);
 }
@@ -2980,8 +2974,7 @@ void SvxColorToolBoxControl::updateImage()
     if ( !!aImage )
     {
         pToolBox->SetItemImage( nId, aImage );
-        EnsurePaletteManager();
-        m_xBtnUpdater->Update(m_xPaletteManager->GetLastColor(), true);
+        m_xBtnUpdater->Update(m_xBtnUpdater->GetCurrentColor(), true);
     }
 }
 
@@ -3293,7 +3286,6 @@ void SvxColorListBox::EnsurePaletteManager()
     {
         m_xPaletteManager.reset(new PaletteManager);
         m_xPaletteManager->SetColorSelectFunction(std::ref(m_aColorWrapper));
-        m_xPaletteManager->SetLastColor(m_aSelectedColor.first);
     }
 }
 
@@ -3408,8 +3400,6 @@ void SvxColorListBox::createColorWindow()
 void SvxColorListBox::Selected(const NamedColor& rColor)
 {
     ShowPreview(rColor);
-    if (m_xPaletteManager)
-        m_xPaletteManager->SetLastColor(rColor.first);
     m_aSelectedColor = rColor;
     if (m_aSelectedLink.IsSet())
         m_aSelectedLink.Call(*this);
