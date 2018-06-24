@@ -209,6 +209,7 @@ public:
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
     void testOpenDocumentAsReadOnly();
+    void testNumberFormatODS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -317,6 +318,7 @@ public:
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
+    CPPUNIT_TEST(testNumberFormatODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4046,6 +4048,47 @@ void ScExportTest::testOpenDocumentAsReadOnly()
     CPPUNIT_ASSERT(xDocSh2->IsSecurityOptOpenReadOnly());
     xDocSh->DoClose();
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testNumberFormatODS()
+{
+    ScDocShellRef xDocSh = loadDoc( "testNumberFormats.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc testNumberFormats.ods", xDocSh.is() );
+
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    sal_uInt32 nNumberFormat;
+    const sal_Int32 nCountFormats = 18;
+    const OUString aExpectedFormatStr[nCountFormats] = {
+                "\"format=\"000000",
+                "\"format=\"??????",
+                "\"format=\"??0000",
+                "\"format=\"000,000",
+                "\"format=\"???,???",
+                "\"format=\"??0,000",
+                "\"format=\"000\" \"?/?",
+                "\"format=\"???\" \"?/?",
+                "\"format=\"?00\" \"?/?",
+                "\"format=\"0,000\" \"?/?",
+                "\"format=\"?,???\" \"?/?",
+                "\"format=\"?,?00\" \"?/?",
+                "\"format=\"0.000E+00",
+                "\"format=\"?.???E+00",
+                "\"format=\"?.0??E+00",
+                "\"format=\"000E+00",
+                "\"format=\"???E+00",
+                "\"format=\"?00E+00" };
+    for ( sal_Int32 i = 0 ; i < nCountFormats ; i++)
+    {
+        rDoc.GetNumberFormat(i+1, 2, 0, nNumberFormat);
+        const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);
+        const OUString& rFormatStr = pNumberFormat->GetFormatstring();
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number format modified during export/import", aExpectedFormatStr[i], rFormatStr );
+    }
+    OUString aCSVPath;
+    createCSVPath( "testNumberFormats.", aCSVPath );
+    testCondFile(aCSVPath, &rDoc, 0, false); // comma is thousand separator and cannot be used as delimiter
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
