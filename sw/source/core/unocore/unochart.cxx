@@ -434,7 +434,7 @@ static bool GetSubranges( const OUString &rRangeRepresentation,
         uno::Sequence< OUString > &rSubRanges, bool bNormalize )
 {
     bool bRes = true;
-    sal_Int32 nLen = comphelper::string::getTokenCount(rRangeRepresentation, ';');
+    const sal_Int32 nLen = comphelper::string::getTokenCount(rRangeRepresentation, ';');
     uno::Sequence< OUString > aRanges( nLen );
 
     sal_Int32 nCnt = 0;
@@ -1685,15 +1685,16 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
     if (bDisposed)
         throw lang::DisposedException();
 
+    if (rRangeRepresentation.isEmpty())
+        return OUString();
+
     OUString aRes;
 
     // multiple ranges are delimited by a ';' like in
     // "Table1.A1:A4;Table1.C2:C5" the same table must be used in all ranges!
-    sal_Int32 nNumRanges = comphelper::string::getTokenCount(rRangeRepresentation, ';');
     SwTable* pFirstFoundTable = nullptr;  // to check that only one table will be used
     sal_Int32 nPos = 0;
-    for (sal_Int32 i = 0;  i < nNumRanges;  ++i)
-    {
+    do {
         const OUString aRange( rRangeRepresentation.getToken(0, ';', nPos) );
         SwFrameFormat    *pTableFormat  = nullptr; // pointer to table format
         std::shared_ptr<SwUnoCursor> pCursor;
@@ -1743,6 +1744,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
             aRes += " ";
         aRes += aTmp;
     }
+    while (nPos>0);
 
     return aRes;
 }
@@ -1753,14 +1755,16 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
     if (bDisposed)
         throw lang::DisposedException();
 
+    if (rXMLRange.isEmpty())
+        return OUString();
+
     OUString aRes;
 
     // multiple ranges are delimited by a ' ' like in
     // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
-    sal_Int32 nNumRanges = comphelper::string::getTokenCount(rXMLRange, ' ');
     OUString aFirstFoundTable; // to check that only one table will be used
     sal_Int32 nPos = 0;
-    for (sal_Int32 i = 0;  i < nNumRanges;  ++i)
+    do
     {
         OUString aRange( rXMLRange.getToken(0, ' ', nPos) );
 
@@ -1789,6 +1793,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
             aRes += ";";
         aRes += aTmp;
     }
+    while (nPos>0);
 
     return aRes;
 }
