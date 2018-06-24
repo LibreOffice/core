@@ -1789,11 +1789,10 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
             DoWriteFieldRunProperties( pNode, nPos, bWriteCombChars );
         }
 
-        sal_Int32 nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
-
-        for ( sal_Int32 i = 0; i < nNbToken; i++ )
+        sal_Int32 nIdx { rInfos.sCmd.isEmpty() ? -1 : 0 };
+        while ( nIdx >= 0 )
         {
-            OUString sToken = rInfos.sCmd.getToken( i, '\t' );
+            OUString sToken = rInfos.sCmd.getToken( 0, '\t', nIdx );
             if ( rInfos.eType ==  ww::eCREATEDATE
               || rInfos.eType ==  ww::eSAVEDATE
               || rInfos.eType ==  ww::ePRINTDATE
@@ -1808,7 +1807,7 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
             DoWriteCmd( sToken );
 
             // Replace tabs by </instrText><tab/><instrText>
-            if ( i < ( nNbToken - 1 ) )
+            if ( nIdx > 0 ) // Is another token expected?
                 RunText( "\t" );
         }
 
