@@ -124,7 +124,7 @@ SCQAHELPER_DLLPUBLIC void loadFile(const OUString& aFileName, std::string& aCont
 SCQAHELPER_DLLPUBLIC void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat = StringType::StringValue);
 
 //need own handler because conditional formatting strings must be generated
-SCQAHELPER_DLLPUBLIC void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
+SCQAHELPER_DLLPUBLIC void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab, bool bCommaAsDelimiter = true);
 
 SCQAHELPER_DLLPUBLIC const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
 
