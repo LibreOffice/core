@@ -14,6 +14,7 @@
 #include <address.hxx>
 #include <dataprovider.hxx>
 #include <vcl/scheduler.hxx>
+#include <orcusxml.hxx>
 
 #include <memory>
 
@@ -29,11 +30,13 @@ public:
     void testCSVImport();
     void testDataLargerThanDB();
     void testHTMLImport();
+    void testXMLImport();
 
     CPPUNIT_TEST_SUITE(ScDataProvidersTest);
     CPPUNIT_TEST(testCSVImport);
     CPPUNIT_TEST(testDataLargerThanDB);
     CPPUNIT_TEST(testHTMLImport);
+    CPPUNIT_TEST(testXMLImport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -136,6 +139,47 @@ void ScDataProvidersTest::testHTMLImport()
         CPPUNIT_ASSERT_EQUAL(aCities[nRow], m_pDoc->GetString(3, nRow + 1, 0));
     }
 }
+
+void ScDataProvidersTest::testXMLImport()
+{
+    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
+    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    CPPUNIT_ASSERT(bInserted);
+
+    OUString aFileURL;
+    ScOrcusImportXMLParam aParam;
+
+    ScOrcusImportXMLParam::RangeLink aRangeLink;
+    aRangeLink.maPos = ScAddress(0,0,0);
+    aRangeLink.maFieldPaths.push_back("/bookstore/book/title");
+    aRangeLink.maFieldPaths.push_back("/bookstore/book/author");
+    aParam.maRangeLinks.push_back(aRangeLink);
+
+    createFileURL("test1.", "xml", aFileURL);
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.xml", m_pDoc);
+    aDataSource.setDBData(pDBData);
+    aDataSource.setXMLImportParam(aParam);
+
+
+    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    CPPUNIT_ASSERT(!rDataSources.empty());
+
+    rDataSources[0].refresh(m_pDoc, true);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("title"), m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("author"), m_pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), m_pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), m_pDoc->GetString(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test3"), m_pDoc->GetString(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(0, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test4"), m_pDoc->GetString(1, 4, 0));
+}
+
 
 ScDataProvidersTest::ScDataProvidersTest() :
     ScBootstrapFixture( "sc/qa/unit/data/dataprovider" ),
