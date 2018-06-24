@@ -169,7 +169,7 @@ OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
 {
     OUString aReduced( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) );
 
-    aReduced = aReduced.getToken( comphelper::string::getTokenCount(aReduced, '/') - 1, '/' );
+    aReduced = aReduced.copy(aReduced.lastIndexOf('/')+1);
 
     if( INetProtocol::PrivSoffice != rURL.GetProtocol() )
     {
