@@ -231,9 +231,11 @@ bool PathDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 
     SdrObject* pObj = GetDragObj();
 
-    if(pObj)
+    if(pObj && pObj->applySpecialDrag(DragStat()))
     {
-        return pObj->applySpecialDrag(DragStat());
+        pObj->SetChanged();
+        pObj->BroadcastObjectChange();
+        return true;
     }
     else
     {
