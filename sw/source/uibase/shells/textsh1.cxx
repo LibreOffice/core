@@ -1228,16 +1228,23 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
                 {
                     rWrtSh.StartUndo( SwUndoId::INSATTR );
-                    rWrtSh.SetAttrItem(
-                        SvxBrushItem( rEdtWin.GetWaterCanTextBackColor(), RES_CHRATR_BACKGROUND) );
+
+                    SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), svl::Items<
+                                         RES_CHRATR_BACKGROUND, RES_CHRATR_BACKGROUND,
+                                         RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG>{} );
+                    rWrtSh.GetCurAttr( aCoreSet );
+
+                    // Remove highlight if already set of the same color
+                    const SvxBrushItem& rBrushItem = aCoreSet.Get(RES_CHRATR_BACKGROUND);
+                    if ( aSet == rBrushItem.GetColor() )
+                        aSet = COL_TRANSPARENT;
+
+                    rWrtSh.SetAttrItem( SvxBrushItem(aSet, RES_CHRATR_BACKGROUND) );
 
                     // Remove MS specific highlight when background is set
                     rWrtSh.SetAttrItem( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
 
                     // Remove shading marker
-                    SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), svl::Items<RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG>{} );
-                    rWrtSh.GetCurAttr( aCoreSet );
-
                     const SfxPoolItem *pTmpItem;
                     if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
                     {
@@ -1254,7 +1261,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
                 else
                     rWrtSh.SetAttrItem(
-                        SvxColorItem( rEdtWin.GetWaterCanTextColor(), RES_CHRATR_COLOR) );
+                        SvxColorItem(aSet, RES_CHRATR_COLOR) );
             }
             else if (nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND)
             {
