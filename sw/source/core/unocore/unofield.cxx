@@ -2680,8 +2680,7 @@ static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
     else if (rTypeName.equalsIgnoreAsciiCase("DataBase"))
     {
         rName = rName.copy(RTL_CONSTASCII_LENGTH("DataBase."));
-        const sal_Int32 nDotCount = comphelper::string::getTokenCount(rName, '.');
-        if( 1 <= nDotCount )
+        if (!rName.isEmpty())
         {
             // #i51815#
             rName = "DataBase." + rName;
