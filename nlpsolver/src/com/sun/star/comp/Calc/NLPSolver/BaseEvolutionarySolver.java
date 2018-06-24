@@ -105,6 +105,12 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
                     case SolverConstraintOperator.LESS_EQUAL_value:
                         setDefaultYAt(i + 1, BasicBound.MINDOUBLE, constraint.Data);
                         break;
+                    case SolverConstraintOperator.INTEGER_value:
+                        setDefaultYAt(i + 1, BasicBound.MINDOUBLE, BasicBound.MAXDOUBLE);
+                        break;
+                    case SolverConstraintOperator.BINARY_value:
+                        setDefaultYAt(i + 1, 0, 1);
+                        break;
                 }
             }
 
