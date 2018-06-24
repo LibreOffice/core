@@ -190,9 +190,8 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_calc_tests4 \
 	UITest_statistics \
 	UITest_solver \
+	UITest_goalSeek \
 ))
 endif
-#FIXME needs debugging
-#	UITest_goalSeek \
 
 # vim: set noet sw=4 ts=4:
