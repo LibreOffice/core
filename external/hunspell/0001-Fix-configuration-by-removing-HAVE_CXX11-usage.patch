@@ -1,0 +1,90 @@
+From afe81b72cfc6f042ef5cbeb7188c2f2cc2f3eba1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Sun, 24 Jun 2018 10:56:24 +0200
+Subject: [PATCH] Fix configuration by removing HAVE_CXX11 usage
+
+Use also the more portable static variable instead of thread_local
+to store time data (it still fixes freezing of spell checking in LibreOffice).
+---
+ Makefile.in                 |  1 -
+ configure.ac                | 10 +++++-----
+ src/hunspell/hunvisapi.h    | 10 +---------
+ src/hunspell/hunvisapi.h.in | 10 +---------
+ 4 files changed, 7 insertions(+), 24 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 241f797..06d933e 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -296,7 +296,6 @@ GMSGFMT = @GMSGFMT@
+ GMSGFMT_015 = @GMSGFMT_015@
+ GREP = @GREP@
+ HAVE_ASPRINTF = @HAVE_ASPRINTF@
+-HAVE_CXX11 = @HAVE_CXX11@
+ HAVE_NEWLOCALE = @HAVE_NEWLOCALE@
+ HAVE_POSIX_PRINTF = @HAVE_POSIX_PRINTF@
+ HAVE_SNPRINTF = @HAVE_SNPRINTF@
+diff --git a/configure.ac b/configure.ac
+index 2936107..9153925 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -18,11 +18,11 @@ AC_SUBST(HUNSPELL_VERSION_MINOR)
+ 
+ # check C++11 compiling environment for thread_local
+ # to handle time limits better also with threads
+-AS_CASE([$CXXFLAGS],
+-                 [*-std=c++11*], [HAVE_CXX11=1],
+-                 [HAVE_CXX11=0]
+-         ])
+-AC_SUBST(HAVE_CXX11)
++#AS_CASE([$CXXFLAGS],
++#                 [*-std=c++11*], [HUNSPELL_HAVE_CXX11=1],
++#                 [HUNSPELL_HAVE_CXX11=0]
++#         ])
++#AC_SUBST(HUNSPELL_HAVE_CXX11)
+ 
+ # Checks for programs.
+ AC_PROG_CXX
+diff --git a/src/hunspell/hunvisapi.h b/src/hunspell/hunvisapi.h
+index 8283017..cf371ea 100644
+--- a/src/hunspell/hunvisapi.h
++++ b/src/hunspell/hunvisapi.h
+@@ -15,14 +15,6 @@
+ #  define LIBHUNSPELL_DLL_EXPORTED
+ #endif
+ 
+-/* use thread_local, if it's possible, otherwise static */
+-
+-#if defined(_WIN32)
+-#  define HUNSPELL_THREAD_LOCAL thread_local
+-#elif 0
+-#  define HUNSPELL_THREAD_LOCAL thread_local
+-#else
+-#  define HUNSPELL_THREAD_LOCAL static
+-#endif
++#define HUNSPELL_THREAD_LOCAL static
+ 
+ #endif
+diff --git a/src/hunspell/hunvisapi.h.in b/src/hunspell/hunvisapi.h.in
+index 85972dd..28256aa 100644
+--- a/src/hunspell/hunvisapi.h.in
++++ b/src/hunspell/hunvisapi.h.in
+@@ -15,14 +15,6 @@
+ #  define LIBHUNSPELL_DLL_EXPORTED
+ #endif
+ 
+-/* use thread_local, if it's possible, otherwise static */
+-
+-#if defined(_WIN32)
+-#  define HUNSPELL_THREAD_LOCAL thread_local
+-#elif @HAVE_CXX11@
+-#  define HUNSPELL_THREAD_LOCAL thread_local
+-#else
+-#  define HUNSPELL_THREAD_LOCAL static
+-#endif
++#define HUNSPELL_THREAD_LOCAL static
+ 
+ #endif
+-- 
+2.7.4
+

@@ -32,6 +32,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
 	external/hunspell/0001-tdf-116586-fix-LibreOffice-crash-by-Hungarian-person.patch \
 	external/hunspell/0001-Hunspell-patches-for-missing-OCONV-conversion.patch \
 	external/hunspell/0001-recent-Hunspell-fixes-for-suggestion-spelling-and-an.patch \
+	external/hunspell/0001-Fix-configuration-by-removing-HAVE_CXX11-usage.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
