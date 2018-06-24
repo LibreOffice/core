@@ -25,7 +25,6 @@
 #include "createaddresslistdialog.hxx"
 #include "customizeaddresslistdialog.hxx"
 #include <mmconfigitem.hxx>
-#include <comphelper/string.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svtools/controldims.hxx>
@@ -438,12 +437,10 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             OUString sLine;
             bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
 
-            if(bRead)
+            if(bRead && !sLine.isEmpty())
             {
-                //header line
-                sal_Int32 nHeaders = comphelper::string::getTokenCount(sLine, '\t');
                 sal_Int32 nIndex = 0;
-                for( sal_Int32 nToken = 0; nToken < nHeaders; ++nToken)
+                do
                 {
                     const OUString sHeader = sLine.getToken( 0, '\t', nIndex );
                     OSL_ENSURE(sHeader.getLength() > 2 &&
@@ -454,14 +451,14 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                         m_pCSVData->aDBColumnHeaders.push_back( sHeader.copy(1, sHeader.getLength() -2));
                     }
                 }
+                while (nIndex > 0);
             }
             while(pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 ))
             {
                 std::vector<OUString> aNewData;
                 //analyze data line
-                sal_Int32 nDataCount = comphelper::string::getTokenCount(sLine, '\t');
-                sal_Int32 nIndex = 0;
-                for( sal_Int32 nToken = 0; nToken < nDataCount; ++nToken)
+                sal_Int32 nIndex = { sLine.isEmpty() ? -1 : 0 };
+                while (nIndex >= 0)
                 {
                     const OUString sData = sLine.getToken( 0, '\t', nIndex );
                     OSL_ENSURE( sData.startsWith("\"") && sData.endsWith("\""),
