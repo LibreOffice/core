@@ -397,26 +397,22 @@ bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
                                                  OUString& rPictureStorageName,
                                                  OUString& rPictureStreamName )
 {
-    OUString      aURLStr( rURLStr );
-    bool    bRet = false;
+    if (rURLStr.isEmpty())
+        return false;
 
-    if( !aURLStr.isEmpty() )
+    const OUString aURLStr {rURLStr.copy(rURLStr.lastIndexOf(':')+1)};
+
+    if( comphelper::string::getTokenCount(aURLStr, '/') == 1 )
     {
-        aURLStr = aURLStr.copy(aURLStr.lastIndexOf(':')+1);
-
-        if( comphelper::string::getTokenCount(aURLStr, '/') == 1 )
-        {
-            rPictureStorageName = XML_GRAPHICSTORAGE_NAME;
-            rPictureStreamName = aURLStr;
-        }
-        else
-            SvXMLEmbeddedObjectHelper::splitObjectURL(aURLStr, rPictureStorageName, rPictureStreamName);
-
-        bRet = !rPictureStreamName.isEmpty();
-        SAL_WARN_IF(!bRet, "svx", "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme: " << rURLStr);
+        rPictureStorageName = XML_GRAPHICSTORAGE_NAME;
+        rPictureStreamName = aURLStr;
     }
+    else
+        SvXMLEmbeddedObjectHelper::splitObjectURL(aURLStr, rPictureStorageName, rPictureStreamName);
 
-    return bRet;
+    SAL_WARN_IF(rPictureStreamName.isEmpty(), "svx", "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme: " << rURLStr);
+
+    return !rPictureStreamName.isEmpty();
 }
 
 uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( const OUString& rStorageName )
