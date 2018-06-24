@@ -16,6 +16,8 @@
 
 #include <rtl/ustring.hxx>
 
+#include "orcusxml.hxx"
+
 class ScDocument;
 class ScDBData;
 
@@ -62,6 +64,8 @@ private:
      */
     OUString maID;
 
+    ScOrcusImportXMLParam maParam;
+
     double mnUpdateFrequency;
 
     std::shared_ptr<DataProvider> mpDataProvider;
@@ -83,10 +87,12 @@ public:
     void setID(const OUString& rID);
     void setURL(const OUString& rURL);
     void setProvider(const OUString& rProvider);
+    void setXMLImportParam(const ScOrcusImportXMLParam& rParam);
 
     const OUString& getURL() const;
     const OUString& getProvider() const;
     const OUString& getID() const;
+    const ScOrcusImportXMLParam& getXMLImportParam() const;
     double getUpdateFrequency() const;
     OUString getDBName() const;
     void setDBData(const OUString& rDBName);
