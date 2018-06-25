@@ -22,6 +22,30 @@
       "revId": "a07bb28d3199542c0b90884a947c2bac02bad07d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_830f76e0",
+        "filename": "cui/source/options/optdict.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-25T11:43:50Z",
+      "side": 1,
+      "message": "Doh! Good spotting!",
+      "parentUuid": "5a22e58a_235322e3",
+      "range": {
+        "startLine": 545,
+        "startChar": 28,
+        "endLine": 545,
+        "endChar": 33
+      },
+      "revId": "a07bb28d3199542c0b90884a947c2bac02bad07d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
