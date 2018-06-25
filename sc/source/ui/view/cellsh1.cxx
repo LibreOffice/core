@@ -52,6 +52,7 @@
 #include <svtools/cliplistener.hxx>
 
 #include <cellsh.hxx>
+#include <ftools.hxx>
 #include <sc.hrc>
 #include <document.hxx>
 #include <patattr.hxx>
@@ -80,6 +81,7 @@
 #include <cliputil.hxx>
 #include <markdata.hxx>
 #include <docpool.hxx>
+#include <colorscale.hxx>
 #include <condformatdlg.hxx>
 #include <attrib.hxx>
 #include <condformatdlgitem.hxx>
@@ -102,6 +104,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/bootstrap.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -1953,15 +1956,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     aRangeList.push_back(ScRange(aPos));
                 }
 
+                // try to find an existing conditional format
                 const ScConditionalFormat* pCondFormat = nullptr;
                 const ScPatternAttr* pPattern = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
+                ScConditionalFormatList* pList = pDoc->GetCondFormList(aPos.Tab());
                 const std::vector<sal_uInt32>& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
                 bool bContainsCondFormat = !rCondFormats.empty();
                 bool bCondFormatDlg = false;
+                bool bContainsExistingCondFormat = false;
                 if(bContainsCondFormat)
                 {
-                    bool bContainsExistingCondFormat = false;
-                    ScConditionalFormatList* pList = pDoc->GetCondFormList(aPos.Tab());
                     for (std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin(), itrEnd = rCondFormats.end();
                                             itr != itrEnd; ++itr)
                     {
@@ -1980,41 +1984,75 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             break;
                         }
                     }
+                }
 
-                    // if not found a conditional format ask whether we should edit one of the existing
-                    // or should create a new overlapping conditional format
-                    if(!bCondFormatDlg && bContainsExistingCondFormat)
+                // do we have a parameter with the conditional formatting type?
+                const SfxInt16Item* pParam = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+                if (pParam && nSlot == SID_OPENDLG_ICONSET)
+                {
+                    ScConditionalFormat* pFormat = new ScConditionalFormat(0, pDoc);
+                    pFormat->SetRange(aRangeList);
+
+                    ScIconSetType eIconSetType = limit_cast<ScIconSetType>(pParam->GetValue(), IconSet_3Arrows, IconSet_5Boxes);
+                    int nSteps = 3;
+                    if (eIconSetType >= IconSet_4Arrows && eIconSetType < IconSet_5Arrows)
+                        nSteps = 4;
+                    else if (eIconSetType >= IconSet_5Arrows)
+                        nSteps = 5;
+
+                    ScIconSetFormat* pEntry = new ScIconSetFormat(pDoc);
+                    ScIconSetFormatData* pIconSetFormatData = new ScIconSetFormatData(eIconSetType);
+
+                    pIconSetFormatData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(0, COL_RED, COLORSCALE_PERCENT));
+                    pIconSetFormatData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(round(100. / nSteps), COL_BROWN, COLORSCALE_PERCENT));
+                    pIconSetFormatData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(round(200. / nSteps), COL_YELLOW, COLORSCALE_PERCENT));
+                    if (nSteps > 3)
+                        pIconSetFormatData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(round(300. / nSteps), COL_WHITE, COLORSCALE_PERCENT));
+                    if (nSteps > 4)
+                        pIconSetFormatData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(round(400. / nSteps), COL_GREEN, COLORSCALE_PERCENT));
+
+                    pEntry->SetIconSetData(pIconSetFormatData);
+                    pFormat->AddEntry(pEntry);
+
+                    // use the new conditional formatting
+                    GetViewData()->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nIndex, pFormat, aPos.Tab(), aRangeList);
+
+                    break;
+                }
+
+                // if not found a conditional format ask whether we should edit one of the existing
+                // or should create a new overlapping conditional format
+                if(bContainsCondFormat && !bCondFormatDlg && bContainsExistingCondFormat)
+                {
+                    vcl::Window* pWin = pTabViewShell->GetDialogParent();
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                                   ScResId(STR_EDIT_EXISTING_COND_FORMATS)));
+                    xQueryBox->set_default_response(RET_YES);
+                    bool bEditExisting = xQueryBox->run() == RET_YES;
+                    if (bEditExisting)
                     {
-                        vcl::Window* pWin = pTabViewShell->GetDialogParent();
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
-                                                                       VclMessageType::Question, VclButtonsType::YesNo,
-                                                                       ScResId(STR_EDIT_EXISTING_COND_FORMATS)));
-                        xQueryBox->set_default_response(RET_YES);
-                        bool bEditExisting = xQueryBox->run() == RET_YES;
-                        if(bEditExisting)
+                        // differentiate between ranges where one conditional format is defined
+                        // and several formats are defined
+                        // if we have only one => open the cond format dlg to edit it
+                        // otherwise open the manage cond format dlg
+                        if (rCondFormats.size() == 1)
                         {
-                            // differentiate between ranges where one conditional format is defined
-                            // and several formats are defined
-                            // if we have only one => open the cond format dlg to edit it
-                            // otherwise open the manage cond format dlg
-                            if(rCondFormats.size() == 1)
-                            {
-                                pCondFormat = pList->GetFormat(rCondFormats[0]);
-                                assert(pCondFormat);
-                                bCondFormatDlg = true;
-                            }
-                            else
-                            {
-                                // Queue message to open Conditional Format Manager Dialog.
-                                GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT_MANAGER, SfxCallMode::ASYNCHRON );
-                                break;
-                            }
+                            pCondFormat = pList->GetFormat(rCondFormats[0]);
+                            assert(pCondFormat);
+                            bCondFormatDlg = true;
                         }
                         else
                         {
-                            // define an overlapping conditional format
-                            // does not need to be handled here
+                            // Queue message to open Conditional Format Manager Dialog.
+                            GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT_MANAGER, SfxCallMode::ASYNCHRON );
+                            break;
                         }
+                    }
+                    else
+                    {
+                        // define an overlapping conditional format
+                        // does not need to be handled here
                     }
                 }
 
