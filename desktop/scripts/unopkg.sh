@@ -37,13 +37,17 @@ cd "$sd_cwd" || exit $?
 
 # this is a temporary hack until we can live with the default search paths
 case "$(uname -s)" in
-NetBSD|OpenBSD|FreeBSD|DragonFly)
+OpenBSD)
     LD_LIBRARY_PATH="$sd_prog${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
     JAVA_HOME=$(javaPathHelper -h libreoffice-java 2> /dev/null)
     export LD_LIBRARY_PATH
     if [ -n "${JAVA_HOME}" ]; then
         export JAVA_HOME
     fi
+    ;;
+NetBSD|FreeBSD|DragonFly)
+    LD_LIBRARY_PATH="$sd_prog${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+    export LD_LIBRARY_PATH
     ;;
 AIX)
     LIBPATH="$sd_prog${LIBPATH:+:${LIBPATH}}"

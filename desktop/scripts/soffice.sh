@@ -141,7 +141,7 @@ if echo "$checks" | grep -q "cc" ; then
 fi
 
 case "$(uname -s)" in
-NetBSD|OpenBSD|DragonFly)
+OpenBSD)
 # this is a temporary hack until we can live with the default search paths
     LD_LIBRARY_PATH="$sd_prog${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
     JAVA_HOME=$(javaPathHelper -h libreoffice-java 2> /dev/null)
@@ -149,6 +149,11 @@ NetBSD|OpenBSD|DragonFly)
     if [ -n "${JAVA_HOME}" ]; then
         export JAVA_HOME
     fi
+    ;;
+NetBSD|DragonFly)
+# this is a temporary hack until we can live with the default search paths
+    LD_LIBRARY_PATH="$sd_prog${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    export LD_LIBRARY_PATH
     ;;
 AIX)
     LIBPATH="$sd_prog${LIBPATH:+:$LIBPATH}"
