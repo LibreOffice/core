@@ -144,8 +144,8 @@ class PortionObj final : public PropStateValue
         sal_uInt32      mnTextSize;
         bool        mbLastPortion;
 
-        sal_uInt16*     mpText;
-        FieldEntry*     mpFieldEntry;
+        std::unique_ptr<sal_uInt16[]> mpText;
+        std::unique_ptr<FieldEntry> mpFieldEntry;
 
                         PortionObj( css::uno::Reference< css::text::XTextRange > & rXTextRangeRef,
                                         bool bLast, FontCollection& rFontCollection );
