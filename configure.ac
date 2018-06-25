@@ -1341,6 +1341,11 @@ AC_ARG_ENABLE(icecream,
          wrappers, you can override that using --with-gcc-home=/the/path switch.]),
 ,)
 
+AC_ARG_ENABLE(ld,
+    AS_HELP_STRING([--enable-ld=<linker>],
+        [Use the specified linker. Both 'gold' and 'lld' linkers generally use less memory and link faster.]),
+,)
+
 libo_FUZZ_ARG_ENABLE(cups,
     AS_HELP_STRING([--disable-cups],
         [Do not build cups support.])
@@ -3151,6 +3156,29 @@ else
     BUILD_TYPE="$BUILD_TYPE NATIVE"
 fi
 AC_SUBST(CROSS_COMPILING)
+
+USE_LD=
+if test -n "$enable_ld" -a "$enable_ld" != "no"; then
+    AC_MSG_CHECKING([for -fuse-ld=$enable_ld linker support])
+    if test "$GCC" = "yes"; then
+        ldflags_save=$LDFLAGS
+        LDFLAGS="$LDFLAGS -fuse-ld=$enable_ld"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+            ],[
+printf ("hello world\n");
+            ])], USE_LD=$enable_ld, [])
+        if test -n "$USE_LD"; then
+            AC_MSG_RESULT( yes )
+            LDFLAGS="$ldflags_save -fuse-ld=$enable_ld"
+        else
+            AC_MSG_ERROR( no )
+        fi
+    else
+        AC_MSG_ERROR( not supported )
+    fi
+fi
+AC_SUBST(USE_LD)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes"; then
