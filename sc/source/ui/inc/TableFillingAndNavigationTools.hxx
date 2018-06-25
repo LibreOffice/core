@@ -85,7 +85,7 @@ public:
             formula::FormulaGrammar::Grammar eGrammar );
 
     void writeFormula(const OUString& aFormula);
-    void writeMatrixFormula(const OUString& aFormula);
+    void writeMatrixFormula(const OUString& aFormula, SCCOL nCols = 1, SCROW nRows = 1);
     void writeString(const OUString& aString);
     void writeString(const char* aCharArray);
     void writeBoldString(const OUString& aString);
