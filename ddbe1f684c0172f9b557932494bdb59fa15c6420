@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_23bc0205",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-06-25T11:13:16Z",
+      "side": 1,
+      "message": "just good practice? I think what this means is that if you are handed a \"const drawingML\" item, that you can run this function, since the function is guaranteed not to change anything.  Correct?",
+      "range": {
+        "startLine": 255,
+        "startChar": 26,
+        "endLine": 255,
+        "endChar": 31
+      },
+      "revId": "ddbe1f684c0172f9b557932494bdb59fa15c6420",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_8341360e",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-06-25T11:13:16Z",
+      "side": 1,
+      "message": "This really is just a guess based on the comments of the related fixes. A unit test proved that the grouped objects themselves should be shifted, not just true group-shapes.",
+      "range": {
+        "startLine": 1372,
+        "startChar": 37,
+        "endLine": 1372,
+        "endChar": 87
+      },
+      "revId": "ddbe1f684c0172f9b557932494bdb59fa15c6420",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
