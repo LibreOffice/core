@@ -48,6 +48,7 @@
 #include <editeng/editview.hxx>
 
 #include "cellsh.hxx"
+#include <ftools.hxx>
 #include "sc.hrc"
 #include "document.hxx"
 #include "patattr.hxx"
@@ -77,6 +78,7 @@
 #include "cliputil.hxx"
 #include "markdata.hxx"
 #include "docpool.hxx"
+#include <colorscale.hxx>
 #include "condformatdlg.hxx"
 #include "attrib.hxx"
 #include "condformatdlgitem.hxx"
@@ -1984,6 +1986,34 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     aRangeList.push_back(pRange);
                 }
 
+                // do we have a parameter with the conditional formatting type?
+                const SfxInt16Item* pParam = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+
+                if (pParam && nSlot == SID_OPENDLG_ICONSET)
+                {
+                    ScConditionalFormat* pFormat = new ScConditionalFormat(0, pDoc);
+                    pFormat->SetRange(aRangeList);
+
+                    ScIconSetFormat* pEntry = new ScIconSetFormat(pDoc);
+                    ScIconSetFormatData* pIconSetFormatData = new ScIconSetFormatData(limit_cast<ScIconSetType>(pParam->GetValue(), IconSet_3Arrows, IconSet_5Boxes));
+                    pIconSetFormatData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(0, COL_BLUE, COLORSCALE_PERCENT));
+                    pIconSetFormatData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(33, COL_GREEN, COLORSCALE_PERCENT));
+                    pIconSetFormatData->m_Entries.push_back(std::make_unique<ScColorScaleEntry>(67, COL_RED, COLORSCALE_PERCENT));
+                    pEntry->SetIconSetData(pIconSetFormatData);
+                    pFormat->AddEntry(pEntry);
+
+                    sal_uLong nKey = pDoc->AddCondFormat(pFormat, aPos.Tab());
+                    pDoc->AddCondFormatData(aRangeList, aPos.Tab(), nKey);
+
+                    // and repaint
+                    for (size_t i = 0; i < aRangeList.size(); ++i)
+                        GetViewData()->GetDocShell()->PostPaint(*aRangeList[i], PaintPartFlags::Grid);
+                    GetViewData()->GetDocShell()->SetDocumentModified();
+
+                    break;
+                }
+
+                // no parameter provided, we have to show a dialog
                 const ScConditionalFormat* pCondFormat = nullptr;
                 const ScPatternAttr* pPattern = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
                 const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
