@@ -1056,6 +1056,8 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
                 m_hMySystemStore = nullptr;
                 throw uno::RuntimeException() ;
             }
+            if (svl::crypto::isMSCng())
+                m_hMySystemStore = nullptr;
         }
 
         //Add system root store into the keys manager.
@@ -1066,6 +1068,8 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
                 m_hRootSystemStore = nullptr;
                 throw uno::RuntimeException() ;
             }
+            if (svl::crypto::isMSCng())
+                m_hRootSystemStore = nullptr;
         }
 
         //Add system trusted store into the keys manager.
@@ -1076,6 +1080,8 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
                 m_hTrustSystemStore = nullptr;
                 throw uno::RuntimeException() ;
             }
+            if (svl::crypto::isMSCng())
+                m_hTrustSystemStore = nullptr;
         }
 
         //Add system CA store into the keys manager.
@@ -1086,6 +1092,8 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
                 m_hCaSystemStore = nullptr;
                 throw uno::RuntimeException() ;
             }
+            if (svl::crypto::isMSCng())
+                m_hCaSystemStore = nullptr;
         }
     }
 

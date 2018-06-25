@@ -27,6 +27,10 @@
 #include <xmlsec/mscrypto/crypto.h>
 #include <xmlsec/mscrypto/keysstore.h>
 #include <xmlsec/mscrypto/x509.h>
+#include <xmlsec/mscng/crypto.h>
+#include <xmlsec/mscng/keysstore.h>
+#include <xmlsec/mscng/x509.h>
+#include <svl/cryptosign.hxx>
 
 namespace xmlsecurity
 {
@@ -43,7 +47,10 @@ xmlSecKeysMngrPtr MSCryptoAppliedKeysMngrCreate()
     xmlSecKeysMngrPtr        keyMngr = nullptr ;
     xmlSecKeyStorePtr        keyStore = nullptr ;
 
-    keyStore = xmlSecKeyStoreCreate(xmlSecMSCryptoKeysStoreId) ;
+    if (!svl::crypto::isMSCng())
+        keyStore = xmlSecKeyStoreCreate(xmlSecMSCryptoKeysStoreId) ;
+    else
+        keyStore = xmlSecKeyStoreCreate(xmlSecMSCngKeysStoreId);
     if (keyStore == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
@@ -95,16 +102,33 @@ xmlSecKeysMngrPtr MSCryptoAppliedKeysMngrCreate()
     /*-
      * Initialize crypto library specific data in keys manager
      */
-    if (xmlSecMSCryptoKeysMngrInit(keyMngr) < 0)
+    if (!svl::crypto::isMSCng())
     {
-        xmlSecError(XMLSEC_ERRORS_HERE,
-                    nullptr,
-                    "xmlSecMSCryptoKeysMngrInit",
-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
-                    XMLSEC_ERRORS_NO_MESSAGE) ;
+        if (xmlSecMSCryptoKeysMngrInit(keyMngr) < 0)
+        {
+             xmlSecError(XMLSEC_ERRORS_HERE,
+                        nullptr,
+                        "xmlSecMSCryptoKeysMngrInit",
+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                        XMLSEC_ERRORS_NO_MESSAGE) ;
 
-        xmlSecKeysMngrDestroy(keyMngr) ;
-        return nullptr ;
+            xmlSecKeysMngrDestroy(keyMngr) ;
+            return nullptr ;
+        }
+    }
+    else
+    {
+        if (xmlSecMSCngKeysMngrInit(keyMngr) < 0)
+        {
+             xmlSecError(XMLSEC_ERRORS_HERE,
+                        nullptr,
+                        "xmlSecMSCngKeysMngrInit",
+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                        XMLSEC_ERRORS_NO_MESSAGE);
+
+            xmlSecKeysMngrDestroy(keyMngr);
+            return nullptr;
+        }
     }
 
     /*-
@@ -133,7 +157,10 @@ MSCryptoAppliedKeysMngrAdoptKeyStore(
     xmlSecAssert2(mngr != nullptr, -1) ;
     xmlSecAssert2(keyStore != nullptr, -1) ;
 
-    x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
+    if (!svl::crypto::isMSCng())
+        x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
+    else
+        x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCngX509StoreId);
     if (x509Store == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
@@ -144,14 +171,29 @@ MSCryptoAppliedKeysMngrAdoptKeyStore(
         return -1 ;
     }
 
-    if (xmlSecMSCryptoX509StoreAdoptKeyStore(x509Store, keyStore) < 0)
+    if (!svl::crypto::isMSCng())
     {
-        xmlSecError(XMLSEC_ERRORS_HERE,
-                    xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
-                    "xmlSecMSCryptoX509StoreAdoptKeyStore",
-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
-                    XMLSEC_ERRORS_NO_MESSAGE) ;
-        return -1 ;
+        if (xmlSecMSCryptoX509StoreAdoptKeyStore(x509Store, keyStore) < 0)
+        {
+            xmlSecError(XMLSEC_ERRORS_HERE,
+                        xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
+                        "xmlSecMSCryptoX509StoreAdoptKeyStore",
+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                        XMLSEC_ERRORS_NO_MESSAGE) ;
+            return -1 ;
+        }
+    }
+    else
+    {
+        if (xmlSecMSCngX509StoreAdoptKeyStore(x509Store, keyStore) < 0)
+        {
+            xmlSecError(XMLSEC_ERRORS_HERE,
+                        xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
+                        "xmlSecMSCngX509StoreAdoptKeyStore",
+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                        XMLSEC_ERRORS_NO_MESSAGE);
+            return -1;
+        }
     }
 
     return 0 ;
@@ -168,7 +210,10 @@ MSCryptoAppliedKeysMngrAdoptTrustedStore(
     xmlSecAssert2(mngr != nullptr, -1) ;
     xmlSecAssert2(trustedStore != nullptr, -1) ;
 
-    x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
+    if (!svl::crypto::isMSCng())
+        x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
+    else
+        x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCngX509StoreId);
     if (x509Store == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
@@ -179,14 +224,29 @@ MSCryptoAppliedKeysMngrAdoptTrustedStore(
         return -1 ;
     }
 
-    if (xmlSecMSCryptoX509StoreAdoptTrustedStore(x509Store, trustedStore) < 0)
+    if (!svl::crypto::isMSCng())
     {
-        xmlSecError(XMLSEC_ERRORS_HERE,
-                    xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
-                    "xmlSecMSCryptoX509StoreAdoptKeyStore",
-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
-                    XMLSEC_ERRORS_NO_MESSAGE) ;
-        return -1 ;
+        if (xmlSecMSCryptoX509StoreAdoptTrustedStore(x509Store, trustedStore) < 0)
+        {
+            xmlSecError(XMLSEC_ERRORS_HERE,
+                        xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
+                        "xmlSecMSCryptoX509StoreAdoptKeyStore",
+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                        XMLSEC_ERRORS_NO_MESSAGE) ;
+            return -1 ;
+        }
+    }
+    else
+    {
+        if (xmlSecMSCngX509StoreAdoptTrustedStore(x509Store, trustedStore) < 0)
+        {
+            xmlSecError(XMLSEC_ERRORS_HERE,
+                        xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
+                        "xmlSecMSCngX509StoreAdoptKeyStore",
+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                        XMLSEC_ERRORS_NO_MESSAGE);
+            return -1;
+        }
     }
 
     return 0 ;
@@ -203,7 +263,10 @@ MSCryptoAppliedKeysMngrAdoptUntrustedStore(
     xmlSecAssert2(mngr != nullptr, -1) ;
     xmlSecAssert2(untrustedStore != nullptr, -1) ;
 
-    x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
+    if (!svl::crypto::isMSCng())
+        x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
+    else
+        x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCngX509StoreId);
     if (x509Store == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
@@ -214,14 +277,29 @@ MSCryptoAppliedKeysMngrAdoptUntrustedStore(
         return -1 ;
     }
 
-    if (xmlSecMSCryptoX509StoreAdoptUntrustedStore(x509Store, untrustedStore) < 0)
+    if (!svl::crypto::isMSCng())
     {
-        xmlSecError(XMLSEC_ERRORS_HERE,
-                    xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
-                    "xmlSecMSCryptoX509StoreAdoptKeyStore",
-                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
-                    XMLSEC_ERRORS_NO_MESSAGE) ;
-        return -1 ;
+        if (xmlSecMSCryptoX509StoreAdoptUntrustedStore(x509Store, untrustedStore) < 0)
+        {
+            xmlSecError(XMLSEC_ERRORS_HERE,
+                        xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
+                        "xmlSecMSCryptoX509StoreAdoptKeyStore",
+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                        XMLSEC_ERRORS_NO_MESSAGE) ;
+            return -1 ;
+        }
+    }
+    else
+    {
+        if (xmlSecMSCngX509StoreAdoptUntrustedStore(x509Store, untrustedStore) < 0)
+        {
+            xmlSecError(XMLSEC_ERRORS_HERE,
+                        xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
+                        "xmlSecMSCngX509StoreAdoptKeyStore",
+                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                        XMLSEC_ERRORS_NO_MESSAGE);
+            return -1;
+        }
     }
 
     return 0 ;
