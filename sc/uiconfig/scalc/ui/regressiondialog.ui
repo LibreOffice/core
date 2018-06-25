@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -8,6 +8,9 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="regressiondialog|RegressionDialog">Regression</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -96,7 +99,7 @@
                       <object class="GtkLabel" id="variable1-range-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="regressiondialog|variable1-range-label">Variable 1 range:</property>
+                        <property name="label" translatable="yes" context="regressiondialog|variable1-range-label">Independent variable(s) (X) range:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">variable1-range-edit</property>
                         <property name="xalign">0</property>
@@ -134,7 +137,7 @@
                       <object class="GtkLabel" id="variable2-range-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="regressiondialog|variable2-range-label">Variable 2 range:</property>
+                        <property name="label" translatable="yes" context="regressiondialog|variable2-range-label">Dependent variable (Y) range:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">variable2-range-edit</property>
                         <property name="xalign">0</property>
@@ -169,6 +172,20 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="withlabels-check">
+                        <property name="label" translatable="yes" context="regressiondialog|withlabels-check">Both X and Y ranges have labels</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkLabel" id="output-range-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -179,7 +196,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -192,7 +209,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -203,8 +220,14 @@
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">3</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -321,13 +344,14 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="linear-check">
-                        <property name="label" translatable="yes" context="regressiondialog|linear-check">Linear Regression</property>
+                      <object class="GtkRadioButton" id="linear-radio">
+                        <property name="label" translatable="yes" context="regressiondialog|linear-radio">Linear Regression</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -337,14 +361,16 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="logarithmic-check">
-                        <property name="label" translatable="yes" context="regressiondialog|logarithmic-check">Logarithmic Regression</property>
+                      <object class="GtkRadioButton" id="logarithmic-radio">
+                        <property name="label" translatable="yes" context="regressiondialog|logarithmic-radio">Logarithmic Regression</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">linear-radio</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -352,14 +378,16 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="power-check">
-                        <property name="label" translatable="yes" context="regressiondialog|power-check">Power Regression</property>
+                      <object class="GtkRadioButton" id="power-radio">
+                        <property name="label" translatable="yes" context="regressiondialog|power-radio">Power Regression</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">linear-radio</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -385,6 +413,104 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="frame-options">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment6">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkGrid" id="grid5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="label5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <property name="label" translatable="yes" context="regressiondialog|label5">Confidence level</property>
+                        <property name="mnemonic_widget">confidencelevel-spin</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="calcresiduals-check">
+                        <property name="label" translatable="yes" context="regressiondialog|calcresiduals-check">Calculate residuals</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="confidencelevel-spin">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <property name="text" translatable="yes" context="regressiondialog|confidencelevel-spin">0.95</property>
+                        <property name="digits">2</property>
+                        <property name="numeric">True</property>
+                        <property name="value">0.94999999999999996</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="regressiondialog|label4">Options</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="error-message">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="wrap">True</property>
+            <property name="track_visited_links">False</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>

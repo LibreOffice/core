@@ -15,9 +15,18 @@
 
 class ScRegressionDialog : public ScStatisticsTwoVariableDialog
 {
-    VclPtr<CheckBox> mpLinearCheckBox;
-    VclPtr<CheckBox> mpLogarithmicCheckBox;
-    VclPtr<CheckBox> mpPowerCheckBox;
+    VclPtr<CheckBox>     mpWithLabelsCheckBox;
+    VclPtr<RadioButton>  mpLinearRadioButton;
+    VclPtr<RadioButton>  mpLogarithmicRadioButton;
+    VclPtr<RadioButton>  mpPowerRadioButton;
+    VclPtr<FixedText>    mpErrorMessage;
+    VclPtr<NumericField> mpConfidenceLevelField;
+    VclPtr<CheckBox>     mpCalcResidualsCheckBox;
+
+    bool mbUnivariate;
+    size_t mnNumIndependentVars;
+    size_t mnNumObservations;
+    bool mbUse3DAddresses;
 
 public:
     ScRegressionDialog(
@@ -32,6 +41,40 @@ protected:
     void dispose() override;
     virtual const char* GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
+    virtual bool InputRangesValid() override;
+
+private:
+
+    using CellValueGetter = const OUString&(size_t, size_t);
+    using CellWriter = void(const OUString&, size_t, size_t);
+
+    size_t GetRegressionTypeIndex();
+    ScRange GetDataRange(const ScRange& rRange);
+    OUString GetVariableNameFormula(bool bXVar, size_t nIndex, bool bWithLog);
+    OUString GetXVariableNameFormula(size_t nIndex, bool bWithLog);
+    OUString GetYVariableNameFormula(bool bWithLog);
+
+    // Helper methods for writing different parts of regression results.
+    void WriteRawRegressionResults(AddressWalkerWriter& rOutput,
+                                   FormulaTemplate& rTemplate,
+                                   size_t nRegressionIndex);
+    void WriteRegressionStatistics(AddressWalkerWriter& rOutput,
+                                   FormulaTemplate& rTemplate);
+    void WriteRegressionANOVAResults(AddressWalkerWriter& rOutput,
+                                     FormulaTemplate& rTemplate);
+    void WriteRegressionEstimatesWithCI(AddressWalkerWriter& rOutput,
+                                        FormulaTemplate& rTemplate,
+                                        bool bTakeLogX);
+    void WritePredictionsWithResiduals(AddressWalkerWriter& rOutput,
+                                       FormulaTemplate& rTemplate,
+                                       size_t nRegressionIndex);
+    // Generic table writer
+    void WriteTable(std::function<CellValueGetter>& rCellGetter, size_t nRowsInTable,
+                    size_t nColsInTable, AddressWalkerWriter& rOutput,
+                    std::function<CellWriter>& rFunc);
+
+    DECL_LINK( CheckBoxHdl, CheckBox&, void );
+    DECL_LINK( NumericFieldHdl, Edit&, void );
 };
 
 
