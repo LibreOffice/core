@@ -90,7 +90,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
         if( pParentItemSet )
             aInputSet.SetParent( pParentItemSet );
 
-        pOutSet = new SfxItemSet( rStyleBase.GetItemSet() );
+        pOutSet.reset( new SfxItemSet( rStyleBase.GetItemSet() ) );
         pOutSet->ClearItem();
 
         // If there is no bullet item in this stylesheet, we get it
@@ -222,7 +222,7 @@ SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 
 void SdPresLayoutTemplateDlg::dispose()
 {
-    delete pOutSet;
+    pOutSet.reset();
     SfxTabDialog::dispose();
 }
 
@@ -294,7 +294,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         const SvxNumBulletItem *pSvxNumBulletItem = nullptr;
         if( SfxItemState::SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pSvxNumBulletItem) ))
             SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
-        return pOutSet;
+        return pOutSet.get();
     }
     else
         return SfxTabDialog::GetOutputItemSet();

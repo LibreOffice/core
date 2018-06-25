@@ -49,7 +49,7 @@ private:
     using SfxTabDialog::GetOutputItemSet;
 
     SfxItemSet  aInputSet;
-    SfxItemSet  *pOutputSet;
+    std::unique_ptr<SfxItemSet> pOutputSet;
     sal_uInt16  m_nOptionsId;
     sal_uInt16  m_nPositionId;
     bool    bTitle;
