@@ -68,6 +68,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
     const long n2 = nSide/2;
     const long n4 = (n2+1)/2;
     const long n8 = (n4+1)/2;
+    const long n16 = (n8+1)/2;
     const Point aCenter = nRect.Center();
 
     switch ( eType )
@@ -79,6 +80,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustTop( 1 );
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
                                 Point( aCenter.X()+i, nRect.Top() ) );
+                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Top() ) );
+                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Top() ) );
             }
             pDev->DrawRect( tools::Rectangle( aCenter.X()-n8, nRect.Top()+1,
                                        aCenter.X()+n8, nRect.Bottom() ) );
@@ -91,6 +94,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustBottom( -1 );
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
                                 Point( aCenter.X()+i, nRect.Bottom() ) );
+                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Bottom() ) );
+                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Bottom() ) );
             }
             pDev->DrawRect( tools::Rectangle( aCenter.X()-n8, nRect.Top(),
                                        aCenter.X()+n8, nRect.Bottom()-1 ) );
@@ -103,6 +108,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustLeft( 1 );
                 pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-i ),
                                 Point( nRect.Left(), aCenter.Y()+i ) );
+                pDev->DrawPixel( Point( nRect.Left(), aCenter.Y()-i ) );
+                pDev->DrawPixel( Point( nRect.Left(), aCenter.Y()+i ) );
             }
             pDev->DrawRect( tools::Rectangle( nRect.Left()+1, aCenter.Y()-n8,
                                        nRect.Right(), aCenter.Y()+n8 ) );
@@ -115,6 +122,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustRight( -1 );
                 pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-i ),
                                 Point( nRect.Right(), aCenter.Y()+i ) );
+                pDev->DrawPixel( Point( nRect.Right(), aCenter.Y()-i ) );
+                pDev->DrawPixel( Point( nRect.Right(), aCenter.Y()+i ) );
             }
             pDev->DrawRect( tools::Rectangle( nRect.Left(), aCenter.Y()-n8,
                                        nRect.Right()-1, aCenter.Y()+n8 ) );
@@ -128,6 +137,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustTop( 1 );
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
                                 Point( aCenter.X()+i, nRect.Top() ) );
+                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Top() ) );
+                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Top() ) );
             }
             break;
 
@@ -139,6 +150,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustBottom( -1 );
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
                                 Point( aCenter.X()+i, nRect.Bottom() ) );
+                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Bottom() ) );
+                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Bottom() ) );
             }
             break;
 
@@ -158,6 +171,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustLeft( 1 );
                 pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-i ),
                                 Point( nRect.Left(), aCenter.Y()+i ) );
+                pDev->DrawPixel( Point( nRect.Left(), aCenter.Y()-i ) );
+                pDev->DrawPixel( Point( nRect.Left(), aCenter.Y()+i ) );
             }
             break;
 
@@ -178,6 +193,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustRight( -1 );
                 pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-i ),
                                 Point( nRect.Right(), aCenter.Y()+i ) );
+                pDev->DrawPixel( Point( nRect.Right(), aCenter.Y()-i ) );
+                pDev->DrawPixel( Point( nRect.Right(), aCenter.Y()+i ) );
             }
             break;
 
@@ -189,8 +206,12 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustTop( 1 );
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
                                 Point( aCenter.X()+i, nRect.Top() ) );
+                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Top() ) );
+                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Top() ) );
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Top()+n2 ),
                                 Point( aCenter.X()+i, nRect.Top()+n2 ) );
+                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Top()+n2 ) );
+                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Top()+n2 ) );
             }
             break;
 
@@ -202,8 +223,12 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 nRect.AdjustBottom( -1 );
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
                                 Point( aCenter.X()+i, nRect.Bottom() ) );
+                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Bottom() ) );
+                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Bottom() ) );
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom()-n2 ),
                                 Point( aCenter.X()+i, nRect.Bottom()-n2 ) );
+                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Bottom()-n2 ) );
+                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Bottom()-n2 ) );
             }
             break;
 
@@ -353,10 +378,10 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             break;
 
         case SymbolType::PLUS:
-            pDev->DrawRect( tools::Rectangle( nRect.Left(), aCenter.Y()-n8/2,
-                                       nRect.Right()+1, aCenter.Y()+n8/2+1 ) );
-            pDev->DrawRect( tools::Rectangle( aCenter.X()-n8/2, nRect.Top(),
-                                       aCenter.X()+n8/2+1, nRect.Bottom()+1 ) );
+            pDev->DrawRect( tools::Rectangle( nRect.Left(), aCenter.Y()-n16,
+                                              nRect.Right(), aCenter.Y()+n16 ) );
+            pDev->DrawRect( tools::Rectangle( aCenter.X()-n16, nRect.Top(),
+                                              aCenter.X()+n16, nRect.Bottom() ) );
             break;
         case SymbolType::DONTKNOW:
         case SymbolType::IMAGE:
