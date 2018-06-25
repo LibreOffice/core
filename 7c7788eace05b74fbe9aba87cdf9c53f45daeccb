@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_c37c0e23",
+        "filename": "translations",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-06-25T12:39:37Z",
+      "side": 1,
+      "message": "What happened here?  I don\u0027t notice this on my git tree on my computer, but I don\u0027t like it...",
+      "revId": "7c7788eace05b74fbe9aba87cdf9c53f45daeccb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
