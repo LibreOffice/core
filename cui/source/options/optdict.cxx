@@ -460,10 +460,8 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 
     EnterWait();
 
-    OUString aStr;
-
-    pWordED->SetText(aStr);
-    pReplaceED->SetText(aStr);
+    pWordED->SetText(OUString());
+    pReplaceED->SetText(OUString());
 
     bool bIsNegative = xDic->getDictionaryType() != DictionaryType_POSITIVE;
     bool bLangNone = LanguageTag(
@@ -517,17 +515,34 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     Sequence< Reference< XDictionaryEntry >  > aEntries( xDic->getEntries() );
     const Reference< XDictionaryEntry >  *pEntry = aEntries.getConstArray();
     sal_Int32 nCount = aEntries.getLength();
-
+    std::vector<OUString> aSortedDicEntries;
+    aSortedDicEntries.reserve(nCount);
     for (sal_Int32 i = 0;  i < nCount;  i++)
     {
-        aStr = pEntry[i]->getDictionaryWord();
-        sal_uLong nPos = GetLBInsertPos( aStr );
+        OUString aStr = pEntry[i]->getDictionaryWord();
         if(!pEntry[i]->getReplacementText().isEmpty())
         {
             aStr += "\t" + pEntry[i]->getReplacementText();
         }
-        pWordsLB->InsertEntry(aStr, nullptr, false, nPos == TREELIST_ENTRY_NOTFOUND ?  TREELIST_APPEND : nPos);
+        aSortedDicEntries.push_back(aStr);
     }
+
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+    const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
+    std::sort(aSortedDicEntries.begin(), aSortedDicEntries.end(),
+        [&] (OUString const & lhs, OUString const & rhs)
+        {
+            sal_Int32 nCmpRes = pCollator->
+                compareString( getNormDicEntry_Impl(lhs), getNormDicEntry_Impl( rhs ) );
+            return nCmpRes < 0;
+        });
+
+    pWordsLB->SetUpdateMode(false); // speed up insert
+    for (OUString const & rStr : aSortedDicEntries)
+    {
+        pWordsLB->InsertEntry(rStr, nullptr, false, TREELIST_APPEND);
+    }
+    pWordsLB->SetUpdateMode(false);
 
     if (pWordsLB->GetEntryCount())
     {
