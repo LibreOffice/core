@@ -1,3 +1,0 @@
-Create HTML pages from C++, Java and IDL inline documentation.
-
-Part of the SDK; to build you need to add --enable-odk.

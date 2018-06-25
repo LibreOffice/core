@@ -1,2 +1,0 @@
-SvIDL Compiler that generates C++ slot headers from SDI files in modules' sdi/
-subdirectory.

@@ -1,2 +1,0 @@
-V	341114153321Z		1000	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=Sub CA 1 Root 8
-R	341114155533Z	091120155655Z,superseded	1001	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=Sub CA 2 Root 8

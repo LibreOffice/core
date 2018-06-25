@@ -1,5 +1,0 @@
-"JavaComponentLoader";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
-"JavaComponentLoader";"com::sun::star::lang::XServiceInfo";"supportsService()"
-"JavaComponentLoader";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
-"JavaComponentLoader";"com::sun::star::loader::XImplementationLoader";"activate()"
-"JavaComponentLoader";"com::sun::star::loader::XImplementationLoader";"writeRegistryInfo()"

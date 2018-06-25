@@ -1,7 +1,0 @@
-P SUNWcar Core Architecture, (Root)
-P SUNWkvm Core Architecture, (Kvm)
-P SUNWcsr Core Solaris, (Root)
-P SUNWcsu Core Solaris, (Usr)
-P SUNWcsd Core Solaris Devices
-P SUNWcsl Core Solaris, (Shared Libs)
-P SUNWloc System Localization

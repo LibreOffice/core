@@ -1,8 +1,0 @@
-    </simple-license>
-  </registration>
-  <version value="#VERSION#"/>
-  <identifier value="com.sun.reportdesignertemplates"/>
-  <dependencies>
-    <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0"/>
-  </dependencies>
-</description>

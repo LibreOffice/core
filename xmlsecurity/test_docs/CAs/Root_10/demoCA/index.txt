@@ -1,1 +1,0 @@
-V	341117151448Z		1000	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=Sub CA 1 Root 10

@@ -1,6 +1,0 @@
-module ooo { module vba {
-    constants VbCalendar {
-        const long vbCalGreg = 0;
-        const long vbCalHijri = 1;
-    };
-}; };

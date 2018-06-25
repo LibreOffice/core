@@ -1,6 +1,0 @@
-module ooo { module vba { module adodb {
-    constants ADCPROP_AUTORECALC_ENUM {
-        const long adRecalcAlways = 1;
-        const long adRecalcUpFront = 0;
-    };
-}; }; };

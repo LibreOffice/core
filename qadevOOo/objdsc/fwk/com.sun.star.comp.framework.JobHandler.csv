@@ -1,3 +1,0 @@
-"JobHandler";"com::sun::star::lang::XInitialization#optional";"initialize()"
-"JobHandler";"com::sun::star::frame::XDispatchProvider";"queryDispatch()"
-"JobHandler";"com::sun::star::frame::XDispatchProvider";"queryDispatches()"

@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
-<settings version="1.0">
-    <module name="org.openoffice.netbeans.modules.office/1"/>
-    <instanceof class="org.openide.filesystems.FileSystem"/>
-    <instance class="org.openoffice.netbeans.modules.office.filesystem.OpenOfficeDocFileSystem"/>
-</settings>

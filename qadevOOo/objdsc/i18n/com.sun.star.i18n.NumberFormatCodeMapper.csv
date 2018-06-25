@@ -1,7 +1,0 @@
-"NumberFormatCodeMapper";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
-"NumberFormatCodeMapper";"com::sun::star::lang::XServiceInfo";"supportsService()"
-"NumberFormatCodeMapper";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
-"NumberFormatCodeMapper";"com::sun::star::i18n::XNumberFormatCode";"getDefault()"
-"NumberFormatCodeMapper";"com::sun::star::i18n::XNumberFormatCode";"getFormatCode()"
-"NumberFormatCodeMapper";"com::sun::star::i18n::XNumberFormatCode";"getAllFormatCode()"
-"NumberFormatCodeMapper";"com::sun::star::i18n::XNumberFormatCode";"getAllFormatCodes()"

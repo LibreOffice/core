@@ -1,6 +1,0 @@
-module ooo { module vba { module excel {
-    constants XlEditionType {
-        const long xlPublisher = 1;
-        const long xlSubscriber = 2;
-    };
-}; }; };

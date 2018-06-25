@@ -1,1 +1,0 @@
--o complex.extensions.OfficeResourceLoader

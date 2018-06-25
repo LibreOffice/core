@@ -1,4 +1,0 @@
-
-
-IDP_SIGNET RCDATA "signet.png"
-

@@ -1,6 +1,0 @@
-#ifndef CONFIG_GRAPHITE_H
-#define CONFIG_GRAPHITE_H
-
-#define ENABLE_GRAPHITE 0
-
-#endif

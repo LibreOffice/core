@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Class-Path:
-Main-Class: test/java/javanative/JavaNative
-Sealed: true
-UNO-Type-Path:

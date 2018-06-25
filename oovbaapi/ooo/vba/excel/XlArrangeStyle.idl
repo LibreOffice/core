@@ -1,8 +1,0 @@
-module ooo { module vba { module excel {
-    constants XlArrangeStyle {
-        const long xlArrangeStyleCascade = 7;
-        const long xlArrangeStyleHorizontal = -4128;
-        const long xlArrangeStyleTiled = 1;
-        const long xlArrangeStyleVertical = -4166;
-    };
-}; }; };

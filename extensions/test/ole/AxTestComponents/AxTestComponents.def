@@ -1,9 +1,0 @@
-; AxTestComponents.def : Declares the module parameters.
-
-LIBRARY      "AxTestComponents.DLL"
-
-EXPORTS
-	DllCanUnloadNow      PRIVATE
-	DllGetClassObject    PRIVATE
-	DllRegisterServer    PRIVATE
-	DllUnregisterServer	 PRIVATE

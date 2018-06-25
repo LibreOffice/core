@@ -1,5 +1,0 @@
-"SdDocLinkTargets";"com::sun::star::container::XNameAccess";"getByName()"
-"SdDocLinkTargets";"com::sun::star::container::XNameAccess";"getElementNames()"
-"SdDocLinkTargets";"com::sun::star::container::XNameAccess";"hasByName()"
-"SdDocLinkTargets";"com::sun::star::container::XElementAccess";"getElementType()"
-"SdDocLinkTargets";"com::sun::star::container::XElementAccess";"hasElements()"

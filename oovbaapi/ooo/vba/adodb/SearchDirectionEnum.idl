@@ -1,6 +1,0 @@
-module ooo { module vba { module adodb {
-    constants SearchDirectionEnum {
-        const long adSearchBackward = -1;
-        const long adSearchForward = 1;
-    };
-}; }; };

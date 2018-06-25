@@ -1,3 +1,0 @@
-"NamingService";"com::sun::star::uno::XNamingService";"getRegisteredObject()"
-"NamingService";"com::sun::star::uno::XNamingService";"registerObject()"
-"NamingService";"com::sun::star::uno::XNamingService";"revokeObject()"

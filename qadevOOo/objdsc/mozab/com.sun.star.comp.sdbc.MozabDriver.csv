@@ -1,5 +1,0 @@
-"MozabDriver";"com::sun::star::sdbc::XDriver";"connect()"
-"MozabDriver";"com::sun::star::sdbc::XDriver";"acceptsURL()"
-"MozabDriver";"com::sun::star::sdbc::XDriver";"getPropertyInfo()"
-"MozabDriver";"com::sun::star::sdbc::XDriver";"getMajorVersion()"
-"MozabDriver";"com::sun::star::sdbc::XDriver";"getMinorVersion()"

@@ -1,5 +1,0 @@
-module ooo { module vba { module excel {
-    constants XlCreator {
-        const long xlCreatorCode = 1480803660;
-    };
-}; }; };

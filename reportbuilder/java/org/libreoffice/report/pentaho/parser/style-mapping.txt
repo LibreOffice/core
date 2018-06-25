@@ -1,8 +1,0 @@
-    <style:style style:name="S1" style:family="graphics">
-      <style:section-properties fo:background-color="#ffffff"/>
-    </style:style>
-
-gets translated into:
-
-*[draw|style-name~="S1"]
-

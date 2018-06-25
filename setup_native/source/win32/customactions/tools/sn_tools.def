@@ -1,3 +1,0 @@
-LIBRARY		"sn_tools.dll"
-EXPORTS
-			CheckVersions

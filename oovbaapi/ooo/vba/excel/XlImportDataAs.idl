@@ -1,6 +1,0 @@
-module ooo { module vba { module excel {
-    constants XlImportDataAs {
-        const long xlPivotTableReport = 1;
-        const long xlQueryTable = 0;
-    };
-}; }; };

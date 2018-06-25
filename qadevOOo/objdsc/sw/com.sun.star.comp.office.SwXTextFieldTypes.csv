@@ -1,6 +1,0 @@
-"SwXTextFieldTypes";"com::sun::star::util::XRefreshable";"refresh()"
-"SwXTextFieldTypes";"com::sun::star::util::XRefreshable";"addRefreshListener()"
-"SwXTextFieldTypes";"com::sun::star::util::XRefreshable";"removeRefreshListener()"
-"SwXTextFieldTypes";"com::sun::star::container::XElementAccess";"getElementType()"
-"SwXTextFieldTypes";"com::sun::star::container::XElementAccess";"hasElements()"
-"SwXTextFieldTypes";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

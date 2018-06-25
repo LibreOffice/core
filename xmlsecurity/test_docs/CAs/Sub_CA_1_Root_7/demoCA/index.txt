@@ -1,2 +1,0 @@
-V	341114131904Z		1000	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=User 1 Sub CA 1 Root 7
-R	341114132648Z	091120132827Z,CACompromise	1001	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=User 2 Sub CA 1 Root 7

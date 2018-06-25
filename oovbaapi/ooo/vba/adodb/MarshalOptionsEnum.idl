@@ -1,6 +1,0 @@
-module ooo { module vba { module adodb {
-    constants MarshalOptionsEnum {
-        const long adMarshalAll = 0;
-        const long adMarshalModifiedOnly = 1;
-    };
-}; }; };

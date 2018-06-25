@@ -1,8 +1,0 @@
-"Pump";"com::sun::star::io::XActiveDataControl";"addListener()"
-"Pump";"com::sun::star::io::XActiveDataControl";"removeListener()"
-"Pump";"com::sun::star::io::XActiveDataControl";"start()"
-"Pump";"com::sun::star::io::XActiveDataControl";"terminate()"
-"Pump";"com::sun::star::io::XActiveDataSink";"setInputStream()"
-"Pump";"com::sun::star::io::XActiveDataSink";"getInputStream()"
-"Pump";"com::sun::star::io::XActiveDataSource";"setOutputStream()"
-"Pump";"com::sun::star::io::XActiveDataSource";"getOutputStream()"

@@ -1,7 +1,0 @@
-"ScAreaLinksObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScAreaLinksObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"ScAreaLinksObj";"com::sun::star::sheet::XAreaLinks";"insertAtPosition()"
-"ScAreaLinksObj";"com::sun::star::sheet::XAreaLinks";"removeByIndex()"
-"ScAreaLinksObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScAreaLinksObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScAreaLinksObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

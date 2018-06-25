@@ -1,8 +1,0 @@
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XNameAccess";"getByName()"
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XNameAccess";"getElementNames()"
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XNameAccess";"hasByName()"
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScDataPilotFieldGroupsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

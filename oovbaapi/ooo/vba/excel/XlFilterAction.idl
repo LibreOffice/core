@@ -1,6 +1,0 @@
-module ooo { module vba { module excel {
-    constants XlFilterAction {
-        const long xlFilterCopy = 2;
-        const long xlFilterInPlace = 1;
-    };
-}; }; };

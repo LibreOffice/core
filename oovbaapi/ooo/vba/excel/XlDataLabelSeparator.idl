@@ -1,5 +1,0 @@
-module ooo { module vba { module excel {
-    constants XlDataLabelSeparator {
-        const long xlDataLabelSeparatorDefault = 1;
-    };
-}; }; };

@@ -1,1 +1,0 @@
-module M { published struct N { long m; }; };

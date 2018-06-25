@@ -1,5 +1,0 @@
-"Dispatch";"drafts::com::sun::star::frame::XDispatchProvider";"queryDispatch()"
-"Dispatch";"drafts::com::sun::star::frame::XDispatchProvider";"queryDispatches()"
-"Dispatch";"drafts::com::sun::star::frame::XDispatch";"dispatch()"
-"Dispatch";"drafts::com::sun::star::frame::XDispatch";"addStatusListener()"
-"Dispatch";"drafts::com::sun::star::frame::XDispatch";"removeStatusListener()"

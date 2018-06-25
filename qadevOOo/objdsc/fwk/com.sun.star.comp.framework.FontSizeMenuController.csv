@@ -1,5 +1,0 @@
-"FontSizeMenuController";"com::sun::star::frame::XPopupMenuController";"setPopupMenu()"
-"FontSizeMenuController";"com::sun::star::frame::XPopupMenuController";"updatePopupMenu()"
-"FontSizeMenuController";"com::sun::star::lang::XEventListener";"disposing()"
-"FontSizeMenuController";"com::sun::star::lang::XInitialization";"initialize()"
-"FontSizeMenuController";"com::sun::star::frame::XStatusListener";"statusChanged()"

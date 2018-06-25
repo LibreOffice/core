@@ -1,2 +1,0 @@
-RegistrationClassName: com.sun.star.script.framework.provider.java.ScriptProviderForJava
-UNO-Type-Path: 

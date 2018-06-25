@@ -1,7 +1,0 @@
-"ObjectInspectorModel";"com::sun::star::inspection::XObjectInspectorModel";"describeCategories()"
-"ObjectInspectorModel";"com::sun::star::inspection::XObjectInspectorModel";"getPropertyOrderIndex()"
-"ObjectInspectorModel";"com::sun::star::inspection::XObjectInspectorModel";"HandlerFactories()"
-"ObjectInspectorModel";"com::sun::star::inspection::XObjectInspectorModel";"HasHelpSection()"
-"ObjectInspectorModel";"com::sun::star::inspection::XObjectInspectorModel";"MinHelpTextLines()"
-"ObjectInspectorModel";"com::sun::star::inspection::XObjectInspectorModel";"MaxHelpTextLines()"
-"ObjectInspectorModel";"com::sun::star::inspection::XObjectInspectorModel";"IsReadOnly()"

@@ -1,1 +1,0 @@
-module M { struct N { short m; }; };

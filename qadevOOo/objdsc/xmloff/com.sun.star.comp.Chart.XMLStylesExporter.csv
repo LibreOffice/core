@@ -1,6 +1,0 @@
-"XMLStylesExporter";"com::sun::star::lang::XInitialization#optional";"initialize()"
-"XMLStylesExporter";"com::sun::star::document::XFilter";"filter()"
-"XMLStylesExporter";"com::sun::star::document::XFilter";"cancel()"
-"XMLStylesExporter";"com::sun::star::container::XNamed#optional";"getName()"
-"XMLStylesExporter";"com::sun::star::container::XNamed#optional";"setName()"
-"XMLStylesExporter";"com::sun::star::document::XExporter";"setSourceDocument()"

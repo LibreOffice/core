@@ -1,6 +1,0 @@
-module ooo { module vba { module excel {
-    constants XlApplyNamesOrder {
-        const long xlColumnThenRow = 2;
-        const long xlRowThenColumn = 1;
-    };
-}; }; };

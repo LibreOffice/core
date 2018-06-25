@@ -1,6 +1,0 @@
-module ooo { module vba { module excel {
-    constants XlInsertShiftDirection {
-        const long xlShiftDown = -4121;
-        const long xlShiftToRight = -4161;
-    };
-}; }; };

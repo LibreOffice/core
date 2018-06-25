@@ -1,3 +1,0 @@
-"AppDispatchProvider";"com::sun::star::lang::XInitialization#optional";"initialize()"
-"AppDispatchProvider";"com::sun::star::frame::XDispatchProvider";"queryDispatch()"
-"AppDispatchProvider";"com::sun::star::frame::XDispatchProvider";"queryDispatches()"

@@ -1,8 +1,0 @@
-"ScSheetLinksObj";"com::sun::star::container::XNameAccess";"getByName()"
-"ScSheetLinksObj";"com::sun::star::container::XNameAccess";"getElementNames()"
-"ScSheetLinksObj";"com::sun::star::container::XNameAccess";"hasByName()"
-"ScSheetLinksObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScSheetLinksObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"ScSheetLinksObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScSheetLinksObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScSheetLinksObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

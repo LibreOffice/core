@@ -1,3 +1,0 @@
-"ServiceHandler";"com::sun::star::lang::XInitialization#optional";"initialize()"
-"ServiceHandler";"com::sun::star::frame::XDispatchProvider";"queryDispatch()"
-"ServiceHandler";"com::sun::star::frame::XDispatchProvider";"queryDispatches()"

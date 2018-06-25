@@ -1,5 +1,0 @@
-"SdPageLinkTargets";"com::sun::star::container::XNameAccess";"getByName()"
-"SdPageLinkTargets";"com::sun::star::container::XNameAccess";"getElementNames()"
-"SdPageLinkTargets";"com::sun::star::container::XNameAccess";"hasByName()"
-"SdPageLinkTargets";"com::sun::star::container::XElementAccess";"getElementType()"
-"SdPageLinkTargets";"com::sun::star::container::XElementAccess";"hasElements()"

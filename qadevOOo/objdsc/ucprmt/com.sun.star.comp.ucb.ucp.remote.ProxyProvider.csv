@@ -1,5 +1,0 @@
-"ProxyProvider";"com::sun::star::ucb::XParameterizedContentProvider#optional";"registerInstance()"
-"ProxyProvider";"com::sun::star::ucb::XParameterizedContentProvider#optional";"deregisterInstance()"
-"ProxyProvider";"com::sun::star::ucb::XContentProvider";"queryContent()"
-"ProxyProvider";"com::sun::star::ucb::XContentProvider";"compareContentIds()"
-"ProxyProvider";"com::sun::star::ucb::XContentIdentifierFactory#optional";"createContentIdentifier()"

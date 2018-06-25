@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Class-Path:
-Main-Class: test/java/tester/Tester
-Sealed: true
-UNO-Type-Path:

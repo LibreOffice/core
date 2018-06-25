@@ -1,6 +1,0 @@
-"MimeContentTypeFactory";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
-"MimeContentTypeFactory";"com::sun::star::lang::XServiceInfo";"supportsService()"
-"MimeContentTypeFactory";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
-"MimeContentTypeFactory";"com::sun::star::lang::XTypeProvider";"getTypes()"
-"MimeContentTypeFactory";"com::sun::star::lang::XTypeProvider";"getImplementationId()"
-"MimeContentTypeFactory";"com::sun::star::datatransfer::XMimeContentTypeFactory";"createMimeContentType()"

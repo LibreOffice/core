@@ -1,6 +1,0 @@
-"SdMasterPagesAccess";"com::sun::star::container::XIndexAccess";"getCount()"
-"SdMasterPagesAccess";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"SdMasterPagesAccess";"com::sun::star::drawing::XDrawPages";"insertNewByIndex()"
-"SdMasterPagesAccess";"com::sun::star::drawing::XDrawPages";"remove()"
-"SdMasterPagesAccess";"com::sun::star::container::XElementAccess";"getElementType()"
-"SdMasterPagesAccess";"com::sun::star::container::XElementAccess";"hasElements()"

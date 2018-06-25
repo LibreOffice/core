@@ -1,9 +1,0 @@
-Test run started : 08/10/2008 12:04:16
-BEGIN StrConv
- TEST START : Test StrConv function
-  ITEM Assertion OK : Converts the string to uppercase characters:ABC EFG HIJ
-  ITEM Assertion OK : Converts the string to lowercase characters:abc efg hij
-  ITEM Assertion OK : Converts the first letter of every word in string to uppercase:Abc Efg Hij
- TEST OK : Test StrConv function
-END  StrConv
-Test run finished : 08/10/2008 12:04:16
