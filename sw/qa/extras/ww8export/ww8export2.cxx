@@ -852,6 +852,13 @@ DECLARE_WW8EXPORT_TEST(testTdf117885, "tdf117885.doc")
     CPPUNIT_ASSERT_EQUAL(nParaA_Top, nParaB_Top);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf118133, "tdf118133.docx")
+{
+    // This was 0, doc import + doc export resulted in lost image due to broken
+    // lazy-loading of tiff images.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15240), getShape(1)->getSize().Width);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
