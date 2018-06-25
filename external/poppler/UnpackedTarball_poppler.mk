@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	$(if $(filter MSC-120,$(COM)-$(VCVER)),external/poppler/poppler-snprintf.patch.1) \
+	external/poppler/msvc2013.patch.1 \
 	external/poppler/poppler-config.patch.1 \
 ))
 
