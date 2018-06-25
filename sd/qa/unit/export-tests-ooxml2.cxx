@@ -121,6 +121,7 @@ public:
     void testGroupRotation();
     void testTdf104788();
     void testSmartartRotation2();
+    void testTdf114845_rotateShape();
     void testGroupsPosition();
     void testGroupsRotatedPosition();
     void testAccentColor();
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testGroupRotation);
     CPPUNIT_TEST(testTdf104788);
     CPPUNIT_TEST(testSmartartRotation2);
+    CPPUNIT_TEST(testTdf114845_rotateShape);
     CPPUNIT_TEST(testGroupsPosition);
     CPPUNIT_TEST(testGroupsRotatedPosition);
     CPPUNIT_TEST(testAccentColor);
@@ -1285,6 +1287,20 @@ void SdOOXMLExportTest2::testSmartartRotation2()
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:bodyPr", "rot", "10800000");
+}
+
+void SdOOXMLExportTest2::testTdf114845_rotateShape()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf114845_rotateShape.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:nvSpPr/p:cNvPr", "name", "CustomShape 5");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm", "flipV", "1");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "x", "4059000");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "y", "3287520");
 }
 
 void SdOOXMLExportTest2::testGroupsPosition()
