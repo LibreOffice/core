@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_235322e3",
+        "filename": "cui/source/options/optdict.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-06-25T11:11:24Z",
+      "side": 1,
+      "message": "Is this correct? (didn\u0027t look the function, just see the same call with false as above)",
+      "range": {
+        "startLine": 545,
+        "startChar": 28,
+        "endLine": 545,
+        "endChar": 33
+      },
+      "revId": "a07bb28d3199542c0b90884a947c2bac02bad07d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
