@@ -16,6 +16,24 @@
       "revId": "7c7788eace05b74fbe9aba87cdf9c53f45daeccb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_836db606",
+        "filename": "translations",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-06-25T14:36:35Z",
+      "side": 1,
+      "message": "You use --with-lang, but you did raw \u0027git pull -r\u0027 instead of the required \u0027./g pull -r\u0027? \u0027git submodule update\u0027 should fix it, I think. (and then \u0027git commit -a --amend\u0027)",
+      "parentUuid": "5a22e58a_c37c0e23",
+      "revId": "7c7788eace05b74fbe9aba87cdf9c53f45daeccb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
