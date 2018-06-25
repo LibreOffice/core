@@ -67,8 +67,6 @@ namespace ww8
     typedef std::vector<SwTextFormatColl *> ParaStyles;
     /// STL container of SfxPoolItems (Attributes)
     typedef std::map<sal_uInt16, const SfxPoolItem *, sw::util::ItemSort> PoolItems;
-    /// STL const iterator for ParaStyles
-    typedef PoolItems::const_iterator cPoolItemIter;
 
     /** Make exporting a Writer Frame easy
 

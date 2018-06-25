@@ -299,7 +299,7 @@ STDMETHODIMP EmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnec
 
 STDMETHODIMP EmbedDocument_Impl::Unadvise( DWORD dwConnection )
 {
-    AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.find( dwConnection );
+    auto iAdvise = m_aAdviseHashMap.find( dwConnection );
     if ( iAdvise != m_aAdviseHashMap.end() )
     {
         iAdvise->second->Release();

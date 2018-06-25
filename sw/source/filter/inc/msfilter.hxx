@@ -281,7 +281,6 @@ namespace sw
         {
         public:
             typedef std::map<InsertedTableClient *, SwNodeIndex *> TableMap;
-            typedef TableMap::iterator TableMapIter;
             void DelAndMakeTableFrames();
             void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);
             explicit InsertedTablesManager(const SwDoc &rDoc);

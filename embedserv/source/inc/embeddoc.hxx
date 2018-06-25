@@ -32,7 +32,6 @@
 #include "docholder.hxx"
 
 typedef std::unordered_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
-typedef std::unordered_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
 
 class GDIMetaFile;
 class CIIAObj;

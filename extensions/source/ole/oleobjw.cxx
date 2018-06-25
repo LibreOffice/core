@@ -99,8 +99,7 @@ IUnknownWrapper::~IUnknownWrapper()
 #endif
 
     // remove entries in global maps
-    typedef std::unordered_map<sal_uIntPtr, sal_uIntPtr>::iterator IT;
-    IT it= WrapperToAdapterMap.find( reinterpret_cast<sal_uIntPtr>(xIntRoot));
+    auto it= WrapperToAdapterMap.find( reinterpret_cast<sal_uIntPtr>(xIntRoot));
     if( it != WrapperToAdapterMap.end())
     {
         sal_uIntPtr adapter= it->second;

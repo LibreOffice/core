@@ -416,7 +416,7 @@ namespace sw
         const SfxPoolItem *SearchPoolItems(const ww8::PoolItems &rItems,
             sal_uInt16 eType)
         {
-            ww8::cPoolItemIter aIter = rItems.find(eType);
+            auto aIter = rItems.find(eType);
             if (aIter != rItems.end())
                 return aIter->second;
             return nullptr;
@@ -865,8 +865,8 @@ namespace sw
         {
             if (!mbHasRoot)
                 return;
-            TableMapIter aEnd = maTables.end();
-            for (TableMapIter aIter = maTables.begin(); aIter != aEnd; ++aIter)
+            auto aEnd = maTables.end();
+            for (auto aIter = maTables.begin(); aIter != aEnd; ++aIter)
             {
                 // If already a layout exists, then the BoxFrames must recreated at this table
                 SwTableNode *pTable = aIter->first->GetTableNode();

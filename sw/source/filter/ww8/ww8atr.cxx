@@ -208,8 +208,8 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
 
 void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript, const SvxFontItem *pFont, bool bWriteCombChars )
 {
-    ww8::cPoolItemIter aEnd = rItems.end();
-    for ( ww8::cPoolItemIter aI = rItems.begin(); aI != aEnd; ++aI )
+    auto aEnd = rItems.cend();
+    for ( auto aI = rItems.cbegin(); aI != aEnd; ++aI )
     {
         const SfxPoolItem *pItem = aI->second;
         sal_uInt16 nWhich = pItem->Which();
@@ -296,8 +296,8 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
             ExportPoolItemsToCHP(aItems, nScript, nullptr);
         if ( bPapFormat )
         {
-            ww8::cPoolItemIter aEnd = aItems.end();
-            for ( ww8::cPoolItemIter aI = aItems.begin(); aI != aEnd; ++aI )
+            auto aEnd = aItems.cend();
+            for ( auto aI = aItems.cbegin(); aI != aEnd; ++aI )
             {
                 pItem = aI->second;
                 sal_uInt16 nWhich = pItem->Which();

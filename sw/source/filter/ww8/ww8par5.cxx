@@ -871,8 +871,8 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     bool bNested = false;
     if (!m_aFieldStack.empty())
     {
-        mycFieldIter aEnd = m_aFieldStack.end();
-        for(mycFieldIter aIter = m_aFieldStack.begin(); aIter != aEnd; ++aIter)
+        auto aEnd = m_aFieldStack.cend();
+        for(auto aIter = m_aFieldStack.cbegin(); aIter != aEnd; ++aIter)
         {
             bNested = !AcceptableNestedField(aIter->mnFieldId);
             if (bNested)

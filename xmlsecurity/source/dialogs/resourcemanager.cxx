@@ -83,10 +83,9 @@ namespace XmlSec
     {
         vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(rRawString);
         OUStringBuffer s1, s2;
-        typedef vector< pair < OUString, OUString > >::const_iterator CIT;
-        for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); ++i)
+        for (auto i = vecAttrValueOfDN.cbegin(); i < vecAttrValueOfDN.cend(); ++i)
         {
-            if (i != vecAttrValueOfDN.begin())
+            if (i != vecAttrValueOfDN.cbegin())
             {
                 s1.append(',');
                 s2.append('\n');
@@ -312,8 +311,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         while ( aIDs[i] )
         {
             OUString sPartId = OUString::createFromAscii( aIDs[i++] );
-            typedef vector< pair < OUString, OUString > >::const_iterator CIT;
-            for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); ++idn)
+            for (auto idn = vecAttrValueOfDN.cbegin(); idn != vecAttrValueOfDN.cend(); ++idn)
             {
                 if (idn->first == sPartId)
                 {

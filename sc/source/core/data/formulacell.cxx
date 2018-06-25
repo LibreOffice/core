@@ -353,10 +353,9 @@ bool
 lcl_checkIfAdjacent(
     const ScAddress& rPos, const deque<formula::FormulaToken*>& rReferences, const DimensionSelector aWhich)
 {
-    typedef deque<formula::FormulaToken*>::const_iterator Iter;
-    Iter aBegin(rReferences.begin());
-    Iter aEnd(rReferences.end());
-    Iter aBegin1(aBegin);
+    auto aBegin(rReferences.cbegin());
+    auto aEnd(rReferences.cend());
+    auto aBegin1(aBegin);
     ++aBegin1;
     --aEnd;
     return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(rPos, aWhich));
