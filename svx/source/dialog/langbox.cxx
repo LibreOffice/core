@@ -654,6 +654,8 @@ void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
     {
         nCount = SvtLanguageTable::GetLanguageEntryCount();
     }
+
+    m_xControl->freeze();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         LanguageType nLangType;
@@ -691,6 +693,8 @@ void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
 
     if (bHasLangNone)
         InsertLanguage( LANGUAGE_NONE );
+
+    m_xControl->thaw();
 }
 
 int LanguageBox::ImplTypeToPos(LanguageType eType) const
@@ -758,6 +762,7 @@ LanguageBox::LanguageBox(weld::ComboBoxText* pControl)
     m_xControl->make_sorted();
     m_xControl->connect_changed(LINK(this, LanguageBox, ChangeHdl));
 
+    m_xControl->freeze();
     sal_uInt32 nCount = SvtLanguageTable::GetLanguageEntryCount();
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
@@ -774,6 +779,7 @@ LanguageBox::LanguageBox(weld::ComboBoxText* pControl)
 
         InsertLanguage(nLangType);
     }
+    m_xControl->thaw();
 }
 
 SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits )
