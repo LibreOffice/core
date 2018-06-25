@@ -35,6 +35,10 @@ else
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 endif
 
+ifneq ($(USE_LD),)
+gb_LinkTarget_LDFLAGS += -fuse-ld=$(USE_LD)
+endif
+
 ifeq ($(strip $(gb_COMPILEROPTFLAGS)),)
 gb_COMPILEROPTFLAGS := -O2
 endif
