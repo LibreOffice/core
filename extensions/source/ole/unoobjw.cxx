@@ -1038,6 +1038,10 @@ STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeIn
     if (iTInfo != 0)
         return E_NOTIMPL;
 
+    // FIXME: This is surely incorrect. Why is being able to handle GetTypeInfo() here coupled to
+    // being a source for outgoing events, i.e. implementing XConnectable? What would break if we
+    // would use XInterfaceWithIID and its getIID instead?
+
     Reference<ooo::vba::XConnectable> xConnectable(m_xOrigin, UNO_QUERY);
     if (!xConnectable.is())
         return E_NOTIMPL;
