@@ -565,7 +565,7 @@ public:
 
     void connect_value_changed(const Link<SpinButton&, void>& rLink) { m_aValueChangedHdl = rLink; }
 
-    void connect_output(const Link<SpinButton&, void>& rLink) { m_aOutputHdl = rLink; }
+    virtual void connect_output(const Link<SpinButton&, void>& rLink) { m_aOutputHdl = rLink; }
     void connect_input(const Link<int*, bool>& rLink) { m_aInputHdl = rLink; }
 
     int normalize(int nValue) const { return (nValue * Power10(get_digits())); }

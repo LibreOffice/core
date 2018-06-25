@@ -487,7 +487,10 @@ public:
     virtual void    LoseFocus() override;
     virtual void    Resize() override;
     virtual void    StyleUpdated() override;
+
     virtual void    Select();
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
 
     OUString        GetText() const { return maText; }
@@ -498,6 +501,8 @@ public:
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);
+    /// Insert an User Drawn item with @rStr tooltip.
+    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos);
     void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();

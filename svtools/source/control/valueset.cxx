@@ -2366,6 +2366,10 @@ void SvtValueSet::Select()
     maSelectHdl.Call( this );
 }
 
+void SvtValueSet::UserDraw( const UserDrawEvent& )
+{
+}
+
 size_t SvtValueSet::ImplGetItem( const Point& rPos ) const
 {
     if (!mbHasVisibleItems)
@@ -2661,9 +2665,9 @@ void SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
         {
             if (rMouseEvent.GetClicks() == 1)
             {
-                SelectItem( pItem->mnId );
                 if (!(GetStyle() & WB_NOPOINTERFOCUS))
                     GrabFocus();
+                SelectItem( pItem->mnId );
                 Select();
             }
             else if ( rMouseEvent.GetClicks() == 2 )
@@ -3459,6 +3463,8 @@ void SvtValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtV
 
         if (pItem->meType == VALUESETITEM_USERDRAW)
         {
+            UserDrawEvent aUDEvt(nullptr, maVirDev.get(), aRect, pItem->mnId);
+            UserDraw(aUDEvt);
         }
         else
         {
@@ -3736,6 +3742,19 @@ void SvtValueSet::SetItemWidth( long nNewItemWidth )
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
+}
+
+//method to set accessible when the style is user draw.
+void SvtValueSet::InsertItem( sal_uInt16 nItemId, const OUString& rText, size_t nPos  )
+{
+    DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
+    DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
+                "ValueSet::InsertItem(): ItemId already exists" );
+    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    pItem->mnId     = nItemId;
+    pItem->meType   = VALUESETITEM_USERDRAW;
+    pItem->maText   = rText;
+    ImplInsertItem( pItem, nPos );
 }
 
 void SvtValueSet::SetItemHeight( long nNewItemHeight )

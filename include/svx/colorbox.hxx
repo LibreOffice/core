@@ -138,6 +138,8 @@ public:
 
     void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
     bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
+
+    void set_sensitive(bool bSet) { m_xButton->set_sensitive(bSet); }
 };
 
 /** A wrapper for SvxColorListBox. */
