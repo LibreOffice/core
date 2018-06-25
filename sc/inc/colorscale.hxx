@@ -51,7 +51,7 @@ private:
     ScColorScaleEntryType meType;
 
 public:
-    ScColorScaleEntry(double nVal, const Color& rCol);
+    ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType = COLORSCALE_VALUE);
     ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
     ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
@@ -329,8 +329,8 @@ struct ScIconSetFormatData
     // std..pair::second == -1 means no image
     std::vector<std::pair<ScIconSetType, sal_Int32> > maCustomVector;
 
-    ScIconSetFormatData():
-        eIconSetType(IconSet_3Arrows),
+    ScIconSetFormatData(ScIconSetType eType = IconSet_3Arrows):
+        eIconSetType(eType),
         mbShowValue(true),
         mbReverse(false),
         mbCustom(false)
