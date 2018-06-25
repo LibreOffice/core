@@ -864,6 +864,26 @@
         <property name="action_name">.uno:GotoPage</property>
       </object>
     </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator68">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="Watermark">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Watermark</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PageDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PageDialog</property>
+      </object>
+    </child>
   </object>
   <object class="GtkMenu" id="MenuFile">
     <property name="visible">True</property>
@@ -1110,7 +1130,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator40">
+      <object class="GtkSeparatorMenuItem" id="separator21">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1164,7 +1184,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator155">
+      <object class="GtkSeparatorMenuItem" id="separator40">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1219,13 +1239,13 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator156">
+      <object class="GtkSeparatorMenuItem" id="separator22">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertRLMD1">
+      <object class="GtkMenuItem" id="FontDialog3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:FontDialog</property>
@@ -1483,7 +1503,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Help"  translatable="yes">_Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Help">_Check for Updates...</property>
       </object>
     </child>
     <child>
@@ -2552,7 +2572,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Menu" translatable="yes">_Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Menu">_Check for Updates...</property>
       </object>
     </child>
     <child>
@@ -2981,7 +3001,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Tools" translatable="yes">_Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Tools">_Check for Updates...</property>
       </object>
     </child>
     <child>
