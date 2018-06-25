@@ -49,9 +49,9 @@ namespace sd
 
         private:
             void execute() override;
-            IBluetoothSocket *mpSocket;
+            std::unique_ptr<IBluetoothSocket> mpSocket;
 
-            Transmitter *pTransmitter;
+            std::unique_ptr<Transmitter> pTransmitter;
             rtl::Reference<Listener> mListener;
     };
 }
