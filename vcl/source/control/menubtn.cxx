@@ -20,6 +20,7 @@
 #include <tools/rc.h>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/menubtn.hxx>
@@ -50,20 +51,29 @@ void MenuButton::ExecuteMenu()
 {
     Activate();
 
-    if ( mpMenu )
+    if (!mpMenu && !mpFloatingWindow)
+        return;
+
+    Size aSize = GetSizePixel();
+    SetPressed( true );
+    EndSelection();
+    if (mpMenu)
     {
-        Point aPos( 0, 1 );
-        Size aSize = GetSizePixel();
-        Rectangle aRect( aPos, aSize );
-        SetPressed( true );
-        EndSelection();
-        mnCurItemId = mpMenu->Execute( this, aRect, PopupMenuFlags::ExecuteDown );
-        SetPressed( false );
-        if ( mnCurItemId )
-        {
-            Select();
-            mnCurItemId = 0;
-        }
+        Point aPos(0, 1);
+        Rectangle aRect(aPos, aSize );
+        mnCurItemId = mpMenu->Execute(this, aRect, PopupMenuFlags::ExecuteDown);
+    }
+    else
+    {
+        Point aPos(GetParent()->OutputToScreenPixel(GetPosPixel()));
+        Rectangle aRect(aPos, aSize );
+        mpFloatingWindow->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
+    }
+    SetPressed(false);
+    if (mnCurItemId)
+    {
+        Select();
+        mnCurItemId = 0;
     }
 }
 
@@ -160,12 +170,20 @@ void MenuButton::Select()
     maSelectHdl.Call( this );
 }
 
-void MenuButton::SetPopupMenu( PopupMenu* pNewMenu )
+void MenuButton::SetPopupMenu(PopupMenu* pNewMenu)
 {
     if (pNewMenu == mpMenu)
         return;
 
     mpMenu = pNewMenu;
+}
+
+void MenuButton::SetPopover(FloatingWindow* pFloatingWindow)
+{
+    if (pFloatingWindow == mpFloatingWindow)
+        return;
+
+    mpFloatingWindow = pFloatingWindow;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

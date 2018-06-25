@@ -23,6 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dllapi.h>
 
+class FloatingWindow;
 class Timer;
 class PopupMenu;
 class VclBuilder;
@@ -38,6 +39,7 @@ private:
     Timer*          mpMenuTimer;
     PopupMenu*      mpOwnMenu;
     PopupMenu*      mpMenu;
+    VclPtr<FloatingWindow> mpFloatingWindow;
     sal_uInt16      mnCurItemId;
     sal_uInt16      mnMenuMode;
     Link<MenuButton*,void> maActivateHdl;
@@ -68,8 +70,11 @@ public:
 
     void            SetMenuMode(sal_uInt16 nMode) { mnMenuMode = nMode; }
 
-    void            SetPopupMenu( PopupMenu* pNewMenu );
+    void            SetPopupMenu(PopupMenu* pNewMenu);
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
+
+    void            SetPopover(FloatingWindow* pFloatingWindow);
+    FloatingWindow* GetPopover() const { return mpFloatingWindow; }
 
     sal_uInt16      GetCurItemId() const { return mnCurItemId; }
     OString         GetCurItemIdent() const;
