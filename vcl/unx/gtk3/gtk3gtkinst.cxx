@@ -3465,6 +3465,7 @@ public:
     {
         disable_notify_events();
         g_object_ref(m_pListStore);
+        gtk_widget_freeze_child_notify(GTK_WIDGET(m_pTreeView));
         gtk_tree_view_set_model(m_pTreeView, nullptr);
         enable_notify_events();
     }
@@ -3473,6 +3474,7 @@ public:
     {
         disable_notify_events();
         gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pListStore));
+        gtk_widget_thaw_child_notify(GTK_WIDGET(m_pTreeView));
         g_object_unref(m_pListStore);
         enable_notify_events();
     }
@@ -4480,12 +4482,24 @@ public:
 
     virtual void freeze() override
     {
-        //do nothing for now
+        gtk_widget_freeze_child_notify(GTK_WIDGET(m_pComboBoxText));
+        if (m_xSorter)
+        {
+            GtkTreeModel* pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
+            gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+        }
     }
 
     virtual void thaw() override
     {
-        //do nothing for now
+        if (m_xSorter)
+        {
+            GtkTreeModel* pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
+            gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
+        }
+        gtk_widget_thaw_child_notify(GTK_WIDGET(m_pComboBoxText));
     }
 
     virtual ~GtkInstanceComboBoxText() override
