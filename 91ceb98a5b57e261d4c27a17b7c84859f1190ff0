@@ -34,6 +34,29 @@
       "revId": "91ceb98a5b57e261d4c27a17b7c84859f1190ff0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_432bbeeb",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-06-25T13:21:14Z",
+      "side": 1,
+      "message": "Numeric items (i.e. all but the last one) don\u0027t need translatable bit",
+      "range": {
+        "startLine": 41,
+        "startChar": 20,
+        "endLine": 41,
+        "endChar": 38
+      },
+      "revId": "91ceb98a5b57e261d4c27a17b7c84859f1190ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
