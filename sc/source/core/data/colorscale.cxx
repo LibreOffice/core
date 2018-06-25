@@ -158,10 +158,10 @@ ScColorScaleEntry::ScColorScaleEntry():
 {
 }
 
-ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
+ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType):
     mnVal(nVal),
     maColor(rCol),
-    meType(COLORSCALE_VALUE)
+    meType(eType)
 {
 }
 

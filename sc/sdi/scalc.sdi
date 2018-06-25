@@ -829,7 +829,7 @@ SfxVoidItem DataBarFormatDialog SID_OPENDLG_DATABAR
 
 
 SfxVoidItem IconSetFormatDialog SID_OPENDLG_ICONSET
-()
+(SfxInt16Item IconSet FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
