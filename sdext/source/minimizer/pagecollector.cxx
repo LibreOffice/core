@@ -109,9 +109,6 @@ void PageCollector::CollectNonCustomShowPages( const css::uno::Reference< css::f
 
 void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std::vector< PageCollector::MasterPageEntity >& rMasterPageList )
 {
-    typedef std::vector< MasterPageEntity > MasterPageList;
-    typedef MasterPageList::iterator MasterPageIter;
-
     try
     {
         // generating list of all master pages
@@ -120,8 +117,8 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
         for ( sal_Int32 i = 0; i < xMasterPages->getCount(); i++ )
         {
             Reference< XDrawPage > xMasterPage( xMasterPages->getByIndex( i ), UNO_QUERY_THROW );
-            MasterPageIter aIter( rMasterPageList.begin() );
-            MasterPageIter aEnd ( rMasterPageList.end() );
+            auto aIter( rMasterPageList.begin() );
+            auto aEnd ( rMasterPageList.end() );
             while( aIter != aEnd )
             {
                 if ( aIter->xMasterPage == xMasterPage )
@@ -144,8 +141,8 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
         {
             Reference< XMasterPageTarget > xMasterPageTarget( xDrawPages->getByIndex( j ), UNO_QUERY_THROW );
             Reference< XDrawPage > xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY_THROW );
-            MasterPageIter aIter( rMasterPageList.begin() );
-            MasterPageIter aEnd ( rMasterPageList.end() );
+            auto aIter( rMasterPageList.begin() );
+            auto aEnd ( rMasterPageList.end() );
             while( aIter != aEnd )
             {
                 if ( aIter->xMasterPage == xMasterPage )

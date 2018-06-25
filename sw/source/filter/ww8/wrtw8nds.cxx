@@ -495,8 +495,8 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby , bool bWriteCombChars
     if( rNd.GetpSwpHints() == nullptr )
         m_rExport.SetCurItemSet(&aExportSet);
 
-    ww8::cPoolItemIter aEnd = aRangeItems.end();
-    for ( ww8::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI )
+    auto aEnd = aRangeItems.cend();
+    for ( auto aI = aRangeItems.cbegin(); aI != aEnd; ++aI )
     {
         if ( !bRuby || !lcl_isFontsizeItem( *aI->second ) )
             aExportItems[aI->first] = aI->second;

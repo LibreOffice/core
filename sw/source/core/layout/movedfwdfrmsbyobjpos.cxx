@@ -53,7 +53,7 @@ bool SwMovedFwdFramesByObjPos::FrameMovedFwdByObjPos( const SwTextFrame& _rTextF
 {
     // sw_redlinehide: assumption: this wants to uniquely identify all
     // SwTextFrame belonging to the same paragraph, so just use first one as key
-    NodeMapIter aIter = maMovedFwdFrames.find( _rTextFrame.GetTextNodeFirst() );
+    auto aIter = maMovedFwdFrames.find( _rTextFrame.GetTextNodeFirst() );
     if ( maMovedFwdFrames.end() != aIter )
     {
         _ornToPageNum = (*aIter).second;
@@ -70,10 +70,8 @@ bool SwMovedFwdFramesByObjPos::DoesRowContainMovedFwdFrame( const SwRowFrame& _r
 
     const sal_uInt32 nPageNumOfRow = _rRowFrame.FindPageFrame()->GetPhyPageNum();
 
-    NodeMapIter aIter = maMovedFwdFrames.begin();
-    for ( ; aIter != maMovedFwdFrames.end(); ++aIter )
+    for ( const auto & rEntry : maMovedFwdFrames )
     {
-        const NodeMapEntry& rEntry = *aIter;
         if ( rEntry.second >= nPageNumOfRow )
         {
             SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aFrameIter(*rEntry.first);

@@ -639,16 +639,16 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
         WW8Fib& rFib = *rWrt.pFib;
         WW8_CP nCpOffs = GetCpOffset(rFib);
 
-        cDrawObjIter aEnd = maDrawObjs.end();
-        cDrawObjIter aIter;
+        auto aEnd = maDrawObjs.cend();
+        auto aIter = maDrawObjs.cbegin();
 
-        for (aIter = maDrawObjs.begin(); aIter < aEnd; ++aIter)
+        for ( ; aIter < aEnd; ++aIter)
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnCp - nCpOffs);
 
         SwWW8Writer::WriteLong(*rWrt.pTableStrm, rFib.m_ccpText + rFib.m_ccpFootnote +
             rFib.m_ccpHdr + rFib.m_ccpEdn + rFib.m_ccpTxbx + rFib.m_ccpHdrTxbx + 1);
 
-        for (aIter = maDrawObjs.begin(); aIter < aEnd; ++aIter)
+        for (aIter = maDrawObjs.cbegin(); aIter < aEnd; ++aIter)
         {
             // write the fspa-struct
             const ww8::Frame &rFrameFormat = aIter->maContent;
@@ -2266,8 +2266,8 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
         MakeZOrderArrAndFollowIds(pSdrObjs->GetObjArr(), aSorted);
 
         sal_uInt32 nShapeId=0;
-        DrawObjPointerIter aEnd = aSorted.end();
-        for (DrawObjPointerIter aIter = aSorted.begin(); aIter != aEnd; ++aIter)
+        auto aEnd = aSorted.end();
+        for (auto aIter = aSorted.begin(); aIter != aEnd; ++aIter)
         {
             sal_Int32 nBorderThick=0;
             DrawObj *pObj = (*aIter);
@@ -2857,8 +2857,8 @@ sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
 sal_uInt16 FindPos(const SwFrameFormat &rFormat, unsigned int nHdFtIndex,
     DrawObjPointerVector &rPVec)
 {
-    DrawObjPointerIter aEnd = rPVec.end();
-    for (DrawObjPointerIter aIter = rPVec.begin(); aIter != aEnd; ++aIter)
+    auto aEnd = rPVec.end();
+    for (auto aIter = rPVec.begin(); aIter != aEnd; ++aIter)
     {
         const DrawObj *pObj = (*aIter);
         OSL_ENSURE(pObj, "Impossible");

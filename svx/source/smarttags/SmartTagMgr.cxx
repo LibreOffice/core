@@ -143,8 +143,6 @@ void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange>& xRange,
 
 }
 
-typedef std::multimap < OUString, ActionReference >::const_iterator SmartTagMapIter;
-
 void SmartTagMgr::GetActionSequences( std::vector< OUString >& rSmartTagTypes,
                                       Sequence < Sequence< Reference< smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                                       Sequence < Sequence< sal_Int32 > >& rActionIndicesSequence ) const
@@ -162,10 +160,10 @@ void SmartTagMgr::GetActionSequences( std::vector< OUString >& rSmartTagTypes,
         Sequence< sal_Int32 > aIndices( nNumberOfActionRefs );
 
         sal_uInt16 i = 0;
-        SmartTagMapIter aActionsIter;
-        SmartTagMapIter aEnd = maSmartTagMap.upper_bound( rSmartTagType );
+        auto aActionsIter = maSmartTagMap.lower_bound( rSmartTagType );
+        auto aEnd = maSmartTagMap.upper_bound( rSmartTagType );
 
-        for ( aActionsIter = maSmartTagMap.lower_bound( rSmartTagType ); aActionsIter != aEnd; ++aActionsIter )
+        for ( ; aActionsIter != aEnd; ++aActionsIter )
         {
             aActions[ i ] = (*aActionsIter).second.mxSmartTagAction;
             aIndices[ i++ ] = (*aActionsIter).second.mnSmartTagIndex;
@@ -182,7 +180,7 @@ OUString SmartTagMgr::GetSmartTagCaption( const OUString& rSmartTagType, const c
 {
     OUString aRet;
 
-    SmartTagMapIter aLower = maSmartTagMap.lower_bound( rSmartTagType );
+    auto aLower = maSmartTagMap.lower_bound( rSmartTagType );
 
     if ( aLower != maSmartTagMap.end() )
     {

@@ -382,7 +382,6 @@ namespace chelp {
 
         typedef std::vector< css::uno::Reference< css::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< css::uno::Reference< css::sdbc::XRow > >              ItemSet;
-        typedef std::vector< OUString >                                                             PathSet;
 
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;

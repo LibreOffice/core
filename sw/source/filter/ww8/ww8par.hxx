@@ -1127,7 +1127,6 @@ private:
     main logic of the filter itself.
     */
     std::deque<WW8FieldEntry> m_aFieldStack;
-    typedef std::deque<WW8FieldEntry>::const_iterator mycFieldIter;
 
     /*
     A stack of open footnotes. Should only be one in it at any time.

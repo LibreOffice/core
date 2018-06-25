@@ -153,13 +153,13 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
                 {
                     // search other modules...
                     bool bChangeCurWindow = false;
-                    WindowTableIt it;
-                    for (it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+                    auto it = aWindowTable.cbegin();
+                    for ( ; it != aWindowTable.cend(); ++it)
                         if (it->second == pCurWin)
                             break;
-                    if (it != aWindowTable.end())
+                    if (it != aWindowTable.cend())
                         ++it;
-                    BaseWindow* pWin = it != aWindowTable.end() ? it->second.get() : nullptr;
+                    BaseWindow* pWin = it != aWindowTable.cend() ? it->second.get() : nullptr;
 
                     bool bSearchedFromStart = false;
                     while ( !nFound && !bCanceled && ( pWin || !bSearchedFromStart ) )
@@ -176,8 +176,8 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
                             xQueryBox->set_default_response(RET_YES);
                             if (xQueryBox->run() == RET_YES)
                             {
-                                it = aWindowTable.begin();
-                                if ( it != aWindowTable.end() )
+                                it = aWindowTable.cbegin();
+                                if ( it != aWindowTable.cend() )
                                     pWin = it->second;
                                 bSearchedFromStart = true;
                             }
@@ -201,9 +201,9 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
                         }
                         if ( pWin && ( pWin != pCurWin ) )
                         {
-                            if ( it != aWindowTable.end() )
+                            if ( it != aWindowTable.cend() )
                                 ++it;
-                            pWin = it != aWindowTable.end() ? it->second.get() : nullptr;
+                            pWin = it != aWindowTable.cend() ? it->second.get() : nullptr;
                         }
                         else
                             pWin = nullptr;

@@ -360,10 +360,7 @@ public:
 };
 
 typedef std::vector<DrawObj> DrawObjVector;
-typedef DrawObjVector::const_iterator cDrawObjIter;
-
 typedef std::vector<DrawObj *> DrawObjPointerVector;
-typedef DrawObjPointerVector::iterator DrawObjPointerIter;
 
 class PlcDrawObj // PC for DrawObjects and Text-/OLE-/GRF-Boxes
 {

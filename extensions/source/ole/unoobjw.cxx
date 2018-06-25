@@ -1437,10 +1437,9 @@ bool  InterfaceOleWrapper::getInvocationInfoForCall( DISPID id, InvocationInfo& 
         // m_nameToDispIdMap can contain several names for one DISPID but only one is
         // the exact one. If there's no m_xExactName and therefore no exact name then
         // there's only one entry in the map.
-        typedef NameToIdMap::const_iterator cit;
         OUString sMemberName;
 
-        for(cit ci1= m_nameToDispIdMap.begin(); ci1 != m_nameToDispIdMap.end(); ++ci1)
+        for(auto ci1= m_nameToDispIdMap.cbegin(); ci1 != m_nameToDispIdMap.cend(); ++ci1)
         {
             if( (*ci1).second == id) // iterator is a pair< OUString, DISPID>
             {
