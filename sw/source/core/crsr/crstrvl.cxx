@@ -1502,6 +1502,17 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             sal_Int32 nStart;
                             sal_Int32 nEnd;
                             pRedl->CalcStartEnd(pTextNd->GetIndex(), nStart, nEnd);
+                            if (nStart == COMPLETE_STRING)
+                            {
+                                // consistency: found pRedl, so there must be
+                                // something in pTextNd
+                                assert(nEnd != COMPLETE_STRING);
+                                nStart = 0;
+                            }
+                            if (nEnd == COMPLETE_STRING)
+                            {
+                                nEnd = pTextNd->Len();
+                            }
                             //get bounding box of range
                             SwRect aStart;
                             pFrame->GetCharRect(aStart, SwPosition(*pTextNd, nStart), &aTmpState);
