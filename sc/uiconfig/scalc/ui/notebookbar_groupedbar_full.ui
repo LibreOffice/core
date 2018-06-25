@@ -1267,6 +1267,47 @@
         <property name="action_name">.uno:SearchDialog</property>
       </object>
     </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator67">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="DefinePrintAreaD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DefinePrintArea</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="AddPrintAreaD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AddPrintArea</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="EditPrintAreaD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:EditPrintArea</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="DeletePrintAreaD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeletePrintArea</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PageFormatDialogD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PageFormatDialog</property>
+      </object>
+    </child>
   </object>
   <object class="GtkMenu" id="MenuFile">
     <property name="visible">True</property>
@@ -1947,7 +1988,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Help"  translatable="yes">_Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Help">_Check for Updates...</property>
       </object>
     </child>
     <child>
@@ -2942,7 +2983,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Menu"  translatable="yes">_Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Menu">_Check for Updates...</property>
       </object>
     </child>
     <child>
@@ -3333,7 +3374,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Tools"  translatable="yes">_Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Tools">_Check for Updates...</property>
       </object>
     </child>
     <child>
