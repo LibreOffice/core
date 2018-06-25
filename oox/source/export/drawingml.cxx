@@ -1369,7 +1369,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
             aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
         }
-        else if(nRotation == 18000)
+        else if ( nRotation == 18000 && IsGroupShape( rXShape, /*bOrChildShape=*/true ) )
         {
             if (!bFlipV && bPositiveX)
             {
@@ -1392,11 +1392,8 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     if(bFlipH != bFlipV)
         nRotation = nRotation * -1 + 36000;
 
-    uno::Reference<lang::XServiceInfo> xServiceInfo(rXShape, uno::UNO_QUERY_THROW);
-    bool bIsGroupShape = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
-
     WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
-            bFlipHWrite, bFlipVWrite, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), bIsGroupShape);
+            bFlipHWrite, bFlipVWrite, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), IsGroupShape( rXShape ));
 }
 
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
@@ -2077,6 +2074,28 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             mpFS->singleElementNS(XML_a, XML_buChar, XML_char, USS( OUString( aBulletChar ) ), FSEND);
         }
     }
+}
+
+bool DrawingML::IsInGroupShape () const
+{
+    bool bRet = m_xParent.is();
+    if ( bRet )
+    {
+        uno::Reference<lang::XServiceInfo> xServiceInfo(m_xParent, uno::UNO_QUERY_THROW);
+        bRet = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
+    }
+    return bRet;
+}
+
+bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape, bool bOrChildShape ) const
+{
+    bool bRet = bOrChildShape && IsInGroupShape();
+    if ( !bRet )
+    {
+        uno::Reference<lang::XServiceInfo> xServiceInfo(rXShape, uno::UNO_QUERY_THROW);
+        bRet = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
+    }
+    return bRet;
 }
 
 sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >& rXPropSet,sal_Int16 nLevel, const OUString& propName)
