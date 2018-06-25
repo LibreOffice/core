@@ -1,0 +1,14 @@
+--- poppler/poppler/Dict.h.orig	2018-06-25 13:58:43.086965564 +0200
++++ poppler/poppler/Dict.h	2018-06-25 13:55:44.353387730 +0200
+@@ -44,6 +44,11 @@
+ struct DictEntry {
+   char *key;
+   Object val;
++  // appease MSVC2013
++  DictEntry(DictEntry const&) = delete;
++  DictEntry& operator=(DictEntry const&) = delete;
++  DictEntry(DictEntry &&) = default;
++  DictEntry& operator=(DictEntry &&) = default;
+ };
+ 
+ class Dict {
