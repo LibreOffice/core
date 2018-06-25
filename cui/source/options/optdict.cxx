@@ -542,7 +542,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     {
         pWordsLB->InsertEntry(rStr, nullptr, false, TREELIST_APPEND);
     }
-    pWordsLB->SetUpdateMode(false);
+    pWordsLB->SetUpdateMode(true);
 
     if (pWordsLB->GetEntryCount())
     {
