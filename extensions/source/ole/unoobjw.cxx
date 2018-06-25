@@ -1861,7 +1861,7 @@ STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
                         // Actual call:
                         // foo(10, 20, E:=50, D:=40, F:=60)
                         //
-                        // That is, A and B are pased positionally, D, E, and F as named arguments,
+                        // That is, A and B are passed positionally, D, E, and F as named arguments,
                         // and the optional C and G parameters are left out.
                         //
                         // Incoming DISPPARAMS:
