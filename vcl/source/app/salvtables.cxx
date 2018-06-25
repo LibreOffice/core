@@ -1697,6 +1697,12 @@ public:
         return m_xButton->GetDecimalDigits();
     }
 
+    virtual void connect_output(const Link<SpinButton&, void>& rLink) override
+    {
+        weld::SpinButton::connect_output(rLink);
+        m_xButton->Reformat();
+    }
+
     virtual ~SalInstanceSpinButton() override
     {
         m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());

@@ -44,8 +44,6 @@ class SwColumnPage;
 
 class SwColumnDlg : public SfxModalDialog
 {
-    VclPtr<ListBox>            m_pApplyToLB;
-
     SwWrtShell&         m_rWrtShell;
     VclPtr<SwColumnPage>       m_pTabPage;
     SfxItemSet*         m_pPageSet;
@@ -53,7 +51,7 @@ class SwColumnDlg : public SfxModalDialog
     SfxItemSet*         m_pSelectionSet;
     SfxItemSet*         m_pFrameSet;
 
-    long                m_nOldSelection;
+    sal_Int32           m_nOldSelection;
     long                m_nSelectionWidth;
     long                m_nPageWidth;
 
@@ -62,9 +60,9 @@ class SwColumnDlg : public SfxModalDialog
     bool                m_bSelSectionChanged : 1;
     bool                m_bFrameChanged : 1;
 
-    DECL_LINK(ObjectListBoxHdl, ListBox&, void);
+    DECL_LINK(ObjectListBoxHdl, weld::ComboBoxText&, void);
     DECL_LINK(OkHdl, Button*, void);
-    void ObjectHdl(ListBox const *);
+    void ObjectHdl(const weld::ComboBoxText*);
     SfxItemSet* EvalCurrentSelection(void);
 
 public:
@@ -73,54 +71,20 @@ public:
     virtual void dispose() override;
 };
 
-class ColumnValueSet : public ValueSet
+class ColumnValueSet : public SvtValueSet
 {
 public:
-    ColumnValueSet(vcl::Window* pParent)
-        : ValueSet(pParent, WB_TABSTOP | WB_ITEMBORDER | WB_DOUBLEBORDER)
+    ColumnValueSet()
+        : SvtValueSet(nullptr)
     {
     }
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
 };
 
 // column dialog now as TabPage
 class SwColumnPage : public SfxTabPage
 {
-    VclPtr<NumericField>   m_pCLNrEdt;
-    VclPtr<ColumnValueSet> m_pDefaultVS;
-    VclPtr<CheckBox>       m_pBalanceColsCB;
-
-    VclPtr<PushButton>     m_pBtnBack;
-    VclPtr<FixedText>      m_pLbl1;
-    PercentField m_aEd1;
-    VclPtr<FixedText>      m_pLbl2;
-    PercentField m_aEd2;
-    VclPtr<FixedText>      m_pLbl3;
-    PercentField m_aEd3;
-    VclPtr<PushButton>     m_pBtnNext;
-    PercentField m_aDistEd1;
-    PercentField m_aDistEd2;
-    VclPtr<CheckBox>       m_pAutoWidthBox;
-
-    VclPtr<FixedText>      m_pLineTypeLbl;
-    VclPtr<LineListBox>    m_pLineTypeDLB;
-    VclPtr<FixedText>      m_pLineWidthLbl;
-    VclPtr<MetricField>    m_pLineWidthEdit;
-    VclPtr<FixedText>      m_pLineColorLbl;
-    VclPtr<SvxColorListBox> m_pLineColorDLB;
-    VclPtr<FixedText>      m_pLineHeightLbl;
-    VclPtr<MetricField>    m_pLineHeightEdit;
-    VclPtr<FixedText>      m_pLinePosLbl;
-    VclPtr<ListBox>        m_pLinePosDLB;
-
-    VclPtr<FixedText>      m_pTextDirectionFT;
-    VclPtr<svx::FrameDirectionListBox>        m_pTextDirectionLB;
-
-    // Example
-    VclPtr<SwColExample>   m_pPgeExampleWN;
-    VclPtr<SwColumnOnlyExample> m_pFrameExampleWN;
-
     SwColMgr*       m_pColMgr;
 
     sal_uInt16          m_nFirstVis;
@@ -128,31 +92,71 @@ class SwColumnPage : public SfxTabPage
     long            m_nColWidth[nMaxCols];
     long            m_nColDist[nMaxCols];
     sal_uInt16          m_nMinWidth;
-    PercentField*   m_pModifiedField;
+    SwPercentField* m_pModifiedField;
 
-    std::map<VclPtr<MetricField>, PercentField*> m_aPercentFieldsMap;
+    std::map<weld::MetricSpinButton*, SwPercentField*> m_aPercentFieldsMap;
 
     bool            m_bFormat;
     bool            m_bFrame;
     bool            m_bHtmlMode;
     bool            m_bLockUpdate;
 
-    // Handler
-    DECL_LINK( ColModify, Edit&, void );
-    void ColModify(NumericField const *);
-    DECL_LINK( GapModify, Edit&, void );
-    DECL_LINK( EdModify, Edit&, void );
-    DECL_LINK( AutoWidthHdl, Button *, void );
-    DECL_LINK( SetDefaultsHdl, ValueSet *, void );
+    SwColExample m_aPgeExampleWN;
+    SwColumnOnlyExample m_aFrameExampleWN;
+    SwPercentField m_aEd1;
+    SwPercentField m_aEd2;
+    SwPercentField m_aEd3;
+    SwPercentField m_aDistEd1;
+    SwPercentField m_aDistEd2;
+    ColumnValueSet m_aDefaultVS;
+    std::unique_ptr<weld::SpinButton> m_xCLNrEdt;
+    std::unique_ptr<weld::CustomWeld> m_xDefaultVS;
+    std::unique_ptr<weld::CheckButton> m_xBalanceColsCB;
 
-    DECL_LINK( Up, Button *, void );
-    DECL_LINK( Down, Button *, void );
-    DECL_LINK( UpdateColMgr, Edit&, void );
-    DECL_LINK( UpdateColMgrListBox, ListBox&, void );
-    DECL_LINK( UpdateColMgrColorBox, SvxColorListBox&, void );
+    std::unique_ptr<weld::Button> m_xBtnBack;
+    std::unique_ptr<weld::Label> m_xLbl1;
+    std::unique_ptr<weld::Label> m_xLbl2;
+    std::unique_ptr<weld::Label> m_xLbl3;
+    std::unique_ptr<weld::Button> m_xBtnNext;
+    std::unique_ptr<weld::CheckButton> m_xAutoWidthBox;
+
+    std::unique_ptr<weld::Label> m_xLineTypeLbl;
+    std::unique_ptr<SvtLineListBox> m_xLineTypeDLB;
+    std::unique_ptr<weld::Label> m_xLineWidthLbl;
+    std::unique_ptr<weld::MetricSpinButton> m_xLineWidthEdit;
+    std::unique_ptr<weld::Label> m_xLineColorLbl;
+    std::unique_ptr<ColorListBox> m_xLineColorDLB;
+    std::unique_ptr<weld::Label> m_xLineHeightLbl;
+    std::unique_ptr<weld::MetricSpinButton> m_xLineHeightEdit;
+    std::unique_ptr<weld::Label> m_xLinePosLbl;
+    std::unique_ptr<weld::ComboBoxText> m_xLinePosDLB;
+
+    std::unique_ptr<weld::Label> m_xApplyFT;
+    std::unique_ptr<weld::ComboBoxText> m_xApplyToLB;
+
+    std::unique_ptr<weld::Label> m_xTextDirectionFT;
+    std::unique_ptr<svx::SvxFrameDirectionListBox> m_xTextDirectionLB;
+
+    // Example
+    std::unique_ptr<weld::CustomWeld> m_xPgeExampleWN;
+    std::unique_ptr<weld::CustomWeld> m_xFrameExampleWN;
+
+    // Handler
+    DECL_LINK(ColModify, weld::SpinButton&, void);
+    void ColModify(const weld::SpinButton*);
+    DECL_LINK(GapModify, weld::MetricSpinButton&, void);
+    DECL_LINK(EdModify, weld::MetricSpinButton&, void);
+    DECL_LINK(AutoWidthHdl, weld::ToggleButton&, void);
+    DECL_LINK(SetDefaultsHdl, SvtValueSet *, void);
+
+    DECL_LINK(Up, weld::Button&, void);
+    DECL_LINK(Down, weld::Button&, void);
+    DECL_LINK(UpdateColMgr, weld::MetricSpinButton&, void);
+    DECL_LINK(UpdateColMgrListBox, weld::ComboBoxText&, void);
+    DECL_LINK(UpdateColMgrColorBox, ColorListBox&, void);
     void Timeout();
 
-    void            Update(MetricField const *pInteractiveField);
+    void            Update(const weld::MetricSpinButton* pInteractiveField);
     void            UpdateCols();
     void            Init();
     void            ResetColWidth();
@@ -164,14 +168,14 @@ class SwColumnPage : public SfxTabPage
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
-    void connectPercentField(PercentField &rWrap, const OString &rName);
+    void connectPercentField(SwPercentField &rWrap);
 
     bool isLineNotNone() const;
 
     static const sal_uInt16 aPageRg[];
 
 public:
-    SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwColumnPage() override;
     virtual void dispose() override;
 
@@ -191,15 +195,18 @@ public:
 
     void ShowBalance(bool bShow)
     {
-        m_pBalanceColsCB->Show(bShow);
+        m_xBalanceColsCB->show(bShow);
     }
 
     void SetInSection(bool bSet);
 
     void ActivateColumnControl()
     {
-        m_pCLNrEdt->GrabFocus();
+        m_xCLNrEdt->grab_focus();
     }
+
+    weld::Label& GetApplyLabel() { return *m_xApplyFT; }
+    weld::ComboBoxText& GetApplyBox() { return *m_xApplyToLB; }
 };
 
 #endif

@@ -194,159 +194,6 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     Invalidate();
 }
 
-void PageExample::UpdateExample( const SfxItemSet& rSet )
-{
-    if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR))
-    {
-        const SvxFrameDirectionItem& rDirItem = rSet.Get(RES_FRAMEDIR);
-        m_bVertical = rDirItem.GetValue() == SvxFrameDirection::Vertical_RL_TB||
-                    rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
-    }
-
-    SfxItemPool* pPool = rSet.GetPool();
-    sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
-    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
-    {
-        // alignment
-        const SvxPageItem* pPage = static_cast<const SvxPageItem*>(&rSet.Get( nWhich ));
-
-        if ( pPage )
-            SetUsage( pPage->GetPageUsage() );
-    }
-
-    nWhich = pPool->GetWhich( SID_ATTR_PAGE_SIZE );
-
-    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
-    {
-        // orientation and size from PageItem
-        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get( nWhich ));
-        SetSize( rSize.GetSize() );
-    }
-    nWhich = RES_LR_SPACE;
-    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
-    {
-        // set left and right border
-        const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get( nWhich ));
-
-        SetLeft( rLRSpace.GetLeft() );
-        SetRight( rLRSpace.GetRight() );
-    }
-    else
-    {
-        SetLeft( 0 );
-        SetRight( 0 );
-    }
-
-    nWhich = RES_UL_SPACE;
-
-    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
-    {
-        // set upper and lower border
-        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get( nWhich ));
-
-        SetTop( rULSpace.GetUpper() );
-        SetBottom( rULSpace.GetLower() );
-    }
-    else
-    {
-        SetTop( 0 );
-        SetBottom( 0 );
-    }
-
-    // evaluate header-attributes
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
-            false, &pItem ) )
-    {
-        const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-        const SfxBoolItem& rHeaderOn =
-            static_cast<const SfxBoolItem&>(rHeaderSet.Get( pPool->GetWhich( SID_ATTR_PAGE_ON ) ) );
-
-        if ( rHeaderOn.GetValue() )
-        {
-            const SvxSizeItem& rSize =
-                static_cast<const SvxSizeItem&>(rHeaderSet.Get(pPool->GetWhich(SID_ATTR_PAGE_SIZE)));
-
-            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rHeaderSet.Get(
-                                        pPool->GetWhich(SID_ATTR_ULSPACE)));
-            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rHeaderSet.Get(
-                                        pPool->GetWhich(SID_ATTR_LRSPACE)));
-
-            SetHdHeight( rSize.GetSize().Height() - rUL.GetLower());
-            SetHdDist( rUL.GetLower() );
-            SetHdLeft( rLR.GetLeft() );
-            SetHdRight( rLR.GetRight() );
-            SetHeader( true );
-
-            if(SfxItemState::SET == rHeaderSet.GetItemState(RES_BACKGROUND))
-            {
-                // create FillAttributes from SvxBrushItem //SetHdColor(rItem.GetColor());
-                const SvxBrushItem& rItem = rHeaderSet.Get(RES_BACKGROUND);
-                SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-
-                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                setHeaderFillAttributes(
-                    std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
-                            aTempSet));
-            }
-        }
-        else
-            SetHeader( false );
-    }
-
-    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
-            false, &pItem ) )
-    {
-        const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-        const SfxBoolItem& rFooterOn = rFooterSet.Get( SID_ATTR_PAGE_ON );
-
-        if ( rFooterOn.GetValue() )
-        {
-            const SvxSizeItem& rSize =
-                static_cast<const SvxSizeItem&>(rFooterSet.Get( pPool->GetWhich( SID_ATTR_PAGE_SIZE ) ));
-
-            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rFooterSet.Get(
-                                        pPool->GetWhich( SID_ATTR_ULSPACE ) ));
-            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rFooterSet.Get(
-                                        pPool->GetWhich( SID_ATTR_LRSPACE ) ));
-
-            SetFtHeight( rSize.GetSize().Height() - rUL.GetUpper());
-            SetFtDist( rUL.GetUpper() );
-            SetFtLeft( rLR.GetLeft() );
-            SetFtRight( rLR.GetRight() );
-            SetFooter( true );
-
-            if( rFooterSet.GetItemState( RES_BACKGROUND ) == SfxItemState::SET )
-            {
-                // create FillAttributes from SvxBrushItem //SetFtColor(rItem.GetColor());
-                const SvxBrushItem& rItem = rFooterSet.Get(RES_BACKGROUND);
-                SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-
-                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                setFooterFillAttributes(
-                    std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
-                            aTempSet));
-            }
-        }
-        else
-            SetFooter( false );
-    }
-
-    if(SfxItemState::SET == rSet.GetItemState(RES_BACKGROUND, false, &pItem))
-    {
-        // create FillAttributes from SvxBrushItem
-        const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
-        SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-
-        setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-        setPageFillAttributes(
-            std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
-                    aTempSet));
-    }
-
-    Invalidate();
-}
-
 void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
                             const bool bSecond, const bool bEnabled)
 {
@@ -483,36 +330,42 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
     }
 }
 
-VCL_BUILDER_FACTORY(SwColExample)
-
-SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
-    : Window(pParent)
-    , m_aFrameSize(1,1)
+SwColumnOnlyExample::SwColumnOnlyExample()
+    : m_aFrameSize(1,1)
 {
-    SetMapMode( MapMode( MapUnit::MapTwip ) );
-    m_aWinSize = GetOptimalSize();
+}
+
+void SwColumnOnlyExample::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
+    // Count in Twips by default
+    rRefDevice.Push(PushFlags::MAPMODE);
+    rRefDevice.SetMapMode(MapMode(MapUnit::MapTwip));
+    m_aWinSize = rRefDevice.LogicToPixel(Size(75, 46), MapMode(MapUnit::MapAppFont));
+    pDrawingArea->set_size_request(m_aWinSize.Width(), m_aWinSize.Height());
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+
     m_aWinSize.AdjustHeight( -4 );
     m_aWinSize.AdjustWidth( -4 );
 
-    m_aWinSize = PixelToLogic( m_aWinSize );
-
-    SetBorderStyle( WindowBorderStyle::MONO );
+    m_aWinSize = rRefDevice.PixelToLogic(m_aWinSize);
 
     m_aFrameSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
     ::FitToActualSize(m_aCols, static_cast<sal_uInt16>(m_aFrameSize.Width()));
 
     long nHeight = m_aFrameSize.Height();
-    Fraction aScale( m_aWinSize.Height(), nHeight );
-    MapMode aMapMode( GetMapMode() );
-    aMapMode.SetScaleX( aScale );
-    aMapMode.SetScaleY( aScale );
-    SetMapMode( aMapMode );
+    Fraction aScale(m_aWinSize.Height(), nHeight);
+    m_aMapMode = MapMode(rRefDevice.GetMapMode());
+    m_aMapMode.SetScaleX(aScale);
+    m_aMapMode.SetScaleY(aScale);
+    rRefDevice.Pop();
 }
-
-VCL_BUILDER_FACTORY(SwColumnOnlyExample)
 
 void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
+    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.SetMapMode(m_aMapMode);
+
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
     const Color& rDlgColor = rStyleSettings.GetDialogColor();
@@ -598,6 +451,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
             }
         }
     }
+    rRenderContext.Pop();
 }
 
 void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
@@ -644,11 +498,6 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
     }
 }
 
-Size SwColumnOnlyExample::GetOptimalSize() const
-{
-    return LogicToPixel(Size(75, 46), MapMode(MapUnit::MapAppFont));
-}
-
 SwPageGridExample::~SwPageGridExample()
 {
     delete pGridItem;
@@ -657,7 +506,7 @@ SwPageGridExample::~SwPageGridExample()
 void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
                                  const bool bSecond, const bool bEnabled)
 {
-    PageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
+    SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
 
     if (!pGridItem || !pGridItem->GetGridType())
         return;
@@ -760,7 +609,7 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     //get the grid information
     if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID))
         pGridItem = static_cast<SwTextGridItem*>(rSet.Get(RES_TEXTGRID).Clone());
-    PageExample::UpdateExample(rSet);
+    SwPageExample::UpdateExample(rSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
