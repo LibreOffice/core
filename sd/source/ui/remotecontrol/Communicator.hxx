@@ -14,6 +14,7 @@
 #include <unistd.h>
 #endif
 #include <sys/types.h>
+#include <memory>
 #include <vector>
 
 #include <rtl/ref.hxx>
@@ -49,9 +50,9 @@ namespace sd
 
         private:
             void execute() override;
-            IBluetoothSocket *mpSocket;
+            std::unique_ptr<IBluetoothSocket> mpSocket;
 
-            Transmitter *pTransmitter;
+            std::unique_ptr<Transmitter> pTransmitter;
             rtl::Reference<Listener> mListener;
     };
 }
