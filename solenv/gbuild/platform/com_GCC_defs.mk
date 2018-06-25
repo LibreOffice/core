@@ -35,6 +35,10 @@ else
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 endif
 
+ifeq ($(USE_GOLD),TRUE)
+gb_LinkTarget_LDFLAGS += -fuse-ld=gold
+endif
+
 ifeq ($(strip $(gb_COMPILEROPTFLAGS)),)
 gb_COMPILEROPTFLAGS := -O2
 endif

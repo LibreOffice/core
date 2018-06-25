@@ -1341,6 +1341,11 @@ AC_ARG_ENABLE(icecream,
          wrappers, you can override that using --with-gcc-home=/the/path switch.]),
 ,)
 
+AC_ARG_ENABLE(gold,
+    AS_HELP_STRING([--enable-gold],
+        [Use the GNU gold linker, which uses less memory and links faster.]),
+,)
+
 libo_FUZZ_ARG_ENABLE(cups,
     AS_HELP_STRING([--disable-cups],
         [Do not build cups support.])
@@ -3151,6 +3156,29 @@ else
     BUILD_TYPE="$BUILD_TYPE NATIVE"
 fi
 AC_SUBST(CROSS_COMPILING)
+
+USE_GOLD=
+if test "$enable_gold" = "yes"; then
+    AC_MSG_CHECKING([for -fuse-ld=gold linker support])
+    if test "$GCC" = "yes"; then
+        use_gold_ldflags_save=$LDFLAGS
+        LDFLAGS="$LDFLAGS -fuse-ld=gold"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+            ],[
+printf ("hello world\n");
+            ])], USE_GOLD=TRUE, [])
+        if test "$USE_GOLD" = "TRUE"; then
+            AC_MSG_RESULT( yes )
+            LDFLAGS="$use_gold_ldflags_save -fuse-ld=gold"
+        else
+            AC_MSG_ERROR( no )
+        fi
+    else
+        AC_MSG_ERROR( not supported )
+    fi
+fi
+AC_SUBST(USE_GOLD)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes"; then
