@@ -1108,7 +1108,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                 const PortionObj& rPortion = *(*it).get();
                 if ( rPortion.mpFieldEntry )
                 {
-                    const FieldEntry* pFieldEntry = rPortion.mpFieldEntry;
+                    const FieldEntry* pFieldEntry = rPortion.mpFieldEntry.get();
 
                     switch ( pFieldEntry->nFieldType >> 28 )
                     {
