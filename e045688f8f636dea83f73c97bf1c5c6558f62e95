@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_6317daa3",
+        "filename": "cui/source/options/optdict.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-06-25T13:34:43Z",
+      "side": 1,
+      "message": "I\u0027d expect a SetUpdateMode(false) to be followed by a SetUpdateMode(true)",
+      "revId": "e045688f8f636dea83f73c97bf1c5c6558f62e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
