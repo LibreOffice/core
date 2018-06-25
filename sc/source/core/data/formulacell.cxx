@@ -1613,10 +1613,15 @@ void ScFormulaCell::Interpret()
                     // Close circle once. If 'this' is self-referencing only
                     // (e.g. counter or self-adder) then it is already
                     // implicitly closed.
-                    if (rRecursionHelper.GetList().size() > 1)
+                    /* TODO: does this even make sense anymore? The last cell
+                     * added above with rRecursionHelper.Insert() should always
+                     * be 'this', shouldn't it? */
+                    ScFormulaCell* pLastCell = nullptr;
+                    if (rRecursionHelper.GetList().size() > 1 &&
+                            ((pLastCell = rRecursionHelper.GetList().back().pCell) != this))
                     {
                         pDocument->IncInterpretLevel();
-                        rRecursionHelper.GetList().back().pCell->InterpretTail(
+                        pLastCell->InterpretTail(
                                 pDocument->GetNonThreadedContext(), SCITP_CLOSE_ITERATION_CIRCLE);
                         pDocument->DecInterpretLevel();
                     }
