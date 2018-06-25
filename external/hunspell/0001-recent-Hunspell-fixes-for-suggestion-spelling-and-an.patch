@@ -1,3 +1,5 @@
+in addition to that: configure.ac portion was fixed to not have unbalanced []
+
 From d9f392dc35f75b1246862b2db8090e8d5b6ec068 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
 Date: Sun, 17 Jun 2018 17:21:01 +0200
@@ -54,7 +56,7 @@ index fb79d0d..2936107 100644
 +AS_CASE([$CXXFLAGS],
 +                 [*-std=c++11*], [HAVE_CXX11=1],
 +                 [HAVE_CXX11=0]
-+         ])
++         )
 +AC_SUBST(HAVE_CXX11)
 +
  # Checks for programs.
