@@ -5,285 +5,99 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
+from uitest.path import get_srcdir_url
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_sheet_from_doc
-from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
 from uitest.debug import sleep
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
+def get_url_for_data_file(file_name):
+    return get_srcdir_url() + "/sc/qa/uitest/statistics/data/" + file_name
+
 class regression(UITestCase):
+    def test_regression_row(self):
+        self._regression_check(data_groupedby_column = False)
+
     def test_regression_column(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        self._regression_check(data_groupedby_column = True)
+
+    def _regression_check(self, data_groupedby_column = True):
+        calc_doc = self.ui_test.load_file(get_url_for_data_file("regression.ods"))
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
-        #fill data
-        enter_text_to_cell(gridwin, "A1", "Time")
-        enter_text_to_cell(gridwin, "A2", "1")
-        enter_text_to_cell(gridwin, "A3", "2")
-        enter_text_to_cell(gridwin, "A4", "3")
-        enter_text_to_cell(gridwin, "A5", "4")
-        enter_text_to_cell(gridwin, "A6", "5")
-        enter_text_to_cell(gridwin, "A7", "6")
-        enter_text_to_cell(gridwin, "A8", "7")
-        enter_text_to_cell(gridwin, "A9", "8")
-        enter_text_to_cell(gridwin, "A10", "9")
-        enter_text_to_cell(gridwin, "A11", "10")
 
-        enter_text_to_cell(gridwin, "B1", "Measurement")
-        enter_text_to_cell(gridwin, "B2", "2.7")
-        enter_text_to_cell(gridwin, "B3", "4")
-        enter_text_to_cell(gridwin, "B4", "4.4")
-        enter_text_to_cell(gridwin, "B5", "7.1")
-        enter_text_to_cell(gridwin, "B6", "4.9")
-        enter_text_to_cell(gridwin, "B7", "3.6")
-        enter_text_to_cell(gridwin, "B8", "4")
-        enter_text_to_cell(gridwin, "B9", "0.6")
-        enter_text_to_cell(gridwin, "B10", "1")
-        enter_text_to_cell(gridwin, "B11", "4.3")
+        # Initially the final check status is "FALSE" (failed).
+        self.assertEqual(get_cell_by_position(document, 11, 1, 5).getString(), "FALSE",
+                         "Check status must be FALSE before the test")
+        self._do_regression(regression_type = "LINEAR", data_groupedby_column = data_groupedby_column)
+        self._do_regression(regression_type = "LOG", data_groupedby_column = data_groupedby_column)
+        self._do_regression(regression_type = "POWER", data_groupedby_column = data_groupedby_column)
+        self.assertEqual(get_cell_by_position(document, 11, 1, 5).getString(), "TRUE",
+                         "One of more of the checks failed for data_groupedby_column = {}, manually try with the document".
+                         format(data_groupedby_column))
+        self.ui_test.close_doc()
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:B11"}))
+    def _do_regression(self, regression_type, data_groupedby_column = True):
+        assert(regression_type == "LINEAR" or regression_type == "LOG" or regression_type == "POWER")
         self.ui_test.execute_modeless_dialog_through_command(".uno:RegressionDialog")
         xDialog = self.xUITest.getTopFocusWindow()
         xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
         xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
         xoutputrangeedit = xDialog.getChild("output-range-edit")
+        xwithlabelscheck = xDialog.getChild("withlabels-check")
         xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
         xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
-        xlinearcheck = xDialog.getChild("linear-check")
-        xlogarithmiccheck = xDialog.getChild("logarithmic-check")
-        xpowercheck = xDialog.getChild("power-check")
+        xlinearradio = xDialog.getChild("linear-radio")
+        xlogarithmicradio = xDialog.getChild("logarithmic-radio")
+        xpowerradio = xDialog.getChild("power-radio")
 
+        ## Set the X, Y and output ranges
+        xvariable1rangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
         xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$2:$A$11"}))
+        if data_groupedby_column:
+            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInColumns.$A$1:$C$11"}))
+        else:
+            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInRows.$A$1:$K$3"}))
+
+        xvariable2rangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
         xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$B$2:$B$11"}))
+        if data_groupedby_column:
+            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInColumns.$D$1:$D$11"}))
+        else:
+            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInRows.$A$4:$K$4"}))
+        # The data ranges have labels in them
+        if (get_state_as_dict(xwithlabelscheck)["Selected"]) == "false":
+            xwithlabelscheck.executeAction("CLICK", tuple())
+
+        xoutputrangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
         xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"F1"}))
-        xgroupedbycolumnsradio.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xlinearcheck)["Selected"]) == "false":
-            xlinearcheck.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xlogarithmiccheck)["Selected"]) == "false":
-            xlogarithmiccheck.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xpowercheck)["Selected"]) == "false":
-            xpowercheck.executeAction("CLICK", tuple())
+        if regression_type == "LINEAR":
+            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLinear.$A$1"}))
+        elif regression_type == "LOG":
+            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLog.$A$1"}))
+        else:
+            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualPower.$A$1"}))
+
+        if data_groupedby_column:
+            xgroupedbycolumnsradio.executeAction("CLICK", tuple())
+        else:
+            xgroupedbyrowsradio.executeAction("CLICK", tuple())
+
+        if regression_type == "LINEAR":
+            xlinearradio.executeAction("CLICK", tuple())
+        elif regression_type == "LOG":
+            xlogarithmicradio.executeAction("CLICK", tuple())
+        else:
+            xpowerradio.executeAction("CLICK", tuple())
+
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        #Verify
-        self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "Regression")
-        self.assertEqual(get_cell_by_position(document, 0, 5, 2).getString(), "Regression Model")
-        self.assertEqual(get_cell_by_position(document, 0, 5, 3).getString(), "R^2")
-        self.assertEqual(get_cell_by_position(document, 0, 5, 4).getString(), "Standard Error")
-        self.assertEqual(get_cell_by_position(document, 0, 5, 6).getString(), "Slope")
-        self.assertEqual(get_cell_by_position(document, 0, 5, 7).getString(), "Intercept")
-        self.assertEqual(get_cell_by_position(document, 0, 5, 9).getValue(), 1)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 10).getValue(), 2)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 11).getValue(), 3)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 12).getValue(), 4)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 13).getValue(), 5)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 14).getValue(), 6)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 15).getValue(), 7)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 16).getValue(), 8)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 17).getValue(), 9)
-        self.assertEqual(get_cell_by_position(document, 0, 5, 18).getValue(), 10)
 
-        self.assertEqual(get_cell_by_position(document, 0, 6, 2).getString(), "Linear")
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 3).getValue(),13), 0.1243901235130)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 4).getValue(),9), 1.869256861)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 6).getValue(),8), -0.21939394)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 7).getValue(),8), 4.86666667)
-
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 9).getValue(),12), 4.647272727273)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 10).getValue(),11), 4.42787878788)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 11).getValue(),11), 4.20848484848)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 12).getValue(),11), 3.98909090909)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 13).getValue(),12), 3.769696969697)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 14).getValue(),11), 3.55030303030)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 15).getValue(),11), 3.33090909091)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 16).getValue(),10), 3.1115151515)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 17).getValue(),11), 2.89212121212)
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 18).getValue(),12), 2.672727272727)
-
-        self.assertEqual(get_cell_by_position(document, 0, 7, 2).getString(), "Logarithmic")
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 3).getValue(),13), 0.0362835060138)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 4).getValue(),9), 1.961048360)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 6).getValue(),8), -0.48941120)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 7).getValue(),8), 4.39922687)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 9).getValue(),12), 4.399226869524)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 10).getValue(),11), 4.05999287553)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 11).getValue(),11), 3.86155371008)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 12).getValue(),11), 3.72075888154)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 13).getValue(),12), 3.611549928136)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 14).getValue(),11), 3.52231971609)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 15).getValue(),11), 3.44687664676)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 16).getValue(),10), 3.3815248876)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 17).getValue(),11), 3.32388055063)
-        self.assertEqual(round(get_cell_by_position(document, 0, 7, 18).getValue(),12), 3.272315934145)
-
-        self.assertEqual(get_cell_by_position(document, 0, 8, 2).getString(), "Power")
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 3).getValue(),13), 0.0884254697227)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 4).getValue(),9), 0.774632105)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 6).getValue(),8), -0.31030853)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 7).getValue(),8), 4.81267293)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 9).getValue(),12), 4.812672931007)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 10).getValue(),12), 3.881272835552)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 11).getValue(),11), 3.42240619237)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 12).getValue(),11), 3.13012727853)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 13).getValue(),11), 2.92072046513)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 14).getValue(),12), 2.760065430808)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 15).getValue(),10), 2.6311476385)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 16).getValue(),11), 2.52435146791)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 17).getValue(),10), 2.4337544465)
-        self.assertEqual(round(get_cell_by_position(document, 0, 8, 18).getValue(),11), 2.35547130753)
-
-        #undo
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
-
-        self.ui_test.close_doc()
-
-#doesn't work in test
-#    def test_regression_row(self):
-#        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-#        xCalcDoc = self.xUITest.getTopFocusWindow()
-#        gridwin = xCalcDoc.getChild("grid_window")
-#        document = self.ui_test.get_component()
-#        #fill data
-#        enter_text_to_cell(gridwin, "A1", "Time")
-#        enter_text_to_cell(gridwin, "A2", "Measurement")
-#        enter_text_to_cell(gridwin, "B1", "1")
-#        enter_text_to_cell(gridwin, "B2", "2.7")
-#        enter_text_to_cell(gridwin, "C1", "2")
-#        enter_text_to_cell(gridwin, "C2", "4")
-#        enter_text_to_cell(gridwin, "D1", "3")
-#        enter_text_to_cell(gridwin, "D2", "4.4")
-#        enter_text_to_cell(gridwin, "E1", "4")
-#        enter_text_to_cell(gridwin, "E2", "7.1")
-#        enter_text_to_cell(gridwin, "F1", "5")
-#        enter_text_to_cell(gridwin, "F2", "4.9")
-#        enter_text_to_cell(gridwin, "G1", "6")
-#        enter_text_to_cell(gridwin, "G2", "3.6")
-#        enter_text_to_cell(gridwin, "H1", "7")
-#        enter_text_to_cell(gridwin, "H2", "4")
-#        enter_text_to_cell(gridwin, "I1", "8")
-#        enter_text_to_cell(gridwin, "I2", "0.6")
-#        enter_text_to_cell(gridwin, "J1", "9")
-#        enter_text_to_cell(gridwin, "J2", "1")
-#        enter_text_to_cell(gridwin, "K1", "10")
-#        enter_text_to_cell(gridwin, "K2", "4.3")
-
-##        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:K1"}))
-#        sleep(5)
-#        self.ui_test.execute_modeless_dialog_through_command(".uno:RegressionDialog")
-#        xDialog = self.xUITest.getTopFocusWindow()
-#        xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
-#        xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
-#        xoutputrangeedit = xDialog.getChild("output-range-edit")
-#        xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-#        xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
-#        xlinearcheck = xDialog.getChild("linear-check")
-#        xlogarithmiccheck = xDialog.getChild("logarithmic-check")
-#        xpowercheck = xDialog.getChild("power-check")
-#        sleep(4)
-
-#        xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-#        xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-#        xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$B$1:$K$1"}))
-#        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-#        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-#        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"TAB"}))
-#        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-#        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-#        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$B$2:$K$2"}))
-#        xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-#        xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-#        xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$M$1"}))
-#        xgroupedbyrowsradio.executeAction("CLICK", tuple())
-#        if (get_state_as_dict(xlinearcheck)["Selected"]) == "false":
-#            xlinearcheck.executeAction("CLICK", tuple())
-#        if (get_state_as_dict(xlogarithmiccheck)["Selected"]) == "false":
-#            xlogarithmiccheck.executeAction("CLICK", tuple())
-#        if (get_state_as_dict(xpowercheck)["Selected"]) == "false":
-#            xpowercheck.executeAction("CLICK", tuple())
-#        xOKBtn = xDialog.getChild("ok")
-#        sleep(5)
-#        self.ui_test.close_dialog_through_button(xOKBtn)
-#        sleep(6)
-#        #Verify
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 0).getString(), "Regression")
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 2).getString(), "Regression Model")
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 3).getString(), "R^2")
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 4).getString(), "Standard Error")
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 6).getString(), "Slope")
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 7).getString(), "Intercept")
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 9).getValue(), 1)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 10).getValue(), 2)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 11).getValue(), 3)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 12).getValue(), 4)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 13).getValue(), 5)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 14).getValue(), 6)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 15).getValue(), 7)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 16).getValue(), 8)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 17).getValue(), 9)
-#        self.assertEqual(get_cell_by_position(document, 0, 12, 18).getValue(), 10)
-
-#        self.assertEqual(get_cell_by_position(document, 0, 13, 2).getString(), "Linear")
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 3).getValue(),13), 0.1243901235130)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 4).getValue(),9), 1.869256861)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 6).getValue(),8), -0.21939394)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 7).getValue(),8), 4.86666667)
-
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 9).getValue(),12), 4.647272727273)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 10).getValue(),11), 4.42787878788)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 11).getValue(),11), 4.20848484848)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 12).getValue(),11), 3.98909090909)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 13).getValue(),12), 3.769696969697)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 14).getValue(),11), 3.55030303030)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 15).getValue(),11), 3.33090909091)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 16).getValue(),10), 3.1115151515)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 17).getValue(),11), 2.89212121212)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 13, 18).getValue(),12), 2.672727272727)
-
-#        self.assertEqual(get_cell_by_position(document, 0, 14, 2).getString(), "Logarithmic")
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 3).getValue(),13), 0.0362835060138)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 4).getValue(),9), 1.961048360)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 6).getValue(),8), -0.48941120)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 7).getValue(),8), 4.39922687)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 9).getValue(),12), 4.399226869524)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 10).getValue(),11), 4.05999287553)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 11).getValue(),11), 3.86155371008)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 12).getValue(),11), 3.72075888154)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 13).getValue(),12), 3.611549928136)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 14).getValue(),11), 3.52231971609)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 15).getValue(),11), 3.44687664676)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 16).getValue(),10), 3.3815248876)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 17).getValue(),11), 3.32388055063)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 14, 18).getValue(),12), 3.272315934145)
-
-#        self.assertEqual(get_cell_by_position(document, 0, 15, 2).getString(), "Power")
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 3).getValue(),13), 0.0884254697227)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 4).getValue(),9), 0.774632105)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 6).getValue(),8), -0.31030853)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 7).getValue(),8), 4.81267293)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 9).getValue(),12), 4.812672931007)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 10).getValue(),12), 3.881272835552)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 11).getValue(),11), 3.42240619237)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 12).getValue(),11), 3.13012727853)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 13).getValue(),11), 2.92072046513)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 14).getValue(),12), 2.760065430808)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 15).getValue(),10), 2.6311476385)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 16).getValue(),11), 2.52435146791)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 17).getValue(),10), 2.4337544465)
-#        self.assertEqual(round(get_cell_by_position(document, 0, 15, 18).getValue(),11), 2.35547130753)
-#        #undo
-#        self.xUITest.executeCommand(".uno:Undo")
-#        self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
-
-#        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

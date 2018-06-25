@@ -162,11 +162,15 @@ void AddressWalkerWriter::writeFormula(const OUString& aFormula)
             new ScFormulaCell(mpDocument, mCurrentAddress, aFormula, meGrammar), true);
 }
 
-void AddressWalkerWriter::writeMatrixFormula(const OUString& aFormula)
+void AddressWalkerWriter::writeMatrixFormula(const OUString& aFormula, SCCOL nCols, SCROW nRows)
 {
     ScRange aRange;
     aRange.aStart = mCurrentAddress;
     aRange.aEnd = mCurrentAddress;
+    if (nCols > 1)
+        aRange.aEnd.IncCol(nCols - 1);
+    if (nRows > 1)
+        aRange.aEnd.IncRow(nRows - 1);
     mpDocShell->GetDocFunc().EnterMatrix(aRange, nullptr, nullptr, aFormula, false, false, OUString(), meGrammar );
 }
 

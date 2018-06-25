@@ -43,6 +43,8 @@ protected:
 
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) = 0;
     virtual const char* GetUndoNameId() = 0;
+    virtual bool InputRangesValid();
+    virtual void ValidateDialogInput();
 
     // Widgets
     VclPtr<FixedText>          mpVariable1RangeLabel;
