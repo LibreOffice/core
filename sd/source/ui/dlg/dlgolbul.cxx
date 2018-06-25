@@ -59,7 +59,7 @@ OutlineBulletDlg::OutlineBulletDlg(
     aInputSet.MergeRange( SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL );
     aInputSet.Put( *pAttr );
 
-    pOutputSet = new SfxItemSet( *pAttr );
+    pOutputSet.reset( new SfxItemSet( *pAttr ) );
     pOutputSet->ClearItem();
 
     bool bOutliner = false;
@@ -142,7 +142,7 @@ OutlineBulletDlg::~OutlineBulletDlg()
 
 void OutlineBulletDlg::dispose()
 {
-    delete pOutputSet;
+    pOutputSet.reset();
     SfxTabDialog::dispose();
 }
 
@@ -191,7 +191,7 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
             pRule->SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS, false );
     }
 
-    return pOutputSet;
+    return pOutputSet.get();
 }
 
 } // end of namespace sd
