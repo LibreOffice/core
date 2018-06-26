@@ -173,6 +173,16 @@ OUString FbCreateStmtParser::compose() const
         if (columnIter->isCaseInsensitive())
             lcl_appendWithSpace(sSql, "COLLATE UNICODE_CI");
 
+        const OUString& sDefaultVal = columnIter->getDefault();
+        if (!sDefaultVal.isEmpty())
+        {
+            lcl_appendWithSpace(sSql, "DEFAULT");
+            if (sDefaultVal.equalsIgnoreAsciiCase("NOW"))
+                lcl_appendWithSpace(sSql, "\'NOW\'"); // Fb likes it single quoted
+            else
+                lcl_appendWithSpace(sSql, sDefaultVal);
+        }
+
         ++columnIter;
         sSql.append(",");
     }
