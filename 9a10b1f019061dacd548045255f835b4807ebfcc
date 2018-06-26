@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_1e04bd15",
+        "filename": "framework/source/fwe/xml/statusbardocumenthandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-06-26T08:49:37Z",
+      "side": 1,
+      "message": "you probably mean sal_True",
+      "range": {
+        "startLine": 651,
+        "startChar": 26,
+        "endLine": 651,
+        "endChar": 35
+      },
+      "revId": "9a10b1f019061dacd548045255f835b4807ebfcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_12ff5102",
+        "filename": "offapi/com/sun/star/ui/ItemStyle.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-06-26T08:49:37Z",
+      "side": 1,
+      "message": "sufficient",
+      "range": {
+        "startLine": 154,
+        "startChar": 21,
+        "endLine": 154,
+        "endChar": 31
+      },
+      "revId": "9a10b1f019061dacd548045255f835b4807ebfcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f231d5ed",
+        "filename": "offapi/com/sun/star/ui/ItemStyle.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-06-26T08:49:37Z",
+      "side": 1,
+      "message": "Please add @since LibreOffice x.y",
+      "revId": "9a10b1f019061dacd548045255f835b4807ebfcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_32044d14",
+        "filename": "offapi/com/sun/star/ui/XStatusbarItem.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-06-26T08:49:37Z",
+      "side": 1,
+      "message": "please add @since LibreOffice x.y",
+      "revId": "9a10b1f019061dacd548045255f835b4807ebfcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
