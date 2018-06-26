@@ -1859,11 +1859,14 @@ namespace cppcanvas
 
                 if (size < 12) {
                     SAL_INFO("cppcanvas.emf", "Size field is less than 12 bytes");
+                    break;
                 } else if (size > length) {
                     SAL_INFO("cppcanvas.emf", "Size field is greater than bytes left");
+                    break;
                 }
                 if (dataSize > (size-12)) {
                     SAL_INFO("cppcanvas.emf", "DataSize field is greater than Size-12");
+                    break;
                 }
 
                 SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
