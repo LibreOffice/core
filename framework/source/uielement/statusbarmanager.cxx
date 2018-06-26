@@ -123,6 +123,9 @@ StatusBarItemBits impl_convertItemStyleToItemBits( sal_Int16 nStyle )
     if ( nStyle & css::ui::ItemStyle::OWNER_DRAW )
         nItemBits |= StatusBarItemBits::UserDraw;
 
+    if ( nStyle & css::ui::ItemStyle::MANDATORY )
+        nItemBits |= StatusBarItemBits::Mandatory;
+
     return nItemBits;
 }
 

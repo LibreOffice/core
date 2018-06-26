@@ -282,6 +282,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="Mandatory" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies whether the element can be hidden (false) or not (true) if status bar width is not sufficient to fit all elements.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="Width" oor:type="xs:long">
         <info>
           <desc>A property to define the size of a status bar item.</desc>
