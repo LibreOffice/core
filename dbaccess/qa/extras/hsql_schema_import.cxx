@@ -42,6 +42,7 @@ public:
     void testIntegerAutoincremental();
     void testTimestampWithParam();
     void testDefaultValueNow();
+    void testEvilNullColumnName();
     // TODO testForeign, testDecomposer
 
     CPPUNIT_TEST_SUITE(HsqlSchemaImportTest);
@@ -53,6 +54,7 @@ public:
     CPPUNIT_TEST(testIntegerAutoincremental);
     CPPUNIT_TEST(testTimestampWithParam);
     CPPUNIT_TEST(testDefaultValueNow);
+    CPPUNIT_TEST(testEvilNullColumnName);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -195,6 +197,22 @@ void HsqlSchemaImportTest::testDefaultValueNow()
     CPPUNIT_ASSERT_EQUAL(OUString{ "NOW" }, colTimeStamp->getDefault()); // parsed NOW
     OUString fbSql = aCreateParser.compose();
     CPPUNIT_ASSERT(fbSql.indexOf("\'NOW\'") > 0); // composed 'NOW'
+}
+
+void HsqlSchemaImportTest::testEvilNullColumnName()
+{
+    OUString sql{ "CREATE CACHED TABLE \"myTable\"(\"id\" INTEGER NOT NULL PRIMARY KEY, "
+                  "\"myEvilNOT NULLName\" "
+                  "VARCHAR(20))" };
+
+    FbCreateStmtParser aCreateParser;
+    aCreateParser.parse(sql);
+
+    const auto& columns = aCreateParser.getColumnDef();
+    CPPUNIT_ASSERT_EQUAL(2_z, columns.size());
+    const ColumnDefinition* colVarchar = lcl_findByType(columns, css::sdbc::DataType::VARCHAR);
+    CPPUNIT_ASSERT(colVarchar != nullptr);
+    CPPUNIT_ASSERT(colVarchar->isNullable());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HsqlSchemaImportTest);
