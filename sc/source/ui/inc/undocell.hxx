@@ -24,13 +24,13 @@
 #include <postit.hxx>
 #include <cellvalue.hxx>
 #include <cellvalues.hxx>
+#include <svx/svdundo.hxx>
 
 #include <memory>
 
 class ScDocShell;
 class ScPatternAttr;
 class EditTextObject;
-class SdrUndoAction;
 class ScDetOpList;
 class ScDetOpData;
 class ScRangeName;
