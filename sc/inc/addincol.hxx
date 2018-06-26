@@ -135,10 +135,10 @@ class SC_DLLPUBLIC ScUnoAddInCollection
 {
 private:
     long                    nFuncCount;
-    ScUnoAddInFuncData**    ppFuncData;
-    ScAddInHashMap*         pExactHashMap;      ///< exact internal name
-    ScAddInHashMap*         pNameHashMap;       ///< internal name upper
-    ScAddInHashMap*         pLocalHashMap;      ///< localized name upper
+    std::unique_ptr<std::unique_ptr<ScUnoAddInFuncData>[]> ppFuncData;
+    std::unique_ptr<ScAddInHashMap>       pExactHashMap;      ///< exact internal name
+    std::unique_ptr<ScAddInHashMap>       pNameHashMap;       ///< internal name upper
+    std::unique_ptr<ScAddInHashMap>       pLocalHashMap;      ///< localized name upper
     bool                    bInitialized;
 
     void        Initialize();

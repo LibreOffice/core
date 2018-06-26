@@ -231,21 +231,14 @@ ScUnoAddInCollection::ScUnoAddInCollection() :
 
 ScUnoAddInCollection::~ScUnoAddInCollection()
 {
-    Clear();
 }
 
 void ScUnoAddInCollection::Clear()
 {
-    DELETEZ( pExactHashMap );
-    DELETEZ( pNameHashMap );
-    DELETEZ( pLocalHashMap );
-    if ( ppFuncData )
-    {
-        for ( long i=0; i<nFuncCount; i++ )
-            delete ppFuncData[i];
-        delete[] ppFuncData;
-    }
-    ppFuncData = nullptr;
+    pExactHashMap.reset();
+    pNameHashMap.reset();
+    pLocalHashMap.reset();
+    ppFuncData.reset();
     nFuncCount = 0;
 
     bInitialized = false;
@@ -386,22 +379,21 @@ void ScUnoAddInCollection::ReadConfiguration()
         nFuncCount = nNewCount+nOld;
         if ( nOld )
         {
-            ScUnoAddInFuncData** ppNew = new ScUnoAddInFuncData*[nFuncCount];
+            std::unique_ptr<std::unique_ptr<ScUnoAddInFuncData>[]> ppNew(new std::unique_ptr<ScUnoAddInFuncData>[nFuncCount]);
             for (long i=0; i<nOld; i++)
-                ppNew[i] = ppFuncData[i];
-            delete[] ppFuncData;
-            ppFuncData = ppNew;
+                ppNew[i] = std::move(ppFuncData[i]);
+            ppFuncData = std::move(ppNew);
         }
         else
-            ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
+            ppFuncData.reset( new std::unique_ptr<ScUnoAddInFuncData>[nFuncCount] );
 
         //TODO: adjust bucket count?
         if ( !pExactHashMap )
-            pExactHashMap = new ScAddInHashMap;
+            pExactHashMap.reset( new ScAddInHashMap );
         if ( !pNameHashMap )
-            pNameHashMap = new ScAddInHashMap;
+            pNameHashMap.reset( new ScAddInHashMap );
         if ( !pLocalHashMap )
-            pLocalHashMap = new ScAddInHashMap;
+            pLocalHashMap.reset( new ScAddInHashMap );
 
         //TODO: get the function information in a single call for all functions?
 
@@ -552,7 +544,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 pData->SetCompNames( aCompNames );
 
-                ppFuncData[nFuncPos+nOld] = pData;
+                ppFuncData[nFuncPos+nOld].reset(pData);
 
                 pExactHashMap->emplace(
                             pData->GetOriginalName(),
@@ -610,7 +602,7 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
 
     for (long i=0; i<nFuncCount; i++)
     {
-        ScUnoAddInFuncData* pFuncData = ppFuncData[i];
+        ScUnoAddInFuncData* pFuncData = ppFuncData[i].get();
         if ( pFuncData )
         {
             const ::std::vector<ScUnoAddInFuncData::LocalizedName>& rNames = pFuncData->GetCompNames();
@@ -768,22 +760,21 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                 nFuncCount = nNewCount+nOld;
                 if ( nOld )
                 {
-                    ScUnoAddInFuncData** ppNew = new ScUnoAddInFuncData*[nFuncCount];
+                    std::unique_ptr<std::unique_ptr<ScUnoAddInFuncData>[]> ppNew(new std::unique_ptr<ScUnoAddInFuncData>[nFuncCount]);
                     for (long i=0; i<nOld; i++)
-                        ppNew[i] = ppFuncData[i];
-                    delete[] ppFuncData;
-                    ppFuncData = ppNew;
+                        ppNew[i] = std::move(ppFuncData[i]);
+                    ppFuncData = std::move(ppNew);
                 }
                 else
-                    ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
+                    ppFuncData.reset(new std::unique_ptr<ScUnoAddInFuncData>[nFuncCount]);
 
                 //TODO: adjust bucket count?
                 if ( !pExactHashMap )
-                    pExactHashMap = new ScAddInHashMap;
+                    pExactHashMap.reset( new ScAddInHashMap );
                 if ( !pNameHashMap )
-                    pNameHashMap = new ScAddInHashMap;
+                    pNameHashMap.reset( new ScAddInHashMap );
                 if ( !pLocalHashMap )
-                    pLocalHashMap = new ScAddInHashMap;
+                    pLocalHashMap.reset( new ScAddInHashMap );
 
                 const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
                 for (long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
@@ -932,14 +923,14 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
                                 }
 
-                                ppFuncData[nFuncPos+nOld] = new ScUnoAddInFuncData(
+                                ppFuncData[nFuncPos+nOld].reset( new ScUnoAddInFuncData(
                                     aFuncName, aLocalName, aDescription,
                                     nCategory, sHelpId,
                                     xFunc, aObject,
-                                    nVisibleCount, pVisibleArgs.get(), nCallerPos );
+                                    nVisibleCount, pVisibleArgs.get(), nCallerPos ) );
 
                                 const ScUnoAddInFuncData* pData =
-                                    ppFuncData[nFuncPos+nOld];
+                                    ppFuncData[nFuncPos+nOld].get();
                                 pExactHashMap->emplace(
                                             pData->GetOriginalName(),
                                             pData );
@@ -1181,7 +1172,7 @@ const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( long nIndex )
         Initialize();
 
     if (nIndex < nFuncCount)
-        return ppFuncData[nIndex];
+        return ppFuncData[nIndex].get();
     return nullptr;
 }
 
