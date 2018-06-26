@@ -257,6 +257,10 @@ static sal_uInt16 GetKeyCode(int keyval)
                 nCode = KEY_ESCAPE;
                 break;
             case Qt::Key_Tab:
+            // oddly enough, Qt doesn't send Shift-Tab event as 'Tab key pressed with Shift
+            // modifier' but as 'Backtab key pressed' (while its modifier bits are still
+            // set to Shift) -- so let's map both Key_Tab and Key_Backtab to VCL's KEY_TAB
+            case Qt::Key_Backtab:
                 nCode = KEY_TAB;
                 break;
             case Qt::Key_Backspace:
