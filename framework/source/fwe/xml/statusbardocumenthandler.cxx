@@ -56,6 +56,7 @@ using namespace ::com::sun::star::container;
 #define ATTRIBUTE_AUTOSIZE          "autosize"
 #define ATTRIBUTE_OWNERDRAW         "ownerdraw"
 #define ATTRIBUTE_HELPURL           "helpid"
+#define ATTRIBUTE_MANDATORY         "mandatory"
 
 #define ELEMENT_NS_STATUSBAR        "statusbar:statusbar"
 #define ELEMENT_NS_STATUSBARITEM    "statusbar:statusbaritem"
@@ -140,7 +141,8 @@ StatusBarEntryProperty const StatusBarEntries[OReadStatusBarDocumentHandler::SB_
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_OWNERDRAW     },
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_WIDTH         },
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_OFFSET        },
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_HELPURL       }
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_HELPURL       },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_MANDATORY     }
 };
 
 OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
@@ -232,7 +234,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
 
                 OUString    aCommandURL;
                 OUString    aHelpURL;
-                sal_Int16   nItemBits( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D );
+                sal_Int16   nItemBits( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D|ItemStyle::MANDATORY );
                 sal_Int16   nWidth( 0 );
                 sal_Int16   nOffset( STATUSBAR_OFFSET );
                 bool    bCommandURL( false );
@@ -347,6 +349,21 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                             case SB_ATTRIBUTE_HELPURL:
                             {
                                 aHelpURL = xAttribs->getValueByIndex( n );
+                            }
+                            break;
+
+                            case SB_ATTRIBUTE_MANDATORY:
+                            {
+                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
+                                    nItemBits |= ItemStyle::MANDATORY;
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
+                                    nItemBits &= ~ItemStyle::MANDATORY;
+                                else
+                                {
+                                    OUString aErrorMessage = getErrorLineString();
+                                    aErrorMessage += "Attribute statusbar:mandatory must have value 'true' or 'false'!";
+                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                                }
                             }
                             break;
 
@@ -629,6 +646,14 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_OFFSET,
                              m_aAttributeType,
                              OUString::number( nOffset ) );
+    }
+
+    // mandatory (default sal_True)
+    if ( !( nStyle & ItemStyle::MANDATORY ) )
+    {
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_MANDATORY,
+                             m_aAttributeType,
+                             ATTRIBUTE_BOOLEAN_FALSE );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );

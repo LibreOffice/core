@@ -51,6 +51,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
             SB_ATTRIBUTE_WIDTH,
             SB_ATTRIBUTE_OFFSET,
             SB_ATTRIBUTE_HELPURL,
+            SB_ATTRIBUTE_MANDATORY,
             SB_XML_ENTRY_COUNT
         };
 
