@@ -207,7 +207,7 @@ public:
 
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
-
+    void testOpenDocumentAsReadOnly();
     void testTdf118990();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
@@ -316,7 +316,7 @@ public:
 
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
-
+    CPPUNIT_TEST(testOpenDocumentAsReadOnly);
     CPPUNIT_TEST(testTdf118990);
 
     CPPUNIT_TEST_SUITE_END();
@@ -4045,6 +4045,16 @@ void ScExportTest::testHyperlinkTargetFrameODS()
     OUString aTargetFrameExport = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "target-frame-name");
     CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrameExport);
+}
+
+void ScExportTest::testOpenDocumentAsReadOnly()
+{
+    ScDocShellRef xDocSh = loadDoc("open-as-read-only.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh->IsSecurityOptOpenReadOnly());
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh2->IsSecurityOptOpenReadOnly());
+    xDocSh->DoClose();
+    xDocSh2->DoClose();
 }
 
 void ScExportTest::testTdf118990()

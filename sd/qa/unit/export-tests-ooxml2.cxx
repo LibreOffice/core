@@ -141,6 +141,8 @@ public:
     void testTdf104786();
     void testTdf104789();
     void testTdf116350TextEffects();
+    void testOpenDocumentAsReadOnly();
+
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -205,6 +207,7 @@ public:
     CPPUNIT_TEST(testTdf104786);
     CPPUNIT_TEST(testTdf104789);
     CPPUNIT_TEST(testTdf116350TextEffects);
+    CPPUNIT_TEST(testOpenDocumentAsReadOnly);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1699,6 +1702,16 @@ void SdOOXMLExportTest2::testTdf116350TextEffects()
     assertXPath(pXmlDocContent, "//p:sp[14]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textCircle");
     assertXPath(pXmlDocContent, "//p:sp[14]/p:spPr/a:solidFill/a:srgbClr", 0);
 
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testOpenDocumentAsReadOnly()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/open-as-read-only.pptx"), PPTX);
+    CPPUNIT_ASSERT(xDocShRef->IsSecurityOptOpenReadOnly());
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    CPPUNIT_ASSERT(xDocShRef->IsSecurityOptOpenReadOnly());
     xDocShRef->DoClose();
 }
 
