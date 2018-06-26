@@ -54,8 +54,8 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     {
         XMLTableShapeImportHelper* pTableShapeImport = static_cast<XMLTableShapeImportHelper*>(GetScImport().GetShapeImport().get());
         pTableShapeImport->SetAnnotation(this);
-        pShapeContext = GetScImport().GetShapeImport()->CreateGroupChildContext(
-            GetScImport(), nPrfx, rLName, xAttrList, xLocalShapes, true);
+        pShapeContext.reset( GetScImport().GetShapeImport()->CreateGroupChildContext(
+            GetScImport(), nPrfx, rLName, xAttrList, xLocalShapes, true) );
     }
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -155,8 +155,7 @@ void ScXMLAnnotationContext::EndElement()
     if (pShapeContext)
     {
         pShapeContext->EndElement();
-        delete pShapeContext;
-        pShapeContext = nullptr;
+        pShapeContext.reset();
     }
 
     mrAnnotationData.maAuthor = maAuthorBuffer.makeStringAndClear();
