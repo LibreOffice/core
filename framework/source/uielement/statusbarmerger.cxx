@@ -32,6 +32,7 @@ static const char MERGE_STATUSBAR_CONTEXT[]     = "Context";
 static const char MERGE_STATUSBAR_ALIGN[]       = "Alignment";
 static const char MERGE_STATUSBAR_AUTOSIZE[]    = "AutoSize";
 static const char MERGE_STATUSBAR_OWNERDRAW[]   = "OwnerDraw";
+static const char MERGE_STATUSBAR_MANDATORY[]   = "Mandatory";
 static const char MERGE_STATUSBAR_WIDTH[]       = "Width";
 
 static const char STATUSBAR_ALIGN_CENTER[]      = "center";
@@ -53,6 +54,7 @@ void lcl_ConvertSequenceToValues(
     OUString sAlignment;
     bool bAutoSize = false;
     bool bOwnerDraw = false;
+    bool bMandatory = true;
 
     PropertyValue aPropVal;
     for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
@@ -70,6 +72,8 @@ void lcl_ConvertSequenceToValues(
             aPropVal.Value >>= bAutoSize;
         else if ( aPropVal.Name == MERGE_STATUSBAR_OWNERDRAW )
             aPropVal.Value >>= bOwnerDraw;
+        else if ( aPropVal.Name == MERGE_STATUSBAR_MANDATORY )
+            aPropVal.Value >>= bMandatory;
         else if ( aPropVal.Name == MERGE_STATUSBAR_WIDTH )
         {
             sal_Int32 aWidth = 0;
@@ -83,6 +87,8 @@ void lcl_ConvertSequenceToValues(
         nItemBits |= StatusBarItemBits::AutoSize;
     if ( bOwnerDraw )
         nItemBits |= StatusBarItemBits::UserDraw;
+    if ( bMandatory )
+        nItemBits |= StatusBarItemBits::Mandatory;
     if ( sAlignment == STATUSBAR_ALIGN_CENTER )
         nItemBits |= StatusBarItemBits::Center;
     else if ( sAlignment == STATUSBAR_ALIGN_RIGHT )

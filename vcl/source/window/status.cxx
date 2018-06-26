@@ -230,23 +230,58 @@ void StatusBar::ImplFormat()
     long            nExtraWidth;
     long            nExtraWidth2;
     long            nX;
-    sal_uInt16          nAutoSizeItems = 0;
+    sal_uInt16      nAutoSizeItems;
+    bool            bChanged;
 
-    // sum up widths
-    mnItemsWidth = STATUSBAR_OFFSET_X;
-    long nOffset = 0;
-    for (ImplStatusItem* i : *mpItemList) {
-        pItem = i;
-        if ( pItem->mbVisible )
-        {
-            if ( pItem->mnBits & StatusBarItemBits::AutoSize ) {
-                nAutoSizeItems++;
+    do {
+        // sum up widths
+        nAutoSizeItems = 0;
+        mnItemsWidth = STATUSBAR_OFFSET_X;
+        bChanged = false;
+        long nOffset = 0;
+        for ( const auto & pItem : *mpItemList ) {
+            if ( pItem->mbVisible )
+            {
+                if ( pItem->mnBits & StatusBarItemBits::AutoSize ) {
+                    nAutoSizeItems++;
+                }
+
+                mnItemsWidth += pItem->mnWidth + nOffset;
+                nOffset = pItem->mnOffset;
             }
-
-            mnItemsWidth += pItem->mnWidth + nOffset;
-            nOffset = pItem->mnOffset;
         }
-    }
+
+        if ( mnDX > 0 && mnDX < mnItemsWidth )
+        {
+            // Total width of items is more than available width
+            // Try to hide secondary elements, if any
+            for ( auto & pItem : *mpItemList )
+            {
+                if ( pItem->mbVisible && !(pItem->mnBits & StatusBarItemBits::Mandatory) )
+                {
+                    pItem->mbVisible = false;
+                    bChanged = true;
+                    break;
+                }
+            }
+        }
+        else if ( mnDX > mnItemsWidth )
+        {
+            // Width of statusbar is sufficient.
+            // Try to restore hidden items, if any
+            for ( auto & pItem : *mpItemList )
+            {
+                if ( !pItem->mbVisible &&
+                    !(pItem->mnBits & StatusBarItemBits::Mandatory) &&
+                    pItem->mnWidth + nOffset + mnItemsWidth < mnDX )
+                {
+                    pItem->mbVisible = true;
+                    bChanged = true;
+                    break;
+                }
+            }
+        }
+    } while ( bChanged );
 
     if ( GetStyle() & WB_RIGHT )
     {

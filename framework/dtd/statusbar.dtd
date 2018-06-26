@@ -33,6 +33,7 @@
 	statusbar:align %alignment; "center"
 	statusbar:style %style; "in"
 	statusbar:autosize %boolean; "false"
+	statusbar:mandatory %boolean; "true"
 	statusbar:ownerdraw %boolean; "false"
 	statusbar:width %numeric; "0"
 	statusbar:offset %numeric; "5"
