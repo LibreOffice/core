@@ -288,25 +288,25 @@ namespace
             ::sw::mark::AnnotationMark* const pAnnotationMark =
                 dynamic_cast< ::sw::mark::AnnotationMark* >(ppMark->get());
 
-            if ( pAnnotationMark == nullptr )
+            if (!pAnnotationMark)
+                continue;
+
+            const SwPosition& rStartPos = pAnnotationMark->GetMarkStart();
+            if (rStartPos.nNode != nOwnNode)
+                continue;
+
+            const SwFormatField* pAnnotationFormatField = pAnnotationMark->GetAnnotationFormatField();
+            if (!pAnnotationFormatField)
             {
+                SAL_WARN("sw.core", "missing annotation format field");
                 continue;
             }
 
-            const SwPosition& rStartPos = pAnnotationMark->GetMarkStart();
-            if ( rStartPos.nNode == nOwnNode )
-            {
-                const SwFormatField* pAnnotationFormatField = pAnnotationMark->GetAnnotationFormatField();
-                OSL_ENSURE( pAnnotationFormatField != nullptr, "<lcl_FillAnnotationStartArray(..)> - annotation fmt fld instance missing!" );
-                if ( pAnnotationFormatField != nullptr )
-                {
-                    rAnnotationStartArr.insert(
-                        std::make_shared<SwAnnotationStartPortion_Impl>(
-                                SwXTextField::CreateXTextField(&rDoc,
-                                    pAnnotationFormatField),
-                                rStartPos));
-                }
-            }
+            rAnnotationStartArr.insert(
+                std::make_shared<SwAnnotationStartPortion_Impl>(
+                        SwXTextField::CreateXTextField(&rDoc,
+                            pAnnotationFormatField),
+                        rStartPos));
         }
     }
 }
