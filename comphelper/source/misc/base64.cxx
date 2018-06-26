@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -61,7 +60,7 @@ const
 //    p   q   r   s   t   u   v   w   x   y   z
 
 
-void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, OUStringBuffer& sBuffer)
+void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, sal_Char* aCharBuffer)
 {
     sal_Int32 nLen(nFullLen - nStart);
     if (nLen > 3)
@@ -94,24 +93,37 @@ void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const 
         break;
     }
 
-    sal_Unicode buf[] = { '=', '=', '=', '=' };
+    aCharBuffer[0] = aCharBuffer[1] = aCharBuffer[2] = aCharBuffer[3] = '=';
 
     sal_uInt8 nIndex (static_cast<sal_uInt8>((nBinaer & 0xFC0000) >> 18));
-    buf[0] = aBase64EncodeTable [nIndex];
+    aCharBuffer[0] = aBase64EncodeTable [nIndex];
 
     nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F000) >> 12);
-    buf[1] = aBase64EncodeTable [nIndex];
+    aCharBuffer[1] = aBase64EncodeTable [nIndex];
     if (nLen > 1)
     {
         nIndex = static_cast<sal_uInt8>((nBinaer & 0xFC0) >> 6);
-        buf[2] = aBase64EncodeTable [nIndex];
+        aCharBuffer[2] = aBase64EncodeTable [nIndex];
         if (nLen > 2)
         {
             nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F));
-            buf[3] = aBase64EncodeTable [nIndex];
+            aCharBuffer[3] = aBase64EncodeTable [nIndex];
         }
     }
-    sBuffer.append(buf, SAL_N_ELEMENTS(buf));
+}
+
+void Base64::encode(OStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+{
+    sal_Int32 i(0);
+    sal_Int32 nBufferLength(aPass.getLength());
+    const sal_Int8* pBuffer = aPass.getConstArray();
+    while (i < nBufferLength)
+    {
+        sal_Char aCharBuffer[4];
+        ThreeByteToFourByte(pBuffer, i, nBufferLength, aCharBuffer);
+        aStrBuffer.append(aCharBuffer, SAL_N_ELEMENTS(aCharBuffer));
+        i += 3;
+    }
 }
 
 void Base64::encode(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
@@ -121,7 +133,9 @@ void Base64::encode(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& a
     const sal_Int8* pBuffer = aPass.getConstArray();
     while (i < nBufferLength)
     {
-        ThreeByteToFourByte(pBuffer, i, nBufferLength, aStrBuffer);
+        sal_Char aCharBuffer[4];
+        ThreeByteToFourByte(pBuffer, i, nBufferLength, aCharBuffer);
+        aStrBuffer.appendAscii(aCharBuffer, SAL_N_ELEMENTS(aCharBuffer));
         i += 3;
     }
 }
