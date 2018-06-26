@@ -25,30 +25,16 @@ using namespace ::com::sun::star::uno;
 namespace framework
 {
 
-XMLNamespaces::XMLNamespaces()
-    : m_aXMLAttributeNamespace( "xmlns" )
-{
-}
-
-XMLNamespaces::XMLNamespaces( const XMLNamespaces& aXMLNamespaces )
-{
-    m_aDefaultNamespace = aXMLNamespaces.m_aDefaultNamespace;
-    m_aNamespaceMap = aXMLNamespaces.m_aNamespaceMap;
-}
-
-XMLNamespaces::~XMLNamespaces()
-{
-}
-
 void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue )
 {
     NamespaceMap::iterator p;
     OUString aNamespaceName( aName );
-    sal_Int32 nXMLNamespaceLength = m_aXMLAttributeNamespace.getLength();
 
     // delete preceding "xmlns"
-    if ( aNamespaceName.startsWith( m_aXMLAttributeNamespace ) )
+    constexpr char aXMLAttributeNamespace[] = "xmlns";
+    if ( aNamespaceName.startsWith( aXMLAttributeNamespace ) )
     {
+        constexpr sal_Int32 nXMLNamespaceLength = RTL_CONSTASCII_LENGTH(aXMLAttributeNamespace);
         if ( aNamespaceName.getLength() == nXMLNamespaceLength )
         {
             aNamespaceName.clear();

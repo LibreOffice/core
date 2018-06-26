@@ -31,10 +31,6 @@ namespace framework
 class FWE_DLLPUBLIC XMLNamespaces final
 {
     public:
-        XMLNamespaces();
-        XMLNamespaces( const XMLNamespaces& );
-        ~XMLNamespaces();
-
         /// @throws css::xml::sax::SAXException
         void addNamespace( const OUString& aName, const OUString& aValue );
 
@@ -50,7 +46,6 @@ class FWE_DLLPUBLIC XMLNamespaces final
         OUString const & getNamespaceValue( const OUString& aNamespace ) const;
 
         OUString        m_aDefaultNamespace;
-        OUString        m_aXMLAttributeNamespace;
         NamespaceMap    m_aNamespaceMap;
 };
 
