@@ -38,6 +38,7 @@ void lcl_ConvertSequenceToValues(
     OUString sAlignment;
     bool bAutoSize = false;
     bool bOwnerDraw = false;
+    bool bMandatory = true;
 
     PropertyValue aPropVal;
     for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
@@ -55,6 +56,8 @@ void lcl_ConvertSequenceToValues(
             aPropVal.Value >>= bAutoSize;
         else if ( aPropVal.Name == "OwnerDraw" )
             aPropVal.Value >>= bOwnerDraw;
+        else if ( aPropVal.Name == "Mandatory" )
+            aPropVal.Value >>= bMandatory;
         else if ( aPropVal.Name == "Width" )
         {
             sal_Int32 aWidth = 0;
@@ -68,6 +71,8 @@ void lcl_ConvertSequenceToValues(
         nItemBits |= StatusBarItemBits::AutoSize;
     if ( bOwnerDraw )
         nItemBits |= StatusBarItemBits::UserDraw;
+    if ( bMandatory )
+        nItemBits |= StatusBarItemBits::Mandatory;
     if ( sAlignment == "center" )
         nItemBits |= StatusBarItemBits::Center;
     else if ( sAlignment == "right" )
