@@ -119,10 +119,10 @@ public:
       *         If host is not empty this parameter must always contain a valid
       *         port number, for instance the default port for the requested
       *         protocol(i.e. 80 or http).
-      * @return a InternetProxyServer reference. If member aName of the
+      * @return a InternetProxyServer struct. If member aName of the
       *         InternetProxyServer is empty no proxy server is to be used.
       */
-    const InternetProxyServer &
+    InternetProxyServer
     getProxy( const OUString & rProtocol,
               const OUString & rHost,
               sal_Int32 nPort ) const;
