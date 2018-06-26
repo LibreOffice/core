@@ -200,6 +200,39 @@ void lcl_addDefaultParameters(std::vector<sal_Int32>& aParams, sal_Int32 eType)
         aParams.push_back(8000); // from SQL standard
 }
 
+struct ColumnTypeParts
+{
+    OUString typeName;
+    std::vector<sal_Int32> params;
+};
+
+/**
+ * Separates full type descriptions (e.g. NUMERIC(5,4)) to type name (NUMERIC) and
+ * parameters (5,4)
+ */
+ColumnTypeParts lcl_getColumnTypeParts(const OUString& sFullTypeName)
+{
+    ColumnTypeParts parts;
+    auto nParenPos = sFullTypeName.indexOf("(");
+    if (nParenPos > 0)
+    {
+        parts.typeName = sFullTypeName.copy(0, nParenPos).trim();
+        OUString sParamStr
+            = sFullTypeName.copy(nParenPos + 1, sFullTypeName.indexOf(")") - nParenPos - 1);
+        auto sParams = string::split(sParamStr, sal_Unicode(u','));
+        for (auto& sParam : sParams)
+        {
+            parts.params.push_back(sParam.toInt32());
+        }
+    }
+    else
+    {
+        parts.typeName = sFullTypeName.trim();
+        lcl_addDefaultParameters(parts.params, lcl_getDataTypeFromHsql(parts.typeName));
+    }
+    return parts;
+}
+
 } // unnamed namespace
 
 namespace dbahsql
@@ -239,61 +272,39 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
         }
 
         bool bIsQuoteUsedForColumnName(sColumn[0] == '\"');
+
         // find next quote after the initial quote
         // or next space if quote isn't used as delimiter
-        // to fetch the whole column name, including quotes
         auto nEndColumnName
-            = bIsQuoteUsedForColumnName ? sColumn.indexOf("\"", 1) : sColumn.indexOf(" ");
-        OUString rColumnName
-            = sColumn.copy(0, bIsQuoteUsedForColumnName ? nEndColumnName + 1 : nEndColumnName);
+            = bIsQuoteUsedForColumnName ? sColumn.indexOf("\"", 1) + 1 : sColumn.indexOf(" ");
+        OUString rColumnName = sColumn.copy(0, nEndColumnName);
 
-        // create a buffer which begins on column type
-        // with extra spaces removed
-        const OUString& buffer
-            = sColumn.copy(bIsQuoteUsedForColumnName ? nEndColumnName + 1 : nEndColumnName).trim();
+        const OUString& sFromTypeName = sColumn.copy(nEndColumnName).trim();
 
         // Now let's manage the column type
         // search next space to get the whole type name
         // eg: INTEGER, VARCHAR(10), DECIMAL(6,3)
-        auto nNextSpace = buffer.indexOf(" ");
+        auto nNextSpace = sFromTypeName.indexOf(" ");
         OUString sFullTypeName;
-        OUString sTypeName;
         if (nNextSpace > 0)
-            sFullTypeName = buffer.copy(0, nNextSpace);
+            sFullTypeName = sFromTypeName.copy(0, nNextSpace);
         // perhaps column type corresponds to the last info here
         else
-            sFullTypeName = buffer;
+            sFullTypeName = sFromTypeName;
 
-        auto nParenPos = sFullTypeName.indexOf("(");
-        std::vector<sal_Int32> aParams;
-        if (nParenPos > 0)
-        {
-            sTypeName = sFullTypeName.copy(0, nParenPos).trim();
-            OUString sParamStr
-                = sFullTypeName.copy(nParenPos + 1, sFullTypeName.indexOf(")") - nParenPos - 1);
-            auto sParams = string::split(sParamStr, sal_Unicode(u','));
-            for (auto& sParam : sParams)
-            {
-                aParams.push_back(sParam.toInt32());
-            }
-        }
-        else
-        {
-            sTypeName = sFullTypeName.trim();
-            lcl_addDefaultParameters(aParams, lcl_getDataTypeFromHsql(sTypeName));
-        }
+        ColumnTypeParts typeParts = lcl_getColumnTypeParts(sFullTypeName);
 
-        bool bCaseInsensitive = sTypeName.indexOf("IGNORECASE") >= 0;
+        bool bCaseInsensitive = typeParts.typeName.indexOf("IGNORECASE") >= 0;
         rColumnName = lcl_ConvertToUTF8(OUStringToOString(rColumnName, RTL_TEXTENCODING_UTF8));
         bool isPrimaryKey = lcl_isPrimaryKey(sColumn);
 
         if (isPrimaryKey)
             m_PrimaryKeys.push_back(rColumnName);
 
-        ColumnDefinition aColDef(rColumnName, lcl_getDataTypeFromHsql(sTypeName), aParams,
-                                 isPrimaryKey, lcl_getAutoIncrementDefault(sColumn),
-                                 lcl_isNullable(sColumn), bCaseInsensitive,
-                                 lcl_getDefaultValue(sColumn));
+        ColumnDefinition aColDef(rColumnName, lcl_getDataTypeFromHsql(typeParts.typeName),
+                                 typeParts.params, isPrimaryKey,
+                                 lcl_getAutoIncrementDefault(sColumn), lcl_isNullable(sColumn),
+                                 bCaseInsensitive, lcl_getDefaultValue(sColumn));
 
         m_aColumns.push_back(aColDef);
     }
