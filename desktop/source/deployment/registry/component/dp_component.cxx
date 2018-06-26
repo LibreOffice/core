@@ -62,8 +62,6 @@ namespace backend {
 namespace component {
 namespace {
 
-typedef std::deque<OUString> t_stringlist;
-
 #define IMPLEMENTATION_NAME  "com.sun.star.comp.deployment.component.PackageRegistryBackend"
 
 /** return a vector of bootstrap variables which have been provided
@@ -241,13 +239,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class OtherPlatformPackageImpl;
 
-    t_stringlist m_jar_typelibs;
-    t_stringlist m_rdb_typelibs;
-    t_stringlist m_components;
+    std::deque<OUString> m_jar_typelibs;
+    std::deque<OUString> m_rdb_typelibs;
+    std::deque<OUString> m_components;
 
     enum RcItem { RCITEM_JAR_TYPELIB, RCITEM_RDB_TYPELIB, RCITEM_COMPONENTS };
 
-    t_stringlist & getRcItemList( RcItem kind ) {
+    std::deque<OUString> & getRcItemList( RcItem kind ) {
         switch (kind)
         {
         case RCITEM_JAR_TYPELIB:
@@ -862,8 +860,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
 
     if (! m_jar_typelibs.empty())
     {
-        t_stringlist::const_iterator iPos( m_jar_typelibs.begin() );
-        t_stringlist::const_iterator const iEnd( m_jar_typelibs.end() );
+        auto iPos( m_jar_typelibs.cbegin() );
+        auto const iEnd( m_jar_typelibs.cend() );
         buf.append( "UNO_JAVA_CLASSPATH=" );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
@@ -878,8 +876,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     }
     if (! m_rdb_typelibs.empty())
     {
-        t_stringlist::const_iterator iPos( m_rdb_typelibs.begin() );
-        t_stringlist::const_iterator const iEnd( m_rdb_typelibs.end() );
+        auto iPos( m_rdb_typelibs.cbegin() );
+        auto const iEnd( m_rdb_typelibs.cend() );
         buf.append( "UNO_TYPES=" );
         while (iPos != iEnd) {
             buf.append( '?' );
@@ -972,7 +970,7 @@ void BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
-    t_stringlist & rSet = getRcItemList(kind);
+    std::deque<OUString> & rSet = getRcItemList(kind);
     if (std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
         rSet.push_front( rcterm ); // prepend to list, thus overriding
         // write immediately:
@@ -989,7 +987,7 @@ void BackendImpl::removeFromUnoRc(
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
-    t_stringlist & aRcItemList = getRcItemList(kind);
+    std::deque<OUString> & aRcItemList = getRcItemList(kind);
     aRcItemList.erase(std::remove(aRcItemList.begin(), aRcItemList.end(), rcterm), aRcItemList.end());
     // write immediately:
     m_unorc_modified = true;
@@ -1002,7 +1000,7 @@ bool BackendImpl::hasInUnoRc(
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
-    t_stringlist const & rSet = getRcItemList(kind);
+    std::deque<OUString> const & rSet = getRcItemList(kind);
     return std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
 }
 

@@ -61,9 +61,6 @@ namespace backend {
 namespace configuration {
 namespace {
 
-typedef std::deque<OUString> t_stringlist;
-
-
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class PackageImpl : public ::dp_registry::backend::Package
@@ -97,9 +94,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class PackageImpl;
 
-    t_stringlist m_xcs_files;
-    t_stringlist m_xcu_files;
-    t_stringlist & getFiles( bool xcs ) {
+    std::deque<OUString> m_xcs_files;
+    std::deque<OUString> m_xcu_files;
+    std::deque<OUString> & getFiles( bool xcs ) {
         return xcs ? m_xcs_files : m_xcu_files;
     }
 
@@ -422,8 +419,8 @@ void BackendImpl::configmgrini_flush(
     OStringBuffer buf;
     if (! m_xcs_files.empty())
     {
-        t_stringlist::const_iterator iPos( m_xcs_files.begin() );
-        t_stringlist::const_iterator const iEnd( m_xcs_files.end() );
+        auto iPos( m_xcs_files.cbegin() );
+        auto const iEnd( m_xcs_files.cend() );
         buf.append( "SCHEMA=" );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
@@ -438,8 +435,8 @@ void BackendImpl::configmgrini_flush(
     }
     if (! m_xcu_files.empty())
     {
-        t_stringlist::const_iterator iPos( m_xcu_files.begin() );
-        t_stringlist::const_iterator const iEnd( m_xcu_files.end() );
+        auto iPos( m_xcu_files.cbegin() );
+        auto const iEnd( m_xcu_files.cend() );
         buf.append( "DATA=" );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
@@ -472,7 +469,7 @@ void BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const &
     const OUString rcterm( isURL ? dp_misc::makeRcTerm(url_) : url_ );
     const ::osl::MutexGuard guard( getMutex() );
     configmgrini_verify_init( xCmdEnv );
-    t_stringlist & rSet = getFiles(isSchema);
+    std::deque<OUString> & rSet = getFiles(isSchema);
     if (std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
         rSet.push_front( rcterm ); // prepend to list, thus overriding
         // write immediately:
@@ -489,8 +486,8 @@ bool BackendImpl::removeFromConfigmgrIni(
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     configmgrini_verify_init( xCmdEnv );
-    t_stringlist & rSet = getFiles(isSchema);
-    t_stringlist::iterator i(std::find(rSet.begin(), rSet.end(), rcterm));
+    std::deque<OUString> & rSet = getFiles(isSchema);
+    auto i(std::find(rSet.begin(), rSet.end(), rcterm));
     if (i == rSet.end() && !isSchema)
     {
         //in case the xcu contained %origin% then the configmr.ini contains the
