@@ -34,6 +34,12 @@
 #include <cppuhelper/implbase.hxx>
 #include "ucbhelper/proxydecider.hxx"
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#include <Winhttp.h>
+#endif
+
 using namespace com::sun::star;
 using namespace ucbhelper;
 
@@ -138,7 +144,7 @@ public:
 
     void dispose();
 
-    const InternetProxyServer & getProxy( const OUString & rProtocol,
+    InternetProxyServer getProxy(const OUString& rProtocol,
                                           const OUString & rHost,
                                           sal_Int32 nPort ) const;
 
@@ -451,8 +457,138 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     return true;
 }
 
+#ifdef _WIN32
+namespace
+{
+struct GetPACProxyData
+{
+    const OUString& m_rProtocol;
+    const OUString& m_rHost;
+    sal_Int32 m_nPort;
+    bool m_bAutoDetect = false;
+    OUString m_sAutoConfigUrl;
+    InternetProxyServer m_ProxyServer;
 
-const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
+    GetPACProxyData(const OUString& rProtocol, const OUString& rHost, sal_Int32 nPort)
+        : m_rProtocol(rProtocol)
+        , m_rHost(rHost)
+        , m_nPort(nPort)
+    {
+    }
+};
+
+// Tries to get proxy configuration using WinHttpGetProxyForUrl, which supports Web Proxy Auto-Discovery
+// (WPAD) protocol and manually configured address to get Proxy Auto-Configuration (PAC) file.
+// The WinINet/WinHTTP functions cannot correctly run in a STA COM thread, so use a dedicated thread
+DWORD WINAPI GetPACProxyThread(_In_ LPVOID lpParameter)
+{
+    assert(lpParameter);
+    GetPACProxyData* pData = static_cast<GetPACProxyData*>(lpParameter);
+
+    OUString url(pData->m_rProtocol + "://" + pData->m_rHost + ":"
+                 + OUString::number(pData->m_nPort));
+
+    HINTERNET hInternet = WinHttpOpen(L"Mozilla 5.0", WINHTTP_ACCESS_TYPE_NO_PROXY,
+                                      WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
+    DWORD nError = GetLastError();
+    if (!hInternet)
+        return nError;
+
+    WINHTTP_AUTOPROXY_OPTIONS AutoProxyOptions{};
+    if (pData->m_bAutoDetect)
+    {
+        AutoProxyOptions.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
+        AutoProxyOptions.dwAutoDetectFlags
+            = WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
+    }
+    if (!pData->m_sAutoConfigUrl.isEmpty())
+    {
+        AutoProxyOptions.dwFlags |= WINHTTP_AUTOPROXY_CONFIG_URL;
+        AutoProxyOptions.lpszAutoConfigUrl = reinterpret_cast<LPCWSTR>(pData->m_sAutoConfigUrl.getStr());
+    }
+    // First, try without autologon. According to
+    // https://github.com/Microsoft/Windows-classic-samples/blob/master/Samples/Win7Samples/web/winhttp/WinhttpProxySample/GetProxy.cpp
+    // autologon prevents caching, and so causes repetitive network traffic.
+    AutoProxyOptions.fAutoLogonIfChallenged = FALSE;
+    WINHTTP_PROXY_INFO ProxyInfo{};
+    BOOL bResult
+        = WinHttpGetProxyForUrl(hInternet, reinterpret_cast<LPCWSTR>(url.getStr()), &AutoProxyOptions, &ProxyInfo);
+    nError = GetLastError();
+    if (!bResult && nError == ERROR_WINHTTP_LOGIN_FAILURE)
+    {
+        AutoProxyOptions.fAutoLogonIfChallenged = TRUE;
+        bResult = WinHttpGetProxyForUrl(hInternet, reinterpret_cast<LPCWSTR>(url.getStr()),
+                                        &AutoProxyOptions, &ProxyInfo);
+        nError = GetLastError();
+    }
+    WinHttpCloseHandle(hInternet);
+    if (bResult)
+    {
+        if (ProxyInfo.lpszProxyBypass)
+            GlobalFree(ProxyInfo.lpszProxyBypass);
+        if (ProxyInfo.lpszProxy)
+        {
+            OUString sProxyResult = reinterpret_cast<const sal_Unicode*>(ProxyInfo.lpszProxy);
+            GlobalFree(ProxyInfo.lpszProxy);
+            // Get the first of possibly multiple results
+            sProxyResult = sProxyResult.getToken(0, ';');
+            sal_Int32 nPortSepPos = sProxyResult.indexOf(':');
+            if (nPortSepPos != -1)
+            {
+                pData->m_ProxyServer.nPort = sProxyResult.copy(nPortSepPos + 1).toInt32();
+                sProxyResult = sProxyResult.copy(0, nPortSepPos);
+            }
+            else
+            {
+                pData->m_ProxyServer.nPort = 0;
+            }
+            pData->m_ProxyServer.aName = sProxyResult;
+        }
+    }
+
+    return nError;
+}
+
+InternetProxyServer GetPACProxy(const OUString& rProtocol, const OUString& rHost, sal_Int32 nPort)
+{
+    GetPACProxyData aData(rProtocol, rHost, nPort);
+
+    // WinHTTP only supports http(s), so don't try for other protocols
+    if (!(rProtocol.equalsIgnoreAsciiCase("http") || rProtocol.equalsIgnoreAsciiCase("https")))
+        return aData.m_ProxyServer;
+
+    // Only try to get configuration from PAC (with all the overhead, including new thread)
+    // if configured to do so
+    {
+        WINHTTP_CURRENT_USER_IE_PROXY_CONFIG aProxyConfig{};
+        BOOL bResult = WinHttpGetIEProxyConfigForCurrentUser(&aProxyConfig);
+        if (aProxyConfig.lpszProxy)
+            GlobalFree(aProxyConfig.lpszProxy);
+        if (aProxyConfig.lpszProxyBypass)
+            GlobalFree(aProxyConfig.lpszProxyBypass);
+        // Don't try WPAD if AutoDetection or AutoConfig script URL are not configured
+        if (!bResult || !(aProxyConfig.fAutoDetect || aProxyConfig.lpszAutoConfigUrl))
+            return aData.m_ProxyServer;
+        aData.m_bAutoDetect = aProxyConfig.fAutoDetect;
+        if (aProxyConfig.lpszAutoConfigUrl)
+        {
+            aData.m_sAutoConfigUrl = reinterpret_cast<const sal_Unicode*>(aProxyConfig.lpszAutoConfigUrl);
+            GlobalFree(aProxyConfig.lpszAutoConfigUrl);
+        }
+    }
+
+    HANDLE hThread = CreateThread(nullptr, 0, GetPACProxyThread, &aData, 0, nullptr);
+    if (hThread)
+    {
+        WaitForSingleObject(hThread, INFINITE);
+        CloseHandle(hThread);
+    }
+    return aData.m_ProxyServer;
+}
+}
+#endif // _WIN32
+
+InternetProxyServer InternetProxyDecider_Impl::getProxy(
                                             const OUString & rProtocol,
                                             const OUString & rHost,
                                             sal_Int32 nPort ) const
@@ -464,6 +600,17 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
         // Never use proxy.
         return m_aEmptyProxy;
     }
+
+#ifdef _WIN32
+    // If get from system
+    if (m_nProxyType == 1 && !rHost.isEmpty())
+    {
+        InternetProxyServer aProxy(GetPACProxy(rProtocol, rHost, nPort));
+        if (!aProxy.aName.isEmpty())
+            return aProxy;
+    }
+#endif // _WIN32
+
 
     if ( !rHost.isEmpty() && !m_aNoProxyList.empty() )
     {
@@ -795,7 +942,7 @@ bool InternetProxyDecider::shouldUseProxy( const OUString & rProtocol,
 }
 
 
-const InternetProxyServer & InternetProxyDecider::getProxy(
+InternetProxyServer InternetProxyDecider::getProxy(
                                             const OUString & rProtocol,
                                             const OUString & rHost,
                                             sal_Int32 nPort ) const

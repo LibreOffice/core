@@ -1722,7 +1722,7 @@ void NeonSession::abort()
     SAL_INFO( "ucb.ucp.webdav", "neon commands cannot be aborted" );
 }
 
-const ucbhelper::InternetProxyServer & NeonSession::getProxySettings() const
+ucbhelper::InternetProxyServer NeonSession::getProxySettings() const
 {
     if ( m_aScheme == "http" || m_aScheme == "https" )
     {
