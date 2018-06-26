@@ -53,16 +53,16 @@ private:
     bool                bRowByName;
     SCSIZE              nColCount;
     SCSIZE              nRowCount;
-    bool**              ppUsed;
-    double**            ppSum;
-    double**            ppCount;
-    double**            ppSumSqr;
-    ScReferenceList**   ppRefs;
+    std::unique_ptr<std::unique_ptr<bool[]>[]> ppUsed;
+    std::unique_ptr<std::unique_ptr<double[]>[]> ppSum;
+    std::unique_ptr<std::unique_ptr<double[]>[]> ppCount;
+    std::unique_ptr<std::unique_ptr<double[]>[]> ppSumSqr;
+    std::unique_ptr<std::unique_ptr<ScReferenceList[]>[]> ppRefs;
     ::std::vector<OUString> maColHeaders;
     ::std::vector<OUString> maRowHeaders;
     ::std::vector<OUString> maTitles;
     SCSIZE              nDataCount;
-    SCSIZE**            ppTitlePos;
+    std::unique_ptr<std::unique_ptr<SCSIZE[]>[]> ppTitlePos;
     bool                bCornerUsed;
     OUString            aCornerText;        // only for bColByName && bRowByName
 
