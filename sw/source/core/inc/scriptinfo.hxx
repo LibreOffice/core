@@ -306,11 +306,11 @@ public:
 
 /** retrieves kashida opportunities for a given text range.
 
-   pKashidaPositions: buffer to receive the char indices of the
+   rKashidaPositions: buffer to receive the char indices of the
                       kashida opportunities relative to the paragraph
 */
     void GetKashidaPositions(TextFrameIndex nStt, TextFrameIndex nLen,
-        TextFrameIndex* pKashidaPosition);
+                             std::vector<TextFrameIndex>& rKashidaPosition);
 
 /** Use regular blank justification instead of kashdida justification for the given line of text.
    nStt Start char index of the line referring to the paragraph.

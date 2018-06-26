@@ -132,9 +132,10 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
     // kashida positions found in SwScriptInfo are not necessarily valid in every font
     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
-    std::unique_ptr<TextFrameIndex[]> pKashidaPos(new TextFrameIndex[rKashidas]);
-    std::unique_ptr<TextFrameIndex[]> pKashidaPosDropped(new TextFrameIndex[rKashidas]);
-    rSI.GetKashidaPositions ( nIdx, rItr.GetLength(), pKashidaPos.get() );
+    std::vector<TextFrameIndex> aKashidaPos;
+    rSI.GetKashidaPositions(nIdx, rItr.GetLength(), aKashidaPos);
+    assert(aKashidaPos.size() >= static_cast<size_t>(rKashidas));
+    std::vector<TextFrameIndex> aKashidaPosDropped(aKashidaPos.size());
     sal_Int32 nKashidaIdx = 0;
     while ( rKashidas && nIdx < nEnd )
     {
@@ -165,12 +166,12 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
                 nKashidasDropped = rInf.GetOut()->ValidateKashidas(
                     rInf.GetText(), sal_Int32(nIdx), sal_Int32(nNext - nIdx),
                     nKashidasInAttr,
-                    reinterpret_cast<sal_Int32*>(pKashidaPos.get() + nKashidaIdx),
-                    reinterpret_cast<sal_Int32*>(pKashidaPosDropped.get()));
+                    reinterpret_cast<sal_Int32*>(aKashidaPos.data() + nKashidaIdx),
+                    reinterpret_cast<sal_Int32*>(aKashidaPosDropped.data()));
                 rInf.GetOut()->SetLayoutMode ( nOldLayout );
                 if ( nKashidasDropped )
                 {
-                    rSI.MarkKashidasInvalid(nKashidasDropped, pKashidaPosDropped.get());
+                    rSI.MarkKashidasInvalid(nKashidasDropped, aKashidaPosDropped.data());
                     rKashidas -= nKashidasDropped;
                     nGluePortion -= TextFrameIndex(nKashidasDropped);
                 }
