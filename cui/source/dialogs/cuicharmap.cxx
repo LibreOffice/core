@@ -435,7 +435,8 @@ void SvxCharacterMap::init()
     OUString aDefStr( aFont.GetFamilyName() );
     OUString aLastName;
     int nCount = m_xVirDev->GetDevFontCount();
-    for ( int i = 0; i < nCount; i++ )
+    m_xFontLB->freeze();
+    for (int i = 0; i < nCount; ++i)
     {
         OUString aFontName( m_xVirDev->GetDevFont( i ).GetFamilyName() );
         if (aFontName != aLastName)
@@ -444,6 +445,7 @@ void SvxCharacterMap::init()
             m_xFontLB->append(OUString::number(i), aFontName);
         }
     }
+    m_xFontLB->thaw();
     // the font may not be in the list =>
     // try to find a font name token in list and select found font,
     // else select topmost entry
@@ -599,8 +601,10 @@ void SvxCharacterMap::fillAllSubsets(weld::ComboBoxText& rListBox)
 {
     SubsetMap aAll(nullptr);
     rListBox.clear();
+    rListBox.freeze();
     for (auto & subset : aAll.GetSubsetMap())
         rListBox.append_text(subset.GetName());
+    rListBox.thaw();
 }
 
 
