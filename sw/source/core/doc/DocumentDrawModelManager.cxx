@@ -79,7 +79,7 @@ void DocumentDrawModelManager::InitDrawModel()
 
     SAL_INFO( "sw.doc", "before create DrawDocument" );
     // The document owns the SwDrawModel. We always have two layers and one page.
-    mpDrawModel = new SwDrawModel( &m_rDoc );
+    mpDrawModel.reset( new SwDrawModel( &m_rDoc ) );
 
     mpDrawModel->EnableUndo( m_rDoc.GetIDocumentUndoRedo().DoesUndo() );
 
@@ -154,22 +154,19 @@ void DocumentDrawModelManager::InitDrawModel()
 
 void DocumentDrawModelManager::ReleaseDrawModel()
 {
-    if ( mpDrawModel )
-    {
-        // !! Also maintain the code in the sw3io for inserting documents!!
-        delete mpDrawModel; mpDrawModel = nullptr;
-    }
+    // !! Also maintain the code in the sw3io for inserting documents!!
+    mpDrawModel.reset();
 }
 
 
 const SwDrawModel* DocumentDrawModelManager::GetDrawModel() const
 {
-    return mpDrawModel;
+    return mpDrawModel.get();
 }
 
 SwDrawModel* DocumentDrawModelManager::GetDrawModel()
 {
-    return mpDrawModel;
+    return mpDrawModel.get();
 }
 
 SwDrawModel* DocumentDrawModelManager::MakeDrawModel_()
@@ -189,7 +186,7 @@ SwDrawModel* DocumentDrawModelManager::MakeDrawModel_()
             m_rDoc.GetDocShell()->Broadcast( aHint );
         }
     }
-    return mpDrawModel;
+    return mpDrawModel.get();
 }
 
 SwDrawModel* DocumentDrawModelManager::GetOrCreateDrawModel()

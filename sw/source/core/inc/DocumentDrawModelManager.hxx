@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/svdtypes.hxx>
+#include <memory>
 
 class SwDrawModel;
 class SdrPageView;
@@ -68,8 +69,7 @@ private:
 
     SwDoc& m_rDoc;
 
-
-    SwDrawModel* mpDrawModel;
+    std::unique_ptr<SwDrawModel> mpDrawModel;
 
     /** Draw Model Layer IDs
      * LayerIds, Heaven == above document
