@@ -219,7 +219,7 @@ private:
                       const OUString & inPath,
                       const DAVRequestEnvironment & rEnv );
 
-    const ucbhelper::InternetProxyServer & getProxySettings() const;
+    ucbhelper::InternetProxyServer getProxySettings() const;
 
     bool removeExpiredLocktoken( const OUString & inURL,
                                  const DAVRequestEnvironment & rEnv );

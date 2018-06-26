@@ -50,5 +50,9 @@ $(eval $(call gb_Library_add_exception_objects,ucbhelper,\
     ucbhelper/source/provider/simplenameclashresolverequest \
 ))
 
+$(eval $(call gb_Library_use_system_win32_libs,ucbhelper,\
+    Winhttp \
+))
+
 # vim: set noet sw=4 ts=4:
 
