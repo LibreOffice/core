@@ -150,16 +150,6 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             exportHeaderFooterContent( xHeaderText, false );
         }
 
-        if( xHeaderTextFirst.is() && xHeaderTextFirst != xHeaderText )
-        {
-            if (bHeaderFirstShared)
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                          XML_DISPLAY, XML_FALSE );
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
-                                        XML_HEADER_FIRST, true, true );
-            exportHeaderFooterContent( xHeaderTextFirst, false );
-        }
-
         if( xHeaderTextLeft.is() && xHeaderTextLeft != xHeaderText )
         {
             if (bHeaderLeftShared)
@@ -168,6 +158,16 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                         XML_HEADER_LEFT, true, true );
             exportHeaderFooterContent( xHeaderTextLeft, false );
+        }
+
+        if( xHeaderTextFirst.is() && xHeaderTextFirst != xHeaderText )
+        {
+            if (bHeaderFirstShared)
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_DISPLAY, XML_FALSE );
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
+                                        XML_HEADER_FIRST, true, true );
+            exportHeaderFooterContent( xHeaderTextFirst, false );
         }
 
         aAny = rPropSet->getPropertyValue( sFooterOn );
@@ -198,16 +198,6 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             exportHeaderFooterContent( xFooterText, false );
         }
 
-        if( xFooterTextFirst.is() && xFooterTextFirst != xFooterText )
-        {
-            if (bFooterFirstShared)
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                          XML_DISPLAY, XML_FALSE );
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
-                                        XML_FOOTER_FIRST, true, true );
-            exportHeaderFooterContent( xFooterTextFirst, false );
-        }
-
         if( xFooterTextLeft.is() && xFooterTextLeft != xFooterText )
         {
             if (bFooterLeftShared)
@@ -216,6 +206,16 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                         XML_FOOTER_LEFT, true, true );
             exportHeaderFooterContent( xFooterTextLeft, false );
+        }
+
+        if( xFooterTextFirst.is() && xFooterTextFirst != xFooterText )
+        {
+            if (bFooterFirstShared)
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_DISPLAY, XML_FALSE );
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
+                                        XML_FOOTER_FIRST, true, true );
+            exportHeaderFooterContent( xFooterTextFirst, false );
         }
     }
 }
