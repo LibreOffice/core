@@ -1994,7 +1994,7 @@ void SwScriptInfo::GetKashidaPositions(
     {
         if ( nEnd <= GetKashida( nCntKashEnd ) )
             break;
-        rKashidaPosition[nCntKashEnd - nCntKash] = GetKashida(nCntKashEnd);
+        rKashidaPosition.push_back(GetKashida(nCntKashEnd));
         nCntKashEnd++;
     }
 }
