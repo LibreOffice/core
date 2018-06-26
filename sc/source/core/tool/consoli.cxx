@@ -61,49 +61,23 @@ ScConsData::ScConsData() :
     bRowByName(false),
     nColCount(0),
     nRowCount(0),
-    ppUsed(nullptr),
-    ppSum(nullptr),
-    ppCount(nullptr),
-    ppSumSqr(nullptr),
-    ppRefs(nullptr),
     nDataCount(0),
-    ppTitlePos(nullptr),
     bCornerUsed(false)
 {
 }
 
 ScConsData::~ScConsData()
 {
-    DeleteData();
-}
-
-#define DELETEARR(ppArray,nCount)   \
-{                                   \
-    sal_uLong i;                        \
-    if (ppArray)                    \
-        for(i=0; i<nCount; i++)     \
-            delete[] ppArray[i];    \
-    delete[] ppArray;               \
-    ppArray = nullptr;                 \
 }
 
 void ScConsData::DeleteData()
 {
-    if (ppRefs)
-    {
-        for (SCSIZE i=0; i<nColCount; i++)
-        {
-            delete[] ppRefs[i];
-        }
-        delete[] ppRefs;
-        ppRefs = nullptr;
-    }
-
-    DELETEARR( ppCount, nColCount );
-    DELETEARR( ppSum,   nColCount );
-    DELETEARR( ppSumSqr,nColCount );
-    DELETEARR( ppUsed,  nColCount );
-    DELETEARR( ppTitlePos, nRowCount );
+    ppRefs.reset();
+    ppCount.reset();
+    ppSum.reset();
+    ppSumSqr.reset();
+    ppUsed.reset();
+    ppTitlePos.reset();
     ::std::vector<OUString>().swap( maColHeaders);
     ::std::vector<OUString>().swap( maRowHeaders);
     ::std::vector<OUString>().swap( maTitles);
@@ -123,40 +97,40 @@ void ScConsData::InitData()
 {
     if (bReference && nColCount && !ppRefs)
     {
-        ppRefs = new ScReferenceList*[nColCount];
+        ppRefs.reset(new std::unique_ptr<ScReferenceList[]>[nColCount]);
         for (SCSIZE i=0; i<nColCount; i++)
-            ppRefs[i] = new ScReferenceList[nRowCount];
+            ppRefs[i].reset(new ScReferenceList[nRowCount]);
     }
     else if (nColCount && !ppCount)
     {
-        ppCount  = new double*[nColCount];
-        ppSum    = new double*[nColCount];
-        ppSumSqr = new double*[nColCount];
+        ppCount.reset( new std::unique_ptr<double[]>[nColCount] );
+        ppSum.reset( new std::unique_ptr<double[]>[nColCount] );
+        ppSumSqr.reset( new std::unique_ptr<double[]>[nColCount] );
         for (SCSIZE i=0; i<nColCount; i++)
         {
-            ppCount[i]  = new double[nRowCount];
-            ppSum[i]    = new double[nRowCount];
-            ppSumSqr[i] = new double[nRowCount];
+            ppCount[i].reset( new double[nRowCount] );
+            ppSum[i].reset( new double[nRowCount] );
+            ppSumSqr[i].reset( new double[nRowCount] );
         }
     }
 
     if (nColCount && !ppUsed)
     {
-        ppUsed = new bool*[nColCount];
+        ppUsed.reset( new std::unique_ptr<bool[]>[nColCount] );
         for (SCSIZE i=0; i<nColCount; i++)
         {
-            ppUsed[i] = new bool[nRowCount];
-            memset( ppUsed[i], 0, nRowCount * sizeof(bool) );
+            ppUsed[i].reset( new bool[nRowCount] );
+            memset( ppUsed[i].get(), 0, nRowCount * sizeof(bool) );
         }
     }
 
     if (nRowCount && nDataCount && !ppTitlePos)
     {
-        ppTitlePos = new SCSIZE*[nRowCount];
+        ppTitlePos.reset( new std::unique_ptr<SCSIZE[]>[nRowCount] );
         for (SCSIZE i=0; i<nRowCount; i++)
         {
-            ppTitlePos[i] = new SCSIZE[nDataCount];
-            memset( ppTitlePos[i], 0, nDataCount * sizeof(SCSIZE) );    //TODO: not necessary ?
+            ppTitlePos[i].reset( new SCSIZE[nDataCount] );
+            memset( ppTitlePos[i].get(), 0, nDataCount * sizeof(SCSIZE) );    //TODO: not necessary ?
         }
     }
 
