@@ -568,29 +568,29 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
 
         if (isCHRATR(nWhich) || isTXTATR(nWhich))
         {
-            aCallMod.Add( mpDfltTextFormatColl );
-            aCallMod.Add( mpDfltCharFormat );
+            aCallMod.Add( mpDfltTextFormatColl.get() );
+            aCallMod.Add( mpDfltCharFormat.get() );
             bCheckSdrDflt = nullptr != pSdrPool;
         }
         else if ( isPARATR(nWhich) ||
                   isPARATR_LIST(nWhich) )
         {
-            aCallMod.Add( mpDfltTextFormatColl );
+            aCallMod.Add( mpDfltTextFormatColl.get() );
             bCheckSdrDflt = nullptr != pSdrPool;
         }
         else if (isGRFATR(nWhich))
         {
-            aCallMod.Add( mpDfltGrfFormatColl );
+            aCallMod.Add( mpDfltGrfFormatColl.get() );
         }
         else if (isFRMATR(nWhich) || isDrawingLayerAttribute(nWhich) )
         {
-            aCallMod.Add( mpDfltGrfFormatColl );
-            aCallMod.Add( mpDfltTextFormatColl );
-            aCallMod.Add( mpDfltFrameFormat );
+            aCallMod.Add( mpDfltGrfFormatColl.get() );
+            aCallMod.Add( mpDfltTextFormatColl.get() );
+            aCallMod.Add( mpDfltFrameFormat.get() );
         }
         else if (isBOXATR(nWhich))
         {
-            aCallMod.Add( mpDfltFrameFormat );
+            aCallMod.Add( mpDfltFrameFormat.get() );
         }
 
         // also copy the defaults
@@ -644,7 +644,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             aOld.ClearItem( RES_PARATR_TABSTOP );
             if( bChg )
             {
-                SwFormatChg aChgFormat( mpDfltCharFormat );
+                SwFormatChg aChgFormat( mpDfltCharFormat.get() );
                 // notify the frames
                 aCallMod.ModifyNotification( &aChgFormat, &aChgFormat );
             }
@@ -968,7 +968,7 @@ void SwDoc::DelTextFormatColl(size_t nFormatColl, bool bBroadcast)
 
     // Who has the to-be-deleted as their Next?
     SwTextFormatColl *pDel = (*mpTextFormatCollTable)[nFormatColl];
-    if( mpDfltTextFormatColl == pDel )
+    if( mpDfltTextFormatColl.get() == pDel )
         return;     // never delete default!
 
     if (bBroadcast)
@@ -1171,7 +1171,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
         return pNewColl;
 
     // search for the "parent" first
-    SwTextFormatColl* pParent = mpDfltTextFormatColl;
+    SwTextFormatColl* pParent = mpDfltTextFormatColl.get();
     if( pParent != rColl.DerivedFrom() )
         pParent = CopyTextColl( *static_cast<SwTextFormatColl*>(rColl.DerivedFrom()) );
 
@@ -1238,7 +1238,7 @@ SwGrfFormatColl* SwDoc::CopyGrfColl( const SwGrfFormatColl& rColl )
         return pNewColl;
 
      // Search for the "parent" first
-    SwGrfFormatColl* pParent = mpDfltGrfFormatColl;
+    SwGrfFormatColl* pParent = mpDfltGrfFormatColl.get();
     if( pParent != rColl.DerivedFrom() )
         pParent = CopyGrfColl( *static_cast<SwGrfFormatColl*>(rColl.DerivedFrom()) );
 
@@ -1700,14 +1700,14 @@ bool SwDoc::DontExpandFormat( const SwPosition& rPos, bool bFlag )
 
 SwTableBoxFormat* SwDoc::MakeTableBoxFormat()
 {
-    SwTableBoxFormat* pFormat = new SwTableBoxFormat( GetAttrPool(), mpDfltFrameFormat );
+    SwTableBoxFormat* pFormat = new SwTableBoxFormat( GetAttrPool(), mpDfltFrameFormat.get() );
     getIDocumentState().SetModified();
     return pFormat;
 }
 
 SwTableLineFormat* SwDoc::MakeTableLineFormat()
 {
-    SwTableLineFormat* pFormat = new SwTableLineFormat( GetAttrPool(), mpDfltFrameFormat );
+    SwTableLineFormat* pFormat = new SwTableLineFormat( GetAttrPool(), mpDfltFrameFormat.get() );
     getIDocumentState().SetModified();
     return pFormat;
 }
@@ -1718,7 +1718,7 @@ void SwDoc::CreateNumberFormatter()
 
     LanguageType eLang = LANGUAGE_SYSTEM;
 
-    mpNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang );
+    mpNumberFormatter.reset( new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang ) );
     mpNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
     if (!utl::ConfigManager::IsFuzzing())
         mpNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));

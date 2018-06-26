@@ -225,42 +225,42 @@ class SW_DLLPUBLIC SwDoc final
     const std::unique_ptr< ::sw::DocumentExternalDataManager > m_pDocumentExternalDataManager;
 
     // Pointer
-    SwFrameFormat        *mpDfltFrameFormat;       //< Default formats.
-    SwFrameFormat        *mpEmptyPageFormat;       //< Format for the default empty page
-    SwFrameFormat        *mpColumnContFormat;      //< Format for column container
-    SwCharFormat       *mpDfltCharFormat;
-    SwTextFormatColl    *mpDfltTextFormatColl;     //< Defaultformatcollections
-    SwGrfFormatColl    *mpDfltGrfFormatColl;
+    std::unique_ptr<SwFrameFormat>     mpDfltFrameFormat;     //< Default formats.
+    std::unique_ptr<SwFrameFormat>     mpEmptyPageFormat;     //< Format for the default empty page
+    std::unique_ptr<SwFrameFormat>     mpColumnContFormat;    //< Format for column container
+    std::unique_ptr<SwCharFormat>      mpDfltCharFormat;
+    std::unique_ptr<SwTextFormatColl>  mpDfltTextFormatColl;  //< Defaultformatcollections
+    std::unique_ptr<SwGrfFormatColl>   mpDfltGrfFormatColl;
 
-    SwFrameFormats       *mpFrameFormatTable;      //< Format table
-    SwCharFormats      *mpCharFormatTable;
-    SwFrameFormats       *mpSpzFrameFormatTable;
-    SwSectionFormats   *mpSectionFormatTable;
-    SwFrameFormats       *mpTableFrameFormatTable; //< For tables
-    SwTextFormatColls   *mpTextFormatCollTable;    //< FormatCollections
-    SwGrfFormatColls   *mpGrfFormatCollTable;
+    std::unique_ptr<SwFrameFormats>    mpFrameFormatTable;    //< Format table
+    std::unique_ptr<SwCharFormats>     mpCharFormatTable;
+    std::unique_ptr<SwFrameFormats>    mpSpzFrameFormatTable;
+    std::unique_ptr<SwSectionFormats>  mpSectionFormatTable;
+    std::unique_ptr<SwFrameFormats>    mpTableFrameFormatTable; //< For tables
+    std::unique_ptr<SwTextFormatColls> mpTextFormatCollTable;   //< FormatCollections
+    std::unique_ptr<SwGrfFormatColls>  mpGrfFormatCollTable;
 
-    SwTOXTypes      *mpTOXTypes;                   //< Tables/indices
-    SwDefTOXBase_Impl * mpDefTOXBases;             //< defaults of SwTOXBase's
+    std::unique_ptr<SwTOXTypes>        mpTOXTypes;              //< Tables/indices
+    std::unique_ptr<SwDefTOXBase_Impl> mpDefTOXBases;           //< defaults of SwTOXBase's
 
     std::unique_ptr<SwDBManager, o3tl::default_delete<SwDBManager>> m_pOwnDBManager; //< own DBManager
     SwDBManager * m_pDBManager; //< DBManager for evaluation of DB-fields.
 
     SwNumRule       *mpOutlineRule;
-    SwFootnoteInfo       *mpFootnoteInfo;
-    SwEndNoteInfo   *mpEndNoteInfo;
-    SwLineNumberInfo*mpLineNumberInfo;
-    SwFootnoteIdxs       *mpFootnoteIdxs;
+    std::unique_ptr<SwFootnoteInfo>   mpFootnoteInfo;
+    std::unique_ptr<SwEndNoteInfo>    mpEndNoteInfo;
+    std::unique_ptr<SwLineNumberInfo> mpLineNumberInfo;
+    std::unique_ptr<SwFootnoteIdxs>   mpFootnoteIdxs;
 
     SwDocShell      *mpDocShell;                   //< Ptr to SfxDocShell of Doc.
     SfxObjectShellLock mxTmpDocShell;              //< A temporary shell that is used to copy OLE-Nodes
 
-    SwAutoCorrExceptWord *mpACEWord;               /**< For the automated takeover of
+    std::unique_ptr<SwAutoCorrExceptWord> mpACEWord;               /**< For the automated takeover of
                                                    auto-corrected words that are "re-corrected". */
-    SwURLStateChanged *mpURLStateChgd;             //< SfxClient for changes in INetHistory
-    SvNumberFormatter *mpNumberFormatter;          //< NumFormatter for tables / fields
+    std::unique_ptr<SwURLStateChanged> mpURLStateChgd;             //< SfxClient for changes in INetHistory
+    std::unique_ptr<SvNumberFormatter> mpNumberFormatter;          //< NumFormatter for tables / fields
 
-    mutable SwNumRuleTable    *mpNumRuleTable;     //< List of all named NumRules.
+    mutable std::unique_ptr<SwNumRuleTable> mpNumRuleTable;     //< List of all named NumRules.
 
     // Hash map to find numrules by name
     mutable std::unordered_map<OUString, SwNumRule *> maNumRuleMap;
@@ -268,11 +268,11 @@ class SW_DLLPUBLIC SwDoc final
     std::unique_ptr<SwPagePreviewPrtData> m_pPgPViewPrtData; //< Indenting / spacing for printing of page view.
     SwExtTextInput  *mpExtInputRing;
 
-    IStyleAccess    *mpStyleAccess;                //< handling of automatic styles
-    SwLayoutCache   *mpLayoutCache;                /**< Layout cache to read and save with the
-                                                   document for a faster formatting */
+    std::unique_ptr<IStyleAccess>  mpStyleAccess;                //< handling of automatic styles
+    std::unique_ptr<SwLayoutCache> mpLayoutCache;                /**< Layout cache to read and save with the
+                                                                    document for a faster formatting */
 
-    IGrammarContact *mpGrammarContact;             //< for grammar checking in paragraphs during editing
+    std::unique_ptr<IGrammarContact> mpGrammarContact;             //< for grammar checking in paragraphs during editing
 
     css::uno::Reference< css::script::vba::XVBAEventProcessor > mxVbaEvents;
     css::uno::Reference<css::container::XNameContainer> m_xTemplateToProjectCache;
@@ -719,23 +719,23 @@ public:
     bool DontExpandFormat( const SwPosition& rPos, bool bFlag = true );
 
     // Formats
-    const SwFrameFormats* GetFrameFormats() const     { return mpFrameFormatTable; }
-          SwFrameFormats* GetFrameFormats()           { return mpFrameFormatTable; }
-    const SwCharFormats* GetCharFormats() const   { return mpCharFormatTable;}
-          SwCharFormats* GetCharFormats()         { return mpCharFormatTable;}
+    const SwFrameFormats* GetFrameFormats() const     { return mpFrameFormatTable.get(); }
+          SwFrameFormats* GetFrameFormats()           { return mpFrameFormatTable.get(); }
+    const SwCharFormats* GetCharFormats() const   { return mpCharFormatTable.get();}
+          SwCharFormats* GetCharFormats()         { return mpCharFormatTable.get();}
 
     // LayoutFormats (frames, DrawObjects), sometimes const sometimes not
-    const SwFrameFormats* GetSpzFrameFormats() const   { return mpSpzFrameFormatTable; }
-          SwFrameFormats* GetSpzFrameFormats()         { return mpSpzFrameFormatTable; }
+    const SwFrameFormats* GetSpzFrameFormats() const   { return mpSpzFrameFormatTable.get(); }
+          SwFrameFormats* GetSpzFrameFormats()         { return mpSpzFrameFormatTable.get(); }
 
-    const SwFrameFormat *GetDfltFrameFormat() const   { return mpDfltFrameFormat; }
-          SwFrameFormat *GetDfltFrameFormat()         { return mpDfltFrameFormat; }
-    const SwFrameFormat *GetEmptyPageFormat() const { return mpEmptyPageFormat; }
-          SwFrameFormat *GetEmptyPageFormat()       { return mpEmptyPageFormat; }
-    const SwFrameFormat *GetColumnContFormat() const{ return mpColumnContFormat; }
-          SwFrameFormat *GetColumnContFormat()      { return mpColumnContFormat; }
-    const SwCharFormat *GetDfltCharFormat() const { return mpDfltCharFormat;}
-          SwCharFormat *GetDfltCharFormat()       { return mpDfltCharFormat;}
+    const SwFrameFormat *GetDfltFrameFormat() const   { return mpDfltFrameFormat.get(); }
+          SwFrameFormat *GetDfltFrameFormat()         { return mpDfltFrameFormat.get(); }
+    const SwFrameFormat *GetEmptyPageFormat() const { return mpEmptyPageFormat.get(); }
+          SwFrameFormat *GetEmptyPageFormat()       { return mpEmptyPageFormat.get(); }
+    const SwFrameFormat *GetColumnContFormat() const{ return mpColumnContFormat.get(); }
+          SwFrameFormat *GetColumnContFormat()      { return mpColumnContFormat.get(); }
+    const SwCharFormat *GetDfltCharFormat() const { return mpDfltCharFormat.get();}
+          SwCharFormat *GetDfltCharFormat()       { return mpDfltCharFormat.get();}
 
     // @return the interface of the management of (auto)styles
     IStyleAccess& GetIStyleAccess() { return *mpStyleAccess; }
@@ -758,10 +758,10 @@ public:
 
     // Formatcollections (styles)
     // TXT
-    const SwTextFormatColl* GetDfltTextFormatColl() const { return mpDfltTextFormatColl; }
-    SwTextFormatColl* GetDfltTextFormatColl() { return mpDfltTextFormatColl; }
-    const SwTextFormatColls *GetTextFormatColls() const { return mpTextFormatCollTable; }
-    SwTextFormatColls *GetTextFormatColls() { return mpTextFormatCollTable; }
+    const SwTextFormatColl* GetDfltTextFormatColl() const { return mpDfltTextFormatColl.get(); }
+    SwTextFormatColl* GetDfltTextFormatColl() { return mpDfltTextFormatColl.get(); }
+    const SwTextFormatColls *GetTextFormatColls() const { return mpTextFormatCollTable.get(); }
+    SwTextFormatColls *GetTextFormatColls() { return mpTextFormatCollTable.get(); }
     SwTextFormatColl *MakeTextFormatColl( const OUString &rFormatName,
                                   SwTextFormatColl *pDerivedFrom,
                                   bool bBroadcast = false);
@@ -785,15 +785,15 @@ public:
 
     void ChkCondColls();
 
-    const SwGrfFormatColl* GetDfltGrfFormatColl() const   { return mpDfltGrfFormatColl; }
-    SwGrfFormatColl* GetDfltGrfFormatColl()  { return mpDfltGrfFormatColl; }
-    const SwGrfFormatColls *GetGrfFormatColls() const     { return mpGrfFormatCollTable; }
+    const SwGrfFormatColl* GetDfltGrfFormatColl() const   { return mpDfltGrfFormatColl.get(); }
+    SwGrfFormatColl* GetDfltGrfFormatColl()  { return mpDfltGrfFormatColl.get(); }
+    const SwGrfFormatColls *GetGrfFormatColls() const     { return mpGrfFormatCollTable.get(); }
     SwGrfFormatColl *MakeGrfFormatColl(const OUString &rFormatName,
                                     SwGrfFormatColl *pDerivedFrom);
 
     // Table formatting
-    const SwFrameFormats* GetTableFrameFormats() const  { return mpTableFrameFormatTable; }
-          SwFrameFormats* GetTableFrameFormats()        { return mpTableFrameFormatTable; }
+    const SwFrameFormats* GetTableFrameFormats() const  { return mpTableFrameFormatTable.get(); }
+          SwFrameFormats* GetTableFrameFormats()        { return mpTableFrameFormatTable.get(); }
     size_t GetTableFrameFormatCount( bool bUsed ) const;
     SwFrameFormat& GetTableFrameFormat(size_t nFormat, bool bUsed ) const;
     SwTableFormat* MakeTableFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
@@ -1350,8 +1350,8 @@ public:
     bool IsVisitedURL( const OUString& rURL );
 
     // Save current values for automatic registration of exceptions in Autocorrection.
-    void SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew );
-    SwAutoCorrExceptWord* GetAutoCorrExceptWord()       { return mpACEWord; }
+    void SetAutoCorrExceptWord( std::unique_ptr<SwAutoCorrExceptWord> pNew );
+    SwAutoCorrExceptWord* GetAutoCorrExceptWord()       { return mpACEWord.get(); }
     void DeleteAutoCorrExceptWord();
 
     const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
@@ -1485,7 +1485,7 @@ public:
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
-    SwLayoutCache* GetLayoutCache() const { return mpLayoutCache; }
+    SwLayoutCache* GetLayoutCache() const { return mpLayoutCache.get(); }
 
     /** Checks if any of the text node contains hidden characters.
         Used for optimization. Changing the view option 'view hidden text'
@@ -1493,7 +1493,7 @@ public:
     */
     bool ContainsHiddenChars() const;
 
-    IGrammarContact* getGrammarContact() const { return mpGrammarContact; }
+    IGrammarContact* getGrammarContact() const { return mpGrammarContact.get(); }
 
     /** Marks/Unmarks a list level of a certain list
 
@@ -1617,7 +1617,7 @@ inline SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate )
 {
     if( bCreate && !mpNumberFormatter )
         CreateNumberFormatter();
-    return mpNumberFormatter;
+    return mpNumberFormatter.get();
 }
 
 inline const SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate ) const

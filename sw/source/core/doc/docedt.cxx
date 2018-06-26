@@ -798,17 +798,14 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
 }
 
 // Save the current values to add them as automatic entries to AutoCorrect.
-void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
+void SwDoc::SetAutoCorrExceptWord( std::unique_ptr<SwAutoCorrExceptWord> pNew )
 {
-    if( pNew != mpACEWord )
-        delete mpACEWord;
-    mpACEWord = pNew;
+    mpACEWord = std::move(pNew);
 }
 
 void SwDoc::DeleteAutoCorrExceptWord()
 {
-    delete mpACEWord;
-    mpACEWord = nullptr;
+    mpACEWord.reset();
 }
 
 void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )

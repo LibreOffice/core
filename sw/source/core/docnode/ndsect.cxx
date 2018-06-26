@@ -505,7 +505,7 @@ SwSection* SwDoc::GetCurrSection( const SwPosition& rPos )
 
 SwSectionFormat* SwDoc::MakeSectionFormat()
 {
-    SwSectionFormat* pNew = new SwSectionFormat( mpDfltFrameFormat, this );
+    SwSectionFormat* pNew = new SwSectionFormat( mpDfltFrameFormat.get(), this );
     mpSectionFormatTable->push_back( pNew );
     return pNew;
 }

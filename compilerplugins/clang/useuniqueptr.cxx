@@ -278,6 +278,11 @@ void UseUniquePtr::CheckDeleteExpr(const CXXMethodDecl* methodDecl, const CXXDel
     auto tc = loplugin::TypeCheck(fieldDecl->getType());
     if (tc.Class("map").StdNamespace() || tc.Class("unordered_map").StdNamespace())
         return;
+    // these sw::Ring based classes do not lend themselves to std::unique_ptr management
+    if (tc.Pointer().Class("SwNodeIndex").GlobalNamespace() || tc.Pointer().Class("SwShellTableCursor").GlobalNamespace()
+        || tc.Pointer().Class("SwBlockCursor").GlobalNamespace() || tc.Pointer().Class("SwVisibleCursor").GlobalNamespace()
+        || tc.Pointer().Class("SwShellCursor").GlobalNamespace())
+        return;
     // there is a loop in ~ImplPrnQueueList deleting stuff on a global data structure
     if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/inc/print.h"))
         return;
