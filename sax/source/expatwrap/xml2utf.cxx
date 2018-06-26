@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 
+#include <o3tl/make_unique.hxx>
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <com/sun/star/io/NotConnectedException.hpp>
@@ -113,14 +114,6 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
     }
     return nRead;
 }
-
-
-XMLFile2UTFConverter::~XMLFile2UTFConverter()
-{
-    delete m_pText2Unicode;
-    delete m_pUnicode2Text;
-}
-
 
 void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
 {
@@ -331,8 +324,8 @@ void XMLFile2UTFConverter::initializeDecoding()
         rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( m_sEncoding.getStr() );
         if( encoding != RTL_TEXTENCODING_UTF8 )
         {
-            m_pText2Unicode = new Text2UnicodeConverter( m_sEncoding );
-            m_pUnicode2Text = new Unicode2TextConverter( RTL_TEXTENCODING_UTF8 );
+            m_pText2Unicode = o3tl::make_unique<Text2UnicodeConverter>( m_sEncoding );
+            m_pUnicode2Text = o3tl::make_unique<Unicode2TextConverter>( RTL_TEXTENCODING_UTF8 );
         }
     }
 }

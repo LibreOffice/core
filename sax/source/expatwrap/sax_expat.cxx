@@ -20,6 +20,7 @@
 #include <string.h>
 #include <cassert>
 #include <memory>
+#include <utility>
 #include <vector>
 
 
@@ -159,8 +160,8 @@ public: // module scope
 
     // External entity stack
     vector<struct Entity>   vecEntity;
-    void pushEntity( const struct Entity &entity )
-        { vecEntity.push_back( entity ); }
+    void pushEntity( Entity &&entity )
+        { vecEntity.push_back( std::move(entity) ); }
     void popEntity()
         { vecEntity.pop_back( ); }
     struct Entity &getEntity()
@@ -388,18 +389,18 @@ class ParserCleanup
 {
 private:
     SaxExpatParser_Impl& m_rParser;
-    Entity& m_rEntity;
+    XML_Parser m_xmlParser;
 public:
-    ParserCleanup(SaxExpatParser_Impl& rParser, Entity& rEntity)
+    ParserCleanup(SaxExpatParser_Impl& rParser, XML_Parser xmlParser)
         : m_rParser(rParser)
-        , m_rEntity(rEntity)
+        , m_xmlParser(xmlParser)
     {
     }
     ~ParserCleanup()
     {
         m_rParser.popEntity();
         //XML_ParserFree accepts a null arg
-        XML_ParserFree(m_rEntity.pParser);
+        XML_ParserFree(m_xmlParser);
     }
 };
 
@@ -469,9 +470,10 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
 
 
     m_pImpl->exception = SAXParseException();
-    m_pImpl->pushEntity( entity );
+    auto const xmlParser = entity.pParser;
+    m_pImpl->pushEntity( std::move(entity) );
 
-    ParserCleanup aEnsureFree(*m_pImpl, entity);
+    ParserCleanup aEnsureFree(*m_pImpl, xmlParser);
 
     // start the document
     if( m_pImpl->rDocumentHandler.is() ) {
@@ -847,7 +849,8 @@ bool SaxExpatParser_Impl::callbackExternalEntityRef(
         }
 
         entity.converter.setInputStream( entity.structSource.aInputStream );
-        pImpl->pushEntity( entity );
+        auto const xmlParser = entity.pParser;
+        pImpl->pushEntity( std::move(entity) );
         try
         {
             pImpl->parse();
@@ -870,7 +873,7 @@ bool SaxExpatParser_Impl::callbackExternalEntityRef(
 
         pImpl->popEntity();
 
-        XML_ParserFree( entity.pParser );
+        XML_ParserFree( xmlParser );
     }
 
     return bOK;
