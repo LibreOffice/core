@@ -36,67 +36,77 @@
 #include <comphelper/base64.hxx>
 #include <sal/log.hxx>
 
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::util;
-
+using namespace css;
+using namespace css::util;
 
 namespace {
 
-class Base64Test
-    : public ::CppUnit::TestFixture
+class Base64Test : public CppUnit::TestFixture
 {
 public:
 
-    void testBase64();
+    void testBase64Encode();
+    void testBase64Decode();
+    void testBase64EncodeForOStringBuffer();
 
     CPPUNIT_TEST_SUITE(Base64Test);
-    CPPUNIT_TEST(testBase64);
+    CPPUNIT_TEST(testBase64Encode);
+    CPPUNIT_TEST(testBase64Decode);
+    CPPUNIT_TEST(testBase64EncodeForOStringBuffer);
     CPPUNIT_TEST_SUITE_END();
-
-private:
 };
 
-
-
-void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8>& aPass)
+void Base64Test::testBase64Encode()
 {
-    OUString const is(OUString::createFromAscii(pis));
-    OUStringBuffer buf;
-    comphelper::Base64::encode(buf, aPass);
-    SAL_INFO("sax.cppunit","" << buf.toString());
-    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
+    OUStringBuffer aBuffer;
+    uno::Sequence<sal_Int8> inputSequence;
+
+    inputSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
+    comphelper::Base64::encode(aBuffer, inputSequence);
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAAAAABAgM="), aBuffer.makeStringAndClear());
+
+    inputSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
+    comphelper::Base64::encode(aBuffer, inputSequence);
+    CPPUNIT_ASSERT_EQUAL(OUString("BQIDAAABAgM="), aBuffer.makeStringAndClear());
+
+    inputSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
+    comphelper::Base64::encode(aBuffer, inputSequence);
+    CPPUNIT_ASSERT_EQUAL(OUString("yB9NbwABAgM="), aBuffer.makeStringAndClear());
 }
 
-void doTestDecodeBase64(const uno::Sequence<sal_Int8>& aPass, char const*const pis)
+void Base64Test::testBase64Decode()
 {
-    OUString const is(OUString::createFromAscii(pis));
-    uno::Sequence< sal_Int8 > tempSequence;
-    comphelper::Base64::decode(tempSequence, is);
-    SAL_INFO("sax.cppunit","" << is);
-    bool b = (tempSequence==aPass);
-    CPPUNIT_ASSERT(b);
+    uno::Sequence<sal_Int8> decodedSequence;
+
+    uno::Sequence<sal_Int8> expectedSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
+    comphelper::Base64::decode(decodedSequence, "AAAAAAABAgM=");
+    CPPUNIT_ASSERT(expectedSequence == decodedSequence);
+
+    expectedSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
+    comphelper::Base64::decode(decodedSequence, "BQIDAAABAgM=");
+    CPPUNIT_ASSERT(expectedSequence == decodedSequence);
+
+    expectedSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
+    comphelper::Base64::decode(decodedSequence, "yB9NbwABAgM=");
+    CPPUNIT_ASSERT(expectedSequence == decodedSequence);
 }
 
-void Base64Test::testBase64()
+void Base64Test::testBase64EncodeForOStringBuffer()
 {
-    std::vector< sal_Int8 > tempSeq { 0, 0, 0, 0, 0, 1, 2, 3 };
-    uno::Sequence< sal_Int8 > tempSequence = comphelper::containerToSequence(tempSeq);
-    doTestEncodeBase64("AAAAAAABAgM=", tempSequence);
-    doTestDecodeBase64(tempSequence, "AAAAAAABAgM=");
-    tempSeq[0] = sal_Int8(5);
-    tempSeq[1] = sal_Int8(2);
-    tempSeq[2] = sal_Int8(3);
-    tempSequence = comphelper::containerToSequence(tempSeq);
-    doTestEncodeBase64("BQIDAAABAgM=", tempSequence);
-    doTestDecodeBase64(tempSequence, "BQIDAAABAgM=");
-    tempSeq[0] = sal_Int8(sal_uInt8(200));
-    tempSeq[1] = sal_Int8(31);
-    tempSeq[2] = sal_Int8(77);
-    tempSeq[3] = sal_Int8(111);
-    tempSequence = comphelper::containerToSequence(tempSeq);
-    doTestEncodeBase64("yB9NbwABAgM=", tempSequence);
-    doTestDecodeBase64(tempSequence, "yB9NbwABAgM=");
+    OStringBuffer aBuffer;
+    uno::Sequence<sal_Int8> inputSequence;
+
+    inputSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
+    comphelper::Base64::encode(aBuffer, inputSequence);
+    CPPUNIT_ASSERT_EQUAL(OString("AAAAAAABAgM="), OString(aBuffer.makeStringAndClear()));
+
+    inputSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
+    comphelper::Base64::encode(aBuffer, inputSequence);
+    CPPUNIT_ASSERT_EQUAL(OString("BQIDAAABAgM="), OString(aBuffer.makeStringAndClear()));
+
+    inputSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
+    comphelper::Base64::encode(aBuffer, inputSequence);
+    CPPUNIT_ASSERT_EQUAL(OString("yB9NbwABAgM="), OString(aBuffer.makeStringAndClear()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Base64Test);
