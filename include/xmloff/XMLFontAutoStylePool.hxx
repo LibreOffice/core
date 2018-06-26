@@ -26,6 +26,7 @@
 #include <tools/fontenum.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <set>
+#include <unordered_map>
 #include <memory>
 
 class XMLFontAutoStylePool_Impl;
@@ -33,13 +34,15 @@ class SvXMLExport;
 
 class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public salhelper::SimpleReferenceObject
 {
+private:
     SvXMLExport& rExport;
 
     std::unique_ptr<XMLFontAutoStylePool_Impl> m_pFontAutoStylePool;
     std::set<OUString> m_aNames;
     bool m_bTryToEmbedFonts;
+    std::unordered_map<OString, OUString> m_aEmbeddedFontFiles;
 
-    OUString embedFontFile( const OUString& fontUrl );
+    OUString embedFontFile(OUString const & rFileUrl, OUString const & rFamilyName);
 
 protected:
 
