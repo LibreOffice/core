@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_d24e99c0",
+        "filename": "framework/source/uielement/statusbarmanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-26T14:09:45Z",
+      "side": 1,
+      "message": "The \"else\" part seems unnecessary.",
+      "revId": "76b1a1e5dc2ea04143690ecf57ca288ab0a6a0c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_b2d83df1",
+        "filename": "framework/source/uielement/statusbarmerger.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-26T14:09:45Z",
+      "side": 1,
+      "message": "There doesn\u0027t seem to be a corresponding change in Addons.xcs schema.",
+      "revId": "76b1a1e5dc2ea04143690ecf57ca288ab0a6a0c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
