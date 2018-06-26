@@ -132,9 +132,10 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
     // kashida positions found in SwScriptInfo are not necessarily valid in every font
     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
-    std::vector<TextFrameIndex> aKashidaPos(rKashidas);
-    std::vector<TextFrameIndex> aKashidaPosDropped(rKashidas);
+    std::vector<TextFrameIndex> aKashidaPos;
     rSI.GetKashidaPositions(nIdx, rItr.GetLength(), aKashidaPos);
+    assert(aKashidaPos.size() >= static_cast<size_t>(rKashidas));
+    std::vector<TextFrameIndex> aKashidaPosDropped(aKashidaPos.size());
     sal_Int32 nKashidaIdx = 0;
     while ( rKashidas && nIdx < nEnd )
     {
