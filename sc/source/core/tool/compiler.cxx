@@ -1738,6 +1738,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     pDoc(rCxt.getDoc()),
     aPos(rPos),
     mpFormatter(pContext? pContext->GetFormatTable() : pDoc->GetFormatTable()),
+    mpInterpreterContext(pContext),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(ScGlobal::pCharClass),
@@ -1759,6 +1760,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
         pDoc( pDocument ),
         aPos( rPos ),
         mpFormatter(pContext ? pContext->GetFormatTable() : pDoc->GetFormatTable()),
+        mpInterpreterContext(pContext),
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
@@ -1781,6 +1783,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
     pDoc(rCxt.getDoc()),
     aPos(rPos),
     mpFormatter(pContext ? pContext->GetFormatTable() : pDoc ? pDoc->GetFormatTable() : nullptr),
+    mpInterpreterContext(pContext),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(ScGlobal::pCharClass),
@@ -1802,6 +1805,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         pDoc( pDocument ),
         aPos( rPos ),
         mpFormatter(pContext ? pContext->GetFormatTable() : pDoc ? pDoc->GetFormatTable() : nullptr),
+        mpInterpreterContext(pContext),
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
@@ -5043,7 +5047,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         ScAddress aAbs = rRef.toAbs(aPos);
         if (pDoc->HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
-            OUString aStr = pDoc->GetString(aAbs);
+            OUString aStr = pDoc->GetString(aAbs, mpInterpreterContext);
             EnQuote( aStr );
             rBuffer.append(aStr);
         }
@@ -5069,7 +5073,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
             {
                 SAL_WARN("sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef falling back to cell: " <<
                         aAbs.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, pDoc));
-                aStr = pDoc->GetString(aAbs);
+                aStr = pDoc->GetString(aAbs, mpInterpreterContext);
             }
             else
             {

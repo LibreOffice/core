@@ -269,6 +269,7 @@ private:
     ScAddress   aPos;
 
     SvNumberFormatter* mpFormatter;
+    const ScInterpreterContext* mpInterpreterContext;
 
     SCTAB       mnCurrentSheetTab;      // indicates current sheet number parsed so far
     sal_Int32   mnCurrentSheetEndPos;   // position after current sheet name if parsed
