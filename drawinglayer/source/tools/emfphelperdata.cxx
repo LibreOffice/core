@@ -815,6 +815,8 @@ namespace emfplushelper
     {
         sal_uInt64 length = rMS.GetSize();
 
+        fprintf(stderr, "initial len %ld\n", length);
+
         if (length < 12)
             SAL_WARN("drawinglayer", "length is less than required header size");
 
@@ -826,6 +828,8 @@ namespace emfplushelper
             sal_uInt64 next;
 
             rMS.ReadUInt16(type).ReadUInt16(flags).ReadUInt32(size).ReadUInt32(dataSize);
+
+            fprintf(stderr, "dataSize is %d\n", dataSize);
 
             next = rMS.Tell() + (size - 12);
 
