@@ -74,9 +74,9 @@ class I18NUTIL_DLLPUBLIC casefolding
 {
 public:
     /// @throws css::uno::RuntimeException
-    static Mapping& getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, css::lang::Locale const & aLocale, MappingType nMappingType);
+    static Mapping getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, css::lang::Locale const & aLocale, MappingType nMappingType);
     /// @throws css::uno::RuntimeException
-    static Mapping& getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, css::lang::Locale const & aLocale, MappingType nMappingType);
+    static const Mapping& getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, css::lang::Locale const & aLocale, MappingType nMappingType);
     /// @throws css::uno::RuntimeException
     static sal_Unicode getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, css::lang::Locale const & aLocale, MappingType nMappingtype, TransliterationFlags moduleLoaded);
 
