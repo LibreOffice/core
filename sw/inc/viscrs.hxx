@@ -21,6 +21,7 @@
 
 #include <config_features.h>
 
+#include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/cursor.hxx>
 #include "swcrsr.hxx"
 #include "swrect.hxx"
@@ -59,7 +60,6 @@ public:
 
 // From here classes/methods for selections.
 
-namespace sdr { namespace overlay { class OverlayObject; }}
 namespace sw { namespace overlay { class OverlayRangesOutline; }}
 class MapMode;
 
@@ -74,15 +74,15 @@ class SwSelPaintRects : public SwRects
     const SwCursorShell* m_pCursorShell;
 
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
-    sdr::overlay::OverlayObject*    m_pCursorOverlay;
+    std::unique_ptr<sdr::overlay::OverlayObject> m_pCursorOverlay;
 
     // access to m_pCursorOverlay for swapContent
-    sdr::overlay::OverlayObject* getCursorOverlay() const { return m_pCursorOverlay; }
-    void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { m_pCursorOverlay = pNew; }
+    sdr::overlay::OverlayObject* getCursorOverlay() const { return m_pCursorOverlay.get(); }
+    void setCursorOverlay(std::unique_ptr<sdr::overlay::OverlayObject> pNew) { m_pCursorOverlay = std::move(pNew); }
 #endif
 
     bool m_bShowTextInputFieldOverlay;
-    sw::overlay::OverlayRangesOutline* m_pTextInputFieldOverlay;
+    std::unique_ptr<sw::overlay::OverlayRangesOutline> m_pTextInputFieldOverlay;
 
     void HighlightInputField();
 

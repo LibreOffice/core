@@ -265,34 +265,17 @@ void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
 
 #if HAVE_FEATURE_DESKTOP
     // #i75172# also swap m_pCursorOverlay
-    sdr::overlay::OverlayObject* pTempOverlay = getCursorOverlay();
-    setCursorOverlay(rSwap.getCursorOverlay());
-    rSwap.setCursorOverlay(pTempOverlay);
-
-    const bool bTempShowTextInputFieldOverlay = m_bShowTextInputFieldOverlay;
-    m_bShowTextInputFieldOverlay = rSwap.m_bShowTextInputFieldOverlay;
-    rSwap.m_bShowTextInputFieldOverlay = bTempShowTextInputFieldOverlay;
-
-    sw::overlay::OverlayRangesOutline* pTempTextInputFieldOverlay = m_pTextInputFieldOverlay;
-    m_pTextInputFieldOverlay = rSwap.m_pTextInputFieldOverlay;
-    rSwap.m_pTextInputFieldOverlay = pTempTextInputFieldOverlay;
+    std::swap(m_pCursorOverlay, rSwap.m_pCursorOverlay);
+    std::swap(m_bShowTextInputFieldOverlay, rSwap.m_bShowTextInputFieldOverlay);
+    std::swap(m_pTextInputFieldOverlay, rSwap.m_pTextInputFieldOverlay);
 #endif
 }
 
 void SwSelPaintRects::Hide()
 {
 #if HAVE_FEATURE_DESKTOP
-    if (m_pCursorOverlay)
-    {
-        delete m_pCursorOverlay;
-        m_pCursorOverlay = nullptr;
-    }
-
-    if (m_pTextInputFieldOverlay != nullptr)
-    {
-        delete m_pTextInputFieldOverlay;
-        m_pTextInputFieldOverlay = nullptr;
-    }
+    m_pCursorOverlay.reset();
+    m_pTextInputFieldOverlay.reset();
 #endif
 
     SwRects::clear();
@@ -350,12 +333,11 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         {
             if(!aNewRanges.empty())
             {
-                static_cast<sdr::overlay::OverlaySelection*>(m_pCursorOverlay)->setRanges(aNewRanges);
+                static_cast<sdr::overlay::OverlaySelection*>(m_pCursorOverlay.get())->setRanges(aNewRanges);
             }
             else
             {
-                delete m_pCursorOverlay;
-                m_pCursorOverlay = nullptr;
+                m_pCursorOverlay.reset();
             }
         }
         else if(!empty())
@@ -370,11 +352,11 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
                 const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
                 // create correct selection
-                m_pCursorOverlay = new sdr::overlay::OverlaySelection(
+                m_pCursorOverlay.reset( new sdr::overlay::OverlaySelection(
                     sdr::overlay::OverlayType::Transparent,
                     aHighlight,
                     aNewRanges,
-                    true);
+                    true) );
 
                 xTargetOverlay->add(*m_pCursorOverlay);
             }
@@ -481,19 +463,15 @@ void SwSelPaintRects::HighlightInputField()
                 Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
                 aHighlight.DecreaseLuminance( 128 );
 
-                m_pTextInputFieldOverlay = new sw::overlay::OverlayRangesOutline(
-                        aHighlight, aInputFieldRanges );
+                m_pTextInputFieldOverlay.reset( new sw::overlay::OverlayRangesOutline(
+                        aHighlight, aInputFieldRanges ) );
                 xTargetOverlay->add( *m_pTextInputFieldOverlay );
             }
         }
     }
     else
     {
-        if (m_pTextInputFieldOverlay != nullptr)
-        {
-            delete m_pTextInputFieldOverlay;
-            m_pTextInputFieldOverlay = nullptr;
-        }
+        m_pTextInputFieldOverlay.reset();
     }
 }
 
