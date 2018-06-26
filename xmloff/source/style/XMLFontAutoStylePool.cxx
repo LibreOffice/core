@@ -34,6 +34,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <XMLBase64Export.hxx>
+#include <comphelper/hash.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -367,7 +368,7 @@ void XMLFontAutoStylePool::exportXML()
                 if (!fontFilesMap.count(sFileUrl))
                 {
                     const OUString docUrl = bExportFlat ?
-                                                lcl_checkFontFile(sFileUrl) : embedFontFile(sFileUrl);
+                                                lcl_checkFontFile(sFileUrl) : embedFontFile(sFileUrl, pEntry->GetFamilyName());
                     if (!docUrl.isEmpty())
                         fontFilesMap[sFileUrl] = docUrl;
                     else
@@ -429,10 +430,72 @@ void XMLFontAutoStylePool::exportXML()
     }
 }
 
-OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
+OUString getFreeFontName(uno::Reference<embed::XStorage> const & rxStorage, OUString const & rFamilyName)
+{
+    OUString sName;
+    int nIndex = 1;
+    do
+    {
+        sName = "Font_" +
+                rFamilyName.replaceAll(" ", "_") + "_" +
+                OUString::number(nIndex) + ".ttf";
+        nIndex++;
+    } while (rxStorage->hasByName(sName));
+
+    return sName;
+}
+
+OString convertToHashString(std::vector<unsigned char> const & rHash)
+{
+    std::stringstream aStringStream;
+    for (auto const & rByte : rHash)
+    {
+        aStringStream << std::setw(2) << std::setfill('0') << std::hex << int(rByte);
+    }
+
+    return OString(aStringStream.str().c_str());
+}
+
+OString getFileHash(OUString const & rFileUrl)
+{
+    OString aHash;
+    osl::File aFile(rFileUrl);
+    if (aFile.open(osl_File_OpenFlag_Read) != osl::File::E_None)
+        return aHash;
+
+    comphelper::Hash aHashEngine(comphelper::HashType::SHA512);
+    for (;;)
+    {
+        sal_Int8 aBuffer[4096];
+        sal_uInt64 nReadSize;
+        sal_Bool bEof;
+        if (aFile.isEndOfFile(&bEof) != osl::File::E_None)
+        {
+            SAL_WARN("xmloff", "Error reading font file " << rFileUrl);
+            return aHash;
+        }
+        if (bEof)
+            break;
+        if (aFile.read(aBuffer, 4096, nReadSize) != osl::File::E_None)
+        {
+            SAL_WARN("xmloff", "Error reading font file " << rFileUrl);
+            return aHash;
+        }
+        if (nReadSize == 0)
+            break;
+        aHashEngine.update(reinterpret_cast<unsigned char*>(aBuffer), nReadSize);
+    }
+    return convertToHashString(aHashEngine.finalize());
+}
+
+OUString XMLFontAutoStylePool::embedFontFile(OUString const & fileUrl, OUString const & rFamilyName)
 {
     try
     {
+        OString sHashString = getFileHash(fileUrl);
+        if (m_aEmbeddedFontFiles.find(sHashString) != m_aEmbeddedFontFiles.end())
+            return m_aEmbeddedFontFiles.at(sHashString);
+
         osl::File file( fileUrl );
         if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
             return OUString();
@@ -443,12 +506,9 @@ OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
         uno::Reference< embed::XStorage > storage;
         storage.set( GetExport().GetTargetStorage()->openStorageElement( "Fonts",
             ::embed::ElementModes::WRITE ), uno::UNO_QUERY_THROW );
-        int index = 0;
-        OUString name;
-        do
-        {
-            name = "font" + OUString::number( ++index ) + ".ttf";
-        } while( storage->hasByName( name ) );
+
+        OUString name = getFreeFontName(storage, rFamilyName);
+
         uno::Reference< io::XOutputStream > outputStream;
         outputStream.set( storage->openStreamElement( name, ::embed::ElementModes::WRITE ), UNO_QUERY_THROW );
         uno::Reference < beans::XPropertySet > propertySet( outputStream, uno::UNO_QUERY );
@@ -484,7 +544,9 @@ OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
             if( transaction.is())
             {
                 transaction->commit();
-                return "Fonts/" + name;
+                OUString sInternalName = "Fonts/" + name;
+                m_aEmbeddedFontFiles.emplace(sHashString, sInternalName);
+                return sInternalName;
             }
         }
     } catch( const Exception& e )
