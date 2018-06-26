@@ -3138,6 +3138,7 @@ public:
         else
         {
             gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
+            gtk_popover_set_position(GTK_POPOVER(m_pPopover), GTK_POS_RIGHT);
             gtk_widget_show_all(m_pPopover);
         }
     }
