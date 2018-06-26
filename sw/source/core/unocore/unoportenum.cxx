@@ -396,10 +396,8 @@ uno::Any SwXTextPortionEnumeration::nextElement()
     return any;
 }
 
-typedef std::deque< sal_Int32 > FieldMarks_t;
-
 static void
-lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCursor const & rUnoCursor,
+lcl_FillFieldMarkArray(std::deque<sal_Int32> & rFieldMarks, SwUnoCursor const & rUnoCursor,
         const sal_Int32 i_nStartPos)
 {
     const SwTextNode * const pTextNode =
@@ -1316,7 +1314,7 @@ static void lcl_CreatePortions(
 
     SwDoc * const pDoc = pUnoCursor->GetDoc();
 
-    FieldMarks_t FieldMarks;
+    std::deque<sal_Int32> FieldMarks;
     lcl_FillFieldMarkArray(FieldMarks, *pUnoCursor, i_nStartPos);
 
     SwXBookmarkPortion_ImplList Bookmarks;

@@ -635,8 +635,8 @@ SwSectionFormat *wwSectionManager::InsertSection(
         return nullptr;
 
     SwPageDesc *pPage = nullptr;
-    mySegrIter aEnd = maSegments.rend();
-    for (mySegrIter aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
+    auto aEnd = maSegments.rend();
+    for (auto aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
     {
         if (nullptr != (pPage = aIter->mpPage))
             break;
