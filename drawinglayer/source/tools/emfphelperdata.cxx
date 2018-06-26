@@ -837,12 +837,21 @@ namespace emfplushelper
             next = rMS.Tell() + (size - 12);
 
             if (size < 12)
+            {
                 SAL_WARN("drawinglayer", "Size field is less than 12 bytes");
+                break;
+            }
             else if (size > length)
+            {
                 SAL_WARN("drawinglayer", "Size field is greater than bytes left");
+                break;
+            }
 
             if (dataSize > (size - 12))
+            {
                 SAL_WARN("drawinglayer", "DataSize field is greater than Size-12");
+                break;
+            }
 
             SAL_INFO("drawinglayer", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
 
