@@ -2557,7 +2557,7 @@ void ScColumn::SetValue(
         BroadcastNewCell(nRow);
 }
 
-void ScColumn::GetString( SCROW nRow, OUString& rString ) const
+void ScColumn::GetString( SCROW nRow, OUString& rString, const ScInterpreterContext* pContext ) const
 {
     ScRefCellValue aCell = GetCellValue(nRow);
 
@@ -2565,9 +2565,10 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
     if (aCell.meType == CELLTYPE_FORMULA)
         aCell.mpFormula->MaybeInterpret();
 
-    sal_uInt32 nFormat = GetNumberFormat(GetDoc()->GetNonThreadedContext(), nRow);
+    sal_uInt32 nFormat = GetNumberFormat( pContext ? *pContext : GetDoc()->GetNonThreadedContext(), nRow);
     Color* pColor = nullptr;
-    ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(GetDoc()->GetFormatTable()), GetDoc());
+    ScCellFormat::GetString(aCell, nFormat, rString, &pColor,
+        pContext ? *(pContext->GetFormatTable()) : *(GetDoc()->GetFormatTable()), GetDoc());
 }
 
 double* ScColumn::GetValueCell( SCROW nRow )

@@ -3495,25 +3495,25 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
     }
 }
 
-OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScInterpreterContext* pContext ) const
 {
     if (TableExists(nTab))
     {
         OUString aStr;
-        maTabs[nTab]->GetString(nCol, nRow, aStr);
+        maTabs[nTab]->GetString(nCol, nRow, aStr, pContext);
         return aStr;
     }
     else
         return EMPTY_OUSTRING;
 }
 
-OUString ScDocument::GetString( const ScAddress& rPos ) const
+OUString ScDocument::GetString( const ScAddress& rPos, const ScInterpreterContext* pContext ) const
 {
     if (!TableExists(rPos.Tab()))
         return EMPTY_OUSTRING;
 
     OUString aStr;
-    maTabs[rPos.Tab()]->GetString(rPos.Col(), rPos.Row(), aStr);
+    maTabs[rPos.Tab()]->GetString(rPos.Col(), rPos.Row(), aStr, pContext);
     return aStr;
 }
 
