@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_32f36d75",
+        "filename": "solenv/sanitizers/ui/modules/scalc.suppr",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-26T14:20:49Z",
+      "side": 1,
+      "message": "Please do not add new suppressions to the a11y checker, fix the problem of the new dialog element instead.\n\nHere it may already help to give the xml_import button a label.\n\nOtherwise it would need a labelled-by attribute (hence the no-labelled-by error) of a relation element (in an accessibility element) with a corresponding target attribute pointing to a GtkLabel class object, see other dialogs.",
+      "revId": "f8a7e8f7e6aa9362289a3940ae65a527967748a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
