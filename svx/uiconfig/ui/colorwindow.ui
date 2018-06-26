@@ -23,8 +23,6 @@
   <object class="GtkPopover" id="palette_popup_window">
     <property name="can_focus">False</property>
     <property name="border_width">4</property>
-    <property name="position">bottom</property>
-    <property name="constrain_to">none</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
