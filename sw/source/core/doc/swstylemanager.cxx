@@ -25,6 +25,7 @@
 #include <swtypes.hxx>
 #include <istyleaccess.hxx>
 #include <unordered_map>
+#include <o3tl/make_unique.hxx>
 
 typedef std::unordered_map< OUString,
                             std::shared_ptr<SfxItemSet> > SwStyleNameCache;
@@ -77,9 +78,9 @@ public:
     virtual void clearCaches() override;
 };
 
-IStyleAccess *createStyleManager( SfxItemSet const * pIgnorableParagraphItems )
+std::unique_ptr<IStyleAccess> createStyleManager( SfxItemSet const * pIgnorableParagraphItems )
 {
-    return new SwStyleManager( pIgnorableParagraphItems );
+    return o3tl::make_unique<SwStyleManager>( pIgnorableParagraphItems );
 }
 
 void SwStyleManager::clearCaches()

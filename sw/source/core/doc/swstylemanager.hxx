@@ -20,10 +20,13 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
 #define INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
 
+#include <memory>
+
 class IStyleAccess;
 class SfxItemSet;
 
-IStyleAccess *createStyleManager( SfxItemSet const * pIgnorableParagraphItems );
+std::unique_ptr<IStyleAccess> createStyleManager( SfxItemSet const * pIgnorableParagraphItems );
+
 #endif // INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
