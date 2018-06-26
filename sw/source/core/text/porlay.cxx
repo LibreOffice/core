@@ -1977,7 +1977,7 @@ void SwScriptInfo::MarkKashidaInvalid(size_t const nKashPos)
 // retrieve the kashida positions in the given text range
 void SwScriptInfo::GetKashidaPositions(
     TextFrameIndex const nStt, TextFrameIndex const nLen,
-    TextFrameIndex *const pKashidaPosition)
+    std::vector<TextFrameIndex>& rKashidaPosition)
 {
     size_t nCntKash = 0;
     while( nCntKash < CountKashida() )
@@ -1994,7 +1994,7 @@ void SwScriptInfo::GetKashidaPositions(
     {
         if ( nEnd <= GetKashida( nCntKashEnd ) )
             break;
-        pKashidaPosition [ nCntKashEnd - nCntKash ] = GetKashida ( nCntKashEnd );
+        rKashidaPosition[nCntKashEnd - nCntKash] = GetKashida(nCntKashEnd);
         nCntKashEnd++;
     }
 }
