@@ -419,7 +419,6 @@ void WriterXmlOptimizer::visit( PolyPolyElement& elem, const std::list< std::uni
 #else
         elem.Parent->Children.erase(next_it);
 #endif
-        delete pNext;
     }
 }
 
@@ -819,7 +818,6 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                     pCur->Children.splice( pCur->Children.end(), pNext->Children );
                     // get rid of the now useless element
                     rParent.Children.erase( next );
-                    delete pNext;
                     bConcat = true;
                 }
             }
