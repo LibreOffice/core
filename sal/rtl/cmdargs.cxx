@@ -18,6 +18,7 @@
  */
 
 #include <osl/mutex.hxx>
+#include <rtl/alloc.h>
 #include <rtl/process.h>
 #include <rtl/ustring.hxx>
 

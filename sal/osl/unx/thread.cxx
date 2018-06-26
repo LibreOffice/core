@@ -30,6 +30,7 @@
 #endif
 #include <config_options.h>
 #include <osl/thread.h>
+#include <osl/time.h>
 #include <osl/nlsupport.h>
 #include <rtl/textenc.h>
 #include <rtl/alloc.h>

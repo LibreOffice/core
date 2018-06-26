@@ -10,3 +10,6 @@ blacklist:
     include/sal/mathconf.h:
     # Platform dependent
     - cmath
+    include/osl/endian.h:
+    # needed for base types used in macros
+    - sal/types.h

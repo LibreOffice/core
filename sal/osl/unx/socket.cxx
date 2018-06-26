@@ -22,8 +22,10 @@
 #include <osl/socket.h>
 #include <osl/mutex.h>
 #include <osl/signal.h>
+#include <osl/time.h>
 
 #include <rtl/alloc.h>
+#include <rtl/byteseq.h>
 #include <assert.h>
 #include <sal/types.h>
 #include <sal/log.hxx>

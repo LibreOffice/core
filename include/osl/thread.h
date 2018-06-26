@@ -22,9 +22,10 @@
 
 #include "sal/config.h"
 
-#include "osl/time.h"
 #include "rtl/textenc.h"
 #include "sal/saldllapi.h"
+
+struct TimeValue;
 
 #ifdef __cplusplus
 extern "C" {
