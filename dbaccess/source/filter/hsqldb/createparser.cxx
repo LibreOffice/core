@@ -111,6 +111,21 @@ sal_Int32 lcl_getAutoIncrementDefault(const OUString& sColumnDef)
     return -1;
 }
 
+OUString lcl_getDefaultValue(const OUString& sColumnDef)
+{
+    constexpr char DEFAULT_KW[] = "DEFAULT";
+    auto nDefPos = sColumnDef.indexOf(DEFAULT_KW);
+    if (nDefPos > 0 && lcl_getAutoIncrementDefault(sColumnDef) < 0)
+    {
+        const OUString& fromDefault = sColumnDef.copy(nDefPos + sizeof(DEFAULT_KW)).trim();
+
+        // next word is the value
+        auto nNextSpace = fromDefault.indexOf(" ");
+        return nNextSpace > 0 ? fromDefault.copy(0, fromDefault.indexOf(" ")) : fromDefault;
+    }
+    return OUString{};
+}
+
 bool lcl_isNullable(const OUString& sColumnDef)
 {
     if (sColumnDef.indexOf("NOT NULL") >= 0)
@@ -277,7 +292,8 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
 
         ColumnDefinition aColDef(rColumnName, lcl_getDataTypeFromHsql(sTypeName), aParams,
                                  isPrimaryKey, lcl_getAutoIncrementDefault(sColumn),
-                                 lcl_isNullable(sColumn), bCaseInsensitive);
+                                 lcl_isNullable(sColumn), bCaseInsensitive,
+                                 lcl_getDefaultValue(sColumn));
 
         m_aColumns.push_back(aColDef);
     }

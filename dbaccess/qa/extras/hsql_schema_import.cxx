@@ -41,6 +41,7 @@ public:
     void testNumericWithTwoParam();
     void testIntegerAutoincremental();
     void testTimestampWithParam();
+    void testDefaultValueNow();
     // TODO testForeign, testDecomposer
 
     CPPUNIT_TEST_SUITE(HsqlSchemaImportTest);
@@ -51,6 +52,7 @@ public:
     CPPUNIT_TEST(testNumericWithTwoParam);
     CPPUNIT_TEST(testIntegerAutoincremental);
     CPPUNIT_TEST(testTimestampWithParam);
+    CPPUNIT_TEST(testDefaultValueNow);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -172,6 +174,27 @@ void HsqlSchemaImportTest::testTimestampWithParam()
     // because it's Firebird specific
     OUString fbSql = aCreateParser.compose();
     CPPUNIT_ASSERT(fbSql.indexOf("0") < 0); //does not contain
+}
+
+/**
+ * Special case:
+ * HSQLDB uses keyword NOW without quotes. Firebird uses single quotes 'NOW'
+ */
+void HsqlSchemaImportTest::testDefaultValueNow()
+{
+    OUString sql{ "CREATE CACHED TABLE \"myTable\"(\"id\" INTEGER NOT NULL PRIMARY KEY, \"myDate\" "
+                  "TIMESTAMP DEFAULT NOW)" };
+
+    FbCreateStmtParser aCreateParser;
+    aCreateParser.parse(sql);
+
+    const auto& columns = aCreateParser.getColumnDef();
+    const ColumnDefinition* colTimeStamp = lcl_findByType(columns, css::sdbc::DataType::TIMESTAMP);
+
+    CPPUNIT_ASSERT(colTimeStamp != nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString{ "NOW" }, colTimeStamp->getDefault()); // parsed NOW
+    OUString fbSql = aCreateParser.compose();
+    CPPUNIT_ASSERT(fbSql.indexOf("\'NOW\'") > 0); // composed 'NOW'
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HsqlSchemaImportTest);
