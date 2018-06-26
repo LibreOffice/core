@@ -56,11 +56,11 @@ private:
     css::uno::Reference<css::linguistic2::XHyphenatedWord> m_xHyphWord;
 public:
     /// input: requested range to hyphenate
-    TextFrameIndex nStart;
-    TextFrameIndex nEnd;
+    TextFrameIndex m_nStart;
+    TextFrameIndex m_nEnd;
     /// output: found word
-    TextFrameIndex nWordStart;
-    TextFrameIndex nWordLen;
+    TextFrameIndex m_nWordStart;
+    TextFrameIndex m_nWordLen;
 
     SwInterHyphInfoTextFrame(SwTextFrame const& rFrame,
             SwTextNode const& rNode, SwInterHyphInfo const& rHyphInfo);

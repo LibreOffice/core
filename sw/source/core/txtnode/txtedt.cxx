@@ -1623,18 +1623,18 @@ void SwTextFrame::CollectAutoCmplWrds(SwTextNode & rNode, sal_Int32 nActPos)
 SwInterHyphInfoTextFrame::SwInterHyphInfoTextFrame(
         SwTextFrame const& rFrame, SwTextNode const& rNode,
         SwInterHyphInfo const& rHyphInfo)
-    : nStart(rFrame.MapModelToView(&rNode, rHyphInfo.nStart))
-    , nEnd(rFrame.MapModelToView(&rNode, rHyphInfo.nEnd))
-    , nWordStart(0)
-    , nWordLen(0)
+    : m_nStart(rFrame.MapModelToView(&rNode, rHyphInfo.nStart))
+    , m_nEnd(rFrame.MapModelToView(&rNode, rHyphInfo.nEnd))
+    , m_nWordStart(0)
+    , m_nWordLen(0)
 {
 }
 
 void SwInterHyphInfoTextFrame::UpdateTextNodeHyphInfo(SwTextFrame const& rFrame,
         SwTextNode const& rNode, SwInterHyphInfo & o_rHyphInfo)
 {
-    std::pair<SwTextNode const*, sal_Int32> const wordStart(rFrame.MapViewToModel(nWordStart));
-    std::pair<SwTextNode const*, sal_Int32> const wordEnd(rFrame.MapViewToModel(nWordStart+nWordLen));
+    std::pair<SwTextNode const*, sal_Int32> const wordStart(rFrame.MapViewToModel(m_nWordStart));
+    std::pair<SwTextNode const*, sal_Int32> const wordEnd(rFrame.MapViewToModel(m_nWordStart+m_nWordLen));
     if (wordStart.first != &rNode || wordEnd.first != &rNode)
     {   // not sure if this can happen since nStart/nEnd are in rNode
         SAL_WARN("sw.core", "UpdateTextNodeHyphInfo: outside of node");
@@ -1671,7 +1671,7 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     }
     SwInterHyphInfoTextFrame aHyphInfo(*pFrame, *this, rHyphInf);
 
-    pFrame = &(pFrame->GetFrameAtOfst( aHyphInfo.nStart ));
+    pFrame = &(pFrame->GetFrameAtOfst( aHyphInfo.m_nStart ));
 
     while( pFrame )
     {
@@ -1686,8 +1686,8 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         pFrame = pFrame->GetFollow();
         if( pFrame )
         {
-            aHyphInfo.nEnd = aHyphInfo.nEnd - (pFrame->GetOfst() - aHyphInfo.nStart);
-            aHyphInfo.nStart = pFrame->GetOfst();
+            aHyphInfo.m_nEnd = aHyphInfo.m_nEnd - (pFrame->GetOfst() - aHyphInfo.m_nStart);
+            aHyphInfo.m_nStart = pFrame->GetOfst();
         }
     }
     return false;

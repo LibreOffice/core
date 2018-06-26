@@ -82,7 +82,7 @@ bool SwTextFrame::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
 
         SwTextFormatInfo aInf( getRootFrame()->GetCurrShell()->GetOut(), this, true ); // true for interactive hyph!
         SwTextFormatter aLine( this, &aInf );
-        aLine.CharToLine( rHyphInf.nStart );
+        aLine.CharToLine( rHyphInf.m_nStart );
 
         // If we're within the first word of a row, it could've been hyphenated
         // in the row earlier.
@@ -97,7 +97,7 @@ bool SwTextFrame::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
                 aLine.Next();
         }
 
-        const TextFrameIndex nEnd = rHyphInf.nEnd;
+        const TextFrameIndex nEnd = rHyphInf.m_nEnd;
         while( !bRet && aLine.GetStart() < nEnd )
         {
             bRet = aLine.Hyphenate( rHyphInf );
@@ -168,9 +168,9 @@ bool SwTextFormatter::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
         // HyphPortion in the specified range.
 
         SwLinePortion *pPos = m_pCurr->GetPortion();
-        const TextFrameIndex nPamStart = rHyphInf.nStart;
+        const TextFrameIndex nPamStart = rHyphInf.m_nStart;
         nWrdStart = m_nStart;
-        const TextFrameIndex nEnd = rHyphInf.nEnd;
+        const TextFrameIndex nEnd = rHyphInf.m_nEnd;
         while( pPos )
         {
             // Either we are above or we are running into a HyphPortion
@@ -216,7 +216,7 @@ bool SwTextFormatter::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
         return false;
 
     // nWrdStart contains the position in string that should be hyphenated
-    rHyphInf.nWordStart = nWrdStart;
+    rHyphInf.m_nWordStart = nWrdStart;
 
     TextFrameIndex nLen(0);
     const TextFrameIndex nEnd = nWrdStart;
@@ -242,8 +242,8 @@ bool SwTextFormatter::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
     if ( xHyphWord.is() )
     {
         rHyphInf.SetHyphWord( xHyphWord );
-        rHyphInf.nWordStart = nWrdStart;
-        rHyphInf.nWordLen = nLen;
+        rHyphInf.m_nWordStart = nWrdStart;
+        rHyphInf.m_nWordLen = nLen;
         return true;
     }
 
