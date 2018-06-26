@@ -1579,6 +1579,12 @@ void SfxObjectShell::SignSignatureLine(weld::Window* pDialogParent,
         false, HasValidSignatures(), aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic, aComment);
 
     AfterSigning(bSignSuccess, false);
+
+    // Reload the document to get the updated graphic
+    // FIXME: Update just the signature line graphic instead of reloading the document
+    SfxViewFrame *pFrame = GetFrame();
+    if (pFrame)
+        pFrame->GetDispatcher()->Execute(SID_RELOAD);
 }
 
 SignatureState SfxObjectShell::GetScriptingSignatureState()
