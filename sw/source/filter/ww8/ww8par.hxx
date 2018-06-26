@@ -817,7 +817,6 @@ private:
     SwWW8ImplReader& mrReader;
     std::deque<wwSection> maSegments;
     typedef std::deque<wwSection>::iterator mySegIter;
-    typedef std::deque<wwSection>::reverse_iterator mySegrIter;
 
     //Num of page desc's entered into the document
     sal_uInt16 mnDesc;
