@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_b2375de2",
+        "filename": "external/poppler/msvc2013.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-06-26T08:45:19Z",
+      "side": 1,
+      "message": "on second thought, key is a char*, this need manual memory mgmt",
+      "revId": "b9da9aa4915b60b3d846a4f8620d9b8d02079bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
