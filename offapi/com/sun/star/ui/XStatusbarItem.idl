@@ -64,6 +64,7 @@ interface XStatusbarItem
             </li>
             <li>com::sun::star::ui::ItemStyle::AUTO_SIZE</li>
             <li>com::sun::star::ui::ItemStyle::OWNER_DRAW</li>
+            <li>com::sun::star::ui::ItemStyle::MANDATORY (@since LibreOffice 6.1)</li>
         </ul>
 
         @see com::sun::star::ui::ItemStyle
