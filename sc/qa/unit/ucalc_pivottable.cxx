@@ -267,7 +267,8 @@ void Test::testPivotTable()
     // don't reload the cache which should force the copy to use the old data
     // from the cache.
     ScDPObject* pDPObj2 = new ScDPObject(*pDPObj);
-    pDPs->InsertNewTable(pDPObj2);
+    bSuccess = pDPs->InsertNewTable(pDPObj2);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
 
     aOutRange = pDPObj2->GetOutRange();
     pDPObj2->ClearTableData();
