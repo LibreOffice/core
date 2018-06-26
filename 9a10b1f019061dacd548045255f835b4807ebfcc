@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a22e58a_3279ad94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-06-26T09:04:14Z",
+      "side": 1,
+      "message": "sufficient",
+      "range": {
+        "startLine": 7,
+        "startChar": 51,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "9a10b1f019061dacd548045255f835b4807ebfcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f248f55d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-06-26T09:04:14Z",
+      "side": 1,
+      "message": "Please mention tdf#86612",
+      "revId": "9a10b1f019061dacd548045255f835b4807ebfcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a22e58a_1e04bd15",
         "filename": "framework/source/fwe/xml/statusbardocumenthandler.cxx",
         "patchSetId": 1
