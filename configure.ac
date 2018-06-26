@@ -2033,9 +2033,9 @@ libo_FUZZ_ARG_WITH(doxygen,
 ,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2015/2017>],
+    AS_HELP_STRING([--with-visual-studio=<2017>],
         [Specify which Visual Studio version to use in case several are
-         installed. If not specified, defaults to 2015.]),
+         installed. Currently only 2017 is supported.]),
 ,)
 
 AC_ARG_WITH(windows-sdk,
@@ -3261,8 +3261,6 @@ map_vs_year_to_version()
     unset vsversion
 
     case $1 in
-    2015)
-        vsversion=14.0;;
     2017)
         vsversion=15.0;;
     *)
@@ -3281,21 +3279,17 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2015/2017, in this order
-        vsversions="14.0 15.0"
+        # We accept only 2017
+        vsversions="15.0"
     fi
 }
 
 win_get_env_from_vsvars32bat()
 {
     WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
-    if test $vcnum = "150"; then
-      # Also seems to be located in another directory under the same name: vsvars32.bat
-      # https://github.com/bazelbuild/bazel/blob/master/src/main/native/build_windows_jni.sh#L56-L57
-      printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
-    else
-      printf '@call "%s/../Common7/Tools/vsvars32.bat"\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
-    fi
+    # Also seems to be located in another directory under the same name: vsvars32.bat
+    # https://github.com/bazelbuild/bazel/blob/master/src/main/native/build_windows_jni.sh#L56-L57
+    printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
     printf '@setlocal\r\n@echo %%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
     chmod +x $WRAPPERBATCHFILEPATH
     _win_get_env_from_vsvars32bat=$("$WRAPPERBATCHFILEPATH" | tr -d '\r')
@@ -3318,11 +3312,7 @@ find_ucrt()
     fi
     if test -z "$UCRTSDKDIR"; then
         ide_env_dir="$VC_PRODUCT_DIR/../Common7/Tools/"
-        if test "$vcnum" = "150"; then
-          ide_env_file="${ide_env_dir}VsDevCmd.bat"
-        else
-          ide_env_file="${ide_env_dir}/vsvars32.bat"
-        fi
+        ide_env_file="${ide_env_dir}VsDevCmd.bat"
         if test -f "$ide_env_file"; then
             PathFormat "$(win_get_env_from_vsvars32bat UniversalCRTSdkDir)"
             UCRTSDKDIR=$formatted_path
@@ -3342,7 +3332,7 @@ find_ucrt()
 
 find_msvc()
 {
-    # Find Visual C++ 2015/2017
+    # Find Visual C++ 2017
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot, $vcbuildnumber
 
@@ -3356,7 +3346,6 @@ find_msvc()
             vctest=$regvalue
             break
         fi
-        # As always MSVC 15.0 is special here
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/SxS/VS7/$ver
         if test -n "$regvalue"; then
             AC_MSG_RESULT([found: $regvalue])
@@ -3368,10 +3357,6 @@ find_msvc()
     if test -n "$vctest"; then
         vcnumwithdot=$ver
         case "$vcnumwithdot" in
-        14.0)
-            vcyear=2015
-            vcnum=140
-            ;;
         15.0)
             vcyear=2017
             vcnum=150
@@ -3392,7 +3377,7 @@ if test "$_os" = "WINNT"; then
         if test -n "$with_visual_studio"; then
             AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
         else
-            AC_MSG_ERROR([No Visual Studio 2015/2017 installation found])
+            AC_MSG_ERROR([No Visual Studio 2017 installation found])
         fi
     fi
 
@@ -3445,16 +3430,12 @@ if test "$_os" = "WINNT"; then
         AC_MSG_RESULT([found: $regvalue])
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
     else
-        if test $vcnum = "150"; then
-            if test "$BITNESS_OVERRIDE" = ""; then
-                regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin"
-            else
-                regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
-            fi
-            MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
+        if test "$BITNESS_OVERRIDE" = ""; then
+            regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin"
         else
-            AC_MSG_ERROR([No msbuild found, Visual Studio installation broken?])
+            regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
         fi
+        MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
 	AC_MSG_RESULT([$regvalue])
     fi
 
@@ -3474,29 +3455,15 @@ if test "$_os" = "WINNT"; then
     CL_LIB=
 
     if test "$BITNESS_OVERRIDE" = ""; then
-        if test "$vcnum" = "150"; then
-            MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86"
-            CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX86/x86
-        else
-            MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
-            CL_DIR=bin
-        fi
+        MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86"
+        CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX86/x86
     else
-        if test "$vcnum" = "150"; then
-            MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"
-            CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX64/x64
-        else
-            MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
-            CL_DIR=bin/amd64
-        fi
+        MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"
+        CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX64/x64
     fi
 
     # MSVC 15.0 has libraries from 14.0?
-    if test  "$vcnum" = "150"; then
-        mspdbnum="140"
-    else
-        mspdbnum=$vcnum
-    fi
+    mspdbnum="140"
 
     if test ! -e "$MSPDB_PATH/mspdb${mspdbnum}.dll"; then
         AC_MSG_ERROR([No mspdb${mspdbnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
@@ -3544,11 +3511,7 @@ if test "$_os" = "WINNT"; then
         # Remove /cl.exe from CC case insensitive
         AC_MSG_RESULT([found Visual C++ $vcyear ($CC)])
         if test "$BITNESS_OVERRIDE" = ""; then
-           if test "$vcnum" = "150"; then
-               COMPATH="$VC_PRODUCT_DIR"
-           else
-               COMPATH=`echo "$CC" | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
-           fi
+           COMPATH="$VC_PRODUCT_DIR"
         else
             if test -n "$VC_PRODUCT_DIR"; then
                 COMPATH=$VC_PRODUCT_DIR
@@ -3559,9 +3522,7 @@ if test "$_os" = "WINNT"; then
             CC="$CC -arch:SSE"
         fi
 
-        if test "$vcnum" = "150"; then
-            COMPATH="$COMPATH/Tools/MSVC/$vcbuildnumber"
-        fi
+        COMPATH="$COMPATH/Tools/MSVC/$vcbuildnumber"
 
         export INCLUDE=`cygpath -d "$COMPATH\Include"`
 
@@ -3575,10 +3536,6 @@ if test "$_os" = "WINNT"; then
         # are always "better", we list them in reverse chronological order.
 
         case $vcnum in
-        140)
-            COMEX=19
-            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0 7.1A"
-            ;;
         150)
             COMEX=19
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0 7.1A"
@@ -5684,31 +5641,6 @@ if test "$_os" != "WINNT"; then
 else
     if test -n "$CC" -a -z "$CXX"; then
         CXX="$CC"
-    fi
-fi
-
-dnl At least MSVC 2015 Update 1 is known to sporadically emit warning C4592
-dnl ("implementation limitation" when defining OUStringLiteral variables in
-dnl vcl/source/app/IconThemeInfo.cxx), while Update 3 is known good, and it is
-dnl probably a good idea to require that anyway.  A reliable way to check for
-dnl MSVC 2015 Update 3 appears to be to check for support of C++17 nested
-dnl namespace definitions (which requires /std:c++latest to be enabled):
-if test "$COM" = MSC -a "$VCVER" = 140; then
-    AC_MSG_CHECKING([whether MSVC 2015 compiler $MSVC_CXX is at least Update 3])
-    save_CXX=$CXX
-    save_CXXFLAGS=$CXXFLAGS
-    CXX=$MSVC_CXX
-    CXXFLAGS="$CXXFLAGS /std:c++latest"
-    AC_LANG_PUSH([C++])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-        namespace A::B {}
-    ]])], [good=yes], [good=no])
-    AC_LANG_POP([C++])
-    CXX=$save_CXX
-    CXXFLAGS=$save_CXXFLAGS
-    AC_MSG_RESULT([$good])
-    if test "$good" = no; then
-        AC_MSG_ERROR([When using MSVC 2015, at least Update 3 must be installed])
     fi
 fi
 
@@ -12435,13 +12367,8 @@ if test "$build_os" = "cygwin"; then
     fi
     ILIB1=-link
     if test "$BITNESS_OVERRIDE" = 64; then
-        if test $vcnum = "150"; then
-            ILIB="$ILIB;$COMPATH/lib/x64"
-            ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/x64"
-        else
-            ILIB="$ILIB;$COMPATH/lib/amd64"
-            ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/amd64"
-        fi
+        ILIB="$ILIB;$COMPATH/lib/x64"
+        ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/x64"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/x64"
         ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/x64"
         if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81 -o $WINDOWS_SDK_VERSION = 10; then
@@ -12453,13 +12380,8 @@ if test "$build_os" = "cygwin"; then
         ILIB="$ILIB;$ucrtlibpath_formatted"
         ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
     else
-        if test $vcnum = "150"; then
-            ILIB="$ILIB;$COMPATH/lib/x86"
-            ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/x86"
-        else
-            ILIB="$ILIB;$COMPATH/lib"
-            ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib"
-        fi
+        ILIB="$ILIB;$COMPATH/lib/x86"
+        ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/x86"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib"
         ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib"
         if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81 -o $WINDOWS_SDK_VERSION = 10; then
@@ -12905,7 +12827,7 @@ place yourself in a working directory of you choice.
 
  git clone git://git.savannah.gnu.org/make.git
 
- [go to Start menu, click "All Programs", click "Visual Studio 2015", click "Visual Studio Tools", double-click "VS2015 x86 Native Tools Command Prompt" or "VS2015 x64 Native Tools Command Prompt"]
+ [go to Start menu, open "Visual Studio 2017", click "VS2017 x86 Native Tools Command Prompt" or "VS2017 x64 Native Tools Command Prompt"]
  set PATH=%PATH%;C:\Cygwin\bin
  [or Cygwin64, if that is what you have]
  cd path-to-make-repo-you-cloned-above
