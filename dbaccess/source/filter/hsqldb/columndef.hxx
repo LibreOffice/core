@@ -26,11 +26,12 @@ private:
     sal_Int32 m_nAutoIncrement;
     bool m_bNullable;
     bool m_bCaseInsensitive;
+    OUString m_sDefaultValue;
 
 public:
     ColumnDefinition(const OUString& sName, sal_Int32 eType, const std::vector<sal_Int32> aParams,
                      bool bPrimary = false, sal_Int32 nAutoIncr = -1, bool bNullable = true,
-                     bool bCaseInsensitive = false);
+                     bool bCaseInsensitive = false, const OUString& sDefault = OUString{});
 
     OUString const& getName() const { return m_sName; }
     sal_Int32 getDataType() const { return m_eType; }
@@ -40,6 +41,7 @@ public:
     bool isCaseInsensitive() const { return m_bCaseInsensitive; }
     sal_Int32 getStartValue() const { return m_nAutoIncrement; }
     const std::vector<sal_Int32>& getParams() const { return m_aParams; }
+    OUString const& getDefault() const { return m_sDefaultValue; }
 };
 }
 
