@@ -24,6 +24,7 @@
 #include <osl/signal.h>
 
 #include <rtl/alloc.h>
+#include <rtl/byteseq.h>
 #include <assert.h>
 #include <sal/types.h>
 #include <sal/log.hxx>

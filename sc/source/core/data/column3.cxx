@@ -53,6 +53,7 @@
 
 #include <memory>
 
+#include <rtl/tencinfo.h>
 #include <mdds/flat_segment_tree.hpp>
 
 #include <sfx2/objsh.hxx>
