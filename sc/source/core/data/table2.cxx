@@ -1522,10 +1522,10 @@ void ScTable::SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rSt
         aCol[nCol].SetRawString(nRow, rStr);
 }
 
-void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const
+void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString, const ScInterpreterContext* pContext ) const
 {
     if (ValidColRow(nCol,nRow))
-        aCol[nCol].GetString( nRow, rString );
+        aCol[nCol].GetString( nRow, rString, pContext );
     else
         rString.clear();
 }

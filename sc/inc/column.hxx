@@ -357,7 +357,7 @@ public:
     void SetValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast = true );
     void        SetError( SCROW nRow, const FormulaError nError);
 
-    void        GetString( SCROW nRow, OUString& rString ) const;
+    void        GetString( SCROW nRow, OUString& rString, const ScInterpreterContext* pContext = nullptr ) const;
     double* GetValueCell( SCROW nRow );
     void        GetInputString( SCROW nRow, OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;
