@@ -301,10 +301,13 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
         if (isPrimaryKey)
             m_PrimaryKeys.push_back(rColumnName);
 
+        const OUString sColumnWithoutName = sColumn.copy(sColumn.indexOf(typeParts.typeName));
+
         ColumnDefinition aColDef(rColumnName, lcl_getDataTypeFromHsql(typeParts.typeName),
                                  typeParts.params, isPrimaryKey,
-                                 lcl_getAutoIncrementDefault(sColumn), lcl_isNullable(sColumn),
-                                 bCaseInsensitive, lcl_getDefaultValue(sColumn));
+                                 lcl_getAutoIncrementDefault(sColumnWithoutName),
+                                 lcl_isNullable(sColumnWithoutName), bCaseInsensitive,
+                                 lcl_getDefaultValue(sColumnWithoutName));
 
         m_aColumns.push_back(aColDef);
     }
