@@ -48,6 +48,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <rtl/tencinfo.h>
 #if OSL_DEBUG_LEVEL > 1
 #include <iostream>
 #endif

@@ -10,3 +10,15 @@ blacklist:
     include/sal/mathconf.h:
     # Platform dependent
     - cmath
+    include/osl/endian.h:
+    # needed for base types used in macros
+    - sal/types.h
+    include/osl/conditn.h:
+    # ODK API test would fail with fw decl here
+    - osl/time.h
+    include/osl/socket.h:
+    # ODK API test would fail with fw decl here
+    - osl/time.h
+    include/osl/thread.h:
+    # ODK API test would fail with fw decl here
+    - osl/time.h

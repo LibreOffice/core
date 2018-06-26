@@ -22,7 +22,6 @@
 
 #include "sal/config.h"
 
-#include "rtl/tencinfo.h"
 #include "rtl/ustring.h"
 #include "sal/saldllapi.h"
 

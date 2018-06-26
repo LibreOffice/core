@@ -97,6 +97,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/datetimeutils.hxx>
 #include <svl/whiter.hxx>
+#include <rtl/tencinfo.h>
 
 #include <docufld.hxx>
 #include <authfld.hxx>
