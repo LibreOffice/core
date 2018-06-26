@@ -447,7 +447,6 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
             auto next_it = poly_it;
             ++next_it;
             Children.erase( poly_it );
-            delete pPoly;
             poly_it = next_it;
         }
         else
