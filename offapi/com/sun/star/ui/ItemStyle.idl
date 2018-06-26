@@ -149,6 +149,13 @@ constants ItemStyle
         icon+text)</p>
     */
     const short TEXT = 2048;
+
+    /** marks always visible element which can not be removed when statusbar
+        width is not sufficient.
+
+        @since LibreOffice 6.1
+    */
+    const short MANDATORY = 4096;
 };
 
 }; }; }; };
