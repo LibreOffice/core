@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_d26cd99e",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-26T10:35:49Z",
+      "side": 1,
+      "message": "Extension namespaces must only be written if writing extensions is allowed, not if \"pure\" ODF 1.2 (or even 1.1) is required. See above line 561 and following for how that can be done. (which assumes that the same attribute will exist in namespace number for ODF 1.3, if it won\u0027t we\u0027ll have to change a lot of places anyway)",
+      "revId": "3c60b72fc96d89353d927395666219c288d93213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_f269d58c",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-26T10:35:49Z",
+      "side": 1,
+      "message": "Same here, extension namespace only if allowed.",
+      "revId": "3c60b72fc96d89353d927395666219c288d93213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_120591c1",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-26T10:35:49Z",
+      "side": 1,
+      "message": "And also here..",
+      "revId": "3c60b72fc96d89353d927395666219c288d93213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
