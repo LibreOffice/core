@@ -119,6 +119,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/textenc.h>
+#include <rtl/tencinfo.h>
 #include <cppuhelper/implbase.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>

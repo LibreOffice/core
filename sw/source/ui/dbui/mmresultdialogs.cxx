@@ -52,6 +52,7 @@
 #include <svl/urihelper.hxx>
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
+#include <rtl/tencinfo.h>
 
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>

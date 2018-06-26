@@ -24,12 +24,9 @@
 #include "sal/config.h"
 
 #include "osl/file.h"
-#include "osl/pipe.h"
 #include "osl/security.h"
-#include "osl/socket.h"
 #include "osl/time.h"
 #include "rtl/locale.h"
-#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "sal/saldllapi.h"
 

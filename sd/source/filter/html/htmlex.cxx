@@ -25,6 +25,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <rtl/uri.hxx>
+#include <rtl/tencinfo.h>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>

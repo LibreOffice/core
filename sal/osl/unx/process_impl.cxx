@@ -28,6 +28,7 @@
 #include <osl/file.h>
 #include <osl/module.h>
 #include <osl/thread.h>
+#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.h>
 #include <sal/log.hxx>
