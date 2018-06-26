@@ -97,7 +97,7 @@ private:
     OUStringBuffer maAuthorBuffer;
     OUStringBuffer maCreateDateBuffer;
     OUStringBuffer maCreateDateStringBuffer;
-    SvXMLImportContext* pShapeContext;
+    std::unique_ptr<SvXMLImportContext> pShapeContext;
 };
 
 #endif
