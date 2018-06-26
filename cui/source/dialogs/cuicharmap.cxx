@@ -599,8 +599,10 @@ void SvxCharacterMap::fillAllSubsets(weld::ComboBoxText& rListBox)
 {
     SubsetMap aAll(nullptr);
     rListBox.clear();
+    rListBox.freeze();
     for (auto & subset : aAll.GetSubsetMap())
         rListBox.append_text(subset.GetName());
+    rListBox.thaw();
 }
 
 
