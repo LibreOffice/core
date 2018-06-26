@@ -25,8 +25,6 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">4</property>
-    <property name="position">bottom</property>
-    <property name="constrain_to">none</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
