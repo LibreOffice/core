@@ -3563,6 +3563,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
+                aValIter.SetInterpreterContext( &mrContext );
                 if (aValIter.GetFirst(nVal, nErr))
                 {
                     if (nMin > nVal)
@@ -3720,6 +3721,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
+                aValIter.SetInterpreterContext( &mrContext );
                 if (aValIter.GetFirst(nVal, nErr))
                 {
                     if (nMax < nVal)
