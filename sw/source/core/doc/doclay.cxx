@@ -983,7 +983,7 @@ SwDoc::InsertLabel(
                         bBefore, nId, rCharacterStyle, bCpyBrd, this );
     }
 
-    SwFlyFrameFormat *const pNewFormat = lcl_InsertLabel(*this, mpTextFormatCollTable, pUndo,
+    SwFlyFrameFormat *const pNewFormat = lcl_InsertLabel(*this, mpTextFormatCollTable.get(), pUndo,
             eType, rText, rSeparator, rNumberingSeparator, bBefore,
             nId, nNdIdx, rCharacterStyle, bCpyBrd);
 
@@ -1270,7 +1270,7 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     }
 
     SwFlyFrameFormat *const pNewFormat = lcl_InsertDrawLabel(
-        *this, mpTextFormatCollTable, pUndo, pOldFormat,
+        *this, mpTextFormatCollTable.get(), pUndo, pOldFormat,
         rText, rSeparator, rNumberSeparator, nId, rCharacterStyle, rSdrObj);
 
     if (pUndo)

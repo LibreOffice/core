@@ -231,8 +231,8 @@ SwDoc::SwDoc()
     m_pDocumentStylePoolManager( new ::sw::DocumentStylePoolManager( *this ) ),
     m_pDocumentExternalDataManager( new ::sw::DocumentExternalDataManager ),
     mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), "Frameformat", nullptr ) ),
-    mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), "Empty Page", mpDfltFrameFormat ) ),
-    mpColumnContFormat( new SwFrameFormat( GetAttrPool(), "Columncontainer", mpDfltFrameFormat ) ),
+    mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), "Empty Page", mpDfltFrameFormat.get() ) ),
+    mpColumnContFormat( new SwFrameFormat( GetAttrPool(), "Columncontainer", mpDfltFrameFormat.get() ) ),
     mpDfltCharFormat( new SwCharFormat( GetAttrPool(), "Character style", nullptr ) ),
     mpDfltTextFormatColl( new SwTextFormatColl( GetAttrPool(), "Paragraph style" ) ),
     mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), "Graphikformatvorlage" ) ),
@@ -307,14 +307,14 @@ SwDoc::SwDoc()
      * DefaultFormats and are also in the list.
      */
     /* Formats */
-    mpFrameFormatTable->push_back(mpDfltFrameFormat);
-    mpCharFormatTable->push_back(mpDfltCharFormat);
+    mpFrameFormatTable->push_back(mpDfltFrameFormat.get());
+    mpCharFormatTable->push_back(mpDfltCharFormat.get());
 
     /* FormatColls */
     // TXT
-    mpTextFormatCollTable->push_back(mpDfltTextFormatColl);
+    mpTextFormatCollTable->push_back(mpDfltTextFormatColl.get());
     // GRF
-    mpGrfFormatCollTable->push_back(mpDfltGrfFormatColl);
+    mpGrfFormatCollTable->push_back(mpDfltGrfFormatColl.get());
 
     // Create PageDesc, EmptyPageFormat and ColumnFormat
     if (m_PageDescs.empty())
@@ -338,7 +338,7 @@ SwDoc::SwDoc()
 
     new SwTextNode(
             SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
-            mpDfltTextFormatColl );
+            mpDfltTextFormatColl.get() );
     new SwTextNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
 
@@ -394,12 +394,11 @@ SwDoc::~SwDoc()
         mpDocShell->SetUndoManager(nullptr);
     }
 
-    delete mpGrammarContact;
-    mpGrammarContact = nullptr;
+    mpGrammarContact.reset();
 
     getIDocumentTimerAccess().StopIdling();   // stop idle timer
 
-    delete mpURLStateChgd;
+    mpURLStateChgd.reset();
 
     // Deactivate Undo notification from Draw
     if( GetDocumentDrawModelManager().GetDrawModel() )
@@ -424,7 +423,7 @@ SwDoc::~SwDoc()
         if(pCursor)
             pCursor->m_aNotifier.Broadcast(aHint);
     }
-    delete mpACEWord;
+    mpACEWord.reset();
 
     // Release the BaseLinks
     {
@@ -471,7 +470,7 @@ SwDoc::~SwDoc()
         }
         mpTOXTypes->clear();
     }
-    delete mpDefTOXBases;
+    mpDefTOXBases.reset();
 
     // Any of the FrameFormats can still have indices registered.
     // These need to be destroyed now at the latest.
@@ -503,7 +502,7 @@ SwDoc::~SwDoc()
     mpFootnoteInfo->EndListeningAll();
     mpEndNoteInfo->EndListeningAll();
 
-    assert(mpDfltTextFormatColl == (*mpTextFormatCollTable)[0]
+    assert(mpDfltTextFormatColl.get() == (*mpTextFormatCollTable)[0]
             && "Default-Text-Collection must always be at the start");
 
     // Optimization: Based on the fact that Standard is always 2nd in the
@@ -512,13 +511,13 @@ SwDoc::~SwDoc()
     if( 2 < mpTextFormatCollTable->size() )
         mpTextFormatCollTable->DeleteAndDestroy(2, mpTextFormatCollTable->size());
     mpTextFormatCollTable->DeleteAndDestroy(1, mpTextFormatCollTable->size());
-    delete mpTextFormatCollTable;
+    mpTextFormatCollTable.reset();
 
-    assert(mpDfltGrfFormatColl == (*mpGrfFormatCollTable)[0]
+    assert(mpDfltGrfFormatColl.get() == (*mpGrfFormatCollTable)[0]
             && "DefaultGrfCollection must always be at the start");
 
     mpGrfFormatCollTable->DeleteAndDestroy(1, mpGrfFormatCollTable->size());
-    delete mpGrfFormatCollTable;
+    mpGrfFormatCollTable.reset();
 
     // Without explicitly freeing the DocumentDeviceManager
     // and relying on the implicit freeing there would be a crash
@@ -570,31 +569,31 @@ SwDoc::~SwDoc()
 
     // Clear the Tables before deleting the defaults, or we crash due to
     // dependencies on defaults.
-    delete mpFrameFormatTable;
-    delete mpSpzFrameFormatTable;
+    mpFrameFormatTable.reset();
+    mpSpzFrameFormatTable.reset();
 
-    delete mpStyleAccess;
+    mpStyleAccess.reset();
 
-    delete mpCharFormatTable;
-    delete mpSectionFormatTable;
-    delete mpTableFrameFormatTable;
-    delete mpDfltTextFormatColl;
-    delete mpDfltGrfFormatColl;
-    delete mpNumRuleTable;
+    mpCharFormatTable.reset();
+    mpSectionFormatTable.reset();
+    mpTableFrameFormatTable.reset();
+    mpDfltTextFormatColl.reset();
+    mpDfltGrfFormatColl.reset();
+    mpNumRuleTable.reset();
 
     disposeXForms(); // #i113606#, dispose the XForms objects
 
-    delete mpNumberFormatter;
-    delete mpFootnoteInfo;
-    delete mpEndNoteInfo;
-    delete mpLineNumberInfo;
-    delete mpFootnoteIdxs;
-    delete mpTOXTypes;
-    delete mpEmptyPageFormat;
-    delete mpColumnContFormat;
-    delete mpDfltCharFormat;
-    delete mpDfltFrameFormat;
-    delete mpLayoutCache;
+    mpNumberFormatter.reset();
+    mpFootnoteInfo.reset();
+    mpEndNoteInfo.reset();
+    mpLineNumberInfo.reset();
+    mpFootnoteIdxs.reset();
+    mpTOXTypes.reset();
+    mpEmptyPageFormat.reset();
+    mpColumnContFormat.reset();
+    mpDfltCharFormat.reset();
+    mpDfltFrameFormat.reset();
+    mpLayoutCache.reset();
 
     SfxItemPool::Free(mpAttrPool);
 }
@@ -659,7 +658,7 @@ void SwDoc::ClearDoc()
     getIDocumentRedlineAccess().GetRedlineTable().DeleteAndDestroyAll();
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
 
-    delete mpACEWord;
+    mpACEWord.reset();
 
     // The BookMarks contain indices to the Content. These must be deleted
     // before deleting the Nodes.
@@ -671,7 +670,7 @@ void SwDoc::ClearDoc()
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     // create the first one over and over again (without attributes/style etc.
-    SwTextNode* pFirstNd = GetNodes().MakeTextNode( aSttIdx, mpDfltTextFormatColl );
+    SwTextNode* pFirstNd = GetNodes().MakeTextNode( aSttIdx, mpDfltTextFormatColl.get() );
 
     if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
@@ -741,8 +740,7 @@ void SwDoc::ClearDoc()
 
     GetDocumentFieldsManager().ClearFieldTypes();
 
-    delete mpNumberFormatter;
-    mpNumberFormatter = nullptr;
+    mpNumberFormatter.reset();
 
     getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFormatColl( getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
@@ -783,7 +781,7 @@ void SwDoc::SetOLEObjModified()
 void SwDoc::ReadLayoutCache( SvStream& rStream )
 {
     if( !mpLayoutCache )
-        mpLayoutCache = new SwLayoutCache();
+        mpLayoutCache.reset( new SwLayoutCache() );
     if( !mpLayoutCache->IsLocked() )
     {
         mpLayoutCache->GetLockCount() |= 0x8000;

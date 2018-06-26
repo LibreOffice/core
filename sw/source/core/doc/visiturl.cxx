@@ -117,7 +117,7 @@ bool SwDoc::IsVisitedURL( const OUString& rURL )
         if( !mpURLStateChgd )
         {
             SwDoc* pD = this;
-            pD->mpURLStateChgd = new SwURLStateChanged( this );
+            pD->mpURLStateChgd.reset( new SwURLStateChanged( this ) );
         }
     }
     return bRet;
