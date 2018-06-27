@@ -1632,8 +1632,8 @@ SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUSt
 
 void ScCheckListBox::Init()
 {
-    mpCheckButton = new SvLBoxButtonData( this );
-    EnableCheckButton( mpCheckButton );
+    mpCheckButton.reset( new SvLBoxButtonData( this ) );
+    EnableCheckButton( mpCheckButton.get() );
     SetNodeDefaultImages();
 }
 
