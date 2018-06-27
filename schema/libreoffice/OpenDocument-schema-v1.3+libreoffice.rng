@@ -36,6 +36,7 @@
 xmlns:officeooo="http://openoffice.org/2009/office"
 xmlns:tableooo="http://openoffice.org/2009/table"
 xmlns:chartooo="http://openoffice.org/2010/chart"
+xmlns:drawooo="http://openoffice.org/2010/draw"
 xmlns:css3t="http://www.w3.org/TR/css3-text/"
 xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0"
 xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
@@ -58,6 +59,859 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
                 <rng:ref name="anyIRI"/>
               </rng:zeroOrMore>
             </rng:list>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:define>
+
+    <rng:define name="style-graphic-properties-attlist">
+      <rng:interleave>
+        <rng:optional>
+          <rng:attribute name="draw:stroke">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>dash</rng:value>
+              <rng:value>solid</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:stroke-dash">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:stroke-dash-names">
+            <rng:ref name="styleNameRefs"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:stroke-width">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:stroke-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-start">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-end">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-start-width">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-end-width">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-start-center">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-end-center">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:stroke-opacity">
+            <rng:choice>
+              <rng:data type="double">
+                <rng:param name="minInclusive">0</rng:param>
+                <rng:param name="maxInclusive">1</rng:param>
+              </rng:data>
+              <rng:ref name="zeroToHundredPercent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:stroke-linejoin">
+            <rng:choice>
+              <rng:value>miter</rng:value>
+              <rng:value>round</rng:value>
+              <rng:value>bevel</rng:value>
+              <rng:value>middle</rng:value>
+              <rng:value>none</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:stroke-linecap">
+            <rng:choice>
+              <rng:value>butt</rng:value>
+              <rng:value>square</rng:value>
+              <rng:value>round</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:symbol-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>scroll</rng:value>
+              <rng:value>alternate</rng:value>
+              <rng:value>slide</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-direction">
+            <rng:choice>
+              <rng:value>left</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>up</rng:value>
+              <rng:value>down</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-start-inside">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-stop-inside">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-repeat">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-delay">
+            <rng:ref name="duration"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-steps">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:auto-grow-width">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:auto-grow-height">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+        <!-- FIXME remove this once the export bug is fixed -->
+          <rng:attribute name="draw:fit-to-size">
+            <rng:choice>
+              <rng:value>true</rng:value>
+              <rng:value>false</rng:value>
+              <rng:value>all</rng:value>
+              <rng:value>shrink-to-fit</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fit-to-contour">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:textarea-vertical-align">
+            <rng:choice>
+              <rng:value>top</rng:value>
+              <rng:value>middle</rng:value>
+              <rng:value>bottom</rng:value>
+              <rng:value>justify</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:textarea-horizontal-align">
+            <rng:choice>
+              <rng:value>left</rng:value>
+              <rng:value>center</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>justify</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:wrap-option">
+            <rng:choice>
+              <rng:value>no-wrap</rng:value>
+              <rng:value>wrap</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:shrink-to-fit">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:color-mode">
+            <rng:choice>
+              <rng:value>greyscale</rng:value>
+              <rng:value>mono</rng:value>
+              <rng:value>watermark</rng:value>
+              <rng:value>standard</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:color-inversion">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:luminance">
+            <rng:ref name="signedZeroToHundredPercent"/>
+          </rng:attribute>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3821 -->
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:contrast">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:gamma">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:red">
+            <rng:ref name="signedZeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:green">
+            <rng:ref name="signedZeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:blue">
+            <rng:ref name="signedZeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:image-opacity">
+            <rng:ref name="zeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow">
+            <rng:choice>
+              <rng:value>visible</rng:value>
+              <rng:value>hidden</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow-offset-x">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow-offset-y">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow-opacity">
+            <rng:ref name="zeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:start-line-spacing-horizontal">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:start-line-spacing-vertical">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:end-line-spacing-horizontal">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:end-line-spacing-vertical">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:line-distance">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:guide-overhang">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:guide-distance">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:start-guide">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:end-guide">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:placing">
+            <rng:choice>
+              <rng:value>below</rng:value>
+              <rng:value>above</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:parallel">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:measure-align">
+            <rng:choice>
+              <rng:value>automatic</rng:value>
+              <rng:value>left-outside</rng:value>
+              <rng:value>inside</rng:value>
+              <rng:value>right-outside</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:measure-vertical-align">
+            <rng:choice>
+              <rng:value>automatic</rng:value>
+              <rng:value>above</rng:value>
+              <rng:value>below</rng:value>
+              <rng:value>center</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:unit">
+            <rng:choice>
+              <rng:value>automatic</rng:value>
+              <rng:value>mm</rng:value>
+              <rng:value>cm</rng:value>
+              <rng:value>m</rng:value>
+              <rng:value>km</rng:value>
+              <rng:value>pt</rng:value>
+              <rng:value>pc</rng:value>
+              <rng:value>inch</rng:value>
+              <rng:value>ft</rng:value>
+              <rng:value>mi</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:show-unit">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:decimal-places">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-type">
+            <rng:choice>
+              <rng:value>straight-line</rng:value>
+              <rng:value>angled-line</rng:value>
+              <rng:value>angled-connector-line</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-angle-type">
+            <rng:choice>
+              <rng:value>fixed</rng:value>
+              <rng:value>free</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-angle">
+            <rng:ref name="angle"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-gap">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-escape-direction">
+            <rng:choice>
+              <rng:value>horizontal</rng:value>
+              <rng:value>vertical</rng:value>
+              <rng:value>auto</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-escape">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-line-length">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-fit-line-length">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:horizontal-segments">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:vertical-segments">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:edge-rounding">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:edge-rounding-mode">
+            <rng:choice>
+              <rng:value>correct</rng:value>
+              <rng:value>attractive</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:back-scale">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:depth">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:backface-culling">
+            <rng:choice>
+              <rng:value>enabled</rng:value>
+              <rng:value>disabled</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:end-angle">
+            <rng:ref name="angle"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:close-front">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:close-back">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:lighting-mode">
+            <rng:choice>
+              <rng:value>standard</rng:value>
+              <rng:value>double-sided</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:normals-kind">
+            <rng:choice>
+              <rng:value>object</rng:value>
+              <rng:value>flat</rng:value>
+              <rng:value>sphere</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:normals-direction">
+            <rng:choice>
+              <rng:value>normal</rng:value>
+              <rng:value>inverse</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-generation-mode-x">
+            <rng:choice>
+              <rng:value>object</rng:value>
+              <rng:value>parallel</rng:value>
+              <rng:value>sphere</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-generation-mode-y">
+            <rng:choice>
+              <rng:value>object</rng:value>
+              <rng:value>parallel</rng:value>
+              <rng:value>sphere</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-kind">
+            <rng:choice>
+              <rng:value>luminance</rng:value>
+              <rng:value>intensity</rng:value>
+              <rng:value>color</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-filter">
+            <rng:choice>
+              <rng:value>enabled</rng:value>
+              <rng:value>disabled</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-mode">
+            <rng:choice>
+              <rng:value>replace</rng:value>
+              <rng:value>modulate</rng:value>
+              <rng:value>blend</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:ambient-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:emissive-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:specular-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:diffuse-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:shininess">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:shadow">
+            <rng:choice>
+              <rng:value>visible</rng:value>
+              <rng:value>hidden</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:ref name="common-draw-rel-size-attlist"/>
+        <rng:optional>
+          <rng:attribute name="fo:min-width">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:min-height">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:max-height">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:max-width">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:ref name="common-horizontal-margin-attlist"/>
+        <rng:ref name="common-vertical-margin-attlist"/>
+        <rng:ref name="common-margin-attlist"/>
+        <rng:optional>
+          <rng:attribute name="style:print-content">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:protect">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:list>
+                <rng:oneOrMore>
+                  <rng:choice>
+                    <rng:value>content</rng:value>
+                    <rng:value>position</rng:value>
+                    <rng:value>size</rng:value>
+                  </rng:choice>
+                </rng:oneOrMore>
+              </rng:list>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:horizontal-pos">
+            <rng:choice>
+              <rng:value>left</rng:value>
+              <rng:value>center</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>from-left</rng:value>
+              <rng:value>inside</rng:value>
+              <rng:value>outside</rng:value>
+              <rng:value>from-inside</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:x">
+            <rng:ref name="coordinate"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:horizontal-rel">
+            <rng:choice>
+              <rng:value>page</rng:value>
+              <rng:value>page-content</rng:value>
+              <rng:value>page-start-margin</rng:value>
+              <rng:value>page-end-margin</rng:value>
+              <rng:value>frame</rng:value>
+              <rng:value>frame-content</rng:value>
+              <rng:value>frame-start-margin</rng:value>
+              <rng:value>frame-end-margin</rng:value>
+              <rng:value>paragraph</rng:value>
+              <rng:value>paragraph-content</rng:value>
+              <rng:value>paragraph-start-margin</rng:value>
+              <rng:value>paragraph-end-margin</rng:value>
+              <rng:value>char</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:ref name="common-vertical-pos-attlist"/>
+        <rng:ref name="common-vertical-rel-attlist"/>
+        <rng:ref name="common-text-anchor-attlist"/>
+        <rng:ref name="common-border-attlist"/>
+        <rng:ref name="common-border-line-width-attlist"/>
+        <rng:ref name="common-padding-attlist"/>
+        <rng:ref name="common-shadow-attlist"/>
+        <rng:ref name="common-background-color-attlist"/>
+        <rng:ref name="common-background-transparency-attlist"/>
+        <rng:ref name="common-editable-attlist"/>
+        <rng:optional>
+          <rng:attribute name="style:wrap">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>left</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>parallel</rng:value>
+              <rng:value>dynamic</rng:value>
+              <rng:value>run-through</rng:value>
+              <rng:value>biggest</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:wrap-dynamic-threshold">
+            <rng:ref name="nonNegativeLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:number-wrapped-paragraphs">
+            <rng:choice>
+              <rng:value>no-limit</rng:value>
+              <rng:ref name="positiveInteger"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:wrap-contour">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:wrap-contour-mode">
+            <rng:choice>
+              <rng:value>full</rng:value>
+              <rng:value>outside</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:run-through">
+            <rng:choice>
+              <rng:value>foreground</rng:value>
+              <rng:value>background</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:flow-with-text">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:overflow-behavior">
+            <rng:choice>
+              <rng:value>clip</rng:value>
+              <rng:value>auto-create-new-frame</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:mirror">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>vertical</rng:value>
+              <rng:ref name="horizontal-mirror"/>
+              <rng:list>
+                <rng:value>vertical</rng:value>
+                <rng:ref name="horizontal-mirror"/>
+              </rng:list>
+              <rng:list>
+                <rng:ref name="horizontal-mirror"/>
+                <rng:value>vertical</rng:value>
+              </rng:list>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:clip">
+            <rng:choice>
+              <rng:value>auto</rng:value>
+              <rng:ref name="clipShape"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:wrap-influence-on-position">
+            <rng:choice>
+              <rng:value>iterative</rng:value>
+              <rng:value>once-concurrent</rng:value>
+              <rng:value>once-successive</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:ref name="common-writing-mode-attlist"/>
+        <rng:optional>
+          <rng:attribute name="draw:frame-display-scrollbar">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:frame-display-border">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:frame-margin-horizontal">
+            <rng:ref name="nonNegativePixelLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:frame-margin-vertical">
+            <rng:ref name="nonNegativePixelLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:visible-area-left">
+            <rng:ref name="nonNegativeLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:visible-area-top">
+            <rng:ref name="nonNegativeLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:visible-area-width">
+            <rng:ref name="positiveLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:visible-area-height">
+            <rng:ref name="positiveLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:draw-aspect">
+            <rng:choice>
+              <rng:value>content</rng:value>
+              <rng:value>thumbnail</rng:value>
+              <rng:value>icon</rng:value>
+              <rng:value>print-view</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:ole-draw-aspect">
+            <rng:ref name="nonNegativeInteger"/>
           </rng:attribute>
         </rng:optional>
       </rng:interleave>
@@ -704,6 +1558,24 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
           <rng:ref name="office-binary-data"/>
         </rng:choice>
       </rng:element>
+    </rng:define>
+
+    <!-- FIXME: one test exports 250 here, which is probably a bug -->
+    <rng:define name="fontWeight">
+      <rng:choice>
+        <rng:value>normal</rng:value>
+        <rng:value>bold</rng:value>
+        <rng:value>100</rng:value>
+        <rng:value>200</rng:value>
+        <rng:value>250</rng:value>
+        <rng:value>300</rng:value>
+        <rng:value>400</rng:value>
+        <rng:value>500</rng:value>
+        <rng:value>600</rng:value>
+        <rng:value>700</rng:value>
+        <rng:value>800</rng:value>
+        <rng:value>900</rng:value>
+      </rng:choice>
     </rng:define>
 
   </rng:include>
@@ -1378,6 +2250,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     <rng:optional>
       <rng:attribute name="calcext:repeat-item-labels">
         <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="draw-enhanced-geometry-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="drawooo:sub-view-size">
+        <rng:ref name="string"/>
       </rng:attribute>
     </rng:optional>
   </rng:define>
