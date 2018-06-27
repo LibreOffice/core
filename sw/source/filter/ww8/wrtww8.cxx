@@ -3588,6 +3588,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_nOrigRedlineFlags(RedlineFlags::NONE)
     , m_pCurrentPageDesc(nullptr)
     , m_bPrevTextNodeIsEmpty(false)
+    , m_bFirstTOCNodeWithSection(false)
     , m_pPapPlc(nullptr)
     , m_pChpPlc(nullptr)
     , m_pChpIter(nullptr)

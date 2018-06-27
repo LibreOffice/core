@@ -1399,6 +1399,35 @@ DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 }
 
+// Check for correct header/footer with special first page with TOC inside:
+// - DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
+// - DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
+DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
+{
+    CPPUNIT_ASSERT_EQUAL( 7, getPages() );
+
+//    CPPUNIT_ASSERT_EQUAL(OUString(""),  parseDump("/root/page[1]/header/txt/text()"));
+//    CPPUNIT_ASSERT_EQUAL(OUString(""),  parseDump("/root/page[1]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/footer/txt/text()"));
+}
+
 DECLARE_ODFEXPORT_TEST(testGerrit13858, "gerrit13858.odt")
 {
     // Just make sure the output is valid.
