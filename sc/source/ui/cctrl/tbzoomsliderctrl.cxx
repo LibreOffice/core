@@ -234,7 +234,7 @@ ScZoomSliderWnd::~ScZoomSliderWnd()
 
 void ScZoomSliderWnd::dispose()
 {
-    delete mpImpl;
+    mpImpl.reset();
     vcl::Window::dispose();
 }
 
