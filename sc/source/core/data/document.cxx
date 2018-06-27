@@ -2568,7 +2568,7 @@ void ScDocument::SetClipParam(const ScClipParam& rParam)
 
 bool ScDocument::IsClipboardSource() const
 {
-    if (bIsClip)
+    if (bIsClip || mpShell == nullptr)
         return false;
 
     ScDocument* pClipDoc = static_cast<ScDocShell*>(mpShell)->GetClipDoc();
