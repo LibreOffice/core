@@ -541,6 +541,22 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
         pWin->updateLibreOfficeKitCellCursor(pOtherShell);
 }
 
+css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipData(vcl::Window* pWin)
+{
+    SfxViewFrame* pViewFrame = nullptr;
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard;
+
+    if (pWin)
+        xClipboard = pWin->GetClipboard();
+    else if ((pViewFrame = SfxViewFrame::GetFirst(nullptr, false)))
+        xClipboard = pViewFrame->GetWindow().GetClipboard();
+
+    xTransferable.set(xClipboard.is() ? xClipboard->getContents() : nullptr, css::uno::UNO_QUERY);
+
+    return xTransferable;
+}
+
 void ScTabViewShell::notifyAllViewsHeaderInvalidation(HeaderType eHeaderType, SCTAB nCurrentTabIndex)
 {
     if (comphelper::LibreOfficeKit::isActive())
