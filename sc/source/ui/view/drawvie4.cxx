@@ -379,7 +379,6 @@ void ScDrawView::DoCopy()
         pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
     }
 
-    pViewData->GetViewShell()->SetClipData(xTransferObj); // internal clipboard
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
 }
 

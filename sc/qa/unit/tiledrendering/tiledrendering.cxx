@@ -15,6 +15,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -1550,12 +1551,17 @@ void ScTiledRenderingTest::testMultiViewCopyPaste()
     // view #1
     ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView1);
+    // emulate clipboard
+    pView1->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext()));
 
     // view #2
     SfxLokHelper::createView();
     ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    // emulate clipboard
+    pView2->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext()));
     CPPUNIT_ASSERT(pView2);
     CPPUNIT_ASSERT(pView1 != pView2);
+    CPPUNIT_ASSERT(pView1->GetViewData().GetActiveWin()->GetClipboard() != pView2->GetViewData().GetActiveWin()->GetClipboard());
 
     // copy text view 1
     pView1->SetCursor(0, 0);
