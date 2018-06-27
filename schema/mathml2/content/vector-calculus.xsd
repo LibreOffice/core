@@ -9,7 +9,7 @@
 
 <xs:annotation>
   <xs:documentation>
-  This is an XML Schema module for the vector calculs operators of content
+  This is an XML Schema module for the vector calculus operators of content
   MathML. 
   Author: St&#233;phane Dalmas, INRIA.
   </xs:documentation>
