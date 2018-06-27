@@ -92,6 +92,9 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
 
 AquaSalFrame::~AquaSalFrame()
 {
+    if (mbFullScreen)
+        ShowFullScreen(false, maGeometry.nDisplayScreenNumber);
+
     assert( GetSalData()->mpInstance->IsMainThread() );
 
     // if the frame is destroyed and has the current menubar
