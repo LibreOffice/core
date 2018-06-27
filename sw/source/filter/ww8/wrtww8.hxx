@@ -489,6 +489,7 @@ public:
     ww8::Frames m_aFrames;             // The floating frames in this document
     const SwPageDesc *m_pCurrentPageDesc;
     bool m_bPrevTextNodeIsEmpty;
+    bool m_bFirstTOCNodeWithSection;
     WW8_WrPlcPn* m_pPapPlc;
     WW8_WrPlcPn* m_pChpPlc;
     MSWordAttrIter* m_pChpIter;
