@@ -452,11 +452,6 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
     SetWindow(pNavigator);
 }
 
-#define CTRL_ITEMS 4
-
-#define REGISTER_SLOT(i,id) \
-    ppBoundItems[i]=new ScNavigatorControllerItem(id,*this,rBindings);
-
 ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui", nullptr)
     , rBindings(*pB)
@@ -510,14 +505,12 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     aStrNotActive = " (" + ScResId(SCSTR_NOTACTIVE) + ")";  // " (not active)"
     aStrHidden    = " (" + ScResId(SCSTR_HIDDEN) + ")";     // " (hidden)"
 
-    ppBoundItems = new ScNavigatorControllerItem* [CTRL_ITEMS];
-
     rBindings.ENTERREGISTRATIONS();
 
-    REGISTER_SLOT( 0, SID_CURRENTCELL       );
-    REGISTER_SLOT( 1, SID_CURRENTTAB        );
-    REGISTER_SLOT( 2, SID_CURRENTDOC        );
-    REGISTER_SLOT( 3, SID_SELECT_SCENARIO   );
+    mvBoundItems[0].reset(new ScNavigatorControllerItem(SID_CURRENTCELL,*this,rBindings));
+    mvBoundItems[1].reset(new ScNavigatorControllerItem(SID_CURRENTTAB,*this,rBindings));
+    mvBoundItems[2].reset(new ScNavigatorControllerItem(SID_CURRENTDOC,*this,rBindings));
+    mvBoundItems[3].reset(new ScNavigatorControllerItem(SID_SELECT_SCENARIO,*this,rBindings));
 
     rBindings.LEAVEREGISTRATIONS();
 
@@ -585,11 +578,9 @@ void ScNavigatorDlg::dispose()
 {
     aContentIdle.Stop();
 
-    for (sal_uInt16 i = 0; i < CTRL_ITEMS; ++i)
-        delete ppBoundItems[i];
-
-    delete [] ppBoundItems;
-    delete pMarkArea;
+    for (auto & p : mvBoundItems)
+        p.reset();
+    pMarkArea.reset();
 
     EndListening( *(SfxGetpApp()) );
     EndListening( rBindings );
@@ -700,7 +691,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
     {
         // SID_CURRENTCELL == Item #0 clear cache, so it's possible
         // setting the current cell even in combined areas
-        ppBoundItems[0]->ClearCache();
+        mvBoundItems[0]->ClearCache();
 
         ScAddress aScAddress( nColNo, nRowNo, 0 );
         OUString aAddr(aScAddress.Format(ScRefFlags::ADDR_ABS));
@@ -720,7 +711,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
 
 void ScNavigatorDlg::SetCurrentCellStr( const OUString& rName )
 {
-    ppBoundItems[0]->ClearCache();
+    mvBoundItems[0]->ClearCache();
     SfxStringItem   aNameItem( SID_CURRENTCELL, rName );
 
     rBindings.GetDispatcher()->ExecuteList(SID_CURRENTCELL,
@@ -1019,7 +1010,7 @@ void ScNavigatorDlg::MarkDataArea()
     if ( pViewSh )
     {
         if ( !pMarkArea )
-            pMarkArea = new ScArea;
+            pMarkArea.reset( new ScArea );
 
         pViewSh->MarkDataArea();
         ScRange aMarkRange;
@@ -1039,7 +1030,7 @@ void ScNavigatorDlg::UnmarkDataArea()
     if ( pViewSh )
     {
         pViewSh->Unmark();
-        DELETEZ( pMarkArea );
+        pMarkArea.reset();
     }
 }
 
