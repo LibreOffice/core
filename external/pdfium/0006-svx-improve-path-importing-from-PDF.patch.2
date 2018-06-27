@@ -12,33 +12,7 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpath.cpp b/pdfium/fpdfsdk/fpdf_editpath.cpp
 index 55f9fce..f41db64 100644
 --- a/pdfium/fpdfsdk/fpdf_editpath.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpath.cpp
-@@ -245,6 +245,25 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
-   return true;
- }
- 
-+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_GetDrawMode(FPDF_PAGEOBJECT path,
-+                                                         int* fillmode,
-+                                                         FPDF_BOOL* stroke)
-+{
-+  auto* pPathObj = CPDFPathObjectFromFPDFPageObject(path);
-+  if (!pPathObj || !fillmode || !stroke)
-+    return false;
-+
-+  if (pPathObj->m_FillType == FXFILL_ALTERNATE)
-+    *fillmode = FPDF_FILLMODE_ALTERNATE;
-+  else if (pPathObj->m_FillType == FXFILL_WINDING)
-+    *fillmode = FPDF_FILLMODE_WINDING;
-+  else
-+    *fillmode = 0; // no fill
-+
-+  *stroke = pPathObj->m_bStroke;
-+  return true;
-+}
-+
- FPDF_EXPORT void FPDF_CALLCONV FPDFPath_SetLineJoin(FPDF_PAGEOBJECT path,
-                                                     int line_join) {
-   if (!path)
-@@ -277,6 +296,30 @@ FPDF_EXPORT void FPDF_CALLCONV FPDFPath_SetLineCap(FPDF_PAGEOBJECT path,
+@@ -285,6 +285,30 @@ FPDF_EXPORT void FPDF_CALLCONV FPDFPath_SetLineCap(FPDF_PAGEOBJECT path,
    pPathObj->SetDirty(true);
  }
  
@@ -73,22 +47,10 @@ diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index b44bc71..89ec8cf 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -907,6 +907,36 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
-                                                          int fillmode,
-                                                          FPDF_BOOL stroke);
+@@ -920,6 +920,24 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_GetDrawMode(FPDF_PAGEOBJECT path,
+                                                          int* fillmode,
+                                                          FPDF_BOOL* stroke);
  
-+// Get the drawing mode of a path.
-+//
-+// path     - the handle to the path object.
-+// fillmode - the filling mode to be set: 0 for no fill, 1 for alternate, 2 for
-+// winding.
-+// stroke   - a boolean specifying if the path should be stroked or not.
-+//
-+// Returns TRUE on success
-+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_GetDrawMode(FPDF_PAGEOBJECT path,
-+                                                         int* fillmode,
-+                                                         FPDF_BOOL* stroke);
-+
 +// Get the matrix of a particular text object.
 +//
 +// path_object - Handle of path object returned by FPDFPath_NewPathObj
