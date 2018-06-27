@@ -13,6 +13,8 @@
 #include <cmath>
 
 #include <vector>
+#include <atomic>
+#include <iostream>
 #include <fstream>
 #include <osl/time.h>
 
@@ -20,12 +22,19 @@
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/optional.hpp>
+
 using namespace lok;
 
-static int help()
+static int help( const char *error = nullptr )
 {
-    fprintf( stderr, "Usage: tilebench <absolute-path-to-libreoffice-install> [path to document] [max parts|-1] [max tiles|-1]\n" );
-    fprintf( stderr, "renders a selection of small tiles from the document, checksums them and times the process\n" );
+    if (error)
+        fprintf (stderr, "Error: %s\n\n", error);
+    fprintf( stderr, "Usage: tilebench <absolute-path-to-libreoffice-install> [path to document]\n");
+    fprintf( stderr, "\trenders a selection of small tiles from the document, checksums them and times the process\n" );
+    fprintf( stderr, "\t--tile\t[max parts|-1] [max tiles|-1]\n" );
+    fprintf( stderr, "\t--dialog\t<.uno:Command>\n" );
     return 1;
 }
 
@@ -37,9 +46,24 @@ static double getTimeNow()
            static_cast<double>(aValue.Nanosec) / (1000*1000*1000);
 }
 
+static double origin;
+struct TimeRecord {
+    const char *mpName;
+    double mfTime;
+
+    TimeRecord() : mpName(nullptr), mfTime(getTimeNow()) { }
+    explicit TimeRecord(const char *pName) :
+        mpName(pName), mfTime(getTimeNow())
+    {
+        fprintf(stderr, "%3.3fs - %s\n", (mfTime - origin), mpName);
+    }
+};
+static std::vector< TimeRecord > aTimes;
+
 /// Dump an array of RGBA or BGRA to an RGB PPM file.
-static void dumpTile(const int nWidth, const int nHeight, const int mode, const char* pBuffer)
+static void dumpTile(const int nWidth, const int nHeight, const int mode, const unsigned char* pBufferU)
 {
+    auto pBuffer = reinterpret_cast<const char *>(pBufferU);
     std::ofstream ofs("/tmp/dump_tile.ppm");
     ofs << "P6\n"
         << nWidth << " "
@@ -79,22 +103,191 @@ static void dumpTile(const int nWidth, const int nHeight, const int mode, const 
     }
 }
 
+void testTile( Document *pDocument, int max_parts,
+               int max_tiles, bool dump )
+{
+    const int mode = pDocument->getTileMode();
+
+    aTimes.emplace_back("getparts");
+    const int nOriginalPart = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getPart());
+    // Writer really has 1 part (the full doc).
+    const int nTotalParts = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getParts());
+    const int nParts = (max_parts < 0 ? nTotalParts : std::min(max_parts, nTotalParts));
+    aTimes.emplace_back();
+
+    aTimes.emplace_back("get size of parts");
+    long nWidth = 0;
+    long nHeight = 0;
+    for (int n = 0; n < nParts; ++n)
+    {
+        const int nPart = (nOriginalPart + n) % nTotalParts;
+        char* pName = pDocument->getPartName(nPart);
+        pDocument->setPart(nPart);
+        pDocument->getDocumentSize(&nWidth, &nHeight);
+        fprintf (stderr, "  '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
+        free (pName);
+    }
+    aTimes.emplace_back();
+
+    // Use realistic dimensions, similar to the Online client.
+    long nTilePixelWidth = 512;
+    long nTilePixelHeight = 512;
+    long nTileTwipWidth = 3840;
+    long nTileTwipHeight = 3840;
+
+    // Estimate the maximum tiles based on the number of parts requested, if Writer.
+    if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
+        max_tiles = static_cast<int>(ceil(max_parts * 16128. / nTilePixelHeight) * ceil(static_cast<double>(nWidth) / nTilePixelWidth));
+    fprintf(stderr, "Parts to render: %d, Total Parts: %d, Max parts: %d, Max tiles: %d\n", nParts, nTotalParts, max_parts, max_tiles);
+
+    std::vector<unsigned char> vBuffer(nTilePixelWidth * nTilePixelHeight * 4);
+    unsigned char* pPixels = &vBuffer[0];
+
+    for (int n = 0; n < nParts; ++n)
+    {
+        const int nPart = (nOriginalPart + n) % nTotalParts;
+        char* pName = pDocument->getPartName(nPart);
+        pDocument->setPart(nPart);
+        pDocument->getDocumentSize(&nWidth, &nHeight);
+        fprintf (stderr, "render '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
+        free (pName);
+
+        if (dump || pDocument->getDocumentType() != LOK_DOCTYPE_TEXT)
+        {
+            // whole part; meaningful only for non-writer documents.
+            aTimes.emplace_back("render whole part");
+            pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
+                                 nWidth/2, 2000, 1000, 1000); // not square
+            aTimes.emplace_back();
+            if (dump)
+                dumpTile(nTilePixelWidth, nTilePixelHeight, mode, pPixels);
+        }
+
+        { // 1:1
+            aTimes.emplace_back("render sub-region at 1:1");
+            // Estimate the maximum tiles based on the number of parts requested, if Writer.
+            int nMaxTiles = max_tiles;
+            int nTiles = 0;
+            for (int nY = 0; nY < nHeight - 1; nY += nTilePixelHeight)
+            {
+                for (int nX = 0; nX < nWidth - 1; nX += nTilePixelWidth)
+                {
+                    if (nMaxTiles >= 0 && nTiles >= nMaxTiles)
+                    {
+                        nY = nHeight;
+                        break;
+                    }
+
+                    pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
+                                         nX, nY, nTilePixelWidth, nTilePixelHeight);
+                    nTiles++;
+                    fprintf (stderr, "   rendered 1:1 tile %d at %d, %d\n",
+                             nTiles, nX, nY);
+                }
+            }
+            aTimes.emplace_back();
+        }
+
+        { // scaled
+            aTimes.emplace_back("render sub-regions at scale");
+            int nMaxTiles = max_tiles;
+            if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
+                nMaxTiles = static_cast<int>(ceil(max_parts * 16128. / nTileTwipHeight) * ceil(static_cast<double>(nWidth) / nTileTwipWidth));
+            int nTiles = 0;
+            for (int nY = 0; nY < nHeight - 1; nY += nTileTwipHeight)
+            {
+                for (int nX = 0; nX < nWidth - 1; nX += nTileTwipWidth)
+                {
+                    if (nMaxTiles >= 0 && nTiles >= nMaxTiles)
+                    {
+                        nY = nHeight;
+                        break;
+                    }
+
+                    pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
+                                         nX, nY, nTileTwipWidth, nTileTwipHeight);
+                    nTiles++;
+                    fprintf (stderr, "   rendered scaled tile %d at %d, %d\n",
+                             nTiles, nX, nY);
+                }
+            }
+            aTimes.emplace_back();
+        }
+    }
+}
+
+static std::atomic<bool> bDialogRendered(false);
+static std::atomic<int> nDialogId(-1);
+
+void kitCallback(int nType, const char* pPayload, void* pData)
+{
+    Document *pDocument = static_cast<Document *>(pData);
+
+    if (nType != LOK_CALLBACK_WINDOW)
+        return;
+
+    std::stringstream aStream(pPayload);
+    boost::property_tree::ptree aRoot;
+    boost::property_tree::read_json(aStream, aRoot);
+    nDialogId = aRoot.get<unsigned>("id");
+    const std::string aAction = aRoot.get<std::string>("action");
+
+    if (aAction == "created")
+    {
+        const std::string aType = aRoot.get<std::string>("type");
+        const std::string aSize = aRoot.get<std::string>("size");
+        int nWidth = atoi(aSize.c_str());
+        int nHeight = 400;
+        const char *pComma = strstr(aSize.c_str(), ", ");
+        if (pComma)
+            nHeight = atoi(pComma + 2);
+        std::cerr << "Size " << aSize << " is " << nWidth << ", " << nHeight << "\n";
+
+        if (aType == "dialog")
+        {
+            aTimes.emplace_back(); // complete wait for dialog
+
+            unsigned char *pBuffer = new unsigned char[nWidth * nHeight * 4];
+
+            aTimes.emplace_back("render dialog");
+            pDocument->paintWindow(nDialogId, pBuffer, 0, 0, nWidth, nHeight);
+            dumpTile(nWidth, nHeight, pDocument->getTileMode(), pBuffer);
+            aTimes.emplace_back();
+
+            delete[] pBuffer;
+
+            bDialogRendered = true;
+        }
+    }
+}
+
+void testDialog( Document *pDocument, const char *uno_cmd )
+{
+    int view = pDocument->createView();
+    pDocument->setView(view);
+    pDocument->registerCallback(kitCallback, pDocument);
+
+    aTimes.emplace_back("open dialog");
+    pDocument->postUnoCommand(uno_cmd, nullptr, true);
+    aTimes.emplace_back();
+
+    aTimes.emplace_back("wait for dialog");
+    while (!bDialogRendered)
+    {
+        usleep (1000);
+    }
+
+    aTimes.emplace_back("post close dialog");
+    pDocument->postWindow(nDialogId, LOK_WINDOW_CLOSE);
+    aTimes.emplace_back();
+
+    pDocument->destroyView(view);
+}
+
 int main( int argc, char* argv[] )
 {
-    static const double origin = getTimeNow();
-    struct TimeRecord {
-        const char *mpName;
-        double mfTime;
-
-        TimeRecord() : mpName(nullptr), mfTime(getTimeNow()) { }
-        explicit TimeRecord(const char *pName) :
-                       mpName(pName), mfTime(getTimeNow())
-        {
-            fprintf(stderr, "%3.3fs - %s\n", (mfTime - origin), mpName);
-        }
-    };
-    std::vector< TimeRecord > aTimes;
-    if( argc < 2 ||
+    origin = getTimeNow();
+    if( argc < 4 ||
         ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
         return help();
 
@@ -103,12 +296,6 @@ int main( int argc, char* argv[] )
         fprintf(stderr, "Absolute path required to libreoffice install\n");
         return 1;
     }
-
-    // Use realistic dimensions, similar to the Online client.
-    long nTilePixelWidth = 512;
-    long nTilePixelHeight = 512;
-    long nTileTwipWidth = 3840;
-    long nTileTwipHeight = 3840;
 
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
@@ -121,122 +308,50 @@ int main( int argc, char* argv[] )
 
     aTimes.emplace_back();
 
-    const int max_parts = (argc > 3 ? atoi(argv[3]) : -1);
-    int max_tiles = (argc > 4 ? atoi(argv[4]) : -1);
-    const bool dump = true;
+    const char *doc_url = argv[2];
+    const char *mode = argv[3];
+    Document *pDocument = nullptr;
 
-    if (argv[2] != nullptr)
+    aTimes.emplace_back("load document");
+    if (doc_url != nullptr)
+        pDocument = pOffice->documentLoad(doc_url);
+    aTimes.emplace_back();
+
+    if (pDocument)
     {
-        aTimes.emplace_back("load document");
-        Document *pDocument(pOffice->documentLoad(argv[2]));
-        aTimes.emplace_back();
-        const int mode = pDocument->getTileMode();
-
-        aTimes.emplace_back("getparts");
-        const int nOriginalPart = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getPart());
-        // Writer really has 1 part (the full doc).
-        const int nTotalParts = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getParts());
-        const int nParts = (max_parts < 0 ? nTotalParts : std::min(max_parts, nTotalParts));
-        aTimes.emplace_back();
-
-        aTimes.emplace_back("get size of parts");
-        long nWidth = 0;
-        long nHeight = 0;
-        for (int n = 0; n < nParts; ++n)
+        if (!strcmp(mode, "--tile"))
         {
-            const int nPart = (nOriginalPart + n) % nTotalParts;
-            char* pName = pDocument->getPartName(nPart);
-            pDocument->setPart(nPart);
-            pDocument->getDocumentSize(&nWidth, &nHeight);
-            fprintf (stderr, "  '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
-            free (pName);
+            const int max_parts = (argc > 4 ? atoi(argv[4]) : -1);
+            int max_tiles = (argc > 5 ? atoi(argv[5]) : -1);
+            const bool dump = true;
+
+            testTile (pDocument, max_parts, max_tiles, dump);
         }
-        aTimes.emplace_back();
-
-        // Estimate the maximum tiles based on the number of parts requested, if Writer.
-        if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
-            max_tiles = static_cast<int>(ceil(max_parts * 16128. / nTilePixelHeight)) * ceil(static_cast<double>(nWidth) / nTilePixelWidth);
-        fprintf(stderr, "Parts to render: %d, Total Parts: %d, Max parts: %d, Max tiles: %d\n", nParts, nTotalParts, max_parts, max_tiles);
-
-        std::vector<unsigned char> vBuffer(nTilePixelWidth * nTilePixelHeight * 4);
-        unsigned char* pPixels = &vBuffer[0];
-
-        for (int n = 0; n < nParts; ++n)
+        else if (!strcmp (mode, "--dialog"))
         {
-            const int nPart = (nOriginalPart + n) % nTotalParts;
-            char* pName = pDocument->getPartName(nPart);
-            pDocument->setPart(nPart);
-            pDocument->getDocumentSize(&nWidth, &nHeight);
-            fprintf (stderr, "render '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
-            free (pName);
-
-            if (dump || pDocument->getDocumentType() != LOK_DOCTYPE_TEXT)
+            const char *uno_cmd = argc > 4 ? argv[4] : nullptr;
+            if (!uno_cmd)
             {
-                 // whole part; meaningful only for non-writer documents.
-                aTimes.emplace_back("render whole part");
-                pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
-                                     nWidth/2, 2000, 1000, 1000); // not square
-                aTimes.emplace_back();
-                if (dump)
-                    dumpTile(nTilePixelWidth, nTilePixelHeight, mode, reinterpret_cast<char*>(pPixels));
-            }
-
-            { // 1:1
-                aTimes.emplace_back("render sub-region at 1:1");
-                // Estimate the maximum tiles based on the number of parts requested, if Writer.
-                int nMaxTiles = max_tiles;
-                int nTiles = 0;
-                for (int nY = 0; nY < nHeight - 1; nY += nTilePixelHeight)
+                switch (pDocument->getDocumentType())
                 {
-                    for (int nX = 0; nX < nWidth - 1; nX += nTilePixelWidth)
-                    {
-                        if (nMaxTiles >= 0 && nTiles >= nMaxTiles)
-                        {
-                            nY = nHeight;
-                            break;
-                        }
-
-                        pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
-                                             nX, nY, nTilePixelWidth, nTilePixelHeight);
-                        nTiles++;
-                        fprintf (stderr, "   rendered 1:1 tile %d at %d, %d\n",
-                                 nTiles, nX, nY);
-                    }
+                case LOK_DOCTYPE_SPREADSHEET:
+                    uno_cmd = ".uno:FormatCellDialog";
+                    break;
+                case LOK_DOCTYPE_TEXT:
+                case LOK_DOCTYPE_PRESENTATION:
+                case LOK_DOCTYPE_DRAWING:
+                case LOK_DOCTYPE_OTHER:
+                    return help("missing argument to --dialog and no default");
                 }
-                aTimes.emplace_back();
             }
-
-            { // scaled
-                aTimes.emplace_back("render sub-regions at scale");
-                int nMaxTiles = max_tiles;
-                if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
-                    nMaxTiles = static_cast<int>(ceil(max_parts * 16128. / nTileTwipHeight)) * ceil(static_cast<double>(nWidth) / nTileTwipWidth);
-                int nTiles = 0;
-                for (int nY = 0; nY < nHeight - 1; nY += nTileTwipHeight)
-                {
-                    for (int nX = 0; nX < nWidth - 1; nX += nTileTwipWidth)
-                    {
-                        if (nMaxTiles >= 0 && nTiles >= nMaxTiles)
-                        {
-                            nY = nHeight;
-                            break;
-                        }
-
-                        pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
-                                             nX, nY, nTileTwipWidth, nTileTwipHeight);
-                        nTiles++;
-                        fprintf (stderr, "   rendered scaled tile %d at %d, %d\n",
-                                 nTiles, nX, nY);
-                    }
-                }
-                aTimes.emplace_back();
-            }
-        }
-
-        aTimes.emplace_back("destroy document");
-        delete pDocument;
-        aTimes.emplace_back();
+            testDialog (pDocument, uno_cmd);
+        } else
+            return help ("unknown parameter");
     }
+
+    aTimes.emplace_back("destroy document");
+    delete pDocument;
+    aTimes.emplace_back();
 
     delete pOffice;
 
