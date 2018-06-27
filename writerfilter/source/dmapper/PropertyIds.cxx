@@ -172,6 +172,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_FOOTER_IS_SHARED     :    sName = "FooterIsShared"; break;
         case PROP_FOOTER_IS_ON         :    sName = "FooterIsOn"; break;
         case PROP_FOOTNOTE_COUNTING    :    sName = "FootnoteCounting"; break;
+        case PROP_FOOTNOTE_LINE_ADJUST :    sName = "FootnoteLineAdjust"; break;
         case PROP_WIDTH                :    sName = "Width"; break;
         case PROP_HEIGHT               :    sName = "Height"; break;
         case PROP_TEXT_COLUMNS         :    sName = "TextColumns"; break;

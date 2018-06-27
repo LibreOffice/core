@@ -128,6 +128,7 @@ enum PropertyIds
         ,PROP_FOOTER_TEXT
         ,PROP_FOOTER_TEXT_LEFT
         ,PROP_FOOTNOTE_COUNTING
+        ,PROP_FOOTNOTE_LINE_ADJUST
         ,PROP_FORMAT
         ,PROP_FULL_NAME
         ,PROP_GAMMA
