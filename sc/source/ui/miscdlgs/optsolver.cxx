@@ -585,10 +585,10 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
         {
             // Close: write dialog settings to DocShell for subsequent calls
             ReadConditions();
-            ScOptSolverSave aSave(
+            std::unique_ptr<ScOptSolverSave> pSave( new ScOptSolverSave(
                 m_pEdObjectiveCell->GetText(), m_pRbMax->IsChecked(), m_pRbMin->IsChecked(), m_pRbValue->IsChecked(),
-                m_pEdTargetValue->GetText(), m_pEdVariableCells->GetText(), maConditions, maEngine, maProperties );
-            mpDocShell->SetSolverSaveData( aSave );
+                m_pEdTargetValue->GetText(), m_pEdVariableCells->GetText(), maConditions, maEngine, maProperties ) );
+            mpDocShell->SetSolverSaveData( std::move(pSave) );
             Close();
         }
         else

@@ -267,7 +267,7 @@ void ScDocShell::BeforeXMLLoading()
 
     // prevent unnecessary broadcasts and updates
     OSL_ENSURE(m_pModificator == nullptr, "The Modificator should not exist");
-    m_pModificator = new ScDocShellModificator( *this );
+    m_pModificator.reset( new ScDocShellModificator( *this ) );
 
     m_aDocument.SetImportingXML( true );
     m_aDocument.EnableExecuteLink( false );   // #i101304# to be safe, prevent nested loading from external references
@@ -372,8 +372,7 @@ void ScDocShell::AfterXMLLoading(bool bRet)
         // will set the cells dirty.
         if (eRecalcState == ScDocument::HardRecalcState::OFF)
             m_aDocument.SetHardRecalcState(ScDocument::HardRecalcState::TEMPORARY);
-        delete m_pModificator;
-        m_pModificator = nullptr;
+        m_pModificator.reset();
         m_aDocument.SetHardRecalcState(eRecalcState);
     }
     else
@@ -713,7 +712,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         sal_uInt32 nTimeout = rStlHint.GetTimeout();
 
         if (!m_pAutoStyleList)
-            m_pAutoStyleList = new ScAutoStyleList(this);
+            m_pAutoStyleList.reset( new ScAutoStyleList(this) );
         m_pAutoStyleList->AddInitial( aRange, aName1, nTimeout, aName2 );
     }
     else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
@@ -2779,9 +2778,9 @@ bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
         || rFilter == pFilterRtf;
 }
 
-ScDocFunc *ScDocShell::CreateDocFunc()
+std::unique_ptr<ScDocFunc> ScDocShell::CreateDocFunc()
 {
-    return new ScDocFuncDirect( *this );
+    return o3tl::make_unique<ScDocFuncDirect>( *this );
 }
 
 ScDocument* ScDocShell::GetClipDoc()
@@ -2899,28 +2898,28 @@ ScDocShell::~ScDocShell()
         EndListening(*pStlPool);
     EndListening(*this);
 
-    delete m_pAutoStyleList;
+    m_pAutoStyleList.reset();
 
     SfxApplication *pSfxApp = SfxGetpApp();
     if ( pSfxApp->GetDdeService() ) // Delete DDE for Document
         pSfxApp->RemoveDdeTopic( this );
 
-    delete m_pDocFunc;
+    m_pDocFunc.reset();
     delete m_aDocument.mpUndoManager;
     m_aDocument.mpUndoManager = nullptr;
-    delete m_pImpl;
+    m_pImpl.reset();
 
-    delete m_pPaintLockData;
+    m_pPaintLockData.reset();
 
-    delete m_pSolverSaveData;
-    delete m_pSheetSaveData;
-    delete m_pFormatSaveData;
-    delete m_pOldAutoDBRange;
+    m_pSolverSaveData.reset();
+    m_pSheetSaveData.reset();
+    m_pFormatSaveData.reset();
+    m_pOldAutoDBRange.reset();
 
     if (m_pModificator)
     {
         OSL_FAIL("The Modificator should not exist");
-        delete m_pModificator;
+        m_pModificator.reset();
     }
 }
 
@@ -3077,26 +3076,25 @@ vcl::Window* ScDocShell::GetActiveDialogParent()
         return Application::GetDefDialogParent();
 }
 
-void ScDocShell::SetSolverSaveData( const ScOptSolverSave& rData )
+void ScDocShell::SetSolverSaveData( std::unique_ptr<ScOptSolverSave> pData )
 {
-    delete m_pSolverSaveData;
-    m_pSolverSaveData = new ScOptSolverSave( rData );
+    m_pSolverSaveData = std::move(pData);
 }
 
 ScSheetSaveData* ScDocShell::GetSheetSaveData()
 {
     if (!m_pSheetSaveData)
-        m_pSheetSaveData = new ScSheetSaveData;
+        m_pSheetSaveData.reset( new ScSheetSaveData );
 
-    return m_pSheetSaveData;
+    return m_pSheetSaveData.get();
 }
 
 ScFormatSaveData* ScDocShell::GetFormatSaveData()
 {
     if (!m_pFormatSaveData)
-        m_pFormatSaveData = new ScFormatSaveData;
+        m_pFormatSaveData.reset( new ScFormatSaveData );
 
-    return m_pFormatSaveData;
+    return m_pFormatSaveData.get();
 }
 
 namespace {
