@@ -36,50 +36,6 @@ void Bundle::SetColor( sal_uInt32 nColor )
     mnColor = nColor;
 }
 
-
-LineBundle& LineBundle::operator=( const LineBundle& rSource )
-{
-    SetIndex( rSource.GetIndex() );
-    eLineType = rSource.eLineType;
-    nLineWidth = rSource.nLineWidth;
-    return *this;
-};
-
-MarkerBundle& MarkerBundle::operator=( const MarkerBundle& rSource )
-{
-    SetIndex( rSource.GetIndex() );
-    eMarkerType = rSource.eMarkerType;
-    nMarkerSize = rSource.nMarkerSize;
-    return *this;
-};
-
-EdgeBundle& EdgeBundle::operator=( const EdgeBundle& rSource )
-{
-    SetIndex( rSource.GetIndex() );
-    eEdgeType = rSource.eEdgeType;
-    nEdgeWidth = rSource.nEdgeWidth;
-    return *this;
-};
-
-TextBundle& TextBundle::operator=( const TextBundle& rSource )
-{
-    SetIndex( rSource.GetIndex() );
-    nTextFontIndex = rSource.nTextFontIndex;
-    eTextPrecision = rSource.eTextPrecision;
-    nCharacterExpansion = rSource.nCharacterExpansion;
-    nCharacterSpacing = rSource.nCharacterSpacing;
-    return *this;
-};
-
-FillBundle& FillBundle::operator=( const FillBundle& rSource )
-{
-    SetIndex( rSource.GetIndex() );
-    eFillInteriorStyle = rSource.eFillInteriorStyle;
-    nFillPatternIndex = rSource.nFillPatternIndex;
-    nFillHatchIndex = rSource.nFillHatchIndex;
-    return *this;
-};
-
 FontEntry::FontEntry() :
     pFontName       ( nullptr ),
     eCharSetType    ( CST_CCOMPLETE ),
