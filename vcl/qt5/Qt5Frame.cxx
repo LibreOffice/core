@@ -345,6 +345,18 @@ void Qt5Frame::GetWorkArea(tools::Rectangle& rRect)
 
 SalFrame* Qt5Frame::GetParent() const { return m_pParent; }
 
+void Qt5Frame::SetModal(bool bModal)
+{
+    if (m_pQWidget->isWindow())
+    {
+        // modality change is only effective if the window is hidden
+        m_pQWidget->windowHandle()->hide();
+        m_pQWidget->windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
+        // and shown again
+        m_pQWidget->windowHandle()->show();
+    }
+}
+
 void Qt5Frame::SetWindowState(const SalFrameState* pState)
 {
     if (!m_pQWidget->isWindow() || !pState || isChild(true, false))
