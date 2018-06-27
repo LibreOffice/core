@@ -213,7 +213,7 @@ protected:
         save(pShell, pFormat, *pTempFile);
         if (nExportType == ODP || nExportType == ODG)
         {
-            // BootstrapFixture::validate(pTempFile->GetFileName(), test::ODF);
+            BootstrapFixture::validate(pTempFile->GetFileName(), test::ODF);
         }
         else if(nExportType == PPTX)
         {
