@@ -5921,6 +5921,13 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
                     m_pSerializer->endElementNS( XML_w, XML_p );
                 }
+                else if ( m_bParagraphOpened )
+                {
+                    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+                    m_pSerializer->singleElementNS( XML_w, XML_br,
+                            FSNS( XML_w, XML_type ), "page", FSEND );
+                    m_pSerializer->endElementNS( XML_w, XML_r );
+                }
                 else
                 {
                     // postpone the output of this; it has to be done inside the
@@ -5928,14 +5935,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                     m_pSectionInfo.reset( new WW8_SepInfo( *pSectionInfo ));
                 }
             }
-            else if ( m_bParagraphOpened )
-            {
-                m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-                m_pSerializer->singleElementNS( XML_w, XML_br,
-                        FSNS( XML_w, XML_type ), "page", FSEND );
-                m_pSerializer->endElementNS( XML_w, XML_r );
-            }
-            else
+            else if ( !m_bParagraphOpened )
                 m_bPostponedPageBreak = true;
 
             break;

@@ -1000,6 +1000,16 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
             pFormat = pSectNd->GetSection().GetFormat();
     }
 
+    // tdf#118393: Do not use section from table of content if it is a first node in array
+    const bool firstTableOfContent = pSectNd &&
+        (   TOX_HEADER_SECTION  == pSectNd->GetSection().GetType() ||
+            TOX_CONTENT_SECTION == pSectNd->GetSection().GetType()  );
+
+    if (firstTableOfContent)
+    {
+        AppendSection( rExport.m_pCurrentPageDesc, pFormat, nRstLnNum );
+    }
+    else
     // Try to get page descriptor of the first node
     if ( pSet &&
          SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&

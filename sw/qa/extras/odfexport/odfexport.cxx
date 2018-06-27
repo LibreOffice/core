@@ -1399,6 +1399,14 @@ DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
+{
+    const OUString result = parseDump("/root/page[2]/header/txt/text()");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), result.compareTo("Seite", 5));
+
+    CPPUNIT_ASSERT_EQUAL( 7, getPages() );
+}
+
 DECLARE_ODFEXPORT_TEST(testGerrit13858, "gerrit13858.odt")
 {
     // Just make sure the output is valid.
