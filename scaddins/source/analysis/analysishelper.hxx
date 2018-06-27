@@ -39,13 +39,10 @@
 
 namespace sca { namespace analysis {
 
-class SortedIndividualInt32List;
 class ScaAnyConverter;
 
 
 #define PI          3.1415926535897932
-#define EOL         ( ( const sal_Char* ) 1 )
-#define EOE         ( ( const sal_Char* ) 2 )
 
 
 inline bool     IsLeapYear( sal_uInt16 nYear );
