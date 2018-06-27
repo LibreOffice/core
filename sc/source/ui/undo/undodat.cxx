@@ -954,17 +954,16 @@ bool ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 // change database sections (dialog)
 ScUndoDBData::ScUndoDBData( ScDocShell* pNewDocShell,
-                            ScDBCollection* pNewUndoColl, ScDBCollection* pNewRedoColl ) :
+                            std::unique_ptr<ScDBCollection> pNewUndoColl,
+                            std::unique_ptr<ScDBCollection> pNewRedoColl ) :
     ScSimpleUndo( pNewDocShell ),
-    pUndoColl( pNewUndoColl ),
-    pRedoColl( pNewRedoColl )
+    pUndoColl( std::move(pNewUndoColl) ),
+    pRedoColl( std::move(pNewRedoColl) )
 {
 }
 
 ScUndoDBData::~ScUndoDBData()
 {
-    delete pUndoColl;
-    delete pRedoColl;
 }
 
 OUString ScUndoDBData::GetComment() const

@@ -55,6 +55,7 @@
 #include <clipparam.hxx>
 #include <rowheightcontext.hxx>
 #include <refupdatecontext.hxx>
+#include <o3tl/make_unique.hxx>
 
 using com::sun::star::script::XLibraryContainer;
 using com::sun::star::script::vba::XVBACompatibility;
@@ -286,12 +287,12 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         }
         else
         {
-            ScDBCollection* pUndoColl = nullptr;
+            std::unique_ptr<ScDBCollection> pUndoColl;
 
             if (eMode==SC_DB_IMPORT)
             {
                 m_aDocument.PreprocessDBDataUpdate();
-                pUndoColl = new ScDBCollection( *pColl );   // Undo for import range
+                pUndoColl.reset( new ScDBCollection( *pColl ) );   // Undo for import range
 
                 OUString aImport = ScResId( STR_DBNAME_IMPORT );
                 long nCount = 0;
@@ -323,8 +324,9 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             {
                 m_aDocument.CompileHybridFormula();
 
-                ScDBCollection* pRedoColl = new ScDBCollection( *pColl );
-                GetUndoManager()->AddUndoAction( new ScUndoDBData( this, pUndoColl, pRedoColl ) );
+                GetUndoManager()->AddUndoAction( new ScUndoDBData( this,
+                        std::move(pUndoColl),
+                        o3tl::make_unique<ScDBCollection>( *pColl ) ) );
             }
 
             //  no longer needed to register new range at the Sba

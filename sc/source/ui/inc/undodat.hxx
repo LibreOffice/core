@@ -266,7 +266,8 @@ class ScUndoDBData: public ScSimpleUndo
 {
 public:
                     ScUndoDBData( ScDocShell* pNewDocShell,
-                            ScDBCollection* pNewUndoColl, ScDBCollection* pNewRedoColl );
+                            std::unique_ptr<ScDBCollection> pNewUndoColl,
+                            std::unique_ptr<ScDBCollection> pNewRedoColl );
     virtual         ~ScUndoDBData() override;
 
     virtual void    Undo() override;
@@ -277,8 +278,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScDBCollection* pUndoColl;
-    ScDBCollection* pRedoColl;
+    std::unique_ptr<ScDBCollection> pUndoColl;
+    std::unique_ptr<ScDBCollection> pRedoColl;
 };
 
 class ScUndoImportData: public ScSimpleUndo
