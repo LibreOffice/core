@@ -173,6 +173,8 @@ friend class RowEdit;
 friend class ScContentTree;
 
 private:
+    static constexpr int CTRL_ITEMS = 4;
+
     SfxBindings&        rBindings;      // must be first member
 
     VclPtr<ColumnEdit> aEdCol;
@@ -201,7 +203,7 @@ private:
     sal_uInt16      nDownId;
     sal_uInt16      nUpId;
     sal_uInt16      nDataId;
-    ScArea*         pMarkArea;
+    std::unique_ptr<ScArea> pMarkArea;
     ScViewData*     pViewData;
 
     NavListMode     eListMode;
@@ -210,7 +212,7 @@ private:
     SCROW           nCurRow;
     SCTAB           nCurTab;
 
-    ScNavigatorControllerItem** ppBoundItems;
+    std::array<std::unique_ptr<ScNavigatorControllerItem>,CTRL_ITEMS> mvBoundItems;
 
     DECL_LINK(TimeHdl, Timer*, void);
     DECL_LINK(DocumentSelectHdl, ListBox&, void);
