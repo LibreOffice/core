@@ -226,7 +226,7 @@ struct ScCheckListMember;
 
 class ScCheckListBox : public SvTreeListBox
 {
-    SvLBoxButtonData*   mpCheckButton;
+    std::unique_ptr<SvLBoxButtonData> mpCheckButton;
     ScTabStops*         mpTabStops;
     bool                mbSeenMouseButtonDown;
     void            CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const;
@@ -236,7 +236,7 @@ class ScCheckListBox : public SvTreeListBox
 
     ScCheckListBox( vcl::Window* pParent );
     virtual ~ScCheckListBox() override { disposeOnce(); }
-    virtual void dispose() override { delete mpCheckButton; SvTreeListBox::dispose(); }
+    virtual void dispose() override { mpCheckButton.reset(); SvTreeListBox::dispose(); }
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck );
     void CheckEntry( SvTreeListEntry* pEntry, bool bCheck );
