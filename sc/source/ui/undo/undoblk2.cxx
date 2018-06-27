@@ -60,8 +60,8 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
 
 ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
 {
-    delete pUndoDoc;
-    delete pUndoTab;
+    pUndoDoc.reset();
+    pUndoTab.reset();
     DeleteSdrUndoAction( pDrawUndo );
 }
 
@@ -95,7 +95,7 @@ void ScUndoWidthOrHeight::Undo()
 
     //! outlines from all tables?
     if (pUndoTab)                                           // Outlines are included when saving ?
-        rDoc.SetOutlineTable( nStartTab, pUndoTab );
+        rDoc.SetOutlineTable( nStartTab, pUndoTab.get() );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     SCTAB nTabCount = rDoc.GetTableCount();
