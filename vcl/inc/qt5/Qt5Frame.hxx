@@ -107,6 +107,7 @@ public:
     virtual void GetClientSize(long& rWidth, long& rHeight) override;
     virtual void GetWorkArea(tools::Rectangle& rRect) override;
     virtual SalFrame* GetParent() const override;
+    virtual void SetModal(bool bModal) override;
     virtual void SetWindowState(const SalFrameState* pState) override;
     virtual bool GetWindowState(SalFrameState* pState) override;
     virtual void ShowFullScreen(bool bFullScreen, sal_Int32 nDisplay) override;
