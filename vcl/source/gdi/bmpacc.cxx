@@ -59,8 +59,6 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
         }
     }
 
-    assert(mpBuffer);
-
     maBitmap = rBitmap;
 }
 
