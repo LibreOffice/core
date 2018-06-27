@@ -383,8 +383,8 @@ private:
     SCCOLROW        nEnd;
     SCTAB           nStartTab;
     SCTAB           nEndTab;
-    ScDocument*     pUndoDoc;
-    ScOutlineTable* pUndoTab;
+    std::unique_ptr<ScDocument>     pUndoDoc;
+    std::unique_ptr<ScOutlineTable> pUndoTab;
     std::vector<sc::ColRowSpan> maRanges;
     sal_uInt16      nNewSize;
     bool            bWidth;
