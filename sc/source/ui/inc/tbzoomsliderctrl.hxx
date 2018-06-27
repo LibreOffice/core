@@ -40,7 +40,7 @@ class ScZoomSliderWnd: public vcl::Window
 {
 private:
     struct ScZoomSliderWnd_Impl;
-    ScZoomSliderWnd_Impl* mpImpl;
+    std::unique_ptr<ScZoomSliderWnd_Impl> mpImpl;
     Size aLogicalSize;
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
