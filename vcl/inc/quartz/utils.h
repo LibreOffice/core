@@ -35,7 +35,7 @@
 #include <rtl/ustring.hxx>
 
 OUString GetOUString( CFStringRef );
-OUString GetOUString( NSString* );
+OUString GetOUString( const NSString* );
 CFStringRef CreateCFString( const OUString& );
 NSString* CreateNSString( const OUString& );
 
