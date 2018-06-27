@@ -131,6 +131,9 @@ class SingletonRef
             // <- GLOBAL SAFE
         }
 
+#if defined LIBO_INTERNAL_ONLY
+        SingletonRef & operator =(SingletonRef const &) = default;
+#endif
 
         /** @short  Allows rSingle->someBodyOp().
          */
@@ -157,7 +160,7 @@ class SingletonRef
     // helper
 
     private:
-
+        SingletonRef(SingletonRef &) SAL_DELETED_FUNCTION;
 
         /** @short  creates an own mutex for guarding static contents.
 
