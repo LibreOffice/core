@@ -106,7 +106,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     Init( rArgSet );
 
     // Hack: RefInput control
-    pTimer = new Timer("ScFilterTimer");
+    pTimer.reset( new Timer("ScFilterTimer") );
     pTimer->SetTimeout( 50 ); // Wait 50ms
     pTimer->SetInvokeHandler( LINK( this, ScFilterDlg, TimeOutHdl ) );
 }
@@ -118,12 +118,12 @@ ScFilterDlg::~ScFilterDlg()
 
 void ScFilterDlg::dispose()
 {
-    delete pOptionsMgr;
-    delete pOutItem;
+    pOptionsMgr.reset();
+    pOutItem.reset();
 
     // Hack: RefInput control
     pTimer->Stop();
-    delete pTimer;
+    pTimer.reset();
 
     pLbConnect1.clear();
     pLbField1.clear();
@@ -219,7 +219,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     maConnLbArr.push_back(pLbConnect4);
 
     // Option initialization:
-    pOptionsMgr  = new ScFilterOptionsMgr(
+    pOptionsMgr.reset( new ScFilterOptionsMgr(
                             pViewData,
                             theQueryData,
                             pBtnCase,
@@ -233,7 +233,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                             pRbCopyArea,
                             pFtDbAreaLabel,
                             pFtDbArea,
-                            aStrUndefined );
+                            aStrUndefined ) );
     // Read in field lists and select entries
 
     FillFieldLists();
@@ -654,10 +654,9 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 
     // only set the three - reset everything else
 
-    DELETEZ( pOutItem );
-    pOutItem = new ScQueryItem( nWhichQuery, &theParam );
+    pOutItem.reset( new ScQueryItem( nWhichQuery, &theParam ) );
 
-    return pOutItem;
+    return pOutItem.get();
 }
 
 bool ScFilterDlg::IsRefInputMode() const
@@ -722,7 +721,7 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer, void )
 {
     // Check if RefInputMode is still true every 50ms
 
-    if( _pTimer == pTimer && IsActive() )
+    if( _pTimer == pTimer.get() && IsActive() )
         bRefInputMode = (pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus());
 
     if ( pExpander->get_expanded() )
