@@ -80,26 +80,26 @@ class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationL
 {
     Timer               m_aIdleTimer;
     Idle                m_aSpellIdle;
-    ScDragData*         m_pDragData;
+    std::unique_ptr<ScDragData> m_pDragData;
     ScSelectionTransferObj* m_pSelTransfer;
     ScMessagePool*      m_pMessagePool;
     // there is no global InputHandler anymore, each View has its own
     ScInputHandler*     m_pRefInputHandler;
-    ScViewCfg*          m_pViewCfg;
-    ScDocCfg*           m_pDocCfg;
-    ScAppCfg*           m_pAppCfg;
-    ScDefaultsCfg*      m_pDefaultsCfg;
-    ScFormulaCfg*       m_pFormulaCfg;
-    ScInputCfg*         m_pInputCfg;
-    ScPrintCfg*         m_pPrintCfg;
-    ScNavipiCfg*        m_pNavipiCfg;
-    ScAddInCfg*         m_pAddInCfg;
-    svtools::ColorConfig*   m_pColorConfig;
-    SvtAccessibilityOptions* m_pAccessOptions;
-    SvtCTLOptions*      m_pCTLOptions;
-    SvtUserOptions*     m_pUserOptions;
-    SfxErrorHandler*    m_pErrorHdl;
-    ScFormEditData*     m_pFormEditData;
+    std::unique_ptr<ScViewCfg>        m_pViewCfg;
+    std::unique_ptr<ScDocCfg>         m_pDocCfg;
+    std::unique_ptr<ScAppCfg>         m_pAppCfg;
+    std::unique_ptr<ScDefaultsCfg>    m_pDefaultsCfg;
+    std::unique_ptr<ScFormulaCfg>     m_pFormulaCfg;
+    std::unique_ptr<ScInputCfg>       m_pInputCfg;
+    std::unique_ptr<ScPrintCfg>       m_pPrintCfg;
+    std::unique_ptr<ScNavipiCfg>      m_pNavipiCfg;
+    std::unique_ptr<ScAddInCfg>       m_pAddInCfg;
+    std::unique_ptr<svtools::ColorConfig>    m_pColorConfig;
+    std::unique_ptr<SvtAccessibilityOptions> m_pAccessOptions;
+    std::unique_ptr<SvtCTLOptions>           m_pCTLOptions;
+    std::unique_ptr<SvtUserOptions>          m_pUserOptions;
+    std::unique_ptr<SfxErrorHandler>  m_pErrorHdl;
+    std::unique_ptr<ScFormEditData>   m_pFormEditData;
     sal_uInt16          m_nCurRefDlgId;
     bool                m_bIsWaterCan:1;
     bool                m_bIsInEditCommand:1;
@@ -219,7 +219,7 @@ public:
 
     void                InitFormEditData();
     void                ClearFormEditData();
-    ScFormEditData*     GetFormEditData()       { return m_pFormEditData; }
+    ScFormEditData*     GetFormEditData()       { return m_pFormEditData.get(); }
 
     // input of reference:
     SC_DLLPUBLIC void   SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm = nullptr );
