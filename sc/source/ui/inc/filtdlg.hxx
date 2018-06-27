@@ -195,11 +195,11 @@ private:
     VclPtr<OKButton>        pBtnOk;
     VclPtr<CancelButton>    pBtnCancel;
 
-    ScFilterOptionsMgr* pOptionsMgr;
+    std::unique_ptr<ScFilterOptionsMgr> pOptionsMgr;
 
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
-    ScQueryItem*        pOutItem;
+    std::unique_ptr<ScQueryItem> pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
 
@@ -207,7 +207,7 @@ private:
     bool                bRefInputMode;
 
     // Hack: RefInput control
-    Idle*  pIdle;
+    std::unique_ptr<Idle> pIdle;
 
 private:
     void            Init( const SfxItemSet& rArgSet );

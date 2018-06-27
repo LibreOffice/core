@@ -95,7 +95,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     pEdFilterArea->GrabFocus();
 
     // hack: control of RefInput
-    pIdle = new Idle("Special Filter Dialog");
+    pIdle.reset( new Idle("Special Filter Dialog") );
     // FIXME: this is an abomination
     pIdle->SetPriority( TaskPriority::LOWEST );
     pIdle->SetInvokeHandler( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
@@ -114,13 +114,13 @@ void ScSpecialFilterDlg::dispose()
     for ( sal_Int32 i=1; i<nEntries; ++i )
         delete static_cast<OUString*>(pLbFilterArea->GetEntryData( i ));
 
-    delete pOptionsMgr;
+    pOptionsMgr.reset();
 
-    delete pOutItem;
+    pOutItem.reset();
 
     // hack: control of RefInput
     pIdle->Stop();
-    delete pIdle;
+    pIdle.reset();
 
     pLbFilterArea.clear();
     pEdFilterArea.clear();
@@ -195,7 +195,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
     // let options be initialized:
 
-    pOptionsMgr  = new ScFilterOptionsMgr(
+    pOptionsMgr.reset( new ScFilterOptionsMgr(
                             pViewData,
                             theQueryData,
                             pBtnCase,
@@ -209,7 +209,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             pRbCopyArea,
                             pFtDbAreaLabel,
                             pFtDbArea,
-                            aStrUndefined );
+                            aStrUndefined ) );
 
     //  special filter always needs column headers
     pBtnHeader->Check();
@@ -275,11 +275,9 @@ void ScSpecialFilterDlg::SetActive()
 ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
                                                 const ScRange& rSource )
 {
-    if ( pOutItem ) DELETEZ( pOutItem );
-    pOutItem = new ScQueryItem( nWhichQuery, &rParam );
+    pOutItem.reset(new ScQueryItem( nWhichQuery, &rParam ));
     pOutItem->SetAdvancedQuerySource( &rSource );
-
-    return pOutItem;
+    return pOutItem.get();
 }
 
 bool ScSpecialFilterDlg::IsRefInputMode() const
@@ -402,7 +400,7 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
 {
     // every 50ms check whether RefInputMode is still true
 
-    if( (_pIdle == pIdle) && IsActive() )
+    if( (_pIdle == pIdle.get()) && IsActive() )
     {
         if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
         {
