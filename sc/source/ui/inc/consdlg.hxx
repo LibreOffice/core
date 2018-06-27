@@ -79,8 +79,8 @@ private:
     ScConsolidateParam  theConsData;
     ScViewData&         rViewData;
     ScDocument*         pDoc;
-    ScRangeUtil*        pRangeUtil;
-    ScAreaData*         pAreaData;
+    std::unique_ptr<ScRangeUtil>  pRangeUtil;
+    std::unique_ptr<ScAreaData[]> pAreaData;
     size_t              nAreaDataCount;
     sal_uInt16          nWhichCons;
 
