@@ -74,7 +74,6 @@ public:
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
 };
-typedef std::shared_ptr< BorderHandler >          BorderHandlerPtr;
 }}
 
 #endif

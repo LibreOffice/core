@@ -1556,7 +1556,7 @@ void DomainMapper_Impl::appendTextContent(
     }
 }
 
-void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandlerPtr& pOLEHandler )
+void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOLEHandler )
 {
     try
     {

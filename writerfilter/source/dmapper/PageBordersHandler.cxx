@@ -98,7 +98,7 @@ void PageBordersHandler::lcl_sprm( Sprm& rSprm )
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
             {
-                BorderHandlerPtr pBorderHandler( new BorderHandler( true ) );
+                std::shared_ptr<BorderHandler> pBorderHandler( new BorderHandler( true ) );
                 pProperties->resolve(*pBorderHandler);
                 BorderPosition ePos = BorderPosition( 0 );
                 switch( rSprm.getId( ) )

@@ -20,7 +20,6 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_OLEHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <memory>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -98,7 +97,6 @@ public:
     const css::uno::Reference<css::graphic::XGraphic>& getReplacement() const { return m_xReplacement; }
 
 };
-typedef std::shared_ptr< OLEHandler >  OLEHandlerPtr;
 }}
 
 #endif
