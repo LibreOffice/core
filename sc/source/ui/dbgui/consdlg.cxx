@@ -115,8 +115,8 @@ ScConsolidateDlg::~ScConsolidateDlg()
 
 void ScConsolidateDlg::dispose()
 {
-    delete [] pAreaData;
-    delete pRangeUtil;
+    pAreaData.reset();
+    pRangeUtil.reset();
     pLbFunc.clear();
     pLbConsAreas.clear();
     pLbDataArea.clear();
@@ -216,7 +216,7 @@ void ScConsolidateDlg::Init()
 
     if ( nAreaDataCount > 0 )
     {
-        pAreaData = new ScAreaData[nAreaDataCount];
+        pAreaData.reset( new ScAreaData[nAreaDataCount] );
 
         OUString aStrName;
         sal_uInt16 nAt = 0;
