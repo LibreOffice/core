@@ -73,7 +73,7 @@ private:
     const OUString          aStrMid;
     const OUString          aStrSouth;
     const OUString          aStrSum;
-    SvNumberFormatter*      pNumFmt;
+    std::unique_ptr<SvNumberFormatter> pNumFmt;
 
     SAL_DLLPRIVATE void Init();
     SAL_DLLPRIVATE void DoPaint(vcl::RenderContext& rRenderContext);
