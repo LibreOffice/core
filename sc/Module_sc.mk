@@ -191,6 +191,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_statistics \
 	UITest_solver \
 	UITest_goalSeek \
+	UITest_protect \
 ))
 endif
 
