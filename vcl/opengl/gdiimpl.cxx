@@ -1786,7 +1786,41 @@ void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, 
     PreDraw();
 
     if( UseInvert( nFlags ) )
-        DrawPolygon( nPoints, pPtAry );
+    {
+        if (nFlags & SalInvert::TrackFrame)
+        {
+            // Track frame means the invert50FragmentShader must remain active
+            // (to draw what looks like a dashed line), so DrawLineSegment()
+            // can't be used. Draw the edge of the polygon as polygons instead.
+            for (size_t nPoint = 0; nPoint < nPoints; ++nPoint)
+            {
+                const SalPoint& rFrom = pPtAry[nPoint];
+                const SalPoint& rTo = pPtAry[(nPoint + 1) % nPoints];
+                if (rFrom.mnX == rTo.mnX)
+                {
+                    // Extend to the right, comments assuming "to" is above
+                    // "from":
+                    const SalPoint aPoints[] = { { rFrom.mnX + 1, rFrom.mnY }, // bottom right
+                                                 { rFrom.mnX, rFrom.mnY }, // bottom left
+                                                 { rTo.mnX, rTo.mnY }, // top left
+                                                 { rTo.mnX + 1, rTo.mnY } }; // top right
+                    DrawConvexPolygon(4, aPoints, true);
+                }
+                else
+                {
+                    // Otherwise can extend downwards, comments assuming "to"
+                    // is above and on the right of "from":
+                    const SalPoint aPoints[] = { { rFrom.mnX, rFrom.mnY + 1 }, // bottom left
+                                                 { rFrom.mnX, rFrom.mnY }, // top left
+                                                 { rTo.mnX, rTo.mnY }, // top right
+                                                 { rTo.mnX, rTo.mnY + 1 } }; // bottom right
+                    DrawConvexPolygon(4, aPoints, true);
+                }
+            }
+        }
+        else
+            DrawPolygon(nPoints, pPtAry);
+    }
 
     PostDraw();
 }
