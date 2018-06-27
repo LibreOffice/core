@@ -85,7 +85,7 @@ protected:
 private:
     ScPreviewShell* mpViewShell;
 
-    accessibility::AccessibleTextHelper* mpTextHelper;
+    std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;
 
     bool IsDefunc(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
