@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_28313aa3",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3564,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-27T11:16:21Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this rather be a non-optional parameter to the ScValueIterator ctor (but accepting a nullptr argument), so all places in ScInterpreter can be caught and adapted once?",
+      "revId": "ceabe204a7547988df8851e5d807ec83105e190c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
