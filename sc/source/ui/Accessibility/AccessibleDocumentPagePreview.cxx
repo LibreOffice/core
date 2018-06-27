@@ -1189,11 +1189,9 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 
     // no need to Dispose the AccessibleTextHelper,
     // as long as mpNotesChildren are destructed here
-    if (mpNotesChildren)
-        DELETEZ(mpNotesChildren);
+    mpNotesChildren.reset();
 
-    if (mpShapeChildren)
-        DELETEZ(mpShapeChildren);
+    mpShapeChildren.reset();
 
     ScAccessibleDocumentBase::disposing();
 }
@@ -1541,7 +1539,7 @@ ScNotesChildren* ScAccessibleDocumentPagePreview::GetNotesChildren()
 {
     if (!mpNotesChildren && mpViewShell)
     {
-        mpNotesChildren = new ScNotesChildren(mpViewShell, this);
+        mpNotesChildren.reset( new ScNotesChildren(mpViewShell, this) );
 
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
         ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
@@ -1549,18 +1547,18 @@ ScNotesChildren* ScAccessibleDocumentPagePreview::GetNotesChildren()
         //! order is background shapes, header, table or notes, footer, foreground shapes, controls
         mpNotesChildren->Init(aCount.aVisRect, aCount.nBackShapes + aCount.nHeaders);
     }
-    return mpNotesChildren;
+    return mpNotesChildren.get();
 }
 
 ScShapeChildren* ScAccessibleDocumentPagePreview::GetShapeChildren()
 {
     if (!mpShapeChildren && mpViewShell)
     {
-        mpShapeChildren = new ScShapeChildren(mpViewShell, this);
+        mpShapeChildren.reset( new ScShapeChildren(mpViewShell, this) );
         mpShapeChildren->Init();
     }
 
-    return mpShapeChildren;
+    return mpShapeChildren.get();
 }
 
 OUString ScAccessibleDocumentPagePreview::getAccessibleName()

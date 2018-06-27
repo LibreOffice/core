@@ -117,8 +117,8 @@ protected:
 
 private:
     ScPreviewShell* mpViewShell;
-    ScNotesChildren* mpNotesChildren;
-    ScShapeChildren* mpShapeChildren;
+    std::unique_ptr<ScNotesChildren> mpNotesChildren;
+    std::unique_ptr<ScShapeChildren> mpShapeChildren;
     rtl::Reference<ScAccessiblePreviewTable> mpTable;
     rtl::Reference<ScAccessiblePageHeader> mpHeader;
     rtl::Reference<ScAccessiblePageHeader> mpFooter;
