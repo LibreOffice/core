@@ -55,7 +55,7 @@ OUString GetOUString( CFStringRef rStr )
     return aRet;
 }
 
-OUString GetOUString( NSString* pStr )
+OUString GetOUString( const NSString* pStr )
 {
     if( ! pStr )
     {
