@@ -73,7 +73,7 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    27197183bb3e7a12e3d554559f80808f https://sourceforge.net/projects/aoo-extensions/files/17102/41/dict-en-20180501b.oxt/download "dict-en.oxt"
+    a180736ccd1424dd5c7eee823f9f09ad https://sourceforge.net/projects/aoo-extensions/files/17102/42/dict-en-20180701.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
