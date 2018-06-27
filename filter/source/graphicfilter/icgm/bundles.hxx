@@ -64,7 +64,6 @@ public:
     {}
 
     virtual Bundle* Clone() override { return new LineBundle( *this ); }
-    LineBundle& operator=( const LineBundle& rLineBundle );
 };
 
 
@@ -81,7 +80,6 @@ public:
         {};
 
     virtual Bundle*     Clone() override { return new MarkerBundle( *this ); } ;
-            MarkerBundle&   operator=( const MarkerBundle& rMarkerBundle );
 };
 
 
@@ -97,7 +95,6 @@ public:
         , nEdgeWidth(0)
     {}
     virtual Bundle*     Clone() override { return new EdgeBundle( *this ); }
-    EdgeBundle& operator=( const EdgeBundle& rEdgeBundle );
 };
 
 
@@ -118,7 +115,6 @@ public:
         {};
 
     virtual Bundle*     Clone() override { return new TextBundle( *this ); } ;
-            TextBundle& operator=( const TextBundle& rTextBundle );
 };
 
 
@@ -136,7 +132,6 @@ public:
         , nFillHatchIndex(0)
     {}
     virtual Bundle*     Clone() override { return new FillBundle( *this ); }
-    FillBundle& operator=( const FillBundle& rFillBundle );
 };
 
 
