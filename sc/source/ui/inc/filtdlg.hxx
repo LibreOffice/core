@@ -114,11 +114,11 @@ private:
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
 
-    ScFilterOptionsMgr* pOptionsMgr;
+    std::unique_ptr<ScFilterOptionsMgr> pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
     ScQueryParam        theQueryData;
-    ScQueryItem*        pOutItem;
+    std::unique_ptr<ScQueryItem> pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
     SCTAB               nSrcTab;
@@ -135,7 +135,7 @@ private:
     EntryListsMap m_EntryLists;
 
     // Hack: RefInput control
-    Timer*  pTimer;
+    std::unique_ptr<Timer>  pTimer;
 
 private:
     void            Init            ( const SfxItemSet& rArgSet );
