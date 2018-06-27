@@ -36,12 +36,15 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
@@ -1033,6 +1036,35 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
     {
         // Set footnote line width to zero, document has no footnote separator.
         Insert(PROP_FOOTNOTE_LINE_RELATIVE_WIDTH, uno::makeAny(sal_Int32(0)));
+    }
+    if ( rDM_Impl.m_bHasFtnSep )
+    {
+        //If default paragraph style is RTL, footnote separator should be right aligned
+        //and for RTL locales, LTR default paragraph style should present a left aligned footnote separator
+        try
+        {
+            uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(rDM_Impl.GetTextDocument(), uno::UNO_QUERY);
+            if ( xStylesSupplier.is() )
+            {
+                uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
+                uno::Reference<container::XNameAccess> xParagraphStyles;
+                if ( xStyleFamilies.is() )
+                    xStyleFamilies->getByName("ParagraphStyles") >>= xParagraphStyles;
+                uno::Reference<beans::XPropertySet> xStandard;
+                if ( xParagraphStyles.is() )
+                    xParagraphStyles->getByName("Standard") >>= xStandard;
+                if ( xStandard.is() )
+                {
+                    sal_Int16 aWritingMode;
+                    xStandard->getPropertyValue( getPropertyName(PROP_WRITING_MODE) ) >>= aWritingMode;
+                    if( aWritingMode == text::WritingMode2::RL_TB )
+                        Insert( PROP_FOOTNOTE_LINE_ADJUST, uno::makeAny( sal_Int16(text::HorizontalAdjust_RIGHT) ), false );
+                    else
+                        Insert( PROP_FOOTNOTE_LINE_ADJUST, uno::makeAny( sal_Int16(text::HorizontalAdjust_LEFT) ), false );
+                }
+            }
+        }
+        catch ( const uno::Exception& ) {}
     }
 
     /*** if headers/footers are available then the top/bottom margins of the
