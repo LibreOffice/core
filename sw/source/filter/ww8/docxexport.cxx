@@ -1463,6 +1463,12 @@ void DocxExport::WriteMainText()
     m_pDocumentFS->endElementNS( XML_w, XML_document );
 }
 
+void DocxExport::SectionBreaksAndFrames( const SwTextNode& rNode )
+{
+    // output page/section breaks
+    OutputSectionBreaks( rNode.GetpSwAttrSet(), rNode );
+}
+
 XFastAttributeListRef DocxExport::MainXmlNamespaces()
 {
     FastAttributeList* pAttr = FastSerializerHelper::createAttrList();

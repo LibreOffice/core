@@ -206,7 +206,7 @@ protected:
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum ) override;
 
-    virtual void SectionBreaksAndFrames( const SwTextNode& /*rNode*/ ) override {}
+    virtual void SectionBreaksAndFrames( const SwTextNode& /*rNode*/ ) override;
 
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
