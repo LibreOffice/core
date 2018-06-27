@@ -167,7 +167,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     {
         SCROW nMaxRow;
         SCCOL nMaxCol;
-        GetAreaSize( m_pDoc, nTab1, nTab2, nMaxRow, nMaxCol );
+        GetAreaSize( m_pDoc.get(), nTab1, nTab2, nMaxRow, nMaxCol );
         if( nMaxRow < nRow2 )
             nRow2 = nMaxRow;
         if( nMaxCol < nCol2 )
@@ -193,7 +193,7 @@ ScTransferObj::~ScTransferObj()
         pScMod->ResetDragObject();
     }
 
-    delete m_pDoc;        // ScTransferObj is owner of clipboard document
+    m_pDoc.reset();        // ScTransferObj is owner of clipboard document
 
     m_aDocShellRef.clear();   // before releasing the mutex
 
@@ -277,7 +277,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 sal_uInt32 nNumFmt = pPattern->GetNumberFormat(pFormatter);
                 OUString aText;
                 Color* pColor;
-                ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, m_pDoc);
+                ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, m_pDoc.get());
                 if (!aText.isEmpty())
                     aEngine.SetText(aText);
             }
@@ -313,7 +313,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 aReducedBlock = ScRange(aStartCol, aStartRow, aReducedBlock.aStart.Tab(), aEndCol, aEndRow, aReducedBlock.aEnd.Tab());
             }
 
-            ScImportExport aObj( m_pDoc, aReducedBlock );
+            ScImportExport aObj( m_pDoc.get(), aReducedBlock );
             // Plain text ("Unformatted text") may contain embedded tabs and
             // line breaks but is not enclosed in quotes. Which makes it
             // unsuitable for multiple cells, especially if one of them is
@@ -369,7 +369,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             ScopedVclPtrInstance< VirtualDevice > pVirtDev;
             pVirtDev->SetOutputSizePixel(pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM)));
 
-            PaintToDev( pVirtDev, m_pDoc, 1.0, m_aBlock );
+            PaintToDev( pVirtDev, m_pDoc.get(), 1.0, m_aBlock );
 
             pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel ) );
             BitmapEx aBmp = pVirtDev->GetBitmapEx( Point(), pVirtDev->GetOutputSize() );
@@ -646,7 +646,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         m_pDoc->GetName( m_aBlock.aStart.Tab(), aTabName );
         rDestDoc.RenameTab( 0, aTabName );
 
-        rDestDoc.CopyStdStylesFrom( m_pDoc );
+        rDestDoc.CopyStdStylesFrom( m_pDoc.get() );
 
         SCCOL nStartX = m_aBlock.aStart.Col();
         SCROW nStartY = m_aBlock.aStart.Row();
@@ -690,10 +690,10 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         bool bWasCut = m_pDoc->IsCutMode();
         if (!bWasCut)
             m_pDoc->SetClipArea( aDestRange, true );          // Cut
-        rDestDoc.CopyFromClip( aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, m_pDoc, false );
+        rDestDoc.CopyFromClip( aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, m_pDoc.get(), false );
         m_pDoc->SetClipArea( aDestRange, bWasCut );
 
-        StripRefs( m_pDoc, nStartX,nStartY, nEndX,nEndY, &rDestDoc );
+        StripRefs( m_pDoc.get(), nStartX,nStartY, nEndX,nEndY, &rDestDoc );
 
         ScRange aMergeRange = aDestRange;
         rDestDoc.ExtendMerge( aMergeRange, true );

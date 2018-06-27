@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
 class ScTransferObj : public TransferableHelper
 {
 private:
-    ScDocument*                     m_pDoc;
+    std::unique_ptr<ScDocument>     m_pDoc;
     ScRange                         m_aBlock;
     SCROW                           m_nNonFiltered;       // non-filtered rows
     TransferableObjectDescriptor    m_aObjDesc;
@@ -78,7 +78,7 @@ public:
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
-    ScDocument*         GetDocument() const     { return m_pDoc; }        // owned by ScTransferObj
+    ScDocument*         GetDocument() const     { return m_pDoc.get(); }        // owned by ScTransferObj
     const ScRange&      GetRange() const        { return m_aBlock; }
     SCROW               GetNonFilteredRows() const { return m_nNonFiltered; }
     SCCOL               GetDragHandleX() const  { return m_nDragHandleX; }
