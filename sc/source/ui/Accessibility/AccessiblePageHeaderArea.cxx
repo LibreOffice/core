@@ -80,11 +80,8 @@ void SAL_CALL ScAccessiblePageHeaderArea::disposing()
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = nullptr;
     }
-    if (mpTextHelper)
-        DELETEZ(mpTextHelper);
-    if (mpEditObj)
-        DELETEZ(mpEditObj);
-
+    mpTextHelper.reset();
+    mpEditObj.reset();
     ScAccessibleContextBase::disposing();
 }
 
@@ -281,10 +278,10 @@ void ScAccessiblePageHeaderArea::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(
+        mpTextHelper.reset( new ::accessibility::AccessibleTextHelper(
             o3tl::make_unique<ScAccessibilityEditSource>(
                 o3tl::make_unique<ScAccessibleHeaderTextData>(
-                    mpViewShell, mpEditObj, mbHeader, meAdjust)));
+                    mpViewShell, mpEditObj.get(), mbHeader, meAdjust))) );
         mpTextHelper->SetEventSource(this);
     }
 }
