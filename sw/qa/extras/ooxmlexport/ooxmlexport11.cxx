@@ -84,6 +84,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112694, "tdf112694.docx")
     CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, "HeaderIsOn"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf118361_RTLfootnoteSeparator, "tdf118361_RTLfootnoteSeparator.docx")
+{
+    uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote separator RTL", sal_Int16(2), getProperty<sal_Int16>(aPageStyle, "FootnoteLineAdjust"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf115861, "tdf115861.docx")
 {
     // Second item in the paragraph enumeration was a table, 2nd paragraph was
