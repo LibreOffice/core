@@ -1309,8 +1309,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( nFormat != SotClipboardFormatId::NONE )
                 {
-                    bool bCells = ( ScTransferObj::GetOwnClipboard(GetViewData()->GetViewShell()->GetClipData()) != nullptr );
-                    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(GetViewData()->GetViewShell()->GetClipData()) != nullptr );
+                    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(GetViewData()->GetActiveWin()));
+                    bool bCells = ( ScTransferObj::GetOwnClipboard(xTransferable) != nullptr );
+                    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(xTransferable) != nullptr );
                     bool bOle = ( nFormat == SotClipboardFormatId::EMBED_SOURCE );
 
                     if ( bCells && bOle )
@@ -1337,7 +1338,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 bool bOtherDoc = !pDoc->IsClipboardSource();
                 // keep a reference in case the clipboard is changed during dialog or PasteFromClip
-                const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(GetViewData()->GetViewShell()->GetClipData());
+                const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData()->GetActiveWin()));
                 if ( pOwnClip )
                 {
                     bool bSkipEmpty = false;
@@ -1524,7 +1525,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_PASTE_ONLY_TEXT:
         case SID_PASTE_ONLY_FORMULA:
         {
-            if ( ScTransferObj::GetOwnClipboard(GetViewData()->GetViewShell()->GetClipData()) )  // own cell data
+            if ( ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData()->GetActiveWin())) )  // own cell data
             {
                 rReq.SetSlot( FID_INS_CELL_CONTENTS );
                 OUString aFlags;
@@ -1548,6 +1549,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // this makes FID_INS_CELL_CONTENTS superfluous
             {
                 vcl::Window* pWin = GetViewData()->GetActiveWin();
+                css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(pWin));
 
                 //  Clipboard-ID given as parameter? Basic "PasteSpecial(Format)"
                 const SfxPoolItem* pItem=nullptr;
@@ -1559,7 +1561,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bool bRet=true;
                     {
                         WaitObject aWait( GetViewData()->GetDialogParent() );
-                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(GetViewData()->GetViewShell()->GetClipData()) != nullptr );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(xTransferable) != nullptr );
                         if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
                         else
@@ -1578,7 +1580,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( !pItem )
                 {
-                    if ( ScTransferObj::GetOwnClipboard(GetViewData()->GetViewShell()->GetClipData()) )  // own cell data
+                    if ( ScTransferObj::GetOwnClipboard(xTransferable) )  // own cell data
                     {
                         rReq.SetSlot( FID_INS_CELL_CONTENTS );
                         ExecuteSlot( rReq, GetInterface() );
@@ -1586,7 +1588,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else                                    // draw objects or external data
                     {
-                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(GetViewData()->GetViewShell()->GetClipData()) != nullptr );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(xTransferable) != nullptr );
 
                         SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         GetPossibleClipboardFormats( aFormats );

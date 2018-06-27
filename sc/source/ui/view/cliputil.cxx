@@ -46,7 +46,7 @@ bool lcl_checkClassification(ScDocument* pSourceDoc, const ScDocument* pDestinat
 
 void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
 {
-    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(pTabViewShell->GetClipData());
+    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pViewData->GetActiveWin()));
     ScDocument* pThisDoc = pViewData->GetDocument();
     ScDPObject* pDPObj = pThisDoc->GetDPAtCursor( pViewData->GetCurX(),
                          pViewData->GetCurY(), pViewData->GetTabNo() );
