@@ -452,6 +452,35 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
              */
             if ( isCellOpen && ( m_pAktPageDesc->GetName() != pPageDesc->GetName() ) )
                 pSet = nullptr;
+
+            // tdf#118393: FILESAVE: DOCX Export loses header/footer
+            {
+                bool bPlausableSingleWordSection = sw::util::IsPlausableSingleWordSection(m_pAktPageDesc->GetFirstMaster(), pPageDesc->GetMaster());
+
+                {
+                    const SwFrameFormat& rTitleFormat = m_pAktPageDesc->GetFirstMaster();
+                    const SwFrameFormat& rFollowFormat = pPageDesc->GetMaster();
+
+                    auto pHeaderFormat1 = rTitleFormat.GetHeader().GetHeaderFormat();
+                    auto pHeaderFormat2 = rFollowFormat.GetHeader().GetHeaderFormat();
+
+                    if (pHeaderFormat1 != pHeaderFormat2)
+                        bPlausableSingleWordSection = false;
+
+                    auto pFooterFormat1 = rTitleFormat.GetFooter().GetFooterFormat();
+                    auto pFooterFormat2 = rFollowFormat.GetFooter().GetFooterFormat();
+
+                    if (pFooterFormat1 != pFooterFormat2)
+                        bPlausableSingleWordSection = false;
+                }
+
+                if ( !bPlausableSingleWordSection && m_bFirstTOCNodeWithSection )
+                {
+                    bBreakSet = false;
+                    bNewPageDesc = true;
+                    m_pAktPageDesc = pPageDesc;
+                }
+            }
         }
         else if (!sw::util::IsPlausableSingleWordSection(m_pAktPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
         {
