@@ -74,8 +74,7 @@ void SAL_CALL ScAccessiblePreviewCell::disposing()
         mpViewShell = nullptr;
     }
 
-    if (mpTextHelper)
-        DELETEZ(mpTextHelper);
+    mpTextHelper.reset();
 
     ScAccessibleCellBase::disposing();
 }
@@ -271,10 +270,10 @@ void ScAccessiblePreviewCell::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(
+        mpTextHelper.reset( new ::accessibility::AccessibleTextHelper(
             o3tl::make_unique<ScAccessibilityEditSource>(
                 o3tl::make_unique<ScAccessiblePreviewCellTextData>(
-                    mpViewShell, maCellAddress)));
+                    mpViewShell, maCellAddress))) );
         mpTextHelper->SetEventSource( this );
 
         // paragraphs in preview are transient
