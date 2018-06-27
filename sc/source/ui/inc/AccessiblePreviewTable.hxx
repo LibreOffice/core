@@ -124,7 +124,7 @@ protected:
 private:
     ScPreviewShell*     mpViewShell;
     sal_Int32           mnIndex;
-    mutable ScPreviewTableInfo* mpTableInfo;
+    mutable std::unique_ptr<ScPreviewTableInfo> mpTableInfo;
 
     bool IsDefunc(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
