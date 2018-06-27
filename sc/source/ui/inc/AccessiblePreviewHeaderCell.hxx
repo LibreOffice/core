@@ -119,7 +119,7 @@ private:
     ScAddress           maCellPos;
     bool                mbColumnHeader;
     bool                mbRowHeader;
-    mutable ScPreviewTableInfo* mpTableInfo;
+    mutable std::unique_ptr<ScPreviewTableInfo> mpTableInfo;
 
     bool IsDefunc(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);

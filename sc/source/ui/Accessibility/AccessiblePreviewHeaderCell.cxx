@@ -87,8 +87,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
         mpViewShell = nullptr;
     }
 
-       if (mpTableInfo)
-        DELETEZ (mpTableInfo);
+    mpTableInfo.reset();
 
     ScAccessibleContextBase::disposing();
 }
@@ -107,7 +106,7 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     {
         //  column / row layout may change with any document change,
         //  so it must be invalidated
-        DELETEZ( mpTableInfo );
+        mpTableInfo.reset();
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);
@@ -404,7 +403,7 @@ void ScAccessiblePreviewHeaderCell::FillTableInfo() const
             aOutputSize = pWindow->GetOutputSizePixel();
         tools::Rectangle aVisRect( Point(), aOutputSize );
 
-        mpTableInfo = new ScPreviewTableInfo;
+        mpTableInfo.reset( new ScPreviewTableInfo );
         mpViewShell->GetLocationData().GetTableInfo( aVisRect, *mpTableInfo );
     }
 }
