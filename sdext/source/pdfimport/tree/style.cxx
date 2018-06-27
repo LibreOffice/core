@@ -53,22 +53,22 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     if( it != m_aStyleToId.end() )
     {
         nRet = it->second;
-        HashedStyle& rFound = m_aIdToStyle[ nRet ];
+        RefCountedHashedStyle& rFound = m_aIdToStyle[ nRet ];
         // increase refcount on this style
         rFound.RefCount++;
         if( ! bSubStyle )
-            rFound.IsSubStyle = false;
+            rFound.style.IsSubStyle = false;
     }
     else
     {
         nRet = m_nNextId++;
         // create new style
-        HashedStyle& rNew = m_aIdToStyle[ nRet ];
-        rNew = aSearchStyle;
+        RefCountedHashedStyle& rNew = m_aIdToStyle[ nRet ];
+        rNew.style = aSearchStyle;
         rNew.RefCount           = 1;
-        rNew.IsSubStyle         = bSubStyle;
+        rNew.style.IsSubStyle         = bSubStyle;
         // fill the style hash to find the id
-        m_aStyleToId[ rNew ] = nRet;
+        m_aStyleToId[ rNew.style ] = nRet;
     }
     return nRet;
 }
@@ -85,15 +85,15 @@ sal_Int32 StyleContainer::getStandardStyleId( const OString& rName )
 
 const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
 {
-    std::unordered_map< sal_Int32, HashedStyle >::const_iterator it =
+    std::unordered_map< sal_Int32, RefCountedHashedStyle >::const_iterator it =
         m_aIdToStyle.find( nStyleId );
-    return it != m_aIdToStyle.end() ? &(it->second.Properties) : nullptr;
+    return it != m_aIdToStyle.end() ? &(it->second.style.Properties) : nullptr;
 }
 
 sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& rNewProps )
 {
     sal_Int32 nRet = -1;
-    std::unordered_map< sal_Int32, HashedStyle >::iterator it =
+    std::unordered_map< sal_Int32, RefCountedHashedStyle >::iterator it =
         m_aIdToStyle.find( nStyleId );
     if( it != m_aIdToStyle.end() )
     {
@@ -101,11 +101,11 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
         {
             nRet = it->first;
             // erase old hash to id mapping
-            m_aStyleToId.erase( it->second );
+            m_aStyleToId.erase( it->second.style );
             // change properties
-            it->second.Properties = rNewProps;
+            it->second.style.Properties = rNewProps;
             // fill in new hash to id mapping
-            m_aStyleToId[ it->second ] = nRet;
+            m_aStyleToId[ it->second.style ] = nRet;
         }
         else
         {
@@ -113,12 +113,12 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
             it->second.RefCount--;
             // acquire new HashedStyle
             HashedStyle aSearchStyle;
-            aSearchStyle.Name                   = it->second.Name;
+            aSearchStyle.Name                   = it->second.style.Name;
             aSearchStyle.Properties             = rNewProps;
-            aSearchStyle.Contents               = it->second.Contents;
-            aSearchStyle.ContainedElement       = it->second.ContainedElement;
-            aSearchStyle.SubStyles              = it->second.SubStyles;
-            aSearchStyle.IsSubStyle             = it->second.IsSubStyle;
+            aSearchStyle.Contents               = it->second.style.Contents;
+            aSearchStyle.ContainedElement       = it->second.style.ContainedElement;
+            aSearchStyle.SubStyles              = it->second.style.SubStyles;
+            aSearchStyle.IsSubStyle             = it->second.style.IsSubStyle;
 
             // find out whether this new style already exists
             std::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator new_it =
@@ -132,8 +132,8 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
             {
                 nRet = m_nNextId++;
                 // create new style with new id
-                HashedStyle& rNew = m_aIdToStyle[ nRet ];
-                rNew = aSearchStyle;
+                RefCountedHashedStyle& rNew = m_aIdToStyle[ nRet ];
+                rNew.style = aSearchStyle;
                 rNew.RefCount = 1;
                 // fill style to id hash
                 m_aStyleToId[ aSearchStyle ] = nRet;
@@ -147,11 +147,11 @@ OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
 {
     OUStringBuffer aRet( 64 );
 
-    std::unordered_map< sal_Int32, HashedStyle >::const_iterator style_it =
+    std::unordered_map< sal_Int32, RefCountedHashedStyle >::const_iterator style_it =
         m_aIdToStyle.find( nStyle );
     if( style_it != m_aIdToStyle.end() )
     {
-        const HashedStyle& rStyle = style_it->second;
+        const HashedStyle& rStyle = style_it->second.style;
 
         PropertyMap::const_iterator name_it = rStyle.Properties.find( "style:name" );
         if( name_it != rStyle.Properties.end() )
@@ -184,10 +184,10 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
                                      EmitContext&        rContext,
                                      ElementTreeVisitor& rContainedElemVisitor )
 {
-    std::unordered_map< sal_Int32, HashedStyle >::const_iterator it = m_aIdToStyle.find( nStyleId );
+    std::unordered_map< sal_Int32, RefCountedHashedStyle >::const_iterator it = m_aIdToStyle.find( nStyleId );
     if( it != m_aIdToStyle.end() )
     {
-        const HashedStyle& rStyle = it->second;
+        const HashedStyle& rStyle = it->second.style;
             PropertyMap aProps( rStyle.Properties );
         if( !rStyle.IsSubStyle )
             aProps[ "style:name" ] = getStyleName( nStyleId );
@@ -210,12 +210,12 @@ void StyleContainer::emit( EmitContext&        rContext,
                            ElementTreeVisitor& rContainedElemVisitor )
 {
     std::vector< sal_Int32 > aMasterPageSection, aAutomaticStyleSection, aOfficeStyleSection;
-    for( std::unordered_map< sal_Int32, HashedStyle >::iterator it = m_aIdToStyle.begin();
+    for( std::unordered_map< sal_Int32, RefCountedHashedStyle >::iterator it = m_aIdToStyle.begin();
          it != m_aIdToStyle.end(); ++it )
     {
-        if( ! it->second.IsSubStyle )
+        if( ! it->second.style.IsSubStyle )
         {
-            if( it->second.Name == "style:master-page" )
+            if( it->second.style.Name == "style:master-page" )
                 aMasterPageSection.push_back( it->first );
             else if( getStyleName( it->first ) == "standard" )
                 aOfficeStyleSection.push_back( it->first );
