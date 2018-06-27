@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a22e58a_e8ee42eb",
+        "filename": "framework/source/fwe/classes/addonsoptions.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-27T13:00:12Z",
+      "side": 1,
+      "message": "We have now 8 elements, but this define wasn\u0027t adapted.",
+      "revId": "bb34af420963f6410822f83dd212d9c3f3081174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a22e58a_48b4b6f1",
+        "filename": "offapi/com/sun/star/ui/ItemStyle.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-06-27T13:00:12Z",
+      "side": 1,
+      "message": "sufficient",
+      "range": {
+        "startLine": 154,
+        "startChar": 21,
+        "endLine": 154,
+        "endChar": 31
+      },
+      "revId": "bb34af420963f6410822f83dd212d9c3f3081174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
