@@ -989,7 +989,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     sal_uLong nRstLnNum =  pSet ? static_cast<const SwFormatLineNumber&>(pSet->Get( RES_LINENUMBER )).GetStartValue() : 0;
 
     const SwTableNode* pTableNd = rExport.m_pCurPam->GetNode().FindTableNode();
-    const SwSectionNode* pSectNd;
+    const SwSectionNode* pSectNd = nullptr;
     if ( pTableNd )
     {
         pSet = &pTableNd->GetTable().GetFrameFormat()->GetAttrSet();
@@ -1013,7 +1013,12 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
             pFormat = pSectNd->GetSection().GetFormat();
     }
 
-    // Hole evtl. Pagedesc des 1. Nodes
+    // tdf#118393: FILESAVE: DOCX Export loses header/footer
+    rExport.m_bFirstTOCNodeWithSection = pSectNd &&
+        (   TOX_HEADER_SECTION  == pSectNd->GetSection().GetType() ||
+            TOX_CONTENT_SECTION == pSectNd->GetSection().GetType()  );
+
+    // Try to get page descriptor of the first node
     if ( pSet &&
          SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
          static_cast<const SwFormatPageDesc*>(pI)->GetPageDesc() )
