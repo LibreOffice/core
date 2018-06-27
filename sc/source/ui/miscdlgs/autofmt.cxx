@@ -90,7 +90,7 @@ ScAutoFmtPreview::~ScAutoFmtPreview()
 
 void ScAutoFmtPreview::dispose()
 {
-    delete pNumFmt;
+    pNumFmt.reset();
     vcl::Window::dispose();
 }
 
