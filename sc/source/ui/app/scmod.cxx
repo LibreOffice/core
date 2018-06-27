@@ -175,10 +175,10 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     // Create ErrorHandler - was in Init()
     // Between OfficeApplication::Init and ScGlobal::Init
     SvxErrorHandler::ensure();
-    m_pErrorHdl    = new SfxErrorHandler(RID_ERRHDLSC,
+    m_pErrorHdl.reset( new SfxErrorHandler(RID_ERRHDLSC,
                                        ErrCodeArea::Sc,
                                        ErrCodeArea::Sc,
-                                       GetResLocale());
+                                       GetResLocale()) );
 
     m_aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );
 
@@ -202,10 +202,10 @@ ScModule::~ScModule()
 
     SfxItemPool::Free(m_pMessagePool);
 
-    DELETEZ( m_pFormEditData );
+    m_pFormEditData.reset();
 
-    delete m_pDragData;
-    delete m_pErrorHdl;
+    m_pDragData.reset();
+    m_pErrorHdl.reset();
 
     ScGlobal::Clear(); // Also calls ScDocumentPool::DeleteVersionMaps();
 
@@ -214,7 +214,7 @@ ScModule::~ScModule()
 
 void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, ConfigurationHints )
 {
-    if ( p == m_pColorConfig || p == m_pAccessOptions )
+    if ( p == m_pColorConfig.get() || p == m_pAccessOptions.get() )
     {
         // Test if detective objects have to be updated with new colors
         // (if the detective colors haven't been used yet, there's nothing to update)
@@ -271,7 +271,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }
     }
-    else if ( p == m_pCTLOptions )
+    else if ( p == m_pCTLOptions.get() )
     {
         // for all documents: set digit language for printer, recalc output factor, update row heights
         SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
@@ -331,35 +331,32 @@ void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void ScModule::DeleteCfg()
 {
-    DELETEZ( m_pViewCfg ); // Saving happens automatically before Exit()
-    DELETEZ( m_pDocCfg );
-    DELETEZ( m_pAppCfg );
-    DELETEZ( m_pDefaultsCfg );
-    DELETEZ( m_pFormulaCfg );
-    DELETEZ( m_pInputCfg );
-    DELETEZ( m_pPrintCfg );
-    DELETEZ( m_pNavipiCfg );
-    DELETEZ( m_pAddInCfg );
+    m_pViewCfg.reset(); // Saving happens automatically before Exit()
+    m_pDocCfg.reset();
+    m_pAppCfg.reset();
+    m_pDefaultsCfg.reset();
+    m_pFormulaCfg.reset();
+    m_pInputCfg.reset();
+    m_pPrintCfg.reset();
+    m_pNavipiCfg.reset();
+    m_pAddInCfg.reset();
 
     if ( m_pColorConfig )
     {
         m_pColorConfig->RemoveListener(this);
-        DELETEZ( m_pColorConfig );
+        m_pColorConfig.reset();
     }
     if ( m_pAccessOptions )
     {
         m_pAccessOptions->RemoveListener(this);
-        DELETEZ( m_pAccessOptions );
+        m_pAccessOptions.reset();
     }
     if ( m_pCTLOptions )
     {
         m_pCTLOptions->RemoveListener(this);
-        DELETEZ( m_pCTLOptions );
+        m_pCTLOptions.reset();
     }
-    if( m_pUserOptions )
-    {
-        DELETEZ( m_pUserOptions );
-    }
+    m_pUserOptions.reset();
 }
 
 // Moved here from the App
@@ -667,18 +664,18 @@ void ScModule::SetSelectionTransfer( ScSelectionTransferObj* pNew )
 
 void ScModule::InitFormEditData()
 {
-    m_pFormEditData = new ScFormEditData;
+    m_pFormEditData.reset( new ScFormEditData );
 }
 
 void ScModule::ClearFormEditData()
 {
-    DELETEZ( m_pFormEditData );
+    m_pFormEditData.reset();
 }
 
 void ScModule::SetViewOptions( const ScViewOptions& rOpt )
 {
     if ( !m_pViewCfg )
-        m_pViewCfg = new ScViewCfg;
+        m_pViewCfg.reset(new ScViewCfg);
 
     m_pViewCfg->SetOptions( rOpt );
 }
@@ -686,7 +683,7 @@ void ScModule::SetViewOptions( const ScViewOptions& rOpt )
 const ScViewOptions& ScModule::GetViewOptions()
 {
     if ( !m_pViewCfg )
-        m_pViewCfg = new ScViewCfg;
+        m_pViewCfg.reset( new ScViewCfg );
 
     return *m_pViewCfg;
 }
@@ -694,7 +691,7 @@ const ScViewOptions& ScModule::GetViewOptions()
 void ScModule::SetDocOptions( const ScDocOptions& rOpt )
 {
     if ( !m_pDocCfg )
-        m_pDocCfg = new ScDocCfg;
+        m_pDocCfg.reset( new ScDocCfg );
 
     m_pDocCfg->SetOptions( rOpt );
 }
@@ -702,7 +699,7 @@ void ScModule::SetDocOptions( const ScDocOptions& rOpt )
 const ScDocOptions& ScModule::GetDocOptions()
 {
     if ( !m_pDocCfg )
-        m_pDocCfg = new ScDocCfg;
+        m_pDocCfg.reset( new ScDocCfg );
 
     return *m_pDocCfg;
 }
@@ -746,7 +743,7 @@ void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
 void ScModule::SetAppOptions( const ScAppOptions& rOpt )
 {
     if ( !m_pAppCfg )
-        m_pAppCfg = new ScAppCfg;
+        m_pAppCfg.reset( new ScAppCfg );
 
     m_pAppCfg->SetOptions( rOpt );
 }
@@ -759,7 +756,7 @@ void global_InitAppOptions()
 const ScAppOptions& ScModule::GetAppOptions()
 {
     if ( !m_pAppCfg )
-        m_pAppCfg = new ScAppCfg;
+        m_pAppCfg.reset( new ScAppCfg );
 
     return *m_pAppCfg;
 }
@@ -767,7 +764,7 @@ const ScAppOptions& ScModule::GetAppOptions()
 void ScModule::SetDefaultsOptions( const ScDefaultsOptions& rOpt )
 {
     if ( !m_pDefaultsCfg )
-        m_pDefaultsCfg = new ScDefaultsCfg;
+        m_pDefaultsCfg.reset( new ScDefaultsCfg );
 
     m_pDefaultsCfg->SetOptions( rOpt );
 }
@@ -775,7 +772,7 @@ void ScModule::SetDefaultsOptions( const ScDefaultsOptions& rOpt )
 const ScDefaultsOptions& ScModule::GetDefaultsOptions()
 {
     if ( !m_pDefaultsCfg )
-        m_pDefaultsCfg = new ScDefaultsCfg;
+        m_pDefaultsCfg.reset( new ScDefaultsCfg );
 
     return *m_pDefaultsCfg;
 }
@@ -783,7 +780,7 @@ const ScDefaultsOptions& ScModule::GetDefaultsOptions()
 void ScModule::SetFormulaOptions( const ScFormulaOptions& rOpt )
 {
     if ( !m_pFormulaCfg )
-        m_pFormulaCfg = new ScFormulaCfg;
+        m_pFormulaCfg.reset( new ScFormulaCfg );
 
     m_pFormulaCfg->SetOptions( rOpt );
 }
@@ -791,7 +788,7 @@ void ScModule::SetFormulaOptions( const ScFormulaOptions& rOpt )
 const ScFormulaOptions& ScModule::GetFormulaOptions()
 {
     if ( !m_pFormulaCfg )
-        m_pFormulaCfg = new ScFormulaCfg;
+        m_pFormulaCfg.reset( new ScFormulaCfg );
 
     return *m_pFormulaCfg;
 }
@@ -799,7 +796,7 @@ const ScFormulaOptions& ScModule::GetFormulaOptions()
 void ScModule::SetInputOptions( const ScInputOptions& rOpt )
 {
     if ( !m_pInputCfg )
-        m_pInputCfg = new ScInputCfg;
+        m_pInputCfg.reset( new ScInputCfg );
 
     m_pInputCfg->SetOptions( rOpt );
 }
@@ -807,7 +804,7 @@ void ScModule::SetInputOptions( const ScInputOptions& rOpt )
 const ScInputOptions& ScModule::GetInputOptions()
 {
     if ( !m_pInputCfg )
-        m_pInputCfg = new ScInputCfg;
+        m_pInputCfg.reset( new ScInputCfg );
 
     return *m_pInputCfg;
 }
@@ -815,7 +812,7 @@ const ScInputOptions& ScModule::GetInputOptions()
 void ScModule::SetPrintOptions( const ScPrintOptions& rOpt )
 {
     if ( !m_pPrintCfg )
-        m_pPrintCfg = new ScPrintCfg;
+        m_pPrintCfg.reset( new ScPrintCfg );
 
     m_pPrintCfg->SetOptions( rOpt );
 }
@@ -823,7 +820,7 @@ void ScModule::SetPrintOptions( const ScPrintOptions& rOpt )
 const ScPrintOptions& ScModule::GetPrintOptions()
 {
     if ( !m_pPrintCfg )
-        m_pPrintCfg = new ScPrintCfg;
+        m_pPrintCfg.reset( new ScPrintCfg );
 
     return *m_pPrintCfg;
 }
@@ -831,7 +828,7 @@ const ScPrintOptions& ScModule::GetPrintOptions()
 ScNavipiCfg& ScModule::GetNavipiCfg()
 {
     if ( !m_pNavipiCfg )
-        m_pNavipiCfg = new ScNavipiCfg;
+        m_pNavipiCfg.reset( new ScNavipiCfg );
 
     return *m_pNavipiCfg;
 }
@@ -839,7 +836,7 @@ ScNavipiCfg& ScModule::GetNavipiCfg()
 ScAddInCfg& ScModule::GetAddInCfg()
 {
     if ( !m_pAddInCfg )
-        m_pAddInCfg = new ScAddInCfg;
+        m_pAddInCfg.reset( new ScAddInCfg );
 
     return *m_pAddInCfg;
 }
@@ -848,7 +845,7 @@ svtools::ColorConfig& ScModule::GetColorConfig()
 {
     if ( !m_pColorConfig )
     {
-        m_pColorConfig = new svtools::ColorConfig;
+        m_pColorConfig.reset( new svtools::ColorConfig );
         m_pColorConfig->AddListener(this);
     }
 
@@ -859,7 +856,7 @@ SvtAccessibilityOptions& ScModule::GetAccessOptions()
 {
     if ( !m_pAccessOptions )
     {
-        m_pAccessOptions = new SvtAccessibilityOptions;
+        m_pAccessOptions.reset( new SvtAccessibilityOptions );
         m_pAccessOptions->AddListener(this);
     }
 
@@ -870,7 +867,7 @@ SvtCTLOptions& ScModule::GetCTLOptions()
 {
     if ( !m_pCTLOptions )
     {
-        m_pCTLOptions = new SvtCTLOptions;
+        m_pCTLOptions.reset( new SvtCTLOptions );
         m_pCTLOptions->AddListener(this);
     }
 
@@ -881,7 +878,7 @@ SvtUserOptions&  ScModule::GetUserOptions()
 {
     if( !m_pUserOptions )
     {
-        m_pUserOptions = new SvtUserOptions;
+        m_pUserOptions.reset( new SvtUserOptions );
     }
     return *m_pUserOptions;
 }
