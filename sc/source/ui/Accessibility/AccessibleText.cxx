@@ -1439,7 +1439,7 @@ ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
     if (mpEditEngine)
         mpEditEngine->SetNotifyHdl(Link<EENotify&,void>());
     mpEditEngine.reset();
-    delete mpForwarder;
+    mpForwarder.reset();
 }
 
 ScAccessibleTextData* ScAccessibleNoteTextData::Clone() const
@@ -1478,11 +1478,11 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
             mpEditEngine->SetRefDevice(mpDocSh->GetRefDevice());
         else
             mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
-        mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
+        mpForwarder.reset( new SvxEditEngineForwarder(*mpEditEngine) );
     }
 
     if (mbDataValid)
-        return mpForwarder;
+        return mpForwarder.get();
 
     if (!msText.isEmpty())
     {
@@ -1506,7 +1506,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
 
     mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleNoteTextData, NotifyHdl) );
 
-    return mpForwarder;
+    return mpForwarder.get();
 }
 
 SvxViewForwarder* ScAccessibleNoteTextData::GetViewForwarder()
