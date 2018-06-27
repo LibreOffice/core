@@ -447,7 +447,7 @@ static bool lcl_TestFormat( SvxClipboardFormatItem& rFormats, const Transferable
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats )
 {
     vcl::Window* pWin = GetViewData()->GetActiveWin();
-    bool bDraw = ScDrawTransferObj::GetOwnClipboard(GetViewData()->GetViewShell()->GetClipData()) != nullptr;
+    bool bDraw = ScDrawTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pWin)) != nullptr;
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
@@ -478,10 +478,11 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats 
 
 //  insert, insert contents
 
-static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData, ScTabViewShell* pViewShell )
+static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
 {
     bool bPossible = false;
-    if ( ScTransferObj::GetOwnClipboard(pViewShell->GetClipData()) || ScDrawTransferObj::GetOwnClipboard(pViewShell->GetClipData()) )
+    css::uno::Reference< css::datatransfer::XTransferable2 > xTransferable(rData.GetXTransferable(), css::uno::UNO_QUERY);
+    if ( ScTransferObj::GetOwnClipboard(xTransferable) || ScDrawTransferObj::GetOwnClipboard(xTransferable) )
         bPossible = true;
     else
     {
@@ -520,19 +521,7 @@ bool ScCellShell::HasClipboardFormat( SotClipboardFormatId nFormatId )
 
 IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
-    ScTabViewShell* pViewShell = GetViewData()->GetViewShell();
-    css::uno::Reference<css::datatransfer::XTransferable2> xOldTransfer(pViewShell->GetClipData());
-    css::uno::Reference<css::datatransfer::XTransferable2> xNewTransfer(pDataHelper->GetXTransferable(), css::uno::UNO_QUERY);
-
-    if ( xNewTransfer.get() != xOldTransfer.get() )
-    {
-        if ( ScTransferObj::GetOwnClipboard(xNewTransfer) || ScDrawTransferObj::GetOwnClipboard(xNewTransfer) )
-            pViewShell->SetClipData(xNewTransfer);
-        else
-            pViewShell->SetClipData(css::uno::Reference<css::datatransfer::XTransferable2>());
-    }
-
-    bPastePossible = lcl_IsCellPastePossible( *pDataHelper, pViewShell );
+    bPastePossible = lcl_IsCellPastePossible( *pDataHelper );
 
     SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_PASTE );
@@ -567,7 +556,7 @@ bool checkDestRanges(ScViewData& rViewData)
     if (!pWin)
         return false;
 
-    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(rViewData.GetViewShell()->GetClipData());
+    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pWin));
     if (!pOwnClip)
         // If it's not a Calc document, we won't be picky.
         return true;
@@ -606,7 +595,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
-        bPastePossible = lcl_IsCellPastePossible( aDataHelper, GetViewData()->GetViewShell() );
+        bPastePossible = lcl_IsCellPastePossible( aDataHelper );
     }
 
     bool bDisable = !bPastePossible;

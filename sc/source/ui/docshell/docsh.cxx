@@ -2755,24 +2755,11 @@ ScDocFunc *ScDocShell::CreateDocFunc()
 
 ScDocument* ScDocShell::GetClipDoc()
 {
-    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
-
+    vcl::Window* pWin = nullptr;
     if (ScTabViewShell* pViewShell = GetBestViewShell())
-        xTransferable.set(pViewShell->GetClipData());
-    else
-    {
-        SfxViewFrame* pViewFrame = nullptr;
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard;
+        pWin = pViewShell->GetViewData().GetActiveWin();
 
-        if ((pViewFrame = SfxViewFrame::GetFirst(this, false)))
-            xClipboard = pViewFrame->GetWindow().GetClipboard();
-        else if ((pViewFrame = SfxViewFrame::GetFirst()))
-             xClipboard = pViewFrame->GetWindow().GetClipboard();
-
-        xTransferable.set(xClipboard.is() ? xClipboard->getContents() : nullptr, css::uno::UNO_QUERY);
-    }
-
-    const ScTransferObj* pObj = ScTransferObj::GetOwnClipboard(xTransferable);
+    const ScTransferObj* pObj = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pWin));
     if (pObj)
     {
         ScDocument* pDoc = pObj->GetDocument();
