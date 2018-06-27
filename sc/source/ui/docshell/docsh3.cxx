@@ -231,7 +231,7 @@ void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, SCCOL nStartCol, SCROW n
 void ScDocShell::LockPaint_Impl(bool bDoc)
 {
     if ( !m_pPaintLockData )
-        m_pPaintLockData = new ScPaintLockData;
+        m_pPaintLockData.reset( new ScPaintLockData );
     m_pPaintLockData->IncLevel(bDoc);
 }
 
@@ -245,8 +245,8 @@ void ScDocShell::UnlockPaint_Impl(bool bDoc)
         {
             //     Execute Paint now
 
-            ScPaintLockData* pPaint = m_pPaintLockData;
-            m_pPaintLockData = nullptr;                      // don't continue collecting
+            // don't continue collecting
+            std::unique_ptr<ScPaintLockData> pPaint = std::move(m_pPaintLockData);
 
             ScRangeListRef xRangeList = pPaint->GetRangeList();
             if ( xRangeList.is() )
@@ -264,8 +264,6 @@ void ScDocShell::UnlockPaint_Impl(bool bDoc)
 
             if ( pPaint->GetModified() )
                 SetDocumentModified();
-
-            delete pPaint;
         }
     }
     else
@@ -301,7 +299,7 @@ void ScDocShell::SetLockCount(sal_uInt16 nNew)
     if (nNew)                   // set
     {
         if ( !m_pPaintLockData )
-            m_pPaintLockData = new ScPaintLockData;
+            m_pPaintLockData.reset( new ScPaintLockData );
         m_pPaintLockData->SetDocLevel(nNew-1);
         LockDocument_Impl(nNew);
     }

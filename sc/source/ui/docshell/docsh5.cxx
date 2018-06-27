@@ -241,14 +241,13 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 // sheet-local anonymous DBData from pOldAutoDBRange, unset so
                 // that won't happen with data of a previous sheet-local
                 // DBData.
-                delete m_pOldAutoDBRange;
-                m_pOldAutoDBRange = nullptr;
+                m_pOldAutoDBRange.reset();
             }
             else if (!m_pOldAutoDBRange)
             {
                 // store the old unnamed database range with its settings for undo
                 // (store at the first change, get the state before all changes)
-                m_pOldAutoDBRange = new ScDBData( *pNoNameData );
+                m_pOldAutoDBRange.reset( new ScDBData( *pNoNameData ) );
             }
             else if (m_pOldAutoDBRange->GetTab() != pNoNameData->GetTab())
             {
@@ -360,11 +359,9 @@ ScDBData* ScDocShell::GetAnonymousDBData(const ScRange& rRange)
     return pData;
 }
 
-ScDBData* ScDocShell::GetOldAutoDBRange()
+std::unique_ptr<ScDBData> ScDocShell::GetOldAutoDBRange()
 {
-    ScDBData* pRet = m_pOldAutoDBRange;
-    m_pOldAutoDBRange = nullptr;
-    return pRet;                    // has to be deleted by caller!
+    return std::move(m_pOldAutoDBRange);
 }
 
 void ScDocShell::CancelAutoDBRange()
@@ -396,8 +393,7 @@ void ScDocShell::CancelAutoDBRange()
             }
         }
 
-        delete m_pOldAutoDBRange;
-        m_pOldAutoDBRange = nullptr;
+        m_pOldAutoDBRange.reset();
     }
 }
 

@@ -464,7 +464,7 @@ ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal ) :
     ScSimpleUndo( pDocSh ),
     aOriginalRange( rOriginal )
 {
-    pAutoDBRange = pDocSh->GetOldAutoDBRange();
+    pAutoDBRange = pDocSh->GetOldAutoDBRange().release();
 }
 
 ScDBFuncUndo::~ScDBFuncUndo()

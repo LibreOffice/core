@@ -91,8 +91,8 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     OUString            m_aDdeTextFmt;
 
     double              m_nPrtToScreenFactor;
-    DocShell_Impl*      m_pImpl;
-    ScDocFunc*          m_pDocFunc;
+    std::unique_ptr<DocShell_Impl> m_pImpl;
+    std::unique_ptr<ScDocFunc> m_pDocFunc;
 
     bool                m_bHeaderOn;
     bool                m_bFooterOn;
@@ -105,15 +105,15 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     sal_uInt16          m_nDocumentLock;
     sal_Int16           m_nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
 
-    ScDBData*           m_pOldAutoDBRange;
+    std::unique_ptr<ScDBData> m_pOldAutoDBRange;
 
-    ScAutoStyleList*    m_pAutoStyleList;
-    ScPaintLockData*    m_pPaintLockData;
-    ScOptSolverSave*    m_pSolverSaveData;
-    ScSheetSaveData*    m_pSheetSaveData;
-    ScFormatSaveData*   m_pFormatSaveData;
+    std::unique_ptr<ScAutoStyleList>    m_pAutoStyleList;
+    std::unique_ptr<ScPaintLockData>    m_pPaintLockData;
+    std::unique_ptr<ScOptSolverSave>    m_pSolverSaveData;
+    std::unique_ptr<ScSheetSaveData>    m_pSheetSaveData;
+    std::unique_ptr<ScFormatSaveData>   m_pFormatSaveData;
 
-    ScDocShellModificator* m_pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
+    std::unique_ptr<ScDocShellModificator> m_pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
     css::uno::Reference< ooo::vba::excel::XWorkbook> mxAutomationWorkbookObject;
 
@@ -162,7 +162,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
 
     SAL_DLLPRIVATE void          UseSheetSaveEntries();
 
-    SAL_DLLPRIVATE ScDocFunc    *CreateDocFunc();
+    SAL_DLLPRIVATE std::unique_ptr<ScDocFunc> CreateDocFunc();
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -299,7 +299,7 @@ public:
     void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2 );
     ScDBData*       GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel );
     ScDBData*       GetAnonymousDBData(const ScRange& rRange);
-    ScDBData*       GetOldAutoDBRange();    // has to be deleted by caller!
+    std::unique_ptr<ScDBData> GetOldAutoDBRange();
     void            CancelAutoDBRange();    // called when dialog is cancelled
 
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer) override;
@@ -414,8 +414,8 @@ public:
 
     virtual HiddenInformation GetHiddenInformationState( HiddenInformation nStates ) override;
 
-    const ScOptSolverSave* GetSolverSaveData() const    { return m_pSolverSaveData; }     // may be null
-    void            SetSolverSaveData( const ScOptSolverSave& rData );
+    const ScOptSolverSave* GetSolverSaveData() const    { return m_pSolverSaveData.get(); }     // may be null
+    void            SetSolverSaveData( std::unique_ptr<ScOptSolverSave> pData );
     ScSheetSaveData* GetSheetSaveData();
     ScFormatSaveData* GetFormatSaveData();
 
