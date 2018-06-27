@@ -624,7 +624,11 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
 {
     // tell the attribute output that we are ready to write the section
     // break [has to be output inside paragraph properties]
-    AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
+    // Don't insert a page break, when we're changing page style just because the next page has to be a different one.
+    if ( NeedSectionBreak( rNd ) )
+    {
+        AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
+    }
 
     const SwSectionFormat* pFormat = GetSectionFormat( rNd );
     const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
@@ -1461,6 +1465,12 @@ void DocxExport::WriteMainText()
     // finish body and document
     m_pDocumentFS->endElementNS( XML_w, XML_body );
     m_pDocumentFS->endElementNS( XML_w, XML_document );
+}
+
+void DocxExport::SectionBreaksAndFrames( const SwTextNode& rNode )
+{
+    // output page/section breaks
+    OutputSectionBreaks( rNode.GetpSwAttrSet(), rNode );
 }
 
 XFastAttributeListRef DocxExport::MainXmlNamespaces()

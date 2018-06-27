@@ -807,6 +807,9 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
         {
             const SwTextNode* pTextNode = static_cast<SwTextNode*>(&aNextIndex.GetNode());
             m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen, pTextNode->GetText().isEmpty());
+
+            // Save the current page description for now, so later we will be able to access the previous one.
+            m_rExport.m_pCurrentPageDesc = pTextNode->FindPageDesc();
         }
         else if (aNextIndex.GetNode().IsTableNode())
         {
@@ -5916,14 +5919,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                     m_pSectionInfo.reset( new WW8_SepInfo( *pSectionInfo ));
                 }
             }
-            else if ( m_bParagraphOpened )
-            {
-                m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-                m_pSerializer->singleElementNS( XML_w, XML_br,
-                        FSNS( XML_w, XML_type ), "page", FSEND );
-                m_pSerializer->endElementNS( XML_w, XML_r );
-            }
-            else
+            else if ( !m_bParagraphOpened )
                 m_bPostponedPageBreak = true;
 
             break;

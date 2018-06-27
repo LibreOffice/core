@@ -1147,6 +1147,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107111, "tdf107111.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr/w:webHidden", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
+{
+    const OUString result = parseDump("/root/page[2]/header/txt/text()");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), result.compareTo("Seite", 5));
+
+    CPPUNIT_ASSERT_EQUAL( 7, getPages() );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
 {
     uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY_THROW);
