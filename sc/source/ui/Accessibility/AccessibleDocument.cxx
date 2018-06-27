@@ -1417,7 +1417,7 @@ void ScAccessibleDocument::PreInit()
 void ScAccessibleDocument::Init()
 {
     if(!mpChildrenShapes)
-        mpChildrenShapes = new ScChildrenShapes(this, mpViewShell, meSplitPos);
+        mpChildrenShapes.reset( new ScChildrenShapes(this, mpViewShell, meSplitPos) );
 }
 
 ScAccessibleDocument::~ScAccessibleDocument()
@@ -1443,8 +1443,7 @@ void SAL_CALL ScAccessibleDocument::disposing()
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = nullptr;
     }
-    if (mpChildrenShapes)
-        DELETEZ(mpChildrenShapes);
+    mpChildrenShapes.reset();
 
     ScAccessibleDocumentBase::disposing();
 }
@@ -1539,9 +1538,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             // Shapes / form controls after reload not accessible, rebuild the
             // mpChildrenShapes variable.
-            if (mpChildrenShapes)
-                DELETEZ(mpChildrenShapes);
-            mpChildrenShapes = new ScChildrenShapes( this, mpViewShell, meSplitPos );
+            mpChildrenShapes.reset( new ScChildrenShapes( this, mpViewShell, meSplitPos ) );
 
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::INVALIDATE_ALL_CHILDREN;
