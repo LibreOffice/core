@@ -628,7 +628,7 @@ public:
     void finishParagraph( const PropertyMapPtr& pPropertyMap );
     void appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap );
     void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
-    void appendOLE( const OUString& rStreamName, const OLEHandlerPtr& pOleHandler );
+    void appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOleHandler );
     void appendStarMath( const Value& v );
     css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange> const & xBefore);
 

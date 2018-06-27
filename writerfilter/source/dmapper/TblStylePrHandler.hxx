@@ -79,8 +79,6 @@ private:
     void resolveSprmProps(Sprm & rSprm);
 };
 
-typedef std::shared_ptr< TblStylePrHandler > TblStylePrHandlerPtr;
-
 }}
 
 #endif

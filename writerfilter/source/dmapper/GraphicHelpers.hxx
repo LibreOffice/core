@@ -23,8 +23,6 @@
 #include "LoggedResources.hxx"
 #include <com/sun/star/text/WrapTextMode.hpp>
 
-#include <memory>
-#include <map>
 #include <utility>
 
 namespace writerfilter {
@@ -48,7 +46,6 @@ public:
     std::pair<OUString, OUString>& m_rPositionOffsets;
     std::pair<OUString, OUString>& m_rAligns;
 };
-typedef std::shared_ptr<PositionHandler> PositionHandlerPtr;
 
 class WrapHandler: public LoggedProperties
 {

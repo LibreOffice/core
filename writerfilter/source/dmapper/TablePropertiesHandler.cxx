@@ -117,7 +117,7 @@ namespace dmapper {
                             nToken = XML_tableRowDelete;
                             break;
                     };
-                    TrackChangesHandlerPtr pTrackChangesHandler( new TrackChangesHandler( nToken ) );
+                    std::shared_ptr<TrackChangesHandler> pTrackChangesHandler( new TrackChangesHandler( nToken ) );
                     pProperties->resolve(*pTrackChangesHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
 
@@ -148,7 +148,7 @@ namespace dmapper {
                             throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
                             break;
                     };
-                    TrackChangesHandlerPtr pTrackChangesHandler( new TrackChangesHandler( nToken ) );
+                    std::shared_ptr<TrackChangesHandler> pTrackChangesHandler( new TrackChangesHandler( nToken ) );
                     pProperties->resolve(*pTrackChangesHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
 
@@ -206,7 +206,7 @@ namespace dmapper {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    BorderHandlerPtr pBorderHandler(new BorderHandler(true));
+                    std::shared_ptr<BorderHandler> pBorderHandler(new BorderHandler(true));
                     if (m_pCurrentInteropGrabBag)
                         pBorderHandler->enableInteropGrabBag("tblBorders");
                     pProperties->resolve(*pBorderHandler);
@@ -254,7 +254,7 @@ namespace dmapper {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if (pProperties.get())
                     {
-                        CellMarginHandlerPtr pCellMarginHandler(new CellMarginHandler);
+                        std::shared_ptr<CellMarginHandler> pCellMarginHandler(new CellMarginHandler);
                         if (m_pCurrentInteropGrabBag)
                             pCellMarginHandler->enableInteropGrabBag("tcMar");
                         pProperties->resolve(*pCellMarginHandler);
@@ -278,7 +278,7 @@ namespace dmapper {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    CellColorHandlerPtr pCellColorHandler( new CellColorHandler);
+                    std::shared_ptr<CellColorHandler> pCellColorHandler( new CellColorHandler);
                     pProperties->resolve( *pCellColorHandler );
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     insertTableProps( pCellColorHandler->getProperties() );
@@ -292,7 +292,7 @@ namespace dmapper {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
+                    std::shared_ptr<CellColorHandler> pCellColorHandler( new CellColorHandler );
                     pCellColorHandler->enableInteropGrabBag("shd"); //enable to store shd unsupported props in grab bag
                     pProperties->resolve( *pCellColorHandler );
                     TablePropertyMapPtr pPropertyMap = pCellColorHandler->getProperties();
@@ -312,7 +312,7 @@ namespace dmapper {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    CellMarginHandlerPtr pCellMarginHandler( new CellMarginHandler );
+                    std::shared_ptr<CellMarginHandler> pCellMarginHandler( new CellMarginHandler );
                     if (m_pCurrentInteropGrabBag)
                         pCellMarginHandler->enableInteropGrabBag("tblCellMar");
                     pProperties->resolve( *pCellMarginHandler );

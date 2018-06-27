@@ -62,7 +62,6 @@ public:
     void disableInteropGrabBag();
     bool isInteropGrabBagEnabled();
 };
-typedef std::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}
 
 #endif
