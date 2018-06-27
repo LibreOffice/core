@@ -1399,6 +1399,53 @@ DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 }
 
+// Check for correct header/footer with special first page with TOC inside:
+// - DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
+// - DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
+DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
+{
+    CPPUNIT_ASSERT_EQUAL( 7, getPages() );
+
+    // First page has no header/footer
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+
+        // check first page
+        xmlXPathObjectPtr pXmlPage1Header = getXPathNode(pXmlDoc, "/root/page[1]/header");
+        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Header->nodesetval));
+
+        xmlXPathObjectPtr pXmlPage1Footer = getXPathNode(pXmlDoc, "/root/page[1]/footer");
+        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Footer->nodesetval));
+
+        // check second page in the same way
+        xmlXPathObjectPtr pXmlPage2Header = getXPathNode(pXmlDoc, "/root/page[2]/header");
+        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Header->nodesetval));
+
+        xmlXPathObjectPtr pXmlPage2Footer = getXPathNode(pXmlDoc, "/root/page[2]/footer");
+        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Footer->nodesetval));
+   }
+
+    // All other pages should have header/footer
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/footer/txt/text()"));
+}
+
 DECLARE_ODFEXPORT_TEST(testGerrit13858, "gerrit13858.odt")
 {
     // Just make sure the output is valid.

@@ -90,6 +90,53 @@ DECLARE_OOXMLEXPORT_TEST(testFooterBodyDistance, "footer-body-distance.docx")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 }
 
+// Check for correct header/footer with special first page with TOC inside:
+// - DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
+// - DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
+DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
+{
+    CPPUNIT_ASSERT_EQUAL( 7, getPages() );
+
+    // First page has no header/footer
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+
+        // check first page
+        xmlXPathObjectPtr pXmlPage1Header = getXPathNode(pXmlDoc, "/root/page[1]/header");
+        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Header->nodesetval));
+
+        xmlXPathObjectPtr pXmlPage1Footer = getXPathNode(pXmlDoc, "/root/page[1]/footer");
+        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Footer->nodesetval));
+
+        // check second page in the same way
+        xmlXPathObjectPtr pXmlPage2Header = getXPathNode(pXmlDoc, "/root/page[2]/header");
+        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Header->nodesetval));
+
+        xmlXPathObjectPtr pXmlPage2Footer = getXPathNode(pXmlDoc, "/root/page[2]/footer");
+        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Footer->nodesetval));
+   }
+
+    // All other pages should have header/footer
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[2]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[3]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[4]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[5]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[6]/footer/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/footer/txt/text()"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo81031, "fdo81031.docx")
 {
     // vml image was not rendered
@@ -110,6 +157,8 @@ DECLARE_OOXMLEXPORT_TEST(testPlausableBorder, "plausable-border.docx")
     if (xmlDocPtr pXmlDoc = parseExport())
         // Page break was exported as section break, this was 0
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
+
+    CPPUNIT_ASSERT_EQUAL( 2, getPages() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testUnwantedSectionBreak, "unwanted-section-break.docx")
@@ -156,6 +205,8 @@ DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
 {
     // Test import and export of a section's headerf/footerf properties.
     // (copied from a ww8export test, with doc converted to docx using Word)
+
+    CPPUNIT_ASSERT_EQUAL( 6, getPages() );
 
     // The document has 6 pages. Note that we don't test if 4 or just 2 page
     // styles are created, the point is that layout should be correct.
