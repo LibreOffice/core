@@ -674,7 +674,8 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
             switch (Casings[nCasing].eCasing)
             {
                 case CAPITALIZE:
-                    return xCharClass->toTitle(aStr, 0, 1, aLocale) + aStr.copy(1);
+                    return xCharClass->toTitle(aStr, 0, 1, aLocale) +
+                        (aStr.getLength() > 1 ? aStr.copy(1) : OUString());
                 case UPPER:
                     return xCharClass->toUpper(aStr, 0, aStr.getLength(), aLocale);
                 case TITLE:
