@@ -13,12 +13,17 @@
 #include <cmath>
 
 #include <vector>
+#include <atomic>
+#include <iostream>
 #include <fstream>
 #include <osl/time.h>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/optional.hpp>
 
 using namespace lok;
 
@@ -56,8 +61,9 @@ struct TimeRecord {
 static std::vector< TimeRecord > aTimes;
 
 /// Dump an array of RGBA or BGRA to an RGB PPM file.
-static void dumpTile(const int nWidth, const int nHeight, const int mode, const char* pBuffer)
+static void dumpTile(const int nWidth, const int nHeight, const int mode, const unsigned char* pBufferU)
 {
+    auto pBuffer = reinterpret_cast<const char *>(pBufferU);
     std::ofstream ofs("/tmp/dump_tile.ppm");
     ofs << "P6\n"
         << nWidth << " "
@@ -154,7 +160,7 @@ void testTile( Document *pDocument, int max_parts,
                                  nWidth/2, 2000, 1000, 1000); // not square
             aTimes.emplace_back();
             if (dump)
-                dumpTile(nTilePixelWidth, nTilePixelHeight, mode, reinterpret_cast<char*>(pPixels));
+                dumpTile(nTilePixelWidth, nTilePixelHeight, mode, pPixels);
         }
 
         { // 1:1
@@ -210,10 +216,72 @@ void testTile( Document *pDocument, int max_parts,
     }
 }
 
+static std::atomic<bool> bDialogRendered(false);
+static std::atomic<int> nDialogId(-1);
+
+void kitCallback(int nType, const char* pPayload, void* pData)
+{
+    Document *pDocument = static_cast<Document *>(pData);
+
+    if (nType != LOK_CALLBACK_WINDOW)
+        return;
+
+    std::stringstream aStream(pPayload);
+    boost::property_tree::ptree aRoot;
+    boost::property_tree::read_json(aStream, aRoot);
+    nDialogId = aRoot.get<unsigned>("id");
+    const std::string aAction = aRoot.get<std::string>("action");
+
+    if (aAction == "created")
+    {
+        const std::string aType = aRoot.get<std::string>("type");
+        const std::string aSize = aRoot.get<std::string>("size");
+        int nWidth = atoi(aSize.c_str());
+        int nHeight = 400;
+        const char *pComma = strstr(aSize.c_str(), ", ");
+        if (pComma)
+            nHeight = atoi(pComma + 2);
+        std::cerr << "Size " << aSize << " is " << nWidth << ", " << nHeight << "\n";
+
+        if (aType == "dialog")
+        {
+            aTimes.emplace_back(); // complete wait for dialog
+
+            unsigned char *pBuffer = new unsigned char[nWidth * nHeight * 4];
+
+            aTimes.emplace_back("render dialog");
+            pDocument->paintWindow(nDialogId, pBuffer, 0, 0, nWidth, nHeight);
+            dumpTile(nWidth, nHeight, pDocument->getTileMode(), pBuffer);
+            aTimes.emplace_back();
+
+            delete[] pBuffer;
+
+            bDialogRendered = true;
+        }
+    }
+}
+
 void testDialog( Document *pDocument, const char *uno_cmd )
 {
-    fprintf (stderr, "Stress test a dialog...\n");
-    (void)pDocument; (void)uno_cmd;
+    int view = pDocument->createView();
+    pDocument->setView(view);
+    pDocument->registerCallback(kitCallback, pDocument);
+
+    aTimes.emplace_back("open dialog");
+    pDocument->postUnoCommand(uno_cmd, nullptr, true);
+    aTimes.emplace_back();
+
+    aTimes.emplace_back("wait for dialog");
+    while (!bDialogRendered)
+    {
+        usleep (1000);
+    }
+
+    aTimes.emplace_back("post close dialog");
+    pDocument->postWindow(nDialogId, LOK_WINDOW_CLOSE);
+    aTimes.emplace_back();
+
+    pDocument->destroyView(view);
 }
 
 int main( int argc, char* argv[] )
@@ -261,10 +329,22 @@ int main( int argc, char* argv[] )
         }
         else if (!strcmp (mode, "--dialog"))
         {
-            if (argc > 4)
-                testDialog (pDocument, argv[4]);
-            else
-                return help("missing argument to --dialog");
+            const char *uno_cmd = argc > 4 ? argv[4] : nullptr;
+            if (!uno_cmd)
+            {
+                switch (pDocument->getDocumentType())
+                {
+                case LOK_DOCTYPE_SPREADSHEET:
+                    uno_cmd = ".uno:FormatCellDialog";
+                    break;
+                case LOK_DOCTYPE_TEXT:
+                case LOK_DOCTYPE_PRESENTATION:
+                case LOK_DOCTYPE_DRAWING:
+                case LOK_DOCTYPE_OTHER:
+                    return help("missing argument to --dialog and no default");
+                }
+            }
+            testDialog (pDocument, uno_cmd);
         } else
             return help ("unknown parameter");
     }
