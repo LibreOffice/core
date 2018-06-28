@@ -39,7 +39,7 @@
 #include <svx/unoapi.hxx>
 #include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/utils/unotools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 using namespace com::sun::star;
 using namespace ::cppu;
@@ -315,7 +315,7 @@ uno::Reference< uno::XInterface > SvxUnoXLineEndTable_createInstance( XPropertyL
 uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
     drawing::PolyPolygonBezierCoords aBezier;
-    basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd(),
+    basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd(),
                                                           aBezier );
     return uno::Any(aBezier);
 }
@@ -328,7 +328,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXLineEndTable::createEntry(const OUString&
 
     basegfx::B2DPolyPolygon aPolyPolygon;
     if( pCoords->Coordinates.getLength() > 0 )
-        aPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
+        aPolyPolygon = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon( *pCoords );
 
     // #86265# make sure polygon is closed
     aPolyPolygon.setClosed(true);

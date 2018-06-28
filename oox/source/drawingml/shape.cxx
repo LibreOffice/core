@@ -579,17 +579,10 @@ Reference< XShape > const & Shape::createAndInsert(
         bool bIsWriter = xModelInfo->supportsService("com.sun.star.text.TextDocument");
         for( i = 0; i < nNumPoints; ++i )
         {
-            basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );
+            const basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );
 
-            // Guard against zero width or height.
-            if (i)
-            {
-                const basegfx::B2DPoint& rPreviousPoint = aPoly.getB2DPoint(i - 1);
-                if (aPoint.getX() - rPreviousPoint.getX() == 0)
-                    aPoint.setX(aPoint.getX() + 1);
-                if (aPoint.getY() - rPreviousPoint.getY() == 0)
-                    aPoint.setY(aPoint.getY() + 1);
-            }
+            // tdf#106792 Not needed anymore due to the change in SdrPathObj::NbcResize:
+            // tdf#96674: Guard against zero width or height.
 
             if (bIsWriter && bInGroup)
                 // Writer's draw page is in twips, and these points get passed
