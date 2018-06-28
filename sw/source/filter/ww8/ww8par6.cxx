@@ -498,7 +498,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
 
     /* Check whether this section has headers / footers */
     sal_uInt16 nHeaderMask = WW8_HEADER_EVEN | WW8_HEADER_ODD;
-    sal_uInt16 nFooterMask = WW8_HEADER_EVEN | WW8_HEADER_ODD;
+    sal_uInt16 nFooterMask = WW8_FOOTER_EVEN | WW8_FOOTER_ODD;
     /* Ignore the presence of a first-page header/footer unless it is enabled */
     if( rSection.HasTitlePage() )
     {

@@ -870,6 +870,16 @@ DECLARE_WW8EXPORT_TEST(testTdf118133, "tdf118133.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15240), getShape(1)->getSize().Width);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf118412, "tdf118412.doc")
+{
+    /* Check that the first page's bottom margin is 1.251cm (not 2.540cm) */
+    OUString sPageStyleName = getProperty<OUString>(getParagraph(1), "PageStyleName");
+    uno::Reference<style::XStyle> xPageStyle(
+        getStyles("PageStyles")->getByName(sPageStyleName), uno::UNO_QUERY);
+    sal_Int32 nBottomMargin = getProperty<sal_Int32>(xPageStyle, "BottomMargin");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1251), nBottomMargin);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
