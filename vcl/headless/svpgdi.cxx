@@ -35,8 +35,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#include <cairo.h>
-
 #if ENABLE_CAIRO_CANVAS
 #   if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
 #      define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
@@ -1134,8 +1132,8 @@ void SvpSalGraphics::copyArea( long nDestX,
     copyBits(aTR, this);
 }
 
-static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
-                                          cairo_surface_t* source)
+static basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR,
+                                          cairo_surface_t* source, cairo_operator_t eOperator = CAIRO_OPERATOR_SOURCE)
 {
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
@@ -1160,22 +1158,33 @@ static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
         cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
         cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
     }
-    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    cairo_set_operator(cr, eOperator);
     cairo_paint(cr);
     cairo_restore(cr);
 
     return extents;
 }
 
-void SvpSalGraphics::copySource( const SalTwoRect& rTR,
-                                 cairo_surface_t* source )
+static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
+                                          cairo_surface_t* source)
+{
+    return renderWithOperator(cr, rTR, source, CAIRO_OPERATOR_SOURCE);
+}
+
+void SvpSalGraphics::copyWithOperator( const SalTwoRect& rTR, cairo_surface_t* source,
+                                 cairo_operator_t eOp )
 {
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
-    basegfx::B2DRange extents = renderSource(cr, rTR, source);
+    basegfx::B2DRange extents = renderWithOperator(cr, rTR, source, eOp);
 
     releaseCairoContext(cr, false, extents);
+}
+
+void SvpSalGraphics::copySource( const SalTwoRect& rTR, cairo_surface_t* source )
+{
+   copyWithOperator(rTR, source, CAIRO_OPERATOR_SOURCE);
 }
 
 void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
@@ -1224,10 +1233,10 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
     copySource(rTR, source);
 }
 
-void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, BitmapBuffer* pBuffer)
+void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, BitmapBuffer* pBuffer, cairo_operator_t eOp)
 {
     cairo_surface_t* source = createCairoSurface( pBuffer );
-    copySource(rTR, source);
+    copyWithOperator(rTR, source, eOp);
 }
 
 void SvpSalGraphics::drawBitmap( const SalTwoRect& rTR,

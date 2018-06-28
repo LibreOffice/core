@@ -24,6 +24,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
 #include <config_cairo_canvas.h>
+#include <cairo.h>
 
 #include <salgdi.hxx>
 #include <sallayout.hxx>
@@ -111,6 +112,8 @@ public:
 private:
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
+    void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source,
+                          cairo_operator_t eOp = CAIRO_OPERATOR_SOURCE);
     void setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPoly);
     void applyColor(cairo_t *cr, Color rColor);
     void drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly);
@@ -225,7 +228,8 @@ public:
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap ) override;
     void                    drawBitmap( const SalTwoRect& rPosAry,
-                                        BitmapBuffer* pBuffer );
+                                        BitmapBuffer* pBuffer,
+                                        cairo_operator_t eOp );
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,
                                         const SalBitmap& rTransparentBitmap ) override;
