@@ -792,10 +792,18 @@ void SigningTest::testODFBrokenDsigGPG()
 
 void SigningTest::testODFEncryptedGPG()
 {
+    // ODF1.2 + loext flavour
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "encryptedGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+
+    // ODF1.3 flavour
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "encryptedGPG_odf13.odt");
+    pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
 }
 
