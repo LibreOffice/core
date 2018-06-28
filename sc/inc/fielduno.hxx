@@ -61,7 +61,7 @@ private:
     css::uno::Reference<css::text::XTextRange> mxContent;
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
-    ScEditSource* mpEditSource;
+    std::unique_ptr<ScEditSource> mpEditSource;
     /// List of refresh listeners.
     comphelper::OInterfaceContainerHelper2* mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
