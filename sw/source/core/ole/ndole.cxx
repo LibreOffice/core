@@ -1019,8 +1019,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
             // copy the result data and cleanup
             m_aPrimitive2DSequence = m_pDeflateData->getSequence();
             m_aRange = m_pDeflateData->getRange();
-            delete m_pDeflateData;
-            m_pDeflateData = nullptr;
+            m_pDeflateData.reset();
         }
     }
 
@@ -1048,7 +1047,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
                 // is okay (preview will be reused)
                 if(!m_pDeflateData)
                 {
-                    m_pDeflateData = new DeflateData(aXModel);
+                    m_pDeflateData.reset( new DeflateData(aXModel) );
                     DeflateThread* pNew = new DeflateThread(*m_pDeflateData);
                     comphelper::ThreadPool::getSharedOptimalPool().pushTask(pNew);
                 }
@@ -1074,8 +1073,7 @@ void SwOLEObj::resetBufferedData()
     {
         // load is in progress, wait until finished and cleanup without using it
         m_pDeflateData->waitFinished();
-        delete m_pDeflateData;
-        m_pDeflateData = nullptr;
+        m_pDeflateData.reset();
     }
 }
 
