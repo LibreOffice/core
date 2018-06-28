@@ -118,12 +118,14 @@ public:
 class InternetProxyDecider_Impl :
     public cppu::WeakImplHelper< util::XChangesListener >
 {
+    // see officecfg/registry/schema/org/openoffice/Inet.xcs for the definition of these values
+    enum class ProxyType { NoProxy, Automatic, Manual };
     mutable osl::Mutex                       m_aMutex;
     InternetProxyServer                      m_aHttpProxy;
     InternetProxyServer                      m_aHttpsProxy;
     InternetProxyServer                      m_aFtpProxy;
     const InternetProxyServer                m_aEmptyProxy;
-    sal_Int32                                m_nProxyType;
+    ProxyType                                m_nProxyType;
     uno::Reference< util::XChangesNotifier > m_xNotifier;
     std::vector< NoProxyListEntry >          m_aNoProxyList;
     mutable HostnameCache                    m_aHostnames;
@@ -284,7 +286,7 @@ bool getConfigInt32Value(
 
 InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     const uno::Reference< uno::XComponentContext >& rxContext )
-    : m_nProxyType( 0 ),
+    : m_nProxyType( ProxyType::NoProxy ),
       m_aHostnames()
 {
     try
@@ -317,8 +319,10 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
             if ( xNameAccess.is() )
             {
                 // *** Proxy type ***
+                sal_Int32 tmp = 0;
                 getConfigInt32Value(
-                    xNameAccess, PROXY_TYPE_KEY, m_nProxyType );
+                    xNameAccess, PROXY_TYPE_KEY, tmp );
+                m_nProxyType = static_cast<ProxyType>(tmp);
 
                 // *** No proxy list ***
                 OUString aNoProxyList;
@@ -435,9 +439,9 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     return true;
 }
 
-#ifdef _WIN32
 namespace
 {
+#ifdef _WIN32
 struct GetPACProxyData
 {
     const OUString& m_rProtocol;
@@ -563,8 +567,40 @@ InternetProxyServer GetPACProxy(const OUString& rProtocol, const OUString& rHost
     }
     return aData.m_ProxyServer;
 }
+
+#else // .. _WIN32
+
+// Read the settings from the OS which are stored in env vars
+//
+InternetProxyServer GetUnixSystemProxy(const OUString & rProtocol,
+                                            const OUString & /*rHost*/,
+                                            sal_Int32 /*nPort*/)
+{
+    // TODO this could be improved to read the "no_proxy" env variable
+    InternetProxyServer aProxy;
+    OUString protocolLower = rProtocol.toAsciiLowerCase() + "_proxy";
+    OString protocolLowerStr = OUStringToOString( protocolLower, RTL_TEXTENCODING_ASCII_US );
+    const char* pEnvProxy = getenv(protocolLowerStr.getStr());
+    if (!pEnvProxy)
+        return aProxy;
+    // expecting something like "https://example.ct:80"
+    OUString tmp = OUString::createFromAscii(pEnvProxy);
+    if (tmp.getLength() < (rProtocol.getLength() + 3))
+        return aProxy;
+    tmp = tmp.copy(rProtocol.getLength() + 3);
+    sal_Int32 x = tmp.indexOf(':');
+    if (x == -1)
+        return aProxy;
+    int nPort = tmp.copy(x + 1).toInt32();
+    if (nPort == 0)
+        return aProxy;
+    aProxy.aName = tmp.copy(0, x);
+    aProxy.nPort = nPort;
+    return aProxy;
 }
-#endif // _WIN32
+
+#endif // else .. _WIN32
+}
 
 InternetProxyServer InternetProxyDecider_Impl::getProxy(
                                             const OUString & rProtocol,
@@ -573,22 +609,23 @@ InternetProxyServer InternetProxyDecider_Impl::getProxy(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( m_nProxyType == 0 )
+    if ( m_nProxyType == ProxyType::NoProxy )
     {
         // Never use proxy.
         return m_aEmptyProxy;
     }
 
-#ifdef _WIN32
     // If get from system
-    if (m_nProxyType == 1 && !rHost.isEmpty())
+    if (m_nProxyType == ProxyType::Automatic && !rHost.isEmpty())
     {
+#ifdef _WIN32
         InternetProxyServer aProxy(GetPACProxy(rProtocol, rHost, nPort));
+#else
+        InternetProxyServer aProxy(GetUnixSystemProxy(rProtocol, rHost, nPort));
+#endif // _WIN32
         if (!aProxy.aName.isEmpty())
             return aProxy;
     }
-#endif // _WIN32
-
 
     if ( !rHost.isEmpty() && !m_aNoProxyList.empty() )
     {
@@ -667,7 +704,6 @@ InternetProxyServer InternetProxyDecider_Impl::getProxy(
     return m_aEmptyProxy;
 }
 
-
 // virtual
 void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                                         const util::ChangesEvent& Event )
@@ -687,11 +723,14 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
             {
                 if ( aKey == PROXY_TYPE_KEY )
                 {
-                    if ( !( rElem.Element >>= m_nProxyType ) )
+                    sal_Int32 tmp;
+                    if ( !( rElem.Element >>= tmp ) )
                     {
                         OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
+                    else
+                        m_nProxyType = static_cast<ProxyType>(tmp);
                 }
                 else if ( aKey == NO_PROXY_LIST_KEY )
                 {
