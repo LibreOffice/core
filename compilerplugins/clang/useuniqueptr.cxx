@@ -62,6 +62,12 @@ public:
         // sometimes it owns, sometimes it doesn't
         if (fn == SRCDIR "/editeng/source/misc/svxacorr.cxx")
             return;
+        // SwDoc::m_PageDescs has weird handling
+        if (fn == SRCDIR "/sw/source/core/doc/docnew.cxx")
+            return;
+        // SwRedlineData::pNext and pExtraData have complex handling
+        if (fn == SRCDIR "/sw/source/core/doc/docredln.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
