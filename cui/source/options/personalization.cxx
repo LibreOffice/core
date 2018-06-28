@@ -99,7 +99,13 @@ SelectPersonaDialog::~SelectPersonaDialog()
 void SelectPersonaDialog::dispose()
 {
     if (m_pSearchThread.is())
+    {
+        // Release the solar mutex, so the thread is not affected by the race
+        // when it's after the m_bExecute check but before taking the solar
+        // mutex.
+        SolarMutexReleaser aReleaser;
         m_pSearchThread->join();
+    }
 
     m_pEdit.clear();
     m_pSearchButton.clear();
