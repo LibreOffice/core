@@ -23,6 +23,7 @@
 #include <IDocumentTimerAccess.hxx>
 
 #include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>
 
@@ -50,6 +51,10 @@ public:
     // Our own 'IdleTimer' calls the following method
     DECL_LINK( DoIdleJobs, Idle *, void );
 
+    /// Delay starting idle jobs to allow for post-load activity.
+    /// Used by LOK only.
+    DECL_LINK( FireIdleJobsTimeout, Timer *, void );
+
     virtual ~DocumentTimerManager() override;
 
 private:
@@ -62,6 +67,7 @@ private:
     bool mbStartIdleTimer; //< idle timer mode start/stop
     sal_Int32 mIdleBlockCount;
     Idle  maIdle;
+    Timer maFireIdleJobsTimer;
 };
 
 }
