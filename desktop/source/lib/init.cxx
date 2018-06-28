@@ -59,6 +59,7 @@
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -101,6 +102,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <app.hxx>
@@ -3755,6 +3757,30 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 // 2) comphelper::setProcessServiceFactory(xSFactory);
                 // 3) InitVCL()
                 aService->initialize({css::uno::makeAny<OUString>("preload")});
+
+                // Initialize fonts.
+                css::uno::Sequence< css::lang::Locale > aLocales;
+                css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
+                if (xLangSrv.is())
+                {
+                    css::uno::Reference<css::linguistic2::XSpellChecker> xSpell(xLangSrv->getSpellChecker(), css::uno::UNO_QUERY);
+                    css::uno::Reference<css::linguistic2::XSupportedLocales> xLocales(xSpell, css::uno::UNO_QUERY);
+                    if (xLocales.is())
+                        aLocales = xLocales->getLocales();
+                }
+
+                for (const auto& aLocale : aLocales)
+                {
+                    //TODO: Add more types and cache more aggessively. For now this initializes the fontcache.
+                    using namespace ::com::sun::star::i18n::ScriptType;
+                    LanguageType nLang;
+                    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), LATIN);
+                    OutputDevice::GetDefaultFont(DefaultFontType::LATIN_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
+                    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), ASIAN);
+                    OutputDevice::GetDefaultFont(DefaultFontType::CJK_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
+                    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), COMPLEX);
+                    OutputDevice::GetDefaultFont(DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
+                }
 
                 preloadData();
 
