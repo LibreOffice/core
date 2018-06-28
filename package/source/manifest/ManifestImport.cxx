@@ -69,6 +69,16 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
     , sCipherDataElement            ( ELEMENT_CIPHERDATA )
     , sCipherValueElement           ( ELEMENT_CIPHERVALUE )
 
+    , sManifestKeyInfoElement13       ( ELEMENT_MANIFEST13_KEYINFO )
+    , sEncryptedKeyElement13          ( ELEMENT_ENCRYPTEDKEY13 )
+    , sEncryptionMethodElement13      ( ELEMENT_ENCRYPTIONMETHOD13 )
+    , sPgpDataElement13               ( ELEMENT_PGPDATA13 )
+    , sPgpKeyIDElement13              ( ELEMENT_PGPKEYID13 )
+    , sPGPKeyPacketElement13          ( ELEMENT_PGPKEYPACKET13 )
+    , sAlgorithmAttribute13           ( ATTRIBUTE_ALGORITHM13 )
+    , sCipherDataElement13            ( ELEMENT_CIPHERDATA13 )
+    , sCipherValueElement13           ( ELEMENT_CIPHERVALUE13 )
+
     , sFullPathProperty             ( "FullPath" )
     , sMediaTypeProperty            ( "MediaType" )
     , sVersionProperty              ( "Version" )
@@ -148,9 +158,10 @@ void ManifestImport::doEncryptedKey(StringHashMap &)
     aKeyInfoSequence.resize(3);
 }
 
-void ManifestImport::doEncryptionMethod(StringHashMap &rConvertedAttribs)
+void ManifestImport::doEncryptionMethod(StringHashMap &rConvertedAttribs,
+                                        const OUString& rAlgoAttrName)
 {
-    OUString aString = rConvertedAttribs[sAlgorithmAttribute];
+    OUString aString = rConvertedAttribs[rAlgoAttrName];
     if ( aKeyInfoSequence.size() != 3
          || aString != "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" )
     {
@@ -339,7 +350,9 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     case 2: {
         if (aConvertedName == sFileEntryElement) //manifest:file-entry
             doFileEntry(aConvertedAttribs);
-        else if (aConvertedName == sManifestKeyInfoElement) //loext:KeyInfo
+        else if (aConvertedName == sManifestKeyInfoElement) //loext:keyinfo
+            doKeyInfoEntry(aConvertedAttribs);
+        else if (aConvertedName == sManifestKeyInfoElement13) //manifest:keyinfo
             doKeyInfoEntry(aConvertedAttribs);
         else
             aStack.back().m_bValid = false;
@@ -354,6 +367,8 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
         else if (aConvertedName == sEncryptionDataElement)   //manifest:encryption-data
             doEncryptionData(aConvertedAttribs);
         else if (aConvertedName == sEncryptedKeyElement)   //loext:encrypted-key
+            doEncryptedKey(aConvertedAttribs);
+        else if (aConvertedName == sEncryptedKeyElement13)   //manifest:encrypted-key
             doEncryptedKey(aConvertedAttribs);
         else
             aStack.back().m_bValid = false;
@@ -372,11 +387,17 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
         else if (aConvertedName == sStartKeyAlgElement)   //manifest:start-key-generation
             doStartKeyAlg(aConvertedAttribs);
         else if (aConvertedName == sEncryptionMethodElement)   //loext:encryption-method
-            doEncryptionMethod(aConvertedAttribs);
+            doEncryptionMethod(aConvertedAttribs, sAlgorithmAttribute);
+        else if (aConvertedName == sEncryptionMethodElement13)   //manifest:encryption-method
+            doEncryptionMethod(aConvertedAttribs, sAlgorithmAttribute13);
         else if (aConvertedName == sKeyInfoElement)            //loext:KeyInfo
             doEncryptedKeyInfo(aConvertedAttribs);
         else if (aConvertedName == sCipherDataElement)            //loext:CipherData
             doEncryptedCipherData(aConvertedAttribs);
+        else if (aConvertedName == sCipherDataElement13)            //manifest:CipherData
+            doEncryptedCipherData(aConvertedAttribs);
+        else if (aConvertedName == sPgpDataElement13)   //manifest:PGPData
+            doEncryptedPgpData(aConvertedAttribs);
         else
             aStack.back().m_bValid = false;
         break;
@@ -390,6 +411,15 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
         else if (aConvertedName == sPgpDataElement)   //loext:PGPData
             doEncryptedPgpData(aConvertedAttribs);
         else if (aConvertedName == sCipherValueElement) //loext:CipherValue
+            // ciphervalue action happens on endElement
+            aCurrentCharacters = "";
+        else if (aConvertedName == sCipherValueElement13) //manifest:CipherValue
+            // ciphervalue action happens on endElement
+            aCurrentCharacters = "";
+        else if (aConvertedName == sPgpKeyIDElement13)   //manifest:PGPKeyID
+            // ciphervalue action happens on endElement
+            aCurrentCharacters = "";
+        else if (aConvertedName == sPGPKeyPacketElement13) //manifest:PGPKeyPacket
             // ciphervalue action happens on endElement
             aCurrentCharacters = "";
         else
@@ -450,7 +480,9 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
 
             aSequence.clear();
         }
-        else if ( aConvertedName == sEncryptedKeyElement && aStack.back().m_bValid ) {
+        else if ( (aConvertedName == sEncryptedKeyElement
+                   || aConvertedName == sEncryptedKeyElement13)
+                  && aStack.back().m_bValid ) {
             if ( !bIgnoreEncryptData )
             {
                 aKeys.push_back( comphelper::containerToSequence(aKeyInfoSequence) );
@@ -464,6 +496,12 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
             case 5: {
                 if (aConvertedName == sCipherValueElement) //loext:CipherValue
                     doEncryptedCipherValue();
+                else if (aConvertedName == sCipherValueElement13) //manifest:CipherValue
+                    doEncryptedCipherValue();
+                else if (aConvertedName == sPgpKeyIDElement13)   //manifest:PGPKeyID
+                    doEncryptedKeyId();
+                else if (aConvertedName == sPGPKeyPacketElement13) //manifest:PGPKeyPacket
+                    doEncryptedKeyPacket();
                 else
                     aStack.back().m_bValid = false;
                 break;
