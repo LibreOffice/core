@@ -1423,7 +1423,7 @@ void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         rInf.DrawViewOpt( *this, POR_QUOVADIS );
         SwTextSlot aDiffText( &rInf, this, true, false );
-        SwFontSave aSave( rInf, m_pFont );
+        SwFontSave aSave( rInf, m_pFont.get() );
         rInf.DrawText( *this, rInf.GetLen(), true );
     }
 }

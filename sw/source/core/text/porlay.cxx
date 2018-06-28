@@ -180,8 +180,8 @@ SwLineLayout::~SwLineLayout()
     delete m_pNext;
     if( pBlink )
         pBlink->Delete( this );
-    delete m_pLLSpaceAdd;
-    delete m_pKanaComp;
+    m_pLLSpaceAdd.reset();
+    m_pKanaComp.reset();
 }
 
 SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
@@ -281,7 +281,7 @@ void SwLineLayout::InitSpaceAdd()
 
 void SwLineLayout::CreateSpaceAdd( const long nInit )
 {
-    m_pLLSpaceAdd = new std::vector<long>;
+    m_pLLSpaceAdd.reset( new std::vector<long> );
     SetLLSpaceAdd( nInit, 0 );
 }
 
