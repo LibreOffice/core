@@ -1121,6 +1121,11 @@ libo_FUZZ_ARG_ENABLE(split-debug,
         [Uses split debug information (-gsplit-dwarf compile flag). Saves disk space and build time,
          but requires tools that support it (both build tools and debuggers).]))
 
+libo_FUZZ_ARG_ENABLE(gdb-index,
+    AS_HELP_STRING([--enable-gdb-index],
+        [Creates debug information in the gdb index format, which makes gdb start faster.
+         Requires the gold or lld linker.]))
+
 libo_FUZZ_ARG_ENABLE(sal-log,
     AS_HELP_STRING([--enable-sal-log],
         [Make SAL_INFO and SAL_WARN calls do something even in a non-debug build.]))
@@ -3179,6 +3184,31 @@ printf ("hello world\n");
     fi
 fi
 AC_SUBST(USE_LD)
+
+ENABLE_GDB_INDEX=
+if test "$enable_gdb_index" = "yes"; then
+    AC_MSG_CHECKING([whether $CC supports -ggnu-pubnames])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -ggnu-pubnames"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ AC_MSG_RESULT( yes )],[ AC_MSG_ERROR( no )])
+
+    AC_MSG_CHECKING([whether $CC supports -Wl,--gdb-index])
+    ldflags_save=$LDFLAGS
+    LDFLAGS="$LDFLAGS -Wl,--gdb-index"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+        ],[
+printf ("hello world\n");
+        ])], ENABLE_GDB_INDEX=TRUE, [])
+    if test "$ENABLE_GDB_INDEX" = "TRUE"; then
+        AC_MSG_RESULT( yes )
+    else
+        AC_MSG_ERROR( no )
+    fi
+    CFLAGS=$save_CFLAGS
+    LDFLAGS=$ldflags_save
+fi
+AC_SUBST(ENABLE_GDB_INDEX)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes"; then
