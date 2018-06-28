@@ -1446,7 +1446,8 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
 SvxBkgTabPage::SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
     SvxAreaTabPage( pParent, rInAttrs ),
     m_pTblLBox(nullptr),
-    bHighlighting(false)
+    bHighlighting(false),
+    bCharBackColor(false)
 {
     VclPtr<vcl::Window> pBtn;
     get(pBtn, "btngradient"); pBtn->Hide();
@@ -1518,6 +1519,8 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     }
     else if ( bHighlighting )
         nSlot = SID_ATTR_BRUSH_CHAR;
+    else if( bCharBackColor )
+        nSlot = SID_ATTR_CHAR_BACK_COLOR;
 
     sal_uInt16 nWhich = GetWhich(nSlot);
 
@@ -1532,7 +1535,10 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
         case drawing::FillStyle_SOLID:
         {
             XFillColorItem aColorItem( rCoreSet->Get( XATTR_FILLCOLOR ) );
-            rCoreSet->Put( SvxBrushItem( aColorItem.GetColorValue(), nWhich ) );
+            if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
+                rCoreSet->Put( SvxBackgroundColorItem( aColorItem.GetColorValue(), nWhich ) );
+            else
+                rCoreSet->Put( SvxBrushItem( aColorItem.GetColorValue(), nWhich ) );
             break;
         }
         case drawing::FillStyle_BITMAP:
@@ -1570,9 +1576,13 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
             m_pTblLBox->SelectEntryPos(0);
             m_pTblLBox->Show();
         }
-        else if (nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)
+        if ((nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING) ||
+            (nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR))
+        {
             bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
-        else if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
+            bCharBackColor = bool(nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR);
+        }
+        if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
         {
             VclPtr<vcl::Window> pBtn;
             get(pBtn, "btnbitmap");

@@ -39,6 +39,8 @@
 #include <sdabstdlg.hxx>
 #include <memory>
 
+#include <svx/unobrushitemhelper.hxx>
+
 namespace sd {
 
 
@@ -68,8 +70,13 @@ void FuChar::DoExecute( SfxRequest& rReq )
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
 
-        SfxItemSet aNewAttr(mpViewShell->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
+        SfxItemSet aNewAttr(mpViewShell->GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END>{});
         aNewAttr.Put( aEditAttr, false );
+
+        sal_uInt16 nWhich = mpDoc->GetPool().GetWhich( SID_ATTR_CHAR_BACK_COLOR );
+        Color aBackColor = static_cast<const SvxBackgroundColorItem&>( aNewAttr.Get( nWhich ) ).GetValue();
+        SvxBrushItem aBrushItem = SvxBrushItem( aBackColor, SID_ATTR_BRUSH_CHAR );
+        setSvxBrushItemAsFillAttributesToTargetSet( aBrushItem, aNewAttr );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabCharDialog(mpViewShell->GetActiveWindow(), &aNewAttr, mpDoc->GetDocSh() ) );
@@ -85,6 +92,10 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
         const SfxItemSet* pOutputSet = pDlg->GetOutputItemSet();
         SfxItemSet aOtherSet( *pOutputSet );
+
+        // don't want area fill so clear these
+        aOtherSet.ClearItem( XATTR_FILLSTYLE );
+        aOtherSet.ClearItem( XATTR_FILLCOLOR );
 
         // and now the reverse process
         const SvxBrushItem* pBrushItem = aOtherSet.GetItem<SvxBrushItem>( SID_ATTR_BRUSH_CHAR );

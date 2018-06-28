@@ -146,6 +146,7 @@ class SvxBkgTabPage : public SvxAreaTabPage
 {
     VclPtr<ListBox> m_pTblLBox;
     bool        bHighlighting       : 1;
+    bool        bCharBackColor      : 1;
 public:
     using SvxAreaTabPage::DeactivatePage;
 
