@@ -47,6 +47,7 @@
 #include <osl/file.hxx>
 #include <errobject.hxx>
 
+#include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
@@ -57,6 +58,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/script/XErrorQuery.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
+#include <ooo/vba/VbTriState.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <memory>
 #include <random>
@@ -3307,6 +3309,133 @@ void SbRtl_Format(StarBASIC *, SbxArray & rPar, bool)
         }
         rPar.Get(0)->PutString( aResult );
     }
+}
+
+// https://msdn.microsoft.com/en-us/vba/language-reference-vba/articles/formatnumber-function
+void SbRtl_FormatNumber(StarBASIC*, SbxArray& rPar, bool)
+{
+    const sal_uInt16 nArgCount = rPar.Count();
+    if (nArgCount < 2 || nArgCount > 6)
+    {
+        StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+        return;
+    }
+
+    // The UI locale never changes -> we can use static value here
+    static const LocaleDataWrapper localeData(Application::GetSettings().GetUILanguageTag());
+    sal_Int16 nNumDigitsAfterDecimal = -1;
+    if (nArgCount > 2 && !rPar.Get(2)->IsEmpty())
+    {
+        nNumDigitsAfterDecimal = rPar.Get(2)->GetInteger();
+        if (nNumDigitsAfterDecimal < -1)
+        {
+            StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+            return;
+        }
+        else if (nNumDigitsAfterDecimal > 255)
+            nNumDigitsAfterDecimal %= 256;
+    }
+    if (nNumDigitsAfterDecimal == -1)
+        nNumDigitsAfterDecimal = LocaleDataWrapper::getNumDigits();
+
+    bool bIncludeLeadingDigit = LocaleDataWrapper::isNumLeadingZero();
+    if (nArgCount > 3 && !rPar.Get(3)->IsEmpty())
+    {
+        switch (rPar.Get(3)->GetInteger())
+        {
+            case ooo::vba::VbTriState::vbFalse:
+                bIncludeLeadingDigit = false;
+                break;
+            case ooo::vba::VbTriState::vbTrue:
+                bIncludeLeadingDigit = true;
+                break;
+            case ooo::vba::VbTriState::vbUseDefault:
+                // do nothing;
+                break;
+            default:
+                StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+                return;
+        }
+    }
+
+    bool bUseParensForNegativeNumbers = false;
+    if (nArgCount > 4 && !rPar.Get(4)->IsEmpty())
+    {
+        switch (rPar.Get(4)->GetInteger())
+        {
+            case ooo::vba::VbTriState::vbFalse:
+            case ooo::vba::VbTriState::vbUseDefault:
+                // do nothing
+                break;
+            case ooo::vba::VbTriState::vbTrue:
+                bUseParensForNegativeNumbers = true;
+                break;
+            default:
+                StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+                return;
+        }
+    }
+
+    bool bGroupDigits = false;
+    if (nArgCount > 5 && !rPar.Get(5)->IsEmpty())
+    {
+        switch (rPar.Get(5)->GetInteger())
+        {
+            case ooo::vba::VbTriState::vbFalse:
+            case ooo::vba::VbTriState::vbUseDefault:
+                // do nothing
+                break;
+            case ooo::vba::VbTriState::vbTrue:
+                bGroupDigits = true;
+                break;
+            default:
+                StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+                return;
+        }
+    }
+
+    double fVal = rPar.Get(1)->GetDouble();
+    const bool bNegative = fVal < 0;
+    if (bNegative)
+        fVal = fabs(fVal); // Always work with non-negatives, to easily handle leading zero
+
+    static const sal_Unicode decSep = localeData.getNumDecimalSep().toChar();
+    OUString aResult = rtl::math::doubleToUString(
+        fVal, rtl_math_StringFormat_F, nNumDigitsAfterDecimal, decSep,
+        bGroupDigits ? localeData.getDigitGrouping().getConstArray() : nullptr,
+        localeData.getNumThousandSep().toChar());
+
+    if (!bIncludeLeadingDigit && aResult.getLength() > 1 && aResult.startsWith("0"))
+        aResult = aResult.copy(1);
+
+    if (nNumDigitsAfterDecimal > 0)
+    {
+        sal_Int32 nActualDigits = nNumDigitsAfterDecimal;
+        const sal_Int32 nSepPos = aResult.indexOf(decSep);
+        if (nSepPos == -1)
+            nActualDigits = 0;
+        else
+            nActualDigits = aResult.getLength() - nSepPos - 1;
+
+        // VBA allows up to 255 digits; rtl::math::doubleToUString outputs up to 15 digits
+        // for ~small numbers, so pad them as appropriate.
+        if (nActualDigits < nNumDigitsAfterDecimal)
+        {
+            OUStringBuffer sBuf;
+            comphelper::string::padToLength(sBuf, nNumDigitsAfterDecimal - nActualDigits, '0');
+            aResult += sBuf.makeStringAndClear();
+        }
+    }
+
+    if (bNegative)
+    {
+        if (bUseParensForNegativeNumbers)
+            aResult = "(" + aResult + ")";
+        else
+            aResult = "-" + aResult;
+    }
+
+    rPar.Get(0)->PutString(aResult);
 }
 
 namespace {

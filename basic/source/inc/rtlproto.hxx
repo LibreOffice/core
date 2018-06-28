@@ -234,6 +234,7 @@ extern void SbRtl_IsUnoStruct(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 
 extern void SbRtl_FileDateTime(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Format(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
+extern void SbRtl_FormatNumber(StarBASIC* pBasic, SbxArray& rPar, bool bWrite);
 extern void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Randomize(StarBASIC * pBasic, SbxArray & rPar, bool bWrite); // JSM
 extern void SbRtl_Round(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
