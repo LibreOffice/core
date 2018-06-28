@@ -302,6 +302,18 @@ DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
     CPPUNIT_ASSERT( aRect.GetHeight() > aRect.GetWidth() );
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf70838b_verticalRotation, "tdf70838b_verticalRotation.odt")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    tools::Rectangle aGroupShape = pPage->GetObj(0)->GetSnapRect();
+    tools::Rectangle aLine = pPage->GetObj(2)->GetSnapRect();
+
+    CPPUNIT_ASSERT_MESSAGE("Smiley faces are round", aGroupShape.GetHeight() > aGroupShape.GetWidth());
+    CPPUNIT_ASSERT_MESSAGE("Line is taller, not wider", aLine.GetHeight() > aLine.GetWidth());
+}
+
 DECLARE_WW8EXPORT_TEST( testActiveXCheckbox, "checkbox_control.odt" )
 {
     // First check box anchored as a floating object
