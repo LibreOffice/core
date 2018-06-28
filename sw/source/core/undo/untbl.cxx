@@ -308,8 +308,8 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         SwDDEFieldType* pNewType = static_cast<SwDDEFieldType*>(rDoc.getIDocumentFieldsAccess().InsertFieldType(
                                                             *pDDEFieldType));
-        SwDDETable* pDDETable = new SwDDETable( pTableNode->GetTable(), pNewType );
-        pTableNode->SetNewTable( pDDETable );
+        std::unique_ptr<SwDDETable> pDDETable(new SwDDETable( pTableNode->GetTable(), pNewType ));
+        pTableNode->SetNewTable( std::move(pDDETable) );
         delete pDDEFieldType;
         pDDEFieldType = nullptr;
     }
@@ -476,8 +476,8 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         SwDDEFieldType* pNewType = static_cast<SwDDEFieldType*>(rDoc.getIDocumentFieldsAccess().InsertFieldType(
                                                             *pDDEFieldType));
-        SwDDETable* pDDETable = new SwDDETable( pTableNd->GetTable(), pNewType );
-        pTableNd->SetNewTable( pDDETable, false );
+        std::unique_ptr<SwDDETable> pDDETable( new SwDDETable( pTableNd->GetTable(), pNewType ) );
+        pTableNd->SetNewTable( std::move(pDDETable), false );
         delete pDDEFieldType;
         pDDEFieldType = nullptr;
     }

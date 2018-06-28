@@ -2087,7 +2087,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         // Change the Table Pointer at the Node
         pNewTable = new SwDDETable( *pNewTable,
                                  static_cast<SwDDEFieldType*>(pFieldType) );
-        pTableNd->SetNewTable( pNewTable, false );
+        pTableNd->SetNewTable( std::unique_ptr<SwTable>(pNewTable), false );
     }
 
     pNewTable->GetFrameFormat()->CopyAttrs( *GetFrameFormat() );

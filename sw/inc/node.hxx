@@ -492,7 +492,7 @@ private:
 class SW_DLLPUBLIC SwTableNode : public SwStartNode, public SwModify
 {
     friend class SwNodes;
-    SwTable* m_pTable;
+    std::unique_ptr<SwTable> m_pTable;
 protected:
     virtual ~SwTableNode() override;
 
@@ -515,7 +515,7 @@ public:
     void MakeFrames( const SwNodeIndex & rIdx );
 
     SwTableNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
-    void SetNewTable( SwTable* , bool bNewFrames=true );
+    void SetNewTable( std::unique_ptr<SwTable> , bool bNewFrames=true );
 
     // Removes redline objects that relate to this table from the 'Extra Redlines' table
     void RemoveRedlines();
