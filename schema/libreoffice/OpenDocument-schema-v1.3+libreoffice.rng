@@ -2263,6 +2263,16 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="draw-custom-shape-attlist" combine="interleave">
+    <rng:ref name="common-draw-rel-size-attlist"/>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-page-layout-properties-attlist" combine="interleave">
+    <rng:ref name="style-graphic-fill-properties-attlist"/>
+  </rng:define>
+
   <!-- just a test-case for user-defined attributes, move along, nothing to see here... -->
   <rng:define name="style-table-cell-properties-attlist" combine="interleave">
     <rng:optional>

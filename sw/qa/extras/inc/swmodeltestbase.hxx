@@ -796,7 +796,8 @@ protected:
         {
             CPPUNIT_ASSERT_MESSAGE("Password set but not requested", xInteractionHandler->wasPasswordRequested());
         }
-        if (mustValidate(filename))
+        if (mustValidate(filename) || aFilterName == "writer8"
+                || aFilterName == "OpenDocument Text Flat XML")
         {
             if(aFilterName == "Office Open XML Text")
             {
@@ -806,7 +807,6 @@ protected:
             else if(aFilterName == "writer8"
                 || aFilterName == "OpenDocument Text Flat XML")
             {
-                // still a few validation errors
                 validate(maTempFile.GetFileName(), test::ODF);
             }
             else if(aFilterName == "MS Word 97")
@@ -838,6 +838,12 @@ protected:
         if (!maFilterOptions.isEmpty())
             aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
         xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        // TODO: for now, validate only ODF here
+        if (aFilterName == "writer8"
+            || aFilterName == "OpenDocument Text Flat XML")
+        {
+            validate(rTempFile.GetFileName(), test::ODF);
+        }
     }
 
     void finish()
