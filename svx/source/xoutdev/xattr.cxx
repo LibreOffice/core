@@ -57,7 +57,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/utils/unotools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/gradient.hxx>
 
@@ -1020,7 +1020,7 @@ bool XLineStartItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     else
     {
         css::drawing::PolyPolygonBezierCoords aBezier;
-        basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
+        basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
 
@@ -1047,7 +1047,7 @@ bool XLineStartItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
             if( pCoords->Coordinates.getLength() > 0 )
             {
-                maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
+                maPolyPolygon = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon( *pCoords );
                 // #i72807# close line start/end polygons hard
                 // maPolyPolygon.setClosed(true);
             }
@@ -1551,7 +1551,7 @@ bool XLineEndItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     else
     {
         css::drawing::PolyPolygonBezierCoords aBezier;
-        basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
+        basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
     return true;
@@ -1577,7 +1577,7 @@ bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
             if( pCoords->Coordinates.getLength() > 0 )
             {
-                maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
+                maPolyPolygon = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon( *pCoords );
                 // #i72807# close line start/end polygons hard
                 // maPolyPolygon.setClosed(true);
             }
