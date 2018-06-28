@@ -325,7 +325,7 @@ private:
     ScAddress       maPos;
     ScNoteData      maOldData;
     ScNoteData      maNewData;
-    SdrUndoAction*  mpDrawUndo;
+    std::unique_ptr<SdrUndoAction> mpDrawUndo;
 };
 
 /** Undo action for showing or hiding a cell note caption. */
@@ -364,10 +364,10 @@ public:
 
 private:
     bool            bIsDelete;
-    ScDetOpList*    pOldList;
+    std::unique_ptr<ScDetOpList> pOldList;
     sal_uInt16      nAction;
     ScAddress       aPos;
-    SdrUndoAction*  pDrawUndo;
+    std::unique_ptr<SdrUndoAction> pDrawUndo;
 };
 
 class ScUndoRangeNames: public ScSimpleUndo
@@ -386,8 +386,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScRangeName*    pOldRanges;
-    ScRangeName*    pNewRanges;
+    std::unique_ptr<ScRangeName> pOldRanges;
+    std::unique_ptr<ScRangeName> pNewRanges;
     SCTAB           mnTab;
 
     void            DoChange( bool bUndo );

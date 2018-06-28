@@ -915,13 +915,13 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
 
 ScUndoReplaceNote::~ScUndoReplaceNote()
 {
-    delete mpDrawUndo;
+    mpDrawUndo.reset();
 }
 
 void ScUndoReplaceNote::Undo()
 {
     BeginUndo();
-    DoSdrUndoAction( mpDrawUndo, &pDocShell->GetDocument() );
+    DoSdrUndoAction( mpDrawUndo.get(), &pDocShell->GetDocument() );
     /*  Undo insert -> remove new note.
         Undo remove -> insert old note.
         Undo replace -> remove new note, insert old note. */
@@ -934,7 +934,7 @@ void ScUndoReplaceNote::Undo()
 void ScUndoReplaceNote::Redo()
 {
     BeginRedo();
-    RedoSdrUndoAction( mpDrawUndo );
+    RedoSdrUndoAction( mpDrawUndo.get() );
     /*  Redo insert -> insert new note.
         Redo remove -> remove old note.
         Redo replace -> remove old note, insert new note. */
@@ -1048,8 +1048,8 @@ ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
 
 ScUndoDetective::~ScUndoDetective()
 {
-    delete pDrawUndo;
-    delete pOldList;
+    pDrawUndo.reset();
+    pOldList.reset();
 }
 
 OUString ScUndoDetective::GetComment() const
@@ -1073,7 +1073,7 @@ void ScUndoDetective::Undo()
     BeginUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    DoSdrUndoAction(pDrawUndo, &rDoc);
+    DoSdrUndoAction(pDrawUndo.get(), &rDoc);
 
     if (bIsDelete)
     {
@@ -1109,7 +1109,7 @@ void ScUndoDetective::Redo()
 {
     BeginRedo();
 
-    RedoSdrUndoAction(pDrawUndo);
+    RedoSdrUndoAction(pDrawUndo.get());
 
     ScDocument& rDoc = pDocShell->GetDocument();
 
@@ -1146,8 +1146,8 @@ ScUndoRangeNames::ScUndoRangeNames( ScDocShell* pNewDocShell,
 
 ScUndoRangeNames::~ScUndoRangeNames()
 {
-    delete pOldRanges;
-    delete pNewRanges;
+    pOldRanges.reset();
+    pNewRanges.reset();
 }
 
 OUString ScUndoRangeNames::GetComment() const

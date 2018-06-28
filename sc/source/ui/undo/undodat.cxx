@@ -722,12 +722,12 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
         aAdvSource = *pAdvSrc;
     }
 
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
 
 ScUndoQuery::~ScUndoQuery()
 {
-    delete pDrawUndo;
+    pDrawUndo.reset();
 }
 
 OUString ScUndoQuery::GetComment() const
@@ -809,7 +809,7 @@ void ScUndoQuery::Undo()
         MAXCOL, aQueryParam.nRow2, nTab );
     rDoc.SetDirty( aDirtyRange, true );
 
-    DoSdrUndoAction( pDrawUndo, &rDoc );
+    DoSdrUndoAction( pDrawUndo.get(), &rDoc );
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
     if ( nVisTab != nTab )
@@ -1890,7 +1890,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
     }
 
     if ( !bUndo )                               //      draw redo after updating row heights
-        RedoSdrUndoAction( pDrawUndo );                 //!     include in ScBlockUndo?
+        RedoSdrUndoAction( pDrawUndo.get() );   //!     include in ScBlockUndo?
 
     pDocShell->PostPaint( aDrawRange, nPaint, nExtFlags );
 

@@ -229,7 +229,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SdrUndoAction*  pDrawUndo;
+    std::unique_ptr<SdrUndoAction> pDrawUndo;
     SCTAB           nTab;
     ScQueryParam    aQueryParam;
     ScDocumentUniquePtr xUndoDoc;
