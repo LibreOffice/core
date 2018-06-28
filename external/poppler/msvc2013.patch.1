@@ -21,3 +21,58 @@
  };
  
  class Dict {
+--- poppler/poppler/UnicodeMap.h.orig	2018-06-27 08:38:04.587184300 -0700
++++ poppler/poppler/UnicodeMap.h	2018-06-27 08:38:13.055134400 -0700
+@@ -73,10 +73,10 @@
+   UnicodeMap(const char *encodingNameA, GBool unicodeOutA,
+ 	     UnicodeMapFunc funcA);
+ 
+-  UnicodeMap(UnicodeMap &&other) noexcept;
+-  UnicodeMap& operator=(UnicodeMap &&other) noexcept;
++  UnicodeMap(UnicodeMap &&other) ;
++  UnicodeMap& operator=(UnicodeMap &&other) ;
+ 
+-  void swap(UnicodeMap& other) noexcept;
++  void swap(UnicodeMap& other) ;
+ 
+   ~UnicodeMap();
+ 
+--- poppler/poppler/UnicodeMap.cc.orig	2018-06-27 08:43:49.625045400 -0700
++++ poppler/poppler/UnicodeMap.cc	2018-06-27 08:42:50.299038500 -0700
+@@ -175,14 +175,18 @@
+   }
+ }
+ 
+-UnicodeMap::UnicodeMap(UnicodeMap &&other) noexcept
++UnicodeMap::UnicodeMap(UnicodeMap &&other)
+   : encodingName{other.encodingName}
+   , kind{other.kind}
+   , unicodeOut{other.unicodeOut}
+   , len{other.len}
+   , eMaps{other.eMaps}
+   , eMapsLen{other.eMapsLen}
++#if defined _MSC_VER && _MSC_VER < 1900
++  , refCnt(std::atomic<int>(1))
++#else
+   , refCnt{1}
++#endif
+ {
+   switch (kind) {
+   case unicodeMapUser:
+@@ -198,14 +198,14 @@
+   other.eMaps = nullptr;
+ }
+ 
+-UnicodeMap& UnicodeMap::operator=(UnicodeMap &&other) noexcept
++UnicodeMap& UnicodeMap::operator=(UnicodeMap &&other)
+ {
+   if (this != &other)
+     swap(other);
+   return *this;
+ }
+ 
+-void UnicodeMap::swap(UnicodeMap &other) noexcept
++void UnicodeMap::swap(UnicodeMap &other)
+ {
+   using std::swap;
+   swap(encodingName, other.encodingName);
