@@ -68,7 +68,7 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    ScHeaderEditEngine*  GetEditEngine() const { return pEdEngine; }
+    ScHeaderEditEngine*  GetEditEngine() const { return pEdEngine.get(); }
     void SetObjectSelectHdl( const Link<ScEditWindow&,void>& aLink) { aObjectSelectLink = aLink; }
     void SetGetFocusHdl(const std::function<void (ScEditWindow&)>& rLink) { m_GetFocusLink = rLink; }
 
@@ -85,8 +85,8 @@ protected:
     virtual void    Resize() override;
 
 private:
-    ScHeaderEditEngine* pEdEngine;
-    EditView*           pEdView;
+    std::unique_ptr<ScHeaderEditEngine> pEdEngine;
+    std::unique_ptr<EditView>           pEdView;
     ScEditWindowLocation eLocation;
     bool mbRTL;
 
