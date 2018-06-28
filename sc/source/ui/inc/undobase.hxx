@@ -88,7 +88,7 @@ public:
 
 protected:
     ScRange         aBlockRange;
-    SdrUndoAction*  pDrawUndo;
+    std::unique_ptr<SdrUndoAction> pDrawUndo;
     ScBlockUndoMode eMode;
 
     void            BeginUndo();
@@ -108,7 +108,7 @@ public:
 
 protected:
     ScRangeList     maBlockRanges;
-    SdrUndoAction*  mpDrawUndo;
+    std::unique_ptr<SdrUndoAction> mpDrawUndo;
 
     void BeginUndo();
     void EndUndo();
@@ -123,7 +123,7 @@ protected:
 class ScDBFuncUndo: public ScSimpleUndo
 {
 protected:
-    ScDBData*       pAutoDBRange;
+    std::unique_ptr<ScDBData> pAutoDBRange;
     ScRange         aOriginalRange;
 
 public:
@@ -147,9 +147,9 @@ public:
     virtual         ~ScMoveUndo() override;
 
 protected:
-    SdrUndoAction*  pDrawUndo;
-    ScDocument*     pRefUndoDoc;
-    ScRefUndoData*  pRefUndoData;
+    std::unique_ptr<SdrUndoAction>  pDrawUndo;
+    std::unique_ptr<ScDocument>     pRefUndoDoc;
+    std::unique_ptr<ScRefUndoData>  pRefUndoData;
     ScMoveUndoMode  eMode;
 
     void            BeginUndo();

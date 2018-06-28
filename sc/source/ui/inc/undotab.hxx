@@ -56,7 +56,7 @@ public:
 
 private:
     OUString        sNewName;
-    SdrUndoAction*  pDrawUndo;
+    std::unique_ptr<SdrUndoAction> pDrawUndo;
     sal_uLong       nEndChangeAction;
     SCTAB           nTab;
     bool            bAppend;
@@ -82,7 +82,7 @@ public:
 
 private:
 
-    SdrUndoAction*  pDrawUndo;
+    std::unique_ptr<SdrUndoAction> pDrawUndo;
     std::vector<OUString>      aNameList;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
@@ -191,7 +191,7 @@ private:
     std::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
     std::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
     std::shared_ptr< ::std::vector< OUString> > mpNewNames;
-    SdrUndoAction*  pDrawUndo;
+    std::unique_ptr<SdrUndoAction> pDrawUndo;
 
     void DoChange() const;
 };
@@ -248,7 +248,7 @@ private:
     OUString    aComment;
     Color       aColor;
     ScScenarioFlags nFlags;
-    SdrUndoAction* pDrawUndo;
+    std::unique_ptr<SdrUndoAction> pDrawUndo;
 };
 
 class ScUndoImportTab : public ScSimpleUndo
@@ -270,7 +270,7 @@ private:
     SCTAB       nTab;
     SCTAB       nCount;
     ScDocumentUniquePtr xRedoDoc;
-    SdrUndoAction*  pDrawUndo;
+    std::unique_ptr<SdrUndoAction> pDrawUndo;
 
     void DoChange() const;
 };
@@ -389,8 +389,8 @@ public:
 
 private:
     SCTAB               nTab;
-    ScPrintRangeSaver*  pOldRanges;
-    ScPrintRangeSaver*  pNewRanges;
+    std::unique_ptr<ScPrintRangeSaver> pOldRanges;
+    std::unique_ptr<ScPrintRangeSaver> pNewRanges;
 
     void DoChange( bool bUndo );
 };

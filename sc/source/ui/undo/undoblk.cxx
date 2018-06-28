@@ -374,7 +374,7 @@ void ScUndoDeleteCells::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendDeleteRange( aEffRange, pRefUndoDoc,
+        pChangeTrack->AppendDeleteRange( aEffRange, pRefUndoDoc.get(),
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;
@@ -685,7 +685,7 @@ void ScUndoDeleteMulti::SetChangeTrack()
                 aRange.aEnd.SetCol( static_cast<SCCOL>(nEnd) );
             }
             sal_uLong nDummyStart;
-            pChangeTrack->AppendDeleteRange( aRange, pRefUndoDoc,
+            pChangeTrack->AppendDeleteRange( aRange, pRefUndoDoc.get(),
                 nDummyStart, nEndChangeAction );
         }
     }
@@ -841,7 +841,7 @@ void ScUndoCut::DoChange( const bool bUndo )
 /*A*/   pDocShell->PostPaint( aExtendedRange, PaintPartFlags::Grid, nExtFlags );
 
     if ( !bUndo )                               //   draw redo after updating row heights
-        RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
+        RedoSdrUndoAction( pDrawUndo.get() );         //! include in ScBlockUndo?
 
     pDocShell->PostDataChanged();
     if (pViewShell)
@@ -902,10 +902,10 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
 
 ScUndoPaste::~ScUndoPaste()
 {
-    delete pUndoDoc;
-    delete pRedoDoc;
-    delete pRefUndoData;
-    delete pRefRedoData;
+    pUndoDoc.reset();
+    pRedoDoc.reset();
+    pRefUndoData.reset();
+    pRefRedoData.reset();
 }
 
 OUString ScUndoPaste::GetComment() const
@@ -920,7 +920,7 @@ void ScUndoPaste::SetChangeTrack()
     {
         for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
         {
-            pChangeTrack->AppendContentRange(maBlockRanges[i], pUndoDoc,
+            pChangeTrack->AppendContentRange(maBlockRanges[i], pUndoDoc.get(),
                 nStartChangeAction, nEndChangeAction, SC_CACM_PASTE );
         }
     }
@@ -936,9 +936,9 @@ void ScUndoPaste::DoChange(bool bUndo)
     //  (with DeleteUnchanged after the DoUndo call)
     bool bCreateRedoData = ( bUndo && pRefUndoData && !pRefRedoData );
     if ( bCreateRedoData )
-        pRefRedoData = new ScRefUndoData( &rDoc );
+        pRefRedoData.reset( new ScRefUndoData( &rDoc ) );
 
-    ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData : pRefRedoData;
+    ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData.get() : pRefRedoData.get();
 
     // Always back-up either all or none of the content for Undo
     InsertDeleteFlags nUndoFlags = InsertDeleteFlags::NONE;
@@ -971,7 +971,7 @@ void ScUndoPaste::DoChange(bool bUndo)
                     break;
             }
 
-            pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pRedoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
             pRedoDoc->InitUndoSelected( &rDoc, aMarkData, bColInfo, bRowInfo );
         }
         //  read "redo" data from the document in the first undo
@@ -1096,7 +1096,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     }
 
     if ( !bUndo )                               //   draw redo after updating row heights
-        RedoSdrUndoAction(mpDrawUndo);
+        RedoSdrUndoAction(mpDrawUndo.get());
 
     pDocShell->PostPaint(aDrawRanges, nPaint, nExtFlags);
 
@@ -1199,11 +1199,11 @@ void ScUndoDragDrop::SetChangeTrack()
         if ( bCut )
         {
             nStartChangeAction = pChangeTrack->GetActionMax() + 1;
-            pChangeTrack->AppendMove( aSrcRange, aDestRange, pRefUndoDoc );
+            pChangeTrack->AppendMove( aSrcRange, aDestRange, pRefUndoDoc.get() );
             nEndChangeAction = pChangeTrack->GetActionMax();
         }
         else
-            pChangeTrack->AppendContentRange( aDestRange, pRefUndoDoc,
+            pChangeTrack->AppendContentRange( aDestRange, pRefUndoDoc.get(),
                 nStartChangeAction, nEndChangeAction );
     }
     else
@@ -1466,7 +1466,7 @@ void ScUndoDragDrop::Redo()
     pClipDoc.reset();
     ShowTable( aDestRange.aStart.Tab() );
 
-    RedoSdrUndoAction( pDrawUndo );             //! include in ScBlockUndo?
+    RedoSdrUndoAction( pDrawUndo.get() );        //! include in ScBlockUndo?
     EnableDrawAdjust( &rDoc, true );             //! include in ScBlockUndo?
 
     EndRedo();

@@ -201,11 +201,11 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    ScDocument*     pRedoDoc;
+    std::unique_ptr<ScDocument> pUndoDoc;
+    std::unique_ptr<ScDocument> pRedoDoc;
     InsertDeleteFlags nFlags;
-    ScRefUndoData*  pRefUndoData;
-    ScRefUndoData*  pRefRedoData;
+    std::unique_ptr<ScRefUndoData> pRefUndoData;
+    std::unique_ptr<ScRefUndoData> pRefRedoData;
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
     bool            bRedoFilled;
@@ -273,7 +273,7 @@ private:
     ScRange         aRange;
     ScMarkData      aMarkData;
     ScDocumentUniquePtr pUndoDoc; // Block mark and deleted data
-    SdrUndoAction*  pDrawUndo;      // Deleted objects
+    std::unique_ptr<SdrUndoAction> pDrawUndo;      // Deleted objects
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
     InsertDeleteFlags nFlags;
@@ -346,7 +346,7 @@ private:
     ScRange         aRange;
     ScRange         aRangeCover;
     std::unique_ptr<ScEditDataArray> mpDataArray;
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument> pUndoDoc;
     bool            bMulti;
     ScPatternAttr*  pApplyPattern;
     SvxBoxItem*     pLineOuter;
@@ -389,7 +389,7 @@ private:
     sal_uInt16      nNewSize;
     bool            bWidth;
     ScSizeMode      eMode;
-    SdrUndoAction*  pDrawUndo;
+    std::unique_ptr<SdrUndoAction>  pDrawUndo;
 };
 
 class ScUndoAutoFill: public ScBlockUndo
@@ -445,7 +445,7 @@ private:
     ScCellMergeOption maOption;
     bool            mbMergeContents;        // Merge contents in Redo().
     ScDocumentUniquePtr mxUndoDoc;              // when data is merged
-    SdrUndoAction*  mpDrawUndo;
+    std::unique_ptr<SdrUndoAction> mpDrawUndo;
 
     void            DoChange( bool bUndo ) const;
 };
@@ -495,8 +495,8 @@ private:
     ScAddress       aCursorPos;
     ScMarkData      aMarkData;
     OUString        aUndoStr;           // Data at single selection
-    ScDocument*     pUndoDoc;           // Block mark and deleted data
-    SvxSearchItem*  pSearchItem;
+    std::unique_ptr<ScDocument> pUndoDoc;           // Block mark and deleted data
+    std::unique_ptr<SvxSearchItem> pSearchItem;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 
@@ -555,9 +555,9 @@ public:
 private:
     ScMarkData      aMarkData;
     ScAddress       aCursorPos;
-    ScDocument*     pUndoDoc;           // Block mark and deleted data
+    std::unique_ptr<ScDocument> pUndoDoc;           // Block mark and deleted data
     ScAddress       aNewCursorPos;
-    ScDocument*     pRedoDoc;           // Block mark and new data
+    std::unique_ptr<ScDocument> pRedoDoc;           // Block mark and new data
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
     ScConversionParam maConvParam;        /// Conversion type and parameters.
@@ -583,8 +583,8 @@ public:
 
 private:
     ScMarkData          aMarkData;
-    ScDocument*         pUndoDoc;
-    ScDocument*         pRedoDoc;
+    std::unique_ptr<ScDocument> pUndoDoc;
+    std::unique_ptr<ScDocument> pRedoDoc;
     ScRange             aRange;
     bool                bMulti;
     sal_uLong           nStartChangeAction;

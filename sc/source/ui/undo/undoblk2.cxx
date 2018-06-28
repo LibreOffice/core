@@ -52,17 +52,16 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     maRanges(rRanges),
     nNewSize( nNewSizeTwips ),
     bWidth( bNewWidth ),
-    eMode( eNewMode ),
-    pDrawUndo( nullptr )
+    eMode( eNewMode )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
 
 ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
 {
     pUndoDoc.reset();
     pUndoTab.reset();
-    delete pDrawUndo;
+    pDrawUndo.reset();
 }
 
 OUString ScUndoWidthOrHeight::GetComment() const
@@ -122,7 +121,7 @@ void ScUndoWidthOrHeight::Undo()
         }
     }
 
-    DoSdrUndoAction( pDrawUndo, &rDoc );
+    DoSdrUndoAction( pDrawUndo.get(), &rDoc );
 
     if (pViewShell)
     {

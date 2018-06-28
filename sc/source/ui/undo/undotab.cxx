@@ -68,13 +68,13 @@ ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
     nTab( nTabNum ),
     bAppend( bApp )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
     SetChangeTrack();
 }
 
 ScUndoInsertTab::~ScUndoInsertTab()
 {
-    delete pDrawUndo;
+    pDrawUndo.reset();
 }
 
 OUString ScUndoInsertTab::GetComment() const
@@ -109,7 +109,7 @@ void ScUndoInsertTab::Undo()
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( false );              //! EndUndo
 
-    DoSdrUndoAction( pDrawUndo, &pDocShell->GetDocument() );
+    DoSdrUndoAction( pDrawUndo.get(), &pDocShell->GetDocument() );
 
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
@@ -123,7 +123,7 @@ void ScUndoInsertTab::Redo()
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+    RedoSdrUndoAction( pDrawUndo.get() );             // Draw Redo first
 
     pDocShell->SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = true;
@@ -160,14 +160,14 @@ ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
     aNameList( newNameList ),
     nTab( nTabNum )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 
     SetChangeTrack();
 }
 
 ScUndoInsertTables::~ScUndoInsertTables()
 {
-    delete pDrawUndo;
+    pDrawUndo.reset();
 }
 
 OUString ScUndoInsertTables::GetComment() const
@@ -208,7 +208,7 @@ void ScUndoInsertTables::Undo()
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( false );              //! EndUndo
 
-    DoSdrUndoAction( pDrawUndo, &pDocShell->GetDocument() );
+    DoSdrUndoAction( pDrawUndo.get(), &pDocShell->GetDocument() );
 
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
@@ -222,7 +222,7 @@ void ScUndoInsertTables::Redo()
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+    RedoSdrUndoAction( pDrawUndo.get() );       // Draw Redo first
 
     pDocShell->SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = true;
@@ -277,7 +277,7 @@ void ScUndoDeleteTab::SetChangeTrack()
         {
             aRange.aStart.SetTab( theTabs[i] );
             aRange.aEnd.SetTab( theTabs[i] );
-            pChangeTrack->AppendDeleteRange( aRange, pRefUndoDoc,
+            pChangeTrack->AppendDeleteRange( aRange, pRefUndoDoc.get(),
                 nTmpChangeAction, nEndChangeAction, static_cast<short>(i) );
         }
     }
@@ -377,7 +377,7 @@ void ScUndoDeleteTab::Redo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     pViewShell->SetTabNo( lcl_GetVisibleTabBefore( pDocShell->GetDocument(), theTabs.front() ) );
 
-    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+    RedoSdrUndoAction( pDrawUndo.get() );       // Draw Redo first
 
     pDocShell->SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = true;
@@ -575,7 +575,7 @@ ScUndoCopyTab::ScUndoCopyTab(
     mpNewNames(pNewNames),
     pDrawUndo( nullptr )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 
     if (mpNewNames && mpNewTabs->size() != mpNewNames->size())
         // The sizes differ.  Something is wrong.
@@ -584,7 +584,7 @@ ScUndoCopyTab::ScUndoCopyTab(
 
 ScUndoCopyTab::~ScUndoCopyTab()
 {
-    delete pDrawUndo;
+    pDrawUndo.reset();
 }
 
 OUString ScUndoCopyTab::GetComment() const
@@ -610,7 +610,7 @@ void ScUndoCopyTab::Undo()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    DoSdrUndoAction( pDrawUndo, &rDoc );                 // before the sheets are deleted
+    DoSdrUndoAction( pDrawUndo.get(), &rDoc );         // before the sheets are deleted
 
     vector<SCTAB>::const_reverse_iterator itr, itrEnd = mpNewTabs->rend();
     for (itr = mpNewTabs->rbegin(); itr != itrEnd; ++itr)
@@ -687,7 +687,7 @@ void ScUndoCopyTab::Redo()
         }
     }
 
-    RedoSdrUndoAction( pDrawUndo );             // after the sheets are inserted
+    RedoSdrUndoAction( pDrawUndo.get() );       // after the sheets are inserted
 
     pViewShell->SetTabNo( nDestTab, true );     // after draw-undo
 
@@ -786,12 +786,12 @@ ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
     nFlags( nF ),
     pDrawUndo( nullptr )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
 
 ScUndoMakeScenario::~ScUndoMakeScenario()
 {
-    delete pDrawUndo;
+    pDrawUndo.reset();
 }
 
 OUString ScUndoMakeScenario::GetComment() const
@@ -809,7 +809,7 @@ void ScUndoMakeScenario::Undo()
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( false );
 
-    DoSdrUndoAction( pDrawUndo, &rDoc );
+    DoSdrUndoAction( pDrawUndo.get(), &rDoc );
 
     pDocShell->PostPaint(0,0,nDestTab,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::All);
     pDocShell->PostDataChanged();
@@ -828,7 +828,7 @@ void ScUndoMakeScenario::Redo()
 {
     SetViewMarkData(*mpMarkData);
 
-    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+    RedoSdrUndoAction( pDrawUndo.get() ); // Draw Redo first
 
     pDocShell->SetInUndo( true );
     bDrawIsInUndo = true;
@@ -865,12 +865,12 @@ ScUndoImportTab::ScUndoImportTab(ScDocShell* pShell,
     , nCount(nNewCount)
     , pDrawUndo(nullptr)
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
 
 ScUndoImportTab::~ScUndoImportTab()
 {
-    delete pDrawUndo;
+    pDrawUndo.reset();
 }
 
 OUString ScUndoImportTab::GetComment() const
@@ -942,7 +942,7 @@ void ScUndoImportTab::Undo()
 
     }
 
-    DoSdrUndoAction( pDrawUndo, &rDoc );             // before the sheets are deleted
+    DoSdrUndoAction( pDrawUndo.get(), &rDoc );  // before the sheets are deleted
 
     bDrawIsInUndo = true;
     for (i=0; i<nCount; i++)
@@ -995,7 +995,7 @@ void ScUndoImportTab::Redo()
             rDoc.SetTabProtection(nTabPos, xRedoDoc->GetTabProtection(nTabPos));
     }
 
-    RedoSdrUndoAction( pDrawUndo );     // after the sheets are inserted
+    RedoSdrUndoAction( pDrawUndo.get() ); // after the sheets are inserted
 
     DoChange();
 }
@@ -1304,8 +1304,8 @@ ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
 
 ScUndoPrintRange::~ScUndoPrintRange()
 {
-    delete pOldRanges;
-    delete pNewRanges;
+    pOldRanges.reset();
+    pNewRanges.reset();
 }
 
 void ScUndoPrintRange::DoChange(bool bUndo)

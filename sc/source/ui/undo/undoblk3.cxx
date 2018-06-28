@@ -77,7 +77,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
         bMulti      ( bNewMulti )   // unnecessary
 {
     if (bObjects)
-        pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
+        pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 
     if ( !(aMarkData.IsMarked() || aMarkData.IsMultiMarked()) )     // if no cell is selected:
         aMarkData.SetMarkArea( aRange );                            // select cell under cursor
@@ -88,7 +88,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
 ScUndoDeleteContents::~ScUndoDeleteContents()
 {
     pUndoDoc.reset();
-    delete pDrawUndo;
+    pDrawUndo.reset();
 }
 
 OUString ScUndoDeleteContents::GetComment() const
@@ -138,7 +138,7 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
 
         pUndoDoc->CopyToDocument(aCopyRange, nUndoFlags, bMulti, rDoc, &aMarkData);
 
-        DoSdrUndoAction( pDrawUndo, &rDoc );
+        DoSdrUndoAction( pDrawUndo.get(), &rDoc );
 
         ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
         if ( pChangeTrack )
@@ -151,7 +151,7 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
         pDocShell->UpdatePaintExt( nExtFlags, aRange );             // content before the change
 
         aMarkData.MarkToMulti();
-        RedoSdrUndoAction( pDrawUndo );
+        RedoSdrUndoAction( pDrawUndo.get() );
         // do not delete objects and note captions, they have been removed via drawing undo
         InsertDeleteFlags nRedoFlags = (nFlags & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS;
         rDoc.DeleteSelection( nRedoFlags, aMarkData );
@@ -372,7 +372,7 @@ ScUndoSelectionAttr::~ScUndoSelectionAttr()
     if (pLineInner)
         pPool->Remove(*pLineInner);
 
-    delete pUndoDoc;
+    pUndoDoc.reset();
 }
 
 OUString ScUndoSelectionAttr::GetComment() const
@@ -648,7 +648,7 @@ ScUndoMerge::ScUndoMerge(ScDocShell* pNewDocShell, const ScCellMergeOption& rOpt
 
 ScUndoMerge::~ScUndoMerge()
 {
-    delete mpDrawUndo;
+    mpDrawUndo.reset();
 }
 
 OUString ScUndoMerge::GetComment() const
@@ -719,9 +719,9 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         }
 
         if (bUndo)
-            DoSdrUndoAction( mpDrawUndo, &rDoc );
+            DoSdrUndoAction( mpDrawUndo.get(), &rDoc );
         else
-            RedoSdrUndoAction( mpDrawUndo );
+            RedoSdrUndoAction( mpDrawUndo.get() );
 
         bool bDidPaint = false;
         if ( pViewShell )
@@ -928,14 +928,14 @@ ScUndoReplace::ScUndoReplace( ScDocShell* pNewDocShell, const ScMarkData& rMark,
         aUndoStr    ( rNewUndoStr ),
         pUndoDoc    ( pNewUndoDoc )
 {
-    pSearchItem = new SvxSearchItem( *pItem );
+    pSearchItem.reset( new SvxSearchItem( *pItem ) );
     SetChangeTrack();
 }
 
 ScUndoReplace::~ScUndoReplace()
 {
-    delete pUndoDoc;
-    delete pSearchItem;
+    pUndoDoc.reset();
+    pSearchItem.reset();
 }
 
 void ScUndoReplace::SetChangeTrack()
@@ -947,7 +947,7 @@ void ScUndoReplace::SetChangeTrack()
         if ( pUndoDoc )
         {   //! UndoDoc includes only the changed cells,
             // that is why an Iterator can be used
-            pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc,
+            pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc.get(),
                 nStartChangeAction, nEndChangeAction );
         }
         else
@@ -1066,7 +1066,7 @@ void ScUndoReplace::Redo()
         {
             SetViewMarkData( aMarkData );
 
-            pViewShell->SearchAndReplace( pSearchItem, false, true );
+            pViewShell->SearchAndReplace( pSearchItem.get(), false, true );
         }
     }
     else if (pSearchItem->GetPattern() &&
@@ -1079,7 +1079,7 @@ void ScUndoReplace::Redo()
     }
     else
         if (pViewShell)
-            pViewShell->SearchAndReplace( pSearchItem, false, true );
+            pViewShell->SearchAndReplace( pSearchItem.get(), false, true );
 
     SetChangeTrack();
 
@@ -1089,7 +1089,7 @@ void ScUndoReplace::Redo()
 void ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
 {
     if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SearchAndReplace( pSearchItem, true, false );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SearchAndReplace( pSearchItem.get(), true, false );
 }
 
 bool ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1189,8 +1189,8 @@ ScUndoConversion::ScUndoConversion(
 
 ScUndoConversion::~ScUndoConversion()
 {
-    delete pUndoDoc;
-    delete pRedoDoc;
+    pUndoDoc.reset();
+    pRedoDoc.reset();
 }
 
 void ScUndoConversion::SetChangeTrack()
@@ -1200,7 +1200,7 @@ void ScUndoConversion::SetChangeTrack()
     if ( pChangeTrack )
     {
         if ( pUndoDoc )
-            pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc,
+            pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc.get(),
                 nStartChangeAction, nEndChangeAction );
         else
         {
@@ -1252,7 +1252,7 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
 void ScUndoConversion::Undo()
 {
     BeginUndo();
-    DoChange( pUndoDoc, aCursorPos );
+    DoChange( pUndoDoc.get(), aCursorPos );
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
@@ -1262,7 +1262,7 @@ void ScUndoConversion::Undo()
 void ScUndoConversion::Redo()
 {
     BeginRedo();
-    DoChange( pRedoDoc, aNewCursorPos );
+    DoChange( pRedoDoc.get(), aNewCursorPos );
     SetChangeTrack();
     EndRedo();
 }
@@ -1293,8 +1293,8 @@ bMulti      ( bNewMulti )
 
 ScUndoRefConversion::~ScUndoRefConversion()
 {
-    delete pUndoDoc;
-    delete pRedoDoc;
+    pUndoDoc.reset();
+    pRedoDoc.reset();
 }
 
 OUString ScUndoRefConversion::GetComment() const
@@ -1306,7 +1306,7 @@ void ScUndoRefConversion::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc,
+        pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc.get(),
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;
@@ -1336,7 +1336,7 @@ void ScUndoRefConversion::Undo()
 {
     BeginUndo();
     if (pUndoDoc)
-        DoChange(pUndoDoc);
+        DoChange(pUndoDoc.get());
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
@@ -1347,7 +1347,7 @@ void ScUndoRefConversion::Redo()
 {
     BeginRedo();
     if (pRedoDoc)
-        DoChange(pRedoDoc);
+        DoChange(pRedoDoc.get());
     SetChangeTrack();
     EndRedo();
 }
