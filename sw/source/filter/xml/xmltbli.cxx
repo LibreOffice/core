@@ -2774,11 +2774,11 @@ void SwXMLTableContext::MakeTable()
         m_xDDESource.set(nullptr);
 
         // 3) create new DDE table, and
-        SwDDETable* pDDETable = new SwDDETable( m_pTableNode->GetTable(),
-                                                pFieldType, false );
+        std::unique_ptr<SwDDETable> pDDETable( new SwDDETable( m_pTableNode->GetTable(),
+                                                pFieldType, false ) );
 
         // 4) set new (DDE)table at node.
-        m_pTableNode->SetNewTable(pDDETable, false);
+        m_pTableNode->SetNewTable(std::move(pDDETable), false);
     }
 
     // ??? this is always false: root frame is only created in SwViewShell::Init

@@ -283,8 +283,8 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         OSL_ENSURE( pDDEType, "unknown FieldType" );
 
         // Swap the table pointers in the node
-        SwDDETable* pNewTable = new SwDDETable( pTableNd->GetTable(), pDDEType );
-        pTableNd->SetNewTable( pNewTable, false );
+        std::unique_ptr<SwDDETable> pNewTable(new SwDDETable( pTableNd->GetTable(), pDDEType ));
+        pTableNd->SetNewTable( std::move(pNewTable), false );
     }
     // First copy the content of the tables, we will later assign the
     // boxes/lines and create the frames
