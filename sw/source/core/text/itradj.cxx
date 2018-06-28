@@ -30,6 +30,7 @@
 #include "pordrop.hxx"
 #include "pormulti.hxx"
 #include "portab.hxx"
+#include <o3tl/make_unique.hxx>
 #include <memory>
 
 #define MIN_TAB_WIDTH 60
@@ -396,8 +397,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     OSL_ENSURE( pCurrent->Height(), "SwTextAdjuster::CalcBlockAdjust: missing CalcLine()" );
     OSL_ENSURE( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
 
-    std::deque<sal_uInt16> *pNewKana = new std::deque<sal_uInt16>;
-    pCurrent->SetKanaComp( pNewKana );
+    pCurrent->SetKanaComp( o3tl::make_unique<std::deque<sal_uInt16>>() );
 
     const sal_uInt16 nNull = 0;
     size_t nKanaIdx = 0;
