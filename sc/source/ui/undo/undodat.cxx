@@ -727,7 +727,7 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
 
 ScUndoQuery::~ScUndoQuery()
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 OUString ScUndoQuery::GetComment() const

@@ -915,7 +915,7 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
 
 ScUndoReplaceNote::~ScUndoReplaceNote()
 {
-    DeleteSdrUndoAction( mpDrawUndo );
+    delete mpDrawUndo;
 }
 
 void ScUndoReplaceNote::Undo()
@@ -1048,7 +1048,7 @@ ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
 
 ScUndoDetective::~ScUndoDetective()
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
     delete pOldList;
 }
 

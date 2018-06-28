@@ -88,7 +88,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
 ScUndoDeleteContents::~ScUndoDeleteContents()
 {
     pUndoDoc.reset();
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 OUString ScUndoDeleteContents::GetComment() const
@@ -648,7 +648,7 @@ ScUndoMerge::ScUndoMerge(ScDocShell* pNewDocShell, const ScCellMergeOption& rOpt
 
 ScUndoMerge::~ScUndoMerge()
 {
-    DeleteSdrUndoAction( mpDrawUndo );
+    delete mpDrawUndo;
 }
 
 OUString ScUndoMerge::GetComment() const
