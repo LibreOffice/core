@@ -65,11 +65,6 @@ void RedoSdrUndoAction( SdrUndoAction* pUndoAction )
         pUndoAction->Redo();
 }
 
-void DeleteSdrUndoAction( SdrUndoAction* pUndoAction )
-{
-    delete pUndoAction;
-}
-
 void EnableDrawAdjust( ScDocument* pDoc, bool bEnable )
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
