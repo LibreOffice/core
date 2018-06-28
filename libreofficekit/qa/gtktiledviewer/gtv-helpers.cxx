@@ -101,7 +101,7 @@ GtkWidget* GtvHelpers::createCommentBox(const boost::property_tree::ptree& aComm
     gchar *id = g_strndup(aComment.get<std::string>("id").c_str(), 20);
     g_object_set_data_full(G_OBJECT(pCommentVBox), "id", id, g_free);
 
-    // Set background if its a reply comment
+    // Set background if it's a reply comment
     if (aComment.get("parent", -1) > 0)
     {
         GtkStyleContext* pStyleContext = gtk_widget_get_style_context(pCommentVBox);
