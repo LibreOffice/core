@@ -83,8 +83,8 @@ class SwLineLayout : public SwTextPortion
 {
 private:
     SwLineLayout *m_pNext;                // The next Line
-    std::vector<long>* m_pLLSpaceAdd;     // Used for justified alignment
-    std::deque<sal_uInt16>* m_pKanaComp;  // Used for Kana compression
+    std::unique_ptr<std::vector<long>> m_pLLSpaceAdd;     // Used for justified alignment
+    std::unique_ptr<std::deque<sal_uInt16>> m_pKanaComp;  // Used for Kana compression
     sal_uInt16 m_nRealHeight;             // The height resulting from line spacing and register
     bool m_bFormatAdj : 1;
     bool m_bDummy     : 1;
@@ -168,7 +168,7 @@ public:
     bool IsSpaceAdd() { return m_pLLSpaceAdd != nullptr; }
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
     void CreateSpaceAdd( const long nInit = 0 );
-    void FinishSpaceAdd() { delete m_pLLSpaceAdd; m_pLLSpaceAdd = nullptr; }
+    void FinishSpaceAdd() { m_pLLSpaceAdd.reset(); }
     sal_uInt16 GetLLSpaceAddCount() const { return sal::static_int_cast< sal_uInt16 >(m_pLLSpaceAdd->size()); }
     void SetLLSpaceAdd( long nNew, sal_uInt16 nIdx )
     {
@@ -179,12 +179,12 @@ public:
     }
     long GetLLSpaceAdd( sal_uInt16 nIdx ) { return (*m_pLLSpaceAdd)[ nIdx ]; }
     void RemoveFirstLLSpaceAdd() { m_pLLSpaceAdd->erase( m_pLLSpaceAdd->begin() ); }
-    std::vector<long>* GetpLLSpaceAdd() const { return m_pLLSpaceAdd; }
+    std::vector<long>* GetpLLSpaceAdd() const { return m_pLLSpaceAdd.get(); }
 
     // Stuff for Kana compression
-    void SetKanaComp( std::deque<sal_uInt16>* pNew ){ m_pKanaComp = pNew; }
-    void FinishKanaComp() { delete m_pKanaComp; m_pKanaComp = nullptr; }
-    std::deque<sal_uInt16>* GetpKanaComp() const { return m_pKanaComp; }
+    void SetKanaComp( std::unique_ptr<std::deque<sal_uInt16>> pNew ){ m_pKanaComp = std::move(pNew); }
+    void FinishKanaComp() { m_pKanaComp.reset(); }
+    std::deque<sal_uInt16>* GetpKanaComp() const { return m_pKanaComp.get(); }
     std::deque<sal_uInt16>& GetKanaComp() { return *m_pKanaComp; }
 
     /** determine ascent and descent for positioning of as-character anchored
