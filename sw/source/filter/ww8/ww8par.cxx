@@ -41,6 +41,7 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/propertysequence.hxx>
 
+#include <editeng/outlobj.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -2119,14 +2120,14 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     DateTime aDate = msfilter::util::DTTM2DateTime(nDateTime);
 
     OUString sText;
-    OutlinerParaObject *pOutliner = ImportAsOutliner( sText, pRes->nCp2OrIdx,
+    std::unique_ptr<OutlinerParaObject> pOutliner = ImportAsOutliner( sText, pRes->nCp2OrIdx,
         pRes->nCp2OrIdx + pRes->nMemLen, MAN_AND );
 
     m_pFormatOfJustInsertedApo = nullptr;
     SwPostItField aPostIt(
         static_cast<SwPostItFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit)), sAuthor,
         sText, sInitials, OUString(), aDate );
-    aPostIt.SetTextObject(pOutliner);
+    aPostIt.SetTextObject(std::move(pOutliner));
 
     SwPaM aEnd(*m_pPaM->End(), *m_pPaM->End());
     m_xCtrlStck->NewAttr(*aEnd.GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));

@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <sal/config.h>
-
+#include <editeng/outlobj.hxx>
 #include <algorithm>
 #include <memory>
 
@@ -1354,7 +1354,7 @@ void SAL_CALL SwXTextField::attach(
                     aDateTime );
                 if ( m_pImpl->m_xTextObject.is() )
                 {
-                    pPostItField->SetTextObject( m_pImpl->m_xTextObject->CreateText() );
+                    pPostItField->SetTextObject( std::unique_ptr<OutlinerParaObject>(m_pImpl->m_xTextObject->CreateText()) );
                     pPostItField->SetPar2(m_pImpl->m_xTextObject->GetText());
                 }
                 xField.reset(pPostItField);
