@@ -2806,7 +2806,7 @@ void SwSectionFrame::CalcFootnoteContent()
 void SwRootFrame::InsertEmptySct( SwSectionFrame* pDel )
 {
     if( !mpDestroy )
-        mpDestroy = new SwDestroyList;
+        mpDestroy.reset( new SwDestroyList );
     mpDestroy->insert( pDel );
 }
 
