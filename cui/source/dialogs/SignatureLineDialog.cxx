@@ -132,6 +132,7 @@ void SignatureLineDialog::Apply()
                         UNO_QUERY);
 
     xShapeProps->setPropertyValue("Graphic", Any(xGraphic));
+    xShapeProps->setPropertyValue("SignatureLineUnsignedImage", Any(xGraphic));
 
     // Set signature line properties
     xShapeProps->setPropertyValue("IsSignatureLine", Any(true));
