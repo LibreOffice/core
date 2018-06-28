@@ -152,12 +152,12 @@ class SwRootFrame: public SwLayoutFrame
     friend void InitCurrShells( SwRootFrame *pRoot );
     SwViewShell *mpCurrShell;
     SwViewShell *mpWaitingCurrShell;
-    SwCurrShells *mpCurrShells;
+    std::unique_ptr<SwCurrShells> mpCurrShells;
 
     /// One Page per DrawModel per Document; is always the size of the Root
     SdrPage *mpDrawPage;
 
-    SwDestroyList* mpDestroy;
+    std::unique_ptr<SwDestroyList> mpDestroy;
 
     sal_uInt16  mnPhyPageNums; /// Page count
     sal_uInt16 mnAccessibleShells; // Number of accessible shells
