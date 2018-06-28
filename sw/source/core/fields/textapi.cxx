@@ -61,7 +61,7 @@ SwTextAPIObject::SwTextAPIObject( SwTextAPIEditSource* p )
 SwTextAPIObject::~SwTextAPIObject() throw()
 {
     pSource->Dispose();
-    delete pSource;
+    pSource.reset();
 }
 
 struct SwTextAPIEditSource_Impl

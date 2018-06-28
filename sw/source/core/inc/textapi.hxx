@@ -53,7 +53,7 @@ public:
 
 class SwTextAPIObject : public SvxUnoText
 {
-    SwTextAPIEditSource* pSource;
+    std::unique_ptr<SwTextAPIEditSource> pSource;
 public:
                         SwTextAPIObject( SwTextAPIEditSource* p);
     virtual             ~SwTextAPIObject() throw() override;
