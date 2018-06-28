@@ -90,6 +90,7 @@ namespace slideshow
             bool                isEmpty() const { return mnStartIndex == mnEndIndex; }
 
             sal_Int32           getStartIndex() const { return mnStartIndex; }
+            void                setStartIndex( sal_Int32 nIndex ) { mnStartIndex = nIndex; }
             sal_Int32           getEndIndex() const { return mnEndIndex; }
             void                setEndIndex( sal_Int32 nIndex ) { mnEndIndex = nIndex; }
 
