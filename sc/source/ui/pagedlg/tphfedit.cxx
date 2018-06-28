@@ -80,7 +80,7 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
     Size aSize( GetOutputSize() );
     aSize.setHeight( aSize.Height() * 4 );
 
-    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool() );
+    pEdEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool() ) );
     pEdEngine->SetPaperSize( aSize );
     pEdEngine->SetRefDevice( this );
 
@@ -94,11 +94,11 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
     if (mbRTL)
         pEdEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
 
-    pEdView = new EditView( pEdEngine, this );
+    pEdView.reset( new EditView( pEdEngine.get(), this ) );
     pEdView->SetOutputArea( tools::Rectangle( Point(0,0), GetOutputSize() ) );
 
     pEdView->SetBackgroundColor( aBgColor );
-    pEdEngine->InsertView( pEdView );
+    pEdEngine->InsertView( pEdView.get() );
 }
 
 void ScEditWindow::Resize()
@@ -125,8 +125,8 @@ void ScEditWindow::dispose()
         if (xTemp.is())
             pAcc->dispose();
     }
-    delete pEdEngine;
-    delete pEdView;
+    pEdEngine.reset();
+    pEdView.reset();
     Control::dispose();
 }
 
@@ -326,7 +326,7 @@ css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAcces
         }
         break;
     }
-    pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView, this,
+    pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView.get(), this,
         sName, sDescription, ScAccessibleEditObject::EditControl);
     css::uno::Reference< css::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
