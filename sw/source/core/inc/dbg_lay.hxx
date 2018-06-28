@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DBG_LAY_HXX
 
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 enum class PROT {
     FileInit   = 0x00000000,
@@ -84,23 +85,10 @@ public:
 
 class SwEnterLeave
 {
-    SwImplEnterLeave* pImpl;
-    void Ctor( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar );
-    void Dtor();
-
+    std::unique_ptr<SwImplEnterLeave> pImpl;
 public:
-    SwEnterLeave( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar )
-    {
-        if( SwProtocol::Record( nFunc ) )
-            Ctor( pFrame, nFunc, nAct, pPar );
-        else
-            pImpl = nullptr;
-    }
-    ~SwEnterLeave()
-    {
-        if( pImpl )
-            Dtor();
-    }
+    SwEnterLeave( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar );
+    ~SwEnterLeave();
 };
 
 #define PROTOCOL( pFrame, nFunc, nAct, pPar ) {   if( SwProtocol::Record( nFunc ) )\

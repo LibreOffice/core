@@ -860,37 +860,34 @@ void SwImplProtocol::DeleteFrame( sal_uInt16 nId )
     pFrameIds->erase(nId);
 }
 
-/* SwEnterLeave::Ctor(..) is called from the (inline-)CTor if the function should
- * be logged.
+/*
  * The task here is to find the right SwImplEnterLeave object based on the
  * function; everything else is then done in his Ctor/Dtor.
  */
-void SwEnterLeave::Ctor( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar )
+SwEnterLeave::SwEnterLeave( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar )
 {
+    if( !SwProtocol::Record( nFunc ) )
+        return;
     switch( nFunc )
     {
         case PROT::AdjustN :
         case PROT::Grow:
-        case PROT::Shrink : pImpl = new SwSizeEnterLeave( pFrame, nFunc, nAct, pPar ); break;
+        case PROT::Shrink : pImpl.reset( new SwSizeEnterLeave( pFrame, nFunc, nAct, pPar ) ); break;
         case PROT::MoveFwd:
-        case PROT::MoveBack : pImpl = new SwUpperEnterLeave( pFrame, nFunc, nAct, pPar ); break;
-        case PROT::FrmChanges : pImpl = new SwFrameChangesLeave( pFrame, nFunc, nAct, pPar ); break;
-        default: pImpl = new SwImplEnterLeave( pFrame, nFunc, nAct, pPar ); break;
+        case PROT::MoveBack : pImpl.reset( new SwUpperEnterLeave( pFrame, nFunc, nAct, pPar ) ); break;
+        case PROT::FrmChanges : pImpl.reset( new SwFrameChangesLeave( pFrame, nFunc, nAct, pPar ) ); break;
+        default: pImpl.reset( new SwImplEnterLeave( pFrame, nFunc, nAct, pPar ) ); break;
     }
     pImpl->Enter();
 }
 
-/* SwEnterLeave::Dtor() only calls the Dtor of the SwImplEnterLeave object. It's
- * just no inline because we don't want the SwImplEnterLeave definition inside
+/* This is not inline because we don't want the SwImplEnterLeave definition inside
  * dbg_lay.hxx.
  */
-void SwEnterLeave::Dtor()
+SwEnterLeave::~SwEnterLeave()
 {
-    if( pImpl )
-    {
+    if (pImpl)
         pImpl->Leave();
-        delete pImpl;
-    }
 }
 
 void SwImplEnterLeave::Enter()
