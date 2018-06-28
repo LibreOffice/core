@@ -622,7 +622,7 @@ bool KDE5SalGraphics::drawNativeControl(ControlType type, ControlPart part,
     QImage2BitmapBuffer(m_image.get(), pBuffer);
     SalTwoRect aTR(0, 0, m_image.get()->width(), m_image.get()->height(), rControlRegion.getX(),
                    rControlRegion.getY(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
-    drawBitmap(aTR, pBuffer);
+    drawBitmap(aTR, pBuffer, CAIRO_OPERATOR_OVER);
 
     delete localClipRegion;
     return returnVal;
