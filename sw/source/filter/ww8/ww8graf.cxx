@@ -952,9 +952,9 @@ void removePositions(EditEngine &rDrawEditEngine, const std::vector<sal_Int32>& 
     }
 }
 
-OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
+std::unique_ptr<OutlinerParaObject> SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
 {
-    OutlinerParaObject* pRet = nullptr;
+    std::unique_ptr<OutlinerParaObject> pRet;
 
     sal_Int32 nLen = GetRangeAsDrawingString(rString, nStartCp, nEndCp, eType);
     if (nLen > 0)
@@ -984,7 +984,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
         }
 
         std::unique_ptr<EditTextObject> pTemporaryText = m_pDrawEditEngine->CreateTextObject();
-        pRet = new OutlinerParaObject(*pTemporaryText);
+        pRet.reset( new OutlinerParaObject(*pTemporaryText) );
         pRet->SetOutlinerMode( OutlinerMode::TextObject );
         pTemporaryText.reset();
 
