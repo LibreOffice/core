@@ -3180,10 +3180,12 @@ void ChartExport::exportDataLabels(
         // Individual label property that overwrites the baseline.
         pFS->startElement(FSNS(XML_c, XML_dLbl), FSEND);
         pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx), FSEND);
+        exportTextProps( xPropSet );
         writeLabelProperties(pFS, this, xLabelPropSet, aParam);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
+    exportTextProps( xPropSet );
     // Baseline label properties for all labels.
     writeLabelProperties(pFS, this, xPropSet, aParam);
 
