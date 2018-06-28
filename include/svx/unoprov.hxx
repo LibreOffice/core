@@ -55,28 +55,27 @@ public:
 #define SVXMAP_DIMENSIONING         2
 #define SVXMAP_CIRCLE               3
 #define SVXMAP_POLYPOLYGON          4
-#define SVXMAP_POLYPOLYGONBEZIER    5
-#define SVXMAP_GRAPHICOBJECT        6
-#define SVXMAP_3DSCENEOBJECT        7
-#define SVXMAP_3DCUBEOBJECT         8
-#define SVXMAP_3DSPHEREOBJECT       9
-#define SVXMAP_3DLATHEOBJECT        10
-#define SVXMAP_3DEXTRUDEOBJECT      11
-#define SVXMAP_3DPOLYGONOBJECT      12
-#define SVXMAP_ALL                  13
-#define SVXMAP_GROUP                14
-#define SVXMAP_CAPTION              15
-#define SVXMAP_OLE2                 16
-#define SVXMAP_PLUGIN               17
-#define SVXMAP_FRAME                18
-#define SVXMAP_APPLET               19
-#define SVXMAP_CONTROL              20
-#define SVXMAP_TEXT                 21
-#define SVXMAP_CUSTOMSHAPE          22
-#define SVXMAP_MEDIA                23
-#define SVXMAP_TABLE                24
-#define SVXMAP_PAGE                 25
-#define SVXMAP_END                  26  // last+1 !
+#define SVXMAP_GRAPHICOBJECT        5
+#define SVXMAP_3DSCENEOBJECT        6
+#define SVXMAP_3DCUBEOBJECT         7
+#define SVXMAP_3DSPHEREOBJECT       8
+#define SVXMAP_3DLATHEOBJECT        9
+#define SVXMAP_3DEXTRUDEOBJECT      10
+#define SVXMAP_3DPOLYGONOBJECT      11
+#define SVXMAP_ALL                  12
+#define SVXMAP_GROUP                13
+#define SVXMAP_CAPTION              14
+#define SVXMAP_OLE2                 15
+#define SVXMAP_PLUGIN               16
+#define SVXMAP_FRAME                17
+#define SVXMAP_APPLET               18
+#define SVXMAP_CONTROL              19
+#define SVXMAP_TEXT                 20
+#define SVXMAP_CUSTOMSHAPE          21
+#define SVXMAP_MEDIA                22
+#define SVXMAP_TABLE                23
+#define SVXMAP_PAGE                 24
+#define SVXMAP_END                  25  // last+1 !
 
 /**
  * SvxUnoPropertyMapProvider

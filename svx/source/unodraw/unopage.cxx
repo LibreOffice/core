@@ -668,17 +668,17 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
                     break;
                 case OBJ_SPLNLINE:
                 case OBJ_PATHLINE:
-                    pRet = new SvxShapePolyPolygonBezier( pObj , PolygonKind_PATHLINE );
+                    pRet = new SvxShapePolyPolygon( pObj , PolygonKind_PATHLINE );
                     break;
                 case OBJ_SPLNFILL:
                 case OBJ_PATHFILL:
-                    pRet = new SvxShapePolyPolygonBezier( pObj , PolygonKind_PATHFILL );
+                    pRet = new SvxShapePolyPolygon( pObj , PolygonKind_PATHFILL );
                     break;
                 case OBJ_FREELINE:
-                    pRet = new SvxShapePolyPolygonBezier( pObj , PolygonKind_FREELINE );
+                    pRet = new SvxShapePolyPolygon( pObj , PolygonKind_FREELINE );
                     break;
                 case OBJ_FREEFILL:
-                    pRet = new SvxShapePolyPolygonBezier( pObj , PolygonKind_FREEFILL );
+                    pRet = new SvxShapePolyPolygon( pObj , PolygonKind_FREEFILL );
                     break;
                 case OBJ_CAPTION:
                     pRet = new SvxShapeCaption( pObj );
