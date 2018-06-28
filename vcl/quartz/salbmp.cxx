@@ -451,13 +451,13 @@ class ImplPixelFormat8 : public ImplPixelFormat
 private:
     sal_uInt8* pData;
     const BitmapPalette& mrPalette;
-    const sal_uInt8 mnPaletteCount;
+    const sal_uInt16 mnPaletteCount;
 
 public:
     explicit ImplPixelFormat8( const BitmapPalette& rPalette )
         : pData(nullptr)
         , mrPalette(rPalette)
-        , mnPaletteCount(static_cast< sal_uInt8 >(rPalette.GetEntryCount()))
+        , mnPaletteCount(rPalette.GetEntryCount())
         {
         }
     virtual void StartLine( sal_uInt8* pLine ) override { pData = pLine; }
@@ -489,7 +489,7 @@ class ImplPixelFormat4 : public ImplPixelFormat
 private:
     sal_uInt8* pData;
     const BitmapPalette& mrPalette;
-    const sal_uInt8 mnPaletteCount;
+    const sal_uInt16 mnPaletteCount;
     sal_uInt32 mnX;
     sal_uInt32 mnShift;
 
@@ -497,7 +497,7 @@ public:
     explicit ImplPixelFormat4( const BitmapPalette& rPalette )
         : pData(nullptr)
         , mrPalette(rPalette)
-        , mnPaletteCount(static_cast< sal_uInt8 >(rPalette.GetEntryCount()))
+        , mnPaletteCount(rPalette.GetEntryCount())
         , mnX(0)
         , mnShift(0)
         {
@@ -545,14 +545,14 @@ class ImplPixelFormat1 : public ImplPixelFormat
 private:
     sal_uInt8* pData;
     const BitmapPalette& mrPalette;
-    const sal_uInt8 mnPaletteCount;
+    const sal_uInt16 mnPaletteCount;
     sal_uInt32 mnX;
 
 public:
     explicit ImplPixelFormat1( const BitmapPalette& rPalette )
         : pData(nullptr)
         , mrPalette(rPalette)
-        , mnPaletteCount(static_cast< sal_uInt8 >(rPalette.GetEntryCount()))
+        , mnPaletteCount(rPalette.GetEntryCount())
         , mnX(0)
         {
         }
