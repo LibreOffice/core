@@ -1826,7 +1826,7 @@ void SwPostItField::SetTextObject( std::unique_ptr<OutlinerParaObject> pText )
 
 sal_Int32 SwPostItField::GetNumberOfParagraphs() const
 {
-    return (mpText) ? mpText->Count() : 1;
+    return mpText ? mpText->Count() : 1;
 }
 
 bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
