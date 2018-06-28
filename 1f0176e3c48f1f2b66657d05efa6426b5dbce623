@@ -69,6 +69,24 @@
       "revId": "1f0176e3c48f1f2b66657d05efa6426b5dbce623",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1ff146_046d7632",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-28T11:50:01Z",
+      "side": 1,
+      "message": "Darn, I overlooked that. Still ShrinkToUsedDataArea() should consider cell comments and drawing objects, shouldn\u0027t it? Or rather decide per clipboard format whether it should or not, as they weren\u0027t included in the now removed block below, but likely are wanted in the image format case and GetPrintArea() handles only cell comments, additionally to cell content and visual formatting.",
+      "parentUuid": "3a1ff146_24c7d246",
+      "revId": "1f0176e3c48f1f2b66657d05efa6426b5dbce623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
