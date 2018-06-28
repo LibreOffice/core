@@ -74,7 +74,7 @@ ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
 
 ScUndoInsertTab::~ScUndoInsertTab()
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 OUString ScUndoInsertTab::GetComment() const
@@ -167,7 +167,7 @@ ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
 
 ScUndoInsertTables::~ScUndoInsertTables()
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 OUString ScUndoInsertTables::GetComment() const
@@ -584,7 +584,7 @@ ScUndoCopyTab::ScUndoCopyTab(
 
 ScUndoCopyTab::~ScUndoCopyTab()
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 OUString ScUndoCopyTab::GetComment() const
@@ -791,7 +791,7 @@ ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
 
 ScUndoMakeScenario::~ScUndoMakeScenario()
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 OUString ScUndoMakeScenario::GetComment() const
@@ -870,7 +870,7 @@ ScUndoImportTab::ScUndoImportTab(ScDocShell* pShell,
 
 ScUndoImportTab::~ScUndoImportTab()
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 OUString ScUndoImportTab::GetComment() const

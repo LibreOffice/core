@@ -250,7 +250,7 @@ ScBlockUndo::ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
 
 ScBlockUndo::~ScBlockUndo()
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 void ScBlockUndo::BeginUndo()
@@ -351,7 +351,7 @@ ScMultiBlockUndo::ScMultiBlockUndo(
 
 ScMultiBlockUndo::~ScMultiBlockUndo()
 {
-    DeleteSdrUndoAction( mpDrawUndo );
+    delete mpDrawUndo;
 }
 
 void ScMultiBlockUndo::BeginUndo()
@@ -423,7 +423,7 @@ ScMoveUndo::~ScMoveUndo()
 {
     delete pRefUndoData;
     delete pRefUndoDoc;
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 void ScMoveUndo::UndoRef()
@@ -469,7 +469,6 @@ ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal ) :
 
 ScDBFuncUndo::~ScDBFuncUndo()
 {
-    DeleteSdrUndoAction( nullptr );
     delete pAutoDBRange;
 }
 

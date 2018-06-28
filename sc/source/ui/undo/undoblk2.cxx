@@ -62,7 +62,7 @@ ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
 {
     pUndoDoc.reset();
     pUndoTab.reset();
-    DeleteSdrUndoAction( pDrawUndo );
+    delete pDrawUndo;
 }
 
 OUString ScUndoWidthOrHeight::GetComment() const
