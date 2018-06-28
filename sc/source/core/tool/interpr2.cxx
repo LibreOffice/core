@@ -1781,11 +1781,6 @@ double ScInterpreter::ScInterVDB(double fCost, double fSalvage, double fLife,
     return fVdb;
 }
 
-inline double DblMin( double a, double b )
-{
-    return (a < b) ? a : b;
-}
-
 void ScInterpreter::ScVDB()
 {
     nFuncFmtType = SvNumFormatType::CURRENCY;
@@ -1826,7 +1821,7 @@ void ScInterpreter::ScVDB()
 
                     //respect partial period in the Beginning/ End:
                     if ( i == nLoopStart+1 )
-                        fTerm *= ( DblMin( fEnd, fIntStart + 1.0 ) - fStart );
+                        fTerm *= ( std::min( fEnd, fIntStart + 1.0 ) - fStart );
                     else if ( i == nLoopEnd )
                         fTerm *= ( fEnd + 1.0 - fIntEnd );
 
