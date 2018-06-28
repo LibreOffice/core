@@ -54,6 +54,7 @@ void VBATest::testMiscVBAFunctions()
         "strconv.vb",
         "dateserial.vb",
         "format.vb",
+        "formatnumber.vb",
         "replace.vb",
         "stringplusdouble.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
