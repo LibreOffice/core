@@ -38,6 +38,7 @@ class   SalXLib;
 #include <vcl/ptrstyle.hxx>
 #include <sal/types.h>
 #include <osl/mutex.h>
+#include <cassert>
 #include <list>
 #include <unordered_map>
 #include <vector>
@@ -89,7 +90,6 @@ class SalVisual : public XVisualInfo
     int             nBlueBits_;
 public:
                             SalVisual();
-                            ~SalVisual();
                             SalVisual( const XVisualInfo* pXVI );
 
     VisualID        GetVisualId() const { return visualid; }
@@ -101,12 +101,29 @@ public:
             Color           GetTCColor( Pixel nPixel ) const;
 };
 
+// A move-only flag, used by SalColormap to track ownership of its m_aVisual.visual:
+struct OwnershipFlag {
+    bool owner = false;
+
+    OwnershipFlag() = default;
+
+    OwnershipFlag(OwnershipFlag && other) noexcept: owner(other.owner) { other.owner = false; }
+
+    OwnershipFlag & operator =(OwnershipFlag && other) noexcept {
+        assert(&other != this);
+        owner = other.owner;
+        other.owner = false;
+        return *this;
+    }
+};
+
 class SalColormap
 {
     const SalDisplay*       m_pDisplay;
     Colormap                m_hColormap;
     std::vector<Color>      m_aPalette;         // Pseudocolor
     SalVisual               m_aVisual;
+    OwnershipFlag           m_aVisualOwnership;
     std::vector<sal_uInt16>     m_aLookupTable;     // Pseudocolor: 12bit reduction
     Pixel                   m_nWhitePixel;
     Pixel                   m_nBlackPixel;
@@ -121,6 +138,11 @@ public:
                  SalX11Screen       nXScreen );
     SalColormap( sal_uInt16         nDepth );
     SalColormap();
+
+    ~SalColormap();
+
+    SalColormap(SalColormap &&) = default;
+    SalColormap & operator =(SalColormap &&) = default;
 
     Colormap            GetXColormap() const { return m_hColormap; }
     const SalDisplay*   GetDisplay() const { return m_pDisplay; }
