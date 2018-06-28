@@ -164,54 +164,67 @@ namespace slideshow
             mbNodeTreeInitialized = true;
         }
 
-        void DrawShapeSubsetting::updateSubsetBounds( const SubsetEntry& rSubsetEntry )
+        void DrawShapeSubsetting::excludeSubset(sal_Int32 nExcludedStart, sal_Int32 nExcludedEnd)
         {
-            // TODO(F1): This removes too much from non-contiguous subsets
-            mnMinSubsetActionIndex = ::std::min(
-                mnMinSubsetActionIndex,
-                rSubsetEntry.mnStartActionIndex );
-            mnMaxSubsetActionIndex = ::std::max(
-                mnMaxSubsetActionIndex,
-                rSubsetEntry.mnEndActionIndex );
+            // If current subsets are empty, fill it with initial range
+            initCurrentSubsets();
+            if (maCurrentSubsets.empty())
+            {
+                // Non-subsetting mode (not a subset of anything; child subsets subtract content)
+                maCurrentSubsets.push_back(DocTreeNode(0, maActionClassVector.size(),
+                                                       DocTreeNode::NODETYPE_INVALID));
+            }
+
+            slideshow::internal::VectorOfDocTreeNodes aNodesToAppend;
+            for (auto i = maCurrentSubsets.begin(); i != maCurrentSubsets.end();)
+            {
+                if (i->getStartIndex() < nExcludedStart)
+                {
+                    if (i->getEndIndex() > nExcludedStart)
+                    {
+                        // Some overlap -> append new node (if required), and correct this node's end
+                        if (i->getEndIndex() > nExcludedEnd)
+                        {
+                            aNodesToAppend.push_back(DocTreeNode(nExcludedEnd, i->getEndIndex(),
+                                                                 DocTreeNode::NODETYPE_INVALID));
+                        }
+                        i->setEndIndex(nExcludedStart);
+                    }
+                    ++i;
+                }
+                else if (i->getStartIndex() < nExcludedEnd)
+                {
+                    if (i->getEndIndex() > nExcludedEnd)
+                    {
+                        // Partial overlap; change the node's start
+                        i->setStartIndex(nExcludedEnd);
+                        ++i;
+                    }
+                    else
+                    {
+                        // Node is fully inside the removed range: erase it
+                        i = maCurrentSubsets.erase(i);
+                    }
+                }
+                else
+                {
+                    // Node is fully outside (after) excluded range
+                    ++i;
+                }
+            }
+
+            maCurrentSubsets.insert(maCurrentSubsets.end(), aNodesToAppend.begin(),
+                                    aNodesToAppend.end());
         }
 
         void DrawShapeSubsetting::updateSubsets()
         {
             maCurrentSubsets.clear();
+            initCurrentSubsets();
 
-            if( !maSubsetShapes.empty() )
+            for (const auto& rSubsetShape : maSubsetShapes)
             {
-                if( maSubset.isEmpty() )
-                {
-                    // non-subsetted node, with some child subsets
-                    // that subtract from it
-                    maCurrentSubsets.push_back( DocTreeNode( 0,
-                                                             mnMinSubsetActionIndex,
-                                                             DocTreeNode::NODETYPE_INVALID ) );
-                    maCurrentSubsets.push_back( DocTreeNode( mnMaxSubsetActionIndex,
-                                                             maActionClassVector.size(),
-                                                             DocTreeNode::NODETYPE_INVALID ) );
-                }
-                else
-                {
-                    // subsetted node, from which some further child
-                    // subsets subtract content
-                    maCurrentSubsets.push_back( DocTreeNode( maSubset.getStartIndex(),
-                                                             mnMinSubsetActionIndex,
-                                                             DocTreeNode::NODETYPE_INVALID ) );
-                    maCurrentSubsets.push_back( DocTreeNode( mnMaxSubsetActionIndex,
-                                                             maSubset.getEndIndex(),
-                                                             DocTreeNode::NODETYPE_INVALID ) );
-                }
-            }
-            else
-            {
-                // no further child subsets, simply add our subset (if any)
-                if( !maSubset.isEmpty() )
-                {
-                    // subsetted node, without any subset children
-                    maCurrentSubsets.push_back( maSubset );
-                }
+                excludeSubset(rSubsetShape.mnStartActionIndex, rSubsetShape.mnEndActionIndex);
             }
         }
 
@@ -224,8 +237,6 @@ namespace slideshow
             mpMtf(),
             maSubset(),
             maSubsetShapes(),
-            mnMinSubsetActionIndex( SAL_MAX_INT32 ),
-            mnMaxSubsetActionIndex(0),
             maCurrentSubsets(),
             mbNodeTreeInitialized( false )
         {
@@ -237,8 +248,6 @@ namespace slideshow
             mpMtf( rMtf ),
             maSubset( rShapeSubset ),
             maSubsetShapes(),
-            mnMinSubsetActionIndex( SAL_MAX_INT32 ),
-            mnMaxSubsetActionIndex(0),
             maCurrentSubsets(),
             mbNodeTreeInitialized( false )
         {
@@ -254,8 +263,6 @@ namespace slideshow
             mpMtf.reset();
             maSubset.reset();
             maSubsetShapes.clear();
-            mnMinSubsetActionIndex = SAL_MAX_INT32;
-            mnMaxSubsetActionIndex = 0;
             maCurrentSubsets.clear();
             mbNodeTreeInitialized = false;
         }
@@ -330,9 +337,7 @@ namespace slideshow
 
                 maSubsetShapes.insert( aEntry );
 
-                // update cached subset borders
-                updateSubsetBounds( aEntry );
-                updateSubsets();
+                excludeSubset(aEntry.mnStartActionIndex, aEntry.mnEndActionIndex);
             }
         }
 
@@ -384,18 +389,9 @@ namespace slideshow
             // part of this shape that is visible, i.e. not displayed
             // in subset shapes)
 
-
-            // init bounds
-            mnMinSubsetActionIndex = SAL_MAX_INT32;
-            mnMaxSubsetActionIndex = 0;
-
             // TODO(P2): This is quite expensive, when
             // after every subset effect end, we have to scan
             // the whole shape set
-
-            // determine new subset range
-            for( const auto& rSubsetShape : maSubsetShapes )
-                updateSubsetBounds( rSubsetShape );
 
             updateSubsets();
 
