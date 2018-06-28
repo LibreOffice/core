@@ -2610,13 +2610,13 @@ void ScDocRowHeightUpdater::update()
     Fraction aZoom(1, 1);
     itr = mpTabRangesArray->begin();
     sal_uInt32 nProgressStart = 0;
-    sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
     for (; itr != itrEnd; ++itr)
     {
         SCTAB nTab = itr->mnTab;
         if (!ValidTab(nTab) || nTab >= mrDoc.GetTableCount() || !mrDoc.maTabs[nTab])
             continue;
 
+        sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
         ScFlatBoolRowSegments::RangeData aData;
         ScFlatBoolRowSegments::RangeIterator aRangeItr(*itr->mpRanges);
         for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
