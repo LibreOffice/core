@@ -455,10 +455,9 @@ namespace
         }
         return BuildJoin(_xConnection, rRh, BuildTable(_xConnection,pLh), &data);
     }
-    typedef std::set<OUString> tableNames_t;
     void addConnectionTableNames( const Reference< XConnection>& _xConnection,
                                   const OQueryTableConnection* const pEntryConn,
-                                  tableNames_t &_rTableNames )
+                                  std::set<OUString> &_rTableNames )
     {
             // insert tables into table list to avoid double entries
             const OQueryTableWindow* const pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
@@ -470,7 +469,7 @@ namespace
                         OQueryTableConnection* pEntryConn,
                         OQueryTableWindow const * pEntryTabTo,
                         OUString &aJoin,
-                        tableNames_t &_rTableNames)
+                        std::set<OUString> &_rTableNames)
     {
         OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get());
         if ( pEntryConnData->GetJoinType() == INNER_JOIN && !pEntryConnData->isNatural() )
@@ -973,7 +972,7 @@ namespace
     }
     void searchAndAppendName(const Reference< XConnection>& _xConnection,
                              const OQueryTableWindow* _pTableWindow,
-                             tableNames_t& _rTableNames,
+                             std::set<OUString>& _rTableNames,
                              OUString& _rsTableListStr
                              )
     {
@@ -992,7 +991,7 @@ namespace
 
         OUString aTableListStr;
         // used to avoid putting a table twice in FROM clause
-        tableNames_t aTableNames;
+        std::set<OUString> aTableNames;
 
         // generate outer join clause in from
         if(!rConnList.empty())

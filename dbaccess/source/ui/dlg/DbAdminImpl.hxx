@@ -64,7 +64,6 @@ namespace dbaui
         css::uno::Reference< css::frame::XModel >         m_xModel;
 
         css::uno::Any              m_aDataSourceOrName;
-        typedef std::set< OUString >   StringSet;
 
         MapInt2String           m_aDirectPropTranslator;    /// translating property id's into names (direct properties of a data source)
         MapInt2String           m_aIndirectPropTranslator;  /// translating property id's into names (indirect properties of a data source)

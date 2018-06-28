@@ -749,10 +749,10 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         // These settings have to be removed: If they're not relevant, we have no UI for changing them.
 
         // for this, we need a string-controlled quick access to m_aIndirectPropTranslator
-        StringSet aIndirectProps;
+        std::set<OUString> aIndirectProps;
         std::transform(m_aIndirectPropTranslator.begin(),
                          m_aIndirectPropTranslator.end(),
-                         std::insert_iterator<StringSet>(aIndirectProps,aIndirectProps.begin()),
+                         std::inserter(aIndirectProps,aIndirectProps.begin()),
                          ::o3tl::select2nd< MapInt2String::value_type >());
 
         // now check the to-be-preserved props

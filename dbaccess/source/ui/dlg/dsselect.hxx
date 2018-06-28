@@ -50,7 +50,7 @@ class ODatasourceSelectDialog final : public ModalDialog
 #endif
 
 public:
-    ODatasourceSelectDialog( vcl::Window* _pParent, const StringBag& _rDatasources );
+    ODatasourceSelectDialog( vcl::Window* _pParent, const std::set<OUString>& _rDatasources );
     virtual ~ODatasourceSelectDialog() override;
     virtual void dispose() override;
     OUString GetSelected() const {
@@ -68,7 +68,7 @@ private:
     DECL_LINK(ManageClickHdl, Button*, void);
     DECL_LINK( ManageProcessFinished, void*, void );
 #endif
-    void fillListBox(const StringBag& _rDatasources);
+    void fillListBox(const std::set<OUString>& _rDatasources);
 };
 
 }   // namespace dbaui

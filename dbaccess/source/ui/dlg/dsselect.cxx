@@ -41,7 +41,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 
-ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const StringBag& _rDatasources)
+ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const std::set<OUString>& _rDatasources)
     : ModalDialog(_pParent, "ChooseDataSourceDialog",
         "dbaccess/ui/choosedatasourcedialog.ui")
 {
@@ -120,7 +120,7 @@ IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl, Button*, void)
 
 IMPL_LINK_NOARG( ODatasourceSelectDialog, ManageProcessFinished, void*, void )
 {
-    StringBag aOdbcDatasources;
+    std::set<OUString> aOdbcDatasources;
     OOdbcEnumeration aEnumeration;
     aEnumeration.getDatasourceNames( aOdbcDatasources );
     fillListBox( aOdbcDatasources );
@@ -132,7 +132,7 @@ IMPL_LINK_NOARG( ODatasourceSelectDialog, ManageProcessFinished, void*, void )
 }
 
 #endif
-void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
+void ODatasourceSelectDialog::fillListBox(const std::set<OUString>& _rDatasources)
 {
     OUString sSelected;
     if (m_pDatasource->GetEntryCount())
