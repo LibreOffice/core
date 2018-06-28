@@ -34,6 +34,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1762,7 +1763,7 @@ SwPostItField::~SwPostItField()
         m_xTextObject->DisposeEditSource();
     }
 
-    delete mpText;
+    mpText.reset();
 }
 
 OUString SwPostItField::Expand() const
@@ -1780,7 +1781,7 @@ SwField* SwPostItField::Copy() const
     SwPostItField* pRet = new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
                                              m_aDateTime, m_nPostItId);
     if (mpText)
-        pRet->SetTextObject( new OutlinerParaObject(*mpText) );
+        pRet->SetTextObject( o3tl::make_unique<OutlinerParaObject>(*mpText) );
 
     // Note: member <m_xTextObject> not copied.
 
@@ -1818,10 +1819,9 @@ void SwPostItField::SetName(const OUString& rName)
 }
 
 
-void SwPostItField::SetTextObject( OutlinerParaObject* pText )
+void SwPostItField::SetTextObject( std::unique_ptr<OutlinerParaObject> pText )
 {
-    delete mpText;
-    mpText = pText;
+    mpText = std::move(pText);
 }
 
 sal_Int32 SwPostItField::GetNumberOfParagraphs() const
@@ -1892,11 +1892,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_PAR2:
         rAny >>= m_sText;
         //#i100374# new string via api, delete complex text object so SwPostItNote picks up the new string
-        if (mpText)
-        {
-            delete mpText;
-            mpText = nullptr;
-        }
+        mpText.reset();
         break;
     case FIELD_PROP_PAR3:
         rAny >>= m_sInitials;
@@ -1935,7 +1931,7 @@ void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
     SwField::dumpAsXml(pWriter);
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("mpText"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", mpText);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", mpText.get());
     if (mpText)
         mpText->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
