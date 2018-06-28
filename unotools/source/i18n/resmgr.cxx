@@ -208,7 +208,7 @@ namespace Translate
             ++pId;
         }
 
-        //if its a key id locale, generate it here
+        //if it's a key id locale, generate it here
         if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
         {
             OString sKeyId(genKeyId(OString(pContextAndId).replace('\004', '|')));

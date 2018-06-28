@@ -3227,7 +3227,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * 'action' can be 'Add', 'Remove' or 'Modify' depending on whether
      *  comment has been added, removed or modified.
      * 'parent' is a non-zero comment id if this comment is a reply comment,
-     *  otherwise its a root comment.
+     *  otherwise it's a root comment.
      */
     doc_view_signals[COMMENT] =
         g_signal_new("comment",

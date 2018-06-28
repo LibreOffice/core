@@ -166,7 +166,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         awt::Size aOrigSize = getVisualAreaSize(nAspect);
         changeState(embed::EmbedStates::RUNNING);
         const bool bIsChart = GetDocumentServiceName() == "com.sun.star.chart2.ChartDocument";
-        // tdf#108643 unless its a chart, cause those are weird (#i103460#)
+        // tdf#108643 unless it's a chart, cause those are weird (#i103460#)
         if (!bIsChart && aOrigSize != getVisualAreaSize(nAspect))
             setVisualAreaSize(nAspect, aOrigSize);
 
