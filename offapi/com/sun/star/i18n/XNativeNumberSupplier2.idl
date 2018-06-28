@@ -51,7 +51,7 @@ interface XNativeNumberSupplier2 : ::com::sun::star::i18n::XNativeNumberSupplier
         @param Locale
             The locale.
 
-        @param NativeNumberParams
+        @param NativeNumberParameters
             The NatNum params (like "ordinal-digits" in [NatNum12 ordinal-digits]).
      */
     string getNativeNumberStringParams(
