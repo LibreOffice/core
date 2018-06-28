@@ -235,6 +235,7 @@ extern RTLFUNC(IsUnoStruct);
 
 extern RTLFUNC(FileDateTime);
 extern RTLFUNC(Format);
+extern RTLFUNC(FormatNumber);
 extern RTLFUNC(GetAttr);
 extern RTLFUNC(Randomize); // JSM
 extern RTLFUNC(Round);
@@ -300,6 +301,7 @@ extern RTLFUNC(Blue);
 
 extern RTLFUNC(Switch);
 extern RTLFUNC(Wait);
+
 //i#64882# add new WaitUntil
 extern RTLFUNC(WaitUntil);
 extern RTLFUNC(FuncCaller);
