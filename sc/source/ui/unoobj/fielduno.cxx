@@ -278,7 +278,7 @@ ScCellFieldsObj::ScCellFieldsObj(
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 
-    mpEditSource = new ScCellEditSource( pDocShell, aCellPos );
+    mpEditSource.reset( new ScCellEditSource( pDocShell, aCellPos ) );
 }
 
 ScCellFieldsObj::~ScCellFieldsObj()
@@ -288,7 +288,7 @@ ScCellFieldsObj::~ScCellFieldsObj()
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 
-    delete mpEditSource;
+    mpEditSource.reset();
 
     // increment refcount to prevent double call off dtor
     osl_atomic_increment( &m_refCount );
