@@ -23,6 +23,7 @@
 #include <IDocumentTimerAccess.hxx>
 #include <SwDocIdle.hxx>
 
+#include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>
 
@@ -56,6 +57,10 @@ public:
 
     void StartBackgroundJobs() override;
 
+    /// Delay starting idle jobs to allow for post-load activity.
+    /// Used by LOK only.
+    DECL_LINK( FireIdleJobsTimeout, Timer *, void );
+
     bool IsDocIdle() const override;
 
 private:
@@ -71,6 +76,7 @@ private:
     bool mbStartIdleTimer; //< idle timer mode start/stop
     sal_Int32 mIdleBlockCount;
     SwDocIdle maDocIdle;
+    Timer maFireIdleJobsTimer;
 };
 
 inline bool DocumentTimerManager::IsDocIdle() const

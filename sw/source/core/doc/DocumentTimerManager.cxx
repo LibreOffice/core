@@ -33,6 +33,7 @@
 #include <docsh.hxx>
 #include <docfld.hxx>
 #include <fldbas.hxx>
+#include <comphelper/lok.hxx>
 
 namespace sw
 {
@@ -45,6 +46,10 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
     maDocIdle.SetPriority( TaskPriority::LOWEST );
     maDocIdle.SetInvokeHandler( LINK( this, DocumentTimerManager, DoIdleJobs) );
     maDocIdle.SetDebugName( "sw::DocumentTimerManager maDocIdle" );
+
+    maFireIdleJobsTimer.SetInvokeHandler(LINK(this, DocumentTimerManager, FireIdleJobsTimeout));
+    maFireIdleJobsTimer.SetTimeout(1000); // Enough time for LOK to render the first tiles.
+    maFireIdleJobsTimer.SetDebugName("sw::DocumentTimerManager maFireIdleJobsTimer");
 }
 
 void DocumentTimerManager::StartIdling()
@@ -75,9 +80,24 @@ void DocumentTimerManager::UnblockIdling()
 
 void DocumentTimerManager::StartBackgroundJobs()
 {
-    // Trigger DoIdleJobs(), asynchronously.
-    if (!maDocIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
-        maDocIdle.Start();
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        /// Reset the timer to fire after the last StartBackgroundJobs.
+        maFireIdleJobsTimer.Start();
+        StopIdling();
+    }
+    else
+    {
+        // Trigger DoIdleJobs(), asynchronously.
+        if (!maDocIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
+            maDocIdle.Start();
+    }
+}
+
+IMPL_LINK( DocumentTimerManager, FireIdleJobsTimeout, Timer *, pTimer, void )
+{
+    (void)pTimer;
+    StartIdling();
 }
 
 DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
