@@ -81,6 +81,12 @@ gb_CXXFLAGS_COMMON := \
 
 gb_CXXFLAGS_Wundef = -Wno-undef
 
+ifeq ($(ENABLE_GDB_INDEX),TRUE)
+gb_LinkTarget_LDFLAGS += -Wl,--gdb-index
+gb_CFLAGS_COMMON += -ggnu-pubnames
+gb_CXXFLAGS_COMMON += -ggnu-pubnames
+endif
+
 ifeq ($(strip $(gb_GCOV)),YES)
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
