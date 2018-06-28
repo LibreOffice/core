@@ -2337,7 +2337,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
 SwTableNode::SwTableNode( const SwNodeIndex& rIdx )
     : SwStartNode( rIdx, SwNodeType::Table )
 {
-    m_pTable = new SwTable;
+    m_pTable.reset(new SwTable);
 }
 
 SwTableNode::~SwTableNode()
@@ -2349,7 +2349,7 @@ SwTableNode::~SwTableNode()
     pTableFormat->ModifyNotification( &aMsgHint, &aMsgHint );
     DelFrames();
     m_pTable->SetTableNode(this); // set this so that ~SwDDETable can read it!
-    delete m_pTable;
+    m_pTable.reset();
 }
 
 SwTabFrame *SwTableNode::MakeFrame( SwFrame* pSib )
@@ -2465,12 +2465,11 @@ void SwTableNode::DelFrames()
     }
 }
 
-void SwTableNode::SetNewTable( SwTable* pNewTable, bool bNewFrames )
+void SwTableNode::SetNewTable( std::unique_ptr<SwTable> pNewTable, bool bNewFrames )
 {
     DelFrames();
     m_pTable->SetTableNode(this);
-    delete m_pTable;
-    m_pTable = pNewTable;
+    m_pTable = std::move(pNewTable);
     if( bNewFrames )
     {
         SwNodeIndex aIdx( *EndOfSectionNode());
