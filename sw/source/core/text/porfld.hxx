@@ -32,7 +32,7 @@ class SwFieldPortion : public SwExpandPortion
     friend class SwTextFormatter;
 protected:
     OUString  m_aExpand;          // The expanded field
-    SwFont  *m_pFont;              // For multi-line fields
+    std::unique_ptr<SwFont> m_pFont;  // For multi-line fields
     TextFrameIndex m_nNextOffset;  // Offset of the follow in the original string
     TextFrameIndex m_nNextScriptChg;
     sal_uInt16  m_nViewWidth;     // Screen width for empty fields
@@ -47,7 +47,7 @@ protected:
     const bool m_bPlaceHolder : 1;
     bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
 
-    void SetFont( SwFont *pNew ) { m_pFont = pNew; }
+    void SetFont( std::unique_ptr<SwFont> pNew ) { m_pFont = std::move(pNew); }
     bool IsNoLength() const  { return m_bNoLength; }
     void SetNoLength()       { m_bNoLength = true; }
 
@@ -61,7 +61,7 @@ public:
     void CheckScript( const SwTextSizeInfo &rInf );
     bool HasFont() const { return nullptr != m_pFont; }
     // #i89179# - made public
-    const SwFont *GetFont() const { return m_pFont; }
+    const SwFont *GetFont() const { return m_pFont.get(); }
 
     const OUString& GetExp() const { return m_aExpand; }
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
