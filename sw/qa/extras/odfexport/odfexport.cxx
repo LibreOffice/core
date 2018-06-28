@@ -52,17 +52,9 @@ public:
         return OString(filename).endsWith(".odt");
     }
 
-    bool mustValidate(const char* filename) const override
+    bool mustValidate(const char* /*filename*/) const override
     {
-        std::vector<const char*> aBlacklist = {
-            // These are known problems, they should be fixed one by one.
-            "fdo86963.odt",
-            "shape-relsize.odt",
-            "fdo60769.odt",
-            "fdo38244.odt"
-        };
-
-        return std::find(aBlacklist.begin(), aBlacklist.end(), filename) == aBlacklist.end();
+        return true;
     }
 
     virtual std::unique_ptr<Resetter> preTest(const char* pFilename) override
