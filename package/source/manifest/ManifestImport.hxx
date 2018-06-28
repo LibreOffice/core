@@ -92,6 +92,16 @@ class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocum
     const OUString sCipherDataElement;
     const OUString sCipherValueElement;
 
+    const OUString sManifestKeyInfoElement13;
+    const OUString sEncryptedKeyElement13;
+    const OUString sEncryptionMethodElement13;
+    const OUString sPgpDataElement13;
+    const OUString sPgpKeyIDElement13;
+    const OUString sPGPKeyPacketElement13;
+    const OUString sAlgorithmAttribute13;
+    const OUString sCipherDataElement13;
+    const OUString sCipherValueElement13;
+
     const OUString sFullPathProperty;
     const OUString sMediaTypeProperty;
     const OUString sVersionProperty;
@@ -154,7 +164,7 @@ private:
     void doStartKeyAlg(StringHashMap &rConvertedAttribs);
     void doKeyInfoEntry(StringHashMap &);
     void doEncryptedKey(StringHashMap &);
-    void doEncryptionMethod(StringHashMap &);
+    void doEncryptionMethod(StringHashMap &, const OUString &);
     void doEncryptedKeyInfo(StringHashMap &);
     void doEncryptedCipherData(StringHashMap &);
     void doEncryptedPgpData(StringHashMap &);
