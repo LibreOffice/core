@@ -139,6 +139,7 @@
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ZoomPanning"/>
       <menu:menu menu:id=".uno:ZoomMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ZoomPage"/>
@@ -149,6 +150,11 @@
           <menu:menuitem menu:id=".uno:Zoom100Percent"/>
           <menu:menuitem menu:id=".uno:Zoom150Percent"/>
           <menu:menuitem menu:id=".uno:Zoom200Percent"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:ZoomMode"/>
+          <menu:menuitem menu:id=".uno:ZoomPrevious"/>
+          <menu:menuitem menu:id=".uno:ZoomNext"/>
+          <menu:menuitem menu:id=".uno:ZoomObjects"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:Zoom"/>
         </menu:menupopup>
