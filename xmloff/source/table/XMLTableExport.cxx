@@ -382,7 +382,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
      }
      catch( Exception )
     {
-         DBG_ERROR( "XMLTableExport::exportTable(), exception cought!" );
+         DBG_ERROR( "XMLTableExport::exportTable(), exception caught!" );
      }
  }
 

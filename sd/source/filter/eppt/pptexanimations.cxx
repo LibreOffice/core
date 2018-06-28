@@ -426,7 +426,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "(@CL)AnimationExporter::processAfterEffectNodes(), exception cought!" );
+        DBG_ERROR( "(@CL)AnimationExporter::processAfterEffectNodes(), exception caught!" );
     }
 }
 

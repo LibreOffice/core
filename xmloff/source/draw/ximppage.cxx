@@ -356,7 +356,7 @@ void SdXMLGenericPageContext::EndElement()
         catch( uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
+            DBG_ERROR("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception caught!");
         }
     }
 
@@ -638,6 +638,6 @@ void SdXMLGenericPageContext::SetNavigationOrder()
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
+        DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception caught while importing shape navigation order!");
     }
 }

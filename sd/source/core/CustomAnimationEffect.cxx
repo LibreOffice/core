@@ -378,7 +378,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
     {
         (void)e;
         nSubItems = 0;
-        DBG_ERROR( "sd::CustomAnimationEffect::getNumberOfSubitems(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::getNumberOfSubitems(), exception caught!" );
     }
 
     return nSubItems;
@@ -706,7 +706,7 @@ void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationEffect::setTarget(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::setTarget(), exception caught!" );
     }
 }
 
@@ -743,7 +743,7 @@ void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationEffect::setTargetSubItem(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::setTargetSubItem(), exception caught!" );
     }
 }
 
@@ -793,7 +793,7 @@ void CustomAnimationEffect::setDuration( double fDuration )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationEffect::setDuration(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::setDuration(), exception caught!" );
     }
 }
 
@@ -808,7 +808,7 @@ void CustomAnimationEffect::setBegin( double fBegin )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationEffect::setBegin(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::setBegin(), exception caught!" );
     }
 }
 
@@ -823,7 +823,7 @@ void CustomAnimationEffect::setAcceleration( double fAcceleration )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationEffect::setAcceleration(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::setAcceleration(), exception caught!" );
     }
 }
 // --------------------------------------------------------------------
@@ -837,7 +837,7 @@ void CustomAnimationEffect::setDecelerate( double fDecelerate )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationEffect::setDecelerate(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::setDecelerate(), exception caught!" );
     }
 }
 
@@ -852,7 +852,7 @@ void CustomAnimationEffect::setAutoReverse( sal_Bool bAutoReverse )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationEffect::setAutoReverse(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::setAutoReverse(), exception caught!" );
     }
 }
 
@@ -1114,7 +1114,7 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationEffect::setIterateType(), Exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationEffect::setIterateType(), Exception caught!" );
     }
 }
 
@@ -1160,7 +1160,7 @@ void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::getPath(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::getPath(), exception caught!" );
     }
 
     return aPath;
@@ -1189,7 +1189,7 @@ void CustomAnimationEffect::setPath( const ::rtl::OUString& rPath )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::setPath(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::setPath(), exception caught!" );
     }
 }
 
@@ -1239,7 +1239,7 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAt
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::getProperty(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::getProperty(), exception caught!" );
     }
 
     return aProperty;
@@ -1317,7 +1317,7 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rA
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::setProperty(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::setProperty(), exception caught!" );
     }
 
     return bChanged;
@@ -1376,7 +1376,7 @@ Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::getColor(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::getColor(), exception caught!" );
     }
 
     return aColor;
@@ -1432,7 +1432,7 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::setColor(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::setColor(), exception caught!" );
     }
 }
 
@@ -1479,7 +1479,7 @@ Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, 
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::getTransformationProperty(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::getTransformationProperty(), exception caught!" );
     }
 
     return aProperty;
@@ -1553,7 +1553,7 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::setTransformationProperty(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::setTransformationProperty(), exception caught!" );
     }
 
     return bChanged;
@@ -1576,7 +1576,7 @@ void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSour
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationEffect::createAudio(), exception cought!" );
+        DBG_ERROR("sd::CustomAnimationEffect::createAudio(), exception caught!" );
     }
 }
 
@@ -1936,7 +1936,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::EffectSequenceHelper::append(), exception cought!" );
+        DBG_ERROR( "sd::EffectSequenceHelper::append(), exception caught!" );
     }
 
     return pEffect;
@@ -1961,7 +1961,7 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::EffectSequenceHelper::replace(), exception cought!" );
+        DBG_ERROR( "sd::EffectSequenceHelper::replace(), exception caught!" );
     }
 }
 
@@ -2118,7 +2118,7 @@ void EffectSequenceHelper::implRebuild()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::EffectSequenceHelper::rebuild(), exception cought!" );
+        DBG_ERROR( "sd::EffectSequenceHelper::rebuild(), exception caught!" );
     }
 }
 
@@ -2288,7 +2288,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "ppt::stl_process_after_effect_node_func::operator(), exception cought!" );
+        DBG_ERROR( "ppt::stl_process_after_effect_node_func::operator(), exception caught!" );
     }
 }
 
@@ -2740,7 +2740,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::EffectSequenceHelper::createTextGroup(), exception cought!" );
+        DBG_ERROR("sd::EffectSequenceHelper::createTextGroup(), exception caught!" );
     }
 }
 
@@ -3065,7 +3065,7 @@ void EffectSequenceHelper::create( const ::com::sun::star::uno::Reference< ::com
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::EffectSequenceHelper::create(), exception cought!" );
+        DBG_ERROR( "sd::EffectSequenceHelper::create(), exception caught!" );
     }
 }
 
@@ -3088,7 +3088,7 @@ void EffectSequenceHelper::createEffectsequence( const Reference< XAnimationNode
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::EffectSequenceHelper::createEffectsequence(), exception cought!" );
+        DBG_ERROR( "sd::EffectSequenceHelper::createEffectsequence(), exception caught!" );
     }
 }
 
@@ -3135,7 +3135,7 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::EffectSequenceHelper::createEffects(), exception cought!" );
+        DBG_ERROR( "sd::EffectSequenceHelper::createEffects(), exception caught!" );
     }
 }
 
@@ -3197,7 +3197,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::EffectSequenceHelper::processAfterEffect(), exception cought!" );
+        DBG_ERROR( "sd::EffectSequenceHelper::processAfterEffect(), exception caught!" );
     }
 }
 
@@ -3398,7 +3398,7 @@ void MainSequence::createMainSequence()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::MainSequence::create(), exception cought!" );
+        DBG_ERROR( "sd::MainSequence::create(), exception caught!" );
         return;
     }
 
@@ -3800,7 +3800,7 @@ InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSe
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::InteractiveSequence::InteractiveSequence(), exception cought!" );
+        DBG_ERROR( "sd::InteractiveSequence::InteractiveSequence(), exception caught!" );
         return;
     }
 }

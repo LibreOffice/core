@@ -217,7 +217,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::TransitionPreset::importResources(), Exception cought!" );
+        DBG_ERROR( "sd::TransitionPreset::importResources(), Exception caught!" );
     }
 
     return bRet;

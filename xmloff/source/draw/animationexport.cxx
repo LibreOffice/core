@@ -1342,7 +1342,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception caught!" );
     }
 }
 

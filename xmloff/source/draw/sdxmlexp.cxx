@@ -1657,7 +1657,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "SdXMLExport::ImpPrepDrawPageHeaderFooterDecls(), unexpected exception cought!" );
+        DBG_ERROR( "SdXMLExport::ImpPrepDrawPageHeaderFooterDecls(), unexpected exception caught!" );
     }
 
     return aSettings;

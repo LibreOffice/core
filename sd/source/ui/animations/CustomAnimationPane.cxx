@@ -236,7 +236,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::CustomAnimationPane(), Exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 
     // get current page and update custom animation list
@@ -1942,7 +1942,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::getTextSelection(), exception cought!" );
+        DBG_ERROR( "sd::CustomAnimationPane::getTextSelection(), exception caught!" );
     }
 
     return false;
