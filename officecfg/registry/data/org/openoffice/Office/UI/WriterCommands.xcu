@@ -83,6 +83,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">He~ader and Footer</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertPageHeader" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1086,6 +1089,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Load Styles...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:CreateAbstract" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1588,6 +1594,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Fields</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:SelectTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1945,6 +1954,9 @@
       <node oor:name=".uno:Repaginate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Page Formatting</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SetExtSelection" oor:op="replace">
@@ -2458,9 +2470,6 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Images and Charts</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
       </node>
       <node oor:name=".uno:CharColorExt" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2684,10 +2693,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Update</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:IndexesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Table of Contents and Inde~x</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatAllNotes" oor:op="replace">
