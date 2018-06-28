@@ -96,6 +96,9 @@ void SwCommentRuler::dispose()
 
 void SwCommentRuler::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return; // no need to waste time on startup
+
     SvxRuler::Paint(rRenderContext, rRect);
 
     // Don't draw if there is not any note
