@@ -55,6 +55,17 @@ bool const sal_use_syslog = false;
 
 namespace {
 
+struct TimeContainer
+{
+    TimeValue aTime;
+    TimeContainer()
+    {
+        osl_getSystemTime(&aTime);
+    }
+};
+
+TimeContainer aStartTime;
+
 bool equalStrings(
     char const * string1, std::size_t length1, char const * string2,
     std::size_t length2)
@@ -206,22 +217,16 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                 s << ts << '.' << milliSecs << ':';
             }
             if (outputRelativeTimer) {
-                static bool beenHere = false;
-                static TimeValue first;
-                if (!beenHere) {
-                    osl_getSystemTime(&first);
-                    beenHere = true;
-                }
                 TimeValue now;
                 osl_getSystemTime(&now);
-                int seconds = now.Seconds - first.Seconds;
+                int seconds = now.Seconds - aStartTime.aTime.Seconds;
                 int milliSeconds;
-                if (now.Nanosec < first.Nanosec) {
+                if (now.Nanosec < aStartTime.aTime.Nanosec) {
                     seconds--;
-                    milliSeconds = 1000-(first.Nanosec-now.Nanosec)/1000000;
+                    milliSeconds = 1000-(aStartTime.aTime.Nanosec-now.Nanosec)/1000000;
                 }
                 else
-                    milliSeconds = (now.Nanosec-first.Nanosec)/1000000;
+                    milliSeconds = (now.Nanosec-aStartTime.aTime.Nanosec)/1000000;
                 char relativeTimestamp[100];
                 snprintf(relativeTimestamp, sizeof(relativeTimestamp), "%d.%03d", seconds, milliSeconds);
                 s << relativeTimestamp << ':';
