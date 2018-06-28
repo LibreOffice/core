@@ -263,6 +263,11 @@ bool DigitalSignaturesDialog::canAddRemove()
     //'canAdd' and 'canRemove' case
     bool ret = true;
 
+    uno::Reference<container::XNameAccess> xNameAccess(maSignatureManager.mxStore, uno::UNO_QUERY);
+    if (xNameAccess.is() && xNameAccess->hasByName("[Content_Types].xml"))
+        // It's always possible to append an OOXML signature.
+        return ret;
+
     if (!maSignatureManager.mxStore.is())
         // It's always possible to append a PDF signature.
         return ret;
