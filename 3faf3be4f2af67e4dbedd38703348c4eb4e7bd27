@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1ff146_c708c02b",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-28T14:14:56Z",
+      "side": 1,
+      "message": "a comment like \n\n  // Shrink the block here so we don\u0027t waste time creating \n  // huge output when whole columns or rows are selected\n\nwould be nice",
+      "revId": "3faf3be4f2af67e4dbedd38703348c4eb4e7bd27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
