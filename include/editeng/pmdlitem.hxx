@@ -40,7 +40,6 @@ public:
     explicit inline SvxPageModelItem( sal_uInt16 nWh  );
     inline SvxPageModelItem( const OUString& rModel, bool bA /*= false*/,
                              sal_uInt16 nWh  );
-    inline SvxPageModelItem& operator=( const SvxPageModelItem& rModel );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
@@ -65,12 +64,6 @@ inline SvxPageModelItem::SvxPageModelItem( const OUString& rModel, bool bA,
     SfxStringItem( nWh, rModel ),
     bAuto( bA )
 {}
-
-inline SvxPageModelItem& SvxPageModelItem::operator=( const SvxPageModelItem& rModel )
-{
-    SetValue( rModel.GetValue() );
-    return *this;
-}
 
 #endif
 
