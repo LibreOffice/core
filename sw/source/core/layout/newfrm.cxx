@@ -328,7 +328,7 @@ void SwRootFrame::DeRegisterShell( SwViewShell *pSh )
 
 void InitCurrShells( SwRootFrame *pRoot )
 {
-    pRoot->mpCurrShells = new SwCurrShells;
+    pRoot->mpCurrShells.reset( new SwCurrShells );
 }
 
 /*
@@ -482,15 +482,13 @@ void SwRootFrame::DestroyImpl()
         pDoc->GetDocumentLayoutManager().ClearSwLayouterEntries();
     }
 
-    delete mpDestroy;
-    mpDestroy = nullptr;
+    mpDestroy.reset();
 
     // Remove references
     for ( SwCurrShells::iterator it = mpCurrShells->begin(); it != mpCurrShells->end(); ++it )
         (*it)->pRoot = nullptr;
 
-    delete mpCurrShells;
-    mpCurrShells = nullptr;
+    mpCurrShells.reset();
 
     // Some accessible shells are left => problems on second SwFrame::Destroy call
     assert(0 == mnAccessibleShells);
