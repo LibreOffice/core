@@ -32,7 +32,6 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/utils/unotools.hxx>
 #include <basegfx/matrix/b3dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;

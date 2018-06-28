@@ -5882,7 +5882,6 @@ include/basegfx/utils/lerp.hxx
 include/basegfx/utils/rectcliptools.hxx
 include/basegfx/utils/tools.hxx
 include/basegfx/utils/unopolypolygon.hxx
-include/basegfx/utils/unotools.hxx
 include/basegfx/utils/zoomtools.hxx
 include/basegfx/vector/b2dsize.hxx
 include/basegfx/vector/b2dvector.hxx

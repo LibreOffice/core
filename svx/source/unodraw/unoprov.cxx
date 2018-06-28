@@ -175,30 +175,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
         { OUString("Geometry"), OWN_ATTR_BASE_GEOMETRY, cppu::UnoType<css::drawing::PointSequenceSequence>::get(), 0, 0 },
         SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGON_PROPERTIES
-        FILL_PROPERTIES
-        LINE_PROPERTIES
-        LINE_PROPERTIES_START_END
-        SHAPE_DESCRIPTOR_PROPERTIES
-        MISC_OBJ_PROPERTIES
-        LINKTARGET_PROPERTIES
-        SHADOW_PROPERTIES
-        TEXT_PROPERTIES
-        // #FontWork#
-        FONTWORK_PROPERTIES
-        { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
-    };
-
-    return aPolyPolygonPropertyMap_Impl;
-}
-
-SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonBezierPropertyMap()
-{
-    static SfxItemPropertyMapEntry const aPolyPolygonBezierPropertyMap_Impl[] =
-    {
-        { OUString("Geometry"), OWN_ATTR_BASE_GEOMETRY, cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get(), 0, 0 },
-        SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGONBEZIER_PROPERTIES
         FILL_PROPERTIES
         LINE_PROPERTIES
@@ -215,7 +191,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonBezierPropertyMap()
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
-    return aPolyPolygonBezierPropertyMap_Impl;
+    return aPolyPolygonPropertyMap_Impl;
 }
 
 SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
@@ -916,7 +892,6 @@ const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPro
             case SVXMAP_DIMENSIONING: aMapArr[SVXMAP_DIMENSIONING]=ImplGetSvxDimensioningPropertyMap(); break;
             case SVXMAP_CIRCLE: aMapArr[SVXMAP_CIRCLE]=ImplGetSvxCirclePropertyMap(); break;
             case SVXMAP_POLYPOLYGON: aMapArr[SVXMAP_POLYPOLYGON]=ImplGetSvxPolyPolygonPropertyMap(); break;
-            case SVXMAP_POLYPOLYGONBEZIER: aMapArr[SVXMAP_POLYPOLYGONBEZIER]=ImplGetSvxPolyPolygonBezierPropertyMap(); break;
             case SVXMAP_GRAPHICOBJECT: aMapArr[SVXMAP_GRAPHICOBJECT]=ImplGetSvxGraphicObjectPropertyMap(); break;
             case SVXMAP_3DSCENEOBJECT: aMapArr[SVXMAP_3DSCENEOBJECT]=ImplGetSvx3DSceneObjectPropertyMap(); break;
             case SVXMAP_3DCUBEOBJECT: aMapArr[SVXMAP_3DCUBEOBJECT]=ImplGetSvx3DCubeObjectPropertyMap(); break;

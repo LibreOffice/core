@@ -1158,7 +1158,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_svx/SvxShapeDimensioning \
     qadevOOo/tests/java/mod/_svx/SvxShapeGroup \
     qadevOOo/tests/java/mod/_svx/SvxShapePolyPolygon \
-    qadevOOo/tests/java/mod/_svx/SvxShapePolyPolygonBezier \
     qadevOOo/tests/java/mod/_svx/SvxUnoNumberingRules \
     qadevOOo/tests/java/mod/_svx/SvxUnoText \
     qadevOOo/tests/java/mod/_svx/SvxUnoTextContent \

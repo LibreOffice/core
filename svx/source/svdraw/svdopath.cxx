@@ -2320,6 +2320,20 @@ void SdrPathObj::NbcMove(const Size& rSiz)
 
 void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
+    const double fResizeX(xFact);
+    const double fResizeY(yFact);
+
+    if(basegfx::fTools::equal(fResizeX, 1.0) && basegfx::fTools::equal(fResizeY, 1.0))
+    {
+        // tdf#106792 avoid numerical unprecisions: If both scale factors are 1.0, do not
+        // manipulate at all - that may change aGeo rapidly (and wrongly) in
+        // SdrTextObj::NbcResize. Combined with the UNO API trying to not 'apply'
+        // a rotation but to manipulate the existing one, this is fatal. So just
+        // avoid this error as long as we have to deal with unprecise geometry
+        // manipulations
+        return;
+    }
+
     basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-rRef.X(), -rRef.Y()));
     aTrans = basegfx::utils::createScaleTranslateB2DHomMatrix(
         double(xFact), double(yFact), rRef.X(), rRef.Y()) * aTrans;

@@ -49,7 +49,6 @@
 #include <svx/svditer.hxx>
 #include <uno/mapping.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/utils/unotools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -483,7 +482,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
                 SdrObject::Free( pNewObj );
             }
             SdrObject::Free( pObj );
-            basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( aPolyPolygon,
+            basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( aPolyPolygon,
                                                                   aPolyPolygonBezierCoords );
         }
     }

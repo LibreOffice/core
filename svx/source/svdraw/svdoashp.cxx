@@ -81,7 +81,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/utils/unotools.hxx>
 #include <svdobjplusdata.hxx>
 
 using namespace ::com::sun::star;
@@ -562,7 +561,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const bool bBezierAl
         css::drawing::PolyPolygonBezierCoords aBezierCoords = xCustomShapeEngine->getLineGeometry();
         try
         {
-            aRetval = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( aBezierCoords );
+            aRetval = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon( aBezierCoords );
             if ( !bBezierAllowed && aRetval.areControlPointsUsed())
             {
                 aRetval = basegfx::utils::adaptiveSubdivideByAngle(aRetval);
