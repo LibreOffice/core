@@ -2661,7 +2661,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-            case SID_SELECT_UNPROTECTED_CELLS:
+        case SID_SELECT_UNPROTECTED_CELLS:
             {
                 ScViewData* pData = GetViewData();
                 SCTAB aTab = pData->GetTabNo();
