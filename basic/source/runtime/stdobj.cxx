@@ -278,6 +278,12 @@ static Methods aMethods[] = {
 { "FormatDateTime", SbxSTRING,    2 | FUNCTION_ | COMPATONLY_, RTLNAME(FormatDateTime),0 },
   { "Date",         SbxDATE, 0,nullptr,0 },
   { "NamedFormat",  SbxINTEGER,        OPT_, nullptr,0 },
+{ "FormatNumber",   SbxSTRING, 5 | FUNCTION_ | COMPATONLY_, RTLNAME(FormatNumber), 0 },
+  { "expression",                  SbxDOUBLE,  0,    nullptr, 0 },
+  { "numDigitsAfterDecimal",       SbxINTEGER, OPT_, nullptr, 0 },
+  { "includeLeadingDigit",         SbxINTEGER, OPT_, nullptr, 0 }, // vbTriState
+  { "useParensForNegativeNumbers", SbxINTEGER, OPT_, nullptr, 0 }, // vbTriState
+  { "groupDigits",                 SbxINTEGER, OPT_, nullptr, 0 }, // vbTriState
 { "Frac",           SbxDOUBLE,    1 | FUNCTION_, RTLNAME(Frac),0            },
   { "number",       SbxDOUBLE, 0,nullptr,0 },
 { "FRAMEANCHORCHAR",        SbxINTEGER,       CPROP_,    RTLNAME(FRAMEANCHORCHAR),0 },
