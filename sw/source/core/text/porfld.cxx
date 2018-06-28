@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <vcl/graph.hxx>
+#include <o3tl/make_unique.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -51,8 +52,8 @@ SwLinePortion *SwFieldPortion::Compress()
 
 SwFieldPortion *SwFieldPortion::Clone( const OUString &rExpand ) const
 {
-    SwFont *pNewFnt;
-    if( nullptr != ( pNewFnt = m_pFont ) )
+    SwFont *pNewFnt = m_pFont.get();
+    if( nullptr != pNewFnt )
     {
         pNewFnt = new SwFont( *m_pFont );
     }
@@ -103,16 +104,14 @@ SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
     , m_nAttrFieldType( rField.m_nAttrFieldType)
 {
     if ( rField.HasFont() )
-        m_pFont = new SwFont( *rField.GetFont() );
-    else
-        m_pFont = nullptr;
+        m_pFont.reset( new SwFont( *rField.GetFont() ) );
 
     SetWhichPor( POR_FLD );
 }
 
 SwFieldPortion::~SwFieldPortion()
 {
-    delete m_pFont;
+    m_pFont.reset();
     if( pBlink )
         pBlink->Delete( this );
 }
@@ -283,7 +282,7 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
     else if ( nTmp != nActual )
     {
         if( !m_pFont )
-            m_pFont = new SwFont( *rInf.GetFont() );
+            m_pFont.reset( new SwFont( *rInf.GetFont() ) );
         m_pFont->SetActual( nTmp );
     }
 
@@ -320,7 +319,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
         if( m_pFont )
             m_pFont->GoMagic( rInf.GetVsh(), m_pFont->GetActual() );
 
-        SwFontSave aSave( rInf, m_pFont );
+        SwFontSave aSave( rInf, m_pFont.get() );
 
         // Length must be 0: the length is set for bFull after format
         // and passed along in nRest. Or else the old length would be
@@ -405,8 +404,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
             SwFieldPortion *pField = Clone( aNew );
             if( !aNew.isEmpty() && !pField->GetFont() )
             {
-                SwFont *pNewFnt = new SwFont( *rInf.GetFont() );
-                pField->SetFont( pNewFnt );
+                pField->SetFont( o3tl::make_unique<SwFont>( *rInf.GetFont() ) );
             }
             pField->SetFollow( true );
             SetHasFollow( true );
@@ -428,7 +426,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
 
 void SwFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    SwFontSave aSave( rInf, m_pFont );
+    SwFontSave aSave( rInf, m_pFont.get() );
 
     OSL_ENSURE(GetLen() <= TextFrameIndex(1), "SwFieldPortion::Paint: rest-portion pollution?");
     if( Width() && ( !m_bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
@@ -459,7 +457,7 @@ void SwFieldPortion::HandlePortion( SwPortionHandler& rPH ) const
         nH = m_pFont->GetSize(m_pFont->GetActual()).Height();
         nW = m_pFont->GetSize(m_pFont->GetActual()).Width();
     }
-    rPH.Special( GetLen(), m_aExpand, GetWhichPor(), nH, nW, m_pFont );
+    rPH.Special( GetLen(), m_aExpand, GetWhichPor(), nH, nW, m_pFont.get() );
     if( GetWhichPor() == POR_FLD )
     {
         rPH.SetAttrFieldType(m_nAttrFieldType);
@@ -468,15 +466,15 @@ void SwFieldPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 SwPosSize SwFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
-    SwFontSave aSave( rInf, m_pFont );
+    SwFontSave aSave( rInf, m_pFont.get() );
     SwPosSize aSize( SwExpandPortion::GetTextSize( rInf ) );
     return aSize;
 }
 
 SwFieldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
 {
-    SwFont *pNewFnt;
-    if( nullptr != ( pNewFnt = m_pFont ) )
+    SwFont *pNewFnt = m_pFont.get();
+    if( nullptr != pNewFnt )
         pNewFnt = new SwFont( *m_pFont );
     return new SwHiddenPortion( rExpand, pNewFnt );
 }
@@ -485,7 +483,7 @@ void SwHiddenPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
     {
-        SwFontSave aSave( rInf, m_pFont );
+        SwFontSave aSave( rInf, m_pFont.get() );
         rInf.DrawViewOpt( *this, POR_HIDDEN );
         SwExpandPortion::Paint( rInf );
     }
@@ -521,8 +519,8 @@ TextFrameIndex SwNumberPortion::GetCursorOfst(const sal_uInt16) const
 
 SwFieldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
 {
-    SwFont *pNewFnt;
-    if( nullptr != ( pNewFnt = m_pFont ) )
+    SwFont *pNewFnt = m_pFont.get();
+    if( nullptr != pNewFnt )
         pNewFnt = new SwFont( *m_pFont );
 
     return new SwNumberPortion( rExpand, pNewFnt, IsLeft(), IsCenter(),
@@ -678,7 +676,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
                             STRIKEOUT_NONE != m_pFont->GetStrikeout() ) &&
                             !m_pFont->IsWordLineMode();
 
-        SwFontSave aSave( rInf, m_pFont );
+        SwFontSave aSave( rInf, m_pFont.get() );
 
         if( nFixWidth == Width() && ! HasFollow() )
             SwExpandPortion::Paint( rInf );
