@@ -249,6 +249,49 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
     if( HasFormat( nFormat ) )
     {
+        ScRange aReducedBlock = m_aBlock;
+
+        bool bReduceBlockFormat =
+            nFormat == SotClipboardFormatId::HTML
+            || nFormat == SotClipboardFormatId::RTF
+            || nFormat == SotClipboardFormatId::RICHTEXT
+            || nFormat == SotClipboardFormatId::BITMAP
+            || nFormat == SotClipboardFormatId::PNG;
+
+        if (bReduceBlockFormat && (m_aBlock.aEnd.Col() == MAXCOL || m_aBlock.aEnd.Row() == MAXROW) &&
+                m_aBlock.aStart.Tab() == m_aBlock.aEnd.Tab())
+        {
+            // Shrink the block here so we don't waste time creating huge
+            // output when whole columns or rows are selected.
+
+            SCCOL nPrintAreaEndCol = 0;
+            SCROW nPrintAreaEndRow = 0;
+            const bool bIncludeVisual = (nFormat == SotClipboardFormatId::BITMAP ||
+                    nFormat == SotClipboardFormatId::PNG);
+            if (bIncludeVisual)
+                m_pDoc->GetPrintArea( m_aBlock.aStart.Tab(), nPrintAreaEndCol, nPrintAreaEndRow, true );
+
+            // Shrink the area to allow pasting to external applications.
+            // Shrink to real data area for HTML, RTF and RICHTEXT, but include
+            // all objects and top-left area for BITMAP and PNG.
+            SCCOL nStartCol = aReducedBlock.aStart.Col();
+            SCROW nStartRow = aReducedBlock.aStart.Row();
+            SCCOL nEndCol = aReducedBlock.aEnd.Col();
+            SCROW nEndRow = aReducedBlock.aEnd.Row();
+            bool bShrunk = false;
+            m_pDoc->ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow,
+                    false, bIncludeVisual /*bStickyTopRow*/, bIncludeVisual /*bStickyLeftCol*/,
+                    bIncludeVisual /*bConsiderCellNotes*/, bIncludeVisual /*bConsiderCellDrawObjects*/);
+
+            if ( nPrintAreaEndRow > nEndRow )
+                nEndRow = nPrintAreaEndRow;
+
+            if ( nPrintAreaEndCol > nEndCol )
+                nEndCol = nPrintAreaEndCol;
+
+            aReducedBlock = ScRange(nStartCol, nStartRow, aReducedBlock.aStart.Tab(), nEndCol, nEndRow, aReducedBlock.aEnd.Tab());
+        }
+
         if ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
         {
             bOK = SetTransferableObjectDescriptor( m_aObjDesc );
@@ -297,21 +340,6 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 m_bUsedForLink = true;
 
             bool bIncludeFiltered = m_pDoc->IsCutMode() || m_bUsedForLink;
-
-            bool bReduceBlockFormat = nFormat == SotClipboardFormatId::HTML || nFormat == SotClipboardFormatId::RTF
-                || nFormat == SotClipboardFormatId::RICHTEXT;
-            ScRange aReducedBlock = m_aBlock;
-            if (bReduceBlockFormat && (m_aBlock.aEnd.Col() == MAXCOL || m_aBlock.aEnd.Row() == MAXROW) && m_aBlock.aStart.Tab() == m_aBlock.aEnd.Tab())
-            {
-                bool bShrunk = false;
-                //shrink the area to allow pasting to external applications
-                SCCOL aStartCol = aReducedBlock.aStart.Col();
-                SCROW aStartRow = aReducedBlock.aStart.Row();
-                SCCOL aEndCol = aReducedBlock.aEnd.Col();
-                SCROW aEndRow = aReducedBlock.aEnd.Row();
-                m_pDoc->ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), aStartCol, aStartRow, aEndCol, aEndRow, false);
-                aReducedBlock = ScRange(aStartCol, aStartRow, aReducedBlock.aStart.Tab(), aEndCol, aEndRow, aReducedBlock.aEnd.Tab());
-            }
 
             ScImportExport aObj( m_pDoc, aReducedBlock );
             // Plain text ("Unformatted text") may contain embedded tabs and
@@ -363,13 +391,13 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
         }
         else if ( nFormat == SotClipboardFormatId::BITMAP || nFormat == SotClipboardFormatId::PNG )
         {
-            tools::Rectangle aMMRect = m_pDoc->GetMMRect( m_aBlock.aStart.Col(), m_aBlock.aStart.Row(),
-                                                 m_aBlock.aEnd.Col(), m_aBlock.aEnd.Row(),
-                                                 m_aBlock.aStart.Tab() );
+            tools::Rectangle aMMRect = m_pDoc->GetMMRect( aReducedBlock.aStart.Col(), aReducedBlock.aStart.Row(),
+                                                 aReducedBlock.aEnd.Col(), aReducedBlock.aEnd.Row(),
+                                                 aReducedBlock.aStart.Tab() );
             ScopedVclPtrInstance< VirtualDevice > pVirtDev;
             pVirtDev->SetOutputSizePixel(pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM)));
 
-            PaintToDev( pVirtDev, m_pDoc, 1.0, m_aBlock );
+            PaintToDev( pVirtDev, m_pDoc, 1.0, aReducedBlock );
 
             pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel ) );
             BitmapEx aBmp = pVirtDev->GetBitmapEx( Point(), pVirtDev->GetOutputSize() );
