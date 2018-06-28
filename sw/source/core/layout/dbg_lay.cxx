@@ -125,8 +125,8 @@ static sal_uLong lcl_GetFrameId( const SwFrame* pFrame )
 
 class SwImplProtocol
 {
-    SvFileStream *pStream;          // output stream
-    std::set<sal_uInt16> *pFrameIds;  // which FrameIds shall be logged ( NULL == all)
+    std::unique_ptr<SvFileStream> pStream;          // output stream
+    std::unique_ptr<std::set<sal_uInt16>> pFrameIds;  // which FrameIds shall be logged ( NULL == all)
     std::vector<long> aVars;        // variables
     OStringBuffer aLayer;      // indentation of output ("  " per start/end)
     SwFrameType nTypes;              // which types shall be logged
@@ -271,11 +271,10 @@ bool SwImplProtocol::NewStream()
 {
     OUString aName("dbg_lay.out");
     nLineCount = 0;
-    pStream = new SvFileStream( aName, StreamMode::WRITE | StreamMode::TRUNC );
+    pStream.reset( new SvFileStream( aName, StreamMode::WRITE | StreamMode::TRUNC ) );
     if( pStream->GetError() )
     {
-        delete pStream;
-        pStream = nullptr;
+        pStream.reset();
     }
     return nullptr != pStream;
 }
@@ -285,11 +284,9 @@ SwImplProtocol::~SwImplProtocol()
     if( pStream )
     {
         pStream->Close();
-        delete pStream;
+        pStream.reset();
     }
-    if (pFrameIds)
-        pFrameIds->clear();
-    delete pFrameIds;
+    pFrameIds.reset();
     aVars.clear();
 }
 
@@ -306,9 +303,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         if (aTmp == "[frmid")      // section FrameIds
         {
             nInitFile = 1;
-            pFrameIds->clear();
-            delete pFrameIds;
-            pFrameIds = nullptr;         // default: log all frames
+            pFrameIds.reset(); // default: log all frames
         }
         else if (aTmp == "[frmtype")// section types
         {
@@ -613,8 +608,8 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
         {
             case 1: InsertFrame( nId ); break;
             case 2: DeleteFrame( nId ); break;
-            case 3: pFrameIds->clear(); delete pFrameIds; pFrameIds = nullptr; break;
-            case 4: delete pStream; pStream = nullptr; break;
+            case 3: pFrameIds.reset(); break;
+            case 4: pStream.reset(); break;
         }
         return;
     }
@@ -846,7 +841,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void const * 
 void SwImplProtocol::InsertFrame( sal_uInt16 nId )
 {
     if( !pFrameIds )
-        pFrameIds = new std::set<sal_uInt16>;
+        pFrameIds.reset( new std::set<sal_uInt16> );
     if( pFrameIds->count( nId ) )
         return;
     pFrameIds->insert( nId );
