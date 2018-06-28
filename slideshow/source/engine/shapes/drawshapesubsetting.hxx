@@ -202,7 +202,7 @@ namespace slideshow
             typedef ::std::set< SubsetEntry >       ShapeSet;
 
             void ensureInitializedNodeTree() const;
-            void updateSubsetBounds( const SubsetEntry& rSubsetEntry );
+            void excludeSubset(sal_Int32 nExcludedStart, sal_Int32 nExcludedEnd);
             void updateSubsets();
             void initCurrentSubsets();
             void reset();
@@ -225,12 +225,6 @@ namespace slideshow
 
             /// the list of subset shapes spawned from this one.
             ShapeSet                            maSubsetShapes;
-
-            /// caches minimal subset index from maSubsetShapes
-            sal_Int32                           mnMinSubsetActionIndex;
-
-            /// caches maximal subset index from maSubsetShapes
-            sal_Int32                           mnMaxSubsetActionIndex;
 
             /** Current number of subsets to render (calculated from
                 maSubset and mnMin/MaxSubsetActionIndex).
