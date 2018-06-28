@@ -116,6 +116,8 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     if( rtl::isAsciiDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
                     (cIntntlDecSep && *p == cIntntlGrpSep)) && rtl::isAsciiDigit( *(p+1) )))
     {
+        // tdf#118442: Whitespace and minus are skipped; store the position to calculate index
+        const sal_Unicode* const pDigitsStart = p;
         short exp = 0;
         short decsep = 0;
         short ndig = 0;
@@ -139,7 +141,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             if( *p == cNonIntntlDecSep || *p == cIntntlDecSep )
             {
                 // Use the separator that is passed to stringToDouble()
-                aBuf[ p - pStart ] = cIntntlDecSep;
+                aBuf[p - pDigitsStart] = cIntntlDecSep;
                 p++;
                 if( ++decsep > 1 )
                     continue;
@@ -153,7 +155,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                 }
                 if( *p == 'D' || *p == 'd' )
                     eScanType = SbxDOUBLE;
-                aBuf[ p - pStart ] = 'E';
+                aBuf[p - pDigitsStart] = 'E';
                 p++;
                 if (*p == '+')
                     ++p;
