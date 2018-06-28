@@ -97,8 +97,8 @@ class ScAnnotationEditSource : public SvxEditSource, public SfxListener
 private:
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
-    ScEditEngineDefaulter*  pEditEngine;
-    SvxEditEngineForwarder* pForwarder;
+    std::unique_ptr<ScEditEngineDefaulter>  pEditEngine;
+    std::unique_ptr<SvxEditEngineForwarder> pForwarder;
     bool                    bDataValid;
 
     SdrObject*                  GetCaptionObj();

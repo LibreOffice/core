@@ -125,8 +125,8 @@ ScAnnotationEditSource::~ScAnnotationEditSource()
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 
-    delete pForwarder;
-    delete pEditEngine;
+    pForwarder.reset();
+    pEditEngine.reset();
 }
 
 std::unique_ptr<SvxEditSource> ScAnnotationEditSource::Clone() const
@@ -147,19 +147,19 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
         // notes don't have fields
         if ( pDocShell )
         {
-            pEditEngine = new ScNoteEditEngine( pDocShell->GetDocument().GetNoteEngine() );
+            pEditEngine.reset( new ScNoteEditEngine( pDocShell->GetDocument().GetNoteEngine() ) );
         }
         else
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScEditEngineDefaulter( pEnginePool, true );
+            pEditEngine.reset( new ScEditEngineDefaulter( pEnginePool, true ) );
         }
-        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
+        pForwarder.reset( new SvxEditEngineForwarder(*pEditEngine) );
     }
 
     if (bDataValid)
-        return pForwarder;
+        return pForwarder.get();
 
     if ( pDocShell )
         if ( ScPostIt* pNote = pDocShell->GetDocument().GetNote(aCellPos) )
@@ -167,7 +167,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
                 pEditEngine->SetText( *pEditObj );      // incl. breaks (line, etc.)
 
     bDataValid = true;
-    return pForwarder;
+    return pForwarder.get();
 }
 
 void ScAnnotationEditSource::UpdateData()
@@ -207,8 +207,8 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             pDocShell = nullptr;
 
-            DELETEZ( pForwarder );
-            DELETEZ( pEditEngine );     // EditEngine uses document's pool
+            pForwarder.reset();
+            pEditEngine.reset();     // EditEngine uses document's pool
         }
         else if ( nId == SfxHintId::DataChanged )
             bDataValid = false;                     // text must be retrieved again
