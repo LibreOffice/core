@@ -138,8 +138,7 @@ bool SwGrfNode::ReRead(
 {
     bool bReadGrf = false;
     bool bSetTwipSize = true;
-    delete mpReplacementGraphic;
-    mpReplacementGraphic = nullptr;
+    mpReplacementGraphic.reset();
 
     OSL_ENSURE( pGraphic || !rGrfName.isEmpty(),
             "GraphicNode without a name, Graphic or GraphicObject" );
@@ -281,8 +280,7 @@ bool SwGrfNode::ReRead(
 
 SwGrfNode::~SwGrfNode()
 {
-    delete mpReplacementGraphic;
-    mpReplacementGraphic = nullptr;
+    mpReplacementGraphic.reset();
 
     // #i73788#
     mpThreadConsumer.reset();
@@ -390,17 +388,17 @@ const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
 
         if(rVectorGraphicDataPtr.get())
         {
-            const_cast< SwGrfNode* >(this)->mpReplacementGraphic = new GraphicObject(rVectorGraphicDataPtr->getReplacement());
+            const_cast< SwGrfNode* >(this)->mpReplacementGraphic.reset( new GraphicObject(rVectorGraphicDataPtr->getReplacement()) );
         }
         else if (GetGrfObj().GetGraphic().hasPdfData() ||
                  GetGrfObj().GetGraphic().GetType() == GraphicType::GdiMetafile)
         {
             // Replacement graphic for PDF and metafiles is just the bitmap.
-            const_cast<SwGrfNode*>(this)->mpReplacementGraphic = new GraphicObject(GetGrfObj().GetGraphic().GetBitmapEx());
+            const_cast<SwGrfNode*>(this)->mpReplacementGraphic.reset( new GraphicObject(GetGrfObj().GetGraphic().GetBitmapEx()) );
         }
     }
 
-    return mpReplacementGraphic;
+    return mpReplacementGraphic.get();
 }
 
 SwContentNode *SwGrfNode::SplitContentNode( const SwPosition & )
@@ -470,8 +468,7 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
             else if( GraphicType::Default == maGrfObj.GetType() )
             {
                 // no default bitmap anymore, thus re-paint
-                delete mpReplacementGraphic;
-                mpReplacementGraphic = nullptr;
+                mpReplacementGraphic.reset();
 
                 maGrfObj.SetGraphic( Graphic() );
                 onGraphicChanged();

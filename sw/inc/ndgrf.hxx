@@ -37,7 +37,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
     friend class SwNodes;
 
     GraphicObject maGrfObj;
-    GraphicObject *mpReplacementGraphic;
+    std::unique_ptr<GraphicObject> mpReplacementGraphic;
     tools::SvRef<sfx2::SvBaseLink> refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
     bool bInSwapIn              :1;
