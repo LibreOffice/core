@@ -189,7 +189,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf113182, "tdf113182.docx") { CPPUNIT_ASSERT_EQUAL
 DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
 {
     OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
-    CPPUNIT_ASSERT_EQUAL(OUString("1696"), aTop);
+    // tdf#106792 Checked loading of tdf113946.docx. Before the change, the expected
+    // value of this test was "1696". Opening the file shows a single short line anchored
+    // at the doc start. Only diff is that in 'old' version it is slightly rotated, in 'new'
+    // version line is strict hiorizontal. Checked against MSWord2013, there the line
+    // is also not rotated -> the change is to the better, correct the expected result here.
+    CPPUNIT_ASSERT_EQUAL(OUString("1695"), aTop);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf114217, "tdf114217.docx")

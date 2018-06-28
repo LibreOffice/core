@@ -1244,13 +1244,18 @@ DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
     uno::Sequence<uno::Sequence<awt::Point>> aPolyPolySequence;
     xShape->getPropertyValue("PolyPolygon") >>= aPolyPolySequence;
     uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+
+    // tdf#106792 These values were wrong all the time due to a missing
+    // conversion in SvxShapePolyPolygon::getPropertyValueImpl. There was no
+    // ForceMetricTo100th_mm -> the old results were in twips due to the
+    // object residing in Writer. The UNO API by definition is in 100thmm,
+    // thus I will correct the values here.
+
     // Vertical flip for the line shape was ignored, so Y coordinates were swapped.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2819), rPolygon[0].X);
-    // This was 1619.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1963), rPolygon[0].Y);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3181), rPolygon[1].X);
-    // This was 1962.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1620), rPolygon[1].Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10927), rPolygon[0].X); // was: 2819
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>( 3463), rPolygon[0].Y); // was: 1963
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11572), rPolygon[1].X); // was: 3181
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>( 2852), rPolygon[1].Y); // was: 1620
 }
 #endif
 
