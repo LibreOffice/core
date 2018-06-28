@@ -309,7 +309,7 @@ namespace dbaui
 
                 sal_Int32 count = list.getLength();
 
-                StringBag aProfiles;
+                std::set<OUString> aProfiles;
                 for (sal_Int32 index=0; index < count; index++)
                     aProfiles.insert(pArray[index]);
 

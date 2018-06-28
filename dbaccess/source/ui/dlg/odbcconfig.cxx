@@ -186,7 +186,7 @@ void OOdbcEnumeration::freeEnv()
 #endif
 }
 
-void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
+void OOdbcEnumeration::getDatasourceNames(std::set<OUString>& _rNames)
 {
     OSL_ENSURE(isLoaded(), "OOdbcEnumeration::getDatasourceNames: not loaded!");
     if (!isLoaded())

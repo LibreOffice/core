@@ -181,8 +181,7 @@ void PackageRegistryImpl::insertBackend(
     Reference<deployment::XPackageRegistry> const & xBackend )
 {
     m_allBackends.insert( xBackend );
-    typedef std::unordered_set<OUString> t_stringset;
-    t_stringset ambiguousFilters;
+    std::unordered_set<OUString> ambiguousFilters;
 
     const Sequence< Reference<deployment::XPackageTypeInfo> > packageTypes(
         xBackend->getSupportedPackageTypes() );

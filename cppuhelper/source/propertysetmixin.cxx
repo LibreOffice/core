@@ -104,17 +104,15 @@ protected:
         css::uno::Sequence< rtl::OUString > const & absentOptional,
         std::vector< rtl::OUString > * handleNames)
     {
-        TypeSet seen;
+        std::set<rtl::OUString> seen;
         initProperties(type, absentOptional, handleNames, &seen);
     }
 
 private:
-    typedef std::set< rtl::OUString > TypeSet;
-
     void initProperties(
         css::uno::Reference< css::reflection::XTypeDescription > const & type,
         css::uno::Sequence< rtl::OUString > const & absentOptional,
-        std::vector< rtl::OUString > * handleNames, TypeSet * seen);
+        std::vector< rtl::OUString > * handleNames, std::set<rtl::OUString> * seen);
 
     static css::uno::Reference< css::reflection::XTypeDescription >
     resolveTypedefs(
@@ -135,7 +133,7 @@ Data::PropertyMap::const_iterator Data::get(
 void Data::initProperties(
     css::uno::Reference< css::reflection::XTypeDescription > const & type,
     css::uno::Sequence< rtl::OUString > const & absentOptional,
-    std::vector< rtl::OUString > * handleNames, TypeSet * seen)
+    std::vector< rtl::OUString > * handleNames, std::set<rtl::OUString> * seen)
 {
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
         resolveTypedefs(type), css::uno::UNO_QUERY_THROW);

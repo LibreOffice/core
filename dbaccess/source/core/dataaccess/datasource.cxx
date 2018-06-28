@@ -862,12 +862,11 @@ namespace
     void lcl_setPropertyValues_resetOrRemoveOther( const Reference< XPropertyBag >& _rxPropertyBag, const Sequence< PropertyValue >& _rAllNewPropertyValues )
     {
         // sequences are ugly to operate on
-        typedef std::set< OUString >   StringSet;
-        StringSet aToBeSetPropertyNames;
+        std::set<OUString> aToBeSetPropertyNames;
         std::transform(
             _rAllNewPropertyValues.begin(),
             _rAllNewPropertyValues.end(),
-            std::insert_iterator< StringSet >( aToBeSetPropertyNames, aToBeSetPropertyNames.end() ),
+            std::inserter( aToBeSetPropertyNames, aToBeSetPropertyNames.end() ),
             SelectPropertyName()
         );
 

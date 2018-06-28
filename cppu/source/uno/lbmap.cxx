@@ -141,7 +141,6 @@ typedef std::unordered_map<
     uno_Mapping *, MappingEntry *, FctPtrHash > t_Mapping2Entry;
 
 typedef set< uno_getMappingFunc > t_CallbackSet;
-typedef set< OUString > t_OUStringSet;
 
 
 struct MappingsData
@@ -154,7 +153,7 @@ struct MappingsData
     t_CallbackSet       aCallbacks;
 
     Mutex               aNegativeLibsMutex;
-    t_OUStringSet       aNegativeLibs;
+    set<OUString>       aNegativeLibs;
 };
 
 static MappingsData & getMappingsData()
@@ -351,7 +350,7 @@ static inline bool loadModule(osl::Module & rModule, const OUString & rBridgeNam
     {
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aNegativeLibsMutex );
-    const t_OUStringSet::const_iterator iFind( rData.aNegativeLibs.find( rBridgeName ) );
+    const auto iFind( rData.aNegativeLibs.find( rBridgeName ) );
     bNeg = (iFind != rData.aNegativeLibs.end());
     }
 
