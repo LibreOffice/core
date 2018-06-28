@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1ff146_44adae87",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-28T09:24:59Z",
+      "side": 1,
+      "message": "Nitpick: SCCOL,SCROW are just integer types, so prefix should be n...",
+      "revId": "1f0176e3c48f1f2b66657d05efa6426b5dbce623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1ff146_64aaaa72",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-28T09:24:59Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be the GetPrintArea() call we talked about in IRC instead of limiting to data content?\n\nHowever, if ShrinkToUsedDataArea() is to be used here then it should include also cell notes and drawing objects outside of data content cell range, so pass bConsiderCellNotes\u003dtrue, bConsiderCellDrawObjects\u003dtrue.",
+      "revId": "1f0176e3c48f1f2b66657d05efa6426b5dbce623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
