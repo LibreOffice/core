@@ -615,9 +615,6 @@ public:
 ***********************************************************************/
 class SvxShapePolyPolygon : public SvxShapeText
 {
-private:
-    css::drawing::PolygonKind mePolygonKind;
-
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;
@@ -626,10 +623,13 @@ protected:
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
+    // local helper to detect PolygonKind from SdrObject::GetObjIdentifier()
+    css::drawing::PolygonKind GetPolygonKind() const;
+
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::PropertyVetoException
-    SvxShapePolyPolygon( SdrObject* pObj , css::drawing::PolygonKind eNew );
+    SvxShapePolyPolygon( SdrObject* pObj );
     virtual ~SvxShapePolyPolygon() throw() override;
 
     // Local support functions
@@ -642,32 +642,6 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SvxShapePolyPolygonBezier : public SvxShapeText
-{
-private:
-    css::drawing::PolygonKind mePolygonKind;
-
-protected:
-    using SvxUnoTextRangeBase::setPropertyValue;
-    using SvxUnoTextRangeBase::getPropertyValue;
-
-public:
-    // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
-
-    SvxShapePolyPolygonBezier(SdrObject* pObj, css::drawing::PolygonKind eNew);
-    virtual ~SvxShapePolyPolygonBezier() throw() override;
-
-    // Local support functions
-    /// @throws css::uno::RuntimeException
-    void SetPolygon(const basegfx::B2DPolyPolygon & rNew);
-    basegfx::B2DPolyPolygon GetPolygon() const throw();
-};
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 class SvxGraphicObject : public SvxShapeText
 {
 protected:
