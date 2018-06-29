@@ -143,7 +143,7 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    if (oox::getNamespace(Element) == static_cast<sal_Int32>(NMSP_mce))
+    if (oox::getNamespace(Element) == NMSP_mce)
         m_bDiscardChildren = prepareMceContext(Element, Attribs);
 
     else if (!m_bDiscardChildren)
@@ -1892,7 +1892,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     // here until we need a more generic solution.
     bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vmlWord | XML_wrap);
     bool bIsSignatureLine = Element == static_cast<sal_Int32>(NMSP_vmlOffice | XML_signatureline);
-    bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == static_cast<sal_Int32>(NMSP_dml) &&
+    bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == NMSP_dml &&
         !((oox::getBaseToken(Element) == XML_linkedTxbx) || (oox::getBaseToken(Element) == XML_txbx));
 
     if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine) || dynamic_cast<OOXMLFastContextHandlerShape&>(*mpParent).isShapeSent()) )
