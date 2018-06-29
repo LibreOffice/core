@@ -226,7 +226,7 @@ namespace sdr
 
             if( mxCell.is() )
             {
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -279,9 +279,9 @@ namespace sdr
                             mpItemSet->Put(aNewSet);
                         }
 
-                        OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                        std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         pOutliner->Clear();
-                        mxCell->SetOutlinerParaObject(pTemp);
+                        mxCell->SetOutlinerParaObject(std::move(pTemp));
                     }
 
                     if( bOwnParaObj )
@@ -306,7 +306,7 @@ namespace sdr
                 rObj.SetVerticalWriting(bVertical);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -327,7 +327,7 @@ namespace sdr
                 const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -509,7 +509,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
     if( xSourceCell.is() && mpProperties )
     {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
-        SetOutlinerParaObject( new OutlinerParaObject(*xSourceCell->GetOutlinerParaObject()) );
+        SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
 
@@ -579,11 +579,10 @@ bool Cell::IsTextEditActive()
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if(rTableObj.getActiveCell().get() == this )
     {
-        OutlinerParaObject* pParaObj = rTableObj.GetEditOutlinerParaObject();
+        std::unique_ptr<OutlinerParaObject> pParaObj = rTableObj.GetEditOutlinerParaObject();
         if( pParaObj != nullptr )
         {
             isActive = true;
-            delete pParaObj;
         }
     }
     return isActive;
@@ -611,7 +610,7 @@ bool Cell::hasText() const
 }
 
 
-OutlinerParaObject* Cell::GetEditOutlinerParaObject() const
+std::unique_ptr<OutlinerParaObject> Cell::GetEditOutlinerParaObject() const
 {
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if( rTableObj.getActiveCell().get() == this )
@@ -774,9 +773,9 @@ SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 }
 
 
-void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
+void Cell::SetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject )
 {
-    SdrText::SetOutlinerParaObject( pTextObject );
+    SdrText::SetOutlinerParaObject( std::move(pTextObject) );
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
 
     if( pTextObject == nullptr )
@@ -1572,10 +1571,10 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
             ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
             rOutliner.RemoveAttribs(aSelection, true, 0);
 
-            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
+            std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
             rOutliner.Clear();
 
-            SetOutlinerParaObject(pTemp);
+            SetOutlinerParaObject(std::move(pTemp));
         }
     }
 }

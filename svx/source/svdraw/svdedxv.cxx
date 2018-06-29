@@ -2624,10 +2624,10 @@ void SdrObjEditView::ApplyFormatPaintBrushToText( SfxItemSet const & rFormatSet,
                 rOutliner.SetParaAttribs(nPara, aSet);
             }
 
-            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
+            std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
             rOutliner.Clear();
 
-            rTextObj.NbcSetOutlinerParaObjectForText(pTemp,pText);
+            rTextObj.NbcSetOutlinerParaObjectForText(std::move(pTemp),pText);
         }
     }
 }

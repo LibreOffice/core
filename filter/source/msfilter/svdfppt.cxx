@@ -2350,10 +2350,10 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
             }
         }
-        OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
+        std::unique_ptr<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
         rOutliner.Clear();
         rOutliner.SetUpdateMode( bOldUpdateMode );
-        pText->SetOutlinerParaObject( pNewText );
+        pText->SetOutlinerParaObject( std::move(pNewText) );
     }
     return pText;
 }
@@ -7634,7 +7634,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
                     {
                         SdrText* pSdrText = pTable->getText( nTableIndex );
                         if ( pSdrText )
-                            pSdrText->SetOutlinerParaObject(new OutlinerParaObject(*pParaObject) );
+                            pSdrText->SetOutlinerParaObject(o3tl::make_unique<OutlinerParaObject>(*pParaObject) );
                     }
                 }
             }

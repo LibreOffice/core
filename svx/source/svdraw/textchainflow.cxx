@@ -154,9 +154,8 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 {
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // making whole text
-    bool bNewTextTransferred = false;
     // merges underflowing text with the one in the next box
-    OutlinerParaObject *pNewText = mpUnderflChText->CreateMergedUnderflowParaObject(pOutl, mpNextLink->GetOutlinerParaObject());
+    std::unique_ptr<OutlinerParaObject> pNewText = mpUnderflChText->CreateMergedUnderflowParaObject(pOutl, mpNextLink->GetOutlinerParaObject());
 
     // Set the other box empty; it will be replaced by the rest of the text if overflow occurs
     if (!mpTargetLink->GetPreventChainable())
@@ -165,20 +164,18 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     // We store the size since NbcSetOutlinerParaObject can change it
     //Size aOldSize = pOutl->GetMaxAutoPaperSize();
 
+    auto pNewTextTemp = pNewText.get(); // because we need to access it after a std::move
     // This should not be done in editing mode!! //XXX
     if (!mpTargetLink->IsInEditMode())
     {
-        mpTargetLink->NbcSetOutlinerParaObject(pNewText);
-        bNewTextTransferred = true;
+        mpTargetLink->NbcSetOutlinerParaObject(std::move(pNewText));
     }
 
     // Restore size and set new text
     //pOutl->SetMaxAutoPaperSize(aOldSize); // XXX (it seems to be working anyway without this)
-    pOutl->SetText(*pNewText);
+    pOutl->SetText(*pNewTextTemp);
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
-    if (!bNewTextTransferred)
-        delete pNewText;
 
     // Check for new overflow
     CheckForFlowEvents(pOutl);
@@ -201,7 +198,7 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
 
 void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
-    OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
+    std::unique_ptr<OutlinerParaObject> pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
 
     SAL_INFO("svx.chaining", "[TEXTCHAINFLOW - OF] SOURCE box set to "
              << pNewText->GetTextObject().GetParagraphCount() << " paras");
@@ -209,7 +206,7 @@ void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
     // adds it to current outliner anyway (useful in static decomposition)
     pNonOverflOutl->SetText(*pNewText);
 
-    mpTargetLink->NbcSetOutlinerParaObject(pNewText);
+    mpTargetLink->NbcSetOutlinerParaObject(std::move(pNewText));
     // For some reason the paper size is lost after last instruction, so we set it.
     pNonOverflOutl->SetPaperSize(Size(pNonOverflOutl->GetPaperSize().Width(),
                                       pNonOverflOutl->GetTextHeight()));
@@ -224,14 +221,14 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
         return;
     }
 
-    OutlinerParaObject *pNewText =
+    std::unique_ptr<OutlinerParaObject> pNewText =
         mpOverflChText->InsertOverflowingText(pOverflOutl,
                                               mpNextLink->GetOutlinerParaObject());
     SAL_INFO("svx.chaining", "[TEXTCHAINFLOW - OF] DEST box set to "
              << pNewText->GetTextObject().GetParagraphCount() << " paras");
 
     if (pNewText)
-        mpNextLink->NbcSetOutlinerParaObject(pNewText);
+        mpNextLink->NbcSetOutlinerParaObject(std::move(pNewText));
 
     // Set Deep Merge status
     SAL_INFO("svx.chaining", "[DEEPMERGE] Setting deepMerge to "
@@ -273,8 +270,7 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 
 void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
-    OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
-    delete pNewText;
+    std::unique_ptr<OutlinerParaObject> pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
     //impSetTextForEditingOutliner(pNewText); //XXX: Don't call it since we do everything with NonOverflowingText::ToParaObject // XXX: You may need this for Underflow
 
     // XXX: I'm not sure whether we need this (after all operations such as Paste don't change this - as far as I understand)

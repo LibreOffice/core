@@ -31,6 +31,7 @@
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/outlobj.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
@@ -1456,7 +1457,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         aURLField.SetTargetFrame(rTarget);
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         pOutl->QuickInsertField( aURLItem, ESelection() );
-        OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
+        std::unique_ptr<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
         SdrRectObj* pRectObj = new SdrRectObj(
             GetView()->getSdrModelFromSdrView(),
@@ -1476,7 +1477,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
 
         ::tools::Rectangle aLogicRect(aPos, aSize);
         pRectObj->SetLogicRect(aLogicRect);
-        pRectObj->SetOutlinerParaObject( pOutlParaObject );
+        pRectObj->SetOutlinerParaObject( std::move(pOutlParaObject) );
         mpDrawView->InsertObjectAtView(pRectObj, *mpDrawView->GetSdrPageView());
         pOutl->Init( nOutlMode );
     }

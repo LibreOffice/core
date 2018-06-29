@@ -1066,7 +1066,7 @@ namespace {
     {
     public:
         OutlinerPrinterPage (
-            OutlinerParaObject* pParaObject,
+            std::unique_ptr<OutlinerParaObject> pParaObject,
             const MapMode& rMapMode,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
@@ -1075,13 +1075,8 @@ namespace {
             const sal_uInt16 nPaperTray)
             : PrinterPage(PageKind::Handout, rMapMode, false, rsPageString,
                 rPageStringOffset, nDrawMode, eOrientation, nPaperTray),
-              mpParaObject(pParaObject)
+              mpParaObject(std::move(pParaObject))
         {
-        }
-
-        virtual ~OutlinerPrinterPage() override
-        {
-            mpParaObject.reset();
         }
 
         virtual void Print (

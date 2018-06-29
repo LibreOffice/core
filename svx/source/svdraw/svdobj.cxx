@@ -1735,10 +1735,10 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
+void SdrObject::SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject)
 {
     tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    NbcSetOutlinerParaObject(pTextObject);
+    NbcSetOutlinerParaObject(std::move(pTextObject));
     SetChanged();
     BroadcastObjectChange();
     if (GetCurrentBoundRect()!=aBoundRect0) {
@@ -1746,7 +1746,7 @@ void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
     }
 }
 
-void SdrObject::NbcSetOutlinerParaObject(OutlinerParaObject* /*pTextObject*/)
+void SdrObject::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> /*pTextObject*/)
 {
 }
 

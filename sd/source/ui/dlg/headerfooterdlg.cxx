@@ -21,6 +21,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/langbox.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/editeng.hxx>

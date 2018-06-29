@@ -971,10 +971,9 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {
-                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+                            std::unique_ptr<OutlinerParaObject> pParaObj = pTextObj->GetEditOutlinerParaObject();
                             if( pParaObj )
                             {
-                                delete pParaObj;
                                 bDisable = false;
                             }
                         }
@@ -1593,7 +1592,9 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
         }
 
         // if we have a title object and a text, set the text
-        OutlinerParaObject* pOPO = pTO ? rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1) : nullptr;
+        std::unique_ptr<OutlinerParaObject> pOPO;
+        if (pTO)
+            pOPO = rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1);
         if (pOPO)
         {
             pOPO->SetOutlinerMode( OutlinerMode::TitleObject );
@@ -1601,7 +1602,6 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
             if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
             {
                 // do nothing, same text already set
-                delete pOPO;
             }
             else
             {
@@ -1609,7 +1609,7 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
                 if( !bNewObject && pOlView->isRecordingUndo() )
                     pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
 
-                pTO->SetOutlinerParaObject( pOPO );
+                pTO->SetOutlinerParaObject( std::move(pOPO) );
                 pTO->SetEmptyPresObj( false );
                 pTO->ActionChanged();
             }
@@ -1654,7 +1654,7 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
         return;
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
-    OutlinerParaObject* pOPO = nullptr;
+    std::unique_ptr<OutlinerParaObject> pOPO;
     SdrTextObj*         pTO  = nullptr;
 
     bool bNewObject = false;
@@ -1703,20 +1703,17 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
             if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
             {
                 // do nothing, same text already set
-                delete pOPO;
             }
             else
             {
                 if( !bNewObject && pOlView->isRecordingUndo() )
                     pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
 
-                pTO->SetOutlinerParaObject( pOPO );
+                pTO->SetOutlinerParaObject( std::move(pOPO) );
                 pTO->SetEmptyPresObj( false );
                 pTO->ActionChanged();
             }
         }
-        else
-            delete pOPO;
     }
     else if( pTO )
     {

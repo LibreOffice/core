@@ -64,7 +64,7 @@ UndoTextAPIChanged::UndoTextAPIChanged(SdrModel& rModel, TextApiObject* pTextObj
 void UndoTextAPIChanged::Undo()
 {
     if( !mpNewText )
-        mpNewText.reset( mxTextObj->CreateText() );
+        mpNewText = mxTextObj->CreateText();
 
     mxTextObj->SetText( *mpOldText );
 }
@@ -99,7 +99,7 @@ public:
 
     void                Dispose();
     void                SetText( OutlinerParaObject const & rText );
-    OutlinerParaObject* CreateText();
+    std::unique_ptr<OutlinerParaObject> CreateText();
     OUString            GetText();
     SdDrawDocument*     GetDoc() { return m_xImpl->mpDoc; }
 };
@@ -150,7 +150,7 @@ void TextApiObject::dispose()
 
 }
 
-OutlinerParaObject* TextApiObject::CreateText()
+std::unique_ptr<OutlinerParaObject> TextApiObject::CreateText()
 {
     return mpSource->CreateText();
 }
@@ -247,7 +247,7 @@ void TextAPIEditSource::SetText( OutlinerParaObject const & rText )
     }
 }
 
-OutlinerParaObject* TextAPIEditSource::CreateText()
+std::unique_ptr<OutlinerParaObject> TextAPIEditSource::CreateText()
 {
     if (m_xImpl->mpDoc && m_xImpl->mpOutliner)
         return m_xImpl->mpOutliner->CreateParaObject();

@@ -23,6 +23,7 @@
 #include <docsh.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/outlobj.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -168,7 +169,7 @@ void SwTextAPIEditSource::SetString( const OUString& rText )
     }
 }
 
-OutlinerParaObject* SwTextAPIEditSource::CreateText()
+std::unique_ptr<OutlinerParaObject> SwTextAPIEditSource::CreateText()
 {
     if ( pImpl->mpPool && pImpl->mpOutliner )
         return pImpl->mpOutliner->CreateParaObject();

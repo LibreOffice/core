@@ -56,7 +56,7 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
         if(mpOutlinerParaObject!=nullptr && rOutliner.ShouldCreateBigTextObject())
         {
             // #i102062# MemoryLeak closed
-            mpOutlinerParaObject.reset( rOutliner.CreateParaObject() );
+            mpOutlinerParaObject = rOutliner.CreateParaObject();
         }
     }
 }
@@ -72,21 +72,20 @@ const SfxItemSet& SdrText::GetItemSet() const
     return const_cast< SdrText* >(this)->GetObjectItemSet();
 }
 
-void SdrText::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
+void SdrText::SetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject )
 {
-    if( mpOutlinerParaObject.get() != pTextObject )
+    assert ( !mpOutlinerParaObject || (mpOutlinerParaObject.get() != pTextObject.get()) );
+
+    // Update HitTestOutliner
+    const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
+
+    if(pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get())
     {
-        // Update HitTestOutliner
-        const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
-
-        if(pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get())
-        {
-            mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
-        }
-
-        mpOutlinerParaObject.reset(pTextObject);
-        mbPortionInfoChecked = false;
+        mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
     }
+
+    mpOutlinerParaObject = std::move(pTextObject);
+    mbPortionInfoChecked = false;
 }
 
 OutlinerParaObject* SdrText::GetOutlinerParaObject() const
@@ -125,8 +124,7 @@ void SdrText::ForceOutlinerParaObject( OutlinerMode nOutlMode )
             Outliner& aDrawOutliner(mrObject.getSdrModelFromSdrObject().GetDrawOutliner());
             pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
             pOutliner->SetStyleSheet( 0, GetStyleSheet());
-            OutlinerParaObject* pOutlinerParaObject = pOutliner->CreateParaObject();
-            SetOutlinerParaObject( pOutlinerParaObject );
+            SetOutlinerParaObject( pOutliner->CreateParaObject() );
         }
     }
 }
