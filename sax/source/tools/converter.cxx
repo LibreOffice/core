@@ -280,10 +280,11 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
 
         return;
     }
+    sal_Int64 nValue(nMeasure); // extend to 64-bit first to avoid overflow
     // the sign is processed separately
-    if( nMeasure < 0 )
+    if (nValue < 0)
     {
-        nMeasure = -nMeasure;
+        nValue = -nValue;
         rBuffer.append( '-' );
     }
 
@@ -401,7 +402,6 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         break;
     }
 
-    sal_Int64 nValue = nMeasure;
     OSL_ENSURE(nValue <= SAL_MAX_INT64 / nMul, "convertMeasure: overflow");
     nValue *= nMul;
     nValue /= nDiv;

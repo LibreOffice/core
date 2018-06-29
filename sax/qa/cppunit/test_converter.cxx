@@ -502,6 +502,7 @@ void ConverterTest::testMeasure()
     doTestMeasureToString("979.928cm", 555550, MeasureUnit::TWIP, MeasureUnit::CM);
     doTestMeasureToString("111.1pt", 2222, MeasureUnit::TWIP, MeasureUnit::POINT);
     doTestMeasureToString("385.7986in", 555550, MeasureUnit::TWIP, MeasureUnit::INCH);
+    doTestMeasureToString("-2147483.648cm", std::numeric_limits<sal_Int32>::min(), MeasureUnit::MM_100TH, MeasureUnit::CM);
 }
 
 void doTestStringToBool(bool bBool, char const*const pis)
