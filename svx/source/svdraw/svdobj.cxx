@@ -465,7 +465,7 @@ void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     // e.g. from Writer - the SdrObject may be cloned to target model, and
     // the xShape was added to it by purpose (see there). Thus it will be
     // good to think about if this is really needed - it *seems* to be intended
-    // for a xShape being a on-demand-creatable resource - wit hthe argument that
+    // for a xShape being a on-demand-creatable resource - with the argument that
     // the SdrPage/UnoPage used influences the SvxShape creation. This uses
     // resources and would be nice to get rid of anyways.
     if(nullptr == pOldPage || nullptr == pNewPage)
