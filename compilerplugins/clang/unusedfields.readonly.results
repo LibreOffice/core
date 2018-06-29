@@ -52,7 +52,7 @@ bridges/source/jni_uno/jni_java2uno.cxx:150
     jni_uno::largest p void *
 bridges/source/jni_uno/jni_java2uno.cxx:151
     jni_uno::largest a uno_Any
-chart2/source/model/main/DataPoint.hxx:107
+chart2/source/model/main/DataPoint.hxx:108
     chart::DataPoint m_bNoParentPropAllowed _Bool
 connectivity/source/drivers/evoab2/EApi.h:125
     (anonymous) po char *
@@ -242,7 +242,7 @@ framework/inc/xml/menudocumenthandler.hxx:160
     framework::OReadMenuHandler m_bMenuPopupMode _Bool
 framework/inc/xml/menudocumenthandler.hxx:190
     framework::OReadMenuPopupHandler m_bMenuMode _Bool
-framework/source/fwe/classes/addonsoptions.cxx:299
+framework/source/fwe/classes/addonsoptions.cxx:301
     framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
 i18npool/inc/textconversion.hxx:80
     i18npool::(anonymous) code sal_Unicode
@@ -314,20 +314,12 @@ include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:33
     MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
-include/svtools/valueset.hxx:440
-    SvtValueSet maSelectHdl Link<class SvtValueSet *, void>
-include/svx/dialcontrol.hxx:164
-    svx::SvxDialControl m_aText class rtl::OUString
-include/svx/dialcontrol.hxx:207
-    svx::SvxDialControl::DialControl_Impl maModifyHdl Link<class svx::SvxDialControl *, void>
-include/svx/paraprev.hxx:118
-    ParaPrevWindow nFirstLineOfst short
-include/svx/paraprev.hxx:120
-    ParaPrevWindow nUpper sal_uInt16
-include/svx/paraprev.hxx:121
-    ParaPrevWindow nLower sal_uInt16
-include/svx/paraprev.hxx:127
-    ParaPrevWindow eLine enum SvxPrevLineSpace
+include/svx/colorbox.hxx:105
+    ColorListBox m_nSlotId sal_uInt16
+include/svx/colorbox.hxx:106
+    ColorListBox m_bShowNoneButton _Bool
+include/svx/fntctrl.hxx:93
+    FontPrevWindow maText class rtl::OUString
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/sdr/overlay/overlaymanager.hxx:73
@@ -340,18 +332,6 @@ include/svx/svdoedge.hxx:161
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
 include/svx/svdpntv.hxx:170
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
-include/svx/swframeexample.hxx:119
-    SwFrameExample nWrap css::text::WrapTextMode
-include/svx/swframeexample.hxx:121
-    SwFrameExample bTrans _Bool
-include/test/sheet/xdatapilottable.hxx:31
-    apitest::XDataPilotTable xCellForChange css::uno::Reference<css::table::XCell>
-include/test/sheet/xdatapilottable.hxx:32
-    apitest::XDataPilotTable xCellForCheck css::uno::Reference<css::table::XCell>
-include/test/sheet/xnamedranges.hxx:38
-    apitest::XNamedRanges xSheet css::uno::Reference<css::sheet::XSpreadsheet>
-include/test/sheet/xspreadsheets2.hxx:46
-    apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
     unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
@@ -442,6 +422,8 @@ sc/inc/formulagroup.hxx:39
     sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **
 sc/inc/reordermap.hxx:21
     sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
+sc/qa/extras/anchor.cxx:53
+    sc_apitest::ScAnchorTest mxComponent uno::Reference<lang::XComponent>
 sc/source/core/inc/adiasync.hxx:41
     ScAddInAsync::(anonymous) pStr class rtl::OUString *
 sc/source/core/inc/interpre.hxx:105
@@ -588,9 +570,9 @@ sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
 sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/doc/swstylemanager.cxx:58
-    SwStyleManager aAutoCharPool class StylePool
 sw/source/core/doc/swstylemanager.cxx:59
+    SwStyleManager aAutoCharPool class StylePool
+sw/source/core/doc/swstylemanager.cxx:60
     SwStyleManager aAutoParaPool class StylePool
 sw/source/core/doc/tblrwcl.cxx:83
     CpyTabFrame::(anonymous) nSize SwTwips
@@ -616,18 +598,8 @@ sw/source/uibase/inc/fldmgr.hxx:77
     SwInsertField_Data m_aDBDataSource css::uno::Any
 sw/source/uibase/inc/labimg.hxx:49
     SwLabItem m_aBin class rtl::OUString
-sw/source/uibase/inc/numprevw.hxx:31
-    NumberingPreview pActNum const class SwNumRule *
-sw/source/uibase/inc/numprevw.hxx:33
-    NumberingPreview nPageWidth long
-sw/source/uibase/inc/numprevw.hxx:34
-    NumberingPreview pOutlineNames const class rtl::OUString *
-sw/source/uibase/inc/numprevw.hxx:35
-    NumberingPreview bPosition _Bool
-sw/source/uibase/inc/optload.hxx:94
+sw/source/uibase/inc/optload.hxx:107
     CaptionComboBox aDefault class rtl::OUString
-sw/source/uibase/inc/prcntfld.hxx:111
-    SwPercentField bLockAutoCalculation _Bool
 toolkit/source/awt/vclxtoolkit.cxx:433
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:46
@@ -642,7 +614,7 @@ ucb/source/ucp/gio/gio_mount.hxx:52
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 ucb/source/ucp/hierarchy/hierarchydatasupplier.cxx:73
     hierarchy_ucp::DataSupplier_Impl m_aIterator class HierarchyEntry::iterator
-ucbhelper/source/client/proxydecider.cxx:118
+ucbhelper/source/client/proxydecider.cxx:127
     ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const struct ucbhelper::InternetProxyServer
 unoidl/source/sourceprovider-scanner.hxx:147
     unoidl::detail::SourceProviderInterfaceTypeEntityPad directMandatoryBases std::vector<DirectBase>
@@ -696,11 +668,9 @@ vcl/inc/svdata.hxx:284
     ImplSVNWFData mbNoActiveTabTextRaise _Bool
 vcl/inc/svdata.hxx:286
     ImplSVNWFData mbProgressNeedsErase _Bool
-vcl/inc/svdata.hxx:295
-    ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/unx/i18n_status.hxx:56
     vcl::I18NStatus m_aCurrentIM class rtl::OUString
-vcl/inc/unx/saldisp.hxx:266
+vcl/inc/unx/saldisp.hxx:288
     SalDisplay m_aInvalidScreenData struct SalDisplay::ScreenData
 vcl/source/filter/jpeg/Exif.hxx:62
     Exif::TiffHeader byteOrder sal_uInt16
@@ -714,11 +684,11 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/fontsubset/sft.cxx:1054
+vcl/source/fontsubset/sft.cxx:1048
     vcl::_subHeader2 firstCode sal_uInt16
-vcl/source/fontsubset/sft.cxx:1055
+vcl/source/fontsubset/sft.cxx:1049
     vcl::_subHeader2 entryCount sal_uInt16
-vcl/source/fontsubset/sft.cxx:1056
+vcl/source/fontsubset/sft.cxx:1050
     vcl::_subHeader2 idDelta sal_uInt16
 vcl/source/gdi/dibtools.cxx:50
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30

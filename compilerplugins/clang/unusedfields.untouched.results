@@ -62,8 +62,28 @@ cui/source/inc/cuicharmap.hxx:108
     SvxCharacterMap m_xShowSetArea std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuicharmap.hxx:110
     SvxCharacterMap m_xSearchSetArea std::unique_ptr<weld::CustomWeld>
+cui/source/inc/cuitabarea.hxx:704
+    SvxColorTabPage m_xCtlPreviewOld std::unique_ptr<weld::CustomWeld>
+cui/source/inc/cuitabarea.hxx:705
+    SvxColorTabPage m_xCtlPreviewNew std::unique_ptr<weld::CustomWeld>
+cui/source/inc/cuitabarea.hxx:706
+    SvxColorTabPage m_xValSetColorListWin std::unique_ptr<weld::CustomWeld>
+cui/source/inc/cuitabarea.hxx:707
+    SvxColorTabPage m_xValSetRecentListWin std::unique_ptr<weld::CustomWeld>
 cui/source/inc/insrc.hxx:31
     SvxInsRowColDlg m_xBeforeBtn std::unique_ptr<weld::RadioButton>
+cui/source/inc/page.hxx:105
+    SvxPageDescPage m_xOrientationFT std::unique_ptr<weld::Label>
+cui/source/inc/page.hxx:135
+    SvxPageDescPage m_xBspWin std::unique_ptr<weld::CustomWeld>
+cui/source/inc/paragrph.hxx:67
+    SvxStdParagraphTabPage m_xRightLabel std::unique_ptr<weld::Label>
+cui/source/inc/paragrph.hxx:91
+    SvxStdParagraphTabPage m_xExampleWin std::unique_ptr<weld::CustomWeld>
+cui/source/inc/paragrph.hxx:154
+    SvxParaAlignTabPage m_xExampleWin std::unique_ptr<weld::CustomWeld>
+cui/source/inc/paragrph.hxx:159
+    SvxParaAlignTabPage m_xPropertiesFL std::unique_ptr<weld::Widget>
 cui/source/inc/swpossizetabpage.hxx:88
     SvxSwPosSizeTabPage m_xExampleWN std::unique_ptr<weld::CustomWeld>
 cui/source/inc/textattr.hxx:69
@@ -80,6 +100,8 @@ emfio/source/emfuno/xemfparser.cxx:60
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:44
     ScannerManager maProtector osl::Mutex
+filter/source/pdf/impdialog.hxx:186
+    ImpPDFTabGeneralPage mxSelectedSheets std::unique_ptr<weld::Label>
 filter/source/xsltdialog/xmlfiltertabpagebasic.hxx:36
     XMLFilterTabPageBasic m_xContainer std::unique_ptr<weld::Widget>
 filter/source/xsltdialog/xmlfiltertabpagexslt.hxx:48
@@ -110,6 +132,12 @@ include/svtools/unoevent.hxx:162
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/ClassificationDialog.hxx:63
     svx::ClassificationDialog m_nInsertMarkings sal_Int16
+include/svx/colorwindow.hxx:133
+    ColorWindow mxColorSetWin std::unique_ptr<weld::CustomWeld>
+include/svx/colorwindow.hxx:134
+    ColorWindow mxRecentColorSetWin std::unique_ptr<weld::CustomWeld>
+include/svx/hdft.hxx:87
+    SvxHFPage m_xBspWin std::unique_ptr<weld::CustomWeld>
 include/vcl/uitest/uiobject.hxx:268
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
@@ -166,15 +194,15 @@ sal/osl/unx/thread.cxx:112
     osl_thread_global_st m_priority struct osl_thread_priority_st
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
-sc/inc/interpretercontext.hxx:23
+sc/inc/interpretercontext.hxx:31
     ScInterpreterContext mrDoc const class ScDocument &
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
-sc/source/core/data/document.cxx:1248
+sc/source/core/data/document.cxx:1251
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1249
+sc/source/core/data/document.cxx:1252
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
-sc/source/core/data/formulacell.cxx:1756
+sc/source/core/data/formulacell.cxx:1793
     (anonymous namespace)::StackCleaner pInt std::unique_ptr<ScInterpreter>
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
@@ -182,7 +210,7 @@ sc/source/ui/inc/crdlg.hxx:33
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
 sc/source/ui/inc/delcodlg.hxx:39
     ScDeleteContentsDlg m_xBtnOk std::unique_ptr<weld::Button>
-sc/source/ui/inc/docsh.hxx:460
+sc/source/ui/inc/docsh.hxx:462
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/instbdlg.hxx:66
     ScInsertTableDlg m_xBtnBehind std::unique_ptr<weld::RadioButton>
@@ -202,7 +230,7 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:106
     sd::TableDesignPane aImpl class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1321
+sd/source/ui/view/DocumentRenderer.cxx:1322
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1215
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -216,9 +244,9 @@ sd/source/ui/view/ViewShellBase.cxx:192
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:114
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
-sfx2/source/view/viewfrm.cxx:158
+sfx2/source/view/viewfrm.cxx:160
     (anonymous namespace)::SfxEditDocumentDialog m_xEditDocument std::unique_ptr<weld::Button>
-sfx2/source/view/viewfrm.cxx:159
+sfx2/source/view/viewfrm.cxx:161
     (anonymous namespace)::SfxEditDocumentDialog m_xCancel std::unique_ptr<weld::Button>
 starmath/inc/dialog.hxx:347
     SmSymbolDialog m_xSymbolSetDisplayArea std::unique_ptr<weld::CustomWeld>
@@ -268,6 +296,8 @@ sw/source/ui/misc/impfnote.hxx:44
     SwEndNoteOptionPage m_xPosFT std::unique_ptr<weld::Label>
 sw/source/uibase/inc/dbui.hxx:31
     PrintMonitor m_xDocName std::unique_ptr<weld::Label>
+sw/source/uibase/inc/drpcps.hxx:141
+    SwDropCapsPage m_xPict std::unique_ptr<weld::CustomWeld>
 sw/source/uibase/inc/insfnote.hxx:38
     SwInsFootNoteDlg m_xNumberFrame std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/num.hxx:55
@@ -296,9 +326,13 @@ uui/source/unknownauthdlg.hxx:36
     UnknownAuthDialog m_xOptionButtonDontAccept std::unique_ptr<weld::RadioButton>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
+vcl/inc/qt5/Qt5Menu.hxx:74
+    Qt5MenuItem mbVisible _Bool
+vcl/inc/qt5/Qt5Object.hxx:34
+    Qt5Object m_aSystemData struct SystemEnvData
 vcl/inc/salprn.hxx:44
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
-vcl/source/app/salvtables.cxx:463
+vcl/source/app/salvtables.cxx:494
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
 vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
@@ -310,7 +344,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2166
+vcl/unx/gtk3/gtk3gtkinst.cxx:2221
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink

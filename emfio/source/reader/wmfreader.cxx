@@ -1364,7 +1364,6 @@ namespace emfio
         sal_uInt16  nFunction;
 
         mnSkipActions = 0;
-        mnCurrentAction = 0;
 
         mpEMFStream.reset();
         mnEMFRecCount = 0;
@@ -1388,7 +1387,6 @@ namespace emfio
                 bool bEMFAvailable = false;
                 while( true )
                 {
-                    mnCurrentAction++;
                     mpInputStream->ReadUInt32(mnRecSize).ReadUInt16( nFunction );
 
                     if (
@@ -1854,7 +1852,6 @@ namespace emfio
         , mnEMFRec(0)
         , mnEMFSize(0)
         , mnSkipActions(0)
-        , mnCurrentAction(0)
         , mpExternalHeader(pExternalHeader)
     {
     }

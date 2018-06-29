@@ -3762,10 +3762,8 @@ ColorListBox::ColorListBox(weld::MenuButton* pControl, weld::Window* pTopLevel)
     , m_pTopLevel(pTopLevel)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
-    , m_nSlotId(0)
-    , m_bShowNoneButton(false)
 {
-    m_aSelectedColor = GetAutoColor(m_nSlotId);
+    m_aSelectedColor = GetAutoColor(0);
     LockWidthRequest();
     ShowPreview(m_aSelectedColor);
 }
@@ -3793,15 +3791,13 @@ void ColorListBox::createColorWindow()
                             OUString() /*m_aCommandURL*/,
                             m_xPaletteManager,
                             m_aBorderColorStatus,
-                            m_nSlotId,
+                            0, // slotID
                             xFrame,
                             m_pTopLevel,
                             m_xButton.get(),
                             m_aColorWrapper));
 
     SetNoSelection();
-    if (m_bShowNoneButton)
-        m_xColorWindow->ShowNoneButton();
     m_xButton->set_popover(m_xColorWindow->GetWidget());
     m_xColorWindow->SelectEntry(m_aSelectedColor);
 }
@@ -3865,20 +3861,10 @@ void ColorListBox::ShowPreview(const NamedColor &rColor)
     ScopedVclPtrInstance<VirtualDevice> xDevice;
     xDevice->SetOutputSize(aImageSize);
     const tools::Rectangle aRect(Point(0, 0), aImageSize);
-    if (m_bShowNoneButton && rColor.first == COL_NONE_COLOR)
-    {
-        const Color aW(COL_WHITE);
-        const Color aG(0xef, 0xef, 0xef);
-        xDevice->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), 8, aW, aG);
-        xDevice->SetFillColor();
-    }
+    if (rColor.first == COL_AUTO)
+        xDevice->SetFillColor(m_aAutoDisplayColor);
     else
-    {
-        if (rColor.first == COL_AUTO)
-            xDevice->SetFillColor(m_aAutoDisplayColor);
-        else
-            xDevice->SetFillColor(rColor.first);
-    }
+        xDevice->SetFillColor(rColor.first);
 
     xDevice->SetLineColor(rStyleSettings.GetDisableColor());
     xDevice->DrawRect(aRect);
