@@ -241,7 +241,7 @@ void SwAnnotationWin::UpdateData()
             pOldField.reset(mpField->Copy());
         }
         mpField->SetPar2(mpOutliner->GetEditEngine().GetText());
-        mpField->SetTextObject(std::unique_ptr<OutlinerParaObject>(mpOutliner->CreateParaObject()));
+        mpField->SetTextObject(mpOutliner->CreateParaObject());
         if (rUndoRedo.DoesUndo())
         {
             SwTextField *const pTextField = mpFormatField->GetTextField();
@@ -404,7 +404,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const * pText)
         pOldField.reset(mpField->Copy());
     }
     mpField->SetPar2(mpOutliner->GetEditEngine().GetText());
-    mpField->SetTextObject(std::unique_ptr<OutlinerParaObject>(mpOutliner->CreateParaObject()));
+    mpField->SetTextObject(mpOutliner->CreateParaObject());
     if (rUndoRedo.DoesUndo())
     {
         SwTextField *const pTextField = mpFormatField->GetTextField();

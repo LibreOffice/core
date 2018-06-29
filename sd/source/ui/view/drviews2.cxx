@@ -2338,7 +2338,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OutlinerMode nOutlMode = pOutl->GetMode();
                 pOutl->SetStyleSheet( 0, nullptr );
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
-                OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
+                std::unique_ptr<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
                 SdrRectObj* pRectObj = new SdrRectObj(
                     *GetDoc(),
@@ -2360,7 +2360,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 ::tools::Rectangle aLogicRect(aPos, aSize);
                 pRectObj->SetLogicRect(aLogicRect);
-                pRectObj->SetOutlinerParaObject( pOutlParaObject );
+                pRectObj->SetOutlinerParaObject( std::move(pOutlParaObject) );
                 mpDrawView->InsertObjectAtView(pRectObj, *mpDrawView->GetSdrPageView());
                 pOutl->Init( nOutlMode );
             }

@@ -46,6 +46,7 @@
 #include <svx/svdotable.hxx> // #i124389#
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked
@@ -404,7 +405,7 @@ void SdrUndoAttrObj::Undo()
 
         if(pTextUndo)
         {
-            pObj->SetOutlinerParaObject(new OutlinerParaObject(*pTextUndo));
+            pObj->SetOutlinerParaObject(o3tl::make_unique<OutlinerParaObject>(*pTextUndo));
         }
     }
 
@@ -482,7 +483,7 @@ void SdrUndoAttrObj::Redo()
         // #i8508#
         if(pTextRedo)
         {
-            pObj->SetOutlinerParaObject(new OutlinerParaObject(*pTextRedo));
+            pObj->SetOutlinerParaObject(o3tl::make_unique<OutlinerParaObject>(*pTextRedo));
         }
     }
 
@@ -1071,9 +1072,8 @@ void SdrUndoObjSetText::Undo()
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-        OutlinerParaObject* pText1 = pOldText ? new OutlinerParaObject(*pOldText) : nullptr;
-        pText->SetOutlinerParaObject(pText1);
-        pTarget->NbcSetOutlinerParaObjectForText(pText1, pText);
+        std::unique_ptr<OutlinerParaObject> pText1( pOldText ? new OutlinerParaObject(*pOldText) : nullptr );
+        pTarget->NbcSetOutlinerParaObjectForText(std::move(pText1), pText);
     }
 
     pTarget->SetEmptyPresObj(bEmptyPresObj);
@@ -1106,8 +1106,8 @@ void SdrUndoObjSetText::Redo()
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-        OutlinerParaObject* pText1 = pNewText ? new OutlinerParaObject(*pNewText) : nullptr;
-        pTarget->NbcSetOutlinerParaObjectForText( pText1, pText );
+        std::unique_ptr<OutlinerParaObject> pText1( pNewText ? new OutlinerParaObject(*pNewText) : nullptr );
+        pTarget->NbcSetOutlinerParaObjectForText( std::move(pText1), pText );
     }
 
     pTarget->ActionChanged();
@@ -1165,10 +1165,10 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
                 if( bUndo )
                     rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
 
-                OutlinerParaObject* pText1=pNewText.get();
-                if (pText1!=nullptr)
-                    pText1 = new OutlinerParaObject(*pText1);
-                pTextObj->SetOutlinerParaObject(pText1);
+                std::unique_ptr<OutlinerParaObject> pText1;
+                if (pNewText)
+                    pText1.reset(new OutlinerParaObject(*pNewText));
+                pTextObj->SetOutlinerParaObject(std::move(pText1));
             }
         }
 

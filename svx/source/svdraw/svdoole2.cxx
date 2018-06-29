@@ -85,6 +85,7 @@
 #include <svx/svdpage.hxx>
 #include <rtl/ref.hxx>
 #include <bitmaps.hlst>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1195,7 +1196,7 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
 
             if(pOPO)
             {
-                pClone->NbcSetOutlinerParaObject(new OutlinerParaObject(*pOPO));
+                pClone->NbcSetOutlinerParaObject(o3tl::make_unique<OutlinerParaObject>(*pOPO));
             }
         }
 

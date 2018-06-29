@@ -49,7 +49,7 @@ public:
 
     void ForceOutlinerParaObject( OutlinerMode nOutlMode );
 
-    virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
+    virtual void SetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject );
     OutlinerParaObject* GetOutlinerParaObject() const;
 
     void CheckPortionInfo( SdrOutliner& rOutliner );

@@ -545,12 +545,11 @@ namespace drawinglayer
 
                 if(bInEditMode)
                 {
-                    OutlinerParaObject* pTempObj = rTextObj.GetEditOutlinerParaObject();
+                    std::unique_ptr<OutlinerParaObject> pTempObj = rTextObj.GetEditOutlinerParaObject();
 
                     if(pTempObj)
                     {
                         aOutlinerParaObject = *pTempObj;
-                        delete pTempObj;
                     }
                     else
                     {

@@ -24,6 +24,7 @@
 
 #include <DrawDocShell.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <editeng/outlobj.hxx>
 #include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/progress.hxx>
@@ -590,8 +591,8 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
             SdrOutliner* pOutl = mpViewShell->GetView()->GetTextEditOutliner();
             if( pObj && pOutl && pOutl->IsModified() )
             {
-                OutlinerParaObject* pNewText = pOutl->CreateParaObject( 0, pOutl->GetParagraphCount() );
-                pObj->SetOutlinerParaObject( pNewText );
+                std::unique_ptr<OutlinerParaObject> pNewText = pOutl->CreateParaObject( 0, pOutl->GetParagraphCount() );
+                pObj->SetOutlinerParaObject( std::move(pNewText) );
                 pOutl->ClearModifyFlag();
             }
         }

@@ -25,6 +25,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <editeng/outlobj.hxx>
 
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

@@ -29,6 +29,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/outlobj.hxx>
 
 #include <drawdoc.hxx>
 #include <glob.hxx>

@@ -488,10 +488,10 @@ public:
     virtual void EndTextEdit(SdrOutliner& rOutl);
     virtual EEAnchorMode GetOutlinerViewAnchorMode() const;
 
-    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
-    void NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObject, SdrText* pText );
+    virtual void NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject) override;
+    void NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaObject> pTextObject, SdrText* pText );
     virtual OutlinerParaObject* GetOutlinerParaObject() const override;
-    OutlinerParaObject* GetEditOutlinerParaObject() const;
+    std::unique_ptr<OutlinerParaObject> GetEditOutlinerParaObject() const;
 
     virtual void NbcReformatText() override;
     virtual void ReformatText() override;
