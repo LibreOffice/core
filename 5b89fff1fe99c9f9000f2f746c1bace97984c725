@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1ff146_8a940fe9",
+        "filename": "scripting/source/pyprov/pythonscript.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-06-29T07:05:08Z",
+      "side": 1,
+      "message": "nitpick: extra space to remove here.",
+      "range": {
+        "startLine": 440,
+        "startChar": 32,
+        "endLine": 440,
+        "endChar": 33
+      },
+      "revId": "5b89fff1fe99c9f9000f2f746c1bace97984c725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
