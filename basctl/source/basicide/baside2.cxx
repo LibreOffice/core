@@ -540,9 +540,9 @@ void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
         CheckCompileBasic();
 
         if ( rBrk.bEnabled )
-            m_xModule->SetBP( static_cast<sal_uInt16>(rBrk.nLine) );
+            m_xModule->SetBP( rBrk.nLine );
         else
-            m_xModule->ClearBP( static_cast<sal_uInt16>(rBrk.nLine) );
+            m_xModule->ClearBP( rBrk.nLine );
     }
 }
 
