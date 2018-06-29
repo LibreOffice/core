@@ -563,6 +563,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     get(mpNupPagesBox, "pagespersheetbox");
     get(mpNupOrientationBox, "pageorientationbox");
     get(mpNupOrderTxt, "labelorder");
+    get(mpPaperSizeBox, "papersizebox");
     get(mpNupOrderBox, "orderbox");
     get(mpPagesBtn, "pagespersheetbtn");
     get(mpBrochureBtn, "brochure");
@@ -629,6 +630,9 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     // update the text fields for the printer
     updatePrinterText();
 
+    // set paper sizes listbox
+    setPaperSizes();
+
     // setup dependencies
     checkControlDependencies();
 
@@ -679,6 +683,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     mpNupPagesBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     mpNupOrientationBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     mpNupOrderBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    mpPaperSizeBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
     // setup modify hdl
     mpPageEdit->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
@@ -736,6 +741,7 @@ void PrintDialog::dispose()
     mpSheetMarginTxt1.clear();
     mpSheetMarginEdt.clear();
     mpSheetMarginTxt2.clear();
+    mpPaperSizeBox.clear();
     mpNupOrientationBox.clear();
     mpNupOrderBox.clear();
     mpNupOrderWin.clear();
@@ -743,6 +749,51 @@ void PrintDialog::dispose()
     mpBorderCB.clear();
     mpMoreOptionsDlg.disposeAndClear();
     ModalDialog::dispose();
+}
+
+void PrintDialog::setPaperSizes()
+{
+    mpPaperSizeBox->Clear();
+
+    if ( isPrintToFile() )
+    {
+        mpPaperSizeBox->Enable( false );
+    }
+    else
+    {
+        VclPtr<Printer> aPrt( maPController->getPrinter() );
+        mePaper = aPrt->GetPaper();
+
+        for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
+        {
+            PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
+            aInfo.doSloppyFit();
+            Paper ePaper = aInfo.getPaper();
+
+            const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
+            MapUnit eUnit = MapUnit::MapMM;
+            int nDigits = 0;
+            if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
+            {
+                eUnit = MapUnit::Map100thInch;
+                nDigits = 2;
+            }
+            Size aSize = aPrt->GetPaperSize( nPaper );
+            Size aLogicPaperSize( LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( eUnit ) ) );
+
+            OUString aWidth( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
+            OUString aHeight( rLocWrap.getNum( aLogicPaperSize.Height(), nDigits ) );
+            OUString aUnit = eUnit == MapUnit::MapMM ? OUString("mm") : OUString("in");
+            OUString aPaperName = Printer::GetPaperName( ePaper ) + " " + aWidth + aUnit + " x " + aHeight + aUnit;
+
+            mpPaperSizeBox->InsertEntry( aPaperName );
+
+            if ( ePaper == mePaper )
+                mpPaperSizeBox->SelectEntryPos( nPaper );
+        }
+
+        mpPaperSizeBox->Enable( true );
+    }
 }
 
 void PrintDialog::updatePrinterText()
@@ -787,7 +838,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     if ( !hasPreview() )
     {
         mpPreviewWindow->setPreview( aMtf, aCurPageSize,
-                            aPrt->GetPaperName(),
+                            Printer::GetPaperName( mePaper ),
                             maNoPreviewStr,
                             aPrt->GetDPIX(), aPrt->GetDPIY(),
                             aPrt->GetPrinterOptions().IsConvertToGreyscales()
@@ -820,7 +871,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
         }
 
         mpPreviewWindow->setPreview( aMtf, aCurPageSize,
-                                    aPrt->GetPaperName(),
+                                    Printer::GetPaperName( mePaper ),
                                     nPages > 0 ? OUString() : maNoPageStr,
                                     aPrt->GetDPIX(), aPrt->GetDPIY(),
                                     aPrt->GetPrinterOptions().IsConvertToGreyscales()
@@ -1687,6 +1738,24 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
         {
             maPController->setupPrinter(GetFrameWeld());
 
+            if ( !isPrintToFile() )
+            {
+                VclPtr<Printer> aPrt( maPController->getPrinter() );
+                mePaper = aPrt->GetPaper();
+
+                for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++ )
+                {
+                    PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
+                    aInfo.doSloppyFit();
+                    Paper ePaper = aInfo.getPaper();
+
+                    if ( mePaper == ePaper )
+                    {
+                        mpPaperSizeBox->SelectEntryPos( nPaper );
+                        break;
+                    }
+                }
+            }
             // tdf#63905 don't use cache: page size may change
             preparePreview();
         }
@@ -1699,8 +1768,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
 {
     if(  &rBox == mpPrinters )
     {
-
-        if ( rBox.GetSelectedEntryPos() != 0)
+        if ( !isPrintToFile() )
         {
             OUString aNewPrinter( rBox.GetSelectedEntry() );
             // set new printer
@@ -1709,6 +1777,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             // update text fields
             mpOKButton->SetText( maPrintText );
             updatePrinterText();
+            setPaperSizes();
             preparePreview();
         }
         else // print to file
@@ -1717,6 +1786,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             maPController->setPrinter( VclPtrInstance<Printer>( Printer::GetDefaultPrinterName() ) );
             mpOKButton->SetText( maPrintToFileText );
             maPController->resetPrinterOptions( true );
+            setPaperSizes();
             preparePreview( true, true );
         }
     }
@@ -1729,6 +1799,18 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
         if( !mpPagesBtn->IsChecked() )
             mpPagesBtn->Check();
         updateNupFromPages();
+    }
+    else if ( &rBox == mpPaperSizeBox )
+    {
+        VclPtr<Printer> aPrt( maPController->getPrinter() );
+        PaperInfo aInfo = aPrt->GetPaperInfo( rBox.GetSelectedEntryPos() );
+        aInfo.doSloppyFit();
+        mePaper = aInfo.getPaper();
+        aPrt->SetPaper( mePaper );
+        if ( mePaper == PAPER_USER )
+            aPrt->SetPaperSizeUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
+
+        preparePreview();
     }
 }
 

@@ -168,8 +168,11 @@ void PaperInfo::doSloppyFit()
 
         long lDiffW = labs(aDinTab[i].m_nWidth - m_nPaperWidth);
         long lDiffH = labs(aDinTab[i].m_nHeight - m_nPaperHeight);
+        long lFlipDiffW = labs(aDinTab[i].m_nHeight - m_nPaperWidth);
+        long lFlipDiffH = labs(aDinTab[i].m_nWidth - m_nPaperHeight);
 
-        if ( lDiffW < MAXSLOPPY && lDiffH < MAXSLOPPY )
+        if ( (lDiffW < MAXSLOPPY && lDiffH < MAXSLOPPY) ||
+            (lFlipDiffW < MAXSLOPPY && lFlipDiffH < MAXSLOPPY) )
         {
             m_nPaperWidth = aDinTab[i].m_nWidth;
             m_nPaperHeight = aDinTab[i].m_nHeight;

@@ -1437,14 +1437,14 @@ OUString Printer::GetPaperName( Paper ePaper )
     {
         static const int PaperIndex[] =
         {
-            PAPER_A0, PAPER_A1, PAPER_A2, PAPER_A3, PAPER_A4, PAPER_A5,
+            PAPER_A0, PAPER_A1, PAPER_A2, PAPER_A3, PAPER_A4, PAPER_A5, PAPER_A6,
             PAPER_B4_ISO, PAPER_B5_ISO, PAPER_LETTER, PAPER_LEGAL, PAPER_TABLOID,
             PAPER_USER, PAPER_B6_ISO, PAPER_ENV_C4, PAPER_ENV_C5, PAPER_ENV_C6, PAPER_ENV_C65,
             PAPER_ENV_DL, PAPER_SLIDE_DIA, PAPER_C, PAPER_D, PAPER_E,
             PAPER_EXECUTIVE, PAPER_FANFOLD_LEGAL_DE, PAPER_ENV_MONARCH, PAPER_ENV_PERSONAL,
             PAPER_ENV_9, PAPER_ENV_10, PAPER_ENV_11, PAPER_ENV_12, PAPER_KAI16,
             PAPER_KAI32, PAPER_KAI32BIG, PAPER_B4_JIS, PAPER_B5_JIS, PAPER_B6_JIS,
-            PAPER_POSTCARD_JP
+            PAPER_POSTCARD_JP, PAPER_DOUBLEPOSTCARD_JP
         };
         assert(SAL_N_ELEMENTS(PaperIndex) == SAL_N_ELEMENTS(RID_STR_PAPERNAMES) && "localized paper name count wrong");
         for (size_t i = 0; i < SAL_N_ELEMENTS(PaperIndex); ++i)
@@ -1473,6 +1473,12 @@ const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
     if( mpInfoPrinter->m_aPaperFormats.empty() || nPaper < 0 || nPaper >= int(mpInfoPrinter->m_aPaperFormats.size()) )
         return ImplGetEmptyPaper();
     return mpInfoPrinter->m_aPaperFormats[nPaper];
+}
+
+Size Printer::GetPaperSize( int nPaper )
+{
+    PaperInfo aInfo = GetPaperInfo( nPaper );
+    return PixelToLogic( Size( aInfo.getWidth(), aInfo.getHeight() ) );
 }
 
 void Printer::SetDuplexMode( DuplexMode eDuplex )
