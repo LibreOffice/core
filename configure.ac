@@ -2063,13 +2063,6 @@ AC_ARG_WITH(doxygen,
          documentation. Not relevant in the --disable-odk case.]),
 ,with_doxygen=yes)
 
-AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2013/2015>],
-        [Specify which Visual Studio version to use in case several are
-         installed. If not specified, only 2013 is detected automatically
-         because 2015 support is currently experimental.]),
-,)
-
 AC_ARG_WITH(windows-sdk,
     AS_HELP_STRING([--with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)/10>],
         [Specify which Windows SDK, or "Windows Kit", version to use
@@ -3290,8 +3283,8 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2013/2015, in this order
-        vsversions="12.0 14.0"
+        # Only support VS2015 going forward
+        vsversions="14.0"
     fi
 }
 
