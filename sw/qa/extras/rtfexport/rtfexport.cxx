@@ -1017,10 +1017,15 @@ DECLARE_RTFEXPORT_TEST(testNumOverrideStart, "num-override-start.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo82006, "fdo82006.rtf")
 {
     // These were 176 (100 twips), as \sbauto and \sbbefore were ignored.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)),
+    // Exception: first paragraph gets zero top margin, see also tdf#104354.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(0)),
                          getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)),
                          getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf104081, "tdf104081.rtf")
@@ -1455,10 +1460,15 @@ DECLARE_RTFEXPORT_TEST(testTdf112507, "tdf112507.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf107480, "tdf107480.rtf")
 {
     // These were 176 (100 twips), as \htmautsp was parsed too late.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)),
+    // Exception: first paragraph gets zero top margin, see also tdf#104354.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(0)),
                          getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)),
                          getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
 }
 
 DECLARE_RTFEXPORT_TEST(testWatermark, "watermark.rtf")

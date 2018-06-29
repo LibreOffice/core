@@ -250,7 +250,12 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsSplitPara(false),
         m_vTextFramesForChaining(),
         m_bParaHadField(false),
-        m_bParaAutoBefore(false)
+        m_bParaAutoBefore(false),
+        m_bParaAutoAfter(false),
+        m_bPrevParaAutoAfter(false),
+        m_bParaChangedBottomMargin(false),
+        m_bFirstParagraphInCell(true),
+        m_bSaveFirstParagraphInCell(false)
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_DOCUMENTBASEURL(), OUString());
@@ -1105,7 +1110,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 {
     if (m_bDiscardHeaderFooter)
         return;
-
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("finishParagraph");
 #endif
@@ -1116,7 +1120,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend > xTextAppend(rAppendContext.xTextAppend);
-
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
 #endif
@@ -1385,6 +1388,35 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                     CheckParaMarkerRedline( xParaEnd );
                 }
+
+                // set top margin of the previous auto paragraph in cells, keeping zero bottom margin only at the first one
+                if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && m_xPreviousParagraph.is())
+                {
+                    bool bParaChangedTopMargin = false;
+                    auto itParaTopMargin = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
+                    {
+                        return rValue.Name == "ParaTopMargin";
+                    });
+                    if (itParaTopMargin != aProperties.end())
+                        bParaChangedTopMargin = true;
+
+                    uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
+                    m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
+                    auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
+                    auto itPrevParaAutoBefore = std::find_if(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                    {
+                        return rValue.Name == "ParaTopMarginBeforeAutoSpacing";
+                    });
+                    bool bPrevParaAutoBefore = itPrevParaAutoBefore != aPrevProperties.end();
+
+                    if ((bPrevParaAutoBefore && !bParaChangedTopMargin) || (bParaChangedTopMargin && m_bParaAutoBefore))
+                    {
+                        sal_Int32 nSize = m_bFirstParagraphInCell ? 0 : 280;
+                        // Previous before spacing is set to auto, set previous before space to 280, except in the first paragraph.
+                        m_xPreviousParagraph->setPropertyValue("ParaTopMargin",
+                                 uno::makeAny( ConversionHelper::convertTwipToMM100(nSize)));
+                    }
+                }
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
@@ -1397,6 +1429,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         {
             SAL_WARN( "writerfilter.dmapper", "finishParagraph() " << e );
         }
+
     }
 
     bool bIgnoreFrameState = IsInHeaderFooter();
@@ -1415,6 +1448,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
     if (m_bIsFirstParaInShape)
         m_bIsFirstParaInShape = false;
 
+    // keep m_bParaAutoAfter for table paragraphs
+    m_bPrevParaAutoAfter = m_bParaAutoAfter || m_bPrevParaAutoAfter;
+
+    // not auto margin in this paragraph
+    m_bParaChangedBottomMargin = (pParaContext && pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN) && !m_bParaAutoAfter);
+
     if (pParaContext)
     {
         // Reset the frame properties for the next paragraph
@@ -1423,10 +1462,18 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 
     SetIsOutsideAParagraph(true);
     m_bParaHadField = false;
+
+    // don't overwrite m_bFirstParagraphInCell in table separator nodes
+    if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth)
+        m_bFirstParagraphInCell = false;
+
     m_bParaAutoBefore = false;
+    m_bParaAutoAfter = false;
+
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().endElement();
 #endif
+
 }
 
 void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
@@ -1820,6 +1867,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
     m_bInFootOrEndnote = true;
     m_bCheckFirstFootnoteTab = true;
+    m_bSaveFirstParagraphInCell = m_bFirstParagraphInCell;
     try
     {
         // Redlines outside the footnote should not affect footnote content
@@ -1986,6 +2034,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
     m_aRedlines.pop();
     m_bSeenFootOrEndnoteSeparator = false;
     m_bInFootOrEndnote = false;
+    m_bFirstParagraphInCell = m_bSaveFirstParagraphInCell;
 }
 
 void DomainMapper_Impl::SeenFootOrEndnoteSeparator()
@@ -2335,9 +2384,33 @@ bool DomainMapper_Impl::IsDiscardHeaderFooter()
     return m_bDiscardHeaderFooter;
 }
 
+// called from TableManager::closeCell()
 void DomainMapper_Impl::ClearPreviousParagraph()
 {
+    // in table cells, set bottom auto margin of last paragraph to 0, except in paragraphs with numbering
+    if ((m_nTableDepth == (m_nTableCellDepth + 1)) && m_xPreviousParagraph.is() && !m_bParaChangedBottomMargin)
+    {
+        uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
+        m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
+        auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
+        auto itPrevParaAutoAfter = std::find_if(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+        {
+            return rValue.Name == "ParaBottomMarginAfterAutoSpacing";
+        });
+        bool bPrevParaAutoAfter = itPrevParaAutoAfter != aPrevProperties.end();
+
+        bool bPrevNumberingRules = false;
+        uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        if (xPreviousNumberingRules.is())
+             bPrevNumberingRules = !xPreviousNumberingRules->getName().isEmpty();
+        if (!bPrevNumberingRules && (bPrevParaAutoAfter || m_bPrevParaAutoAfter))
+            m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::makeAny(static_cast<sal_Int32>(0)));
+    }
+
     m_xPreviousParagraph.clear();
+
+    // next table paragraph will be first paragraph in a cell
+    m_bFirstParagraphInCell = true;
 }
 
 static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
