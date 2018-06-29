@@ -45,7 +45,7 @@ start:
                 nRes = static_cast<sal_uInt8>(p->nChar);
             break;
         case SbxBYTE:
-            nRes = static_cast<sal_uInt8>(p->nByte);    break;
+            nRes = p->nByte;    break;
         case SbxINTEGER:
         case SbxBOOL:
             if( p->nInteger > SbxMAXBYTE )
