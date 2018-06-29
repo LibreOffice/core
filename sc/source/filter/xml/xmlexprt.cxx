@@ -4138,11 +4138,18 @@ SvXMLElementExport aTransformations(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_TRAN
                             // Sort Transformation
                             std::shared_ptr<sc::SortTransformation> aSortTransformation = std::dynamic_pointer_cast<sc::SortTransformation>(itr);
                             ScSortParam aSortParam = aSortTransformation->getSortParam();
+                            const sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+                            const sc::DataStream* pStrm = rMgr.getDataStream();
+                            if (!pStrm)
+                                // No data stream.
+                                return;
 
-                            if (!aSortParam.bByRow)
-                                AddAttribute(XML_NAMESPACE_CALC_EXT,  XML_ORIENTATION, XML_COLUMN);
+                            // Streamed range
+                            ScRange aRange = pStrm->GetRange();
 
                             SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_SORT_TRANSFORMATION, true, true);
+
+                            writeSort(*this, aSortParam, aRange, pDoc);
                         }
                     break;
                     default:
