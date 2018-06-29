@@ -493,19 +493,18 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                 }
             }
 
-            OutlinerParaObject* pOPO = pOutliner->CreateParaObject();
+            std::unique_ptr<OutlinerParaObject> pOPO = pOutliner->CreateParaObject();
 
             if (pOutlinerView)
             {
                 pOutlinerView->InsertText(*pOPO);
-                delete pOPO;
             }
             else
             {
                 SdrRectObj* pTO = new SdrRectObj(
                     mpView->getSdrModelFromSdrView(),
                     OBJ_TEXT);
-                pTO->SetOutlinerParaObject(pOPO);
+                pTO->SetOutlinerParaObject(std::move(pOPO));
 
                 const bool bUndo = mpView->IsUndoEnabled();
                 if( bUndo )

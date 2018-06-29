@@ -21,6 +21,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <View.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/request.hxx>
 #include <svx/obj3d.hxx>

@@ -97,6 +97,7 @@
 #include <fmtmeta.hxx>
 #include <calbck.hxx>
 #include <rtl/strbuf.hxx>
+#include <editeng/outlobj.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;

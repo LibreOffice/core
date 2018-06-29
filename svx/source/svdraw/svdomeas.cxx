@@ -1285,9 +1285,9 @@ OutlinerParaObject* SdrMeasureObj::GetOutlinerParaObject() const
     return SdrTextObj::GetOutlinerParaObject();
 }
 
-void SdrMeasureObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
+void SdrMeasureObj::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject)
 {
-    SdrTextObj::NbcSetOutlinerParaObject(pTextObject);
+    SdrTextObj::NbcSetOutlinerParaObject(std::move(pTextObject));
     if(SdrTextObj::GetOutlinerParaObject())
         SetTextDirty(); // recalculate text
 }

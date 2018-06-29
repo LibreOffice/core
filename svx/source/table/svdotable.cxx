@@ -1501,7 +1501,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
     // set text at outliner, maybe from edit outliner
     OutlinerParaObject* pPara= xCell->GetOutlinerParaObject();
     if (pEdtOutl && !bNoEditText && mpImpl->mxActiveCell == xCell )
-        pPara=pEdtOutl->CreateParaObject();
+        pPara=pEdtOutl->CreateParaObject().release();
 
     if (pPara)
     {
@@ -1863,7 +1863,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 
     if(rOutl.IsModified())
     {
-        OutlinerParaObject* pNewText = nullptr;
+        std::unique_ptr<OutlinerParaObject> pNewText;
         Paragraph* p1stPara = rOutl.GetParagraph( 0 );
         sal_Int32 nParaCnt = rOutl.GetParagraphCount();
 
@@ -1875,7 +1875,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
             // create new text object
             pNewText = rOutl.CreateParaObject( 0, nParaCnt );
         }
-        SetOutlinerParaObject(pNewText);
+        SetOutlinerParaObject(std::move(pNewText));
     }
 
     pEdtOutl = nullptr;
@@ -1898,7 +1898,7 @@ OutlinerParaObject* SdrTableObj::GetOutlinerParaObject() const
 }
 
 
-void SdrTableObj::NbcSetOutlinerParaObject( OutlinerParaObject* pTextObject)
+void SdrTableObj::NbcSetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject)
 {
     CellRef xCell( getActiveCell() );
     if( xCell.is() )
@@ -1911,7 +1911,7 @@ void SdrTableObj::NbcSetOutlinerParaObject( OutlinerParaObject* pTextObject)
             getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
         }
 
-        xCell->SetOutlinerParaObject( pTextObject );
+        xCell->SetOutlinerParaObject( std::move(pTextObject) );
         SetTextSizeDirty();
         NbcAdjustTextFrameWidthAndHeight();
     }

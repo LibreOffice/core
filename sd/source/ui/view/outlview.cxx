@@ -1339,11 +1339,10 @@ SvtScriptType OutlineView::GetScriptType() const
 {
     SvtScriptType nScriptType = ::sd::View::GetScriptType();
 
-    OutlinerParaObject* pTempOPObj = mrOutliner.CreateParaObject();
+    std::unique_ptr<OutlinerParaObject> pTempOPObj = mrOutliner.CreateParaObject();
     if(pTempOPObj)
     {
         nScriptType = pTempOPObj->GetTextObject().GetScriptType();
-        delete pTempOPObj;
     }
 
     return nScriptType;

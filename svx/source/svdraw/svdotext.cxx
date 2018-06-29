@@ -206,10 +206,10 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.SetUpdateMode(true);
     rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
-    OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
+    std::unique_ptr<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
     Size aSiz(rOutliner.CalcTextSize());
     rOutliner.Clear();
-    NbcSetOutlinerParaObject(pNewText);
+    NbcSetOutlinerParaObject(std::move(pNewText));
     aTextSize=aSiz;
     bTextSizeDirty=false;
 }
@@ -228,11 +228,11 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, EETextFo
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.Read(rInput,rBaseURL,eFormat);
-    OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
+    std::unique_ptr<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
     rOutliner.SetUpdateMode(true);
     Size aSiz(rOutliner.CalcTextSize());
     rOutliner.Clear();
-    NbcSetOutlinerParaObject(pNewText);
+    NbcSetOutlinerParaObject(std::move(pNewText));
     aTextSize=aSiz;
     bTextSizeDirty=false;
 }
@@ -711,7 +711,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
     // put text into the outliner, if available from the edit outliner
     SdrText* pText = getActiveText();
     OutlinerParaObject* pOutlinerParaObject = pText ? pText->GetOutlinerParaObject() : nullptr;
-    OutlinerParaObject* pPara = (pEdtOutl && !bNoEditText) ? pEdtOutl->CreateParaObject() : pOutlinerParaObject;
+    OutlinerParaObject* pPara = (pEdtOutl && !bNoEditText) ? pEdtOutl->CreateParaObject().release() : pOutlinerParaObject;
 
     if (pPara)
     {
@@ -802,9 +802,9 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         rTextRect=aAnkRect;
 }
 
-OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
+std::unique_ptr<OutlinerParaObject> SdrTextObj::GetEditOutlinerParaObject() const
 {
-    OutlinerParaObject* pPara=nullptr;
+    std::unique_ptr<OutlinerParaObject> pPara;
     if( HasTextImpl( pEdtOutl ) )
     {
         sal_Int32 nParaCount = pEdtOutl->GetParagraphCount();
@@ -1041,7 +1041,7 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
         // objects). In the current form it makes only sense to
         // create locally and use locally on a known existing SdrText
         const Outliner* pEO=rObj.pEdtOutl;
-        OutlinerParaObject* pNewOutlinerParaObject = nullptr;
+        std::unique_ptr<OutlinerParaObject> pNewOutlinerParaObject;
 
         if (pEO!=nullptr)
         {
@@ -1049,10 +1049,10 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
         }
         else
         {
-            pNewOutlinerParaObject = new OutlinerParaObject(*rObj.getActiveText()->GetOutlinerParaObject());
+            pNewOutlinerParaObject.reset( new OutlinerParaObject(*rObj.getActiveText()->GetOutlinerParaObject()) );
         }
 
-        pText->SetOutlinerParaObject( pNewOutlinerParaObject );
+        pText->SetOutlinerParaObject( std::move(pNewOutlinerParaObject) );
     }
 
     ImpSetTextStyleSheetListeners();
@@ -1394,15 +1394,15 @@ OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
         return nullptr;
 }
 
-void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
+void SdrTextObj::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject)
 {
-    NbcSetOutlinerParaObjectForText( pTextObject, getActiveText() );
+    NbcSetOutlinerParaObjectForText( std::move(pTextObject), getActiveText() );
 }
 
-void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObject, SdrText* pText )
+void SdrTextObj::NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaObject> pTextObject, SdrText* pText )
 {
     if( pText )
-        pText->SetOutlinerParaObject( pTextObject );
+        pText->SetOutlinerParaObject( std::move(pTextObject) );
 
     if (pText && pText->GetOutlinerParaObject())
     {

@@ -20,6 +20,7 @@
 
 #include <sdr/properties/textproperties.hxx>
 #include <editeng/outlobj.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <cell.hxx>
 #include "tableundo.hxx"
@@ -107,7 +108,7 @@ void CellUndo::setDataToCell( const Data& rData )
         mxCell->mpProperties.reset();
 
     if( rData.mpOutlinerParaObject )
-        mxCell->SetOutlinerParaObject( new OutlinerParaObject(*rData.mpOutlinerParaObject) );
+        mxCell->SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>(*rData.mpOutlinerParaObject) );
     else
         mxCell->RemoveOutlinerParaObject();
 

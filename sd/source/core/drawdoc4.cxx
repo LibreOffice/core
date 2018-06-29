@@ -904,7 +904,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
             if (mbHasOnlineSpellErrors)
             {
-                OutlinerParaObject* pOPO = pOutl->CreateParaObject();
+                std::unique_ptr<OutlinerParaObject> pOPO = pOutl->CreateParaObject();
                 if (pOPO)
                 {
                     if (!( *pOPO == *pObj->GetOutlinerParaObject() ) ||
@@ -914,11 +914,9 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
                         // taking text from the outliner
                         // use non-broadcasting version to avoid O(n^2)
-                        pObj->NbcSetOutlinerParaObject( pOPO );
-                        pOPO = nullptr;
+                        pObj->NbcSetOutlinerParaObject( std::move(pOPO) );
                     }
                 }
-                delete pOPO;
             }
         }
 
