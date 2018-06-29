@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+1: Gabor Kelemen <kelemeng@ubuntu.com>
+Code-Review+2: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-by: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-at: Sat, 30 Jun 2018 00:44:58 +0200
+Reviewed-on: https://gerrit.libreoffice.org/56582
+Project: core
+Branch: refs/heads/master
