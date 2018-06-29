@@ -3510,6 +3510,19 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
             }
         }
     }
+    else if ((XML_NAMESPACE_LO_EXT == nPrefix) && IsXMLToken(rLocalName, XML_SIGNATURELINE))
+    {
+        SdXMLShapeContext* pSContext = dynamic_cast<SdXMLShapeContext*>(mxImplContext.get());
+        if (pSContext)
+        {
+            uno::Reference<beans::XPropertySet> xPropSet(pSContext->getShape(), uno::UNO_QUERY);
+            if (xPropSet.is())
+            {
+                xContext = new SignatureLineContext(GetImport(), nPrefix, rLocalName, xAttrList,
+                                                    pSContext->getShape());
+            }
+        }
+    }
     // call parent for content
     if (!xContext)
         xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );

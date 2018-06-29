@@ -174,6 +174,7 @@ private:
 
     void            DoReadUserData( const OUString& rData );
     void            DoReadUserDataSequence( const css::uno::Sequence< css::beans::PropertyValue >& rSettings );
+    bool            IsSignatureLineSelected();
 
     DECL_LINK( SimpleRefClose, const OUString*, void );
     DECL_LINK( SimpleRefDone, const OUString&, void );

@@ -16,12 +16,15 @@
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -29,10 +32,12 @@
 using namespace css;
 using namespace css::uno;
 using namespace css::beans;
+using namespace css::container;
 using namespace css::frame;
 using namespace css::io;
 using namespace css::lang;
 using namespace css::frame;
+using namespace css::sheet;
 using namespace css::text;
 using namespace css::drawing;
 using namespace css::graphic;
@@ -161,11 +166,34 @@ void SignatureLineDialog::Apply()
         // Default anchoring
         xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
 
-        // Insert into document
-        Reference<XTextRange> const xEnd
-            = Reference<XTextDocument>(m_xModel, UNO_QUERY)->getText()->getEnd();
-        Reference<XTextContent> const xShapeContent(xShapeProps, UNO_QUERY);
-        xShapeContent->attach(xEnd);
+        const Reference<XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY);
+
+        // Writer
+        const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
+        if (xTextDocument.is())
+        {
+            // Insert into document
+            Reference<XTextRange> const xEnd
+                = Reference<XTextDocument>(m_xModel, UNO_QUERY)->getText()->getEnd();
+            Reference<XTextContent> const xShapeContent(xShapeProps, UNO_QUERY);
+            xShapeContent->attach(xEnd);
+            return;
+        }
+
+        // Calc
+        const Reference<XSpreadsheetDocument> xSpreadsheetDocument(m_xModel, UNO_QUERY);
+        if (xSpreadsheetDocument.is())
+        {
+            Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
+            awt::Point aCellPosition;
+            xSheetCell->getPropertyValue("Position") >>= aCellPosition;
+            xShape->setPosition(aCellPosition);
+
+            Reference<XDrawPagesSupplier> xDrawPagesSupplier(m_xModel, UNO_QUERY_THROW);
+            Reference<XIndexAccess> xDrawPages = xDrawPagesSupplier->getDrawPages();
+            Reference<XShapes> xShapes(xDrawPages->getByIndex(0), UNO_QUERY_THROW);
+            xShapes->add(xShape);
+        }
     }
 }
 
