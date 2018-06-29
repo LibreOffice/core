@@ -11,11 +11,13 @@
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 #include <test/sheet/xcalculatable.hxx>
 #include <test/sheet/xconsolidatable.hxx>
+#include <test/sheet/xdocumentauditing.hxx>
 #include <test/sheet/xgoalseek.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -32,6 +34,7 @@ class ScModelObj : public UnoApiTest,
                    public apitest::SpreadsheetDocumentSettings,
                    public apitest::XCalculatable,
                    public apitest::XConsolidatable,
+                   public apitest::XDocumentAuditing,
                    public apitest::XGoalSeek
 {
 public:
@@ -39,6 +42,7 @@ public:
     virtual void tearDown() override;
 
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< uno::XInterface > getXMSF() override;
     virtual uno::Sequence<uno::Reference<table::XCell>> getXCells() override;
 
     ScModelObj();
@@ -56,6 +60,9 @@ public:
     // XConsolidatable
     CPPUNIT_TEST(testCreateConsolidationDescriptor);
     CPPUNIT_TEST(testConsolidate);
+
+    // XDocumentAuditing
+    CPPUNIT_TEST(testRefreshArrows);
 
     // XGoalSeek
     CPPUNIT_TEST(testSeekGoal);
@@ -91,6 +98,11 @@ uno::Reference< uno::XInterface > ScModelObj::init()
     m_xCells[2]->setFormula("= E6 * F6");
 
     return xModel;
+}
+
+uno::Reference<uno::XInterface> ScModelObj::getXMSF()
+{
+    return getMultiServiceFactory();
 }
 
 uno::Sequence<uno::Reference<table::XCell>> ScModelObj::getXCells()
