@@ -40,7 +40,6 @@
 "ScModelObj";"com::sun::star::beans::XPropertySet#optional";"removePropertyChangeListener()"
 "ScModelObj";"com::sun::star::beans::XPropertySet#optional";"addVetoableChangeListener()"
 "ScModelObj";"com::sun::star::beans::XPropertySet#optional";"removeVetoableChangeListener()"
-"ScModelObj";"com::sun::star::sheet::XDocumentAuditing";"refreshArrows()"
 "ScModelObj";"com::sun::star::sheet::SpreadsheetDocument";"NamedRanges"
 "ScModelObj";"com::sun::star::sheet::SpreadsheetDocument";"DatabaseRanges"
 "ScModelObj";"com::sun::star::sheet::SpreadsheetDocument";"ColumnLabelRanges"
