@@ -89,7 +89,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
                                                                   ", rSet.m_aMap[" + OUString::number(i) + "] == " +
                                                                   OUString::number(rSet.m_aMap[i], 16)),
                                                          RTL_TEXTENCODING_UTF8).getStr(),
-                                       static_cast<sal_Unicode>(rSet.m_aMap[i]), aUnicode[j]);
+                                       rSet.m_aMap[i], aUnicode[j]);
             }
             if (rSet.m_aMap[i] != 0xFFFF)
                 j++;
