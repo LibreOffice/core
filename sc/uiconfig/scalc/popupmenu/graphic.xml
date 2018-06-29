@@ -75,4 +75,7 @@
       <menu:menuitem menu:id=".uno:Crop"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:EditSignatureLine"/>
+  <menu:menuitem menu:id=".uno:SignSignatureLine"/>
 </menu:menupopup>

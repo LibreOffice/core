@@ -308,6 +308,7 @@
                     <menu:menuitem menu:id=".uno:ScrollBar"/>
                 </menu:menupopup>
             </menu:menu>
+        <menu:menuitem menu:id=".uno:InsertSignatureLine"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:FormatMenu">
