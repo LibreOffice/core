@@ -202,7 +202,7 @@ public:
             specified character set and that can be converted to UTF-32
             characters, are first decoded.  If they have to be encoded, they
             are converted to UTF-8 characters and are than translated into
-            (sequences of) escape sequences.  Other escape sequences are
+            (sequences of) escape sequences. Other escape sequences are
             copied verbatim (but using upper case hex digits).
          */
         WasEncoded,
@@ -386,7 +386,7 @@ public:
     /** Check if the scheme is one of the WebDAV scheme
      *  we know about.
      *
-     *  @return true is one othe scheme either public scheme or private scheme.
+     *  @return true is one other scheme either public scheme or private scheme.
      */
     bool isAnyKnownWebDAVScheme() const;
 
