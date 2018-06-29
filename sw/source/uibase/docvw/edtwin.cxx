@@ -192,7 +192,11 @@ static SfxShell* lcl_GetTextShellFromDispatcher( SwView const & rView );
 /// Check if the selected shape has a TextBox: if so, go into that instead.
 static bool lcl_goIntoTextBox(SwEditWin& rEditWin, SwWrtShell& rSh)
 {
-    SdrObject* pSdrObject = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+    SdrMark* pMark = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0);
+    if (!pMark)
+        return false;
+
+    SdrObject* pSdrObject = pMark->GetMarkedSdrObj();
     SwFrameFormat* pObjectFormat = ::FindFrameFormat(pSdrObject);
     if (SwFrameFormat* pTextBoxFormat = SwTextBoxHelper::getOtherTextBoxFormat(pObjectFormat, RES_DRAWFRMFMT))
     {
@@ -2301,12 +2305,15 @@ KEYINPUT_CHECKTABLE:
         break;
         case SwKeyState::GoIntoDrawing:
         {
-            SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-            if(pObj)
+            if (SdrMark* pMark = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0))
             {
-                EnterDrawTextMode(pObj->GetLogicRect().Center());
-                if (dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
-                    static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
+                if(pObj)
+                {
+                    EnterDrawTextMode(pObj->GetLogicRect().Center());
+                    if (dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
+                        static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
+                }
             }
             eKeyState = SwKeyState::End;
         }
