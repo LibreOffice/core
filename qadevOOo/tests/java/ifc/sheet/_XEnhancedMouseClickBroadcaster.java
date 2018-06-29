@@ -99,7 +99,7 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
             System.out.println("Release Button");
             rob.mouseRelease(InputEvent.BUTTON3_MASK);
             System.out.println("done");
-            System.out.println("warte");
+            System.out.println("wait");
             waitForEventIdle();
             System.out.println("Press Button");
             rob.mousePress(InputEvent.BUTTON1_MASK);
