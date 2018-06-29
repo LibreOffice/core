@@ -99,6 +99,7 @@
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <rtl/byteseq.hxx>
 #include <rtl/uri.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
