@@ -50,6 +50,8 @@ SAL_DLLPUBLIC_EXPORT void* xsec_xmlsec_component_getFactory( const sal_Char* pIm
         {
             xFactory = SEInitializerGpg::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
         }
+#else
+        (void)pServiceManager;
 #endif
     }
 
