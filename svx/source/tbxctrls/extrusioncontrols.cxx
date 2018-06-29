@@ -271,7 +271,7 @@ void ExtrusionDirectionWindow::SelectHdl(void const * pControl)
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(g_sExtrusionDirection).copy(5);
-        aArgs[0].Value <<= static_cast<sal_Int32>(gSkewList[mpDirectionSet->GetSelectedItemId()-1]);
+        aArgs[0].Value <<= gSkewList[mpDirectionSet->GetSelectedItemId()-1];
 
         mrController.dispatchCommand( g_sExtrusionDirection, aArgs );
     }
