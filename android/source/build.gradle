@@ -5,9 +5,8 @@ apply from: 'liboSettings.gradle'
 project.ext.set("archivesBaseName", "LibreOfficeViewer")
 allprojects {
     repositories {
-        maven {
-            url "https://maven.google.com"
-        }
+        jcenter()
+        google()
         flatDir {
             dirs "${liboWorkdir}/UnpackedTarball/owncloud_android_lib/build/outputs/aar"
         }
@@ -17,12 +16,10 @@ allprojects {
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url "https://maven.google.com"
-        }
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.3'
     }
 }
 
@@ -38,13 +35,13 @@ dependencies {
     implementation files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
     debugImplementation(name:'owncloud_android_lib-debug', ext:'aar')
     releaseImplementation(name:'owncloud_android_lib-release', ext:'aar')
-    implementation 'com.android.support:design:27.0.1' // also pulls-in corresponding support libraries
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:27.1.1' // also pulls-in corresponding support libraries
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "27.0.1"
+    buildToolsVersion "27.0.3"
     compileOptions {
         // silence some java-language features hints
         sourceCompatibility 6
@@ -64,7 +61,7 @@ android {
     }
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 26
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
