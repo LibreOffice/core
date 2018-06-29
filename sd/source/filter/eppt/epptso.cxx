@@ -1080,7 +1080,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         if ( mnTextSize )
             aTextObj.Write( &rOut );
 
-        if ( pPropOpt )
+        if ( pPropOpt && mType != "drawing.Table" )
             ImplAdjustFirstLineLineSpacing( aTextObj, *pPropOpt );
 
         sal_uInt32 nSize, nPos = rOut.Tell();
