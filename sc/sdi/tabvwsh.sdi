@@ -56,6 +56,9 @@ interface BaseSelection
     SID_INSERT_OBJECT           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_FLOATINGFRAME    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_AVMEDIA          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_SIGNATURELINE    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_EDIT_SIGNATURELINE      [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_SIGN_SIGNATURELINE      [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 
     SID_IMAP                    [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
     SID_IMAP_EXEC               [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]

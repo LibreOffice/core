@@ -344,6 +344,30 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             FuInsertOLE(*this, pWin, pView, pDrModel, rReq);
             break;
 
+        case SID_INSERT_SIGNATURELINE:
+        case SID_EDIT_SIGNATURELINE:
+            {
+                const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
+
+                VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                ScopedVclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
+                    pWin->GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_SIGNATURELINE));
+                pDialog->Execute();
+                break;
+            }
+
+        case SID_SIGN_SIGNATURELINE:
+            {
+                const uno::Reference<frame::XModel> xModel(
+                    GetViewData().GetDocShell()->GetBaseModel());
+
+                VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                VclPtr<AbstractSignSignatureLineDialog> pDialog
+                    = pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel);
+                pDialog->Execute();
+                break;
+            }
+
         case SID_INSERT_DIAGRAM_FROM_FILE:
             try
             {
@@ -508,6 +532,16 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
 
+            case SID_INSERT_SIGNATURELINE:
+                if ( bTabProt || bShared )
+                    rSet.DisableItem( nWhich );
+                break;
+            case SID_EDIT_SIGNATURELINE:
+            case SID_SIGN_SIGNATURELINE:
+                if (!IsSignatureLineSelected())
+                    rSet.DisableItem(nWhich);
+                break;
+
             case SID_INSERT_GRAPHIC:
                 if (bTabProt || bShared)
                 {
@@ -540,6 +574,26 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
         }
         nWhich = aIter.NextWhich();
     }
+}
+
+bool ScTabViewShell::IsSignatureLineSelected()
+{
+    SdrView* pSdrView = GetSdrView();
+    if (!pSdrView)
+        return false;
+
+    if (pSdrView->GetMarkedObjectCount() != 1)
+        return false;
+
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    if (!pPickObj)
+        return false;
+
+    SdrGrafObj* pGraphic = dynamic_cast<SdrGrafObj*>(pPickObj);
+    if (!pGraphic)
+        return false;
+
+    return pGraphic->isSignatureLine();
 }
 
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
