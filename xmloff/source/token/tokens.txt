@@ -3055,6 +3055,13 @@ provider
 data-mappings
 data-mapping
 frequency
+data-transformations
+column-remove-transformation
+column-split-transformation
+column-merge-transformation
+column-sort-transformation
+sort-param
+merge-string
 star
 asterisk
 horizontal-bar
