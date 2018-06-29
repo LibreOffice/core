@@ -24,7 +24,6 @@
 
 #include <string.h>
 
-#include <cassert>
 #include <cstddef>
 
 #include "sal/log.hxx"
@@ -33,9 +32,8 @@
 
 #include "osl/file.h"
 #include "osl/diagnose.h"
-#include "rtl/byteseq.hxx"
 
-#include <stdio.h>
+namespace rtl { class ByteSequence; }
 
 namespace osl
 {

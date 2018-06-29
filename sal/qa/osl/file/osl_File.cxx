@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 

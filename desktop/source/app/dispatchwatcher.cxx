@@ -61,6 +61,7 @@
 #include <osl/thread.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
+#include <rtl/byteseq.hxx>
 #include <iostream>
 
 using namespace ::osl;
