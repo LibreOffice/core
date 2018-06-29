@@ -3278,6 +3278,14 @@ namespace xmloff { namespace token {
         XML_DATA_MAPPINGS,
         XML_DATA_MAPPING,
         XML_DATA_FREQUENCY,
+        XML_DATA_TRANSFORMATIONS,
+        XML_COLUMN_REMOVE_TRANSFORMATION,
+        XML_COLUMN_SPLIT_TRANSFORMATION,
+        XML_COLUMN_MERGE_TRANSFORMATION,
+        XML_COLUMN_SORT_TRANSFORMATION,
+        XML_SORT_PARAM,
+        XML_MERGE_STRING,
+        //Already defined XML_SEPARATOR,
 
         // regina, ODF1.2 additional symbols in charts
         XML_STAR,

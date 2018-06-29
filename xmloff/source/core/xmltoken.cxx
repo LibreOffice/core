@@ -3274,6 +3274,13 @@ namespace xmloff { namespace token {
         TOKEN( "data-mappings", XML_DATA_MAPPINGS),
         TOKEN( "data-mapping", XML_DATA_MAPPING),
         TOKEN( "frequency", XML_DATA_FREQUENCY),
+        TOKEN( "data-transformations", XML_DATA_TRANSFORMATIONS),
+        TOKEN( "column-remove-transformation", XML_COLUMN_REMOVE_TRANSFORMATION),
+        TOKEN( "column-split-transformation", XML_COLUMN_SPLIT_TRANSFORMATION),
+        TOKEN( "column-merge-transformation", XML_COLUMN_MERGE_TRANSFORMATION),
+        TOKEN( "column-sort-transformation", XML_COLUMN_SORT_TRANSFORMATION),
+        TOKEN( "sort-param", XML_SORT_PARAM ),
+        TOKEN( "merge-string", XML_MERGE_STRING ),
 
         // regina, ODF1.2 additional symbols in charts
         TOKEN( "star",                         XML_STAR ),

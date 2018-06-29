@@ -30,6 +30,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include <datatransformation.hxx>
+
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
@@ -196,6 +198,7 @@ class ScXMLExport : public SvXMLExport
     void WriteLabelRanges( const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn );
     void WriteNamedExpressions();
     void WriteExternalDataMapping();
+    void WriteExternalDataTransformations(const std::vector<std::shared_ptr<sc::DataTransformation>>& aDataTransformations);
     void WriteDataStream();
     void WriteNamedRange(ScRangeName* pRangeName);
     void ExportConditionalFormat(SCTAB nTab);
