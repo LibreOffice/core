@@ -104,7 +104,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
                     if (*pUCMode != nLen)
                     {
                         aBuf.append("\\uc");
-                        aBuf.append(static_cast<sal_Int32>(nLen));
+                        aBuf.append(nLen);
                         // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.
                         aBuf.append(' ');
                         *pUCMode = nLen;

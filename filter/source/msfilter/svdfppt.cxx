@@ -2442,7 +2442,7 @@ bool SdrPowerPointImport::SeekToCurrentPage( DffRecordHeader* pRecHd ) const
     PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
     if ( pList && ( nCurrentPageNum < pList->size() ) )
     {
-        sal_uLong nPersist = (*pList)[ static_cast<sal_uInt16>(nCurrentPageNum) ].aPersistAtom.nPsrReference;
+        sal_uLong nPersist = (*pList)[ nCurrentPageNum ].aPersistAtom.nPsrReference;
         if ( nPersist > 0 && nPersist < nPersistPtrCnt )
         {
             sal_uLong nFPos = 0;
