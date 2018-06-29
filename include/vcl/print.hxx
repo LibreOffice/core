@@ -334,6 +334,7 @@ public:
 
     const Size&                 GetPaperSizePixel() const { return maPaperSize; }
     Size                        GetPaperSize() const { return PixelToLogic( maPaperSize ); }
+    Size                        GetPaperSize( int nPaper );
     const Point&                GetPageOffsetPixel() const { return maPageOffset; }
     Point                       GetPageOffset() const { return PixelToLogic( maPageOffset ); }
 
