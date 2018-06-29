@@ -110,7 +110,8 @@ void applySharedFormulas(
     ScDocumentImport& rDoc,
     SvNumberFormatter& rFormatter,
     std::vector<FormulaBuffer::SharedFormulaEntry>& rSharedFormulas,
-    std::vector<FormulaBuffer::SharedFormulaDesc>& rCells )
+    std::vector<FormulaBuffer::SharedFormulaDesc>& rCells,
+    bool bGeneratorKnownGood)
 {
     sc::SharedFormulaGroups aGroups;
     {
@@ -133,6 +134,7 @@ void applySharedFormulas(
     }
 
     {
+        svl::SharedStringPool& rStrPool = rDoc.getDoc().GetSharedStringPool();
         // Process formulas that use shared formulas.
         for (const FormulaBuffer::SharedFormulaDesc& rDesc : rCells)
         {
@@ -150,7 +152,7 @@ void applySharedFormulas(
                 continue;
             }
 
-            // Set cached formula results. For now, we only use numeric
+            // Set cached formula results. For now, we only use numeric and string-formula
             // results. Find out how to utilize cached results of other types.
             switch (rDesc.mnValueType)
             {
@@ -158,6 +160,14 @@ void applySharedFormulas(
                     // numeric value.
                     pCell->SetResultDouble(rDesc.maCellValue.toDouble());
                 break;
+                case XML_str:
+                    if (bGeneratorKnownGood)
+                    {
+                        // See applyCellFormulaValues
+                        svl::SharedString aSS = rStrPool.intern(rDesc.maCellValue);
+                        pCell->SetResultToken(new formula::FormulaStringToken(aSS));
+                    }
+                    break;
                 default:
                     // Mark it for re-calculation.
                     pCell->SetDirty();
@@ -292,7 +302,8 @@ void processSheetFormulaCells(
     const Sequence<ExternalLinkInfo>& rExternalLinks, bool bGeneratorKnownGood )
 {
     if (rItem.mpSharedFormulaEntries && rItem.mpSharedFormulaIDs)
-        applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries, *rItem.mpSharedFormulaIDs);
+        applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries,
+                            *rItem.mpSharedFormulaIDs, bGeneratorKnownGood);
 
     if (rItem.mpCellFormulas)
     {
