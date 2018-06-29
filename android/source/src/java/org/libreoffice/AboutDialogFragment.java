@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
@@ -56,7 +57,9 @@ public class AboutDialogFragment extends DialogFragment {
             {
                 String version = String.format(versionView.getText().toString().replace("\n", "<br/>"),
                         tokens[0], "<a href=\"https://hub.libreoffice.org/git-core/" + tokens[1] + "\">" + tokens[1] + "</a>");
-                versionView.setText(Html.fromHtml(version));
+                @SuppressWarnings("deprecation") // since 24 with additional option parameter
+                Spanned versionString = Html.fromHtml(version);
+                versionView.setText(versionString);
                 versionView.setMovementMethod(LinkMovementMethod.getInstance());
                 String vendor = vendorView.getText().toString();
                 vendor = vendor.replace("$VENDOR", tokens[2]);
