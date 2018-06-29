@@ -268,7 +268,7 @@ bool isOkToRemoveArithmeticCast(
     // suffix like L it could still be either long or long long):
     if ((t1->isIntegralType(context)
          || t1->isRealFloatingType())
-        && ((t1 != t2
+        && ((t1.getLocalUnqualifiedType() != t2.getLocalUnqualifiedType()
              && (loplugin::TypeCheck(t1).Typedef()
                  || loplugin::TypeCheck(t2).Typedef()))
             || isArithmeticOp(subExpr)
