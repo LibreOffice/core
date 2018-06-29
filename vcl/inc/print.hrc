@@ -31,6 +31,7 @@ const char* RID_STR_PAPERNAMES[] =
     NC_("RID_STR_PAPERNAMES", "A3"),
     NC_("RID_STR_PAPERNAMES", "A4"),
     NC_("RID_STR_PAPERNAMES", "A5"),
+    NC_("RID_STR_PAPERNAMES", "A6"),
     NC_("RID_STR_PAPERNAMES", "B4 (ISO)"),
     NC_("RID_STR_PAPERNAMES", "B5 (ISO)"),
     NC_("RID_STR_PAPERNAMES", "Letter"),
@@ -61,8 +62,9 @@ const char* RID_STR_PAPERNAMES[] =
     NC_("RID_STR_PAPERNAMES", "B4 (JIS)"),
     NC_("RID_STR_PAPERNAMES", "B5 (JIS)"),
     NC_("RID_STR_PAPERNAMES", "B6 (JIS)"),
+    NC_("RID_STR_PAPERNAMES", "Japanese Postcard"),
     // To translators: This is the last entry of the sequence of paper size names
-    NC_("RID_STR_PAPERNAMES", "Japanese Postcard")
+    NC_("RID_STR_PAPERNAMES", "Double Postcard")
 };
 
 #endif // INCLUDED_VCL_INC_PRINT_HRC
