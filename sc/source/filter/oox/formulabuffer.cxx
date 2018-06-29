@@ -114,7 +114,8 @@ void applySharedFormulas(
     ScDocumentImport& rDoc,
     SvNumberFormatter& rFormatter,
     std::vector<FormulaBuffer::SharedFormulaEntry>& rSharedFormulas,
-    std::vector<FormulaBuffer::SharedFormulaDesc>& rCells )
+    std::vector<FormulaBuffer::SharedFormulaDesc>& rCells,
+    bool bGeneratorKnownGood)
 {
     sc::SharedFormulaGroups aGroups;
     {
@@ -139,6 +140,7 @@ void applySharedFormulas(
     }
 
     {
+        svl::SharedStringPool& rStrPool = rDoc.getDoc().GetSharedStringPool();
         // Process formulas that use shared formulas.
         std::vector<FormulaBuffer::SharedFormulaDesc>::const_iterator it = rCells.begin(), itEnd = rCells.end();
         for (; it != itEnd; ++it)
@@ -157,7 +159,7 @@ void applySharedFormulas(
                 continue;
             }
 
-            // Set cached formula results. For now, we only use numeric
+            // Set cached formula results. For now, we only use numeric and string-formula
             // results. Find out how to utilize cached results of other types.
             switch (it->mnValueType)
             {
@@ -165,6 +167,19 @@ void applySharedFormulas(
                     // numeric value.
                     pCell->SetResultDouble(it->maCellValue.toDouble());
                 break;
+                case XML_str:
+                    if (bGeneratorKnownGood)
+                    {
+                        // See applyCellFormulaValues
+                        svl::SharedString aSS = rStrPool.intern(it->maCellValue);
+                        pCell->SetResultToken(new formula::FormulaStringToken(aSS));
+                        // If we don't reset dirty, then e.g. disabling macros makes all cells
+                        // that use macro functions to show #VALUE!
+                        pCell->ResetDirty();
+                        pCell->SetChanged(false);
+                        break;
+                    }
+                    SAL_FALLTHROUGH;
                 default:
                     // Mark it for re-calculation.
                     pCell->SetDirty();
@@ -306,7 +321,8 @@ void processSheetFormulaCells(
     const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks, bool bGeneratorKnownGood )
 {
     if (rItem.mpSharedFormulaEntries && rItem.mpSharedFormulaIDs)
-        applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries, *rItem.mpSharedFormulaIDs);
+        applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries,
+                            *rItem.mpSharedFormulaIDs, bGeneratorKnownGood);
 
     if (rItem.mpCellFormulas)
     {
