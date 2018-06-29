@@ -318,6 +318,9 @@ void testArithmeticTypedefs() {
     (void) static_cast<T1>(nt1r()); // expected-error {{redundant}}
     (void) T1(nt1r()); // expected-error {{redundant}}
     (void) (T1) nt1r(); // expected-error {{redundant}}
+
+    T1 const c{};
+    (void) static_cast<T1>(c); // expected-error {{redundant}}
 }
 
 void testReinterpretConstCast() {
