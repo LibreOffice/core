@@ -48,6 +48,7 @@
 #include <userdat.hxx>
 #include <detfunc.hxx>
 #include <editutil.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <utility>
 
@@ -713,7 +714,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                 OSL_ENSURE( rInitData.mxOutlinerObj.get() || !rInitData.maSimpleText.isEmpty(),
                     "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
                 if( rInitData.mxOutlinerObj.get() )
-                    maNoteData.m_pCaption->SetOutlinerParaObject( rInitData.mxOutlinerObj.release() );
+                    maNoteData.m_pCaption->SetOutlinerParaObject( std::move(rInitData.mxOutlinerObj) );
                 else
                     maNoteData.m_pCaption->SetText( rInitData.maSimpleText );
 
@@ -772,7 +773,7 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const std::shared_ptr< SdrC
         {
             // copy edit text object (object must be inserted into page already)
             if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                maNoteData.m_pCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
+                maNoteData.m_pCaption->SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>( *pOPO ) );
             // copy formatting items (after text has been copied to apply font formatting)
             maNoteData.m_pCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
             // move textbox position relative to new cell, copy textbox size
@@ -850,7 +851,7 @@ std::shared_ptr< SdrCaptionObj > ScNoteUtil::CreateTempCaption(
     if( pNoteCaption && rUserText.isEmpty() )
     {
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
-            pCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
+            pCaption->SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>( *pOPO ) );
         // set formatting (must be done after setting text) and resize the box to fit the text
         pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
         tools::Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );

@@ -47,7 +47,7 @@ public:
     void                Dispose();
     void                SetText( OutlinerParaObject const & rText );
     void                SetString( const OUString& rText );
-    OutlinerParaObject* CreateText();
+    std::unique_ptr<OutlinerParaObject> CreateText();
     OUString            GetText();
 };
 
@@ -58,7 +58,7 @@ public:
                         SwTextAPIObject( SwTextAPIEditSource* p);
     virtual             ~SwTextAPIObject() throw() override;
     void                DisposeEditSource() { pSource->Dispose(); }
-    OutlinerParaObject* CreateText() { return pSource->CreateText(); }
+    std::unique_ptr<OutlinerParaObject> CreateText() { return pSource->CreateText(); }
     void                SetString( const OUString& rText ) { pSource->SetString( rText ); }
     void                SetText( OutlinerParaObject const & rText ) { pSource->SetText( rText ); }
     OUString            GetText() { return pSource->GetText(); }

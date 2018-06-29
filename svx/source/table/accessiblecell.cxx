@@ -71,7 +71,7 @@ void AccessibleCell::Init()
     const vcl::Window* pWindow = maShapeTreeInfo.GetWindow ();
     if( (pView != nullptr) && (pWindow != nullptr) && mxCell.is())
     {
-        OutlinerParaObject* pOutlinerParaObject = mxCell->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+        OutlinerParaObject* pOutlinerParaObject = mxCell->GetEditOutlinerParaObject().release(); // Get the OutlinerParaObject if text edit is active
 
         bool bOwnParaObject = pOutlinerParaObject != nullptr;
 

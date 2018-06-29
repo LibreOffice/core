@@ -369,7 +369,7 @@ void Outliner::SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled)
     pEditEngine->SetHoriAlignIgnoreTrailingWhitespace( bEnabled );
 }
 
-OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
+std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
     if ( static_cast<sal_uLong>(nStartPara) + nCount >
             static_cast<sal_uLong>(pParaList->GetParagraphCount()) )
@@ -393,7 +393,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
         aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
     }
 
-    OutlinerParaObject* pPObj = new OutlinerParaObject(*pText, aParagraphDataVector, bIsEditDoc);
+    std::unique_ptr<OutlinerParaObject> pPObj(new OutlinerParaObject(*pText, aParagraphDataVector, bIsEditDoc));
     pPObj->SetOutlinerMode(GetMode());
 
     return pPObj;
@@ -401,9 +401,8 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
 
 void Outliner::SetToEmptyText()
 {
-    OutlinerParaObject *pEmptyTxt =  GetEmptyParaObject();
+    std::unique_ptr<OutlinerParaObject> pEmptyTxt = GetEmptyParaObject();
     SetText(*pEmptyTxt);
-    delete pEmptyTxt;
 }
 
 void Outliner::SetText( const OUString& rText, Paragraph* pPara )
@@ -2115,10 +2114,10 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
     }
 }
 
-OutlinerParaObject *Outliner::GetEmptyParaObject() const
+std::unique_ptr<OutlinerParaObject> Outliner::GetEmptyParaObject() const
 {
     std::unique_ptr<EditTextObject> pEmptyText = pEditEngine->GetEmptyTextObject();
-    OutlinerParaObject* pPObj = new OutlinerParaObject( *pEmptyText );
+    std::unique_ptr<OutlinerParaObject> pPObj( new OutlinerParaObject( std::move(pEmptyText) ));
     pPObj->SetOutlinerMode(GetMode());
     return pPObj;
 }

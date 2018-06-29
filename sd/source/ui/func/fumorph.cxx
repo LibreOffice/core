@@ -25,6 +25,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/outlobj.hxx>
 
 #include <View.hxx>
 #include <ViewShell.hxx>

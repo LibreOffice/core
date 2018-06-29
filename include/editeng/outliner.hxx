@@ -705,7 +705,7 @@ public:
 
     void            SetToEmptyText();
 
-    OutlinerParaObject* CreateParaObject( sal_Int32 nStartPara = 0, sal_Int32 nParaCount = EE_PARA_ALL ) const;
+    std::unique_ptr<OutlinerParaObject> CreateParaObject( sal_Int32 nStartPara = 0, sal_Int32 nParaCount = EE_PARA_ALL ) const;
 
     const SfxItemSet& GetEmptyItemSet() const;
 
@@ -759,7 +759,7 @@ public:
     void ClearOverflowingParaNum();
     bool IsPageOverflow();
 
-    OutlinerParaObject *GetEmptyParaObject() const;
+    std::unique_ptr<OutlinerParaObject> GetEmptyParaObject() const;
 
 
     void            DepthChangedHdl(Paragraph*, ParaFlag nPrevFlags);

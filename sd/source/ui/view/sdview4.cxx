@@ -21,6 +21,7 @@
 
 #include <View.hxx>
 #include <osl/file.hxx>
+#include <editeng/outlobj.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfilt.hxx>

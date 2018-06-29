@@ -97,6 +97,7 @@
 #include <fmtmeta.hxx>
 #include <calbck.hxx>
 #include <rtl/strbuf.hxx>
+#include <editeng/outlobj.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -1354,7 +1355,7 @@ void SAL_CALL SwXTextField::attach(
                     aDateTime );
                 if ( m_pImpl->m_xTextObject.is() )
                 {
-                    pPostItField->SetTextObject( std::unique_ptr<OutlinerParaObject>(m_pImpl->m_xTextObject->CreateText()) );
+                    pPostItField->SetTextObject( m_pImpl->m_xTextObject->CreateText() );
                     pPostItField->SetPar2(m_pImpl->m_xTextObject->GetText());
                 }
                 xField.reset(pPostItField);

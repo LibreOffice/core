@@ -270,8 +270,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         // to make the gray field background vanish again
         rOutl.UpdateFields();
 
-        bool bNewTextTransferred = false;
-        OutlinerParaObject* pNewText = rOutl.CreateParaObject( 0, rOutl.GetParagraphCount() );
+        std::unique_ptr<OutlinerParaObject> pNewText = rOutl.CreateParaObject( 0, rOutl.GetParagraphCount() );
 
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
@@ -283,16 +282,11 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             GetTextChain()->SetSwitchingToNextBox(this, false);
             if( getActiveText() )
             {
-                getActiveText()->SetOutlinerParaObject( pNewText);
-                bNewTextTransferred = true;
+                getActiveText()->SetOutlinerParaObject( std::move(pNewText) );
             }
         } else { // If we are not doing in-chaining switching just set the ParaObject
-            SetOutlinerParaObject(pNewText);
-            bNewTextTransferred = true;
+            SetOutlinerParaObject(std::move(pNewText));
         }
-
-        if (!bNewTextTransferred)
-            delete pNewText;
     }
 
     /* Chaining-related code */

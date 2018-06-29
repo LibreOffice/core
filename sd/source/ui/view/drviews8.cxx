@@ -22,6 +22,7 @@
 #include <ViewShellHint.hxx>
 
 #include <com/sun/star/scanner/XScannerManager2.hpp>
+#include <editeng/outlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>

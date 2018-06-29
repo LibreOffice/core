@@ -606,14 +606,14 @@ void AnnotationWindow::Deactivate()
 
         if( pTextApi )
         {
-            OutlinerParaObject* pOPO = Engine()->CreateParaObject();
+            std::unique_ptr<OutlinerParaObject> pOPO = Engine()->CreateParaObject();
             if( pOPO )
             {
                 if( mpDoc->IsUndoEnabled() )
                     mpDoc->BegUndo( SdResId( STR_ANNOTATION_UNDO_EDIT ) );
 
                 pTextApi->SetText( *pOPO );
-                delete pOPO;
+                pOPO.reset();
 
                 // set current time to changed annotation
                 xAnnotation->setDateTime( getCurrentDateTime() );
