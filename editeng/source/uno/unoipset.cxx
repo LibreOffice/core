@@ -100,7 +100,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if( nullptr == pItem && pPool )
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
 
-    const MapUnit eMapUnit = pPool ? pPool->GetMetric(static_cast<sal_uInt16>(pMap->nWID)) : MapUnit::Map100thMM;
+    const MapUnit eMapUnit = pPool ? pPool->GetMetric(pMap->nWID) : MapUnit::Map100thMM;
     sal_uInt8 nMemberId = pMap->nMemberId;
     if( eMapUnit == MapUnit::Map100thMM )
         nMemberId &= (~CONVERT_TWIPS);
@@ -161,7 +161,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     {
         uno::Any aValue( rVal );
 
-        const MapUnit eMapUnit = pPool ? pPool->GetMetric(static_cast<sal_uInt16>(pMap->nWID)) : MapUnit::Map100thMM;
+        const MapUnit eMapUnit = pPool ? pPool->GetMetric(pMap->nWID) : MapUnit::Map100thMM;
 
         // check for needed metric translation
         if( (pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM) && eMapUnit != MapUnit::Map100thMM )
@@ -195,7 +195,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         return *pUsrAny;
 
     // No UsrAny detected yet, generate Default entry and return this
-    const MapUnit eMapUnit = mrItemPool.GetMetric(static_cast<sal_uInt16>(pMap->nWID));
+    const MapUnit eMapUnit = mrItemPool.GetMetric(pMap->nWID);
     sal_uInt8 nMemberId = pMap->nMemberId;
     if( eMapUnit == MapUnit::Map100thMM )
         nMemberId &= (~CONVERT_TWIPS);

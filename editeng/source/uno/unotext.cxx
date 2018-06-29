@@ -582,9 +582,9 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyValue(const OUString& Property
         const ESelection& rSel = GetSelection();
         text::TextRangeSelection aSel;
         aSel.Start.Paragraph = rSel.nStartPara;
-        aSel.Start.PositionInParagraph = static_cast<sal_Int32>(rSel.nStartPos);
+        aSel.Start.PositionInParagraph = rSel.nStartPos;
         aSel.End.Paragraph = rSel.nEndPara;
-        aSel.End.PositionInParagraph = static_cast<sal_Int32>(rSel.nEndPos);
+        aSel.End.PositionInParagraph = rSel.nEndPos;
         return uno::makeAny(aSel);
     }
 

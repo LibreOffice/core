@@ -374,7 +374,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
 
         const sal_Int32 nTextPortions = pPPortion->GetTextPortions().Count();
         OStringBuffer aPortionStr("\nText portions: #");
-        aPortionStr.append(static_cast<sal_Int32>(nTextPortions));
+        aPortionStr.append(nTextPortions);
         aPortionStr.append(" \nA");
         aPortionStr.append(nPortion);
         aPortionStr.append(": Paragraph Length = ");
