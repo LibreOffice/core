@@ -22,3 +22,15 @@ blacklist:
     include/osl/thread.h:
     # ODK API test would fail with fw decl here
     - osl/time.h
+    include/osl/conditn.hxx:
+    # ODK API test would fail with fw decl here
+    - osl/time.h
+    include/osl/pipe_decl.hxx:
+    # ODK API test would fail with fw decl here
+    - osl/security.hxx
+    include/osl/socket_decl.hxx:
+    # Needed by socket.hxx for inline function
+    - rtl/byteseq.hxx
+    include/osl/thread.hxx:
+    # ODK API test would fail with fw decl here
+    - osl/time.h
