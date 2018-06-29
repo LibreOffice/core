@@ -102,8 +102,6 @@ private:
     Color m_aAutoDisplayColor;
     Color m_aSaveColor;
     NamedColor m_aSelectedColor;
-    sal_uInt16 m_nSlotId;
-    bool m_bShowNoneButton;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
 

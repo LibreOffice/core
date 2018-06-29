@@ -979,19 +979,6 @@ void Window::SetCompoundControl( bool bCompound )
         mpWindowImpl->mbCompoundControl = bCompound;
 }
 
-void Window::IncrementLockCount()
-{
-    assert( mpWindowImpl != nullptr );
-    mpWindowImpl->mnLockCount++;
-}
-
-void Window::DecrementLockCount()
-{
-    assert( mpWindowImpl != nullptr );
-    if (mpWindowImpl)
-        mpWindowImpl->mnLockCount--;
-}
-
 WinBits Window::GetStyle() const
 {
     return mpWindowImpl ? mpWindowImpl->mnStyle : 0;

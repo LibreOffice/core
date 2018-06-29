@@ -647,7 +647,6 @@ WindowImpl::WindowImpl( WindowType nType )
     mnParentClipMode                    = ParentClipMode::NONE;      // Flags for Parent-ClipChildren-Mode
     mnActivateMode                      = ActivateModeFlags::NONE;   // Will be converted in System/Overlap-Windows
     mnDlgCtrlFlags                      = DialogControlFlags::NONE;  // DialogControl-Flags
-    mnLockCount                         = 0;                         // LockCount
     meAlwaysInputMode                   = AlwaysInputNone;           // neither AlwaysEnableInput nor AlwaysDisableInput called
     meHalign                            = VclAlign::Fill;
     meValign                            = VclAlign::Fill;
