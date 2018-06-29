@@ -1504,7 +1504,7 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             rValue <<= m_bAllowDelete;
             break;
         case PROPERTY_ID_PRIVILEGES:
-            rValue <<= static_cast<sal_Int32>(m_nPrivileges);
+            rValue <<= m_nPrivileges;
             break;
         case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
             rValue = m_aDynamicControlBorder;
