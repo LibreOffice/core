@@ -984,9 +984,8 @@ std::unique_ptr<OutlinerParaObject> SwWW8ImplReader::ImportAsOutliner(OUString &
         }
 
         std::unique_ptr<EditTextObject> pTemporaryText = m_pDrawEditEngine->CreateTextObject();
-        pRet.reset( new OutlinerParaObject(*pTemporaryText) );
+        pRet.reset( new OutlinerParaObject( std::move(pTemporaryText) ) );
         pRet->SetOutlinerMode( OutlinerMode::TextObject );
-        pTemporaryText.reset();
 
         m_pDrawEditEngine->SetText( OUString() );
         m_pDrawEditEngine->SetParaAttribs(0, m_pDrawEditEngine->GetEmptyItemSet());
@@ -1193,11 +1192,11 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
         bool bVertical = pTextObj->IsVerticalWriting();
         std::unique_ptr<EditTextObject> pTemporaryText = m_pDrawEditEngine->CreateTextObject();
-        OutlinerParaObject* pOp = new OutlinerParaObject(*pTemporaryText);
+        std::unique_ptr<OutlinerParaObject> pOp( new OutlinerParaObject(*pTemporaryText) );
         pOp->SetOutlinerMode( OutlinerMode::TextObject );
         pOp->SetVertical( bVertical );
         pTemporaryText.reset();
-        pTextObj->NbcSetOutlinerParaObject( pOp );
+        pTextObj->NbcSetOutlinerParaObject( std::move(pOp) );
         pTextObj->SetVerticalWriting(bVertical);
 
         // For the next TextBox also remove the old paragraph attributes

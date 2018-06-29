@@ -611,7 +611,7 @@ sal_Int32 RtfSdrExport::StartShape()
         */
         if (pTextObj->IsTextEditActive())
         {
-            pOwnedParaObj.reset(pTextObj->GetEditOutlinerParaObject());
+            pOwnedParaObj = pTextObj->GetEditOutlinerParaObject();
             pParaObj = pOwnedParaObj.get();
         }
         else

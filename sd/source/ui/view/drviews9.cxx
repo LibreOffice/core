@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <DrawViewShell.hxx>
+#include <editeng/outlobj.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/svdpagv.hxx>
