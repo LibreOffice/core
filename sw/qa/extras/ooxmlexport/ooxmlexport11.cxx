@@ -283,6 +283,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113258, "tdf113258.docx")
                          getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104354, "tdf104354.docx")
+{
+    uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+    // This was 494, i.e. automatic spacing resulted in non-zero paragraph top
+    // margin for the first paragraph in a text frame.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
+    // still 494 in the second paragraph
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494),
+                         getProperty<sal_Int32>(xShape->getEnd(), "ParaTopMargin"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
 {
     // Select the second run containing the page number field
