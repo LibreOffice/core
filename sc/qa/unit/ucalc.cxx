@@ -5001,7 +5001,7 @@ void Test::testFindAreaPosVertical()
 
     m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), nRow);
+    CPPUNIT_ASSERT_EQUAL(MAXROW, nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
     nCol = 1;
@@ -5068,7 +5068,7 @@ void Test::testFindAreaPosColRight()
     m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), nCol);
+    CPPUNIT_ASSERT_EQUAL(MAXCOL, nCol);
 
     nCol = 2;
     nRow = 1;
