@@ -26,7 +26,7 @@
 
 #include "osl/socket.h"
 #include "rtl/ustring.hxx"
-#include "rtl/byteseq.hxx"
+#include "rtl/byteseq.h"
 
 namespace osl
 {
