@@ -140,7 +140,7 @@ DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    tools::Rectangle aRect = pPage->GetObj(0)->GetSnapRect();
+    Rectangle aRect = pPage->GetObj(0)->GetSnapRect();
     CPPUNIT_ASSERT( aRect.GetHeight() > aRect.GetWidth() );
 }
 
