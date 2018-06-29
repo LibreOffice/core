@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1ff146_2d1df50f",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4088,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-06-29T10:59:30Z",
+      "side": 1,
+      "message": "Please use proper indentation of 4 spaces, here and below.",
+      "revId": "16972e5b8cd008ffbede339f1004c266a4ff80d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
