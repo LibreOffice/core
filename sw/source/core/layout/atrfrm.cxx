@@ -1342,11 +1342,11 @@ bool SwFormatVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_VERTORIENT_ORIENT:
         {
-            rVal <<= static_cast<sal_Int16>(m_eOrient);
+            rVal <<= m_eOrient;
         }
         break;
         case MID_VERTORIENT_RELATION:
-                rVal <<= static_cast<sal_Int16>(m_eRelation);
+                rVal <<= m_eRelation;
         break;
         case MID_VERTORIENT_POSITION:
                 rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetPos()));
@@ -1436,11 +1436,11 @@ bool SwFormatHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_HORIORIENT_ORIENT:
         {
-            rVal <<= static_cast<sal_Int16>(m_eOrient);
+            rVal <<= m_eOrient;
         }
         break;
         case MID_HORIORIENT_RELATION:
-            rVal <<= static_cast<sal_Int16>(m_eRelation);
+            rVal <<= m_eRelation;
         break;
         case MID_HORIORIENT_POSITION:
                 rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetPos()));
