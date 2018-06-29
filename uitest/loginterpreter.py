@@ -91,8 +91,17 @@ def get_coupling_type(line1, line2):
         return "COMMAND_MODAL_COUPLE"
 
     elif action_dict1["keyword"] == "CommandSent" and \
-        action_dict2["keyword"] == "ModelessDialogExecuted":
+        action_dict2["keyword"] == "ModelessDialogConstructed":
         return "COMMAND_MODELESS_COUPLE"
+
+    elif action_dict1["keyword"] == "ButtonUIObject" and \
+        action_dict2["keyword"] == "DialogClosed":
+        return "BUTTON_DIALOGCLOSE_COUPLE"
+
+    elif "parameters" in action_dict1 and \
+        "KEYCODE" in action_dict1["parameters"] and \
+        action_dict2["keyword"] == "CommandSent":
+        return "REDUNDANT_COUPLE"
 
     return "NOT_A_COUPLE"
 
@@ -113,6 +122,10 @@ def get_test_line_from_one_log_line(log_line):
             else:
                 test_line += ",tuple())\n"
             return test_line
+    elif action_dict["keyword"] == "CommandSent":
+        test_line += "self.xUITest.executeCommand(\"" + \
+        action_dict["Name"] + "\")\n"
+        return test_line
 
     return ""
 
@@ -131,6 +144,11 @@ def get_test_line_from_two_log_lines(log_line1,log_line2):
         "self.ui_test.execute_modeless_dialog_through_command(\"" + \
         action_dict1["Name"] + "\")\n        " + \
         action_dict2["Id"] + " = self.xUITest.getTopFocusWindow()\n"
+    elif coupling_type == "BUTTON_DIALOGCLOSE_COUPLE":
+        test_line += \
+        action_dict1["Id"] + " = " + action_dict1["Parent"] + ".getChild(\"" + \
+        action_dict1["Id"] + "\")\n        self.ui_test.close_dialog_through_button(" + \
+        action_dict1["Id"] + ")\n"
     return test_line
 
 def main():
@@ -143,6 +161,8 @@ def main():
             get_coupling_type(log_lines[line_number],log_lines[line_number + 1]) == "NOT_A_COUPLE":
             test_line = get_test_line_from_one_log_line(log_lines[line_number])
             output_stream.write(test_line)
+            line_number += 1
+        elif get_coupling_type(log_lines[line_number],log_lines[line_number + 1]) == "REDUNDANT_COUPLE":
             line_number += 1
         else:
             test_line = get_test_line_from_two_log_lines(log_lines[line_number],log_lines[line_number + 1])
