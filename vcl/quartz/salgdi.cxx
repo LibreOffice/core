@@ -116,7 +116,7 @@ CoreTextFontFace::~CoreTextFontFace()
 
 sal_IntPtr CoreTextFontFace::GetFontId() const
 {
-    return static_cast<sal_IntPtr>(mnFontId);
+    return mnFontId;
 }
 
 const FontCharMapRef CoreTextFontFace::GetFontCharMap() const
