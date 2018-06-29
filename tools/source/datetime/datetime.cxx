@@ -304,7 +304,7 @@ DateTime DateTime::CreateFromUnixTime(const double fSecondsSinceEpoch)
 
     Date aDate (1, 1, 1970);
     aDate.AddDays(nDays);
-    SAL_WARN_IF(aDate - Date(1, 1, 1970) != static_cast<sal_Int32>(nDays), "tools.datetime",
+    SAL_WARN_IF(aDate - Date(1, 1, 1970) != nDays, "tools.datetime",
                 "DateTime::CreateFromUnixTime - date truncated to max");
 
     fValue -= nDays;
