@@ -2000,7 +2000,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
 
         OUStringBuffer sIDBuf;
         sIDBuf.append(RECOVERY_ITEM_BASE_IDENTIFIER);
-        sIDBuf.append(static_cast<sal_Int32>(rInfo.ID));
+        sIDBuf.append(rInfo.ID);
         OUString sID = sIDBuf.makeStringAndClear();
 
         // remove
