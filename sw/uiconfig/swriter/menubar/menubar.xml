@@ -548,7 +548,7 @@
   </menu:menu>
   <menu:menu menu:id=".uno:FormatStylesMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles" menu:style="radio"/>
