@@ -170,7 +170,8 @@ if ($src_path ne $build_path)
     {
         my $dir = basename (dirname ($module));
         mkdir ($dir);
-        system ("ln -sf $src_path/$dir/Makefile $dir/Makefile");
+        system ("rm $dir/Makefile");
+        system ("printf 'module_directory:=$src_path/$dir/\ninclude \$(module_directory)/../solenv/gbuild/partial_build.mk\n' > $dir/Makefile");
     }
     my @external_modules = <$src_path/external/*/Makefile>;
     mkdir ("external");
@@ -179,7 +180,8 @@ if ($src_path ne $build_path)
     {
         my $dir = basename (dirname ($module));
         mkdir ("external/$dir");
-        system ("ln -sf $src_path/external/$dir/Makefile external/$dir/Makefile");
+        system ("rm external/$dir/Makefile");
+        system ("printf 'module_directory:=$src_path/external/$dir/\ninclude \$(module_directory)/../../solenv/gbuild/partial_build.mk\n' > external/$dir/Makefile");
     }
 }
 system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
