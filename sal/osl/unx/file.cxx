@@ -320,12 +320,12 @@ oslFileError FileHandle_Impl::setSize(sal_uInt64 uSize)
         if (write(m_fd, "", size_t(1)) == -1)
         {
             /* Failure. Restore saved position */
-            (void) lseek(m_fd, static_cast<off_t>(nCurPos), SEEK_SET);
+            (void) lseek(m_fd, nCurPos, SEEK_SET);
             return result;
         }
 
         /* Success. Restore saved position */
-        if (lseek(m_fd, static_cast<off_t>(nCurPos), SEEK_SET) == -1)
+        if (lseek(m_fd, nCurPos, SEEK_SET) == -1)
             return result;
     }
 
