@@ -914,10 +914,10 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
             break;
         // added for exporting OCX control
         case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
-            _rValue <<= static_cast<sal_Int16>(m_nControlTypeinMSO);
+            _rValue <<= m_nControlTypeinMSO;
             break;
         case PROPERTY_ID_OBJ_ID_IN_MSO:
-            _rValue <<= static_cast<sal_uInt16>(m_nObjIDinMSO);
+            _rValue <<= m_nObjIDinMSO;
             break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
