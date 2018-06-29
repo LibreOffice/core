@@ -1409,7 +1409,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                 case XATTR_FILLHATCH:
                 case XATTR_LINEDASH:
                     {
-                        const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(static_cast<sal_uInt16>(pMap->nWID));
+                        const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(pMap->nWID);
                         if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1424,7 +1424,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                 case XATTR_LINESTART:
                 case XATTR_FILLFLOATTRANSPARENCE:
                     {
-                        const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(static_cast<sal_uInt16>(pMap->nWID));
+                        const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(pMap->nWID);
                         if( pItem == nullptr )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
