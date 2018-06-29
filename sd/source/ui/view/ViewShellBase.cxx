@@ -162,7 +162,7 @@ public:
         bool bOuterResize);
 
     /** Show or hide the specified pane.  The visibility state is taken
-        fromthe given request.
+        from the given request.
         @param rRequest
             The request determines the new visibility state.  The state can
             either be toggled or be set to a given value.

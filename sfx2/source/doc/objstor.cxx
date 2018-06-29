@@ -2253,7 +2253,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
 
             // tdf#107690 import custom document property _MarkAsFinal as SecurityOptOpenReadonly
             // (before this fix, LibreOffice opened read-only OOXML documents as editable,
-            // also saved and exported _MarkAsFinal=true silently, resulting unintented read-only
+            // also saved and exported _MarkAsFinal=true silently, resulting unintended read-only
             // warning info bar in MSO)
             uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier(GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps = xPropSupplier->getDocumentProperties() ;

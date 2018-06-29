@@ -84,8 +84,8 @@ SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel >
     return pResult;
 }
 
-// this code is copied from sfx2/source/doc/objembed.cxx.  It is a workaround to
-// get the reference device (e.g. printer) fromthe parent document
+// this code is copied from sfx2/source/doc/objembed.cxx. It is a workaround to
+// get the reference device (e.g. printer) from the parent document
 OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & xModel )
 {
     SfxObjectShell * pParent = lcl_GetParentObjectShell( xModel );

@@ -474,7 +474,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
             rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
                                         InsertDeleteFlags::FORMULA, false, *pUndoDoc );
 
-            // data base and othe ranges
+            // database and other ranges
             ScRangeName* pDocRange = rDoc.GetRangeName();
             if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
