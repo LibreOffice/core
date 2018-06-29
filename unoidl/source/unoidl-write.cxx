@@ -22,6 +22,7 @@
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <rtl/byteseq.hxx>
 #include <rtl/process.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>

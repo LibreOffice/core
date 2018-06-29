@@ -35,6 +35,7 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <rtl/byteseq.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/safeint.hxx>
 #include <memory>
