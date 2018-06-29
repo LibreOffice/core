@@ -459,7 +459,7 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
         break;
         case MID_RUBY_POSITION:
         {
-            rVal <<= static_cast<sal_uInt16>(m_nPosition);
+            rVal <<= m_nPosition;
         }
         break;
         default:
