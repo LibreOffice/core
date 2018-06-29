@@ -27,18 +27,6 @@
 
 using namespace com::sun::star;
 
-
-SvxChartColorTable::SvxChartColorTable()
-    : nNextElementNumber(0)
-{
-}
-
-SvxChartColorTable::SvxChartColorTable(const SvxChartColorTable & _rSource)
-    : m_aColorEntries(_rSource.m_aColorEntries)
-    , nNextElementNumber(m_aColorEntries.size() + 1)
-{
-}
-
 // accessors
 size_t SvxChartColorTable::size() const
 {
@@ -71,7 +59,6 @@ Color SvxChartColorTable::getColor( size_t _nIndex ) const
 void SvxChartColorTable::clear()
 {
     m_aColorEntries.clear();
-    nNextElementNumber = 1;
 }
 
 void SvxChartColorTable::append( const XColorEntry & _rEntry )
@@ -127,23 +114,21 @@ OUString SvxChartColorTable::getDefaultName( size_t _nIndex )
 {
     OUString aName;
 
-    if (sDefaultNamePrefix.getLength() == 0)
+    OUString sDefaultNamePrefix;
+    OUString sDefaultNamePostfix;
+    OUString aResName( CuiResId( RID_SVXSTR_DIAGRAM_ROW ) );
+    sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
+    if( nPos != -1 )
     {
-        OUString aResName( CuiResId( RID_SVXSTR_DIAGRAM_ROW ) );
-        sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
-        if( nPos != -1 )
-        {
-            sDefaultNamePrefix = aResName.copy( 0, nPos );
-            sDefaultNamePostfix = aResName.copy( nPos + sizeof( "$(ROW)" ) - 1 );
-        }
-        else
-        {
-            sDefaultNamePrefix = aResName;
-        }
+        sDefaultNamePrefix = aResName.copy( 0, nPos );
+        sDefaultNamePostfix = aResName.copy( nPos + sizeof( "$(ROW)" ) - 1 );
+    }
+    else
+    {
+        sDefaultNamePrefix = aResName;
     }
 
     aName = sDefaultNamePrefix + OUString::number(_nIndex + 1) + sDefaultNamePostfix;
-    nNextElementNumber++;
 
     return aName;
 }
