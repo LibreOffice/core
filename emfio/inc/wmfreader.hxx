@@ -47,7 +47,6 @@ namespace emfio
         sal_uInt32      mnEMFSize;
 
         sal_uInt32      mnSkipActions;
-        sal_uInt32      mnCurrentAction;
 
         // eventually handed over external header
         const WmfExternal* mpExternalHeader;

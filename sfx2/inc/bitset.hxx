@@ -25,7 +25,6 @@ class IndexBitSet
 {
 private:
     sal_uInt16                    nBlocks;
-    sal_uInt16                    nCount;
     std::unique_ptr<sal_uInt32[]> pBitmap;
 
     IndexBitSet& operator|=( sal_uInt16 nBit );

@@ -1,6 +1,6 @@
 basctl/source/basicide/basicbox.hxx:69
     basctl::DocListenerBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/basidesh.hxx:88
+basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/bastype2.hxx:180
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
@@ -82,6 +82,8 @@ codemaker/source/cppumaker/dependencies.hxx:114
     codemaker::cppumaker::Dependencies m_floatDependency _Bool
 codemaker/source/cppumaker/dependencies.hxx:115
     codemaker::cppumaker::Dependencies m_doubleDependency _Bool
+comphelper/qa/container/comphelper_ifcontainer.cxx:45
+    ContainerListener m_pStats struct ContainerStats *
 configmgr/source/components.cxx:164
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
 connectivity/source/drivers/mork/MorkParser.hxx:133
@@ -158,6 +160,8 @@ cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
 cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
+cui/source/options/cfgchart.hxx:33
+    SvxChartColorTable nNextElementNumber int
 dbaccess/source/core/dataaccess/documentdefinition.cxx:287
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:178
@@ -206,6 +210,8 @@ emfio/inc/mtftools.hxx:128
     emfio::LOGFONTW lfClipPrecision sal_uInt8
 emfio/inc/mtftools.hxx:129
     emfio::LOGFONTW lfQuality sal_uInt8
+emfio/inc/wmfreader.hxx:50
+    emfio::WmfReader mnCurrentAction sal_uInt32
 emfio/source/reader/emfreader.cxx:310
     (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
 emfio/source/reader/emfreader.cxx:311
@@ -320,7 +326,7 @@ sc/inc/compiler.hxx:262
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:264
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2514
+sc/inc/document.hxx:2509
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
@@ -328,7 +334,7 @@ sc/inc/pivot.hxx:78
     ScDPLabelData mbIsValue _Bool
 sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
-sc/source/core/data/column4.cxx:1313
+sc/source/core/data/column4.cxx:1314
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
 sc/source/filter/excel/xltoolbar.hxx:23
     TBCCmd cmdID sal_uInt16
@@ -384,12 +390,8 @@ sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
 sc/source/ui/inc/datastream.hxx:108
     sc::DataStream mnSettings sal_uInt32
-sc/source/ui/inc/filtdlg.hxx:198
-    ScSpecialFilterDlg pOptionsMgr class ScFilterOptionsMgr *
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
-sc/source/ui/inc/sortkeydlg.hxx:46
-    ScSortKeyWindow m_nItemHeight sal_Int32
 sc/source/ui/inc/tabvwsh.hxx:129
     ScTabViewShell pPivotSource class ScArea *
 sd/source/filter/eppt/eppt.hxx:142
@@ -402,18 +404,14 @@ sd/source/filter/ppt/ppt97animations.hxx:50
     Ppt97AnimationInfoAtom nUnknown1 sal_uInt8
 sd/source/filter/ppt/ppt97animations.hxx:51
     Ppt97AnimationInfoAtom nUnknown2 sal_uInt8
-sd/source/ui/inc/animobjs.hxx:123
-    sd::AnimationWindow pControllerItem class sd::AnimationControllerItem *
-sd/source/ui/inc/navigatr.hxx:123
-    SdNavigatorWin mpNavigatorCtrlItem class SdNavigatorControllerItem *
-sd/source/ui/inc/navigatr.hxx:124
-    SdNavigatorWin mpPageNameCtrlItem class SdPageNameControllerItem *
 sd/source/ui/remotecontrol/Receiver.hxx:36
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
 sd/source/ui/sidebar/SlideBackground.hxx:99
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
+sfx2/inc/bitset.hxx:28
+    IndexBitSet nCount sal_uInt16
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
@@ -464,20 +462,24 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:105
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:106
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
-svx/source/svdraw/svdpdf.hxx:188
-    ImpSdrPdfImport mbLastObjWasLine _Bool
-svx/source/svdraw/svdpdf.hxx:195
+svx/source/svdraw/svdpdf.hxx:192
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-sw/inc/ndgrf.hxx:45
-    SwGrfNode bGraphicArrived _Bool
 sw/inc/shellio.hxx:145
     SwReader aFileName class rtl::OUString
 sw/source/core/doc/tblafmt.cxx:185
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
+sw/source/core/inc/swfont.hxx:975
+    SvStatistics nGetTextSize sal_uInt16
+sw/source/core/inc/swfont.hxx:976
+    SvStatistics nDrawText sal_uInt16
 sw/source/core/inc/swfont.hxx:977
     SvStatistics nGetStretchTextSize sal_uInt16
+sw/source/core/inc/swfont.hxx:978
+    SvStatistics nDrawStretchText sal_uInt16
+sw/source/core/inc/swfont.hxx:979
+    SvStatistics nChangeFont sal_uInt16
 sw/source/core/text/xmldump.cxx:34
     XmlPortionDumper ofs TextFrameIndex
 sw/source/filter/html/htmlcss1.cxx:77
@@ -514,6 +516,10 @@ vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
 vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
+vcl/inc/qt5/Qt5Frame.hxx:59
+    Qt5Frame m_pSalMenu class Qt5Menu *
+vcl/inc/qt5/Qt5Graphics.hxx:50
+    Qt5Graphics m_pFontCollection class PhysicalFontCollection *
 vcl/inc/salmenu.hxx:34
     SalItemParams nBits enum MenuItemBits
 vcl/inc/salmenu.hxx:42
@@ -540,10 +546,12 @@ vcl/inc/salwtype.hxx:213
     SalQueryCharPositionEvent mnCursorBoundHeight long
 vcl/inc/salwtype.hxx:248
     SalSwipeEvent mnVelocityY double
-vcl/inc/sft.hxx:462
+vcl/inc/sft.hxx:461
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/inc/unx/gtk/gtkframe.hxx:215
     GtkSalFrame m_nFloatFlags enum FloatWinPopupFlags
+vcl/inc/window.h:293
+    WindowImpl mnLockCount sal_uInt16
 vcl/opengl/salbmp.cxx:435
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/source/filter/graphicfilter.cxx:1008
@@ -568,5 +576,9 @@ vcl/unx/gtk/hudawareness.cxx:20
     (anonymous) connection GDBusConnection *
 vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
+vcl/unx/kde4/KDEXLib.hxx:49
+    KDEXLib::SocketData pending YieldFunc
+vcl/unx/kde4/KDEXLib.hxx:50
+    KDEXLib::SocketData queued YieldFunc
 writerfilter/source/dmapper/PropertyMap.hxx:198
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

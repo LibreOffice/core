@@ -196,7 +196,7 @@ include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/oox/export/shapes.hxx:122
+include/oox/export/shapes.hxx:123
     oox::drawingml::ShapeExport maShapeMap oox::drawingml::ShapeExport::ShapeHashMap
 include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
@@ -216,8 +216,6 @@ include/svx/itemwin.hxx:34
     SvxLineBox aDelayTimer class Timer
 include/xmloff/shapeimport.hxx:140
     SdXML3DLightContext mbSpecular _Bool
-include/xmloff/XMLTextMasterPageContext.hxx:34
-    XMLTextMasterPageContext sIsPhysical const class rtl::OUString
 jvmfwk/plugins/sunmajor/pluginlib/sunversion.hxx:102
     jfw_plugin::SunVersion usVersion class rtl::OUString
 libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:35
@@ -314,15 +312,15 @@ sc/inc/compiler.hxx:264
     ScCompiler::AddInMap pUpper const char *
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
-sc/inc/interpretercontext.hxx:23
+sc/inc/interpretercontext.hxx:31
     ScInterpreterContext mrDoc const class ScDocument &
-sc/inc/token.hxx:399
+sc/inc/token.hxx:397
     SingleDoubleRefModifier aDub struct ScComplexRefData
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
-sc/source/core/data/document.cxx:1248
+sc/source/core/data/document.cxx:1251
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1249
+sc/source/core/data/document.cxx:1252
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
 sc/source/filter/inc/htmlpars.hxx:614
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
@@ -372,8 +370,6 @@ sc/source/ui/inc/msgpool.hxx:46
     ScMessagePool aCondFormatDlgItem class ScCondFormatDlgItem
 sc/source/ui/inc/notemark.hxx:43
     ScNoteMarker m_aTimer class Timer
-sc/source/ui/inc/sortkeydlg.hxx:46
-    ScSortKeyWindow m_nItemHeight sal_Int32
 sccomp/source/solver/DifferentialEvolution.hxx:35
     DifferentialEvolutionAlgorithm maRandomDevice std::random_device
 sccomp/source/solver/ParticelSwarmOptimization.hxx:56
@@ -394,7 +390,7 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
 sd/source/ui/table/TableDesignPane.hxx:106
     sd::TableDesignPane aImpl class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1321
+sd/source/ui/view/DocumentRenderer.cxx:1322
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1215
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -472,12 +468,10 @@ svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1091
     (anonymous namespace)::ExpressionGrammar::definition modifierReference ::boost::spirit::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1092
     (anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::rule<ScannerT>
-svx/source/dialog/framelinkarray.cxx:377
+svx/source/dialog/framelinkarray.cxx:376
     svx::frame::MergedCellIterator mnFirstRow size_t
 svx/source/dialog/imapwnd.hxx:78
     IMapWindow maItemInfos struct SfxItemInfo [1]
-svx/source/dialog/orienthelper.cxx:36
-    svx::OrientationHelper_Impl mrCtrlDial class svx::DialControl &
 svx/source/gallery2/galbrws2.cxx:116
     (anonymous namespace)::GalleryThemePopup maBuilder class VclBuilder
 svx/source/stbctrls/pszctrl.cxx:93
@@ -488,15 +482,13 @@ svx/source/stbctrls/zoomctrl.cxx:55
     ZoomPopup_Impl m_aBuilder class VclBuilder
 svx/source/svdraw/svdcrtv.cxx:49
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
-svx/source/svdraw/svdopath.cxx:93
-    ImpSdrPathDragData bIsPrevControl _Bool
 svx/source/xml/xmleohlp.cxx:71
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
 sw/inc/unosett.hxx:144
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:134
     ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:3995
+sw/qa/extras/uiwriter/uiwriter.cxx:4001
     IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -506,7 +498,7 @@ sw/source/core/layout/dbg_lay.cxx:169
     SwImplEnterLeave nAction enum DbgAction
 sw/source/core/text/inftxt.hxx:683
     SwTextSlot aText class rtl::OUString
-sw/source/core/text/porfld.cxx:142
+sw/source/core/text/porfld.cxx:141
     SwFieldSlot aText class rtl::OUString
 sw/source/filter/html/htmlcss1.cxx:77
     SwCSS1ItemIds nFormatBreak sal_uInt16
@@ -522,7 +514,7 @@ sw/source/uibase/inc/chrdlg.hxx:43
     SwCharDlg m_nCharUrlId sal_uInt16
 sw/source/uibase/inc/chrdlg.hxx:45
     SwCharDlg m_nCharBrdId sal_uInt16
-sw/source/uibase/inc/cption.hxx:56
+sw/source/uibase/inc/cption.hxx:44
     SwCaptionDialog m_aTextFilter class TextFilterAutoConvert
 sw/source/uibase/inc/glossary.hxx:95
     SwGlossaryDlg m_aNoSpaceFilter class TextFilter
@@ -530,6 +522,8 @@ sw/source/uibase/inc/olmenu.hxx:77
     SwSpellPopup m_aBuilder class VclBuilder
 sw/source/uibase/inc/olmenu.hxx:86
     SwSpellPopup m_nLangParaMenuId sal_uInt16
+sw/source/uibase/inc/optload.hxx:186
+    SwCaptionOptPage m_aTextFilter class TextFilterAutoConvert
 sw/source/uibase/inc/regionsw.hxx:256
     SwInsertSectionTabDialog m_nNotePageId sal_uInt16
 sw/source/uibase/inc/regionsw.hxx:276
@@ -564,6 +558,12 @@ vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
+vcl/inc/qt5/Qt5Menu.hxx:74
+    Qt5MenuItem mbVisible _Bool
+vcl/inc/qt5/Qt5Object.hxx:34
+    Qt5Object m_aSystemData struct SystemEnvData
+vcl/inc/qt5/Qt5Object.hxx:36
+    Qt5Object m_pParent class Qt5Frame *
 vcl/inc/salmenu.hxx:42
     SalMenuButtonItem mnId sal_uInt16
 vcl/inc/salmenu.hxx:43
@@ -584,15 +584,13 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/inc/unx/i18n_xkb.hxx:32
-    SalI18N_KeyboardExtension mnErrorBase int
-vcl/source/app/salvtables.cxx:1249
+vcl/source/app/salvtables.cxx:1344
     SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
 vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2166
+vcl/unx/gtk3/gtk3gtkinst.cxx:2221
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink
@@ -606,8 +604,6 @@ vcl/unx/gtk/glomenu.cxx:20
     GLOMenu parent_instance GMenuModel
 writerfilter/source/dmapper/PropertyMap.hxx:198
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-xmloff/source/draw/ximpstyl.hxx:144
-    SdXMLPresentationPageLayoutContext msName class rtl::OUString
 xmloff/source/text/XMLTextListBlockContext.hxx:35
     XMLTextListBlockContext msListStyleName class rtl::OUString
 xmloff/source/text/XMLTextListBlockContext.hxx:41

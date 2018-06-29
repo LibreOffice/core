@@ -1571,7 +1571,7 @@ void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     else
     {
         if (pImpl->mbUseResText)
-            pImpl->maText = GetText();
+            pImpl->maText = OUString();
         else if (!pImpl->mbSelection && !pImpl->mbTextInited)
         {
             using namespace css::i18n::ScriptType;
@@ -1611,7 +1611,7 @@ void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
             }
 
             if (pImpl->maText.isEmpty())
-                pImpl->maText = GetText();
+                pImpl->maText = OUString();
 
             if (pImpl->maText.isEmpty())
             {   // fdo#58427: still no text? let's try that one...
@@ -1620,7 +1620,7 @@ void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
             bool bEmpty = CleanAndCheckEmpty(pImpl->maText);
             if (bEmpty)
-                pImpl->maText = GetText();
+                pImpl->maText = OUString();
 
             if (pImpl->maText.getLength() > (TEXT_WIDTH - 1))
             {

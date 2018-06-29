@@ -524,13 +524,16 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
             }
             else if (op == UO_AddrOf || op == UO_Deref
                 || op == UO_Plus || op == UO_Minus
-                || op == UO_Not || op == UO_LNot
-                || op == UO_PreInc || op == UO_PostInc
-                || op == UO_PreDec || op == UO_PostDec)
+                || op == UO_Not || op == UO_LNot)
             {
                 bPotentiallyReadFrom = true;
                 break;
             }
+            /* The following are technically reads, but from a code-sense they're more of a write/modify, so
+                ignore them to find interesting fields that only modified, not usefully read:
+                UO_PreInc / UO_PostInc / UO_PreDec / UO_PostDec
+                But we still walk up in case the result of the expression is used in a read sense.
+            */
             walkupUp();
         }
         else if (auto caseStmt = dyn_cast<CaseStmt>(parent))
@@ -651,7 +654,14 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
 
     MyFieldInfo fieldInfo = niceName(fieldDecl);
     if (bPotentiallyReadFrom)
+    {
         readFromSet.insert(fieldInfo);
+        if (fieldInfo.fieldName == "nNextElementNumber")
+        {
+            parent->dump();
+            memberExpr->dump();
+        }
+    }
 }
 
 void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberExpr)

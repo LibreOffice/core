@@ -90,7 +90,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FontPrevWindow : public weld::CustomWidgetCo
 {
 private:
     std::unique_ptr<FontPrevWin_Impl> pImpl;
-    OUString maText;
     bool mbResetForeground : 1;
     bool mbResetBackground : 1;
 
@@ -112,7 +111,6 @@ public:
     SvxFont&            GetCJKFont();
     SvxFont&            GetCTLFont();
     void                SetBackColor( const Color& rColor );
-    const OUString&     GetText() const { return maText; }
     void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
     bool                IsTwoLines() const;

@@ -832,9 +832,6 @@ public:
     ImplSVEvent *                       PostUserEvent( const Link<void*,void>& rLink, void* pCaller = nullptr, bool bReferenceLink = false );
     void                                RemoveUserEvent( ImplSVEvent * nUserEvent );
 
-    void                                IncrementLockCount();
-    void                                DecrementLockCount();
-
                                         // returns the input language used for the last key stroke
                                         // may be LANGUAGE_DONTKNOW if not supported by the OS
     LanguageType                        GetInputLanguage() const;
