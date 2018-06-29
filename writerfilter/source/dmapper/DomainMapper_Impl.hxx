@@ -975,6 +975,7 @@ public:
     bool IsDiscardHeaderFooter();
 
     void SetParaAutoBefore(bool bParaAutoBefore) { m_bParaAutoBefore = bParaAutoBefore; }
+    void SetParaAutoAfter(bool bParaAutoAfter) { m_bParaAutoAfter = bParaAutoAfter; }
 
     /// Forget about the previous paragraph, as it's not inside the same
     /// start/end node.
@@ -988,6 +989,14 @@ private:
     css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool m_bParaAutoBefore;
+    /// Current paragraph has automatic after spacing.
+    bool m_bParaAutoAfter;
+    /// Paragraph has direct top or bottom margin formattings
+    bool m_bPrevParaAutoAfter;
+    bool m_bParaChangedBottomMargin;
+    /// Current paragraph in a table is first paragraph of a cell
+    bool m_bFirstParagraphInCell;
+    bool m_bSaveFirstParagraphInCell;
 };
 
 } //namespace dmapper

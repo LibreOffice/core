@@ -671,7 +671,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
                     default_spacing = 49;
                 else
-                    default_spacing = 280;
+                {
+                    // tdf#104354 first paragraphs of table cells and shapes get zero top margin
+                    if ((m_pImpl->GetIsFirstParagraphInSection() && !m_pImpl->IsInShape() && m_pImpl->m_nTableDepth > 0) ||
+                         m_pImpl->GetIsFirstParagraphInShape())
+                        default_spacing = 0;
+                    else
+                        default_spacing = 280;
+                }
             }
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
             {
@@ -698,6 +705,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
             {
+                m_pImpl->SetParaAutoAfter(true);
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
             }
             else
