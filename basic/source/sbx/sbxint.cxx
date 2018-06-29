@@ -86,7 +86,7 @@ start:
             break;
         case SbxCURRENCY:
             {
-                sal_Int64 tstVal = static_cast<sal_Int64>(p->nInt64) / sal_Int64(CURRENCY_FACTOR);
+                sal_Int64 tstVal = p->nInt64 / sal_Int64(CURRENCY_FACTOR);
 
                 if( tstVal > SbxMAXINT )
                 {
