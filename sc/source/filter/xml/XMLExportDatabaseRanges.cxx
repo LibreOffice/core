@@ -52,6 +52,71 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
+void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& aRange, const ScDocument* mpDoc)
+{
+    // Count sort items first.
+    size_t nSortCount = 0;
+    for (; nSortCount < aParam.GetSortKeyCount(); ++nSortCount)
+    {
+        if (!aParam.maKeyState[nSortCount].bDoSort)
+            break;
+    }
+
+    if (!nSortCount)
+        // Nothing to export.
+        return;
+
+    ScAddress aOutPos(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab);
+
+    if (!aParam.bIncludePattern)
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT, XML_FALSE);
+
+    if (!aParam.bInplace)
+    {
+        OUString aStr;
+        ScRangeStringConverter::GetStringFromAddress(
+            aStr, aOutPos, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aStr);
+    }
+
+    if (aParam.bCaseSens)
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+
+    mrExport.AddLanguageTagAttributes( XML_NAMESPACE_TABLE, XML_NAMESPACE_TABLE, aParam.aCollatorLocale, false);
+    if (!aParam.aCollatorAlgorithm.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, aParam.aCollatorAlgorithm);
+
+    SvXMLElementExport aElemS(mrExport, XML_NAMESPACE_TABLE, XML_SORT, true, true);
+
+    SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+
+    for (size_t i = 0; i < nSortCount; ++i)
+    {
+            // Convert field value from absolute to relative.
+        SCCOLROW nField = aParam.maKeyState[i].nField - nFieldStart;
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(nField));
+
+        if (!aParam.maKeyState[i].bAscending)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
+
+        if (aParam.bUserDef)
+        {
+            OUStringBuffer aBuf;
+            aBuf.append(SC_USERLIST);
+            aBuf.append(static_cast<sal_Int32>(aParam.nUserIndex));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
+        }
+        else
+        {
+            // Right now we only support automatic field type.  In the
+            // future we may support numeric or alphanumeric field type.
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_AUTOMATIC);
+        }
+
+        SvXMLElementExport aElemSb(mrExport, XML_NAMESPACE_TABLE, XML_SORT_BY, true, true);
+    }
+}
+
 ScXMLExportDatabaseRanges::ScXMLExportDatabaseRanges(ScXMLExport& rTempExport)
     : rExport(rTempExport),
     pDoc( nullptr )
@@ -207,9 +272,12 @@ private:
 
         SvXMLElementExport aElemDR(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGE, true, true);
 
+        ScSortParam aParam;
+        rData.GetSortParam(aParam);
+
         writeImport(rData);
         writeFilter(rData);
-        writeSort(rData);
+        writeSort(mrExport, aParam, aRange, mpDoc);
         writeSubtotals(rData);
     }
 
@@ -291,76 +359,6 @@ private:
             {
                 // added to avoid warnings
             }
-        }
-    }
-
-    void writeSort(const ScDBData& rData)
-    {
-        ScSortParam aParam;
-        rData.GetSortParam(aParam);
-
-        // Count sort items first.
-        size_t nSortCount = 0;
-        for (; nSortCount < aParam.GetSortKeyCount(); ++nSortCount)
-        {
-            if (!aParam.maKeyState[nSortCount].bDoSort)
-                break;
-        }
-
-        if (!nSortCount)
-            // Nothing to export.
-            return;
-
-        ScAddress aOutPos(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab);
-
-        if (!aParam.bIncludePattern)
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT, XML_FALSE);
-
-        if (!aParam.bInplace)
-        {
-            OUString aStr;
-            ScRangeStringConverter::GetStringFromAddress(
-                aStr, aOutPos, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aStr);
-        }
-
-        if (aParam.bCaseSens)
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-
-        mrExport.AddLanguageTagAttributes( XML_NAMESPACE_TABLE, XML_NAMESPACE_TABLE, aParam.aCollatorLocale, false);
-        if (!aParam.aCollatorAlgorithm.isEmpty())
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, aParam.aCollatorAlgorithm);
-
-        SvXMLElementExport aElemS(mrExport, XML_NAMESPACE_TABLE, XML_SORT, true, true);
-
-        ScRange aRange;
-        rData.GetArea(aRange);
-        SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
-
-        for (size_t i = 0; i < nSortCount; ++i)
-        {
-            // Convert field value from absolute to relative.
-            SCCOLROW nField = aParam.maKeyState[i].nField - nFieldStart;
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(nField));
-
-            if (!aParam.maKeyState[i].bAscending)
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
-
-            if (aParam.bUserDef)
-            {
-                OUStringBuffer aBuf;
-                aBuf.append(SC_USERLIST);
-                aBuf.append(static_cast<sal_Int32>(aParam.nUserIndex));
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
-            }
-            else
-            {
-                // Right now we only support automatic field type.  In the
-                // future we may support numeric or alphanumeric field type.
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_AUTOMATIC);
-            }
-
-            SvXMLElementExport aElemSb(mrExport, XML_NAMESPACE_TABLE, XML_SORT_BY, true, true);
         }
     }
 
