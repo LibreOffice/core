@@ -159,6 +159,8 @@
 #include <vector>
 #include <vbahelper/vbaaccesshelper.hxx>
 
+
+
 //! not found in unonames.hxx
 #define SC_LAYERID "LayerID"
 
@@ -4061,6 +4063,7 @@ void ScXMLExport::WriteExternalDataMapping()
 
     sc::ExternalDataMapper& rDataMapper = pDoc->GetExternalDataMapper();
     auto& rDataSources = rDataMapper.getDataSources();
+
     if (!rDataSources.empty())
     {
         SvXMLElementExport aMappings(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_MAPPINGS, true, true);
@@ -4071,7 +4074,85 @@ void ScXMLExport::WriteExternalDataMapping()
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATA_FREQUENCY, OUString::number(itr.getUpdateFrequency()));
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_ID, itr.getID());
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATABASE_NAME, itr.getDBName());
+
+            // Add the data transformations
+            WriteExternalDataTransformations(itr.getDataTransformation());
+
             SvXMLElementExport aMapping(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_MAPPING, true, true);
+        }
+    }
+}
+
+void ScXMLExport::WriteExternalDataTransformations(const std::vector<std::shared_ptr<sc::DataTransformation>>& aDataTransformations)
+{
+    SvXMLElementExport aTransformations(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_TRANSFORMATIONS, true, true);
+    for (auto& itr : aDataTransformations)
+    {
+        sc::TransformationType aTransformationType = itr->getTransformationType();
+
+        switch(aTransformationType)
+        {
+            case sc::TransformationType::DELETE_TRANSFORMATION:
+            {
+                // Delete Columns Transformation
+                std::shared_ptr<sc::ColumnRemoveTransformation> aDeleteTransformation = std::dynamic_pointer_cast<sc::ColumnRemoveTransformation>(itr);
+                std::set<SCCOL> aColumns = aDeleteTransformation->getColumns();
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_REMOVE_TRANSFORMATION, true, true);
+                for(auto& col : aColumns)
+                {
+                    // Add Columns
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(col));
+                    SvXMLElementExport aCol(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN, true, true);
+                }
+            }
+            break;
+            case sc::TransformationType::SPLIT_TRANSFORMATION:
+            {
+                std::shared_ptr<sc::SplitColumnTransformation> aSplitTransformation = std::dynamic_pointer_cast<sc::SplitColumnTransformation>(itr);
+
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(aSplitTransformation->getColumn()));
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SEPARATOR, OUString::number(aSplitTransformation->getSeparator()));
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_SPLIT_TRANSFORMATION, true, true);
+            }
+            break;
+            case sc::TransformationType::MERGE_TRANSFORMATION:
+            {
+                // Merge Transformation
+                std::shared_ptr<sc::MergeColumnTransformation> aMergeTransformation = std::dynamic_pointer_cast<sc::MergeColumnTransformation>(itr);
+                std::set<SCCOL> aColumns = aMergeTransformation->getColumns();
+
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_MERGE_STRING, aMergeTransformation->getMergeString());
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_MERGE_TRANSFORMATION, true, true);
+
+                for(auto& col : aColumns)
+                {
+                    // Columns
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(col));
+                    SvXMLElementExport aCol(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN, true, true);
+                }
+            }
+            break;
+            case sc::TransformationType::SORT_TRANSFORMATION:
+            {
+                // Sort Transformation
+                std::shared_ptr<sc::SortTransformation> aSortTransformation = std::dynamic_pointer_cast<sc::SortTransformation>(itr);
+                ScSortParam aSortParam = aSortTransformation->getSortParam();
+                const sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+                const sc::DataStream* pStrm = rMgr.getDataStream();
+                if (!pStrm)
+                    // No data stream.
+                    return;
+
+                // Streamed range
+                ScRange aRange = pStrm->GetRange();
+
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_SORT_TRANSFORMATION, true, true);
+
+                writeSort(*this, aSortParam, aRange, pDoc);
+            }
+            break;
+            default:
+            break;
         }
     }
 }
