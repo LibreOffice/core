@@ -100,6 +100,7 @@ namespace vcl
         bool isCollate();
         bool hasPreview();
 
+        void setPaperSizes();
         void previewForward();
         void previewBackward();
 
@@ -161,6 +162,7 @@ namespace vcl
         VclPtr<FixedText>                       mpSheetMarginTxt1;
         VclPtr<MetricField>                     mpSheetMarginEdt;
         VclPtr<FixedText>                       mpSheetMarginTxt2;
+        VclPtr<ListBox>                         mpPaperSizeBox;
         VclPtr<ListBox>                         mpNupOrientationBox;
 
         // page order ("left to right, then down")
@@ -183,6 +185,8 @@ namespace vcl
         Size                                    maFirstPageSize;
 
         bool                                    mbShowLayoutFrame;
+
+        Paper                                   mePaper;
 
         DECL_LINK( ClickHdl, Button*, void );
         DECL_LINK( SelectHdl, ListBox&, void );
