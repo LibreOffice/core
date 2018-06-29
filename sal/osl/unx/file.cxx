@@ -24,6 +24,7 @@
 #include <osl/file.hxx>
 #include <osl/detail/file.h>
 #include <rtl/alloc.h>
+#include <rtl/byteseq.hxx>
 #include <rtl/string.hxx>
 
 #include "system.hxx"

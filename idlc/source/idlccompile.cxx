@@ -18,6 +18,7 @@
  */
 
 #include <idlc.hxx>
+#include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/process.h>
