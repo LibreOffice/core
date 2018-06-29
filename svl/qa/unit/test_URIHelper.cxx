@@ -397,9 +397,9 @@ void Test::testFindFirstURLInText() {
             buf.append("\" -> ");
             buf.append(tests[i].result == nullptr ? "none" : tests[i].result);
             buf.append(" (");
-            buf.append(static_cast< sal_Int32 >(tests[i].begin));
+            buf.append(tests[i].begin);
             buf.append(", ");
-            buf.append(static_cast< sal_Int32 >(tests[i].end));
+            buf.append(tests[i].end);
             buf.append(')');
             buf.append(" != ");
             buf.append(OUStringToOString(result, RTL_TEXTENCODING_UTF8));
