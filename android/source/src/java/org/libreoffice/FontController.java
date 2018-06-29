@@ -20,17 +20,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 public class FontController implements AdapterView.OnItemSelectedListener {
 
     private boolean mFontNameSpinnerSet = false;
     private boolean mFontSizeSpinnerSet = false;
-    private LibreOfficeMainActivity mActivity;
-    private List<String> mFontList = null;
-    private List<String> mFontSizes = new ArrayList<String>();
-    private Map<String, List<String>> mAllFontSizes = null;
+    private final LibreOfficeMainActivity mActivity;
+    private final ArrayList<String> mFontList = new ArrayList<String>();
+    private final ArrayList<String> mFontSizes = new ArrayList<String>();
+    private final HashMap<String, ArrayList<String>> mAllFontSizes = new HashMap<String, ArrayList<String>>();
 
     private String mCurrentFontSelected = null;
     private String mCurrentFontSizeSelected = null;
@@ -44,7 +42,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     private ColorPickerAdapter colorPickerAdapter;
     private ColorPickerAdapter backColorPickerAdapter;
 
-    ColorPaletteListener colorPaletteListener = new ColorPaletteListener() {
+    final ColorPaletteListener colorPaletteListener = new ColorPaletteListener() {
         @Override
         public void applyColor(int color) {
             sendFontColorChange(color);
@@ -58,7 +56,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         }
     };
 
-    ColorPaletteListener backColorPaletteListener = new ColorPaletteListener() {
+    final ColorPaletteListener backColorPaletteListener = new ColorPaletteListener() {
         @Override
         public void applyColor(int color) {
             sendFontBackColorChange(color);
@@ -177,7 +175,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        if (mFontList == null || !mFontNameSpinnerSet)
+        if (mFontList.isEmpty() || !mFontNameSpinnerSet)
             return;
         if (parent == mActivity.findViewById(R.id.font_name_spinner)) {
             String currentFontSelected = parent.getItemAtPosition(pos).toString();
@@ -200,13 +198,13 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     }
 
     public void parseJson(String json) {
-        mFontList = new ArrayList<String>();
-        mAllFontSizes = new HashMap<String, List<String>>();
+        mFontList.clear();
+        mAllFontSizes.clear();
         try {
             JSONObject jObject = new JSONObject(json);
             JSONObject jObject2 = jObject.getJSONObject("commandValues");
             Iterator<String> keys = jObject2.keys();
-            List<String> fontSizes;
+            ArrayList<String> fontSizes;
             while (keys.hasNext()) {
                 String key = keys.next();
                 mFontList.add(key);
@@ -375,7 +373,6 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
     private void selectFontCurrentThread(String fontName) {
         Spinner spinner = mActivity.findViewById(R.id.font_name_spinner);
-
         if (!mFontNameSpinnerSet) {
             spinner.setOnItemSelectedListener(this);
             mFontNameSpinnerSet = true;
@@ -384,24 +381,22 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         if (fontName.equals(mCurrentFontSelected))
             return;
 
-        ArrayAdapter<String> arrayAdapter = (ArrayAdapter<String>) spinner.getAdapter();
-        int position = arrayAdapter.getPosition(fontName);
+        int position = mFontList.indexOf(fontName);
         if (position != -1) {
             mCurrentFontSelected = fontName;
-            spinner.setSelection(position);
+            spinner.setSelection(position,false);
         }
 
         resetFontSizes(fontName);
     }
 
     private void resetFontSizes(String fontName) {
-        Spinner spinner = mActivity.findViewById(R.id.font_size_spinner);
-        ArrayAdapter<String> arrayAdapter = (ArrayAdapter<String>) spinner.getAdapter();
-
-        List<String> fontSizes = mAllFontSizes.get(fontName);
-        if (fontSizes != null) {
-            arrayAdapter.clear();
-            arrayAdapter.addAll(mAllFontSizes.get(fontName));
+        if (mAllFontSizes.get(fontName) != null) {
+            mFontSizes.clear();
+            mFontSizes.addAll(mAllFontSizes.get(fontName));
+            Spinner spinner = mActivity.findViewById(R.id.font_size_spinner);
+            ArrayAdapter<?> arrayAdapter = (ArrayAdapter<?>)spinner.getAdapter();
+            arrayAdapter.notifyDataSetChanged();
         }
     }
 
@@ -423,13 +418,10 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         if (fontSize.equals(mCurrentFontSizeSelected))
             return;
 
-        ArrayAdapter<String> arrayAdapter = (ArrayAdapter<String>) spinner.getAdapter();
-
-        int position = arrayAdapter.getPosition(fontSize);
+        int position = mFontSizes.indexOf(fontSize);
         if (position != -1) {
             mCurrentFontSizeSelected = fontSize;
             spinner.setSelection(position, false);
         }
-
     }
 }

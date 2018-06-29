@@ -467,7 +467,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
             if (mState == OverlayState.SELECTION) {
                 changeStateTo(OverlayState.TRANSITION);
             }
-            mDocumentOverlay.changeSelections(Collections.EMPTY_LIST);
+            mDocumentOverlay.changeSelections(Collections.<RectF>emptyList());
             if (mContext.isSpreadsheet()) {
                 mDocumentOverlay.showHeaderSelection(null);
             }
