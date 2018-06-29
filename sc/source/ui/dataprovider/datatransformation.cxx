@@ -43,6 +43,16 @@ void ColumnRemoveTransformation::Transform(ScDocument& rDoc) const
     }
 }
 
+TransformationType ColumnRemoveTransformation::getTransformationType() const
+{
+    return TransformationType::DELETE_TRANSFORMATION;
+}
+
+std::set<SCCOL> ColumnRemoveTransformation::getColumns() const
+{
+    return maColumns;
+}
+
 SplitColumnTransformation::SplitColumnTransformation(SCCOL nCol, sal_Unicode cSeparator):
     mnCol(nCol),
     mcSeparator(cSeparator)
@@ -69,6 +79,21 @@ void SplitColumnTransformation::Transform(ScDocument& rDoc) const
             }
         }
     }
+}
+
+TransformationType SplitColumnTransformation::getTransformationType() const
+{
+    return TransformationType::SPLIT_TRANSFORMATION;
+}
+
+SCCOL SplitColumnTransformation::getColumn() const
+{
+    return mnCol;
+}
+
+sal_Unicode SplitColumnTransformation::getSeparator() const
+{
+    return mcSeparator;
 }
 
 MergeColumnTransformation::MergeColumnTransformation(const std::set<SCCOL>& rColumns, const OUString& rMergeString):
@@ -113,6 +138,21 @@ void MergeColumnTransformation::Transform(ScDocument& rDoc) const
     }
 }
 
+TransformationType MergeColumnTransformation::getTransformationType() const
+{
+    return TransformationType::MERGE_TRANSFORMATION;
+}
+
+OUString MergeColumnTransformation::getMergeString() const
+{
+    return maMergeString;
+}
+
+std::set<SCCOL> MergeColumnTransformation::getColumns() const
+{
+    return maColumns;
+}
+
 SortTransformation::SortTransformation(const ScSortParam& rSortParam):
     maSortParam(rSortParam)
 {
@@ -121,6 +161,16 @@ SortTransformation::SortTransformation(const ScSortParam& rSortParam):
 void SortTransformation::Transform(ScDocument& rDoc) const
 {
     rDoc.Sort(0, maSortParam, false, false, nullptr, nullptr);
+}
+
+TransformationType SortTransformation::getTransformationType() const
+{
+    return TransformationType::SORT_TRANSFORMATION;
+}
+
+ScSortParam SortTransformation::getSortParam() const
+{
+    return maSortParam;
 }
 
 }
