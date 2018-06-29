@@ -2510,6 +2510,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Vertical Ruler</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Hyphenate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2523,6 +2526,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Vertical Scroll Bar</value>
         </prop>
+      <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+      </prop>
       </node>
       <node oor:name=".uno:AddAllUnknownWords" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2532,6 +2538,9 @@
       <node oor:name=".uno:HScroll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Horizontal Scroll Bar</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ChapterNumberingDialog" oor:op="replace">
