@@ -4628,7 +4628,6 @@ void WW8AttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
 {
     // sprmPDyaLine
     m_rWW8Export.InsUInt16( NS_sprm::sprmPDyaLine );
-
     m_rWW8Export.InsUInt16( nSpace );
     m_rWW8Export.InsUInt16( nMulti );
 }
@@ -4674,11 +4673,14 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                         *pSet, *Application::GetDefaultDevice(), nScript ) );
                 }
             }
+            else if ( rSpacing.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Off )
+            {
+                nMulti = 1;
+            }
             else // Proportional
             {
                 nSpace = static_cast<short>( ( 240L * rSpacing.GetPropLineSpace() ) / 100L );
                 nMulti = 1;
-                break;
             }
         }
         break;
