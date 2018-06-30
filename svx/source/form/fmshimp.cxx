@@ -408,9 +408,8 @@ namespace
                 for (j=0; j<pCurrentArray->getLength(); ++j, ++pCurrentListeners)
                 {
                     OUString aListener = (*pCurrentListeners).getTypeName();
-                    sal_Int32 nTokens = comphelper::string::getTokenCount(aListener, '.');
-                    if (nTokens)
-                        aListener = aListener.getToken(nTokens - 1, '.');
+                    if (!aListener.isEmpty())
+                        aListener = aListener.copy(aListener.lastIndexOf('.')+1);
 
                     if (aListener == pCurrent->ListenerType)
                         // the current ScriptEventDescriptor doesn't match the current listeners class
