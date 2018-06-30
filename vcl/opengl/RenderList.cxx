@@ -284,9 +284,6 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
 
     checkOverlapping(rPolyPolygon.getB2DRange());
 
-    RenderParameters& rLineRenderParameter = maRenderEntries.back().maLineParameters;
-    RenderParameters& rTriangleRenderParameter = maRenderEntries.back().maTriangleParameters;
-
     if (nFillColor != SALCOLOR_NONE)
     {
         basegfx::B2DTrapezoidVector aTrapezoidVector;
@@ -294,6 +291,8 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
 
         if (!aTrapezoidVector.empty())
         {
+            RenderParameters& rTriangleRenderParameter = maRenderEntries.back().maTriangleParameters;
+
             for (basegfx::B2DTrapezoid & rTrapezoid : aTrapezoidVector)
             {
                 GLfloat topX1 = rTrapezoid.getTopXLeft();
@@ -314,6 +313,7 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
 
     if (nLineColor != SALCOLOR_NONE || bUseAA)
     {
+        RenderParameters& rLineRenderParameter = maRenderEntries.back().maLineParameters;
         Color nColor = (nLineColor == SALCOLOR_NONE) ? nFillColor : nLineColor;
 
         vcl::LineBuilder aBuilder(rLineRenderParameter.maVertices, rLineRenderParameter.maIndices,
