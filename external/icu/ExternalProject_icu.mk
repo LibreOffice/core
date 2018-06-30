@@ -54,8 +54,7 @@ icu_LDFLAGS:=" \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter TRUE,$(HAVE_LD_HASH_STYLE)),-Wl$(COMMA)--hash-style=$(WITH_LINKER_HASH_STYLE)) \
     $(if $(SYSBASE),-L../lib -L../../lib -L../stubdata -L../../stubdata -L$(SYSBASE)/usr/lib) \
-    $(if $(filter TRUE,$(HAVE_LD_BSYMBOLIC_FUNCTIONS)),\
-	    -Wl$(COMMA)-Bsymbolic-functions -Wl$(COMMA)--dynamic-list-cpp-new -Wl$(COMMA)--dynamic-list-cpp-typeinfo) \
+    $(if $(filter TRUE,$(HAVE_LD_BSYMBOLIC_FUNCTIONS)), -Wl$(COMMA)-Bsymbolic-functions) \
     $(if $(filter ANDROID,$(OS)),$(gb_STDLIBS))"
 
 # DATASUBDIR=data in cross-compiling case, because --disable-tools completely skips the

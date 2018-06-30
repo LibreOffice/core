@@ -81,11 +81,7 @@ gb_LinkTarget_LDFLAGS += \
 endif
 
 ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
-gb_LinkTarget_LDFLAGS += \
-	-Wl,--dynamic-list-cpp-new \
-	-Wl,--dynamic-list-cpp-typeinfo \
-	-Wl,-Bsymbolic-functions \
-
+gb_LinkTarget_LDFLAGS += -Wl,-Bsymbolic-functions
 endif
 
 # sun ld doesn't understand -O1 optimize flag
