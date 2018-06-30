@@ -717,10 +717,12 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "pctHoriz" || rProperty.first == "pctVert")
         {
             sal_Int16 nPercentage = rtl::math::round(rProperty.second.toDouble() / 10);
-            boost::optional<sal_Int16>& rPercentage
-                = rProperty.first == "pctHoriz" ? oRelativeWidth : oRelativeHeight;
             if (nPercentage)
+            {
+                boost::optional<sal_Int16>& rPercentage
+                    = rProperty.first == "pctHoriz" ? oRelativeWidth : oRelativeHeight;
                 rPercentage = nPercentage;
+            }
         }
         else if (rProperty.first == "sizerelh")
         {
