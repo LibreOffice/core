@@ -287,12 +287,11 @@ void ImageMap::ImpReadCERNLine( const OString& rLine  )
     {
         const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr, '(') - 1;
         tools::Polygon aPoly( nCount );
-        OUString aURL;
 
         for ( sal_uInt16 i = 0; i < nCount; i++ )
             aPoly[ i ] = ImpReadCERNCoords( &pStr );
 
-        aURL = ImpReadCERNURL( &pStr );
+        const OUString aURL = ImpReadCERNURL( &pStr );
 
         maList.emplace_back( new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
@@ -425,8 +424,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine )
     }
     else if ( aToken == "poly" )
     {
-        const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr,
-            ',') - 1;
+        const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr, ',') - 1;
         const OUString aURL( ImpReadNCSAURL( &pStr ) );
         tools::Polygon aPoly( nCount );
 
