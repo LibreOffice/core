@@ -905,9 +905,9 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                     sal_Int32 nIndex = 0;
                     css::drawing::EnhancedCustomShapeParameterPair aParameterPair;
                     css::drawing::EnhancedCustomShapeParameter& rDepth = aParameterPair.First;
-                    css::drawing::EnhancedCustomShapeParameter& rFraction = aParameterPair.Second;
                     if ( GetNextParameter( rDepth, nIndex, rValue ) )
                     {
+                        css::drawing::EnhancedCustomShapeParameter& rFraction = aParameterPair.Second;
                         // try to catch the unit for the depth
                         sal_Int16 const eSrcUnit(
                             ::sax::Converter::GetUnitFromString(
