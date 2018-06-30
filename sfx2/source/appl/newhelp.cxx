@@ -954,24 +954,19 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 void SearchTabPage_Impl::dispose()
 {
     SvtViewOptions aViewOpt( EViewType::TabPage, CONFIGNAME_SEARCHPAGE );
-    sal_Int32 nChecked = m_pFullWordsCB->IsChecked() ? 1 : 0;
-    OUString aUserData = OUString::number( nChecked );
-    aUserData += ";";
-    nChecked = m_pScopeCB->IsChecked() ? 1 : 0;
-    aUserData += OUString::number( nChecked );
-    aUserData += ";";
+    OUString aUserData =
+        OUString::number( m_pFullWordsCB->IsChecked() ? 1 : 0 ) + ";" +
+        OUString::number( m_pScopeCB->IsChecked() ? 1 : 0 );
     sal_Int32 nCount = std::min( m_pSearchED->GetEntryCount(), sal_Int32(10) );  // save only 10 entries
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        OUString aText = m_pSearchED->GetEntry(i);
-        aUserData += INetURLObject::encode(
-            aText, INetURLObject::PART_UNO_PARAM_VALUE,
+        aUserData += ";" + INetURLObject::encode(
+            m_pSearchED->GetEntry(i),
+            INetURLObject::PART_UNO_PARAM_VALUE,
             INetURLObject::EncodeMechanism::All );
-        aUserData += ";";
     }
 
-    aUserData = comphelper::string::stripEnd(aUserData, ';');
     Any aUserItem = makeAny( aUserData );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 
