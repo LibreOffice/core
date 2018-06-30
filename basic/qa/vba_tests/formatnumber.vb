@@ -1,7 +1,6 @@
-Rem Attribute VBA_ModuleType=VBAModule
 Option VBASupport 1
-Rem Option VBASupport 1    'unREM in .vb file
 Option Explicit
+
 Dim passCount As Integer
 Dim failCount As Integer
 Dim result As String
@@ -14,8 +13,6 @@ Else
     doUnitTest = "OK"
 End If
 End Function
-
-
 
 Function verify_testFormatNumber() As String
 
