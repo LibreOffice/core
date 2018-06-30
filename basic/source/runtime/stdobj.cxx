@@ -278,7 +278,7 @@ static Methods aMethods[] = {
 { "FormatDateTime", SbxSTRING,    2 | FUNCTION_ | COMPATONLY_, RTLNAME(FormatDateTime),0 },
   { "Date",         SbxDATE, 0,nullptr,0 },
   { "NamedFormat",  SbxINTEGER,        OPT_, nullptr,0 },
-{ "FormatNumber",   SbxSTRING, 5 | FUNCTION_, RTLNAME(FormatNumber), 0 },
+{ "FormatNumber",   SbxSTRING, 5 | FUNCTION_ | COMPATONLY_, RTLNAME(FormatNumber), 0 },
   { "expression",                  SbxDOUBLE,  0,    nullptr, 0 },
   { "numDigitsAfterDecimal",       SbxINTEGER, OPT_, nullptr, 0 },
   { "includeLeadingDigit",         SbxINTEGER, OPT_, nullptr, 0 }, // vbTriState
