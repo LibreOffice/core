@@ -9,11 +9,7 @@
 
 import os
 import sys
-
-def usage():
-    message = "usage: {program} inputfile outputfile"
-
-    print(message.format(program = os.path.basename(sys.argv[0])))
+import argparse
 
 def parse_line(line):
     """
@@ -37,19 +33,16 @@ def parse_line(line):
         dict[key] = val
     return dict
 
-def parse_args(argv):
+def parse_args():
     """
     This function parses the command-line arguments
     to get the input and output file details
     """
-    if len(argv) != 3:
-        usage()
-        sys.exit(1)
-    else:
-        input_address = argv[1]
-        output_address = argv[2]
-
-    return input_address, output_address
+    parser = argparse.ArgumentParser(description = "Generate a UI test file from log")
+    parser.add_argument("input_address", type = str, help = "The log file address")
+    parser.add_argument("output_address", type = str, help = "The test file address")
+    args = parser.parse_args()
+    return args
 
 def get_log_file(input_address):
     try:
@@ -57,7 +50,7 @@ def get_log_file(input_address):
             content = f.readlines()
     except IOError as err:
         print("IO error: {0}".format(err))
-        usage()
+        print("Use " + os.path.basename(sys.argv[0]) + " -h to get usage instructions")
         sys.exit(1)
 
     content = [x.strip() for x in content]
@@ -68,7 +61,7 @@ def initiate_test_generation(address):
         f = open(address,"w")
     except IOError as err:
         print("IO error: {0}".format(err))
-        usage()
+        print("Use " + os.path.basename(sys.argv[0]) + " -h to get usage instructions")
         sys.exit(1)
     initial_text = \
     "from uitest.framework import UITestCase\n" + \
@@ -152,9 +145,9 @@ def get_test_line_from_two_log_lines(log_line1,log_line2):
     return test_line
 
 def main():
-    input_address, output_address = parse_args(sys.argv)
-    log_lines = get_log_file(input_address)
-    output_stream = initiate_test_generation(output_address)
+    args = parse_args()
+    log_lines = get_log_file(args.input_address)
+    output_stream = initiate_test_generation(args.output_address)
     line_number = 0
     while line_number < len(log_lines):
         if line_number == len(log_lines)-1 or \
