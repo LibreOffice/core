@@ -18,7 +18,6 @@
  */
 
 
-#include <comphelper/string.hxx>
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
@@ -1186,7 +1185,7 @@ OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObje
         if( aTitle.isEmpty() )
         {
             aTitle = aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
-            aTitle = aTitle.getToken( comphelper::string::getTokenCount(aTitle, '/') - 1, '/' );
+            aTitle = aTitle.copy( aTitle.lastIndexOf('/')+1 );
         }
 
         aRet += aTitle;
