@@ -206,6 +206,8 @@ bool SfxNotebookBar::IsActive()
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
         eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
     }
+    else
+        return false;
 
     OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
     aPath.append( lcl_getAppName( eApp ) );
