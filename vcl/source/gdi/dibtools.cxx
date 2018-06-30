@@ -801,7 +801,6 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     sal_uInt16 nColors(0);
     SvStream* pIStm;
     std::unique_ptr<SvMemoryStream> pMemStm;
-    std::vector<sal_uInt8> aData;
 
     if (aHeader.nBitCount <= 8)
     {
@@ -819,6 +818,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     {
         sal_uInt32 nCodedSize(0);
         sal_uInt32  nUncodedSize(0);
+        std::vector<sal_uInt8> aData;
 
         // read coding information
         rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
