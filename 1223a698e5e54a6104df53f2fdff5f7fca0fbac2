@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1ff146_5303aeb8",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-30T06:04:32Z",
+      "side": 1,
+      "message": "if we\u0027re going to do a feature test, why bother with checking for GCC?\nI use CLANG with GOLD some time now and they work fine",
+      "revId": "1223a698e5e54a6104df53f2fdff5f7fca0fbac2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
