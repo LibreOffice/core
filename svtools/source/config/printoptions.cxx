@@ -30,7 +30,6 @@
 
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 
 #include "itemholder2.hxx"
 
@@ -129,10 +128,7 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
 
         if (m_xCfg.is())
         {
-            using comphelper::string::getTokenCount;
-            sal_Int32 nTokenCount = getTokenCount(rConfigRoot, '/');
-            OUString sTok = rConfigRoot.getToken(nTokenCount - 1, '/');
-            m_xCfg->getByName(sTok) >>= m_xNode;
+            m_xCfg->getByName(rConfigRoot.copy(rConfigRoot.lastIndexOf('/')+1)) >>= m_xNode;
         }
     }
     catch (const css::uno::Exception&)
