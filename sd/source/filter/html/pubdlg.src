@@ -29,28 +29,24 @@ ModalDialog DLG_PUBLISHING
     HelpID = "sd:ModalDialog:DLG_PUBLISHING";
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 272 , 190 ) ;
+    Size = MAP_APPFONT ( 272, 190 ) ;
     Text [ en-US ] = "HTML Export" ;
     Moveable = TRUE ;
 
-    /////////////////////////////
-    // Page 1, choose a design //
-    /////////////////////////////
-
+    // Page 1: Choose a design
     FixedBitmap PAGE1_BMP
     {
         OutputSize = TRUE ;
         Scale = TRUE;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
-        Fixed = Bitmap { File = "pubdlg1.bmp" ; };
+        Pos = MAP_APPFONT ( 6, 5 ) ;
+        Size = MAP_APPFONT ( 260, 29 ) ;
+        Fixed = Bitmap { File = "pubdlg1.png" ; };
     };
 
     FixedLine PAGE1_TITEL
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 38 ) ;
+        Size = MAP_APPFONT ( 258, 8 ) ;
         Text [ en-US ] = "Assign design";
     };
 
@@ -74,8 +70,8 @@ ModalDialog DLG_PUBLISHING
     {
         HelpID = "sd:ListBox:DLG_PUBLISHING:PAGE1_DESIGNS";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 21 , 75 ) ;
-        Size = MAP_APPFONT ( 144 , 63 ) ;
+        Pos = MAP_APPFONT ( 21, 75 ) ;
+        Size = MAP_APPFONT ( 144, 63 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
     };
@@ -83,8 +79,8 @@ ModalDialog DLG_PUBLISHING
     PushButton PAGE1_DEL_DESIGN
     {
         HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE1_DEL_DESIGN";
-        Pos = MAP_APPFONT ( 168 , 75 ) ;
-        Size = MAP_APPFONT ( 92 , 14 ) ;
+        Pos = MAP_APPFONT ( 168, 75 ) ;
+        Size = MAP_APPFONT ( 92, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text [ en-US ] = "Delete Selected Design";
@@ -92,24 +88,20 @@ ModalDialog DLG_PUBLISHING
 
     FixedText PAGE1_DESC
     {
-        Pos = MAP_APPFONT ( 12 , 142 ) ;
-        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 142 ) ;
+        Size = MAP_APPFONT ( 258, 8 ) ;
         Text [ en-US ] = "Select an existing design or create a new one";
     };
 
 
-    ////////////////////////////////
-    // Page 2, type of publishing //
-    ////////////////////////////////
-
+    // Page 2: Type of publishing
     FixedBitmap PAGE2_BMP
     {
         OutputSize = TRUE ;
         Scale = TRUE;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
-        Fixed = Bitmap { File = "pubdlg1.bmp" ; };
+        Pos = MAP_APPFONT ( 6, 5 ) ;
+        Size = MAP_APPFONT ( 260, 29 ) ;
+        Fixed = Bitmap { File = "pubdlg1.png" ; };
     };
 
     FixedLine PAGE2_TITEL
@@ -155,8 +147,8 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 102 );
         Scale = TRUE;
-        Size = MAP_APPFONT( 60, 50 );
-        Fixed = Bitmap { File = "pubdes.bmp"; };
+        Size = MAP_APPFONT( 60, 45 );
+        Fixed = Bitmap { File = "pubdes1.png"; };
         OutputSize = TRUE ;
         Border = TRUE;
     };
@@ -165,8 +157,8 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 102 );
         Scale = TRUE;
-        Size = MAP_APPFONT( 60, 50 );
-        Fixed = Bitmap { File = "pubdes2.bmp"; };
+        Size = MAP_APPFONT( 60, 45 );
+        Fixed = Bitmap { File = "pubdes2.png"; };
         OutputSize = TRUE ;
         Border = TRUE;
     };
@@ -175,8 +167,8 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 102 );
         Scale = TRUE;
-        Size = MAP_APPFONT( 60, 50 );
-        Fixed = Bitmap { File = "pubdes3.bmp"; };
+        Size = MAP_APPFONT( 60, 45 );
+        Fixed = Bitmap { File = "pubdes3.png"; };
         OutputSize = TRUE ;
         Border = TRUE;
     };
@@ -185,16 +177,13 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 102 );
         Scale = TRUE;
-        Size = MAP_APPFONT( 60, 50 );
-        Fixed = Bitmap { File = "pubdes4.bmp"; };
+        Size = MAP_APPFONT( 60, 45 );
+        Fixed = Bitmap { File = "pubdes4.png"; };
         OutputSize = TRUE ;
         Border = TRUE;
     };
 
-    //////////////////////////////
-    // Special options for html //
-    //////////////////////////////
-
+    // Special options for html
     FixedLine PAGE2_TITEL_HTML
     {
         Pos = MAP_APPFONT( 138, 38 );
@@ -212,7 +201,7 @@ ModalDialog DLG_PUBLISHING
 
     FixedLine PAGE2_VERT
     {
-        Pos = MAP_APPFONT ( 132 , 49  ) ;
+        Pos = MAP_APPFONT ( 132, 49 ) ;
         Size = MAP_APPFONT ( 4, 109 ) ;
         Vert = TRUE;
     };
@@ -225,10 +214,7 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Show notes";
     };
 
-    ///////////////////////////////
-    // Special options for kiosk //
-    ///////////////////////////////
-
+    // Special options for kiosk
     FixedLine PAGE2_TITEL_KIOSK
     {
         Pos = MAP_APPFONT( 138, 38 );
@@ -239,8 +225,8 @@ ModalDialog DLG_PUBLISHING
     RadioButton PAGE2_CHG_DEFAULT
     {
         HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_CHG_DEFAULT";
-        Pos = MAP_APPFONT ( 144 , 49 ) ;
-        Size = MAP_APPFONT ( 116 , 10 ) ;
+        Pos = MAP_APPFONT ( 144, 49 ) ;
+        Size = MAP_APPFONT ( 116, 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~As stated in document" ;
     };
@@ -248,8 +234,8 @@ ModalDialog DLG_PUBLISHING
     RadioButton PAGE2_CHG_AUTO
     {
         HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_CHG_AUTO";
-        Pos = MAP_APPFONT ( 144 , 63 ) ;
-        Size = MAP_APPFONT ( 116 , 10 ) ;
+        Pos = MAP_APPFONT ( 144, 63 ) ;
+        Size = MAP_APPFONT ( 116, 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Automatic" ;
     };
@@ -273,17 +259,17 @@ ModalDialog DLG_PUBLISHING
         Duration = TRUE ;
         StrictFormat = TRUE ;
         Maximum = Time
-        {
-            Hour = 23 ;
-            Minute = 59 ;
-            Second = 59 ;
-        };
+    {
+        Hour = 23 ;
+        Minute = 59 ;
+        Second = 59 ;
+    };
         Last = Time
-        {
-            Hour = 23 ;
-            Minute = 59 ;
-            Second = 59 ;
-        };
+    {
+        Hour = 23 ;
+        Minute = 59 ;
+        Second = 59 ;
+    };
         QuickHelpText [ en-US ] = "~Duration of page";
     };
 
@@ -295,10 +281,7 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "~Endless" ;
     };
 
-    /////////////////////////////////
-    // Special options for WebCast //
-    /////////////////////////////////
-
+    // Special options for WebCast
     FixedLine PAGE2_TITEL_WEBCAST
     {
         Pos = MAP_APPFONT( 138, 38 );
@@ -334,13 +317,13 @@ ModalDialog DLG_PUBLISHING
         HelpID = "sd:Edit:DLG_PUBLISHING:PAGE2_INDEX";
         BORDER = TRUE;
         Pos = MAP_APPFONT( 154, 88 );
-        Size  = MAP_APPFONT( 105, 12 );
+        Size = MAP_APPFONT( 105, 12 );
         Left = TRUE;
     };
 
     FixedText PAGE2_URL_TXT
     {
-        Pos  = MAP_APPFONT( 154, 104 );
+        Pos = MAP_APPFONT( 154, 104 );
         Size = MAP_APPFONT( 105, 10 );
         Text [ en-US ] = "URL for ~presentation:";
     };
@@ -356,7 +339,7 @@ ModalDialog DLG_PUBLISHING
 
     FixedText PAGE2_CGI_TXT
     {
-        Pos  = MAP_APPFONT( 154, 132 );
+        Pos = MAP_APPFONT( 154, 132 );
         Size = MAP_APPFONT( 105, 10 );
         Text [ en-US ] = "URL for ~Perl scripts:";
     };
@@ -371,24 +354,17 @@ ModalDialog DLG_PUBLISHING
     };
 
 
-    /////////////////////////////////////////////////////////
-    // Page 3, Misc Options, Picture Format and Resolution //
-    /////////////////////////////////////////////////////////
-
+    // Page 3: Misc Options, Picture format and resolution
     FixedBitmap PAGE3_BMP
     {
         OutputSize = TRUE ;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Pos = MAP_APPFONT ( 6, 5 ) ;
+        Size = MAP_APPFONT ( 260, 29 ) ;
         Scale = TRUE;
-        Fixed = Bitmap { File = "pubdlg2.bmp" ; };
+        Fixed = Bitmap { File = "pubdlg2.png" ; };
     };
 
-    ////////////////////
-    // Picture Format //
-    ////////////////////
-
+    // Picture Format
     FixedLine PAGE3_TITEL_1
     {
         Pos = MAP_APPFONT ( 6, 38 ) ;
@@ -438,15 +414,12 @@ ModalDialog DLG_PUBLISHING
 
     FixedLine PAGE3_VERT
     {
-        Pos = MAP_APPFONT ( 132 , 49  ) ;
+        Pos = MAP_APPFONT ( 132, 49 ) ;
         Size = MAP_APPFONT ( 4, 65 ) ;
         Vert = TRUE;
     };
 
-    ////////////////
-    // Resolution //
-    ////////////////
-
+    // Resolution
     FixedLine PAGE3_TITEL_2
     {
         Pos = MAP_APPFONT( 138, 38 );
@@ -474,14 +447,11 @@ ModalDialog DLG_PUBLISHING
     {
         HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_RESOLUTION_3";
         Pos = MAP_APPFONT ( 144, 77 ) ;
-        Size = MAP_APPFONT ( 116 , 10 ) ;
+        Size = MAP_APPFONT ( 116, 10 ) ;
         Text [ en-US ] = "High resolution (~1024x768 pixels)";
     };
 
-    ////////////////
-    // Resolution //
-    ////////////////
-
+    // Effects
     FixedLine PAGE3_TITEL_3
     {
         Pos = MAP_APPFONT( 6, 114 );
@@ -505,23 +475,19 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Export ~hidden slides" ;
     };
 
-    ////////////////////////////////////////
-    // Page 4, information for titel page //
-    ////////////////////////////////////////
-
+    // Page 4: Information for titel page
     FixedBitmap PAGE4_BMP
     {
         OutputSize = TRUE ;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
-        Fixed = Bitmap { File = "pubdlg3.bmp" ; };
+        Pos = MAP_APPFONT ( 6, 5 ) ;
+        Size = MAP_APPFONT ( 260, 29 ) ;
+        Fixed = Bitmap { File = "pubdlg3.png" ; };
     };
 
     FixedLine PAGE4_TITEL_1
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 38 ) ;
+        Size = MAP_APPFONT ( 258, 8 ) ;
         Text [ en-US ] = "Information for the title page";
     };
 
@@ -552,8 +518,8 @@ ModalDialog DLG_PUBLISHING
     {
         HelpID = "sd:Edit:DLG_PUBLISHING:PAGE4_EMAIL_EDIT";
         BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 136 , 65 ) ;
-        Size = MAP_APPFONT ( 128 , 12 ) ;
+        Pos = MAP_APPFONT ( 136, 65 ) ;
+        Size = MAP_APPFONT ( 128, 12 ) ;
         LEFT = TRUE ;
     };
 
@@ -575,8 +541,8 @@ ModalDialog DLG_PUBLISHING
 
     FixedText PAGE4_TITEL_2
     {
-        Pos = MAP_APPFONT ( 12 , 99 ) ;
-        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 99 ) ;
+        Size = MAP_APPFONT ( 121, 8 ) ;
         Text [ en-US ] = "Additional ~information";
     };
 
@@ -585,7 +551,7 @@ ModalDialog DLG_PUBLISHING
         HelpID = "sd:MultiLineEdit:DLG_PUBLISHING:PAGE4_MISC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 136, 97 ) ;
-        Size = MAP_APPFONT ( 128 , 45 ) ;
+        Size = MAP_APPFONT ( 128, 45 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
         IgnoreTab = TRUE ;
@@ -594,8 +560,8 @@ ModalDialog DLG_PUBLISHING
     CheckBox PAGE4_DOWNLOAD
     {
         HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE4_DOWNLOAD";
-        Pos = MAP_APPFONT ( 12 , 149 ) ;
-        Size = MAP_APPFONT ( 252 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 149 ) ;
+        Size = MAP_APPFONT ( 252, 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Link to a copy of the ~original presentation";
     };
@@ -603,29 +569,25 @@ ModalDialog DLG_PUBLISHING
     CheckBox PAGE4_CREATED
     {
         HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE4_CREATED";
-        Pos = MAP_APPFONT ( 12 , 152 ) ;
-        Size = MAP_APPFONT ( 252 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 152 ) ;
+        Size = MAP_APPFONT ( 252, 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Note: 'Created with %PRODUCTNAME'";
     };
 
-    /////////////////////
-    // Page 5, Buttons //
-    /////////////////////
-
+    // Page 5: Buttons
     FixedBitmap PAGE5_BMP
     {
         OutputSize = TRUE ;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
-        Fixed = Bitmap { File = "pubdlg4.bmp" ; };
+        Pos = MAP_APPFONT ( 6, 5 ) ;
+        Size = MAP_APPFONT ( 260, 29 ) ;
+        Fixed = Bitmap { File = "pubdlg4.png" ; };
     };
 
     FixedLine PAGE5_TITEL
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 38 ) ;
+        Size = MAP_APPFONT ( 258, 8 ) ;
         Text [ en-US ] = "Select button style";
     };
 
@@ -645,23 +607,19 @@ ModalDialog DLG_PUBLISHING
         Size = MAP_APPFONT ( 243, 95 ) ;
     };
 
-    /////////////////////////
-    // Page 6, colorscheme //
-    /////////////////////////
-
+    // Page 6: Colorscheme
     FixedBitmap PAGE6_BMP
     {
         OutputSize = TRUE ;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
-        Fixed = Bitmap { File = "pubdlg5.bmp" ; };
+        Pos = MAP_APPFONT ( 6, 5 ) ;
+        Size = MAP_APPFONT ( 260, 29 ) ;
+        Fixed = Bitmap { File = "pubdlg5.png" ; };
     };
 
     FixedLine PAGE6_TITEL
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 38 ) ;
+        Size = MAP_APPFONT ( 258, 8 ) ;
         Text [ en-US ] = "Select color scheme";
     };
 
@@ -736,11 +694,10 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Bac~kground";
     };
 
-    // generell
-
+    // General
     FixedLine BOTTOM_LINE
     {
-        Pos = MAP_APPFONT ( 1 , 162 ) ;
+        Pos = MAP_APPFONT ( 1, 162 ) ;
         Size = MAP_APPFONT ( 272, 4) ;
     };
 
@@ -748,10 +705,10 @@ ModalDialog DLG_PUBLISHING
     {
         HelpID = "sd:PushButton:DLG_PUBLISHING:BUT_LAST";
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 112 , 170 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 112, 170 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "<< Back" ;
+        Text [ en-US ] = "<< ~Back" ;
     };
 
     PushButton BUT_NEXT
@@ -759,17 +716,17 @@ ModalDialog DLG_PUBLISHING
         HelpID = "sd:PushButton:DLG_PUBLISHING:BUT_NEXT";
         DefButton = TRUE ;
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 165 , 170 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 165, 170 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Next >>" ;
+        Text [ en-US ] = "~Next >>" ;
     };
 
     OKButton BUT_FINISH
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 218 , 170 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 218, 170 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Create" ;
     };
@@ -777,15 +734,15 @@ ModalDialog DLG_PUBLISHING
     CancelButton BUT_CANCEL
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 170 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 59, 170 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BUT_HELP
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 170 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 6, 170 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
 };
@@ -795,7 +752,7 @@ ModalDialog DLG_DESIGNNAME
     HelpID = HID_SD_HTMLEXPORT_DLG_DNAME;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 160 , 40 ) ;
+    Size = MAP_APPFONT ( 160, 40 ) ;
     Moveable = TRUE ;
 
     Edit EDT_NAME
@@ -810,8 +767,8 @@ ModalDialog DLG_DESIGNNAME
     OKButton BTN_SAVE
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 25 , 22 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 25, 22 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         DefButton = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Save";
@@ -820,41 +777,10 @@ ModalDialog DLG_DESIGNNAME
     CancelButton BTN_NOSAVE
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 22 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 80, 22 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Do Not Save";
     };
-    Text [ en-US ] = "Name HTML Design";
+        Text [ en-US ] = "Name HTML Design";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
