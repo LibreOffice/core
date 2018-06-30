@@ -279,17 +279,6 @@ ScTypedCaseStrSet::const_iterator findTextAll(
     return rDataSet.end(); // no matching text found
 }
 
-void removeChars(OUString& rStr, sal_Unicode c)
-{
-    OUStringBuffer aBuf(rStr);
-    for (sal_Int32 i = 0, n = aBuf.getLength(); i < n; ++i)
-    {
-        if (aBuf[i] == c)
-            aBuf[i] = ' ';
-    }
-    rStr = aBuf.makeStringAndClear();
-}
-
 }
 
 void ScInputHandler::InitRangeFinder( const OUString& rFormula )
@@ -497,13 +486,13 @@ inline OUString GetEditText(const EditEngine* pEng)
 
 static void lcl_RemoveTabs(OUString& rStr)
 {
-    removeChars(rStr, '\t');
+    rStr = rStr.replace('\t', ' ');
 }
 
 static void lcl_RemoveLineEnd(OUString& rStr)
 {
     rStr = convertLineEnd(rStr, LINEEND_LF);
-    removeChars(rStr, '\n');
+    rStr = rStr.replace('\n', ' ');
 }
 
 static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
