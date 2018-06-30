@@ -2884,9 +2884,6 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 {
     OSL_ASSERT( mxExpPropMapper.is());
 
-    std::vector< XMLPropertyState > aPropertyStates;
-    std::vector< XMLPropertyState > aEquationPropertyStates;
-
     Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeries, uno::UNO_QUERY );
     if( xRegressionCurveContainer.is() )
     {
@@ -2898,6 +2895,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 
         for( pIt = pBeg; pIt != pEnd; pIt++ )
         {
+            std::vector< XMLPropertyState > aEquationPropertyStates;
             Reference< chart2::XRegressionCurve > xRegCurve = *pIt;
             if (!xRegCurve.is())
                 continue;
@@ -2917,7 +2915,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             OUString aService;
             aService = xServiceName->getServiceName();
 
-            aPropertyStates = mxExpPropMapper->Filter( xProperties );
+            std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xProperties );
 
             // Add service name (which is regression type)
             sal_Int32 nIndex = GetPropertySetMapper()->FindEntryIndex(XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE);
