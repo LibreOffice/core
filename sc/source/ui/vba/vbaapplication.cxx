@@ -1400,7 +1400,10 @@ void SAL_CALL ScVbaApplication::setScreenUpdating(sal_Bool bUpdate)
 
     if( bUpdate )
     {
-        rDoc.UnlockAdjustHeight();
+        // Since setting ScreenUpdating from user code might be unpaired, avoid calling function,
+        // that asserts correct lock/unlock order and number, when not locked.
+        if(rDoc.IsAdjustHeightLocked())
+            rDoc.UnlockAdjustHeight();
         if( !rDoc.IsAdjustHeightLocked() )
             pDocShell->UpdateAllRowHeights();
     }
