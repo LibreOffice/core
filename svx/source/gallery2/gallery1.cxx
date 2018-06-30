@@ -29,7 +29,6 @@
 #include <sal/config.h>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <tools/vcompat.hxx>
 #include <vcl/lstbox.hxx>
@@ -273,10 +272,9 @@ Gallery* Gallery::GetGalleryInstance()
 
 void Gallery::ImplLoad( const OUString& rMultiPath )
 {
-    const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rMultiPath, ';');
     bool            bIsReadOnlyDir;
 
-    bMultiPath = ( nTokenCount > 0 );
+    bMultiPath = !rMultiPath.isEmpty();
 
     INetURLObject aCurURL(SvtPathOptions().GetConfigPath());
     ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
@@ -287,9 +285,10 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
     if( bMultiPath )
     {
         bool bIsRelURL {true};
-        for( sal_Int32 i = 0; i < nTokenCount; ++i )
+        sal_Int32 nIdx {0};
+        do
         {
-            aCurURL = INetURLObject(rMultiPath.getToken(i, ';'));
+            aCurURL = INetURLObject(rMultiPath.getToken(0, ';', nIdx));
             if (bIsRelURL)
             {
                 aRelURL = aCurURL;
@@ -301,6 +300,7 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
             if( !bIsReadOnlyDir )
                 aUserURL = aCurURL;
         }
+        while (nIdx>0);
     }
     else
         aRelURL = INetURLObject( rMultiPath );
