@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1ff146_13f936c9",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 3874,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-06-30T06:02:32Z",
+      "side": 1,
+      "message": "if we\u0027re going to do a feature test, why bother with checking for GCC? quite possibly clang will support this feature at some point.",
+      "revId": "f0b0d9999bff60b65c09a82684f53762fbf3e15b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
