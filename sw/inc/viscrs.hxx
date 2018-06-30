@@ -75,10 +75,6 @@ class SwSelPaintRects : public SwRects
 
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
     std::unique_ptr<sdr::overlay::OverlayObject> m_pCursorOverlay;
-
-    // access to m_pCursorOverlay for swapContent
-    sdr::overlay::OverlayObject* getCursorOverlay() const { return m_pCursorOverlay.get(); }
-    void setCursorOverlay(std::unique_ptr<sdr::overlay::OverlayObject> pNew) { m_pCursorOverlay = std::move(pNew); }
 #endif
 
     bool m_bShowTextInputFieldOverlay;

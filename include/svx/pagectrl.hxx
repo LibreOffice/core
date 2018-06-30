@@ -121,8 +121,6 @@ public:
     void SetHdDist(long nNew) { nHdDist = nNew; }
     void SetHdHeight(long nNew) { nHdHeight = nNew; }
 
-    long GetHdLeft() const { return nHdLeft; }
-    long GetHdRight() const { return nHdRight; }
     long GetHdDist() const { return nHdDist; }
     long GetHdHeight() const { return nHdHeight; }
 
@@ -131,8 +129,6 @@ public:
     void SetFtDist(long nNew) { nFtDist = nNew; }
     void SetFtHeight(long nNew) { nFtHeight = nNew; }
 
-    long GetFtLeft() const { return nFtLeft; }
-    long GetFtRight() const { return nFtRight; }
     long GetFtDist() const { return nFtDist; }
     long GetFtHeight() const { return nFtHeight; }
 
@@ -141,14 +137,6 @@ public:
 
     void SetHeader( bool bNew ) { bHeader = bNew; }
     void SetFooter( bool bNew ) { bFooter = bNew; }
-    void SetTable( bool bNew ) { bTable = bNew; }
-    void SetHorz( bool bNew ) { bHorz = bNew; }
-    void SetVert( bool bNew ) { bVert = bNew; }
-
-    void EnableFrameDirection(bool bEnable);
-    void SetFrameDirection(SvxFrameDirection nDirection);
-
-    void ResetBackground();
 
     virtual Size GetOptimalSize() const override;
 };
@@ -216,10 +204,6 @@ public:
     void setPageFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
     {
         maPageFillAttributes = rFillAttributes;
-    }
-    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& getPageFillAttributes() const
-    {
-        return maPageFillAttributes;
     }
     void SetSize(const Size& rSize)
     {

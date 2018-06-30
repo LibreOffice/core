@@ -154,7 +154,6 @@ public:
     weld::Container* GetWidget() { return mxTopLevel.get(); }
     virtual ~ColorWindow() override;
     void                ShowNoneButton();
-    void                StartSelection();
     void                SetNoSelection();
     bool                IsNoSelection() const;
     void                SelectEntry(const NamedColor& rColor);
@@ -163,7 +162,6 @@ public:
 
     virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
-    void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
 };
 
 #endif

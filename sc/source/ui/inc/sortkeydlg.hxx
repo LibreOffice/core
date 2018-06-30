@@ -31,8 +31,6 @@ struct ScSortKeyItem
 
     void DisableField();
     void EnableField();
-
-    long getItemHeight() const;
 };
 
 typedef std::vector<std::unique_ptr<ScSortKeyItem> > ScSortKeyItems;

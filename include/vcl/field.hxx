@@ -493,11 +493,9 @@ public:
     void                    SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit );
     void             SetFirst(sal_Int64 first) { SetFirst(first, FUNIT_NONE); }
     sal_Int64               GetFirst( FieldUnit eOutUnit ) const;
-    sal_Int64        GetFirst() const { return GetFirst(FUNIT_NONE); }
     void                    SetLast( sal_Int64 nNewLast, FieldUnit eInUnit );
     void             SetLast(sal_Int64 last) { SetLast(last, FUNIT_NONE); }
     sal_Int64               GetLast( FieldUnit eOutUnit ) const;
-    sal_Int64        GetLast() const { return GetLast(FUNIT_NONE); }
 
     static void             SetDefaultUnit( FieldUnit eDefaultUnit );
     static FieldUnit        GetDefaultUnit();

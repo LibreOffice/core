@@ -21,11 +21,6 @@ ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
 {
 }
 
-long ScSortKeyItem::getItemHeight() const
-{
-    return m_xFrame->get_preferred_size().Height();
-}
-
 void ScSortKeyItem::DisableField()
 {
     m_xFrame->set_sensitive(false);

@@ -229,10 +229,8 @@ public:
     void            StartExecuteDrag();
     void            DragFinished();
 
-    const Color& GetWaterCanTextColor() { return m_aWaterCanTextColor; }
     void         SetWaterCanTextColor(const Color& rCol ) { m_aWaterCanTextColor = rCol; }
 
-    const Color& GetWaterCanTextBackColor() { return m_aWaterCanTextBackColor; }
     void         SetWaterCanTextBackColor(const Color& rCol ) { m_aWaterCanTextBackColor = rCol; }
 
     void            LockKeyInput(bool bSet){m_bLockInput = bSet;}

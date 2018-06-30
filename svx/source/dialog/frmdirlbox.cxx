@@ -54,13 +54,6 @@ void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameD
     SetEntryData( nRealPos, lclEnumToVoid( eDirection ) );
 }
 
-void FrameDirectionListBox::RemoveEntryValue( SvxFrameDirection eDirection )
-{
-    sal_Int32 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        RemoveEntry( nPos );
-}
-
 void FrameDirectionListBox::SelectEntryValue( SvxFrameDirection eDirection )
 {
     sal_Int32 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );

@@ -84,15 +84,6 @@ void SvxRelativeField::Modify()
 }
 
 
-void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax )
-{
-    bRelativeMode = true;
-    nRelMin       = nMin;
-    nRelMax       = nMax;
-    SetUnit( FUNIT_CM );
-}
-
-
 void SvxRelativeField::SetRelative( bool bNewRelative )
 {
     Selection aSelection = GetSelection();

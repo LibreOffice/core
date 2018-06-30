@@ -125,11 +125,6 @@ public:
     void                SetPreviewText( const OUString& rString );
     void                SetFontNameAsPreviewText();
 
-    static void         SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
-    static void         SetFontStyle( const SfxItemSet& rSet, sal_uInt16 nSlotPosture, sal_uInt16 nSlotWeight, SvxFont& rFont ); // posture/weight
-    void                SetFontWidthScale( const SfxItemSet& rSet );
-    void                SetFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
-
     void                SetFromItemSet( const SfxItemSet &rSet,
                                         bool bPreviewBackgroundToCharacter );
 };
