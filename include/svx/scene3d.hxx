@@ -99,9 +99,6 @@ public:
 
     virtual void SetBoundRectDirty() override;
 
-    // access to cleanup of depth mapper
-    void Cleanup3DDepthMapper() { ImpCleanup3DDepthMapper(); }
-
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;

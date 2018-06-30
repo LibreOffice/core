@@ -85,7 +85,6 @@ class ListBoxColorWrapper
 public:
     ListBoxColorWrapper(ColorListBox* pControl);
     void operator()(const OUString& rCommand, const NamedColor& rColor);
-    void dispose();
 private:
     ColorListBox* mpControl;
 };
@@ -113,28 +112,14 @@ public:
     ColorListBox(weld::MenuButton* pControl, weld::Window* pWindow);
     ~ColorListBox();
 
-    void SetSelectHdl(const Link<ColorListBox&, void>& rLink)
-    {
-        m_aSelectedLink = rLink;
-    }
-
-    void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
-
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
-    NamedColor const & GetSelectedEntry() const { return m_aSelectedColor; }
 
-    void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);
 
     void SetNoSelection() { getColorWindow()->SetNoSelection(); }
-    bool IsNoSelection() const { return getColorWindow()->IsNoSelection(); }
 
-    void SetAutoDisplayColor(const Color &rColor) { m_aAutoDisplayColor = rColor; }
     void ShowPreview(const NamedColor &rColor);
     void EnsurePaletteManager();
-
-    void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
-    bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 };
 
 /** A wrapper for SvxColorListBox. */

@@ -66,45 +66,9 @@ class SVX_DLLPUBLIC SvxParaPrevWindow final : public vcl::Window
 public:
     SvxParaPrevWindow( vcl::Window* pParent, WinBits nBits);
 
-    void SetFirstLineOfst( short nNew )
-    {
-        nFirstLineOfst = nNew;
-    }
-    void SetLeftMargin( long nNew )
-    {
-        nLeftMargin = nNew;
-    }
-    void SetRightMargin( long nNew )
-    {
-        nRightMargin = nNew;
-    }
-    void SetUpper( sal_uInt16 nNew )
-    {
-        nUpper = nNew;
-    }
-    void SetLower( sal_uInt16 nNew )
-    {
-        nLower = nNew;
-    }
-    void SetAdjust( SvxAdjust eNew )
-    {
-        eAdjust = eNew;
-    }
-    void SetLastLine( SvxAdjust eNew )
-    {
-        eLastLine = eNew;
-    }
-    void SetLineSpace( SvxPrevLineSpace eNew )
-    {
-        eLine = eNew;
-    }
     void SetText( const OUString& rStr ) override
     {
         aText = rStr;
-    }
-    void SetSize( Size aNew )
-    {
-        aSize = aNew;
     }
     OUString GetText() const override
     {
@@ -172,17 +136,9 @@ public:
     {
         eLine = eNew;
     }
-    void SetText( const OUString& rStr )
-    {
-        aText = rStr;
-    }
     void SetSize( Size aNew )
     {
         aSize = aNew;
-    }
-    OUString GetText() const
-    {
-        return aText;
     }
 };
 

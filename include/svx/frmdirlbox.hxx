@@ -45,8 +45,6 @@ public:
     void                InsertEntryValue(
                             const OUString& rString,
                             SvxFrameDirection eDirection );
-    /** Removes the entry, that represents the specified frame direction. */
-    void                RemoveEntryValue( SvxFrameDirection eDirection );
 
     /** Selects the specified frame direction. */
     void                SelectEntryValue( SvxFrameDirection eDirection );

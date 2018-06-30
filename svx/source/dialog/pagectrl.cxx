@@ -391,21 +391,6 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
 }
 
 
-void SvxPageWindow::EnableFrameDirection(bool bEnable)
-{
-    bFrameDirection = bEnable;
-}
-
-void SvxPageWindow::SetFrameDirection(SvxFrameDirection nDirection)
-{
-    nFrameDirection = nDirection;
-}
-
-void SvxPageWindow::ResetBackground()
-{
-    bResetBackground = true;
-}
-
 Size SvxPageWindow::GetOptimalSize() const
 {
     return LogicToPixel(Size(75, 46), MapMode(MapUnit::MapAppFont));

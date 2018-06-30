@@ -100,22 +100,4 @@ SvxPageNumberListBox::SvxPageNumberListBox(weld::ComboBoxText* pControl)
     }
 }
 
-void SvxPageNumberListBox::SetSelection( sal_uInt16 nPos )
-{
-    int nEntryCount = m_xControl->get_count();
-    int nSelPos = -1;
-
-    for (sal_Int32 i = 0; i < nEntryCount; ++i)
-    {
-        sal_uInt16 nTmp = static_cast<sal_uInt16>(m_xControl->get_id(i).toInt32());
-
-        if (nTmp == nPos)
-        {
-            nSelPos = i;
-            break;
-        }
-    }
-    m_xControl->set_active(nSelPos);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

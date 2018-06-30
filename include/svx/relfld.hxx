@@ -40,10 +40,7 @@ protected:
 public:
     SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);
 
-    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax );
     void            SetRelative( bool bRelative );
-    bool            IsRelative() const { return bRelative; }
-    void            EnableNegativeMode() {bNegativeEnabled = true;}
 };
 
 class SVX_DLLPUBLIC RelativeField

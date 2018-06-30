@@ -30,6 +30,8 @@ filter/source/flash/swfexporter.hxx:85
     _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
 i18nlangtag/source/languagetag/languagetag.cxx:274
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
+include/basegfx/range/b2dconnectedranges.hxx:217
+    type-parameter-?-? basegfx::B2DConnectedRanges::forEachAggregate(type-parameter-?-?) const
 include/basegfx/vector/b2dvector.hxx:115
     class basegfx::B2DVector & basegfx::B2DVector::setLength(double)
 include/basegfx/vector/b2ivector.hxx:101
@@ -120,9 +122,9 @@ include/oox/dump/oledumper.hxx:326
     unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
 include/oox/dump/oledumper.hxx:327
     char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
-include/oox/export/shapes.hxx:202
-    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
 include/oox/export/shapes.hxx:203
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
+include/oox/export/shapes.hxx:204
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,int)
 include/oox/helper/binaryoutputstream.hxx:78
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
@@ -158,25 +160,19 @@ include/svx/framelink.hxx:195
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/svx/svdograf.hxx:120
     _Bool SdrGrafObj::ImpUpdateGraphicLink(_Bool) const
-include/svx/SvxColorValueSet.hxx:53
+include/svx/SvxColorValueSet.hxx:55
     class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
-include/test/sheet/xcellrangedata.hxx:21
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XCellRangeData::init()
+include/test/sheet/xdocumentauditing.hxx:29
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XDocumentAuditing::getXMSF()
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
-include/test/sheet/xsheetannotation.hxx:36
-    class com::sun::star::uno::Reference<class com::sun::star::sheet::XSheetAnnotation> apitest::XSheetAnnotation::getAnnotation(struct com::sun::star::table::CellAddress &)
 include/test/sheet/xspreadsheets2.hxx:40
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
-include/test/sheet/xstyleloader.hxx:27
-    class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XStyleLoader::getTargetComponent()
-include/test/sheet/xusedareacursor.hxx:25
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XUsedAreaCursor::init()
 include/tools/color.hxx:151
     class SvStream & Color::Read(class SvStream &)
 include/tools/color.hxx:152
     class SvStream & Color::Write(class SvStream &) const
-include/tools/config.hxx:37
+include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
@@ -200,11 +196,11 @@ include/vcl/textview.hxx:192
     _Bool TextView::SetCursorAtPoint(const class Point &)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:271
+include/vcl/weld.hxx:277
     _Bool weld::ComboBoxText::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:481
+include/vcl/weld.hxx:490
     _Bool weld::Entry::get_selection_bounds(int &,int &)
-include/vcl/weld.hxx:774
+include/vcl/weld.hxx:794
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -217,9 +213,9 @@ reportdesign/source/ui/inc/DateTime.hxx:76
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
 sc/source/core/opencl/formulagroupcl.cxx:952
-    unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
+    unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,_Bool &)
 sc/source/core/opencl/formulagroupcl.cxx:1190
-    unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
+    unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,int,_Bool &)
 sc/source/filter/inc/workbookhelper.hxx:254
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
 sc/source/ui/inc/select.hxx:73
@@ -284,7 +280,7 @@ sw/inc/tblafmt.hxx:343
     _Bool SwTableAutoFormatTable::Load(class SvStream &)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
-sw/source/core/inc/scriptinfo.hxx:226
+sw/source/core/inc/scriptinfo.hxx:225
     _Bool SwScriptInfo::GetBoundsOfHiddenRange(int,int &,int &) const
 sw/source/filter/ww8/ww8toolbar.hxx:339
     _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
@@ -298,6 +294,8 @@ ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
     _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
 ucb/source/ucp/webdav-neon/NeonSession.hxx:232
     _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
+vcl/inc/font/FeatureCollector.hxx:36
+    _Bool vcl::font::FeatureCollector::collectGraphiteFeatureDefinition(struct vcl::font::Feature &)
 vcl/inc/opengl/salbmp.hxx:96
     _Bool OpenGLSalBitmap::ImplScaleFilter(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,unsigned int)
 vcl/inc/opengl/salbmp.hxx:98
@@ -312,8 +310,6 @@ vcl/inc/salgdi.hxx:392
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
-vcl/inc/unx/saldisp.hxx:294
-    _Bool SalDisplay::Dispatch(union _XEvent *)
 vcl/source/gdi/pdfwriter_impl.hxx:1261
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
 vcl/source/gdi/pdfwriter_impl.hxx:1262
