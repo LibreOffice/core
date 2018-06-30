@@ -928,16 +928,17 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
         if ( aUserItem >>= aUserData )
         {
-            bool bChecked = aUserData.getToken(0, ';').toInt32() == 1;
+            sal_Int32 nIdx {0};
+            bool bChecked = aUserData.getToken(0, ';', nIdx).toInt32() == 1;
             m_pFullWordsCB->Check( bChecked );
-            bChecked = aUserData.getToken(1, ';').toInt32() == 1;
+            bChecked = aUserData.getToken(0, ';', nIdx).toInt32() == 1;
             m_pScopeCB->Check( bChecked );
 
-            for ( sal_Int32 i = 2; i < comphelper::string::getTokenCount(aUserData, ';'); ++i )
+            while ( nIdx > 0 )
             {
-                OUString aToken = aUserData.getToken(i, ';');
                 m_pSearchED->InsertEntry( INetURLObject::decode(
-                    aToken, INetURLObject::DecodeMechanism::WithCharset ) );
+                    aUserData.getToken(0, ';', nIdx),
+                    INetURLObject::DecodeMechanism::WithCharset ) );
             }
         }
     }
