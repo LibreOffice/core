@@ -543,9 +543,9 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
                 // Get the char style
                 uno::Sequence< beans::PropertyValue > aAbsCharStyleProps = pAbsLevel->GetCharStyleProperties( );
-                uno::Sequence< beans::PropertyValue >& rAbsCharStyleProps = aAbsCharStyleProps;
                 if ( pLevel.get( ) )
                 {
+                    uno::Sequence< beans::PropertyValue >& rAbsCharStyleProps = aAbsCharStyleProps;
                     uno::Sequence< beans::PropertyValue > aCharStyleProps =
                         pLevel->GetCharStyleProperties( );
                     uno::Sequence< beans::PropertyValue >& rCharStyleProps = aCharStyleProps;
