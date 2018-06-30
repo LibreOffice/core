@@ -89,5 +89,6 @@ module StarWriter
 
     include "_navsh.sdi"
     include "navsh.sdi"
+    include "pview.sdi"
 }
 
