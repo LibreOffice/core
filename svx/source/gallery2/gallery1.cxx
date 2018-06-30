@@ -286,11 +286,15 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
 
     if( bMultiPath )
     {
-        aRelURL = INetURLObject( rMultiPath.getToken(0, ';') );
-
+        bool bIsRelURL {true};
         for( sal_Int32 i = 0; i < nTokenCount; ++i )
         {
             aCurURL = INetURLObject(rMultiPath.getToken(i, ';'));
+            if (bIsRelURL)
+            {
+                aRelURL = aCurURL;
+                bIsRelURL = false;
+            }
 
             ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
 
