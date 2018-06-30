@@ -272,7 +272,7 @@ Gallery* Gallery::GetGalleryInstance()
 
 void Gallery::ImplLoad( const OUString& rMultiPath )
 {
-    bool            bIsReadOnlyDir;
+    bool bIsReadOnlyDir {false};
 
     bMultiPath = !rMultiPath.isEmpty();
 
