@@ -475,8 +475,6 @@ RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms const& rSprms, Id
     auto it = m_aStyleTableEntries.find(nStyle);
     if (it != m_aStyleTableEntries.end())
     {
-        RTFReferenceProperties& rProps = *static_cast<RTFReferenceProperties*>(it->second.get());
-
         // cloneAndDeduplicate() wants to know about only a single "style", so
         // let's merge paragraph and character style properties here.
         auto itChar = m_aStyleTableEntries.end();
@@ -490,15 +488,21 @@ RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms const& rSprms, Id
         RTFSprms aStyleAttributes;
         // Ensure the paragraph style is a flat list.
         if (!nStyleType || nStyleType == NS_ooxml::LN_Value_ST_StyleType_paragraph)
+        {
+            RTFReferenceProperties& rProps
+                = *static_cast<RTFReferenceProperties*>(it->second.get());
             lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
+        }
 
         if (itChar != m_aStyleTableEntries.end())
         {
             // Found active character style, then update aStyleSprms/Attributes.
-            RTFReferenceProperties& rCharProps
-                = *static_cast<RTFReferenceProperties*>(itChar->second.get());
             if (!nStyleType || nStyleType == NS_ooxml::LN_Value_ST_StyleType_character)
+            {
+                RTFReferenceProperties& rCharProps
+                    = *static_cast<RTFReferenceProperties*>(itChar->second.get());
                 lcl_copyFlatten(rCharProps, aStyleAttributes, aStyleSprms);
+            }
         }
 
         // Get rid of direct formatting what is already in the style.
