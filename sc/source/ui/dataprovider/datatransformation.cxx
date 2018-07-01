@@ -173,6 +173,101 @@ ScSortParam SortTransformation::getSortParam() const
     return maSortParam;
 }
 
+TextTransformation::TextTransformation(SCCOL nCol, const TEXT_TRANSFORM_TYPE rType):
+    mnCol(nCol),
+    maType(rType)
+{
+}
+
+void TextTransformation::Transform(ScDocument& rDoc) const
+{
+    SCROW nEndRow = getLastRow(rDoc, mnCol);
+
+    switch (maType)
+    {
+        case TEXT_TRANSFORM_TYPE::TO_LOWER:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_STRING)
+                {
+                    OUString aStr = rDoc.GetString(mnCol, nRow, 0);
+                    rDoc.SetString(mnCol, nRow, 0, ScGlobal::pCharClass->lowercase(aStr));
+                }
+            }
+        }
+        break;
+        case TEXT_TRANSFORM_TYPE::TO_UPPER:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_STRING)
+                {
+                    OUString aStr = rDoc.GetString(mnCol, nRow, 0);
+                    rDoc.SetString(mnCol, nRow, 0, ScGlobal::pCharClass->uppercase(aStr));
+                }
+            }
+        }
+        break;
+        case TEXT_TRANSFORM_TYPE::CAPITALIZE:
+        {
+            sal_Unicode separator = sal_Unicode(U' ');
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_STRING)
+                {
+                    OUString aStr = rDoc.GetString(mnCol, nRow, 0);
+
+                    sal_Int32 length = aStr.getLength();
+
+                    if(length != 0)
+                        aStr = aStr.replaceAt(0, 1, ScGlobal::pCharClass->uppercase(OUString(aStr[0])));
+
+                    for (sal_Int32 i = 1; i < length; i++){
+                        if (aStr[i-1] == separator)
+                        {
+                            aStr = aStr.replaceAt(i, 1, ScGlobal::pCharClass->uppercase(OUString(aStr[i])));
+                        }
+                        else
+                        {
+                            aStr = aStr.replaceAt(i, 1, ScGlobal::pCharClass->lowercase(OUString(aStr[i])));
+                        }
+                    }
+                    rDoc.SetString(mnCol, nRow, 0, aStr);
+                }
+            }
+        }
+        break;
+        case TEXT_TRANSFORM_TYPE::TRIM:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_STRING)
+                {
+                    OUString aStr = rDoc.GetString(mnCol, nRow, 0);
+                    rDoc.SetString(mnCol, nRow, 0, aStr.trim());
+                }
+            }
+        }
+        break;
+        default:
+        break;
+    }
+}
+
+TransformationType TextTransformation::getTransformationType() const
+{
+    return TransformationType::TEXT_TRANSFORMATION;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
