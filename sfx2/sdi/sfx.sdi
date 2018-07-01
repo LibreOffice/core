@@ -4582,7 +4582,22 @@ SfxVoidItem VersionDialog SID_VERSION
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Document;
 ]
+SfxStringItem CapsLockStatus SID_CAPS_LOCK_STATUS
 
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Document;
+]
 SfxUInt16Item Signature SID_SIGNATURE
 [
     AutoUpdate = FALSE,

@@ -403,7 +403,7 @@ class SfxDocumentInfoItem;
 #define SID_CURSORHOME                      (SID_SFX_START + 745)
 #define SID_CURSOREND                       (SID_SFX_START + 746)
 #define SID_UNICODE_NOTATION_TOGGLE         (SID_SFX_START + 792)
-
+#define SID_CAPS_LOCK_STATUS                (SID_SFX_START + 793)
 // default-ids for macros
 #define SID_RECORDING_FLOATWINDOW           (SID_SFX_START + 800)
 #define SID_RECORDMACRO                     (SID_SFX_START + 1669)

@@ -1001,12 +1001,21 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
             }
 
+            case SID_CAPS_LOCK_STATUS:
+            {
+              vcl::Window* pFrameWin = &GetFrame()->GetWindow();
+              OUString nCapsLockStatus = "";
+              bool bCapsLockOn = pFrameWin &&( pFrameWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK);
+              if(bCapsLockOn)
+                nCapsLockStatus = "Caps Lock on";
+              rSet.Put(SfxStringItem ( SID_CAPS_LOCK_STATUS, nCapsLockStatus ) );
+              break;
+            }
             case SID_DOC_MODIFIED:
             {
                 rSet.Put( SfxBoolItem( SID_DOC_MODIFIED, IsModified() ) );
                 break;
             }
-
             case SID_MODIFIED:
             {
                 rSet.Put( SfxBoolItem( SID_MODIFIED, IsModified() ) );

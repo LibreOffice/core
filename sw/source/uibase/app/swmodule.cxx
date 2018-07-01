@@ -47,6 +47,7 @@
 #include <svx/tbxcolor.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
+#include <svx/capsctrl.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
@@ -332,7 +333,7 @@ void SwDLL::RegisterControls()
     SvxSelectionModeControl::RegisterControl(FN_STAT_SELMODE, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SwWordCountStatusBarControl::RegisterControl(FN_STAT_WORDCOUNT, pMod);
-
+    SvxCapsStatusBarControl::RegisterControl(SID_CAPS_LOCK_STATUS,pMod);
     SwBookmarkControl::RegisterControl(FN_STAT_PAGE, pMod );
     SwTemplateControl::RegisterControl(FN_STAT_TEMPLATE, pMod );
     SwViewLayoutControl::RegisterControl( SID_ATTR_VIEWLAYOUT, pMod );

@@ -1112,7 +1112,8 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "PageStyleName" ||
              aEvent.FeatureURL.Path == "PageStatus" ||
              aEvent.FeatureURL.Path == "LayoutStatus" ||
-             aEvent.FeatureURL.Path == "Context")
+             aEvent.FeatureURL.Path == "Context" ||
+             aEvent.FeatureURL.Path == "CapsLockStatus" )
     {
         OUString aString;
 

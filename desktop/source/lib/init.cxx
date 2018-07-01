@@ -1780,6 +1780,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:StatusBarFunc"),
         OUString(".uno:StatePageNumber"),
         OUString(".uno:StateWordCount"),
+        OUString(".uno:CapsLockStatus"),
         OUString(".uno:SelectionMode"),
         OUString(".uno:PageStatus"),
         OUString(".uno:LayoutStatus"),

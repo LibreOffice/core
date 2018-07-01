@@ -211,6 +211,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/tools/ValueSetWithTextControl \
     svx/source/stbctrls/pszctrl \
     svx/source/stbctrls/insctrl \
+    svx/source/stbctrls/capsctrl \
     svx/source/stbctrls/selctrl \
     svx/source/stbctrls/xmlsecctrl \
     svx/source/stbctrls/modctrl \
