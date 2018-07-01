@@ -34,12 +34,13 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 // DrawContact section
-sdr::contact::ViewContact* E3dLatheObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> E3dLatheObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfE3dLathe(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfE3dLathe>(*this);
 }
 
 sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()

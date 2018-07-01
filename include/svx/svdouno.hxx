@@ -127,7 +127,7 @@ public:
 
 protected:
     // SdrObject overridables
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
 private:
     /** Retrieves the typed ViewContact for the object

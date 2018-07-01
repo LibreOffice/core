@@ -951,7 +951,7 @@ protected:
 
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact();
 
     tools::Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 

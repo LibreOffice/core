@@ -80,7 +80,7 @@ private:
     bool mbAdjustingTextFrameWidthAndHeight;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual void impl_setUnoShape(const css::uno::Reference<css::uno::XInterface>& rxUnoShape) override;
 
 public:

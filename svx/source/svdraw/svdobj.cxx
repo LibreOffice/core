@@ -130,6 +130,7 @@
 #include <rtl/strbuf.hxx>
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <boost/optional.hpp>
 #include <libxml/xmlwriter.h>
@@ -256,17 +257,17 @@ void SdrObject::RemoveObjectUser(sdr::ObjectUser& rOldUser)
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrObject::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrObject::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrObj>(*this);
 }
 
 sdr::contact::ViewContact& SdrObject::GetViewContact() const
 {
     if(!mpViewContact)
     {
-        const_cast< SdrObject* >(this)->mpViewContact.reset(
-            const_cast< SdrObject* >(this)->CreateObjectSpecificViewContact() );
+        const_cast< SdrObject* >(this)->mpViewContact =
+            const_cast< SdrObject* >(this)->CreateObjectSpecificViewContact();
     }
 
     return *mpViewContact;

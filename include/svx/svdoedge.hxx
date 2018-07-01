@@ -136,7 +136,7 @@ private:
     friend class                ImpEdgeHdl;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     SdrObjConnection            aCon1;  // Connection status of the beginning of the line

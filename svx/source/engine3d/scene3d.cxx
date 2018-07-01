@@ -46,6 +46,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdmodel.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 class ImpRemap3DDepth
@@ -164,9 +165,9 @@ sdr::properties::BaseProperties* E3dScene::CreateObjectSpecificProperties()
 
 // DrawContact section
 
-sdr::contact::ViewContact* E3dScene::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> E3dScene::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfE3dScene(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfE3dScene>(*this);
 }
 
 

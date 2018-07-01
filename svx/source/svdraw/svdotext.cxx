@@ -60,6 +60,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -70,9 +71,9 @@ sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
 }
 
 // DrawContact section
-sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrTextObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfTextObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfTextObj>(*this);
 }
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel)

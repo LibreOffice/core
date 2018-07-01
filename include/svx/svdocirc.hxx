@@ -47,7 +47,7 @@ private:
     // only for SdrCircleAttributes
     SdrObjKind GetCircleKind() const { return meCircleKind; }
 
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     SdrObjKind                  meCircleKind;

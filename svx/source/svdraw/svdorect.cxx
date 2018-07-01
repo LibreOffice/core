@@ -43,6 +43,7 @@
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -56,9 +57,9 @@ sdr::properties::BaseProperties* SdrRectObj::CreateObjectSpecificProperties()
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrRectObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrRectObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrRectObj>(*this);
 }
 
 

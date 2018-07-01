@@ -73,7 +73,7 @@ public:
 
 private:
         void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
-        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+        virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
         struct Impl;
         std::unique_ptr<Impl> m_xImpl;

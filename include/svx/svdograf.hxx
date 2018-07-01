@@ -85,7 +85,7 @@ private:
     friend class SdrExchangeView; // Only for a ForceSwapIn() call.
     friend class SdrGraphicLink;
 
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     void ImpSetAttrToGrafInfo(); // Copy values from the pool

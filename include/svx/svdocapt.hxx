@@ -48,7 +48,7 @@ private:
 
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
 private:
     tools::Polygon aTailPoly;  // the whole tail polygon

@@ -225,7 +225,7 @@ class SwDrawVirtObj : public SdrVirtObj
         /** AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
          not used but something own (top left of new SnapRect minus top left
          of original SnapRect) */
-        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+        virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
         // protected destructor
         virtual ~SwDrawVirtObj() override;

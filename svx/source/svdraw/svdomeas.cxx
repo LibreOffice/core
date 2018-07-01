@@ -68,6 +68,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
 #include <unotools/syslocale.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
@@ -192,9 +193,9 @@ sdr::properties::BaseProperties* SdrMeasureObj::CreateObjectSpecificProperties()
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrMeasureObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrMeasureObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrMeasureObj>(*this);
 }
 
 

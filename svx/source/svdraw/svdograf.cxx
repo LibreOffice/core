@@ -62,6 +62,7 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <memory>
 #include <vcl/GraphicLoader.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -272,9 +273,9 @@ sdr::properties::BaseProperties* SdrGrafObj::CreateObjectSpecificProperties()
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrGrafObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfGraphic(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfGraphic>(*this);
 }
 
 // check if SVG and if try to get ObjectInfoPrimitive2D and extract info

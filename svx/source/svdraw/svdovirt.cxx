@@ -28,6 +28,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svddrgv.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
@@ -37,9 +38,9 @@ sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
 
 
 // #i27224#
-sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrVirtObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfVirtObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfVirtObj>(*this);
 }
 
 SdrVirtObj::SdrVirtObj(

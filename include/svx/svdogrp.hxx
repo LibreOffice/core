@@ -32,7 +32,7 @@ class SfxItemSet;
 class SVX_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
 {
 private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     Point                       aRefPoint;      // Reference point inside the object group
