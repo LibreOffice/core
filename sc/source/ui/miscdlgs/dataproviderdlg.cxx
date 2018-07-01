@@ -271,6 +271,59 @@ void ScDataTransformationBaseControl::setAllocation(const Size &rAllocation)
     setLayoutPosSize(*maGrid, Point(0, 0), rAllocation);
 }
 
+class ScDeleteColumnTransformationControl : public ScDataTransformationBaseControl
+{
+private:
+    VclPtr<Edit> maColumnNums;
+
+public:
+    ScDeleteColumnTransformationControl(vcl::Window* pParent);
+    ~ScDeleteColumnTransformationControl() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+};
+
+ScDeleteColumnTransformationControl::ScDeleteColumnTransformationControl(vcl::Window* pParent):
+    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/deletecolumnentry.ui")
+{
+    get(maColumnNums, "ed_columns");
+}
+
+ScDeleteColumnTransformationControl::~ScDeleteColumnTransformationControl()
+{
+    disposeOnce();
+}
+
+void ScDeleteColumnTransformationControl::dispose()
+{
+    maColumnNums.clear();
+
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScDeleteColumnTransformationControl::getTransformation()
+{
+    OUString aColumnString = maColumnNums->GetText();
+    std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
+    std::set<SCCOL> ColNums;
+    for (auto& rColStr : aSplitColumns)
+    {
+        sal_Int32 nCol = rColStr.toInt32();
+        if (nCol <= 0)
+            continue;
+
+        if (nCol > MAXCOL)
+            continue;
+
+        // translate from 1-based column notations to internal Calc one
+        ColNums.insert(nCol - 1);
+    }
+
+    return std::make_shared<sc::ColumnRemoveTransformation>(ColNums);
+}
+
 class ScSplitColumnTransformationControl : public ScDataTransformationBaseControl
 {
 private:
@@ -497,10 +550,8 @@ void ScDataProviderDlg::cancelAndQuit()
 
 void ScDataProviderDlg::deleteColumn()
 {
-    VclPtr<FixedText> mpText = VclPtr<FixedText>::Create(mpList);
-    mpText->SetText("Delete Column");
-    mpText->SetSizePixel(Size(400, 20));
-    mpList->addEntry(mpText);
+    VclPtr<ScDeleteColumnTransformationControl> pDeleteColumnEntry = VclPtr<ScDeleteColumnTransformationControl>::Create(mpList);
+    mpList->addEntry(pDeleteColumnEntry);
 }
 
 void ScDataProviderDlg::splitColumn()
