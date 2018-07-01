@@ -28,21 +28,21 @@ Menu RID_SLIDESHOW_CONTEXTMENU
 {
     ItemList =
     {
+    MenuItem
+    {
+        Identifier = CM_NEXT_SLIDE ;
+        Text [ en-US ] = "~Next" ;
+    };
+    MenuItem
+    {
+        Identifier = CM_PREV_SLIDE ;
+        Text [ en-US ] = "~Previous" ;
+    };
         MenuItem
         {
-            Identifier = CM_NEXT_SLIDE ;
-            Text [ en-US ] = "~Next" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_PREV_SLIDE ;
-            Text [ en-US ] = "~Previous" ;
-           };
-        MenuItem
-        {
-            Identifier = CM_GOTO;
-            Text [ en-US ] = "~Go to Slide" ;
-            SubMenu = Menu
+        Identifier = CM_GOTO;
+        Text [ en-US ] = "~Go to Slide" ;
+        SubMenu = Menu
             {
                 ItemList =
                 {
@@ -80,31 +80,31 @@ Menu RID_SLIDESHOW_CONTEXTMENU
             {
                 ItemList =
                 {
-                    MenuItem
-                    {
-                        Identifier =  CM_WIDTH_PEN_VERY_THIN;
-                        Text [ en-US ] = "~Very thin";
-                    };
-                    MenuItem
-                    {
-                        Identifier =  CM_WIDTH_PEN_THIN;
-                        Text [ en-US ] = "~Thin";
-                    };
-                    MenuItem
-                    {
-                        Identifier =  CM_WIDTH_PEN_NORMAL;
-                        Text [ en-US ] = "~Normal";
-                    };
-                    MenuItem
-                    {
-                        Identifier =  CM_WIDTH_PEN_THICK;
-                        Text [ en-US ] = "~Thick";
-                    };
-                    MenuItem
-                    {
-                        Identifier =  CM_WIDTH_PEN_VERY_THICK;
-                        Text [ en-US ] = "~Very Thick";
-                    };
+                MenuItem
+                {
+                    Identifier = CM_WIDTH_PEN_VERY_THIN;
+                    Text [ en-US ] = "~Very thin";
+                };
+                MenuItem
+                {
+                    Identifier = CM_WIDTH_PEN_THIN;
+                    Text [ en-US ] = "~Thin";
+                };
+                MenuItem
+                {
+                    Identifier = CM_WIDTH_PEN_NORMAL;
+                    Text [ en-US ] = "~Normal";
+                };
+                MenuItem
+                {
+                    Identifier = CM_WIDTH_PEN_THICK;
+                    Text [ en-US ] = "~Thick";
+                };
+                MenuItem
+                {
+                    Identifier = CM_WIDTH_PEN_VERY_THICK;
+                    Text [ en-US ] = "~Very thick";
+                };
                 };
             };
         };
