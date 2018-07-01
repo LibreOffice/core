@@ -1364,8 +1364,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     }
 }
 
-ColorWindow::ColorWindow(const OUString&            rCommand,
-                         std::shared_ptr<PaletteManager> const & rPaletteManager,
+ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager,
                          BorderColorStatus&         rBorderColorStatus,
                          sal_uInt16                 nSlotId,
                          const Reference< XFrame >& rFrame,
@@ -1375,7 +1374,6 @@ ColorWindow::ColorWindow(const OUString&            rCommand,
     : ToolbarPopupBase(rFrame)
     , m_xBuilder(Application::CreateBuilder(pMenuButton, "svx/ui/colorwindow.ui"))
     , theSlotId(nSlotId)
-    , maCommand(rCommand)
     , mpParentWindow(pParentWindow)
     , mpMenuButton(pMenuButton)
     , mxPaletteManager(rPaletteManager)
@@ -3788,7 +3786,6 @@ void ColorListBox::createColorWindow()
     EnsurePaletteManager();
 
     m_xColorWindow.reset(new ColorWindow(
-                            OUString() /*m_aCommandURL*/,
                             m_xPaletteManager,
                             m_aBorderColorStatus,
                             0, // slotID

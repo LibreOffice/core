@@ -240,9 +240,8 @@ namespace connectivity
 
         public:
             ONDXNode(){}
-            ONDXNode(const ONDXKey& rKey,
-                       ONDXPagePtr aPagePtr = ONDXPagePtr())
-                       :aChild(aPagePtr),aKey(rKey) {}
+            ONDXNode(const ONDXKey& rKey)
+                       :aKey(rKey) {}
 
             // Does the node point to a page?
             bool            HasChild() const {return aChild.HasPage();}

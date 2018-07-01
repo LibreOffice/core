@@ -113,7 +113,7 @@ bool lcl_MergeItems( StatusBar* pStatusbar,
     for ( sal_Int32 i = 0; i < nSize; i++ )
     {
         const AddonStatusbarItem& rItem = rAddonItems[i];
-        if ( !StatusbarMerger::IsCorrectContext( rItem.aContext, OUString() ) )
+        if ( !StatusbarMerger::IsCorrectContext( rItem.aContext ) )
             continue;
 
         sal_uInt16 nInsPos = nPos + nModIndex + i;
@@ -155,10 +155,9 @@ bool lcl_RemoveItems( StatusBar* pStatusbar,
 }
 
 bool StatusbarMerger::IsCorrectContext(
-    const OUString& rContext,
-    const OUString& rModuleIdentifier )
+    const OUString& rContext )
 {
-    return (( rContext.getLength() == 0 ) || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
+    return rContext.isEmpty();
 }
 
 bool StatusbarMerger::ConvertSeqSeqToVector(

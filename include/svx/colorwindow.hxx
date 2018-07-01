@@ -144,8 +144,7 @@ private:
     NamedColor GetAutoColor() const;
 
 public:
-    ColorWindow(const OUString& rCommand,
-                std::shared_ptr<PaletteManager> const & rPaletteManager,
+    ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager,
                 BorderColorStatus& rBorderColorStatus,
                 sal_uInt16 nSlotId,
                 const css::uno::Reference< css::frame::XFrame >& rFrame,
