@@ -1462,11 +1462,6 @@ SfxTabDialogController::SfxTabDialogController
     , m_pOutSet(nullptr)
     , m_pRanges(nullptr)
 {
-    Init_Impl(/*bEditFmt*/false);
-}
-
-void SfxTabDialogController::Init_Impl(bool /*bFmtFlag*/)
-{
     m_pImpl.reset(new TabDlg_Impl(m_xTabCtrl->get_n_pages()));
     m_pImpl->bHideResetBtn = !m_xResetBtn->get_visible();
     m_xOKBtn->connect_clicked(LINK(this, SfxTabDialogController, OkHdl));

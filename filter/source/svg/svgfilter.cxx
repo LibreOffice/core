@@ -594,11 +594,10 @@ private:
 
 public:
     SVGFileInfo(
-        const uno::Reference<io::XInputStream>& xInput,
-        sal_Int32 nFirstBytesSize = 4096)
+        const uno::Reference<io::XInputStream>& xInput)
     :   mxInput(xInput),
         mnFirstBytes(),
-        mnFirstBytesSize(nFirstBytesSize),
+        mnFirstBytesSize(2048),
         mnFirstRead(0),
         mbProcessed(false),
         mbIsSVG(false)
@@ -668,7 +667,7 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 
     try
     {
-        SVGFileInfo aSVGFileInfo(xInput, 2048);
+        SVGFileInfo aSVGFileInfo(xInput);
 
         if(aSVGFileInfo.isSVG())
         {
