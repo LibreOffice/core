@@ -128,9 +128,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
             m_nAsianLayoutId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ));
 
-            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) , "GetTabPageRangesFunc fail!");
-            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ));
+            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
 
             SAL_WARN_IF(!pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "sw.ui", "GetTabPageCreatorFunc fail!");
             SAL_WARN_IF(!pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "sw.ui", "GetTabPageRangesFunc fail!");

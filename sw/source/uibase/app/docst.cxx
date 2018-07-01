@@ -86,6 +86,8 @@
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
 
+#include <svx/unobrushitemhelper.hxx>
+
 using namespace ::com::sun::star;
 
 void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
@@ -784,6 +786,10 @@ void SwDocShell::Edit(
     else if( SfxStyleFamily::Char == nFamily )
     {
         ::ConvertAttrCharToGen(xTmp->GetItemSet());
+        SfxItemSet& rSet = xTmp->GetItemSet();
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhich( SID_ATTR_BRUSH_CHAR );
+        SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>( rSet.Get( nWhich ) ) );
+        setSvxBrushItemAsFillAttributesToTargetSet( aBrushItem, rSet );
     }
 
     if(SfxStyleFamily::Page == nFamily || SfxStyleFamily::Para == nFamily)
