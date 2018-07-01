@@ -36,7 +36,7 @@ private:
     SVX_DLLPRIVATE void CreateDefaultTexture();
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     // protected destructor
     virtual ~E3dPolygonObj() override;

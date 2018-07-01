@@ -24,11 +24,12 @@
 #include <sdr/contact/viewcontactofe3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
+#include <o3tl/make_unique.hxx>
 
 // DrawContact section
-sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> E3dPolygonObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfE3dPolygon(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfE3dPolygon>(*this);
 }
 
 E3dPolygonObj::E3dPolygonObj(

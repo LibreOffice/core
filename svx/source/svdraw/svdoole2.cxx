@@ -676,9 +676,9 @@ sdr::properties::BaseProperties* SdrOle2Obj::CreateObjectSpecificProperties()
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrOle2Obj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrOle2Obj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrOle2Obj>(*this);
 }
 
 void SdrOle2Obj::Init()

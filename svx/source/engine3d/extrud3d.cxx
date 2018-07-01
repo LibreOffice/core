@@ -36,12 +36,13 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 // DrawContact section
-sdr::contact::ViewContact* E3dExtrudeObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> E3dExtrudeObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfE3dExtrude(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfE3dExtrude>(*this);
 }
 
 sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()

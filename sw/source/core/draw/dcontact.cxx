@@ -71,6 +71,7 @@
 #include <calbck.hxx>
 #include <algorithm>
 #include <txtfly.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2149,9 +2150,9 @@ namespace sdr
 } // end of namespace sdr
 
 /// implementation of class <SwDrawVirtObj>
-sdr::contact::ViewContact* SwDrawVirtObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SwDrawVirtObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::VCOfDrawVirtObj(*this);
+    return o3tl::make_unique<sdr::contact::VCOfDrawVirtObj>(*this);
 }
 
 SwDrawVirtObj::SwDrawVirtObj(

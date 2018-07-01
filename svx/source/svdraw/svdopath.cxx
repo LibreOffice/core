@@ -51,6 +51,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <o3tl/make_unique.hxx>
 #include <memory>
 
 using namespace sdr;
@@ -1616,9 +1617,9 @@ SdrPathObjGeoData::~SdrPathObjGeoData()
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrPathObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrPathObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrPathObj>(*this);
 }
 
 

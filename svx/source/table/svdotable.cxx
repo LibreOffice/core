@@ -846,9 +846,9 @@ sdr::properties::BaseProperties* SdrTableObj::CreateObjectSpecificProperties()
 // DrawContact section
 
 
-sdr::contact::ViewContact* SdrTableObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrTableObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfTableObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfTableObj>(*this);
 }
 
 SdrTableObj::SdrTableObj(SdrModel& rSdrModel)

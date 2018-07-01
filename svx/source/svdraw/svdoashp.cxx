@@ -82,6 +82,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svdobjplusdata.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -3048,9 +3049,9 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
     return false;
 }
 
-sdr::contact::ViewContact* SdrObjCustomShape::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrObjCustomShape::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrObjCustomShape(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrObjCustomShape>(*this);
 }
 
 // #i33136#

@@ -64,6 +64,7 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <notxtfrm.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -114,11 +115,11 @@ sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
     return new sdr::properties::DefaultProperties(*this);
 }
 
-sdr::contact::ViewContact* SwFlyDrawObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SwFlyDrawObj::CreateObjectSpecificViewContact()
 {
     // needs an own VC since createViewIndependentPrimitive2DSequence()
     // is called when RecalcBoundRect() is used
-    return new sdr::contact::VCOfSwFlyDrawObj(*this);
+    return o3tl::make_unique<sdr::contact::VCOfSwFlyDrawObj>(*this);
 }
 
 SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel)
@@ -410,11 +411,11 @@ void SwVirtFlyDrawObj::Rotate(const Point& rRef, long nAngle, double sn, double 
     }
 }
 
-sdr::contact::ViewContact* SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
 {
     // need an own ViewContact (VC) to allow creation of a specialized primitive
     // for being able to visualize the FlyFrames in primitive renderers
-    return new sdr::contact::VCOfSwVirtFlyDrawObj(*this);
+    return o3tl::make_unique<sdr::contact::VCOfSwVirtFlyDrawObj>(*this);
 }
 
 SwVirtFlyDrawObj::SwVirtFlyDrawObj(

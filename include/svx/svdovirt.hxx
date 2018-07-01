@@ -34,7 +34,7 @@ public:
     virtual sdr::properties::BaseProperties& GetProperties() const override;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     SdrObject&                  rRefObj; // Referenced drawing object
     tools::Rectangle            aSnapRect;

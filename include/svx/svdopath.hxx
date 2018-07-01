@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC SdrPathObj final : public SdrTextObj
 private:
     friend class ImpPathForDragAndCreate;
 
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     basegfx::B2DPolyPolygon maPathPolygon;
     SdrObjKind                  meKind;

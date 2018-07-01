@@ -44,7 +44,7 @@ private:
     friend class SdrTextObj; // Due to SetXPolyDirty for GrowAdjust
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     std::unique_ptr<XPolygon> mpXPoly;

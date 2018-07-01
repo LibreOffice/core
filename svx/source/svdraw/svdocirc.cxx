@@ -49,6 +49,7 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xpool.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -99,9 +100,9 @@ sdr::properties::BaseProperties* SdrCircObj::CreateObjectSpecificProperties()
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrCircObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrCircObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrCircObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrCircObj>(*this);
 }
 
 SdrCircObj::SdrCircObj(

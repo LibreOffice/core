@@ -61,7 +61,7 @@ class SVX_DLLPUBLIC E3dScene : public E3dObject, public SdrObjList
 {
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     // transformations
     B3dCamera                   aCameraSet;

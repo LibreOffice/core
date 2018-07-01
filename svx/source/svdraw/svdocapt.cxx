@@ -58,6 +58,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 enum EscDir {LKS,RTS,OBN,UNT};
@@ -182,9 +183,9 @@ sdr::properties::BaseProperties* SdrCaptionObj::CreateObjectSpecificProperties()
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrCaptionObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrCaptionObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrCaptionObj>(*this);
 }
 
 

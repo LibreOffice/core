@@ -55,7 +55,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dCubeObj final : public E3dCompoundObject
     bool                                bPosIsCenter : 1;
 
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
 private:
     // protected destructor - due to final, make private

@@ -38,7 +38,7 @@ private:
     // geometry, which determines the object
     basegfx::B2DPolyPolygon         maExtrudePolygon;
 
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 

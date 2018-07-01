@@ -47,6 +47,7 @@
 #include <svx/sxenditm.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 SdrObjConnection::~SdrObjConnection()
@@ -155,9 +156,9 @@ sdr::properties::BaseProperties* SdrEdgeObj::CreateObjectSpecificProperties()
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrEdgeObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrEdgeObj(*this);
+    return o3tl::make_unique<sdr::contact::ViewContactOfSdrEdgeObj>(*this);
 }
 
 
