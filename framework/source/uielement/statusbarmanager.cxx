@@ -477,7 +477,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             MergeStatusbarInstruction &rInstruction = aMergeInstructions[i];
-            if ( !StatusbarMerger::IsCorrectContext( rInstruction.aMergeContext, "" ) )
+            if ( !StatusbarMerger::IsCorrectContext( rInstruction.aMergeContext ) )
                 continue;
 
             AddonStatusbarItemContainer aItems;

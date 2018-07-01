@@ -93,7 +93,7 @@ private:
     bool mbResetForeground : 1;
     bool mbResetBackground : 1;
 
-    SVX_DLLPRIVATE void ResetSettings(bool bForeground, bool bBackground);
+    SVX_DLLPRIVATE void ResetSettings();
     SVX_DLLPRIVATE void ApplySettings(vcl::RenderContext& rRenderContext);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     SVX_DLLPRIVATE static void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);

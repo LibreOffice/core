@@ -44,8 +44,7 @@ typedef ::std::vector< AddonStatusbarItem > AddonStatusbarItemContainer;
 
 namespace StatusbarMerger
 {
-    bool IsCorrectContext( const ::rtl::OUString& aContext,
-                                  const ::rtl::OUString& aModuleIdentifier );
+    bool IsCorrectContext( const ::rtl::OUString& aContext );
 
     bool ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                        AddonStatusbarItemContainer& rContainer );

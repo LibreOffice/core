@@ -1441,10 +1441,10 @@ Size SvxFontPrevWindow::GetOptimalSize() const
     return getPreviewStripSize(*this);
 }
 
-void FontPrevWindow::ResetSettings(bool bForeground, bool bBackground)
+void FontPrevWindow::ResetSettings()
 {
-    mbResetForeground = bForeground;
-    mbResetBackground = bBackground;
+    mbResetForeground = true;
+    mbResetBackground = true;
     Invalidate();
 }
 
@@ -1489,7 +1489,7 @@ void FontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     initFont(pImpl->maCJKFont);
     initFont(pImpl->maCTLFont);
 
-    ResetSettings(true, true);
+    ResetSettings();
 }
 
 FontPrevWindow::FontPrevWindow()
@@ -1514,7 +1514,7 @@ SvxFont& FontPrevWindow::GetCJKFont()
 
 void FontPrevWindow::StyleUpdated()
 {
-    ResetSettings(true, true);
+    ResetSettings();
     CustomWidgetController::StyleUpdated();
 }
 
