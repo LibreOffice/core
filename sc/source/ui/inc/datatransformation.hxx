@@ -26,8 +26,11 @@ enum class TransformationType
     MERGE_TRANSFORMATION,
     SPLIT_TRANSFORMATION,
     DELETE_TRANSFORMATION,
-    SORT_TRANSFORMATION
+    SORT_TRANSFORMATION,
+    TEXT_TRANSFORMATION
 };
+
+enum class TEXT_TRANSFORM_TYPE { TO_LOWER, TO_UPPER, CAPITALIZE, TRIM };
 
 class SC_DLLPUBLIC DataTransformation
 {
@@ -94,6 +97,17 @@ public:
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
     ScSortParam getSortParam() const;
+};
+
+class SC_DLLPUBLIC TextTransformation : public DataTransformation
+{
+    SCCOL mnCol;
+    TEXT_TRANSFORM_TYPE maType;
+
+    public:
+    TextTransformation(SCCOL nCol, const TEXT_TRANSFORM_TYPE rType);
+    virtual void Transform(ScDocument& rDoc) const override;
+    virtual TransformationType getTransformationType() const override;
 };
 
 }
