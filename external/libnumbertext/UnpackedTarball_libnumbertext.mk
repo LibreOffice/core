@@ -13,10 +13,4 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libnumbertext,$(LIBNUMBERTEXT_TARBA
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libnumbertext))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libnumbertext,0))
-
-$(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
-    external/libnumbertext/configure.patch \
-))
-
 # vim: set noet sw=4 ts=4:

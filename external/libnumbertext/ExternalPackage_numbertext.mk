@@ -23,6 +23,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(L
 	data/fi.sor \
 	data/fr.sor \
 	data/fr.sor \
+	data/gl.sor \
 	data/he.sor \
 	data/hr.sor \
 	data/hu.sor \
@@ -36,6 +37,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(L
 	data/lt.sor \
 	data/lv.sor \
 	data/ms.sor \
+	data/no.sor \
 	data/nl.sor \
 	data/pl.sor \
 	data/pt.sor \
@@ -44,11 +46,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(L
 	data/ru.sor \
 	data/sh.sor \
 	data/sl.sor \
+	data/sq.sor \
 	data/sr.sor \
 	data/Suzhou.sor \
 	data/sv.sor \
 	data/th.sor \
 	data/tr.sor \
+	data/uk.sor \
 	data/vi.sor \
 	data/zh.sor \
 ))
