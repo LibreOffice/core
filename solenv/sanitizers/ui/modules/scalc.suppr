@@ -99,6 +99,11 @@ sc/uiconfig/scalc/ui/mergecolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id=
 sc/uiconfig/scalc/ui/mergecolumnentry.ui://GtkEntry[@id='ed_separator'] no-labelled-by
 sc/uiconfig/scalc/ui/mergecolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/mergecolumnentry.ui://GtkEntry[@id='ed_columns'] no-labelled-by
+sc/uiconfig/scalc/ui/texttransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label
+sc/uiconfig/scalc/ui/texttransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
+sc/uiconfig/scalc/ui/texttransformationentry.ui://GtkComboBox[@id='ed_lst'] no-labelled-by
+sc/uiconfig/scalc/ui/texttransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
+sc/uiconfig/scalc/ui/texttransformationentry.ui://GtkEntry[@id='ed_columns'] no-labelled-by
 sc/uiconfig/scalc/ui/movecopysheet.ui://GtkEntry[@id='newName'] no-labelled-by
 sc/uiconfig/scalc/ui/movecopysheet.ui://GtkLabel[@id='newNameWarn'] orphan-label
 sc/uiconfig/scalc/ui/movecopysheet.ui://GtkLabel[@id='warnunused'] orphan-label

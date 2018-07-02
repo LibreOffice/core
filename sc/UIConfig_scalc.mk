@@ -156,6 +156,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/managenamesdialog \
 	sc/uiconfig/scalc/ui/mergecellsdialog \
 	sc/uiconfig/scalc/ui/mergecolumnentry \
+	sc/uiconfig/scalc/ui/texttransformationentry \
 	sc/uiconfig/scalc/ui/movecopysheet \
 	sc/uiconfig/scalc/ui/movingaveragedialog \
 	sc/uiconfig/scalc/ui/multipleoperationsdialog \

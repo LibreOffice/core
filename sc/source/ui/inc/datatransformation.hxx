@@ -21,6 +21,8 @@ class ScDocument;
 
 namespace sc {
 
+enum class TEXT_TRANSFORM_TYPE { TO_LOWER, TO_UPPER, CAPITALIZE, TRIM, CLEAN };
+
 class SC_DLLPUBLIC DataTransformation
 {
 protected:
@@ -76,6 +78,17 @@ public:
     SortTransformation(const ScSortParam& rParam);
 
     virtual void Transform(ScDocument& rDoc) const override;
+};
+
+class SC_DLLPUBLIC TextTransformation : public DataTransformation
+{
+    std::set<SCCOL> mnCol;
+    TEXT_TRANSFORM_TYPE maType;
+
+    public:
+    TextTransformation(const std::set<SCCOL> nCol, const TEXT_TRANSFORM_TYPE rType);
+    virtual void Transform(ScDocument& rDoc) const override;
+
 };
 
 }
