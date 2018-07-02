@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_c5490c61",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-02T14:57:47Z",
+      "side": 1,
+      "message": "ah! of course! it can be called in either case...",
+      "parentUuid": "ffe62b97_45085c27",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 23
+      },
+      "revId": "2f9cee688cdfde4c29ba377f7fde8360ca4602fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_dffd683b",
         "filename": "compilerplugins/clang/plugin.cxx",
         "patchSetId": 2
