@@ -48,7 +48,7 @@ static bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox* pBox, SwGCBorder_BoxBrd*
 
 static bool lcl_GCBorder_ChkBoxBrd_L( const SwTableLine* pLine, SwGCBorder_BoxBrd* pPara )
 {
-    const SwTableBox* pBox = pLine->GetTabBoxes().front();
+    const SwTableBox* pBox = pLine->GetTabBoxes().front().get();
     return lcl_GCBorder_ChkBoxBrd_B( pBox, pPara );
 }
 
@@ -69,16 +69,16 @@ static bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox* pBox, SwGCBorder_BoxBrd*
     return pPara->CheckLeftBorderOfFormat( *pBox->GetFrameFormat() );
 }
 
-static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPara );
+static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, std::vector<SwTableBox*>* pPara );
 
-static void lcl_GCBorder_GetLastBox_L( const SwTableLine* pLine, SwTableBoxes* pPara )
+static void lcl_GCBorder_GetLastBox_L( const SwTableLine* pLine, std::vector<SwTableBox*>* pPara )
 {
     const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-    SwTableBox* pBox = rBoxes.back();
+    SwTableBox* pBox = rBoxes.back().get();
     lcl_GCBorder_GetLastBox_B( pBox, pPara );
 }
 
-static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPara )
+static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, std::vector<SwTableBox*>* pPara )
 {
     const SwTableLines& rLines = pBox->GetTabLines();
     if( !rLines.empty() )
@@ -169,9 +169,9 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( SwTableBoxes::size_type n = 0, nBoxes = rBoxes.size() - 1; n < nBoxes; ++n )
         {
-            SwTableBoxes aBoxes;
+            std::vector<SwTableBox*> aBoxes;
             {
-                SwTableBox* pBox = rBoxes[ n ];
+                SwTableBox* pBox = rBoxes[ n ].get();
                 if( pBox->GetSttNd() )
                     aBoxes.insert( aBoxes.begin(), pBox );
                 else
@@ -186,7 +186,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
                     nullptr != ( pBrd = static_cast<const SvxBoxItem*>(pItem)->GetRight() ) )
                 {
                     aBPara.SetBorder( *pBrd );
-                    const SwTableBox* pNextBox = rBoxes[n+1];
+                    const SwTableBox* pNextBox = rBoxes[n+1].get();
                     if( lcl_GCBorder_ChkBoxBrd_B( pNextBox, &aBPara ) &&
                         aBPara.IsAnyBorderFound() )
                     {
@@ -303,7 +303,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
 
     for( SwTableBoxes::const_iterator it = pLine->GetTabBoxes().begin();
              it != pLine->GetTabBoxes().end(); ++it)
-        lcl_GC_Box_Border(*it, pGCPara );
+        lcl_GC_Box_Border(it->get(), pGCPara );
 
     ++pGCPara->nLinePos;
 }
@@ -347,17 +347,16 @@ static bool lcl_MergeGCBox(SwTableBox* pTableBox, GCLinePara* pPara)
             // we have a box with a single line, so we just replace it by the line's boxes
             SwTableLine* pInsLine = pTableBox->GetUpper();
             SwTableLine* pCpyLine = pTableBox->GetTabLines()[0];
-            SwTableBoxes::iterator it = std::find( pInsLine->GetTabBoxes().begin(), pInsLine->GetTabBoxes().end(), pTableBox );
-            for( auto pTabBox : pCpyLine->GetTabBoxes() )
+            auto it = std::find_if( pInsLine->GetTabBoxes().begin(), pInsLine->GetTabBoxes().end(),
+                        [&] (std::unique_ptr<SwTableBox> const & itBox) { return itBox.get() == pTableBox; } );
+            for( auto & pTabBox : pCpyLine->GetTabBoxes() )
                 pTabBox->SetUpper( pInsLine );
 
-            // remove the old box from its parent line
+            // remove the old box from its parent line and delete it
             it = pInsLine->GetTabBoxes().erase( it );
             // insert the nested line's boxes in its place
-            pInsLine->GetTabBoxes().insert( it, pCpyLine->GetTabBoxes().begin(), pCpyLine->GetTabBoxes().end());
+            pInsLine->GetTabBoxes().insert( it, std::make_move_iterator(pCpyLine->GetTabBoxes().begin()), std::make_move_iterator(pCpyLine->GetTabBoxes().end()));
             pCpyLine->GetTabBoxes().clear();
-            // destroy the removed box
-            delete pTableBox;
 
             return false; // set up anew
         }
@@ -373,7 +372,7 @@ static bool lcl_MergeGCLine(SwTableLine* pLn, GCLinePara* pGCPara)
         while( 1 == nBoxes )
         {
             // We have a Box with Lines
-            SwTableBox* pBox = pLn->GetTabBoxes().front();
+            SwTableBox* pBox = pLn->GetTabBoxes().front().get();
             if( pBox->GetTabLines().empty() )
                 break;
 
@@ -420,7 +419,7 @@ static bool lcl_MergeGCLine(SwTableLine* pLn, GCLinePara* pGCPara)
 
         // ATTENTION: The number of boxes can change!
         for( SwTableBoxes::size_type nLen = 0; nLen < pLn->GetTabBoxes().size(); ++nLen )
-            if( !lcl_MergeGCBox( pLn->GetTabBoxes()[nLen], pGCPara ))
+            if( !lcl_MergeGCBox( pLn->GetTabBoxes()[nLen].get(), pGCPara ))
                 --nLen;
     }
     return true;

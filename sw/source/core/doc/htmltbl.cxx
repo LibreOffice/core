@@ -389,14 +389,14 @@ const SwStartNode *SwHTMLTableLayout::GetAnyBoxStartNode() const
 {
     const SwStartNode *pBoxSttNd;
 
-    const SwTableBox* pBox = m_pSwTable->GetTabLines()[0]->GetTabBoxes()[0];
+    const SwTableBox* pBox = m_pSwTable->GetTabLines()[0]->GetTabBoxes()[0].get();
     while( nullptr == (pBoxSttNd = pBox->GetSttNd()) )
     {
         OSL_ENSURE( pBox->GetTabLines().size() > 0,
                 "Box without start node and lines" );
         OSL_ENSURE( pBox->GetTabLines().front()->GetTabBoxes().size() > 0,
                 "Line without boxes" );
-        pBox = pBox->GetTabLines().front()->GetTabBoxes().front();
+        pBox = pBox->GetTabLines().front()->GetTabBoxes().front().get();
     }
 
     return pBoxSttNd;
@@ -1546,8 +1546,8 @@ static void lcl_ResizeLine( const SwTableLine* pLine, SwTwips *pWidth )
 {
     SwTwips nOldWidth = *pWidth;
     *pWidth = 0;
-    for( const SwTableBox* pBox : pLine->GetTabBoxes() )
-        lcl_ResizeBox(pBox, pWidth );
+    for( std::unique_ptr<SwTableBox> const & pBox : pLine->GetTabBoxes() )
+        lcl_ResizeBox(pBox.get(), pWidth );
 
     SAL_WARN_IF( nOldWidth && std::abs(*pWidth-nOldWidth) >= COLFUZZY, "sw.core",
                  "A box's rows have all a different length" );
