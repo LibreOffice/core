@@ -220,9 +220,9 @@ void SwModify::Add( SwClient* pDepend )
     if(pDepend->m_pRegisteredIn != this )
     {
 #if OSL_DEBUG_LEVEL > 0
-        if(sw::ClientIteratorBase::our_pClientIters)
+        if(sw::ClientIteratorBase::s_pClientIters)
         {
-            for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
+            for(auto& rIter : sw::ClientIteratorBase::s_pClientIters->GetRingContainer())
             {
                 SAL_WARN_IF(&rIter.m_rRoot == m_pWriterListeners, "sw.core", "a " << typeid(*pDepend).name() << " client added as listener to a " << typeid(*this).name() << " during client iteration.");
             }
@@ -272,9 +272,9 @@ SwClient* SwModify::Remove( SwClient* pDepend )
         pR->m_pLeft = pL;
 
     // update ClientIterators
-    if(sw::ClientIteratorBase::our_pClientIters)
+    if(sw::ClientIteratorBase::s_pClientIters)
     {
-        for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
+        for(auto& rIter : sw::ClientIteratorBase::s_pClientIters->GetRingContainer())
         {
             if (&rIter.m_rRoot == this &&
                 (rIter.m_pCurrent == pDepend || rIter.m_pPosition == pDepend))
@@ -362,5 +362,5 @@ void sw::WriterMultiListener::EndListeningAll()
     m_vDepends.clear();
 }
 
-sw::ClientIteratorBase* sw::ClientIteratorBase::our_pClientIters = nullptr;
+sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

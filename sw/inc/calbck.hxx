@@ -285,13 +285,13 @@ namespace sw
             // is marked down to become the current object in the next step
             // this is necessary because iteration requires access to members of the current object
             WriterListener* m_pPosition;
-            static SW_DLLPUBLIC ClientIteratorBase* our_pClientIters;
+            static SW_DLLPUBLIC ClientIteratorBase* s_pClientIters;
 
             ClientIteratorBase( const SwModify& rModify )
                 : m_rRoot(rModify)
             {
-                MoveTo(our_pClientIters);
-                our_pClientIters = this;
+                MoveTo(s_pClientIters);
+                s_pClientIters = this;
                 m_pCurrent = m_pPosition = m_rRoot.m_pWriterListeners;
             }
             WriterListener* GetLeftOfPos() { return m_pPosition->m_pLeft; }
@@ -306,9 +306,9 @@ namespace sw
             }
             ~ClientIteratorBase() override
             {
-                assert(our_pClientIters);
-                if(our_pClientIters == this)
-                    our_pClientIters = unique() ? nullptr : GetNextInRing();
+                assert(s_pClientIters);
+                if(s_pClientIters == this)
+                    s_pClientIters = unique() ? nullptr : GetNextInRing();
                 MoveTo(nullptr);
             }
             // return "true" if an object was removed from a client chain in iteration
