@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_4213b267",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-02T10:51:09Z",
+      "side": 1,
+      "message": "but otoh there are a lot of these that require the cxx-file, see e.g. FragileDestructor::TraverseCXXDestructorDecl\n\nto be honest i\u0027d prefer if whitelisting were based more on class/function names than on file names...",
+      "parentUuid": "9a30ddce_bffef435",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 23
+      },
+      "revId": "2f9cee688cdfde4c29ba377f7fde8360ca4602fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_dffd683b",
         "filename": "compilerplugins/clang/plugin.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-05-30T10:52:25Z",
       "side": 1,
       "message": "Is it necessary to use getExpansionLoc()? I think using directly getPresumedLoc() should do (although I\u0027m not 100% sure).",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 227,
+        "endChar": 100
+      },
+      "revId": "2f9cee688cdfde4c29ba377f7fde8360ca4602fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_e22086b3",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-02T10:51:09Z",
+      "side": 1,
+      "message": "this was copied from somewhere else; i can try if it works without....",
+      "parentUuid": "9a30ddce_dffd683b",
       "range": {
         "startLine": 227,
         "startChar": 0,
