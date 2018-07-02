@@ -14,7 +14,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/vclevent.hxx>
-
+#include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 /**
  * split from the main class since it needs different ref-counting mana
  */
@@ -37,7 +37,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
-
+    mxFrame = rFrame;
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"
     // or "ContextContainerX" where X is a number >= 1
@@ -154,6 +154,23 @@ void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(co
     }
 }
 
+void NotebookBar::ControlListener(bool bListen)
+{
+    if(bListen)
+    {
+        // remove listeners
+        css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (css::ui::ContextChangeEventMultiplexer::get(
+                ::comphelper::getProcessComponentContext()));
+        xMultiplexer->removeContextChangeEventListener(getContextChangeEventListener(),mxFrame->getController());
+    }
+    else
+    {
+        // add listeners
+        css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (css::ui::ContextChangeEventMultiplexer::get(
+                ::comphelper::getProcessComponentContext()));
+        xMultiplexer->addContextChangeEventListener(getContextChangeEventListener(),mxFrame->getController());
+    }
+}
 
 void SAL_CALL NotebookBarContextChangeEventListener::disposing(const ::css::lang::EventObject&)
 {
