@@ -104,7 +104,7 @@ public:
 
 class SC_DLLPUBLIC TextTransformation : public DataTransformation
 {
-    SCCOL mnCol;
+    std::set<SCCOL> mnCol;
     TEXT_TRANSFORM_TYPE maType;
 
     public:
