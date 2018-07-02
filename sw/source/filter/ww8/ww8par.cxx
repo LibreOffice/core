@@ -1804,6 +1804,9 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TAB_COMPAT, true);
     // #i24363# tab stops relative to indent
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TABS_RELATIVE_TO_INDENT, false);
+    // tdf#117923
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, true);
 
     // Import Default Tabs
     long nDefTabSiz = m_xWDop->dxaTab;

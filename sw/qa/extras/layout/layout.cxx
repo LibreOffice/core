@@ -19,11 +19,13 @@ public:
     void testTdf116830();
     void testTdf116925();
     void testTdf117028();
+    void testTdf117923();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
+    CPPUNIT_TEST(testTdf117923);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -106,6 +108,19 @@ void SwLayoutWriter::testTdf117028()
 
     // Make sure the text is still rendered.
     assertXPathContent(pXmlDoc, "//textarray/text", "Hello");
+}
+
+void SwLayoutWriter::testTdf117923()
+{
+    createDoc("tdf117923.doc");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // Check that we actually test the line we need
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", "GHI GHI GHI GHI");
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nType", "POR_NUMBER");
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "rText", "2.");
+    // The numbering height was 960.
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
