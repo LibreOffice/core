@@ -31,11 +31,21 @@ public:
     void testColumnRemove();
     void testColumnSplit();
     void testColumnMerge();
+    void testTextToLower();
+    void testTextToUpper();
+    void testTextCapitalize();
+    void testTextTrim();
+    void testTextClean();
 
     CPPUNIT_TEST_SUITE(ScDataTransformationTest);
     CPPUNIT_TEST(testColumnRemove);
     CPPUNIT_TEST(testColumnSplit);
     CPPUNIT_TEST(testColumnMerge);
+    CPPUNIT_TEST(testTextToLower);
+    CPPUNIT_TEST(testTextToUpper);
+    CPPUNIT_TEST(testTextCapitalize);
+    CPPUNIT_TEST(testTextTrim);
+    CPPUNIT_TEST(testTextClean);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -121,6 +131,80 @@ void ScDataTransformationTest::testColumnMerge()
     {
         CPPUNIT_ASSERT(m_pDoc->GetString(4, nRow, 0).isEmpty());
     }
+}
+
+void ScDataTransformationTest::testTextToLower()
+{
+    m_pDoc->SetString(2, 0, 0, "Berlin");
+    m_pDoc->SetString(2, 1, 0, "Brussels");
+    m_pDoc->SetString(2, 2, 0, "Paris");
+    m_pDoc->SetString(2, 3, 0, "Peking");
+
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TO_LOWER);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("berlin"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("brussels"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("paris"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("peking"), m_pDoc->GetString(2, 3, 0));
+}
+
+void ScDataTransformationTest::testTextToUpper()
+{
+    m_pDoc->SetString(2, 0, 0, "Berlin");
+    m_pDoc->SetString(2, 1, 0, "Brussels");
+    m_pDoc->SetString(2, 2, 0, "Paris");
+    m_pDoc->SetString(2, 3, 0, "Peking");
+
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TO_UPPER);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("BERLIN"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("BRUSSELS"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("PARIS"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("PEKING"), m_pDoc->GetString(2, 3, 0));
+}
+
+void ScDataTransformationTest::testTextCapitalize()
+{
+    m_pDoc->SetString(2, 0, 0, "hello woRlD");
+    m_pDoc->SetString(2, 1, 0, "qUe vA");
+    m_pDoc->SetString(2, 2, 0, "si tu la ves");
+    m_pDoc->SetString(2, 3, 0, "cUaNdO mE EnAmOro");
+
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::CAPITALIZE);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Que Va"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Si Tu La Ves"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Cuando Me Enamoro"), m_pDoc->GetString(2, 3, 0));
+}
+
+void ScDataTransformationTest::testTextTrim()
+{
+    m_pDoc->SetString(2, 0, 0, " Berlin");
+    m_pDoc->SetString(2, 1, 0, "Brussels ");
+    m_pDoc->SetString(2, 2, 0, " Paris ");
+
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TRIM);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Berlin"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Brussels"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paris"), m_pDoc->GetString(2, 2, 0));
+}
+
+void ScDataTransformationTest::testTextClean()
+{
+    m_pDoc->SetString(2, 0, 0, "first line \n second line \n");
+    m_pDoc->SetString(2, 1, 0, "let us \t us \t clean \t some \t text");
+
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::CLEAN);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("first line  second line "), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("let us  us  clean  some  text"), m_pDoc->GetString(2, 1, 0));
 }
 
 ScDataTransformationTest::ScDataTransformationTest() :
