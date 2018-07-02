@@ -147,7 +147,7 @@ TableBoxVectorPtr WW8TableNodeInfoInner::getTableBoxesOfRow()
             nBoxes = MAXTABLECELLS;
         for ( sal_uInt8 n = 0; n < nBoxes; n++ )
         {
-            pResult->push_back(rTableBoxes[n]);
+            pResult->push_back(rTableBoxes[n].get());
         }
     }
     else
@@ -673,7 +673,7 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
 
     for (size_t n = 0; n < rBoxes.size(); ++n)
     {
-        const SwTableBox * pBox = rBoxes[n];
+        const SwTableBox * pBox = rBoxes[n].get();
 
         pPrev = processTableBox(pTable, pBox, nRow, static_cast<sal_uInt32>(n), nDepth, n == rBoxes.size() - 1, pPrev, rLastRowEnds);
     }
@@ -705,7 +705,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
             const SwTableBoxes & rBoxes = pLine->GetTabBoxes();
 
             for (size_t nBox = 0; nBox < rBoxes.size(); ++nBox)
-                pNodeInfo = processTableBoxLines(rBoxes[nBox], pTable, pBoxToSet, nRow, nCell, nDepth);
+                pNodeInfo = processTableBoxLines(rBoxes[nBox].get(), pTable, pBoxToSet, nRow, nCell, nDepth);
         }
     }
     else
