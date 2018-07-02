@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_25baf8dd",
+        "filename": "xmloff/source/text/XMLTextMarkImportContext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-02T16:32:21Z",
+      "side": 1,
+      "message": "this is for \"bookmark-start\"",
+      "revId": "74671ab2bbc0384a968a61d3f95d322f600a75d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_e5cbf06f",
+        "filename": "xmloff/source/text/XMLTextMarkImportContext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-02T16:32:21Z",
+      "side": 1,
+      "message": "possibly need to check !bImportAsField here?",
+      "revId": "74671ab2bbc0384a968a61d3f95d322f600a75d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_05cff47f",
+        "filename": "xmloff/source/text/XMLTextMarkImportContext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-02T16:32:21Z",
+      "side": 1,
+      "message": "this is for \"bookmark-end\" - which means it will break as soon as there is an unrelated bookmark-start between the matching bookmark-start and this bookmark-end, which is perfectly valid.",
+      "revId": "74671ab2bbc0384a968a61d3f95d322f600a75d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
