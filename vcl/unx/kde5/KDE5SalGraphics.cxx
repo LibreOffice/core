@@ -81,6 +81,7 @@ void QImage2BitmapBuffer(QImage* pImg, BitmapBuffer* pBuf)
 KDE5SalGraphics::KDE5SalGraphics()
     : SvpSalGraphics()
 {
+    initStyles();
 }
 
 bool KDE5SalGraphics::IsNativeControlSupported(ControlType type, ControlPart part)
@@ -218,12 +219,6 @@ bool KDE5SalGraphics::drawNativeControl(ControlType type, ControlPart part,
         case ControlType::Tooltip:
             m_image->fill(QApplication::palette().color(QPalette::ToolTipBase).rgb());
             break;
-        case ControlType::Pushbutton:
-            if (nControlState & ControlState::FOCUSED)
-                m_image->fill(QApplication::palette().color(QPalette::Highlight).rgb());
-            else
-                m_image->fill(QApplication::palette().color(QPalette::Button).rgb());
-            break;
         case ControlType::Scrollbar:
             if ((part == ControlPart::DrawBackgroundVert)
                 || (part == ControlPart::DrawBackgroundHorz))
@@ -241,9 +236,21 @@ bool KDE5SalGraphics::drawNativeControl(ControlType type, ControlPart part,
 
     if (type == ControlType::Pushbutton)
     {
-        QStyleOptionButton option;
-        draw(QStyle::CE_PushButton, &option, m_image.get(),
-             vclStateValue2StateFlag(nControlState, value));
+        if (part == ControlPart::Entire)
+        {
+            QStyleOptionButton option;
+            draw(QStyle::CE_PushButton, &option, m_image.get(),
+                 vclStateValue2StateFlag(nControlState, value));
+        }
+        else if (part == ControlPart::Focus)
+        {
+            QStyleOptionButton option;
+            option.state = QStyle::State_HasFocus;
+            option.rect = m_image->rect();
+            QPainter painter(m_image.get());
+            m_focusedButton->style()->drawControl(QStyle::CE_PushButton, &option, &painter,
+                                                  m_focusedButton.get());
+        }
     }
     else if (type == ControlType::Menubar)
     {
@@ -989,6 +996,17 @@ bool KDE5SalGraphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
         return true;
     }
     return false;
+}
+
+void KDE5SalGraphics::initStyles()
+{
+    // button focus
+    m_focusedButton.reset(new QPushButton());
+    QString aHighlightColor = QApplication::palette().color(QPalette::Highlight).name();
+    QString focusStyleSheet("background-color: rgb(0,0,0,0%); border: 1px; border-radius: 2px; "
+                            "border-color: %1; border-style:solid;");
+    focusStyleSheet.replace("%1", aHighlightColor);
+    m_focusedButton->setStyleSheet(focusStyleSheet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,6 +25,7 @@
 #include <headless/svpgdi.hxx>
 
 #include <QtGui/QImage>
+#include <QtWidgets/QPushButton>
 
 class KDE5SalFrame;
 
@@ -49,6 +50,11 @@ public:
 
     std::unique_ptr<QImage> m_image;
     QRect lastPopupRect;
+
+private:
+    void initStyles();
+
+    std::unique_ptr<QPushButton> m_focusedButton;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
