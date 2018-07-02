@@ -12282,15 +12282,29 @@
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first22">
-                                    <property name="width_request">400</property>
+                                    <property name="width_request">1000</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="hexpand">True</property>
                                     <property name="toolbar_style">both-horiz</property>
                                     <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkToolButton" id="AVMediaToolBox">
+                                      <object class="GtkToolButton" id="Media-AVMediaPlayer">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:AVMediaPlayer</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="AVMediaToolBox">
+                                        <property name="width_request">600</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="hexpand">True</property>
                                         <property name="action_name">.uno:AVMediaToolBox</property>
                                       </object>
                                       <packing>
