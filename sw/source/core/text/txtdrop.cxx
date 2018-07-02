@@ -95,8 +95,8 @@ SwDropSave::~SwDropSave()
 /// SwDropPortionPart DTor
 SwDropPortionPart::~SwDropPortionPart()
 {
-    delete pFollow;
-    delete pFnt;
+    pFollow.reset();
+    pFnt.reset();
 }
 
 /// SwDropPortion CTor, DTor
@@ -641,7 +641,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         if ( ! pCurrPart )
             pDropPor->SetPart( pPart );
         else
-            pCurrPart->SetFollow( pPart );
+            pCurrPart->SetFollow( std::unique_ptr<SwDropPortionPart>(pPart) );
 
         pCurrPart = pPart;
     }
