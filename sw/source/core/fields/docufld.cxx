@@ -45,7 +45,6 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/zforlist.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
