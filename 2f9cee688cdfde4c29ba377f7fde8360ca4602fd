@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_45085c27",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2018-07-02T11:16:35Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you mean. Is this function called also for something else than locations in the main .cpp file? If yes, you may get unlucky with the first call not being a location for the main file and s_Mode possibly getting set incorrectly.",
+      "parentUuid": "ffe62b97_4213b267",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 23
+      },
+      "revId": "2f9cee688cdfde4c29ba377f7fde8360ca4602fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_dffd683b",
         "filename": "compilerplugins/clang/plugin.cxx",
         "patchSetId": 2
