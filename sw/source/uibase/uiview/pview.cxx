@@ -78,6 +78,8 @@
 #include <svx/dialogs.hrc>
 
 #include <memory>
+#include <vcl/EnumContext.hxx>
+#include <vcl/notebookbar.hxx>
 
 using namespace ::com::sun::star;
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")
@@ -1157,6 +1159,14 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     CreateScrollbar( true );
     CreateScrollbar( false );
 
+    //notify notebookbar change in context
+    SfxShell::SetContextBroadcasterEnabled(true);
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
+    SfxShell::BroadcastContextForActivation(true);
+    //removelisteners for notebookbar
+    if (auto& pBar = SfxViewFrame::Current()->GetWindow().GetSystemWindow()->GetNotebookBar())
+        pBar->ControlListener(true);
+
     SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
     if ( !pOldSh )
     {
@@ -1221,7 +1231,8 @@ SwPagePreview::~SwPagePreview()
     delete pVShell;
 
     m_pViewWin.disposeAndClear();
-
+    if (auto& pBar = SfxViewFrame::Current()->GetWindow().GetSystemWindow()->GetNotebookBar())
+        pBar->ControlListener(false);
     m_pScrollFill.disposeAndClear();
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
