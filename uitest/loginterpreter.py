@@ -98,12 +98,27 @@ def get_coupling_type(line1, line2):
 
     return "NOT_A_COUPLE"
 
+def check_app_starting_action(action_dict):
+    app_starter_button_ids = \
+    set(["draw_all", "impress_all", "calc_all" , "writer_all", "database_all", "math_all"])
+
+    if action_dict["keyword"] == "ButtonUIObject" and action_dict["Action"] == "CLICK" and \
+    action_dict["Id"] in app_starter_button_ids:
+        return True
+    return False
+
 def get_test_line_from_one_log_line(log_line):
     action_dict = parse_line(log_line)
     test_line = "        "
     if action_dict["keyword"].endswith("UIObject"):
         parent = action_dict["Parent"]
-        if (parent != ""):
+        if (check_app_starting_action(action_dict)):
+            test_line +=\
+            "MainDoc = self.ui_test.create_doc_in_start_center(\"" + \
+            action_dict["Id"][:-4] +"\")\n        MainWindow = " + \
+            "self.xUITest.getTopFocusWindow()\n"
+            return test_line
+        elif (parent != ""):
             test_line += \
             action_dict["Id"] + " = " + parent + ".getChild(\"" + \
             action_dict["Id"] + "\")\n        " + \
