@@ -187,8 +187,6 @@ ScHeaderFooterTextData::ScHeaderFooterTextData(
     mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
     xContentObj( xContent ),
     nPart( nP ),
-    pEditEngine( nullptr ),
-    pForwarder( nullptr ),
     bDataValid(false)
 {
 }
@@ -197,8 +195,8 @@ ScHeaderFooterTextData::~ScHeaderFooterTextData()
 {
     SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
-    delete pForwarder;
-    delete pEditEngine;
+    pForwarder.reset();
+    pEditEngine.reset();
 }
 
 SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
@@ -207,7 +205,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
     {
         SfxItemPool* pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool );
+        std::unique_ptr<ScHeaderEditEngine> pHdrEngine(new ScHeaderEditEngine( pEnginePool ));
 
         pHdrEngine->EnableUndo( false );
         pHdrEngine->SetRefMapMode(MapMode(MapUnit::MapTwip));
@@ -232,18 +230,18 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
         ScHeaderFooterTextObj::FillDummyFieldData( aData );
         pHdrEngine->SetData( aData );
 
-        pEditEngine = pHdrEngine;
-        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
+        pEditEngine = std::move(pHdrEngine);
+        pForwarder.reset( new SvxEditEngineForwarder(*pEditEngine) );
     }
 
     if (bDataValid)
-        return pForwarder;
+        return pForwarder.get();
 
     if (mpTextObj)
         pEditEngine->SetText(*mpTextObj);
 
     bDataValid = true;
-    return pForwarder;
+    return pForwarder.get();
 }
 
 void ScHeaderFooterTextData::UpdateData()
