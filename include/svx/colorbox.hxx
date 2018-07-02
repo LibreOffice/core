@@ -99,7 +99,6 @@ private:
     Link<ColorListBox&, void> m_aSelectedLink;
     ListBoxColorWrapper m_aColorWrapper;
     Color m_aAutoDisplayColor;
-    Color m_aSaveColor;
     NamedColor m_aSelectedColor;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
