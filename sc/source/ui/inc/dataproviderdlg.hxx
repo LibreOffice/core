@@ -61,7 +61,7 @@ public:
     void splitColumn();
     void mergeColumns();
 
-    void import();
+    void import(ScDocument* pDoc);
 };
 
 #endif

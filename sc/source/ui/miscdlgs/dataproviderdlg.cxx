@@ -481,7 +481,7 @@ IMPL_LINK(ScDataProviderDlg, ImportHdl, Window*, pCtrl, void)
 {
     if (pCtrl == mpDataProviderCtrl.get())
     {
-        import();
+        import(mpDoc.get());
     }
 }
 
@@ -521,9 +521,9 @@ void ScDataProviderDlg::mergeColumns()
     mpList->addEntry(pMergeColumnEntry);
 }
 
-void ScDataProviderDlg::import()
+void ScDataProviderDlg::import(ScDocument* pDoc)
 {
-    sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(mpDoc.get());
+    sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(pDoc);
     std::vector<VclPtr<vcl::Window>> aListEntries = mpList->getEntries();
     for (size_t i = 1; i < aListEntries.size(); ++i)
     {
@@ -536,7 +536,7 @@ void ScDataProviderDlg::import()
         aSource.AddDataTransformation(pTransformationCtrl->getTransformation());
     }
     aSource.setDBData(pDBData);
-    aSource.refresh(mpDoc.get(), true);
+    aSource.refresh(pDoc, true);
     mpTable->Invalidate();
 }
 
