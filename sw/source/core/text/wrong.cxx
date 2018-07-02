@@ -24,6 +24,7 @@
 #include <txtfrm.hxx>
 
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 
 SwWrongArea::SwWrongArea( const OUString& rType, WrongListType listType,
         css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
@@ -49,6 +50,26 @@ SwWrongArea::SwWrongArea( const OUString& rType,
     }
 }
 
+SwWrongArea::SwWrongArea( SwWrongArea const & other )
+{
+    this->operator=(other);
+}
+
+SwWrongArea & SwWrongArea::operator=( SwWrongArea const & other )
+{
+    maType = other.maType;
+    mxPropertyBag = other.mxPropertyBag;
+    mnPos = other.mnPos;
+    mnLen= other.mnLen;
+    if (other.mpSubList)
+        mpSubList = other.mpSubList->Clone();
+    else
+        mpSubList.reset();
+    mColor = other.mColor;
+    mLineType = other.mLineType;
+    return *this;
+}
+
 SwWrongList::SwWrongList( WrongListType eType ) :
     meType       (eType),
     mnBeginInvalid(COMPLETE_STRING),  // everything correct... (the invalid area starts beyond the string)
@@ -57,38 +78,25 @@ SwWrongList::SwWrongList( WrongListType eType ) :
     maList.reserve( 5 );
 }
 
+SwWrongList::SwWrongList( SwWrongList const & other ) :
+    maList(other.maList),
+    meType(other.meType),
+    mnBeginInvalid(other.mnBeginInvalid),
+    mnEndInvalid (other.mnEndInvalid)
+{
+}
+
 SwWrongList::~SwWrongList()
 {
-    ClearList();
 }
 
-SwWrongList* SwWrongList::Clone()
+std::unique_ptr<SwWrongList> SwWrongList::Clone()
 {
-    SwWrongList* pClone = new SwWrongList( meType );
-    pClone->CopyFrom( *this );
-    return pClone;
-}
-
-void SwWrongList::CopyFrom( const SwWrongList& rCopy )
-{
-    maList = rCopy.maList;
-    meType = rCopy.meType;
-    mnBeginInvalid = rCopy.mnBeginInvalid;
-    mnEndInvalid = rCopy.mnEndInvalid;
-    for(SwWrongArea & i : maList)
-    {
-        if( i.mpSubList )
-            i.mpSubList = i.mpSubList->Clone();
-    }
+    return o3tl::make_unique<SwWrongList>( *this );
 }
 
 void SwWrongList::ClearList()
 {
-    for (SwWrongArea & i : maList)
-    {
-        delete i.mpSubList;
-        i.mpSubList = nullptr;
-    }
     maList.clear();
 }
 
@@ -562,32 +570,7 @@ void SwWrongList::Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator s
 
 void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
 {
-    if ( nIdx >= maList.size() ) return;
-    std::vector<SwWrongArea>::iterator i1 = maList.begin();
-    i1 += nIdx;
-
-    std::vector<SwWrongArea>::iterator i2 = i1;
-    if ( nIdx + nLen >= static_cast<sal_uInt16>(maList.size()) )
-        i2 = maList.end(); // robust
-    else
-        i2 += nLen;
-
-    std::vector<SwWrongArea>::iterator iLoop = i1;
-    while ( iLoop != i2 )
-    {
-        delete (*iLoop).mpSubList;
-        ++iLoop;
-    }
-
-#if OSL_DEBUG_LEVEL > 0
-    const int nOldSize = Count();
-#endif
-
-    maList.erase(i1, i2);
-
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" );
-#endif
+    maList.erase(maList.begin() + nIdx, maList.begin() + nIdx + nLen);
 }
 
 void SwWrongList::RemoveEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
