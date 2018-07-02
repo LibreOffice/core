@@ -790,7 +790,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             ScopedVclPtrInstance< ScDataProviderDlg > aDialog( pTabViewShell->GetDialogParent(), xDoc);
             if (aDialog->Execute() == RET_OK)
             {
-                // handle the import here
+                ScDocument* pDoc = GetViewData()->GetDocument();
+                aDialog->import(pDoc);
             }
         }
         break;
