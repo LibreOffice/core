@@ -176,7 +176,7 @@ ScFunctionAccess::ScFunctionAccess() :
 
 ScFunctionAccess::~ScFunctionAccess()
 {
-    delete pOptions;
+    pOptions.reset();
     {
         // SfxBroadcaster::RemoveListener checks DBG_TESTSOLARMUTEX():
         SolarMutexGuard g;
@@ -241,7 +241,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
     else
     {
         if ( !pOptions )
-            pOptions = new ScDocOptions();
+            pOptions.reset( new ScDocOptions() );
 
         // options aren't initialized from configuration - always get the same default behaviour
 
@@ -259,7 +259,7 @@ uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const OUString& aPropertyN
         return uno::Any( mbArray );
 
     if ( !pOptions )
-        pOptions = new ScDocOptions();
+        pOptions.reset( new ScDocOptions() );
 
     // options aren't initialized from configuration - always get the same default behaviour
 

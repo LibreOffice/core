@@ -61,7 +61,7 @@ class ScFunctionAccess : public cppu::WeakImplHelper<
 {
 private:
     ScTempDocCache  aDocCache;
-    ScDocOptions*   pOptions;
+    std::unique_ptr<ScDocOptions> pOptions;
     SfxItemPropertyMap aPropertyMap;
     bool            mbArray;
     bool            mbValid;
