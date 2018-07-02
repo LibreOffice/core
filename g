@@ -193,36 +193,36 @@ do_git_cmd()
 
 do_checkout()
 {
-local cmd
-local create_branch="0"
-local branch
-local module
+	local cmd
+	local create_branch="0"
+	local branch
+	local module
 
     git checkout "$@" || return $?
     for cmd in "$@" ; do
-	if [ "$cmd" = "-f" ]; then
-	    return 0
-	elif [ "$cmd" = "-b" ] ; then
-	    create_branch=1
-	elif [ "$create_branch" = "1" ] ; then
-	    branch="$cmd"
-	    create_branch=0
-	fi
+		if [ "$cmd" = "-f" ]; then
+			return 0
+		elif [ "$cmd" = "-b" ] ; then
+			create_branch=1
+		elif [ "$create_branch" = "1" ] ; then
+			branch="$cmd"
+			create_branch=0
+		fi
     done
     if [ -f .gitmodules ] ; then
-	git submodule update
-	if [ -n "$branch" ] ; then
-	    git submodule foreach git checkout -b "${branch}" HEAD || return $?
-	fi
+		git submodule update
+		if [ -n "$branch" ] ; then
+			git submodule foreach git checkout -b "${branch}" HEAD || return $?
+		fi
     else
-	# now that is the nasty case we moved prior to submodules
-	# delete the submodules left over if any
-	for module in $SUBMODULES_ALL ; do
-	    echo "clean-up submodule $module"
-	    rm -fr "${module}"
-	done
-	# make sure we have the needed repo in clone
-	./g clone && ./g -f checkout "$@" || return $?
+		# now that is the nasty case we moved prior to submodules
+		# delete the submodules left over if any
+		for module in $SUBMODULES_ALL ; do
+			echo "clean-up submodule $module"
+			rm -fr "${module}"
+		done
+		# make sure we have the needed repo in clone
+		./g clone && ./g -f checkout "$@" || return $?
     fi
     return $?
 }
