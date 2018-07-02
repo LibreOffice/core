@@ -910,6 +910,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117297_tableStyle, "tdf117297_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph3 double spacing", sal_Int16(200), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf82175_noStyleInheritance, "tdf82175_noStyleInheritance.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Text Body style Single line spacing", sal_Int16(100), getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing").Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing").Mode);
+}
+
 DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
 {
     // Header was lost on export when the document had multiple columns.

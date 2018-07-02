@@ -938,7 +938,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                 && pEntry->sBaseStyleIdentifier.isEmpty()
                                 && !xStyle->getParentStyle().isEmpty() )
                             {
-                                xStyle->setParentStyle( "Standard" );
+                                xStyle->setParentStyle( "" );
                             }
                         }
                     }
