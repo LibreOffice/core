@@ -564,7 +564,7 @@ enum QuoteType
         FIELDEND_QUOTE if end of field quote
         DONTKNOW_QUOTE anything else
  */
-static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* pSeps )
+static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* pSeps, sal_Unicode& rcDetectSep )
 {
     // Due to broken CSV generators that don't double embedded quotes check if
     // a field separator immediately or with trailing spaces follows the quote,
@@ -572,6 +572,10 @@ static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* p
     const sal_Unicode cBlank = ' ';
     if (p[1] == cBlank && ScGlobal::UnicodeStrChr( pSeps, cBlank))
         return FIELDEND_QUOTE;
+    // Detect a possible blank separator if it's not already in the list (which
+    // was checked right above for p[1]==cBlank).
+    if (p[1] == cBlank && !rcDetectSep && p[2] && p[2] != cBlank)
+        rcDetectSep = cBlank;
     while (p[1] == cBlank)
         ++p;
     if (!p[1] || ScGlobal::UnicodeStrChr( pSeps, p[1]))
@@ -601,7 +605,7 @@ static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* p
                             do not increment nQuotes in caller then!
  */
 static QuoteType lcl_isEscapedOrFieldEndQuote( sal_Int32 nQuotes, const sal_Unicode* p,
-        const sal_Unicode* pSeps, sal_Unicode cStr )
+        const sal_Unicode* pSeps, sal_Unicode cStr, sal_Unicode& rcDetectSep )
 {
     if ((nQuotes % 2) == 0)
     {
@@ -615,7 +619,7 @@ static QuoteType lcl_isEscapedOrFieldEndQuote( sal_Int32 nQuotes, const sal_Unic
     }
     if (p[1] == cStr)
         return FIRST_QUOTE;
-    return lcl_isFieldEndQuote( p, pSeps);
+    return lcl_isFieldEndQuote( p, pSeps, rcDetectSep);
 }
 
 /** Append characters of [p1,p2) to rField.
@@ -664,7 +668,8 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
                     // break or continue for loop
                     if (eMode == DoubledQuoteMode::ESCAPE)
                     {
-                        if (lcl_isFieldEndQuote( p-1, pSeps) == FIELDEND_QUOTE)
+                        sal_Unicode cDetectSep = 0xffff;    // No separator detection here.
+                        if (lcl_isFieldEndQuote( p-1, pSeps, cDetectSep) == FIELDEND_QUOTE)
                             break;
                         else
                             continue;
@@ -1299,8 +1304,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     SCTAB nTab = aRange.aStart.Tab();
 
     bool    bFixed              = pExtOptions->IsFixedLen();
-    const OUString& rSeps       = pExtOptions->GetFieldSeps();
-    const sal_Unicode* pSeps    = rSeps.getStr();
+    OUString aSeps              = pExtOptions->GetFieldSeps();  // Need non-const for ReadCsvLine(),
+    const sal_Unicode* pSeps    = aSeps.getStr();               // but it will be const anyway (asserted below).
     bool    bMerge              = pExtOptions->IsMergeSeps();
     bool    bRemoveSpace        = pExtOptions->IsRemoveSpace();
     sal_uInt16  nInfoCount      = pExtOptions->GetInfoCount();
@@ -1336,10 +1341,11 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     OUString aCell;
     sal_uInt16 i;
     SCROW nRow = nStartRow;
+    sal_Unicode cDetectSep = 0xffff;    // No separator detection here.
 
     while(--nSkipLines>0)
     {
-        aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr); // content is ignored
+        aLine = ReadCsvLine(rStrm, !bFixed, aSeps, cStr, cDetectSep); // content is ignored
         if ( rStrm.eof() )
             break;
     }
@@ -1362,9 +1368,11 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     {
         for( ;; )
         {
-            aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr);
+            aLine = ReadCsvLine(rStrm, !bFixed, aSeps, cStr, cDetectSep);
             if ( rStrm.eof() && aLine.isEmpty() )
                 break;
+
+            assert(pSeps == aSeps.getStr());
 
             if ( nRow > MAXROW )
             {
@@ -2380,8 +2388,26 @@ ScImportStringStream::ScImportStringStream( const OUString& rStr )
 }
 
 OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
-        const OUString& rFieldSeparators, sal_Unicode cFieldQuote )
+        OUString& rFieldSeparators, sal_Unicode cFieldQuote, sal_Unicode& rcDetectSep )
 {
+    enum RetryState
+    {
+        FORBID,
+        ALLOW,
+        RETRY,
+        RETRIED
+    } eRetryState = (bEmbeddedLineBreak && rcDetectSep == 0 ? RetryState::ALLOW : RetryState::FORBID);
+
+    sal_uInt64 nStreamPos = (eRetryState == RetryState::ALLOW ? rStream.Tell() : 0);
+
+Label_RetryWithNewSep:
+
+    if (eRetryState == RetryState::RETRY)
+    {
+        eRetryState = RetryState::RETRIED;
+        rStream.Seek( nStreamPos);
+    }
+
     OUString aStr;
     rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
 
@@ -2416,7 +2442,15 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                         // we are in FIELDEND_QUOTE state.
                         else if (eQuoteState != FIELDEND_QUOTE)
                         {
-                            eQuoteState = lcl_isEscapedOrFieldEndQuote( nQuotes, p, pSeps, cFieldQuote);
+                            eQuoteState = lcl_isEscapedOrFieldEndQuote( nQuotes, p, pSeps, cFieldQuote, rcDetectSep);
+
+                            if (eRetryState == RetryState::ALLOW && rcDetectSep == ' ')
+                            {
+                                eRetryState = RetryState::RETRY;
+                                rFieldSeparators += OUString(' ');
+                                goto Label_RetryWithNewSep;
+                            }
+
                             // DONTKNOW_QUOTE is an embedded unescaped quote we
                             // don't count for pairing.
                             if (eQuoteState != DONTKNOW_QUOTE)
