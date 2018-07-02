@@ -60,7 +60,7 @@ class SwLayAction
     // painting.
     const SwTabFrame *m_pOptTab;
 
-    SwWait *m_pWait;
+    std::unique_ptr<SwWait> m_pWait;
 
     // If a paragraph (or anything else) moved more than one page when
     // formatting, it adds its new page number here.
