@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_429e1208",
+        "filename": "wizards/source/access2base/Application.xba",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-02T09:19:19Z",
+      "side": 1,
+      "message": "Here and elsewhere:\n\n* in how far was a newline \"missing\" here?\n\n* doesn\u0027t this break the syntax, in that it drops a closing \"\u003e\"?",
+      "revId": "ae412b486e02aa5890769bebcfc46e485a72103c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
