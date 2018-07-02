@@ -186,7 +186,7 @@ static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
         pNewBox->setRowSpan( pBox->getRowSpan() );
     }
 
-    pCT->m_pInsLine->GetTabBoxes().push_back( pNewBox );
+    pCT->m_pInsLine->GetTabBoxes().emplace_back( pNewBox );
 
     if (nLines)
     {
@@ -228,9 +228,8 @@ static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT )
     }
 
     pCT->m_pInsLine = pNewLine;
-    for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(pLine)->GetTabBoxes().begin();
-             it != const_cast<SwTableLine*>(pLine)->GetTabBoxes().end(); ++it)
-        lcl_CopyTableBox(*it, pCT );
+    for( std::unique_ptr<SwTableBox> const & rpBox : const_cast<SwTableLine*>(pLine)->GetTabBoxes() )
+        lcl_CopyTableBox(rpBox.get(), pCT );
 }
 
 SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const

@@ -543,7 +543,7 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
         assert(pLine);
         const SwTableBoxes& rBoxes(pLine->GetTabBoxes());
         assert(rBoxes.size() != 0);
-        const SwTableBox* pBox = i_bTopLeft ? rBoxes.front() : rBoxes.back();
+        const SwTableBox* pBox = i_bTopLeft ? rBoxes.front().get() : rBoxes.back().get();
         assert(pBox);
         if (pBox->GetSttNd())
             return pBox;
@@ -594,7 +594,7 @@ static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString>& rAllNa
 {
     for(auto pLine : rLines)
     {
-        for(auto pBox : pLine->GetTabBoxes())
+        for(std::unique_ptr<SwTableBox> const & pBox : pLine->GetTabBoxes())
         {
             if(!pBox->GetName().isEmpty() && pBox->getRowSpan() > 0)
                 rAllNames.push_back(pBox->GetName());
@@ -1378,7 +1378,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                 {
                     UnoActionContext aContext(pDoc);
                     SwTable* pTable2 = SwTable::FindTable( pFormat );
-                    lcl_SetTableSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], true, pDoc);
+                    lcl_SetTableSeparators(aValue, pTable2, pLine->GetTabBoxes()[0].get(), true, pDoc);
                 }
                 break;
 
@@ -1425,7 +1425,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
 
             case FN_UNO_TABLE_COLUMN_SEPARATORS:
             {
-                lcl_GetTableSeparators(aRet, pTable, pLine->GetTabBoxes()[0], true);
+                lcl_GetTableSeparators(aRet, pTable, pLine->GetTabBoxes()[0].get(), true);
             }
             break;
 
@@ -2707,7 +2707,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
                         for(size_t k = 0; k < rBoxes.size(); ++k)
                         {
-                            SwTableBox* pBox = rBoxes[k];
+                            SwTableBox* pBox = rBoxes[k].get();
                             const SwFrameFormat* pBoxFormat = pBox->GetFrameFormat();
                             const SvxBoxItem& rBox = pBoxFormat->GetBox();
                             if(
@@ -2738,7 +2738,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 {
                     UnoActionContext aContext(pFormat->GetDoc());
                     SwTable* pTable = SwTable::FindTable( pFormat );
-                    lcl_SetTableSeparators(aValue, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], false, pFormat->GetDoc());
+                    lcl_SetTableSeparators(aValue, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0].get(), false, pFormat->GetDoc());
                 }
                 break;
 
@@ -2912,7 +2912,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
                         for(size_t k = 0; k < rBoxes.size(); ++k)
                         {
-                            const SwTableBox* pBox = rBoxes[k];
+                            const SwTableBox* pBox = rBoxes[k].get();
                             SwFrameFormat* pBoxFormat = pBox->GetFrameFormat();
                             const SvxBoxItem& rBox = pBoxFormat->GetBox();
                             if( bFirst )
@@ -2962,7 +2962,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
                     SwTable* pTable = SwTable::FindTable( pFormat );
-                    lcl_GetTableSeparators(aRet, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], false);
+                    lcl_GetTableSeparators(aRet, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0].get(), false);
                 }
                 break;
 
@@ -3994,7 +3994,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         SwTableLines& rLines = pTable->GetTabLines();
         SwTableLine* pLine = rLines.back();
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        pTLBox = rBoxes.front();
+        pTLBox = rBoxes.front().get();
     }
     if(!pTLBox)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
@@ -4145,7 +4145,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         bAppend = true;
         // to append at the end the cursor must be in the last line
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        pTLBox = rBoxes.back();
+        pTLBox = rBoxes.back().get();
     }
     if(!pTLBox)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));

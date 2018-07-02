@@ -63,7 +63,7 @@ void    ConvertNestedTablesToText( const SwTableLines &rTableLines, sal_Unicode 
         SwTableLine* pTableLine = rTableLines[ n ];
         for (size_t i = 0; i < pTableLine->GetTabBoxes().size(); ++i)
         {
-            SwTableBox* pTableBox = pTableLine->GetTabBoxes()[ i ];
+            SwTableBox* pTableBox = pTableLine->GetTabBoxes()[ i ].get();
             if (pTableBox->GetTabLines().empty())
             {
                 SwNodeIndex nodeIndex( *pTableBox->GetSttNd(), 1 );

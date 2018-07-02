@@ -614,8 +614,8 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
                 i = pNd->EndOfSectionIndex();
         }
 
-        SwTableBox* pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
-        pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin(), pBox );
+        std::unique_ptr<SwTableBox> pBox( new SwTableBox( pBoxFormat, *pSttNd, pLine ) );
+        pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin(), std::move(pBox) );
     }
     return pTableNd;
 }
@@ -1023,7 +1023,7 @@ void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
             const size_t nBoxes = rBoxes.size();
             for (size_t k = 0; k < nBoxes;  ++k)
             {
-                SwTableBox *pBox = rBoxes[k];
+                SwTableBox *pBox = rBoxes[k].get();
                 if (pPCD)
                     pPCD->DeleteBox( &rTable, *pBox );
             }
@@ -1044,7 +1044,7 @@ void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
             const size_t nBoxes = rBoxes.size();
             for (size_t k2 = 0; k2 < nBoxes; ++k2)
             {
-                SwTableBox *pBox = rBoxes[k2];
+                SwTableBox *pBox = rBoxes[k2].get();
                 // TL_CHART2: notify chart about boxes to be removed
                 if (pPCD)
                     pPCD->DeleteBox( &rTable, *pBox );
@@ -1324,7 +1324,7 @@ void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTab
     if( ULONG_MAX == nSttNode )     // no EndBox
     {
         SwTableBox* pNew = new SwTableBox( pFormat, 1, &rParent );
-        rParent.GetTabBoxes().push_back( pNew );
+        rParent.GetTabBoxes().emplace_back( pNew );
 
         Ptrs.pLine->CreateNew( rTable, *pNew, rSTable );
     }
@@ -1342,11 +1342,14 @@ void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTab
             pBox->setRowSpan( nRowSpan );
 
             SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
-            pTBoxes->erase( std::find( pTBoxes->begin(), pTBoxes->end(), pBox ) );
+            auto it = std::find_if( pTBoxes->begin(), pTBoxes->end(),
+                            [&] (std::unique_ptr<SwTableBox> const & p) { return p.get() == pBox; } );
+            it->release();
+            pTBoxes->erase( it );
 
             pBox->SetUpper( &rParent );
             pTBoxes = &rParent.GetTabBoxes();
-            pTBoxes->push_back( pBox );
+            pTBoxes->emplace_back( pBox );
         }
     }
 
@@ -1698,9 +1701,9 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             pSave->RestoreSection( &rDoc, &aIdx, SwTableBoxStartNode );
             if( pSave->GetHistory() )
                 pSave->GetHistory()->Rollback( &rDoc );
-            SwTableBox* pBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pCpyBox->GetFrameFormat()), aIdx,
-                                                pCpyBox->GetUpper() );
-            rLnBoxes.push_back( pBox );
+            std::unique_ptr<SwTableBox> pBox( new SwTableBox( static_cast<SwTableBoxFormat*>(pCpyBox->GetFrameFormat()), aIdx,
+                                                pCpyBox->GetUpper() ));
+            rLnBoxes.push_back( std::move(pBox) );
         }
         m_pDelSects->clear();
     }
@@ -1789,8 +1792,8 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         SwTableBox* pCurrBox = aDelBoxes[n];
         SwTableBoxes* pTBoxes = &pCurrBox->GetUpper()->GetTabBoxes();
-        pTBoxes->erase( std::find( pTBoxes->begin(), pTBoxes->end(), pCurrBox ) );
-        delete pCurrBox;
+        pTBoxes->erase( std::find_if( pTBoxes->begin(), pTBoxes->end(),
+                            [&] (std::unique_ptr<SwTableBox> const & p) { return p.get() == pCurrBox; } ) );
     }
 
     pSaveTable->CreateNew( pTableNd->GetTable(), true, false );
@@ -1973,7 +1976,7 @@ CHECKTABLE(pTableNd->GetTable())
                                             SwTableBoxStartNode, pColl );
         pBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pCpyBox->GetFrameFormat()), *pSttNd,
                                 pCpyBox->GetUpper() );
-        rLnBoxes.push_back( pBox );
+        rLnBoxes.emplace_back( pBox );
 
         aSelBoxes.insert( pBox );
     }
@@ -2046,7 +2049,8 @@ CHECKTABLE(pTableNd->GetTable())
                 pPCD->DeleteBox( &pTableNd->GetTable(), *pBox );
 
             SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
-            pTBoxes->erase( std::find(pTBoxes->begin(), pTBoxes->end(), pBox ) );
+            pTBoxes->erase( std::find_if(pTBoxes->begin(), pTBoxes->end(),
+                                [&] (std::unique_ptr<SwTableBox> const & p) { return p.get() == pBox; } ) );
 
             // delete indices from section
             {
@@ -2056,7 +2060,6 @@ CHECKTABLE(pTableNd->GetTable())
                             SwPosition( aTmpIdx, SwIndex( nullptr, 0 )), true );
             }
 
-            delete pBox;
             rDoc.getIDocumentContentOperations().DeleteSection( rDoc.GetNodes()[ nIdx ] );
         }
     }

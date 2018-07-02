@@ -135,7 +135,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
         sal_uInt32 nCPos = 0U;
         for( size_t nBox=0U; nBox<nBoxes; ++nBox )
         {
-            const SwTableBox *pBox = rBoxes[nBox];
+            const SwTableBox *pBox = rBoxes[nBox].get();
 
             if( nBox < nBoxes-1U || nWidth==0 )
             {
@@ -651,7 +651,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
         size_t nCol = 0U;
         for( size_t nBox=0U; nBox<nBoxes; nBox++ )
         {
-            SwTableBox *pBox = rBoxes[nBox];
+            SwTableBox *pBox = rBoxes[nBox].get();
 
             if( nBox < nBoxes-1U )
                 nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
@@ -915,7 +915,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
         size_t nCol = 0U;
         for( size_t nBox=0U; nBox<nBoxes; ++nBox )
         {
-            const SwTableBox *pBox = rBoxes[nBox];
+            const SwTableBox *pBox = rBoxes[nBox].get();
 
             // NEW TABLES
             const long nRowSpan = pBox->getRowSpan();
@@ -1076,8 +1076,8 @@ static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
 
 void lcl_xmltble_ClearName_Line( SwTableLine* pLine )
 {
-    for( SwTableBox* pBox : pLine->GetTabBoxes() )
-        lcl_xmltble_ClearName_Box( pBox );
+    for( std::unique_ptr<SwTableBox> const & pBox : pLine->GetTabBoxes() )
+        lcl_xmltble_ClearName_Box( pBox.get() );
 }
 
 void SwXMLExport::ExportTable( const SwTableNode& rTableNd )

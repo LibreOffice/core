@@ -4981,7 +4981,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                     size_t i = 0;
                     do
                     {
-                        pTmpBox = rBoxes[ i++ ];
+                        pTmpBox = rBoxes[ i++ ].get();
                         nSumWidth += pTmpBox->GetFrameFormat()->GetFrameSize().GetWidth();
                     }
                     while ( pTmpBox != GetTabBox() );

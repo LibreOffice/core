@@ -64,19 +64,19 @@ bool SwTable::IsTableComplexForChart( const OUString& rSelection ) const
     else
     {
         const SwTableLines* pLns = &GetTabLines();
-        pSttBox = (*pLns)[ 0 ]->GetTabBoxes().front();
+        pSttBox = (*pLns)[ 0 ]->GetTabBoxes().front().get();
         while( !pSttBox->GetSttNd() )
             // Until the Content Box!
-            pSttBox = pSttBox->GetTabLines().front()->GetTabBoxes().front();
+            pSttBox = pSttBox->GetTabLines().front()->GetTabBoxes().front().get();
 
         const SwTableBoxes* pBoxes = &pLns->back()->GetTabBoxes();
-        pEndBox = pBoxes->back();
+        pEndBox = pBoxes->back().get();
         while( !pEndBox->GetSttNd() )
         {
             // Until the Content Box!
             pLns = &pEndBox->GetTabLines();
             pBoxes = &pLns->back()->GetTabBoxes();
-            pEndBox = pBoxes->back();
+            pEndBox = pBoxes->back().get();
         }
     }
 
