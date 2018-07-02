@@ -170,7 +170,7 @@ void ScDataTransformationTest::testTextToLower()
     m_pDoc->SetString(2, 2, 0, "Paris");
     m_pDoc->SetString(2, 3, 0, "Peking");
 
-    sc::TextTransformation aTransform(2, sc::TEXT_TRANSFORM_TYPE::TO_LOWER);
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TO_LOWER);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(OUString("berlin"), m_pDoc->GetString(2, 0, 0));
@@ -186,7 +186,7 @@ void ScDataTransformationTest::testTextToUpper()
     m_pDoc->SetString(2, 2, 0, "Paris");
     m_pDoc->SetString(2, 3, 0, "Peking");
 
-    sc::TextTransformation aTransform(2, sc::TEXT_TRANSFORM_TYPE::TO_UPPER);
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TO_UPPER);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(OUString("BERLIN"), m_pDoc->GetString(2, 0, 0));
@@ -202,7 +202,7 @@ void ScDataTransformationTest::testTextCapitalize()
     m_pDoc->SetString(2, 2, 0, "si tu la ves");
     m_pDoc->SetString(2, 3, 0, "cUaNdO mE EnAmOro");
 
-    sc::TextTransformation aTransform(2, sc::TEXT_TRANSFORM_TYPE::CAPITALIZE);
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::CAPITALIZE);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), m_pDoc->GetString(2, 0, 0));
@@ -217,7 +217,7 @@ void ScDataTransformationTest::testTextTrim()
     m_pDoc->SetString(2, 1, 0, "Brussels ");
     m_pDoc->SetString(2, 2, 0, " Paris ");
 
-    sc::TextTransformation aTransform(2, sc::TEXT_TRANSFORM_TYPE::TRIM);
+    sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TRIM);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Berlin"), m_pDoc->GetString(2, 0, 0));

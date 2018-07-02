@@ -108,11 +108,11 @@ public:
 
 class SC_DLLPUBLIC TextTransformation : public DataTransformation
 {
-    SCCOL mnCol;
+    std::set<SCCOL> mnCol;
     TEXT_TRANSFORM_TYPE maType;
 
     public:
-    TextTransformation(SCCOL nCol, const TEXT_TRANSFORM_TYPE rType);
+    TextTransformation(const std::set<SCCOL>& nCol, const TEXT_TRANSFORM_TYPE rType);
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
 };
