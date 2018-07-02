@@ -248,13 +248,13 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
         if( nInsPos < pLine->GetTabBoxes().size() )
         {
             if( nullptr == (pPrvBox = pLine->FindPreviousBox( pTableNd->GetTable(),
-                            pLine->GetTabBoxes()[ nInsPos ] )))
+                            pLine->GetTabBoxes()[ nInsPos ].get() )))
                 pPrvBox = pLine->FindPreviousBox( pTableNd->GetTable() );
         }
         else
         {
             if( nullptr == (pNxtBox = pLine->FindNextBox( pTableNd->GetTable(),
-                            pLine->GetTabBoxes().back() )))
+                            pLine->GetTabBoxes().back().get() )))
                 pNxtBox = pLine->FindNextBox( pTableNd->GetTable() );
         }
     }
@@ -273,7 +273,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
             if( pTableNd->GetTable().GetTabLines()[ 0 ] == pTableLn )
             {
                 // Before the Table's first Box
-                while( !( pNxtBox = pLine->GetTabBoxes()[0])->GetTabLines().empty() )
+                while( !( pNxtBox = pLine->GetTabBoxes()[0].get() )->GetTabLines().empty() )
                     pLine = pNxtBox->GetTabLines()[0];
                 nIdxPos = pNxtBox->GetSttIdx();
                 bSetIdxPos = false;
@@ -303,7 +303,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
         if (nRealInsPos > rTabBoxes.size())
             nRealInsPos = rTabBoxes.size();
 
-        rTabBoxes.insert( rTabBoxes.begin() + nRealInsPos, pPrvBox );
+        rTabBoxes.emplace( rTabBoxes.begin() + nRealInsPos, pPrvBox );
 
         if( ! pTextColl->IsAssignedToListLevelOfOutlineStyle()
 //FEATURE::CONDCOLL
@@ -535,7 +535,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             }
 
             SwTableBox *pBox = new SwTableBox( pBoxF, aNdIdx, pLine);
-            rBoxes.insert( rBoxes.begin() + i, pBox );
+            rBoxes.emplace( rBoxes.begin() + i, pBox );
             aNdIdx += 3; // StartNode, TextNode, EndNode  == 3 Nodes
         }
     }
@@ -779,7 +779,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             const SwTableBoxes::size_type nCols = rBoxes.size();
             for( SwTableBoxes::size_type i = 0; i < nCols; ++i )
             {
-                SwTableBox* pBox = rBoxes[ i ];
+                SwTableBox* pBox = rBoxes[ i ].get();
                 bool bChgSz = false;
 
                 if( pTAFormat )
@@ -977,7 +977,7 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
             {
                 // Have to do an Add here, because the BoxFormat
                 // is still needed by the caller
-                pNewFormat->Add( rLns[ nTmpLine ]->GetTabBoxes()[ n ] );
+                pNewFormat->Add( rLns[ nTmpLine ]->GetTabBoxes()[ n ].get() );
             }
 
             nLastPos = (*pPositions)[ n ];
@@ -1090,7 +1090,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
                     // Assign Section to the Box
                     pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
-                    pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
+                    pLine->GetTabBoxes().emplace( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
                 }
                 else
                 {
@@ -1109,7 +1109,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         pTextNd->m_pStartOfSection = pSttNd;
 
         pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
-        pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
+        pLine->GetTabBoxes().emplace( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
         if( nMaxBoxes < nBoxes )
             nMaxBoxes = nBoxes;
     }
@@ -1353,7 +1353,7 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
             size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
             pNewFormat->SetFormatAttr( SwFormatFrameSize(ATT_VAR_SIZE,
                         nWidth * (nMissing + 1)) );
-            pNewFormat->Add(rBoxes.back());
+            pNewFormat->Add(rBoxes.back().get());
         }
     }
     size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
@@ -1431,7 +1431,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 
                 // assign Section to the Box
                 pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
-                pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
+                pLine->GetTabBoxes().emplace( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
         }
         if( nMaxBoxes < nBoxes )
             nMaxBoxes = nBoxes;
@@ -1509,9 +1509,8 @@ static void lcl_DelLine( SwTableLine* pLine, DelTabPara* pPara )
 {
     assert(pPara && "The parameters are missing!");
     DelTabPara aPara( *pPara );
-    for( SwTableBoxes::iterator it = pLine->GetTabBoxes().begin();
-             it != pLine->GetTabBoxes().end(); ++it)
-        lcl_DelBox(*it, &aPara );
+    for( std::unique_ptr<SwTableBox> const & pBox : pLine->GetTabBoxes())
+        lcl_DelBox(pBox.get(), &aPara );
     if( pLine->GetUpper() ) // Is there a parent Box?
         // Return the last TextNode
         pPara->pLastNd = aPara.pLastNd;
@@ -1868,12 +1867,12 @@ void SwDoc::DeleteRow( const SwCursor& rCursor )
         }
 
         SwTableLine* pDelLine = pFndBox->GetLines().back()->GetLine();
-        SwTableBox* pDelBox = pDelLine->GetTabBoxes().back();
+        SwTableBox* pDelBox = pDelLine->GetTabBoxes().back().get();
         while( !pDelBox->GetSttNd() )
         {
             SwTableLine* pLn = pDelBox->GetTabLines()[
                         pDelBox->GetTabLines().size()-1 ];
-            pDelBox = pLn->GetTabBoxes().back();
+            pDelBox = pLn->GetTabBoxes().back().get();
         }
         SwTableBox* pNextBox = pDelLine->FindNextBox( pTableNd->GetTable(),
                                                         pDelBox );
@@ -1884,9 +1883,9 @@ void SwDoc::DeleteRow( const SwCursor& rCursor )
         if( !pNextBox ) // No succeeding Boxes? Then take the preceding one
         {
             pDelLine = pFndBox->GetLines().front()->GetLine();
-            pDelBox = pDelLine->GetTabBoxes()[ 0 ];
+            pDelBox = pDelLine->GetTabBoxes()[ 0 ].get();
             while( !pDelBox->GetSttNd() )
-                pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
+                pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0].get();
             pNextBox = pDelLine->FindPreviousBox( pTableNd->GetTable(),
                                                         pDelBox );
             while( pNextBox &&
@@ -2976,13 +2975,11 @@ bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )
 {
     SwCollectTableLineBoxes* pSplPara = static_cast<SwCollectTableLineBoxes*>(pPara);
     if( pSplPara->IsGetValues() )
-        for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(rpLine)->GetTabBoxes().begin();
-                 it != const_cast<SwTableLine*>(rpLine)->GetTabBoxes().end(); ++it)
-            sw_Box_CollectBox(*it, pSplPara );
+        for( std::unique_ptr<SwTableBox> const & pBox : const_cast<SwTableLine*>(rpLine)->GetTabBoxes() )
+            sw_Box_CollectBox(pBox.get(), pSplPara );
     else
-        for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(rpLine)->GetTabBoxes().begin();
-                 it != const_cast<SwTableLine*>(rpLine)->GetTabBoxes().end(); ++it)
-            sw_BoxSetSplitBoxFormats(*it, pSplPara );
+        for( std::unique_ptr<SwTableBox> const & pBox : const_cast<SwTableLine*>(rpLine)->GetTabBoxes() )
+            sw_BoxSetSplitBoxFormats(pBox.get(), pSplPara );
     return true;
 }
 
@@ -3154,15 +3151,13 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
                 SwCollectTableLineBoxes aPara( false, eHdlnMode );
                 SwTableLine* pLn = rTable.GetTabLines()[
                             rTable.GetTabLines().size() - 1 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_Box_CollectBox(*it, &aPara );
+                for( std::unique_ptr<SwTableBox> const & pBox : pLn->GetTabBoxes() )
+                    sw_Box_CollectBox(pBox.get(), &aPara );
 
                 aPara.SetValues( true );
                 pLn = pNew->GetTable().GetTabLines()[ 0 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_BoxSetSplitBoxFormats(*it, &aPara );
+                for( std::unique_ptr<SwTableBox> const & pBox : pLn->GetTabBoxes() )
+                    sw_BoxSetSplitBoxFormats(pBox.get(), &aPara );
 
                 // Switch off repeating Header
                 pNew->GetTable().SetRowsToRepeat( 0 );
@@ -3179,15 +3174,13 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
 
                 SwCollectTableLineBoxes aPara( true, eHdlnMode, pHst );
                 SwTableLine* pLn = rTable.GetTabLines()[ 0 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_Box_CollectBox(*it, &aPara );
+                for( std::unique_ptr<SwTableBox> const & pBox : pLn->GetTabBoxes() )
+                    sw_Box_CollectBox(pBox.get(), &aPara );
 
                 aPara.SetValues( true );
                 pLn = pNew->GetTable().GetTabLines()[ 0 ];
-                for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-                         it != pLn->GetTabBoxes().end(); ++it)
-                    sw_BoxSetSplitBoxFormats(*it, &aPara );
+                for( std::unique_ptr<SwTableBox> const & pBox : pLn->GetTabBoxes() )
+                    sw_BoxSetSplitBoxFormats(pBox.get(), &aPara );
             }
             break;
 
@@ -3249,7 +3242,7 @@ static bool lcl_ChgTableSize( SwTable& rTable )
     {
         SwTwips nMaxLnWidth = 0;
         SwTableBoxes& rBoxes = pLn->GetTabBoxes();
-        for( auto pBox : rBoxes )
+        for( std::unique_ptr<SwTableBox> const & pBox : rBoxes )
             nMaxLnWidth += pBox->GetFrameFormat()->GetFrameSize().GetWidth();
 
         if( nMaxLnWidth > aTableMaxSz.GetWidth() )
@@ -3301,9 +3294,8 @@ static void lcl_SplitTable_CpyLine( SwTableLine* pLn, SplitTable_Para* pPara )
     else
         pLn->ChgFrameFormat( pDestFormat );
 
-    for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
-             it != pLn->GetTabBoxes().end(); ++it)
-        lcl_SplitTable_CpyBox(*it, pPara );
+    for( std::unique_ptr<SwTableBox> const & pBox : pLn->GetTabBoxes() )
+        lcl_SplitTable_CpyBox(pBox.get(), pPara );
 }
 
 static void lcl_SplitTable_CpyBox( SwTableBox* pBox, SplitTable_Para* pPara )
@@ -3352,9 +3344,9 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
 
     // Find the first Box of the succeeding Line
     SwTableLine* pNextLine = rTable.GetTabLines()[ nLinePos ];
-    pBox = pNextLine->GetTabBoxes()[0];
+    pBox = pNextLine->GetTabBoxes()[0].get();
     while( !pBox->GetSttNd() )
-        pBox = pBox->GetTabLines()[0]->GetTabBoxes()[0];
+        pBox = pBox->GetTabLines()[0]->GetTabBoxes()[0].get();
 
     // Insert an EndNode and TableNode into the Nodes Array
     SwTableNode * pNewTableNd;
@@ -3838,7 +3830,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
             SwTableBox* pFBox = rLine.GetBoxes()[ aBoxArr[ nBox ] ]->GetBox();
             // Always apply to the first ones
             while( !pFBox->GetSttNd() )
-                pFBox = pFBox->GetTabLines()[0]->GetTabBoxes()[0];
+                pFBox = pFBox->GetTabLines()[0]->GetTabBoxes()[0].get();
 
             sal_uInt8 nPos = nLine * 4 + nBox;
             SwNodeIndex aIdx( *pFBox->GetSttNd(), 1 );
