@@ -269,7 +269,7 @@ bool SwTableCalcPara::CalcWithStackOverflow()
 
     m_nMaxSize = cMAXSTACKSIZE - 5;
     sal_uInt16 nCnt = 0;
-    SwTableBoxes aStackOverflows;
+    std::vector<SwTableBox*> aStackOverflows;
     do {
         SwTableBox* pBox = const_cast<SwTableBox*>(m_pLastTableBox);
         m_nStackCount = 0;
@@ -795,7 +795,7 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
         pBoxes = &pLine->GetTabBoxes();
         if( static_cast<size_t>(nBoxOffset) >= pBoxes->size() )
             return nullptr;
-        pBox = (*pBoxes)[ nBoxOffset ];
+        pBox = (*pBoxes)[ nBoxOffset ].get();
 
         while (!sGetName.isEmpty())
         {
@@ -815,7 +815,7 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
             pBoxes = &pLine->GetTabBoxes();
             if( nSttBox >= pBoxes->size() )
                 break;
-            pBox = (*pBoxes)[ nSttBox ];
+            pBox = (*pBoxes)[ nSttBox ].get();
         }
 
         if( pBox )
@@ -823,7 +823,7 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
             if( !pBox->GetSttNd() )
                 // "bubble up" to first box
                 while( !pBox->GetTabLines().empty() )
-                    pBox = pBox->GetTabLines().front()->GetTabBoxes().front();
+                    pBox = pBox->GetTabLines().front()->GetTabBoxes().front().get();
         }
     }
     else
