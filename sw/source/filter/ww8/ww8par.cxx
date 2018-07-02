@@ -50,7 +50,6 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/outlobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdoashp.hxx>
