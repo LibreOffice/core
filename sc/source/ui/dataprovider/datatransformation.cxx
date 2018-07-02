@@ -171,6 +171,121 @@ TransformationType SortTransformation::getTransformationType() const
 ScSortParam SortTransformation::getSortParam() const
 {
     return maSortParam;
+TextTransformation::TextTransformation(const std::set<SCCOL> nCol, const TEXT_TRANSFORM_TYPE rType):
+    mnCol(nCol),
+    maType(rType)
+{
+}
+
+void TextTransformation::Transform(ScDocument& rDoc) const
+{
+    for (auto& rCol : mnCol)
+    {
+        SCROW nEndRow = getLastRow(rDoc, rCol);
+
+        switch (maType)
+        {
+            case TEXT_TRANSFORM_TYPE::TO_LOWER:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_STRING)
+                    {
+                        OUString aStr = rDoc.GetString(rCol, nRow, 0);
+                        rDoc.SetString(rCol, nRow, 0, ScGlobal::pCharClass->lowercase(aStr));
+                    }
+                }
+            }
+            break;
+            case TEXT_TRANSFORM_TYPE::TO_UPPER:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_STRING)
+                    {
+                        OUString aStr = rDoc.GetString(rCol, nRow, 0);
+                        rDoc.SetString(rCol, nRow, 0, ScGlobal::pCharClass->uppercase(aStr));
+                    }
+                }
+            }
+            break;
+            case TEXT_TRANSFORM_TYPE::CAPITALIZE:
+            {
+                sal_Unicode separator = sal_Unicode(U' ');
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_STRING)
+                    {
+                        OUString aStr = rDoc.GetString(rCol, nRow, 0);
+
+                        sal_Int32 length = aStr.getLength();
+
+                        if(length != 0)
+                            aStr = aStr.replaceAt(0, 1, ScGlobal::pCharClass->uppercase(OUString(aStr[0])));
+
+                        for (sal_Int32 i = 1; i < length; i++){
+                            if (aStr[i-1] == separator)
+                            {
+                                aStr = aStr.replaceAt(i, 1, ScGlobal::pCharClass->uppercase(OUString(aStr[i])));
+                            }
+                            else
+                            {
+                                aStr = aStr.replaceAt(i, 1, ScGlobal::pCharClass->lowercase(OUString(aStr[i])));
+                            }
+                        }
+                        rDoc.SetString(rCol, nRow, 0, aStr);
+                    }
+                }
+            }
+            break;
+            case TEXT_TRANSFORM_TYPE::TRIM:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_STRING)
+                    {
+                        OUString aStr = rDoc.GetString(rCol, nRow, 0);
+                        rDoc.SetString(rCol, nRow, 0, aStr.trim());
+                    }
+                }
+            }
+            break;
+            case TEXT_TRANSFORM_TYPE::CLEAN:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_STRING)
+                    {
+                        OUString aStr = rDoc.GetString(rCol, nRow, 0);
+                        OUString aResult = OUString();
+
+                        sal_Int32 length = aStr.getLength();
+
+                        for (sal_Int32 i = 0; i < length; i++)
+                        {
+                            if(isprint(aStr[i]))
+                                aResult += OUStringLiteral1(aStr[i]);
+                        }
+
+                        rDoc.SetString(rCol, nRow, 0, aResult);
+                    }
+                }
+            }
+            break;
+            default:
+            break;
+        }
+    }
 }
 
 }

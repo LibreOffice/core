@@ -60,6 +60,7 @@ public:
     void deleteColumn();
     void splitColumn();
     void mergeColumns();
+    void texttransformation();
 
     void import(ScDocument* pDoc);
 };
