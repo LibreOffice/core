@@ -1074,11 +1074,11 @@ void SpinUIObject::execute(const OUString& rAction,
 {
     if (rAction == "UP")
     {
-        /* code */
+        mxSpinButton->Up();
     }
     else if (rAction == "DOWN")
     {
-        /* code */
+        mxSpinButton->Down();
     }
 }
 
@@ -1091,6 +1091,22 @@ StringMap SpinUIObject::get_state()
     aMap["Value"] = OUString::number(mxSpinButton->GetValue());
 
     return aMap;
+}
+
+OUString SpinUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::SpinbuttonUp)
+    {
+        return this->get_type() + " Action:UP Id:" + mxSpinButton->get_id() +
+            " Parent:" + get_top_parent(mxSpinButton)->get_id();
+    }
+    else if (nEvent == VclEventId::SpinbuttonDown)
+    {
+        return this->get_type() + " Action:DOWN Id:" + mxSpinButton->get_id() +
+            " Parent:" + get_top_parent(mxSpinButton)->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
 }
 
 OUString SpinUIObject::get_name() const
@@ -1137,6 +1153,22 @@ StringMap SpinFieldUIObject::get_state()
     StringMap aMap = EditUIObject::get_state();
 
     return aMap;
+}
+
+OUString SpinFieldUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::SpinfieldUp)
+    {
+        return this->get_type() + " Action:UP Id:" + mxSpinField->get_id() +
+            " Parent:" + get_top_parent(mxSpinField)->get_id();
+    }
+    else if (nEvent == VclEventId::SpinfieldDown)
+    {
+        return this->get_type() + " Action:DOWN Id:" + mxSpinField->get_id() +
+            " Parent:" + get_top_parent(mxSpinField)->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
 }
 
 OUString SpinFieldUIObject::get_name() const
