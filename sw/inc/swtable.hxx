@@ -100,8 +100,6 @@ public:
     }
 };
 
-using SwTableBoxes = std::vector<SwTableBox*>;
-
 // Save content-bearing box-pointers additionally in a sorted array
 // (for calculation in table).
 class SwTableSortBoxes : public o3tl::sorted_vector<SwTableBox*> {};
@@ -340,6 +338,8 @@ public:
     bool HasLayout() const;
 };
 
+using SwTableBoxes = std::vector<std::unique_ptr<SwTableBox>>;
+
 /// SwTableLine is one table row in the document model.
 class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrameFormat.
 {
@@ -355,7 +355,8 @@ public:
     const SwTableBoxes &GetTabBoxes() const { return m_aBoxes; }
     sal_uInt16 GetBoxPos(const SwTableBox* pBox) const
     {
-        SwTableBoxes::const_iterator it = std::find(m_aBoxes.begin(), m_aBoxes.end(), pBox);
+        auto it = std::find_if(m_aBoxes.begin(), m_aBoxes.end(),
+                      [&] (std::unique_ptr<SwTableBox> const & rItBox) { return rItBox.get() == pBox; } );
         return it == m_aBoxes.end() ? USHRT_MAX : it - m_aBoxes.begin();
     }
 

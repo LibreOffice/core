@@ -156,7 +156,7 @@ namespace
         SubTable::iterator pMax = pStartLn;
         ++pMax;
         SubTable::difference_type nMax = 1;
-        for( auto pBox : rLine.GetTabBoxes() )
+        for( auto & pBox : rLine.GetTabBoxes() )
         {
             SubTable::iterator pTmp = insertSubBox( rSubTable, *pBox, pStartLn, pMax );
             SubTable::difference_type nTmp = std::distance( pStartLn, pTmp );
@@ -211,7 +211,7 @@ namespace
                     while( nEndLn < nNewEndLn )
                     {
                         SwTableLine *pLine2 = rLines[ ++nEndLn ];
-                        SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0];
+                        SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0].get();
                         FndLine_ *pInsLine = new FndLine_( pLine2, &rFndBox );
                         pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), o3tl::make_unique<FndBox_>(pTmpBox, pInsLine));
                         rFndLines.push_back(std::unique_ptr<FndLine_>(pInsLine));
@@ -260,7 +260,7 @@ namespace
             aSubTable.push_back( aSubLine );
             SubTable::iterator pStartLn = aSubTable.begin();
             SubTable::iterator pEndLn = aSubTable.end();
-            for( auto pBox : rBoxes )
+            for( auto & pBox : rBoxes )
                 insertSubBox( aSubTable, *pBox, pStartLn, pEndLn );
             SubTable::size_type nSize = aSubTable.size();
             if( nSize )
@@ -295,8 +295,8 @@ namespace
             maLines[rLine].reserve( rBoxes.size() );
             ColumnStructure::iterator pCol = maCols.begin();
             BoxStructure::iterator pSel = maLines[rLine].end();
-            for( auto pBox : rBoxes )
-                addBox( rLine, pSelBoxes, pBox, nBorder, nCol,
+            for( auto & pBox : rBoxes )
+                addBox( rLine, pSelBoxes, pBox.get(), nBorder, nCol,
                         pCol, pSel, bSelected, false );
             ++rLine;
         }
@@ -675,7 +675,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
     if( aTarget.mnAddLine && IsNewModel() )
     {
         SwSelBoxes aBoxes;
-        aBoxes.insert( GetTabLines().back()->GetTabBoxes().front() );
+        aBoxes.insert( GetTabLines().back()->GetTabBoxes().front().get() );
         if( pUndo )
             pUndo->InsertRow( *this, aBoxes, aTarget.mnAddLine );
         else
@@ -753,9 +753,9 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
     for( auto pLine : rCpyTable.GetTabLines() )
     {
         // Get the first from the CopyLine
-        const SwTableBox* pCpyBox = pLine->GetTabBoxes().front();
+        const SwTableBox* pCpyBox = pLine->GetTabBoxes().front().get();
         while( !pCpyBox->GetTabLines().empty() )
-            pCpyBox = pCpyBox->GetTabLines().front()->GetTabBoxes().front();
+            pCpyBox = pCpyBox->GetTabLines().front()->GetTabBoxes().front().get();
 
         do {
             // First copy the new content and then delete the old one.
@@ -785,9 +785,9 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
         {
             // Find the next Box with content
             pNxtLine = GetTabLines()[ nPos ];
-            pMyBox = pNxtLine->GetTabBoxes().front();
+            pMyBox = pNxtLine->GetTabBoxes().front().get();
             while( !pMyBox->GetTabLines().empty() )
-                pMyBox = pMyBox->GetTabLines().front()->GetTabBoxes().front();
+                pMyBox = pMyBox->GetTabLines().front()->GetTabBoxes().front().get();
             bDelContent = true;
         }
     }
@@ -873,7 +873,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 }
                 // We have enough space for the to-be-copied, so insert new
                 // rows accordingly.
-                SwTableBox* pInsBox = pLastLn->GetTabBoxes()[ nSttBox ];
+                SwTableBox* pInsBox = pLastLn->GetTabBoxes()[ nSttBox ].get();
                 OSL_ENSURE( pInsBox && pInsBox->GetSttNd(),
                     "no ContentBox or it's not in this Table" );
                 SwSelBoxes aBoxes;
@@ -924,7 +924,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 // Test for nesting
                 for (FndBoxes_t::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx)
                 {
-                    SwTableBox *pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ];
+                    SwTableBox *pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ].get();
                     if( !pTmpBox->GetSttNd() )
                     {
                         delete pInsFLine;
@@ -947,7 +947,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 // Test for nesting
                 for( SwTableBoxes::size_type nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
                 {
-                    SwTableBox *pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ];
+                    SwTableBox *pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ].get();
                     if( !pTmpBox->GetSttNd() )
                         return false;
                     // if Ok, insert the Box into the FndLine
@@ -1010,9 +1010,10 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
             for (FndBoxes_t::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx)
             {
                 // Copy the pCpyBox into pMyBox
-                lcl_CpyBox( rCpyTable, pCpyLn->GetTabBoxes()[
-                            nBx % pCpyLn->GetTabBoxes().size() ],
-                    *this, pFLine->GetBoxes()[nBx]->GetBox(), true, pUndo );
+                auto pCpyBox = pCpyLn->GetTabBoxes()[
+                                nBx % pCpyLn->GetTabBoxes().size() ].get();
+                lcl_CpyBox( rCpyTable, pCpyBox,
+                            *this, pFLine->GetBoxes()[nBx]->GetBox(), true, pUndo );
             }
         }
 
@@ -1035,24 +1036,23 @@ static void FndContentBox( const SwTableBox* pBox, SwSelBoxes* pPara )
 
 static void FndContentLine( const SwTableLine* pLine, SwSelBoxes* pPara )
 {
-    for( const SwTableBox* pBox : pLine->GetTabBoxes() )
-        FndContentBox(pBox, pPara );
+    for( std::unique_ptr<SwTableBox> const & pBox : pLine->GetTabBoxes() )
+        FndContentBox(pBox.get(), pPara );
 }
 
 // Find all Boxes with content in this Box
-SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
+SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pFindBox,
                                     SwSelBoxes& rBoxes, bool bToTop )
 {
-    SwTableLine* pLine = const_cast<SwTableLine*>(pBox->GetUpper());
+    SwTableLine* pLine = const_cast<SwTableLine*>(pFindBox->GetUpper());
     if( bToTop )
         while( pLine->GetUpper() )
             pLine = pLine->GetUpper()->GetUpper();
 
     // Delete all old ones
     rBoxes.clear();
-    for( SwTableBoxes::iterator it = pLine->GetTabBoxes().begin();
-             it != pLine->GetTabBoxes().end(); ++it)
-        FndContentBox(*it, &rBoxes );
+    for( std::unique_ptr<SwTableBox> const & pBox : pLine->GetTabBoxes() )
+        FndContentBox(pBox.get(), &rBoxes );
     return rBoxes;
 }
 
