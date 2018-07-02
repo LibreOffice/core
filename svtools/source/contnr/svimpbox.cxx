@@ -1076,7 +1076,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
 
             pChild = pView->FirstChild( pEntry );
             DBG_ASSERT(pChild,"Child?");
-            pChild = SvTreeList::LastSibling( pChild );
+            pChild = pChild->LastSibling();
             nDistance = static_cast<sal_uInt16>(pView->GetVisiblePos(pChild) - pView->GetVisiblePos(pEntry));
             aPos2 = aPos1;
             aPos2.AdjustY(nDistance * nEntryHeight );
@@ -1116,7 +1116,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
         aPos1.AdjustX( -(pView->GetIndent()) );
         aPos1.setY( GetEntryLine( pEntry ) );
         aPos1.AdjustY(nEntryHeightDIV2 );
-        pChild = SvTreeList::LastSibling( pEntry );
+        pChild = pEntry->LastSibling();
         aPos2.setX( aPos1.X() );
         aPos2.setY( GetEntryLine( pChild ) );
         aPos2.AdjustY(nEntryHeightDIV2 );
@@ -1650,7 +1650,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
             pView->Select( pCursor, false );
         ShowCursor( false );    // focus rectangle gone
         // NextSibling, because we also delete the children of the cursor
-        pTemp = SvTreeListBox::NextSibling( pCursor );
+        pTemp = pCursor->NextSibling();
         if( !pTemp )
             pTemp = pView->PrevVisible(pCursor);
 
@@ -1658,7 +1658,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
     }
     if( pStartEntry && pStartEntry == pEntry )
     {
-        pTemp = SvTreeListBox::NextSibling( pStartEntry );
+        pTemp = pStartEntry->NextSibling();
         if( !pTemp )
             pTemp = pView->PrevVisible(pStartEntry);
         pStartEntry = pTemp;
@@ -1749,9 +1749,9 @@ void SvImpLBox::MovingEntry( SvTreeListEntry* pEntry )
     }
     else
     {
-        pNew = SvTreeList::NextSibling( pEntry );
+        pNew = pEntry->NextSibling();
         if( !pNew )
-            pNew = SvTreeList::PrevSibling( pEntry );
+            pNew = pEntry->PrevSibling();
     }
     pStartEntry = pNew;
 }

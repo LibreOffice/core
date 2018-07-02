@@ -159,9 +159,6 @@ public:
     SvTreeListEntry*    Last() const;
 
     SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
-    static SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry );
-    static SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry );
-    static SvTreeListEntry*    LastSibling( SvTreeListEntry* pEntry );
 
     sal_uLong           Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uLong nPos = TREELIST_APPEND);
     sal_uLong           Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND )

@@ -449,7 +449,7 @@ TriState StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
     for(SvTreeListEntry *pTmpEntry=FirstChild(pTarget);
         pTmpEntry && pCollator->compareString(
             GetEntryText(pTmpEntry),GetEntryText(pEntry)) < 0;
-        pTmpEntry=NextSibling(pTmpEntry),lPos++) ;
+        pTmpEntry=pTmpEntry->NextSibling(),lPos++) ;
 
     return bRet ? TRISTATE_INDET : TRISTATE_FALSE;
 }

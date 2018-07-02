@@ -357,7 +357,7 @@ namespace dbaui
         {
             m_pTablesList->Expand(pExpand);
             pExpand = m_pTablesList->FirstChild(pExpand);
-            if (pExpand && SvTreeList::NextSibling(pExpand))
+            if (pExpand && pExpand->NextSibling())
                 pExpand = nullptr;
         }
 
@@ -526,7 +526,7 @@ namespace dbaui
         SvTreeListEntry* pReturn = nullptr;
         if (_pEntry)
         {
-            pReturn = SvTreeList::NextSibling(_pEntry);
+            pReturn = _pEntry->NextSibling();
             if (!pReturn)
                 pReturn = implNextSibling(m_pTablesList->GetParent(_pEntry));
         }

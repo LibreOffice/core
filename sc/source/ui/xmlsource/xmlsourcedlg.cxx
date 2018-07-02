@@ -337,7 +337,7 @@ void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
     {
         // Only an element with no child elements (leaf element) can be linked.
         bool bHasChild = false;
-        for (SvTreeListEntry* pChild = mpLbTree->FirstChild(&rEntry); pChild; pChild = SvTreeListBox::NextSibling(pChild))
+        for (SvTreeListEntry* pChild = mpLbTree->FirstChild(&rEntry); pChild; pChild = pChild->NextSibling())
         {
             ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
             OSL_ASSERT(pUserData);
@@ -482,7 +482,7 @@ bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
 
 bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
 {
-    for (SvTreeListEntry* pChild = mpLbTree->FirstChild(pEntry); pChild; pChild = SvTreeListBox::NextSibling(pChild))
+    for (SvTreeListEntry* pChild = mpLbTree->FirstChild(pEntry); pChild; pChild = pChild->NextSibling())
     {
         ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
         OSL_ASSERT(pUserData);

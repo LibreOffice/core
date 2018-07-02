@@ -336,7 +336,7 @@ void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
     {
         ClearChildren( pEntry );
         delete static_cast<ContentEntry_Impl*>(pEntry->GetUserData());
-        pEntry = NextSibling( pEntry );
+        pEntry = pEntry->NextSibling();
     }
 }
 

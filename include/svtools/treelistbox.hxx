@@ -365,8 +365,6 @@ public:
     }
 
     SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
-    static SvTreeListEntry* NextSibling( SvTreeListEntry* pEntry );
-    static SvTreeListEntry* PrevSibling( SvTreeListEntry* pEntry );
 
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );

@@ -116,7 +116,7 @@ namespace
                 }
             }
             else
-                pEntry = SvTreeListBox::NextSibling(pEntry);
+                pEntry = pEntry->NextSibling();
         }
         return pReturn;
     }

@@ -1369,7 +1369,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const css::lang::EventObject& _rS
                         break;
                     }
 
-                    pDSLoop = SvTreeList::NextSibling(pDSLoop);
+                    pDSLoop = pDSLoop->NextSibling();
                 }
             }
             else
@@ -2697,7 +2697,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getEntryFromContainer(const Reference<XNa
         if ( pTablesData && pTablesData->xContainer == _rxNameAccess )
             break;
 
-        pDSLoop     = SvTreeList::NextSibling(pDSLoop);
+        pDSLoop     = pDSLoop->NextSibling();
         pContainer  = nullptr;
     }
     return pContainer;
@@ -2789,7 +2789,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
                     m_pTreeModel->Remove(pChild);
                     break;
                 }
-                pChild = SvTreeList::NextSibling(pChild);
+                pChild = pChild->NextSibling();
             }
         }
 
@@ -2854,7 +2854,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
                     }
                     break;
                 }
-                pChild = SvTreeList::NextSibling(pChild);
+                pChild = pChild->NextSibling();
             }
         }
 
@@ -2921,7 +2921,7 @@ void SbaTableQueryBrowser::closeConnection(SvTreeListEntry* _pDSEntry, bool _bDi
         unloadAndCleanup(_bDisposeConnection);
 
     // collapse the query/table container
-    for (SvTreeListEntry* pContainers = m_pTreeModel->FirstChild(_pDSEntry); pContainers; pContainers = SvTreeList::NextSibling(pContainers))
+    for (SvTreeListEntry* pContainers = m_pTreeModel->FirstChild(_pDSEntry); pContainers; pContainers = pContainers->NextSibling())
     {
         SvTreeListEntry* pElements = m_pTreeModel->FirstChild(pContainers);
         if ( pElements )
@@ -2931,7 +2931,7 @@ void SbaTableQueryBrowser::closeConnection(SvTreeListEntry* _pDSEntry, bool _bDi
         for (; pElements; )
         {
             SvTreeListEntry* pRemove = pElements;
-            pElements = SvTreeList::NextSibling(pElements);
+            pElements = pElements->NextSibling();
             DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pRemove->GetUserData());
             pRemove->SetUserData(nullptr);
             delete pData;
@@ -3700,7 +3700,7 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const OUString& _rDataSo
         if ( m_pTreeView->getListBox().GetEntryText( pDataSourceEntry ) == _rDataSourceName )
             break;
 
-        pDataSourceEntry = SvTreeList::NextSibling( pDataSourceEntry );
+        pDataSourceEntry = pDataSourceEntry->NextSibling();
     }
 
     OSL_ENSURE( pDataSourceEntry, "SbaTableQueryBrowser::impl_cleanupDataSourceEntry: do not know this data source!" );

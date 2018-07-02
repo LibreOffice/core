@@ -316,7 +316,7 @@ void SdPageObjsTLB::SaveExpandedTreeItemState(SvTreeListEntry* pEntry, std::vect
                 SvTreeListEntry* pChildEntry = FirstChild(pListEntry);
                 SaveExpandedTreeItemState(pChildEntry, vectTreeItem);
             }
-            pListEntry = NextSibling(pListEntry);
+            pListEntry = pListEntry->NextSibling();
         }
     }
 }

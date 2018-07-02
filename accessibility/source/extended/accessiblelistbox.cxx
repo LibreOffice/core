@@ -265,7 +265,7 @@ namespace accessibility
         while (pEntryChild)
         {
             RemoveChildEntries(pEntryChild);
-            pEntryChild = SvTreeListBox::NextSibling(pEntryChild);
+            pEntryChild = pEntryChild->NextSibling();
         }
     }
 

@@ -759,7 +759,7 @@ void NavigatorTree::removeEntry(SvTreeListEntry* _pEntry,bool _bRemove)
         while( pChild )
         {
             removeEntry(pChild,false);
-            pChild = NextSibling(pChild);
+            pChild = pChild->NextSibling();
         }
         delete static_cast<UserData*>(_pEntry->GetUserData());
         if ( _bRemove )

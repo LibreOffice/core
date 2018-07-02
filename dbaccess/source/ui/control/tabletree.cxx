@@ -368,7 +368,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, 
         {
             if (GetModel()->HasChildren(pChildLoop))
                 implEmphasize(pChildLoop, false, true, false);
-            pChildLoop = NextSibling(pChildLoop);
+            pChildLoop = pChildLoop->NextSibling();
         }
     }
 
