@@ -24,6 +24,7 @@ public:
     void testTableExtrusion2();
     void testTdf116848();
     void testTdf117245();
+    void testTdf117923();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -34,6 +35,7 @@ public:
     CPPUNIT_TEST(testTableExtrusion2);
     CPPUNIT_TEST(testTdf116848);
     CPPUNIT_TEST(testTdf117245);
+    CPPUNIT_TEST(testTdf117923);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -192,6 +194,19 @@ void SwLayoutWriter::testTdf117245()
 
     // This was 2, same problem elsewhere due to code duplication.
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
+}
+
+void SwLayoutWriter::testTdf117923()
+{
+    createDoc("tdf117923.doc");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // Check that we actually test the line we need
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", "GHI GHI GHI GHI");
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nType", "POR_NUMBER");
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "rText", "2.");
+    // The numbering height was 960.
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);

@@ -88,7 +88,12 @@ OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
             xmlXPathNodeSetGetLength(pXmlNodes) > 0);
 
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString s(convert((pXmlNode->children[0]).content));
+    xmlNodePtr pXmlChild = pXmlNode->children;
+    OUString s;
+    while (pXmlChild && pXmlChild->type != XML_TEXT_NODE)
+        pXmlChild = pXmlChild->next;
+    if (pXmlChild && pXmlChild->type == XML_TEXT_NODE)
+        s = convert(pXmlChild->content);
     xmlXPathFreeObject(pXmlObj);
     return s;
 }
