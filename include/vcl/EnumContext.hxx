@@ -96,7 +96,7 @@ public:
         Text,
         TextObject,
         Trendline,
-
+        Printpreview,
         // Default context of an application.  Do we need this?
         Default,
 
