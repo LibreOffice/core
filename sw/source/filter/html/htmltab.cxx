@@ -478,7 +478,7 @@ private:
     void MakeTable_( SwTableBox *pUpper );
 
     // Generate a new SwTableBox, which contains a SwStartNode
-    SwTableBox *NewTableBox( const SwStartNode *pStNd,
+    std::unique_ptr<SwTableBox> NewTableBox( const SwStartNode *pStNd,
                              SwTableLine *pUpper ) const;
 
     // Generate a SwTableLine from the cells of the rectangle
@@ -488,7 +488,7 @@ private:
                                 sal_uInt16 nBottomRow, sal_uInt16 nRightCol );
 
     // Generate a SwTableBox from the content of the cell
-    SwTableBox *MakeTableBox( SwTableLine *pUpper,
+    std::unique_ptr<SwTableBox> MakeTableBox( SwTableLine *pUpper,
                               HTMLTableCnts *pCnts,
                               sal_uInt16 nTopRow, sal_uInt16 nLeftCol,
                               sal_uInt16 nBootomRow, sal_uInt16 nRightCol );
@@ -1468,19 +1468,19 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
 
 }
 
-SwTableBox *HTMLTable::NewTableBox( const SwStartNode *pStNd,
+std::unique_ptr<SwTableBox> HTMLTable::NewTableBox( const SwStartNode *pStNd,
                                     SwTableLine *pUpper ) const
 {
-    SwTableBox *pBox;
+    std::unique_ptr<SwTableBox> pBox;
 
     if (m_xBox1 && m_xBox1->GetSttNd() == pStNd)
     {
         // If the StartNode is the StartNode of the initially created box, we take that box
-        pBox = const_cast<HTMLTable*>(this)->m_xBox1.release();
+        pBox = std::move(const_cast<HTMLTable*>(this)->m_xBox1);
         pBox->SetUpper(pUpper);
     }
     else
-        pBox = new SwTableBox( m_pBoxFormat, *pStNd, pUpper );
+        pBox.reset( new SwTableBox( m_pBoxFormat, *pStNd, pUpper ) );
 
     return pBox;
 }
@@ -1563,7 +1563,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
             OSL_ENSURE((nCol != nRightCol-1) || bSplit, "Split-Flag wrong");
             if( bSplit )
             {
-                SwTableBox* pBox = nullptr;
+                std::unique_ptr<SwTableBox> pBox;
                 HTMLTableCell& rCell2 = GetCell(nTopRow, nStartCol);
                 if (rCell2.GetColSpan() == (nCol+1-nStartCol))
                 {
@@ -1611,7 +1611,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                 OSL_ENSURE( pBox, "Colspan trouble" );
 
                 if( pBox )
-                    rBoxes.push_back( pBox );
+                    rBoxes.push_back( std::move(pBox) );
             }
             nCol++;
         }
@@ -1621,12 +1621,12 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     return pLine;
 }
 
-SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
+std::unique_ptr<SwTableBox> HTMLTable::MakeTableBox( SwTableLine *pUpper,
                                      HTMLTableCnts *pCnts,
                                      sal_uInt16 nTopRow, sal_uInt16 nLeftCol,
                                      sal_uInt16 nBottomRow, sal_uInt16 nRightCol )
 {
-    SwTableBox *pBox;
+    std::unique_ptr<SwTableBox> pBox;
     sal_uInt16 nColSpan = nRightCol - nLeftCol;
     sal_uInt16 nRowSpan = nBottomRow - nTopRow;
 
@@ -1637,7 +1637,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
         {
             // ... that's not a table
             pBox = NewTableBox( pCnts->GetStartNode(), pUpper );
-            pCnts->SetTableBox( pBox );
+            pCnts->SetTableBox( pBox.get() );
         }
         else if (HTMLTable* pTable = pCnts->GetTable().get())
         {
@@ -1645,13 +1645,13 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                                                    nRightCol-nLeftCol );
             // ... that's a table. We'll build a new box and put the rows of the table
             // in the rows of the box
-            pBox = new SwTableBox( m_pBoxFormat, 0, pUpper );
+            pBox.reset( new SwTableBox( m_pBoxFormat, 0, pUpper ) );
             sal_uInt16 nAbs, nRel;
             m_xLayoutInfo->GetAvail( nLeftCol, nColSpan, nAbs, nRel );
             sal_uInt16 nLSpace = m_xLayoutInfo->GetLeftCellSpace( nLeftCol, nColSpan );
             sal_uInt16 nRSpace = m_xLayoutInfo->GetRightCellSpace( nLeftCol, nColSpan );
             sal_uInt16 nInhSpace = m_xLayoutInfo->GetInhCellSpace( nLeftCol, nColSpan );
-            pCnts->GetTable()->MakeTable( pBox, nAbs, nRel, nLSpace, nRSpace,
+            pCnts->GetTable()->MakeTable( pBox.get(), nAbs, nRel, nLSpace, nRSpace,
                                           nInhSpace );
         }
         else
@@ -1662,7 +1662,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
     else
     {
         // multiple content sections: we'll build a box with rows
-        pBox = new SwTableBox( m_pBoxFormat, 0, pUpper );
+        pBox.reset( new SwTableBox( m_pBoxFormat, 0, pUpper ) );
         SwTableLines& rLines = pBox->GetTabLines();
         bool bFirstPara = true;
 
@@ -1673,7 +1673,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                 // normal paragraphs are gonna be boxes in a row
                 SwTableLine *pLine =
                     new SwTableLine( m_pLineFrameFormatNoHeight ? m_pLineFrameFormatNoHeight
-                                                         : m_pLineFormat, 0, pBox );
+                                                         : m_pLineFormat, 0, pBox.get() );
                 if( !m_pLineFrameFormatNoHeight )
                 {
                     // If there's no line format without height yet, we can use that one
@@ -1682,12 +1682,12 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                     ResetLineFrameFormatAttrs( m_pLineFrameFormatNoHeight );
                 }
 
-                SwTableBox* pCntBox = NewTableBox( pCnts->GetStartNode(),
+                std::unique_ptr<SwTableBox> pCntBox = NewTableBox( pCnts->GetStartNode(),
                                                    pLine );
-                pCnts->SetTableBox( pCntBox );
-                FixFrameFormat( pCntBox, nTopRow, nLeftCol, nRowSpan, nColSpan,
+                pCnts->SetTableBox( pCntBox.get() );
+                FixFrameFormat( pCntBox.get(), nTopRow, nLeftCol, nRowSpan, nColSpan,
                              bFirstPara, nullptr==pCnts->Next() );
-                pLine->GetTabBoxes().push_back( pCntBox );
+                pLine->GetTabBoxes().push_back( std::move(pCntBox) );
 
                 rLines.push_back( pLine );
             }
@@ -1703,7 +1703,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                 sal_uInt16 nRSpace = m_xLayoutInfo->GetRightCellSpace( nLeftCol,
                                                                  nColSpan );
                 sal_uInt16 nInhSpace = m_xLayoutInfo->GetInhCellSpace( nLeftCol, nColSpan );
-                pCnts->GetTable()->MakeTable( pBox, nAbs, nRel, nLSpace,
+                pCnts->GetTable()->MakeTable( pBox.get(), nAbs, nRel, nLSpace,
                                               nRSpace, nInhSpace );
             }
 
@@ -1712,7 +1712,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
         }
     }
 
-    FixFrameFormat( pBox, nTopRow, nLeftCol, nRowSpan, nColSpan );
+    FixFrameFormat( pBox.get(), nTopRow, nLeftCol, nRowSpan, nColSpan );
 
     return pBox;
 }
@@ -2328,8 +2328,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
     // get the default line and box format
     // remember the first box and unlist it from the first row
-    SwTableLine *pLine1 = (m_pSwTable->GetTabLines())[0];
-    m_xBox1.reset((pLine1->GetTabBoxes())[0]);
+    SwTableLine *pLine1 = m_pSwTable->GetTabLines()[0];
+    m_xBox1 = std::move(pLine1->GetTabBoxes()[0]);
     pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
     m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());

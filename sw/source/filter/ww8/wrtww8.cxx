@@ -2129,7 +2129,7 @@ void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
     sal_uInt8 nBoxes = rTableBoxes.size();
     for ( sal_uInt8 n = 0; n < nBoxes; n++ )
     {
-        const SwTableBox * pTabBox1 = rTableBoxes[n];
+        const SwTableBox * pTabBox1 = rTableBoxes[n].get();
         const SwFrameFormat * pFrameFormat = pTabBox1->GetFrameFormat();
 
         if ( SvxFrameDirection::Vertical_RL_TB == m_rWW8Export.TrueFrameDirection( *pFrameFormat ) )
@@ -2591,7 +2591,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
     for ( sal_uInt8 n = 0; n < nBoxes; n++ )
     {
-        const SwTableBox * pBox1 = rTabBoxes[n];
+        const SwTableBox * pBox1 = rTabBoxes[n].get();
         const SwFrameFormat * pFrameFormat = pBox1->GetFrameFormat();
         const SfxPoolItem * pI = nullptr;
         Color aColor;
@@ -2621,7 +2621,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
         for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
         {
-            const SwTableBox * pBox1 = rTabBoxes[n];
+            const SwTableBox * pBox1 = rTabBoxes[n].get();
             const SwFrameFormat * pFrameFormat = pBox1->GetFrameFormat();
             const SfxPoolItem * pI = nullptr;
             Color aColor;

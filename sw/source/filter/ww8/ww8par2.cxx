@@ -2561,7 +2561,7 @@ void WW8TabDesc::MergeCells()
                         "Too few columns, table ended early");
                     if (nCol >= m_pTabBoxes->size())
                         return;
-                    m_pTabBox = (*m_pTabBoxes)[nCol];
+                    m_pTabBox = (*m_pTabBoxes)[nCol].get();
                     WW8_TCell& rCell = m_pActBand->pTCs[ i ];
                     // is this the left upper cell of a merge group ?
 
@@ -2675,7 +2675,7 @@ void WW8TabDesc::ParkPaM()
         if (SwTableLine *pLine = (*m_pTabLines)[nRow])
         {
             SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-            pTabBox2 = rBoxes.empty() ? nullptr : rBoxes.front();
+            pTabBox2 = rBoxes.empty() ? nullptr : rBoxes.front().get();
         }
     }
 
@@ -2908,7 +2908,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         }
         return;
     }
-    m_pTabBox = (*m_pTabBoxes)[nCol];
+    m_pTabBox = (*m_pTabBoxes)[nCol].get();
     if( !m_pTabBox->GetSttNd() )
     {
         OSL_ENSURE(m_pTabBox->GetSttNd(), "Problems building the table");
@@ -2978,7 +2978,7 @@ void WW8TabDesc::InsertCells( short nIns )
 {
     m_pTabLine = (*m_pTabLines)[m_nCurrentRow];
     m_pTabBoxes = &m_pTabLine->GetTabBoxes();
-    m_pTabBox = (*m_pTabBoxes)[0];
+    m_pTabBox = (*m_pTabBoxes)[0].get();
 
     m_pIo->m_rDoc.GetNodes().InsBoxen( m_pTableNd, m_pTabLine, static_cast<SwTableBoxFormat*>(m_pTabBox->GetFrameFormat()),
                             const_cast<SwTextFormatColl*>(m_pIo->m_pDfltTextFormatColl), nullptr, m_pTabBoxes->size(), nIns );
@@ -3194,7 +3194,7 @@ void WW8TabDesc::AdjustNewBand()
             m_pActBand->nWidth[ j ] = nW;
         }
 
-        SwTableBox* pBox = (*m_pTabBoxes)[i];
+        SwTableBox* pBox = (*m_pTabBoxes)[i].get();
         // could be reduced further by intelligent moving of FrameFormats
         pBox->ClaimFrameFormat();
 
@@ -3206,7 +3206,7 @@ void WW8TabDesc::AdjustNewBand()
         SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrameFormat()), RES_BOX));
         if (i != 0)
         {
-            SwTableBox* pBox2 = (*m_pTabBoxes)[i-1];
+            SwTableBox* pBox2 = (*m_pTabBoxes)[i-1].get();
             SvxBoxItem aOldBox(sw::util::ItemGet<SvxBoxItem>(*(pBox2->GetFrameFormat()), RES_BOX));
             if( aOldBox.CalcLineWidth(SvxBoxItemLine::RIGHT) > aCurrentBox.CalcLineWidth(SvxBoxItemLine::LEFT) )
                 aCurrentBox.SetLine(aOldBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::LEFT);
@@ -3273,7 +3273,7 @@ void WW8TabDesc::TableCellEnd()
             }
             else
             {
-                SwTableBox* pBox = (*m_pTabBoxes)[0];
+                SwTableBox* pBox = (*m_pTabBoxes)[0].get();
                 SwSelBoxes aBoxes;
                 m_pIo->m_rDoc.InsertRow( SwTable::SelLineFromBox( pBox, aBoxes ) );
             }
