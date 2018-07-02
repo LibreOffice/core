@@ -589,6 +589,13 @@ cmd/sc_cellverttop.png cmd/sc_aligntop.png
 cmd/sc_cellvertcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
 
+cmd/sc_commonaligntop.png cmd/sc_aligntop.png
+cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
+cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
+cmd/lc_commonaligntop.png cmd/lc_aligntop.png
+cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
+cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
+
 # paragraph line spacing drop down
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
