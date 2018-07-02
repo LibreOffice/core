@@ -1252,7 +1252,7 @@ DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
     // thus I will correct the values here.
     // Indeed need to use the Linux values, I have no idea why these differ
     // from Mac/Win ones, but the disable above hints to that (maybe a problem
-    // of it's own). Factor between Twips and 100thmm is ca. 1.76 -> stable change
+    // of its own). Factor between Twips and 100thmm is ca. 1.76 -> stable change
 
     // Vertical flip for the line shape was ignored, so Y coordinates were swapped.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4972), rPolygon[0].X); // was: 2819, win is 10927
