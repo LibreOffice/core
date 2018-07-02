@@ -105,8 +105,8 @@ private:
     std::unique_ptr<EditTextObject> mpTextObj;
     css::uno::WeakReference<css::sheet::XHeaderFooterContent> xContentObj;
     ScHeaderFooterPart          nPart;
-    ScEditEngineDefaulter*      pEditEngine;
-    SvxEditEngineForwarder*     pForwarder;
+    std::unique_ptr<ScEditEngineDefaulter>  pEditEngine;
+    std::unique_ptr<SvxEditEngineForwarder> pForwarder;
     bool                        bDataValid;
 
 public:
@@ -120,7 +120,7 @@ public:
     SvxTextForwarder*       GetTextForwarder();
     void UpdateData();
     void UpdateData(EditEngine& rEditEngine);
-    ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+    ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine.get(); }
 
     ScHeaderFooterPart      GetPart() const         { return nPart; }
     const css::uno::Reference<css::sheet::XHeaderFooterContent> GetContentObj() const { return xContentObj; }
