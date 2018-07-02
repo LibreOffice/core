@@ -21,6 +21,7 @@
 #include <svtools/treelistentry.hxx>
 #include <svtools/viewdataentry.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <map>
@@ -1177,7 +1178,7 @@ void SvListView::Impl::InitTable()
     pEntry = m_rThis.pModel->First();
     while( pEntry )
     {
-        pViewData.reset(m_rThis.CreateViewData( pEntry ));
+        pViewData = m_rThis.CreateViewData( pEntry );
         DBG_ASSERT(pViewData,"InitTable:No ViewData");
         m_rThis.InitViewData( pViewData.get(), pEntry );
         m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
@@ -1185,9 +1186,9 @@ void SvListView::Impl::InitTable()
     }
 }
 
-SvViewDataEntry* SvListView::CreateViewData( SvTreeListEntry* )
+std::unique_ptr<SvViewDataEntry> SvListView::CreateViewData( SvTreeListEntry* )
 {
-    return new SvViewDataEntry;
+    return o3tl::make_unique<SvViewDataEntry>();
 }
 
 void SvListView::Clear()

@@ -320,7 +320,7 @@ public:
     SvViewDataEntry*         GetViewData( SvTreeListEntry* pEntry );
     bool                HasViewData() const;
 
-    virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* pEntry );
+    virtual std::unique_ptr<SvViewDataEntry> CreateViewData( SvTreeListEntry* pEntry );
     virtual void        InitViewData( SvViewDataEntry*, SvTreeListEntry* pEntry );
 
     virtual void        ModelHasCleared();

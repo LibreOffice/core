@@ -297,7 +297,7 @@ protected:
     bool            EditingCanceled() const;
 
     // Return value must be derived from SvViewDataEntry!
-    virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* ) override;
+    virtual std::unique_ptr<SvViewDataEntry> CreateViewData( SvTreeListEntry* ) override;
     // InitViewData is called right after CreateViewData
     // The Entry is has not yet been added to the View in InitViewData!
     virtual void InitViewData( SvViewDataEntry*, SvTreeListEntry* pEntry ) override;
