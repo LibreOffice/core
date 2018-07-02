@@ -33,8 +33,8 @@ extern SwDropCapCache *pDropCapCache;
 // attribute changes inside them.
 class SwDropPortionPart
 {
-    SwDropPortionPart* pFollow;
-    SwFont* pFnt;
+    std::unique_ptr<SwDropPortionPart> pFollow;
+    std::unique_ptr<SwFont> pFnt;
     TextFrameIndex nLen;
     sal_uInt16 nWidth;
     bool m_bJoinBorderWithNext;
@@ -45,8 +45,8 @@ public:
             : pFollow( nullptr ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
     ~SwDropPortionPart();
 
-    SwDropPortionPart* GetFollow() const { return pFollow; };
-    void SetFollow( SwDropPortionPart* pNew ) { pFollow = pNew; };
+    SwDropPortionPart* GetFollow() const { return pFollow.get(); };
+    void SetFollow( std::unique_ptr<SwDropPortionPart> pNew ) { pFollow = std::move(pNew); };
     SwFont& GetFont() const { return *pFnt; }
     TextFrameIndex GetLen() const { return nLen; }
     sal_uInt16 GetWidth() const { return nWidth; }
