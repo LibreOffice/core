@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_e2ff6632",
+        "filename": "sw/source/uibase/app/swmodule.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-07-02T09:00:37Z",
+      "side": 0,
+      "message": "Please no unrelated changes in this patch.",
+      "revId": "1c7921c43960a4a6717c816d646cf0f65fbaec12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

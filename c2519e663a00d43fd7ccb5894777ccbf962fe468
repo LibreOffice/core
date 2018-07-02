@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_22ee6e88",
+        "filename": "sfx2/sdi/docslots.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-07-02T09:00:37Z",
+      "side": 1,
+      "message": "Why have this twice?",
+      "revId": "c2519e663a00d43fd7ccb5894777ccbf962fe468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_42e9727e",
+        "filename": "sfx2/sdi/sfx.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 4599,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-07-02T09:00:37Z",
+      "side": 1,
+      "message": "is there any group id that fits better than document?",
+      "range": {
+        "startLine": 4599,
+        "startChar": 26,
+        "endLine": 4599,
+        "endChar": 34
+      },
+      "revId": "c2519e663a00d43fd7ccb5894777ccbf962fe468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_02036a44",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-07-02T09:00:37Z",
+      "side": 1,
+      "message": "If you put a text into the statusbar, it needs to be translatable.\n\nBut probably an icon would be a better choice?",
+      "revId": "c2519e663a00d43fd7ccb5894777ccbf962fe468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
