@@ -1377,8 +1377,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 
         pTableFrameFormat->SetName( sTableName );
 
-        SwTableLine *pLine1 = m_pTableNode->GetTable().GetTabLines()[0U];
-        m_pBox1 = pLine1->GetTabBoxes()[0U];
+        SwTableLine *pLine1 = m_pTableNode->GetTable().GetTabLines()[0];
+        m_pBox1 = pLine1->GetTabBoxes()[0].get();
         m_pSttNd1 = m_pBox1->GetSttNd();
     }
 }
@@ -1793,7 +1793,7 @@ void SwXMLTableContext::ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol, 
 
 }
 
-SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
+std::unique_ptr<SwTableBox> SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
                                              SwTableLine *pUpper )
 {
     // The topmost table is the only table that maintains the two members
@@ -1802,20 +1802,20 @@ SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
         return static_cast<SwXMLTableContext *>(m_xParentTable.get())->NewTableBox( pStNd,
                                                                   pUpper );
 
-    SwTableBox *pBox;
+    std::unique_ptr<SwTableBox> pBox;
 
     if( m_pBox1 &&
         m_pBox1->GetSttNd() == pStNd )
     {
         // if the StartNode is equal to the StartNode of the initially
         // created box, we use this box
-        pBox = m_pBox1;
+        pBox.reset( m_pBox1 );
         pBox->SetUpper( pUpper );
         m_pBox1 = nullptr;
         m_bOwnsBox1 = false;
     }
     else
-        pBox = new SwTableBox( m_pBoxFormat, *pStNd, pUpper );
+        pBox.reset( new SwTableBox( m_pBoxFormat, *pStNd, pUpper ) );
 
     return pBox;
 }
@@ -1874,14 +1874,14 @@ SwTableBoxFormat* SwXMLTableContext::GetSharedBoxFormat(
     return pBoxFormat2;
 }
 
-SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
+std::unique_ptr<SwTableBox> SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                                              sal_uInt32 nTopRow,
                                              sal_uInt32 nLeftCol,
                                              sal_uInt32 nBottomRow,
                                              sal_uInt32 nRightCol )
 {
     //FIXME: here would be a great place to handle XmlId for cell
-    SwTableBox *pBox = new SwTableBox( m_pBoxFormat, 0, pUpper );
+    std::unique_ptr<SwTableBox> pBox(new SwTableBox( m_pBoxFormat, 0, pUpper ));
 
     sal_uInt32 nColSpan = nRightCol - nLeftCol;
     sal_Int32 nColWidth = GetColumnWidth( nLeftCol, nColSpan );
@@ -1916,7 +1916,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
             if( bSplit && (nStartRow>nTopRow || i+1<nBottomRow) )
             {
                 SwTableLine *pLine =
-                    MakeTableLine( pBox, nStartRow, nLeftCol, i+1,
+                    MakeTableLine( pBox.get(), nStartRow, nLeftCol, i+1,
                                    nRightCol );
 
                 rLines.push_back( pLine );
@@ -1973,12 +1973,12 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     return pBox;
 }
 
-SwTableBox *SwXMLTableContext::MakeTableBox(
+std::unique_ptr<SwTableBox> SwXMLTableContext::MakeTableBox(
         SwTableLine *pUpper, const SwXMLTableCell_Impl *pCell,
         sal_uInt32 nLeftCol, sal_uInt32 nRightCol )
 {
     //FIXME: here would be a great place to handle XmlId for cell
-    SwTableBox *pBox;
+    std::unique_ptr<SwTableBox> pBox;
     sal_uInt32 nColSpan = nRightCol - nLeftCol;
     sal_Int32 nColWidth = GetColumnWidth( nLeftCol, nColSpan );
 
@@ -1990,8 +1990,8 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     {
         // and it is a table: therefore we build a new box and
         // put the rows of the table into the rows of the box
-        pBox = new SwTableBox( m_pBoxFormat, 0, pUpper );
-        pCell->GetSubTable()->MakeTable( pBox, nColWidth );
+        pBox.reset( new SwTableBox( m_pBoxFormat, 0, pUpper ) );
+        pCell->GetSubTable()->MakeTable( pBox.get(), nColWidth );
     }
 
     // Share formats!
@@ -1999,7 +1999,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     bool bModifyLocked;
     bool bNew;
     SwTableBoxFormat *pBoxFormat2 = GetSharedBoxFormat(
-        pBox, sStyleName, nColWidth, pCell->IsProtected(),
+        pBox.get(), sStyleName, nColWidth, pCell->IsProtected(),
         pCell->GetStartNode() && pCell->GetFormula().isEmpty() &&
             ! pCell->HasValue(),
         bNew, &bModifyLocked  );
@@ -2266,7 +2266,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
 
             if( bSplit )
             {
-                SwTableBox* pBox = nullptr;
+                std::unique_ptr<SwTableBox> pBox;
                 SwXMLTableCell_Impl *pCell = GetCell( nTopRow, nStartCol );
                 // #i95726# - some fault tolerance
                 if( ( !m_bHasSubTables || ( pCell->GetRowSpan() == (nBottomRow-nTopRow) ) ) &&
@@ -2333,7 +2333,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 OSL_ENSURE( m_bHasSubTables || pBox, "Colspan trouble" );
 
                 if( pBox )
-                    rBoxes.push_back( pBox );
+                    rBoxes.push_back( std::move(pBox) );
             }
             nCol++;
         }
@@ -2738,7 +2738,7 @@ void SwXMLTableContext::MakeTable()
     }
 
     SwTableLine *pLine1 = m_pTableNode->GetTable().GetTabLines()[0U];
-    assert(m_pBox1 == pLine1->GetTabBoxes()[0] && !m_bOwnsBox1 && "Why is box 1 change?");
+    assert(m_pBox1 == pLine1->GetTabBoxes()[0].get() && !m_bOwnsBox1 && "Why is box 1 change?");
     m_pBox1->m_pStartNode = m_pSttNd1;
     pLine1->GetTabBoxes().erase( pLine1->GetTabBoxes().begin() );
     m_bOwnsBox1 = true;

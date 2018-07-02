@@ -208,7 +208,7 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
                 pLine = rLines[ nSttPos ];
                 for( auto n = pLine->GetTabBoxes().size(); n ; )
                 {
-                    SwTableBox* pBox = pLine->GetTabBoxes()[ --n ];
+                    SwTableBox* pBox = pLine->GetTabBoxes()[ --n ].get();
                     // check for cell protection??
                     if( !bChkProtected ||
                         !pBox->GetFrameFormat()->GetProtect().IsContentProtected() )
@@ -992,7 +992,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                     CmpLPt( aRectFnSet.GetPos(pCell->getFrameArea()),
                                     pBox, aRectFnSet.IsVert() ) );
 
-                                pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
+                                pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ].get();
                                 aNew.SetWidth( nTmpWidth );
                                 pBox->ClaimFrameFormat();
                                 pBox->GetFrameFormat()->SetFormatAttr( aNew );
@@ -1041,7 +1041,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             }
                             }
 
-                            pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
+                            pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ].get();
                             aNew.SetWidth( nWidth );
                             pBox->ClaimFrameFormat();
                             pBox->GetFrameFormat()->SetFormatAttr( aNew );
@@ -1056,7 +1056,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 CmpLPt( aRectFnSet.GetPos(pCell->getFrameArea()),
                                 pBox, aRectFnSet.IsVert() ) );
 
-                            pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos+1 ];
+                            pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos+1 ].get();
                             aNew.SetWidth( nRight );
                             pBox->ClaimFrameFormat();
                             pBox->GetFrameFormat()->SetFormatAttr( aNew );
@@ -1086,7 +1086,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             pBox->ClaimFrameFormat()->SetFormatAttr( aNew );
 
                                 // this box is selected
-                            pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
+                            pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ].get();
                             aNew.SetWidth( nRight );
                             pBox->ClaimFrameFormat();
                             pBox->GetFrameFormat()->SetFormatAttr( aNew );
@@ -1307,7 +1307,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         sal_uInt16 nInsPos = pInsLine->GetBoxPos( pTmpBox );
 
         lcl_InsTableBox( pTableNd, pDoc, pTmpBox, nInsPos );
-        (*ppMergeBox) = pInsLine->GetTabBoxes()[ nInsPos ];
+        (*ppMergeBox) = pInsLine->GetTabBoxes()[ nInsPos ].release();
         pInsLine->GetTabBoxes().erase( pInsLine->GetTabBoxes().begin() + nInsPos );  // remove again
         (*ppMergeBox)->SetUpper( nullptr );
         (*ppMergeBox)->ClaimFrameFormat();
@@ -2064,9 +2064,8 @@ static void FndLineCopyCol( SwTableLine* pLine, FndPara* pFndPara )
 {
     std::unique_ptr<FndLine_> pFndLine(new FndLine_(pLine, pFndPara->pFndBox));
     FndPara aPara(*pFndPara, pFndLine.get());
-    for( SwTableBoxes::iterator it = pFndLine->GetLine()->GetTabBoxes().begin();
-             it != pFndLine->GetLine()->GetTabBoxes().end(); ++it)
-        FndBoxCopyCol(*it, &aPara );
+    for( std::unique_ptr<SwTableBox> const & pBox : pFndLine->GetLine()->GetTabBoxes())
+        FndBoxCopyCol(pBox.get(), &aPara );
     if( pFndLine->GetBoxes().size() )
     {
         pFndPara->pFndBox->GetLines().push_back( std::move(pFndLine) );

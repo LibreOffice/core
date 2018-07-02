@@ -142,7 +142,7 @@ void SwDDETable::ChangeContent()
         SwTableLine* pLine = m_aLines[ n ];
         for( size_t i = 0; i < pLine->GetTabBoxes().size(); ++i )
         {
-            SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
+            SwTableBox* pBox = pLine->GetTabBoxes()[ i ].get();
             OSL_ENSURE( pBox->GetSttIdx(), "no content box" );
             SwNodeIndex aNdIdx( *pBox->GetSttNd(), 1 );
             SwTextNode* pTextNode = aNdIdx.GetNode().GetTextNode();

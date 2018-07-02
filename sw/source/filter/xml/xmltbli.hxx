@@ -97,12 +97,12 @@ class SwXMLTableContext : public XMLTextTableContext
     // MINLAY<=nWidth2<=MAX_WIDTH into m_aColumnWidths in SwXMLTableContext::InsertColumn:
     static constexpr sal_Int32 MAX_WIDTH = SAL_MAX_UINT16;
 
-    SwTableBox *NewTableBox( const SwStartNode *pStNd,
+    std::unique_ptr<SwTableBox> NewTableBox( const SwStartNode *pStNd,
                              SwTableLine *pUpper );
-    SwTableBox *MakeTableBox( SwTableLine *pUpper,
+    std::unique_ptr<SwTableBox> MakeTableBox( SwTableLine *pUpper,
                               const SwXMLTableCell_Impl *pStartNode,
                               sal_uInt32 nLeftCol, sal_uInt32 nRightCol );
-    SwTableBox *MakeTableBox( SwTableLine *pUpper,
+    std::unique_ptr<SwTableBox> MakeTableBox( SwTableLine *pUpper,
                               sal_uInt32 nTopRow, sal_uInt32 nLeftCol,
                               sal_uInt32 nBottomRow, sal_uInt32 nRightCol );
     SwTableLine *MakeTableLine( SwTableBox *pUpper,

@@ -291,8 +291,8 @@ static void lcl_ProcessRowSize(std::vector<std::unique_ptr<SwTableFormatCmp>>& r
 {
     lcl_ProcessRowAttr( rFormatCmp, pLine, rNew );
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-    for ( auto pBox : rBoxes )
-        ::lcl_ProcessBoxSize( rFormatCmp, pBox, rNew );
+    for ( auto & pBox : rBoxes )
+        ::lcl_ProcessBoxSize( rFormatCmp, pBox.get(), rNew );
 }
 
 static void lcl_ProcessBoxSize(std::vector<std::unique_ptr<SwTableFormatCmp>>& rFormatCmp,

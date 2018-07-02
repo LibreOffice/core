@@ -220,10 +220,9 @@ static bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, bool *pBorder
     if( *pBorders )
         return false;
 
-    for( SwTableBoxes::const_iterator it = pLine->GetTabBoxes().begin();
-             it != pLine->GetTabBoxes().end(); ++it)
+    for( std::unique_ptr<SwTableBox> const & pBox : pLine->GetTabBoxes() )
     {
-        if ( lcl_TableBox_HasTabBorders( *it, pBorders ) )
+        if ( lcl_TableBox_HasTabBorders( pBox.get(), pBorders ) )
             break;
     }
     return !*pBorders;
