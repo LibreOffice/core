@@ -213,4 +213,29 @@ void SvTreeListEntry::SetFlags( SvTLEntryFlags nFlags )
     nEntryFlags = nFlags;
 }
 
+SvTreeListEntry* SvTreeListEntry::NextSibling() const
+{
+    SvTreeListEntries& rList = pParent->m_Children;
+    sal_uLong nPos = GetChildListPos();
+    nPos++;
+    return (nPos < rList.size()) ? rList[nPos].get() : nullptr;
+}
+
+SvTreeListEntry* SvTreeListEntry::PrevSibling() const
+{
+    SvTreeListEntries& rList = pParent->m_Children;
+    sal_uLong nPos = GetChildListPos();
+    if ( nPos == 0 )
+        return nullptr;
+    nPos--;
+    return rList[nPos].get();
+}
+
+
+SvTreeListEntry* SvTreeListEntry::LastSibling() const
+{
+    SvTreeListEntries& rChildren = pParent->m_Children;
+    return (rChildren.empty()) ? nullptr : rChildren.back().get();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

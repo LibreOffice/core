@@ -806,44 +806,6 @@ SvTreeListEntry* SvTreeList::FirstChild( SvTreeListEntry* pParent ) const
     return pResult;
 }
 
-SvTreeListEntry* SvTreeList::NextSibling( SvTreeListEntry* pEntry )
-{
-    DBG_ASSERT(pEntry,"Entry?");
-    if( !pEntry )
-        return nullptr;
-
-    SvTreeListEntries& rList = pEntry->pParent->m_Children;
-    sal_uLong nPos = pEntry->GetChildListPos();
-    nPos++;
-    return (nPos < rList.size()) ? rList[nPos].get() : nullptr;
-}
-
-SvTreeListEntry* SvTreeList::PrevSibling( SvTreeListEntry* pEntry )
-{
-    DBG_ASSERT(pEntry,"Entry?");
-    if( !pEntry )
-        return nullptr;
-
-    SvTreeListEntries& rList = pEntry->pParent->m_Children;
-    sal_uLong nPos = pEntry->GetChildListPos();
-    if ( nPos == 0 )
-        return nullptr;
-    nPos--;
-    pEntry = rList[nPos].get();
-    return pEntry;
-}
-
-
-SvTreeListEntry* SvTreeList::LastSibling( SvTreeListEntry* pEntry )
-{
-    DBG_ASSERT(pEntry,"LastSibling:Entry?");
-    if( !pEntry )
-        return nullptr;
-
-    SvTreeListEntries& rChildren = pEntry->pParent->m_Children;
-    return (rChildren.empty()) ? nullptr : rChildren.back().get();
-}
-
 SvTreeListEntry* SvTreeList::NextSelected( const SvListView* pView, SvTreeListEntry* pEntry ) const
 {
     DBG_ASSERT(pView&&pEntry,"NextSel:View/Entry?");

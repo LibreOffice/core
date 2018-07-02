@@ -125,7 +125,7 @@ void SFTreeListBox::deleteTree( SvTreeListEntry* pEntry )
     pEntry = FirstChild( pEntry );
     while ( pEntry )
     {
-        SvTreeListEntry* pNextEntry = NextSibling( pEntry );
+        SvTreeListEntry* pNextEntry = pEntry->NextSibling();
         deleteTree( pEntry );
         GetModel()->Remove( pEntry );
         pEntry = pNextEntry;
@@ -141,7 +141,7 @@ void SFTreeListBox::deleteAllTree()
     {
         while ( pEntry )
         {
-            SvTreeListEntry* pNextEntry = NextSibling( pEntry ) ;
+            SvTreeListEntry* pNextEntry = pEntry->NextSibling();
             deleteTree( pEntry );
             GetModel()->Remove( pEntry );
             pEntry = pNextEntry;
@@ -1154,7 +1154,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
                 pEntry = pTmpEntry;
                 break;
             }
-            pTmpEntry = SvTreeListBox::NextSibling( pTmpEntry );
+            pTmpEntry = pTmpEntry->NextSibling();
         }
         if ( !pTmpEntry )
             break;

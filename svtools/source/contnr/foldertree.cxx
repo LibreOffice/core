@@ -146,7 +146,7 @@ void FolderTree::SetTreePath( OUString const & sUrl )
             }
             else
             {
-                pEntry = NextSibling( pEntry );
+                pEntry = pEntry->NextSibling();
             }
         }
         else

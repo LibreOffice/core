@@ -18,6 +18,7 @@
  */
 
 #include <marktree.hxx>
+#include <svtools/treelistentry.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -114,7 +115,7 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
             ++nCheckedChildren;
         ++nChildrenOverall;
 
-        pChildLoop = SvTreeList::NextSibling(pChildLoop);
+        pChildLoop = pChildLoop->NextSibling();
     }
 
     if (pChildLoop)
@@ -128,7 +129,7 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
         while (pChildLoop)
         {
             implDetermineState(pChildLoop);
-            pChildLoop = SvTreeList::NextSibling(pChildLoop);
+            pChildLoop = pChildLoop->NextSibling();
         }
     }
     else
@@ -157,7 +158,7 @@ void OMarkableTreeListBox::CheckButtons()
     while (pEntry)
     {
         implDetermineState(pEntry);
-        pEntry = SvTreeList::NextSibling(pEntry);
+        pEntry = pEntry->NextSibling();
     }
 }
 
@@ -173,7 +174,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     if (GetModel()->HasChildren(_pEntry)) // if it has children, check those too
     {
         SvTreeListEntry* pChildEntry = GetModel()->Next(_pEntry);
-        SvTreeListEntry* pSiblingEntry = SvTreeList::NextSibling(_pEntry);
+        SvTreeListEntry* pSiblingEntry = _pEntry->NextSibling();
         while(pChildEntry && pChildEntry != pSiblingEntry)
         {
             SetCheckButtonState(pChildEntry, eState);
@@ -188,7 +189,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
         if(GetModel()->HasChildren(pEntry))   // if it has children, check those too
         {
             SvTreeListEntry* pChildEntry = GetModel()->Next(pEntry);
-            SvTreeListEntry* pSiblingEntry = SvTreeList::NextSibling(pEntry);
+            SvTreeListEntry* pSiblingEntry = pEntry->NextSibling();
             while(pChildEntry && pChildEntry != pSiblingEntry)
             {
                 SetCheckButtonState(pChildEntry,eState);

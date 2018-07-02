@@ -333,7 +333,7 @@ void ScContentTree::GetEntryIndexes( ScContentId& rnRootIndex, sal_uLong& rnChil
                     rnChildIndex = nEntry;
                     bFound = true;  // exit the while loop
                 }
-                pIterEntry = NextSibling( pIterEntry );
+                pIterEntry = pIterEntry->NextSibling();
                 ++nEntry;
             }
 
@@ -1138,7 +1138,7 @@ bool ScContentTree::NoteStringsChanged()
         if (lcl_NoteString(*pNote) != GetEntryText(pEntry))
             return true;
 
-        pEntry = NextSibling(pEntry);
+        pEntry = pEntry->NextSibling();
     }
 
     return pEntry != nullptr;
@@ -1184,7 +1184,7 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
                             if ( ScDrawLayer::GetVisibleName( pObject ) != GetEntryText(pEntry) )
                                 bEqual = false;
 
-                            pEntry = NextSibling( pEntry );
+                            pEntry = pEntry->NextSibling();
                         }
                     }
                     pObject = aIter.Next();

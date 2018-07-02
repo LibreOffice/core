@@ -530,16 +530,6 @@ SvTreeListEntry* SvTreeListBox::FirstChild( SvTreeListEntry* pParent ) const
     return pModel->FirstChild(pParent);
 }
 
-SvTreeListEntry* SvTreeListBox::NextSibling( SvTreeListEntry* pEntry )
-{
-    return SvTreeList::NextSibling(pEntry);
-}
-
-SvTreeListEntry* SvTreeListBox::PrevSibling( SvTreeListEntry* pEntry )
-{
-    return SvTreeList::PrevSibling(pEntry);
-}
-
 // return: all entries copied
 bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget )
 {
@@ -966,7 +956,7 @@ const void* SvTreeListBox::NextSearchEntry( const void* _pCurrentSearchEntry, OU
         &&  !IsExpanded( pEntry )
         )
     {
-        pEntry = NextSibling( pEntry );
+        pEntry = pEntry->NextSibling();
     }
     else
     {
@@ -3178,7 +3168,7 @@ void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
             if( IsExpanded( pEntry ) )
                 pNextEntry = pModel->FirstChild( pEntry );
             else
-                pNextEntry = SvTreeList::NextSibling( pEntry );
+                pNextEntry = pEntry->NextSibling();
 
             if( !pNextEntry )
                 pEntry = pModel->Next( pEntry );

@@ -1055,13 +1055,13 @@ void TreeControlPeer::updateChildNodes( UnoTreeListBoxImpl const & rTree, const 
             updateEntry( pCurrentChild );
         }
 
-        pCurrentChild = dynamic_cast< UnoTreeListEntry* >( SvTreeListBox::NextSibling( pCurrentChild ) );
+        pCurrentChild = dynamic_cast< UnoTreeListEntry* >( pCurrentChild->NextSibling() );
     }
 
     // check if we have entries without nodes left, we need to remove them
     while( pCurrentChild )
     {
-        UnoTreeListEntry* pNextChild = dynamic_cast< UnoTreeListEntry* >( SvTreeListBox::NextSibling( pCurrentChild ) );
+        UnoTreeListEntry* pNextChild = dynamic_cast< UnoTreeListEntry* >( pCurrentChild->NextSibling() );
         rTree.GetModel()->Remove( pCurrentChild );
         pCurrentChild = pNextChild;
     }

@@ -1625,7 +1625,7 @@ SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUSt
         if ( sNode == GetEntryText( pEntry ) )
             return pEntry;
 
-        pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
+        pEntry = pParent ? pEntry->NextSibling() : GetEntry( ++nRootPos );
     }
     return nullptr;
 }
@@ -1711,7 +1711,7 @@ void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, bool bCheck )
     while ( pEntry )
     {
         CheckAllChildren( pEntry, bCheck );
-        pEntry = NextSibling( pEntry );
+        pEntry = pEntry->NextSibling();
     }
 }
 
@@ -1739,7 +1739,7 @@ void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, bool bCheck )
                     bChildChecked = true;
                     break;
                 }
-                pChild = NextSibling( pChild );
+                pChild = pChild->NextSibling();
             }
             SetCheckButtonState( pAncestor, bChildChecked ? SvButtonState::Checked : SvButtonState::Unchecked );
             pAncestor = GetParent(pAncestor);
@@ -1807,7 +1807,7 @@ void ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& n
     while ( pEntry )
     {
         CountCheckedEntries( pEntry, nCount );
-        pEntry = NextSibling( pEntry );
+        pEntry = pEntry->NextSibling();
     }
 }
 

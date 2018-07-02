@@ -219,7 +219,7 @@ namespace
                 }
                 break;
             }
-            pEntry = SvTreeListBox::NextSibling(pEntry);
+            pEntry = pEntry->NextSibling();
         }
     }
 }

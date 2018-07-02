@@ -506,7 +506,7 @@ SvTreeListEntry* TreeListBox::ImpFindEntry( SvTreeListEntry* pParent, const OUSt
         if (  rText == GetEntryText( pEntry ) )
             return pEntry;
 
-        pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
+        pEntry = pParent ? pEntry->NextSibling() : GetEntry( ++nRootPos );
     }
     return nullptr;
 }
@@ -625,7 +625,7 @@ SvTreeListEntry* TreeListBox::FindEntry( SvTreeListEntry* pParent, const OUStrin
         if ( ( pBasicEntry->GetType() == eType  ) && ( rText == GetEntryText( pEntry ) ) )
             return pEntry;
 
-        pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
+        pEntry = pParent ? pEntry->NextSibling() : GetEntry( ++nRootPos );
     }
     return nullptr;
 }

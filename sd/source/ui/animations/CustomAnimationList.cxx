@@ -862,7 +862,7 @@ EffectSequence CustomAnimationList::getSelection() const
                         aSelection.push_back( pChildEffect );
                 }
 
-                pChild = dynamic_cast< CustomAnimationListEntry* >(  NextSibling( pChild ) );
+                pChild = dynamic_cast< CustomAnimationListEntry* >(  pChild->NextSibling() );
             }
         }
 

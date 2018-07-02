@@ -212,7 +212,7 @@ namespace svxform
         if (m_pRootEntry)
         {
             SvTreeListEntry* pFirst = FirstChild(m_pRootEntry);
-            if (pFirst && !NextSibling(pFirst))
+            if (pFirst && !pFirst->NextSibling())
                 Expand(pFirst);
         }
     }

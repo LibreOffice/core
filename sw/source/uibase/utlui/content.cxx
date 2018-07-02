@@ -1165,7 +1165,7 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     while( pChildEntry )
                     {
                         pEntry = pChildEntry;
-                        pChildEntry = NextSibling( pChildEntry );
+                        pChildEntry = pChildEntry->NextSibling();
                     }
                 }
                 pTargetEntry = pEntry;

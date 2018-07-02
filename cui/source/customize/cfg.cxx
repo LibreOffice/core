@@ -1823,12 +1823,12 @@ void SvxConfigPage::MoveEntry( bool bMoveUp )
     {
         // Move Up is just a Move Down with the source and target reversed
         pTargetEntry = pSourceEntry;
-        pSourceEntry = SvTreeListBox::PrevSibling( pTargetEntry );
+        pSourceEntry = pTargetEntry->PrevSibling();
         pToSelect = pTargetEntry;
     }
     else
     {
-        pTargetEntry = SvTreeListBox::NextSibling( pSourceEntry );
+        pTargetEntry = pSourceEntry->NextSibling();
         pToSelect = pSourceEntry;
     }
 

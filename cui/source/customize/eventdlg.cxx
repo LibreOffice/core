@@ -111,7 +111,7 @@ void SvxEventConfigPage::dispose()
         OUString const * pEventName = static_cast<OUString const *>(pE->GetUserData());
         delete pEventName;
         pE->SetUserData(nullptr);
-        pE = SvTreeListBox::NextSibling( pE );
+        pE = pE->NextSibling();
     }
     m_pSaveInListBox.clear();
     SvxMacroTabPage_::dispose();

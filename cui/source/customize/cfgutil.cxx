@@ -1116,13 +1116,13 @@ void SfxConfigGroupListBox::SelectMacro( const OUString& rBasic,
                                 pMethod = pFunctionListBox->Next( pMethod );
                             }
                         }
-                        pMod = NextSibling( pMod );
+                        pMod = pMod->NextSibling();
                     }
                 }
-                pLib = NextSibling( pLib );
+                pLib = pLib->NextSibling();
             }
         }
-        pEntry = NextSibling( pEntry );
+        pEntry = pEntry->NextSibling();
     }
 }
 
@@ -1261,7 +1261,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
         {
             // Select the next entry in the list if possible
             SvTreeListEntry* current = m_pCommands->FirstSelected();
-            SvTreeListEntry* next = SvTreeListBox::NextSibling( current );
+            SvTreeListEntry* next = current->NextSibling();
 
             if ( next != nullptr )
             {
