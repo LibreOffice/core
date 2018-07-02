@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_c54eacc0",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-07-02T20:40:53Z",
+      "side": 1,
+      "message": "reindent those as well or don\u0027t reindent at all",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 24
+      },
+      "revId": "9622abf28c43cd1bd75e6590adbd922f7cf10778",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_a54ba8ae",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-07-02T20:40:53Z",
+      "side": 1,
+      "message": "reindent as well or don\u0027t reindent at all",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 32
+      },
+      "revId": "9622abf28c43cd1bd75e6590adbd922f7cf10778",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_e551b064",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-07-02T20:40:53Z",
+      "side": 1,
+      "message": "reindent as well or don\u0027t reindent at all",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 8
+      },
+      "revId": "9622abf28c43cd1bd75e6590adbd922f7cf10778",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_0555b450",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-07-02T20:40:53Z",
+      "side": 1,
+      "message": "reindent those as well or don\u0027t reindent at all.",
+      "range": {
+        "startLine": 226,
+        "startChar": 0,
+        "endLine": 227,
+        "endChar": 13
+      },
+      "revId": "9622abf28c43cd1bd75e6590adbd922f7cf10778",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
