@@ -116,7 +116,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
     }
 
     const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-    for( auto pBox : rBoxes )
+    for( std::unique_ptr<SwTableBox> const & pBox : rBoxes )
     {
         if( pBox->GetSttNd() )
         {
@@ -459,7 +459,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
         sal_uInt32 nCPos = nStartCPos;
         for( SwTableBoxes::size_type nBox=0; nBox<nBoxes; ++nBox )
         {
-            const SwTableBox *pBox = rBoxes[nBox];
+            const SwTableBox *pBox = rBoxes[nBox].get();
 
             sal_uInt32 nOldCPos = nCPos;
 
@@ -624,7 +624,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 
         for( SwTableBoxes::size_type nBox=0; nBox<nBoxes; ++nBox )
         {
-            const SwTableBox *pBox = rBoxes[nBox];
+            const SwTableBox *pBox = rBoxes[nBox].get();
 
             // Determine the position of the last covered column
             sal_uInt32 nOldCPos = nCPos;
