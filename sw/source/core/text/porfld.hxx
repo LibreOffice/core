@@ -154,7 +154,7 @@ public:
 
 class SwGrfNumPortion : public SwNumberPortion
 {
-    SvxBrushItem* pBrush;
+    std::unique_ptr<SvxBrushItem> pBrush;
     long            nId;    // For StopAnimation
     SwTwips         nYPos;  // _Always_ contains the current RelPos
     SwTwips         nGrfHeight;

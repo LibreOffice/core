@@ -800,7 +800,7 @@ SwGrfNumPortion::~SwGrfNumPortion()
         if (pGraph)
             pGraph->StopAnimation( nullptr, nId );
     }
-    delete pBrush;
+    pBrush.reset();
 }
 
 void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
@@ -993,7 +993,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( bDraw && aTmp.HasArea() )
     {
-        DrawGraphic( pBrush, const_cast<OutputDevice*>(rInf.GetOut()),
+        DrawGraphic( pBrush.get(), const_cast<OutputDevice*>(rInf.GetOut()),
             aTmp, aRepaint, m_bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
     }
 }
