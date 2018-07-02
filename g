@@ -209,7 +209,7 @@ local module
     git checkout "$@" || return $?
     for cmd in "$@" ; do
 	if [ "$cmd" = "-f" ]; then
-	    return 0
+	    continue
 	elif [ "$cmd" = "-b" ] ; then
 	    create_branch=1
 	elif [ "$create_branch" = "1" ] ; then
