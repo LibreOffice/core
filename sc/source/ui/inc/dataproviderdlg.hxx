@@ -61,6 +61,7 @@ public:
     void deleteColumn();
     void splitColumn();
     void mergeColumns();
+    void textTransformation();
 
     void import(ScDocument* pDoc, bool bInternal = false);
 };

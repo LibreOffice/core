@@ -222,6 +222,7 @@ MenuData aColumnData[] = {
     { 0, "Delete Column", &ScDataProviderDlg::deleteColumn },
     { 1, "Split Column", &ScDataProviderDlg::splitColumn },
     { 2, "Merge Columns", &ScDataProviderDlg::mergeColumns },
+    { 3, "Text Transformation", &ScDataProviderDlg::textTransformation }
 };
 
 class ScDataTransformationBaseControl : public VclContainer,
@@ -435,6 +436,78 @@ std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getT
     return std::make_shared<sc::MergeColumnTransformation>(aMergedColumns, mpSeparator->GetText());
 }
 
+class ScColumnTextTransformation : public ScDataTransformationBaseControl
+{
+private:
+    VclPtr<Edit> maColumnNums;
+    VclPtr<ListBox> maType;
+
+public:
+
+    ScColumnTextTransformation(vcl::Window* pParent);
+    ~ScColumnTextTransformation() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+
+};
+
+ScColumnTextTransformation::ScColumnTextTransformation(vcl::Window* pParent):
+    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/texttransformationentry.ui")
+{
+    get(maColumnNums, "ed_columns");
+    get(maType, "ed_lst");
+}
+
+ScColumnTextTransformation::~ScColumnTextTransformation()
+{
+    disposeOnce();
+}
+
+void ScColumnTextTransformation::dispose()
+{
+    maColumnNums.clear();
+    maType.clear();
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScColumnTextTransformation::getTransformation()
+{
+    OUString aColumnString = maColumnNums->GetText();
+    std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
+    std::set<SCCOL> aColumns;
+    for (auto& rColStr : aSplitColumns)
+    {
+        sal_Int32 nCol = rColStr.toInt32();
+        if (nCol <= 0)
+            continue;
+
+        if (nCol > MAXCOL)
+            continue;
+
+        // translate from 1-based column notations to internal Calc one
+        aColumns.insert(nCol - 1);
+    }
+
+    sal_Int32 nPos = maType->GetSelectedEntryPos();
+    switch (nPos)
+    {
+        case 0:
+            return std::make_shared<sc::TextTransformation>(aColumns,sc::TEXT_TRANSFORM_TYPE::TO_LOWER);
+        case 1:
+            return std::make_shared<sc::TextTransformation>(aColumns,sc::TEXT_TRANSFORM_TYPE::TO_UPPER);
+        case 2:
+            return std::make_shared<sc::TextTransformation>(aColumns,sc::TEXT_TRANSFORM_TYPE::CAPITALIZE);
+        case 3:
+            return std::make_shared<sc::TextTransformation>(aColumns,sc::TEXT_TRANSFORM_TYPE::TRIM);
+        default:
+            assert(false);
+    }
+
+    return nullptr;
+}
+
 }
 
 ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument):
@@ -579,6 +652,12 @@ void ScDataProviderDlg::mergeColumns()
     mpTable->getColRange(nStartCol, nEndCol);
     VclPtr<ScMergeColumnTransformationControl> pMergeColumnEntry = VclPtr<ScMergeColumnTransformationControl>::Create(mpList, nStartCol, nEndCol);
     mpList->addEntry(pMergeColumnEntry);
+}
+
+void ScDataProviderDlg::textTransformation()
+{
+    VclPtr<ScColumnTextTransformation> pTextTransforamtionEntry = VclPtr<ScColumnTextTransformation>::Create(mpList);
+    mpList->addEntry(pTextTransforamtionEntry);
 }
 
 void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
