@@ -41,10 +41,15 @@ public:
 
     void DataChanged(const DataChangedEvent& rDCEvt) override;
 
+    void AddContextPrintprev();
+
+    void RemoveContextPrintprev();
+
 private:
     VclPtr<SystemWindow> m_pSystemWindow;
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
     std::vector<NotebookbarContextControl*> m_pContextContainers;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 
     AllSettings DefaultSettings;
     AllSettings PersonaSettings;
