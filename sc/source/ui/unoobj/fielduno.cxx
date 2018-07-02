@@ -428,12 +428,12 @@ ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterTextData& rData) :
     mrData(rData),
     mpRefreshListeners( nullptr )
 {
-    mpEditSource = new ScHeaderFooterEditSource(rData);
+    mpEditSource.reset( new ScHeaderFooterEditSource(rData) );
 }
 
 ScHeaderFieldsObj::~ScHeaderFieldsObj()
 {
-    delete mpEditSource;
+    mpEditSource.reset();
 
     // increment refcount to prevent double call off dtor
     osl_atomic_increment( &m_refCount );

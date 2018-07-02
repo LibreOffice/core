@@ -114,7 +114,7 @@ class ScHeaderFieldsObj : public cppu::WeakImplHelper<
 {
 private:
     ScHeaderFooterTextData& mrData;
-    ScEditSource* mpEditSource;
+    std::unique_ptr<ScEditSource> mpEditSource;
 
     /// List of refresh listeners.
     comphelper::OInterfaceContainerHelper2* mpRefreshListeners;
