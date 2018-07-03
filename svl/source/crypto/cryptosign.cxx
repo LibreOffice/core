@@ -2422,8 +2422,8 @@ bool Signing::Verify(SvStream& rStream,
 
 bool isMSCng()
 {
-    static bool bMSCng = getenv("SVL_CRYPTO_CNG");
-    return bMSCng;
+    static bool bNoMSCng = getenv("SVL_CRYPTO_NOCNG");
+    return !bNoMSCng;
 }
 
 }
