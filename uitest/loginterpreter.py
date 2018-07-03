@@ -41,6 +41,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description = "Generate a UI test file from log")
     parser.add_argument("input_address", type = str, help = "The log file address")
     parser.add_argument("output_address", type = str, help = "The test file address")
+    parser.add_argument("-d", "--document", metavar = "", help = "Name of the document to be opened")
     args = parser.parse_args()
     return args
 
@@ -65,6 +66,7 @@ def initiate_test_generation(address):
         sys.exit(1)
     initial_text = \
     "from uitest.framework import UITestCase\n" + \
+    "from libreoffice.uno.propertyvalue import mkPropertyValues\n" + \
     "import importlib\n\n" + \
     "class TestClass(UITestCase):\n" + \
     "    def test_function(self):\n"
@@ -163,6 +165,14 @@ def main():
     args = parse_args()
     log_lines = get_log_file(args.input_address)
     output_stream = initiate_test_generation(args.output_address)
+    if args.document is not None:
+        output_line = "        unotest = importlib.import_module(\"org.libreoffice.unotest\")\n" + \
+        "        pathlib = importlib.import_module(\"pathlib\")\n" + \
+        "        doc_path = pathlib.Path(unotest.makeCopyFromTDOC(\"" + args.document + \
+        "\")).as_uri()\n" + \
+        "        MainDoc = self.ui_test.load_file(doc_path)\n" + \
+        "        MainWindow = self.xUITest.getTopFocusWindow()\n"
+        output_stream.write(output_line)
     line_number = 0
     while line_number < len(log_lines):
         if line_number == len(log_lines)-1 or \
