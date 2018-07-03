@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_0b738582",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-07-03T16:09:55Z",
+      "side": 1,
+      "message": "I\u0027d say it may be needed to reload notebookbar also in another place. I think we should create reload notebookbar uno command (eg. \".uno:ReloadNotebookbar\") and call it here. Having the reload thing here is not universal.",
+      "revId": "b9314e641121cfe3c2bc49988edbb56e7f75832d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
