@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_68ed7724",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-03T07:09:00Z",
+      "side": 1,
+      "message": "Don\u0027t use std::isprint. That function will not work well with unicode characters.",
+      "revId": "7c84b8669e623415ddbb1f3d0c73b0f535c7162b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
