@@ -76,9 +76,6 @@ class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
     const sal_uInt8* m_pBuffer;
     const sal_Int32  m_nLength;
     sal_Int32        m_nPosition;
-
-    const sal_uInt8* m_pBMPHeader; //default BMP-header
-    sal_Int32        m_nHeaderLength;
 public:
     XInputStreamHelper(const sal_uInt8* buf, size_t len);
 
@@ -94,10 +91,6 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len) :
         m_nLength( len ),
         m_nPosition( 0 )
 {
-    static const sal_uInt8 aHeader[] =
-        {0x42, 0x4d, 0xe6, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
-    m_pBMPHeader = aHeader;
-    m_nHeaderLength = 0;
 }
 
 sal_Int32 XInputStreamHelper::readBytes( uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
@@ -110,24 +103,16 @@ sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence<sal_Int8>& aData, sal
     sal_Int32 nRet = 0;
     if( nMaxBytesToRead > 0 )
     {
-        if( nMaxBytesToRead > (m_nLength + m_nHeaderLength) - m_nPosition )
-            nRet = (m_nLength + m_nHeaderLength) - m_nPosition;
+        if( nMaxBytesToRead > m_nLength - m_nPosition )
+            nRet = m_nLength - m_nPosition;
         else
             nRet = nMaxBytesToRead;
         aData.realloc( nRet );
         sal_Int8* pData = aData.getArray();
         sal_Int32 nHeaderRead = 0;
-        if( m_nPosition < m_nHeaderLength)
-        {
-            //copy header content first
-            nHeaderRead = m_nHeaderLength - m_nPosition;
-            memcpy( pData, m_pBMPHeader + (m_nPosition ), nHeaderRead );
-            nRet -= nHeaderRead;
-            m_nPosition += nHeaderRead;
-        }
         if( nRet )
         {
-            memcpy( pData + nHeaderRead, m_pBuffer + (m_nPosition - m_nHeaderLength), nRet );
+            memcpy( pData + nHeaderRead, m_pBuffer + m_nPosition, nRet );
             m_nPosition += nRet;
         }
     }
@@ -137,7 +122,7 @@ sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence<sal_Int8>& aData, sal
 
 void XInputStreamHelper::skipBytes( sal_Int32 nBytesToSkip )
 {
-    if( nBytesToSkip < 0 || m_nPosition + nBytesToSkip > (m_nLength + m_nHeaderLength))
+    if( nBytesToSkip < 0 || m_nPosition + nBytesToSkip > m_nLength)
         throw io::BufferSizeExceededException();
     m_nPosition += nBytesToSkip;
 }
@@ -145,7 +130,7 @@ void XInputStreamHelper::skipBytes( sal_Int32 nBytesToSkip )
 
 sal_Int32 XInputStreamHelper::available(  )
 {
-    return ( m_nLength + m_nHeaderLength ) - m_nPosition;
+    return m_nLength - m_nPosition;
 }
 
 
