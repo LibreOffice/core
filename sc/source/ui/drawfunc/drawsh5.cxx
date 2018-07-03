@@ -668,8 +668,8 @@ void ScDrawShell::ExecFormatPaintbrush( const SfxRequest& rReq )
         ScDrawView* pDrawView = pViewData->GetScDrawView();
         if ( pDrawView && pDrawView->AreObjectsMarked() )
         {
-            SfxItemSet* pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) );
-            pView->SetDrawBrushSet( pItemSet, bLock );
+            std::unique_ptr<SfxItemSet> pItemSet(new SfxItemSet( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) ));
+            pView->SetDrawBrushSet( std::move(pItemSet), bLock );
         }
     }
 }
