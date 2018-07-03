@@ -47,17 +47,6 @@ ScAsciiOptions::~ScAsciiOptions()
 {
 }
 
-void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, const sal_uInt8* pFormat )
-{
-    mvColStart.resize(nCount);
-    mvColFormat.resize(nCount);
-    for (sal_uInt16 i=0; i<nCount; i++)
-    {
-        mvColStart[i] = pStart[i];
-        mvColFormat[i] = pFormat[i];
-    }
-}
-
 void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
 {
     sal_uInt16 nInfoCount = static_cast< sal_uInt16 >( rDataVec.size() );
@@ -68,27 +57,6 @@ void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
         mvColStart[ nIx ] = rDataVec[ nIx ].mnIndex;
         mvColFormat[ nIx ] = rDataVec[ nIx ].mnType;
     }
-}
-
-ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
-{
-    SetColInfo( rCpy.mvColStart.size(), rCpy.mvColStart.data(), rCpy.mvColFormat.data() );
-
-    bFixedLen       = rCpy.bFixedLen;
-    aFieldSeps      = rCpy.aFieldSeps;
-    bMergeFieldSeps = rCpy.bMergeFieldSeps;
-    bRemoveSpace    = rCpy.bRemoveSpace;
-    bQuotedFieldAsText = rCpy.bQuotedFieldAsText;
-    bDetectSpecialNumber = rCpy.bDetectSpecialNumber;
-    bSkipEmptyCells = rCpy.bSkipEmptyCells;
-    bSaveAsShown    = rCpy.bSaveAsShown;
-    bSaveFormulas   = rCpy.bSaveFormulas;
-    cTextSep        = rCpy.cTextSep;
-    eCharSet        = rCpy.eCharSet;
-    bCharSetSystem  = rCpy.bCharSetSystem;
-    nStartRow       = rCpy.nStartRow;
-
-    return *this;
 }
 
 static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeFieldSeps )

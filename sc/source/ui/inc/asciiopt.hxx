@@ -51,8 +51,6 @@ public:
 
     static const sal_Unicode cDefaultTextSep = '"';
 
-    ScAsciiOptions& operator=( const ScAsciiOptions& rCpy );
-
     void            ReadFromString( const OUString& rString );
     OUString        WriteToString() const;
 
@@ -84,7 +82,6 @@ public:
     void    SetStartRow( long nRow)             { nStartRow= nRow; }
     void    SetLanguage(LanguageType e)         { eLang = e; }
 
-    void    SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, const sal_uInt8* pFormat );
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );
 
     /** From the import field separators obtain the one most likely to be used
