@@ -799,6 +799,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Statistics</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:SamplingDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1208,6 +1211,9 @@
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Insert...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertRowsMenu" oor:op="replace">
@@ -2141,6 +2147,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Ca~lculate</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:NamesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2158,6 +2167,9 @@
       <node oor:name=".uno:DataPilotMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Pivot Table</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:EditSheetMenu" oor:op="replace">
@@ -2217,10 +2229,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">M~erge Cells</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:PrintRangesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Prin~t Ranges</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ToggleFormula" oor:op="replace">
