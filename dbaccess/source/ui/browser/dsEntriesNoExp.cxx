@@ -109,7 +109,7 @@ void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, bool _bSelect)
     if (pTextItem)
     {
         static_cast<OBoldListboxString*>(pTextItem)->emphasize(_bSelect);
-        m_pTreeModel->InvalidateEntry(_pEntry);
+        m_pTreeView->GetTreeModel()->InvalidateEntry(_pEntry);
     }
     else {
         OSL_FAIL("SbaTableQueryBrowser::select: invalid entry!");
@@ -121,7 +121,7 @@ void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, bool _bSelect)
     while (_pEntry)
     {
         select(_pEntry, _bSelect);
-        _pEntry = m_pTreeModel->GetParent(_pEntry);
+        _pEntry = m_pTreeView->GetTreeModel()->GetParent(_pEntry);
     }
 }
 
@@ -197,14 +197,15 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 {
     if ( m_pTreeView )
     {
+        auto pTreeModel = m_pTreeView->GetTreeModel();
         // change all bitmap entries
-        SvTreeListEntry* pEntryLoop = m_pTreeModel->First();
+        SvTreeListEntry* pEntryLoop = pTreeModel->First();
         while ( pEntryLoop )
         {
             DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());
             if ( !pData )
             {
-                pEntryLoop = m_pTreeModel->Next(pEntryLoop);
+                pEntryLoop = pTreeModel->Next(pEntryLoop);
                 continue;
             }
 
@@ -245,7 +246,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
                 break;
             }
 
-            pEntryLoop = m_pTreeModel->Next(pEntryLoop);
+            pEntryLoop = pTreeModel->Next(pEntryLoop);
         }
     }
 }

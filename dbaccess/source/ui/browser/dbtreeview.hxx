@@ -52,7 +52,7 @@ namespace dbaui
 
         void                setCopyHandler(const Link<LinkParamNone*,void>& _rHdl);
 
-        void                setModel(SvTreeList* _pTreeModel);
+        SvTreeList*         GetTreeModel();
         void                setSelChangeHdl(const Link<LinkParamNone*,void>& _rHdl);
 
         DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }

@@ -582,8 +582,6 @@ public:
 
     void            SetNoAutoCurEntry( bool b );
 
-    void            DisconnectFromModel();
-
     void            EnableCheckButton( SvLBoxButtonData* );
     void            SetCheckButtonData( SvLBoxButtonData* );
     void            SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image& rExpandedNodeBmp );

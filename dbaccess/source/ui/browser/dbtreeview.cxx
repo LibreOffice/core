@@ -50,16 +50,13 @@ DBTreeView::~DBTreeView()
 
 void DBTreeView::dispose()
 {
-    if (m_pTreeListBox)
-    {
-        if (m_pTreeListBox->GetModel())
-        {
-            m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
-            m_pTreeListBox->DisconnectFromModel();
-        }
-    }
     m_pTreeListBox.disposeAndClear();
     vcl::Window::dispose();
+}
+
+SvTreeList* DBTreeView::GetTreeModel()
+{
+    return m_pTreeListBox->GetModel();
 }
 
 void DBTreeView::SetPreExpandHandler(const Link<SvTreeListEntry*,bool>& _rHdl)
@@ -76,13 +73,6 @@ void DBTreeView::Resize()
 {
     Window::Resize();
     m_pTreeListBox->SetPosSizePixel(Point(0,0),GetOutputSizePixel());
-}
-
-void DBTreeView::setModel(SvTreeList* _pTreeModel)
-{
-    if (_pTreeModel)
-        _pTreeModel->InsertView(m_pTreeListBox);
-    m_pTreeListBox->SetModel(_pTreeModel);
 }
 
 void DBTreeView::setSelChangeHdl( const Link<LinkParamNone*,void>& _rHdl )
