@@ -165,7 +165,12 @@ void SwView::GetState(SfxItemSet &rSet)
             case RES_PAPER_BIN:
             case FN_PARAM_FTN_INFO:
             {
+                //tdf#118506:  it crashes in read only
+                if( GetDocShell()->IsReadOnly() )
+                    rSet.DisableItem(nWhich);
+
                 const size_t nCurIdx = m_pWrtShell->GetCurPageDesc();
+
                 const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
 
                 // set correct parent to get the XFILL_NONE FillStyle as needed
