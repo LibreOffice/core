@@ -831,7 +831,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
     }
 
-    return pForwarder;
+    return pForwarder.get();
 }
 
 SvxViewForwarder* ScAccessibleCellTextData::GetViewForwarder()
@@ -1179,7 +1179,7 @@ SvxTextForwarder* ScAccessiblePreviewCellTextData::GetTextForwarder()
     if (pEditEngine)
         pEditEngine->SetNotifyHdl( LINK(this, ScAccessiblePreviewCellTextData, NotifyHdl) );
 
-    return pForwarder;
+    return pForwarder.get();
 }
 
 SvxViewForwarder* ScAccessiblePreviewCellTextData::GetViewForwarder()
@@ -1253,11 +1253,11 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
             pEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
-        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
+        pForwarder.reset( new SvxEditEngineForwarder(*pEditEngine) );
     }
 
     if (bDataValid)
-        return pForwarder;
+        return pForwarder.get();
 
     if (!maText.isEmpty())
     {
@@ -1280,7 +1280,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
 
     pEditEngine->SetNotifyHdl( LINK(this, ScAccessiblePreviewHeaderCellTextData, NotifyHdl) );
 
-    return pForwarder;
+    return pForwarder.get();
 }
 
 SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()

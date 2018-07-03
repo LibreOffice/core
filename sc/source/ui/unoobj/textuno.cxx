@@ -886,16 +886,16 @@ ScCellTextData::~ScCellTextData()
     else
         pEditEngine.reset();
 
-    delete pForwarder;
+    pForwarder.reset();
 
-    delete pOriginalSource;
+    pOriginalSource.reset();
 }
 
 ScCellEditSource* ScCellTextData::GetOriginalSource()
 {
     if (!pOriginalSource)
-        pOriginalSource = new ScCellEditSource(pDocShell, aCellPos);
-    return pOriginalSource;
+        pOriginalSource.reset( new ScCellEditSource(pDocShell, aCellPos) );
+    return pOriginalSource.get();
 }
 
 SvxTextForwarder* ScCellTextData::GetTextForwarder()
@@ -921,11 +921,11 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
             pEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
-        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
+        pForwarder.reset( new SvxEditEngineForwarder(*pEditEngine) );
     }
 
     if (bDataValid)
-        return pForwarder;
+        return pForwarder.get();
 
     OUString aText;
 
@@ -959,7 +959,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
     }
 
     bDataValid = true;
-    return pForwarder;
+    return pForwarder.get();
 }
 
 void ScCellTextData::UpdateData()
@@ -990,7 +990,7 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         pDocShell = nullptr;                       // invalid now
 
-        DELETEZ( pForwarder );
+        pForwarder.reset();
         pEditEngine.reset();     // EditEngine uses document's pool
     }
     else if ( nId == SfxHintId::DataChanged )
