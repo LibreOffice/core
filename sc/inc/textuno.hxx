@@ -293,16 +293,16 @@ public:
 
 class ScSimpleEditSourceHelper
 {
-    ScEditEngineDefaulter*  pEditEngine;
-    SvxEditEngineForwarder* pForwarder;
-    ScSimpleEditSource*     pOriginalSource;
+    std::unique_ptr<ScEditEngineDefaulter>  pEditEngine;
+    std::unique_ptr<SvxEditEngineForwarder> pForwarder;
+    std::unique_ptr<ScSimpleEditSource>     pOriginalSource;
 
 public:
             ScSimpleEditSourceHelper();
             ~ScSimpleEditSourceHelper();
 
-    ScSimpleEditSource* GetOriginalSource() const   { return pOriginalSource; }
-    ScEditEngineDefaulter* GetEditEngine() const    { return pEditEngine; }
+    ScSimpleEditSource* GetOriginalSource() const   { return pOriginalSource.get(); }
+    ScEditEngineDefaulter* GetEditEngine() const    { return pEditEngine.get(); }
 };
 
 class ScEditEngineTextObj : public ScSimpleEditSourceHelper, public SvxUnoText
