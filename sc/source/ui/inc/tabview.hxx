@@ -28,6 +28,7 @@
 
 #include <sfx2/ipclient.hxx>
 
+#include "fupoor.hxx"
 #include "hiranges.hxx"
 #include "viewutil.hxx"
 #include "select.hxx"
@@ -147,8 +148,7 @@ private:
     Size                aFrameSize;             // passed on as for DoResize
     Point               aBorderPos;
 
-    FuPoor*             pDrawActual;
-    FuPoor*             pDrawOld;
+    std::unique_ptr<FuPoor> pDrawActual;
 
     std::array<VclPtr<ScGridWindow>, 4> pGridWin;
     std::array<VclPtr<ScColBar>, 2> pColBar;
@@ -168,11 +168,11 @@ private:
 
     std::unique_ptr<sdr::overlay::OverlayObjectList> mxInputHintOO; // help hint for data validation
 
-    ScPageBreakData*    pPageBreakData;
-    std::vector<ScHighlightEntry>   maHighlightRanges;
+    std::unique_ptr<ScPageBreakData>  pPageBreakData;
+    std::vector<ScHighlightEntry>     maHighlightRanges;
 
-    ScDocument*         pBrushDocument;         // cell formats for format paint brush
-    SfxItemSet*         pDrawBrushSet;          // drawing object attributes for paint brush
+    std::unique_ptr<ScDocument>       pBrushDocument;         // cell formats for format paint brush
+    std::unique_ptr<SfxItemSet>       pDrawBrushSet;          // drawing object attributes for paint brush
 
     Timer               aScrollTimer;
     VclPtr<ScGridWindow>       pTimerWindow;
@@ -325,16 +325,14 @@ public:
     bool            IsDrawSelMode() const       { return bDrawSelMode; }
     void            SetDrawSelMode(bool bNew)   { bDrawSelMode = bNew; }
 
-    void            SetDrawFuncPtr(FuPoor* pFuncPtr)    { pDrawActual = pFuncPtr; }
-    void            SetDrawFuncOldPtr(FuPoor* pFuncPtr) { pDrawOld = pFuncPtr; }
-    FuPoor*         GetDrawFuncPtr()                    { return pDrawActual; }
-    FuPoor*         GetDrawFuncOldPtr()                 { return pDrawOld; }
+    void            SetDrawFuncPtr(std::unique_ptr<FuPoor> pFuncPtr);
+    FuPoor*         GetDrawFuncPtr()  { return pDrawActual.get(); }
 
     void            DrawDeselectAll();
     void            DrawMarkListHasChanged();
     void            UpdateAnchorHandles();
 
-    ScPageBreakData* GetPageBreakData()     { return pPageBreakData; }
+    ScPageBreakData* GetPageBreakData()     { return pPageBreakData.get(); }
     const std::vector<ScHighlightEntry>& GetHighlightRanges()   { return maHighlightRanges; }
 
     void            UpdatePageBreakData( bool bForcePaint = false );
@@ -594,11 +592,11 @@ public:
     vcl::Window*         GetFrameWin() const { return pFrameWin; }
 
     bool            HasPaintBrush() const           { return pBrushDocument || pDrawBrushSet; }
-    ScDocument*     GetBrushDocument() const        { return pBrushDocument; }
-    SfxItemSet*     GetDrawBrushSet() const         { return pDrawBrushSet; }
+    ScDocument*     GetBrushDocument() const        { return pBrushDocument.get(); }
+    SfxItemSet*     GetDrawBrushSet() const         { return pDrawBrushSet.get(); }
     bool            IsPaintBrushLocked() const      { return bLockPaintBrush; }
-    void            SetBrushDocument( ScDocument* pNew, bool bLock );
-    void            SetDrawBrushSet( SfxItemSet* pNew, bool bLock );
+    void            SetBrushDocument( std::unique_ptr<ScDocument> pNew, bool bLock );
+    void            SetDrawBrushSet( std::unique_ptr<SfxItemSet> pNew, bool bLock );
     void            ResetBrushDocument();
 
     bool ContinueOnlineSpelling();
