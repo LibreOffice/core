@@ -1297,7 +1297,9 @@ bool SfxObjectShell::SaveTo_Impl
         rMedium.CloseAndRelease();
         if ( bStorageBasedTarget )
         {
+            rMedium.SetHasEmbeddedObjects(GetEmbeddedObjectContainer().HasEmbeddedObjects());
             rMedium.GetOutputStorage();
+            rMedium.SetHasEmbeddedObjects(false);
         }
     }
 
