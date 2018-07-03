@@ -80,7 +80,7 @@ inline PyObject* PyStr_FromString(const char *string)
     return PyUnicode_FromString(string);
 }
 
-inline char * PyStr_AsString(PyObject *object)
+inline char const * PyStr_AsString(PyObject *object)
 {
     return PyUnicode_AsUTF8(object);
 }
