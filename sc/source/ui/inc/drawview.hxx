@@ -39,7 +39,7 @@ class ScDrawView final : public FmFormView
     SCTAB                   nTab;
     Fraction                aScaleX;                // Factor for Drawing-MapMode
     Fraction                aScaleY;
-    SdrDropMarkerOverlay*   pDropMarker;
+    std::unique_ptr<SdrDropMarkerOverlay> pDropMarker;
     SdrObject*              pDropMarkObj;
     bool                    bInConstruct;
 
