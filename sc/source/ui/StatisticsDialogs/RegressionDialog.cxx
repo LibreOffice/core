@@ -381,7 +381,7 @@ void ScRegressionDialog::WriteRawRegressionResults(AddressWalkerWriter& rOutput,
     rTemplate.setTemplate(constTemplateLINEST[nRegressionIndex]);
     rOutput.writeMatrixFormula(rTemplate.getTemplate(), 1 + mnNumIndependentVars, 5);
     // Add LINEST result components to template
-    // 1. Add ranges for coeffients and standard errors for indep. vars and the intercept.
+    // 1. Add ranges for coefficients and standard errors for indep. vars and the intercept.
     // Note that these two are in the reverse order(m_n, m_n-1, ..., m_1, b) w.r.t what we expect.
     rTemplate.autoReplaceRange("%COEFFICIENTS_REV_RANGE%", ScRange(rOutput.current(), rOutput.current(mnNumIndependentVars)));
     rTemplate.autoReplaceRange("%SERRORSX_REV_RANGE%", ScRange(rOutput.current(0, 1), rOutput.current(mnNumIndependentVars, 1)));
