@@ -10,6 +10,7 @@
 #include <datatransformation.hxx>
 
 #include <document.hxx>
+#include <limits>
 
 namespace sc {
 
@@ -266,6 +267,97 @@ void TextTransformation::Transform(ScDocument& rDoc) const
 TransformationType TextTransformation::getTransformationType() const
 {
     return TransformationType::TEXT_TRANSFORMATION;
+}
+
+AggregateFunction::AggregateFunction(SCCOL nCol, const AGGREGATE_FUNCTION rType):
+    mnCol(nCol),
+    maType(rType)
+{
+}
+
+void AggregateFunction::Transform(ScDocument& rDoc) const
+{
+    SCROW nEndRow = getLastRow(rDoc, mnCol);
+
+    switch (maType)
+    {
+        case AGGREGATE_FUNCTION::SUM:
+        {
+            double nSum = 0;
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    nSum += nVal;
+                }
+            }
+            rDoc.SetValue(mnCol, nEndRow + 1, 0, nSum);
+        }
+        break;
+        case AGGREGATE_FUNCTION::AVERAGE:
+        {
+            double nSum = 0;
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    nSum += nVal;
+                }
+            }
+
+            double nAvg = nSum / (nEndRow + 1);
+            rDoc.SetValue(mnCol, nEndRow + 1, 0, nAvg);
+        }
+        break;
+        case AGGREGATE_FUNCTION::MIN:
+        {
+            double nMin = std::numeric_limits<double>::max();
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    if(nVal < nMin)
+                        nMin = nVal;
+                }
+            }
+            rDoc.SetValue(mnCol, nEndRow + 1, 0, nMin);
+        }
+        break;
+        case AGGREGATE_FUNCTION::MAX:
+        {
+            double nMax = std::numeric_limits<double>::lowest();
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    if(nMax < nVal)
+                        nMax = nVal;
+                }
+            }
+            rDoc.SetValue(mnCol, nEndRow + 1, 0, nMax);
+        }
+        break;
+        default:
+        break;
+    }
+
+}
+
+TransformationType AggregateFunction::getTransformationType() const
+{
+    return TransformationType::AGGREGATE_FUNCTION;
 }
 
 }
