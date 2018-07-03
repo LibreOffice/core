@@ -6214,7 +6214,7 @@ SvxPageItem Orientation SID_ATTR_PAGE_ORIENTATION
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
