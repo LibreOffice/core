@@ -2216,6 +2216,11 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="vertJustifyValues"/>
       </rng:attribute>
     </rng:optional>
+    <rng:optional>
+      <rng:attribute name="style:vertical-justify">
+        <rng:ref name="vertJustifyValues"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
   <rng:define name="style-paragraph-properties-attlist" combine="interleave">
     <rng:optional>
@@ -2271,6 +2276,27 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   <!-- TODO no proposal -->
   <rng:define name="style-page-layout-properties-attlist" combine="interleave">
     <rng:ref name="style-graphic-fill-properties-attlist"/>
+  </rng:define>
+  <rng:define name="style-header-footer-properties-attlist" combine="interleave">
+    <rng:ref name="style-graphic-fill-properties-attlist"/>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="text-index-entry-tab-stop-attrs" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="style:with-tab">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:char-shading-value">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
 
   <!-- just a test-case for user-defined attributes, move along, nothing to see here... -->
