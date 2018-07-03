@@ -62,6 +62,7 @@ public:
     void splitColumn();
     void mergeColumns();
     void textTransformation();
+    void sortTransformation();
 
     void import(ScDocument* pDoc, bool bInternal = false);
 };
