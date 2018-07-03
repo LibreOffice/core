@@ -21,7 +21,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_fontfeature, \
 $(eval $(call gb_CppunitTest_use_externals,vcl_fontfeature,boost_headers))
 
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
-$(eval $(call gb_CppunitTest_use_package,vcl_fontfeature,fonts_libertineg))
+$(call gb_CppunitTest_get_target,vcl_fontfeature): \
+    $(call gb_ExternalPackage_get_target,fonts_libertineg)
 endif
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_fontfeature, \
