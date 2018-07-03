@@ -1153,6 +1153,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     const bool bIsMergeSilent = IsMergeSilent();
 
     bool bCheckSingleFile_ = rMergeDescriptor.bCreateSingleFile;
+    OUString sPrefix_ = rMergeDescriptor.sPrefix;
     if( bMT_EMAIL )
     {
         assert( !rMergeDescriptor.bPrefixIsFilename );
@@ -1161,11 +1162,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     }
     else if( bMT_SHELL || bMT_PRINTER )
     {
-        assert( !rMergeDescriptor.bPrefixIsFilename );
         assert(bCheckSingleFile_);
         bCheckSingleFile_ = true;
+        assert(sPrefix_.isEmpty());
+        sPrefix_.clear();
     }
     const bool bCreateSingleFile = bCheckSingleFile_;
+    const OUString sDescriptorPrefix = sPrefix_;
 
     // Setup for dumping debugging documents
     static const char *sMaxDumpDocs = nullptr;
@@ -1388,7 +1391,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         // create a new temporary file name - only done once in case of bCreateSingleFile
         if( bNeedsTempFiles && ( !bWorkDocInitialized || !bCreateSingleFile ))
         {
-            OUString sPrefix = rMergeDescriptor.sPrefix;
+            OUString sPrefix = sDescriptorPrefix;
             OUString sLeading;
 
             //#i97667# if the name is from a database field then it will be used _as is_
@@ -1634,11 +1637,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // save merged document
             assert( aTempFile.get() );
             INetURLObject aTempFileURL;
-            if( rMergeDescriptor.sPrefix.isEmpty() || !rMergeDescriptor.bPrefixIsFilename )
+            if (sDescriptorPrefix.isEmpty() || !rMergeDescriptor.bPrefixIsFilename)
                 aTempFileURL.SetURL( aTempFile->GetURL() );
             else
             {
-                aTempFileURL.SetURL( rMergeDescriptor.sPrefix );
+                aTempFileURL.SetURL(sDescriptorPrefix);
                 // remove the unneeded temporary file
                 aTempFile->EnableKillingFile();
             }
