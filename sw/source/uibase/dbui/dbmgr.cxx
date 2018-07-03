@@ -1156,13 +1156,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     if( bMT_EMAIL )
     {
         assert( !rMergeDescriptor.bPrefixIsFilename );
-        assert( bMT_EMAIL && !bCheckSingleFile_ );
+        assert(!bCheckSingleFile_);
         bCheckSingleFile_ = false;
     }
     else if( bMT_SHELL || bMT_PRINTER )
     {
         assert( !rMergeDescriptor.bPrefixIsFilename );
-        assert( (bMT_SHELL || bMT_PRINTER) && bCheckSingleFile_ );
+        assert(bCheckSingleFile_);
         bCheckSingleFile_ = true;
     }
     const bool bCreateSingleFile = bCheckSingleFile_;
