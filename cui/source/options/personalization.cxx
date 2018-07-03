@@ -37,6 +37,14 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <ucbhelper/content.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #define MAX_RESULTS 9
 
@@ -355,6 +363,7 @@ bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
         // broadcast the change
         DataChangedEvent aDataChanged( DataChangedEventType::SETTINGS, nullptr, AllSettingsFlags::STYLE );
         Application::NotifyAllWindows( aDataChanged );
+        NotifyNotebookBar();
     }
 
     return bModified;
@@ -378,6 +387,85 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet * )
         m_pOwnPersona->Check();
     else
         m_pDefaultPersona->Check();
+}
+
+void SvxPersonalizationTabPage::NotifyNotebookBar()
+{
+    struct ExecuteInfo
+    {
+        uno::Reference< frame::XDispatch >  xDispatch;
+        util::URL                           aTargetURL;
+        uno::Sequence< beans::PropertyValue >      aArgs;
+    };
+
+        {
+            OUString Notebookbarfile = sfx2::SfxNotebookBar::sFilename;
+            if(sfx2::SfxNotebookBar::sFilename=="notebookbar.ui")
+                Notebookbarfile="notebookbar_compact.ui";
+            else
+                Notebookbarfile="notebookbar.ui";
+            OUStringBuffer aBuf(".uno:Notebookbar?File:string=");
+            aBuf.append( Notebookbarfile );
+            css::util::URL aTargetURL;
+            uno::Sequence< beans::PropertyValue > aArgs;
+
+            aTargetURL.Complete = aBuf.makeStringAndClear();
+            uno::Reference< util::XURLTransformer > xURLTransformer =
+            util::URLTransformer::create(comphelper::getProcessComponentContext());
+            xURLTransformer->parseStrict( aTargetURL );
+            SfxViewFrame *pSfxViewFrame = SfxViewFrame::Current();
+            uno::Reference< frame::XFrame > xFrame;
+            if ( pSfxViewFrame )
+                xFrame = pSfxViewFrame->GetFrame().GetFrameInterface();
+            uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
+            if ( xDispatchProvider.is() )
+            {
+                uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                        aTargetURL, OUString(), 0 );
+
+                ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+                pExecuteInfo->xDispatch     = xDispatch;
+                pExecuteInfo->aTargetURL    = aTargetURL;
+                pExecuteInfo->aArgs         = aArgs;
+                if ( pExecuteInfo->xDispatch.is() )
+                {
+                    pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+                }
+
+            }
+        }
+        {
+            OUString Notebookbarfile = sfx2::SfxNotebookBar::sFilename;
+            OUStringBuffer aBuf(".uno:Notebookbar?File:string=");
+            aBuf.append( Notebookbarfile );
+            css::util::URL aTargetURL;
+            uno::Sequence< beans::PropertyValue > aArgs;
+
+            aTargetURL.Complete = aBuf.makeStringAndClear();
+            uno::Reference< util::XURLTransformer > xURLTransformer =
+            util::URLTransformer::create(comphelper::getProcessComponentContext());
+            xURLTransformer->parseStrict( aTargetURL );
+            SfxViewFrame *pSfxViewFrame = SfxViewFrame::Current();
+            uno::Reference< frame::XFrame > xFrame;
+            if ( pSfxViewFrame )
+                xFrame = pSfxViewFrame->GetFrame().GetFrameInterface();
+            uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
+            if ( xDispatchProvider.is() )
+            {
+                uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                        aTargetURL, OUString(), 0 );
+
+                ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+                pExecuteInfo->xDispatch     = xDispatch;
+                pExecuteInfo->aTargetURL    = aTargetURL;
+                pExecuteInfo->aArgs         = aArgs;
+                if ( pExecuteInfo->xDispatch.is() )
+                {
+                    pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+                }
+
+            }
+        }
 }
 
 void SvxPersonalizationTabPage::SetPersonaSettings( const OUString& aPersonaSettings )

@@ -36,6 +36,7 @@ using namespace css;
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
+OUString SfxNotebookBar::sFilename = "notebookbar.ui";
 
 static Reference<frame::XLayoutManager> lcl_getLayoutManager( const Reference<frame::XFrame>& xFrame )
 {
@@ -284,6 +285,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
         OUString sFile = lcl_getNotebookbarFileName( eApp );
         OUString sNewFile = rUIFile + sFile;
+        sFilename = sFile;
         OUString sCurrentFile;
         VclPtr<NotebookBar> pNotebookBar = pSysWindow->GetNotebookBar();
         if ( pNotebookBar )

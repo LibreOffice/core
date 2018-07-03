@@ -60,6 +60,7 @@ public:
 
     void LoadDefaultImages();
     void LoadExtensionThemes();
+    void NotifyNotebookBar();
 
 private:
     /// Handle the Persona selection

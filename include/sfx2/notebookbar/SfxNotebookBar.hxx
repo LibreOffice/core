@@ -45,6 +45,7 @@ public:
 
     static void ShowMenubar(bool bShow);
     static void ToggleMenubar();
+    static OUString sFilename;
 
 private:
     static bool m_bLock;
