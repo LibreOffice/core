@@ -2437,7 +2437,7 @@ ScChart2DataSequence::~ScChart2DataSequence()
         StopListeningToAllExternalRefs();
     }
 
-    delete m_pValueListener;
+    m_pValueListener.reset();
 }
 
 void ScChart2DataSequence::RefChanged()
@@ -2463,7 +2463,7 @@ void ScChart2DataSequence::RefChanged()
                 if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
                     continue;
 
-                m_pDocument->StartListeningArea(aRange, false, m_pValueListener);
+                m_pDocument->StartListeningArea(aRange, false, m_pValueListener.get());
                 if (pCLC)
                     pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
             }
@@ -3220,7 +3220,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
     if ( m_aValueListeners.size() == 1 )
     {
         if (!m_pValueListener)
-            m_pValueListener = new ScLinkListener( LINK( this, ScChart2DataSequence, ValueListenerHdl ) );
+            m_pValueListener.reset(new ScLinkListener( LINK( this, ScChart2DataSequence, ValueListenerHdl ) ));
 
         if (!m_pHiddenListener.get())
             m_pHiddenListener.reset(new HiddenRangeListener(*this));
@@ -3235,7 +3235,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
                 if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
                     continue;
 
-                m_pDocument->StartListeningArea( aRange, false, m_pValueListener );
+                m_pDocument->StartListeningArea( aRange, false, m_pValueListener.get() );
                 if (pCLC)
                     pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
             }

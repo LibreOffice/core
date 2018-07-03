@@ -380,7 +380,7 @@ private:
 
     std::unique_ptr<HiddenRangeListener> m_pHiddenListener;
 
-    ScLinkListener*             m_pValueListener;
+    std::unique_ptr<ScLinkListener>      m_pValueListener;
     XModifyListenerArr_Impl     m_aValueListeners;
 
     bool                        m_bGotDataChangedHint;
