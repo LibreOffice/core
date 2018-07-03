@@ -64,7 +64,7 @@ OUString pyString2ustring( PyObject *pystr )
 #else
 #if PY_MAJOR_VERSION >= 3
     Py_ssize_t size(0);
-    char *pUtf8(PyUnicode_AsUTF8AndSize(pystr, &size));
+    char const *pUtf8(PyUnicode_AsUTF8AndSize(pystr, &size));
     ret = OUString(pUtf8, size, RTL_TEXTENCODING_UTF8);
 #else
     PyObject* pUtf8 = PyUnicode_AsUTF8String(pystr);
