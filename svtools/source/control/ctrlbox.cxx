@@ -669,6 +669,7 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
+    EnableSelectAll();
     mbWYSIWYG = false;
     InitFontMRUEntriesFile();
 }
