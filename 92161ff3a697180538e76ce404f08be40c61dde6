@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_2b13e90f",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-07-03T16:16:24Z",
+      "side": 1,
+      "message": "Hmm, this seems to be too hacky. We have a lot of contexts in LO which doesn\u0027t needs that kind of special methods. I think there should be a way to create printpreview context to work exactly like other contexts.\n\nWhy this is that special?",
+      "revId": "92161ff3a697180538e76ce404f08be40c61dde6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
