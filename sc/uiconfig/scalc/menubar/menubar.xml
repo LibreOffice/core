@@ -95,23 +95,6 @@
             <menu:menuitem menu:id=".uno:PasteSpecial"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
-            <menu:menu menu:id=".uno:EditSelectMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:TableSelectAll"/>
-                    <menu:menuitem menu:id=".uno:SelectTables"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:JumpToNextTableSel"/>
-                    <menu:menuitem menu:id=".uno:JumpToPrevTableSel"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:SelectRow"/>
-                    <menu:menuitem menu:id=".uno:SelectColumn"/>
-                    <menu:menuitem menu:id=".uno:SelectData"/>
-                    <menu:menuitem menu:id=".uno:SelectUnprotectedCells"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SetInputMode"/>
-            <menu:menuitem menu:id=".uno:CellProtection"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
@@ -131,10 +114,21 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menu menu:id=".uno:SheetCommentMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:EditAnnotation"/>
+                    <menu:menuitem menu:id=".uno:DeleteNote"/>
+                    <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:HideNote"/>
+                    <menu:menuitem menu:id=".uno:ShowNote"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SetInputMode"/>
             <menu:menuitem menu:id=".uno:EditDoc"/>
         </menu:menupopup>
     </menu:menu>
@@ -387,45 +381,9 @@
             <menu:menuitem menu:id=".uno:ResetAttributes"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FormatCellDialog"/>
-            <menu:menu menu:id=".uno:RowMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:RowHeight"/>
-                    <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
-                    <menu:menuitem menu:id=".uno:HideRow"/>
-                    <menu:menuitem menu:id=".uno:ShowRow"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:ColumnMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ColumnWidth"/>
-                    <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
-                    <menu:menuitem menu:id=".uno:HideColumn"/>
-                    <menu:menuitem menu:id=".uno:ShowColumn"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:MergeCellsMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ToggleMergeCells"/>
-                    <menu:menuitem menu:id=".uno:MergeCells"/>
-                    <menu:menuitem menu:id=".uno:SplitCell"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FontDialog"/>
             <menu:menuitem menu:id=".uno:ParagraphDialog"/>
             <menu:menuitem menu:id=".uno:PageFormatDialog"/>
-            <menu:menu menu:id=".uno:PrintRangesMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DefinePrintArea"/>
-                    <menu:menuitem menu:id=".uno:AddPrintArea"/>
-                    <menu:menuitem menu:id=".uno:EditPrintArea"/>
-                    <menu:menuitem menu:id=".uno:DeletePrintArea"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
-            <menu:menuitem menu:id=".uno:AutoFormat"/>
-            <menu:menuitem menu:id=".uno:ChooseDesign"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:FormatImageMenu">
                 <menu:menupopup>
@@ -437,11 +395,6 @@
                     <menu:menuitem menu:id=".uno:ChangePicture"/>
                     <menu:menuitem menu:id=".uno:CompressGraphic"/>
                     <menu:menuitem menu:id=".uno:SaveGraphic"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:ChartMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ExportAsGraphic"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:ObjectMenu">
@@ -515,41 +468,60 @@
     <menu:menu menu:id=".uno:SheetMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:InsertCell"/>
-            <menu:menu menu:id=".uno:InsertRowsMenu">
+            <menu:menu menu:id=".uno:TableInsertMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
                     <menu:menuitem menu:id=".uno:InsertRowsAfter"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:InsertColumnsMenu">
-                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:InsertRowBreak"/>
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:InsertColumnsBefore"/>
                     <menu:menuitem menu:id=".uno:InsertColumnsAfter"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:InsertBreakMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:InsertRowBreak"/>
                     <menu:menuitem menu:id=".uno:InsertColumnBreak"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:Insert"/>
+                    <menu:menuitem menu:id=".uno:Add"/>
+                    <menu:menuitem menu:id=".uno:InsertSheetFromFile"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:DeleteCell"/>
-            <menu:menuitem menu:id=".uno:DeleteRows"/>
-            <menu:menuitem menu:id=".uno:DeleteColumns"/>
-            <menu:menu menu:id=".uno:DelBreakMenu">
+            <menu:menu menu:id=".uno:TableDeleteMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DeleteRowbreak"/>
-                    <menu:menuitem menu:id=".uno:DeleteColumnbreak"/>
+                    <menu:menuitem menu:id=".uno:DeleteCell"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:DeleteRows"/>
+                    <menu:menuitem menu:id=".uno:DeleteColumns"/>
+                    <menu:menuitem menu:id=".uno:DelBreakMenu"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:Remove"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Insert"/>
-            <menu:menuitem menu:id=".uno:Add"/>
-            <menu:menuitem menu:id=".uno:InsertSheetFromFile"/>
-            <menu:menuitem menu:id=".uno:InsertExternalDataSource"/>
-            <menu:menuitem menu:id=".uno:Remove"/>
-            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:TableSelectMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SelectRow"/>
+                    <menu:menuitem menu:id=".uno:SelectColumn"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:JumpToNextTableSel"/>
+                    <menu:menuitem menu:id=".uno:JumpToPrevTableSel"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SelectData"/>
+                    <menu:menuitem menu:id=".uno:SelectUnprotectedCells"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:TableSelectAll"/>
+                    <menu:menuitem menu:id=".uno:SelectTables"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:TableAutoFitMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:RowHeight"/>
+                    <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
+                    <menu:menuitem menu:id=".uno:HideRow"/>
+                    <menu:menuitem menu:id=".uno:ShowRow"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ColumnWidth"/>
+                    <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
+                    <menu:menuitem menu:id=".uno:HideColumn"/>
+                    <menu:menuitem menu:id=".uno:ShowColumn"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menu menu:id=".uno:FillCellsMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:FillDown"/>
@@ -561,6 +533,29 @@
                     <menu:menuitem menu:id=".uno:RandomNumberGeneratorDialog"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:Delete"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ToggleMergeCells"/>
+            <menu:menuitem menu:id=".uno:MergeCells"/>
+            <menu:menuitem menu:id=".uno:SplitCell"/>
+            <menu:menu menu:id=".uno:PrintRangesMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DefinePrintArea"/>
+                    <menu:menuitem menu:id=".uno:AddPrintArea"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:EditPrintArea"/>
+                    <menu:menuitem menu:id=".uno:InsertRowBreak"/>
+                    <menu:menuitem menu:id=".uno:InsertColumnBreak"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:DeletePrintArea"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Protect"/>
+            <menu:menuitem menu:id=".uno:ToolProtectionDocument"/>
+            <menu:menuitem menu:id=".uno:CellProtection"/>
+            <menu:menuseparator/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:NamesMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:AddName"/>
@@ -571,33 +566,26 @@
                     <menu:menuitem menu:id=".uno:DefineLabelRange"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:ToggleRelative"/>
-            <menu:menu menu:id=".uno:SheetCommentMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:EditAnnotation"/>
-                    <menu:menuitem menu:id=".uno:HideNote"/>
-                    <menu:menuitem menu:id=".uno:ShowNote"/>
-                    <menu:menuitem menu:id=".uno:DeleteNote"/>
-                    <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuitem menu:id=".uno:Delete"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
+            <menu:menuitem menu:id=".uno:AutoFormat"/>
+            <menu:menuitem menu:id=".uno:ChooseDesign"/>
+            <menu:menuitem menu:id=".uno:SetTabBgColor"/>
+            <menu:menuitem menu:id=".uno:TableEvents"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:RenameTable"/>
-            <menu:menuitem menu:id=".uno:Hide"/>
-            <menu:menuitem menu:id=".uno:Show"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Move"/>
             <menu:menu menu:id=".uno:NavigateMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:JumpToPrevTable"/>
                     <menu:menuitem menu:id=".uno:JumpToNextTable"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:Hide"/>
+                    <menu:menuitem menu:id=".uno:Show"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SheetRightToLeft"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SetTabBgColor"/>
-            <menu:menuitem menu:id=".uno:TableEvents"/>
-            <menu:menuitem menu:id=".uno:SheetRightToLeft"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:DataMenu">
@@ -699,6 +687,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
             <menu:menuitem menu:id=".uno:SolverDialog"/>
+            <menu:menuitem menu:id=".uno:ToggleRelative"/>
             <menu:menu menu:id=".uno:AuditMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:ShowPrecedents"/>
@@ -735,9 +724,8 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ExportAsGraphic"/>
             <menu:menuitem menu:id=".uno:ShareDocument"/>
-            <menu:menuitem menu:id=".uno:Protect"/>
-            <menu:menuitem menu:id=".uno:ToolProtectionDocument"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoComplete"/>
             <menu:menuseparator/>
