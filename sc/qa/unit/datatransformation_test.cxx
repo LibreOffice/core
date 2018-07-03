@@ -39,6 +39,18 @@ public:
     void testAggregateAverage();
     void testAggregateMin();
     void testAggregateMax();
+    void testNumberRound();
+    void testNumberRoundUp();
+    void testNumberRoundDown();
+    void testNumberAbsolute();
+    void testNumberLogE();
+    void testNumberLog10();
+    void testNumberCube();
+    void testNumberSquare();
+    void testNumberSquareRoot();
+    void testNumberEven();
+    void testNumberOdd();
+    void testNumberSign();
 
     CPPUNIT_TEST_SUITE(ScDataTransformationTest);
     CPPUNIT_TEST(testColumnRemove);
@@ -52,6 +64,18 @@ public:
     CPPUNIT_TEST(testAggregateAverage);
     CPPUNIT_TEST(testAggregateMin);
     CPPUNIT_TEST(testAggregateMax);
+    CPPUNIT_TEST(testNumberRound);
+    CPPUNIT_TEST(testNumberRoundUp);
+    CPPUNIT_TEST(testNumberRoundDown);
+    CPPUNIT_TEST(testNumberAbsolute);
+    CPPUNIT_TEST(testNumberLogE);
+    CPPUNIT_TEST(testNumberLog10);
+    CPPUNIT_TEST(testNumberCube);
+    CPPUNIT_TEST(testNumberSquare);
+    CPPUNIT_TEST(testNumberSquareRoot);
+    CPPUNIT_TEST(testNumberEven);
+    CPPUNIT_TEST(testNumberOdd);
+    CPPUNIT_TEST(testNumberSign);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -250,6 +274,195 @@ void ScDataTransformationTest::testAggregateMax()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(57453, m_pDoc->GetValue(2, 4, 0), 1e-10);
 }
 
+void ScDataTransformationTest::testNumberRound()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034.342453456);
+    m_pDoc->SetValue(2, 1, 0, 2342.252678567542);
+    m_pDoc->SetValue(2, 2, 0, 57453.651345687654345676);
+    m_pDoc->SetValue(2, 3, 0, -453.22234567543);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::ROUND, 4);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2034.3425, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2342.2527, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(57453.6513, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(-453.2223, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testNumberRoundUp()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034.34);
+    m_pDoc->SetValue(2, 1, 0, 2342.22);
+    m_pDoc->SetValue(2, 2, 0, 57453.65);
+    m_pDoc->SetValue(2, 3, 0, -453.22);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::ROUND_UP);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2035.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2343.0, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(57454.0, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(-453.0, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testNumberRoundDown()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034.34);
+    m_pDoc->SetValue(2, 1, 0, 2342.22);
+    m_pDoc->SetValue(2, 2, 0, 57453.65);
+    m_pDoc->SetValue(2, 3, 0, -453.22);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2034.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2342.0, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(57453.0, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(-454.0, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testNumberAbsolute()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034.34);
+    m_pDoc->SetValue(2, 1, 0, -2342.22);
+    m_pDoc->SetValue(2, 2, 0, 57453.65);
+    m_pDoc->SetValue(2, 3, 0, -453.22);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2034.34, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2342.22, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(57453.65, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(453.22, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testNumberLogE()
+{
+    m_pDoc->SetValue(2, 0, 0, 1);
+    m_pDoc->SetValue(2, 1, 0, 5);
+    m_pDoc->SetValue(2, 2, 0, -9);
+    m_pDoc->SetValue(2, 3, 0, 500);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::LOG_E);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(2, 0, 0), 1e-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.60943791243, m_pDoc->GetValue(2, 1, 0), 1e-10);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6.21460809842, m_pDoc->GetValue(2, 3, 0), 1e-10);
+}
+
+void ScDataTransformationTest::testNumberLog10()
+{
+    m_pDoc->SetValue(2, 0, 0, 1);
+    m_pDoc->SetValue(2, 1, 0, 10);
+    m_pDoc->SetValue(2, 2, 0, -9);
+    m_pDoc->SetValue(2, 3, 0, 500);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::LOG_10);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(2, 0, 0), 1e-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(2, 1, 0), 1e-10);
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.69897000434, m_pDoc->GetValue(2, 3, 0), 1e-10);
+}
+
+void ScDataTransformationTest::testNumberCube()
+{
+    m_pDoc->SetValue(2, 0, 0, 2);
+    m_pDoc->SetValue(2, 1, 0, -2);
+    m_pDoc->SetValue(2, 2, 0, 8);
+    m_pDoc->SetValue(2, 3, 0, -8);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::CUBE);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(-8.0, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(512.0, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(-512.0, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testNumberSquare()
+{
+    m_pDoc->SetValue(2, 0, 0, 2);
+    m_pDoc->SetValue(2, 1, 0, -2);
+    m_pDoc->SetValue(2, 2, 0, 8);
+    m_pDoc->SetValue(2, 3, 0, -8);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::SQUARE);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testNumberSquareRoot()
+{
+    m_pDoc->SetValue(2, 0, 0, 8);
+    m_pDoc->SetValue(2, 1, 0, 4);
+    m_pDoc->SetValue(2, 2, 0, 9);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.82842712475, m_pDoc->GetValue(2, 0, 0), 1e-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, m_pDoc->GetValue(2, 1, 0), 1e-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, m_pDoc->GetValue(2, 2, 0), 1e-10);
+}
+
+void ScDataTransformationTest::testNumberEven()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034);
+    m_pDoc->SetValue(2, 1, 0, 2343);
+    m_pDoc->SetValue(2, 2, 0, 57453.65);
+    m_pDoc->SetValue(2, 3, 0, -453);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::IS_EVEN);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testNumberOdd()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034);
+    m_pDoc->SetValue(2, 1, 0, 2343);
+    m_pDoc->SetValue(2, 2, 0, 57453.65);
+    m_pDoc->SetValue(2, 3, 0, -453);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::IS_ODD);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testNumberSign()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034.34);
+    m_pDoc->SetValue(2, 1, 0, -2342.22);
+    m_pDoc->SetValue(2, 2, 0, 0);
+    m_pDoc->SetValue(2, 3, 0, -453.22);
+
+    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::SIGN);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(-1.0, m_pDoc->GetValue(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(-1.0, m_pDoc->GetValue(2, 3, 0));
+}
 
 ScDataTransformationTest::ScDataTransformationTest() :
     ScBootstrapFixture( "sc/qa/unit/data/dataprovider" ),
