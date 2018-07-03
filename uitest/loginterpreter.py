@@ -118,7 +118,9 @@ def get_test_line_from_one_log_line(log_line):
             action_dict["Id"][:-4] +"\")\n        MainWindow = " + \
             "self.xUITest.getTopFocusWindow()\n"
             return test_line
-        elif (parent != ""):
+        else:
+            if (parent == ""):
+                parent = "MainWindow"
             test_line += \
             action_dict["Id"] + " = " + parent + ".getChild(\"" + \
             action_dict["Id"] + "\")\n        " + \
