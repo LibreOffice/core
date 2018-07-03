@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_ab725910",
+        "filename": "svx/source/table/cell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-03T19:40:43Z",
+      "side": 1,
+      "message": "i\u0027m not sure why we need to be doing this here. It seems to me that it just calls the superclass, and surely the superclass should be responsible for cleaning up it\u0027s own members. But otherwise this looks fine to me.",
+      "revId": "5260aa86f203caa555e6b67d36b7b58cfdd6d164",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
