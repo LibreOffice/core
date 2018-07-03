@@ -6300,6 +6300,13 @@ void SwUiWriterTest::testTdf117225()
     int nActual = CountFilesInDirectory(aTargetDirectory);
     // nActual was nExpected + 1, i.e. we leaked a tempfile.
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+
+    OUString aTargetFileSaveAs = aTargetDirectory + "tdf117225-save-as.odt";
+    xStorable->storeAsURL(aTargetFileSaveAs, {});
+    ++nExpected;
+    nActual = CountFilesInDirectory(aTargetDirectory);
+    // nActual was nExpected + 1, i.e. we leaked a tempfile.
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
 void SwUiWriterTest::testTdf91801()
