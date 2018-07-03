@@ -60,6 +60,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
 
 SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     : SwModify(nullptr)
+    , BroadcasterMixin()
     , m_StyleName( rCpy.GetName() )
     , m_NumType( rCpy.GetNumType() )
     , m_Master( rCpy.GetMaster() )
