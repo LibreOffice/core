@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <comphelper/base64.hxx>
+#include <comphelper/graphicmimetype.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
@@ -357,33 +358,33 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
     }
 }
 
-bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, bool bAddPrefix)
+bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, bool bAddPrefix,
+                                 ConvertDataFormat aTargetFormat)
 {
     SvMemoryStream aOStm;
-    OUString aMimeType;
     GfxLink aLink = rGraphic.GetGfxLink();
-    ConvertDataFormat aCvtType;
-    switch(  aLink.GetType() )
+
+    if (aTargetFormat == ConvertDataFormat::Unknown)
     {
-        case GfxLinkType::NativeJpg:
-            aCvtType = ConvertDataFormat::JPG;
-            aMimeType = "image/jpeg";
-            break;
-        case GfxLinkType::NativePng:
-            aCvtType = ConvertDataFormat::PNG;
-            aMimeType = "image/png";
-            break;
-        case GfxLinkType::NativeSvg:
-            aCvtType = ConvertDataFormat::SVG;
-            aMimeType = "image/svg+xml";
-            break;
-        default:
-            // save everything else (including gif) into png
-            aCvtType = ConvertDataFormat::PNG;
-            aMimeType = "image/png";
-            break;
+        switch (aLink.GetType())
+        {
+            case GfxLinkType::NativeJpg:
+                aTargetFormat = ConvertDataFormat::JPG;
+                break;
+            case GfxLinkType::NativePng:
+                aTargetFormat = ConvertDataFormat::PNG;
+                break;
+            case GfxLinkType::NativeSvg:
+                aTargetFormat = ConvertDataFormat::SVG;
+                break;
+            default:
+                // save everything else (including gif) into png
+                aTargetFormat = ConvertDataFormat::PNG;
+                break;
+        }
     }
-    ErrCode nErr = GraphicConverter::Export(aOStm,rGraphic,aCvtType);
+
+    ErrCode nErr = GraphicConverter::Export(aOStm,rGraphic,aTargetFormat);
     if ( nErr )
     {
         SAL_WARN("svx", "XOutBitmap::GraphicToBase64() invalid Graphic? error: " << nErr );
@@ -396,7 +397,11 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, b
     rOUString = aStrBuffer.makeStringAndClear();
 
     if (bAddPrefix)
+    {
+        OUString aMimeType
+            = comphelper::GraphicMimeTypeHelper::GetMimeTypeForConvertDataFormat(aTargetFormat);
         rOUString = aMimeType + ";base64," + rOUString;
+    }
 
     return true;
 }
