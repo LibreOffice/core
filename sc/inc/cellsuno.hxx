@@ -182,12 +182,12 @@ private:
     css::uno::WeakReference<css::uno::XInterface> m_wThis;
     const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
-    ScLinkListener*         pValueListener;
-    std::unique_ptr<ScPatternAttr> pCurrentFlat;
-    std::unique_ptr<ScPatternAttr> pCurrentDeep;
-    SfxItemSet*             pCurrentDataSet;
-    SfxItemSet*             pNoDfltCurrentDataSet;
-    ScMarkData*             pMarkData;
+    std::unique_ptr<ScLinkListener> pValueListener;
+    std::unique_ptr<ScPatternAttr>  pCurrentFlat;
+    std::unique_ptr<ScPatternAttr>  pCurrentDeep;
+    std::unique_ptr<SfxItemSet>     pCurrentDataSet;
+    std::unique_ptr<SfxItemSet>     pNoDfltCurrentDataSet;
+    std::unique_ptr<ScMarkData>     pMarkData;
     ScRangeList             aRanges;
     sal_Int64               nObjectId;
     bool                    bChartColAsHdr;
