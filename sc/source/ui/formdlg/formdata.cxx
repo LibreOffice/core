@@ -31,11 +31,6 @@ ScFormEditData::~ScFormEditData()
 {
 }
 
-ScFormEditData::ScFormEditData( const ScFormEditData& r )  : formula::FormEditData(r)
-{
-    *this = r;
-}
-
 void ScFormEditData::SaveValues()
 {
     Reset();
