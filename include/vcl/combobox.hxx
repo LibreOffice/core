@@ -90,7 +90,7 @@ public:
     virtual void    RemoveEntryAt(sal_Int32  nPos);
 
     void            Clear();
-
+    void            EnableSelectAll();
     sal_Int32       GetEntryPos( const OUString& rStr ) const;
     sal_Int32       GetEntryPos( const void* pData ) const;
     Image           GetEntryImage( sal_Int32  nPos ) const;

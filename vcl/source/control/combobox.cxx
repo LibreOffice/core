@@ -507,7 +507,11 @@ void ComboBox::EnableAutoSize( bool bAuto )
         }
     }
 }
+void ComboBox::EnableSelectAll()
+{
+   m_pImpl->m_pSubEdit->SetSelectAllSingleClick(true);
 
+}
 void ComboBox::EnableDDAutoWidth( bool b )
 {
     if (m_pImpl->m_pFloatWin)
