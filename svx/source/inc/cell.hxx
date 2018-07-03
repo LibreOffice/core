@@ -52,13 +52,18 @@ class SVX_DLLPUBLIC Cell :  public SdrText,
                 public css::lang::XEventListener,
                 public ::cppu::OWeakObject
 {
+private:
+    // tdf#118199 allow these access to dispose()
     friend class CellUndo;
+    friend class TableRow;
+    friend static void Dispose( CellVector& rCells );
+
+    // tdf#118199 allow indication when called from own destructor
+    SVX_DLLPRIVATE void dispose(bool bFromDestructor = false);
 
 public:
     SVX_DLLPRIVATE static rtl::Reference< Cell > create( SdrTableObj& rTableObj );
 
-    // private
-    SVX_DLLPRIVATE void dispose();
 
     // SdrTextShape proxy
     bool IsActiveCell();
