@@ -88,5 +88,38 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForImageStream(Reference<XInputStream
 
     return GetMimeTypeForXGraphic(xGraphic);
 }
+
+OUString GraphicMimeTypeHelper::GetMimeTypeForConvertDataFormat(ConvertDataFormat convertDataFormat)
+{
+    switch (convertDataFormat)
+    {
+        case ConvertDataFormat::BMP:
+            return "image/bmp";
+        case ConvertDataFormat::GIF:
+            return "image/gif";
+        case ConvertDataFormat::JPG:
+            return "image/jpeg";
+        case ConvertDataFormat::PCT:
+            return "image/x-pict";
+        case ConvertDataFormat::PNG:
+            return "image/png";
+        case ConvertDataFormat::SVM:
+            return "image/x-svm";
+        case ConvertDataFormat::TIF:
+            return "image/tiff";
+        case ConvertDataFormat::WMF:
+            return "image/x-wmf";
+        case ConvertDataFormat::EMF:
+            return "image/x-emf";
+        case ConvertDataFormat::SVG:
+            return "image/svg+xml";
+        case ConvertDataFormat::PDF:
+            return "application/pdf";
+        case ConvertDataFormat::MET: // What is this?
+        case ConvertDataFormat::Unknown:
+        default:
+            return "";
+    }
+}
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
