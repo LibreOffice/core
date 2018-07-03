@@ -62,12 +62,13 @@ public:
 
         while( !mpPool->mbTerminate )
         {
-            ThreadTask *pTask = mpPool->popWorkLocked( aGuard, true );
+            std::unique_ptr<ThreadTask> pTask = mpPool->popWorkLocked( aGuard, true );
             if( pTask )
             {
                 aGuard.unlock();
 
-                pTask->execAndDelete();
+                pTask->exec();
+                pTask.reset();
 
                 aGuard.lock();
             }
@@ -142,9 +143,9 @@ void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
 {
     if( maWorkers.empty() )
     { // no threads at all -> execute the work in-line
-        ThreadTask *pTask;
+        std::unique_ptr<ThreadTask> pTask;
         while ( ( pTask = popWorkLocked(aGuard, false) ) )
-            pTask->execAndDelete();
+            pTask->exec();
     }
     else
     {
@@ -175,7 +176,7 @@ void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
     }
 }
 
-void ThreadPool::pushTask( ThreadTask *pTask )
+void ThreadPool::pushTask( std::unique_ptr<ThreadTask> pTask )
 {
     std::unique_lock< std::mutex > aGuard( maMutex );
 
@@ -188,18 +189,18 @@ void ThreadPool::pushTask( ThreadTask *pTask )
     }
 
     pTask->mpTag->onTaskPushed();
-    maTasks.insert( maTasks.begin(), pTask );
+    maTasks.insert( maTasks.begin(), std::move(pTask) );
 
     maTasksChanged.notify_one();
 }
 
-ThreadTask *ThreadPool::popWorkLocked( std::unique_lock< std::mutex > & rGuard, bool bWait )
+std::unique_ptr<ThreadTask> ThreadPool::popWorkLocked( std::unique_lock< std::mutex > & rGuard, bool bWait )
 {
     do
     {
         if( !maTasks.empty() )
         {
-            ThreadTask *pTask = maTasks.back();
+            std::unique_ptr<ThreadTask> pTask = std::move(maTasks.back());
             maTasks.pop_back();
             return pTask;
         }
@@ -223,10 +224,10 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
 
         if( maWorkers.empty() )
         { // no threads at all -> execute the work in-line
-            ThreadTask *pTask;
+            std::unique_ptr<ThreadTask> pTask;
             while (!rTag->isDone() &&
                    ( pTask = popWorkLocked(aGuard, false) ) )
-                pTask->execAndDelete();
+                pTask->exec();
         }
     }
 
@@ -256,7 +257,7 @@ ThreadTask::ThreadTask(const std::shared_ptr<ThreadTaskTag>& pTag)
 {
 }
 
-void ThreadTask::execAndDelete()
+void ThreadTask::exec()
 {
     std::shared_ptr<ThreadTaskTag> pTag(mpTag);
     try {
@@ -271,7 +272,6 @@ void ThreadTask::execAndDelete()
         SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e);
     }
 
-    delete this;
     pTag->onTaskWorkerDone();
 }
 

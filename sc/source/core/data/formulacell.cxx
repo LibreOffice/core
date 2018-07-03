@@ -4616,7 +4616,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             for (int i = 0; i < nThreadCount; ++i)
             {
                 contexts[i] = new ScInterpreterContext(*pDocument, pNonThreadedFormatter);
-                rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, contexts[i], mxGroup->mpTopCell->aPos, mxGroup->mnLength));
+                rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, contexts[i], mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 
             SAL_INFO("sc.threaded", "Joining threads");

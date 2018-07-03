@@ -1048,8 +1048,8 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
                 if(!m_pDeflateData)
                 {
                     m_pDeflateData.reset( new DeflateData(aXModel) );
-                    DeflateThread* pNew = new DeflateThread(*m_pDeflateData);
-                    comphelper::ThreadPool::getSharedOptimalPool().pushTask(pNew);
+                    std::unique_ptr<DeflateThread> pNew( new DeflateThread(*m_pDeflateData) );
+                    comphelper::ThreadPool::getSharedOptimalPool().pushTask(std::move(pNew));
                 }
             }
         }
