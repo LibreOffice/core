@@ -36,6 +36,10 @@ public:
     void testTextCapitalize();
     void testTextTrim();
     void testTextClean();
+    void testAggregateSum();
+    void testAggregateAverage();
+    void testAggregateMin();
+    void testAggregateMax();
 
     CPPUNIT_TEST_SUITE(ScDataTransformationTest);
     CPPUNIT_TEST(testColumnRemove);
@@ -46,6 +50,10 @@ public:
     CPPUNIT_TEST(testTextCapitalize);
     CPPUNIT_TEST(testTextTrim);
     CPPUNIT_TEST(testTextClean);
+    CPPUNIT_TEST(testAggregateSum);
+    CPPUNIT_TEST(testAggregateAverage);
+    CPPUNIT_TEST(testAggregateMin);
+    CPPUNIT_TEST(testAggregateMax);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -206,6 +214,56 @@ void ScDataTransformationTest::testTextClean()
     CPPUNIT_ASSERT_EQUAL(OUString("first line  second line "), m_pDoc->GetString(2, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("let us  us  clean  some  text"), m_pDoc->GetString(2, 1, 0));
 }
+
+void ScDataTransformationTest::testAggregateSum()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034);
+    m_pDoc->SetValue(2, 1, 0, 2342);
+    m_pDoc->SetValue(2, 2, 0, 57452);
+
+    sc::AggregateFunction aTransform(2, sc::AGGREGATE_FUNCTION::SUM);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL((double)61828, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testAggregateAverage()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034);
+    m_pDoc->SetValue(2, 1, 0, 2342);
+    m_pDoc->SetValue(2, 2, 0, 57453);
+
+    sc::AggregateFunction aTransform(2, sc::AGGREGATE_FUNCTION::AVERAGE);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL((double)20609.67, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testAggregateMin()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034);
+    m_pDoc->SetValue(2, 1, 0, 2342);
+    m_pDoc->SetValue(2, 2, 0, 57453);
+
+    sc::AggregateFunction aTransform(2, sc::AGGREGATE_FUNCTION::MIN);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL((double)2034, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testAggregateMax()
+{
+    m_pDoc->SetValue(2, 0, 0, 2034);
+    m_pDoc->SetValue(2, 1, 0, 2342);
+    m_pDoc->SetValue(2, 2, 0, 57453);
+    m_pDoc->SetValue(2, 3, 0, -453);
+
+    sc::AggregateFunction aTransform(2, sc::AGGREGATE_FUNCTION::MAX);
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL((double)57453, m_pDoc->GetValue(2, 4, 0));
+}
+
 
 ScDataTransformationTest::ScDataTransformationTest() :
     ScBootstrapFixture( "sc/qa/unit/data/dataprovider" ),
