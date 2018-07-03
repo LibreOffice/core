@@ -123,11 +123,7 @@ void ScDrawView::Construct()
 
 void ScDrawView::ImplClearCalcDropMarker()
 {
-    if(pDropMarker)
-    {
-        delete pDropMarker;
-        pDropMarker = nullptr;
-    }
+    pDropMarker.reset();
 }
 
 ScDrawView::~ScDrawView()
@@ -907,7 +903,7 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
 
         if(pDropMarkObj)
         {
-            pDropMarker = new SdrDropMarkerOverlay(*this, *pDropMarkObj);
+            pDropMarker.reset( new SdrDropMarkerOverlay(*this, *pDropMarkObj) );
         }
     }
 }
