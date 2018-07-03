@@ -35,31 +35,31 @@ TabPage RID_SVXPAGE_PAGE
 {
     HelpId = HID_FORMAT_PAGE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( 260, 185 ) ;
     FixedLine FL_PAPER_SIZE
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 164 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 164, 8 ) ;
         Text [ en-US ] = "Paper format" ;
     };
     FixedText FT_PAPER_FORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 16 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
         Text [ en-US ] = "~Format";
     };
     ListBox LB_PAPER_SIZE
     {
         HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_PAPER_SIZE";
-        Pos = MAP_APPFONT ( 50 , 14 ) ;
-        Size = MAP_APPFONT ( 50 , 64 ) ;
+        Pos = MAP_APPFONT ( 50, 14 ) ;
+        Size = MAP_APPFONT ( 75, 64 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedText FT_PAPER_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 32 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
         Text [ en-US ] = "~Width" ;
         Left = TRUE ;
     };
@@ -68,7 +68,7 @@ TabPage RID_SVXPAGE_PAGE
         HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_PAPER_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 50, 30 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -80,8 +80,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_PAPER_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 48 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
         Text [ en-US ] = "~Height" ;
         Left = TRUE ;
     };
@@ -89,8 +89,8 @@ TabPage RID_SVXPAGE_PAGE
     {
         HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_PAPER_HEIGHT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 46 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 50, 46 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -102,35 +102,35 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_ORIENTATION
     {
-        Pos = MAP_APPFONT ( 12 , 62 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 62 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
         Text [ en-US ] = "Orientation";
     };
     RadioButton RB_PORTRAIT
     {
         HelpID = "cui:RadioButton:RID_SVXPAGE_PAGE:RB_PORTRAIT";
-        Pos = MAP_APPFONT ( 50 , 62 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Pos = MAP_APPFONT ( 50, 62 ) ;
+        Size = MAP_APPFONT ( 53, 10 ) ;
         Check = TRUE ;
         Text [ en-US ] = "~Portrait" ;
     };
     RadioButton RB_LANDSCAPE
     {
         HelpID = "cui:RadioButton:RID_SVXPAGE_PAGE:RB_LANDSCAPE";
-        Pos = MAP_APPFONT ( 50 , 74 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Pos = MAP_APPFONT ( 50, 74 ) ;
+        Size = MAP_APPFONT ( 53, 10 ) ;
         Text [ en-US ] = "L~andscape";
     };
     Window WN_BSP
     {
-        Pos = MAP_APPFONT ( 176 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 46 ) ;
+        Pos = MAP_APPFONT ( 176, 6 ) ;
+        Size = MAP_APPFONT ( 75, 46 ) ;
     };
 
     FixedText FT_TEXT_FLOW
     {
-        Pos = MAP_APPFONT ( 113 , 60 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 113, 60 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
         Hide = TRUE ;
         Text [ en-US ] = "~Text direction";
@@ -139,37 +139,37 @@ TabPage RID_SVXPAGE_PAGE
     {
         HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_TEXT_FLOW";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 165 , 58 ) ;
-        Size = MAP_APPFONT ( 83 , 50 ) ;
+        Pos = MAP_APPFONT ( 165, 58 ) ;
+        Size = MAP_APPFONT ( 83, 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
     };
 
     FixedText FT_PAPER_TRAY
     {
-        Pos = MAP_APPFONT ( 113 , 74 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 113, 74 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Paper ~tray";
     };
     ListBox LB_PAPER_TRAY
     {
         HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_PAPER_TRAY";
-        Pos = MAP_APPFONT ( 165 , 72 ) ;
-        Size = MAP_APPFONT ( 83 , 50 ) ;
+        Pos = MAP_APPFONT ( 165, 72 ) ;
+        Size = MAP_APPFONT ( 83, 50 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedLine FL_MARGIN
     {
-        Pos = MAP_APPFONT ( 6 , 90 ) ;
-        Size = MAP_APPFONT ( 95 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 90 ) ;
+        Size = MAP_APPFONT ( 95, 8 ) ;
         Text [ en-US ] = "Margins";
     };
     FixedText FT_LEFT_MARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 103 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 103 ) ;
+        Size = MAP_APPFONT ( 40, 8 ) ;
         Text [ en-US ] = "~Left" ;
         Left = TRUE ;
     };
@@ -177,21 +177,21 @@ TabPage RID_SVXPAGE_PAGE
     {
         HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_LEFT_MARGIN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 101 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 55, 101 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-    // #i4219# taken from configuration now Maximum = 9999 ;
+        // #i4219# taken from configuration now Maximum = 9999 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
-    // #i4219# Last = 9999 ;
+        // #i4219# Last = 9999 ;
         SpinSize = 10 ;
     };
     FixedText FT_RIGHT_MARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 119 ) ;
+        Size = MAP_APPFONT ( 40, 8 ) ;
         Text [ en-US ] = "~Right" ;
         Left = TRUE ;
     };
@@ -199,21 +199,21 @@ TabPage RID_SVXPAGE_PAGE
     {
         HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_RIGHT_MARGIN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 117 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 55, 117 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-    // #i4219# taken from configuration now Maximum = 9999 ;
+        // #i4219# taken from configuration now Maximum = 9999 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
-    // #i4219# Last = 9999 ;
+        // #i4219# Last = 9999 ;
         SpinSize = 10 ;
     };
     FixedText FT_TOP_MARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 135 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 135 ) ;
+        Size = MAP_APPFONT ( 40, 8 ) ;
         Text [ en-US ] = "~Top" ;
         Left = TRUE ;
     };
@@ -221,21 +221,21 @@ TabPage RID_SVXPAGE_PAGE
     {
         HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_TOP_MARGIN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 133 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 55, 133 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-    // #i4219# taken from configuration now Maximum = 9999 ;
+        // #i4219# taken from configuration now Maximum = 9999 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
-    // #i4219# Last = 9999 ;
+        // #i4219# Last = 9999 ;
         SpinSize = 10 ;
     };
     FixedText FT_BOTTOM_MARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 151 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 151 ) ;
+        Size = MAP_APPFONT ( 40, 8 ) ;
         Text [ en-US ] = "~Bottom" ;
         Left = TRUE ;
     };
@@ -243,33 +243,33 @@ TabPage RID_SVXPAGE_PAGE
     {
         HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_BOTTOM_MARGIN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 149 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 55, 149 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-    // #i4219# taken from configuration now Maximum = 9999 ;
+        // #i4219# taken from configuration now Maximum = 9999 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
-    // #i4219# Last = 9999 ;
+        // #i4219# Last = 9999 ;
         SpinSize = 10 ;
     };
     FixedLine FL_BOTTOM_SEP
     {
-        Pos = MAP_APPFONT ( 102 , 101 ) ;
-        Size = MAP_APPFONT ( 4 , 68 ) ;
+        Pos = MAP_APPFONT ( 102, 101 ) ;
+        Size = MAP_APPFONT ( 4, 68 ) ;
         Vert = TRUE;
     };
     FixedLine FL_LAYOUT
     {
         Pos = MAP_APPFONT ( 107, 90 ) ;
-        Size = MAP_APPFONT ( 147 , 8 ) ;
+        Size = MAP_APPFONT ( 147, 8 ) ;
         Text [ en-US ] = "Layout settings";
     };
     FixedText FT_PAGELAYOUT
     {
-        Pos = MAP_APPFONT ( 113 , 103 ) ;
-        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Pos = MAP_APPFONT ( 113, 103 ) ;
+        Size = MAP_APPFONT ( 54, 8 ) ;
         Text [ en-US ] = "Page layout" ;
     };
     ListBox LB_LAYOUT
@@ -277,7 +277,7 @@ TabPage RID_SVXPAGE_PAGE
         HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_LAYOUT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170, 101 ) ;
-        Size = MAP_APPFONT ( 78 , 44 ) ;
+        Size = MAP_APPFONT ( 78, 44 ) ;
         DropDown = TRUE ;
         StringList [ en-US ] =
         {
@@ -289,16 +289,16 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_NUMBER_FORMAT
     {
-        Pos = MAP_APPFONT ( 113 , 119 ) ;
-        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Pos = MAP_APPFONT ( 113, 119 ) ;
+        Size = MAP_APPFONT ( 54, 8 ) ;
         Text [ en-US ] = "For~mat";
     };
     ListBox LB_NUMBER_FORMAT
     {
         HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_NUMBER_FORMAT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 117 ) ;
-        Size = MAP_APPFONT ( 78 , 64 ) ;
+        Pos = MAP_APPFONT ( 170, 117 ) ;
+        Size = MAP_APPFONT ( 78, 64 ) ;
         DropDown = TRUE ;
         StringList [ en-US ] =
         {
@@ -313,55 +313,55 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_TBL_ALIGN
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 133 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Pos = MAP_APPFONT ( 113, 133 ) ;
+        Size = MAP_APPFONT ( 60, 8 ) ;
         Text [ en-US ] = "Table alignment";
     };
     CheckBox CB_HORZ
     {
         HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_HORZ";
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 175 , 133 ) ;
-        Size = MAP_APPFONT ( 73 , 10 ) ;
+        Pos = MAP_APPFONT ( 175, 133 ) ;
+        Size = MAP_APPFONT ( 73, 10 ) ;
         Text [ en-US ] = "Hori~zontal" ;
     };
     CheckBox CB_VERT
     {
         HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_VERT";
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 175 , 147 ) ;
-        Size = MAP_APPFONT ( 73 , 10 ) ;
+        Pos = MAP_APPFONT ( 175, 147 ) ;
+        Size = MAP_APPFONT ( 73, 10 ) ;
         Text [ en-US ] = "~Vertical" ;
     };
     CheckBox CB_ADAPT
     {
         HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_ADAPT";
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 133 ) ;
-        Size = MAP_APPFONT ( 135 , 10 ) ;
+        Pos = MAP_APPFONT ( 113, 133 ) ;
+        Size = MAP_APPFONT ( 135, 10 ) ;
         Text [ en-US ] = "~Fit object to paper format";
     };
     /* Registerhaltigkeit (fuer SW) */
     CheckBox CB_REGISTER
     {
         HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_REGISTER";
-        Pos = MAP_APPFONT ( 113 , 133 ) ;
-        Size = MAP_APPFONT ( 135 , 10 ) ;
+        Pos = MAP_APPFONT ( 113, 133 ) ;
+        Size = MAP_APPFONT ( 135, 10 ) ;
         Hide = TRUE ;
         Text [ en-US ] = "Register-true" ;
     };
     FixedText FT_REGISTER
     {
-        Pos = MAP_APPFONT ( 122 , 147 ) ;
-        Size = MAP_APPFONT ( 126 , 8 ) ;
+        Pos = MAP_APPFONT ( 122, 147 ) ;
+        Size = MAP_APPFONT ( 126, 8 ) ;
         Text [ en-US ] = "Reference ~Style" ;
         Hide = TRUE ;
     };
     ListBox LB_REGISTER
     {
         HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_REGISTER";
-        Pos = MAP_APPFONT ( 122 , 157 ) ;
-        Size = MAP_APPFONT ( 126 , 50 ) ;
+        Pos = MAP_APPFONT ( 122, 157 ) ;
+        Size = MAP_APPFONT ( 126, 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
         Sort = TRUE ;
@@ -448,7 +448,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "C4 Envelope" ; PAPERSIZE_C4 ; > ;
         < "Dia Slide" ; PAPERSIZE_DIA ; > ;
         < "Screen" ; PAPERSIZE_SCREEN ; > ;
+
     };
 };
  // ********************************************************************** EOF
-
