@@ -184,9 +184,9 @@ private:
     bool mbForceAutoColor;
 
     bool mbSyntaxMode;          // Syntax highlighting
-    Color* pValueColor;
-    Color* pTextColor;
-    Color* pFormulaColor;
+    std::unique_ptr<Color> pValueColor;
+    std::unique_ptr<Color> pTextColor;
+    std::unique_ptr<Color> pFormulaColor;
 
     Color   aGridColor;
 
