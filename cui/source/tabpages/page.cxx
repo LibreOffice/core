@@ -226,7 +226,7 @@ sal_Bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 
 // class SvxPageDescPage --------------------------------------------------
 
-// gibt den Bereich der Which-Werte zur"uck
+// gibt den Bereich der Which-Werte zurück
 
 sal_uInt16* SvxPageDescPage::GetRanges()
 {
@@ -372,7 +372,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr )
     MapMode aOldMode = mpDefPrinter->GetMapMode();
     mpDefPrinter->SetMapMode( MAP_TWIP );
 
-    // First- und Last-Werte f"ur die R"ander setzen
+    // First- und Last-Werte für die Ränder setzen
     Size aPaperSize = mpDefPrinter->GetPaperSize();
     Size aPrintSize = mpDefPrinter->GetOutputSize();
     /*
@@ -492,7 +492,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) );
 
-    // R"ander (Links/Rechts) einstellen
+    // Ränder (Links/Rechts) einstellen
     const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_LRSPACE );
 
     if ( pItem )
@@ -506,7 +506,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             (sal_uInt16)ConvertLong_Impl( (long)rLRSpace.GetRight(), eUnit ) );
     }
 
-    // R"ander (Oben/Unten) einstellen
+    // Ränder (Oben/Unten) einstellen
     pItem = GetItem( rSet, SID_ATTR_ULSPACE );
 
     if ( pItem )
@@ -688,7 +688,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     // Header Footer anzeigen
     InitHeadFoot_Impl( rSet );
 
-    // R"ander auf Hoch/Quer updaten, dann Beispiel updaten
+    // Ränder auf Hoch/Quer updaten, dann Beispiel updaten
     bBorderModified = sal_False;
     SwapFirstValues_Impl( sal_False );
     UpdateExample_Impl();
@@ -763,7 +763,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     // alten linken und rechten Rand kopieren
     SvxLRSpaceItem aMargin( (const SvxLRSpaceItem&)rOldSet.Get( nWhich ) );
 
-    // alten  oberen und unteren Rand kopieren
+    // alten oberen und unteren Rand kopieren
     nWhich = GetWhich( SID_ATTR_ULSPACE );
     SvxULSpaceItem aTopMargin( (const SvxULSpaceItem&)rOldSet.Get( nWhich ) );
 
@@ -978,7 +978,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
 IMPL_LINK( SvxPageDescPage, LayoutHdl_Impl, ListBox *, EMPTYARG )
 {
-    // innen au\sen umschalten
+    // Innen/Außen umschalten
     const sal_uInt16 nPos = PosToPageUsage_Impl( aLayoutBox.GetSelectEntryPos() );
 
     if ( nPos == SVX_PAGE_MIRROR )
@@ -1006,7 +1006,7 @@ IMPL_LINK( SvxPageDescPage, LayoutHdl_Impl, ListBox *, EMPTYARG )
 IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
 {
     if ( aPaperTrayBox.GetEntryCount() > 1 )
-        // schon gef"ullt
+        // schon gefüllt
         return 0;
 
     // Schacht-Box initialisieren
@@ -1062,7 +1062,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
         SetMetricValue( aPaperHeightEdit, aSize.Height(), SFX_MAPUNIT_100TH_MM );
         SetMetricValue( aPaperWidthEdit, aSize.Width(), SFX_MAPUNIT_100TH_MM );
 
-        // R"ander ggf. neu berechnen
+        // Ränder ggf. neu berechnen
         CalcMargin_Impl();
 
         RangeHdl_Impl( 0 );
@@ -1078,7 +1078,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
                 // bei Bildschirm keinen Rand
                 nTmp = 1; // entspr. 1cm
 
-            // Abfragen, ob fuer Raender 0 gesetzt ist:
+            // Abfragen, ob für Ränder 0 gesetzt ist:
             if ( bScreen || aRightMarginEdit.GetValue() == 0 )
             {
                 SetMetricValue( aRightMarginEdit, nTmp, SFX_MAPUNIT_CM );
@@ -1180,7 +1180,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
     mpDefPrinter->SetOrientation( eOri );
     mpDefPrinter->SetMapMode( MAP_TWIP );
 
-    // First- und Last-Werte f"ur die R"ander setzen
+    // First- und Last-Werte für die Ränder setzen
     Size aPaperSize = mpDefPrinter->GetPaperSize();
     Size aPrintSize = mpDefPrinter->GetOutputSize();
     /*
@@ -1257,7 +1257,7 @@ void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
 
     aBspWin.SetSize( aSize );
 
-    // R"ander
+    // Ränder
     aBspWin.SetTop( GetCoreValue( aTopMarginEdit, SFX_MAPUNIT_TWIP ) );
     aBspWin.SetBottom( GetCoreValue( aBottomMarginEdit, SFX_MAPUNIT_TWIP ) );
     aBspWin.SetLeft( GetCoreValue( aLeftMarginEdit, SFX_MAPUNIT_TWIP ) );
@@ -1543,8 +1543,8 @@ void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
 
 int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    // Abfrage, ob die Seitenr"ander ausserhalb des Druckbereichs liegen
-    // Wenn nicht, dann den Anwender fragen, ob sie "ubernommen werden sollen.
+    // Abfrage, ob die Seitenränder ausserhalb des Druckbereichs liegen
+    // Wenn nicht, dann den Anwender fragen, ob sie übernommen werden sollen.
     // Wenn nicht, dann auf der TabPage bleiben.
     sal_uInt16 nPos = aPaperSizeBox.GetSelectEntryPos();
     Paper ePaper = (Paper)(sal_uLong)aPaperSizeBox.GetEntryData( nPos );
@@ -1584,7 +1584,7 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
         Size aSize( GetCoreValue( aPaperWidthEdit, eUnit ),
                     GetCoreValue( aPaperHeightEdit, eUnit ) );
 
-        // putten, wenn aktuelle Gr"o/se unterschiedlich zum Wert in _pSet
+        // putten, wenn aktuelle Größe unterschiedlich zum Wert in _pSet
         const SvxSizeItem* pSize = (const SvxSizeItem*)GetItem( *_pSet, SID_ATTR_PAGE_SIZE );
         if ( aSize.Width() && ( !pSize || !IsEqualSize_Impl( pSize, aSize ) ) )
             _pSet->Put( SvxSizeItem( nWh, aSize ) );
@@ -1597,19 +1597,19 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 
 IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
 {
-    // Aktuelle Header-Breite/H"ohe aus dem Bsp
+    // Aktuelle Header-Breite/Höhe aus dem Bsp
     long nHHeight = aBspWin.GetHdHeight();
     long nHDist = aBspWin.GetHdDist();
 
-    // Aktuelle Footer-Breite/H"ohe aus dem Bsp
+    // Aktuelle Footer-Breite/Höhe aus dem Bsp
     long nFHeight = aBspWin.GetFtHeight();
     long nFDist = aBspWin.GetFtDist();
 
-    // Aktuelle Header/Footer-R"ander aus dem Bsp
+    // Aktuelle Header/Footer-Ränder aus dem Bsp
     long nHFLeft = Max( aBspWin.GetHdLeft(), aBspWin.GetFtLeft() );
     long nHFRight = Max( aBspWin.GetHdRight(), aBspWin.GetFtRight() );
 
-    // Aktuelle Werte der Seitenr"ander
+    // Aktuelle Werte der Seitenränder
     long nBT = static_cast<long>(aTopMarginEdit.Denormalize(aTopMarginEdit.GetValue(FUNIT_TWIP)));
     long nBB = static_cast<long>(aBottomMarginEdit.Denormalize(aBottomMarginEdit.GetValue(FUNIT_TWIP)));
     long nBL = static_cast<long>(aLeftMarginEdit.Denormalize(aLeftMarginEdit.GetValue(FUNIT_TWIP)));
@@ -1642,7 +1642,7 @@ IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
     nMin = MINBODY + nBL + nBR + aBorder.Width();
     aPaperWidthEdit.SetMin(aPaperWidthEdit.Normalize(nMin), FUNIT_TWIP);
 
-    // Falls sich die Papiergr"o\se ge"adert hat
+    // Falls sich die Papiergröße geändert hat
     nH = static_cast<long>(aPaperHeightEdit.Denormalize(aPaperHeightEdit.GetValue(FUNIT_TWIP)));
     nW = static_cast<long>(aPaperWidthEdit.Denormalize(aPaperWidthEdit.GetValue(FUNIT_TWIP)));
 
@@ -1672,7 +1672,7 @@ IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
 
 void SvxPageDescPage::CalcMargin_Impl()
 {
-    // Aktuelle Werte der Seitenr"ander
+    // Aktuelle Werte der Seitenränder
     long nBT = GetCoreValue( aTopMarginEdit, SFX_MAPUNIT_TWIP );
     long nBB = GetCoreValue( aBottomMarginEdit, SFX_MAPUNIT_TWIP );
 
