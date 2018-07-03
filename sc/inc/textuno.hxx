@@ -323,8 +323,8 @@ protected:
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
     std::unique_ptr<ScFieldEditEngine> pEditEngine;
-    SvxEditEngineForwarder* pForwarder;
-    ScCellEditSource* pOriginalSource;
+    std::unique_ptr<SvxEditEngineForwarder> pForwarder;
+    std::unique_ptr<ScCellEditSource> pOriginalSource;
     bool                    bDataValid;
     bool                    bInUpdate;
     bool                    bDirty;
