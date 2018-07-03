@@ -14,6 +14,12 @@
 
 namespace sc {
 
+double roundP(double nVal, int nPrecision)
+{
+    const int temp = pow(10, nPrecision);
+    return round(nVal * temp) / temp;
+}
+
 DataTransformation::~DataTransformation()
 {
 }
@@ -358,6 +364,239 @@ void AggregateFunction::Transform(ScDocument& rDoc) const
 TransformationType AggregateFunction::getTransformationType() const
 {
     return TransformationType::AGGREGATE_FUNCTION;
+}
+
+NumberTransformation::NumberTransformation(SCCOL nCol, const NUMBER_TRANSFORM_TYPE rType):
+    mnCol(nCol),
+    maType(rType),
+    maPrecision(-1)
+{
+}
+
+NumberTransformation::NumberTransformation(SCCOL nCol,const NUMBER_TRANSFORM_TYPE rType, int nPrecision):
+    mnCol(nCol),
+    maType(rType),
+    maPrecision(nPrecision)
+{
+}
+
+void NumberTransformation::Transform(ScDocument& rDoc) const
+{
+    SCROW nEndRow = getLastRow(rDoc, mnCol);
+
+    switch (maType)
+    {
+        case NUMBER_TRANSFORM_TYPE::ROUND:
+        {
+            if(maPrecision > -1)
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(mnCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_VALUE)
+                    {
+                        double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                        rDoc.SetValue(mnCol, nRow, 0, roundP(nVal, maPrecision));
+                    }
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::ROUND_UP:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    rDoc.SetValue(mnCol, nRow, 0, ceil(nVal));
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::ROUND_DOWN:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    rDoc.SetValue(mnCol, nRow, 0, floor(nVal));
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::ABSOLUTE:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    rDoc.SetValue(mnCol, nRow, 0, abs(nVal));
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::LOG_E:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    if (nVal > 0)
+                    {
+                        rDoc.SetValue(mnCol, nRow, 0, log(nVal));
+                    }
+                    else
+                    {
+                        rDoc.SetString(mnCol, nRow, 0, OUString());
+                    }
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::LOG_10:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    if (nVal > 0)
+                    {
+                        rDoc.SetValue(mnCol, nRow, 0, log10(nVal));
+                    }
+                    else
+                    {
+                        rDoc.SetString(mnCol, nRow, 0, OUString());
+                    }
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::CUBE:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    rDoc.SetValue(mnCol, nRow, 0, nVal * nVal * nVal);
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::SQUARE:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    rDoc.SetValue(mnCol, nRow, 0, nVal * nVal);
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::SQUARE_ROOT:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    if (nVal > 0)
+                    {
+                        rDoc.SetValue(mnCol, nRow, 0, sqrt(nVal));
+                    }
+                    else
+                    {
+                        rDoc.SetString(mnCol, nRow, 0, OUString());
+                    }
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::IS_EVEN:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    if (fmod(nVal, 1) == 0 && fmod(nVal, 2) == 0)
+                        rDoc.SetValue(mnCol, nRow, 0, (double) 1);
+                    else
+                        rDoc.SetValue(mnCol, nRow, 0, (double) 0);
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::IS_ODD:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    if (fmod(nVal, 1) == 0 && fmod(nVal, 2) != 0)
+                        rDoc.SetValue(mnCol, nRow, 0, (double) 1);
+                    else
+                        rDoc.SetValue(mnCol, nRow, 0, (double) 0);
+                }
+            }
+        }
+        break;
+        case NUMBER_TRANSFORM_TYPE::SIGN:
+        {
+            for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+            {
+                CellType eType;
+                rDoc.GetCellType(mnCol, nRow, 0, eType);
+                if (eType == CELLTYPE_VALUE)
+                {
+                    double nVal = rDoc.GetValue(mnCol, nRow, 0);
+                    if (nVal > 0)
+                        rDoc.SetValue(mnCol, nRow, 0, (double) 1);
+                    else if (nVal < 0)
+                        rDoc.SetValue(mnCol, nRow, 0, (double) -1);
+                    else
+                        rDoc.SetValue(mnCol, nRow, 0, (double) 0);
+                }
+            }
+        }
+        break;
+        default:
+        break;
+    }
+}
+
+TransformationType NumberTransformation::getTransformationType() const
+{
+    return TransformationType::NUMBER_TRANSFORMATION;
 }
 
 }
