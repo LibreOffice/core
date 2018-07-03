@@ -25,6 +25,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/salctype.hxx>
+
 
 enum class XOutFlags {
     NONE                 = 0x00000000,
@@ -62,7 +64,9 @@ public:
                                       const OUString& rFilterName, const XOutFlags nFlags,
                                       const Size* pMtfSize_100TH_MM = nullptr,
                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr);
-    static bool         GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, bool bAddPrefix=true);
+    static bool GraphicToBase64(const Graphic& rGraphic, OUString& rOUString,
+                                bool bAddPrefix = true,
+                                ConvertDataFormat aTargetFormat = ConvertDataFormat::Unknown);
 
     static ErrCode      ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
