@@ -378,7 +378,6 @@ void OObjectBase::EndListening()
 {
     OSL_ENSURE(!m_xReportComponent.is() || isListening(), "OUnoObject::EndListening: not listening currently!");
 
-    m_bIsListening = false;
     if ( isListening() && m_xReportComponent.is() )
     {
         // XPropertyChangeListener
@@ -396,6 +395,7 @@ void OObjectBase::EndListening()
         }
         m_xPropertyChangeListener.clear();
     }
+    m_bIsListening = false;
 }
 
 void OObjectBase::SetPropsFromRect(const tools::Rectangle& _rRect)
