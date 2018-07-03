@@ -220,9 +220,6 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
 
 ScOutputData::~ScOutputData()
 {
-    delete pValueColor;
-    delete pTextColor;
-    delete pFormulaColor;
 }
 
 void ScOutputData::SetSpellCheckContext( const sc::SpellCheckContext* pCxt )
@@ -295,9 +292,9 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
         if ( !pValueColor )
         {
             const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-            pValueColor = new Color( rColorCfg.GetColorValue( svtools::CALCVALUE ).nColor );
-            pTextColor = new Color( rColorCfg.GetColorValue( svtools::CALCTEXT ).nColor );
-            pFormulaColor = new Color( rColorCfg.GetColorValue( svtools::CALCFORMULA ).nColor );
+            pValueColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCVALUE ).nColor ) );
+            pTextColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCTEXT ).nColor ) );
+            pFormulaColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCFORMULA ).nColor ) );
         }
 }
 
