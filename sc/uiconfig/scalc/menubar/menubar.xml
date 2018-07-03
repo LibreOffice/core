@@ -108,9 +108,7 @@
                     <menu:menuitem menu:id=".uno:SelectUnprotectedCells"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SetInputMode"/>
-            <menu:menuitem menu:id=".uno:CellProtection"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
@@ -124,15 +122,17 @@
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:CommentChange"/>
                     <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:CompareDocuments"/>
+                    <menu:menuitem menu:id=".uno:MergeDocuments"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:CompareDocuments"/>
-            <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CellProtection"/>
             <menu:menuitem menu:id=".uno:EditDoc"/>
         </menu:menupopup>
     </menu:menu>
@@ -437,17 +437,13 @@
                     <menu:menuitem menu:id=".uno:SaveGraphic"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:ChartMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ExportAsGraphic"/>
-                </menu:menupopup>
-            </menu:menu>
             <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:TransformDialog"/>
                     <menu:menuitem menu:id=".uno:FormatLine"/>
                     <menu:menuitem menu:id=".uno:FormatArea"/>
                     <menu:menuitem menu:id=".uno:TextAttributes"/>
+                    <menu:menuitem menu:id=".uno:ExportAsGraphic"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
                 </menu:menupopup>
@@ -733,8 +729,8 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ShareDocument"/>
             <menu:menuitem menu:id=".uno:Protect"/>
+            <menu:menuitem menu:id=".uno:ShareDocument"/>
             <menu:menuitem menu:id=".uno:ToolProtectionDocument"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoComplete"/>
