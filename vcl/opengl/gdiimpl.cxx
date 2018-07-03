@@ -1601,7 +1601,12 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(const basegfx::B2DPolygon& rPolygon, do
 {
     VCL_GL_INFO("::drawPolyLine " << rPolygon.getB2DRange());
 
-    mpRenderList->addDrawPolyLine(rPolygon, fTransparency, rLineWidth, eLineJoin, eLineCap,
+    // addDrawPolyLine() assumes that there are no duplicate points in the
+    // polygon.
+    basegfx::B2DPolygon aPolygon(rPolygon);
+    aPolygon.removeDoublePoints();
+
+    mpRenderList->addDrawPolyLine(aPolygon, fTransparency, rLineWidth, eLineJoin, eLineCap,
                                   fMiterMinimumAngle, mnLineColor, mrParent.getAntiAliasB2DDraw());
     PostBatchDraw();
     return true;
