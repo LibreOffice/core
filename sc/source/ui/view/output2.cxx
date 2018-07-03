@@ -392,6 +392,10 @@ void ScDrawStringsVars::SetPattern(
     if (pOutput->mbSyntaxMode)
         pOutput->SetSyntaxColor(&aFont, rCell);
 
+    // There is no cell attribute for kerning, default is kerning OFF, all
+    // kerning is stored at an EditText object that is drawn using EditEngine.
+    aFont.SetKerning( FontKerning::NONE);
+
     pDev->SetFont( aFont );
     if ( pFmtDevice != pDev )
         pFmtDevice->SetFont( aFont );
