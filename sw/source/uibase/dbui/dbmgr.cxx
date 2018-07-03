@@ -3061,8 +3061,9 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
         aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
         aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc();
-        aMergeDesc.bPrefixIsFilename = aMergeDesc.bCreateSingleFile;
         aMergeDesc.sPrefix = pImpl->pMergeDialog->GetTargetURL();
+        aMergeDesc.bPrefixIsFilename
+            = aMergeDesc.bCreateSingleFile && !aMergeDesc.sPrefix.isEmpty();
         if( !aMergeDesc.bCreateSingleFile && pImpl->pMergeDialog->IsGenerateFromDataBase() )
         {
             aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
