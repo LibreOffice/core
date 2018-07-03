@@ -420,7 +420,21 @@ Cell::Cell(
 
 Cell::~Cell() throw()
 {
-    dispose();
+    if( mxTable.is() )
+    {
+        try
+        {
+            Reference< XEventListener > xThis( this );
+            mxTable->removeEventListener( xThis );
+        }
+        catch( Exception& )
+        {
+            OSL_FAIL("Cell::dispose(), exception caught!");
+        }
+        mxTable.clear();
+    }
+
+    mpProperties.reset();
 }
 
 
