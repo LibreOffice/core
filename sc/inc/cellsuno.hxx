@@ -1082,7 +1082,7 @@ private:
     ScDocShell*             pDocShell;
     ScRangeList             aRanges;
     ScAddress               aPos;
-    ScMarkData*             pMark;
+    std::unique_ptr<ScMarkData> pMark;
     bool                    bAtEnd;
 
 private:
