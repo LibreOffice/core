@@ -1038,14 +1038,14 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
                     long nStripY = nStartY;
                     for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
                     {
-                        ScaleTask *pTask = new ScaleTask( pTag, pScaleRangeFn );
+                        std::unique_ptr<ScaleTask> pTask(new ScaleTask( pTag, pScaleRangeFn ));
                         for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
                         {
                             ScaleRangeContext aRC( &aContext, nStripY );
                             pTask->push( aRC );
                             nStripY += SCALE_THREAD_STRIP;
                         }
-                        rShared.pushTask( pTask );
+                        rShared.pushTask( std::move(pTask) );
                     }
                     // finish any remaining bits here
                     pScaleRangeFn( aContext, nStripY, nEndY );

@@ -68,9 +68,9 @@ void ZipOutputStream::setEntry( ZipEntry *pEntry )
     }
 }
 
-void ZipOutputStream::addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThread )
+void ZipOutputStream::addDeflatingThread( ZipOutputEntry *pEntry, std::unique_ptr<comphelper::ThreadTask> pThread )
 {
-    comphelper::ThreadPool::getSharedOptimalPool().pushTask(pThread);
+    comphelper::ThreadPool::getSharedOptimalPool().pushTask(std::move(pThread));
     m_aEntries.push_back(pEntry);
 }
 

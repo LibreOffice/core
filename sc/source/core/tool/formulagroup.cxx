@@ -400,7 +400,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
             if ( nRemaining )
                 --nRemaining;
             SCROW nLast = nStart + nCount - 1;
-            rThreadPool.pushTask(new Executor(aTag, rCode, aTmpPos, rTopPos, rDoc, pFormatter, aResults, nStart, nLast));
+            rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, rCode, aTmpPos, rTopPos, rDoc, pFormatter, aResults, nStart, nLast));
             aTmpPos.IncRow(nCount);
             nLeft -= nCount;
             nStart = nLast + 1;

@@ -65,6 +65,7 @@
 #include <salhelper/thread.hxx>
 #include <comphelper/threadpool.hxx>
 #include <osl/conditn.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 #include <queue>
@@ -326,7 +327,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
          pProgress->setCustomRowProgress(
                      aProgressUpdater.wrapProgress(
                              pProgress->getRowProgress() ) );
-         rSharedPool.pushTask( new WorkerThread( pTag, rWorkbookHandler, it->second,
+         rSharedPool.pushTask( o3tl::make_unique<WorkerThread>( pTag, rWorkbookHandler, it->second,
                                            /* ref */ nSheetsLeft ) );
          nSheetsLeft++;
      }

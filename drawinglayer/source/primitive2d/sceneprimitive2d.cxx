@@ -424,8 +424,8 @@ namespace drawinglayer
                                 aBZPixelRaster,
                                 nLinesPerThread * a,
                                 a + 1 == nThreadCount ? aBZPixelRaster.getHeight() : nLinesPerThread * (a + 1)));
-                            Executor* pExecutor = new Executor(aTag, std::move(pNewZBufferProcessor3D), getChildren3D());
-                            rThreadPool.pushTask(pExecutor);
+                            std::unique_ptr<Executor> pExecutor(new Executor(aTag, std::move(pNewZBufferProcessor3D), getChildren3D()));
+                            rThreadPool.pushTask(std::move(pExecutor));
                         }
 
                         rThreadPool.waitUntilDone(aTag);

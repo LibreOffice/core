@@ -47,7 +47,7 @@ public:
         const css::uno::Reference< css::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
-    void addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThreadTask );
+    void addDeflatingThread( ZipOutputEntry *pEntry, std::unique_ptr<comphelper::ThreadTask> pThreadTask );
 
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException

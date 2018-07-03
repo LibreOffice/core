@@ -1385,7 +1385,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                         rContext.m_pAccess = o3tl::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
-                            rSharedPool.pushTask(new GraphicImportTask(pTag, rContext));
+                            rSharedPool.pushTask(o3tl::make_unique<GraphicImportTask>(pTag, rContext));
                         else
                             GraphicImportTask::doImport(rContext);
                     }
