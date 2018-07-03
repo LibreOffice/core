@@ -327,7 +327,6 @@ cmd/lc_editprintarea.png cmd/lc_editdoc.png
 cmd/sc_printpagepreview.png cmd/sc_printpreview.png
 cmd/sc_printlayout.png cmd/sc_printpreview.png
 cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
-cmd/sc_defineprintarea.png cmd/sc_printpreview.png
 cmd/sc_sendfax.png cmd/sc_print.png
 cmd/sc_editprintarea.png cmd/sc_editdoc.png
 
@@ -609,6 +608,7 @@ cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
 cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
+cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
 
 # calc tabs
 cmd/sc_insertcurrentdate.png cmd/sc_datefield.png
@@ -850,6 +850,14 @@ cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
 cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
+
+# Cacl
+cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
+cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
+cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
+cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
+cmd/sc_insertcell.png cmd/sc_insertcellsright.png
+cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 
 # Reload
 cmd/lc_refresh.png cmd/lc_reload.png
