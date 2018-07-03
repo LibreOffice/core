@@ -272,6 +272,7 @@ void Edit::ImplInitEditData()
     mbModified              = false;
     mbInternModified        = false;
     mbReadOnly              = false;
+    mbSelectAllSingleClick  = false;
     mbInsertMode            = true;
     mbClickedInSelection    = false;
     mbActivePopup           = false;
@@ -1318,7 +1319,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() < 4 )
     {
         mbClickedInSelection = false;
-        if ( rMEvt.GetClicks() == 3 )
+        if ( rMEvt.GetClicks() == 3 || mbSelectAllSingleClick )
         {
             ImplSetSelection( Selection( 0, EDIT_NOLIMIT) );
             ImplCopyToSelectionClipboard();
@@ -2413,6 +2414,15 @@ void Edit::SetReadOnly( bool bReadOnly )
     }
 }
 
+void Edit::SetSelectAllSingleClick( bool bSelectAllSingleClick )
+{
+    if ( mbSelectAllSingleClick != bSelectAllSingleClick )
+    {
+        mbSelectAllSingleClick = bSelectAllSingleClick;
+        if ( mpSubEdit )
+            mpSubEdit->SetSelectAllSingleClick( bSelectAllSingleClick );
+    }
+}
 void Edit::SetInsertMode( bool bInsert )
 {
     if ( bInsert != mbInsertMode )
