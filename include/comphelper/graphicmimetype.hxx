@@ -12,6 +12,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
+#include <vcl/salctype.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -26,6 +27,7 @@ public:
     static OUString GetMimeTypeForXGraphic(css::uno::Reference<css::graphic::XGraphic> xGraphic);
     static OUString
     GetMimeTypeForImageStream(css::uno::Reference<css::io::XInputStream> xInputStream);
+    static OUString GetMimeTypeForConvertDataFormat(ConvertDataFormat convertDataFormat);
 };
 }
 
