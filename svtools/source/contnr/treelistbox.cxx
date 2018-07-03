@@ -1402,15 +1402,6 @@ void SvTreeListBox::SetBaseModel( SvTreeList* pNewModel )
     }
 }
 
-void SvTreeListBox::DisconnectFromModel()
-{
-    SvTreeList* pNewModel = new SvTreeList;
-    pNewModel->SetRefCount( 0 );    // else this will never be deleted
-    SvListView::SetModel( pNewModel );
-
-    pImpl->SetModel( GetModel() );
-}
-
 void SvTreeListBox::SetSublistOpenWithReturn()
 {
     pImpl->bSubLstOpRet = true;
