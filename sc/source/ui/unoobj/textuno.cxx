@@ -822,18 +822,18 @@ ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
     pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
     pEnginePool->FreezeIdRanges();
 
-    pEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);     // TRUE: become owner of pool
-    pForwarder = new SvxEditEngineForwarder( *pEditEngine );
-    pOriginalSource = new ScSimpleEditSource( pForwarder );
+    pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true) );     // TRUE: become owner of pool
+    pForwarder.reset( new SvxEditEngineForwarder( *pEditEngine ) );
+    pOriginalSource.reset( new ScSimpleEditSource( pForwarder.get() ) );
 }
 
 ScSimpleEditSourceHelper::~ScSimpleEditSourceHelper()
 {
     SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
-    delete pOriginalSource;
-    delete pForwarder;
-    delete pEditEngine;
+    pOriginalSource.reset();
+    pForwarder.reset();
+    pEditEngine.reset();
 }
 
 ScEditEngineTextObj::ScEditEngineTextObj() :

@@ -68,6 +68,9 @@ public:
         // SwRedlineData::pNext and pExtraData have complex handling
         if (fn == SRCDIR "/sw/source/core/doc/docredln.cxx")
             return;
+        // ScTempDocSource::pTempDoc
+        if (fn == SRCDIR "/sc/source/ui/unoobj/funcuno.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
