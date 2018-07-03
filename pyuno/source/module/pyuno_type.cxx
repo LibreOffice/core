@@ -157,7 +157,7 @@ Any PyEnum2Enum( PyObject *obj )
     }
 
     OUString strTypeName( OUString::createFromAscii( PyStr_AsString( typeName.get() ) ) );
-    char *stringValue = PyStr_AsString( value.get() );
+    char const *stringValue = PyStr_AsString( value.get() );
 
     TypeDescription desc( strTypeName );
     if( !desc.is() )
