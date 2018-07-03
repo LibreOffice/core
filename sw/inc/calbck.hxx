@@ -83,6 +83,8 @@ namespace sw
     class SW_DLLPUBLIC BroadcasterMixin {
         SvtBroadcaster m_aNotifier;
         public:
+            BroadcasterMixin() = default;
+            BroadcasterMixin(BroadcasterMixin const &) = default;
             BroadcasterMixin& operator=(const BroadcasterMixin&)
             {
                 return *this; // Listeners are never copied or moved.
