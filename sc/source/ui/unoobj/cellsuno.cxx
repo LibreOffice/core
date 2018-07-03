@@ -8952,7 +8952,7 @@ void ScCellsEnumeration::CheckPos_Impl()
     {
         if (!pMark)
         {
-            pMark = new ScMarkData;
+            pMark.reset( new ScMarkData );
             pMark->MarkFromRangeList(aRanges, false);
             pMark->MarkToMulti();   // needed for GetNextMarkedCell
         }
@@ -8968,7 +8968,7 @@ ScCellsEnumeration::~ScCellsEnumeration()
 
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
-    delete pMark;
+    pMark.reset();
 }
 
 void ScCellsEnumeration::Advance_Impl()
@@ -8976,7 +8976,7 @@ void ScCellsEnumeration::Advance_Impl()
     OSL_ENSURE(!bAtEnd,"too much Advance_Impl");
     if (!pMark)
     {
-        pMark = new ScMarkData;
+        pMark.reset( new ScMarkData );
         pMark->MarkFromRangeList( aRanges, false );
         pMark->MarkToMulti();   // needed for GetNextMarkedCell
     }
@@ -9001,8 +9001,7 @@ void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
             aRanges.UpdateReference( pRefHint->GetMode(), &pDocShell->GetDocument(), pRefHint->GetRange(),
                                      pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() );
 
-            delete pMark;       // recreate from moved area
-            pMark = nullptr;
+            pMark.reset();       // recreate from moved area
 
             if (!bAtEnd)        // adjust aPos
             {
