@@ -1479,7 +1479,7 @@ ScCellRangesBase::~ScCellRangesBase()
     ForgetCurrentAttrs();
     ForgetMarkData();
 
-    delete pValueListener;
+    pValueListener.reset();
 
     //! unregister XChartDataChangeEventListener ??
     //! (ChartCollection will then hold this object as well!)
@@ -1489,8 +1489,8 @@ void ScCellRangesBase::ForgetCurrentAttrs()
 {
     pCurrentFlat.reset();
     pCurrentDeep.reset();
-    delete pCurrentDataSet;
-    delete pNoDfltCurrentDataSet;
+    pCurrentDataSet.reset();
+    pNoDfltCurrentDataSet.reset();
     pCurrentDataSet = nullptr;
     pNoDfltCurrentDataSet = nullptr;
 
@@ -1499,8 +1499,7 @@ void ScCellRangesBase::ForgetCurrentAttrs()
 
 void ScCellRangesBase::ForgetMarkData()
 {
-    delete pMarkData;
-    pMarkData = nullptr;
+    pMarkData.reset();
 }
 
 const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsFlat()
@@ -1535,22 +1534,22 @@ SfxItemSet* ScCellRangesBase::GetCurrentDataSet(bool bNoDflt)
         if ( pPattern )
         {
             //  replace Dontcare with Default,  so that we always have a reflection
-            pCurrentDataSet = new SfxItemSet( pPattern->GetItemSet() );
-            pNoDfltCurrentDataSet = new SfxItemSet( pPattern->GetItemSet() );
+            pCurrentDataSet.reset( new SfxItemSet( pPattern->GetItemSet() ) );
+            pNoDfltCurrentDataSet.reset( new SfxItemSet( pPattern->GetItemSet() ) );
             pCurrentDataSet->ClearInvalidItems();
         }
     }
-    return bNoDflt ? pNoDfltCurrentDataSet : pCurrentDataSet;
+    return bNoDflt ? pNoDfltCurrentDataSet.get() : pCurrentDataSet.get();
 }
 
 const ScMarkData* ScCellRangesBase::GetMarkData()
 {
     if (!pMarkData)
     {
-        pMarkData = new ScMarkData();
+        pMarkData.reset( new ScMarkData() );
         pMarkData->MarkFromRangeList( aRanges, false );
     }
-    return pMarkData;
+    return pMarkData.get();
 }
 
 void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1684,7 +1683,7 @@ void ScCellRangesBase::RefChanged()
 
         ScDocument& rDoc = pDocShell->GetDocument();
         for ( size_t i = 0, nCount = aRanges.size(); i < nCount; ++i )
-            rDoc.StartListeningArea( aRanges[ i ], false, pValueListener );
+            rDoc.StartListeningArea( aRanges[ i ], false, pValueListener.get() );
     }
 
     ForgetCurrentAttrs();
@@ -3375,11 +3374,11 @@ void SAL_CALL ScCellRangesBase::addModifyListener(const uno::Reference<util::XMo
     if ( aValueListeners.size() == 1 )
     {
         if (!pValueListener)
-            pValueListener = new ScLinkListener( LINK( this, ScCellRangesBase, ValueListenerHdl ) );
+            pValueListener.reset( new ScLinkListener( LINK( this, ScCellRangesBase, ValueListenerHdl ) ) );
 
         ScDocument& rDoc = pDocShell->GetDocument();
         for ( size_t i = 0, nCount = aRanges.size(); i < nCount; i++)
-            rDoc.StartListeningArea( aRanges[ i ], false, pValueListener );
+            rDoc.StartListeningArea( aRanges[ i ], false, pValueListener.get() );
 
         acquire();  // don't lose this object (one ref for all listeners)
     }
