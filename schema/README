@@ -4,7 +4,7 @@ subdirs:
 - mathml2: W3C MathML 2.0 XML Schema (needed for Math embedded objects)
 - odf1.0, odf1.1, odf1.2: official OASIS RelaxNG schemas
 - odf1.3: current OASIS draft ODF 1.3 RelaxNG schema
-- liberoffice: draft ODF schema, with additional LO extensions
+- libreoffice: draft ODF schema, with additional LO extensions
 
 The extension schema in "libreoffice/" is used by all unit tests if
 --with-export-validation is given, which is the default.
