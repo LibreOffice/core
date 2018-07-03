@@ -24,6 +24,7 @@
 #include <dbfld.hxx>
 #include <fldtdlg.hxx>
 #include <numrule.hxx>
+#include <doc.hxx>
 
 #include "flddb.hxx"
 #include <dbconfig.hxx>
@@ -207,6 +208,10 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     SwWrtShell *pSh = GetWrtShell();
     if(!pSh)
         pSh = ::GetActiveWrtShell();
+
+    SwDBManager* pDbManager = pSh->GetDoc()->GetDBManager();
+    if (pDbManager)
+        pDbManager->CommitLastRegistrations();
 
     if (aData.sDataSource.isEmpty())
         aData = pSh->GetDBData();
@@ -477,7 +482,12 @@ IMPL_LINK( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox, void )
 
 IMPL_LINK_NOARG(SwFieldDBPage, AddDBHdl, Button*, void)
 {
-    OUString sNewDB = SwDBManager::LoadAndRegisterDataSource(GetFrameWeld());
+    SwWrtShell* pSh = GetWrtShell();
+    if (!pSh)
+        pSh = ::GetActiveWrtShell();
+
+    OUString sNewDB
+        = SwDBManager::LoadAndRegisterDataSource(GetFrameWeld(), pSh->GetDoc()->GetDocShell());
     if(!sNewDB.isEmpty())
     {
         m_pDatabaseTLB->AddDataSource(sNewDB);
