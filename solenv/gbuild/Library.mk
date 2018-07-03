@@ -102,6 +102,7 @@ gb_Library_get_runtime_filename = \
 
 define gb_Library_is_udk_versioned
 $(or \
+    $(filter-out $(OS),MACOSX),\
 	$(filter $(patsubst %:$(notdir $(1)),%,$(filter %:$(notdir $(1)),$(gb_Library_FILENAMES))),$(gb_Library_RTVERLIBS)),\
 	$(filter $(patsubst %:$(notdir $(1)),%,$(filter %:$(notdir $(1)),$(gb_Library_FILENAMES))),$(gb_Library_UNOVERLIBS)))
 endef
