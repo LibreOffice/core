@@ -125,10 +125,11 @@
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:CommentChange"/>
                     <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:CompareDocuments"/>
+                    <menu:menuitem menu:id=".uno:MergeDocuments"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:CompareDocuments"/>
-            <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
