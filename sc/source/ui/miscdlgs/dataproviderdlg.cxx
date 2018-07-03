@@ -222,7 +222,8 @@ MenuData aColumnData[] = {
     { 0, "Delete Column", &ScDataProviderDlg::deleteColumn },
     { 1, "Split Column", &ScDataProviderDlg::splitColumn },
     { 2, "Merge Columns", &ScDataProviderDlg::mergeColumns },
-    { 3, "Text Transformation", &ScDataProviderDlg::textTransformation }
+    { 3, "Text Transformation", &ScDataProviderDlg::textTransformation },
+    { 4, "Sort Columns", &ScDataProviderDlg::sortTransformation }
 };
 
 class ScDataTransformationBaseControl : public VclContainer,
@@ -434,6 +435,60 @@ std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getT
         aMergedColumns.insert(nCol - 1);
     }
     return std::make_shared<sc::MergeColumnTransformation>(aMergedColumns, mpSeparator->GetText());
+}
+
+class ScSortTransformationControl : public ScDataTransformationBaseControl
+{
+private:
+
+    VclPtr<CheckBox> mpAscending;
+    VclPtr<Edit> mpEdColumns;
+
+public:
+    ScSortTransformationControl(vcl::Window* pParent);
+    ~ScSortTransformationControl() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+};
+
+ScSortTransformationControl::ScSortTransformationControl(vcl::Window* pParent):
+    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/sorttransformationentry.ui")
+{
+    get(mpAscending, "ed_ascending");
+    get(mpEdColumns, "ed_columns");
+}
+
+ScSortTransformationControl::~ScSortTransformationControl()
+{
+    disposeOnce();
+}
+
+void ScSortTransformationControl::dispose()
+{
+    mpAscending.clear();
+    mpEdColumns.clear();
+
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScSortTransformationControl::getTransformation()
+{
+    OUString aColStr = mpEdColumns->GetText();
+    bool aIsAscending = mpAscending->IsChecked();
+    SCCOL aColumn = 0;
+    sal_Int32 nCol = aColStr.toInt32();
+    if (nCol > 0 && nCol <= MAXCOL)
+        aColumn = nCol - 1;     // translate from 1-based column notations to internal Calc one
+
+    ScSortParam aSortParam;
+    ScSortKeyState aSortKey;
+    aSortKey.bDoSort = true;
+    aSortKey.nField = aColumn;
+    aSortKey.bAscending = aIsAscending;
+    aSortParam.maKeyState.push_back(aSortKey);
+    return std::make_shared<sc::SortTransformation>(aSortParam);
 }
 
 class ScColumnTextTransformation : public ScDataTransformationBaseControl
@@ -658,6 +713,12 @@ void ScDataProviderDlg::textTransformation()
 {
     VclPtr<ScColumnTextTransformation> pTextTransforamtionEntry = VclPtr<ScColumnTextTransformation>::Create(mpList);
     mpList->addEntry(pTextTransforamtionEntry);
+}
+
+void ScDataProviderDlg::sortTransformation()
+{
+    VclPtr<ScSortTransformationControl> pSortTransforamtionEntry = VclPtr<ScSortTransformationControl>::Create(mpList);
+    mpList->addEntry(pSortTransforamtionEntry);
 }
 
 void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
