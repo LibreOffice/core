@@ -1446,7 +1446,7 @@ void ScTabView::ErrorMessage(const char* pGlobStrId)
 
 void ScTabView::UpdatePageBreakData( bool bForcePaint )
 {
-    ScPageBreakData* pNewData = nullptr;
+    std::unique_ptr<ScPageBreakData> pNewData;
 
     if (aViewData.IsPagebreakMode())
     {
@@ -1457,9 +1457,9 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
         sal_uInt16 nCount = rDoc.GetPrintRangeCount(nTab);
         if (!nCount)
             nCount = 1;
-        pNewData = new ScPageBreakData(nCount);
+        pNewData.reset( new ScPageBreakData(nCount) );
 
-        ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab, 0,0,nullptr, nullptr, pNewData );
+        ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab, 0,0,nullptr, nullptr, pNewData.get() );
         // ScPrintFunc fills the PageBreakData in ctor
         if ( nCount > 1 )
         {
@@ -1472,8 +1472,7 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
             PaintGrid();
     }
 
-    delete pPageBreakData;
-    pPageBreakData = pNewData;
+    pPageBreakData = std::move(pNewData);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

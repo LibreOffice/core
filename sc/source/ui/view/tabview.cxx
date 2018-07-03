@@ -25,6 +25,7 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
+#include <pagedata.hxx>
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
 #include <document.hxx>
