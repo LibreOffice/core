@@ -70,7 +70,6 @@ blacklist:
     sd/inc/TransitionPreset.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XMultiServiceFactory.hpp
-    - memory
     sd/inc/undoanim.hxx:
     # base class has to be a complete type
     - com/sun/star/animations/XAnimationNode.hpp
@@ -80,9 +79,6 @@ blacklist:
     sd/source/filter/eppt/eppt.hxx:
     # base class has to be a complete type
     - escherex.hxx
-    sd/source/filter/eppt/pptexanimations.hxx:
-    # base class has to be a complete type
-    - memory
     sd/source/ui/inc/AccessibleDocumentViewBase.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
