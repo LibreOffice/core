@@ -151,7 +151,7 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
 bool Standard2007Engine::decrypt(BinaryXInputStream& aInputStream,
                                  BinaryXOutputStream& aOutputStream)
 {
-    aInputStream.skip(4); // Document unencrypted size - 4 bytes
+    sal_uInt32 totalSize = aInputStream.readuInt32(); // Document unencrypted size - 4 bytes
     aInputStream.skip(4); // Reserved 4 Bytes
 
     std::vector<sal_uInt8> iv;
@@ -160,11 +160,14 @@ bool Standard2007Engine::decrypt(BinaryXInputStream& aInputStream,
     std::vector<sal_uInt8> outputBuffer(4096);
     sal_uInt32 inputLength;
     sal_uInt32 outputLength;
+    sal_uInt32 remaining = totalSize;
 
     while ((inputLength = aInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
     {
         outputLength = aDecryptor.update(outputBuffer, inputBuffer, inputLength);
-        aOutputStream.writeMemory(outputBuffer.data(), outputLength);
+        sal_uInt32 writeLength = std::min(outputLength, remaining);
+        aOutputStream.writeMemory(outputBuffer.data(), writeLength);
+        remaining -= outputLength;
     }
     return true;
 }

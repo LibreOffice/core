@@ -115,7 +115,7 @@ void CryptoTest::testStandard2007()
 
     OString aTestString = OUStringToOString("1234567890ABCDEFG", RTL_TEXTENCODING_UTF8);
 
-    aUnencryptedInput.WriteOString(aTestString);
+    aUnencryptedInput.WriteBytes(aTestString.getStr(), aTestString.getLength() + 1);
     aUnencryptedInput.Seek(STREAM_SEEK_TO_BEGIN);
 
     {
@@ -156,7 +156,7 @@ void CryptoTest::testStandard2007()
         const sal_Char* pData = static_cast<const sal_Char*>(aUnencryptedOutput.GetData());
         sal_uInt64 nSize = aUnencryptedOutput.GetSize();
 
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(32), nSize);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(18), nSize);
 
         OString aString(pData);
 
