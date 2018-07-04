@@ -11419,21 +11419,32 @@ TEST_FONTS_MISSING=0
 test_font_map()
 {
     FONT="$1" ; shift
+    FONT_LOWER="$(echo "$FONT" | $AWK '{print tolower($0)}')"
     AC_MSG_CHECKING([font mapping for '$FONT'])
     FONTFILE="$(basename `$FCMATCH -f '%{file}' "$FONT"`)"
-    FONTFILE_LOWER="$(echo $FONTFILE | $AWK '{print tolower($0)}')"
+    FONTFILE_LOWER="$(echo "$FONTFILE" | $AWK '{print tolower($0)}')"
 
-    TESTEXPR="'${FONTFILE_LOWER}' = '$(echo $FONT | $AWK '{print tolower($0)}').ttf'"
-    while test "$#" -ge 1 ; do
-        MAPPING="$(echo $1 | $AWK '{print tolower($0)}')"; shift
-        TESTEXPR="${TESTEXPR} -o '${FONTFILE_LOWER}' = '$MAPPING-regular.ttf'"
-    done
-    if test $TESTEXPR
+    CURRENT_FONT_FOUND=0
+    if test "${FONTFILE_LOWER}" = "${FONT_LOWER}".ttf
+    then
+        CURRENT_FONT_FOUND=1
+    else
+        while test "$#" -ge 1 ; do
+            MAPPING_LOWER="$(echo "$1" | $AWK '{print tolower($0)}')"; shift
+            if test \( "${FONTFILE_LOWER}" = "${MAPPING_LOWER}"-regular.ttf \) -o \
+                \( "${FONTFILE_LOWER}" = "${MAPPING_LOWER}".ttf \)
+            then
+                CURRENT_FONT_FOUND=1
+                break
+            fi
+        done
+    fi
+    if test $CURRENT_FONT_FOUND -eq 1
     then
         AC_MSG_RESULT([ok])
     else
-        AC_MSG_WARN([unknown ($FONTFILE)])
-        add_warning "unknown ($FONTFILE)"
+        AC_MSG_RESULT([unknown map '$FONTFILE'])
+        add_warning "unkonwn map '$FONTFILE' for '$FONT'"
         TEST_FONTS_MISSING=1
     fi
 }
@@ -11459,6 +11470,7 @@ else
         else
             test_font_map 'Calibri' 'Carlito'
             test_font_map 'DejaVuSans' 'DejaVuSans'
+            test_font_map 'Linux Libertine G' 'LinLibertine_R_G'
             if test ${TEST_FONTS_MISSING} -eq 1
             then
                 AC_MSG_WARN([Unknown font mappings - unit tests disabled.])
