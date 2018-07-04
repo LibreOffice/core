@@ -440,8 +440,13 @@ void Cell::dispose()
         mxTable.clear();
     }
 
-    mpProperties.reset();
-    SetOutlinerParaObject( nullptr );
+    // tdf#118199 avoid double dispose, detect by using mpProperties
+    // as indicator. Only use SetOutlinerParaObject once
+    if( mpProperties )
+    {
+        mpProperties.reset();
+        SetOutlinerParaObject( nullptr );
+    }
 }
 
 void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
