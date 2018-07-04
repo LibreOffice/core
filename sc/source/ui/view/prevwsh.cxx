@@ -151,8 +151,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
     pDocShell( static_cast<ScDocShell*>(pViewFrame->GetObjectShell()) ),
     mpFrameWindow(nullptr),
     nSourceDesignMode( TRISTATE_INDET ),
-    nMaxVertPos(0),
-    pAccessibilityBroadcaster( nullptr )
+    nMaxVertPos(0)
 {
     Construct( &pViewFrame->GetWindow() );
 
@@ -185,7 +184,7 @@ ScPreviewShell::~ScPreviewShell()
 
     // #108333#; notify Accessibility that Shell is dying and before destroy all
     BroadcastAccessibility( SfxHint( SfxHintId::Dying ) );
-    DELETEZ(pAccessibilityBroadcaster);
+    pAccessibilityBroadcaster.reset();
 
     SfxBroadcaster* pDrawBC = pDocShell->GetDocument().GetDrawBroadcaster();
     if (pDrawBC)
@@ -1135,7 +1134,7 @@ void ScPreviewShell::ExitPreview()
 void ScPreviewShell::AddAccessibilityObject( SfxListener& rObject )
 {
     if (!pAccessibilityBroadcaster)
-        pAccessibilityBroadcaster = new SfxBroadcaster;
+        pAccessibilityBroadcaster.reset( new SfxBroadcaster );
 
     rObject.StartListening( *pAccessibilityBroadcaster );
 }
