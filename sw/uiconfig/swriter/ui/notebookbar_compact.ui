@@ -1214,6 +1214,92 @@
       </object>
     </child>
   </object>
+  <object class="GtkMenu" id="MenuPrint">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="ShowSinglePageD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowSinglePage</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ShowTwoPagesD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowTwoPages</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ShowBookviewD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowBookview</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ShowMultiplePagesD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowMultiplePages</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator109">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="GoToStartOfDocD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:GoToStartOfDoc</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PageUpD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PageUp</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PageDownD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PageDown</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="GoToEndOfDocD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:GoToEndOfDoc</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator110">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PrintD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Print</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ClosePreviewD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ClosePreview</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkMenu" id="MenuReference">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -10335,7 +10421,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="PageLayoutsECTION1">
+                      <object class="sfxlo-OptionalBox" id="PageLayoutsSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10412,6 +10498,9 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -10420,7 +10509,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="NavigationSection1">
+                      <object class="sfxlo-OptionalBox" id="NavigationSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10508,6 +10597,9 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -10528,7 +10620,7 @@
                             <property name="toolbar_style">icons</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="PrintPreview-ZoomMinus1">
+                              <object class="GtkToolButton" id="PrintPreview-ZoomMinus">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ZoomMinus</property>
@@ -10539,7 +10631,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="PrintPreview-PreviewZoom1">
+                              <object class="GtkToolButton" id="PrintPreview-PreviewZoom">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:PreviewZoom</property>
@@ -10550,7 +10642,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="PrintPreview-ZoomPlus1">
+                              <object class="GtkToolButton" id="PrintPreview-ZoomPlus">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ZoomPlus</property>
@@ -10561,7 +10653,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="PrintPreview-FullScreen1">
+                              <object class="GtkToolButton" id="PrintPreview-FullScreen">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FullScreen</property>
@@ -10593,6 +10685,9 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -10653,7 +10748,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="CloseSection1">
+                      <object class="sfxlo-OptionalBox" id="CloseSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10704,12 +10799,6 @@
                         <property name="position">4</property>
                       </packing>
                     </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -10752,8 +10841,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="PrintPreview-PrintPreviewButton:MenuPrintPreview">
-                        <property name="label" translatable="yes" context="notebookbar_compact|PrintPreviewButton">Print Preview</property>
+                      <object class="svtlo-ManagedMenuButton" id="print:MenuPrint">
+                        <property name="label" translatable="yes" context="notebookbar_compact|PrintPreviewButton">Print</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -10797,7 +10886,7 @@
                   </packing>
                 </child>
                 <style>
-                  <class name="Context-Printpreview"/>
+                  <class name="context-Printpreview"/>
                 </style>
               </object>
               <packing>
@@ -10808,7 +10897,7 @@
               <object class="GtkLabel" id="PrintPreviewLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|PrintPreviewLabel">Print Preview</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|PrintPreviewLabel">Print</property>
                 <style>
                   <class name="context-Printpreview"/>
                 </style>
