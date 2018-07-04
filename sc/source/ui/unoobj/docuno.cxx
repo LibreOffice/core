@@ -1957,14 +1957,14 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     struct DrawViewKeeper
     {
-        FmFormView* mpDrawView;
-        DrawViewKeeper() : mpDrawView(nullptr) {}
+        std::unique_ptr<FmFormView> mpDrawView;
+        DrawViewKeeper() {}
         ~DrawViewKeeper()
         {
             if (mpDrawView)
             {
                 mpDrawView->HideSdrPage();
-                delete mpDrawView;
+                mpDrawView.reset();
             }
         }
     } aDrawViewKeeper;
@@ -1974,9 +1974,9 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     if( pModel )
     {
-        aDrawViewKeeper.mpDrawView = new FmFormView(
+        aDrawViewKeeper.mpDrawView.reset( new FmFormView(
             *pModel,
-            pDev);
+            pDev) );
         aDrawViewKeeper.mpDrawView->ShowSdrPage(aDrawViewKeeper.mpDrawView->GetModel()->GetPage(nTab));
         aDrawViewKeeper.mpDrawView->SetPrintPreview();
     }
@@ -1991,7 +1991,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     else
         pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
 
-    pPrintFunc->SetDrawView( aDrawViewKeeper.mpDrawView );
+    pPrintFunc->SetDrawView( aDrawViewKeeper.mpDrawView.get() );
     pPrintFunc->SetRenderFlag( true );
     if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
         pPrintFunc->SetExclusivelyDrawOleAndDrawObjects();
