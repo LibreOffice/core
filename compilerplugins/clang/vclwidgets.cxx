@@ -392,7 +392,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         return true;
     }
     // std::pair seems to show up in whacky ways in clang's AST. Sometimes it's a class, sometimes it's a typedef, and sometimes
-    // its an ElaboratedType (whatever that is)
+    // it's an ElaboratedType (whatever that is)
     if (s.find("pair") != std::string::npos) {
         return true;
     }

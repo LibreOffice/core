@@ -1394,8 +1394,8 @@ bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::
     css::uno::Reference< css::document::XActionLockable > xLock(xFrame, css::uno::UNO_QUERY);
 
     // ? no lock interface ?
-    // Might its an external written frame implementation :-(
-    // Allowing using of it ... but it can fail if it's not synchronized with our processes !
+    // Maybe it's an external written frame implementation :-(
+    // Allowing using of it... but it can fail if it's not synchronized with our processes!
     if (!xLock.is())
         return false;
 
