@@ -544,16 +544,16 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
                     pSourceDoc->maTabs[i]->GetName(aString);
                     if ( i < static_cast<SCTAB>(maTabs.size()) )
                     {
-                        maTabs[i] = new ScTable(this, i, aString);
+                        maTabs[i].reset( new ScTable(this, i, aString) );
 
                     }
                     else
                     {
                         if( i > static_cast<SCTAB>(maTabs.size()) )
                         {
-                            maTabs.resize(i, nullptr );
+                            maTabs.resize(i);
                         }
-                        maTabs.push_back(new ScTable(this, i, aString));
+                        maTabs.emplace_back(new ScTable(this, i, aString));
                     }
                     maTabs[i]->SetLayoutRTL( pSourceDoc->maTabs[i]->IsLayoutRTL() );
                 }
@@ -571,9 +571,9 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
         InitClipPtrs(pSourceDoc);
         if (nTab >= static_cast<SCTAB>(maTabs.size()))
         {
-            maTabs.resize(nTab+1, nullptr );
+            maTabs.resize(nTab+1);
         }
-        maTabs[nTab] = new ScTable(this, nTab, "baeh");
+        maTabs[nTab].reset( new ScTable(this, nTab, "baeh") );
         if (nTab < static_cast<SCTAB>(pSourceDoc->maTabs.size()) && pSourceDoc->maTabs[nTab])
             maTabs[nTab]->SetLayoutRTL( pSourceDoc->maTabs[nTab]->IsLayoutRTL() );
     }
@@ -587,10 +587,10 @@ void ScDocument::EnsureTable( SCTAB nTab )
 {
     bool bExtras = !bIsUndo;        // Column-Widths, Row-Heights, Flags
     if (static_cast<size_t>(nTab) >= maTabs.size())
-        maTabs.resize(nTab+1, nullptr);
+        maTabs.resize(nTab+1);
 
     if (!maTabs[nTab])
-        maTabs[nTab] = new ScTable(this, nTab, "temp", bExtras, bExtras);
+        maTabs[nTab].reset( new ScTable(this, nTab, "temp", bExtras, bExtras) );
 }
 
 ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
@@ -779,9 +779,9 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                 pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_REORDER,
                             aSourceRange, 0,0,nDz ) );
 
-            ScTable* pSaveTab = maTabs[nOldPos];
+            std::unique_ptr<ScTable> pSaveTab = std::move(maTabs[nOldPos]);
             maTabs.erase(maTabs.begin()+nOldPos);
-            maTabs.insert(maTabs.begin()+nNewPos, pSaveTab);
+            maTabs.insert(maTabs.begin()+nNewPos, std::move(pSaveTab));
             TableContainer::iterator it = maTabs.begin();
             for (SCTAB i = 0; i < nTabCount; i++)
                 if (maTabs[i])
@@ -833,7 +833,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         if (nNewPos >= static_cast<SCTAB>(maTabs.size()))
         {
             nNewPos = static_cast<SCTAB>(maTabs.size());
-            maTabs.push_back(new ScTable(this, nNewPos, aName));
+            maTabs.emplace_back(new ScTable(this, nNewPos, aName));
         }
         else
         {
@@ -858,16 +858,12 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 
-                SCTAB i;
                 for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
                     if (*it && it != (maTabs.begin() + nOldPos))
                         (*it)->UpdateInsertTab(aCxt);
-                maTabs.push_back(nullptr);
-                for (i = static_cast<SCTAB>(maTabs.size())-1; i > nNewPos; i--)
-                    maTabs[i] = maTabs[i - 1];
                 if (nNewPos <= nOldPos)
                     nOldPos++;
-                maTabs[nNewPos] = new ScTable(this, nNewPos, aName);
+                maTabs.emplace(maTabs.begin() + nNewPos, new ScTable(this, nNewPos, aName));
                 bValid = true;
                 for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
                     if (*it && it != maTabs.begin()+nOldPos && it != maTabs.begin() + nNewPos)
@@ -899,7 +895,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
         sc::CopyToDocContext aCopyDocCxt(*this);
         maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MAXCOL, MAXROW, InsertDeleteFlags::ALL,
-                (pOnlyMarked != nullptr), maTabs[nNewPos], pOnlyMarked,
+                (pOnlyMarked != nullptr), maTabs[nNewPos].get(), pOnlyMarked,
                 false /*bAsLink*/, true /*bColRowFlags*/, bGlobalNamesToLocal, false /*bCopyCaptions*/ );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
 
@@ -944,7 +940,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         // 1. the updated source ScColumn::nTab members if nNewPos <= nOldPos
         // 2. row heights and column widths of the destination
         // 3. RTL settings of the destination
-        maTabs[nOldPos]->CopyCaptionsToTable( 0, 0, MAXCOL, MAXROW, maTabs[nNewPos], true /*bCloneCaption*/);
+        maTabs[nOldPos]->CopyCaptionsToTable( 0, 0, MAXCOL, MAXROW, maTabs[nNewPos].get(), true /*bCloneCaption*/);
     }
 
     return bValid;
@@ -1021,7 +1017,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 }
                 pSrcDoc->maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW,
                         ( bResultsOnly ? InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA : InsertDeleteFlags::ALL),
-                        false, maTabs[nDestPos] );
+                        false, maTabs[nDestPos].get() );
             }
         }
         maTabs[nDestPos]->SetTabNo(nDestPos);

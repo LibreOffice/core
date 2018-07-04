@@ -326,7 +326,7 @@ friend class sc::TableColumnBlockPositionSet;
 friend struct ScMutationGuard;
 friend struct ScMutationDisable;
 
-    typedef std::vector<ScTable*> TableContainer;
+    typedef std::vector<std::unique_ptr<ScTable>> TableContainer;
 
 public:
     enum class HardRecalcState

@@ -510,10 +510,6 @@ void ScDocument::Clear( bool bFromDestructor )
         if (*it)
             (*it)->GetCondFormList()->clear();
 
-    it = maTabs.begin();
-    for (;it != maTabs.end(); ++it)
-        delete *it;
-
     maTabs.clear();
     pSelectionAttr.reset();
 
