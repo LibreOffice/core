@@ -177,6 +177,7 @@ public:
         assert(nCnt < m_HiddenChg.size());
         return m_HiddenChg[ nCnt ];
     }
+    TextFrameIndex NextHiddenChg(TextFrameIndex nPos) const;
     static void CalcHiddenRanges(const SwTextNode& rNode, MultiSelection& rHiddenMulti);
     static void selectHiddenTextProperty(const SwTextNode& rNode, MultiSelection &rHiddenMulti);
     static void selectRedLineDeleted(const SwTextNode& rNode, MultiSelection &rHiddenMulti, bool bSelect=true);
