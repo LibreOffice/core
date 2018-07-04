@@ -3992,7 +3992,7 @@ void SwHTMLParser::EndPara( bool bReal )
             AddParSpace();
     }
 
-    // If a DD or DT was open, its an implied definition list,
+    // If a DD or DT was open, it's an implied definition list,
     // which must be closed now.
     if( (m_nOpenParaToken == HtmlTokenId::DT_ON || m_nOpenParaToken == HtmlTokenId::DD_ON) &&
         m_nDefListDeep)
