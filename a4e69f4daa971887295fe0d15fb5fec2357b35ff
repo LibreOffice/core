@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_11f856c2",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-07-04T11:08:02Z",
+      "side": 1,
+      "message": "You can re-merge this with bMT_SHELL. It has the same issue and the same solution.\n\nSHELL and PRINTER just can create single files, both don\u0027t save any documents, so bPrefixIsFilename should be irrelevant and sPrefix empty.\n\nSorry that I wasn\u0027t explicit enough.",
+      "revId": "a4e69f4daa971887295fe0d15fb5fec2357b35ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
