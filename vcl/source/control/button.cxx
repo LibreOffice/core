@@ -2918,12 +2918,6 @@ void RadioButton::ShowFocus(const tools::Rectangle& rRect)
 
         aInRect.SetLeft( rRect.Left() );  // exclude the radio element itself from the focusrect
 
-        //to-do, figure out a better solution here
-        aInRect.AdjustLeft( -2 );
-        aInRect.AdjustRight(2 );
-        aInRect.AdjustTop( -2 );
-        aInRect.AdjustBottom(2 );
-
         DrawNativeControl(ControlType::Radiobutton, ControlPart::Focus, aInRect,
                           ControlState::FOCUSED, aControlValue, OUString());
     }
@@ -3742,12 +3736,6 @@ void CheckBox::ShowFocus(const tools::Rectangle& rRect)
         tools::Rectangle aInRect(Point(0, 0), GetSizePixel());
 
         aInRect.SetLeft( rRect.Left() );  // exclude the checkbox itself from the focusrect
-
-        //to-do, figure out a better solution here
-        aInRect.AdjustLeft( -2 );
-        aInRect.AdjustRight(2 );
-        aInRect.AdjustTop( -2 );
-        aInRect.AdjustBottom(2 );
 
         DrawNativeControl(ControlType::Checkbox, ControlPart::Focus, aInRect,
                           ControlState::FOCUSED, aControlValue, OUString());

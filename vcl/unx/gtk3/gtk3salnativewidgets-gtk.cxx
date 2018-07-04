@@ -2499,7 +2499,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case RenderType::Focus:
     {
-        if (nType != ControlType::Checkbox)
+        if (nType == ControlType::Checkbox ||
+            nType == ControlType::Radiobutton)
+        {
+            nX -= 2; nY -=2;
+            nHeight += 4; nWidth += 4;
+        }
+        else
         {
             GtkBorder border;
 
