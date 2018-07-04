@@ -3289,6 +3289,7 @@ namespace basegfx
             const css::drawing::PolygonFlags* pFlagSequence = rFlagSequenceSource.getConstArray();
 
             // get first point and flag
+            assert(nCount != 0);
             B2DPoint aNewCoordinatePair(pPointSequence->X, pPointSequence->Y); pPointSequence++;
             css::drawing::PolygonFlags ePolygonFlag(*pFlagSequence); pFlagSequence++;
             B2DPoint aControlA;
