@@ -50,7 +50,7 @@ class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
     SvxZoomType     eZoom;
     long            nMaxVertPos;
 
-    SfxBroadcaster* pAccessibilityBroadcaster;
+    std::unique_ptr<SfxBroadcaster> pAccessibilityBroadcaster;
     bool            GetPageSize( Size& aPageSize );
 private:
     void            Construct( vcl::Window* pParent );
