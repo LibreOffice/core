@@ -71,33 +71,6 @@ index ac1ff42..a483edf 100644
    for (auto& point : m_Points)
      point.m_Point = pMatrix->Transform(point.m_Point);
  }
-diff --git a/pdfium/fpdfsdk/fpdf_editpath.cpp b/pdfium/fpdfsdk/fpdf_editpath.cpp
-index f41db64..017dbcd 100644
---- a/pdfium/fpdfsdk/fpdf_editpath.cpp
-+++ b/pdfium/fpdfsdk/fpdf_editpath.cpp
-@@ -308,14 +308,14 @@ FPDFPath_GetMatrix(FPDF_PAGEOBJECT path_object,
-   if (!path_object || !a || !b || !c || !d || !e || !f)
-     return false;
- 
--  auto* pPathObj = CPDFPageObjectFromFPDFPageObject(path_object);
--  CFX_Matrix* pMatrix = pPathObj->m_GeneralState.GetMutableMatrix();
--  *a = pMatrix->a;
--  *b = pMatrix->b;
--  *c = pMatrix->c;
--  *d = pMatrix->d;
--  *e = pMatrix->e;
--  *f = pMatrix->f;
-+  CPDF_PathObject* pPathObj = CPDFPathObjectFromFPDFPageObject(path_object);
-+  const CFX_Matrix& pMatrix = pPathObj->m_Matrix;
-+  *a = pMatrix.a;
-+  *b = pMatrix.b;
-+  *c = pMatrix.c;
-+  *d = pMatrix.d;
-+  *e = pMatrix.e;
-+  *f = pMatrix.f;
- 
-   return true;
- }
 -- 
 2.16.3
 
