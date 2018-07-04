@@ -95,6 +95,8 @@ public:
     SwCursor( const SwPosition &rPos, SwPaM* pRing );
     virtual ~SwCursor() override;
 
+    SwCursor & operator =(SwCursor const &) = default;
+
     /// this takes a second parameter, which indicates the Ring that
     /// the new cursor should be part of (may be null)
     SwCursor(SwCursor const& rCursor, SwPaM* pRing);
