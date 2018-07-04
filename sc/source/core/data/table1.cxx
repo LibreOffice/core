@@ -1384,45 +1384,86 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
     if ( nMovY && (bMarked || bUnprotected))
     {
         bool  bUp    = ( nMovY < 0 );
-        SCROW nUsedY = nRow;
-        SCCOL nUsedX = nCol;
+        const SCCOL nColAdd = (bUp ? -1 : 1);
+        SCCOL nStartCol, nEndCol;
+        SCROW nStartRow, nEndRow;
+        if (bMarked && rMark.IsMarked())
+        {
+            ScRange aRange( ScAddress::UNINITIALIZED);
+            rMark.GetMarkArea( aRange);
+            nStartCol = aRange.aStart.Col();
+            nStartRow = aRange.aStart.Row();
+            nEndCol = aRange.aEnd.Col();
+            nEndRow = aRange.aEnd.Row();
+        }
+        else if (bMarked && rMark.IsMultiMarked())
+        {
+            ScRange aRange( ScAddress::UNINITIALIZED);
+            rMark.GetMultiMarkArea( aRange);
+            nStartCol = aRange.aStart.Col();
+            nStartRow = aRange.aStart.Row();
+            nEndCol = aRange.aEnd.Col();
+            nEndRow = aRange.aEnd.Row();
+        }
+        else if (bUnprotected)
+        {
+            nStartCol = 0;
+            nStartRow = 0;
+            nEndCol = nCol;
+            nEndRow = nRow;
+            pDocument->GetPrintArea( nTab, nEndCol, nEndRow, true );
+            // Add some cols/rows to the print area (which is "content or
+            // visually different from empty") to enable travelling through
+            // protected forms with empty cells and no visual indicator.
+            // 42 might be good enough and not too much..
+            nEndCol = std::min<SCCOL>( nEndCol+42, MAXCOL);
+            nEndRow = std::min<SCROW>( nEndRow+42, MAXROW);
+        }
+        else
+        {
+            SAL_WARN("sc.core","ScTable::GetNextPos - bMarked but not marked");
+            nStartCol = 0;
+            nStartRow = 0;
+            nEndCol = MAXCOL;
+            nEndRow = MAXROW;
+        }
 
         if (bMarked)
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        pDocument->GetPrintArea( nTab, nUsedX, nUsedY );
 
-        while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nUsedY, bMarked, bSheetProtected ))
+        while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nEndRow, bMarked, bSheetProtected ))
             ;
 
-        while ( nRow < 0 || nRow > MAXROW )
+        while ( nRow < nStartRow || nRow > nEndRow )
         {
-            nCol = sal::static_int_cast<SCCOL>( nCol + static_cast<SCCOL>(nMovY) );
+            nCol += nColAdd;
 
-            while ( ValidCol(nCol) && ColHidden(nCol) )
-                nCol = sal::static_int_cast<SCCOL>( nCol + static_cast<SCCOL>(nMovY) );   //  skip hidden rows (see above)
-            if (nCol < 0)
+            while (nStartCol <= nCol && nCol <= nEndCol && ValidCol(nCol) && ColHidden(nCol))
+                nCol += nColAdd;    //  skip hidden cols
+
+            if (nCol < nStartCol)
             {
-                nCol = (bSheetProtected ? nUsedX : MAXCOL);
+                nCol = nEndCol;
 
                 if (++nWrap >= 2)
                     return;
             }
-            else if (nCol > MAXCOL || ( nCol > nUsedX && bSheetProtected ))
+            else if (nCol > nEndCol)
             {
-                nCol = 0;
+                nCol = nStartCol;
 
                 if (++nWrap >= 2)
                     return;
             }
-            if (nRow < 0)
-                nRow = MAXROW;
-            else if (nRow > MAXROW)
-                nRow = 0;
+            if (nRow < nStartRow)
+                nRow = nEndRow;
+            else if (nRow > nEndRow)
+                nRow = nStartRow;
 
             if (bMarked)
                 nRow = rMark.GetNextMarked( nCol, nRow, bUp );
 
-            while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nUsedY, bMarked, bSheetProtected ))
+            while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nEndRow, bMarked, bSheetProtected ))
                 ;
         }
     }
