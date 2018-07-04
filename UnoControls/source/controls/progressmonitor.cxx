@@ -413,11 +413,7 @@ Size SAL_CALL ProgressMonitor::getPreferredSize ()
     nWidth  +=  aProgressBarSize.Width;
 
     sal_Int32 nHeight  =  6 * PROGRESSMONITOR_FREEBORDER;
-    nHeight +=  aTopicSize_Top.Height;
-    nHeight +=  aProgressBarSize.Height;
-    nHeight +=  aTopicSize_Bottom.Height;
-    nHeight +=  2;   // 1 for black line, 1 for white line = 3D-Line!
-    nHeight +=  aButtonSize.Height;
+    nHeight += aTopicSize_Top.Height + aProgressBarSize.Height +  aTopicSize_Bottom.Height + 2 + aButtonSize.Height ;   // 1 for black line, 1 for white line = 3D-Line!
 
     // norm to minimum
     if ( nWidth < PROGRESSMONITOR_DEFAULT_WIDTH )
