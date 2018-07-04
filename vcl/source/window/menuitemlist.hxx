@@ -51,6 +51,7 @@ struct MenuItemData
     bool            bVisible;               // Visible (note: this flag will not override MenuFlags::HideDisabledEntries when true)
     bool            bIsTemporary;           // Temporary inserted ('No selection possible')
     bool            bHiddenOnGUI;
+    bool            bMain;                  //submenu selected is an attribute of this menu
     Size            aSz;                    // only temporarily valid
     OUString        aAccessibleName;        // accessible name
 
@@ -68,6 +69,7 @@ struct MenuItemData
         , bVisible(false)
         , bIsTemporary(false)
         , bHiddenOnGUI(false)
+        , bMain(false)
     {
     }
     MenuItemData( const OUString& rStr )
@@ -84,6 +86,7 @@ struct MenuItemData
         , bVisible(false)
         , bIsTemporary(false)
         , bHiddenOnGUI(false)
+        , bMain(false)
     {
     }
     ~MenuItemData();
@@ -116,6 +119,7 @@ public:
     void            Clear();
 
     MenuItemData*   GetData( sal_uInt16 nSVId, size_t& rPos ) const;
+    MenuItemData*   GetDataFromSubMenu(sal_uInt16 nSVId) const;
     MenuItemData*   GetData( sal_uInt16 nSVId ) const
                     {
                         size_t nTemp;
@@ -133,6 +137,7 @@ public:
                         size_t& nDuplicates,
                         size_t nCurrentPos
                     ) const;
+    void            SetMainMenu(size_t nPos);
     size_t          GetItemCount( sal_Unicode cSelectChar ) const;
     size_t          GetItemCount( vcl::KeyCode aKeyCode ) const;
     size_t          size()

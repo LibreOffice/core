@@ -127,6 +127,32 @@ void MenuItemList::Clear()
     maItemList.clear();
 }
 
+void    MenuItemList::SetMainMenu(size_t nPos)
+{
+    for (size_t i = 0, n = maItemList.size(); i < n; ++i)
+    {
+        if (maItemList[i]->bMain == true)
+        {
+            maItemList[i]->bMain = false;
+        }
+    }
+    maItemList[nPos]->bMain = true;
+ }
+
+MenuItemData*   MenuItemList::GetDataFromSubMenu(sal_uInt16 nSVId) const
+{
+    for (size_t i = 0, n = maItemList.size(); i < n; ++i)
+        {
+            if (maItemList[i]->bMain == true)
+                {
+                    return maItemList[i].get()->pSubMenu->GetItemList()->GetDataFromPos(nSVId - 1);
+                }
+        }
+    return nullptr;
+}
+
+
+
 MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
 {
     for( size_t i = 0, n = maItemList.size(); i < n; ++i )
@@ -139,6 +165,8 @@ MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
     }
     return nullptr;
 }
+
+
 
 MenuItemData* MenuItemList::SearchItem(
     sal_Unicode cSelectChar,
