@@ -23,6 +23,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <filter/msfilter/mscodec.hxx>
+#include <tools/XmlWriter.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -146,6 +147,18 @@ public:
                 comphelper::Base64::decode(encryptedKeyValue, rAttribute.Value);
                 mInfo.encryptedKeyValue = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(encryptedKeyValue);
             }
+            if (rAttrLocalName == "encryptedHmacKey")
+            {
+                Sequence<sal_Int8> aValue;
+                comphelper::Base64::decode(aValue, rAttribute.Value);
+                mInfo.hmacEncryptedKey = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(aValue);
+            }
+            if (rAttrLocalName == "encryptedHmacValue")
+            {
+                Sequence<sal_Int8> aValue;
+                comphelper::Base64::decode(aValue, rAttribute.Value);
+                mInfo.hmacEncryptedValue = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(aValue);
+            }
         }
     }
 
@@ -168,7 +181,13 @@ public:
     {}
 };
 
-const sal_uInt32 constSegmentLength = 4096;
+constexpr const sal_uInt32 constSegmentLength = 4096;
+
+static const std::vector<sal_uInt8> constBlock1 { 0xfe, 0xa7, 0xd2, 0x76, 0x3b, 0x4b, 0x9e, 0x79 };
+static const std::vector<sal_uInt8> constBlock2 { 0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e };
+static const std::vector<sal_uInt8> constBlock3 { 0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0xd6 };
+static const std::vector<sal_uInt8> constBlockHmac1 { 0x5f, 0xb2, 0xad, 0x01, 0x0c, 0xb9, 0xe1, 0xf6 };
+static const std::vector<sal_uInt8> constBlockHmac2 { 0xa0, 0x67, 0x7f, 0x02, 0xb2, 0x2c, 0x84, 0x33 };
 
 bool hashCalc(std::vector<sal_uInt8>& output,
               std::vector<sal_uInt8>& input,
@@ -189,7 +208,18 @@ bool hashCalc(std::vector<sal_uInt8>& output,
     return false;
 }
 
+CryptoHashType cryptoHashTypeFromString(OUString const & sAlgorithm)
+{
+    if (sAlgorithm == "SHA512")
+        return CryptoHashType::SHA512;
+    return CryptoHashType::SHA1;
+}
+
 } // namespace
+
+AgileEngine::AgileEngine()
+    : meEncryptionPreset(AgileEncryptionPreset::AES_256_SHA512)
+{}
 
 Crypto::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
 {
@@ -198,6 +228,19 @@ Crypto::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
     else if (rInfo.keyBits == 256 && rInfo.cipherAlgorithm == "AES" && rInfo.cipherChaining == "ChainingModeCBC")
         return Crypto::AES_256_CBC;
     return Crypto::UNKNOWN;
+}
+
+std::vector<sal_uInt8> calculateIV(comphelper::HashType eType,
+                             std::vector<sal_uInt8> const & rSalt,
+                             std::vector<sal_uInt8> const & rBlock,
+                             sal_Int32 nCipherBlockSize)
+{
+    comphelper::Hash aHasher(eType);
+    aHasher.update(rSalt.data(), rSalt.size());
+    aHasher.update(rBlock.data(), rBlock.size());
+    std::vector<sal_uInt8> aIV = aHasher.finalize();
+    aIV.resize(roundUp(sal_Int32(aIV.size()), nCipherBlockSize), 0x36);
+    return aIV;
 }
 
 void AgileEngine::calculateBlock(
@@ -222,21 +265,55 @@ void AgileEngine::calculateBlock(
     aDecryptor.update(rOutput, rInput);
 }
 
-void AgileEngine::calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal)
+void AgileEngine::encryptBlock(
+    std::vector<sal_uInt8> const & rBlock,
+    std::vector<sal_uInt8> & rHashFinal,
+    std::vector<sal_uInt8> & rInput,
+    std::vector<sal_uInt8> & rOutput)
 {
-    aHashFinal = comphelper::DocPasswordHelper::GetOoxHashAsVector( rPassword, mInfo.saltValue,
-            mInfo.spinCount, comphelper::Hash::IterCount::PREPEND, mInfo.hashAlgorithm);
+    std::vector<sal_uInt8> hash(mInfo.hashSize, 0);
+    std::vector<sal_uInt8> dataFinal(mInfo.hashSize + rBlock.size(), 0);
+    std::copy(rHashFinal.begin(), rHashFinal.end(), dataFinal.begin());
+    std::copy(rBlock.begin(), rBlock.end(), dataFinal.begin() + mInfo.hashSize);
+
+    hashCalc(hash, dataFinal, mInfo.hashAlgorithm);
+
+    sal_Int32 keySize = mInfo.keyBits / 8;
+    std::vector<sal_uInt8> key(keySize, 0);
+
+    std::copy(hash.begin(), hash.begin() + keySize, key.begin());
+
+    Encrypt aEncryptor(key, mInfo.saltValue, cryptoType(mInfo));
+
+    aEncryptor.update(rOutput, rInput);
 }
 
-bool AgileEngine::generateEncryptionKey(const OUString& rPassword)
+void AgileEngine::calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal)
 {
-    static const std::vector<sal_uInt8> constBlock1{ 0xfe, 0xa7, 0xd2, 0x76, 0x3b, 0x4b, 0x9e, 0x79 };
-    static const std::vector<sal_uInt8> constBlock2{ 0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e };
-    static const std::vector<sal_uInt8> constBlock3{ 0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0xd6 };
+    aHashFinal = comphelper::DocPasswordHelper::GetOoxHashAsVector(
+                    rPassword, mInfo.saltValue, mInfo.spinCount,
+                    comphelper::Hash::IterCount::PREPEND, mInfo.hashAlgorithm);
+}
 
-    mKey.clear();
-    mKey.resize(mInfo.keyBits / 8, 0);
+namespace
+{
 
+bool generateBytes(std::vector<sal_uInt8> & rBytes, sal_Int32 nSize)
+{
+    size_t nMax = std::min(rBytes.size(), size_t(nSize));
+
+    for (size_t i = 0; i < nMax; ++i)
+    {
+        rBytes[i] = sal_uInt8(comphelper::rng::uniform_uint_distribution(0, 0xFF));
+    }
+
+    return true;
+}
+
+} // end anonymous namespace
+
+bool AgileEngine::decryptAndCheckVerifierHash(OUString const & rPassword)
+{
     std::vector<sal_uInt8> hashFinal(mInfo.hashSize, 0);
     calculateHashFinal(rPassword, hashFinal);
 
@@ -251,22 +328,114 @@ bool AgileEngine::generateEncryptionKey(const OUString& rPassword)
     std::vector<sal_uInt8> hash(mInfo.hashSize, 0);
     hashCalc(hash, hashInput, mInfo.hashAlgorithm);
 
-    if (hash.size() <= hashValue.size() && std::equal(hash.begin(), hash.end(), hashValue.begin()))
-    {
-        std::vector<sal_uInt8>& encryptedKeyValue = mInfo.encryptedKeyValue;
-        calculateBlock(constBlock3, hashFinal, encryptedKeyValue, mKey);
-        return true;
-    }
+    return (hash.size() <= hashValue.size() && std::equal(hash.begin(), hash.end(), hashValue.begin()));
+}
 
-    return false;
+bool AgileEngine::decryptEncryptionKey(OUString const & rPassword)
+{
+    sal_Int32 nKeySize = mInfo.keyBits / 8;
+
+    mKey.clear();
+    mKey.resize(nKeySize, 0);
+
+    std::vector<sal_uInt8> aPasswordHash(mInfo.hashSize, 0);
+    calculateHashFinal(rPassword, aPasswordHash);
+
+    calculateBlock(constBlock3, aPasswordHash, mInfo.encryptedKeyValue, mKey);
+
+    return true;
+}
+
+// TODO: Rename
+bool AgileEngine::generateEncryptionKey(OUString const & rPassword)
+{
+    bool bResult = decryptAndCheckVerifierHash(rPassword);
+
+    if (bResult)
+    {
+        decryptEncryptionKey(rPassword);
+        decryptHmacKey();
+        decryptHmacValue();
+    }
+    return bResult;
+}
+
+bool AgileEngine::decryptHmacKey()
+{
+    // Initialize hmacKey
+    mInfo.hmacKey.clear();
+    mInfo.hmacKey.resize(mInfo.hmacEncryptedKey.size(), 0);
+
+    // Calculate IV
+    comphelper::HashType eType;
+    if (mInfo.hashAlgorithm == "SHA1")
+        eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA512")
+        eType = comphelper::HashType::SHA512;
+    else
+        return false;
+
+    std::vector<sal_uInt8> iv = calculateIV(eType, mInfo.keyDataSalt, constBlockHmac1, mInfo.blockSize);
+
+    // Decrypt with out key, calculated iv
+    Decrypt aDecrypt(mKey, iv, cryptoType(mInfo));
+    aDecrypt.update(mInfo.hmacKey, mInfo.hmacEncryptedKey);
+
+    mInfo.hmacKey.resize(mInfo.hashSize, 0);
+
+    return true;
+}
+
+bool AgileEngine::decryptHmacValue()
+{
+    // Initialize hmacHash
+    mInfo.hmacHash.clear();
+    mInfo.hmacHash.resize(mInfo.hmacEncryptedValue.size(), 0);
+
+    // Calculate IV
+    comphelper::HashType eType;
+    if (mInfo.hashAlgorithm == "SHA1")
+        eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA512")
+        eType = comphelper::HashType::SHA512;
+    else
+        return false;
+    std::vector<sal_uInt8> iv = calculateIV(eType, mInfo.keyDataSalt, constBlockHmac2, mInfo.blockSize);
+
+    // Decrypt with out key, calculated iv
+    Decrypt aDecrypt(mKey, iv, cryptoType(mInfo));
+    aDecrypt.update(mInfo.hmacHash, mInfo.hmacEncryptedValue);
+
+    mInfo.hmacHash.resize(mInfo.hashSize, 0);
+
+    return true;
+}
+
+bool AgileEngine::checkDataIntegrity()
+{
+    bool bResult = (mInfo.hmacHash.size() == mInfo.hmacCalculatedHash.size() &&
+               std::equal(mInfo.hmacHash.begin(), mInfo.hmacHash.end(), mInfo.hmacCalculatedHash.begin()));
+
+    return bResult;
 }
 
 bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
                           BinaryXOutputStream& aOutputStream)
 {
-    sal_uInt32 totalSize = aInputStream.readuInt32(); // Document unencrypted size - 4 bytes
-    aInputStream.skip(4);  // Reserved 4 Bytes
+    CryptoHash aCryptoHash(mInfo.hmacKey, cryptoHashTypeFromString(mInfo.hashAlgorithm));
 
+    sal_uInt32 totalSize = aInputStream.readuInt32(); // Document unencrypted size - 4 bytes
+    // account for size in HMAC
+    std::vector<sal_uInt8> aSizeBytes(sizeof(sal_uInt32));
+    ByteOrderConverter::writeLittleEndian(aSizeBytes.data(), totalSize);
+    aCryptoHash.update(aSizeBytes);
+
+    aInputStream.skip(4);  // Reserved 4 Bytes
+    // accout for reserved 4 bytes (must be 0)
+    std::vector<sal_uInt8> aReserved{0,0,0,0};
+    aCryptoHash.update(aReserved);
+
+    // setup decryption
     std::vector<sal_uInt8>& keyDataSalt = mInfo.keyDataSalt;
 
     sal_uInt32 saltSize = mInfo.saltSize;
@@ -286,7 +455,7 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
     sal_uInt32 outputLength;
     sal_uInt32 remaining = totalSize;
 
-    while ((inputLength = aInputStream.readMemory(inputBuffer.data(), constSegmentLength)) > 0)
+    while ((inputLength = aInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
     {
         sal_uInt8* segmentBegin = reinterpret_cast<sal_uInt8*>(&segment);
         sal_uInt8* segmentEnd   = segmentBegin + sizeof(segment);
@@ -301,11 +470,16 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
         outputLength = aDecryptor.update(outputBuffer, inputBuffer, inputLength);
 
         sal_uInt32 writeLength = std::min(outputLength, remaining);
+
+        aCryptoHash.update(inputBuffer, inputLength);
+
         aOutputStream.writeMemory(outputBuffer.data(), writeLength);
 
         remaining -= outputLength;
         segment++;
     }
+
+    mInfo.hmacCalculatedHash = aCryptoHash.finalize();
 
     return true;
 }
@@ -363,18 +537,279 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
     return false;
 }
 
-void AgileEngine::writeEncryptionInfo(
-                        const OUString& /*aPassword*/,
-                        BinaryXOutputStream& /*rStream*/)
+bool AgileEngine::generateAndEncryptVerifierHash(OUString const & rPassword)
 {
-    // Agile encrypting is not supported for now
+    if (!generateBytes(mInfo.saltValue, mInfo.saltSize))
+        return false;
+
+    std::vector<sal_uInt8> unencryptedVerifierHashInput(mInfo.saltSize);
+    if (!generateBytes(unencryptedVerifierHashInput, mInfo.saltSize))
+        return false;
+
+    // HASH - needs to be modified to be multiple of block size
+    sal_Int32 nVerifierHash = roundUp(mInfo.hashSize, mInfo.blockSize);
+    std::vector<sal_uInt8> unencryptedVerifierHashValue;
+    if (!hashCalc(unencryptedVerifierHashValue, unencryptedVerifierHashInput, mInfo.hashAlgorithm))
+        return false;
+    unencryptedVerifierHashValue.resize(nVerifierHash, 0);
+
+    std::vector<sal_uInt8> hashFinal(mInfo.hashSize, 0);
+    calculateHashFinal(rPassword, hashFinal);
+
+    encryptBlock(constBlock1, hashFinal, unencryptedVerifierHashInput, mInfo.encryptedVerifierHashInput);
+
+    encryptBlock(constBlock2, hashFinal, unencryptedVerifierHashValue, mInfo.encryptedVerifierHashValue);
+
+    return true;
 }
 
-void AgileEngine::encrypt(
-                    BinaryXInputStream& /*aInputStream*/,
-                    BinaryXOutputStream& /*aOutputStream*/)
+bool AgileEngine::encryptHmacKey()
 {
-    // Agile encrypting is not supported for now
+    // Initialize hmacKey
+    mInfo.hmacKey.clear();
+    mInfo.hmacKey.resize(mInfo.hashSize, 0);
+
+    if (!generateBytes(mInfo.hmacKey, mInfo.hashSize))
+        return false;
+
+    // Encrypted salt must be multiple of block size
+    sal_Int32 nEncryptedSaltSize = oox::core::roundUp(mInfo.hashSize, mInfo.blockSize);
+
+    // We need to extend hmacSalt to multiple of block size, padding with 0x36
+    std::vector<sal_uInt8> extendedSalt(mInfo.hmacKey);
+    extendedSalt.resize(nEncryptedSaltSize, 0x36);
+
+    // Initialize hmacEncryptedKey
+    mInfo.hmacEncryptedKey.clear();
+    mInfo.hmacEncryptedKey.resize(nEncryptedSaltSize, 0);
+
+    // Calculate IV
+    comphelper::HashType eType;
+    if (mInfo.hashAlgorithm == "SHA1")
+        eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA512")
+        eType = comphelper::HashType::SHA512;
+    else
+        return false;
+
+    std::vector<sal_uInt8> iv = calculateIV(eType, mInfo.keyDataSalt, constBlockHmac1, mInfo.blockSize);
+
+    // Encrypt with out key, calculated iv
+    Encrypt aEncryptor(mKey, iv, cryptoType(mInfo));
+    aEncryptor.update(mInfo.hmacEncryptedKey, extendedSalt);
+
+    return true;
+}
+
+bool AgileEngine::encryptHmacValue()
+{
+    sal_Int32 nEncryptedValueSize = roundUp(mInfo.hashSize, mInfo.blockSize);
+    mInfo.hmacEncryptedValue.clear();
+    mInfo.hmacEncryptedValue.resize(nEncryptedValueSize, 0);
+
+    std::vector<sal_uInt8> extendedHash(mInfo.hmacHash);
+    extendedHash.resize(nEncryptedValueSize, 0x36);
+
+    // Calculate IV
+    comphelper::HashType eType;
+    if (mInfo.hashAlgorithm == "SHA1")
+        eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA512")
+        eType = comphelper::HashType::SHA512;
+    else
+        return false;
+
+    std::vector<sal_uInt8> iv = calculateIV(eType, mInfo.keyDataSalt, constBlockHmac2, mInfo.blockSize);
+
+    // Encrypt with out key, calculated iv
+    Encrypt aEncryptor(mKey, iv, cryptoType(mInfo));
+    aEncryptor.update(mInfo.hmacEncryptedValue, extendedHash);
+
+    return true;
+}
+
+bool AgileEngine::encryptEncryptionKey(OUString const & rPassword)
+{
+    sal_Int32 nKeySize = mInfo.keyBits / 8;
+
+    mKey.clear();
+    mKey.resize(nKeySize, 0);
+
+    mInfo.encryptedKeyValue.clear();
+    mInfo.encryptedKeyValue.resize(nKeySize, 0);
+
+    if (!generateBytes(mKey, nKeySize))
+        return false;
+
+    std::vector<sal_uInt8> aPasswordHash(mInfo.hashSize, 0);
+    calculateHashFinal(rPassword, aPasswordHash);
+
+    encryptBlock(constBlock3, aPasswordHash, mKey, mInfo.encryptedKeyValue);
+
+    return true;
+}
+
+bool AgileEngine::setupEncryption(OUString const & rPassword)
+{
+    if (meEncryptionPreset == AgileEncryptionPreset::AES_128_SHA1)
+        setupEncryptionParameters({ 100000, 16, 128, 20, 16, "AES", "ChainingModeCBC", "SHA1" });
+    else
+        setupEncryptionParameters({ 100000, 16, 256, 64, 16, "AES", "ChainingModeCBC", "SHA512" });
+
+    if (!setupEncryptionKey(rPassword))
+        return false;
+    return true;
+}
+
+void AgileEngine::setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters)
+{
+    mInfo.spinCount = rAgileEncryptionParameters.spinCount;
+    mInfo.saltSize = rAgileEncryptionParameters.saltSize;
+    mInfo.keyBits = rAgileEncryptionParameters.keyBits;
+    mInfo.hashSize = rAgileEncryptionParameters.hashSize;
+    mInfo.blockSize = rAgileEncryptionParameters.blockSize;
+
+    mInfo.cipherAlgorithm = rAgileEncryptionParameters.cipherAlgorithm;
+    mInfo.cipherChaining = rAgileEncryptionParameters.cipherChaining;
+    mInfo.hashAlgorithm = rAgileEncryptionParameters.hashAlgorithm;
+
+    mInfo.keyDataSalt.resize(mInfo.saltSize);
+    mInfo.saltValue.resize(mInfo.saltSize);
+    mInfo.encryptedVerifierHashInput.resize(mInfo.saltSize);
+    mInfo.encryptedVerifierHashValue.resize(roundUp(mInfo.hashSize, mInfo.blockSize), 0);
+}
+
+bool AgileEngine::setupEncryptionKey(OUString const & rPassword)
+{
+    if (!generateAndEncryptVerifierHash(rPassword))
+        return false;
+    if (!encryptEncryptionKey(rPassword))
+        return false;
+    if (!generateBytes(mInfo.keyDataSalt, mInfo.saltSize))
+        return false;
+    if (!encryptHmacKey())
+        return false;
+    return true;
+}
+
+void AgileEngine::writeEncryptionInfo(BinaryXOutputStream & rStream)
+{
+    rStream.WriteUInt32(msfilter::VERSION_INFO_AGILE);
+    rStream.WriteUInt32(0); // reserved
+
+    SvMemoryStream aMemStream;
+    tools::XmlWriter aXmlWriter(&aMemStream);
+
+    if (aXmlWriter.startDocument(0/*nIndent*/))
+    {
+        aXmlWriter.startElement("", "encryption", "http://schemas.microsoft.com/office/2006/encryption");
+        aXmlWriter.attribute("xmlns:p", OString("http://schemas.microsoft.com/office/2006/keyEncryptor/password"));
+
+        aXmlWriter.startElement("keyData");
+        aXmlWriter.attribute("saltSize", mInfo.saltSize);
+        aXmlWriter.attribute("blockSize", mInfo.blockSize);
+        aXmlWriter.attribute("keyBits", mInfo.keyBits);
+        aXmlWriter.attribute("hashSize", mInfo.hashSize);
+        aXmlWriter.attribute("cipherAlgorithm", mInfo.cipherAlgorithm);
+        aXmlWriter.attribute("cipherChaining", mInfo.cipherChaining);
+        aXmlWriter.attribute("hashAlgorithm", mInfo.hashAlgorithm);
+        aXmlWriter.attributeBase64("saltValue", mInfo.keyDataSalt);
+        aXmlWriter.endElement();
+
+        aXmlWriter.startElement("dataIntegrity");
+        aXmlWriter.attributeBase64("encryptedHmacKey", mInfo.hmacEncryptedKey);
+        aXmlWriter.attributeBase64("encryptedHmacValue", mInfo.hmacEncryptedValue);
+        aXmlWriter.endElement();
+
+        aXmlWriter.startElement("keyEncryptors");
+        aXmlWriter.startElement("keyEncryptor");
+        aXmlWriter.attribute("uri", OString("http://schemas.microsoft.com/office/2006/keyEncryptor/password"));
+
+        aXmlWriter.startElement("p", "encryptedKey", "");
+        aXmlWriter.attribute("spinCount", mInfo.spinCount);
+        aXmlWriter.attribute("saltSize", mInfo.saltSize);
+        aXmlWriter.attribute("blockSize", mInfo.blockSize);
+        aXmlWriter.attribute("keyBits", mInfo.keyBits);
+        aXmlWriter.attribute("hashSize", mInfo.hashSize);
+        aXmlWriter.attribute("cipherAlgorithm", mInfo.cipherAlgorithm);
+        aXmlWriter.attribute("cipherChaining", mInfo.cipherChaining);
+        aXmlWriter.attribute("hashAlgorithm", mInfo.hashAlgorithm);
+        aXmlWriter.attributeBase64("saltValue", mInfo.saltValue);
+        aXmlWriter.attributeBase64("encryptedVerifierHashInput", mInfo.encryptedVerifierHashInput);
+        aXmlWriter.attributeBase64("encryptedVerifierHashValue", mInfo.encryptedVerifierHashValue);
+        aXmlWriter.attributeBase64("encryptedKeyValue", mInfo.encryptedKeyValue);
+        aXmlWriter.endElement();
+
+        aXmlWriter.endElement();
+        aXmlWriter.endElement();
+
+        aXmlWriter.endElement();
+        aXmlWriter.endDocument();
+    }
+    rStream.writeMemory(aMemStream.GetData(), aMemStream.GetSize());
+}
+
+void AgileEngine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputStream,
+                          css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
+                          sal_uInt32 nSize)
+{
+    CryptoHash aCryptoHash(mInfo.hmacKey, cryptoHashTypeFromString(mInfo.hashAlgorithm));
+
+    BinaryXOutputStream aBinaryOutputStream(rxOutputStream, false);
+    BinaryXInputStream aBinaryInputStream(rxInputStream, false);
+
+    std::vector<sal_uInt8> aSizeBytes(sizeof(sal_uInt32));
+    ByteOrderConverter::writeLittleEndian(aSizeBytes.data(), nSize);
+    aBinaryOutputStream.writeMemory(aSizeBytes.data(), aSizeBytes.size()); // size
+    aCryptoHash.update(aSizeBytes, aSizeBytes.size());
+
+    std::vector<sal_uInt8> aNull{0,0,0,0};
+    aBinaryOutputStream.writeMemory(aNull.data(), aNull.size()); // reserved
+    aCryptoHash.update(aNull, aNull.size());
+
+    std::vector<sal_uInt8>& keyDataSalt = mInfo.keyDataSalt;
+
+    sal_uInt32 saltSize = mInfo.saltSize;
+    sal_uInt32 keySize = mInfo.keyBits / 8;
+
+    sal_uInt32 nSegment = 0;
+    sal_uInt32 nSegmentByteSize = sizeof(nSegment);
+
+    std::vector<sal_uInt8> saltWithBlockKey(saltSize + nSegmentByteSize, 0);
+    std::copy(keyDataSalt.begin(), keyDataSalt.end(), saltWithBlockKey.begin());
+
+    std::vector<sal_uInt8> hash(mInfo.hashSize, 0);
+    std::vector<sal_uInt8> iv(keySize, 0);
+
+    std::vector<sal_uInt8> inputBuffer(constSegmentLength);
+    std::vector<sal_uInt8> outputBuffer(constSegmentLength);
+    sal_uInt32 inputLength;
+    sal_uInt32 outputLength;
+
+    while ((inputLength = aBinaryInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
+    {
+        sal_uInt32 correctedInputLength = inputLength % mInfo.blockSize == 0 ?
+                        inputLength : oox::core::roundUp(inputLength, sal_uInt32(mInfo.blockSize));
+
+        // Update Key
+        sal_uInt8* segmentBegin = reinterpret_cast<sal_uInt8*>(&nSegment);
+        sal_uInt8* segmentEnd   = segmentBegin + nSegmentByteSize;
+        std::copy(segmentBegin, segmentEnd, saltWithBlockKey.begin() + saltSize);
+
+        hashCalc(hash, saltWithBlockKey, mInfo.hashAlgorithm);
+
+        // Only if hash > keySize
+        std::copy(hash.begin(), hash.begin() + keySize, iv.begin());
+
+        Encrypt aEncryptor(mKey, iv, AgileEngine::cryptoType(mInfo));
+        outputLength = aEncryptor.update(outputBuffer, inputBuffer, correctedInputLength);
+        aBinaryOutputStream.writeMemory(outputBuffer.data(), outputLength);
+        aCryptoHash.update(outputBuffer, outputLength);
+
+        nSegment++;
+    }
+    mInfo.hmacHash = aCryptoHash.finalize();
+    encryptHmacValue();
 }
 
 } // namespace core

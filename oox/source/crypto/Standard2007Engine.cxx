@@ -35,6 +35,7 @@ void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
 }
 
 static const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
+constexpr const sal_uInt32 AES128Size = 16;
 
 } // end anonymous namespace
 
@@ -172,7 +173,12 @@ bool Standard2007Engine::decrypt(BinaryXInputStream& aInputStream,
     return true;
 }
 
-void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOutputStream& rStream)
+bool Standard2007Engine::checkDataIntegrity()
+{
+    return true;
+}
+
+bool Standard2007Engine::setupEncryption(OUString const & password)
 {
     mInfo.header.flags        = msfilter::ENCRYPTINFO_AES | msfilter::ENCRYPTINFO_CRYPTOAPI;
     mInfo.header.algId        = msfilter::ENCRYPT_ALGO_AES128;
@@ -187,11 +193,16 @@ void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
     mKey.resize(keyLength, 0);
 
     if (!calculateEncryptionKey(password))
-        return;
+        return false;
 
     if (!generateVerifier())
-        return;
+        return false;
 
+    return true;
+}
+
+void Standard2007Engine::writeEncryptionInfo(BinaryXOutputStream& rStream)
+{
     rStream.WriteUInt32(msfilter::VERSION_INFO_2007_FORMAT);
 
     sal_uInt32 cspNameSize = (lclCspName.getLength() * 2) + 2;
@@ -209,9 +220,19 @@ void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
     rStream.writeMemory(&mInfo.verifier, sizeof(msfilter::EncryptionVerifierAES));
 }
 
-void Standard2007Engine::encrypt(BinaryXInputStream& aInputStream,
-                                 BinaryXOutputStream& aOutputStream)
+void Standard2007Engine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputStream,
+                                 css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
+                                 sal_uInt32 nSize)
 {
+    if (mKey.empty())
+        return;
+
+    BinaryXOutputStream aBinaryOutputStream(rxOutputStream, false);
+    BinaryXInputStream aBinaryInputStream(rxInputStream, false);
+
+    aBinaryOutputStream.WriteUInt32(nSize); // size
+    aBinaryOutputStream.WriteUInt32(0U);    // reserved
+
     std::vector<sal_uInt8> inputBuffer(1024);
     std::vector<sal_uInt8> outputBuffer(1024);
 
@@ -221,11 +242,13 @@ void Standard2007Engine::encrypt(BinaryXInputStream& aInputStream,
     std::vector<sal_uInt8> iv;
     Encrypt aEncryptor(mKey, iv, Crypto::AES_128_ECB);
 
-    while ((inputLength = aInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
+    while ((inputLength = aBinaryInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
     {
-        inputLength = inputLength % 16 == 0 ? inputLength : ((inputLength / 16) * 16) + 16;
+        // increase size to multiple of 16 (size of mKey) if necessary
+        inputLength = inputLength % AES128Size == 0 ?
+                            inputLength : roundUp(inputLength, AES128Size);
         outputLength = aEncryptor.update(outputBuffer, inputBuffer, inputLength);
-        aOutputStream.writeMemory(outputBuffer.data(), outputLength);
+        aBinaryOutputStream.writeMemory(outputBuffer.data(), outputLength);
     }
 }
 

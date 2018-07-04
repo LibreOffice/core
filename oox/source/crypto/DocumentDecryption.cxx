@@ -106,6 +106,9 @@ bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStr
     xDecryptedPackage->flush();
     aDecryptedPackage.seekToStart();
 
+    if (bResult)
+        return mEngine->checkDataIntegrity();
+
     return bResult;
 }
 
