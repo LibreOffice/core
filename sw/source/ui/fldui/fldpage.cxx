@@ -169,7 +169,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
     }
     else    // change field
     {
-        SwField *const pTmpField = m_pCurField->CopyField();
+        std::unique_ptr<SwField> pTmpField = m_pCurField->CopyField();
 
         OUString sPar1(rPar1);
         OUString sPar2(rPar2);
@@ -194,7 +194,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
                 aData.nCommandType = rPar1.getToken(0, DB_DELIM, nPos).toInt32();
                 sPar1 = rPar1.copy(nPos);
 
-                static_cast<SwDBNameInfField*>(pTmpField)->SetDBData(aData);
+                static_cast<SwDBNameInfField*>(pTmpField.get())->SetDBData(aData);
             }
             break;
 
@@ -240,7 +240,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
                 if (m_aMgr.GetFieldType(SwFieldIds::User, sPar1) == nullptr &&
                 !(pTmpField->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
-                    SwSetExpField* pField = static_cast<SwSetExpField*>(pTmpField);
+                    SwSetExpField* pField = static_cast<SwSetExpField*>(pTmpField.get());
                     pField->SetPromptText(sPar2);
                     sPar2 = pField->GetPar2();
                 }
@@ -250,7 +250,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
             {
                 if( nSubType == nsSwDocInfoSubType::DI_CUSTOM )
                 {
-                    SwDocInfoField* pDocInfo = static_cast<SwDocInfoField*>( pTmpField );
+                    SwDocInfoField* pDocInfo = static_cast<SwDocInfoField*>( pTmpField.get() );
                     pDocInfo->SetName( rPar1 );
                 }
             }
@@ -262,7 +262,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
         pTmpField->SetSubType(nSubType);
         pTmpField->SetAutomaticLanguage(bIsAutomaticLanguage);
 
-        m_aMgr.UpdateCurField( nFormatId, sPar1, sPar2, pTmpField );
+        m_aMgr.UpdateCurField( nFormatId, sPar1, sPar2, std::move(pTmpField) );
 
         m_pCurField = m_aMgr.GetCurField();
 

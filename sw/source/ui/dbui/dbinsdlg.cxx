@@ -1314,7 +1314,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     case DB_Column::Type::COL_FIELD:
                         {
                             std::unique_ptr<SwDBField> pField(static_cast<SwDBField *>(
-                                pDBCol->pField->CopyField()));
+                                pDBCol->pField->CopyField().release()));
                             double nValue = DBL_MAX;
 
                             Reference< XPropertySet > xColumnProps;

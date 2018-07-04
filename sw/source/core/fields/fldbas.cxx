@@ -421,9 +421,9 @@ OUString SwField::ExpandField(bool const bCached) const
     return Expand();
 }
 
-SwField * SwField::CopyField() const
+std::unique_ptr<SwField> SwField::CopyField() const
 {
-    SwField *const pNew = Copy();
+    std::unique_ptr<SwField> pNew = Copy();
     // #i85766# cache expansion of source (for clipboard)
     // use this->cache, not this->Expand(): only text formatting calls Expand()
     pNew->m_Cache = m_Cache;

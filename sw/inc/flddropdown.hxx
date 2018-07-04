@@ -97,7 +97,7 @@ class SW_DLLPUBLIC SwDropDownField : public SwField
 
        @return the copy of this field
     */
-    virtual SwField * Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     /**

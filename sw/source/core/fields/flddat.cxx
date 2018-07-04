@@ -79,11 +79,11 @@ OUString SwDateTimeField::Expand() const
     return ExpandValue(fVal, GetFormat(), GetLanguage());
 }
 
-SwField* SwDateTimeField::Copy() const
+std::unique_ptr<SwField> SwDateTimeField::Copy() const
 {
-    SwDateTimeField *pTmp =
+    std::unique_ptr<SwDateTimeField> pTmp(
         new SwDateTimeField(static_cast<SwDateTimeFieldType*>(GetTyp()), nSubType,
-                                            GetFormat(), GetLanguage());
+                                            GetFormat(), GetLanguage()) );
 
     pTmp->SetValue(GetValue());
     pTmp->SetOffset(nOffset);

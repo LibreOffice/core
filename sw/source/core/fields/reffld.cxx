@@ -742,11 +742,11 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
     return OUString();
 }
 
-SwField* SwGetRefField::Copy() const
+std::unique_ptr<SwField> SwGetRefField::Copy() const
 {
-    SwGetRefField* pField = new SwGetRefField( static_cast<SwGetRefFieldType*>(GetTyp()),
+    std::unique_ptr<SwGetRefField> pField( new SwGetRefField( static_cast<SwGetRefFieldType*>(GetTyp()),
                                                 sSetRefName, sSetReferenceLanguage, nSubType,
-                                                nSeqNo, GetFormat() );
+                                                nSeqNo, GetFormat() ) );
     pField->sText = sText;
     return pField;
 }
