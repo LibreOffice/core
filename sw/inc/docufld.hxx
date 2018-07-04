@@ -157,7 +157,7 @@ public:
             sal_uInt16 const nMaxPage);
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     virtual OUString GetPar2() const override;
     virtual void        SetPar2(const OUString& rStr) override;
@@ -187,7 +187,7 @@ public:
     SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFormat);
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 
@@ -213,7 +213,7 @@ public:
     SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFormat);
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 
@@ -237,7 +237,7 @@ public:
     SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFormat);
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
@@ -267,7 +267,7 @@ public:
     void ChangeExpansion( const SwFrame* pFrame );
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     virtual sal_uInt16      GetSubType() const override;
     virtual void        SetSubType(sal_uInt16 nSub) override;
@@ -301,7 +301,7 @@ class SW_DLLPUBLIC SwHiddenTextField : public SwField
     bool m_bValid : 1; ///< Is DB-field evaluated?
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwHiddenTextField( SwHiddenTextFieldType*,
@@ -362,7 +362,7 @@ public:
     SwHiddenParaField(SwHiddenParaFieldType*, const OUString& rCond);
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     void                SetHidden(bool bHidden)     { m_bIsHidden = bHidden; }
     bool                IsHidden() const            { return m_bIsHidden;    }
@@ -391,7 +391,7 @@ class SW_DLLPUBLIC SwMacroField : public SwField
     bool      m_bIsScriptURL;
 
     virtual OUString Expand() const override;
-    virtual SwField* Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     /// Direct input, delete old value.
@@ -465,7 +465,7 @@ public:
     virtual ~SwPostItField() override;
 
     virtual OUString        Expand() const override;
-    virtual SwField*        Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     const DateTime&         GetDateTime() const             { return m_aDateTime; }
     const Date       GetDate() const                 { return Date(m_aDateTime.GetDate()); }
@@ -511,7 +511,7 @@ class SW_DLLPUBLIC SwDocInfoField : public SwValueField
     OUString  m_aName;
 
     virtual OUString        Expand() const override;
-    virtual SwField*        Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwDocInfoField(SwDocInfoFieldType*, sal_uInt16 nSub, const OUString& rName, sal_uInt32 nFormat=0);
@@ -547,7 +547,7 @@ public:
     SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     virtual sal_uInt16      GetSubType() const override;
     virtual void        SetSubType(sal_uInt16 nSub) override;
@@ -581,7 +581,7 @@ public:
     SwRefPageSetField( SwRefPageSetFieldType*, short nOff, bool bOn );
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     virtual OUString  GetPar2() const override;
     virtual void    SetPar2(const OUString& rStr) override;
@@ -619,7 +619,7 @@ public:
     SwRefPageGetField( SwRefPageGetFieldType*, sal_uInt32 nFormat );
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     void SetText( const OUString& rText )      { m_sText = rText; }
 
@@ -650,7 +650,7 @@ public:
                      const OUString& sText, const OUString& sHelp );
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     /// Placeholder-Text
     virtual OUString GetPar1() const override;
@@ -690,7 +690,7 @@ public:
     virtual OUString        GetDescription() const override;
 
     virtual OUString        Expand() const override;
-    virtual SwField*        Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     /// Type
     virtual OUString        GetPar1() const override;
@@ -725,7 +725,7 @@ public:
     SwCombinedCharField( SwCombinedCharFieldType*, const OUString& rChars );
 
     virtual OUString        Expand() const override;
-    virtual SwField*        Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     /// Characters
     virtual OUString    GetPar1() const override;

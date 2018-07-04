@@ -495,8 +495,8 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
-        SwField * pNewField = rSrcField.CopyField();
-        pDstFormatField->SetField(pNewField);
+        pDstFormatField->SetField(rSrcField.CopyField());
+        SwField* pNewField = pDstFormatField->GetField();
 
         switch( nFieldWhich )
         {

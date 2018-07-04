@@ -43,7 +43,7 @@ public:
 
 class SwUndoFieldFromDoc : public SwUndoField
 {
-    SwField * pOldField, * pNewField;
+    std::unique_ptr<SwField> pOldField, pNewField;
     SwMsgPoolItem * pHint;
     bool bUpdate;
 
