@@ -421,7 +421,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             rACW.SetLockWordLstLocked( true );
 
-            editeng::SortedAutoCompleteStrings aTmpLst( rACW.GetWordList() );
+            editeng::SortedAutoCompleteStrings aTmpLst( rACW.GetWordList().createNonOwningCopy() );
             pAFlags->m_pAutoCompleteList = &aTmpLst;
 
             SfxApplication* pApp = SfxGetpApp();
@@ -455,8 +455,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 // clear the temp WordList pointer
                 pAFlags->m_pAutoCompleteList = nullptr;
             }
-            // remove all pointer we never delete the strings
-            aTmpLst.clear();
 
             if( !bOldAutoCmpltCollectWords && bOldAutoCmpltCollectWords !=
                 pAFlags->bAutoCmpltCollectWords )

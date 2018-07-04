@@ -52,8 +52,20 @@ struct CompareAutoCompleteString
 class SortedAutoCompleteStrings
   : public o3tl::sorted_vector<IAutoCompleteString*, CompareAutoCompleteString>
 {
+    // For createNonOwningCopy only:
+    SortedAutoCompleteStrings(SortedAutoCompleteStrings const & other):
+        sorted_vector(other), owning_(false) {}
+
+    void operator =(SortedAutoCompleteStrings) = delete;
+
+    bool owning_;
+
 public:
-    ~SortedAutoCompleteStrings() { DeleteAndDestroyAll(); }
+    SortedAutoCompleteStrings(): owning_(true) {}
+
+    ~SortedAutoCompleteStrings() { if (owning_) DeleteAndDestroyAll(); }
+
+    SortedAutoCompleteStrings createNonOwningCopy() const { return *this; }
 };
 
 } // namespace editeng
