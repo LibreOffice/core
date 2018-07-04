@@ -958,6 +958,10 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     const TextFrameIndex nNextDir = m_pScriptInfo->NextDirChg(rInf.GetIdx());
     nNextChg = std::min( nNextChg, nNextDir );
 
+    // hidden change (potentially via bookmark):
+    const TextFrameIndex nNextHidden = m_pScriptInfo->NextHiddenChg(rInf.GetIdx());
+    nNextChg = std::min( nNextChg, nNextHidden );
+
     // Turbo boost:
     // We assume that font characters are not larger than twice
     // as wide as height.
