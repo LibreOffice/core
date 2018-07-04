@@ -3534,7 +3534,6 @@ ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
 
 ScDPDataDimension::~ScDPDataDimension()
 {
-    std::for_each(maMembers.begin(), maMembers.end(), std::default_delete<ScDPDataMember>());
 }
 
 void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )
@@ -3553,7 +3552,7 @@ void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )
         const ScDPResultMember* pResMem = pDim->GetMember(i);
 
         ScDPDataMember* pNew = new ScDPDataMember( pResultData, pResMem );
-        maMembers.push_back( pNew);
+        maMembers.emplace_back( pNew);
 
         if ( !pResultData->IsLateInit() )
         {
@@ -3575,7 +3574,7 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
     long nCount = maMembers.size();
     for (long i=0; i<nCount; i++)
     {
-        ScDPDataMember* pMember = maMembers[static_cast<sal_uInt16>(i)];
+        ScDPDataMember* pMember = maMembers[static_cast<sal_uInt16>(i)].get();
 
         // always first member for data layout dim
         if ( bIsDataLayout || ( !aDataMembers.empty() && pMember->IsNamedItem(aDataMembers[0]) ) )
@@ -3633,7 +3632,7 @@ void ScDPDataDimension::FillDataRow(
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
         if ( pRefMember->IsVisible() )  //TODO: here or in ScDPDataMember::FillDataRow ???
         {
-            const ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(nMemberPos)];
+            const ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(nMemberPos)].get();
             pDataMember->FillDataRow(pRefMember, rFilterCxt, rSequence, nMemberMeasure, bIsSubTotalRow, rSubState);
         }
     }
@@ -3661,7 +3660,7 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
 
         // Calculate must be called even if the member is not visible (for use as reference value)
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
-        ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(nMemberPos)];
+        ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(nMemberPos)].get();
         pDataMember->UpdateDataRow( pRefMember, nMemberMeasure, bIsSubTotalRow, rSubState );
     }
 }
@@ -3696,7 +3695,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //TODO: here or in ScDPDataMember ???
         {
-            ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(i)];
+            ScDPDataMember* pDataMember = maMembers[static_cast<sal_uInt16>(i)].get();
             pDataMember->SortMembers( pRefMember );
         }
     }
@@ -3718,7 +3717,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //TODO: here or in ScDPDataMember ???
         {
-            ScDPDataMember* pDataMember = maMembers[i];
+            ScDPDataMember* pDataMember = maMembers[i].get();
             pDataMember->DoAutoShow( pRefMember );
         }
     }
@@ -3739,7 +3738,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
         // look for equal values to the last included one
 
         long nIncluded = pRefDim->GetAutoCount();
-        ScDPDataMember* pDataMember1 = maMembers[aAutoOrder[nIncluded - 1]];
+        ScDPDataMember* pDataMember1 = maMembers[aAutoOrder[nIncluded - 1]].get();
         if ( !pDataMember1->IsVisible() )
             pDataMember1 = nullptr;
         bool bContinue = true;
@@ -3748,7 +3747,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
             bContinue = false;
             if ( nIncluded < nCount )
             {
-                ScDPDataMember* pDataMember2 = maMembers[aAutoOrder[nIncluded]];
+                ScDPDataMember* pDataMember2 = maMembers[aAutoOrder[nIncluded]].get();
                 if ( !pDataMember2->IsVisible() )
                     pDataMember2 = nullptr;
 
@@ -3778,7 +3777,7 @@ void ScDPDataDimension::ResetResults()
         //  sort order doesn't matter
 
         long nMemberPos = bIsDataLayout ? 0 : i;
-        ScDPDataMember* pDataMember = maMembers[nMemberPos];
+        ScDPDataMember* pDataMember = maMembers[nMemberPos].get();
         pDataMember->ResetResults();
     }
 }
@@ -3824,7 +3823,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
             else
                 rRunning.AddColIndex( i, nSorted );
 
-            ScDPDataMember* pDataMember = maMembers[nMemberPos];
+            ScDPDataMember* pDataMember = maMembers[nMemberPos].get();
             pDataMember->UpdateRunningTotals(
                 pRefMember, nMemberMeasure, bIsSubTotalRow, rSubState, rRunning, rTotals, rRowParent);
 
@@ -3845,7 +3844,7 @@ void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocumen
     for (long i=0; i<nCount; i++)
     {
         const ScDPResultMember* pRefMember = pRefDim->GetMember(i);
-        const ScDPDataMember* pDataMember = maMembers[i];
+        const ScDPDataMember* pDataMember = maMembers[i].get();
         pDataMember->DumpState( pRefMember, pDoc, rPos );
     }
 
@@ -3857,7 +3856,7 @@ void ScDPDataDimension::Dump(int nIndent) const
     std::string aIndent(nIndent*2, ' ');
     std::cout << aIndent << "-- data dimension '"
         << (pResultDimension ? pResultDimension->GetName() : OUString()) << "'" << std::endl;
-    ScDPDataMembers::const_iterator it = maMembers.begin(), itEnd = maMembers.end();
+    auto it = maMembers.begin(), itEnd = maMembers.end();
     for (; it != itEnd; ++it)
         (*it)->Dump(nIndent+1);
 }
@@ -3870,12 +3869,12 @@ long ScDPDataDimension::GetMemberCount() const
 
 const ScDPDataMember* ScDPDataDimension::GetMember(long n) const
 {
-    return maMembers[n];
+    return maMembers[n].get();
 }
 
 ScDPDataMember* ScDPDataDimension::GetMember(long n)
 {
-    return maMembers[n];
+    return maMembers[n].get();
 }
 
 ScDPResultVisibilityData::ScDPResultVisibilityData(

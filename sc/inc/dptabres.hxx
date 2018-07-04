@@ -614,7 +614,7 @@ class ScDPDataDimension
 private:
     const ScDPResultData*       pResultData;
     const ScDPResultDimension* pResultDimension;  // column
-    ScDPDataMembers     maMembers;
+    std::vector<std::unique_ptr<ScDPDataMember>> maMembers;
     bool bIsDataLayout;      //! or ptr to IntDimension?
 
 public:
