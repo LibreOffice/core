@@ -49,6 +49,7 @@ gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
 	-Wshadow \
+	-Wno-deprecated \
 	-Woverloaded-virtual \
 
 ifneq ($(COM_GCC_IS_CLANG),TRUE)
