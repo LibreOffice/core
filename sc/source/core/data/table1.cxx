@@ -1419,7 +1419,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
         }
         else
         {
-            SAL_WARN("sc.core","ScTable::GetNextPos - bMarked but not marked");
+            assert(!"ScTable::GetNextPos - bMarked but not marked");
             nStartCol = 0;
             nStartRow = 0;
             nEndCol = MAXCOL;
