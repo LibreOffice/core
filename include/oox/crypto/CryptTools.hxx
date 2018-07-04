@@ -21,26 +21,41 @@
 #define INCLUDED_OOX_CRYPTO_CRYPTTOOLS_HXX
 
 #include <config_oox.h>
-
-#if USE_TLS_OPENSSL
-#include <openssl/evp.h>
-#include <openssl/sha.h>
-#endif // USE_TLS_OPENSSL
-
-#if USE_TLS_NSS
-#include <nss.h>
-#include <pk11pub.h>
-#include <sechash.h>
-#endif // USE_TLS_NSS
+#include <oox/dllapi.h>
+#include <sal/types.h>
 
 #include <vector>
-
-#include <sal/types.h>
+#include <memory>
 
 namespace oox {
 namespace core {
 
-class Crypto
+/** Rounds up the input to the nearest multiple
+ *
+ *  For example:
+ *  input  1, multiple 16 = 16
+ *  input 16, multiple 16 = 16
+ *  input 17, multiple 16 = 32
+ *  input 31, multiple 16 = 32
+ */
+template<typename T>
+T roundUp(T input, T multiple)
+{
+    if (input % multiple == 0)
+        return input;
+    return ((input / multiple) * multiple) + multiple;
+}
+
+enum class CryptoHashType
+{
+    SHA1,
+    SHA256,
+    SHA512
+};
+
+struct CryptoImpl;
+
+class OOX_DLLPUBLIC Crypto
 {
 public:
     enum CryptoType
@@ -52,47 +67,24 @@ public:
     };
 
 protected:
-#if USE_TLS_OPENSSL
-    EVP_CIPHER_CTX mContext;
-#endif
-#if USE_TLS_NSS
-    PK11Context* mContext;
-    SECItem*     mSecParam;
-    PK11SymKey*  mSymKey;
-#endif
-
-#if USE_TLS_OPENSSL
-    const EVP_CIPHER* getCipher(CryptoType type);
-#endif
-#if USE_TLS_NSS
-    void setupContext(
-            std::vector<sal_uInt8>& key,
-            std::vector<sal_uInt8>& iv,
-            CryptoType type,
-            CK_ATTRIBUTE_TYPE operation);
-#endif
+    std::unique_ptr<CryptoImpl> mpImpl;
 
 protected:
     Crypto();
 
 public:
     virtual ~Crypto();
-
-    virtual sal_uInt32 update(
-                    std::vector<sal_uInt8>& output,
-                    std::vector<sal_uInt8>& input,
-                    sal_uInt32 inputLength = 0) = 0;
 };
 
-class Decrypt : public Crypto
+class OOX_DLLPUBLIC Decrypt : public Crypto
 {
 public:
     Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
 
-    virtual sal_uInt32 update(
+    sal_uInt32 update(
                     std::vector<sal_uInt8>& output,
                     std::vector<sal_uInt8>& input,
-                    sal_uInt32 inputLength = 0) override;
+                    sal_uInt32 inputLength = 0);
 
 
     static sal_uInt32 aes128ecb(
@@ -102,16 +94,26 @@ public:
 
 };
 
-class Encrypt : public Crypto
+class OOX_DLLPUBLIC Encrypt : public Crypto
 {
 public:
     Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
 
-    virtual sal_uInt32 update(
+    sal_uInt32 update(
                     std::vector<sal_uInt8>& output,
                     std::vector<sal_uInt8>& input,
-                    sal_uInt32 inputLength = 0) override;
+                    sal_uInt32 inputLength = 0);
 };
+
+class OOX_DLLPUBLIC CryptoHash : public Crypto
+{
+    sal_Int32 mnHashSize;
+public:
+    CryptoHash(std::vector<sal_uInt8>& rKey, CryptoHashType eType);
+    bool update(std::vector<sal_uInt8>& rInput, sal_uInt32 nInputLength = 0);
+    std::vector<sal_uInt8> finalize();
+};
+
 
 } // namespace core
 } // namespace oox
