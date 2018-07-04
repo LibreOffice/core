@@ -348,14 +348,21 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 {
                     // create temporary file for unencrypted package
                     Reference<XStream> xTempFile( TempFile::create(mxContext), UNO_QUERY_THROW );
-                    aDecryptor.decrypt( xTempFile );
 
-                    // store temp file in media descriptor to keep it alive
-                    rMediaDescriptor.setComponentDataEntry( "DecryptedPackage", Any( xTempFile ) );
+                    // if decryption was unsuccessful (corrupted file or any other reason)
+                    if (!aDecryptor.decrypt(xTempFile))
+                    {
+                        rMediaDescriptor[ MediaDescriptor::PROP_ABORTED() ] <<= true;
+                    }
+                    else
+                    {
+                        // store temp file in media descriptor to keep it alive
+                        rMediaDescriptor.setComponentDataEntry( "DecryptedPackage", Any( xTempFile ) );
 
-                    Reference<XInputStream> xDecryptedInputStream = xTempFile->getInputStream();
-                    if( lclIsZipPackage( mxContext, xDecryptedInputStream ) )
-                        return xDecryptedInputStream;
+                        Reference<XInputStream> xDecryptedInputStream = xTempFile->getInputStream();
+                        if( lclIsZipPackage( mxContext, xDecryptedInputStream ) )
+                            return xDecryptedInputStream;
+                    }
                 }
             }
         }

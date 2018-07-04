@@ -38,21 +38,23 @@ public:
 
     msfilter::StandardEncryptionInfo& getInfo() { return mInfo;}
 
-    virtual bool generateEncryptionKey(const OUString& rPassword) override;
+    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
 
-    virtual void writeEncryptionInfo(
-                    const OUString& rPassword,
-                    BinaryXOutputStream& rStream) override;
+    virtual bool generateEncryptionKey(OUString const & rPassword) override;
 
     virtual bool decrypt(
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) override;
 
-    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
+    bool checkDataIntegrity() override;
 
-    virtual void encrypt(
-                    BinaryXInputStream& aInputStream,
-                    BinaryXOutputStream& aOutputStream) override;
+    void encrypt(css::uno::Reference<css::io::XInputStream>&  rxInputStream,
+                 css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
+                 sal_uInt32 nSize) override;
+
+    virtual void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
+
+    virtual bool setupEncryption(OUString const & rPassword) override;
 
 };
 
