@@ -12,105 +12,243 @@
 #include <filter/msfilter/mscodec.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
+#include <o3tl/make_unique.hxx>
+
+#if USE_TLS_OPENSSL
+#include <openssl/evp.h>
+#include <openssl/sha.h>
+#include <openssl/hmac.h>
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+#include <nss.h>
+#include <pk11pub.h>
+#include <sechash.h>
+#endif // USE_TLS_NSS
+
 namespace oox {
 namespace core {
 
-Crypto::Crypto()
-#if USE_TLS_NSS
-    : mContext(nullptr)
-    , mSecParam(nullptr)
-    , mSymKey(nullptr)
-#endif
+#if USE_TLS_OPENSSL
+struct CryptoImpl
 {
-#if USE_TLS_NSS
-    // Initialize NSS, database functions are not needed
-    NSS_NoDB_Init(nullptr);
-#endif // USE_TLS_NSS
+    std::unique_ptr<EVP_CIPHER_CTX> mpContext;
+    std::unique_ptr<HMAC_CTX> mpHmacContext;
+
+    CryptoImpl() = default;
+
+    void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType eType)
+    {
+        mpContext.reset(new EVP_CIPHER_CTX);
+        EVP_CIPHER_CTX_init(mpContext.get());
+
+        const EVP_CIPHER* cipher = getCipher(eType);
+        if (cipher == nullptr)
+            return;
+
+        if (iv.empty())
+            EVP_EncryptInit_ex(mpContext.get(), cipher, nullptr, key.data(), 0);
+        else
+            EVP_EncryptInit_ex(mpContext.get(), cipher, nullptr, key.data(), iv.data());
+        EVP_CIPHER_CTX_set_padding(mpContext.get(), 0);
+    }
+
+    void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType eType)
+    {
+        mpContext.reset(new EVP_CIPHER_CTX);
+        EVP_CIPHER_CTX_init(mpContext.get());
+
+        const EVP_CIPHER* pCipher = getCipher(eType);
+        if (pCipher == nullptr)
+            return;
+
+        const size_t nMinKeySize = EVP_CIPHER_key_length(pCipher);
+        if (key.size() < nMinKeySize)
+            key.resize(nMinKeySize, 0);
+
+        if (iv.empty())
+            EVP_DecryptInit_ex(mpContext.get(), pCipher, nullptr, key.data(), 0);
+        else
+        {
+            const size_t nMinIVSize = EVP_CIPHER_iv_length(pCipher);
+            if (iv.size() < nMinIVSize)
+                iv.resize(nMinIVSize, 0);
+
+            EVP_DecryptInit_ex(mpContext.get(), pCipher, nullptr, key.data(), iv.data());
+        }
+        EVP_CIPHER_CTX_set_padding(mpContext.get(), 0);
+    }
+
+    void setupCryptoHashContext(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
+    {
+        mpHmacContext.reset(new HMAC_CTX);
+        HMAC_CTX_init(mpHmacContext.get());
+        const EVP_MD* aEvpMd;
+        switch (eType)
+        {
+            case CryptoHashType::SHA1:
+                aEvpMd = EVP_sha1(); break;
+            case CryptoHashType::SHA256:
+                aEvpMd = EVP_sha256(); break;
+            case CryptoHashType::SHA512:
+                aEvpMd = EVP_sha512(); break;
+        }
+        HMAC_Init(mpHmacContext.get(), rKey.data(), rKey.size(), aEvpMd);
+    }
+
+    ~CryptoImpl()
+    {
+        if (mpContext)
+            EVP_CIPHER_CTX_cleanup(mpContext.get());
+        if (mpHmacContext)
+            HMAC_CTX_cleanup(mpHmacContext.get());
+    }
+
+    const EVP_CIPHER* getCipher(Crypto::CryptoType type)
+    {
+        switch(type)
+        {
+            case Crypto::CryptoType::AES_128_ECB:
+                return EVP_aes_128_ecb();
+            case Crypto::CryptoType::AES_128_CBC:
+                return EVP_aes_128_cbc();
+            case Crypto::CryptoType::AES_256_CBC:
+                return EVP_aes_256_cbc();
+            default:
+                break;
+        }
+        return nullptr;
+    }
+};
+
+#elif USE_TLS_NSS
+
+struct CryptoImpl
+{
+    PK11Context* mContext;
+    SECItem*     mSecParam;
+    PK11SymKey*  mSymKey;
+    PK11SlotInfo* mpSlot;
+
+    CryptoImpl()
+        : mContext(nullptr)
+        , mSecParam(nullptr)
+        , mSymKey(nullptr)
+    {
+        // Initialize NSS, database functions are not needed
+        NSS_NoDB_Init(nullptr);
+    }
+
+    ~CryptoImpl()
+    {
+        if (mContext)
+            PK11_DestroyContext(mContext, PR_TRUE);
+        if (mSymKey)
+            PK11_FreeSymKey(mSymKey);
+        if (mSecParam)
+            SECITEM_FreeItem(mSecParam, PR_TRUE);
+        if (mpSlot)
+            PK11_FreeSlot(mpSlot);
+    }
+
+    void setupCryptoContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType type, CK_ATTRIBUTE_TYPE operation)
+    {
+        CK_MECHANISM_TYPE mechanism = static_cast<CK_ULONG>(-1);
+
+        SECItem ivItem;
+        ivItem.type = siBuffer;
+        if(iv.empty())
+            ivItem.data = nullptr;
+        else
+            ivItem.data = iv.data();
+        ivItem.len = iv.size();
+
+        SECItem* pIvItem = nullptr;
+
+        switch(type)
+        {
+            case Crypto::CryptoType::AES_128_ECB:
+                mechanism = CKM_AES_ECB;
+                break;
+            case Crypto::CryptoType::AES_128_CBC:
+                mechanism = CKM_AES_CBC;
+                pIvItem = &ivItem;
+                break;
+            case Crypto::CryptoType::AES_256_CBC:
+                mechanism = CKM_AES_CBC;
+                pIvItem = &ivItem;
+                break;
+            default:
+                break;
+        }
+
+        mpSlot = PK11_GetBestSlot(mechanism, nullptr);
+
+        if (!mpSlot)
+            throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
+
+        SECItem keyItem;
+        keyItem.type = siBuffer;
+        keyItem.data = key.data();
+        keyItem.len  = key.size();
+
+        mSymKey = PK11_ImportSymKey(mpSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, nullptr);
+        if (!mSymKey)
+            throw css::uno::RuntimeException("NSS SymKey failure", css::uno::Reference<css::uno::XInterface>());
+
+        mSecParam = PK11_ParamFromIV(mechanism, pIvItem);
+        mContext = PK11_CreateContextBySymKey(mechanism, operation, mSymKey, mSecParam);
+    }
+
+    void setupCryptoHashContext(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
+    {
+        CK_MECHANISM_TYPE aMechanism = static_cast<CK_ULONG>(-1);
+
+        switch(eType)
+        {
+            case CryptoHashType::SHA1:
+                aMechanism = CKM_SHA_1_HMAC;
+                break;
+            case CryptoHashType::SHA256:
+                aMechanism = CKM_SHA256_HMAC;
+                break;
+            case CryptoHashType::SHA512:
+                aMechanism = CKM_SHA512_HMAC;
+                break;
+        }
+
+        mpSlot = PK11_GetBestSlot(aMechanism, nullptr);
+
+        if (!mpSlot)
+            throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
+
+        SECItem aKeyItem;
+        aKeyItem.data = rKey.data();
+        aKeyItem.len  = rKey.size();
+
+        mSymKey = PK11_ImportSymKey(mpSlot, aMechanism, PK11_OriginUnwrap, CKA_SIGN, &aKeyItem, nullptr);
+        if (!mSymKey)
+            throw css::uno::RuntimeException("NSS SymKey failure", css::uno::Reference<css::uno::XInterface>());
+
+        SECItem param;
+        param.data = 0;
+        param.len = 0;
+        mContext = PK11_CreateContextBySymKey(aMechanism, CKA_SIGN, mSymKey, &param);
+    }
+};
+#else
+struct CryptoImpl
+{};
+#endif
+
+Crypto::Crypto()
+    : mpImpl(o3tl::make_unique<CryptoImpl>())
+{
 }
 
 Crypto::~Crypto()
 {
-#if USE_TLS_OPENSSL
-    EVP_CIPHER_CTX_cleanup( &mContext );
-#endif
-#if USE_TLS_NSS
-    if (mContext)
-        PK11_DestroyContext(mContext, PR_TRUE);
-    if (mSymKey)
-        PK11_FreeSymKey(mSymKey);
-    if (mSecParam)
-        SECITEM_FreeItem(mSecParam, PR_TRUE);
-#endif
 }
-
-#if USE_TLS_OPENSSL
-const EVP_CIPHER* Crypto::getCipher(CryptoType type)
-{
-    switch(type)
-    {
-        case AES_128_ECB:
-            return EVP_aes_128_ecb();
-        case AES_128_CBC:
-            return EVP_aes_128_cbc();
-        case AES_256_CBC:
-            return EVP_aes_256_cbc();
-        default:
-            break;
-    }
-    return NULL;
-}
-#endif
-
-#if USE_TLS_NSS
-void Crypto::setupContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type, CK_ATTRIBUTE_TYPE operation)
-{
-    CK_MECHANISM_TYPE mechanism = static_cast<CK_ULONG>(-1);
-
-    SECItem ivItem;
-    ivItem.type = siBuffer;
-    if(iv.empty())
-        ivItem.data = nullptr;
-    else
-        ivItem.data = iv.data();
-    ivItem.len = iv.size();
-
-    SECItem* pIvItem = nullptr;
-
-    switch(type)
-    {
-        case AES_128_ECB:
-            mechanism = CKM_AES_ECB;
-            break;
-        case AES_128_CBC:
-            mechanism = CKM_AES_CBC;
-            pIvItem = &ivItem;
-            break;
-        case AES_256_CBC:
-            mechanism = CKM_AES_CBC;
-            pIvItem = &ivItem;
-            break;
-        default:
-            break;
-    }
-
-    PK11SlotInfo* pSlot(PK11_GetBestSlot(mechanism, nullptr));
-
-    if (!pSlot)
-        throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
-
-    SECItem keyItem;
-    keyItem.type = siBuffer;
-    keyItem.data = key.data();
-    keyItem.len  = key.size();
-
-    mSymKey = PK11_ImportSymKey(pSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, nullptr);
-    if (!mSymKey)
-        throw css::uno::RuntimeException("NSS SymKey failure", css::uno::Reference<css::uno::XInterface>());
-
-    mSecParam = PK11_ParamFromIV(mechanism, pIvItem);
-    mContext = PK11_CreateContextBySymKey(mechanism, operation, mSymKey, mSecParam);
-}
-#endif // USE_TLS_NSS
 
 // DECRYPT
 
@@ -124,29 +262,11 @@ Decrypt::Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto
 #endif
 
 #if USE_TLS_OPENSSL
-    EVP_CIPHER_CTX_init(&mContext);
-
-    const EVP_CIPHER* cipher = getCipher(type);
-
-    const size_t nMinKeySize = EVP_CIPHER_key_length(cipher);
-    if (key.size() < nMinKeySize)
-        key.resize(nMinKeySize, 0);
-
-    if (iv.empty())
-        EVP_DecryptInit_ex(&mContext, cipher, nullptr, key.data(), 0);
-    else
-    {
-        const size_t nMinIVSize = EVP_CIPHER_iv_length(cipher);
-        if (iv.size() < nMinIVSize)
-            iv.resize(nMinIVSize, 0);
-
-        EVP_DecryptInit_ex(&mContext, cipher, nullptr, key.data(), iv.data());
-    }
-    EVP_CIPHER_CTX_set_padding(&mContext, 0);
+    mpImpl->setupDecryptContext(key, iv, type);
 #endif
 
 #if USE_TLS_NSS
-    setupContext(key, iv, type, CKA_DECRYPT);
+    mpImpl->setupCryptoContext(key, iv, type, CKA_DECRYPT);
 #endif // USE_TLS_NSS
 }
 
@@ -163,11 +283,11 @@ sal_uInt32 Decrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8
 #endif
 
 #if USE_TLS_OPENSSL
-    (void)EVP_DecryptUpdate(&mContext, output.data(), &outputLength, input.data(), actualInputLength);
+    (void)EVP_DecryptUpdate(mpImpl->mpContext.get(), output.data(), &outputLength, input.data(), actualInputLength);
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
-    (void)PK11_CipherOp( mContext, output.data(), &outputLength, actualInputLength, input.data(), actualInputLength );
+    (void)PK11_CipherOp(mpImpl->mContext, output.data(), &outputLength, actualInputLength, input.data(), actualInputLength);
 #endif // USE_TLS_NSS
 
     return static_cast<sal_uInt32>(outputLength);
@@ -194,19 +314,9 @@ Encrypt::Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto
 #endif
 
 #if USE_TLS_OPENSSL
-    EVP_CIPHER_CTX_init(&mContext);
-
-    const EVP_CIPHER* cipher = getCipher(type);
-
-    if (iv.empty())
-        EVP_EncryptInit_ex(&mContext, cipher, nullptr, key.data(), 0);
-    else
-        EVP_EncryptInit_ex(&mContext, cipher, nullptr, key.data(), iv.data());
-    EVP_CIPHER_CTX_set_padding(&mContext, 0);
-#endif
-
-#if USE_TLS_NSS
-    setupContext(key, iv, type, CKA_ENCRYPT);
+    mpImpl->setupEncryptContext(key, iv, type);
+#elif USE_TLS_NSS
+    mpImpl->setupCryptoContext(key, iv, type, CKA_ENCRYPT);
 #endif // USE_TLS_NSS
 }
 
@@ -223,14 +333,80 @@ sal_uInt32 Encrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8
 #endif
 
 #if USE_TLS_OPENSSL
-    (void)EVP_EncryptUpdate(&mContext, output.data(), &outputLength, input.data(), actualInputLength);
+    (void)EVP_EncryptUpdate(mpImpl->mpContext.get(), output.data(), &outputLength, input.data(), actualInputLength);
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
-    (void)PK11_CipherOp(mContext, output.data(), &outputLength, actualInputLength, input.data(), actualInputLength);
+    (void)PK11_CipherOp(mpImpl->mContext, output.data(), &outputLength, actualInputLength, input.data(), actualInputLength);
 #endif // USE_TLS_NSS
 
     return static_cast<sal_uInt32>(outputLength);
+}
+
+// CryptoHash - HMAC
+
+namespace
+{
+
+sal_Int32 getSizeForHashType(CryptoHashType eType)
+{
+    switch (eType)
+    {
+        case CryptoHashType::SHA1: return 20;
+        case CryptoHashType::SHA256: return 32;
+        case CryptoHashType::SHA512: return 64;
+    }
+    return 0;
+}
+
+} // end anonymous namespace
+
+CryptoHash::CryptoHash(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
+    : Crypto()
+    , mnHashSize(getSizeForHashType(eType))
+{
+#if USE_TLS_OPENSSL
+    mpImpl->setupCryptoHashContext(rKey, eType);
+#elif USE_TLS_NSS
+    mpImpl->setupCryptoHashContext(rKey, eType);
+    PK11_DigestBegin(mpImpl->mContext);
+#else
+    (void)rKey;
+#endif
+}
+
+bool CryptoHash::update(std::vector<sal_uInt8>& rInput, sal_uInt32 nInputLength)
+{
+#if USE_TLS_OPENSSL + USE_TLS_NSS > 0
+    sal_uInt32 nActualInputLength = (nInputLength == 0 || nInputLength > rInput.size()) ? rInput.size() : nInputLength;
+#else
+    (void)input;
+    (void)inputLength;
+#endif
+
+#if USE_TLS_OPENSSL
+    return HMAC_Update(mpImpl->mpHmacContext.get(), rInput.data(), nActualInputLength) != 0;
+#elif USE_TLS_NSS
+    return PK11_DigestOp(mpImpl->mContext, rInput.data(), nActualInputLength) == SECSuccess;
+#endif
+}
+
+std::vector<sal_uInt8> CryptoHash::finalize()
+{
+    std::vector<sal_uInt8> aHash(mnHashSize, 0);
+    sal_uInt32 nSizeWritten;
+#if USE_TLS_OPENSSL
+    bool bResult = HMAC_Final(mpImpl->mpHmacContext.get(), aHash.data(), &nSizeWritten) != 0;
+    printf ("RES: %d\n", bResult);
+    if (bResult)
+        aHash.resize(nSizeWritten, 0);
+#elif USE_TLS_NSS
+    PK11_DigestFinal(mpImpl->mContext, aHash.data(), &nSizeWritten, aHash.size());
+    aHash.resize(nSizeWritten, 0);
+#else
+    (void)nSizeWritten;
+#endif
+    return aHash;
 }
 
 } // namespace core

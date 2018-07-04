@@ -16,6 +16,20 @@ $(eval $(call gb_CppunitTest_add_exception_objects,oox_crypto,\
 
 $(eval $(call gb_CppunitTest_use_sdk_api,oox_crypto))
 
+ifeq ($(TLS),OPENSSL)
+$(eval $(call gb_CppunitTest_externals,oox_crypto,\
+	openssl \
+	openssl_headers \
+))
+else
+ifeq ($(TLS),NSS)
+$(eval $(call gb_CppunitTest_use_externals,oox_crypto,\
+       plc4 \
+       nss3 \
+))
+endif
+endif
+
 $(eval $(call gb_CppunitTest_use_libraries,oox_crypto,\
     basegfx \
     comphelper \
@@ -68,6 +82,7 @@ $(eval $(call gb_CppunitTest_use_components,oox_crypto,\
     unotools/util/utl \
     uui/util/uui \
     vcl/vcl.common \
+    sax/source/expatwrap/expwrap \
 ))
 
 
