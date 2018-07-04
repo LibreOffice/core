@@ -419,6 +419,7 @@ Size SAL_CALL ProgressMonitor::getPreferredSize ()
     nHeight +=  2;   // 1 for black line, 1 for white line = 3D-Line!
     nHeight +=  aButtonSize.Height;
 
+
     // norm to minimum
     if ( nWidth < PROGRESSMONITOR_DEFAULT_WIDTH )
     {

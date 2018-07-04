@@ -474,8 +474,7 @@ namespace accessibility
         OUString altText = getListBox()->GetEntryAltText( pEntry );
         if (!altText.isEmpty())
         {
-            sRet += " ";
-            sRet += altText;
+            sRet += " " + altText;
         }
 
         return sRet;

@@ -1429,6 +1429,7 @@ int Desktop::Main()
         aTitle += " [";
         aTitle += utl::Bootstrap::getBuildIdData("development");
         aTitle += "]";
+
 #endif
 
         SetDisplayName( aTitle );
