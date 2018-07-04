@@ -172,8 +172,7 @@ OUString implCreatePureResourceId
                         + aDot;
     if( !aCtrlName.isEmpty() )
     {
-        aPureIdStr += aCtrlName;
-        aPureIdStr += aDot;
+        aPureIdStr += aCtrlName + aDot;
     }
     aPureIdStr += aPropName;
     return aPureIdStr;
