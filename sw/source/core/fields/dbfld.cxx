@@ -213,9 +213,9 @@ OUString SwDBField::Expand() const
     return OUString();
 }
 
-SwField* SwDBField::Copy() const
+std::unique_ptr<SwField> SwDBField::Copy() const
 {
-    SwDBField *pTmp = new SwDBField(static_cast<SwDBFieldType*>(GetTyp()), GetFormat());
+    std::unique_ptr<SwDBField> pTmp(new SwDBField(static_cast<SwDBFieldType*>(GetTyp()), GetFormat()));
     pTmp->aContent      = aContent;
     pTmp->bIsInBodyText  = bIsInBodyText;
     pTmp->bValidValue   = bValidValue;
@@ -571,10 +571,10 @@ OUString SwDBNextSetField::Expand() const
     return OUString();
 }
 
-SwField* SwDBNextSetField::Copy() const
+std::unique_ptr<SwField> SwDBNextSetField::Copy() const
 {
-    SwDBNextSetField *pTmp = new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(GetTyp()),
-                                         aCond, GetDBData());
+    std::unique_ptr<SwDBNextSetField> pTmp(new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(GetTyp()),
+                                         aCond, GetDBData()));
     pTmp->SetSubType(GetSubType());
     pTmp->bCondValid = bCondValid;
     return pTmp;
@@ -658,10 +658,10 @@ OUString SwDBNumSetField::Expand() const
     return OUString();
 }
 
-SwField* SwDBNumSetField::Copy() const
+std::unique_ptr<SwField> SwDBNumSetField::Copy() const
 {
-    SwDBNumSetField *pTmp = new SwDBNumSetField(static_cast<SwDBNumSetFieldType*>(GetTyp()),
-                                         aCond, aPar2, GetDBData());
+    std::unique_ptr<SwDBNumSetField> pTmp(new SwDBNumSetField(static_cast<SwDBNumSetFieldType*>(GetTyp()),
+                                         aCond, aPar2, GetDBData()));
     pTmp->bCondValid = bCondValid;
     pTmp->SetSubType(GetSubType());
     return pTmp;
@@ -772,9 +772,9 @@ OUString SwDBNameField::Expand() const
     return OUString();
 }
 
-SwField* SwDBNameField::Copy() const
+std::unique_ptr<SwField> SwDBNameField::Copy() const
 {
-    SwDBNameField *pTmp = new SwDBNameField(static_cast<SwDBNameFieldType*>(GetTyp()), GetDBData());
+    std::unique_ptr<SwDBNameField> pTmp(new SwDBNameField(static_cast<SwDBNameFieldType*>(GetTyp()), GetDBData()));
     pTmp->ChangeFormat(GetFormat());
     pTmp->SetLanguage(GetLanguage());
     pTmp->SetSubType(GetSubType());
@@ -828,10 +828,10 @@ void SwDBSetNumberField::Evaluate(SwDoc const * pDoc)
     nNumber = pMgr->GetSelectedRecordId();
 }
 
-SwField* SwDBSetNumberField::Copy() const
+std::unique_ptr<SwField> SwDBSetNumberField::Copy() const
 {
-    SwDBSetNumberField *pTmp =
-        new SwDBSetNumberField(static_cast<SwDBSetNumberFieldType*>(GetTyp()), GetDBData(), GetFormat());
+    std::unique_ptr<SwDBSetNumberField> pTmp(
+        new SwDBSetNumberField(static_cast<SwDBSetNumberFieldType*>(GetTyp()), GetDBData(), GetFormat()));
     pTmp->SetLanguage(GetLanguage());
     pTmp->SetSetNumber(nNumber);
     pTmp->SetSubType(GetSubType());

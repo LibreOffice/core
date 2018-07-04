@@ -1540,22 +1540,13 @@ bool SwFieldMgr::InsertField(
 void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
                             const OUString& rPar1,
                             const OUString& rPar2,
-                            SwField * _pTmpField)
+                            std::unique_ptr<SwField> pTmpField)
 {
     // change format
     OSL_ENSURE(m_pCurField, "no field at CursorPos");
 
-    bool bDelete = false;
-    SwField *pTmpField;       // mb: fixed memory leak
-    if (nullptr != _pTmpField)
-    {
-        pTmpField = _pTmpField;
-    }
-    else
-    {
+    if (!pTmpField)
         pTmpField = m_pCurField->CopyField();
-        bDelete = true;
-    }
 
     SwFieldType* pType   = pTmpField->GetTyp();
     const sal_uInt16 nTypeId = pTmpField->GetTypeId();
@@ -1592,13 +1583,13 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             nByte = std::max(sal_uInt16(1), nByte);
             nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
-            static_cast<SwChapterField*>(pTmpField)->SetLevel(static_cast<sal_uInt8>(nByte));
+            static_cast<SwChapterField*>(pTmpField.get())->SetLevel(static_cast<sal_uInt8>(nByte));
             bSetPar2 = false;
             break;
         }
 
         case TYP_SCRIPTFLD:
-            static_cast<SwScriptField*>(pTmpField)->SetCodeURL(static_cast<bool>(nFormat));
+            static_cast<SwScriptField*>(pTmpField.get())->SetCodeURL(static_cast<bool>(nFormat));
             break;
 
         case TYP_NEXTPAGEFLD:
@@ -1642,10 +1633,10 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
         case TYP_GETREFFLD:
             {
                 bSetPar2 = false;
-                static_cast<SwGetRefField*>(pTmpField)->SetSubType( static_cast<sal_uInt16>(rPar2.toInt32()) );
+                static_cast<SwGetRefField*>(pTmpField.get())->SetSubType( static_cast<sal_uInt16>(rPar2.toInt32()) );
                 const sal_Int32 nPos = rPar2.indexOf( '|' );
                 if( nPos>=0 )
-                    static_cast<SwGetRefField*>(pTmpField)->SetSeqNo( static_cast<sal_uInt16>(rPar2.copy( nPos + 1 ).toInt32()));
+                    static_cast<SwGetRefField*>(pTmpField.get())->SetSeqNo( static_cast<sal_uInt16>(rPar2.copy( nPos + 1 ).toInt32()));
             }
             break;
         case TYP_DROPDOWN:
@@ -1655,15 +1646,15 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             OUString* pArray = aEntries.getArray();
             for(sal_Int32 nToken = 0; nToken < nTokenCount; nToken++)
                 pArray[nToken] = sPar2.getToken(nToken, DB_DELIM);
-            static_cast<SwDropDownField*>(pTmpField)->SetItems(aEntries);
-            static_cast<SwDropDownField*>(pTmpField)->SetName(rPar1);
+            static_cast<SwDropDownField*>(pTmpField.get())->SetItems(aEntries);
+            static_cast<SwDropDownField*>(pTmpField.get())->SetName(rPar1);
             bSetPar1 = bSetPar2 = false;
         }
         break;
         case TYP_AUTHORITY :
         {
             //#i99069# changes to a bibliography field should change the field type
-            SwAuthorityField* pAuthorityField = static_cast<SwAuthorityField*>(pTmpField);
+            SwAuthorityField* pAuthorityField = static_cast<SwAuthorityField*>(pTmpField.get());
             SwAuthorityFieldType* pAuthorityType = static_cast<SwAuthorityFieldType*>(pType);
             SwAuthEntry aTempEntry;
             for( sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i )
@@ -1706,8 +1697,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
         GetCurField();
     }
 
-    if (bDelete)
-        delete pTmpField;
+    pTmpField.reset();
 
     pSh->EndAllAction();
 }

@@ -309,10 +309,10 @@ OUString SwGetExpField::GetFieldName() const
     return SwFieldType::GetTypeStr(nType) + " " + GetFormula();
 }
 
-SwField* SwGetExpField::Copy() const
+std::unique_ptr<SwField> SwGetExpField::Copy() const
 {
-    SwGetExpField *pTmp = new SwGetExpField(static_cast<SwGetExpFieldType*>(GetTyp()),
-                                            GetFormula(), nSubType, GetFormat());
+    std::unique_ptr<SwGetExpField> pTmp(new SwGetExpField(static_cast<SwGetExpFieldType*>(GetTyp()),
+                                            GetFormula(), nSubType, GetFormat()));
     pTmp->SetLanguage(GetLanguage());
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->sExpand       = sExpand;
@@ -831,10 +831,10 @@ OUString SwSetExpField::GetFieldName() const
     return aStr;
 }
 
-SwField* SwSetExpField::Copy() const
+std::unique_ptr<SwField> SwSetExpField::Copy() const
 {
-    SwSetExpField *pTmp = new SwSetExpField(static_cast<SwSetExpFieldType*>(GetTyp()),
-                                            GetFormula(), GetFormat());
+    std::unique_ptr<SwSetExpField> pTmp(new SwSetExpField(static_cast<SwSetExpFieldType*>(GetTyp()),
+                                            GetFormula(), GetFormat()));
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->sExpand       = sExpand;
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
@@ -1192,16 +1192,16 @@ OUString SwInputField::GetFieldName() const
     return aStr;
 }
 
-SwField* SwInputField::Copy() const
+std::unique_ptr<SwField> SwInputField::Copy() const
 {
-    SwInputField* pField =
+    std::unique_ptr<SwInputField> pField(
         new SwInputField(
             static_cast<SwInputFieldType*>(GetTyp()),
             getContent(),
             aPText,
             GetSubType(),
             GetFormat(),
-            mbIsFormField );
+            mbIsFormField ));
 
     pField->SetHelp( aHelp );
     pField->SetToolTip( aToolTip );

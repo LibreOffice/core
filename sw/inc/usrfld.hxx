@@ -88,7 +88,7 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
     sal_uInt16  nSubType;
 
     virtual OUString        Expand() const override;
-    virtual SwField*        Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwUserField(SwUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);

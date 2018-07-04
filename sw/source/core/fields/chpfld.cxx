@@ -84,10 +84,10 @@ OUString SwChapterField::Expand() const
     return sNumber;
 }
 
-SwField* SwChapterField::Copy() const
+std::unique_ptr<SwField> SwChapterField::Copy() const
 {
-    SwChapterField *pTmp =
-        new SwChapterField(static_cast<SwChapterFieldType*>(GetTyp()), GetFormat());
+    std::unique_ptr<SwChapterField> pTmp(
+        new SwChapterField(static_cast<SwChapterFieldType*>(GetTyp()), GetFormat()));
     pTmp->nLevel = nLevel;
     pTmp->sTitle = sTitle;
     pTmp->sNumber = sNumber;

@@ -93,7 +93,7 @@ void sw::DropDownFieldDialog::Apply()
             m_rSh.StartAllAction();
 
             std::unique_ptr<SwDropDownField> const pCopy(
-                static_cast<SwDropDownField*>(m_pDropField->CopyField()));
+                static_cast<SwDropDownField*>(m_pDropField->CopyField().release()));
 
             pCopy->SetPar1(sSelect);
             m_rSh.SwEditShell::UpdateFields(*pCopy);

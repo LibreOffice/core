@@ -7255,7 +7255,7 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eTy
 
     struct FieldInfos infos;
     if (pField)
-        infos.pField.reset(pField->CopyField());
+        infos.pField = pField->CopyField();
     infos.sCmd = rFieldCmd;
     infos.eType = eType;
     infos.bClose = bool(FieldFlags::Close & nMode);

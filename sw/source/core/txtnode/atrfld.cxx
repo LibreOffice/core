@@ -63,12 +63,12 @@ SwFormatField::SwFormatField( const SwField &rField )
     {
         // input field in-place editing
         SetWhich( RES_TXTATR_INPUTFIELD );
-        static_cast<SwInputField*>(mpField)->SetFormatField( *this );
+        static_cast<SwInputField*>(mpField.get())->SetFormatField( *this );
     }
     else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
     {
         // see SwWrtShell::StartInputFieldDlg
-        static_cast<SwSetExpField *>(mpField)->SetFormatField(*this);
+        static_cast<SwSetExpField *>(mpField.get())->SetFormatField(*this);
     }
     else if ( mpField->GetTyp()->Which() == SwFieldIds::Postit )
     {
@@ -96,7 +96,7 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
         {
             // input field in-place editing
             SetWhich( RES_TXTATR_INPUTFIELD );
-            SwInputField *pField = dynamic_cast<SwInputField*>(mpField);
+            SwInputField *pField = dynamic_cast<SwInputField*>(mpField.get());
             assert(pField);
             if (pField)
                 pField->SetFormatField( *this );
@@ -104,7 +104,7 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
         else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
         {
             // see SwWrtShell::StartInputFieldDlg
-            static_cast<SwSetExpField *>(mpField)->SetFormatField(*this);
+            static_cast<SwSetExpField *>(mpField.get())->SetFormatField(*this);
         }
         else if ( mpField->GetTyp()->Which() == SwFieldIds::Postit )
         {
@@ -122,7 +122,7 @@ SwFormatField::~SwFormatField()
         pType = nullptr;  // DB field types destroy themselves
 
     Broadcast( SwFormatFieldHint( this, SwFormatFieldHintWhich::REMOVED ) );
-    delete mpField;
+    mpField.reset();
 
     // some fields need to delete their field type
     if( pType && pType->HasOnlyOneListener() )
@@ -158,19 +158,17 @@ void SwFormatField::RegisterToFieldType( SwFieldType& rType )
     rType.Add(this);
 }
 
-void SwFormatField::SetField(SwField * _pField)
+void SwFormatField::SetField(std::unique_ptr<SwField> _pField)
 {
-    delete mpField;
-
-    mpField = _pField;
+    mpField = std::move(_pField);
     if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
-        static_cast<SwInputField* >(mpField)->SetFormatField( *this );
+        static_cast<SwInputField* >(mpField.get())->SetFormatField( *this );
     }
     else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
     {
         // see SwWrtShell::StartInputFieldDlg
-        static_cast<SwSetExpField *>(mpField)->SetFormatField(*this);
+        static_cast<SwSetExpField *>(mpField.get())->SetFormatField(*this);
     }
     Broadcast( SwFormatFieldHint( this, SwFormatFieldHintWhich::CHANGED ) );
 }
@@ -260,7 +258,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 if( SwFieldIds::GetRef == mpField->GetTyp()->Which() )
                 {
                     // #i81002#
-                    static_cast<SwGetRefField*>(mpField)->UpdateField( mpTextField );
+                    static_cast<SwGetRefField*>(mpField.get())->UpdateField( mpTextField );
                 }
                 break;
         case RES_DOCPOS_UPDATE:

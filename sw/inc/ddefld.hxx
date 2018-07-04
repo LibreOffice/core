@@ -106,7 +106,7 @@ class SwDDEField : public SwField
 {
 private:
     virtual OUString Expand() const override;
-    virtual SwField* Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwDDEField(SwDDEFieldType*);

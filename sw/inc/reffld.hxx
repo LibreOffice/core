@@ -88,7 +88,7 @@ private:
     sal_uInt16 nSeqNo;
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     // #i81002#
     static OUString MakeRefNumStr( const SwTextNode& rTextNodeOfField,
