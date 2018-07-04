@@ -258,7 +258,7 @@ struct StyleSheetTable_Impl
     /// Style names which should not be used without a " (user)" suffix.
     std::set<OUString>                      m_aReservedStyleNames;
     ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
-    bool                                    m_bHasImportedDefaultParaStyle;
+    bool                                    m_bHasImportedDefaultParaProps;
     bool                                    m_bIsNewDoc;
 
     StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
@@ -281,7 +281,7 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
             m_pCurrentEntry(),
             m_pDefaultParaProps(new PropertyMap),
             m_pDefaultCharProps(new PropertyMap),
-            m_bHasImportedDefaultParaStyle(false),
+            m_bHasImportedDefaultParaProps(false),
             m_bIsNewDoc(bIsNewDoc)
 {
     //set font height default to 10pt
@@ -452,8 +452,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_ooxml::LN_CT_Style_default:
             m_pImpl->m_pCurrentEntry->bIsDefaultStyle = (nIntValue != 0);
-            if (m_pImpl->m_pCurrentEntry->bIsDefaultStyle && m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
-                m_pImpl->m_bHasImportedDefaultParaStyle = true;
 
             if (m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN)
             {
@@ -678,6 +676,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
+            m_pImpl->m_bHasImportedDefaultParaProps = true;
         break;
         case NS_ooxml::LN_CT_RPrDefault_rPr:
         case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
@@ -933,10 +932,10 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         {
                             StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
 
-                            // resolve import conflicts with built-in styles (only if normal style has been defined)
-                            if( m_pImpl->m_bHasImportedDefaultParaStyle
-                                && pEntry->sBaseStyleIdentifier.isEmpty()
-                                && !xStyle->getParentStyle().isEmpty() )
+                            // resolve import conflicts with built-in styles (only if defaults have been defined)
+                            if ( m_pImpl->m_bHasImportedDefaultParaProps
+                                && pEntry->sBaseStyleIdentifier.isEmpty()   //imported style has no inheritance
+                                && !xStyle->getParentStyle().isEmpty() )    //built-in style has a default inheritance
                             {
                                 xStyle->setParentStyle( "Standard" );
                             }
