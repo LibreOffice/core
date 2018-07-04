@@ -1376,9 +1376,6 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
     nCol = sal::static_int_cast<SCCOL>( nCol + nMovX );
     nRow = sal::static_int_cast<SCROW>( nRow + nMovY );
 
-    OSL_ENSURE( !nMovY || !bUnprotected,
-                "GetNextPos with bUnprotected horizontal not implemented" );
-
     if ( nMovY && (bMarked || bUnprotected))
     {
         bool  bUp    = ( nMovY < 0 );
