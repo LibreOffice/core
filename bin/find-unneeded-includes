@@ -53,6 +53,15 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         if include == k and v in toAdd:
             return True
 
+    # Avoid proposing to use libstdc++ internal headers.
+    bits = {
+        "exception": "bits/exception.h",
+        "memory": "bits/shared_ptr.h",
+    }
+    for k, v in bits.items():
+        if include == k and v in toAdd:
+            return True
+
     # Follow boost documentation.
     if include == "boost/optional.hpp" and "boost/optional/optional.hpp" in toAdd:
         return True

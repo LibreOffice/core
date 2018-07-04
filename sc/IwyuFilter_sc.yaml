@@ -38,9 +38,6 @@ blacklist:
     sc/inc/autoform.hxx:
     # contains macro definitions
     - scitems.hxx
-    sc/inc/calcconfig.hxx:
-    # needed for std::shared_ptr
-    - memory
     sc/inc/chartuno.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XEnumerationAccess.hpp
@@ -253,9 +250,6 @@ blacklist:
     sc/inc/scmatrix.hxx:
     # base class has to be a complete type
     - svl/sharedstringpool.hxx
-    sc/inc/simplerangelist.hxx:
-    # base class has to be a complete type
-    - memory
     sc/inc/spellcheckcontext.hxx:
     # base class has to be a complete type
     - editeng/misspellrange.hxx
@@ -298,9 +292,6 @@ blacklist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/text/XTextFieldsSupplier.hpp
-    sc/inc/token.hxx:
-    # needed for std::shared_ptr
-    - memory
     sc/inc/tokenuno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
