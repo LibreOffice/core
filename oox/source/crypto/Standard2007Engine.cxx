@@ -226,6 +226,62 @@ void Standard2007Engine::encrypt(BinaryXInputStream& aInputStream,
     }
 }
 
+bool Standard2007Engine::readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream)
+{
+    BinaryXInputStream aBinaryStream(rxInputStream, false);
+
+    mInfo.header.flags = aBinaryStream.readuInt32();
+    if (getFlag(mInfo.header.flags, msfilter::ENCRYPTINFO_EXTERNAL))
+        return false;
+
+    sal_uInt32 nHeaderSize = aBinaryStream.readuInt32();
+
+    sal_uInt32 actualHeaderSize = sizeof(mInfo.header);
+
+    if (nHeaderSize < actualHeaderSize)
+        return false;
+
+    mInfo.header.flags = aBinaryStream.readuInt32();
+    mInfo.header.sizeExtra = aBinaryStream.readuInt32();
+    mInfo.header.algId = aBinaryStream.readuInt32();
+    mInfo.header.algIdHash = aBinaryStream.readuInt32();
+    mInfo.header.keyBits = aBinaryStream.readuInt32();
+    mInfo.header.providedType = aBinaryStream.readuInt32();
+    mInfo.header.reserved1 = aBinaryStream.readuInt32();
+    mInfo.header.reserved2 = aBinaryStream.readuInt32();
+
+    aBinaryStream.skip(nHeaderSize - actualHeaderSize);
+
+    mInfo.verifier.saltSize = aBinaryStream.readuInt32();
+    aBinaryStream.readArray(mInfo.verifier.salt, SAL_N_ELEMENTS(mInfo.verifier.salt));
+    aBinaryStream.readArray(mInfo.verifier.encryptedVerifier, SAL_N_ELEMENTS(mInfo.verifier.encryptedVerifier));
+    mInfo.verifier.encryptedVerifierHashSize = aBinaryStream.readuInt32();
+    aBinaryStream.readArray(mInfo.verifier.encryptedVerifierHash, SAL_N_ELEMENTS(mInfo.verifier.encryptedVerifierHash));
+
+    if (mInfo.verifier.saltSize != 16)
+        return false;
+
+    // check flags and algorithm IDs, required are AES128 and SHA-1
+    if (!getFlag(mInfo.header.flags, msfilter::ENCRYPTINFO_CRYPTOAPI))
+        return false;
+
+    if (!getFlag(mInfo.header.flags, msfilter::ENCRYPTINFO_AES))
+        return false;
+
+    // algorithm ID 0 defaults to AES128 too, if ENCRYPTINFO_AES flag is set
+    if (mInfo.header.algId != 0 && mInfo.header.algId != msfilter::ENCRYPT_ALGO_AES128)
+        return false;
+
+    // hash algorithm ID 0 defaults to SHA-1 too
+    if (mInfo.header.algIdHash != 0 && mInfo.header.algIdHash != msfilter::ENCRYPT_HASH_SHA1)
+        return false;
+
+    if (mInfo.verifier.encryptedVerifierHashSize != 20)
+        return false;
+
+    return !aBinaryStream.isEof();
+}
+
 } // namespace core
 } // namespace oox
 
