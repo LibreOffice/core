@@ -296,12 +296,19 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     }
 }
 
-bool Control::ImplCallEventListenersAndHandler( VclEventId nEvent, std::function<void()> const & callHandler )
+void Control::CallEventListeners( VclEventId nEvent, void* pData)
 {
     VclPtr<Control> xThis(this);
     UITestLogger::getInstance().logAction(xThis, nEvent);
 
-    CallEventListeners( nEvent );
+    vcl::Window::CallEventListeners(nEvent, pData);
+}
+
+bool Control::ImplCallEventListenersAndHandler( VclEventId nEvent, std::function<void()> const & callHandler )
+{
+    VclPtr<Control> xThis(this);
+
+    Control::CallEventListeners( nEvent );
 
     if ( !xThis->IsDisposed() )
     {

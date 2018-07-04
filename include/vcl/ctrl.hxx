@@ -76,6 +76,8 @@ protected:
                     VclEventId nEvent, std::function<void()> const & callHandler
                 );
 
+    void        CallEventListeners( VclEventId nEvent, void* pData = nullptr );
+
     /** draws the given text onto the given device
 
         If no reference device is set, the draw request will simply be forwarded to OutputDevice::DrawText. Otherwise,
