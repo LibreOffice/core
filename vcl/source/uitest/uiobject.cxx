@@ -684,6 +684,23 @@ StringMap EditUIObject::get_state()
     return aMap;
 }
 
+OUString EditUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::EditSelectionChanged)
+    {
+        const Selection& rSelection  = mxEdit->GetSelection();
+        long nMin = rSelection.Min();
+        long nMax = rSelection.Max();
+        return this->get_type() + " Action:SELECT Id:" +
+                mxEdit->get_id() +
+                " Parent:" + get_top_parent(mxEdit)->get_id() +
+                " {\"FROM\": \"" + OUString::number(nMin) + "\", \"TO\": \"" +
+                OUString::number(nMax) + "\"}";
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
+}
+
 OUString EditUIObject::get_name() const
 {
     return OUString("EditUIObject");
