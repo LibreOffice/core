@@ -54,14 +54,14 @@ XmlWriter::~XmlWriter()
         endDocument();
 }
 
-bool XmlWriter::startDocument()
+bool XmlWriter::startDocument(sal_Int32 nIndent)
 {
     xmlOutputBufferPtr xmlOutBuffer
         = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback, mpImpl->mpStream, nullptr);
     mpImpl->mpWriter = xmlNewTextWriter(xmlOutBuffer);
     if (mpImpl->mpWriter == nullptr)
         return false;
-    xmlTextWriterSetIndent(mpImpl->mpWriter, 1);
+    xmlTextWriterSetIndent(mpImpl->mpWriter, nIndent);
     xmlTextWriterStartDocument(mpImpl->mpWriter, nullptr, "UTF-8", nullptr);
     return true;
 }
@@ -73,6 +73,26 @@ void XmlWriter::endDocument()
     mpImpl->mpWriter = nullptr;
 }
 
+void XmlWriter::startElement(const OString& sPrefix, const OString& sName,
+                             const OString& sNamespaceUri)
+{
+    xmlChar* xmlName = xmlCharStrdup(sName.getStr());
+    xmlChar* xmlPrefix = nullptr;
+    xmlChar* xmlNamespaceUri = nullptr;
+    if (!sPrefix.isEmpty())
+        xmlPrefix = xmlCharStrdup(sPrefix.getStr());
+    if (!sNamespaceUri.isEmpty())
+        xmlNamespaceUri = xmlCharStrdup(sNamespaceUri.getStr());
+
+    xmlTextWriterStartElementNS(mpImpl->mpWriter, xmlPrefix, xmlName, xmlNamespaceUri);
+
+    xmlFree(xmlName);
+    if (!sPrefix.isEmpty())
+        xmlFree(xmlPrefix);
+    if (!sNamespaceUri.isEmpty())
+        xmlFree(xmlNamespaceUri);
+}
+
 void XmlWriter::startElement(const OString& sName)
 {
     xmlChar* xmlName = xmlCharStrdup(sName.getStr());
@@ -81,6 +101,21 @@ void XmlWriter::startElement(const OString& sName)
 }
 
 void XmlWriter::endElement() { xmlTextWriterEndElement(mpImpl->mpWriter); }
+
+void XmlWriter::attributeBase64(const OString& rsName, std::vector<sal_uInt8> const& rValueInBytes)
+{
+    std::vector<char> aSignedBytes(rValueInBytes.begin(), rValueInBytes.end());
+    attributeBase64(rsName, aSignedBytes);
+}
+
+void XmlWriter::attributeBase64(const OString& rsName, std::vector<char> const& rValueInBytes)
+{
+    xmlChar* xmlName = xmlCharStrdup(rsName.getStr());
+    xmlTextWriterStartAttribute(mpImpl->mpWriter, xmlName);
+    xmlTextWriterWriteBase64(mpImpl->mpWriter, rValueInBytes.data(), 0, rValueInBytes.size());
+    xmlTextWriterEndAttribute(mpImpl->mpWriter);
+    xmlFree(xmlName);
+}
 
 void XmlWriter::attribute(const OString& name, const OString& value)
 {
