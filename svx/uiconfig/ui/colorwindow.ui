@@ -22,8 +22,6 @@
   </object>
   <object class="GtkPopover" id="palette_popup_window">
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
     <property name="border_width">4</property>
     <property name="position">bottom</property>
     <property name="constrain_to">none</property>
@@ -106,6 +104,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">never</property>
+            <property name="vscrollbar_policy">never</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkViewport">

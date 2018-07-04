@@ -3634,9 +3634,6 @@ Size SvtValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesire
         aSize.AdjustHeight(nTxtHeight + n + mnSpacing );
     }
 
-    // sum possible ScrollBar width
-    aSize.AdjustWidth(GetScrollWidth());
-
     return aSize;
 }
 
