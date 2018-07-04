@@ -18,6 +18,12 @@ gb_AllLangHelp_AUXDIR := $(gb_AllLangHelp_HELPDIR)/$(gb_AllLangHelp_AUXDIRNAME)
 
 gb_AllLangHelp__get_helpname = $(1)/$(2)
 
+ifneq ($(ENABLE_HTMLHELP),)
+$(call gb_AllLangHelp_get_helpfiles_target,%): | \
+        $(dir $(call gb_AllLangHelp_get_helpfiles_target,%)).dir
+	touch $@
+endif
+
 $(dir $(call gb_AllLangHelp_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
@@ -92,12 +98,6 @@ $(call gb_AllLangHelp_get_helpfiles_target,$(1)): $(addprefix $(SRCDIR)/,$(addsu
 endif
 
 endef
-
-ifneq ($(ENABLE_HTMLHELP),)
-$(call gb_AllLangHelp_get_helpfiles_target,%): | \
-        $(dir $(call gb_AllLangHelp_get_helpfiles_target,%)).dir
-	touch $@
-endif
 
 # Add additional localized file(s) to the help pack.
 #
