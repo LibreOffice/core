@@ -51,6 +51,7 @@ struct MenuItemData
     bool            bVisible;               // Visible (note: this flag will not override MenuFlags::HideDisabledEntries when true)
     bool            bIsTemporary;           // Temporary inserted ('No selection possible')
     bool            bHiddenOnGUI;
+    bool            bMain;                  // subMenu selection is from this menu
     Size            aSz;                    // only temporarily valid
     OUString        aAccessibleName;        // accessible name
 
@@ -68,6 +69,7 @@ struct MenuItemData
         , bVisible(false)
         , bIsTemporary(false)
         , bHiddenOnGUI(false)
+        , bMain(false)
     {
     }
     MenuItemData( const OUString& rStr )
@@ -84,6 +86,7 @@ struct MenuItemData
         , bVisible(false)
         , bIsTemporary(false)
         , bHiddenOnGUI(false)
+        , bMain(false)
     {
     }
     ~MenuItemData();
@@ -114,8 +117,10 @@ public:
     void            InsertSeparator(const OString &rIdent, size_t nPos);
     void            Remove( size_t nPos );
     void            Clear();
+    void            SetMainMenu(size_t nPos);
 
     MenuItemData*   GetData( sal_uInt16 nSVId, size_t& rPos ) const;
+    MenuItemData*   GetDataFromSubMenu( sal_uInt16 nSVId ) const;
     MenuItemData*   GetData( sal_uInt16 nSVId ) const
                     {
                         size_t nTemp;
