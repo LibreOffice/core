@@ -1098,6 +1098,92 @@
       </object>
     </child>
   </object>
+  <object class="GtkMenu" id="MenuPrint">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="ShowSinglePageD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowSinglePage</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ShowTwoPagesD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowTwoPages</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ShowBookviewD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowBookview</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ShowMultiplePagesD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowMultiplePages</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator137">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="GoToStartOfDocD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:GoToStartOfDoc</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PageUpD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PageUp</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PageDownD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PageDown</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="GoToEndOfDocD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:GoToEndOfDoc</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator147">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PrintD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Print</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ClosePreviewD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ClosePreview</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkMenu" id="MenuReference">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -12249,17 +12335,17 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="MediaBox">
+              <object class="sfxlo-PriorityHBox" id="PrintBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-PriorityMergedHBox" id="MediaContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="PrintPreviewContainer">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MediaGroup">
+                      <object class="sfxlo-OptionalBox" id="ShowPageGroup">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12269,17 +12355,52 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="resize_mode">immediate</property>
-                            <property name="toolbar_style">both-horiz</property>
+                            <property name="toolbar_style">both</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="Media-AVMediaPlayer">
+                              <object class="GtkToolButton" id="Print-ShowSinglePage">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:AVMediaPlayer</property>
+                                <property name="action_name">.uno:ShowSinglePage</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Print-ShowTwoPages">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ShowTwoPages</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Print-ShowBookview">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ShowBookview</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkMenuToolButton" id="Print-ShowMultiplePages">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
+                                <property name="action_name">.uno:ShowMultiplePages</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
                               </packing>
                             </child>
                           </object>
@@ -12304,6 +12425,9 @@
                             <property name="position">3</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -12312,13 +12436,415 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MediaGroup1">
+                      <object class="sfxlo-OptionalBox" id="ArrangeGroup">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="GtkBox" id="box4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="first6">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="resize_mode">immediate</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="show_arrow">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-GoToStartOfDoc">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:GoToStartOfDoc</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-PageUp">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:PageUp</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-JumpToSpecificPage">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:JumpToSpecificPage</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-PageDown">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:PageDown</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-GoToEndOfDoc">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:GoToEndOfDoc</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="second7">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="resize_mode">immediate</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="show_arrow">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-ZoomMinus">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:ZoomMinus</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-PreviewZoom">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:PreviewZoom</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-ZoomPlus">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:ZoomPlus</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Print-FullScreen">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:FullScreen</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator" id="separator75">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="PrintGroup">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
                           <object class="sfxlo-NotebookbarToolBox" id="first3">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="resize_mode">immediate</property>
+                            <property name="toolbar_style">both</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Print-Print">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Print</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator" id="separator105">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="Printmenu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkBox" id="GroupB78">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="svtlo-ManagedMenuButton" id="print:MenuPrint">
+                            <property name="label" translatable="yes" context="notebookbar|PrintMenuButton">_Print</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="halign">start</property>
+                            <property name="relief">none</property>
+                            <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom79">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
+                            <property name="toolbar_style">both-horiz</property>
+                            <property name="show_arrow">False</property>
+                            <property name="icon_size">1</property>
+                            <child>
+                              <object class="GtkToolButton" id="Print-ClosePreview">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ClosePreview</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator114">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">5</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <style>
+                  <class name="context-Printpreview"/>
+                </style>
+              </object>
+              <packing>
+                <property name="position">10</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="PrintLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar|PrintLabel">Print</property>
+                <style>
+                  <class name="context-Printpreview"/>
+                </style>
+              </object>
+              <packing>
+                <property name="position">12</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="sfxlo-PriorityHBox" id="MediaBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="sfxlo-PriorityMergedHBox" id="MediaContainer">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="MediaGroup">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="first4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="resize_mode">immediate</property>
+                            <property name="toolbar_style">both-horiz</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Media-AVMediaPlayer1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:AVMediaPlayer</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator" id="separator25">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="MediaGroup2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="first5">
                             <property name="width_request">1000</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -12326,7 +12852,7 @@
                             <property name="toolbar_style">both-horiz</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="Media-AVMediaToolBox1">
+                              <object class="GtkToolButton" id="Media-AVMediaToolBox2">
                                 <property name="width_request">800</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -12346,7 +12872,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator137">
+                          <object class="GtkSeparator" id="separator31">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -12371,25 +12897,25 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="WrapGroupe">
+                      <object class="sfxlo-OptionalBox" id="WrapGroupe1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB76">
+                          <object class="GtkBox" id="GroupB49">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="Wrap6">
+                              <object class="sfxlo-NotebookbarToolBox" id="Wrap9">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-WrapLeft">
+                                  <object class="GtkToolButton" id="Media-WrapLeft1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:WrapLeft</property>
@@ -12400,7 +12926,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-WrapThrough">
+                                  <object class="GtkToolButton" id="Media-WrapThrough1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:WrapThrough</property>
@@ -12411,7 +12937,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-WrapRight">
+                                  <object class="GtkToolButton" id="Media-WrapRight1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:WrapRight</property>
@@ -12422,7 +12948,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-WrapContour">
+                                  <object class="GtkToolButton" id="Media-WrapContour1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:WrapContour</property>
@@ -12440,13 +12966,13 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="Wrap5">
+                              <object class="sfxlo-NotebookbarToolBox" id="Wrap10">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-WrapOff">
+                                  <object class="GtkToolButton" id="Media-WrapOff1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:WrapOff</property>
@@ -12457,7 +12983,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-WrapOn">
+                                  <object class="GtkToolButton" id="Media-WrapOn1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:WrapOn</property>
@@ -12468,7 +12994,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-WrapIdeal">
+                                  <object class="GtkToolButton" id="Media-WrapIdeal1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:WrapIdeal</property>
@@ -12493,7 +13019,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator75">
+                          <object class="GtkSeparator" id="separator32">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -12518,25 +13044,25 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="AlignGroup">
+                      <object class="sfxlo-OptionalBox" id="AlignGroup2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB75">
+                          <object class="GtkBox" id="GroupB52">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="Align5">
+                              <object class="sfxlo-NotebookbarToolBox" id="Align1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-AlignTop">
+                                  <object class="GtkToolButton" id="Media-AlignTop1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:AlignTop</property>
@@ -12547,7 +13073,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-AlignVerticalCenter">
+                                  <object class="GtkToolButton" id="Media-AlignVerticalCenter1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:AlignVerticalCenter</property>
@@ -12558,7 +13084,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-AlignBottom">
+                                  <object class="GtkToolButton" id="Media-AlignBottom1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:AlignBottom</property>
@@ -12576,13 +13102,13 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="Align6">
+                              <object class="sfxlo-NotebookbarToolBox" id="Align2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-AlignLeft">
+                                  <object class="GtkToolButton" id="Media-AlignLeft1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:AlignLeft</property>
@@ -12593,7 +13119,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-AlignHorizontalCenter">
+                                  <object class="GtkToolButton" id="Media-AlignHorizontalCenter1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:AlignHorizontalCenter</property>
@@ -12604,7 +13130,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Media-AlignRight">
+                                  <object class="GtkToolButton" id="Media-AlignRight1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:AlignRight</property>
@@ -12629,7 +13155,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator105">
+                          <object class="GtkSeparator" id="separator37">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -12661,14 +13187,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Mediamenu">
+                  <object class="sfxlo-DropdownBox" id="Mediamenu1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="GtkBox" id="GroupB78">
+                      <object class="GtkBox" id="GroupB53">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12692,7 +13218,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom79">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom25">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
@@ -12701,7 +13227,7 @@
                             <property name="show_arrow">False</property>
                             <property name="icon_size">1</property>
                             <child>
-                              <object class="GtkToolButton" id="Media-TransformDialog">
+                              <object class="GtkToolButton" id="Media-TransformDialog1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:TransformDialog</property>
@@ -12712,7 +13238,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkMenuToolButton" id="Media-AnchorMenu">
+                              <object class="GtkMenuToolButton" id="Media-AnchorMenu1">
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -12746,7 +13272,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="separator114">
+                  <object class="GtkSeparator" id="separator38">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -12801,7 +13327,7 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom25">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom26">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -12831,7 +13357,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="GroupB49">
+                          <object class="GtkBox" id="GroupB54">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -12841,7 +13367,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom26">
+                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom27">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">both-horiz</property>
@@ -12865,7 +13391,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom27">
+                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom28">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
@@ -12935,7 +13461,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom28">
+                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom30">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">text</property>
@@ -12974,7 +13500,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator25">
+                          <object class="GtkSeparator" id="separator41">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -13002,7 +13528,7 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom30">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom31">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -13040,7 +13566,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="Wrap9">
+                                  <object class="sfxlo-NotebookbarToolBox" id="Wrap11">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
@@ -13086,7 +13612,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="Wrap10">
+                                  <object class="sfxlo-NotebookbarToolBox" id="Wrap12">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
@@ -13139,7 +13665,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSeparator" id="separator31">
+                              <object class="GtkSeparator" id="separator81">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
@@ -13157,7 +13683,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="Align1">
+                                  <object class="sfxlo-NotebookbarToolBox" id="Align9">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
@@ -13203,7 +13729,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="Align2">
+                                  <object class="sfxlo-NotebookbarToolBox" id="Align10">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
@@ -13256,7 +13782,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSeparator" id="separator32">
+                              <object class="GtkSeparator" id="separator82">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
@@ -13358,7 +13884,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator37">
+                          <object class="GtkSeparator" id="separator83">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -13389,13 +13915,13 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB52">
+                          <object class="GtkBox" id="GroupB55">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom31">
+                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom54">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -13454,7 +13980,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator38">
+                          <object class="GtkSeparator" id="separator84">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -13512,7 +14038,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="GroupB53">
+                          <object class="GtkBox" id="GroupB56">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -13577,7 +14103,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator41">
+                          <object class="GtkSeparator" id="separator86">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -13619,7 +14145,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="GtkBox" id="GroupB54">
+                      <object class="GtkBox" id="GroupB71">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13687,7 +14213,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="separator81">
+                  <object class="GtkSeparator" id="separator88">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -13806,7 +14332,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="separator82">
+                  <object class="GtkSeparator" id="separator89">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -13874,7 +14400,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="GroupB55">
+                          <object class="GtkBox" id="GroupB77">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -13936,7 +14462,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator83">
+                          <object class="GtkSeparator" id="separator115">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -13991,7 +14517,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="GroupB56">
+                          <object class="GtkBox" id="GroupB85">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -14057,7 +14583,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator84">
+                          <object class="GtkSeparator" id="separator140">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -14115,7 +14641,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="GroupB71">
+                          <object class="GtkBox" id="GroupB86">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -14181,7 +14707,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator86">
+                          <object class="GtkSeparator" id="separator141">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -14212,7 +14738,7 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB85">
+                          <object class="GtkBox" id="GroupB88">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -14384,7 +14910,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator88">
+                          <object class="GtkSeparator" id="separator142">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -14415,7 +14941,7 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB86">
+                          <object class="GtkBox" id="GroupB89">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -14521,7 +15047,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator115">
+                          <object class="GtkSeparator" id="separator144">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -14552,7 +15078,7 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB88">
+                          <object class="GtkBox" id="GroupB91">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
@@ -14658,7 +15184,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator89">
+                          <object class="GtkSeparator" id="separator145">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
