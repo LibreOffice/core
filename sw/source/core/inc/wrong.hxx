@@ -59,7 +59,7 @@ public:
     css::uno::Reference< css::container::XStringKeyMap > mxPropertyBag;
     sal_Int32 mnPos;
     sal_Int32 mnLen;
-    std::unique_ptr<SwWrongList> mpSubList;
+    SwWrongList* mpSubList;
 
     Color mColor;
     WrongAreaLineType mLineType;
@@ -75,10 +75,6 @@ public:
                  sal_Int32 nPos,
                  sal_Int32 nLen,
                  SwWrongList* pSubList);
-
-    SwWrongArea( const SwWrongArea& );
-    SwWrongArea& operator=( const SwWrongArea& );
-
 private:
 
     static Color getGrammarColor ( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag)
@@ -257,13 +253,14 @@ class SwWrongList
     void Remove( sal_uInt16 nIdx, sal_uInt16 nLen );
 
     SwWrongList& operator= (const SwWrongList &) = delete;
+    SwWrongList( const SwWrongList& rCpy ) = delete;
 
 public:
     SwWrongList( WrongListType eType );
-    SwWrongList( SwWrongList const & );
 
     virtual ~SwWrongList();
-    virtual std::unique_ptr<SwWrongList> Clone();
+    virtual SwWrongList* Clone();
+    virtual void CopyFrom( const SwWrongList& rCopy );
 
     WrongListType GetWrongListType() const { return meType; }
     sal_Int32 GetBeginInv() const { return mnBeginInvalid; }
@@ -322,14 +319,14 @@ public:
 
     SwWrongList* SubList( sal_uInt16 nIdx ) const
     {
-        return maList[nIdx].mpSubList.get();
+        return nIdx < maList.size() ? maList[nIdx].mpSubList : nullptr;
     }
 
     void InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList );
 
     const SwWrongArea* GetElement( sal_uInt16 nIdx ) const
     {
-        return &maList[nIdx];
+        return nIdx < maList.size() ? &maList[nIdx] : nullptr;
     }
     void RemoveEntry( sal_Int32 nBegin, sal_Int32 nEnd );
     bool LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd );

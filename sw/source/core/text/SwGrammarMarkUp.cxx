@@ -18,21 +18,22 @@
  */
 
 #include <SwGrammarMarkUp.hxx>
-#include <o3tl/make_unique.hxx>
 
 SwGrammarMarkUp::~SwGrammarMarkUp()
 {
 }
 
-SwGrammarMarkUp::SwGrammarMarkUp(SwGrammarMarkUp const & other)
-    : SwWrongList(other),
-      maSentence(other.maSentence)
+SwWrongList* SwGrammarMarkUp::Clone()
 {
+    SwWrongList* pClone = new SwGrammarMarkUp();
+    pClone->CopyFrom( *this );
+    return pClone;
 }
 
-std::unique_ptr<SwWrongList> SwGrammarMarkUp::Clone()
+void SwGrammarMarkUp::CopyFrom( const SwWrongList& rCopy )
 {
-    return o3tl::make_unique<SwGrammarMarkUp>();
+    maSentence = static_cast<const SwGrammarMarkUp&>(rCopy).maSentence;
+    SwWrongList::CopyFrom( rCopy );
 }
 
 void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )

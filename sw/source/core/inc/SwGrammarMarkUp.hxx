@@ -39,10 +39,10 @@ class SwGrammarMarkUp : public SwWrongList
 
 public:
     SwGrammarMarkUp() : SwWrongList( WRONGLIST_GRAMMAR ) {}
-    SwGrammarMarkUp(SwGrammarMarkUp const &);
 
     virtual ~SwGrammarMarkUp() override;
-    virtual std::unique_ptr<SwWrongList> Clone() override;
+    virtual SwWrongList* Clone() override;
+    virtual void CopyFrom( const SwWrongList& rCopy ) override;
 
     /* SwWrongList::Move() + handling of maSentence */
     void MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff );

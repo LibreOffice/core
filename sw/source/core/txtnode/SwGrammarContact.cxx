@@ -41,14 +41,14 @@
 class SwGrammarContact : public IGrammarContact, public SwClient
 {
     Timer aTimer;
-    std::unique_ptr<SwGrammarMarkUp> mpProxyList;
+    SwGrammarMarkUp *mpProxyList;
     bool mbFinished;
     SwTextNode* getMyTextNode() { return static_cast<SwTextNode*>(GetRegisteredIn()); }
       DECL_LINK( TimerRepaint, Timer *, void );
 
 public:
     SwGrammarContact();
-    virtual ~SwGrammarContact() override { aTimer.Stop(); mpProxyList.reset(); }
+    virtual ~SwGrammarContact() override { aTimer.Stop(); delete mpProxyList; }
 
     // (pure) virtual functions of IGrammarContact
     virtual void updateCursorPosition( const SwPosition& rNewPos ) override;
@@ -73,7 +73,7 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
         pTimer->Stop();
         if( GetRegisteredIn() )
         {   //Replace the old wrong list by the proxy list and repaint all frames
-            getMyTextNode()->SetGrammarCheck( mpProxyList.get() );
+            getMyTextNode()->SetGrammarCheck( mpProxyList );
             mpProxyList = nullptr;
             SwTextFrame::repaintTextFrames( *getMyTextNode() );
         }
@@ -91,7 +91,7 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
         {
             if( mpProxyList )
             {   // replace old list by the proxy list and repaint
-                getMyTextNode()->SetGrammarCheck( mpProxyList.get() );
+                getMyTextNode()->SetGrammarCheck( mpProxyList );
                 SwTextFrame::repaintTextFrames( *getMyTextNode() );
             }
             EndListeningAll();
@@ -112,21 +112,22 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool 
         {
             if( mbFinished )
             {
-                mpProxyList.reset();
+                delete mpProxyList;
+                mpProxyList = nullptr;
             }
             if( !mpProxyList )
             {
                 if( rTextNode.GetGrammarCheck() )
-                    mpProxyList.reset( static_cast<SwGrammarMarkUp*>(rTextNode.GetGrammarCheck()->Clone().release()) );
+                    mpProxyList = static_cast<SwGrammarMarkUp*>(rTextNode.GetGrammarCheck()->Clone());
                 else
                 {
-                    mpProxyList.reset(new SwGrammarMarkUp());
+                    mpProxyList = new SwGrammarMarkUp();
                     mpProxyList->SetInvalid( 0, COMPLETE_STRING );
                 }
             }
            mbFinished = false;
         }
-        pRet = mpProxyList.get();
+        pRet = mpProxyList;
     }
     else
     {
@@ -152,7 +153,8 @@ void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
     {    // if my current paragraph dies, I throw the proxy list away
         aTimer.Stop();
         EndListeningAll();
-        mpProxyList.reset();
+        delete mpProxyList;
+        mpProxyList = nullptr;
     }
 }
 
