@@ -490,20 +490,32 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Dat~e (variable)</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertDateFieldFix" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Date (fixed)</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertTimeFieldVar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">T~ime (variable)</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertTimeFieldFix" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Time (fixed)</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertPageField" oor:op="replace">
@@ -518,6 +530,9 @@
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:InsertPageField</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertPageTitleField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -530,6 +545,9 @@
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:InsertPageTitleField</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertPagesField" oor:op="replace">
@@ -544,6 +562,9 @@
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:InsertPagesField</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ModifyField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -553,6 +574,9 @@
       <node oor:name=".uno:InsertFileField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~File Name</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertAuthorField" oor:op="replace">
@@ -1702,6 +1726,9 @@
       <node oor:name=".uno:InsertSlideNumber" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">S~lide Number...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:InsertPageNumber</value>
