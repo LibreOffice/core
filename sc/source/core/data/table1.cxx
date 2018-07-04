@@ -1324,7 +1324,8 @@ bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
 
 // Skips the current cell if it is Hidden, Overlapped or Protected and Sheet is Protected
 bool ScTable::SkipRow( const SCCOL nCol, SCROW& rRow, const SCROW nMovY,
-        const ScMarkData& rMark, const bool bUp, const SCROW nUsedY, const bool bSheetProtected ) const
+        const ScMarkData& rMark, const bool bUp, const SCROW nUsedY,
+        const bool bMarked, const bool bSheetProtected ) const
 {
     if ( !ValidRow( rRow ))
         return false;
@@ -1336,7 +1337,8 @@ bool ScTable::SkipRow( const SCCOL nCol, SCROW& rRow, const SCROW nMovY,
         else
             rRow += nMovY;
 
-        rRow  = rMark.GetNextMarked( nCol, rRow, bUp );
+        if (bMarked)
+            rRow  = rMark.GetNextMarked( nCol, rRow, bUp );
 
         return true;
     }
@@ -1348,7 +1350,8 @@ bool ScTable::SkipRow( const SCCOL nCol, SCROW& rRow, const SCROW nMovY,
         if ( bRowHidden || bOverlapped )
         {
             rRow += nMovY;
-            rRow  = rMark.GetNextMarked( nCol, rRow, bUp );
+            if (bMarked)
+                rRow = rMark.GetNextMarked( nCol, rRow, bUp );
 
             return true;
         }
@@ -1375,16 +1378,17 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
     OSL_ENSURE( !nMovY || !bUnprotected,
                 "GetNextPos with bUnprotected horizontal not implemented" );
 
-    if ( nMovY && bMarked )
+    if ( nMovY && (bMarked || bUnprotected))
     {
         bool  bUp    = ( nMovY < 0 );
         SCROW nUsedY = nRow;
         SCCOL nUsedX = nCol;
 
-        nRow = rMark.GetNextMarked( nCol, nRow, bUp );
+        if (bMarked)
+            nRow = rMark.GetNextMarked( nCol, nRow, bUp );
         pDocument->GetPrintArea( nTab, nUsedX, nUsedY );
 
-        while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nUsedY, bSheetProtected ))
+        while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nUsedY, bMarked, bSheetProtected ))
             ;
 
         while ( nRow < 0 || nRow > MAXROW )
@@ -1412,9 +1416,10 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
             else if (nRow > MAXROW)
                 nRow = 0;
 
-            nRow = rMark.GetNextMarked( nCol, nRow, bUp );
+            if (bMarked)
+                nRow = rMark.GetNextMarked( nCol, nRow, bUp );
 
-            while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nUsedY, bSheetProtected ))
+            while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, nUsedY, bMarked, bSheetProtected ))
                 ;
         }
     }
