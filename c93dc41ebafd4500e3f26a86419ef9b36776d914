@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_fc6f0990",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5923,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-04T16:54:29Z",
+      "side": 1,
+      "message": "this change looks a bit inconsistent and surprising: if there is a paragraph open, then no page break, but if no paragraph is open, then write a deferred page break?",
+      "revId": "c93dc41ebafd4500e3f26a86419ef9b36776d914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
