@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_1c3bcdd1",
+        "filename": "sw/source/core/unocore/unobkm.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-04T15:34:44Z",
+      "side": 1,
+      "message": "i am not sure if this duplication of state is needed...\n\nit\u0027s also possible that this code path (!pBkmk \u0026\u0026 m_pRegisteredBookmark) is actually dead ... TODO need to check this...",
+      "revId": "b7b26047d2117608851df3ba7d30457f8c3eea5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
