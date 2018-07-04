@@ -38,9 +38,6 @@ blacklist:
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/qa/XDumper.hpp
     - com/sun/star/util/XModifyListener.hpp
-    chart2/source/inc/chartview/ExplicitValueProvider.hxx:
-    # base class has to be a complete type
-    - memory
     chart2/source/inc/AxisHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/ScaleData.hpp
