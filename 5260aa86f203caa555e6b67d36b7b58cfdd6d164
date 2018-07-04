@@ -16,6 +16,24 @@
       "revId": "5260aa86f203caa555e6b67d36b7b58cfdd6d164",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b64be0ae",
+        "filename": "svx/source/table/cell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-07-04T07:08:35Z",
+      "side": 1,
+      "message": "I guess you are right. I had in mind to separate dispose and destructor, but - afaik - dispose means there is no way back anyways, right? Ar there any cases an object gets re-activated and re-used *after* dispose?\nIf no -\u003e dispose is equal in meaning to destructor but on another level (UNObject)",
+      "parentUuid": "ffe62b97_ab725910",
+      "revId": "5260aa86f203caa555e6b67d36b7b58cfdd6d164",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
