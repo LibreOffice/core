@@ -909,6 +909,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117297_tableStyle, "tdf117297_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph3 double spacing", sal_Int16(200), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf82175_noStyleInheritance, "tdf82175_noStyleInheritance.docx")
+{
+    // The document's "Default" paragraph style is 1 inch fixed line spacing, and that is what should not be inherited.
+    style::LineSpacing aSpacing = getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing");
+    // MSWord uses 115% line spacing, but LO follows the documentation and sets single spacing.
+    CPPUNIT_ASSERT_MESSAGE("Text Body style 115% line spacing", sal_Int16(120) > aSpacing.Height);
+    CPPUNIT_ASSERT_MESSAGE("THANKS for *FIXING* line spacing", sal_Int16(115) != aSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aSpacing.Mode);
+}
+
 DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
 {
     // Header was lost on export when the document had multiple columns.
