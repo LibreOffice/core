@@ -267,7 +267,7 @@
           <value>.uno:NewDoc</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="en-US">Templates</value>
+          <value xml:lang="en-US">Templates...</value>
         </prop>
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_self</value>
