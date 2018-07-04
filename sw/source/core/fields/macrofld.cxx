@@ -24,6 +24,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -51,9 +52,9 @@ OUString SwMacroField::Expand() const
     return m_aText ;
 }
 
-SwField* SwMacroField::Copy() const
+std::unique_ptr<SwField> SwMacroField::Copy() const
 {
-    return new SwMacroField(static_cast<SwMacroFieldType*>(GetTyp()), m_aMacro, m_aText);
+    return o3tl::make_unique<SwMacroField>(static_cast<SwMacroFieldType*>(GetTyp()), m_aMacro, m_aText);
 }
 
 OUString SwMacroField::GetFieldName() const

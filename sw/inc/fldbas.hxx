@@ -283,7 +283,7 @@ private:
     SwFieldType*        m_pType;
 
     virtual OUString    Expand() const = 0;
-    virtual SwField*    Copy() const = 0;
+    virtual std::unique_ptr<SwField> Copy() const = 0;
 
 protected:
     void                SetFormat(sal_uInt32 const nSet) {
@@ -316,7 +316,7 @@ public:
     /// @return name or content.
     virtual OUString    GetFieldName() const;
 
-    SwField *           CopyField() const;
+    std::unique_ptr<SwField> CopyField() const;
 
     /// ResId
     SwFieldIds          Which() const

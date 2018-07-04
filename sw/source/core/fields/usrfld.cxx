@@ -55,9 +55,9 @@ OUString SwUserField::Expand() const
     return OUString();
 }
 
-SwField* SwUserField::Copy() const
+std::unique_ptr<SwField> SwUserField::Copy() const
 {
-    SwField* pTmp = new SwUserField(static_cast<SwUserFieldType*>(GetTyp()), nSubType, GetFormat());
+    std::unique_ptr<SwField> pTmp(new SwUserField(static_cast<SwUserFieldType*>(GetTyp()), nSubType, GetFormat()));
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     return pTmp;
 }

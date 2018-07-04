@@ -63,15 +63,15 @@ SwTableField::SwTableField( SwTableFieldType* pInitType, const OUString& rFormel
     sExpand = "0";
 }
 
-SwField* SwTableField::Copy() const
+std::unique_ptr<SwField> SwTableField::Copy() const
 {
-    SwTableField* pTmp = new SwTableField( static_cast<SwTableFieldType*>(GetTyp()),
-                                        SwTableFormula::GetFormula(), nSubType, GetFormat() );
+    std::unique_ptr<SwTableField> pTmp(new SwTableField( static_cast<SwTableFieldType*>(GetTyp()),
+                                        SwTableFormula::GetFormula(), nSubType, GetFormat() ));
     pTmp->sExpand     = sExpand;
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->SwTableFormula::operator=( *this );
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
-    return pTmp;
+    return std::unique_ptr<SwField>(pTmp.release());
 }
 
 OUString SwTableField::GetFieldName() const

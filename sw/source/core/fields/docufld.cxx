@@ -211,14 +211,14 @@ OUString SwPageNumberField::Expand() const
     return sRet;
 }
 
-SwField* SwPageNumberField::Copy() const
+std::unique_ptr<SwField> SwPageNumberField::Copy() const
 {
-    SwPageNumberField *pTmp = new SwPageNumberField(
+    std::unique_ptr<SwPageNumberField> pTmp(new SwPageNumberField(
                 static_cast<SwPageNumberFieldType*>(GetTyp()), m_nSubType,
-                GetFormat(), m_nOffset, m_nPageNumber, m_nMaxPage);
+                GetFormat(), m_nOffset, m_nPageNumber, m_nMaxPage));
     pTmp->SetLanguage( GetLanguage() );
     pTmp->SetUserString( m_sUserStr );
-    return pTmp;
+    return std::unique_ptr<SwField>(pTmp.release());
 }
 
 OUString SwPageNumberField::GetPar2() const
@@ -344,12 +344,12 @@ OUString SwAuthorField::Expand() const
     return m_aContent;
 }
 
-SwField* SwAuthorField::Copy() const
+std::unique_ptr<SwField> SwAuthorField::Copy() const
 {
-    SwAuthorField *pTmp = new SwAuthorField( static_cast<SwAuthorFieldType*>(GetTyp()),
-                                                GetFormat());
+    std::unique_ptr<SwAuthorField> pTmp(new SwAuthorField( static_cast<SwAuthorFieldType*>(GetTyp()),
+                                                GetFormat()));
     pTmp->SetExpansion(m_aContent);
-    return pTmp;
+    return std::unique_ptr<SwField>(pTmp.release());
 }
 
 bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -477,13 +477,13 @@ OUString SwFileNameField::Expand() const
     return m_aContent;
 }
 
-SwField* SwFileNameField::Copy() const
+std::unique_ptr<SwField> SwFileNameField::Copy() const
 {
-    SwFileNameField *pTmp =
-        new SwFileNameField(static_cast<SwFileNameFieldType*>(GetTyp()), GetFormat());
+    std::unique_ptr<SwFileNameField> pTmp(
+        new SwFileNameField(static_cast<SwFileNameFieldType*>(GetTyp()), GetFormat()));
     pTmp->SetExpansion(m_aContent);
 
-    return pTmp;
+    return std::unique_ptr<SwField>(pTmp.release());
 }
 
 bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -643,11 +643,9 @@ OUString SwTemplNameField::Expand() const
     return static_cast<SwTemplNameFieldType*>(GetTyp())->Expand(GetFormat());
 }
 
-SwField* SwTemplNameField::Copy() const
+std::unique_ptr<SwField> SwTemplNameField::Copy() const
 {
-    SwTemplNameField *pTmp =
-        new SwTemplNameField(static_cast<SwTemplNameFieldType*>(GetTyp()), GetFormat());
-    return pTmp;
+    return o3tl::make_unique<SwTemplNameField>(static_cast<SwTemplNameFieldType*>(GetTyp()), GetFormat());
 }
 
 bool SwTemplNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -772,11 +770,10 @@ OUString SwDocStatField::Expand() const
     return static_cast<SwDocStatFieldType*>(GetTyp())->Expand(m_nSubType, static_cast<SvxNumType>(GetFormat()));
 }
 
-SwField* SwDocStatField::Copy() const
+std::unique_ptr<SwField> SwDocStatField::Copy() const
 {
-    SwDocStatField *pTmp = new SwDocStatField(
+    return o3tl::make_unique<SwDocStatField>(
                     static_cast<SwDocStatFieldType*>(GetTyp()), m_nSubType, GetFormat() );
-    return pTmp;
 }
 
 sal_uInt16 SwDocStatField::GetSubType() const
@@ -1135,13 +1132,13 @@ OUString SwDocInfoField::GetFieldName() const
     return aStr;
 }
 
-SwField* SwDocInfoField::Copy() const
+std::unique_ptr<SwField> SwDocInfoField::Copy() const
 {
-    SwDocInfoField* pField = new SwDocInfoField(static_cast<SwDocInfoFieldType*>(GetTyp()), m_nSubType, m_aName, GetFormat());
+    std::unique_ptr<SwDocInfoField> pField(new SwDocInfoField(static_cast<SwDocInfoFieldType*>(GetTyp()), m_nSubType, m_aName, GetFormat()));
     pField->SetAutomaticLanguage(IsAutomaticLanguage());
     pField->m_aContent = m_aContent;
 
-    return pField;
+    return std::unique_ptr<SwField>(pField.release());
 }
 
 sal_uInt16 SwDocInfoField::GetSubType() const
@@ -1402,17 +1399,17 @@ OUString SwHiddenTextField::GetFieldName() const
     return aStr;
 }
 
-SwField* SwHiddenTextField::Copy() const
+std::unique_ptr<SwField> SwHiddenTextField::Copy() const
 {
-    SwHiddenTextField* pField =
+    std::unique_ptr<SwHiddenTextField> pField(
         new SwHiddenTextField(static_cast<SwHiddenTextFieldType*>(GetTyp()), m_aCond,
-                              m_aTRUEText, m_aFALSEText);
+                              m_aTRUEText, m_aFALSEText));
     pField->m_bIsHidden = m_bIsHidden;
     pField->m_bValid    = m_bValid;
     pField->m_aContent  = m_aContent;
     pField->SetFormat(GetFormat());
     pField->m_nSubType  = m_nSubType;
-    return pField;
+    return std::unique_ptr<SwField>(pField.release());
 }
 
 /// set condition
@@ -1669,12 +1666,11 @@ OUString SwHiddenParaField::Expand() const
     return OUString();
 }
 
-SwField* SwHiddenParaField::Copy() const
+std::unique_ptr<SwField> SwHiddenParaField::Copy() const
 {
-    SwHiddenParaField* pField = new SwHiddenParaField(static_cast<SwHiddenParaFieldType*>(GetTyp()), m_aCond);
+    std::unique_ptr<SwHiddenParaField> pField(new SwHiddenParaField(static_cast<SwHiddenParaFieldType*>(GetTyp()), m_aCond));
     pField->m_bIsHidden = m_bIsHidden;
-
-    return pField;
+    return std::unique_ptr<SwField>(pField.release());
 }
 
 bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -1776,16 +1772,16 @@ OUString SwPostItField::GetDescription() const
     return SwResId(STR_NOTE);
 }
 
-SwField* SwPostItField::Copy() const
+std::unique_ptr<SwField> SwPostItField::Copy() const
 {
-    SwPostItField* pRet = new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
-                                             m_aDateTime, m_nPostItId);
+    std::unique_ptr<SwPostItField> pRet(new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
+                                             m_aDateTime, m_nPostItId));
     if (mpText)
         pRet->SetTextObject( o3tl::make_unique<OutlinerParaObject>(*mpText) );
 
     // Note: member <m_xTextObject> not copied.
 
-    return pRet;
+    return std::unique_ptr<SwField>(pRet.release());
 }
 
 /// set author
@@ -2001,12 +1997,12 @@ OUString SwExtUserField::Expand() const
     return m_aContent;
 }
 
-SwField* SwExtUserField::Copy() const
+std::unique_ptr<SwField> SwExtUserField::Copy() const
 {
-    SwExtUserField* pField = new SwExtUserField(static_cast<SwExtUserFieldType*>(GetTyp()), m_nType, GetFormat());
+    std::unique_ptr<SwExtUserField> pField(new SwExtUserField(static_cast<SwExtUserFieldType*>(GetTyp()), m_nType, GetFormat()));
     pField->SetExpansion(m_aContent);
 
-    return pField;
+    return std::unique_ptr<SwField>(pField.release());
 }
 
 sal_uInt16 SwExtUserField::GetSubType() const
@@ -2099,9 +2095,9 @@ OUString SwRefPageSetField::Expand() const
     return OUString();
 }
 
-SwField* SwRefPageSetField::Copy() const
+std::unique_ptr<SwField> SwRefPageSetField::Copy() const
 {
-    return new SwRefPageSetField( static_cast<SwRefPageSetFieldType*>(GetTyp()), m_nOffset, m_bOn );
+    return o3tl::make_unique<SwRefPageSetField>( static_cast<SwRefPageSetFieldType*>(GetTyp()), m_nOffset, m_bOn );
 }
 
 OUString SwRefPageSetField::GetPar2() const
@@ -2287,12 +2283,12 @@ OUString SwRefPageGetField::Expand() const
     return m_sText;
 }
 
-SwField* SwRefPageGetField::Copy() const
+std::unique_ptr<SwField> SwRefPageGetField::Copy() const
 {
-    SwRefPageGetField* pCpy = new SwRefPageGetField(
-                        static_cast<SwRefPageGetFieldType*>(GetTyp()), GetFormat() );
+    std::unique_ptr<SwRefPageGetField> pCpy(new SwRefPageGetField(
+                        static_cast<SwRefPageGetFieldType*>(GetTyp()), GetFormat() ));
     pCpy->SetText( m_sText );
-    return pCpy;
+    return std::unique_ptr<SwField>(pCpy.release());
 }
 
 void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
@@ -2419,9 +2415,9 @@ OUString SwJumpEditField::Expand() const
     return "<" + m_sText + ">";
 }
 
-SwField* SwJumpEditField::Copy() const
+std::unique_ptr<SwField> SwJumpEditField::Copy() const
 {
-    return new SwJumpEditField( static_cast<SwJumpEditFieldType*>(GetTyp()), GetFormat(),
+    return o3tl::make_unique<SwJumpEditField>( static_cast<SwJumpEditFieldType*>(GetTyp()), GetFormat(),
                                 m_sText, m_sHelp );
 }
 
@@ -2539,9 +2535,9 @@ OUString SwCombinedCharField::Expand() const
     return m_sCharacters;
 }
 
-SwField* SwCombinedCharField::Copy() const
+std::unique_ptr<SwField> SwCombinedCharField::Copy() const
 {
-    return new SwCombinedCharField( static_cast<SwCombinedCharFieldType*>(GetTyp()),
+    return o3tl::make_unique<SwCombinedCharField>( static_cast<SwCombinedCharFieldType*>(GetTyp()),
                                         m_sCharacters );
 }
 

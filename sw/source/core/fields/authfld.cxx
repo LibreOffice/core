@@ -569,10 +569,10 @@ OUString SwAuthorityField::ExpandCitation(ToxAuthorityField eField) const
     return sRet;
 }
 
-SwField* SwAuthorityField::Copy() const
+std::unique_ptr<SwField> SwAuthorityField::Copy() const
 {
     SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(GetTyp());
-    return new SwAuthorityField(pAuthType, m_nHandle);
+    return o3tl::make_unique<SwAuthorityField>(pAuthType, m_nHandle);
 }
 
 OUString SwAuthorityField::GetFieldText(ToxAuthorityField eField) const

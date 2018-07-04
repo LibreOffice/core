@@ -92,7 +92,7 @@ class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
     bool            bLateInitialization; // #i82544#
 
     virtual OUString            Expand() const override;
-    virtual SwField*            Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwGetExpField( SwGetExpFieldType*, const OUString& rFormel,
@@ -214,7 +214,7 @@ class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
     SwFormatField * mpFormatField; /// pool item to which the SwSetExpField belongs
 
     virtual OUString            Expand() const override;
-    virtual SwField*            Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwSetExpField(SwSetExpFieldType*, const OUString& rFormel, sal_uLong nFormat = 0);
@@ -299,7 +299,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 
     virtual OUString        Expand() const override;
-    virtual SwField*        Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     // Accessing Input Field's content
     const OUString& getContent() const { return aContent;}
@@ -385,7 +385,7 @@ class SwTableField : public SwValueField, public SwTableFormula
     sal_uInt16      nSubType;
 
     virtual OUString    Expand() const override;
-    virtual SwField*    Copy() const override;
+    virtual std::unique_ptr<SwField> Copy() const override;
 
     /// Search TextNode containing the field.
     virtual const SwNode* GetNodeOfFormula() const override;
