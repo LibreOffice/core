@@ -2939,6 +2939,9 @@ private:
         }
         else
         {
+            //set border width
+            gtk_container_set_border_width(GTK_CONTAINER(m_pMenuHack), gtk_container_get_border_width(GTK_CONTAINER(m_pPopover)));
+
             //steal popover contents and smuggle into toplevel display window
             GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pPopover));
             g_object_ref(pChild);
