@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_d1b78e3a",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-04T09:42:24Z",
+      "side": 1,
+      "message": "There should be a round function in rtl::math",
+      "revId": "bfc9c360558da26ce6ba01af3441a09c7d48f117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_91834657",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-04T09:42:24Z",
+      "side": 1,
+      "message": "There should also be a function in rtl::math for ceil and floor.",
+      "revId": "bfc9c360558da26ce6ba01af3441a09c7d48f117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_7188c270",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-04T09:42:24Z",
+      "side": 1,
+      "message": "There is also a function for this in rtl::math.",
+      "revId": "bfc9c360558da26ce6ba01af3441a09c7d48f117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_517dbe6c",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-04T09:42:24Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "bfc9c360558da26ce6ba01af3441a09c7d48f117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
