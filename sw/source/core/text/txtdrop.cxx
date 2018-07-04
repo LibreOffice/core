@@ -117,7 +117,7 @@ SwDropPortion::SwDropPortion( const sal_uInt16 nLineCnt,
 
 SwDropPortion::~SwDropPortion()
 {
-    delete pPart;
+    pPart.reset();
     if( pBlink )
         pBlink->Delete( this );
 }
@@ -635,15 +635,16 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         if ( nNextChg > nPorLen )
             nNextChg = nPorLen;
 
-        SwDropPortionPart* pPart =
-                new SwDropPortionPart( *pTmpFnt, nNextChg - nTmpIdx );
+        std::unique_ptr<SwDropPortionPart> pPart(
+                new SwDropPortionPart( *pTmpFnt, nNextChg - nTmpIdx ) );
+        auto pPartTemp = pPart.get();
 
         if ( ! pCurrPart )
-            pDropPor->SetPart( pPart );
+            pDropPor->SetPart( std::move(pPart) );
         else
-            pCurrPart->SetFollow( std::unique_ptr<SwDropPortionPart>(pPart) );
+            pCurrPart->SetFollow( std::move(pPart) );
 
-        pCurrPart = pPart;
+        pCurrPart = pPartTemp;
     }
 
     SetPaintDrop( true );
@@ -1008,7 +1009,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
         const long nOldX = rInf.X();
         {
             SwDropSave aSave( rInf );
-            SwDropPortionPart* pCurrPart = pPart;
+            SwDropPortionPart* pCurrPart = pPart.get();
 
             while ( pCurrPart )
             {
@@ -1057,8 +1058,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
 
             // And now for another round
             nDropHeight = nLines = 0;
-            delete pPart;
-            pPart = nullptr;
+            pPart.reset();
 
             // Meanwhile use normal formatting
             bFull = SwTextPortion::Format( rInf );

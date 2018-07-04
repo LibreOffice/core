@@ -61,7 +61,7 @@ public:
 class SwDropPortion : public SwTextPortion
 {
     friend class SwDropCapCache;
-    SwDropPortionPart* pPart; // due to script/attribute changes
+    std::unique_ptr<SwDropPortionPart> pPart; // due to script/attribute changes
     sal_uInt16 nLines;          // Line count
     sal_uInt16 nDropHeight;     // Height
     sal_uInt16 nDropDescent;    // Distance to the next line
@@ -91,8 +91,8 @@ public:
     sal_uInt16 GetDropDescent() const { return nDropDescent; }
     sal_uInt16 GetDropLeft() const { return Width() + nFix; }
 
-    SwDropPortionPart* GetPart() const { return pPart; }
-    void SetPart( SwDropPortionPart* pNew ) { pPart = pNew; }
+    SwDropPortionPart* GetPart() const { return pPart.get(); }
+    void SetPart( std::unique_ptr<SwDropPortionPart> pNew ) { pPart = std::move(pNew); }
 
     void SetY( short nNew )  { nY = nNew; }
 
