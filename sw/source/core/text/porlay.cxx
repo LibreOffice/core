@@ -1287,6 +1287,18 @@ sal_uInt8 SwScriptInfo::DirType(const sal_Int32 nPos) const
     return 0;
 }
 
+sal_Int32 SwScriptInfo::NextHiddenChg(sal_Int32 const nPos) const
+{
+    for (auto const it : aHiddenChg)
+    {
+        if (nPos < it)
+        {
+            return it;
+        }
+    }
+    return COMPLETE_STRING;
+}
+
 // Takes a string and replaced the hidden ranges with cChar.
 sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTextNode& rNode, OUStringBuffer & rText,
                                        const sal_Int32 nStt, const sal_Int32 nEnd,
