@@ -16,6 +16,24 @@
       "revId": "32c00ebd5b1da8e592eab1180b0d2957f2f5d2d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d658a457",
+        "filename": "include/IwyuFilter_include.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-07-04T08:13:46Z",
+      "side": 1,
+      "message": "Sure, I\u0027ll take a look there and remove from here.",
+      "parentUuid": "ffe62b97_b6e08098",
+      "revId": "32c00ebd5b1da8e592eab1180b0d2957f2f5d2d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
