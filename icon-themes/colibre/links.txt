@@ -1050,6 +1050,15 @@ cmd/sc_lastslide.png cmd/sc_lastrecord.png
 cmd/sc_previousslide.png cmd/sc_prevrecord.png
 cmd/sc_nextslide.png cmd/sc_nextrecord.png
 cmd/sc_slidesetup.png cmd/sc_pagesetup.png
+cmd/sc_insertslidenumber.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertslidefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertslidesfield.png cmd/sc_insertpagecountfield.png
+cmd/sc_insertslidetitlefield.png cmd/sc_inserttitlefield.png
+cmd/sc_insertfilefield.png cmd/sc_open.png
+cmd/sc_insertdatefielfix.png cmd/sc_datefield.png
+cmd/sc_insertdatefielvar.png cmd/sc_datefield.png
+cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
+cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
 
 # dbaccess
 # ==============================================
