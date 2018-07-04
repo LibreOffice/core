@@ -177,13 +177,36 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:InsertObjectChart"/>
+      <menu:menuitem menu:id=".uno:InsertTable"/>
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
           <menu:menuitem menu:id=".uno:InsertMath"/>
+          <menu:menuitem menu:id=".uno:ImportFromFile"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:InsertTable"/>
+      <menu:menu menu:id=".uno:ShapesMenu">
+        <menu:menupopup>
+          <menu:menu menu:id=".uno:ShapesLineMenu">
+            <menu:menupopup>
+              <menu:menuitem menu:id=".uno:Line"/>
+              <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
+              <menu:menuitem menu:id=".uno:Freeline"/>
+              <menu:menuitem menu:id=".uno:Bezier_Unfilled"/>
+              <menu:menuitem menu:id=".uno:BezierFill"/>
+              <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
+              <menu:menuitem menu:id=".uno:Polygon_Diagonal_Unfilled"/>
+              <menu:menuitem menu:id=".uno:Polygon_Diagonal"/>
+            </menu:menupopup>
+          </menu:menu>
+          <menu:menuitem menu:id=".uno:BasicShapes"/>
+          <menu:menuitem menu:id=".uno:ArrowShapes"/>
+          <menu:menuitem menu:id=".uno:SymbolShapes"/>
+          <menu:menuitem menu:id=".uno:StarShapes"/>
+          <menu:menuitem menu:id=".uno:CalloutShapes"/>
+          <menu:menuitem menu:id=".uno:FlowChartShapes"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CapturePoint"/>
       <menu:menuitem menu:id=".uno:InsertLayer"/>
@@ -257,36 +280,36 @@
     <menu:menupopup>
       <menu:menu menu:id=".uno:FormatTextMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Bold"/>
-          <menu:menuitem menu:id=".uno:Italic"/>
-          <menu:menuitem menu:id=".uno:Underline"/>
-          <menu:menuitem menu:id=".uno:UnderlineDouble"/>
-          <menu:menuitem menu:id=".uno:Strikeout"/>
-          <menu:menuitem menu:id=".uno:Overline"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:SuperScript"/>
-          <menu:menuitem menu:id=".uno:SubScript"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:Shadowed"/>
-          <menu:menuitem menu:id=".uno:OutlineFont"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:Grow"/>
-          <menu:menuitem menu:id=".uno:Shrink"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
-          <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
-          <menu:menu menu:id=".uno:TransliterateMenu">
-            <menu:menupopup>
-              <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
-              <menu:menuseparator/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
-            </menu:menupopup>
-          </menu:menu>
+            <menu:menuitem menu:id=".uno:Bold"/>
+            <menu:menuitem menu:id=".uno:Italic"/>
+            <menu:menuitem menu:id=".uno:Underline"/>
+            <menu:menuitem menu:id=".uno:UnderlineDouble"/>
+            <menu:menuitem menu:id=".uno:Strikeout"/>
+            <menu:menuitem menu:id=".uno:Overline"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SuperScript"/>
+            <menu:menuitem menu:id=".uno:SubScript"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Shadowed"/>
+            <menu:menuitem menu:id=".uno:OutlineFont"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Grow"/>
+            <menu:menuitem menu:id=".uno:Shrink"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseRotateCase"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SmallCaps"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:FormatSpacingMenu">
@@ -333,17 +356,14 @@
           <menu:menuitem menu:id=".uno:DesignerDialog"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
       <menu:menuitem menu:id=".uno:SetDefault"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuitem menu:id=".uno:OutlineBullet"/>
+      <menu:menuitem menu:id=".uno:PageSetup"/>
       <menu:menuitem menu:id=".uno:ModifyLayer"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:TransformDialog"/>
-      <menu:menuitem menu:id=".uno:FormatLine"/>
-      <menu:menuitem menu:id=".uno:FormatArea"/>
-      <menu:menuitem menu:id=".uno:TextAttributes"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:FormatImageMenu">
         <menu:menupopup>
@@ -375,6 +395,10 @@
           <menu:menuitem menu:id=".uno:GrafAttrCrop"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:TransformDialog"/>
+      <menu:menuitem menu:id=".uno:FormatLine"/>
+      <menu:menuitem menu:id=".uno:FormatArea"/>
+      <menu:menuitem menu:id=".uno:TextAttributes"/>
       <menu:menuitem menu:id=".uno:FillShadow"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:NameGroup"/>
@@ -384,23 +408,20 @@
   <menu:menu menu:id=".uno:PageMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertPage"/>
-      <menu:menuitem menu:id=".uno:ImportFromFile"/>
       <menu:menuitem menu:id=".uno:DuplicatePage"/>
       <menu:menuitem menu:id=".uno:DeletePage"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertMasterPage"/>
-      <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
-      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:RenamePage"/>
       <menu:menuitem menu:id=".uno:SelectBackground"/>
       <menu:menuitem menu:id=".uno:SaveBackground"/>
-      <menu:menuitem menu:id=".uno:PageSetup"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:InsertMasterPage"/>
+      <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawingLayout"/>
       <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
       <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
       <menu:menuitem menu:id=".uno:MasterLayouts"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:RenamePage"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:SlideMoveMenu">
         <menu:menupopup>
@@ -422,82 +443,9 @@
   </menu:menu>
   <menu:menu menu:id=".uno:ShapeMenu">
     <menu:menupopup>
-      <menu:menu menu:id=".uno:InsertMenu">
-        <menu:menupopup>
-          <menu:menu menu:id=".uno:ShapesLineMenu">
-            <menu:menupopup>
-              <menu:menuitem menu:id=".uno:Line"/>
-              <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
-              <menu:menuitem menu:id=".uno:Freeline"/>
-              <menu:menuitem menu:id=".uno:Bezier_Unfilled"/>
-              <menu:menuitem menu:id=".uno:BezierFill"/>
-              <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
-              <menu:menuitem menu:id=".uno:Polygon_Diagonal_Unfilled"/>
-              <menu:menuitem menu:id=".uno:Polygon_Diagonal"/>
-            </menu:menupopup>
-          </menu:menu>
-          <menu:menuitem menu:id=".uno:BasicShapes"/>
-          <menu:menuitem menu:id=".uno:ArrowShapes"/>
-          <menu:menuitem menu:id=".uno:SymbolShapes"/>
-          <menu:menuitem menu:id=".uno:StarShapes"/>
-          <menu:menuitem menu:id=".uno:CalloutShapes"/>
-          <menu:menuitem menu:id=".uno:FlowChartShapes"/>
-        </menu:menupopup>
-      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CopyObjects"/>
       <menu:menuitem menu:id=".uno:Morphing"/>
-      <menu:menuseparator/>
-      <menu:menu menu:id=".uno:MirrorMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:MirrorVert"/>
-          <menu:menuitem menu:id=".uno:MirrorHorz"/>
-        </menu:menupopup>
-      </menu:menu>
-      <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
-      <menu:menuseparator/>
-      <menu:menu menu:id=".uno:ArrangeMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:BringToFront"/>
-          <menu:menuitem menu:id=".uno:Forward"/>
-          <menu:menuitem menu:id=".uno:Backward"/>
-          <menu:menuitem menu:id=".uno:SendToBack"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:BeforeObject"/>
-          <menu:menuitem menu:id=".uno:BehindObject"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:ReverseOrder"/>
-        </menu:menupopup>
-      </menu:menu>
-      <menu:menu menu:id=".uno:ObjectAlign">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
-          <menu:menuitem menu:id=".uno:AlignCenter"/>
-          <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:AlignUp"/>
-          <menu:menuitem menu:id=".uno:AlignMiddle"/>
-          <menu:menuitem menu:id=".uno:AlignDown"/>
-        </menu:menupopup>
-      </menu:menu>
-      <menu:menuitem menu:id=".uno:DistributeSelection"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:FormatGroup"/>
-      <menu:menuitem menu:id=".uno:FormatUngroup"/>
-      <menu:menuitem menu:id=".uno:EnterGroup"/>
-      <menu:menuitem menu:id=".uno:LeaveGroup"/>
-      <menu:menuseparator/>
-      <menu:menu menu:id=".uno:ConvertMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:ChangeBezier"/>
-          <menu:menuitem menu:id=".uno:ChangePolygon"/>
-          <menu:menuitem menu:id=".uno:convert_to_contour"/>
-          <menu:menuitem menu:id=".uno:ConvertInto3D"/>
-          <menu:menuitem menu:id=".uno:ConvertInto3DLatheFast"/>
-          <menu:menuitem menu:id=".uno:ConvertIntoBitmap"/>
-          <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
-        </menu:menupopup>
-      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Combine"/>
       <menu:menuitem menu:id=".uno:Dismantle"/>
@@ -511,6 +459,55 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Connect"/>
       <menu:menuitem menu:id=".uno:Break"/>
+      <menu:menuseparator/>
+      <menu:menu menu:id=".uno:ObjectAlign">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+          <menu:menuitem menu:id=".uno:AlignCenter"/>
+          <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:AlignUp"/>
+          <menu:menuitem menu:id=".uno:AlignMiddle"/>
+          <menu:menuitem menu:id=".uno:AlignDown"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menu menu:id=".uno:ArrangeMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:BringToFront"/>
+          <menu:menuitem menu:id=".uno:Forward"/>
+          <menu:menuitem menu:id=".uno:Backward"/>
+          <menu:menuitem menu:id=".uno:SendToBack"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:BeforeObject"/>
+          <menu:menuitem menu:id=".uno:BehindObject"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:ReverseOrder"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menuitem menu:id=".uno:MirrorVert"/>
+      <menu:menuitem menu:id=".uno:MirrorHorz"/>
+      <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
+      <menu:menuitem menu:id=".uno:DistributeSelection"/>
+      <menu:menuseparator/>
+      <menu:menu menu:id=".uno:GroupMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:FormatGroup"/>
+          <menu:menuitem menu:id=".uno:FormatUngroup"/>
+          <menu:menuitem menu:id=".uno:EnterGroup"/>
+          <menu:menuitem menu:id=".uno:LeaveGroup"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menu menu:id=".uno:ConvertMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ChangeBezier"/>
+          <menu:menuitem menu:id=".uno:ChangePolygon"/>
+          <menu:menuitem menu:id=".uno:convert_to_contour"/>
+          <menu:menuitem menu:id=".uno:ConvertInto3D"/>
+          <menu:menuitem menu:id=".uno:ConvertInto3DLatheFast"/>
+          <menu:menuitem menu:id=".uno:ConvertIntoBitmap"/>
+          <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
+        </menu:menupopup>
+      </menu:menu>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">
