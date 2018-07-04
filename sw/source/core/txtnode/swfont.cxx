@@ -888,8 +888,6 @@ SwFont::~SwFont()
 {
 }
 
-SwSubFont& SwSubFont::operator=( const SwSubFont& ) = default;
-
 SwFont& SwFont::operator=( const SwFont &rFont )
 {
     m_aSub[SwFontScript::Latin] = rFont.m_aSub[SwFontScript::Latin];
