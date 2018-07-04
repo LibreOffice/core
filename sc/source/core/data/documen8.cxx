@@ -581,7 +581,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
     if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()])
         aScope.setTab(0);
 
-    ScTable* pTab = maTabs[aScope.Tab()];
+    ScTable* pTab = maTabs[aScope.Tab()].get();
     ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(aScope.getStylePool()->Find(pTab->aPageStyle, SfxStyleFamily::Page));
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
@@ -668,7 +668,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
             {
                 if ( bNewTab )
                 {
-                    pTab = maTabs[aScope.Tab()];
+                    pTab = maTabs[aScope.Tab()].get();
                     pStyle = static_cast<ScStyleSheet*>(aScope.getStylePool()->Find(
                         pTab->aPageStyle, SfxStyleFamily::Page));
 

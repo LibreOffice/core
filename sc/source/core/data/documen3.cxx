@@ -796,7 +796,7 @@ void ScDocument::CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc )
     SCTAB nCount = static_cast<SCTAB>(maTabs.size());
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (maTabs[nTab] && pPosDoc->maTabs[nTab] && pDestDoc->maTabs[nTab])
-            maTabs[nTab]->CopyUpdated( pPosDoc->maTabs[nTab], pDestDoc->maTabs[nTab] );
+            maTabs[nTab]->CopyUpdated( pPosDoc->maTabs[nTab].get(), pDestDoc->maTabs[nTab].get() );
 }
 
 void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario )
@@ -826,7 +826,7 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario 
                 {
                     maTabs[nTab]->SetActiveScenario(false);
                     if ( maTabs[nTab]->GetScenarioFlags() & ScScenarioFlags::TwoWay )
-                        maTabs[nTab]->CopyScenarioFrom( maTabs[nDestTab] );
+                        maTabs[nTab]->CopyScenarioFrom( maTabs[nDestTab].get() );
                 }
             }
         }
@@ -835,7 +835,7 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario 
         if (!bNewScenario) // Copy data from the selected scenario
         {
             sc::AutoCalcSwitch aACSwitch(*this, false);
-            maTabs[nSrcTab]->CopyScenarioTo( maTabs[nDestTab] );
+            maTabs[nSrcTab]->CopyScenarioTo( maTabs[nDestTab].get() );
 
             sc::SetFormulaDirtyContext aCxt;
             SetAllFormulasDirty(aCxt);
@@ -883,7 +883,7 @@ bool ScDocument::TestCopyScenario( SCTAB nSrcTab, SCTAB nDestTab ) const
 {
     if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size())
                 && nDestTab < static_cast<SCTAB>(maTabs.size())&& ValidTab(nDestTab))
-        return maTabs[nSrcTab]->TestCopyScenarioTo( maTabs[nDestTab] );
+        return maTabs[nSrcTab]->TestCopyScenarioTo( maTabs[nDestTab].get() );
 
     OSL_FAIL("wrong table at TestCopyScenario");
     return false;
@@ -1679,7 +1679,7 @@ tools::Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
     tools::Rectangle aRect;
     ScTable* pTable = nullptr;
     if ( aEmbedRange.aStart.Tab() < static_cast<SCTAB>(maTabs.size()) )
-        pTable = maTabs[aEmbedRange.aStart.Tab()];
+        pTable = maTabs[aEmbedRange.aStart.Tab()].get();
     else
         OSL_FAIL("table out of range");
     if (!pTable)
@@ -1770,7 +1770,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
 {
     ScTable* pTable = nullptr;
     if (nTab < static_cast<SCTAB>(maTabs.size()))
-        pTable = maTabs[nTab];
+        pTable = maTabs[nTab].get();
     else
         OSL_FAIL("table out of range");
     if (!pTable)

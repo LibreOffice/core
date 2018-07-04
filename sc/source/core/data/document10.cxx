@@ -292,7 +292,7 @@ void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::un
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
-        ScTable* p = *it;
+        ScTable* p = it->get();
         p->PreprocessRangeNameUpdate(aEndListenCxt, aCompileCxt);
     }
 }
@@ -305,7 +305,7 @@ void ScDocument::PreprocessRangeNameUpdate()
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
-        ScTable* p = *it;
+        ScTable* p = it->get();
         p->PreprocessRangeNameUpdate(aEndListenCxt, aCompileCxt);
     }
 }
@@ -318,7 +318,7 @@ void ScDocument::PreprocessDBDataUpdate()
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
-        ScTable* p = *it;
+        ScTable* p = it->get();
         p->PreprocessDBDataUpdate(aEndListenCxt, aCompileCxt);
     }
 }
@@ -330,7 +330,7 @@ void ScDocument::CompileHybridFormula()
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
-        ScTable* p = *it;
+        ScTable* p = it->get();
         p->CompileHybridFormula(aStartListenCxt, aCompileCxt);
     }
 }
@@ -477,7 +477,7 @@ public:
         mpCxt->setColumnSet( rpColSet);
     }
 
-    void operator() (ScTable* p)
+    void operator() (std::unique_ptr<ScTable> & p)
     {
         if (p)
             p->StartListeners(*mpCxt, false);
@@ -522,7 +522,7 @@ void ScDocument::finalizeOutlineImport()
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
-        ScTable* p = *it;
+        ScTable* p = it->get();
         p->finalizeOutlineImport();
     }
 }
