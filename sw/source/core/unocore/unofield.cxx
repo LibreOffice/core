@@ -1984,9 +1984,9 @@ void SAL_CALL SwXTextField::attach(
         {
             UnoActionContext aCont( m_pImpl->m_pDoc );
             // insert copy of annotation at new text range
-            SwPostItField* pPostItField = static_cast< SwPostItField* >(m_pImpl->m_pFormatField->GetField()->CopyField());
+            std::unique_ptr<SwPostItField> pPostItField(static_cast< SwPostItField* >(m_pImpl->m_pFormatField->GetField()->CopyField().release()));
             SwFormatField aFormatField( *pPostItField );
-            delete pPostItField;
+            pPostItField.reset();
             SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
             m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFormatField );
             // delete former annotation

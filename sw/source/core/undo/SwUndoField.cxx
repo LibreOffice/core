@@ -72,8 +72,6 @@ SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
 
 SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 {
-    delete pOldField;
-    delete pNewField;
 }
 
 void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)

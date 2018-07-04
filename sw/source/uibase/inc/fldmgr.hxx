@@ -23,8 +23,9 @@
 #include <swtypes.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
-#include <vector>
 #include <vcl/vclptr.hxx>
+#include <memory>
+#include <vector>
 
 namespace com{namespace sun{namespace star{
     namespace container{
@@ -126,7 +127,7 @@ public:
     void            UpdateCurField(sal_uInt32 nFormat,
                                  const OUString& rPar1,
                                  const OUString& rPar2,
-                                 SwField * _pField = nullptr);
+                                 std::unique_ptr<SwField> _pField = nullptr);
 
     const OUString& GetCurFieldPar1() const { return m_aCurPar1; }
     const OUString& GetCurFieldPar2() const { return m_aCurPar2; }
