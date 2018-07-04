@@ -17,6 +17,7 @@
 #include <sal/types.h>
 
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 
 namespace oox {
     class BinaryXInputStream;
@@ -38,9 +39,8 @@ public:
     virtual ~CryptoEngine()
     {}
 
-    virtual void writeEncryptionInfo(
-                    const OUString& rPassword,
-                    BinaryXOutputStream& rStream) = 0;
+    // Decryption
+    virtual bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) = 0;
 
     virtual bool generateEncryptionKey(const OUString& rPassword) = 0;
 
@@ -48,11 +48,16 @@ public:
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) = 0;
 
-    virtual bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) = 0;
+    // Encryption
+    virtual void writeEncryptionInfo(BinaryXOutputStream & rStream) = 0;
 
-    virtual void encrypt(
-                    BinaryXInputStream& aInputStream,
-                    BinaryXOutputStream& aOutputStream) = 0;
+    virtual bool setupEncryption(const OUString& rPassword) = 0;
+
+    virtual void encrypt(css::uno::Reference<css::io::XInputStream> & rxInputStream,
+                         css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
+                         sal_uInt32 nSize) = 0;
+
+    virtual bool checkDataIntegrity() = 0;
 };
 
 } // namespace core

@@ -41,36 +41,29 @@ bool DocumentEncryption::encrypt()
     if (!xSeekable.is())
         return false;
 
-    sal_uInt32 aLength = xSeekable->getLength();
+    sal_uInt32 aLength = xSeekable->getLength(); // check length of the stream
+    xSeekable->seek(0); // seek to begin of the document stream
 
     if (!mrOleStorage.isStorage())
         return false;
 
+    mEngine.setupEncryption(maPassword);
+
+    Reference<XOutputStream> xOutputStream(mrOleStorage.openOutputStream("EncryptedPackage"), UNO_SET_THROW);
+
+    mEngine.encrypt(xInputStream, xOutputStream, aLength);
+
+    xOutputStream->flush();
+    xOutputStream->closeOutput();
+
     Reference<XOutputStream> xEncryptionInfo(mrOleStorage.openOutputStream("EncryptionInfo"), UNO_SET_THROW);
     BinaryXOutputStream aEncryptionInfoBinaryOutputStream(xEncryptionInfo, false);
 
-    mEngine.writeEncryptionInfo(maPassword, aEncryptionInfoBinaryOutputStream);
+    mEngine.writeEncryptionInfo(aEncryptionInfoBinaryOutputStream);
 
     aEncryptionInfoBinaryOutputStream.close();
     xEncryptionInfo->flush();
     xEncryptionInfo->closeOutput();
-
-    Reference<XOutputStream> xEncryptedPackage(mrOleStorage.openOutputStream("EncryptedPackage"), UNO_SET_THROW);
-    BinaryXOutputStream aEncryptedPackageStream(xEncryptedPackage, false);
-
-    BinaryXInputStream aDocumentInputStream(xInputStream, false);
-    aDocumentInputStream.seekToStart();
-
-    aEncryptedPackageStream.WriteUInt32(aLength); // size
-    aEncryptedPackageStream.WriteUInt32(0U);      // reserved
-
-    mEngine.encrypt(aDocumentInputStream, aEncryptedPackageStream);
-
-    aEncryptedPackageStream.close();
-    aDocumentInputStream.close();
-
-    xEncryptedPackage->flush();
-    xEncryptedPackage->closeOutput();
 
     return true;
 }
