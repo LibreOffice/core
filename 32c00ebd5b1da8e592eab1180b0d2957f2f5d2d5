@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_b6e08098",
+        "filename": "include/IwyuFilter_include.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-04T07:30:18Z",
+      "side": 1,
+      "message": "Could you handle that in bin/find-unneeded-includes, next to the existing \"avoid debug stl\" block? I imagine otherwise this will have to be blacklisted in several other files, good to avoid such duplication.",
+      "revId": "32c00ebd5b1da8e592eab1180b0d2957f2f5d2d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
