@@ -15,6 +15,7 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 
+#include <oox/crypto/CryptTools.hxx>
 #include <oox/crypto/Standard2007Engine.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
@@ -24,12 +25,76 @@ using namespace css;
 class CryptoTest : public CppUnit::TestFixture
 {
 public:
+    void testCryptoHash();
+    void testRoundUp();
     void testStandard2007();
 
     CPPUNIT_TEST_SUITE(CryptoTest);
+    CPPUNIT_TEST(testCryptoHash);
+    CPPUNIT_TEST(testRoundUp);
     CPPUNIT_TEST(testStandard2007);
     CPPUNIT_TEST_SUITE_END();
 };
+
+namespace
+{
+std::string toString(std::vector<sal_uInt8> const& aInput)
+{
+    std::stringstream aStream;
+    for (auto const& aValue : aInput)
+    {
+        aStream << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(aValue);
+    }
+
+    return aStream.str();
+}
+}
+
+void CryptoTest::testCryptoHash()
+{
+    // Check examples from Wikipedia (https://en.wikipedia.org/wiki/HMAC)
+    OString aContentString("The quick brown fox jumps over the lazy dog");
+    std::vector<sal_uInt8> aContent(aContentString.getStr(),
+                                    aContentString.getStr() + aContentString.getLength());
+    std::vector<sal_uInt8> aKey = { 'k', 'e', 'y' };
+    {
+        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA1);
+        aCryptoHash.update(aContent);
+        std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
+        CPPUNIT_ASSERT_EQUAL(std::string("de7c9b85b8b78aa6bc8a7a36f70a90701c9db4d9"),
+                             toString(aHash));
+    }
+
+    {
+        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA256);
+        aCryptoHash.update(aContent);
+        std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("f7bc83f430538424b13298e6aa6fb143ef4d59a14946175997479dbc2d1a3cd8"),
+            toString(aHash));
+    }
+
+    {
+        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA512);
+        aCryptoHash.update(aContent);
+        std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("b42af09057bac1e2d41708e48a902e09b5ff7f12ab428a4fe86653c73dd248fb82f948a549"
+                        "f7b791a5b41915ee4d1ec3935357e4e2317250d0372afa2ebeeb3a"),
+            toString(aHash));
+    }
+}
+
+void CryptoTest::testRoundUp()
+{
+    CPPUNIT_ASSERT_EQUAL(16, oox::core::roundUp(16, 16));
+    CPPUNIT_ASSERT_EQUAL(32, oox::core::roundUp(32, 16));
+    CPPUNIT_ASSERT_EQUAL(64, oox::core::roundUp(64, 16));
+
+    CPPUNIT_ASSERT_EQUAL(16, oox::core::roundUp(01, 16));
+    CPPUNIT_ASSERT_EQUAL(32, oox::core::roundUp(17, 16));
+    CPPUNIT_ASSERT_EQUAL(32, oox::core::roundUp(31, 16));
+}
 
 void CryptoTest::testStandard2007()
 {
