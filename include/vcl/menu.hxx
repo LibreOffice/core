@@ -260,6 +260,7 @@ public:
     sal_uInt16 GetItemId(const OString &rIdent) const;
     sal_uInt16 GetItemPos( sal_uInt16 nItemId ) const;
     OString GetItemIdent(sal_uInt16 nItemId) const;
+    OString GetItemIdentFromSubMenu(sal_uInt16 nItemId) const;
     MenuItemType GetItemType( sal_uInt16 nPos ) const;
     sal_uInt16 GetCurItemId() const { return nSelectedId;}
     OString GetCurItemIdent() const;

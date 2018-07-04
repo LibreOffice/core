@@ -702,6 +702,13 @@ OString Menu::GetItemIdent(sal_uInt16 nId) const
     return pData ? pData->sIdent : OString();
 }
 
+OString Menu::GetItemIdentFromSubMenu(sal_uInt16 nId) const
+{
+    const MenuItemData* pData = pItemList->GetDataFromSubMenu(nId);
+    return pData ? pData->sIdent : OString();
+}
+
+
 void Menu::SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
@@ -2797,6 +2804,16 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
         return 0;
 
+    if (pSFrom)
+        {
+            MenuItemList *itemList = GetItemList();
+            if (itemList && itemList->size() == 3 && itemList->GetDataFromPos(0)->sIdent == "hyperlink"
+                && itemList->GetDataFromPos(1)->sIdent == "link"
+                && itemList->GetDataFromPos(2)->sIdent == "copy")
+                pSFrom->GetItemList()->SetMainMenu(0);
+            else if (itemList && itemList->GetDataFromPos(itemList->size() - 1)->aText == "Active Window")
+                pSFrom->GetItemList()->SetMainMenu(1);
+        }
     // set the flag to hide or show accelerators in the menu depending on whether the menu was launched by mouse or keyboard shortcut
     if( pSFrom && pSFrom->IsMenuBar())
     {
