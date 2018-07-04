@@ -1211,7 +1211,7 @@ class SwFootnoteSave
 {
     SwTextSizeInfo *pInf;
     SwFont       *pFnt;
-    SwFont       *pOld;
+    std::unique_ptr<SwFont> pOld;
 
     SwFootnoteSave(const SwFootnoteSave&) = delete;
     SwFootnoteSave& operator=(const SwFootnoteSave&) = delete;
@@ -1235,7 +1235,7 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
     if( pTextFootnote && rInf.GetTextFrame() )
     {
         pFnt = const_cast<SwTextSizeInfo&>(rInf).GetFont();
-          pOld = new SwFont( *pFnt );
+        pOld.reset( new SwFont( *pFnt ) );
         pOld->GetTox() = pFnt->GetTox();
         pFnt->GetTox() = 0;
         SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(pTextFootnote->GetFootnote());
@@ -1295,7 +1295,7 @@ SwFootnoteSave::~SwFootnoteSave() COVERITY_NOEXCEPT_FALSE
         *pFnt = *pOld;
         pFnt->GetTox() = pOld->GetTox();
         pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
-        delete pOld;
+        pOld.reset();
     }
 }
 
