@@ -1303,7 +1303,10 @@ bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
     if (bMarked && !rMark.IsCellMarked(nCol,nRow))
         return false;
 
-    if (bUnprotected && GetAttr(nCol,nRow,ATTR_PROTECTION)->GetProtection())
+    /* TODO: for cursor movement *only* this should even take the protection
+     * options (select locked, select unlocked) into account, see
+     * ScTabView::SkipCursorHorizontal() and ScTabView::SkipCursorVertical(). */
+    if (bUnprotected && pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HasAttrFlags::Protected))
         return false;
 
     if (bMarked || bUnprotected)        //TODO: also in other case ???
