@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_51a49e08",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-04T09:37:36Z",
+      "side": 1,
+      "message": "No need for cmath here. Actually, always check if rtl::math does not contain something that you might need.",
+      "revId": "3d2f295ba9dfce1d6907d307b2a83850caa527ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
