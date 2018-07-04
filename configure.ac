@@ -11467,7 +11467,7 @@ test_font_map()
         AC_MSG_RESULT([ok])
     else
         AC_MSG_RESULT([unknown map '$FONTFILE'])
-        add_warning "unkonwn map '$FONTFILE' for '$FONT'"
+        add_warning "unknown map '$FONTFILE' for '$FONT'"
         TEST_FONTS_MISSING=1
     fi
 }
