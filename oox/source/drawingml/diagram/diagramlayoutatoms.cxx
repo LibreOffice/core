@@ -553,9 +553,24 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
             }
 
-            // text centered vertically by default
-            pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_CENTER;
-            pTextBody->getTextProperties().maPropertyMap.setProperty(PROP_TextVerticalAdjust, css::drawing::TextVerticalAdjust_CENTER);
+            const sal_Int32 atxAnchorVert = maMap.count(XML_txAnchorVert) ? maMap.find(XML_txAnchorVert)->second : XML_mid;
+
+            switch(atxAnchorVert)
+            {
+                case XML_t:
+                pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_TOP;
+                break;
+                case XML_b:
+                pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_BOTTOM;
+                break;
+                case XML_mid:
+                // text centered vertically by default
+                default:
+                pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_CENTER;
+                break;
+            }
+
+            pTextBody->getTextProperties().maPropertyMap.setProperty(PROP_TextVerticalAdjust, pTextBody->getTextProperties().meVA);
 
             // normalize list level
             sal_Int32 nBaseLevel = pTextBody->getParagraphs().front()->getProperties().getLevel();
