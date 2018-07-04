@@ -937,7 +937,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                 && pEntry->sBaseStyleIdentifier.isEmpty()   //imported style has no inheritance
                                 && !xStyle->getParentStyle().isEmpty() )    //built-in style has a default inheritance
                             {
-                                xStyle->setParentStyle( "Standard" );
+                                xStyle->setParentStyle( "" );
                             }
                         }
                     }
