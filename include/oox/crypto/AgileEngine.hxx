@@ -74,6 +74,8 @@ public:
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) override;
 
+    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
+
     virtual void encrypt(
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) override;

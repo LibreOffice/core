@@ -27,7 +27,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
 } } }
 
-namespace oox { class BinaryInputStream; }
 namespace oox { namespace ole { class OleStorage; } }
 
 namespace oox {
@@ -48,9 +47,6 @@ private:
     oox::ole::OleStorage&           mrOleStorage;
     std::unique_ptr<CryptoEngine>   mEngine;
     CryptoType                      mCryptoType;
-
-    bool readAgileEncryptionInfo( css::uno::Reference< css::io::XInputStream > const & rStream );
-    bool readStandard2007EncryptionInfo( BinaryInputStream& rStream );
 
 public:
     DocumentDecryption(

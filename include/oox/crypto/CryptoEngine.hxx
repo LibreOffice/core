@@ -16,6 +16,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
+#include <com/sun/star/io/XInputStream.hpp>
+
 namespace oox {
     class BinaryXInputStream;
     class BinaryXOutputStream;
@@ -45,6 +47,8 @@ public:
     virtual bool decrypt(
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) = 0;
+
+    virtual bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) = 0;
 
     virtual void encrypt(
                     BinaryXInputStream& aInputStream,
