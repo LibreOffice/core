@@ -93,6 +93,8 @@
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <memory>
 
 using namespace css;
@@ -1735,120 +1737,26 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Reference
     return aRetPolyPoly;
 }
 
+// adapting to basegfx::B2DPolyPolygon now, has no sense to do corrections in the
+// old tools::PolyPolygon creation code. Convert to that at return time
 tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Any& rAny )
 {
-    bool bNoError = true;
+    basegfx::B2DPolyPolygon aRetval;
 
-    tools::Polygon aPolygon;
-    tools::PolyPolygon aPolyPolygon;
-
-    if ( rAny.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
+    if(auto pBCC = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(rAny))
     {
-        auto pSourcePolyPolygon = o3tl::doAccess<drawing::PolyPolygonBezierCoords>(rAny);
-        sal_uInt16 nOuterSequenceCount = static_cast<sal_uInt16>(pSourcePolyPolygon->Coordinates.getLength());
-
-        // get pointer of inner sequences
-        drawing::PointSequence const * pOuterSequence = pSourcePolyPolygon->Coordinates.getConstArray();
-        drawing::FlagSequence const *  pOuterFlags = pSourcePolyPolygon->Flags.getConstArray();
-
-        bNoError = pOuterSequence && pOuterFlags;
-        if ( bNoError )
-        {
-            sal_uInt16  a, b, nInnerSequenceCount;
-            awt::Point const * pArray;
-
-            // this will be a polygon set
-            for ( a = 0; a < nOuterSequenceCount; a++ )
-            {
-                drawing::PointSequence const * pInnerSequence = pOuterSequence++;
-                drawing::FlagSequence const *  pInnerFlags = pOuterFlags++;
-
-                bNoError = pInnerSequence && pInnerFlags;
-                if  ( bNoError )
-                {
-                    // get pointer to arrays
-                    pArray = pInnerSequence->getConstArray();
-                    drawing::PolygonFlags const * pFlags = pInnerFlags->getConstArray();
-
-                    if ( pArray && pFlags )
-                    {
-                        nInnerSequenceCount = static_cast<sal_uInt16>(pInnerSequence->getLength());
-                        aPolygon = tools::Polygon( nInnerSequenceCount );
-                        for( b = 0; b < nInnerSequenceCount; b++)
-                        {
-                            drawing::PolygonFlags ePolyFlags = *pFlags++;
-                            awt::Point aPoint( *(pArray++) );
-                            aPolygon[ b ] = Point( aPoint.X, aPoint.Y );
-                            aPolygon.SetFlags( b, static_cast<PolyFlags>(ePolyFlags) );
-
-                            if ( ePolyFlags == drawing::PolygonFlags_CONTROL )
-                                continue;
-                        }
-                        aPolyPolygon.Insert( aPolygon );
-                    }
-                }
-            }
-        }
+        aRetval = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*pBCC);
     }
-    else if ( auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PointSequenceSequence>(rAny) )
+    else if(auto pCC = o3tl::tryAccess<drawing::PointSequenceSequence>(rAny))
     {
-        sal_uInt16 nOuterSequenceCount = static_cast<sal_uInt16>(pSourcePolyPolygon->getLength());
-
-        // get pointer to inner sequences
-        drawing::PointSequence const * pOuterSequence = pSourcePolyPolygon->getConstArray();
-        bNoError = pOuterSequence != nullptr;
-        if ( bNoError )
-        {
-            sal_uInt16 a, b, nInnerSequenceCount;
-
-            // this will be a polygon set
-            for( a = 0; a < nOuterSequenceCount; a++ )
-            {
-                drawing::PointSequence const * pInnerSequence = pOuterSequence++;
-                bNoError = pInnerSequence != nullptr;
-                if ( bNoError )
-                {
-                    // get pointer to arrays
-                    awt::Point const * pArray =
-                          pInnerSequence->getConstArray();
-                    if ( pArray != nullptr )
-                    {
-                        nInnerSequenceCount = static_cast<sal_uInt16>(pInnerSequence->getLength());
-                        aPolygon = tools::Polygon( nInnerSequenceCount );
-                        for( b = 0; b < nInnerSequenceCount; b++)
-                        {
-                            aPolygon[ b ] = Point( pArray->X, pArray->Y );
-                            pArray++;
-                        }
-                        aPolyPolygon.Insert( aPolygon );
-                    }
-                }
-            }
-        }
+        aRetval = basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(*pCC);
     }
-    else if ( auto pInnerSequence = o3tl::tryAccess<drawing::PointSequence>(rAny) )
+    else if(auto pC = o3tl::tryAccess<drawing::PointSequence>(rAny))
     {
-        bNoError = pInnerSequence != nullptr;
-        if ( bNoError )
-        {
-            sal_uInt16 a, nInnerSequenceCount;
-
-            // get pointer to arrays
-            awt::Point const * pArray = pInnerSequence->getConstArray();
-            if ( pArray != nullptr )
-            {
-                nInnerSequenceCount = static_cast<sal_uInt16>(pInnerSequence->getLength());
-                aPolygon = tools::Polygon( nInnerSequenceCount );
-                for( a = 0; a < nInnerSequenceCount; a++)
-                {
-                    aPolygon[ a ] = Point( pArray->X, pArray->Y );
-                    pArray++;
-                }
-                aPolyPolygon.Insert( aPolygon );
-            }
-        }
+        aRetval.append(basegfx::utils::UnoPointSequenceToB2DPolygon(*pC));
     }
-    return aPolyPolygon;
+
+    return tools::PolyPolygon(aRetval);
 }
 
 bool EscherPropertyContainer::CreatePolygonProperties(
