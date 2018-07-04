@@ -939,6 +939,10 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     const sal_Int32 nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
     nNextChg = std::min( nNextChg, nNextDir );
 
+    // hidden change (potentially via bookmark):
+    const sal_Int32 nNextHidden = pScriptInfo->NextHiddenChg(rInf.GetIdx());
+    nNextChg = std::min( nNextChg, nNextHidden );
+
     // Turbo boost:
     // We assume that a font's characters are not larger than twice
     // as wide as heigh.

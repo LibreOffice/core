@@ -173,6 +173,7 @@ public:
         OSL_ENSURE( nCnt < aHiddenChg.size(),"No HiddenChg today!");
         return aHiddenChg[ nCnt ];
     }
+    sal_Int32 NextHiddenChg(sal_Int32 nPos) const;
     static void CalcHiddenRanges(const SwTextNode& rNode, MultiSelection& rHiddenMulti);
     static void selectHiddenTextProperty(const SwTextNode& rNode, MultiSelection &rHiddenMulti);
     static void selectRedLineDeleted(const SwTextNode& rNode, MultiSelection &rHiddenMulti, bool bSelect=true);
