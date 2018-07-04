@@ -33,6 +33,7 @@ cmd/32/browsebackward.png cmd/32/navigateback.png
 cmd/32/browseforward.png cmd/32/navigateforward.png
 cmd/32/bulletliststyle.png cmd/32/defaultbullet.png
 cmd/32/calloutshapes.png cmd/32/calloutshapes.round-rectangular-callout.png
+cmd/32/cellcontentsmenu.png cmd/32/calculate.png
 cmd/32/ca/underlinesimple.png cmd/32/ca/underline.png
 cmd/32/cellprotection.png cmd/32/protect.png
 cmd/32/cellvertbottom.png cmd/32/alignbottom.png
@@ -65,6 +66,7 @@ cmd/32/ellipse.png cmd/32/basicshapes.ellipse.png
 cmd/32/ellipsetoolbox.png cmd/32/basicshapes.ellipse.png
 cmd/32/es/underlinesimple.png cmd/32/es/underline.png
 cmd/32/exitsearch.png cmd/32/closedoc.png
+cmd/32/fieldmenu.png cmd/32/insertfield.png
 cmd/32/fieldnames.png cmd/32/fields.png
 cmd/32/fillcolor.png cmd/32/formatarea.png
 cmd/32/flowchartshapes.png cmd/32/flowchartshapes.flowchart-internal-storage.png
@@ -100,6 +102,7 @@ cmd/32/importfromfile.png cmd/32/importdialog.png
 cmd/32/indexesmenu.png cmd/32/insertindexesentry.png
 cmd/32/inputlinevisible.png cmd/32/insertformula.png
 cmd/32/insertavmedia.png cmd/32/avmediaplayer.png
+cmd/32/insertcell.png cmd/32/insertcellsright.png
 cmd/32/insertcolumndialog.png cmd/32/insertcolumns.png
 cmd/32/insertcolumnsbefore.png cmd/32/insertcolumns.png
 cmd/32/insertcolumnsleft.png cmd/32/insertcolumns.png
@@ -162,12 +165,14 @@ cmd/32/mailmergelastentry.png cmd/32/lastrecord.png
 cmd/32/mailmergenextentry.png cmd/32/nextrecord.png
 cmd/32/mailmergepreventry.png cmd/32/prevrecord.png
 cmd/32/mailmergewizard.png cmd/32/dsbformletter.png
+cmd/32/mergecellsmenu.png cmd/32/mergecells.png
 cmd/32/mirrorhorz.png cmd/32/fliphorizontal.png
 cmd/32/mirrorvert.png cmd/32/flipvertical.png
 cmd/32/nl/underlinesimple.png cmd/32/nl/underline.png
 cmd/32/no.png cmd/32/cancel.png
 cmd/32/numberformatcurrency.png cmd/32/currencyfield.png
 cmd/32/numberformatcurrencysimple.png cmd/32/currencyfield.png
+cmd/32/numberformatmenu.png cmd/32/numberformatstandard.png
 cmd/32/numberformattime.png cmd/32/timefield.png
 cmd/32/numberliststyle.png cmd/32/defaultnumbering.png
 cmd/32/numberformatstandard.png cmd/32/numericfield.png
@@ -192,6 +197,7 @@ cmd/32/pie.png cmd/32/basicshapes.circle-pie.png
 cmd/32/pl/underlinesimple.png cmd/32/pl/underline.png
 cmd/32/pluginsactive.png cmd/32/addons.png
 cmd/32/printpagepreview.png cmd/32/printpreview.png
+cmd/32/printrangesmenu.png cmd/32/defineprintarea.png
 cmd/32/pt/underlinesimple.png cmd/32/pt/underline.png
 cmd/32/pt-BR/underlinesimple.png cmd/32/pt-BR/underline.png
 cmd/32/questionanswers.png cmd/32/webhtml.png
@@ -323,6 +329,7 @@ cmd/lc_browsebackward.png cmd/lc_navigateback.png
 cmd/lc_browseforward.png cmd/lc_navigateforward.png
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/lc_calloutshapes.png cmd/lc_calloutshapes.round-rectangular-callout.png
+cmd/lc_cellcontentsmenu.png cmd/lc_calculate.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
 cmd/lc_cellvertbottom.png cmd/lc_alignbottom.png
 cmd/lc_cellvertcenter.png cmd/lc_alignverticalcenter.png
@@ -353,6 +360,7 @@ cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_exitsearch.png cmd/lc_closedoc.png
+cmd/lc_fieldmenu.png cmd/lc_insertfield.png
 cmd/lc_fieldnames.png cmd/lc_fields.png
 cmd/lc_fillcolor.png cmd/lc_formatarea.png
 cmd/lc_flowchartshapes.png cmd/lc_flowchartshapes.flowchart-internal-storage.png
@@ -386,6 +394,7 @@ cmd/lc_importfromfile.png cmd/lc_importdialog.png
 cmd/lc_indexesmenu.png cmd/lc_insertindexesentry.png
 cmd/lc_inputlinevisible.png cmd/lc_insertformula.png
 cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
+cmd/lc_insertcell.png cmd/lc_insertcellsright.png
 cmd/lc_insertcolumndialog.png cmd/lc_insertcolumns.png
 cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
 cmd/lc_insertcolumnsleft.png cmd/lc_insertcolumns.png
@@ -440,11 +449,13 @@ cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
 cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/lc_mailmergewizard.png cmd/lc_dsbformletter.png
+cmd/lc_mergecellsmenu.png cmd/lc_mergecells.png
 cmd/lc_mirrorhorz.png cmd/lc_fliphorizontal.png
 cmd/lc_mirrorvert.png cmd/lc_flipvertical.png
 cmd/lc_no.png cmd/lc_cancel.png
 cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
 cmd/lc_numberformatcurrencysimple.png cmd/lc_currencyfield.png
+cmd/lc_numberformatmenu.png cmd/lc_numberformatstandard.png
 cmd/lc_numberformattime.png cmd/lc_timefield.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 cmd/lc_numberformatstandard.png cmd/lc_numericfield.png
@@ -468,6 +479,7 @@ cmd/lc_pageup.png cmd/lc_navigateback.png
 cmd/lc_pie.png cmd/lc_basicshapes.circle-pie.png
 cmd/lc_pluginsactive.png cmd/lc_addons.png
 cmd/lc_printpagepreview.png cmd/lc_printpreview.png
+cmd/lc_printrangesmenu.png cmd/lc_defineprintarea.png
 cmd/lc_questionanswers.png cmd/lc_webhtml.png
 cmd/lc_recalcpivottable.png cmd/lc_calculate.png
 cmd/lc_rect.png cmd/lc_basicshapes.rectangle.png
@@ -561,6 +573,7 @@ cmd/sc_browsebackward.png cmd/sc_navigateback.png
 cmd/sc_browseforward.png cmd/sc_navigateforward.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
 cmd/sc_calloutshapes.png cmd/sc_calloutshapes.round-rectangular-callout.png
+cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
 cmd/sc_cellvertcenter.png cmd/sc_alignverticalcenter.png
@@ -591,6 +604,7 @@ cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
+cmd/sc_fieldmenu.png cmd/sc_insertfield.png
 cmd/sc_fieldnames.png cmd/sc_fields.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
 cmd/sc_flowchartshapes.png cmd/sc_flowchartshapes.flowchart-internal-storage.png
@@ -624,6 +638,7 @@ cmd/sc_importfromfile.png cmd/sc_importdialog.png
 cmd/sc_indexesmenu.png cmd/sc_insertindexesentry.png
 cmd/sc_inputlinevisible.png cmd/sc_insertformula.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
+cmd/sc_insertcell.png cmd/sc_insertcellsright.png
 cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
 cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
 cmd/sc_insertcolumnsleft.png cmd/sc_insertcolumns.png
@@ -678,11 +693,13 @@ cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
 cmd/sc_mailmergewizard.png cmd/sc_dsbformletter.png
+cmd/sc_mergecellsmenu.png cmd/sc_mergecells.png
 cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
 cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
 cmd/sc_no.png cmd/sc_cancel.png
 cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
 cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
+cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_numberformattime.png cmd/sc_timefield.png
 cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 cmd/sc_numberformatstandard.png cmd/sc_numericfield.png
@@ -706,6 +723,7 @@ cmd/sc_pageup.png cmd/sc_navigateback.png
 cmd/sc_pie.png cmd/sc_basicshapes.circle-pie.png
 cmd/sc_pluginsactive.png cmd/sc_addons.png
 cmd/sc_printpagepreview.png cmd/sc_printpreview.png
+cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
 cmd/sc_questionanswers.png cmd/sc_webhtml.png
 cmd/sc_recalcpivottable.png cmd/sc_calculate.png
 cmd/sc_rect.png cmd/sc_basicshapes.rectangle.png
