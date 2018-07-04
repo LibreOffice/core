@@ -589,7 +589,7 @@ public:
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
 
     bool        SkipRow( const SCCOL rCol, SCROW& rRow, const SCROW nMovY, const ScMarkData& rMark,
-                         const bool bUp, const SCROW nUsedY, const bool bSheetProtected ) const;
+                         const bool bUp, const SCROW nUsedY, const bool bMarked, const bool bSheetProtected ) const;
     void        LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const;
 
     bool        HasData( SCCOL nCol, SCROW nRow ) const;
