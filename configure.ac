@@ -6402,6 +6402,29 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
+HAVE_CPP_GUARANTEED_COPY_ELISION=
+AC_MSG_CHECKING([whether $CXX supports guaranteed copy elision])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #if !defined __cpp_guaranteed_copy_elision
+        struct S {
+        private:
+            S(S const &);
+        public:
+            S copy() const { return *this; }
+        };
+        void f(S & s) { S c(s.copy()); }
+        #endif
+    ])], [
+        AC_DEFINE([HAVE_CPP_GUARANTEED_COPY_ELISION],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+AC_SUBST([HAVE_CPP_GUARANTEED_COPY_ELISION])
+
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================

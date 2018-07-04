@@ -20,6 +20,9 @@
 #ifndef INCLUDED_EDITENG_SWAFOPT_HXX
 #define INCLUDED_EDITENG_SWAFOPT_HXX
 
+#include <sal/config.h>
+
+#include <config_global.h>
 #include <editeng/editengdllapi.h>
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/ustring.hxx>
@@ -52,8 +55,23 @@ struct CompareAutoCompleteString
 class SortedAutoCompleteStrings
   : public o3tl::sorted_vector<IAutoCompleteString*, CompareAutoCompleteString>
 {
+    bool owning_;
+
+    void operator =(SortedAutoCompleteStrings) = delete;
+
+#if !HAVE_CPP_GUARANTEED_COPY_ELISION
 public:
-    ~SortedAutoCompleteStrings() { DeleteAndDestroyAll(); }
+#endif
+    // For createNonOwningCopy only:
+    SortedAutoCompleteStrings(SortedAutoCompleteStrings const & other):
+        sorted_vector(other), owning_(false) {}
+
+public:
+    SortedAutoCompleteStrings(): owning_(true) {}
+
+    ~SortedAutoCompleteStrings() { if (owning_) DeleteAndDestroyAll(); }
+
+    SortedAutoCompleteStrings createNonOwningCopy() const { return *this; }
 };
 
 } // namespace editeng
