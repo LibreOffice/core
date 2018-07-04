@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_5c21559f",
+        "filename": "sw/source/core/text/porlay.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2256,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-04T15:32:10Z",
+      "side": 1,
+      "message": "invalid assumption: one of mark start / end is in node that is affected by the hide bookmark",
+      "revId": "62f0b724843c7ec0dd6cb712be2c704e87169d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_7c2c1999",
+        "filename": "sw/source/core/text/porlay.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2265,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-04T15:32:10Z",
+      "side": 1,
+      "message": "invalid assumption: mark start is in same node as end",
+      "revId": "62f0b724843c7ec0dd6cb712be2c704e87169d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
