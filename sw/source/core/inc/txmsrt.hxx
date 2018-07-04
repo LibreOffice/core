@@ -69,8 +69,8 @@ struct TextAndReading
 
 class SwTOXInternational
 {
-    IndexEntrySupplierWrapper* m_pIndexWrapper;
-    CharClass*                 m_pCharClass;
+    std::unique_ptr<IndexEntrySupplierWrapper> m_pIndexWrapper;
+    std::unique_ptr<CharClass>                 m_pCharClass;
     LanguageType               m_eLang;
     OUString                   m_sSortAlgorithm;
     SwTOIOptions               m_nOptions;
