@@ -108,7 +108,7 @@ add_warning()
     if test "$have_WARNINGS" = "no"; then
         echo "*************************************" > warn
         have_WARNINGS="yes"
-        if which tput >/dev/null 2>/dev/null && test `tput colors` -ge 8; then
+        if which tput && test "`tput colors 2>/dev/null || echo 0`" -ge 8; then
             dnl <esc> as actual byte (U+1b), [ escaped using quadrigraph @<:@
             COLORWARN='*@<:@1;33;40m WARNING @<:@0m:'
         else
