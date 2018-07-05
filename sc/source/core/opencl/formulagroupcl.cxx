@@ -3136,11 +3136,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpMDuration, nResultSize));
                 }
-                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getXirr")
+                /*else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getXirr")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpXirr, nResultSize));
-                }
+                }*/
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getOddlprice")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
