@@ -70,9 +70,6 @@ namespace sdr
             // basic constructor.
             DisplayInfo();
 
-            // destructor
-            ~DisplayInfo();
-
             // access to ProcessLayers
             void SetProcessLayers(const SdrLayerIDSet& rSet);
             const SdrLayerIDSet& GetProcessLayers() const { return maProcessLayers; }

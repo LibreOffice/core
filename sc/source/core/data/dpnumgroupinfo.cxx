@@ -17,15 +17,6 @@ ScDPNumGroupInfo::ScDPNumGroupInfo() :
     mbIntegerOnly(true),
     mfStart(0.0), mfEnd(0.0), mfStep(0.0) {}
 
-ScDPNumGroupInfo::ScDPNumGroupInfo(const ScDPNumGroupInfo& r) :
-    mbEnable(r.mbEnable),
-    mbDateValues(r.mbDateValues),
-    mbAutoStart(r.mbAutoStart),
-    mbAutoEnd(r.mbAutoEnd),
-    mbIntegerOnly(r.mbIntegerOnly),
-    mfStart(r.mfStart),
-    mfEnd(r.mfEnd), mfStep(r.mfStep) {}
-
 #if DUMP_PIVOT_TABLE
 
 void ScDPNumGroupInfo::Dump() const

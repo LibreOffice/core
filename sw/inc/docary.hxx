@@ -53,6 +53,12 @@ public:
     virtual size_t GetFormatCount() const = 0;
     virtual SwFormat* GetFormat(size_t idx) const = 0;
     virtual ~SwFormatsBase() {};
+
+    SwFormatsBase() = default;
+    SwFormatsBase(SwFormatsBase const &) = default;
+    SwFormatsBase(SwFormatsBase &&) = default;
+    SwFormatsBase & operator =(SwFormatsBase const &) = default;
+    SwFormatsBase & operator =(SwFormatsBase &&) = default;
 };
 
 template<typename Value>
@@ -73,6 +79,11 @@ protected:
 private:
     typename std::vector<Value> mvVals;
     const DestructorPolicy mPolicy;
+
+#if 0 //TODO ***************************************************************************************
+    SwVectorModifyBase(SwVectorModifyBase &) = delete;
+    void operator =(SwVectorModifyBase) = delete;
+#endif
 
 protected:
     // default destructor deletes all contained elements
@@ -109,6 +120,11 @@ public:
             for(const_iterator it = begin(); it != end(); ++it)
                 delete *it;
     }
+    //TODO:
+    SwVectorModifyBase(SwVectorModifyBase const &) = default;
+    SwVectorModifyBase(SwVectorModifyBase &&) = default;
+    SwVectorModifyBase & operator =(SwVectorModifyBase const &) = default;
+    SwVectorModifyBase & operator =(SwVectorModifyBase &&) = default;
 
     void DeleteAndDestroy(int aStartIdx, int aEndIdx)
     {

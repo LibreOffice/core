@@ -111,7 +111,6 @@ protected:
     bool bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
 public:
     SbiTokenizer( const OUString&, StarBASIC* = nullptr );
-   ~SbiTokenizer();
 
     bool IsEof()             { return bEof; }
     bool IsEos()             { return bEos; }

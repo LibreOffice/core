@@ -72,16 +72,6 @@ public:
 
     sal_uInt8 &GetMaxHyphens() { return nMaxHyphens; }
     sal_uInt8 GetMaxHyphens() const { return nMaxHyphens; }
-
-    SvxHyphenZoneItem &operator=( const SvxHyphenZoneItem &rNew )
-    {
-        bHyphen = rNew.IsHyphen();
-        bPageEnd = rNew.IsPageEnd();
-        nMinLead = rNew.GetMinLead();
-        nMinTrail = rNew.GetMinTrail();
-        nMaxHyphens = rNew.GetMaxHyphens();
-        return *this;
-    }
 };
 
 #endif

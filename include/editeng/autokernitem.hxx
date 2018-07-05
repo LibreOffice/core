@@ -46,12 +46,6 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-
-    SvxAutoKernItem& operator=(const SvxAutoKernItem& rAutoKern)
-        {
-            SetValue( rAutoKern.GetValue() );
-            return *this;
-        }
 };
 
 #endif

@@ -63,6 +63,7 @@ public:
             SetValue( rWeight.GetValue() );
             return *this;
         }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxWeightItem(SvxWeightItem const &) = default;
 
     // enum cast
     FontWeight              GetWeight() const { return GetValue(); }

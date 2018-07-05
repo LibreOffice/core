@@ -209,11 +209,6 @@ SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _r
 {
 }
 
-
-SQLParseNodeParameter::~SQLParseNodeParameter()
-{
-}
-
 OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString)
 {
     Date aDate = DBTypeConversion::toDate(rString);

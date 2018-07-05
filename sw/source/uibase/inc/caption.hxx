@@ -44,7 +44,6 @@ private:
 
 public:
     InsCaptionOpt(const SwCapObjType eType = FRAME_CAP, const SvGlobalName* pOleId = nullptr);
-    ~InsCaptionOpt();
 
     bool&            UseCaption()                    { return m_bUseCaption; }
     bool             UseCaption() const              { return m_bUseCaption; }

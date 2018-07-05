@@ -253,6 +253,11 @@ public:
                             explicit SfxVoidItem( sal_uInt16 nWhich );
                             virtual ~SfxVoidItem() override;
 
+    SfxVoidItem(SfxVoidItem const &) = default;
+    SfxVoidItem(SfxVoidItem &&) = default;
+    SfxVoidItem & operator =(SfxVoidItem const &) = default;
+    SfxVoidItem & operator =(SfxVoidItem &&) = default;
+
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
