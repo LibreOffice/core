@@ -72,6 +72,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <filter/msfilter/msoleexp.hxx>
+#include <comphelper/fileurl.hxx>
 
 using namespace com::sun::star;
 
@@ -300,6 +301,19 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 }
 
+OUString SwHTMLParser::StripQueryFromPath(const OUString& rBase, const OUString& rPath)
+{
+    if (!comphelper::isFileUrl(rBase))
+        return rPath;
+
+    sal_Int32 nIndex = rPath.indexOf('?');
+
+    if (nIndex != -1)
+        return rPath.copy(0, nIndex);
+
+    return rPath;
+}
+
 bool SwHTMLParser::InsertEmbed()
 {
     OUString aURL, aType, aName, aAlt, aId, aStyle, aClass;
@@ -423,9 +437,13 @@ bool SwHTMLParser::InsertEmbed()
                            INetURLObject(m_sBaseURL), aURL,
                            URIHelper::GetMaybeFileHdl()) );
     bool bHasData = !aData.isEmpty();
+
     try
     {
-        aURLObj.SetURL(rtl::Uri::convertRelToAbs(m_sBaseURL, aData));
+        // Strip query and everything after that for file:// URLs, browsers do
+        // the same.
+        aURLObj.SetURL(rtl::Uri::convertRelToAbs(
+            m_sBaseURL, SwHTMLParser::StripQueryFromPath(m_sBaseURL, aData)));
     }
     catch (const rtl::MalformedUriException& /*rException*/)
     {

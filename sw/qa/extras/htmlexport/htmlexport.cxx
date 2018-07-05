@@ -391,6 +391,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     // This failed, OLE object had no replacement image.
     // And then it also failed when the export lost the replacement image.
     uno::Reference<graphic::XGraphic> xGraphic = xObject->getReplacementGraphic();
+    // This failed when query and fragment of file:// URLs were not ignored.
     CPPUNIT_ASSERT(xGraphic.is());
 
     uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
@@ -456,6 +457,8 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfPngImg, "reqif-png-img.xhtml")
 
     // Make sure that both RTF and PNG versions are written.
     CPPUNIT_ASSERT(aStream.indexOf("text/rtf") != -1);
+    // This failed when images with a query in their file:// URL failed to
+    // import.
     CPPUNIT_ASSERT(aStream.indexOf("image/png") != -1);
 }
 

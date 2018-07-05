@@ -340,7 +340,8 @@ void SwHTMLParser::InsertImage()
             case HtmlOptionId::DATA:
                 aGraphicData = rOption.GetString();
                 if (!InternalImgToPrivateURL(aGraphicData))
-                    aGraphicData = INetURLObject::GetAbsURL(m_sBaseURL, aGraphicData);
+                    aGraphicData = INetURLObject::GetAbsURL(
+                        m_sBaseURL, SwHTMLParser::StripQueryFromPath(m_sBaseURL, aGraphicData));
                 break;
             case HtmlOptionId::ALIGN:
                 eVertOri =
