@@ -2855,16 +2855,32 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScF
                 size_t nEnd = std::min(it->size, nOffset+nRowsToRead); // last row + 1
                 sc::formula_block::const_iterator itCell = sc::formula_block::begin(*it->data);
                 std::advance(itCell, nOffset);
+                // Loop inside the formula block.
                 for (size_t i = nOffset; i < nEnd; ++itCell, ++i)
                 {
-                    // Loop inside the formula block.
+                    // Check if itCell is already in path.
+                    // If yes use a cycle guard to mark all elements of the cycle
+                    // and return false
+                    const ScFormulaCellGroupRef& mxGroupChild = (*itCell)->GetCellGroup();
+                    ScFormulaCell* pChildTopCell = mxGroupChild ? mxGroupChild->mpTopCell : *itCell;
+                    if (pChildTopCell->GetSeenInPath())
+                    {
+                        ScRecursionHelper& rRecursionHelper = GetDoc()->GetRecursionHelper();
+                        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, pChildTopCell);
+                        return false;
+                    }
+
                     (*itCell)->MaybeInterpret();
 
                     // child cell's Interpret could result in calling dependency calc
                     // and that could detect a cycle involving mxGroup
                     // and do early exit in that case.
                     if (mxGroup->mbPartOfCycle)
+                    {
+                        // Set itCell as dirty as itCell may be interpreted in InterpretTail()
+                        (*itCell)->SetDirtyVar();
                         return false;
+                    }
                 }
                 nRow += nEnd - nOffset;
                 break;

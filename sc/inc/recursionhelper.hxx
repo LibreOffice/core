@@ -46,7 +46,7 @@ typedef ::std::list< ScFormulaRecursionEntry > ScFormulaRecursionList;
 class ScRecursionHelper
 {
     typedef ::std::stack< ScFormulaCell* >  ScRecursionInIterationStack;
-    typedef ::std::vector< ScFormulaCellGroup* > ScFGList;
+    typedef ::std::vector< ScFormulaCell* > ScFGList;
     ScFormulaRecursionList              aRecursionFormulas;
     ScFormulaRecursionList::iterator    aInsertPos;
     ScFormulaRecursionList::iterator    aLastIterationStart;
@@ -54,6 +54,8 @@ class ScRecursionHelper
     ScFGList                            aFGList;
     sal_uInt16                              nRecursionCount;
     sal_uInt16                              nIteration;
+    // Count of ScFormulaCell::CheckComputeDependencies in current call-stack.
+    sal_uInt16                              nDependencyComputationLevel;
     bool                                bInRecursionReturn;
     bool                                bDoingRecursion;
     bool                                bInIterationReturn;
@@ -68,6 +70,9 @@ public:
     sal_uInt16  GetRecursionCount() const       { return nRecursionCount; }
     void    IncRecursionCount()             { ++nRecursionCount; }
     void    DecRecursionCount()             { --nRecursionCount; }
+    sal_uInt16 GetDepComputeLevel()         { return nDependencyComputationLevel; }
+    void    IncDepComputeLevel()            { ++nDependencyComputationLevel; }
+    void    DecDepComputeLevel()            { --nDependencyComputationLevel; }
     /// A pure recursion return, no iteration.
     bool    IsInRecursionReturn() const     { return bInRecursionReturn &&
         !bInIterationReturn; }
@@ -99,9 +104,10 @@ public:
 
     void Clear();
 
-    /** Detects whether the formula-group is part of a simple cycle of formula-groups. */
-    bool PushFormulaGroup(ScFormulaCellGroup* pGrp);
+    /** Detects a simple cycle involving formula-groups and singleton formula-cells. */
+    bool PushFormulaGroup(ScFormulaCell* pCell);
     void PopFormulaGroup();
+    bool AnyParentFGInCycle();
 };
 
 /** A class to wrap ScRecursionHelper::PushFormulaGroup(),
@@ -113,8 +119,18 @@ class ScFormulaGroupCycleCheckGuard
     bool mbShouldPop;
 public:
     ScFormulaGroupCycleCheckGuard() = delete;
-    ScFormulaGroupCycleCheckGuard(ScRecursionHelper& rRecursionHelper, ScFormulaCellGroup* pGrp);
+    ScFormulaGroupCycleCheckGuard(ScRecursionHelper& rRecursionHelper, ScFormulaCell* pCell);
     ~ScFormulaGroupCycleCheckGuard();
+
+};
+
+class ScFormulaGroupDependencyComputeGuard
+{
+    ScRecursionHelper& mrRecHelper;
+public:
+    ScFormulaGroupDependencyComputeGuard() = delete;
+    ScFormulaGroupDependencyComputeGuard(ScRecursionHelper& rRecursionHelper);
+    ~ScFormulaGroupDependencyComputeGuard();
 };
 
 #endif // INCLUDED_SC_INC_RECURSIONHELPER_HXX

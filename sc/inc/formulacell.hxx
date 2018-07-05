@@ -67,7 +67,6 @@ public:
     SvNumFormatType mnFormatType;
     bool mbInvariant:1;
     bool mbSubTotal:1;
-    bool mbSeenInPath:1; // For detecting cycle of formula groups
     bool mbPartOfCycle:1; // To flag FG's part of a cycle
 
     sal_uInt8 meCalcState;
@@ -134,6 +133,7 @@ private:
                                                       number formats as hard number format */
     bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
     bool            mbIsExtRef       : 1; // has references in ScExternalRefManager; never cleared after set
+    bool            mbSeenInPath     : 1; // For detecting cycle involving formula groups and singleton formulacells
 
     /**
      * Update reference in response to cell copy-n-paste.
@@ -453,6 +453,8 @@ public:
     bool IsPostponedDirty() const { return mbPostponedDirty;}
 
     void SetIsExtRef() { mbIsExtRef = true; }
+    bool GetSeenInPath() { return mbSeenInPath; }
+    void SetSeenInPath(bool bSet) { mbSeenInPath = bSet; }
 
 #if DUMP_COLUMN_STORAGE
     void Dump() const;

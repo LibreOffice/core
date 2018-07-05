@@ -526,7 +526,6 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mnFormatType(SvNumFormatType::NUMBER),
     mbInvariant(false),
     mbSubTotal(false),
-    mbSeenInPath(false),
     mbPartOfCycle(false),
     meCalcState(sc::GroupCalcEnabled)
 {
@@ -628,6 +627,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    mbSeenInPath(false),
     aPos(rPos)
 {
 }
@@ -659,6 +659,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    mbSeenInPath(false),
     aPos(rPos)
 {
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
@@ -693,6 +694,7 @@ ScFormulaCell::ScFormulaCell(
     mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    mbSeenInPath(false),
     aPos(rPos)
 {
     assert(pArray); // Never pass a NULL pointer here.
@@ -742,6 +744,7 @@ ScFormulaCell::ScFormulaCell(
     mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    mbSeenInPath(false),
     aPos(rPos)
 {
     // RPN array generation
@@ -790,6 +793,7 @@ ScFormulaCell::ScFormulaCell(
     mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    mbSeenInPath(false),
     aPos(rPos)
 {
     if (bSubTotal)
@@ -821,6 +825,7 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    mbSeenInPath(false),
     aPos(rPos)
 {
     pCode = rCell.pCode->Clone();
@@ -1474,12 +1479,11 @@ void ScFormulaCell::Interpret()
 {
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
 
-    if (mxGroup && mxGroup->mbSeenInPath)
+    ScFormulaCell* pTopCell = mxGroup ? mxGroup->mpTopCell : this;
+
+    if (pTopCell->mbSeenInPath && rRecursionHelper.GetDepComputeLevel())
     {
-        // This call arose from a dependency calculation and
-        // we just found a cycle.
-        // This will mark all elements in the cycle as parts-of-cycle
-        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, mxGroup.get());
+        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, pTopCell);
         return;
     }
 
@@ -1541,15 +1545,25 @@ void ScFormulaCell::Interpret()
 #if DEBUG_CALCULATION
         aDC.enterGroup();
 #endif
-
+        bool bPartOfCycleBefore = mxGroup && mxGroup->mbPartOfCycle;
         bool bGroupInterpreted = InterpretFormulaGroup();
+        bool bPartOfCycleAfter = mxGroup && mxGroup->mbPartOfCycle;
 
 #if DEBUG_CALCULATION
         aDC.leaveGroup();
 #endif
         if (!bGroupInterpreted)
         {
-            ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, mxGroup.get());
+            // Dependency calc inside InterpretFormulaGroup() failed due to
+            // detection of a cycle and there are parent FG's in the cycle.
+            // Skip InterpretTail() in such cases, only run InterpretTail for the "cycle-starting" FG
+            if (!bPartOfCycleBefore && bPartOfCycleAfter && rRecursionHelper.AnyParentFGInCycle())
+            {
+                pDocument->DecInterpretLevel();
+                return;
+            }
+
+            ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, this);
             InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
         }
 
@@ -4331,6 +4345,7 @@ struct ScDependantsCalculator
         // Partially from ScGroupTokenConverter::convert in sc/source/core/data/grouptokenconverter.cxx
 
         ScRangeList aRangeList;
+        bool bHasSelfReferences = false;
         for (auto p: mrCode.RPNTokens())
         {
             switch (p->GetType())
@@ -4346,7 +4361,10 @@ struct ScDependantsCalculator
                     if (aRef.IsRowRel())
                     {
                         if (isSelfReferenceRelative(aRefPos, aRef.Row()))
-                            return false;
+                        {
+                            bHasSelfReferences = true;
+                            continue;
+                        }
 
                         // Trim data array length to actual data range.
                         SCROW nTrimLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), mnLen);
@@ -4357,7 +4375,10 @@ struct ScDependantsCalculator
                     else
                     {
                         if (isSelfReferenceAbsolute(aRefPos))
-                            return false;
+                        {
+                            bHasSelfReferences = true;
+                            continue;
+                        }
 
                         aRangeList.Join(ScRange(aRefPos.Col(), aRefPos.Row(), aRefPos.Tab()));
                     }
@@ -4377,22 +4398,37 @@ struct ScDependantsCalculator
                     if (bIsRef1RowRel)
                     {
                         if (isSelfReferenceRelative(aAbs.aStart, aRef.Ref1.Row()))
-                            return false;
+                        {
+                            bHasSelfReferences = true;
+                            continue;
+                        }
                     }
                     else if (isSelfReferenceAbsolute(aAbs.aStart))
-                        return false;
+                    {
+                        bHasSelfReferences = true;
+                        continue;
+                    }
 
                     bool bIsRef2RowRel = aRef.Ref2.IsRowRel();
                     if (bIsRef2RowRel)
                     {
                         if (isSelfReferenceRelative(aAbs.aEnd, aRef.Ref2.Row()))
-                            return false;
+                        {
+                            bHasSelfReferences = true;
+                            continue;
+                        }
                     }
                     else if (isSelfReferenceAbsolute(aAbs.aEnd))
-                        return false;
+                    {
+                        bHasSelfReferences = true;
+                        continue;
+                    }
 
                     if (isDoubleRefSpanGroupRange(aAbs, bIsRef1RowRel, bIsRef2RowRel))
-                        return false;
+                    {
+                        bHasSelfReferences = true;
+                        continue;
+                    }
 
                     // Row reference is relative.
                     bool bAbsLast = !aRef.Ref2.IsRowRel();
@@ -4421,6 +4457,9 @@ struct ScDependantsCalculator
             }
         }
 
+        // Compute dependencies irrespective of the presence of any self references.
+        // These dependencies would get computed via InterpretTail anyway when we disable group calc, so lets do it now.
+        // The advantage is that the FG's get marked for cycles early if present, and can avoid lots of complications.
         for (size_t i = 0; i < aRangeList.size(); ++i)
         {
             const ScRange & rRange = aRangeList[i];
@@ -4432,7 +4471,7 @@ struct ScDependantsCalculator
                     return false;
             }
         }
-        return true;
+        return !bHasSelfReferences;
     }
 };
 
@@ -4503,7 +4542,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
 
     bool bOKToParallelize = false;
     {
-        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, mxGroup.get());
+        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, this);
         if (mxGroup->mbPartOfCycle)
         {
             mxGroup->meCalcState = sc::GroupCalcDisabled;
@@ -4511,6 +4550,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
             return false;
         }
 
+        ScFormulaGroupDependencyComputeGuard aDepComputeGuard(rRecursionHelper);
         ScDependantsCalculator aCalculator(*pDocument, *pCode, *this, mxGroup->mpTopCell->aPos);
         bOKToParallelize = aCalculator.DoIt();
     }
