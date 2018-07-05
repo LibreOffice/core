@@ -33,7 +33,6 @@ class ContextList
 {
 public:
     ContextList();
-    ~ContextList();
 
     class Entry
     {

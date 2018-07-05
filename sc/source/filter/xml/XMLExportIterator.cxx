@@ -540,10 +540,6 @@ ScMyCell::ScMyCell() :
 {
 }
 
-ScMyCell::~ScMyCell()
-{
-}
-
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
     : pShapes(nullptr),
     pNoteShapes(nullptr),

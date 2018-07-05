@@ -27,6 +27,11 @@ public:
     SfxGrabBagItem(sal_uInt16 nWhich);
     ~SfxGrabBagItem() override;
 
+    SfxGrabBagItem(SfxGrabBagItem const &) = default;
+    SfxGrabBagItem(SfxGrabBagItem &&) = default;
+    SfxGrabBagItem & operator =(SfxGrabBagItem const &) = default;
+    SfxGrabBagItem & operator =(SfxGrabBagItem &&) = default;
+
     const std::map<OUString, css::uno::Any>& GetGrabBag() const
     {
         return m_aMap;

@@ -100,6 +100,11 @@ class TextField
 protected:
     SVGFilter::ObjectSet mMasterPageSet;
 public:
+    TextField() = default;
+    TextField(TextField const &) = default;
+    TextField(TextField &&) = default;
+    TextField & operator =(TextField const &) = default;
+    TextField & operator =(TextField &&) = default;
 
     virtual OUString getClassName() const
     {

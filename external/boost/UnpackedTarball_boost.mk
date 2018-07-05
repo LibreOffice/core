@@ -38,6 +38,8 @@ boost_patches += boost-android-unified.patch.1
 
 boost_patches += windows-no-utf8-locales.patch.0
 
+boost_patches += gcc9.patch.0
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))

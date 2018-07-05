@@ -109,6 +109,11 @@ struct ScQueryParamTable
 
     ScQueryParamTable();
     virtual ~ScQueryParamTable();
+
+    ScQueryParamTable(ScQueryParamTable const &) = default;
+    ScQueryParamTable(ScQueryParamTable &&) = default;
+    ScQueryParamTable & operator =(ScQueryParamTable const &) = default;
+    ScQueryParamTable & operator =(ScQueryParamTable &&) = default;
 };
 
 // For use in SAL_DEBUG etc. Output format not guaranteed to be stable.

@@ -35,6 +35,11 @@ public:
     SwFormatLineNumber();
     virtual ~SwFormatLineNumber() override;
 
+    SwFormatLineNumber(SwFormatLineNumber const &) = default;
+    SwFormatLineNumber(SwFormatLineNumber &&) = default;
+    SwFormatLineNumber & operator =(SwFormatLineNumber const &) = default;
+    SwFormatLineNumber & operator =(SwFormatLineNumber &&) = default;
+
     static SfxPoolItem* CreateDefault();
 
     /// "Pure virtual methods" of SfxPoolItem.

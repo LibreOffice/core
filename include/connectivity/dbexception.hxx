@@ -82,8 +82,6 @@ public:
     */
     SQLExceptionInfo( const OUString& _rSimpleErrorMessage );
 
-    SQLExceptionInfo(const SQLExceptionInfo& _rCopySource);
-
             // use for events got via XSQLErrorListener::errorOccured
     SQLExceptionInfo(const css::uno::Any& _rError);
             // use with the Reason member of an SQLErrorEvent or with NextElement of an SQLException
