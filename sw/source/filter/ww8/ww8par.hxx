@@ -1048,6 +1048,9 @@ struct WW8TabBandDesc
     void ReadNewShd(const sal_uInt8* pS, bool bVer67);
 
     enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
+
+private:
+    WW8TabBandDesc & operator =(WW8TabBandDesc const &) = default; // only for use in copy ctor
 };
 
 //            Storage-Reader
