@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_1755e650",
+        "filename": "sc/source/ui/inc/datatransformation.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001756
+      },
+      "writtenOn": "2018-07-05T10:52:13Z",
+      "side": 1,
+      "message": "Extend this for multiple columns by using std::set.",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 16
+      },
+      "revId": "328a665cfb322dd4c473930058ec79b2ea4cb310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
