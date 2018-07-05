@@ -137,7 +137,7 @@ public class ProcessHandler
 
     /**
      * Creates instance with specified external command which
-     * will be executed in the some work directory  and
+     * will be executed in the same work directory and
      *
      * @param cmdLine       the command to be executed
      * @param log           log stream where debug info and output

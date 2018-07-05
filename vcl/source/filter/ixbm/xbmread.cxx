@@ -316,7 +316,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                             bStatus = false;
 
                         //xbms are a minimum of one character per 8 pixels, so if the file isn't
-                        //even that long, its not all there
+                        //even that long, it's not all there
                         if (rIStm.remainingSize() < (static_cast<sal_uInt64>(nWidth) * nHeight) / 8)
                             bStatus = false;
 

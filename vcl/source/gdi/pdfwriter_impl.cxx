@@ -6793,7 +6793,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         aAlignOffset = aRotScale.transform( aAlignOffset );
 
     /* #159153# do not emit an empty glyph vector; this can happen if e.g. the original
-       string contained only on of the UTF16 BOMs
+       string contained only one of the UTF16 BOMs
     */
     if( ! aGlyphs.empty() )
     {

@@ -388,7 +388,7 @@ namespace dbaui
         for (SvTreeListEntry* pAdjust = m_pIndexList->First(); pAdjust; pAdjust = m_pIndexList->Next(pAdjust))
         {
             Indexes::const_iterator aAfterInsertPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
-            OSL_ENSURE(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
+            OSL_ENSURE(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with one of the entries!");
             pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterInsertPos - m_pIndexes->begin())));
         }
 
@@ -460,7 +460,7 @@ namespace dbaui
             for (SvTreeListEntry* pAdjust = m_pIndexList->First(); pAdjust; pAdjust = m_pIndexList->Next(pAdjust))
             {
                 Indexes::const_iterator aAfterDropPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
-                OSL_ENSURE(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
+                OSL_ENSURE(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with one of the remaining entries!");
                 pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterDropPos - m_pIndexes->begin())));
             }
 

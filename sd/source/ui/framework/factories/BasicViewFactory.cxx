@@ -117,7 +117,7 @@ void SAL_CALL BasicViewFactory::disposing()
 
     // Release the view shell container.  At this point no one other than us
     // should hold references to the view shells (at the moment this is a
-    // trivial requirement, because no one other then us holds a shared
+    // trivial requirement, because no one other than us holds a shared
     // pointer).
     //    ViewShellContainer::const_iterator iView;
     for (iView=mpViewShellContainer->begin(); iView!=mpViewShellContainer->end(); ++iView)

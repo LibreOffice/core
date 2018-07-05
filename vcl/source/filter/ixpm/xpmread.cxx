@@ -29,7 +29,7 @@
 #define XPMTEMPBUFSIZE      0x00008000
 #define XPMSTRINGBUF        0x00008000
 
-#define XPMIDENTIFIER       0x00000001          // mnIdentifier includes on of the six phases
+#define XPMIDENTIFIER       0x00000001          // mnIdentifier includes one of the six phases
 #define XPMDEFINITION       0x00000002          // the XPM format consists of
 #define XPMVALUES           0x00000003
 #define XPMCOLORS           0x00000004

@@ -104,7 +104,7 @@ namespace dbp
         );
         virtual ~OControlWizard() override;
 
-        // make the some base class methods public
+        // make the same base class methods public
         using OControlWizard_Base::travelNext;
 
     public:

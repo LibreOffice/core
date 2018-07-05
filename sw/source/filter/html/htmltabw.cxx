@@ -500,7 +500,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
                                     const SwWriteTableCells& rCells,
                                     const SvxBrushItem *pBrushItem ) const
 {
-    // If the line contains more the one cell and all cells have the some
+    // If the line contains more the one cell and all cells have the same
     // alignment, then output the VALIGN at the line instead of the cell.
     sal_Int16 eRowVertOri = text::VertOrientation::NONE;
     if( rCells.size() > 1 )

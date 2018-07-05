@@ -1865,7 +1865,7 @@ void SvxColorWindow::SelectEntry(const NamedColor& rNamedColor)
     // try recently used
     if (!bFoundColor)
         bFoundColor = SelectValueSetEntry(mpRecentColorSet, rColor);
-    // if its not there, add it there now to the end of the recently used
+    // if it's not there, add it there now to the end of the recently used
     // so its available somewhere handy, but not without trashing the
     // whole recently used
     if (!bFoundColor)
@@ -1906,7 +1906,7 @@ void ColorWindow::SelectEntry(const NamedColor& rNamedColor)
     // try recently used
     if (!bFoundColor)
         bFoundColor = SelectValueSetEntry(mxRecentColorSet.get(), rColor);
-    // if its not there, add it there now to the end of the recently used
+    // if it's not there, add it there now to the end of the recently used
     // so its available somewhere handy, but not without trashing the
     // whole recently used
     if (!bFoundColor)
