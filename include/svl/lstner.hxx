@@ -26,7 +26,7 @@ class SfxBroadcaster;
 class SfxHint;
 
 //StartListening duplicate handling options
-//Prevent only adds the listener if its not already added
+//Prevent only adds the listener if it's not already added
 //Allow allows duplicate listeners
 //Unexpected, the default, is for the usual case where the
 //listener should only be added once and duplicates are

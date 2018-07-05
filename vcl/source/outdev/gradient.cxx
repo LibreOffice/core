@@ -455,7 +455,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     assert(!is_double_buffered_window());
 
     // Determine if we output via Polygon or PolyPolygon
-    // For all rasteroperations other then Overpaint always use PolyPolygon,
+    // For all rasteroperations other than Overpaint always use PolyPolygon,
     // as we will get wrong results if we output multiple times on top of each other.
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
@@ -799,7 +799,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     assert(!is_double_buffered_window());
 
     // Determine if we output via Polygon or PolyPolygon
-    // For all rasteroperations other then Overpaint always use PolyPolygon,
+    // For all rasteroperations other than Overpaint always use PolyPolygon,
     // as we will get wrong results if we output multiple times on top of each other.
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.

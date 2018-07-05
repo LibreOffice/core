@@ -3928,15 +3928,15 @@ ScVbaRange::getRowHeight()
     }
 
     // if any row's RowHeight in the
-    // range is different from any other then return NULL
+    // range is different from any other, then return NULL
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
 
     sal_Int32 nStartRow = thisAddress.StartRow;
     sal_Int32 nEndRow = thisAddress.EndRow;
         sal_uInt16 nRowTwips = 0;
-    // #TODO probably possible to use the SfxItemSet ( and see if
-    //  SfxItemState::DONTCARE is set ) to improve performance
+    // #TODO probably possible to use the SfxItemSet (and see if
+    //  SfxItemState::DONTCARE is set) to improve performance
 // #CHECKME looks like this is general behaviour not just row Range specific
 //  if ( mbIsRows )
     ScDocShell* pShell = getScDocShell();

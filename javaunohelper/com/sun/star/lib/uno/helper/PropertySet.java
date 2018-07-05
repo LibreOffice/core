@@ -256,7 +256,7 @@ XMultiPropertySet
      *  then the argument <em>id</em> has to be a String that equals the name of
      *  the member variable that holds the Property's value.
      *  Override this method if you want to implement your own mapping from Property objects  to ids or
-     *  if you need ids of a type other then String.
+     *  if you need ids of a type other than String.
      *  Then you also need to override {@link #initMappings initMappings} and {@link #getPropertyId getPropertyId}.
      *  @param prop The Property object that is being assigned an id.
      *  @param id The object which identifies the storage used for the property's value.

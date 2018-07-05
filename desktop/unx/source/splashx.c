@@ -562,7 +562,7 @@ static sal_Bool isHiDPI(struct splash* splash)
         return sal_False;
 
     pValStr = XGetDefault(splash->display, "Xft", "dpi");
-    /* if its too old to have this, assume its not hidpi */
+    /* if it's too old to have this, assume it's not hidpi */
     if (!pValStr)
         return sal_False;
 

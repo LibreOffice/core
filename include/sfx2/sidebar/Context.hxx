@@ -36,7 +36,7 @@ public:
         const ::rtl::OUString& rsApplication,
         const ::rtl::OUString& rsContext);
 
-    /** When two contexts are matched against each other then
+    /** When two contexts are matched against each other, then
         application or context name may have the wildcard value 'any'.
         In order to prefer matches without wildcards over matches with
         wildcards we introduce a integer evaluation for matches.

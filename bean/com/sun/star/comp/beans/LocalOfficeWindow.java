@@ -237,7 +237,7 @@ public class LocalOfficeWindow
      * Returns an Any containing a sequences of com.sun.star.beans.NamedValue. One NamedValue
      * contains the name "WINDOW" and the value is a Long representing the window handle.
      * The second NamedValue  has the name "XEMBED" and the value is true, when the XEmbed
-     * protocol shall be used fore embedding the native Window.
+     * protocol shall be used for embedding the native Window.
     */
     protected Any getWrappedWindowHandle()
     {
