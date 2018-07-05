@@ -48,8 +48,17 @@ bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPale
     {
         m_pImage.reset();
         m_aSize = rSize;
-        m_nScanline = rSize.Width() / 2 + (rSize.Width() % 2) ? 0 : 1;
-        m_pBuffer.reset(new sal_uInt8[m_nScanline * rSize.Height()]);
+        bool bFail = o3tl::checked_multiply<sal_uInt32>(rSize.Width(), nBitCount, m_nScanline);
+        if (bFail)
+        {
+            SAL_WARN("vcl.gdi", "checked multiply failed");
+            return false;
+        }
+        m_nScanline = AlignedWidth4Bytes(m_nScanline);
+        sal_uInt8* pBuffer = nullptr;
+        if (0 != m_nScanline && 0 != rSize.Height())
+            pBuffer = new sal_uInt8[m_nScanline * rSize.Height()];
+        m_pBuffer.reset(pBuffer);
     }
     else
     {
@@ -59,7 +68,7 @@ bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPale
     m_aPalette = rPal;
 
     auto count = rPal.GetEntryCount();
-    if (nBitCount != 4 && count)
+    if (nBitCount != 4 && count && m_pImage.get())
     {
         QVector<QRgb> aColorTable(count);
         for (unsigned i = 0; i < count; ++i)
@@ -81,8 +90,14 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp)
     {
         m_aSize = pBitmap->m_aSize;
         m_nScanline = pBitmap->m_nScanline;
-        m_pBuffer.reset(new sal_uInt8[m_nScanline * m_aSize.Height()]);
-        memcpy(m_pBuffer.get(), pBitmap->m_pBuffer.get(), m_nScanline);
+        sal_uInt8* pBuffer = nullptr;
+        if (0 != m_nScanline && 0 != m_aSize.Height())
+        {
+            sal_uInt32 nSize = m_nScanline * m_aSize.Height();
+            pBuffer = new sal_uInt8[nSize];
+            memcpy(pBuffer, pBitmap->m_pBuffer.get(), nSize);
+        }
+        m_pBuffer.reset(pBuffer);
         m_pImage.reset();
     }
     m_aPalette = pBitmap->m_aPalette;
@@ -107,9 +122,52 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
 
     const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
     if (pBitmap->m_pBuffer.get())
-        return false;
+    {
+        if (nNewBitCount != 32)
+            return false;
 
-    m_pImage.reset(new QImage(pBitmap->m_pImage->convertToFormat(getBitFormat(nNewBitCount))));
+        // convert 4bit indexed palette to 32bit ARGB
+        m_pImage.reset(new QImage(pBitmap->m_aSize.Width(), pBitmap->m_aSize.Height(),
+                                  getBitFormat(nNewBitCount)));
+        m_pImage->fill(0);
+
+        // prepare a whole palette
+        const BitmapPalette& rPal = pBitmap->m_aPalette;
+        QVector<QRgb> colorTable(16);
+        int i = 0, maxEntry = pBitmap->m_aPalette.GetEntryCount();
+        assert(maxEntry <= 16 && maxEntry >= 0);
+        for (; i < maxEntry; ++i)
+            colorTable[i] = qRgb(rPal[i].GetRed(), rPal[i].GetGreen(), rPal[i].GetBlue());
+        for (; i < 16; ++i)
+            colorTable[i] = qRgb(0, 0, 0);
+
+        sal_uInt32* image_data = reinterpret_cast<sal_uInt32*>(m_pImage->bits());
+        sal_uInt8* buffer_data_pos = pBitmap->m_pBuffer.get();
+        sal_uInt32 nWidth = pBitmap->m_aSize.Height() / 2;
+        bool isOdd(0 != pBitmap->m_aSize.Height() % 2);
+
+        for (sal_uInt32 h = 0; h < pBitmap->m_aSize.Height(); ++h)
+        {
+            sal_uInt8* buffer_data = buffer_data_pos;
+            buffer_data_pos += pBitmap->m_nScanline;
+            for (sal_uInt32 w = 0; w < nWidth; ++w)
+            {
+                *image_data = reinterpret_cast<sal_uInt32>(colorTable.at(*buffer_data >> 4));
+                ++image_data;
+                *image_data = reinterpret_cast<sal_uInt32>(colorTable.at(*buffer_data & 0xF));
+                ++image_data;
+                ++buffer_data;
+            }
+            if (isOdd)
+            {
+                *image_data = reinterpret_cast<sal_uInt32>(colorTable.at(*buffer_data >> 4));
+                ++image_data;
+            }
+        }
+    }
+    else
+        m_pImage.reset(new QImage(pBitmap->m_pImage->convertToFormat(getBitFormat(nNewBitCount))));
+    m_pBuffer.reset();
     return true;
 }
 

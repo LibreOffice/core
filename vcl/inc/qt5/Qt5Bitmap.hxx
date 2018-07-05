@@ -31,7 +31,7 @@ class VCL_DLLPUBLIC Qt5Bitmap : public SalBitmap
     BitmapPalette m_aPalette;
 
     // for 4bit support
-    std::unique_ptr<sal_uInt8> m_pBuffer;
+    std::unique_ptr<sal_uInt8[]> m_pBuffer;
     Size m_aSize;
     sal_uInt32 m_nScanline;
 
