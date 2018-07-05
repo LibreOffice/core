@@ -53,9 +53,6 @@ SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
     nSaveLineIdx = -1;
 }
 
-SbiScanner::~SbiScanner()
-{}
-
 void SbiScanner::LockColumn()
 {
     if( !nColLock++ )

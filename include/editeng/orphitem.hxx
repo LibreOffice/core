@@ -45,12 +45,6 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-
-    SvxOrphansItem& operator=( const SvxOrphansItem& rOrphans )
-    {
-        SetValue( rOrphans.GetValue() );
-        return *this;
-    }
 };
 
 #endif

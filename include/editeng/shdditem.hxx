@@ -53,7 +53,7 @@ public:
             SetValue(rShadow.GetValue());
             return *this;
         }
-
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxShadowedItem(SvxShadowedItem const &) = default;
 };
 
 #endif

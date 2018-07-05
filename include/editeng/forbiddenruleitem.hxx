@@ -43,13 +43,6 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
-
-    SvxForbiddenRuleItem& operator=(
-                                    const SvxForbiddenRuleItem& rItem )
-    {
-        SetValue( rItem.GetValue() );
-        return *this;
-    }
 };
 
 #endif

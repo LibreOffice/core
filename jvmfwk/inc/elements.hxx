@@ -58,7 +58,6 @@ class CNodeJavaInfo
 {
 public:
     CNodeJavaInfo();
-    ~CNodeJavaInfo();
 
     /** if true, then javaInfo is empty. When writeToNode is called
         then all child elements are deleted.

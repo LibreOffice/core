@@ -142,19 +142,6 @@ namespace dbtools
         OSL_ENSURE( m_pContainer, "OCharsetMap::CharsetIterator::CharsetIterator : invalid container!" );
     }
 
-
-    OCharsetMap::CharsetIterator::CharsetIterator(const CharsetIterator& _rSource)
-        :m_pContainer( _rSource.m_pContainer )
-        ,m_aPos( _rSource.m_aPos )
-    {
-    }
-
-
-    OCharsetMap::CharsetIterator::~CharsetIterator()
-    {
-    }
-
-
     CharsetIteratorDerefHelper OCharsetMap::CharsetIterator::operator*() const
     {
         OSL_ENSURE( m_aPos != m_pContainer->m_aEncodings.end(), "OCharsetMap::CharsetIterator::operator*: invalid position!");

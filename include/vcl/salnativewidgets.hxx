@@ -269,6 +269,11 @@ class VCL_DLLPUBLIC ImplControlValue
 
         virtual ~ImplControlValue();
 
+        ImplControlValue(ImplControlValue const &) = default;
+        ImplControlValue(ImplControlValue &&) = default;
+        ImplControlValue & operator =(ImplControlValue const &) = default;
+        ImplControlValue & operator =(ImplControlValue &&) = default;
+
         virtual ImplControlValue* clone() const;
 
         ControlType getType() const { return mType; }
@@ -309,6 +314,11 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
         };
         virtual ~ScrollbarValue() override;
         virtual ScrollbarValue* clone() const override;
+
+        ScrollbarValue(ScrollbarValue const &) = default;
+        ScrollbarValue(ScrollbarValue &&) = default;
+        ScrollbarValue & operator =(ScrollbarValue const &) = default;
+        ScrollbarValue & operator =(ScrollbarValue &&) = default;
 };
 
 class VCL_DLLPUBLIC SliderValue : public ImplControlValue
@@ -326,6 +336,11 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
         {}
         virtual ~SliderValue() override;
         virtual SliderValue* clone() const override;
+
+        SliderValue(SliderValue const &) = default;
+        SliderValue(SliderValue &&) = default;
+        SliderValue & operator =(SliderValue const &) = default;
+        SliderValue & operator =(SliderValue &&) = default;
 };
 
 /* TabitemValue:
@@ -361,6 +376,11 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         }
         virtual ~TabitemValue() override;
         virtual TabitemValue* clone() const override;
+
+        TabitemValue(TabitemValue const &) = default;
+        TabitemValue(TabitemValue &&) = default;
+        TabitemValue & operator =(TabitemValue const &) = default;
+        TabitemValue & operator =(TabitemValue &&) = default;
 
         bool isLeftAligned() const  { return bool(mnAlignment & TabitemFlags::LeftAligned); }
         bool isRightAligned() const { return bool(mnAlignment & TabitemFlags::RightAligned); }
@@ -398,6 +418,11 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
 
         virtual ~SpinbuttonValue() override;
         virtual SpinbuttonValue* clone() const override;
+
+        SpinbuttonValue(SpinbuttonValue const &) = default;
+        SpinbuttonValue(SpinbuttonValue &&) = default;
+        SpinbuttonValue & operator =(SpinbuttonValue const &) = default;
+        SpinbuttonValue & operator =(SpinbuttonValue &&) = default;
 };
 
 /*  Toolbarvalue:
@@ -411,6 +436,12 @@ public:
     { mbIsTopDockingArea = false; }
     virtual ~ToolbarValue() override;
     virtual ToolbarValue* clone() const override;
+
+    ToolbarValue(ToolbarValue const &) = default;
+    ToolbarValue(ToolbarValue &&) = default;
+    ToolbarValue & operator =(ToolbarValue const &) = default;
+    ToolbarValue & operator =(ToolbarValue &&) = default;
+
     tools::Rectangle           maGripRect;
     bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
                                             // adjacent to the menubar, only used on Windows
@@ -427,6 +458,10 @@ public:
     { maTopDockingAreaHeight=0; }
     virtual ~MenubarValue() override;
     virtual MenubarValue* clone() const override;
+    MenubarValue(MenubarValue const &) = default;
+    MenubarValue(MenubarValue &&) = default;
+    MenubarValue & operator =(MenubarValue const &) = default;
+    MenubarValue & operator =(MenubarValue &&) = default;
     int             maTopDockingAreaHeight;
 };
 
@@ -444,6 +479,10 @@ public:
     {}
     virtual ~MenupopupValue() override;
     virtual MenupopupValue* clone() const override;
+    MenupopupValue(MenupopupValue const &) = default;
+    MenupopupValue(MenupopupValue &&) = default;
+    MenupopupValue & operator =(MenupopupValue const &) = default;
+    MenupopupValue & operator =(MenupopupValue &&) = default;
     tools::Rectangle       maItemRect;
 };
 
@@ -459,6 +498,11 @@ public:
     , mbBevelButton( false ), mbSingleLine( true ) {}
     virtual ~PushButtonValue() override;
     virtual PushButtonValue* clone() const override;
+
+    PushButtonValue(PushButtonValue const &) = default;
+    PushButtonValue(PushButtonValue &&) = default;
+    PushButtonValue & operator =(PushButtonValue const &) = default;
+    PushButtonValue & operator =(PushButtonValue &&) = default;
 
     bool            mbBevelButton:1; // only used on OSX
     bool            mbSingleLine:1;  // only used on OSX

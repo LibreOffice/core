@@ -47,12 +47,6 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-
-    SvxWordLineModeItem& operator=( const SvxWordLineModeItem& rWLM )
-        {
-            SetValue( rWLM.GetValue() );
-            return *this;
-        }
 };
 
 #endif

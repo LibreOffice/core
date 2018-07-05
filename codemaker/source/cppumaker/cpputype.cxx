@@ -1162,6 +1162,13 @@ void InterfaceType::dumpDeclaration(FileStream & out)
     }
     out << "\n{\npublic:\n";
     inc();
+    out << "#if defined LIBO_INTERNAL_ONLY\n"
+        << indent() << id_ << "() = default;\n"
+        << indent() << id_ << "(" << id_ << " const &) = default;\n"
+        << indent() << id_ << "(" << id_ << " &&) = default;\n"
+        << indent() << id_ << " & operator =(" << id_ << " const &) = default;\n"
+        << indent() << id_ << " & operator =(" << id_ << " &&) = default;\n"
+        << "#endif\n\n";
     dumpAttributes(out);
     dumpMethods(out);
     out << "\n" << indent()

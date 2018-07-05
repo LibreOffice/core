@@ -86,6 +86,11 @@ public:
     explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData );
     virtual             ~XclImpChRoot() override;
 
+    XclImpChRoot(XclImpChRoot const &) = default;
+    XclImpChRoot(XclImpChRoot &&) = default;
+    XclImpChRoot & operator =(XclImpChRoot const &) = default;
+    XclImpChRoot & operator =(XclImpChRoot &&) = default;
+
     /** Returns this root instance - for code readability in derived classes. */
     const XclImpChRoot& GetChRoot() const { return *this; }
     /** Returns a reference to the parent chart data object. */
@@ -177,6 +182,12 @@ private:
 class XclImpChGroupBase
 {
 public:
+    XclImpChGroupBase() = default;
+    XclImpChGroupBase(XclImpChGroupBase const &) = default;
+    XclImpChGroupBase(XclImpChGroupBase &&) = default;
+    XclImpChGroupBase & operator =(XclImpChGroupBase const &) = default;
+    XclImpChGroupBase & operator =(XclImpChGroupBase &&) = default;
+
     virtual             ~XclImpChGroupBase();
 
     /** Reads the entire record group.
@@ -428,6 +439,12 @@ typedef std::shared_ptr< XclImpChSourceLink > XclImpChSourceLinkRef;
 class XclImpChFontBase
 {
 public:
+    XclImpChFontBase() = default;
+    XclImpChFontBase(XclImpChFontBase const &) = default;
+    XclImpChFontBase(XclImpChFontBase &&) = default;
+    XclImpChFontBase & operator =(XclImpChFontBase const &) = default;
+    XclImpChFontBase & operator =(XclImpChFontBase &&) = default;
+
     virtual             ~XclImpChFontBase();
 
     /** Derived classes return the leading font index for the text object. */

@@ -3108,11 +3108,6 @@ HeaderFooterEntry::HeaderFooterEntry( const PptSlidePersistEntry* pMPE ) :
     }
 }
 
-HeaderFooterEntry::~HeaderFooterEntry()
-{
-}
-
-
 sal_uInt32 HeaderFooterEntry::IsToDisplay( sal_uInt32 nInstance )
 {
     sal_uInt32 nMask = 0;
@@ -3834,11 +3829,6 @@ PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
     }
 }
 
-PPTCharSheet::PPTCharSheet( const PPTCharSheet& rAttr )
-{
-    *this = rAttr;
-}
-
 void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
 {
     // character attributes
@@ -3929,11 +3919,6 @@ PPTParaSheet::PPTParaSheet( TSS_Type nInstance )
         i.mnAsianLineBreak = 0;
         i.mnBiDi = 0;
     }
-}
-
-PPTParaSheet::PPTParaSheet( const PPTParaSheet& rSheet )
-{
-    *this = rSheet;
 }
 
 void PPTParaSheet::Read( SdrPowerPointImport const &
@@ -4758,10 +4743,6 @@ PPTTextSpecInfo::PPTTextSpecInfo( sal_uInt32 _nCharIdx ) :
     nLanguage[ 0 ] = LANGUAGE_PROCESS_OR_USER_DEFAULT;
     nLanguage[ 1 ] = LANGUAGE_SYSTEM;
     nLanguage[ 2 ] = LANGUAGE_SYSTEM;
-}
-
-PPTTextSpecInfo::~PPTTextSpecInfo()
-{
 }
 
 PPTTextSpecInfoAtomInterpreter::PPTTextSpecInfoAtomInterpreter() :
