@@ -67,5 +67,16 @@ $(eval $(call gb_Library_add_exception_objects,spell,\
 	lingucomponent/source/spellcheck/spell/sspellimp \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_libs,spell,\
+	-framework Cocoa \
+	-framework Carbon \
+	-framework CoreFoundation \
+))
+
+$(eval $(call gb_Library_add_cxxflags,spell,\
+    -x -objective-c++ -stdlib=libc++ \
+))
+endif
 # vim: set noet sw=4 ts=4:
 
