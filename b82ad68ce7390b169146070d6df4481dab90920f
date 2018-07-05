@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_973696b4",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-07-05T07:58:22Z",
+      "side": 1,
+      "message": "Rather one space less",
+      "range": {
+        "startLine": 282,
+        "startChar": 12,
+        "endLine": 283,
+        "endChar": 10
+      },
+      "revId": "b82ad68ce7390b169146070d6df4481dab90920f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_773b129c",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-07-05T07:58:22Z",
+      "side": 1,
+      "message": "Both are not really relevant in Draw/Impress but let\u0027s keep it for sake of consistency.",
+      "range": {
+        "startLine": 359,
+        "startChar": 1,
+        "endLine": 361,
+        "endChar": 1
+      },
+      "revId": "b82ad68ce7390b169146070d6df4481dab90920f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_f7460222",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-07-05T07:58:22Z",
+      "side": 1,
+      "message": "These two commands don\u0027t work standalone with the label \"Vertically\" and \"Horizontally\". So you should keep the \u003cmenu:menu menu:id\u003d\".uno:MirrorMenu\"\u003e (and maybe move Rotate into).",
+      "range": {
+        "startLine": 487,
+        "startChar": 0,
+        "endLine": 489,
+        "endChar": 1
+      },
+      "revId": "b82ad68ce7390b169146070d6df4481dab90920f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b7699a8c",
+        "filename": "sd/uiconfig/simpress/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-07-05T07:58:22Z",
+      "side": 1,
+      "message": "This duplication is not needed.",
+      "range": {
+        "startLine": 247,
+        "startChar": 49,
+        "endLine": 247,
+        "endChar": 65
+      },
+      "revId": "b82ad68ce7390b169146070d6df4481dab90920f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_7709d2db",
+        "filename": "sd/uiconfig/simpress/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-07-05T07:58:22Z",
+      "side": 1,
+      "message": "Doesn\u0027t work on the root level with just the label \"Properties...\". And contextual it\u0027s better suited for \"Slide\".",
+      "range": {
+        "startLine": 377,
+        "startChar": 36,
+        "endLine": 377,
+        "endChar": 51
+      },
+      "revId": "b82ad68ce7390b169146070d6df4481dab90920f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_570ecee5",
+        "filename": "sd/uiconfig/simpress/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-07-05T07:58:22Z",
+      "side": 1,
+      "message": "It\u0027s part of the View menu, no dup needed.",
+      "range": {
+        "startLine": 503,
+        "startChar": 36,
+        "endLine": 503,
+        "endChar": 58
+      },
+      "revId": "b82ad68ce7390b169146070d6df4481dab90920f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
