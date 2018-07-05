@@ -674,9 +674,11 @@ static sal_Int32 GetNextAttrImpl(SwTextNode const*const pTextNode,
         }
     }
     assert(p <= nNext);
-    if (p < l && nPosition < p)
+    if (p < l)
     {
-        nNext=p;
+        // found a CH_TXT_ATR_FIELD*: if it's same as current position,
+        // skip behind it so that both before- and after-positions are returned
+        nNext = (nPosition < p) ? p : p + 1;
     }
     return nNext;
 }
