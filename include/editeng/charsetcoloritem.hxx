@@ -46,13 +46,6 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
     rtl_TextEncoding     GetCharSet() const { return eFrom; }
-
-    SvxCharSetColorItem& operator=(const SvxCharSetColorItem& rColor)
-    {
-        SetValue( rColor.GetValue() );
-        eFrom = rColor.GetCharSet();
-        return *this;
-    }
 };
 
 #endif

@@ -78,6 +78,11 @@ public:
 
     virtual ~XFTextStyle() override;
 
+    XFTextStyle(XFTextStyle const &) = default;
+    XFTextStyle(XFTextStyle &&) = default;
+    XFTextStyle & operator =(XFTextStyle const &) = default;
+    XFTextStyle & operator =(XFTextStyle &&) = default;
+
 public:
     /**
      * @descr:  set the font for the text span.

@@ -28,10 +28,6 @@ ContextList::ContextList()
 {
 }
 
-ContextList::~ContextList()
-{
-}
-
 const ContextList::Entry* ContextList::GetMatch (const Context& rContext) const
 {
     const ::std::vector<Entry>::const_iterator iEntry = FindBestMatch(rContext);

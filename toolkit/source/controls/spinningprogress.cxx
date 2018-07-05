@@ -34,6 +34,11 @@ class SpinningProgressControlModel : public SpinningProgressControlModel_Base
 public:
     explicit SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
 
+    SpinningProgressControlModel(SpinningProgressControlModel const &) = default;
+    SpinningProgressControlModel(SpinningProgressControlModel &&) = default;
+    SpinningProgressControlModel & operator =(SpinningProgressControlModel const &) = default;
+    SpinningProgressControlModel & operator =(SpinningProgressControlModel &&) = default;
+
     virtual rtl::Reference<UnoControlModel> Clone() const override;
 
     // XPropertySet

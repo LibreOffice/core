@@ -36,6 +36,12 @@
 class XclExpRecordBase
 {
 public:
+    XclExpRecordBase() = default;
+    XclExpRecordBase(XclExpRecordBase const &) = default;
+    XclExpRecordBase(XclExpRecordBase &&) = default;
+    XclExpRecordBase & operator =(XclExpRecordBase const &) = default;
+    XclExpRecordBase & operator =(XclExpRecordBase &&) = default;
+
     virtual             ~XclExpRecordBase();
 
     /** Overwrite this method to do any operation while saving the record. */
@@ -123,6 +129,11 @@ public:
                             std::size_t nRecSize = 0 );
 
     virtual             ~XclExpRecord() override;
+
+    XclExpRecord(XclExpRecord const &) = default;
+    XclExpRecord(XclExpRecord &&) = default;
+    XclExpRecord & operator =(XclExpRecord const &) = default;
+    XclExpRecord & operator =(XclExpRecord &&) = default;
 
     /** Returns the current record ID. */
     sal_uInt16   GetRecId() const { return mnRecId; }

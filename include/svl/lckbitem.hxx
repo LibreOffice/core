@@ -33,6 +33,11 @@ public:
                             SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             virtual ~SfxLockBytesItem() override;
 
+    SfxLockBytesItem(SfxLockBytesItem const &) = default;
+    SfxLockBytesItem(SfxLockBytesItem &&) = default;
+    SfxLockBytesItem & operator =(SfxLockBytesItem const &) = default;
+    SfxLockBytesItem & operator =(SfxLockBytesItem &&) = default;
+
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nItemVersion) const override;

@@ -38,6 +38,7 @@ public:
     inline SvxFormatKeepItem( const bool bKeep /*= false*/,
                            const sal_uInt16 _nWhich  );
     inline SvxFormatKeepItem& operator=( const SvxFormatKeepItem& rSplit );
+     /*TODO: SfxPoolItem copy function dichotomy*/SvxFormatKeepItem(SvxFormatKeepItem const &) = default;
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

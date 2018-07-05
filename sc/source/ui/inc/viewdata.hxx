@@ -265,9 +265,6 @@ private:
         anywhere.
      */
     SAL_WARN_UNUSED_RESULT ScSplitPos SanitizeWhichActive() const;
-
-public:
-    ~ScViewDataTable();
 };
 
 class SC_DLLPUBLIC ScViewData

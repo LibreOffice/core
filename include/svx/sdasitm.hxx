@@ -54,6 +54,11 @@ private:
             SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );
             virtual ~SdrCustomShapeGeometryItem() override;
 
+            SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem const &) = default;
+            SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem &&) = default;
+            SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem const &) = default;
+            SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem &&) = default;
+
             virtual bool                operator==( const SfxPoolItem& ) const override;
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                          MapUnit eCoreMetric, MapUnit ePresentationMetric,

@@ -114,8 +114,6 @@ public:
 
     inline SwRegisterItem( const bool bRegister = false );
 
-    inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
-
     /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -128,13 +126,6 @@ public:
 inline SwRegisterItem::SwRegisterItem( const bool bRegister ) :
     SfxBoolItem( RES_PARATR_REGISTER, bRegister )
 {}
-
-inline SwRegisterItem& SwRegisterItem::operator=(
-    const SwRegisterItem& rRegister )
-{
-    SetValue( rRegister.GetValue() );
-    return *this;
-}
 
 class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 {
@@ -149,6 +140,7 @@ public:
 
     SwNumRuleItem& operator=( const SwNumRuleItem& rCpy )
     { SetValue( rCpy.GetValue() ); return *this; }
+    /*TODO: SfxPoolItem copy function dichotomy*/SwNumRuleItem(SwNumRuleItem const &) = default;
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -171,8 +163,6 @@ public:
 
     inline SwParaConnectBorderItem( const bool bConnect = true );
 
-    inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
-
     /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -185,13 +175,6 @@ public:
 inline SwParaConnectBorderItem::SwParaConnectBorderItem( const bool bConnect ) :
     SfxBoolItem( RES_PARATR_CONNECT_BORDER, bConnect )
 {}
-
-inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
-    const SwParaConnectBorderItem& rConnect )
-{
-    SetValue( rConnect.GetValue() );
-    return *this;
-}
 
 //  Implementation of paragraph-attributes methods of SwAttrSet
 inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(bool bInP) const

@@ -99,6 +99,12 @@ public:
      */
     virtual void resolve(T & rHandler) = 0;
 
+    Reference() = default;
+    Reference(Reference const &) = default;
+    Reference(Reference &&) = default;
+    Reference & operator =(Reference const &) = default;
+    Reference & operator =(Reference &&) = default;
+
 protected:
     ~Reference() override {}
 };
@@ -317,6 +323,14 @@ public:
        Pointer to a value.
      */
     typedef tools::SvRef<Value> Pointer_t;
+
+    Value() = default;
+    Value(Value const &) = default;
+    Value(Value &&) = default;
+    Value & operator =(Value const &) = default;
+    Value & operator =(Value &&) = default;
+
+    virtual ~Value() {}
 
     /**
        Returns integer representation of the value.
