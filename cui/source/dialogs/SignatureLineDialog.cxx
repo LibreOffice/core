@@ -30,6 +30,8 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextViewCursor.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -174,11 +176,12 @@ void SignatureLineDialog::Apply()
         const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
         if (xTextDocument.is())
         {
-            // Insert into document
-            Reference<XTextRange> const xEnd
-                = Reference<XTextDocument>(m_xModel, UNO_QUERY)->getText()->getEnd();
-            Reference<XTextContent> const xShapeContent(xShapeProps, UNO_QUERY);
-            xShapeContent->attach(xEnd);
+            Reference<XText> xText = xTextDocument->getText();
+            Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
+            Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
+                                                                   UNO_QUERY_THROW);
+            Reference<XTextViewCursor> xCursor = xViewCursorSupplier->getViewCursor();
+            xText->insertTextContent(xCursor, xTextContent, true);
             return;
         }
 
