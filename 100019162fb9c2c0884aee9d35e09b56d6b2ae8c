@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_29f88ec2",
+        "filename": "cui/source/dialogs/SignatureLineDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-05T16:05:25Z",
+      "side": 1,
+      "message": "Try sth like this: \n\nReference\u003c sheet::XSpreadsheetView \u003e xView( m_xModel-\u003egetCurrentController(), UNO_QUERY_THROW );\nReference\u003c sheet::XSpreadsheet \u003e xSheet( xView-\u003egetActiveSheet(), UNO_QUERY_THROW );\nReference\u003c XDrawPage\u003e xDP( xSheet-\u003egetDrawPage(), UNO_QUERY_THROW )\n\nthis should give you XDrawPage of the current sheet",
+      "revId": "100019162fb9c2c0884aee9d35e09b56d6b2ae8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
