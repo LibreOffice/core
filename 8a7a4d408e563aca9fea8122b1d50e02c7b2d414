@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_a936deb3",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-05T15:35:10Z",
+      "side": 1,
+      "message": "copy paste error? that should be WW8_FOOTER_EVEN/ODD?",
+      "revId": "8a7a4d408e563aca9fea8122b1d50e02c7b2d414",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
