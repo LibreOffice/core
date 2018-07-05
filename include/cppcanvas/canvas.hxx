@@ -69,6 +69,12 @@ namespace cppcanvas
             ANTIALIASING_EXTRA_SIZE=2
         };
 
+        Canvas() = default;
+        Canvas(Canvas const &) = default;
+        Canvas(Canvas &&) = default;
+        Canvas & operator =(Canvas const &) = default;
+        Canvas & operator =(Canvas &&) = default;
+
         virtual ~Canvas() {}
 
         virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;

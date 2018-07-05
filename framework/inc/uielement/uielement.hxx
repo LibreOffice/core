@@ -82,7 +82,6 @@ struct UIElement
                    m_nStyle( ButtonType::SYMBOLONLY ) {}
 
     bool operator< ( const UIElement& aUIElement ) const;
-    UIElement& operator=( const UIElement& rUIElement );
 
     OUString                                                      m_aType;
     OUString                                                      m_aName;

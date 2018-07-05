@@ -56,6 +56,12 @@ typedef std::vector< SvxUnoTextRangeBase* > SvxUnoTextRangeBaseVec;
 class EDITENG_DLLPUBLIC SvxEditSource
 {
 public:
+    SvxEditSource() = default;
+    SvxEditSource(SvxEditSource const &) = default;
+    SvxEditSource(SvxEditSource &&) = default;
+    SvxEditSource & operator =(SvxEditSource const &) = default;
+    SvxEditSource & operator =(SvxEditSource &&) = default;
+
     virtual                 ~SvxEditSource();
 
     /// Returns a new reference to the same object. This is a shallow copy

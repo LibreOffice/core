@@ -61,6 +61,7 @@ public:
         SetValue(rColor.GetValue());
         return *this;
     }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxColorItem(SvxColorItem const &) = default;
 
     const Color& GetValue() const
     {

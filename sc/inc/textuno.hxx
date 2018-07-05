@@ -220,6 +220,11 @@ public:
                             ScCellTextCursor(ScCellObj& rText);
         virtual             ~ScCellTextCursor() throw() override;
 
+    ScCellTextCursor(ScCellTextCursor const &) = default;
+    ScCellTextCursor(ScCellTextCursor &&) = default;
+    ScCellTextCursor & operator =(ScCellTextCursor const &) = default;
+    ScCellTextCursor & operator =(ScCellTextCursor &&) = default;
+
     ScCellObj&              GetCellObj() const  { return *mxTextObj; }
 
                             // SvxUnoTextCursor methods reimplemented here:
@@ -246,6 +251,11 @@ public:
                             ScHeaderFooterTextCursor(rtl::Reference<ScHeaderFooterTextObj> const & rText);
         virtual             ~ScHeaderFooterTextCursor() throw() override;
 
+    ScHeaderFooterTextCursor(ScHeaderFooterTextCursor const &) = default;
+    ScHeaderFooterTextCursor(ScHeaderFooterTextCursor &&) = default;
+    ScHeaderFooterTextCursor & operator =(ScHeaderFooterTextCursor const &) = default;
+    ScHeaderFooterTextCursor & operator =(ScHeaderFooterTextCursor &&) = default;
+
                             // SvxUnoTextCursor methods reimplemented here:
     virtual css::uno::Reference< css::text::XText > SAL_CALL
                             getText() override;
@@ -270,6 +280,11 @@ public:
                             ScDrawTextCursor( const css::uno::Reference< css::text::XText >& xParent,
                                             const SvxUnoTextBase& rText );
     virtual                  ~ScDrawTextCursor() throw() override;
+
+    ScDrawTextCursor(ScDrawTextCursor const &) = default;
+    ScDrawTextCursor(ScDrawTextCursor &&) = default;
+    ScDrawTextCursor & operator =(ScDrawTextCursor const &) = default;
+    ScDrawTextCursor & operator =(ScDrawTextCursor &&) = default;
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual css::uno::Reference< css::text::XText > SAL_CALL

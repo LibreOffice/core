@@ -104,6 +104,11 @@ public:
     /*implicit*/ WorkbookHelper( WorkbookGlobals& rBookGlob ) : mrBookGlob( rBookGlob ) {}
     virtual             ~WorkbookHelper();
 
+    WorkbookHelper(WorkbookHelper const &) = default;
+    WorkbookHelper(WorkbookHelper &&) = default;
+    WorkbookHelper & operator =(WorkbookHelper const &) = default;
+    WorkbookHelper & operator =(WorkbookHelper &&) = default;
+
     static WorkbookGlobalsRef constructGlobals( ExcelFilter& rFilter );
 
     // filter -----------------------------------------------------------------

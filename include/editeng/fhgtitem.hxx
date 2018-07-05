@@ -72,6 +72,7 @@ public:
             ePropUnit = rSize.ePropUnit;
             return *this;
         }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxFontHeightItem(SvxFontHeightItem const &) = default;
 
     void SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp = 100,
                      MapUnit eUnit = MapUnit::MapRelative );

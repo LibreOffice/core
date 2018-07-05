@@ -43,10 +43,6 @@ ScAsciiOptions::ScAsciiOptions() :
 {
 }
 
-ScAsciiOptions::~ScAsciiOptions()
-{
-}
-
 void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
 {
     sal_uInt16 nInfoCount = static_cast< sal_uInt16 >( rDataVec.size() );

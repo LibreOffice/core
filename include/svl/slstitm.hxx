@@ -38,6 +38,11 @@ public:
     SfxStringListItem( sal_uInt16 nWhich, SvStream& rStream );
     virtual ~SfxStringListItem() override;
 
+    SfxStringListItem(SfxStringListItem const &) = default;
+    SfxStringListItem(SfxStringListItem &&) = default;
+    SfxStringListItem & operator =(SfxStringListItem const &) = default;
+    SfxStringListItem & operator =(SfxStringListItem &&) = default;
+
     std::vector<OUString>&       GetList();
 
     const std::vector<OUString>& GetList() const;
