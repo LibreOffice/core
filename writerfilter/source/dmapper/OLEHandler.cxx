@@ -156,7 +156,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if ( pProperties.get( ) )
             {
-                std::shared_ptr<WrapHandler> pHandler( new WrapHandler );
+                tools::SvRef<WrapHandler> pHandler( new WrapHandler );
                 pProperties->resolve( *pHandler );
 
                 m_nWrapMode = pHandler->getWrapMode( );

@@ -67,7 +67,7 @@ void TableManager::insertTableProps(const TablePropertyMapPtr& pProps)
 #endif
 
     if (getTableProps().get() && getTableProps() != pProps)
-        getTableProps()->InsertProps(pProps);
+        getTableProps()->InsertProps(pProps.get());
     else
         mState.setTableProps(pProps);
 
@@ -83,7 +83,7 @@ void TableManager::insertRowProps(const TablePropertyMapPtr& pProps)
 #endif
 
     if (getRowProps().get())
-        getRowProps()->InsertProps(pProps);
+        getRowProps()->InsertProps(pProps.get());
     else
         mState.setRowProps(pProps);
 
@@ -112,7 +112,7 @@ void TableManager::cellProps(const TablePropertyMapPtr& pProps)
 #endif
 
     if (getCellProps().get())
-        getCellProps()->InsertProps(pProps);
+        getCellProps()->InsertProps(pProps.get());
     else
         mState.setCellProps(pProps);
 
@@ -385,7 +385,7 @@ void TableManager::startLevel()
             pTableData2->addCell(mpUnfinishedRow->getCellStart(i), mpUnfinishedRow->getCellProperties(i));
             pTableData2->endCell(mpUnfinishedRow->getCellEnd(i));
         }
-        mpUnfinishedRow.reset();
+        mpUnfinishedRow.clear();
     }
 
     mTableDataStack.push(pTableData2);
@@ -411,7 +411,7 @@ void TableManager::handle(const css::uno::Reference<css::text::XTextRange>& rHan
     setHandle(rHandle);
 }
 
-void TableManager::setHandler(const std::shared_ptr<DomainMapperTableHandler>& pTableDataHandler)
+void TableManager::setHandler(const tools::SvRef<DomainMapperTableHandler>& pTableDataHandler)
 {
     mpTableDataHandler = pTableDataHandler;
 }

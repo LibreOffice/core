@@ -94,7 +94,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
 };
-typedef std::shared_ptr< SettingsTable >          SettingsTablePtr;
+typedef tools::SvRef< SettingsTable >          SettingsTablePtr;
 }}
 
 #endif

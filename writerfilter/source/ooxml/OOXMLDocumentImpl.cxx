@@ -358,7 +358,7 @@ void OOXMLDocumentImpl::resolvePicture(Stream & rStream,
 {
     OOXMLPropertySet::Pointer_t pProps(getPicturePropSet(rId));
 
-    rStream.props(pProps);
+    rStream.props(pProps.get());
 }
 
 OUString OOXMLDocumentImpl::getTargetForId(const OUString & rId)

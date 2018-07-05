@@ -38,7 +38,7 @@ class OOXMLDocumentImpl;
 class OOXMLFastContextHandler: public ::cppu::WeakImplHelper<css::xml::sax::XFastContextHandler>
 {
 public:
-    typedef std::shared_ptr<OOXMLFastContextHandler> Pointer_t;
+    typedef tools::SvRef<OOXMLFastContextHandler> Pointer_t;
 
     enum ResourceEnum_t { UNKNOWN, STREAM, PROPERTIES, TABLE, SHAPE };
 

@@ -113,7 +113,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     checkUnicode(/*bUnicode =*/nKeyword != RTF_U, /*bHex =*/true);
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
-    auto pIntValue = std::make_shared<RTFValue>(nParam);
+    auto pIntValue = new RTFValue(nParam);
     // Trivial table sprms.
     switch (nKeyword)
     {
@@ -133,12 +133,12 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     nValue = NS_ooxml::LN_Value_ST_Jc_right;
                     break;
             }
-            pIntValue = std::make_shared<RTFValue>(nValue);
+            pIntValue = new RTFValue(nValue);
             break;
         }
         case RTF_LEVELNFC:
             nSprm = NS_ooxml::LN_CT_Lvl_numFmt;
-            pIntValue = std::make_shared<RTFValue>(getNumberFormat(nParam));
+            pIntValue = new RTFValue(getNumberFormat(nParam));
             break;
         case RTF_LEVELSTARTAT:
             nSprm = NS_ooxml::LN_CT_Lvl_start;
@@ -148,7 +148,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_SBASEDON:
             nSprm = NS_ooxml::LN_CT_Style_basedOn;
-            pIntValue = std::make_shared<RTFValue>(getStyleName(nParam));
+            pIntValue = new RTFValue(getStyleName(nParam));
             break;
         default:
             break;
@@ -214,7 +214,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         LanguageTag aTag((LanguageType(static_cast<sal_uInt16>(nParam))));
-        auto pValue = std::make_shared<RTFValue>(aTag.getBcp47());
+        auto pValue = new RTFValue(aTag.getBcp47());
         putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_lang, nSprm,
                            pValue);
         // Language is a character property, but we should store it at a paragraph level as well for fields.
@@ -233,7 +233,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nParam == 0 && (m_nTopLevelCells != 0 || m_nNestedCells != 0))
             {
                 nParam = 1;
-                pIntValue = std::make_shared<RTFValue>(nParam);
+                pIntValue = new RTFValue(nParam);
             }
             break;
         default:
@@ -359,18 +359,18 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 RTFSprms aFontAttributes;
                 aFontAttributes.set(nSprm,
-                                    std::make_shared<RTFValue>(m_aFontNames[getFontIndex(nParam)]));
+                                    new RTFValue(m_aFontNames[getFontIndex(nParam)]));
                 RTFSprms aRunPropsSprms;
                 aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts,
-                                   std::make_shared<RTFValue>(aFontAttributes));
+                                   new RTFValue(aFontAttributes));
                 m_aStates.top().aTableSprms.set(
-                    NS_ooxml::LN_CT_Lvl_rPr, std::make_shared<RTFValue>(RTFSprms(), aRunPropsSprms),
+                    NS_ooxml::LN_CT_Lvl_rPr, new RTFValue(RTFSprms(), aRunPropsSprms),
                     RTFOverwrite::NO_APPEND);
             }
             else
             {
                 m_nCurrentFontIndex = getFontIndex(nParam);
-                auto pValue = std::make_shared<RTFValue>(getFontName(m_nCurrentFontIndex));
+                auto pValue = new RTFValue(getFontName(m_nCurrentFontIndex));
                 putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts,
                                    nSprm, pValue);
                 if (nKeyword == RTF_F)
@@ -424,10 +424,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CF:
         {
             RTFSprms aAttributes;
-            auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+            auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
             aAttributes.set(NS_ooxml::LN_CT_Color_val, pValue);
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_color,
-                                                std::make_shared<RTFValue>(aAttributes));
+                                                new RTFValue(aAttributes));
         }
         break;
         case RTF_S:
@@ -438,7 +438,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 || m_aStates.top().eDestination == Destination::STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
-                auto pValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_StyleType_paragraph);
+                auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_StyleType_paragraph);
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type,
                                                      pValue); // paragraph style
             }
@@ -449,10 +449,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 {
                     if (m_aStates.top().eDestination == Destination::LISTLEVEL)
                         m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_pStyle,
-                                                        std::make_shared<RTFValue>(aName));
+                                                        new RTFValue(aName));
                     else
                         m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle,
-                                                            std::make_shared<RTFValue>(aName));
+                                                            new RTFValue(aName));
                 }
             }
         }
@@ -463,7 +463,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 || m_aStates.top().eDestination == Destination::STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
-                auto pValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_StyleType_character);
+                auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_StyleType_character);
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type,
                                                      pValue); // character style
             }
@@ -472,7 +472,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 OUString aName = getStyleName(nParam);
                 if (!aName.isEmpty())
                     m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_rStyle,
-                                                        std::make_shared<RTFValue>(aName));
+                                                        new RTFValue(aName));
             }
             break;
         case RTF_DS:
@@ -480,7 +480,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 || m_aStates.top().eDestination == Destination::STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
-                auto pValue = std::make_shared<RTFValue>(0); // TODO no value in enum StyleType?
+                auto pValue = new RTFValue(0); // TODO no value in enum StyleType?
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type,
                                                      pValue); // section style
             }
@@ -491,7 +491,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 m_nCurrentStyleIndex = nParam;
                 // FIXME the correct value would be NS_ooxml::LN_Value_ST_StyleType_table but maybe table styles mess things up in dmapper, be cautious and disable them for now
-                auto pValue = std::make_shared<RTFValue>(0);
+                auto pValue = new RTFValue(0);
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type,
                                                      pValue); // table style
             }
@@ -503,7 +503,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_ADEFLANG:
         {
             LanguageTag aTag((LanguageType(nParam)));
-            auto pValue = std::make_shared<RTFValue>(aTag.getBcp47());
+            auto pValue = new RTFValue(aTag.getBcp47());
             putNestedAttribute(m_aStates.top().aCharacterSprms,
                                (nKeyword == RTF_DEFLANG ? NS_ooxml::LN_EG_RPrBase_lang
                                                         : NS_ooxml::LN_CT_Language_bidi),
@@ -513,7 +513,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CHCBPAT:
         {
             auto pValue
-                = std::make_shared<RTFValue>(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
+                = new RTFValue(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
             putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
@@ -521,7 +521,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CLCBPAT:
         case RTF_CLCBPATRAW:
         {
-            auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+            auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
             putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
@@ -529,34 +529,34 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CBPAT:
             if (nParam)
             {
-                auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+                auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
                 putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_shd,
                                    NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
         case RTF_ULC:
         {
-            auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+            auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
             m_aStates.top().aCharacterSprms.set(0x6877, pValue);
         }
         break;
         case RTF_HIGHLIGHT:
         {
             auto pValue
-                = std::make_shared<RTFValue>(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
+                = new RTFValue(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_highlight, pValue);
         }
         break;
         case RTF_UP:
         case RTF_DN:
         {
-            auto pValue = std::make_shared<RTFValue>(nParam * (nKeyword == RTF_UP ? 1 : -1));
+            auto pValue = new RTFValue(nParam * (nKeyword == RTF_UP ? 1 : -1));
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_position, pValue);
         }
         break;
         case RTF_HORZVERT:
         {
-            auto pValue = std::make_shared<RTFValue>(int(true));
+            auto pValue = new RTFValue(int(true));
             m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_vert, pValue);
             if (nParam)
                 // rotate fits to a single line
@@ -567,13 +567,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_EXPND:
         {
             // Convert quarter-points to twentieths of a point
-            auto pValue = std::make_shared<RTFValue>(nParam * 5);
+            auto pValue = new RTFValue(nParam * 5);
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_spacing, pValue);
         }
         break;
         case RTF_TWOINONE:
         {
-            auto pValue = std::make_shared<RTFValue>(int(true));
+            auto pValue = new RTFValue(int(true));
             m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_combine,
                                                      pValue);
             nId = 0;
@@ -598,19 +598,19 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nId > 0)
                 m_aStates.top().aCharacterAttributes.set(
                     NS_ooxml::LN_CT_EastAsianLayout_combineBrackets,
-                    std::make_shared<RTFValue>(nId));
+                    new RTFValue(nId));
         }
         break;
         case RTF_SL:
         {
             // This is similar to RTF_ABSH, negative value means 'exact', positive means 'at least'.
             auto pValue
-                = std::make_shared<RTFValue>(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast);
+                = new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast);
             if (nParam < 0)
             {
                 pValue
-                    = std::make_shared<RTFValue>(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact);
-                pIntValue = std::make_shared<RTFValue>(-nParam);
+                    = new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact);
+                pIntValue = new RTFValue(-nParam);
             }
             m_aStates.top().aParagraphAttributes.set(NS_ooxml::LN_CT_Spacing_lineRule, pValue);
             m_aStates.top().aParagraphAttributes.set(NS_ooxml::LN_CT_Spacing_line, pIntValue);
@@ -620,7 +620,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nParam > 0)
             {
                 auto pValue
-                    = std::make_shared<RTFValue>(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto);
+                    = new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto);
                 m_aStates.top().aParagraphAttributes.set(NS_ooxml::LN_CT_Spacing_lineRule, pValue);
             }
             break;
@@ -629,27 +629,27 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // dmapper expects it in 1/8 pt, we have it in twip - but avoid rounding 1 to 0
             if (nParam > 1)
                 nParam = nParam * 2 / 5;
-            auto pValue = std::make_shared<RTFValue>(nParam);
+            auto pValue = new RTFValue(nParam);
             putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_sz, pValue);
         }
         break;
         case RTF_BRDRCF:
         {
-            auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+            auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
             putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_color, pValue);
         }
         break;
         case RTF_BRSP:
         {
             // dmapper expects it in points, we have it in twip
-            auto pValue = std::make_shared<RTFValue>(nParam / 20);
+            auto pValue = new RTFValue(nParam / 20);
             putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_space, pValue);
         }
         break;
         case RTF_TX:
         {
             m_aStates.top().aTabAttributes.set(NS_ooxml::LN_CT_TabStop_pos, pIntValue);
-            auto pValue = std::make_shared<RTFValue>(m_aStates.top().aTabAttributes);
+            auto pValue = new RTFValue(m_aStates.top().aTabAttributes);
             if (m_aStates.top().eDestination == Destination::LISTLEVEL)
                 putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_tabs,
                               NS_ooxml::LN_CT_Tabs_tab, pValue);
@@ -734,7 +734,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             if (!sValue.isEmpty())
                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_suff,
-                                                std::make_shared<RTFValue>(sValue));
+                                                new RTFValue(sValue));
         }
         break;
         case RTF_FPRQ:
@@ -755,9 +755,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nValue)
             {
                 RTFSprms aAttributes;
-                aAttributes.set(NS_ooxml::LN_CT_Pitch_val, std::make_shared<RTFValue>(nValue));
+                aAttributes.set(NS_ooxml::LN_CT_Pitch_val, new RTFValue(nValue));
                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Font_pitch,
-                                                std::make_shared<RTFValue>(aAttributes));
+                                                new RTFValue(aAttributes));
             }
         }
         break;
@@ -814,7 +814,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 default:
                     break;
             }
-            auto pValue = std::make_shared<RTFValue>(nValue);
+            auto pValue = new RTFValue(nValue);
             RTFValue::Pointer_t pTight
                 = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_EG_WrapType_wrapTight);
             if (pTight)
@@ -837,12 +837,12 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 case 3:
                     m_aStates.top().aShape.nWrap = text::WrapTextMode_THROUGH;
                     m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone,
-                                                        std::make_shared<RTFValue>());
+                                                        new RTFValue());
                     break;
                 case 4:
                     m_aStates.top().aShape.nWrap = text::WrapTextMode_PARALLEL;
                     m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapTight,
-                                                        std::make_shared<RTFValue>());
+                                                        new RTFValue());
                     break;
                 case 5:
                     m_aStates.top().aShape.nWrap = text::WrapTextMode_THROUGH;
@@ -873,7 +873,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
 
             rCurrentCellX = nParam;
-            auto pXValue = std::make_shared<RTFValue>(nCellX);
+            auto pXValue = new RTFValue(nCellX);
             m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
                                                RTFOverwrite::NO_APPEND);
             if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination)
@@ -900,9 +900,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 // Wasn't in table, but now is -> tblStart.
                 RTFSprms aAttributes;
                 RTFSprms aSprms;
-                aSprms.set(NS_ooxml::LN_tblStart, std::make_shared<RTFValue>(1));
+                aSprms.set(NS_ooxml::LN_tblStart, new RTFValue(1));
                 writerfilter::Reference<Properties>::Pointer_t pProperties
-                    = std::make_shared<RTFReferenceProperties>(aAttributes, aSprms);
+                    = new RTFReferenceProperties(aAttributes, aSprms);
                 Mapper().props(pProperties);
             }
             m_nCellxMax = std::max(m_nCellxMax, nParam);
@@ -913,8 +913,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             OUString hRule("auto");
             if (nParam < 0)
             {
-                auto pAbsValue = std::make_shared<RTFValue>(-nParam);
-                pIntValue.swap(pAbsValue);
+                auto pAbsValue = new RTFValue(-nParam);
+                std::swap(pIntValue, pAbsValue);
 
                 hRule = "exact";
             }
@@ -924,7 +924,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TrPrBase_trHeight,
                                NS_ooxml::LN_CT_Height_val, pIntValue);
 
-            auto pHRule = std::make_shared<RTFValue>(hRule);
+            auto pHRule = new RTFValue(hRule);
             putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TrPrBase_trHeight,
                                NS_ooxml::LN_CT_Height_hRule, pHRule);
         }
@@ -934,9 +934,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // the value is in twips
             putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblInd,
                                NS_ooxml::LN_CT_TblWidth_type,
-                               std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+                               new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
             putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblInd,
-                               NS_ooxml::LN_CT_TblWidth_w, std::make_shared<RTFValue>(nParam));
+                               NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
             auto const aDestination = m_aStates.top().eDestination;
             int& rCurrentTRLeft((Destination::NESTEDTABLEPROPERTIES == aDestination)
                                     ? m_nNestedTRLeft
@@ -1047,7 +1047,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_REVAUTH:
         case RTF_REVAUTHDEL:
         {
-            auto pValue = std::make_shared<RTFValue>(m_aAuthors[nParam]);
+            auto pValue = new RTFValue(m_aAuthors[nParam]);
             putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange,
                                NS_ooxml::LN_CT_TrackChange_author, pValue);
         }
@@ -1057,7 +1057,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             OUString aStr(
                 OStringToOUString(DTTM22OString(nParam), m_aStates.top().nCurrentEncoding));
-            auto pValue = std::make_shared<RTFValue>(aStr);
+            auto pValue = new RTFValue(aStr);
             putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange,
                                NS_ooxml::LN_CT_TrackChange_date, pValue);
         }
@@ -1219,11 +1219,11 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_PNF:
         {
-            auto pValue = std::make_shared<RTFValue>(m_aFontNames[getFontIndex(nParam)]);
+            auto pValue = new RTFValue(m_aFontNames[getFontIndex(nParam)]);
             RTFSprms aAttributes;
             aAttributes.set(NS_ooxml::LN_CT_Fonts_ascii, pValue);
             putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_Lvl_rPr,
-                          NS_ooxml::LN_EG_RPrBase_rFonts, std::make_shared<RTFValue>(aAttributes));
+                          NS_ooxml::LN_EG_RPrBase_rFonts, new RTFValue(aAttributes));
         }
         break;
         case RTF_VIEWSCALE:
@@ -1338,7 +1338,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             if (nValue != -1)
                 putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd,
-                                   NS_ooxml::LN_CT_Shd_val, std::make_shared<RTFValue>(nValue));
+                                   NS_ooxml::LN_CT_Shd_val, new RTFValue(nValue));
         }
         break;
         case RTF_DODHGT:
@@ -1388,8 +1388,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             RTFSprms aAttributes;
             aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
-                            std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_TblWidth_dxa));
-            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, std::make_shared<RTFValue>(nParam));
+                            new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
             // Top and left is swapped, that's what Word does.
             switch (nKeyword)
             {
@@ -1409,7 +1409,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     break;
             }
             putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm,
-                          std::make_shared<RTFValue>(aAttributes));
+                          new RTFValue(aAttributes));
         }
         break;
         case RTF_TRPADDFB:
@@ -1422,7 +1422,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 case 3:
                     aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
-                                    std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+                                    new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
                     break;
             }
             switch (nKeyword)
@@ -1443,9 +1443,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     break;
             }
             putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar,
-                               nSprm, std::make_shared<RTFValue>(aAttributes));
+                               nSprm, new RTFValue(aAttributes));
             putNestedAttribute(m_aDefaultState.aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar,
-                               nSprm, std::make_shared<RTFValue>(aAttributes));
+                               nSprm, new RTFValue(aAttributes));
         }
         break;
         case RTF_TRPADDB:
@@ -1454,7 +1454,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_TRPADDT:
         {
             RTFSprms aAttributes;
-            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, std::make_shared<RTFValue>(nParam));
+            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
             switch (nKeyword)
             {
                 case RTF_TRPADDB:
@@ -1473,9 +1473,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     break;
             }
             putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm,
-                          std::make_shared<RTFValue>(aAttributes));
+                          new RTFValue(aAttributes));
             putNestedSprm(m_aDefaultState.aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm,
-                          std::make_shared<RTFValue>(aAttributes));
+                          new RTFValue(aAttributes));
         }
         break;
         case RTF_FI:
@@ -1509,7 +1509,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // It turns out \li should reset the \fi inherited from the stylesheet.
             // So set the direct formatting to zero, if we don't have such direct formatting yet.
             putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
-                               NS_ooxml::LN_CT_Ind_firstLine, std::make_shared<RTFValue>(0),
+                               NS_ooxml::LN_CT_Ind_firstLine, new RTFValue(0),
                                RTFOverwrite::NO_IGNORE);
         }
         break;
@@ -1534,14 +1534,14 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 RTFSprms aAttributes;
                 aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
-                                std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+                                new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
                 aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, pIntValue);
                 putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar,
                               NS_ooxml::LN_CT_TblCellMar_left,
-                              std::make_shared<RTFValue>(aAttributes));
+                              new RTFValue(aAttributes));
                 putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar,
                               NS_ooxml::LN_CT_TblCellMar_right,
-                              std::make_shared<RTFValue>(aAttributes));
+                              new RTFValue(aAttributes));
             }
             break;
         case RTF_TRFTSWIDTH:
@@ -1595,7 +1595,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
             if (nId > 0)
                 m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_effect,
-                                                    std::make_shared<RTFValue>(nId));
+                                                    new RTFValue(nId));
             break;
         }
         case RTF_VIEWBKSP:

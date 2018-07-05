@@ -31,7 +31,7 @@ namespace ooxml
 class OOXMLValue : public Value
 {
 public:
-    typedef std::shared_ptr<OOXMLValue> Pointer_t;
+    typedef tools::SvRef<OOXMLValue> Pointer_t;
     OOXMLValue();
     virtual ~OOXMLValue() override;
 
@@ -50,7 +50,7 @@ public:
 class OOXMLProperty : public Sprm
 {
 public:
-    typedef std::shared_ptr<OOXMLProperty> Pointer_t;
+    typedef tools::SvRef<OOXMLProperty> Pointer_t;
     enum Type_t { SPRM, ATTRIBUTE };
 private:
     Id mId;
@@ -60,7 +60,7 @@ private:
 public:
     OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue, Type_t eType);
     OOXMLProperty(const OOXMLProperty & rSprm);
-    virtual ~OOXMLProperty();
+    virtual ~OOXMLProperty() override;
 
     sal_uInt32 getId() const override;
     Value::Pointer_t getValue() override;
@@ -138,13 +138,13 @@ class OOXMLPropertySet : public writerfilter::Reference<Properties>
 {
 public:
     typedef std::vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
-    typedef std::shared_ptr<OOXMLPropertySet> Pointer_t;
+    typedef tools::SvRef<OOXMLPropertySet> Pointer_t;
 private:
     OOXMLProperties_t mProperties;
     void add(const OOXMLProperty::Pointer_t& pProperty);
 public:
     OOXMLPropertySet();
-    virtual ~OOXMLPropertySet();
+    virtual ~OOXMLPropertySet() override;
 
     void resolve(Properties & rHandler) override;
     void add(Id id, const OOXMLValue::Pointer_t& pValue, OOXMLProperty::Type_t eType);
@@ -166,9 +166,9 @@ class OOXMLValue;
 class OOXMLTable : public writerfilter::Reference<Table>
 {
 public:
-    typedef std::shared_ptr<OOXMLValue> ValuePointer_t;
+    typedef tools::SvRef<OOXMLValue> ValuePointer_t;
     OOXMLTable();
-    virtual ~OOXMLTable();
+    virtual ~OOXMLTable() override;
 
     void resolve(Table & rTable) override;
     void add(const ValuePointer_t& pPropertySet);
@@ -313,7 +313,7 @@ class OOXMLPropertySetEntryToString : public Properties
 
 public:
     explicit OOXMLPropertySetEntryToString(Id nId);
-    virtual ~OOXMLPropertySetEntryToString();
+    virtual ~OOXMLPropertySetEntryToString() override;
 
     virtual void sprm(Sprm & rSprm) override;
     virtual void attribute(Id nId, Value & rValue) override;
@@ -327,7 +327,7 @@ class OOXMLPropertySetEntryToInteger : public Properties
     int mnValue;
 public:
     explicit OOXMLPropertySetEntryToInteger(Id nId);
-    virtual ~OOXMLPropertySetEntryToInteger();
+    virtual ~OOXMLPropertySetEntryToInteger() override;
 
     virtual void sprm(Sprm & rSprm) override;
     virtual void attribute(Id nId, Value & rValue) override;
@@ -341,7 +341,7 @@ class OOXMLPropertySetEntryToBool : public Properties
     bool mValue;
 public:
     explicit OOXMLPropertySetEntryToBool(Id nId);
-    virtual ~OOXMLPropertySetEntryToBool();
+    virtual ~OOXMLPropertySetEntryToBool() override;
 
     virtual void sprm(Sprm & rSprm) override;
     virtual void attribute(Id nId, Value & rValue) override;

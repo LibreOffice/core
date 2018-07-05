@@ -26,9 +26,7 @@ class RTFDocument : public writerfilter::Reference<Stream>
 {
 public:
     /// Pointer to this stream.
-    using Pointer_t = std::shared_ptr<RTFDocument>;
-
-    virtual ~RTFDocument() = default;
+    using Pointer_t = tools::SvRef<RTFDocument>;
 
     /// Resolves this document to a stream handler.
     void resolve(Stream& rHandler) override = 0;

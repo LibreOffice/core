@@ -41,7 +41,6 @@
 #include <oox/ole/vbaproject.hxx>
 #include <ooxml/OOXMLDocument.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 
@@ -255,7 +254,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
             }
         }
 
-        pStream.reset();
+        pStream.clear();
 
         return true;
     }
