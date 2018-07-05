@@ -2351,8 +2351,25 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     {
         SfxListener::Notify(rBC, rHint);
     }
-    if (SfxHintId::DocChanged == rHint.GetId())
-        m_bViewHasChanged = true;
+    switch (rHint.GetId())
+    {
+        case SfxHintId::DocChanged:
+            m_bViewHasChanged = true;
+            break;
+        case SfxHintId::ModeChanged:
+            if (SwWrtShell* pShell = GetWrtShell())
+            {
+                const bool bReadOnly = pShell->GetView().GetDocShell()->IsReadOnly();
+                if (bReadOnly != m_bIsLastReadOnly)
+                {
+                    m_bIsLastReadOnly = bReadOnly;
+                    Select(GetCurEntry());
+                }
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 
