@@ -57,7 +57,7 @@ public:
     static OUString fromLocaleToScriptTag(const OUString& sLocale);
     static OUString fromLCIDToScriptTag(LanguageType lang);
 };
-typedef std::shared_ptr< ThemeTable >          ThemeTablePtr;
+typedef rtl::Reference< ThemeTable >          ThemeTablePtr;
 }}
 
 #endif

@@ -16,6 +16,7 @@
 #include <map>
 
 #include <tools/ref.hxx>
+#include <rtl/ref.hxx>
 #include "rtfvalue.hxx"
 
 namespace writerfilter
@@ -38,16 +39,16 @@ enum class RTFOverwrite
 };
 
 /// A list of RTFSprm with a copy constructor that performs a deep copy.
-class RTFSprms
+class RTFSprms : public virtual writerfilter::NotSoSimpleReferenceObject
 {
 public:
-    using Pointer_t = std::shared_ptr<RTFSprms>;
+    using Pointer_t = rtl::Reference<RTFSprms>;
     using Entry_t = std::pair<Id, RTFValue::Pointer_t>;
     using Iterator_t = std::vector<Entry_t>::iterator;
     using ReverseIterator_t = std::vector<Entry_t>::reverse_iterator;
     RTFSprms();
     RTFSprms(const RTFSprms& rSprms);
-    ~RTFSprms();
+    ~RTFSprms() override;
     RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true, bool bForWrite = false);
     /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
     void set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = RTFOverwrite::YES);
@@ -79,7 +80,6 @@ class RTFSprm : public Sprm
 {
 public:
     RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);
-    virtual ~RTFSprm() = default;
     sal_uInt32 getId() const override;
     Value::Pointer_t getValue() override;
     writerfilter::Reference<Properties>::Pointer_t getProps() override;

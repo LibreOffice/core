@@ -294,18 +294,18 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     else
                     {
                         RTFSprms aAttributes;
-                        aAttributes.set(Id(0), std::make_shared<RTFValue>(m_nGroupStartPos - 1));
-                        aAttributes.set(Id(1), std::make_shared<RTFValue>(nId));
-                        aAttributes.set(Id(2), std::make_shared<RTFValue>(aCustomMark));
+                        aAttributes.set(Id(0), new RTFValue(m_nGroupStartPos - 1));
+                        aAttributes.set(Id(1), new RTFValue(nId));
+                        aAttributes.set(Id(2), new RTFValue(aCustomMark));
                         m_aStates.top().pCurrentBuffer->push_back(
-                            Buf_t(BUFFER_RESOLVESUBSTREAM, std::make_shared<RTFValue>(aAttributes),
+                            Buf_t(BUFFER_RESOLVESUBSTREAM, new RTFValue(aAttributes),
                                   nullptr));
                     }
                     if (bCustomMark)
                     {
                         m_aStates.top().aCharacterAttributes.clear();
                         m_aStates.top().aCharacterSprms.clear();
-                        auto pValue = std::make_shared<RTFValue>(1);
+                        auto pValue = new RTFValue(1);
                         m_aStates.top().aCharacterAttributes.set(
                             NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue);
                         text(aCustomMark);
@@ -344,16 +344,16 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         RTFSprms aAttributes;
                         if (!m_aAuthor.isEmpty())
                         {
-                            auto pValue = std::make_shared<RTFValue>(m_aAuthor);
+                            auto pValue = new RTFValue(m_aAuthor);
                             aAttributes.set(NS_ooxml::LN_CT_TrackChange_author, pValue);
                         }
                         if (!m_aAuthorInitials.isEmpty())
                         {
-                            auto pValue = std::make_shared<RTFValue>(m_aAuthorInitials);
+                            auto pValue = new RTFValue(m_aAuthorInitials);
                             aAttributes.set(NS_ooxml::LN_CT_Comment_initials, pValue);
                         }
                         writerfilter::Reference<Properties>::Pointer_t pProperties
-                            = std::make_shared<RTFReferenceProperties>(aAttributes);
+                            = new RTFReferenceProperties(aAttributes);
                         Mapper().props(pProperties);
                     }
                 }
@@ -387,7 +387,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                                                   RTFSdrImport::SHAPE);
                         else
                         {
-                            auto pValue = std::make_shared<RTFValue>(m_aStates.top().aShape);
+                            auto pValue = new RTFValue(m_aStates.top().aShape);
                             m_aStates.top().pCurrentBuffer->push_back(
                                 Buf_t(BUFFER_STARTSHAPE, pValue, nullptr));
                         }
@@ -617,7 +617,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().eDestination = Destination::FOOTNOTESEPARATOR;
                 m_aStates.top().aCharacterAttributes.set(
                     NS_ooxml::LN_CT_FtnEdn_type,
-                    std::make_shared<RTFValue>(NS_ooxml::LN_Value_doc_ST_FtnEdn_separator));
+                    new RTFValue(NS_ooxml::LN_Value_doc_ST_FtnEdn_separator));
                 break;
             case RTF_USERPROPS:
                 // Container of all user-defined properties.

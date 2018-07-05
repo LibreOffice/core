@@ -15,6 +15,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <notsosimplereferenceobject.hxx>
 
 namespace com
 {
@@ -43,7 +44,7 @@ class DomainMapper_Impl;
  * w:sdt tokens can't be imported as form fields, as w:sdt supports
  * e.g. date picking as well.
  */
-class SdtHelper final
+class SdtHelper final : public virtual writerfilter::NotSoSimpleReferenceObject
 {
     DomainMapper_Impl& m_rDM_Impl;
 
@@ -68,7 +69,7 @@ class SdtHelper final
     void createControlShape(css::awt::Size aSize, css::uno::Reference<css::awt::XControlModel> const& xControlModel, const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl);
-    ~SdtHelper();
+    ~SdtHelper() override;
 
     std::vector<OUString>& getDropDownItems()
     {

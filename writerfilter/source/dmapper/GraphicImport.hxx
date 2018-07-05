@@ -126,7 +126,7 @@ public:
     void handleWrapTextValue(sal_uInt32 nVal);
 };
 
-typedef std::shared_ptr<GraphicImport> GraphicImportPtr;
+typedef rtl::Reference<GraphicImport> GraphicImportPtr;
 
 }}
 

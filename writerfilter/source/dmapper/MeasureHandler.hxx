@@ -57,7 +57,7 @@ public:
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag();
 };
-typedef std::shared_ptr
+typedef rtl::Reference
     < MeasureHandler >  MeasureHandlerPtr;
 }}
 

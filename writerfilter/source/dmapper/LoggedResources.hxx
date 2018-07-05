@@ -50,7 +50,7 @@ class LoggedStream : public Stream
 {
 public:
     explicit LoggedStream(const std::string & sPrefix);
-    virtual ~LoggedStream();
+    virtual ~LoggedStream() override;
 
     void startSectionGroup() override;
     void endSectionGroup() override;
@@ -103,7 +103,7 @@ class LoggedProperties : public Properties
 {
 public:
     explicit LoggedProperties(const std::string & sPrefix);
-    virtual ~LoggedProperties();
+    virtual ~LoggedProperties() override;
 
     void attribute(Id name, Value & val) override;
     void sprm(Sprm & sprm) override;
@@ -121,7 +121,7 @@ class LoggedTable : public Table
 {
 public:
     explicit LoggedTable(const std::string & sPrefix);
-    virtual ~LoggedTable();
+    virtual ~LoggedTable() override;
 
     void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 

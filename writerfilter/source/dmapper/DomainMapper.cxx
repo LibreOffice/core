@@ -1391,7 +1391,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 pCellColorHandler->enableInteropGrabBag( "TempShdPropsGrabBag" );
 
             pProperties->resolve(*pCellColorHandler);
-            rContext->InsertProps(pCellColorHandler->getProperties());
+            rContext->InsertProps(pCellColorHandler->getProperties().get());
 
             rContext->Insert(PROP_CHAR_THEME_FILL,  pCellColorHandler->getInteropGrabBag().Value, true, PARA_GRAB_BAG);
             if(bEnableTempGrabBag)
@@ -1759,7 +1759,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 std::shared_ptr<CellColorHandler> pCellColorHandler( new CellColorHandler );
                 pCellColorHandler->setOutputFormat( CellColorHandler::Character );
                 pProperties->resolve(*pCellColorHandler);
-                rContext->InsertProps(pCellColorHandler->getProperties());
+                rContext->InsertProps(pCellColorHandler->getProperties().get());
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_SHADING_MARKER, uno::makeAny(true), true, CHAR_GRAB_BAG );
             }
             break;
@@ -2021,7 +2021,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if( pProperties.get())
         {
 
-            std::shared_ptr< SectionColumnHandler > pSectHdl( new SectionColumnHandler );
+            rtl::Reference< SectionColumnHandler > pSectHdl( new SectionColumnHandler );
             pProperties->resolve(*pSectHdl);
             if(pSectionContext && !m_pImpl->isInIndexContext())
             {
@@ -2081,7 +2081,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get( ) && pSectionContext )
         {
-            std::shared_ptr< PageBordersHandler > pHandler( new PageBordersHandler );
+            rtl::Reference< PageBordersHandler > pHandler( new PageBordersHandler );
             pProperties->resolve( *pHandler );
 
             // Set the borders to the context and apply them to the styles
@@ -2613,7 +2613,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_stylisticSets_stylisticSets:
     case NS_ooxml::LN_cntxtAlts_cntxtAlts:
     {
-        std::shared_ptr<TextEffectsHandler> pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
+        rtl::Reference<TextEffectsHandler> pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
         boost::optional<PropertyIds> aPropertyId = pTextEffectsHandlerPtr->getGrabBagPropertyId();
         if(aPropertyId)
         {
@@ -3033,7 +3033,7 @@ void DomainMapper::PopStyleSheetProperties( bool bAffectTableMngr )
     }
 }
 
-void DomainMapper::PushListProperties( const ::std::shared_ptr<PropertyMap>& pListProperties )
+void DomainMapper::PushListProperties( const ::rtl::Reference<PropertyMap>& pListProperties )
 {
     m_pImpl->PushListProperties( pListProperties );
 }
@@ -3151,7 +3151,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
         else
         {
             if (pContext == nullptr)
-                pContext.reset(new PropertyMap());
+                pContext = new PropertyMap();
 
             m_pImpl->appendTextPortion( sText, pContext );
         }
@@ -3411,7 +3411,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             else
             {
                 if (pContext == nullptr)
-                    pContext.reset(new PropertyMap());
+                    pContext = new PropertyMap();
 
                 m_pImpl->appendTextPortion( sText, pContext );
             }
@@ -3490,7 +3490,7 @@ void DomainMapper::lcl_endGlossaryEntry()
     m_pImpl->appendGlossaryEntry();
 }
 
-void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext)
+void DomainMapper::handleUnderlineType(const Id nId, const ::rtl::Reference<PropertyMap>& rContext)
 {
     sal_Int16 nUnderline = awt::FontUnderline::NONE;
 
@@ -3554,7 +3554,7 @@ void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<Pro
     rContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny(nUnderline));
 }
 
-void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap>& rContext, const bool bExchangeLeftRight)
+void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::rtl::Reference<PropertyMap>& rContext, const bool bExchangeLeftRight)
 {
     style::ParagraphAdjust nAdjust = style::ParagraphAdjust_LEFT;
     style::ParagraphAdjust nLastLineAdjust = style::ParagraphAdjust_LEFT;

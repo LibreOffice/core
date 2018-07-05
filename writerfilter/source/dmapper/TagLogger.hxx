@@ -33,7 +33,7 @@ namespace writerfilter
     class TagLogger
     {
     private:
-        static std::shared_ptr<TagLogger> instance;
+        static rtl::Reference<TagLogger> instance;
 
         xmlTextWriterPtr pWriter;
         const char* pName;

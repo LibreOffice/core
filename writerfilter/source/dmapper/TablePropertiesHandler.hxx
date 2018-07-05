@@ -34,7 +34,7 @@ namespace dmapper {
 
 class DomainMapper;
 
-class TablePropertiesHandler final
+class TablePropertiesHandler final : public virtual writerfilter::NotSoSimpleReferenceObject
 {
 private:
     PropertyMapPtr m_pCurrentProperties;
@@ -65,7 +65,7 @@ private:
         if ( m_pTableManager )
             m_pTableManager->cellProps( pProps );
         else
-            m_pCurrentProperties->InsertProps(pProps);
+            m_pCurrentProperties->InsertProps(pProps.get());
     };
 
     void insertRowProps( TablePropertyMapPtr pProps )
@@ -73,7 +73,7 @@ private:
         if ( m_pTableManager )
             m_pTableManager->insertRowProps( pProps );
         else
-            m_pCurrentProperties->InsertProps(pProps);
+            m_pCurrentProperties->InsertProps(pProps.get());
     };
 
     void insertTableProps( TablePropertyMapPtr pProps )
@@ -81,7 +81,7 @@ private:
         if ( m_pTableManager )
             m_pTableManager->insertTableProps( pProps );
         else
-            m_pCurrentProperties->InsertProps(pProps);
+            m_pCurrentProperties->InsertProps(pProps.get());
     };
 };
 

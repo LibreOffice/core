@@ -112,9 +112,9 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     // Was in table, but not anymore -> tblEnd.
                     RTFSprms aAttributes;
                     RTFSprms aSprms;
-                    aSprms.set(NS_ooxml::LN_tblEnd, std::make_shared<RTFValue>(1));
+                    aSprms.set(NS_ooxml::LN_tblEnd, new RTFValue(1));
                     writerfilter::Reference<Properties>::Pointer_t pProperties
-                        = std::make_shared<RTFReferenceProperties>(aAttributes, aSprms);
+                        = new RTFReferenceProperties(aAttributes, aSprms);
                     Mapper().props(pProperties);
                 }
                 m_nCellxMax = 0;
@@ -180,10 +180,10 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             if (m_bNeedPap)
             {
                 // There were no runs in the cell, so we need to send paragraph and character properties here.
-                auto pPValue = std::make_shared<RTFValue>(m_aStates.top().aParagraphAttributes,
+                auto pPValue = new RTFValue(m_aStates.top().aParagraphAttributes,
                                                           m_aStates.top().aParagraphSprms);
                 m_aTableBufferStack.back().emplace_back(Buf_t(BUFFER_PROPS, pPValue, nullptr));
-                auto pCValue = std::make_shared<RTFValue>(m_aStates.top().aCharacterAttributes,
+                auto pCValue = new RTFValue(m_aStates.top().aCharacterAttributes,
                                                           m_aStates.top().aCharacterSprms);
                 m_aTableBufferStack.back().emplace_back(Buf_t(BUFFER_PROPS, pCValue, nullptr));
             }
@@ -195,7 +195,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         break;
         case RTF_NESTROW:
         {
-            std::shared_ptr<TableRowBuffer> const pBuffer(
+            rtl::Reference<TableRowBuffer> const pBuffer(
                 new TableRowBuffer(m_aTableBufferStack.back(), m_aNestedTableCellsSprms,
                                    m_aNestedTableCellsAttributes, m_nNestedCells));
             prepareProperties(m_aStates.top(), pBuffer->pParaProperties, pBuffer->pFrameProperties,
@@ -234,7 +234,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             {
                 // Add fake cellx / cell, RTF equivalent of
                 // OOXMLFastContextHandlerTextTableRow::handleGridAfter().
-                auto pXValue = std::make_shared<RTFValue>(m_aStates.top().nTableRowWidthAfter);
+                auto pXValue = new RTFValue(m_aStates.top().nTableRowWidthAfter);
                 m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
                                                    RTFOverwrite::NO_APPEND);
                 dispatchSymbol(RTF_CELL);
@@ -261,7 +261,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 auto pXValueLast = m_aStates.top().aTableRowSprms.find(
                     NS_ooxml::LN_CT_TblGridBase_gridCol, false);
                 const int nXValueLast = pXValueLast ? pXValueLast->getInt() : 0;
-                auto pXValue = std::make_shared<RTFValue>(nXValueLast + m_nCellxMax
+                auto pXValue = new RTFValue(nXValueLast + m_nCellxMax
                                                           - m_nTopLevelCurrentCellX);
                 m_aStates.top().aTableRowSprms.eraseLast(NS_ooxml::LN_CT_TblGridBase_gridCol);
                 m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,

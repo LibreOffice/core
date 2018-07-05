@@ -394,9 +394,15 @@ void OOXMLPropertySet::add(const OOXMLPropertySet::Pointer_t& pPropertySet)
 
     if (pSet != nullptr)
     {
-        mProperties.reserve(mProperties.size() + pSet->mProperties.size());
-        for (const auto& aIt: pSet->mProperties)
-            add(aIt);
+        int x = mProperties.size();
+        mProperties.resize(mProperties.size() + pSet->mProperties.size());
+        auto itSrc = pSet->mProperties.begin();
+        auto itDest = mProperties.begin() + x;
+        while (itSrc != pSet->mProperties.end())
+        {
+            *itDest = *itSrc;
+            ++itDest; ++itSrc;
+        }
     }
 }
 
