@@ -56,11 +56,13 @@ struct SAL_WARN_UNUSED TTimeValue : public TimeValue
         normalize();
     }
 
+#if 0
     TTimeValue( const TTimeValue& rTimeValue ):
         TimeValue(rTimeValue)
     {
         normalize();
     }
+#endif
 
     TTimeValue( const TimeValue& rTimeValue )
     {
@@ -69,6 +71,14 @@ struct SAL_WARN_UNUSED TTimeValue : public TimeValue
 
         normalize();
     }
+
+#if 0
+    TTimeValue & operator =(TTimeValue const & other) {
+        Seconds = other.Seconds;
+        Nanosec = other.Nanosec;
+        return *this;
+    }
+#endif
 
     void SAL_CALL normalize()
     {

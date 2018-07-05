@@ -62,6 +62,7 @@ public:
             SetValue( rLang.GetValue() );
             return *this;
         }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxLanguageItem(SvxLanguageItem const &) = default;
 
     LanguageType            GetLanguage() const
                                 { return GetValue(); }

@@ -443,6 +443,11 @@ class Base
 public:
     virtual             ~Base();
 
+    Base(Base const &) = default;
+    Base(Base &&) = default;
+    Base & operator =(Base const &) = default;
+    Base & operator =(Base &&) = default;
+
     bool         isValid() const { return implIsValid(); }
     static bool  isValid( const std::shared_ptr< Base >& rxBase ) { return rxBase.get() && rxBase->isValid(); }
 
@@ -829,7 +834,6 @@ void SharedConfigData::readNameList( TextInputStream& rStrm, const OUString& rLi
 class Config : public Base
 {
 public:
-    explicit            Config( const Config& rParent );
     explicit            Config(
                             const sal_Char* pcEnvVar,
                             const ::oox::core::FilterBase& rFilter );
@@ -840,6 +844,11 @@ public:
                             const OUString& rSysFileName );
 
     virtual             ~Config() override;
+
+    Config(Config const &) = default;
+    Config(Config &&) = default;
+    Config & operator =(Config const &) = default;
+    Config & operator =(Config &&) = default;
 
     const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
     const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
@@ -1089,6 +1098,11 @@ class ObjectBase : public Base
 public:
     virtual             ~ObjectBase() override;
 
+    ObjectBase(ObjectBase const &) = default;
+    ObjectBase(ObjectBase &&) = default;
+    ObjectBase & operator =(ObjectBase const &) = default;
+    ObjectBase & operator =(ObjectBase &&) = default;
+
     const css::uno::Reference< css::uno::XComponentContext >&
                         getContext() const { return mxConfig->getContext(); }
 
@@ -1189,6 +1203,10 @@ class OutputObjectBase : public ObjectBase
 public:
     virtual             ~OutputObjectBase() override;
 
+    OutputObjectBase(OutputObjectBase const &) = default;
+    OutputObjectBase(OutputObjectBase &&) = default;
+    OutputObjectBase & operator =(OutputObjectBase const &) = default;
+    OutputObjectBase & operator =(OutputObjectBase &&) = default;
 
 protected:
                         OutputObjectBase() {}
@@ -1353,6 +1371,10 @@ class InputObjectBase : public OutputObjectBase
 public:
     virtual             ~InputObjectBase() override;
 
+    InputObjectBase(InputObjectBase const &) = default;
+    InputObjectBase(InputObjectBase &&) = default;
+    InputObjectBase & operator =(InputObjectBase const &) = default;
+    InputObjectBase & operator =(InputObjectBase &&) = default;
 
 protected:
                         InputObjectBase() {}

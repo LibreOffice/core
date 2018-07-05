@@ -1,0 +1,10 @@
+--- boost/bimap/detail/map_view_iterator.hpp
++++ boost/bimap/detail/map_view_iterator.hpp
+@@ -165,6 +165,7 @@
+       : base_(iter.base()) {}
+ 	const_map_view_iterator(map_view_iterator<Tag,BimapCore> i)
+       : base_(i.base()) {}
++    const_map_view_iterator & operator = (const_map_view_iterator const &) = default;
+ 
+     BOOST_DEDUCED_TYPENAME base_::reference dereference() const
+     {

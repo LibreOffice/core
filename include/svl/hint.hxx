@@ -206,6 +206,12 @@ public:
     SfxHint() : mnId(SfxHintId::NONE) {}
     explicit SfxHint( SfxHintId nId ) : mnId(nId) {}
     virtual ~SfxHint() COVERITY_NOEXCEPT_FALSE;
+
+    SfxHint(SfxHint const &) = default;
+    SfxHint(SfxHint &&) = default;
+    SfxHint & operator =(SfxHint const &) = default;
+    SfxHint & operator =(SfxHint &&) = default;
+
     SfxHintId GetId() const { return mnId; }
 };
 

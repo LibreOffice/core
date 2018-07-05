@@ -110,8 +110,6 @@ struct XMLPropertyState
         : mnIndex( nIndex ) {}
     XMLPropertyState( sal_Int32 nIndex, const css::uno::Any& rValue )
         : mnIndex( nIndex ), maValue( rValue ) {}
-    XMLPropertyState( const XMLPropertyState& rPropState )
-        : mnIndex( rPropState.mnIndex ), maValue( rPropState.maValue ) {}
 };
 
 #endif // INCLUDED_XMLOFF_MAPTYPE_HXX

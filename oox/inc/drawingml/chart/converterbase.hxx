@@ -64,6 +64,11 @@ public:
                             const css::awt::Size& rChartSize );
     virtual             ~ConverterRoot();
 
+    ConverterRoot(ConverterRoot const &) = default;
+    ConverterRoot(ConverterRoot &&) = default;
+    ConverterRoot & operator =(ConverterRoot const &) = default;
+    ConverterRoot & operator =(ConverterRoot &&) = default;
+
     /** Creates an instance for the passed service name, using the process service factory. */
     css::uno::Reference< css::uno::XInterface >
                         createInstance( const OUString& rServiceName ) const;

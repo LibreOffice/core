@@ -85,6 +85,11 @@ public:
     TBBase() : nOffSet( 0 ) {}
     virtual ~TBBase(){}
 
+    TBBase(TBBase const &) = default;
+    TBBase(TBBase &&) = default;
+    TBBase & operator =(TBBase const &) = default;
+    TBBase & operator =(TBBase &&) = default;
+
     virtual bool Read(SvStream &rS) = 0;
 #ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) {} // #FIXME remove this an implement the debug routines in all the classes below to enable some sort of readable output
@@ -255,6 +260,12 @@ class MSFILTER_DLLPUBLIC TBCHeader : public TBBase
 public:
     TBCHeader();
     virtual ~TBCHeader() override;
+
+    TBCHeader(TBCHeader const &) = default;
+    TBCHeader(TBCHeader &&) = default;
+    TBCHeader & operator =(TBCHeader const &) = default;
+    TBCHeader & operator =(TBCHeader &&) = default;
+
     sal_uInt8 getTct() const { return tct; }
     sal_uInt16 getTcID() const { return tcid; }
     bool isVisible() { return !( bFlagsTCR & 0x1 ); }

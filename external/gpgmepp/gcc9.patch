@@ -1,0 +1,10 @@
+--- lang/cpp/src/key.h
++++ lang/cpp/src/key.h
+@@ -62,6 +62,7 @@
+     /* implicit */ Key(const Null &);
+     Key(const shared_gpgme_key_t &key);
+     Key(gpgme_key_t key, bool acquireRef);
++    Key(Key const &) = default;
+ 
+     static const Null null;
+ 

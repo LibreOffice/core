@@ -25,12 +25,6 @@ XPropertyEntry::XPropertyEntry(const OUString& rPropEntryName)
 {
 }
 
-XPropertyEntry::XPropertyEntry(const XPropertyEntry& rOther)
-:   maPropEntryName(rOther.maPropEntryName),
-    maUiBitmap(rOther.maUiBitmap)
-{
-}
-
 XPropertyEntry::~XPropertyEntry()
 {
 }

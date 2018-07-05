@@ -49,11 +49,6 @@
 #include <svx/xpool.hxx>
 #include <o3tl/make_unique.hxx>
 
-
-SdrObjConnection::~SdrObjConnection()
-{
-}
-
 void SdrObjConnection::ResetVars()
 {
     pObj=nullptr;

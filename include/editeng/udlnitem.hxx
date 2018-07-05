@@ -65,6 +65,7 @@ public:
             SetColor( rTextLine.GetColor() );
             return *this;
         }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxTextLineItem(SvxTextLineItem const &) = default;
 
     // enum cast
     FontLineStyle           GetLineStyle() const
