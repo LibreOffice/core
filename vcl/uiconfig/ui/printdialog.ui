@@ -89,6 +89,7 @@
   </object>
   <object class="GtkDialog" id="PrintDialog">
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="PrintDialogBox">
@@ -121,7 +122,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_left">50</property>
-                <property name="margin_right">50</property>
+                <property name="margin_right">135</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -215,6 +216,7 @@
                         <property name="receives_default">False</property>
                         <property name="halign">center</property>
                         <property name="active">True</property>
+                        <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -428,6 +430,7 @@
                               <object class="GtkAlignment">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="top_padding">6</property>
                                 <property name="left_padding">12</property>
                                 <child>
                                   <object class="GtkBox" id="box5">
@@ -538,6 +541,7 @@
                               <object class="GtkAlignment">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="top_padding">6</property>
                                 <property name="left_padding">12</property>
                                 <child>
                                   <object class="GtkExpander" id="expander1">
@@ -594,6 +598,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">False</property>
+                                                    <property name="use_underline">True</property>
                                                     <property name="draw_indicator">True</property>
                                                   </object>
                                                   <packing>
@@ -727,6 +732,7 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="halign">start</property>
+                                            <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                           </object>
                                           <packing>
@@ -774,6 +780,7 @@
                               <object class="GtkAlignment">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="top_padding">6</property>
                                 <property name="left_padding">12</property>
                                 <child>
                                   <object class="GtkExpander" id="expander2">
@@ -941,6 +948,7 @@
                                             <property name="receives_default">False</property>
                                             <property name="halign">start</property>
                                             <property name="active">True</property>
+                                            <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">pagespersheetbtn</property>
                                           </object>
@@ -986,6 +994,7 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="halign">start</property>
+                                            <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                           </object>
                                           <packing>
@@ -1006,6 +1015,7 @@
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
                                                 <property name="active">True</property>
+                                                <property name="use_underline">True</property>
                                                 <property name="draw_indicator">True</property>
                                                 <property name="group">brochure</property>
                                               </object>
