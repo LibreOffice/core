@@ -94,7 +94,9 @@ cmd/sc_insertformradio.png cmd/sc_radiobutton.png
 cmd/sc_insertformspin.png cmd/sc_spinbutton.png
 cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
+cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
+cmd/sc_insertframemenu.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
 cmd/sc_insertgraphic.png cmd/sc_gallery.png
 cmd/sc_insertimagecontrol.png cmd/sc_drawchart.png
@@ -114,6 +116,7 @@ cmd/sc_showtrackedchanges.png cmd/sc_addwatch.png
 cmd/lc_showtrackedchanges.png cmd/lc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
+cmd/sc_formatallnotes.png cmd/sc_editannotation.png
 
 # Zoom
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
@@ -388,10 +391,19 @@ cmd/sc_textalign.png cmd/sc_alignleft.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatframemenu.png cmd/sc_chainframes.png
 
+# Notebookbar
+cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
+cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png
+cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
+cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
+cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
+cmd/sc_insertsignatureline.png cmd/sc_signaturelinedialog.png
+
 # Group
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
 cmd/sc_formatungroup.png cmd/sc_ungroup.png
+cmd/sc_groupmenu.png cmd/sc_group.png
 
 # Undo
 cmd/lc_recundo.png cmd/lc_undo.png
@@ -480,6 +492,7 @@ cmd/lc_xlinestyle.png cmd/lc_linestyle.png
 cmd/lc_hfixedline.png cmd/lc_line.png
 cmd/sc_xlinestyle.png cmd/sc_linestyle.png
 cmd/sc_hfixedline.png cmd/sc_line.png
+cmd/sc_shapeslinemenu.png cmd/sc_line.png
 
 # Mail merge
 cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
@@ -676,6 +689,12 @@ cmd/sc_numberformatcurrencysimple.png cmd/sc_formattedfield.png
 cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
 cmd/sc_fontworkshapetype.png cmd/sc_fontwork.png
 
+# Ruler
+cmd/lc_showruler.png cmd/lc_ruler.png
+cmd/sc_showruler.png cmd/sc_ruler.png
+cmd/lc_rulermenu.png cmd/lc_ruler.png
+cmd/sc_rulermenu.png cmd/sc_ruler.png
+
 # Axis
 cmd/lc_toggleaxisdescr.png cmd/lc_helplinesvisible.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
@@ -683,6 +702,7 @@ cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 # Grid
 cmd/lc_gridvisible.png cmd/lc_grid.png
 cmd/sc_gridvisible.png cmd/sc_grid.png
+cmd/sc_gridmenu.png cmd/sc_grid.png
 
 # Crop
 cmd/lc_grafattrcrop.png cmd/lc_crop.png
@@ -709,6 +729,8 @@ cmd/lc_editstyled.png cmd/lc_editstyle.png
 cmd/sc_editstyled.png cmd/sc_editstyle.png
 cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
 cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
+cmd/lc_loadstyles.png cmd/lc_open.png
+cmd/sc_loadstyles.png cmd/sc_open.png
 
 # Outline
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
@@ -719,6 +741,10 @@ cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_outlineleft.png cmd/sc_decrementindent.png
 cmd/sc_incrementlevel.png cmd/sc_decrementindent.png
 cmd/sc_incrementindent.png cmd/sc_decrementlevel.png
+
+# Index
+cmd/sc_indexesmenu.png cmd/sc_insertindexesentry.png
+cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 
 # Mirror
 cmd/lc_fliphorizontal.png cmd/lc_mirror.png
@@ -753,6 +779,14 @@ cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
 cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
 
+# Calc
+cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
+cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
+cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
+cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
+cmd/sc_insertcell.png cmd/sc_insertcellsright.png
+cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
+
 # Bibliography
 cmd/lc_insertauthoritiesentry.png cmd/lc_bibliographycomponent.png
 cmd/sc_insertauthoritiesentry.png cmd/sc_bibliographycomponent.png
@@ -767,9 +801,14 @@ cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_refreshformcontrol.png cmd/sc_reload.png
 cmd/sc_styleupdatebyexample.png cmd/sc_reload.png
 cmd/sc_draw.png cmd/sc_reload.png
-cmd/sc_updatecurindex.png cmd/sc_reload.png
-cmd/sc_updateallindexes.png cmd/sc_reload.png
 cmd/sc_updateall.png cmd/sc_reload.png
+cmd/sc_repaginate.png cmd/sc_insertpagenumberfield.png
+cmd/sc_updatefields.png cmd/sc_addfield.png
+cmd/sc_updateallindexes.png cmd/sc_insertmultiindex.png
+cmd/sc_updatecurindex.png cmd/sc_insertindexesentry.png
+cmd/sc_updatealllinks.png cmd/sc_inserthyperlink.png
+cmd/sc_updatecharts.png cmd/sc_drawchart.png
+
 
 # Select
 cmd/lc_selectmode.png cmd/lc_selectobject.png
@@ -803,6 +842,13 @@ cmd/lc_browsebackward cmd/lc_prevrecord.png
 cmd/lc_browseforward.png cmd/lc_nextrecord.png
 cmd/sc_browsebackward cmd/lc_prevrecord.png
 cmd/sc_browseforward.png cmd/sc_nextrecord.png
+
+# Macro
+cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
+
+# Help
+#cmd/sc_about.png res/mainapp_16.png
+cmd/sc_questionanswers.png cmd/browseview.png
 
 # Math
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
@@ -880,6 +926,15 @@ cmd/lc_lastslide.png cmd/lc_lastrecord.png
 cmd/lc_previousslide.png cmd/lc_prevrecord.png
 cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_slidesetup.png cmd/lc_pagesetup.png
+cmd/sc_insertslidenumber.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertslidefield.png  cmd/sc_insertpagenumberfield.png
+cmd/sc_insertslidesfield.png cmd/sc_insertpagecountfield.png
+cmd/sc_insertslidetitlefield.png cmd/sc_inserttitlefield.png
+cmd/sc_insertfilefield.png cmd/sc_open.png
+cmd/sc_insertdatefielfix.png cmd/sc_datefield.png
+cmd/sc_insertdatefielvar.png cmd/sc_datefield.png
+cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
+cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
 
 cmd/sc_insertslide.png cmd/sc_insertpage.png
 cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png

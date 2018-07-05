@@ -94,7 +94,9 @@ cmd/sc_insertformradio.svg cmd/sc_radiobutton.svg
 cmd/sc_insertformspin.svg cmd/sc_spinbutton.svg
 cmd/sc_insertformula.svg cmd/sc_dbviewfunctions.svg
 cmd/sc_insertformvscroll.svg cmd/sc_scrollbar.svg
+cmd/sc_scrollbarmenu.svg cmd/sc_scrollbar.svg
 cmd/sc_insertframeinteract.svg cmd/sc_insertframe.svg
+cmd/sc_insertframemenu.svg cmd/sc_insertframe.svg
 cmd/sc_insertframeinteractnocolumns.svg cmd/sc_insertframe.svg
 cmd/sc_insertgraphic.svg cmd/sc_gallery.svg
 cmd/sc_insertimagecontrol.svg cmd/sc_drawchart.svg
@@ -114,6 +116,7 @@ cmd/sc_showtrackedchanges.svg cmd/sc_addwatch.svg
 cmd/lc_showtrackedchanges.svg cmd/lc_addwatch.svg
 cmd/sc_tracechangemode.svg cmd/sc_trackchanges.svg
 cmd/sc_numberformatmenu.svg cmd/sc_numberformatstandard.svg
+cmd/sc_formatallnotes.svg cmd/sc_editannotation.svg
 
 # Zoom
 cmd/lc_previewzoom.svg cmd/lc_zoomprevious.svg
@@ -392,6 +395,7 @@ cmd/sc_formatframemenu.svg cmd/sc_chainframes.svg
 cmd/lc_leaveallgroups.svg cmd/lc_leavegroup.svg
 cmd/sc_leaveallgroups.svg cmd/sc_leavegroup.svg
 cmd/sc_formatungroup.svg cmd/sc_ungroup.svg
+cmd/sc_groupmenu.svg cmd/sc_group.svg
 
 # Undo
 cmd/lc_recundo.svg cmd/lc_undo.svg
@@ -480,6 +484,7 @@ cmd/lc_xlinestyle.svg cmd/lc_linestyle.svg
 cmd/lc_hfixedline.svg cmd/lc_line.svg
 cmd/sc_xlinestyle.svg cmd/sc_linestyle.svg
 cmd/sc_hfixedline.svg cmd/sc_line.svg
+cmd/sc_shapeslinemenu.svg cmd/sc_line.svg
 
 # Mail merge
 cmd/lc_mailmergefirstentry.svg cmd/lc_firstrecord.svg
@@ -601,6 +606,14 @@ cmd/sc_styleapply.svg cmd/sc_formatarea.svg
 cmd/sc_fillstyle.svg cmd/sc_formatarea.svg
 cmd/sc_fillcolor.svg cmd/sc_formatarea.svg
 
+# Notebookbar
+cmd/lc_headerandfooter.svg cmd/lc_editheaderandfooter.svg
+cmd/sc_headerandfooter.svg cmd/sc_editheaderandfooter.svg
+cmd/sc_insertheaderfootermenu.svg cmd/sc_editheaderandfooter.svg
+cmd/lc_datafilterhideautofilter.svg cmd/lc_removefiltersort.svg
+cmd/sc_datafilterhideautofilter.svg cmd/sc_removefiltersort.svg
+cmd/sc_insertsignatureline.svg cmd/sc_signaturelinedialog.svg
+
 # Ok
 cmd/lc_yes.svg cmd/lc_ok.svg
 cmd/lc_apply.svg cmd/lc_ok.svg
@@ -676,6 +689,12 @@ cmd/sc_numberformatcurrencysimple.svg cmd/sc_formattedfield.svg
 cmd/lc_fontworkshapetype.svg cmd/lc_fontwork.svg
 cmd/sc_fontworkshapetype.svg cmd/sc_fontwork.svg
 
+# Ruler
+cmd/lc_showruler.svg cmd/lc_ruler.svg
+cmd/sc_showruler.svg cmd/sc_ruler.svg
+cmd/lc_rulermenu.svg cmd/lc_ruler.svg
+cmd/sc_rulermenu.svg cmd/sc_ruler.svg
+
 # Axis
 cmd/lc_toggleaxisdescr.svg cmd/lc_helplinesvisible.svg
 cmd/sc_toggleaxisdescr.svg cmd/sc_helplinesvisible.svg
@@ -683,6 +702,7 @@ cmd/sc_toggleaxisdescr.svg cmd/sc_helplinesvisible.svg
 # Grid
 cmd/lc_gridvisible.svg cmd/lc_grid.svg
 cmd/sc_gridvisible.svg cmd/sc_grid.svg
+cmd/sc_gridmenu.svg cmd/sc_grid.svg
 
 # Crop
 cmd/lc_grafattrcrop.svg cmd/lc_crop.svg
@@ -709,6 +729,8 @@ cmd/lc_editstyled.svg cmd/lc_editstyle.svg
 cmd/sc_editstyled.svg cmd/sc_editstyle.svg
 cmd/lc_viewsidebarstyles.svg cmd/lc_designerdialog.svg
 cmd/sc_viewsidebarstyles.svg cmd/sc_designerdialog.svg
+cmd/lc_loadstyles.svg cmd/lc_open.svg
+cmd/sc_loadstyles.svg cmd/sc_open.svg
 
 # Outline
 cmd/lc_outlineright.svg cmd/lc_decrementlevel.svg
@@ -719,6 +741,10 @@ cmd/sc_outlineright.svg cmd/sc_decrementlevel.svg
 cmd/sc_outlineleft.svg cmd/sc_decrementindent.svg
 cmd/sc_incrementlevel.svg cmd/sc_decrementindent.svg
 cmd/sc_incrementindent.svg cmd/sc_decrementlevel.svg
+
+# Index
+cmd/sc_indexesmenu.svg cmd/sc_insertindexesentry.svg
+cmd/sc_insertfootnotesmenu.svg cmd/sc_insertfootnote.svg
 
 # Mirror
 cmd/lc_fliphorizontal.svg cmd/lc_mirror.svg
@@ -753,6 +779,14 @@ cmd/sc_arrangeframemenu.svg cmd/sc_bringtofront.svg
 cmd/lc_setobjecttobackground.svg cmd/lc_sendtoback.svg
 cmd/sc_setobjecttobackground.svg cmd/sc_sendtoback.svg
 
+# Calc
+cmd/sc_fieldmenu.svg cmd/sc_insertfieldctrl.svg
+cmd/sc_numberformatmenu.svg cmd/sc_numberformatstandard.svg
+cmd/sc_mergecellsmenu.svg cmd/sc_togglemergecells.svg
+cmd/sc_printrangesmenu.svg cmd/sc_defineprintarea.svg
+cmd/sc_insertcell.svg cmd/sc_insertcellsright.svg
+cmd/sc_insertrowsmenu.svg cmd/sc_insertrows.svg
+
 # Bibliography
 cmd/lc_insertauthoritiesentry.svg cmd/lc_bibliographycomponent.svg
 cmd/sc_insertauthoritiesentry.svg cmd/sc_bibliographycomponent.svg
@@ -767,9 +801,13 @@ cmd/sc_refresh.svg cmd/sc_reload.svg
 cmd/sc_refreshformcontrol.svg cmd/sc_reload.svg
 cmd/sc_styleupdatebyexample.svg cmd/sc_reload.svg
 cmd/sc_draw.svg cmd/sc_reload.svg
-cmd/sc_updatecurindex.svg cmd/sc_reload.svg
-cmd/sc_updateallindexes.svg cmd/sc_reload.svg
 cmd/sc_updateall.svg cmd/sc_reload.svg
+cmd/sc_repaginate.svg cmd/sc_insertpagenumberfield.svg
+cmd/sc_updatefields.svg cmd/sc_addfield.svg
+cmd/sc_updateallindexes.svg cmd/sc_insertmultiindex.svg
+cmd/sc_updatecurindex.svg cmd/sc_insertindexesentry.svg
+cmd/sc_updatealllinks.svg cmd/sc_inserthyperlink.svg
+cmd/sc_updatecharts.svg cmd/sc_drawchart.svg
 
 # Select
 cmd/lc_selectmode.svg cmd/lc_selectobject.svg
@@ -803,6 +841,13 @@ cmd/lc_browsebackward cmd/lc_prevrecord.svg
 cmd/lc_browseforward.svg cmd/lc_nextrecord.svg
 cmd/sc_browsebackward cmd/lc_prevrecord.svg
 cmd/sc_browseforward.svg cmd/sc_nextrecord.svg
+
+# Macro
+cmd/sc_macrosmenu.svg cmd/sc_choosemacro.svg
+
+# Help
+#cmd/sc_about.svg res/mainapp_16.svg
+cmd/sc_questionanswers.svg cmd/browseview.svg
 
 # Math
 cmd/lc_symbolcatalogue.svg cmd/lc_insertsymbol.svg
@@ -878,6 +923,15 @@ cmd/lc_lastslide.svg cmd/lc_lastrecord.svg
 cmd/lc_previousslide.svg cmd/lc_prevrecord.svg
 cmd/lc_nextslide.svg cmd/lc_nextrecord.svg
 cmd/lc_slidesetup.svg cmd/lc_pagesetup.svg
+svg/sc_insertslidenumber.svg svg/sc_insertpagenumberfield.svg
+svg/sc_insertslidefield.svg  svg/sc_insertpagenumberfield.svg
+svg/sc_insertslidesfield.svg svg/sc_insertpagecountfield.svg
+svg/sc_insertslidetitlefield.svg svg/sc_inserttitlefield.svg
+svg/sc_insertfilefield.svg svg/sc_open.svg
+svg/sc_insertdatefielfix.svg svg/sc_datefield.svg
+svg/sc_insertdatefielvar.svg svg/sc_datefield.svg
+svg/sc_inserttimefieldfix.svg svg/sc_timefield.svg
+svg/sc_inserttimefieldvar.svg svg/sc_timefield.svg
 
 cmd/sc_insertslide.svg cmd/sc_insertpage.svg
 cmd/sc_duplicateslide.svg cmd/sc_duplicatepage.svg
