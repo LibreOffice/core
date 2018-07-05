@@ -178,18 +178,19 @@ struct Entity : public ParserData
     void throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
                          bool mbDuringParse );
 
-    std::stack< NameWithToken >           maNamespaceStack;
+    std::stack< NameWithToken, std::vector<NameWithToken> > maNamespaceStack;
     /* Context for main thread consuming events.
      * startElement() stores the data, which characters() and endElement() uses
      */
-    std::stack< SaxContext>               maContextStack;
+    std::stack< SaxContext, std::vector<SaxContext> >  maContextStack;
     // Determines which elements of maNamespaceDefines are valid in current context
-    std::stack< sal_uInt32 >              maNamespaceCount;
+    std::stack< sal_uInt32, std::vector<sal_uInt32> >  maNamespaceCount;
     std::vector< std::shared_ptr< NamespaceDefine > >
                                           maNamespaceDefines;
 
     explicit Entity( const ParserData& rData );
     Entity( const Entity& rEntity ) = delete;
+    Entity( Entity&& ) = default;
     Entity& operator=( const Entity& rEntity ) = delete;
     void startElement( Event const *pEvent );
     void characters( const OUString& sChars );
@@ -270,7 +271,7 @@ private:
     ParserData maData;                      /// Cached parser configuration for next call of parseStream().
 
     Entity *mpTop;                          /// std::stack::top() is amazingly slow => cache this.
-    std::stack< Entity > maEntities;      /// Entity stack for each call of parseStream().
+    std::stack< Entity, std::vector<Entity> > maEntities; /// Entity stack for each call of parseStream().
     OUString pendingCharacters;             /// Data from characters() callback that needs to be sent.
 };
 
@@ -674,11 +675,12 @@ sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, int nPr
     sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
     while( nNamespace-- )
     {
-        const OString& rPrefix( rEntity.maNamespaceDefines[nNamespace]->maPrefix );
+        const auto & rNamespaceDefine = rEntity.maNamespaceDefines[nNamespace];
+        const OString& rPrefix( rNamespaceDefine->maPrefix );
         if( (rPrefix.getLength() == nPrefixLen) &&
             (strncmp( rPrefix.getStr(), XML_CAST( pPrefix ), nPrefixLen ) == 0 ) )
         {
-            nNamespaceToken = rEntity.maNamespaceDefines[nNamespace]->mnToken;
+            nNamespaceToken = rNamespaceDefine->mnToken;
             break;
         }
 
@@ -1277,8 +1279,7 @@ void FastSaxParserImpl::sendPendingCharacters()
 {
     Entity& rEntity = getEntity();
     Event& rEvent = rEntity.getEvent( CHARACTERS );
-    rEvent.msChars = pendingCharacters;
-    pendingCharacters.clear();
+    rEvent.msChars = std::move(pendingCharacters);
     if (rEntity.mbEnableThreads)
         produce();
     else
