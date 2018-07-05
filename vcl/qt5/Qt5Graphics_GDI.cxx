@@ -356,6 +356,15 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DPolygon& rPolyLine, double fTra
 
 bool Qt5Graphics::drawGradient(const tools::PolyPolygon&, const Gradient&) { return false; }
 
+void Qt5Graphics::drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage)
+{
+    Qt5Painter aPainter(*this);
+    QRect aSrcRect(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+    QRect aDestRect(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+    aPainter.drawImage(aDestRect, rImage, aSrcRect);
+    aPainter.update(aDestRect);
+}
+
 void Qt5Graphics::copyArea(long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
                            long nSrcHeight, bool /*bWindowInvalidate*/)
 {
@@ -372,25 +381,21 @@ void Qt5Graphics::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
         || rPosAry.mnDestHeight <= 0)
         return;
 
-    assert(rPosAry.mnSrcWidth == rPosAry.mnDestWidth);
-    assert(rPosAry.mnSrcHeight == rPosAry.mnDestHeight);
-
-    QImage aImage, *pImage = &aImage;
+    QImage aImage, *pImage;
+    SalTwoRect aPosAry = rPosAry;
     if (!pSrcGraphics || this == pSrcGraphics)
     {
-        if (rPosAry.mnDestX == rPosAry.mnSrcX && rPosAry.mnDestY == rPosAry.mnSrcY)
-            return;
+        pImage = static_cast<Qt5Graphics*>(this)->m_pQImage;
         aImage
             = pImage->copy(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+        pImage = &aImage;
+        aPosAry.mnSrcX = 0;
+        aPosAry.mnSrcY = 0;
     }
     else
         pImage = static_cast<Qt5Graphics*>(pSrcGraphics)->m_pQImage;
 
-    Qt5Painter aPainter(*this);
-    aPainter.drawImage(
-        QPoint(rPosAry.mnDestX, rPosAry.mnDestY), *pImage,
-        QRect(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
-    aPainter.update(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+    drawScaledImage(aPosAry, *pImage);
 }
 
 void Qt5Graphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
@@ -399,10 +404,6 @@ void Qt5Graphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBit
         || rPosAry.mnDestHeight <= 0)
         return;
 
-    assert(rPosAry.mnSrcWidth == rPosAry.mnDestWidth);
-    assert(rPosAry.mnSrcHeight == rPosAry.mnDestHeight);
-
-    Qt5Painter aPainter(*this);
     Qt5Bitmap aRGBABitmap;
     if (rSalBitmap.GetBitCount() == 4)
         aRGBABitmap.Create(rSalBitmap, 32);
@@ -411,10 +412,7 @@ void Qt5Graphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBit
                                : aRGBABitmap.GetQImage();
     assert(pImage);
 
-    aPainter.drawImage(
-        QPoint(rPosAry.mnDestX, rPosAry.mnDestY), *pImage,
-        QRect(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
-    aPainter.update(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+    drawScaledImage(rPosAry, *pImage);
 }
 
 void Qt5Graphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& /*rSalBitmap*/,
@@ -523,12 +521,7 @@ bool Qt5Graphics::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rS
     QImage aImage;
     if (!getAlphaImage(rSourceBitmap, rAlphaBitmap, aImage))
         return false;
-
-    Qt5Painter aPainter(*this);
-    aPainter.drawImage(
-        QPoint(rPosAry.mnDestX, rPosAry.mnDestY), aImage,
-        QRect(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
-    aPainter.update(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+    drawScaledImage(rPosAry, aImage);
     return true;
 }
 
