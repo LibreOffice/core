@@ -25,6 +25,7 @@
 
 #include "PropertyMap.hxx"
 #include "TableData.hxx"
+#include "DomainMapperTableHandler.hxx"
 
 namespace writerfilter
 {
@@ -41,7 +42,7 @@ class DomainMapperTableHandler;
    table structure. The events have to be handles by a TableDataHandler.
 
  */
-class TableManager
+class TableManager : public virtual SvRefBase
 {
     class TableManagerState final
     {
@@ -107,7 +108,7 @@ class TableManager
 
         void resetCellProps()
         {
-            mpCellProps.reset();
+            mpCellProps.clear();
         }
 
         void setCellProps(TablePropertyMapPtr pProps)
@@ -122,7 +123,7 @@ class TableManager
 
         void resetRowProps()
         {
-            mpRowProps.reset();
+            mpRowProps.clear();
         }
 
         void setRowProps(TablePropertyMapPtr pProps)
@@ -138,7 +139,7 @@ class TableManager
         void resetTableProps()
         {
             if (mTableProps.size() > 0)
-                mTableProps.top().reset();
+                mTableProps.top().clear();
         }
 
         void setTableProps(TablePropertyMapPtr pProps)
@@ -249,7 +250,7 @@ protected:
     }
 
 private:
-    typedef std::shared_ptr< css::uno::Reference<css::text::XTextRange> > T_p;
+    typedef tools::SvRef< css::uno::Reference<css::text::XTextRange> > T_p;
 
     /**
        depth of the current cell
@@ -275,7 +276,7 @@ private:
     /**
        handler for resolveCurrentTable
      */
-    std::shared_ptr<DomainMapperTableHandler> mpTableDataHandler;
+    tools::SvRef<DomainMapperTableHandler> mpTableDataHandler;
 
     /**
        Set flag which indicates the current handle is in a cell.
@@ -352,14 +353,13 @@ protected:
 
 public:
     TableManager();
-    virtual ~TableManager(){}
 
     /**
        Set handler for resolveCurrentTable.
 
        @param pTableDataHandler     the handler
      */
-    void setHandler(const std::shared_ptr<DomainMapperTableHandler>& pTableDataHandler);
+    void setHandler(const tools::SvRef<DomainMapperTableHandler>& pTableDataHandler);
 
     /**
        Set the current handle.

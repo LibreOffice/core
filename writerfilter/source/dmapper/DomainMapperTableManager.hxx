@@ -107,7 +107,7 @@ public:
     virtual void cellProps(const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )
-            m_pStyleProps->InsertProps(pProps);
+            m_pStyleProps->InsertProps(pProps.get());
         else
            TableManager::cellProps( pProps );
     };
@@ -115,7 +115,7 @@ public:
     virtual void cellPropsByCell(unsigned int i, const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )
-            m_pStyleProps->InsertProps(pProps);
+            m_pStyleProps->InsertProps(pProps.get());
         else
            TableManager::cellPropsByCell( i, pProps );
     };
@@ -123,7 +123,7 @@ public:
     virtual void insertRowProps(const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )
-            m_pStyleProps->InsertProps(pProps);
+            m_pStyleProps->InsertProps(pProps.get());
         else
            TableManager::insertRowProps( pProps );
     };
@@ -131,9 +131,9 @@ public:
     virtual void insertTableProps(const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )
-            m_pStyleProps->InsertProps(pProps);
+            m_pStyleProps->InsertProps(pProps.get());
         else
-            m_aTmpTableProperties.back()->InsertProps(pProps);
+            m_aTmpTableProperties.back()->InsertProps(pProps.get());
     };
 
     bool IsRowSizeTypeInserted() const

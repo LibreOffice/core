@@ -32,7 +32,7 @@ template <class T>
 class OOXMLFastHelper
 {
 public:
-    static css::uno::Reference<css::xml::sax::XFastContextHandler> createAndSetParentAndDefine
+    static OOXMLFastContextHandler* createAndSetParentAndDefine
     (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine);
 
     static void newProperty(OOXMLFastContextHandler * pHandler,
@@ -40,7 +40,7 @@ public:
 };
 
 template <class T>
-css::uno::Reference<css::xml::sax::XFastContextHandler> OOXMLFastHelper<T>::createAndSetParentAndDefine (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine)
+OOXMLFastContextHandler* OOXMLFastHelper<T>::createAndSetParentAndDefine (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine)
 {
     OOXMLFastContextHandler * pTmp = new T(pHandler);
 
@@ -48,9 +48,7 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> OOXMLFastHelper<T>::crea
     pTmp->setId(nId);
     pTmp->setDefine(nDefine);
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> aResult(pTmp);
-
-    return aResult;
+    return pTmp;
 }
 
 template <class T>

@@ -130,11 +130,11 @@ protected:
 
 public:
                     SvRefBase() : nRefCount(0), bNoDelete(1) {}
-
                     SvRefBase(const SvRefBase &) : nRefCount(0), bNoDelete(1) {}
+                    SvRefBase(SvRefBase &&) : nRefCount(0), bNoDelete(1) {}
 
-    SvRefBase &     operator = ( const SvRefBase & )
-                    { return *this; }
+    SvRefBase &     operator=(const SvRefBase &) { return *this; }
+    SvRefBase &     operator=(SvRefBase &&) { return *this; }
 
     void            RestoreNoDelete()
                     { bNoDelete = 1; }

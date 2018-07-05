@@ -27,7 +27,7 @@ class FFDataHandler : public LoggedProperties
 {
 public:
     // typedefs
-    typedef ::std::shared_ptr<FFDataHandler> Pointer_t;
+    typedef ::tools::SvRef<FFDataHandler> Pointer_t;
     typedef ::std::vector<OUString> DropDownEntries_t;
 
     // constructor
