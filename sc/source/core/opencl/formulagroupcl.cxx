@@ -3217,7 +3217,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             new OpGestep, nResultSize));
                 }
                 else
-                    throw UnhandledToken("unhandled opcode", __FILE__, __LINE__);
+                    throw UnhandledToken("unhandled external " + pChild->GetExternal().toUtf8(), __FILE__, __LINE__);
                 break;
 
             default:
