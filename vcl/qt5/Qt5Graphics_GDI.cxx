@@ -444,9 +444,30 @@ std::shared_ptr<SalBitmap> Qt5Graphics::getBitmap(long nX, long nY, long nWidth,
 
 Color Qt5Graphics::getPixel(long nX, long nY) { return m_pQImage->pixel(nX, nY); }
 
-void Qt5Graphics::invert(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/,
-                         SalInvert /*nFlags*/)
+void Qt5Graphics::invert(long nX, long nY, long nWidth, long nHeight, SalInvert nFlags)
 {
+    Qt5Painter aPainter(*this);
+    if (SalInvert::N50 & nFlags)
+    {
+        aPainter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+        aPainter.setBrush(Qt::DiagCrossPattern);
+        aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
+    }
+    else
+    {
+        if (SalInvert::TrackFrame & nFlags)
+        {
+            aPainter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+            aPainter.setPen(Qt::DashLine);
+            aPainter.drawRect(nX, nY, nWidth, nHeight);
+        }
+        else
+        {
+            aPainter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+            aPainter.fillRect(nX, nY, nWidth, nHeight, Qt::white);
+        }
+    }
+    aPainter.update(nX, nY, nWidth, nHeight);
 }
 
 void Qt5Graphics::invert(sal_uInt32 /*nPoints*/, const SalPoint* /*pPtAry*/, SalInvert /*nFlags*/)
