@@ -226,7 +226,6 @@ void StatusBar::ImplInitSettings()
 
 void StatusBar::ImplFormat()
 {
-    ImplStatusItem* pItem;
     long            nExtraWidth;
     long            nExtraWidth2;
     long            nX;
@@ -312,6 +311,7 @@ void StatusBar::ImplFormat()
             nX += ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     }
 
+    ImplStatusItem* pItem;
     for (ImplStatusItem* i : *mpItemList) {
         pItem = i;
         if ( pItem->mbVisible ) {
