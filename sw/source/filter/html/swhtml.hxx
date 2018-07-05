@@ -963,6 +963,9 @@ public:
     }
 
     void DeregisterHTMLTable(HTMLTable* pOld);
+
+    /// Strips query and fragment from a URL path if base URL is a file:// one.
+    static OUString StripQueryFromPath(const OUString& rBase, const OUString& rPath);
 };
 
 struct SwPendingStackData
