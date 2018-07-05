@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_c9e24230",
+        "filename": "sw/inc/anchoredobject.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-05T15:26:08Z",
+      "side": 1,
+      "message": "this is an abstract base class, thus i don\u0027t see the point of providing an implementation here, better keep it pure virtual so subclasses are forced to override.",
+      "revId": "3ad44390dc510c77cf5abf37f84d9bf3b3409d4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_29c52e8f",
+        "filename": "sw/source/core/inc/flyfrm.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-05T15:26:08Z",
+      "side": 1,
+      "message": "SwFlyFrmae is also abstract so getSwFlyFrameType should be pure virtual",
+      "revId": "3ad44390dc510c77cf5abf37f84d9bf3b3409d4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
