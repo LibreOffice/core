@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_176966bd",
+        "filename": "UnoControls/source/controls/progressmonitor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-07-05T06:05:00Z",
+      "side": 1,
+      "message": "This line seems too long to be readable. Please break up the line maybe to have two values on each line, and be careful about the extra space characters (like the one before the semicolon).\n\nAnd the comment will be more meaningful if it is just after the value it actually refers to.\n\nEdit: Oh, and most importantly, nHeight is not a string! :) The easyhack is about the readability of OUString/OString concatenations",
+      "range": {
+        "startLine": 416,
+        "startChar": 1,
+        "endLine": 416,
+        "endChar": 168
+      },
+      "revId": "c69b56cee9354711fabc420bc940aa6212a6b296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_779f92b4",
+        "filename": "accessibility/source/standard/vclxaccessiblelistitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-07-05T06:05:00Z",
+      "side": 1,
+      "message": "Although I think this is more readable, aPoint is not a OString/OUString.",
+      "range": {
+        "startLine": 352,
+        "startChar": 8,
+        "endLine": 352,
+        "endChar": 88
+      },
+      "revId": "c69b56cee9354711fabc420bc940aa6212a6b296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
