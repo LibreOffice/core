@@ -53,6 +53,8 @@ class Qt5Graphics : public SalGraphics
 
     Qt5Graphics(Qt5Frame* pFrame, QImage* pQImage);
 
+    void drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage);
+
 public:
     Qt5Graphics(Qt5Frame* pFrame)
         : Qt5Graphics(pFrame, nullptr)
