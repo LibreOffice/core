@@ -433,11 +433,6 @@ namespace osl
     {}
 
 
-    inline StreamSocket::StreamSocket( const StreamSocket & socket )
-        : Socket( socket )
-    {}
-
-
     inline sal_Int32 StreamSocket::read(void* pBuffer, sal_uInt32 n)
     {
         return osl_readSocket( m_handle, pBuffer, n );

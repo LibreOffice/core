@@ -271,12 +271,6 @@ ObjectIdentifier::ObjectIdentifier( const Any& rAny )
     }
 }
 
-ObjectIdentifier::ObjectIdentifier( const ObjectIdentifier& rOID )
-    :m_aObjectCID( rOID.m_aObjectCID )
-    ,m_xAdditionalShape( rOID.m_xAdditionalShape )
-{
-}
-
 bool ObjectIdentifier::operator==( const ObjectIdentifier& rOID ) const
 {
     return areIdenticalObjects( m_aObjectCID, rOID.m_aObjectCID ) &&

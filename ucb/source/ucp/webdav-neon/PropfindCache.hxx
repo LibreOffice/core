@@ -42,8 +42,6 @@ namespace webdav_ucp
     public:
         PropertyNames();
         explicit PropertyNames( const OUString& rURL );
-        PropertyNames( const PropertyNames& theOther );
-        ~PropertyNames();
 
         sal_uInt32 getStaleTime() const { return m_nStaleTime; };
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };

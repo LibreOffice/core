@@ -30,10 +30,6 @@ CollatorWrapper::CollatorWrapper ( const uno::Reference< uno::XComponentContext 
     mxInternationalCollator = i18n::Collator::create( rxContext );
 }
 
-CollatorWrapper::~CollatorWrapper()
-{
-}
-
 sal_Int32
 CollatorWrapper::compareString (const OUString& s1, const OUString& s2) const
 {

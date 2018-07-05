@@ -67,10 +67,6 @@ SvtCompatibilityEntry::SvtCompatibilityEntry()
     setDefaultEntry( false );
 }
 
-SvtCompatibilityEntry::~SvtCompatibilityEntry()
-{
-}
-
 OUString SvtCompatibilityEntry::getName( const Index rIdx )
 {
     static const char* sPropertyName[] =

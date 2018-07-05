@@ -393,10 +393,4 @@ sal_uInt16 SvxJustifyMethodItem::GetValueCount() const
     return static_cast<sal_uInt16>(SvxCellJustifyMethod::Distribute) + 1;   // Last Enum value + 1
 }
 
-SvxJustifyMethodItem& SvxJustifyMethodItem::operator=(const SvxJustifyMethodItem& r)
-{
-    SetValue( r.GetValue() );
-    return *this;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

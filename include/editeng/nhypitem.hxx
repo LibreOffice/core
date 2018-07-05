@@ -36,12 +36,6 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-
-    SvxNoHyphenItem& operator=(const SvxNoHyphenItem& rNHH)
-        {
-            SetValue( rNHH.GetValue() );
-            return *this;
-        }
 };
 
 #endif

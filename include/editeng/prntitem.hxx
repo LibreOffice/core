@@ -36,7 +36,6 @@ class EDITENG_DLLPUBLIC SvxPrintItem : public SfxBoolItem
 {
 public:
     explicit SvxPrintItem( const sal_uInt16 nId , const bool bPrt = true );
-    inline SvxPrintItem &operator=( const SvxPrintItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -50,13 +49,6 @@ public:
 inline SvxPrintItem::SvxPrintItem( const sal_uInt16 nId, const bool bPrt )
     : SfxBoolItem( nId, bPrt )
 {}
-
-inline SvxPrintItem &SvxPrintItem::operator=( const SvxPrintItem &rCpy )
-{
-    SetValue( rCpy.GetValue() );
-    return *this;
-}
-
 
 #endif
 

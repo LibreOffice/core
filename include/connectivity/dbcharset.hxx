@@ -127,9 +127,6 @@ namespace dbtools
         OCharsetMap::TextEncBag::const_iterator m_aPos;
 
     public:
-        CharsetIterator(const CharsetIterator& _rSource);
-        ~CharsetIterator();
-
         CharsetIteratorDerefHelper operator*() const;
         // no -> operator
         // this would require us to a) store CharsetIteratorDerefHelper instances ourself so that we

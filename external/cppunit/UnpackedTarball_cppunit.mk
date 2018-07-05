@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/CPPUNIT_PLUGIN_EXPORT.patch.0 \
 	external/cppunit/enable-win32-debug.patch \
 	external/cppunit/rtti.patch.0 \
+	external/cppunit/gcc9.patch.0 \
 ))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\

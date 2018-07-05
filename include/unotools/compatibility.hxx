@@ -67,7 +67,6 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
         };
 
         SvtCompatibilityEntry();
-        ~SvtCompatibilityEntry();
 
         static OUString getName( const Index rIdx );
 

@@ -60,6 +60,7 @@ public:
                 SetValue( rOrientation.GetValue() );
                 return *this;
             }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxOrientationItem(SvxOrientationItem const &) = default;
 
     /** Returns sal_True, if the item represents STACKED state. */
     bool                    IsStacked() const;
@@ -110,6 +111,7 @@ public:
                 nBottomMargin = rMargin.nBottomMargin;
                 return *this;
             }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxMarginItem(SvxMarginItem const &) = default;
 };
 
 #endif

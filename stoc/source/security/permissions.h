@@ -67,9 +67,6 @@ class PermissionCollection
 public:
     PermissionCollection()
         {}
-    PermissionCollection( PermissionCollection const & collection )
-        : m_head( collection.m_head )
-        {}
     explicit PermissionCollection( ::rtl::Reference< Permission > const & single )
         : m_head( single )
         {}

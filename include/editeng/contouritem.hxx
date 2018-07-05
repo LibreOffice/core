@@ -51,6 +51,7 @@ public:
         SetValue(rCont.GetValue());
         return *this;
     }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxContourItem(SvxContourItem const &) = default;
 };
 
 #endif

@@ -188,13 +188,6 @@ class PreventDuplicateInteraction : private ThreadHelpBase2
                     , m_nMaxCount   (nMaxCount   )
                     , m_nCallCount  (0           )
                 {}
-
-                InteractionInfo(const InteractionInfo& aCopy)
-                    : m_aInteraction(aCopy.m_aInteraction)
-                    , m_nMaxCount   (aCopy.m_nMaxCount   )
-                    , m_nCallCount  (aCopy.m_nCallCount  )
-                    , m_xRequest    (aCopy.m_xRequest    )
-                {}
         };
 
         typedef ::std::vector< InteractionInfo > InteractionList;

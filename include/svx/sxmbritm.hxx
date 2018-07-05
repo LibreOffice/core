@@ -34,6 +34,11 @@ public:
     SdrMeasureBelowRefEdgeItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASUREBELOWREFEDGE,bOn) {}
     virtual ~SdrMeasureBelowRefEdgeItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrMeasureBelowRefEdgeItem(SdrMeasureBelowRefEdgeItem const &) = default;
+    SdrMeasureBelowRefEdgeItem(SdrMeasureBelowRefEdgeItem &&) = default;
+    SdrMeasureBelowRefEdgeItem & operator =(SdrMeasureBelowRefEdgeItem const &) = default;
+    SdrMeasureBelowRefEdgeItem & operator =(SdrMeasureBelowRefEdgeItem &&) = default;
 };
 
 #endif

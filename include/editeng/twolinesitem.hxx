@@ -36,6 +36,11 @@ public:
                      sal_uInt16 nId  );
     virtual ~SvxTwoLinesItem() override;
 
+    SvxTwoLinesItem(SvxTwoLinesItem const &) = default;
+    SvxTwoLinesItem(SvxTwoLinesItem &&) = default;
+    SvxTwoLinesItem & operator =(SvxTwoLinesItem const &) = default;
+    SvxTwoLinesItem & operator =(SvxTwoLinesItem &&) = default;
+
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
@@ -49,14 +54,6 @@ public:
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual sal_uInt16          GetVersion( sal_uInt16 nFFVer ) const override;
-
-    SvxTwoLinesItem&        operator=( const SvxTwoLinesItem& rCpy )
-    {
-        SetValue( rCpy.GetValue() );
-        SetStartBracket( rCpy.GetStartBracket() );
-        SetEndBracket( rCpy.GetEndBracket() );
-        return *this;
-    }
 
     bool GetValue() const                       { return bOn; }
     void SetValue( bool bFlag )                 { bOn = bFlag; }

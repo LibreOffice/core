@@ -107,6 +107,7 @@ public:
     }
 
     SvxFontItem& operator=(const SvxFontItem& rFont);
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxFontItem(SvxFontItem const &) = default;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

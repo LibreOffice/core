@@ -104,6 +104,11 @@ protected:
 public:
     virtual ~SwFrameFormat() override;
 
+    SwFrameFormat(SwFrameFormat const &) = default;
+    SwFrameFormat(SwFrameFormat &&) = default;
+    SwFrameFormat & operator =(SwFrameFormat const &) = default;
+    SwFrameFormat & operator =(SwFrameFormat &&) = default;
+
     /// Destroys all Frames in aDepend (Frames are identified via dynamic_cast).
     virtual void DelFrames();
 

@@ -108,6 +108,11 @@ public:
     {
     }
 
+    SwSidebarItem(SwSidebarItem const &) = default;
+    SwSidebarItem(SwSidebarItem &&) = default;
+    SwSidebarItem & operator =(SwSidebarItem const &) = default;
+    SwSidebarItem & operator =(SwSidebarItem &&) = default;
+
     virtual SwPosition GetAnchorPosition() const = 0;
     virtual bool UseElement() = 0;
     virtual const SwFormatField& GetFormatField() const = 0;

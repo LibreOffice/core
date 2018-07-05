@@ -74,6 +74,11 @@ private:
     typename std::vector<Value> mvVals;
     const DestructorPolicy mPolicy;
 
+#if 0 //TODO ***************************************************************************************
+    SwVectorModifyBase(SwVectorModifyBase &) = delete;
+    void operator =(SwVectorModifyBase) = delete;
+#endif
+
 protected:
     // default destructor deletes all contained elements
     SwVectorModifyBase(DestructorPolicy policy = DestructorPolicy::FreeElements)

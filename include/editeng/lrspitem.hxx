@@ -69,6 +69,7 @@ public:
                     const long nTLeft /*= 0*/, const short nOfset /*= 0*/,
                     const sal_uInt16 nId  );
     inline SvxLRSpaceItem& operator=( const SvxLRSpaceItem &rCpy );
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxLRSpaceItem(SvxLRSpaceItem const &) = default;
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

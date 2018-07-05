@@ -140,6 +140,11 @@ public:
                               const ScDocOptions& rOpt );
                 virtual ~ScTpCalcItem() override;
 
+    ScTpCalcItem(ScTpCalcItem const &) = default;
+    ScTpCalcItem(ScTpCalcItem &&) = default;
+    ScTpCalcItem & operator =(ScTpCalcItem const &) = default;
+    ScTpCalcItem & operator =(ScTpCalcItem &&) = default;
+
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 

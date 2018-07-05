@@ -86,6 +86,11 @@ public:
                                     bool bActive );
     virtual             ~IMapObject() {};
 
+    IMapObject(IMapObject const &) = default;
+    IMapObject(IMapObject &&) = default;
+    IMapObject & operator =(IMapObject const &) = default;
+    IMapObject & operator =(IMapObject &&) = default;
+
     virtual sal_uInt16  GetType() const = 0;
     virtual bool        IsHit( const Point& rPoint ) const = 0;
 

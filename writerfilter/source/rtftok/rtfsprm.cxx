@@ -370,10 +370,6 @@ RTFSprms::RTFSprms()
 {
 }
 
-RTFSprms::~RTFSprms() = default;
-
-RTFSprms::RTFSprms(const RTFSprms& rSprms) { *this = rSprms; }
-
 void RTFSprms::clear()
 {
     if (m_pSprms->GetRefCount() == 1)

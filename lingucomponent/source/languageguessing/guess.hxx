@@ -43,8 +43,6 @@ class Guess final {
          */
         Guess(const char * guess_str);
 
-        ~Guess();
-
         const string& GetLanguage() { return language_str;}
         const string& GetCountry() { return country_str;}
 

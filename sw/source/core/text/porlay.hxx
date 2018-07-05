@@ -68,8 +68,6 @@ class SwRepaint : public SwRect
     SwTwips nRightOfst;
 public:
     SwRepaint() : SwRect(), nOfst( 0 ), nRightOfst( 0 ) {}
-    SwRepaint( const SwRepaint& rRep ) : SwRect( rRep ), nOfst( rRep.nOfst ),
-        nRightOfst( rRep.nRightOfst ) {}
 
     SwTwips GetOfst() const { return nOfst; }
     void   SetOfst( const SwTwips nNew ) { nOfst = nNew; }

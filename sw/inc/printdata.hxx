@@ -99,6 +99,11 @@ public:
 
     virtual ~SwPrintData() {}
 
+    SwPrintData(SwPrintData const &) = default;
+    SwPrintData(SwPrintData &&) = default;
+    SwPrintData & operator =(SwPrintData const &) = default;
+    SwPrintData & operator =(SwPrintData &&) = default;
+
     bool operator==(const SwPrintData& rData)const
     {
         return

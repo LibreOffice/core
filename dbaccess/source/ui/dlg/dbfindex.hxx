@@ -40,7 +40,6 @@ private:
 
 public:
     OTableIndex() { }
-    OTableIndex( const OTableIndex& _rSource) : aIndexFileName(_rSource.aIndexFileName) { }
     explicit OTableIndex( const OUString& rFileName ) : aIndexFileName( rFileName ) { }
 
     const OUString& GetIndexFileName() const { return aIndexFileName; }

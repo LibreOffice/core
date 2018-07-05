@@ -35,7 +35,6 @@ class SW_DLLPUBLIC SwFormatSurround: public SfxEnumItem<css::text::WrapTextMode>
     bool    bOutside    :1;
 public:
     SwFormatSurround( css::text::WrapTextMode eNew = css::text::WrapTextMode_PARALLEL );
-    inline SwFormatSurround &operator=( const SwFormatSurround &rCpy );
 
     // "Pure virtual Methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -60,15 +59,6 @@ public:
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
-
-inline SwFormatSurround &SwFormatSurround::operator=( const SwFormatSurround &rCpy )
-{
-    bAnchorOnly = rCpy.IsAnchorOnly();
-    bContour = rCpy.IsContour();
-    bOutside = rCpy.IsOutside();
-    SfxEnumItem::SetValue( rCpy.GetValue() );
-    return *this;
-}
 
 inline const SwFormatSurround &SwAttrSet::GetSurround(bool bInP) const
     { return Get( RES_SURROUND,bInP); }

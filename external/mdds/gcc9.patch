@@ -1,0 +1,42 @@
+--- include/mdds/multi_type_vector_itr.hpp
++++ include/mdds/multi_type_vector_itr.hpp
+@@ -54,9 +54,6 @@
+     iterator_value_node(size_type start_pos, size_type block_index) :
+         type(mdds::mtv::element_type_empty), position(start_pos), size(0), data(nullptr), __private_data(block_index) {}
+ 
+-    iterator_value_node(const iterator_value_node& other) :
+-        type(other.type), position(other.position), size(other.size), data(other.data), __private_data(other.__private_data) {}
+-
+     void swap(iterator_value_node& other)
+     {
+         std::swap(type, other.type);
+@@ -272,9 +269,6 @@
+         size_type start_pos, size_type block_index) :
+         common_base(pos, end, start_pos, block_index) {}
+ 
+-    iterator_base(const iterator_base& other) :
+-        common_base(other) {}
+-
+     value_type& operator*()
+     {
+         return m_cur_node;
+@@ -345,9 +339,6 @@
+         size_type start_pos, size_type block_index) :
+         common_base(pos, end, start_pos, block_index) {}
+ 
+-    const_iterator_base(const const_iterator_base& other) :
+-        common_base(other) {}
+-
+     /**
+      * Take the non-const iterator counterpart to create a const iterator.
+      */
+--- include/mdds/multi_type_vector_types.hpp
++++ include/mdds/multi_type_vector_types.hpp
+@@ -90,7 +90,6 @@
+ protected:
+     element_t type;
+     base_element_block(element_t _t) : type(_t) {}
+-    ~base_element_block() {}
+ };
+ 
+ template<typename _Self, element_t _TypeId, typename _Data>

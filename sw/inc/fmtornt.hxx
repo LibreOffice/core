@@ -39,6 +39,7 @@ public:
     SwFormatVertOrient( SwTwips nY = 0, sal_Int16 eVert = css::text::VertOrientation::NONE,
                      sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA );
     inline SwFormatVertOrient &operator=( const SwFormatVertOrient &rCpy );
+    /*TODO: SfxPoolItem copy function dichotomy*/SwFormatVertOrient(SwFormatVertOrient const &) = default;
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -75,6 +76,7 @@ public:
     SwFormatHoriOrient( SwTwips nX = 0, sal_Int16 eHori = css::text::HoriOrientation::NONE,
         sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA, bool bPos = false );
     inline SwFormatHoriOrient &operator=( const SwFormatHoriOrient &rCpy );
+    /*TODO: SfxPoolItem copy function dichotomy*/SwFormatHoriOrient(SwFormatHoriOrient const &) = default;
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

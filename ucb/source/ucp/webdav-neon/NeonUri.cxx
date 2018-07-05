@@ -147,10 +147,6 @@ void NeonUri::init( const OString & rUri, const ne_uri * pUri )
     }
 }
 
-NeonUri::~NeonUri( )
-{
-}
-
 void NeonUri::calculateURI ()
 {
     OUStringBuffer aBuf( mScheme );

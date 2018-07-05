@@ -81,6 +81,7 @@ protected:
 
 public:
     virtual XMLNodeType GetNodeType() const = 0;
+    XMLNode(XMLNode const &) = default;
     virtual ~XMLNode(){}
 };
 

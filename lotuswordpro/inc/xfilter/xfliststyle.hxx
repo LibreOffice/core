@@ -88,6 +88,11 @@ public:
 
     virtual ~XFListLevel(){}
 
+    XFListLevel(XFListLevel const &) = default;
+    XFListLevel(XFListLevel &&) = default;
+    XFListLevel & operator =(XFListLevel const &) = default;
+    XFListLevel & operator =(XFListLevel &&) = default;
+
     void    SetListlevelType(enumXFListLevel type);
 
     void    SetLevel(sal_Int16 level);

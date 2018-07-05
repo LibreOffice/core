@@ -48,6 +48,11 @@ public:
 
     virtual ~OOXMLFastContextHandler() override;
 
+    OOXMLFastContextHandler(OOXMLFastContextHandler const &) = default;
+    OOXMLFastContextHandler(OOXMLFastContextHandler &&) = default;
+    OOXMLFastContextHandler & operator =(OOXMLFastContextHandler const &) = default;
+    OOXMLFastContextHandler & operator =(OOXMLFastContextHandler &&) = default;
+
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement (Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 

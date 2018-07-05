@@ -77,6 +77,11 @@ public:
 
     virtual ~Entry();
 
+    Entry(Entry const &) = default;
+    Entry(Entry &&) = default;
+    Entry & operator =(Entry const &) = default;
+    Entry & operator =(Entry &&) = default;
+
     EntryType GetType () const { return m_eType; }
 };
 

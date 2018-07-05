@@ -65,6 +65,7 @@ public:
     explicit SvxNumberType(SvxNumType nType = SVX_NUM_ARABIC);
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
+    SvxNumberType & operator =(SvxNumberType const &) = default;
 
     OUString        GetNumStr( sal_Int32 nNo ) const;
     OUString        GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale ) const;

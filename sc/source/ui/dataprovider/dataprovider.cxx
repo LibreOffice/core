@@ -65,10 +65,6 @@ ExternalDataSource::ExternalDataSource(const OUString& rURL,
 {
 }
 
-ExternalDataSource::~ExternalDataSource()
-{
-}
-
 void ExternalDataSource::setID(const OUString& rID)
 {
     maID = rID;

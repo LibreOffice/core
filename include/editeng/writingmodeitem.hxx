@@ -32,7 +32,10 @@ public:
                 sal_uInt16 nWhich /*= SDRATTR_TEXTDIRECTION*/ );
     virtual ~SvxWritingModeItem() override;
 
-    SvxWritingModeItem& operator=( const SvxWritingModeItem& rItem );
+    SvxWritingModeItem(SvxWritingModeItem const &) = default;
+    SvxWritingModeItem(SvxWritingModeItem &&) = default;
+    SvxWritingModeItem & operator =(SvxWritingModeItem const &) = default;
+    SvxWritingModeItem & operator =(SvxWritingModeItem &&) = default;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const override;

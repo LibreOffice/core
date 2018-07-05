@@ -68,7 +68,6 @@ public:
                 ScGridOptions( const SvxOptionsGrid& rOpt ) : SvxOptionsGrid( rOpt ) {}
 
     void                    SetDefaults();
-    ScGridOptions&          operator=  ( const ScGridOptions& rCpy );
     bool                    operator== ( const ScGridOptions& rOpt ) const;
     bool                    operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
 };
@@ -116,6 +115,11 @@ class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 public:
                 ScTpViewItem( const ScViewOptions& rOpt );
                 virtual ~ScTpViewItem() override;
+
+    ScTpViewItem(ScTpViewItem const &) = default;
+    ScTpViewItem(ScTpViewItem &&) = default;
+    ScTpViewItem & operator =(ScTpViewItem const &) = default;
+    ScTpViewItem & operator =(ScTpViewItem &&) = default;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

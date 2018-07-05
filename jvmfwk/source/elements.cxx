@@ -694,10 +694,6 @@ CNodeJavaInfo::CNodeJavaInfo() :
 {
 }
 
-CNodeJavaInfo::~CNodeJavaInfo()
-{
-}
-
 void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
 {
     OString sExcMsg("[Java framework] Error in function NodeJavaInfo::loadFromNode "

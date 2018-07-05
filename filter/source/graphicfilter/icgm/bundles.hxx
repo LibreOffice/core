@@ -45,9 +45,13 @@ public:
         {};
 
     virtual Bundle*     Clone() { return new Bundle( *this ); };
-            Bundle&     operator=(const Bundle& rBundle );
 
     virtual            ~Bundle() {} ;
+
+    Bundle(Bundle const &) = default;
+    Bundle(Bundle &&) = default;
+    Bundle & operator =(Bundle const &) = default;
+    Bundle & operator =(Bundle &&) = default;
 };
 
 

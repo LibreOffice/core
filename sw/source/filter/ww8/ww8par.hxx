@@ -505,6 +505,11 @@ public:
     SwMacroInfo();
     virtual ~SwMacroInfo() override;
 
+    SwMacroInfo(SwMacroInfo const &) = default;
+    SwMacroInfo(SwMacroInfo &&) = default;
+    SwMacroInfo & operator =(SwMacroInfo const &) = default;
+    SwMacroInfo & operator =(SwMacroInfo &&) = default;
+
     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
 
     void SetHlink( const OUString& rHlink ) { maHlink = rHlink; }

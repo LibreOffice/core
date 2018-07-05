@@ -43,6 +43,7 @@ public:
 
     explicit inline SvxProtectItem( const sal_uInt16 nId  );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxProtectItem(SvxProtectItem const &) = default;
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool             operator==( const SfxPoolItem& ) const override;

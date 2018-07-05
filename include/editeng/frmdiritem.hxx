@@ -57,6 +57,7 @@ public:
         SetValue( rItem.GetValue() );
         return *this;
     }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxFrameDirectionItem(SvxFrameDirectionItem const &) = default;
 };
 
 #endif // INCLUDED_EDITENG_FRMDIRITEM_HXX

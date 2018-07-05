@@ -117,9 +117,6 @@ LwpColor LwpNumericFormatSubset::GetColor()
 LwpNumericFormatSubset::LwpNumericFormatSubset():cSubFlags(0)
 {
 }
-LwpNumericFormatSubset::~LwpNumericFormatSubset()
-{
-}
 
 LwpNumericFormat::LwpNumericFormat(LwpObjectStream * pStrm)
     : m_pObjStrm(pStrm)

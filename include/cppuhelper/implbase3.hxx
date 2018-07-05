@@ -71,6 +71,14 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData3 < Ifc1, Ifc2, Ifc3, ImplHelper3<Ifc1, Ifc2, Ifc3> > > {};
     public:
+#if defined LIBO_INTERNAL_ONLY
+        ImplHelper3() = default;
+        ImplHelper3(ImplHelper3 const &) = default;
+        ImplHelper3(ImplHelper3 &&) = default;
+        ImplHelper3 & operator =(ImplHelper3 const &) = default;
+        ImplHelper3 & operator =(ImplHelper3 &&) = default;
+#endif
+
         virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return ImplHelper_query( rType, cd::get(), this ); }
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE

@@ -43,6 +43,11 @@ public:
     ScTpDefaultsItem( const ScDefaultsOptions& rOpt );
     virtual ~ScTpDefaultsItem() override;
 
+    ScTpDefaultsItem(ScTpDefaultsItem const &) = default;
+    ScTpDefaultsItem(ScTpDefaultsItem &&) = default;
+    ScTpDefaultsItem & operator =(ScTpDefaultsItem const &) = default;
+    ScTpDefaultsItem & operator =(ScTpDefaultsItem &&) = default;
+
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 

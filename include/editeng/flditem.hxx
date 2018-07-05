@@ -52,6 +52,11 @@ public:
                             SvxFieldData();
     virtual                 ~SvxFieldData() override;
 
+    SvxFieldData(SvxFieldData const &) = default;
+    SvxFieldData(SvxFieldData &&) = default;
+    SvxFieldData & operator =(SvxFieldData const &) = default;
+    SvxFieldData & operator =(SvxFieldData &&) = default;
+
     virtual tools::SvRef<SvxFieldData> Clone() const;
     virtual bool            operator==( const SvxFieldData& ) const;
 

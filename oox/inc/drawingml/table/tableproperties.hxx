@@ -36,7 +36,6 @@ class TableProperties
 public:
 
     TableProperties();
-    ~TableProperties();
 
     std::vector< sal_Int32 >&           getTableGrid() { return mvTableGrid; };
     std::vector< TableRow >&            getTableRows() { return mvTableRows; };

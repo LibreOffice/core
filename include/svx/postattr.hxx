@@ -40,12 +40,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    SvxPostItAuthorItem& operator=( const SvxPostItAuthorItem& rAuthor )
-    {
-        SetValue( rAuthor.GetValue() );
-        return *this;
-    }
 };
 
 
@@ -66,12 +60,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    SvxPostItDateItem& operator=( const SvxPostItDateItem& rDate )
-    {
-        SetValue( rDate.GetValue() );
-        return *this;
-    }
 };
 
 /** The text of a note
@@ -92,12 +80,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    SvxPostItTextItem& operator=( const SvxPostItTextItem& rText )
-    {
-        SetValue( rText.GetValue() );
-        return *this;
-    }
 };
 
 
@@ -112,12 +94,6 @@ public:
     SvxPostItIdItem( sal_uInt16 nWhich );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    SvxPostItIdItem& operator=( const SvxPostItIdItem& rId )
-    {
-        SetValue( rId.GetValue() );
-        return *this;
-    }
 };
 
 #endif

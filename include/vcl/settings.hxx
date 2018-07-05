@@ -96,8 +96,6 @@ private:
 public:
                                     MouseSettings();
 
-                                    ~MouseSettings();
-
     void                            SetOptions( MouseSettingsOptions nOptions );
     MouseSettingsOptions            GetOptions() const;
 
@@ -243,7 +241,6 @@ private:
 
 public:
                                     StyleSettings();
-                                    ~StyleSettings();
 
     void                            Set3DColors( const Color& rColor );
 
@@ -623,7 +620,6 @@ class VCL_DLLPUBLIC MiscSettings
 
 public:
                                     MiscSettings();
-                                    ~MiscSettings();
 
 #ifdef _WIN32
     void                            SetEnableATToolSupport( bool bEnable );
@@ -645,7 +641,6 @@ class VCL_DLLPUBLIC HelpSettings
 
 public:
                                     HelpSettings();
-                                    ~HelpSettings();
 
     sal_uLong                       GetTipDelay() const;
     void                            SetTipTimeout( sal_uLong nTipTimeout );
@@ -678,8 +673,6 @@ private:
 
 public:
                                             AllSettings();
-                                            AllSettings( const AllSettings& rSet );
-                                            ~AllSettings();
 
     void                                    SetMouseSettings( const MouseSettings& rSet );
     const MouseSettings&                    GetMouseSettings() const;

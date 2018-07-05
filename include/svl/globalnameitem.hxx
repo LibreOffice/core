@@ -34,6 +34,11 @@ public:
                             SfxGlobalNameItem( sal_uInt16 nWhich, const SvGlobalName& );
                             virtual ~SfxGlobalNameItem() override;
 
+    SfxGlobalNameItem(SfxGlobalNameItem const &) = default;
+    SfxGlobalNameItem(SfxGlobalNameItem &&) = default;
+    SfxGlobalNameItem & operator =(SfxGlobalNameItem const &) = default;
+    SfxGlobalNameItem & operator =(SfxGlobalNameItem &&) = default;
+
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     const SvGlobalName&     GetValue() const { return m_aName; }

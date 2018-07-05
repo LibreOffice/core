@@ -493,10 +493,6 @@ ScViewDataTable::ScViewDataTable() :
     nPixPosY[0]=nPixPosY[1]=0;
 }
 
-ScViewDataTable::~ScViewDataTable()
-{
-}
-
 void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData) const
 {
     rSettings.realloc(SC_TABLE_VIEWSETTINGS_COUNT);

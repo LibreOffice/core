@@ -79,6 +79,12 @@ struct SwSortElement
     static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox const * = nullptr );
     static void Finit();
 
+    SwSortElement() = default;
+    SwSortElement(SwSortElement const &) = default;
+    SwSortElement(SwSortElement &&) = default;
+    SwSortElement & operator =(SwSortElement const &) = default;
+    SwSortElement & operator =(SwSortElement &&) = default;
+
     virtual ~SwSortElement();
 
     virtual OUString GetKey(sal_uInt16 nKey ) const = 0;

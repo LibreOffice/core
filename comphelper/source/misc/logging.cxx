@@ -72,12 +72,6 @@ namespace comphelper
     {
     }
 
-
-    EventLogger::~EventLogger()
-    {
-    }
-
-
     bool EventLogger::isLoggable( const sal_Int32 _nLogLevel ) const
     {
         if ( !m_pImpl->isValid() )

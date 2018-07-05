@@ -538,8 +538,6 @@ namespace osl
                             oslProtocol Protocol = osl_Socket_ProtocolIp,
                             oslSocketType   Type = osl_Socket_TypeStream);
 
-        inline StreamSocket( const StreamSocket & );
-
         inline StreamSocket( oslSocket Socket , __sal_NoAcquire noacquire );
 
         inline StreamSocket( oslSocket Socket );

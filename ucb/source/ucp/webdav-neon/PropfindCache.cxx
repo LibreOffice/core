@@ -29,17 +29,6 @@ namespace webdav_ucp
     {
     }
 
-    PropertyNames::PropertyNames( const PropertyNames& theOther ) :
-        m_nStaleTime( theOther.m_nStaleTime ),
-        m_sURL( theOther.m_sURL ),
-        m_aPropertiesNames( theOther.m_aPropertiesNames )
-    {
-    }
-
-    PropertyNames::~PropertyNames()
-    {
-    }
-
     //PropertyNamesCache implementation
 
     PropertyNamesCache::PropertyNamesCache()

@@ -102,11 +102,6 @@ class PathSettings : private cppu::BaseMutex
                 , bIsReadonly   (false)
             {}
 
-            PathInfo(const PathInfo& rCopy)
-            {
-                takeOver(rCopy);
-            }
-
             void takeOver(const PathInfo& rCopy)
             {
                 sPathName      = rCopy.sPathName;

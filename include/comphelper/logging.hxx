@@ -108,8 +108,6 @@ namespace comphelper
             const sal_Char* _pAsciiLoggerName
         );
 
-        ~EventLogger();
-
     public:
         /// determines whether an event with the given level would be logged
         bool        isLoggable( const sal_Int32 _nLogLevel ) const;

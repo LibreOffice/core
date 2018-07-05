@@ -57,6 +57,10 @@ protected:
     virtual ~SdrAttrObj() override;
 
 public:
+    SdrAttrObj(SdrAttrObj const &) = default;
+    SdrAttrObj(SdrAttrObj &&) = default;
+    SdrAttrObj & operator =(SdrAttrObj const &) = default;
+    SdrAttrObj & operator =(SdrAttrObj &&) = default;
 
     // Detects if bFilledObj && Fill != FillNone
     bool HasFill() const;

@@ -39,6 +39,11 @@ public:
     SwPageFootnoteInfoItem(SwPageFootnoteInfo const & rInfo);
     virtual ~SwPageFootnoteInfoItem() override;
 
+    SwPageFootnoteInfoItem(SwPageFootnoteInfoItem const &) = default;
+    SwPageFootnoteInfoItem(SwPageFootnoteInfoItem &&) = default;
+    SwPageFootnoteInfoItem & operator =(SwPageFootnoteInfoItem const &) = default;
+    SwPageFootnoteInfoItem & operator =(SwPageFootnoteInfoItem &&) = default;
+
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,

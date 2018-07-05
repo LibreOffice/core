@@ -50,7 +50,6 @@ private:
 
 public:
     XColorEntry(const Color& rColor, const OUString& rName);
-    XColorEntry(const XColorEntry& rOther);
 
     const Color& GetColor() const
     {

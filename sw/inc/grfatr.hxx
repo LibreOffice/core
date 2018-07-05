@@ -62,13 +62,6 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal,
                                         sal_uInt8 nMemberId ) override;
 
-    SwMirrorGrf& operator=( const SwMirrorGrf& rMirrorGrf )
-        {
-            SfxEnumItem::SetValue( rMirrorGrf.GetValue() );
-            bGrfToggle = rMirrorGrf.IsGrfToggle();
-            return *this;
-        }
-
     bool IsGrfToggle() const         { return bGrfToggle; }
     void SetGrfToggle( bool bNew )   { bGrfToggle = bNew; }
 };
@@ -198,12 +191,6 @@ public:
     SwGammaGrf( const double& rVal )
         : SfxPoolItem( RES_GRFATR_GAMMA ), nValue( rVal )
     {}
-
-    SwGammaGrf& operator=( const SwGammaGrf& rCopy )
-    {
-        nValue = rCopy.nValue;
-        return *this;
-    }
 
     // pure virtual methods from SfxEnumItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

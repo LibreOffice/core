@@ -68,6 +68,12 @@
 class IXFStyle
 {
 public:
+    IXFStyle() = default;
+    IXFStyle(IXFStyle const &) = default;
+    IXFStyle(IXFStyle &&) = default;
+    IXFStyle & operator =(IXFStyle const &) = default;
+    IXFStyle & operator =(IXFStyle &&) = default;
+
     virtual ~IXFStyle(){}
     /**
      * @descr:  return the style name.

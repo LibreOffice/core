@@ -34,10 +34,6 @@ namespace sdr
         {
         }
 
-        DisplayInfo::~DisplayInfo()
-        {
-        }
-
         // Access to LayerInfos (which layers to process)
         void DisplayInfo::SetProcessLayers(const SdrLayerIDSet& rSet)
         {

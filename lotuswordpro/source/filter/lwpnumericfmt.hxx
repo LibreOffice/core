@@ -75,7 +75,6 @@ class LwpNumericFormatSubset final
 {
 public:
     LwpNumericFormatSubset();
-    ~LwpNumericFormatSubset();
     void QuickRead(LwpObjectStream* pStrm);
     OUString const & GetPrefix(){ return cPrefix.str();}
     OUString const & GetSuffix(){ return cSuffix.str();}

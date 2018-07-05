@@ -86,13 +86,6 @@ public:
         return *this;
     }
 
-    array_view& operator=(array_view const & other)
-    {
-        data_ = other.data_;
-        size_ = other.size_;
-        return *this;
-    }
-
     constexpr bool empty() const noexcept { return size_ == 0; }
 
     constexpr iterator begin() const noexcept { return data_; }

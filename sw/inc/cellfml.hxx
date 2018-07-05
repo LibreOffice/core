@@ -110,6 +110,11 @@ public:
 
     virtual ~SwTableFormula();
 
+    SwTableFormula(SwTableFormula const &) = default;
+    SwTableFormula(SwTableFormula &&) = default;
+    SwTableFormula & operator =(SwTableFormula const &) = default;
+    SwTableFormula & operator =(SwTableFormula &&) = default;
+
     /// create from the internal formula (for CORE) the external formula (for UI)
     void PtrToBoxNm( const SwTable* pTable );
     /// create from the external formula the internal

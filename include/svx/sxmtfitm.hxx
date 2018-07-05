@@ -32,6 +32,11 @@ public:
     SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn) {}
     virtual ~SdrMeasureTextIsFixedAngleItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrMeasureTextIsFixedAngleItem(SdrMeasureTextIsFixedAngleItem const &) = default;
+    SdrMeasureTextIsFixedAngleItem(SdrMeasureTextIsFixedAngleItem &&) = default;
+    SdrMeasureTextIsFixedAngleItem & operator =(SdrMeasureTextIsFixedAngleItem const &) = default;
+    SdrMeasureTextIsFixedAngleItem & operator =(SdrMeasureTextIsFixedAngleItem &&) = default;
 };
 
 //Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
@@ -40,6 +45,11 @@ public:
     SdrMeasureTextFixedAngleItem(long nVal=0): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
     virtual ~SdrMeasureTextFixedAngleItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrMeasureTextFixedAngleItem(SdrMeasureTextFixedAngleItem const &) = default;
+    SdrMeasureTextFixedAngleItem(SdrMeasureTextFixedAngleItem &&) = default;
+    SdrMeasureTextFixedAngleItem & operator =(SdrMeasureTextFixedAngleItem const &) = default;
+    SdrMeasureTextFixedAngleItem & operator =(SdrMeasureTextFixedAngleItem &&) = default;
 };
 
 // The decimal places used for the measure value
@@ -48,6 +58,11 @@ public:
     SdrMeasureDecimalPlacesItem(sal_Int16 nVal=2): SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES,nVal)  {}
     virtual ~SdrMeasureDecimalPlacesItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrMeasureDecimalPlacesItem(SdrMeasureDecimalPlacesItem const &) = default;
+    SdrMeasureDecimalPlacesItem(SdrMeasureDecimalPlacesItem &&) = default;
+    SdrMeasureDecimalPlacesItem & operator =(SdrMeasureDecimalPlacesItem const &) = default;
+    SdrMeasureDecimalPlacesItem & operator =(SdrMeasureDecimalPlacesItem &&) = default;
 };
 
 #endif

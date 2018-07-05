@@ -482,10 +482,6 @@ MouseSettings::MouseSettings()
 {
 }
 
-MouseSettings::~MouseSettings()
-{
-}
-
 void MouseSettings::CopyData()
 {
     // copy if other references exist
@@ -767,10 +763,6 @@ void ImplStyleData::SetStandardStyles()
 
 StyleSettings::StyleSettings()
     : mxData(std::make_shared<ImplStyleData>())
-{
-}
-
-StyleSettings::~StyleSettings()
 {
 }
 
@@ -2409,10 +2401,6 @@ MiscSettings::MiscSettings()
 {
 }
 
-MiscSettings::~MiscSettings()
-{
-}
-
 bool MiscSettings::operator ==( const MiscSettings& rSet ) const
 {
     if ( mxData == rSet.mxData )
@@ -2606,10 +2594,6 @@ HelpSettings::HelpSettings()
 {
 }
 
-HelpSettings::~HelpSettings()
-{
-}
-
 bool HelpSettings::operator ==( const HelpSettings& rSet ) const
 {
     if ( mxData == rSet.mxData )
@@ -2688,15 +2672,6 @@ ImplAllSettingsData::~ImplAllSettingsData()
 
 AllSettings::AllSettings()
     : mxData(std::make_shared<ImplAllSettingsData>())
-{
-}
-
-AllSettings::AllSettings( const AllSettings& rSet )
-{
-    mxData = rSet.mxData;
-}
-
-AllSettings::~AllSettings()
 {
 }
 

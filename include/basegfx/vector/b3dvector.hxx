@@ -64,15 +64,6 @@ namespace basegfx
         :   B3DTuple(fX, fY, fZ)
         {}
 
-        /** Create a copy of a 3D Vector
-
-            @param rVec
-            The 3D Vector which will be copied.
-        */
-        B3DVector(const B3DVector& rVec)
-        :   B3DTuple(rVec)
-        {}
-
         /** constructor with tuple to allow copy-constructing
             from B3DTuple-based classes
         */

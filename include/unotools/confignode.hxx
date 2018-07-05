@@ -221,10 +221,6 @@ namespace utl
             const bool i_bUpdatable
         );
 
-        /// copy ctor
-        OConfigurationTreeRoot(const OConfigurationTreeRoot& _rSource)
-            :OConfigurationNode(_rSource), m_xCommitter(_rSource.m_xCommitter) { }
-
         /** open a new top-level configuration node
 
             opens a new node which is the root if an own configuration sub tree. This is what "top level" means: The

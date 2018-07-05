@@ -23,14 +23,6 @@
 #include <tools/stream.hxx>
 #include <memory>
 
-Bundle& Bundle::operator=( const Bundle& rSource )
-{
-    mnColor = rSource.mnColor;
-    mnBundleIndex = rSource.mnBundleIndex;
-    return *this;
-};
-
-
 void Bundle::SetColor( sal_uInt32 nColor )
 {
     mnColor = nColor;

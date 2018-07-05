@@ -500,10 +500,6 @@ ScNoteData::ScNoteData( bool bShown ) :
 {
 }
 
-ScNoteData::~ScNoteData()
-{
-}
-
 sal_uInt32 ScPostIt::mnLastPostItId = 1;
 
 ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nPostItId ) :

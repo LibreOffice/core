@@ -34,21 +34,11 @@ public:
         ,xInterface( rxInterface )
     {}
 
-    inline FmInterfaceItem&  operator=( const FmInterfaceItem &rCpy );
-
     // "purely virtual methods" of the SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 };
-
-inline FmInterfaceItem& FmInterfaceItem::operator=( const FmInterfaceItem &rCpy )
-{
-    xInterface = rCpy.xInterface;
-
-    return *this;
-}
-
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMITEMS_HXX
 

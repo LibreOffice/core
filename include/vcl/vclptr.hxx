@@ -115,6 +115,10 @@ public:
         assert((!m_rInnerRef.get() || m_rInnerRef->isDisposed() || m_rInnerRef->getRefCount() > 1)
                 && "someone forgot to call dispose()");
     }
+    VclPtr(VclPtr const &) = default;
+    VclPtr(VclPtr &&) = default;
+    VclPtr & operator =(VclPtr const &) = default;
+    VclPtr & operator =(VclPtr &&) = default;
 #endif
 
     /**

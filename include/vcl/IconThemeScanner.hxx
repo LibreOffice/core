@@ -34,8 +34,6 @@ namespace vcl {
 class VCL_DLLPUBLIC IconThemeScanner
 {
 public:
-    ~IconThemeScanner();
-
     /** Factory method to create the object.
      * Provide a path to search for IconThemes.
      */

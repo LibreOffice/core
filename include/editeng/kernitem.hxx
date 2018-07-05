@@ -51,11 +51,6 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    SvxKerningItem& operator=(const SvxKerningItem& rKern) {
-            SetValue( rKern.GetValue() );
-            return *this;
-        }
-
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };

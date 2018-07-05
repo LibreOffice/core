@@ -310,13 +310,6 @@ WW8ReadFieldParams::WW8ReadFieldParams( const OUString& _rData )
     nSavPtr   = nNext;
 }
 
-
-WW8ReadFieldParams::~WW8ReadFieldParams()
-{
-
-}
-
-
 OUString WW8ReadFieldParams::GetResult() const
 {
     if (nFnd<0 && nSavPtr>nFnd)

@@ -36,6 +36,11 @@ public:
     SfxIntegerListItem( sal_uInt16 nWhich, const css::uno::Sequence < sal_Int32 >& rList );
     virtual ~SfxIntegerListItem() override;
 
+    SfxIntegerListItem(SfxIntegerListItem const &) = default;
+    SfxIntegerListItem(SfxIntegerListItem &&) = default;
+    SfxIntegerListItem & operator =(SfxIntegerListItem const &) = default;
+    SfxIntegerListItem & operator =(SfxIntegerListItem &&) = default;
+
     const std::vector< sal_Int32 >& GetList() const { return m_aList; }
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
