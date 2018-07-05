@@ -23,6 +23,8 @@
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
+#include <ostream>
 
 enum class DeviceFormat {
                             NONE = -1,
@@ -62,6 +64,19 @@ struct SalTwoRect
     {
     }
 };
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const SalTwoRect& rPosAry)
+{
+    tools::Rectangle aSrcRect(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcX + rPosAry.mnSrcWidth,
+                              rPosAry.mnSrcY + rPosAry.mnSrcHeight);
+    tools::Rectangle aDestRect(rPosAry.mnDestX, rPosAry.mnDestY,
+                               rPosAry.mnDestX + rPosAry.mnDestWidth,
+                               rPosAry.mnDestY + rPosAry.mnDestHeight);
+    stream << aSrcRect << " => " << aDestRect;
+    return stream;
+}
 
 enum class SalROPColor {
     N0, N1, Invert
