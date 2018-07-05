@@ -30,6 +30,8 @@ enum class TransformationType
 };
 enum class TEXT_TRANSFORM_TYPE { TO_LOWER, TO_UPPER, CAPITALIZE, TRIM, CLEAN };
 
+enum class AGGREGATE_FUNCTION { SUM, AVERAGE, MINIMUM, MAXIMUM };
+
 class SC_DLLPUBLIC DataTransformation
 {
 protected:
@@ -107,6 +109,17 @@ class SC_DLLPUBLIC TextTransformation : public DataTransformation
     virtual void Transform(ScDocument& rDoc) const override;
 
 };
+
+class SC_DLLPUBLIC AggregateFunction : public DataTransformation
+{
+    std::set<SCCOL> mnCol;
+    AGGREGATE_FUNCTION maType;
+
+    public:
+    AggregateFunction(std::set<SCCOL> nCol, const AGGREGATE_FUNCTION rType);
+    virtual void Transform(ScDocument& rDoc) const override;
+};
+
 
 }
 

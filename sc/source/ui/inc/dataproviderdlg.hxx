@@ -62,6 +62,7 @@ public:
     void mergeColumns();
     void texttransformation();
     void sortTransformation();
+    void aggregateFunction();
 
     void import(ScDocument* pDoc);
 };
