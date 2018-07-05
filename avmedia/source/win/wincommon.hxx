@@ -39,6 +39,6 @@
 
 #define WM_GRAPHNOTIFY (WM_USER + 567)
 
-#endif // _WINCOMMOM_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_WIN_WINCOMMON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
