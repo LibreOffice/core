@@ -59,7 +59,7 @@ public:
     int             mnWidth;                    // width of font in pixel units
     int             mnHeight;                   // height of font in pixel units
     float           mfExactHeight;              // requested height (in pixels with subpixel details)
-    int             mnOrientation;              // text orientation in 3600 system
+    int             mnOrientation;              // text orientation in 1/10 degree (0-3600)
     LanguageType    meLanguage;                 // text language
     bool            mbVertical;                 // vertical mode of requested font
     bool            mbNonAntialiased;           // true if antialiasing is disabled

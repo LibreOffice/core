@@ -129,7 +129,10 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     bool                bMasterCommand( false );
     Reference < XDispatch > xDisp;
     const SfxSlot* pSlot = nullptr;
-    SfxDispatcher* pAppDisp = SfxGetpApp()->GetAppDispatcher_Impl();
+    SfxApplication* pApp = SfxGetpApp();
+    if ( !pApp )
+        return xDisp;
+    SfxDispatcher* pAppDisp = pApp->GetAppDispatcher_Impl();
     if ( aURL.Protocol == "slot:" || aURL.Protocol == "commandId:" )
     {
         nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
