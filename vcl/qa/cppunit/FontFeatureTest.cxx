@@ -43,8 +43,15 @@ void FontFeatureTest::testGetFontFeatures()
                                               DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
     aVDev->SetOutputSizePixel(Size(10, 10));
 
+    OUString aFontName("Linux Libertine G");
+    if (aVDev->IsFontAvailable(aFontName))
+        return; // Can't test this because the font is not available, so exit
+
     vcl::Font aFont = aVDev->GetFont();
     aFont.SetFamilyName("Linux Libertine G");
+    aFont.SetWeight(FontWeight::WEIGHT_NORMAL);
+    aFont.SetItalic(FontItalic::ITALIC_NORMAL);
+    aFont.SetWidthType(FontWidth::WIDTH_NORMAL);
     aVDev->SetFont(aFont);
 
     std::vector<vcl::font::Feature> rFontFeatures;
@@ -63,12 +70,11 @@ void FontFeatureTest::testGetFontFeatures()
         }
     }
 
-    CPPUNIT_ASSERT_EQUAL(size_t(27), rDefaultFontFeatures.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(20), rDefaultFontFeatures.size());
 
     OUString aExpectedFeaturesString = "aalt c2sc case dlig frac hlig liga lnum "
-                                       "nalt onum pnum salt sinf smcp ss01 ss02 "
-                                       "ss03 ss04 ss05 ss06 sups tnum zero cpsp "
-                                       "kern lfbd rtbd ";
+                                       "onum pnum salt sinf smcp ss01 ss02 ss03 "
+                                       "sups tnum zero cpsp ";
     CPPUNIT_ASSERT_EQUAL(aExpectedFeaturesString, aFeaturesString);
 
     // Check C2SC feature
