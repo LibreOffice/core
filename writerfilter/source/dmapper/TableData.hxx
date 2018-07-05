@@ -33,7 +33,7 @@ namespace dmapper
 /**
    Class containing the data to describe a table cell.
  */
-class CellData final
+class CellData final : public writerfilter::SpookyReferenceObject
 {
     /**
        Handle to start of cell.
@@ -53,7 +53,7 @@ class CellData final
     bool mbOpen;
 
 public:
-    typedef std::shared_ptr<CellData> Pointer_t;
+    typedef rtl::Reference<CellData> Pointer_t;
 
     CellData(css::uno::Reference<css::text::XTextRange> const & start, TablePropertyMapPtr pProps)
     : mStart(start), mEnd(start), mpProps(pProps), mbOpen(true)
@@ -75,7 +75,7 @@ public:
     void insertProperties(TablePropertyMapPtr pProps)
     {
         if( mpProps.get() )
-            mpProps->InsertProps(pProps);
+            mpProps->InsertProps(pProps.get());
         else
             mpProps = pProps;
     }
@@ -101,7 +101,7 @@ public:
 /**
    Class to handle data of a table row.
  */
-class RowData final
+class RowData final : public writerfilter::SpookyReferenceObject
 {
     typedef ::std::vector<CellData::Pointer_t> Cells;
 
@@ -116,12 +116,12 @@ class RowData final
     mutable TablePropertyMapPtr mpProperties;
 
 public:
-    typedef std::shared_ptr<RowData> Pointer_t;
+    typedef rtl::Reference<RowData> Pointer_t;
 
     RowData() {}
 
     RowData(const RowData& rRowData)
-    : mCells(rRowData.mCells), mpProperties(rRowData.mpProperties)
+    : writerfilter::SpookyReferenceObject(), mCells(rRowData.mCells), mpProperties(rRowData.mpProperties)
     {
     }
 
@@ -161,7 +161,7 @@ public:
             if( !mpProperties.get() )
                 mpProperties = pProperties;
             else
-                mpProperties->InsertProps(pProperties);
+                mpProperties->InsertProps(pProperties.get());
         }
     }
 
@@ -235,7 +235,7 @@ public:
 /**
    Class that holds the data of a table.
  */
-class TableData
+class TableData : public writerfilter::SpookyReferenceObject
 {
     typedef RowData::Pointer_t RowPointer_t;
     typedef ::std::vector<RowPointer_t> Rows;
@@ -261,7 +261,7 @@ class TableData
     void newRow() { mpRow = RowPointer_t(new RowData()); }
 
 public:
-    typedef std::shared_ptr<TableData> Pointer_t;
+    typedef rtl::Reference<TableData> Pointer_t;
 
     explicit TableData(unsigned int nDepth) : mnDepth(nDepth) { newRow(); }
 

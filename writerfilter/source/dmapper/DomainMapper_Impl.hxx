@@ -131,7 +131,7 @@ public:
 };
 
 /// field stack element
-class FieldContext
+class FieldContext : public writerfilter::SpookyReferenceObject
 {
     bool m_bFieldCommandCompleted;
     css::uno::Reference<css::text::XTextRange> m_xStartRange;
@@ -240,7 +240,7 @@ struct AnchoredContext
     }
 };
 
-typedef std::shared_ptr<FieldContext>  FieldContextPtr;
+typedef rtl::Reference<FieldContext>  FieldContextPtr;
 
 /*-------------------------------------------------------------------------
     extended tab stop struct
@@ -454,8 +454,8 @@ private:
     SymbolData                                                                      m_aSymbolData;
 
     // TableManagers are stacked: one for each stream to avoid any confusion
-    std::stack< std::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
-    std::shared_ptr<DomainMapperTableHandler> m_pTableHandler;
+    std::stack< rtl::Reference< DomainMapperTableManager > > m_aTableManagers;
+    rtl::Reference<DomainMapperTableHandler> m_pTableHandler;
 
     //each context needs a stack of currently used attributes
     std::stack<PropertyMapPtr>  m_aPropertyStacks[NUMBER_OF_CONTEXTS];
@@ -659,27 +659,27 @@ public:
     FontTablePtr const & GetFontTable()
     {
         if(!m_pFontTable)
-            m_pFontTable.reset(new FontTable());
+            m_pFontTable = new FontTable();
          return m_pFontTable;
     }
     StyleSheetTablePtr const & GetStyleSheetTable()
     {
         if(!m_pStyleSheetTable)
-            m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper, m_xTextDocument, m_bIsNewDoc ));
+            m_pStyleSheetTable = new StyleSheetTable( m_rDMapper, m_xTextDocument, m_bIsNewDoc );
         return m_pStyleSheetTable;
     }
     ListsManager::Pointer const & GetListTable();
     ThemeTablePtr const & GetThemeTable()
     {
         if(!m_pThemeTable)
-            m_pThemeTable.reset( new ThemeTable );
+            m_pThemeTable = new ThemeTable;
         return m_pThemeTable;
     }
 
     SettingsTablePtr const & GetSettingsTable()
     {
         if( !m_pSettingsTable )
-            m_pSettingsTable.reset(new SettingsTable(m_rDMapper));
+            m_pSettingsTable = new SettingsTable(m_rDMapper);
         return m_pSettingsTable;
     }
 
@@ -800,13 +800,13 @@ public:
 
     DomainMapperTableManager& getTableManager()
     {
-        std::shared_ptr< DomainMapperTableManager > pMngr = m_aTableManagers.top();
+        rtl::Reference< DomainMapperTableManager > pMngr = m_aTableManagers.top();
         return *pMngr.get( );
     }
 
     void appendTableManager( )
     {
-        std::shared_ptr<DomainMapperTableManager> pMngr(new DomainMapperTableManager());
+        rtl::Reference<DomainMapperTableManager> pMngr(new DomainMapperTableManager());
         m_aTableManagers.push( pMngr );
     }
 
@@ -901,7 +901,7 @@ public:
     /// If we're inside <w:rPr>, inside <w:style w:type="table">
     bool m_bInTableStyleRunProps;
 
-    std::shared_ptr<SdtHelper> m_pSdtHelper;
+    rtl::Reference<SdtHelper> m_pSdtHelper;
 
     /// Document background color, applied to every page style.
     boost::optional<sal_Int32> m_oBackgroundColor;

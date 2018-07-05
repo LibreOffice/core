@@ -28,10 +28,10 @@
 namespace writerfilter {
 namespace dmapper {
 
-class FormControlHelper
+class FormControlHelper : public writerfilter::SpookyReferenceObject
 {
 public:
-    typedef std::shared_ptr<FormControlHelper> Pointer_t;
+    typedef rtl::Reference<FormControlHelper> Pointer_t;
     FormControlHelper(FieldId eFieldId,
                       css::uno::Reference<css::text::XTextDocument> const& rTextDocument,
                       FFDataHandler::Pointer_t const & pFFData);
@@ -43,7 +43,7 @@ public:
 private:
     FFDataHandler::Pointer_t m_pFFData;
     struct FormControlHelper_Impl;
-    std::shared_ptr<FormControlHelper_Impl> m_pImpl;
+    rtl::Reference<FormControlHelper_Impl> m_pImpl;
 
     bool createCheckbox(css::uno::Reference<css::text::XTextRange> const& xTextRange,
                         const OUString & rControlName);

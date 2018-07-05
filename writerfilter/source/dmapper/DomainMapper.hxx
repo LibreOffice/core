@@ -86,12 +86,12 @@ public:
     virtual void data(const sal_uInt8* buf, size_t len,
                       writerfilter::Reference<Properties>::Pointer_t ref) override;
 
-    void sprmWithProps( Sprm& sprm, const ::std::shared_ptr<PropertyMap>& pContext );
+    void sprmWithProps( Sprm& sprm, const ::rtl::Reference<PropertyMap>& pContext );
 
-    void PushStyleSheetProperties( const ::std::shared_ptr<PropertyMap>& pStyleProperties, bool bAffectTableMngr = false );
+    void PushStyleSheetProperties( const ::rtl::Reference<PropertyMap>& pStyleProperties, bool bAffectTableMngr = false );
     void PopStyleSheetProperties( bool bAffectTableMngr = false );
 
-    void PushListProperties( const ::std::shared_ptr<PropertyMap>& pListProperties );
+    void PushListProperties( const ::rtl::Reference<PropertyMap>& pListProperties );
     void PopListProperties();
 
     bool IsOOXMLImport() const;
@@ -100,7 +100,7 @@ public:
     css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
-    std::shared_ptr< StyleSheetTable > const & GetStyleSheetTable( );
+    rtl::Reference< StyleSheetTable > const & GetStyleSheetTable( );
     GraphicZOrderHelper* graphicZOrderHelper();
     GraphicNamingHelper& GetGraphicNamingHelper();
 
@@ -156,8 +156,8 @@ private:
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
-    static void handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext);
-    void handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap>& rContext, const bool bExchangeLeftRight);
+    static void handleUnderlineType(const Id nId, const ::rtl::Reference<PropertyMap>& rContext);
+    void handleParaJustification(const sal_Int32 nIntValue, const ::rtl::Reference<PropertyMap>& rContext, const bool bExchangeLeftRight);
     static bool getColorFromId(const Id, sal_Int32 &nColor);
     static sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);
     static OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);

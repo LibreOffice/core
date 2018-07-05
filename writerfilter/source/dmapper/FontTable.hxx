@@ -30,9 +30,9 @@ namespace dmapper
 {
 
 struct FontTable_Impl;
-struct FontEntry
+struct FontEntry : public writerfilter::SpookyReferenceObject
 {
-    typedef std::shared_ptr<FontEntry> Pointer_t;
+    typedef rtl::Reference<FontEntry> Pointer_t;
 
     OUString        sFontName;
     sal_Int32       nTextEncoding;
@@ -81,7 +81,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     virtual void lcl_endShape( ) override;
 
 };
-typedef std::shared_ptr< FontTable >          FontTablePtr;
+typedef rtl::Reference< FontTable >          FontTablePtr;
 
 class EmbeddedFontHandler : public LoggedProperties
 {

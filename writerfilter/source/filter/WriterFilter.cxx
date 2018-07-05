@@ -255,7 +255,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
             }
         }
 
-        pStream.reset();
+        pStream.clear();
 
         return true;
     }

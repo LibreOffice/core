@@ -71,12 +71,12 @@ namespace writerfilter {
 namespace ooxml
 {
 
-class OOXMLStream
+class OOXMLStream : public writerfilter::SpookyReferenceObject
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, WEBSETTINGS, FONTTABLE, NUMBERING,
         FOOTNOTES, ENDNOTES, COMMENTS, THEME, CUSTOMXML, CUSTOMXMLPROPS, GLOSSARY, CHARTS, EMBEDDINGS, SETTINGS, VBAPROJECT, FOOTER, HEADER, VBADATA };
-    typedef std::shared_ptr<OOXMLStream> Pointer_t;
+    typedef rtl::Reference<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
 
@@ -114,7 +114,7 @@ public:
     /**
        Pointer to this stream.
     */
-    typedef std::shared_ptr<OOXMLDocument> Pointer_t;
+    typedef rtl::Reference<OOXMLDocument> Pointer_t;
 
     virtual ~OOXMLDocument() {}
 

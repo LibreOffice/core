@@ -17,6 +17,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <rtl/ustring.hxx>
+#include <spookyreferenceobject.hxx>
 
 namespace com
 {
@@ -38,12 +39,12 @@ namespace writerfilter
 namespace rtftok
 {
 /// RTF tokenizer that separates control words from text.
-class RTFTokenizer final
+class RTFTokenizer final : public writerfilter::SpookyReferenceObject
 {
 public:
     RTFTokenizer(RTFListener& rImport, SvStream* pInStream,
                  css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
-    ~RTFTokenizer();
+    ~RTFTokenizer() override;
 
     RTFError resolveParse();
     /// Number of states on the stack.

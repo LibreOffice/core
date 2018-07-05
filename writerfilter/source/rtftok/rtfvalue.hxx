@@ -41,7 +41,7 @@ class RTFPicture;
 class RTFValue : public Value
 {
 public:
-    using Pointer_t = std::shared_ptr<RTFValue>;
+    using Pointer_t = rtl::Reference<RTFValue>;
     RTFValue(int nValue, OUString sValue, RTFSprms rAttributes, RTFSprms rSprms,
              css::uno::Reference<css::drawing::XShape> xShape,
              css::uno::Reference<css::io::XInputStream> xStream,
@@ -79,14 +79,14 @@ public:
 private:
     int m_nValue = 0;
     OUString m_sValue;
-    std::shared_ptr<RTFSprms> m_pAttributes;
-    std::shared_ptr<RTFSprms> m_pSprms;
+    rtl::Reference<RTFSprms> m_pAttributes;
+    rtl::Reference<RTFSprms> m_pSprms;
     css::uno::Reference<css::drawing::XShape> m_xShape;
     css::uno::Reference<css::io::XInputStream> m_xStream;
     css::uno::Reference<css::embed::XEmbeddedObject> m_xObject;
     bool m_bForceString = false;
-    std::shared_ptr<RTFShape> m_pShape;
-    std::shared_ptr<RTFPicture> m_pPicture;
+    rtl::Reference<RTFShape> m_pShape;
+    rtl::Reference<RTFPicture> m_pPicture;
 };
 } // namespace rtftok
 } // namespace writerfilter

@@ -51,8 +51,8 @@ def factoryGetInstance(nsLabel):
 
 OOXMLFactory_ns::Pointer_t OOXMLFactory_%s::getInstance()
 {
-    if (m_pInstance.get() == NULL)
-        m_pInstance.reset(new OOXMLFactory_%s());
+    if (!m_pInstance)
+        m_pInstance = new OOXMLFactory_%s();
 
     return m_pInstance;
 }""" % (nsLabel, nsLabel, nsLabel))

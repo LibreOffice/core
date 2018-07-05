@@ -29,9 +29,9 @@
 namespace writerfilter
 {
 
-class QNameToString
+class QNameToString : public writerfilter::SpookyReferenceObject
 {
-    typedef std::shared_ptr<QNameToString> Pointer_t;
+    typedef rtl::Reference<QNameToString> Pointer_t;
     typedef std::map < Id, std::string > Map;
 
     static Pointer_t pInstance;

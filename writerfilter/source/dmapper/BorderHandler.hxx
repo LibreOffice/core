@@ -67,7 +67,7 @@ public:
     explicit BorderHandler( bool bOOXML );
     virtual ~BorderHandler() override;
 
-    ::std::shared_ptr<PropertyMap>            getProperties();
+    ::rtl::Reference<PropertyMap>            getProperties();
     css::table::BorderLine2 getBorderLine();
     sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
     bool                                        getShadow() { return m_bShadow;}

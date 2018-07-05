@@ -78,7 +78,7 @@ enum GrabBagType
     CHAR_GRAB_BAG
 };
 
-struct RedlineParams
+struct RedlineParams : public writerfilter::SpookyReferenceObject
 {
     OUString  m_sAuthor;
     OUString  m_sDate;
@@ -88,7 +88,7 @@ struct RedlineParams
     css::uno::Sequence< css::beans::PropertyValue > m_aRevertProperties;
 };
 
-typedef std::shared_ptr< RedlineParams > RedlineParamsPtr;
+typedef rtl::Reference< RedlineParams > RedlineParamsPtr;
 
 class PropValue
 {
@@ -114,7 +114,7 @@ public:
     GrabBagType getGrabBagType() const { return m_GrabBagType; }
 };
 
-class PropertyMap
+class PropertyMap : public writerfilter::SpookyReferenceObject
 {
 private:
     // Cache the property values for the GetPropertyValues() call(s).
@@ -143,7 +143,7 @@ public:
     void Erase( PropertyIds eId);
 
     // Imports properties from pMap, overwriting those with the same PropertyIds as the current map
-    void InsertProps( const std::shared_ptr< PropertyMap >& rMap );
+    void InsertProps( const rtl::Reference< PropertyMap >& rMap );
 
     // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
     boost::optional< Property > getProperty( PropertyIds eId ) const;
@@ -177,7 +177,7 @@ protected:
     }
 };
 
-typedef std::shared_ptr< PropertyMap > PropertyMapPtr;
+typedef rtl::Reference< PropertyMap > PropertyMapPtr;
 
 class SectionPropertyMap : public PropertyMap
 {
@@ -380,7 +380,7 @@ public:
     void ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType );
 };
 
-class ParagraphProperties
+class ParagraphProperties : public writerfilter::SpookyReferenceObject
 {
 private:
     bool                                         m_bFrameMode;
@@ -476,7 +476,7 @@ public:
     void ResetFrameProperties();
 };
 
-typedef std::shared_ptr< ParagraphProperties > ParagraphPropertiesPtr;
+typedef rtl::Reference< ParagraphProperties > ParagraphPropertiesPtr;
 
 /*-------------------------------------------------------------------------
     property map of a stylesheet
@@ -562,7 +562,7 @@ public:
     virtual void insertTableProperties( const PropertyMap* ) override;
 };
 
-typedef std::shared_ptr< TablePropertyMap > TablePropertyMapPtr;
+typedef rtl::Reference< TablePropertyMap > TablePropertyMapPtr;
 
 } // namespace dmapper
 } // namespace writerfilter

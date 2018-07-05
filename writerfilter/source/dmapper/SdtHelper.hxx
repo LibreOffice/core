@@ -15,6 +15,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <spookyreferenceobject.hxx>
 
 namespace com
 {
@@ -43,7 +44,7 @@ class DomainMapper_Impl;
  * w:sdt tokens can't be imported as form fields, as w:sdt supports
  * e.g. date picking as well.
  */
-class SdtHelper final
+class SdtHelper final : public writerfilter::SpookyReferenceObject
 {
     DomainMapper_Impl& m_rDM_Impl;
 

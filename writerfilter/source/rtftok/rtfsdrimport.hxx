@@ -14,6 +14,7 @@
 #include <vector>
 
 #include <dmapper/GraphicZOrderHelper.hxx>
+#include <spookyreferenceobject.hxx>
 
 namespace com
 {
@@ -47,7 +48,7 @@ class RTFDocumentImpl;
 class RTFShape;
 
 /// Handles the import of drawings using RTF markup.
-class RTFSdrImport final
+class RTFSdrImport final : public writerfilter::SpookyReferenceObject
 {
 public:
     RTFSdrImport(RTFDocumentImpl& rDocument,

@@ -64,9 +64,9 @@ struct AttributeInfo
     Id m_nRef;
 };
 
-class OOXMLFactory_ns {
+class OOXMLFactory_ns : public writerfilter::SpookyReferenceObject {
 public:
-    typedef std::shared_ptr<OOXMLFactory_ns> Pointer_t;
+    typedef rtl::Reference<OOXMLFactory_ns> Pointer_t;
 
     virtual void startAction(OOXMLFastContextHandler * pHandler);
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);

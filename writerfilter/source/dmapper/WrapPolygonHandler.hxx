@@ -29,11 +29,11 @@
 namespace writerfilter {
 namespace dmapper {
 
-class WrapPolygon final
+class WrapPolygon final : public writerfilter::SpookyReferenceObject
 {
 public:
     typedef std::vector<css::awt::Point> Points_t;
-    typedef ::std::shared_ptr<WrapPolygon> Pointer_t;
+    typedef ::rtl::Reference<WrapPolygon> Pointer_t;
 
 private:
     Points_t mPoints;

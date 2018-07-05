@@ -31,7 +31,7 @@ namespace ooxml
 class OOXMLValue : public Value
 {
 public:
-    typedef std::shared_ptr<OOXMLValue> Pointer_t;
+    typedef rtl::Reference<OOXMLValue> Pointer_t;
     OOXMLValue();
     virtual ~OOXMLValue() override;
 
@@ -50,7 +50,7 @@ public:
 class OOXMLProperty : public Sprm
 {
 public:
-    typedef std::shared_ptr<OOXMLProperty> Pointer_t;
+    typedef rtl::Reference<OOXMLProperty> Pointer_t;
     enum Type_t { SPRM, ATTRIBUTE };
 private:
     Id mId;
@@ -138,7 +138,7 @@ class OOXMLPropertySet : public writerfilter::Reference<Properties>
 {
 public:
     typedef std::vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
-    typedef std::shared_ptr<OOXMLPropertySet> Pointer_t;
+    typedef rtl::Reference<OOXMLPropertySet> Pointer_t;
 private:
     OOXMLProperties_t mProperties;
     void add(const OOXMLProperty::Pointer_t& pProperty);
@@ -166,7 +166,7 @@ class OOXMLValue;
 class OOXMLTable : public writerfilter::Reference<Table>
 {
 public:
-    typedef std::shared_ptr<OOXMLValue> ValuePointer_t;
+    typedef rtl::Reference<OOXMLValue> ValuePointer_t;
     OOXMLTable();
     virtual ~OOXMLTable();
 
