@@ -90,6 +90,7 @@ public:
         OLE,
         OutlineText,
         Pivot,
+        Printpreview,
         Series,
         SlidesorterPage,
         Table,

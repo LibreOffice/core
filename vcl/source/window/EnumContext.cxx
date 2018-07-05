@@ -160,9 +160,6 @@ void EnumContext::ProvideContextContainers()
     if (!maContextMap.empty())
         return;
 
-    AddEntry("any", Context::Any);
-    AddEntry("default", Context::Default);
-    AddEntry("empty", Context::Empty);
     AddEntry("3DObject", Context::ThreeDObject);
     AddEntry("Annotation", Context::Annotation);
     AddEntry("Auditing", Context::Auditing);
@@ -188,6 +185,7 @@ void EnumContext::ProvideContextContainers()
     AddEntry("OLE", Context::OLE);
     AddEntry("OutlineText", Context::OutlineText);
     AddEntry("Pivot", Context::Pivot);
+    AddEntry("Printpreview", Context::Printpreview);
     AddEntry("Series", Context::Series);
     AddEntry("SlidesorterPage", Context::SlidesorterPage);
     AddEntry("Table", Context::Table);
@@ -196,6 +194,10 @@ void EnumContext::ProvideContextContainers()
     AddEntry("Trendline", Context::Trendline);
     AddEntry("Printpreview", Context::Printpreview);
 
+    // other general contexts
+    AddEntry("any", Context::Any);
+    AddEntry("default", Context::Default);
+    AddEntry("empty", Context::Empty);
 }
 
 EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsContextName)
