@@ -38,6 +38,6 @@
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayerWindow.hpp>
 
-#endif // _VLCCOMMOM_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_VLC_VLCCOMMON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

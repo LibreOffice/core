@@ -52,6 +52,6 @@
 #define AVMEDIA_QUICKTIME_WINDOW_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Window_QuickTime"
 #define AVMEDIA_QUICKTIME_WINDOW_SERVICENAME "com.sun.star.media.Window_QuickTime"
 
-#endif // _QUICKTIMECOMMOM_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_QUICKTIME_QUICKTIMECOMMON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
