@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="xsec_xmlsec" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.xml.crypto.NSSInitializer"
     constructor="com_sun_star_xml_crypto_NSSInitializer_get_implementation">
     <service name="com.sun.star.xml.crypto.NSSInitializer"/>
@@ -27,7 +27,8 @@
     constructor="com_sun_star_xml_crypto_SEInitializer_get_implementation">
     <service name="com.sun.star.xml.crypto.SEInitializer"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.SEInitializer_Gpg">
+  <implementation name="com.sun.star.xml.security.SEInitializer_Gpg"
+    constructor="com_sun_star_xml_security_SEInitializer_Gpg_get_implementation">
     <service name="com.sun.star.xml.crypto.GPGSEInitializer"/>
   </implementation>
   <implementation name="com.sun.star.xml.crypto.SecurityEnvironment"

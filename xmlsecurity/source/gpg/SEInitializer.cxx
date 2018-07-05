@@ -22,7 +22,6 @@ using namespace css::lang;
 using namespace css::uno;
 using namespace css::xml::crypto;
 
-
 SEInitializerGpg::SEInitializerGpg()
 {
     // Also init GpgME while we're at it
@@ -57,28 +56,7 @@ void SAL_CALL SEInitializerGpg::freeSecurityContext( const uno::Reference< XXMLS
 {
 }
 
-
-
-uno::Reference< uno::XInterface > SAL_CALL SEInitializerGpg::impl_createInstance( const uno::Reference< lang::XMultiServiceFactory > & /*rxMSF*/)
-{
-    return static_cast<cppu::OWeakObject*>(new SEInitializerGpg());
-}
-
-uno::Reference< XSingleServiceFactory > SEInitializerGpg::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return cppu::createSingleFactory( aServiceManager, impl_getImplementationName(), impl_createInstance, impl_getSupportedServiceNames() ) ;
-}
-
 /* XServiceInfo */
-OUString SEInitializerGpg::impl_getImplementationName()
-{
-    return OUString("com.sun.star.xml.security.SEInitializer_Gpg");
-}
-
-uno::Sequence< OUString > SEInitializerGpg::impl_getSupportedServiceNames()
-{
-    return {"com.sun.star.xml.crypto.GPGSEInitializer"};
-}
-
 sal_Bool SAL_CALL SEInitializerGpg::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
@@ -86,12 +64,19 @@ sal_Bool SAL_CALL SEInitializerGpg::supportsService( const OUString& rServiceNam
 
 uno::Sequence< OUString > SAL_CALL SEInitializerGpg::getSupportedServiceNames()
 {
-    return impl_getSupportedServiceNames();
+    return {"com.sun.star.xml.crypto.GPGSEInitializer"};
 }
 
 OUString SAL_CALL SEInitializerGpg::getImplementationName()
 {
-    return impl_getImplementationName();
+    return OUString("com.sun.star.xml.security.SEInitializer_Gpg");
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_security_SEInitializer_Gpg_get_implementation(
+    uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SEInitializerGpg());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
