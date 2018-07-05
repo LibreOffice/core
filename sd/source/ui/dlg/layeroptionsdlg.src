@@ -30,14 +30,14 @@ ModalDialog DLG_INSERT_LAYER
     HelpID = CMD_SID_INSERTLAYER ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 172 ) ;
+    Size = MAP_APPFONT ( 200, 172 ) ;
     Text [ en-US ] = "Insert Layer" ;
     Moveable = TRUE ;
 
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 188 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 188, 8 ) ;
         Text [ en-US ] = "~Name" ;
     };
 
@@ -45,15 +45,15 @@ ModalDialog DLG_INSERT_LAYER
     {
         HelpID = "sd:Edit:DLG_INSERT_LAYER:EDT_NAME";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 188 , 12 ) ;
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT ( 188, 12 ) ;
         TabStop = TRUE ;
     };
 
     FixedText FT_TITLE
     {
-        Pos = MAP_APPFONT ( 6 , 32 ) ;
-        Size = MAP_APPFONT ( 188 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 32 ) ;
+        Size = MAP_APPFONT ( 188, 8 ) ;
         Text [ en-US ] = "~Title" ;
     };
 
@@ -61,15 +61,15 @@ ModalDialog DLG_INSERT_LAYER
     {
         HelpID = "sd:Edit:DLG_INSERT_LAYER:EDT_TITLE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 188 , 12 ) ;
+        Pos = MAP_APPFONT ( 6, 43 ) ;
+        Size = MAP_APPFONT ( 188, 12 ) ;
         TabStop = TRUE ;
     };
 
     FixedText FT_DESCRIPTION
     {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
-        Size = MAP_APPFONT ( 188 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 58 ) ;
+        Size = MAP_APPFONT ( 188, 8 ) ;
         Text [ en-US ] = "~Description" ;
     };
 
@@ -77,8 +77,8 @@ ModalDialog DLG_INSERT_LAYER
     {
         HelpID = "sd:MultiLineEdit:DLG_INSERT_LAYER:EDT_DESCRIPTION";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 69 ) ;
-        Size = MAP_APPFONT ( 188 , 34 ) ;
+        Pos = MAP_APPFONT ( 6, 69 ) ;
+        Size = MAP_APPFONT ( 188, 34 ) ;
         TabStop = TRUE ;
         IgnoreTab = TRUE;
         VScroll = TRUE;
@@ -87,8 +87,8 @@ ModalDialog DLG_INSERT_LAYER
     CheckBox CBX_VISIBLE
     {
         HelpID = "sd:CheckBox:DLG_INSERT_LAYER:CBX_VISIBLE";
-        Pos = MAP_APPFONT ( 6 , 106 ) ;
-        Size = MAP_APPFONT ( 188 , 10 ) ;
+        Pos = MAP_APPFONT ( 6, 106 ) ;
+        Size = MAP_APPFONT ( 188, 10 ) ;
         Text [ en-US ] = "~Visible" ;
         TabStop = TRUE ;
     };
@@ -96,8 +96,8 @@ ModalDialog DLG_INSERT_LAYER
     CheckBox CBX_PRINTABLE
     {
         HelpID = "sd:CheckBox:DLG_INSERT_LAYER:CBX_PRINTABLE";
-        Pos = MAP_APPFONT ( 6 , 119 ) ;
-        Size = MAP_APPFONT ( 188 , 10 ) ;
+        Pos = MAP_APPFONT ( 6, 119 ) ;
+        Size = MAP_APPFONT ( 188, 10 ) ;
         Text [ en-US ] = "~Printable" ;
         TabStop = TRUE ;
     };
@@ -105,82 +105,37 @@ ModalDialog DLG_INSERT_LAYER
     CheckBox CBX_LOCKED
     {
         HelpID = "sd:CheckBox:DLG_INSERT_LAYER:CBX_LOCKED";
-        Pos = MAP_APPFONT ( 6 , 132 ) ;
-        Size = MAP_APPFONT ( 188 , 10 ) ;
+        Pos = MAP_APPFONT ( 6, 132 ) ;
+        Size = MAP_APPFONT ( 188, 10 ) ;
         Text [ en-US ] = "~Locked" ;
         TabStop = TRUE ;
     };
 
-    // divider
+    // Divider
     FixedLine FL_SEPARATOR_B
     {
-        Pos = MAP_APPFONT ( 0 , 144 ) ;
-        Size = MAP_APPFONT ( 200 , 4 ) ;
+        Pos = MAP_APPFONT ( 0, 144 ) ;
+        Size = MAP_APPFONT ( 200, 4 ) ;
     };
 
     // Buttons
     HelpButton BTN_HELP
     {
         Pos = MAP_APPFONT ( 6, 152 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 200 - (50 + 50 + 9), 152) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
         Pos = MAP_APPFONT ( 200 - (50 + 6), 152) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
