@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_1794c643",
+        "filename": ".git-hooks/commit-msg",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-05T09:03:46Z",
+      "side": 1,
+      "message": "This change must\u0027ve been included accidentaly -- please don\u0027t delete content of this file",
+      "revId": "d244cf16ccdc31ee470b60dd7635c21cce7ca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_778e722f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-05T09:03:46Z",
+      "side": 1,
+      "message": "So the navigator doesn\u0027t work drag mode doesn\u0027t work anymore after this change? :)",
+      "revId": "d244cf16ccdc31ee470b60dd7635c21cce7ca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_57836e05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-05T09:03:46Z",
+      "side": 1,
+      "message": "No seriously, I\u0027d use this sentence as the title of the commit and then explain the details in its body",
+      "revId": "d244cf16ccdc31ee470b60dd7635c21cce7ca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_9789f627",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2810,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-05T09:03:46Z",
+      "side": 1,
+      "message": "Hm, this is a generic code for all popup menus -- it is not recommended to include a code that works for one very specific context menu here.\n\nOr is this just some debug code you\u0027ve forgotten to delete?",
+      "revId": "d244cf16ccdc31ee470b60dd7635c21cce7ca05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
