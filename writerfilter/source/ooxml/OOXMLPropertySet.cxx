@@ -38,7 +38,7 @@ OOXMLProperty::OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue,
 }
 
 OOXMLProperty::OOXMLProperty(const OOXMLProperty & rSprm)
-: mId(rSprm.mId), mpValue(rSprm.mpValue), meType(rSprm.meType)
+: SvRefBase(), mId(rSprm.mId), mpValue(rSprm.mpValue), meType(rSprm.meType)
 {
 }
 
@@ -394,9 +394,15 @@ void OOXMLPropertySet::add(const OOXMLPropertySet::Pointer_t& pPropertySet)
 
     if (pSet != nullptr)
     {
-        mProperties.reserve(mProperties.size() + pSet->mProperties.size());
-        for (const auto& aIt: pSet->mProperties)
-            add(aIt);
+        int x = mProperties.size();
+        mProperties.resize(mProperties.size() + pSet->mProperties.size());
+        auto itSrc = pSet->mProperties.begin();
+        auto itDest = mProperties.begin() + x;
+        while (itSrc != pSet->mProperties.end())
+        {
+            *itDest = *itSrc;
+            ++itDest; ++itSrc;
+        }
     }
 }
 

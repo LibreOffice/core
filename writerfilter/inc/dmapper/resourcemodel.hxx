@@ -25,6 +25,8 @@
 #include <sal/types.h>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <tools/ref.hxx>
+
 /**
    @file resourcemodel.hxx
 
@@ -76,7 +78,7 @@ namespace writerfilter {
 */
 
 template <class T>
-class SAL_DLLPUBLIC_TEMPLATE Reference
+class SAL_DLLPUBLIC_TEMPLATE Reference : public virtual SvRefBase
 {
 public:
     /**
@@ -85,7 +87,7 @@ public:
         @attention The ownership of a reference is transferred when
         the reference is passed.
     */
-    typedef std::shared_ptr< Reference<T> > Pointer_t;
+    typedef tools::SvRef< Reference<T> > Pointer_t;
 
     /**
        Resolves the reference.
@@ -98,7 +100,7 @@ public:
     virtual void resolve(T & rHandler) = 0;
 
 protected:
-    ~Reference() {}
+    ~Reference() override {}
 };
 
 class Value;
@@ -107,7 +109,7 @@ class Sprm;
 /**
    Handler for properties.
  */
-class Properties
+class Properties : public virtual SvRefBase
 {
 public:
     /**
@@ -126,16 +128,16 @@ public:
     virtual void sprm(Sprm & sprm) = 0;
 
 protected:
-    ~Properties() {}
+    ~Properties() override {}
 };
 
 /**
    Handler for tables.
  */
-class Table
+class Table : public virtual SvRefBase
 {
 public:
-    typedef std::shared_ptr<Table> Pointer_t;
+    typedef tools::SvRef<Table> Pointer_t;
 
     /**
        Receives an entry of the table.
@@ -146,7 +148,7 @@ public:
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
 
 protected:
-    ~Table() {}
+    ~Table() override {}
 };
 
 /**
@@ -176,14 +178,14 @@ const sal_uInt8 cFieldEnd = 0x15;
 /**
    Handler for a stream.
  */
-class Stream
+class Stream : public virtual SvRefBase
 {
 public:
 
     /**
        Pointer to this stream.
      */
-    typedef std::shared_ptr<Stream> Pointer_t;
+    typedef tools::SvRef<Stream> Pointer_t;
 
     /**
        Receives start mark for group with the same section properties.
@@ -298,7 +300,7 @@ public:
     virtual void endGlossaryEntry() = 0;
 
 protected:
-    ~Stream() {}
+    ~Stream() override {}
 };
 
 /**
@@ -308,15 +310,13 @@ protected:
    makes no sense for a certain value, e.g. the integer value of a
    string.
  */
-class Value
+class Value : public virtual SvRefBase
 {
 public:
     /**
        Pointer to a value.
      */
-    typedef std::unique_ptr<Value> Pointer_t;
-
-    virtual ~Value() {}
+    typedef tools::SvRef<Value> Pointer_t;
 
     /**
        Returns integer representation of the value.
@@ -355,10 +355,10 @@ public:
    An SPRM: Section, Paragraph and Run Modifier
 
  */
-class Sprm
+class Sprm : public virtual SvRefBase
 {
 public:
-    typedef std::unique_ptr<Sprm> Pointer_t;
+    typedef tools::SvRef<Sprm> Pointer_t;
 
     /**
        Returns id of the SPRM.
@@ -391,7 +391,7 @@ public:
 #endif
 
 protected:
-    ~Sprm() {}
+    ~Sprm() override {}
 };
 
 typedef sal_Int32 Token_t;

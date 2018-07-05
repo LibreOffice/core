@@ -64,9 +64,9 @@ struct AttributeInfo
     Id m_nRef;
 };
 
-class OOXMLFactory_ns {
+class OOXMLFactory_ns : public virtual SvRefBase {
 public:
-    typedef std::shared_ptr<OOXMLFactory_ns> Pointer_t;
+    typedef tools::SvRef<OOXMLFactory_ns> Pointer_t;
 
     virtual void startAction(OOXMLFastContextHandler * pHandler);
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);
@@ -74,7 +74,7 @@ public:
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, const OOXMLValue::Pointer_t& pValue);
 
 protected:
-    virtual ~OOXMLFactory_ns();
+    virtual ~OOXMLFactory_ns() override;
 
 public:
     virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue) = 0;

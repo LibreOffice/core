@@ -57,7 +57,7 @@ class OOXMLStreamImpl : public OOXMLStream
                        const OUString & rId,
                        OUString & rDocumentTarget);
 public:
-    typedef std::shared_ptr<OOXMLStreamImpl> Pointer_t;
+    typedef tools::SvRef<OOXMLStreamImpl> Pointer_t;
 
     OOXMLStreamImpl
     (OOXMLStreamImpl const & rStream, StreamType_t nType);
