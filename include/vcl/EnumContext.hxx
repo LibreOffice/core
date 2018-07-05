@@ -90,13 +90,14 @@ public:
         OLE,
         OutlineText,
         Pivot,
+        Printpreview,
         Series,
         SlidesorterPage,
         Table,
         Text,
         TextObject,
         Trendline,
-        Printpreview,
+
         // Default context of an application.  Do we need this?
         Default,
 
