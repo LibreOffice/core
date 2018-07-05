@@ -19,7 +19,7 @@
 
 #include <Qt5Graphics.hxx>
 #include <Qt5FontFace.hxx>
-#include "Qt5Font.hxx"
+#include <Qt5Font.hxx>
 #include <Qt5Painter.hxx>
 
 #include <vcl/fontcharmap.hxx>
@@ -56,6 +56,7 @@ void Qt5Graphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
 void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
 {
     QRawFont aRawFont(QRawFont::fromFont(*m_pTextStyle[nFallbackLevel]));
+    Qt5FontFace::fillAttributesFromQFont(*m_pTextStyle[nFallbackLevel], *rFMD);
 
     QByteArray aHheaTable = aRawFont.fontTable("hhea");
     std::vector<uint8_t> rHhea(aHheaTable.data(), aHheaTable.data() + aHheaTable.size());
@@ -65,6 +66,7 @@ void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
 
     rFMD->ImplCalcLineSpacing(rHhea, rOS2, aRawFont.unitsPerEm());
 
+    rFMD->SetSlant(0);
     rFMD->SetWidth(aRawFont.averageCharWidth());
 
     rFMD->SetMinKashida(m_pTextStyle[nFallbackLevel]->GetKashidaWidth());
@@ -146,10 +148,21 @@ bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& r
 
 bool Qt5Graphics::GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) { return false; }
 
+class Qt5CommonSalLayout : public GenericSalLayout
+{
+public:
+    Qt5CommonSalLayout(LogicalFontInstance& rLFI)
+        : GenericSalLayout(rLFI)
+    {
+    }
+
+    void SetOrientation(int nOrientation) { mnOrientation = nOrientation; }
+};
+
 std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFallbackLevel)
 {
     if (m_pTextStyle[nFallbackLevel])
-        return std::unique_ptr<SalLayout>(new GenericSalLayout(*m_pTextStyle[nFallbackLevel]));
+        return std::unique_ptr<SalLayout>(new Qt5CommonSalLayout(*m_pTextStyle[nFallbackLevel]));
     return std::unique_ptr<SalLayout>();
 }
 
@@ -162,6 +175,14 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
     QVector<quint32> glyphIndexes;
     QVector<QPointF> positions;
 
+    // prevent glyph rotation inside the SalLayout
+    // probably better to add a parameter to GetNextGlyphs?
+    Qt5CommonSalLayout* pQt5Layout
+        = static_cast<Qt5CommonSalLayout*>(const_cast<GenericSalLayout*>(&rLayout));
+    int nOrientation = rLayout.GetOrientation();
+    if (nOrientation)
+        pQt5Layout->SetOrientation(0);
+
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
@@ -171,6 +192,9 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
         positions.push_back(QPointF(aPos.X(), aPos.Y()));
     }
 
+    if (nOrientation)
+        pQt5Layout->SetOrientation(nOrientation);
+
     QGlyphRun aGlyphRun;
     aGlyphRun.setPositions(positions);
     aGlyphRun.setGlyphIndexes(glyphIndexes);
@@ -179,6 +203,21 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
     Qt5Painter aPainter(*this);
     QColor aColor = toQColor(m_aTextColor);
     aPainter.setPen(aColor);
+
+    if (nOrientation)
+    {
+        // make text position the center of the rotation
+        // then rotate and move back
+        QRect window = aPainter.window();
+        window.moveTo(-positions[0].x(), -positions[0].y());
+        aPainter.setWindow(window);
+
+        QTransform p;
+        p.rotate(-static_cast<qreal>(nOrientation) / 10.0);
+        p.translate(-positions[0].x(), -positions[0].y());
+        aPainter.setTransform(p);
+    }
+
     aPainter.drawGlyphRun(QPointF(), aGlyphRun);
 }
 

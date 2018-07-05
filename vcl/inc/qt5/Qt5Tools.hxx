@@ -49,7 +49,7 @@ inline QRect toQRect(const tools::Rectangle& rRect)
 
 inline tools::Rectangle toRectangle(const QRect& rRect)
 {
-    return tools::Rectangle(rRect.left(), rRect.top(), rRect.width(), rRect.height());
+    return tools::Rectangle(rRect.left(), rRect.top(), rRect.right(), rRect.bottom());
 }
 
 inline QSize toQSize(const Size& rSize) { return QSize(rSize.Width(), rSize.Height()); }

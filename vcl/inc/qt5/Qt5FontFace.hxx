@@ -37,6 +37,7 @@ public:
     virtual ~Qt5FontFace() override;
 
     static Qt5FontFace* fromQFont(const QFont& rFont);
+    static void fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA);
 
     sal_IntPtr GetFontId() const override;
 
