@@ -86,7 +86,7 @@ void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nV
     maAttributeValues.push_back( maAttributeValues.back() + nValueLength + 1 );
     if (maAttributeValues.back() > mnChunkLength)
     {
-        mnChunkLength = maAttributeValues.back();
+        mnChunkLength = std::max(mnChunkLength * 2, maAttributeValues.back());
         mpChunk = static_cast<sal_Char *>(realloc( mpChunk, mnChunkLength ));
     }
     strncpy(mpChunk + nWritePosition, pValue, nValueLength);
@@ -166,6 +166,11 @@ bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const
     return false;
 }
 
+sal_Int32 FastAttributeList::getAsIntegerByIndex( sal_Int32 nTokenIndex ) const
+{
+    return rtl_str_toInt32( getFastAttributeValue(nTokenIndex), 10 );
+}
+
 bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
 {
     rDouble = 0.0;
@@ -193,6 +198,12 @@ bool FastAttributeList::getAsChar( sal_Int32 nToken, const char*& rPos ) const
     return false;
 }
 
+const char* FastAttributeList::getAsCharByIndex( sal_Int32 nTokenIndex ) const
+{
+    sal_Int32 nOffset = maAttributeValues[nTokenIndex];
+    return mpChunk + nOffset;
+}
+
 OUString FastAttributeList::getValue( ::sal_Int32 Token )
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
@@ -200,6 +211,11 @@ OUString FastAttributeList::getValue( ::sal_Int32 Token )
             return OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
 
     throw SAXException();
+}
+
+OUString FastAttributeList::getValueByIndex( ::sal_Int32 nTokenIndex ) const
+{
+    return OUString( getFastAttributeValue(nTokenIndex), AttributeValueLength(nTokenIndex), RTL_TEXTENCODING_UTF8 );
 }
 
 OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token )
