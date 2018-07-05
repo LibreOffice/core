@@ -88,7 +88,7 @@ public class ScChartsObj extends TestCase {
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document
-    * and takes one of them. Inserts some values into the cells of the some cell
+    * and takes one of them. Inserts some values into the cells of the same cell
     * range address. Obtains the collection of the charts using the interface
     * <code>XTableChartsSupplier</code>. Creates and adds the chart that using
     * the data from the cells of this cell range address. Collection of

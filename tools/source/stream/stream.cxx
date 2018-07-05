@@ -1418,7 +1418,7 @@ bool checkSeek(SvStream &rSt, sal_uInt64 nOffset)
     return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
 }
 
-//STREAM_SEEK_TO_END in the some of the Seek backends is special cased to be
+//STREAM_SEEK_TO_END in some of the Seek backends is special cased to be
 //efficient, in others e.g. SotStorageStream it's really horribly slow, and in
 //those this should be overridden
 sal_uInt64 SvStream::remainingSize()

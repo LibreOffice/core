@@ -127,7 +127,7 @@ public:
         used by the SFX as factories.  They only set the initial pane
         configuration, nothing more.
 
-        So what we do here in essence is to return on of the
+        So what we do here in essence is to return one of the
         ViewShellFactoryIds that can be used to select the factory that
         creates the ViewShellBase subclass with the initial pane
         configuration that has in the center pane a view shell of the same

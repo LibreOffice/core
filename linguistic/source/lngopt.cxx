@@ -368,7 +368,7 @@ void SAL_CALL
     {
         bDisposing = true;
 
-        //! its too late to save the options here!
+        //! it's too late to save the options here!
         // (see AppExitListener for saving)
         //aOpt.Save();  // save (possible) changes before exiting
 

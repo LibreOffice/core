@@ -584,7 +584,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 
     if (aTmp.GetFamilyName() == "StarSymbol" && m_xFontLB->find_text(aTmp.GetFamilyName()) == -1)
     {
-        //if for some reason, like font in an old document, StarSymbol is requested and its not available, then
+        //if for some reason, like font in an old document, StarSymbol is requested and it's not available, then
         //try OpenSymbol instead
         aTmp.SetFamilyName("OpenSymbol");
     }

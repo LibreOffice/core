@@ -207,7 +207,7 @@ void JobData::setEvent( const OUString& sEvent ,
     setAlias(sAlias);
 
     SolarMutexGuard g;
-    // take over the new information - which differ against set on of method setAlias()!
+    // take over the new information - which differ against set one of method setAlias()!
     m_sEvent = sEvent;
     m_eMode  = E_EVENT;
 }
