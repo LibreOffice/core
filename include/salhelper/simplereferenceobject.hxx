@@ -93,16 +93,20 @@ protected:
 
     oslInterlockedCount m_nCount;
 
-private:
-    /** not implemented
-     */
+public:
+#if defined LIBO_INTERNAL_ONLY
+    /** These are only here so that subclasses get the default implicits */
+    SimpleReferenceObject(SimpleReferenceObject const &) {}
+    SimpleReferenceObject(SimpleReferenceObject&&) {}
+    void operator=(SimpleReferenceObject const &) {}
+    void operator=(SimpleReferenceObject &&) {}
+#else
     SimpleReferenceObject(SimpleReferenceObject &) SAL_DELETED_FUNCTION;
-
-    /** not implemented
-     */
     void operator =(SimpleReferenceObject) SAL_DELETED_FUNCTION;
-
+#endif
     /// @cond INTERNAL
+
+private:
 
 #ifdef _MSC_VER
 /* We can't now have these private with MSVC2008 at least, it leads to
