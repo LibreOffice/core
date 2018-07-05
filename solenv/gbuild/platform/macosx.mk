@@ -302,6 +302,14 @@ $(call gb_Helper_abbreviate_dirs,\
 	rm -f $${DYLIB_FILE})
 endef
 
+define gb_LinkTarget__command_symlink_udk_versioned_library
+	$(if $(call gb_Library_is_udk_versioned,$(1)),
+		$(call gb_Helper_abbreviate_dirs,\
+			rm -f $(1).$(gb_UDK_MAJOR) $(notdir $(1)).$(gb_UDK_MAJOR) && \
+			ln $(1) $(1).$(gb_UDK_MAJOR) && \
+			ln $(1) $(notdir $(1)).$(gb_UDK_MAJOR) ))
+endef
+
 # parameters: 1-linktarget 2-cobjects 3-cxxobjects
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
@@ -317,6 +325,7 @@ endef
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(if $(filter Library GoogleTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter Library,$(TARGETTYPE)),$(call gb_LinkTarget__command_symlink_udk_versioned_library,$(1)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
