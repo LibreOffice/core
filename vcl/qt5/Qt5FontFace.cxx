@@ -18,7 +18,7 @@
  */
 
 #include <Qt5FontFace.hxx>
-#include "Qt5Font.hxx"
+#include <Qt5Font.hxx>
 #include <Qt5Tools.hxx>
 
 #include <sft.hxx>
@@ -41,13 +41,67 @@ Qt5FontFace::Qt5FontFace(const Qt5FontFace& rSrc)
         m_xCharMap = rSrc.m_xCharMap;
 }
 
+void Qt5FontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA)
+{
+    QFontInfo aFontInfo(rFont);
+
+    rFA.SetFamilyName(toOUString(aFontInfo.family()));
+    if (IsStarSymbol(toOUString(aFontInfo.family())))
+        rFA.SetSymbolFlag(true);
+    rFA.SetStyleName(toOUString(aFontInfo.styleName()));
+    rFA.SetPitch(aFontInfo.fixedPitch() ? PITCH_FIXED : PITCH_VARIABLE);
+
+    FontWeight eWeight = WEIGHT_DONTKNOW;
+    switch (aFontInfo.weight())
+    {
+        case QFont::Thin:
+            eWeight = WEIGHT_THIN;
+            break;
+        case QFont::ExtraLight:
+            eWeight = WEIGHT_ULTRALIGHT;
+            break;
+        case QFont::Light:
+            eWeight = WEIGHT_LIGHT;
+            break;
+        case QFont::Normal:
+            eWeight = WEIGHT_NORMAL;
+            break;
+        case QFont::Medium:
+            eWeight = WEIGHT_MEDIUM;
+            break;
+        case QFont::DemiBold:
+            eWeight = WEIGHT_SEMIBOLD;
+            break;
+        case QFont::Bold:
+            eWeight = WEIGHT_BOLD;
+            break;
+        case QFont::ExtraBold:
+            eWeight = WEIGHT_ULTRABOLD;
+            break;
+        case QFont::Black:
+            eWeight = WEIGHT_BLACK;
+            break;
+    }
+    rFA.SetWeight(eWeight);
+
+    switch (aFontInfo.style())
+    {
+        case QFont::StyleNormal:
+            rFA.SetItalic(ITALIC_NONE);
+            break;
+        case QFont::StyleItalic:
+            rFA.SetItalic(ITALIC_NORMAL);
+            break;
+        case QFont::StyleOblique:
+            rFA.SetItalic(ITALIC_OBLIQUE);
+            break;
+    }
+}
+
 Qt5FontFace* Qt5FontFace::fromQFont(const QFont& rFont)
 {
     FontAttributes aFA;
-    aFA.SetFamilyName(toOUString(rFont.family()));
-    aFA.SetStyleName(toOUString(rFont.styleName()));
-    aFA.SetItalic(rFont.italic() ? ITALIC_NORMAL : ITALIC_NONE);
-
+    fillAttributesFromQFont(rFont, aFA);
     return new Qt5FontFace(aFA, rFont.toString());
 }
 
