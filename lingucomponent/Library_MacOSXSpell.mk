@@ -60,11 +60,6 @@ $(eval $(call gb_Library_add_libs,MacOSXSpell,\
 	-framework CoreFoundation \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,MacOSXSpell,\
-	lingucomponent/source/spellcheck/macosxspell/macreg \
-	lingucomponent/source/spellcheck/macosxspell/macspellimp \
-))
-
 $(eval $(call gb_Library_add_cxxflags,MacOSXSpell,\
     -x -objective-c++ -stdlib=libc++ \
 ))

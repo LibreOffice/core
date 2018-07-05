@@ -62,10 +62,12 @@ $(eval $(call gb_Library_use_externals,spell,\
 	hunspell \
 ))
 
+ifneq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_exception_objects,spell,\
 	lingucomponent/source/spellcheck/spell/sreg \
 	lingucomponent/source/spellcheck/spell/sspellimp \
 ))
+endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_libs,spell,\
