@@ -98,7 +98,9 @@ void ScRecursionHelper::Clear()
 
 bool ScRecursionHelper::PushFormulaGroup(ScFormulaCellGroup* pGrp)
 {
-    assert(pGrp);
+    if (!pGrp)
+        return false;
+
     if (pGrp->mbSeenInPath)
     {
         // Found a simple cycle of formula-groups.

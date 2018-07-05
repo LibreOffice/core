@@ -1541,14 +1541,18 @@ void ScFormulaCell::Interpret()
 
 #if DEBUG_CALCULATION
         aDC.enterGroup();
-        bool bGroupInterpreted = InterpretFormulaGroup();
-        aDC.leaveGroup();
-        if (!bGroupInterpreted)
-            InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
-#else
-        if (!InterpretFormulaGroup())
-            InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
 #endif
+
+        bool bGroupInterpreted = InterpretFormulaGroup();
+
+#if DEBUG_CALCULATION
+        aDC.leaveGroup();
+#endif
+        if (!bGroupInterpreted)
+        {
+            ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, mxGroup.get());
+            InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
+        }
 
         pDocument->DecInterpretLevel();
     }
