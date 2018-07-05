@@ -27,6 +27,7 @@
 
 #include <svx/svdpage.hxx>
 #include <editeng/outlobj.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
@@ -222,7 +223,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                     SvGlobalName aObjClsId( xObj->getClassID() );
                     if ( SotExchange::IsChart( aObjClsId ) )
                     {   // yes, it's a chart diagram
-                        mrObjMgr.AddObj( new XclExpChartObj( mrObjMgr, rxShape, pChildAnchor ) );
+                        mrObjMgr.AddObj( o3tl::make_unique<XclExpChartObj>( mrObjMgr, rxShape, pChildAnchor ) );
                         pCurrXclObj = nullptr;     // no metafile or whatsoever
                     }
                     else    // metafile and OLE object
@@ -265,7 +266,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     }
     if ( pCurrXclObj )
     {
-        if ( !mrObjMgr.AddObj( pCurrXclObj ) )
+        if ( !mrObjMgr.AddObj( std::unique_ptr<XclObj>(pCurrXclObj) ) )
         {   // maximum count reached, object got deleted
             pCurrXclObj = nullptr;
         }
@@ -353,9 +354,8 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
         // escher data of last shape not written? -> delete it from object list
         if( nShapeID == 0 )
         {
-            XclObj* pLastObj = mrObjMgr.RemoveLastObj();
-            OSL_ENSURE( pLastObj == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
-            DELETEZ( pLastObj );
+            std::unique_ptr<XclObj> pLastObj = mrObjMgr.RemoveLastObj();
+            OSL_ENSURE( pLastObj.get() == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
             pCurrXclObj = nullptr;
         }
 
