@@ -75,6 +75,7 @@
 
 #include <memory>
 #include <map>
+#include <vector>
 
 using namespace formula;
 
@@ -230,8 +231,6 @@ namespace {
 // Allow for a year's calendar (366).
 const sal_uInt16 MAXRECURSION = 400;
 
-using std::deque;
-
 typedef SCCOLROW(*DimensionSelector)(const ScAddress&, const ScSingleRefData&);
 
 SCCOLROW lcl_GetCol(const ScAddress& rPos, const ScSingleRefData& rData)
@@ -286,11 +285,11 @@ lcl_checkRangeDimensions(
 bool
 lcl_checkRangeDimensions(
     const ScAddress& rPos,
-    const deque<formula::FormulaToken*>::const_iterator& rBegin,
-    const deque<formula::FormulaToken*>::const_iterator& rEnd,
+    const std::vector<formula::FormulaToken*>::const_iterator& rBegin,
+    const std::vector<formula::FormulaToken*>::const_iterator& rEnd,
     bool& bCol, bool& bRow, bool& bTab)
 {
-    deque<formula::FormulaToken*>::const_iterator aCur(rBegin);
+    std::vector<formula::FormulaToken*>::const_iterator aCur(rBegin);
     ++aCur;
     const SingleDoubleRefProvider aRef(**rBegin);
     bool bOk(false);
@@ -351,7 +350,7 @@ public:
 
 bool
 lcl_checkIfAdjacent(
-    const ScAddress& rPos, const deque<formula::FormulaToken*>& rReferences, const DimensionSelector aWhich)
+    const ScAddress& rPos, const std::vector<formula::FormulaToken*>& rReferences, const DimensionSelector aWhich)
 {
     auto aBegin(rReferences.cbegin());
     auto aEnd(rReferences.cend());
@@ -363,7 +362,7 @@ lcl_checkIfAdjacent(
 
 void
 lcl_fillRangeFromRefList(
-    const ScAddress& aPos, const deque<formula::FormulaToken*>& rReferences, ScRange& rRange)
+    const ScAddress& aPos, const std::vector<formula::FormulaToken*>& rReferences, ScRange& rRange)
 {
     const ScSingleRefData aStart(
             SingleDoubleRefProvider(*rReferences.front()).Ref1);
@@ -375,7 +374,7 @@ lcl_fillRangeFromRefList(
 
 bool
 lcl_refListFormsOneRange(
-        const ScAddress& rPos, deque<formula::FormulaToken*>& rReferences,
+        const ScAddress& rPos, std::vector<formula::FormulaToken*>& rReferences,
         ScRange& rRange)
 {
     if (rReferences.size() == 1)
@@ -2977,7 +2976,7 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
     {
         // Collect all consecutive references, starting by the one
         // already found
-        std::deque<formula::FormulaToken*> aReferences;
+        std::vector<formula::FormulaToken*> aReferences;
         aReferences.push_back(pFirstReference);
         FormulaToken* pToken(aIter.NextRPN());
         FormulaToken* pFunction(nullptr);
