@@ -29,18 +29,18 @@
 namespace writerfilter {
 namespace dmapper {
 
-class WrapPolygon final
+class WrapPolygon final : public virtual SvRefBase
 {
 public:
     typedef std::vector<css::awt::Point> Points_t;
-    typedef ::std::shared_ptr<WrapPolygon> Pointer_t;
+    typedef ::tools::SvRef<WrapPolygon> Pointer_t;
 
 private:
     Points_t mPoints;
 
 public:
     WrapPolygon();
-    ~WrapPolygon();
+    ~WrapPolygon() override;
 
     void addPoint(const css::awt::Point & rPoint);
 

@@ -107,7 +107,7 @@ public:
     bool operator== (const TablePositionHandler& rHandler) const;
 };
 
-using TablePositionHandlerPtr = std::shared_ptr<TablePositionHandler>;
+using TablePositionHandlerPtr = tools::SvRef<TablePositionHandler>;
 } // namespace dmapper
 } // namespace writerfilter
 

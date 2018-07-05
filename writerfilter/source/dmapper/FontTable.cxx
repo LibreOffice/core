@@ -159,11 +159,11 @@ void FontTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Poin
 {
     //create a new font entry
     SAL_WARN_IF( m_pImpl->pCurrentEntry, "writerfilter.dmapper", "current entry has to be NULL here" );
-    m_pImpl->pCurrentEntry.reset(new FontEntry);
+    m_pImpl->pCurrentEntry = new FontEntry;
     ref->resolve(*this);
     //append it to the table
     m_pImpl->aFontEntries.push_back( m_pImpl->pCurrentEntry );
-    m_pImpl->pCurrentEntry.reset();
+    m_pImpl->pCurrentEntry.clear();
 }
 
 void FontTable::lcl_startSectionGroup()

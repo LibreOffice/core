@@ -267,14 +267,13 @@ DomainMapper_Impl::DomainMapper_Impl(
 
     //todo: does it make sense to set the body text as static text interface?
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
-    m_pTableHandler.reset
-        (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
+    m_pTableHandler = new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this);
     getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
     m_bUsingEnhancedFields = !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get(m_xComponentContext);
 
-    m_pSdtHelper.reset(new SdtHelper(*this));
+    m_pSdtHelper = new SdtHelper(*this);
 
     m_aRedlines.push(std::vector<RedlineParamsPtr>());
 }
@@ -578,7 +577,7 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
     else
     {
         // OSL_ENSURE(eId == CONTEXT_SECTION, "this should happen at a section context end");
-        m_pTopContext.reset();
+        m_pTopContext.clear();
     }
 }
 
@@ -699,8 +698,8 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
 ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
-        m_pListTable.reset(
-            new ListsManager( m_rDMapper, m_xTextFactory ));
+        m_pListTable =
+            new ListsManager( m_rDMapper, m_xTextFactory );
     return m_pListTable;
 }
 
@@ -1209,7 +1208,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                 xParaProperties->setPropertyToDefault(getPropertyName(PROP_CHAR_ESCAPEMENT));
                 xParaProperties->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT));
                 //handles (2) and part of (6)
-                pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                pToBeSavedProperties = new ParagraphProperties(*pParaContext);
                 sal_Int32 nCount = xParaCursor->getString().getLength();
                 pToBeSavedProperties->SetDropCapLength(nCount > 0 && nCount < 255 ? static_cast<sal_Int8>(nCount) : 1);
             }
@@ -1226,7 +1225,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     aDrop.Distance  = nHSpace > 0 && nHSpace < SAL_MAX_INT16 ? static_cast<sal_Int16>(nHSpace) : 0;
                     //completes (5)
                     if( pParaContext->IsFrameMode() )
-                        pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                        pToBeSavedProperties = new ParagraphProperties(*pParaContext);
                 }
                 else if(*rAppendContext.pLastParagraphProperties == *pParaContext )
                 {
@@ -1242,7 +1241,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     // If different frame properties are set on this paragraph, keep them.
                     if ( !bIsDropCap && pParaContext->IsFrameMode() )
                     {
-                        pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                        pToBeSavedProperties = new ParagraphProperties(*pParaContext);
                         lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
                     }
                 }
@@ -1254,7 +1253,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 
                 if( !bIsDropCap && pParaContext->IsFrameMode() )
                 {
-                    pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                    pToBeSavedProperties = new ParagraphProperties(*pParaContext);
                     lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
                 }
             }
@@ -1899,8 +1898,8 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
         CreateRedline( xRange, m_pParaMarkerRedline );
         if ( m_pParaMarkerRedline.get( ) )
         {
-            m_pParaMarkerRedline.reset();
-            m_currentRedline.reset();
+            m_pParaMarkerRedline.clear();
+            m_currentRedline.clear();
         }
     }
 }
@@ -1942,7 +1941,7 @@ void DomainMapper_Impl::StartParaMarkerChange( )
 void DomainMapper_Impl::EndParaMarkerChange( )
 {
     m_bIsParaMarkerChange = false;
-    m_currentRedline.reset();
+    m_currentRedline.clear();
 }
 
 
@@ -2905,7 +2904,7 @@ void DomainMapper_Impl::PushFieldContext()
         uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
         xStart = xCrsr->getStart();
     }
-    m_aFieldStack.push( std::make_shared<FieldContext>( xStart ) );
+    m_aFieldStack.push( new FieldContext( xStart ) );
 }
 /*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command
@@ -2944,7 +2943,7 @@ FieldContext::FieldContext(uno::Reference< text::XTextRange > const& xStart)
     , m_xStartRange( xStart )
     , m_bFieldLocked( false )
 {
-    m_pProperties.reset(new PropertyMap());
+    m_pProperties = new PropertyMap();
 }
 
 
@@ -5148,7 +5147,7 @@ void DomainMapper_Impl::AddAnnotationPosition(
 GraphicImportPtr const & DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
 {
     if(!m_pGraphicImport)
-        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, m_rDMapper, eGraphicImportType, m_aPositionOffsets, m_aAligns, m_aPositivePercentages ) );
+        m_pGraphicImport = new GraphicImport( m_xComponentContext, m_xTextFactory, m_rDMapper, eGraphicImportType, m_aPositionOffsets, m_aAligns, m_aPositivePercentages );
     return m_pGraphicImport;
 }
 /*-------------------------------------------------------------------------
@@ -5156,7 +5155,7 @@ GraphicImportPtr const & DomainMapper_Impl::GetGraphicImport(GraphicImportType e
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::ResetGraphicImport()
 {
-    m_pGraphicImport.reset();
+    m_pGraphicImport.clear();
 }
 
 
@@ -5242,7 +5241,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
     // TextFrame, we won't try to resize it (to match the size of the
     // TextFrame) here.
     m_xEmbedded.clear();
-    m_pGraphicImport.reset();
+    m_pGraphicImport.clear();
 }
 
 
@@ -5369,7 +5368,7 @@ void DomainMapper_Impl::AddNewRedline( sal_uInt32 sprmId )
 
 void DomainMapper_Impl::SetCurrentRedlineIsRead()
 {
-    m_currentRedline.reset();
+    m_currentRedline.clear();
 }
 
 sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  )
@@ -5446,7 +5445,7 @@ void DomainMapper_Impl::RemoveTopRedline( )
 {
     assert( m_aRedlines.top().size( ) > 0 );
     m_aRedlines.top().pop_back( );
-    m_currentRedline.reset();
+    m_currentRedline.clear();
 }
 
 void DomainMapper_Impl::ApplySettingsTable()
