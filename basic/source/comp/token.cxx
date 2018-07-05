@@ -217,11 +217,6 @@ SbiTokenizer::SbiTokenizer( const OUString& rSrc, StarBASIC* pb )
 {
 }
 
-SbiTokenizer::~SbiTokenizer()
-{
-}
-
-
 void SbiTokenizer::Push( SbiToken t )
 {
     if( ePush != NIL )

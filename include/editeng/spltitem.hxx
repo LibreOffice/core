@@ -39,7 +39,11 @@ public:
 
     inline SvxFormatSplitItem( const bool bSplit /*= true*/,
                             const sal_uInt16 nWh  );
-    inline SvxFormatSplitItem& operator=( const SvxFormatSplitItem& rSplit );
+
+    SvxFormatSplitItem(SvxFormatSplitItem const &) = default;
+    SvxFormatSplitItem(SvxFormatSplitItem &&) = default;
+    SvxFormatSplitItem & operator =(SvxFormatSplitItem const &) = default;
+    SvxFormatSplitItem & operator =(SvxFormatSplitItem &&) = default;
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -53,13 +57,6 @@ public:
 inline SvxFormatSplitItem::SvxFormatSplitItem( const bool bSplit, const sal_uInt16 nWh ) :
     SfxBoolItem( nWh, bSplit )
 {}
-
-inline SvxFormatSplitItem& SvxFormatSplitItem::operator=(
-    const SvxFormatSplitItem& rSplit )
-{
-    SetValue( rSplit.GetValue() );
-    return *this;
-}
 
 #endif
 

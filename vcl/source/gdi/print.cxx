@@ -102,10 +102,6 @@ PrinterOptions::PrinterOptions() :
 {
 }
 
-PrinterOptions::~PrinterOptions()
-{
-}
-
 void PrinterOptions::ReadFromConfig( bool i_bFile )
 {
     bool bSuccess = false;
@@ -335,10 +331,6 @@ QueueInfo::QueueInfo()
     mnStatus    = PrintQueueFlags::NONE;
     mnJobs      = 0;
 }
-
-QueueInfo::QueueInfo( const QueueInfo& ) = default;
-
-QueueInfo::~QueueInfo() = default;
 
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {

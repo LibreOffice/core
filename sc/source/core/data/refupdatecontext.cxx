@@ -77,10 +77,6 @@ bool RefUpdateContext::isDeleted() const
 }
 
 RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbReferenceModified(false), mbNameModified(false) {}
-RefUpdateResult::RefUpdateResult(const RefUpdateResult& r) :
-    mbValueChanged(r.mbValueChanged),
-    mbReferenceModified(r.mbReferenceModified),
-    mbNameModified(r.mbNameModified) {}
 
 RefUpdateInsertTabContext::RefUpdateInsertTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets) :
     mrDoc(rDoc), mnInsertPos(nInsertPos), mnSheets(nSheets) {}

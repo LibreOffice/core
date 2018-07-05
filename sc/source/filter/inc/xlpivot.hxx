@@ -377,6 +377,11 @@ public:
     explicit            XclPCItem();
     virtual             ~XclPCItem();
 
+    XclPCItem(XclPCItem const &) = default;
+    XclPCItem(XclPCItem &&) = default;
+    XclPCItem & operator =(XclPCItem const &) = default;
+    XclPCItem & operator =(XclPCItem &&) = default;
+
     /** Sets the item to 'empty' type. */
     void                SetEmpty();
     /** Sets the item to 'text' type and adds the passed text. */

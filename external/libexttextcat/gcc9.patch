@@ -1,0 +1,16 @@
+--- src/textcat.c
++++ src/textcat.c
+@@ -360,7 +360,12 @@
+                 break;
+             }
+ 
+-            memcpy(&candidates[cnt - 1], &candidates[i], sizeof(candidate_t));
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wpragmas" /* for old GCC */
++#pragma GCC diagnostic ignored "-Wunknown-warning-option" /* for Clang 5 */
++#pragma GCC diagnostic ignored "-Wrestrict"
++            if (cnt - 1 != i) memcpy(&candidates[cnt - 1], &candidates[i], sizeof(candidate_t));
++#pragma GCC diagnostic pop
+ 
+         }
+     }

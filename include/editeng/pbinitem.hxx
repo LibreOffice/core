@@ -40,7 +40,6 @@ public:
 
     explicit inline SvxPaperBinItem( const sal_uInt16 nId ,
                             const sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS );
-    inline SvxPaperBinItem &operator=( const SvxPaperBinItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -53,13 +52,6 @@ public:
 inline SvxPaperBinItem::SvxPaperBinItem( const sal_uInt16 nId, const sal_uInt8 nT )
     : SfxByteItem( nId, nT )
 {}
-
-inline SvxPaperBinItem &SvxPaperBinItem::operator=(
-    const SvxPaperBinItem &rCpy )
-{
-    SetValue( rCpy.GetValue() );
-    return *this;
-}
 
 #endif
 

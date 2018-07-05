@@ -105,10 +105,4 @@ bool SvxWritingModeItem::QueryValue( css::uno::Any& rVal,
     return true;
 }
 
-SvxWritingModeItem& SvxWritingModeItem::operator=( const SvxWritingModeItem& rItem )
-{
-    SetValue( static_cast<sal_uInt16>(rItem.GetValue()) );
-    return *this;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

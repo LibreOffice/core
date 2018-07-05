@@ -93,6 +93,11 @@ public:
     explicit            FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath );
     virtual             ~FragmentHandler() override;
 
+    FragmentHandler(FragmentHandler const &) = default;
+    FragmentHandler(FragmentHandler &&) = default;
+    FragmentHandler & operator =(FragmentHandler const &) = default;
+    FragmentHandler & operator =(FragmentHandler &&) = default;
+
     /** Returns the com.sun.star.xml.sax.XFastContextHandler interface of this context. */
     css::uno::Reference< css::xml::sax::XFastContextHandler >
                         getFastContextHandler() { return static_cast< ContextHandler* >( this ); }

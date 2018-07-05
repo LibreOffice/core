@@ -16,10 +16,6 @@ CellTextAttr::CellTextAttr() :
     mnTextWidth(TEXTWIDTH_DIRTY),
     mnScriptType(SvtScriptType::UNKNOWN) {}
 
-CellTextAttr::CellTextAttr(const CellTextAttr& r) :
-    mnTextWidth(r.mnTextWidth),
-    mnScriptType(r.mnScriptType) {}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

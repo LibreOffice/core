@@ -229,6 +229,11 @@ public:
     explicit            ContextHandler2( ContextHandler2Helper const & rParent );
     virtual             ~ContextHandler2() override;
 
+    ContextHandler2(ContextHandler2 const &) = default;
+    ContextHandler2(ContextHandler2 &&) = default;
+    ContextHandler2 & operator =(ContextHandler2 const &) = default;
+    ContextHandler2 & operator =(ContextHandler2 &&) = default;
+
     // resolve ambiguity from base classes
     virtual void SAL_CALL acquire() throw() override { ContextHandler::acquire(); }
     virtual void SAL_CALL release() throw() override { ContextHandler::release(); }

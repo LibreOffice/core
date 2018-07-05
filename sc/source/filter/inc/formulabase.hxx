@@ -537,6 +537,11 @@ public:
     explicit            FunctionProvider(bool bImportFilter);
     virtual             ~FunctionProvider();
 
+    FunctionProvider(FunctionProvider const &) = default;
+    FunctionProvider(FunctionProvider &&) = default;
+    FunctionProvider & operator =(FunctionProvider const &) = default;
+    FunctionProvider & operator =(FunctionProvider &&) = default;
+
     /** Returns the function info for an OOXML function name, or 0 on error. */
     const FunctionInfo* getFuncInfoFromOoxFuncName( const OUString& rFuncName ) const;
 
@@ -573,6 +578,11 @@ public:
     explicit            OpCodeProvider(const css::uno::Reference<css::lang::XMultiServiceFactory>& rxModelFactory,
                                        bool bImportFilter);
     virtual             ~OpCodeProvider() override;
+
+    OpCodeProvider(OpCodeProvider const &) = default;
+    OpCodeProvider(OpCodeProvider &&) = default;
+    OpCodeProvider & operator =(OpCodeProvider const &) = default;
+    OpCodeProvider & operator =(OpCodeProvider &&) = default;
 
     /** Returns the structure containing all token op-codes for operators and
         special tokens used by the Calc document and its formula parser. */

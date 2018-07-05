@@ -298,6 +298,11 @@ protected:
 public:
     virtual             ~SwField();
 
+    SwField(SwField const &) = default;
+    SwField(SwField &&) = default;
+    SwField & operator =(SwField const &) = default;
+    SwField & operator =(SwField &&) = default;
+
     inline SwFieldType* GetTyp() const;
 
     /// Set new type (used for copying among documents).

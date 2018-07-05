@@ -39,11 +39,6 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-
-    SvxCharHiddenItem& operator=(const SvxCharHiddenItem& rHidden) {
-            SetValue(rHidden.GetValue());
-            return *this;
-        }
 };
 
 #endif

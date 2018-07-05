@@ -34,10 +34,15 @@ private:
 
 protected:
     XPropertyEntry(const OUString& rPropEntryName);
-    XPropertyEntry(const XPropertyEntry& rOther);
+
+    XPropertyEntry(XPropertyEntry const &) = default;
+    XPropertyEntry(XPropertyEntry &&) = default;
 
 public:
     virtual ~XPropertyEntry();
+
+    XPropertyEntry & operator =(XPropertyEntry const &) = default;
+    XPropertyEntry & operator =(XPropertyEntry &&) = default;
 
     void SetName(const OUString& rPropEntryName) { maPropEntryName = rPropEntryName; }
     const OUString& GetName() const { return maPropEntryName; }

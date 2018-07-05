@@ -31,10 +31,6 @@ SwRewriter::SwRewriter()
 {
 }
 
-SwRewriter::~SwRewriter()
-{
-}
-
 void SwRewriter::AddRule(SwUndoArg eWhat, const OUString & rWith)
 {
     SwRewriteRule aRule(eWhat, rWith);

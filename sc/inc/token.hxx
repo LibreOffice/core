@@ -147,6 +147,11 @@ public:
     ScExternalSingleRefToken() = delete;
     virtual ~ScExternalSingleRefToken() override;
 
+    ScExternalSingleRefToken(ScExternalSingleRefToken const &) = default;
+    ScExternalSingleRefToken(ScExternalSingleRefToken &&) = default;
+    ScExternalSingleRefToken & operator =(ScExternalSingleRefToken const &) = default;
+    ScExternalSingleRefToken & operator =(ScExternalSingleRefToken &&) = default;
+
     virtual sal_uInt16                  GetIndex() const override;
     virtual svl::SharedString GetString() const override;
     virtual const ScSingleRefData*  GetSingleRef() const override;
@@ -165,6 +170,11 @@ public:
     ScExternalDoubleRefToken() = delete;
     ScExternalDoubleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& r );
     virtual ~ScExternalDoubleRefToken() override;
+
+    ScExternalDoubleRefToken(ScExternalDoubleRefToken const &) = default;
+    ScExternalDoubleRefToken(ScExternalDoubleRefToken &&) = default;
+    ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken const &) = default;
+    ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken &&) = default;
 
     virtual sal_uInt16                 GetIndex() const override;
     virtual svl::SharedString GetString() const override;
@@ -187,6 +197,11 @@ public:
     ScExternalNameToken() = delete;
     ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedString& rName );
     virtual ~ScExternalNameToken() override;
+
+    ScExternalNameToken(ScExternalNameToken const &) = default;
+    ScExternalNameToken(ScExternalNameToken &&) = default;
+    ScExternalNameToken & operator =(ScExternalNameToken const &) = default;
+    ScExternalNameToken & operator =(ScExternalNameToken &&) = default;
 
     virtual sal_uInt16              GetIndex() const override;
     virtual svl::SharedString GetString() const override;
