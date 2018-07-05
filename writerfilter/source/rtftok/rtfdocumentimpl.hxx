@@ -118,11 +118,11 @@ enum class RTFFieldStatus
 };
 
 /// A buffer storing dmapper calls.
-using Buf_t = std::tuple<RTFBufferTypes, RTFValue::Pointer_t, std::shared_ptr<TableRowBuffer>>;
+using Buf_t = std::tuple<RTFBufferTypes, RTFValue::Pointer_t, tools::SvRef<TableRowBuffer>>;
 using RTFBuffer_t = std::deque<Buf_t>;
 
 /// holds one nested table row
-struct TableRowBuffer
+struct TableRowBuffer : public virtual SvRefBase
 {
     RTFBuffer_t buffer;
     ::std::deque<RTFSprms> cellsSprms;
@@ -171,7 +171,7 @@ private:
 };
 
 /// Stores the properties of a shape.
-class RTFShape
+class RTFShape : public virtual SvRefBase
 {
 public:
     RTFShape();
@@ -220,7 +220,7 @@ public:
 };
 
 /// Stores the properties of a picture.
-class RTFPicture
+class RTFPicture : public virtual SvRefBase
 {
 public:
     RTFPicture();
@@ -432,7 +432,7 @@ OString DTTM22OString(long nDTTM);
 class RTFDocumentImpl : public RTFDocument, public RTFListener
 {
 public:
-    using Pointer_t = std::shared_ptr<RTFDocumentImpl>;
+    using Pointer_t = tools::SvRef<RTFDocumentImpl>;
     RTFDocumentImpl(css::uno::Reference<css::uno::XComponentContext> const& xContext,
                     css::uno::Reference<css::io::XInputStream> const& xInputStream,
                     css::uno::Reference<css::lang::XComponent> const& xDstDoc,
@@ -551,8 +551,8 @@ private:
     css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
     std::shared_ptr<SvStream> m_pInStream;
     Stream* m_pMapperStream;
-    std::shared_ptr<RTFSdrImport> m_pSdrImport;
-    std::shared_ptr<RTFTokenizer> m_pTokenizer;
+    tools::SvRef<RTFSdrImport> m_pSdrImport;
+    tools::SvRef<RTFTokenizer> m_pTokenizer;
     RTFStack m_aStates;
     /// Read by RTF_PARD.
     RTFParserState m_aDefaultState;

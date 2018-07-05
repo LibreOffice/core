@@ -50,13 +50,13 @@ class ListLevel : public PropertyMap
     css::awt::Size                         m_aGraphicSize;
     css::uno::Reference<css::awt::XBitmap> m_xGraphicBitmap;
     sal_Int32                                     m_nTabstop;
-    std::shared_ptr< StyleSheetEntry >          m_pParaStyle;
+    tools::SvRef< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
     bool m_bHasValues = false;
 
 public:
 
-    typedef std::shared_ptr< ListLevel > Pointer;
+    typedef tools::SvRef< ListLevel > Pointer;
 
     ListLevel() :
         m_nIStartAt(-1)
@@ -74,11 +74,11 @@ public:
 
     void SetGraphicBitmap(css::uno::Reference<css::awt::XBitmap> const& xGraphicBitmap)
         { m_xGraphicBitmap = xGraphicBitmap; }
-    void SetParaStyle( const std::shared_ptr< StyleSheetEntry >& pStyle );
+    void SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle );
 
     // Getters
     const OUString& GetBulletChar( ) { return m_sBulletChar; };
-    const std::shared_ptr< StyleSheetEntry >& GetParaStyle( ) { return m_pParaStyle; };
+    const tools::SvRef< StyleSheetEntry >& GetParaStyle( ) { return m_pParaStyle; };
     bool isOutlineNumbering() const { return m_outline; }
     /// Determines if SetValue() was called at least once.
     bool HasValues() const;
@@ -100,12 +100,12 @@ private:
 };
 
 /// Represents a numbering picture bullet: an id and a graphic.
-class NumPicBullet final
+class NumPicBullet final : public virtual SvRefBase
 {
 public:
-    typedef std::shared_ptr<NumPicBullet> Pointer;
+    typedef tools::SvRef<NumPicBullet> Pointer;
     NumPicBullet();
-    ~NumPicBullet();
+    ~NumPicBullet() override;
 
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() { return m_nId;}
@@ -116,7 +116,7 @@ private:
     css::uno::Reference<css::drawing::XShape> m_xShape;
 };
 
-class AbstractListDef
+class AbstractListDef : public virtual SvRefBase
 {
 private:
     // The ID member reflects either the abstractNumId or the numId
@@ -134,10 +134,10 @@ private:
     ::rtl::OUString                      m_sNumStyleLink;
 
 public:
-    typedef std::shared_ptr< AbstractListDef > Pointer;
+    typedef tools::SvRef< AbstractListDef > Pointer;
 
     AbstractListDef( );
-    virtual ~AbstractListDef( );
+    virtual ~AbstractListDef( ) override;
 
     // Setters using during the import
     void SetId( sal_Int32 nId ) { m_nId = nId; };
@@ -168,7 +168,7 @@ private:
     css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
 public:
-    typedef std::shared_ptr< ListDef > Pointer;
+    typedef tools::SvRef< ListDef > Pointer;
 
     ListDef( );
     virtual ~ListDef( ) override;
@@ -223,7 +223,7 @@ public:
     ListsManager(DomainMapper& rDMapper, const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory);
     virtual ~ListsManager() override;
 
-    typedef std::shared_ptr< ListsManager >  Pointer;
+    typedef tools::SvRef< ListsManager >  Pointer;
 
     ListDef::Pointer        GetList( sal_Int32 nId );
 

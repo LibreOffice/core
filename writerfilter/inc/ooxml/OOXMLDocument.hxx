@@ -71,14 +71,12 @@ namespace writerfilter {
 namespace ooxml
 {
 
-class OOXMLStream
+class OOXMLStream : public virtual SvRefBase
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, WEBSETTINGS, FONTTABLE, NUMBERING,
         FOOTNOTES, ENDNOTES, COMMENTS, THEME, CUSTOMXML, CUSTOMXMLPROPS, GLOSSARY, CHARTS, EMBEDDINGS, SETTINGS, VBAPROJECT, FOOTER, HEADER, VBADATA };
-    typedef std::shared_ptr<OOXMLStream> Pointer_t;
-
-    virtual ~OOXMLStream() {}
+    typedef tools::SvRef<OOXMLStream> Pointer_t;
 
     /**
        Returns fast parser for this stream.
@@ -114,9 +112,7 @@ public:
     /**
        Pointer to this stream.
     */
-    typedef std::shared_ptr<OOXMLDocument> Pointer_t;
-
-    virtual ~OOXMLDocument() {}
+    typedef tools::SvRef<OOXMLDocument> Pointer_t;
 
     /**
        Resolves this document to a stream handler.

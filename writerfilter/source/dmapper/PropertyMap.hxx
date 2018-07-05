@@ -78,7 +78,7 @@ enum GrabBagType
     CHAR_GRAB_BAG
 };
 
-struct RedlineParams
+struct RedlineParams : public virtual SvRefBase
 {
     OUString  m_sAuthor;
     OUString  m_sDate;
@@ -88,7 +88,7 @@ struct RedlineParams
     css::uno::Sequence< css::beans::PropertyValue > m_aRevertProperties;
 };
 
-typedef std::shared_ptr< RedlineParams > RedlineParamsPtr;
+typedef tools::SvRef< RedlineParams > RedlineParamsPtr;
 
 class PropValue
 {
@@ -114,7 +114,7 @@ public:
     GrabBagType getGrabBagType() const { return m_GrabBagType; }
 };
 
-class PropertyMap
+class PropertyMap : public virtual SvRefBase
 {
 private:
     // Cache the property values for the GetPropertyValues() call(s).
@@ -130,7 +130,6 @@ public:
     typedef std::pair< PropertyIds, css::uno::Any > Property;
 
     PropertyMap() {}
-    virtual ~PropertyMap() {}
 
     // Sequence: Grab Bags: The CHAR_GRAB_BAG has Name "CharInteropGrabBag" and the PARA_GRAB_BAG has Name "ParaInteropGrabBag"
     // the contained properties are their Value.
@@ -143,7 +142,7 @@ public:
     void Erase( PropertyIds eId);
 
     // Imports properties from pMap, overwriting those with the same PropertyIds as the current map
-    void InsertProps( const std::shared_ptr< PropertyMap >& rMap );
+    void InsertProps( const tools::SvRef< PropertyMap >& rMap );
 
     // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
     boost::optional< Property > getProperty( PropertyIds eId ) const;
@@ -177,7 +176,7 @@ protected:
     }
 };
 
-typedef std::shared_ptr< PropertyMap > PropertyMapPtr;
+typedef tools::SvRef< PropertyMap > PropertyMapPtr;
 
 class SectionPropertyMap : public PropertyMap
 {
@@ -380,7 +379,7 @@ public:
     void ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType );
 };
 
-class ParagraphProperties
+class ParagraphProperties : public virtual SvRefBase
 {
 private:
     bool                                         m_bFrameMode;
@@ -409,7 +408,6 @@ private:
 
 public:
     ParagraphProperties();
-    virtual ~ParagraphProperties() {}
 
     // Does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
     bool operator==( const ParagraphProperties& );
@@ -476,7 +474,7 @@ public:
     void ResetFrameProperties();
 };
 
-typedef std::shared_ptr< ParagraphProperties > ParagraphPropertiesPtr;
+typedef tools::SvRef< ParagraphProperties > ParagraphPropertiesPtr;
 
 /*-------------------------------------------------------------------------
     property map of a stylesheet
@@ -562,7 +560,7 @@ public:
     virtual void insertTableProperties( const PropertyMap* ) override;
 };
 
-typedef std::shared_ptr< TablePropertyMap > TablePropertyMapPtr;
+typedef tools::SvRef< TablePropertyMap > TablePropertyMapPtr;
 
 } // namespace dmapper
 } // namespace writerfilter

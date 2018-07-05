@@ -39,7 +39,7 @@ RTFLookahead::RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart)
     sal_uInt64 const nPos = m_rStream.Tell();
     m_rStream.Seek(nGroupStart);
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
-    m_pTokenizer.reset(new RTFTokenizer(*this, &m_rStream, xStatusIndicator));
+    m_pTokenizer = new RTFTokenizer(*this, &m_rStream, xStatusIndicator);
     m_pTokenizer->resolveParse();
     m_rStream.Seek(nPos);
 }

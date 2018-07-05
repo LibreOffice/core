@@ -606,9 +606,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dxWrapDistLeft")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(
-                    NS_ooxml::LN_CT_Anchor_distL,
-                    std::make_shared<RTFValue>(rProperty.second.toInt32()));
+                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distL,
+                                             new RTFValue(rProperty.second.toInt32()));
             else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("LeftMargin",
                                                uno::makeAny(rProperty.second.toInt32() / 360));
@@ -616,9 +615,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dyWrapDistTop")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(
-                    NS_ooxml::LN_CT_Anchor_distT,
-                    std::make_shared<RTFValue>(rProperty.second.toInt32()));
+                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distT,
+                                             new RTFValue(rProperty.second.toInt32()));
             else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("TopMargin",
                                                uno::makeAny(rProperty.second.toInt32() / 360));
@@ -626,9 +624,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dxWrapDistRight")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(
-                    NS_ooxml::LN_CT_Anchor_distR,
-                    std::make_shared<RTFValue>(rProperty.second.toInt32()));
+                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distR,
+                                             new RTFValue(rProperty.second.toInt32()));
             else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("RightMargin",
                                                uno::makeAny(rProperty.second.toInt32() / 360));
@@ -636,9 +633,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (rProperty.first == "dyWrapDistBottom")
         {
             if (m_bTextGraphicObject)
-                rShape.aAnchorAttributes.set(
-                    NS_ooxml::LN_CT_Anchor_distB,
-                    std::make_shared<RTFValue>(rProperty.second.toInt32()));
+                rShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_distB,
+                                             new RTFValue(rProperty.second.toInt32()));
             else if (xPropertySet.is())
                 xPropertySet->setPropertyValue("BottomMargin",
                                                uno::makeAny(rProperty.second.toInt32() / 360));
@@ -844,11 +840,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                             oY.reset(aPoint.toInt32());
                     } while (nI >= 0);
                     RTFSprms aPathAttributes;
-                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, std::make_shared<RTFValue>(*oX));
-                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, std::make_shared<RTFValue>(*oY));
+                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, new RTFValue(*oX));
+                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, new RTFValue(*oY));
                     aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo,
-                                      std::make_shared<RTFValue>(aPathAttributes),
-                                      RTFOverwrite::NO_APPEND);
+                                      new RTFValue(aPathAttributes), RTFOverwrite::NO_APPEND);
                 }
             } while (nCharIndex >= 0);
             rShape.aWrapPolygonSprms = aPolygonSprms;
@@ -1098,9 +1093,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     {
         RTFSprms aAttributes;
         aAttributes.set(NS_ooxml::LN_CT_Background_color,
-                        std::make_shared<RTFValue>(
-                            xPropertySet->getPropertyValue("FillColor").get<sal_Int32>()));
-        m_rImport.Mapper().props(std::make_shared<RTFReferenceProperties>(aAttributes));
+                        new RTFValue(xPropertySet->getPropertyValue("FillColor").get<sal_Int32>()));
+        m_rImport.Mapper().props(new RTFReferenceProperties(aAttributes));
 
         uno::Reference<lang::XComponent> xComponent(xShape, uno::UNO_QUERY);
         xComponent->dispose();

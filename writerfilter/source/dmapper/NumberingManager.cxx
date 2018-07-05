@@ -129,7 +129,7 @@ bool ListLevel::HasValues() const
     return m_bHasValues;
 }
 
-void ListLevel::SetParaStyle( const std::shared_ptr< StyleSheetEntry >& pStyle )
+void ListLevel::SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle )
 {
     if (!pStyle)
         return;
@@ -821,7 +821,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 {
                     //create a new Abstract list entry
                     OSL_ENSURE( !m_pCurrentDefinition.get(), "current entry has to be NULL here");
-                    m_pCurrentDefinition.reset( new AbstractListDef );
+                    m_pCurrentDefinition = new AbstractListDef;
                     pProperties->resolve( *this );
                     //append it to the table
                     m_aAbstractLists.push_back( m_pCurrentDefinition );
@@ -837,7 +837,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     // Create a new list entry
                     OSL_ENSURE( !m_pCurrentDefinition.get(), "current entry has to be NULL here");
                     ListDef::Pointer listDef( new ListDef );
-                    m_pCurrentDefinition = listDef;
+                    m_pCurrentDefinition = listDef.get();
                     pProperties->resolve( *this );
                     //append it to the table
                     m_aLists.push_back( listDef );
@@ -1088,7 +1088,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             default:
                 if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
                 {
-                    m_rDMapper.PushListProperties(pCurrentLevel);
+                    m_rDMapper.PushListProperties(pCurrentLevel.get());
                     m_rDMapper.sprm( rSprm );
                     m_rDMapper.PopListProperties();
                 }
@@ -1107,7 +1107,7 @@ void ListsManager::lcl_entry( int /* pos */,
     {
         // Create AbstractListDef's
         OSL_ENSURE( !m_pCurrentDefinition.get(), "current entry has to be NULL here");
-        m_pCurrentDefinition.reset( new AbstractListDef( ) );
+        m_pCurrentDefinition = new AbstractListDef( );
         ref->resolve(*this);
         //append it to the table
         m_aAbstractLists.push_back( m_pCurrentDefinition );

@@ -414,7 +414,7 @@ void TDefTableHandler::lcl_sprm(Sprm & rSprm)
 }
 
 void TDefTableHandler::fillCellProperties(
-            size_t nCell, const ::std::shared_ptr< TablePropertyMap >& pCellProperties ) const
+            size_t nCell, const ::tools::SvRef< TablePropertyMap >& pCellProperties ) const
 {
     if( m_aTopBorderLines.size() > nCell )
         pCellProperties->Insert( PROP_TOP_BORDER, uno::makeAny( m_aTopBorderLines[nCell] ) );

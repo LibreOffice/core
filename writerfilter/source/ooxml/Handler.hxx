@@ -31,7 +31,7 @@ class OOXMLFootnoteHandler : public Properties
 
 public:
     explicit OOXMLFootnoteHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFootnoteHandler();
+    virtual ~OOXMLFootnoteHandler() override;
 
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
@@ -42,7 +42,7 @@ class OOXMLEndnoteHandler : public Properties
     OOXMLFastContextHandler * mpFastContext;
 public:
     explicit OOXMLEndnoteHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLEndnoteHandler();
+    virtual ~OOXMLEndnoteHandler() override;
 
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
@@ -55,7 +55,6 @@ class OOXMLFooterHandler : public Properties
     sal_Int32 mnType;
 public:
     explicit OOXMLFooterHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFooterHandler() {}
     void finalize();
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
@@ -68,7 +67,6 @@ class OOXMLHeaderHandler : public Properties
     sal_Int32 mnType;
 public:
     explicit OOXMLHeaderHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLHeaderHandler() {}
     void finalize();
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
@@ -79,7 +77,7 @@ class OOXMLCommentHandler : public Properties
     OOXMLFastContextHandler * mpFastContext;
 public:
     explicit OOXMLCommentHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLCommentHandler();
+    virtual ~OOXMLCommentHandler() override;
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
 };
@@ -90,7 +88,7 @@ class OOXMLOLEHandler : public Properties
 
 public:
     explicit OOXMLOLEHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLOLEHandler();
+    virtual ~OOXMLOLEHandler() override;
 
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
@@ -102,7 +100,7 @@ class OOXMLEmbeddedFontHandler : public Properties
 
 public:
     explicit OOXMLEmbeddedFontHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLEmbeddedFontHandler();
+    virtual ~OOXMLEmbeddedFontHandler() override;
 
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
@@ -114,7 +112,7 @@ class OOXMLBreakHandler : public Properties
     Stream & mrStream;
 public:
     explicit OOXMLBreakHandler(Stream & rStream);
-    virtual ~OOXMLBreakHandler();
+    virtual ~OOXMLBreakHandler() override;
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
 };
@@ -124,7 +122,7 @@ class OOXMLPictureHandler : public Properties
     OOXMLFastContextHandler * mpFastContext;
 public:
     explicit OOXMLPictureHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLPictureHandler();
+    virtual ~OOXMLPictureHandler() override;
 
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
@@ -138,7 +136,7 @@ class OOXMLHyperlinkHandler : public Properties
 
 public:
     explicit OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLHyperlinkHandler();
+    virtual ~OOXMLHyperlinkHandler() override;
     void writetext();
 
     virtual void attribute(Id name, Value & val) override;
@@ -152,7 +150,7 @@ class OOXMLHyperlinkURLHandler : public Properties
 
 public:
     explicit OOXMLHyperlinkURLHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLHyperlinkURLHandler();
+    virtual ~OOXMLHyperlinkURLHandler() override;
 
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
