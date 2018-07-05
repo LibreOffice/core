@@ -33,6 +33,11 @@ public:
     SdrCaptionLineLenItem(long nLineLen=0): SdrMetricItem(SDRATTR_CAPTIONLINELEN,nLineLen) {}
     virtual ~SdrCaptionLineLenItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrCaptionLineLenItem(SdrCaptionLineLenItem const &) = default;
+    SdrCaptionLineLenItem(SdrCaptionLineLenItem &&) = default;
+    SdrCaptionLineLenItem & operator =(SdrCaptionLineLenItem const &) = default;
+    SdrCaptionLineLenItem & operator =(SdrCaptionLineLenItem &&) = default;
 };
 
 /**
@@ -44,6 +49,11 @@ public:
     SdrCaptionFitLineLenItem(bool bBestFit=true): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}
     virtual ~SdrCaptionFitLineLenItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrCaptionFitLineLenItem(SdrCaptionFitLineLenItem const &) = default;
+    SdrCaptionFitLineLenItem(SdrCaptionFitLineLenItem &&) = default;
+    SdrCaptionFitLineLenItem & operator =(SdrCaptionFitLineLenItem const &) = default;
+    SdrCaptionFitLineLenItem & operator =(SdrCaptionFitLineLenItem &&) = default;
 };
 
 #endif

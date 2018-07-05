@@ -90,6 +90,11 @@ protected:
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
 
 public:
+    DlgEdObj(DlgEdObj const &) = default;
+    DlgEdObj(DlgEdObj &&) = default;
+    DlgEdObj & operator =(DlgEdObj const &) = default;
+    DlgEdObj & operator =(DlgEdObj &&) = default;
+
     void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 

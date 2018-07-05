@@ -1,0 +1,27 @@
+--- source/i18n/unicode/format.h
++++ source/i18n/unicode/format.h
+@@ -22,6 +22,13 @@
+ 
+ #ifndef FORMAT_H
+ #define FORMAT_H
++
++#ifdef __GNUC__
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wpragmas" // for old GCC
++#pragma GCC diagnostic ignored "-Wunknown-warning-option" // for Clang
++#pragma GCC diagnostic ignored "-Wdeprecated-copy"
++#endif
+ 
+ 
+ #include "unicode/utypes.h"
+@@ -302,6 +309,10 @@
+ U_NAMESPACE_END
+ 
+ #endif /* #if !UCONFIG_NO_FORMATTING */
++
++#ifdef __GNUC__
++#pragma GCC diagnostic pop
++#endif
+ 
+ #endif // _FORMAT
+ //eof

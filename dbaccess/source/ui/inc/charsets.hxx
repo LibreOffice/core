@@ -93,8 +93,6 @@ namespace dbaui
         base_iterator               m_aPosition;
 
     public:
-        ExtendedCharsetIterator(const ExtendedCharsetIterator& _rSource);
-
         CharsetDisplayDerefHelper operator*() const;
 
         /// prefix increment

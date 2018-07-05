@@ -39,6 +39,11 @@ public:
     RefHint() = delete;
     virtual ~RefHint() override = 0;
 
+    RefHint(RefHint const &) = default;
+    RefHint(RefHint &&) = default;
+    RefHint & operator =(RefHint const &) = default;
+    RefHint & operator =(RefHint &&) = default;
+
     Type getType() const;
 };
 
@@ -77,6 +82,11 @@ public:
     RefColReorderHint( const sc::ColRowReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
     virtual ~RefColReorderHint() override;
 
+    RefColReorderHint(RefColReorderHint const &) = default;
+    RefColReorderHint(RefColReorderHint &&) = default;
+    RefColReorderHint & operator =(RefColReorderHint const &) = default;
+    RefColReorderHint & operator =(RefColReorderHint &&) = default;
+
     const sc::ColRowReorderMapType& getColMap() const;
 
     SCTAB getTab() const;
@@ -94,6 +104,11 @@ class RefRowReorderHint : public RefHint
 public:
     RefRowReorderHint( const sc::ColRowReorderMapType& rRowMap, SCTAB nTab, SCCOL nCol1, SCCOL nCol2 );
     virtual ~RefRowReorderHint() override;
+
+    RefRowReorderHint(RefRowReorderHint const &) = default;
+    RefRowReorderHint(RefRowReorderHint &&) = default;
+    RefRowReorderHint & operator =(RefRowReorderHint const &) = default;
+    RefRowReorderHint & operator =(RefRowReorderHint &&) = default;
 
     const sc::ColRowReorderMapType& getRowMap() const;
 

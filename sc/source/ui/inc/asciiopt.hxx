@@ -47,7 +47,6 @@ private:
 
 public:
                     ScAsciiOptions();
-                    ~ScAsciiOptions();
 
     static const sal_Unicode cDefaultTextSep = '"';
 

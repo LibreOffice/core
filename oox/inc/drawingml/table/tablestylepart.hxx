@@ -38,7 +38,6 @@ class TableStylePart
 public:
 
     TableStylePart();
-    ~TableStylePart();
 
     ::oox::drawingml::Color&            getTextColor(){ return maTextColor; }
     ::boost::optional< bool >&          getTextBoldStyle(){ return maTextBoldStyle; }

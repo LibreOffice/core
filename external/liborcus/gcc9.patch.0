@@ -1,0 +1,27 @@
+--- include/orcus/types.hpp
++++ include/orcus/types.hpp
+@@ -7,6 +7,13 @@
+ 
+ #ifndef INCLUDED_ORCUS_TYPES_HPP
+ #define INCLUDED_ORCUS_TYPES_HPP
++
++#ifdef __GNUC__
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wpragmas" // for old GCC
++#pragma GCC diagnostic ignored "-Wunknown-warning-option" // for Clang
++#pragma GCC diagnostic ignored "-Wdeprecated-copy"
++#endif
+ 
+ #include <cstdlib>
+ #include <vector>
+@@ -145,6 +152,10 @@
+ typedef ::std::vector<xml_token_attr_t> xml_attrs_t;
+ 
+ }
++
++#ifdef __GNUC__
++#pragma GCC diagnostic pop
++#endif
+ 
+ #endif
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

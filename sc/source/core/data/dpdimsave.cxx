@@ -145,10 +145,6 @@ ScDPSaveGroupDimension::ScDPSaveGroupDimension( const OUString& rSource, const O
 {
 }
 
-ScDPSaveGroupDimension::~ScDPSaveGroupDimension()
-{
-}
-
 void ScDPSaveGroupDimension::SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart )
 {
     aDateInfo = rInfo;
@@ -433,10 +429,6 @@ ScDPSaveNumGroupDimension::ScDPSaveNumGroupDimension( const OUString& rName, con
 {
 }
 
-ScDPSaveNumGroupDimension::~ScDPSaveNumGroupDimension()
-{
-}
-
 void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 {
     long nSource = rData.GetDimensionIndex( aDimensionName );
@@ -586,10 +578,6 @@ struct ScDPSaveGroupSourceNameFunc
 } // namespace
 
 ScDPDimensionSaveData::ScDPDimensionSaveData()
-{
-}
-
-ScDPDimensionSaveData::~ScDPDimensionSaveData()
 {
 }
 

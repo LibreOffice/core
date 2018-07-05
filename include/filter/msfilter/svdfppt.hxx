@@ -528,7 +528,6 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
                         );
 
                         explicit HeaderFooterEntry( const PptSlidePersistEntry* pMaster = nullptr );
-                        ~HeaderFooterEntry();
 };
 
 struct ProcessData
@@ -668,7 +667,6 @@ struct PPTTextSpecInfo
     sal_uInt16      nDontKnow;
 
     explicit PPTTextSpecInfo( sal_uInt32 nCharIdx );
-    ~PPTTextSpecInfo();
 };
 
 struct  PPTTextSpecInfoAtomInterpreter
@@ -754,7 +752,6 @@ struct PPTCharSheet
     PPTCharLevel    maCharLevel[nMaxPPTLevels];
 
                     explicit PPTCharSheet( TSS_Type nInstance );
-                    PPTCharSheet( const PPTCharSheet& rCharSheet );
 
     void            Read( SvStream& rIn, sal_uInt32 nLevel );
 };
@@ -787,7 +784,6 @@ public:
     PPTParaLevel    maParaLevel[nMaxPPTLevels];
 
                     explicit PPTParaSheet( TSS_Type nInstance );
-                    PPTParaSheet( const PPTParaSheet& rParaSheet );
 
     void            Read(
                         SdrPowerPointImport const & rMan,

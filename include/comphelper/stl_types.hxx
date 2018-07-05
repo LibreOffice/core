@@ -144,21 +144,17 @@ public:
     typedef size_t difference_type;
 
     OUStringBufferAppender(OUStringBuffer & i_rBuffer)
-        : m_rBuffer(i_rBuffer) { }
-    Self & operator=(Self const &)
-    {   // MSVC 2013 with non-debug runtime requires this in xutility.hpp:289
-        return *this;
-    }
+        : m_rBuffer(&i_rBuffer) { }
     Self & operator=(OUString const & i_rStr)
     {
-        m_rBuffer.append( i_rStr );
+        m_rBuffer->append( i_rStr );
         return *this;
     }
     Self & operator*() { return *this; } // so operator= works
     Self & operator++() { return *this; }
 
 private:
-    OUStringBuffer & m_rBuffer;
+    OUStringBuffer * m_rBuffer;
 };
 
 /** algorithm similar to std::copy, but inserts a separator between elements.
