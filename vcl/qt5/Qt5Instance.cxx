@@ -283,7 +283,7 @@ VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
 
     QApplication::setQuitOnLastWindowClosed(false);
 
-    const bool bUseCairo = (nullptr != getenv("SAL_VCL_QT5_USE_CAIRO"));
+    static const bool bUseCairo = (nullptr != getenv("SAL_VCL_QT5_USE_CAIRO"));
     Qt5Instance* pInstance = new Qt5Instance(new SalYieldMutex(), bUseCairo);
 
     // initialize SalData

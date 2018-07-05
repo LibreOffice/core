@@ -248,9 +248,31 @@ void Qt5Graphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
     aPainter.update(aPolygon.boundingRect());
 }
 
-void Qt5Graphics::drawPolyPolygon(sal_uInt32 /*nPoly*/, const sal_uInt32* /*pPoints*/,
-                                  PCONSTSALPOINT* /*pPtAry*/)
+void Qt5Graphics::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32* pPoints,
+                                  PCONSTSALPOINT* ppPtAry)
 {
+    // ignore invisible polygons
+    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
+        return;
+
+    QPainterPath aPath;
+    for (sal_uInt32 nPoly = 0; nPoly < nPolyCount; nPoly++)
+    {
+        const sal_uInt32 nPoints = pPoints[nPoly];
+        if (nPoints > 1)
+        {
+            const SalPoint* pPtAry = ppPtAry[nPoly];
+            aPath.moveTo(pPtAry->mnX, pPtAry->mnY);
+            pPtAry++;
+            for (sal_uInt32 nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++)
+                aPath.lineTo(pPtAry->mnX, pPtAry->mnY);
+            aPath.closeSubpath();
+        }
+    }
+
+    Qt5Painter aPainter(*this, true);
+    aPainter.drawPath(aPath);
+    aPainter.update(aPath.boundingRect());
 }
 
 bool Qt5Graphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
