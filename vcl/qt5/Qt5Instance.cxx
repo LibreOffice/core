@@ -26,6 +26,7 @@
 #include <Qt5Frame.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5Object.hxx>
+#include <Qt5System.hxx>
 #include <Qt5Timer.hxx>
 #include <Qt5VirtualDevice.hxx>
 
@@ -40,7 +41,6 @@
 #include <sal/log.hxx>
 #include <osl/process.h>
 
-#include <headless/svpdummies.hxx>
 #include <headless/svpbmp.hxx>
 
 Qt5Instance::Qt5Instance(SalYieldMutex* pMutex, bool bUseCairo)
@@ -128,7 +128,7 @@ std::unique_ptr<SalMenuItem> Qt5Instance::CreateMenuItem(const SalItemParams& rI
 
 SalTimer* Qt5Instance::CreateSalTimer() { return new Qt5Timer(); }
 
-SalSystem* Qt5Instance::CreateSalSystem() { return new SvpSalSystem(); }
+SalSystem* Qt5Instance::CreateSalSystem() { return new Qt5System(); }
 
 std::shared_ptr<SalBitmap> Qt5Instance::CreateSalBitmap()
 {
