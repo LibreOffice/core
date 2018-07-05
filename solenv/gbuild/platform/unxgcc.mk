@@ -76,6 +76,11 @@ endif
 
 ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
 gb_LinkTarget_LDFLAGS += -Wl,-Bsymbolic-functions
+ifeq ($(COM_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+gb_LinkTarget_LDFLAGS += -Wl,--dynamic-list-cpp-typeinfo
+endif
+endif
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
