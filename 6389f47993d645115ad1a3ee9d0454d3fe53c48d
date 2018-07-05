@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_373fcad7",
+        "filename": "sw/uiconfig/swriter/ui/assignstylesdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-07-05T13:15:54Z",
+      "side": 1,
+      "message": "are you sure you want to change the context here?",
+      "range": {
+        "startLine": 128,
+        "startChar": 99,
+        "endLine": 128,
+        "endChar": 106
+      },
+      "revId": "6389f47993d645115ad1a3ee9d0454d3fe53c48d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
