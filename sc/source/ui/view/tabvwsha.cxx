@@ -483,7 +483,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     std::shared_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
     std::shared_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
-    pOldSet->MergeRange(XATTR_FILLCOLOR, XATTR_FILLCOLOR);
+    pOldSet->MergeRange(XATTR_FILLSTYLE, XATTR_FILLCOLOR);
 
     sal_uInt16 nWhich = pOldSet->GetPool()->GetWhich( SID_ATTR_BRUSH );
     SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(pOldSet->Get(nWhich)));
