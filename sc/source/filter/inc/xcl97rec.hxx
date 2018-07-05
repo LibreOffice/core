@@ -37,24 +37,21 @@ class XclExpObjList : public ExcEmptyRec, protected XclExpRoot
 {
 public:
 
-    typedef std::vector<XclObj*>::iterator iterator;
+    typedef std::vector<std::unique_ptr<XclObj>>::iterator iterator;
 
     explicit            XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx );
     virtual             ~XclExpObjList() override;
 
     /// return: 1-based ObjId
     ///! count>=0xFFFF: Obj will be deleted, return 0
-    sal_uInt16              Add( XclObj* );
+    sal_uInt16              Add( std::unique_ptr<XclObj> );
 
-    XclObj* back () { return maObjs.empty() ? nullptr : maObjs.back(); }
+    XclObj* back () { return maObjs.empty() ? nullptr : maObjs.back().get(); }
 
     /**
-     *
      * @brief Remove last element in the list.
-     *
      */
-
-    void pop_back ();
+    std::unique_ptr<XclObj> pop_back ();
 
     bool empty () const { return maObjs.empty(); }
 
@@ -64,7 +61,7 @@ public:
 
     iterator end () { return maObjs.end(); }
 
-    XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
+    XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet.get(); }
 
                                 /// close groups and DgContainer opened in ctor
     void                EndSheet();
@@ -79,10 +76,10 @@ private:
     SCTAB               mnScTab;
 
     XclEscherEx&        mrEscherEx;
-    XclExpMsoDrawing*   pMsodrawingPerSheet;
-    XclExpMsoDrawing*   pSolverContainer;
+    std::unique_ptr<XclExpMsoDrawing> pMsodrawingPerSheet;
+    std::unique_ptr<XclExpMsoDrawing> pSolverContainer;
 
-    std::vector<XclObj*> maObjs;
+    std::vector<std::unique_ptr<XclObj>> maObjs;
 };
 
 // --- class XclObj --------------------------------------------------

@@ -1013,8 +1013,8 @@ void ExcAutoFilterRecs::AddObjRecs()
         ScAddress aAddr( m_pFilterInfo->GetStartPos() );
         for( SCCOL nObj = 0, nCount = m_pFilterInfo->GetColCount(); nObj < nCount; nObj++ )
         {
-            XclObj* pObjRec = new XclObjDropDown( GetObjectManager(), aAddr, IsFiltered( nObj ) );
-            GetObjectManager().AddObj( pObjRec );
+            std::unique_ptr<XclObj> pObjRec(new XclObjDropDown( GetObjectManager(), aAddr, IsFiltered( nObj ) ));
+            GetObjectManager().AddObj( std::move(pObjRec) );
             aAddr.IncCol();
         }
     }

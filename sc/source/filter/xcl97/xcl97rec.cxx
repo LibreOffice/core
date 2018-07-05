@@ -98,10 +98,9 @@ sal_Int32 XclExpObjList::mnVmlCount;
 XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) :
     XclExpRoot( rRoot ),
     mnScTab( rRoot.GetCurrScTab() ),
-    mrEscherEx( rEscherEx ),
-    pSolverContainer( nullptr )
+    mrEscherEx( rEscherEx )
 {
-    pMsodrawingPerSheet = new XclExpMsoDrawing( rEscherEx );
+    pMsodrawingPerSheet.reset( new XclExpMsoDrawing( rEscherEx ) );
     // open the DGCONTAINER and the patriarch group shape
     mrEscherEx.OpenContainer( ESCHER_DgContainer );
     tools::Rectangle aRect( 0, 0, 0, 0 );
@@ -111,12 +110,12 @@ XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) 
 
 XclExpObjList::~XclExpObjList()
 {
-    std::for_each(maObjs.begin(), maObjs.end(), std::default_delete<XclObj>());
-    delete pMsodrawingPerSheet;
-    delete pSolverContainer;
+    maObjs.clear();
+    pMsodrawingPerSheet.reset();
+    pSolverContainer.reset();
 }
 
-sal_uInt16 XclExpObjList::Add( XclObj* pObj )
+sal_uInt16 XclExpObjList::Add( std::unique_ptr<XclObj> pObj )
 {
     OSL_ENSURE( maObjs.size() < 0xFFFF, "XclExpObjList::Add: too much for Xcl" );
 
@@ -124,30 +123,31 @@ sal_uInt16 XclExpObjList::Add( XclObj* pObj )
 
     if ( nSize < 0xFFFF )
     {
-        maObjs.push_back(pObj);
+        maObjs.push_back(std::move(pObj));
         ++nSize;
         pObj->SetId( nSize );
         pObj->SetTab( mnScTab );
     }
     else
     {
-        delete pObj;
         nSize = 0;
     }
 
     return nSize;
 }
 
-void XclExpObjList::pop_back ()
+std::unique_ptr<XclObj> XclExpObjList::pop_back ()
 {
+    auto ret = std::move(maObjs.back());
     maObjs.pop_back();
+    return ret;
 }
 
 void XclExpObjList::EndSheet()
 {
     // Is there still something in the stream? -> The solver container
     if( mrEscherEx.HasPendingDffData() )
-        pSolverContainer = new XclExpMsoDrawing( mrEscherEx );
+        pSolverContainer.reset( new XclExpMsoDrawing( mrEscherEx ) );
 
     // close the DGCONTAINER created by XclExpObjList ctor MSODRAWING
     mrEscherEx.CloseContainer();
@@ -158,8 +158,7 @@ void XclExpObjList::Save( XclExpStream& rStrm )
     //! Escher must be written, even if there are no objects
     pMsodrawingPerSheet->Save( rStrm );
 
-    std::vector<XclObj*>::iterator pIter;
-    for ( pIter = maObjs.begin(); pIter != maObjs.end(); ++pIter )
+    for ( auto pIter = maObjs.begin(); pIter != maObjs.end(); ++pIter )
         (*pIter)->Save( rStrm );
 
     if( pSolverContainer )
@@ -183,9 +182,8 @@ sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
 {
     sal_Int32 nNumVml = 0;
 
-    std::vector<XclObj*>::iterator pIter;
-    for ( pIter = rList.begin(); pIter != rList.end(); ++pIter )
-        if( IsVmlObject( *pIter ) )
+    for ( auto pIter = rList.begin(); pIter != rList.end(); ++pIter )
+        if( IsVmlObject( pIter->get() ) )
             ++nNumVml;
 
     return nNumVml;
@@ -236,13 +234,12 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
 {
     std::vector<XclObj*> aList;
     aList.reserve(rList.size());
-    std::vector<XclObj*>::iterator it = rList.begin(), itEnd = rList.end();
-    for (; it != itEnd; ++it)
+    for (auto it = rList.begin(), itEnd = rList.end(); it != itEnd; ++it)
     {
-        if (IsVmlObject(*it) || !IsValidObject(**it))
+        if (IsVmlObject(it->get()) || !IsValidObject(**it))
             continue;
 
-        aList.push_back(*it);
+        aList.push_back(it->get());
     }
 
     if (aList.empty())
@@ -269,7 +266,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
             FSNS( XML_xmlns, XML_r ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
             FSEND );
 
-    for (it = aList.begin(), itEnd = aList.end(); it != itEnd; ++it)
+    for (auto it = aList.begin(), itEnd = aList.end(); it != itEnd; ++it)
         (*it)->SaveXml(rStrm);
 
     pDrawing->endElement( FSNS( XML_xdr, XML_wsDr ) );
@@ -304,10 +301,9 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nV
             FSNS( XML_xmlns, XML_w10 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlWord))).getStr(),
             FSEND );
 
-    std::vector<XclObj*>::iterator pIter;
-    for ( pIter = rList.begin(); pIter != rList.end(); ++pIter )
+    for ( auto pIter = rList.begin(); pIter != rList.end(); ++pIter )
     {
-        if( !IsVmlObject( *pIter ) )
+        if( !IsVmlObject( pIter->get() ) )
             continue;
         (*pIter)->SaveXml( rStrm );
     }
