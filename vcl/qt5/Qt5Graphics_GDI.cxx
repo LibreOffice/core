@@ -196,7 +196,7 @@ void Qt5Graphics::drawLine(long nX1, long nY1, long nX2, long nY2)
         nY1 = nY2;
         nY2 = tmp;
     }
-    aPainter.update(nX1, nY1, nX2 - nX1, nY2 - nY1);
+    aPainter.update(nX1, nY1, nX2 - nX1 + 1, nY2 - nY1 + 1);
 }
 
 void Qt5Graphics::drawRect(long nX, long nY, long nWidth, long nHeight)
@@ -207,7 +207,7 @@ void Qt5Graphics::drawRect(long nX, long nY, long nWidth, long nHeight)
     Qt5Painter aPainter(*this, true);
     if (SALCOLOR_NONE != m_aFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
-    else
+    if (SALCOLOR_NONE != m_aLineColor)
         aPainter.drawRect(nX, nY, nWidth, nHeight);
     aPainter.update(nX, nY, nWidth, nHeight);
 }
@@ -527,7 +527,7 @@ static bool getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlph
             {
                 if (x && !(x % 8))
                     ++alpha_line;
-                if (0 == (*alpha_line & (1 << (x % 8))))
+                if (0 != (*alpha_line & (1 << (7 - x % 8))))
                     image_line[3] = 0;
             }
         }
@@ -584,7 +584,7 @@ bool Qt5Graphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight,
     Qt5Painter aPainter(*this, true, nTransparency);
     if (SALCOLOR_NONE != m_aFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
-    else
+    if (SALCOLOR_NONE != m_aLineColor)
         aPainter.drawRect(nX, nY, nWidth, nHeight);
     aPainter.update(nX, nY, nWidth, nHeight);
     return true;
