@@ -50,7 +50,10 @@ Qt5Instance::Qt5Instance(SalYieldMutex* pMutex, bool bUseCairo)
 {
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
-    pSVData->maAppData.mpToolkitName = new OUString("qt5");
+    if (bUseCairo)
+        pSVData->maAppData.mpToolkitName = new OUString("qt5+cairo");
+    else
+        pSVData->maAppData.mpToolkitName = new OUString("qt5");
 
     m_postUserEventId = QEvent::registerEventType();
 
