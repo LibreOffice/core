@@ -31,10 +31,10 @@ class FormulaTreeNode;
 class UnhandledToken
 {
 public:
-    UnhandledToken( const char* m, const std::string& fn, int ln );
+    UnhandledToken( const OString& m, const char* fn, int ln );
 
-    std::string mMessage;
-    std::string mFile;
+    OString mMessage;
+    const char* mFile;
     int mLineNumber;
 };
 

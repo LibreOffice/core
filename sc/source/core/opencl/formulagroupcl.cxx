@@ -2185,7 +2185,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     // of them. Round down a bit.
 
                     if (pDVR->GetArrays().size() > 50)
-                        throw UnhandledToken(("Kernel would have ridiculously many parameters (" + std::to_string(2 + pDVR->GetArrays().size()) + ")").c_str(), __FILE__, __LINE__);
+                        throw UnhandledToken("Kernel would have ridiculously many parameters (" + OString::number(2 + pDVR->GetArrays().size()) + ")", __FILE__, __LINE__);
 
                     for (size_t j = 0; j < pDVR->GetArrays().size(); ++j)
                     {
@@ -2217,7 +2217,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             {
                                 // Can't handle
                                 SAL_INFO("sc.opencl", "Strings but can't do that.");
-                                throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
+                                throw UnhandledToken("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush", __FILE__, __LINE__);
                             }
                             else
                             {
@@ -2329,7 +2329,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 else
                 {
                     SAL_INFO("sc.opencl", "Fallback case, rejecting for OpenCL");
-                    throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
+                    throw UnhandledToken("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush", __FILE__, __LINE__);
                 }
                 break;
             case ocDiv:

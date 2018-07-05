@@ -87,7 +87,7 @@ enum StackVar : sal_uInt8
 
 // Turn this into an operator<< when StackVar becomes a scoped enum
 
-inline std::string StackVarEnumToString(StackVar const e)
+inline OString StackVarEnumToString(StackVar const e)
 {
     switch (e)
     {
@@ -116,9 +116,7 @@ inline std::string StackVarEnumToString(StackVar const e)
         case svSep:               return "Sep";
         case svUnknown:           return "Unknown";
     }
-    std::ostringstream os;
-    os << static_cast<int>(e);
-    return os.str();
+    return OString::number(e);
 }
 
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken

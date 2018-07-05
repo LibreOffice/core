@@ -16,7 +16,7 @@ using namespace formula;
 namespace sc { namespace opencl {
 
 UnhandledToken::UnhandledToken(
-    const char* m, const std::string& fn, int ln ) :
+    const OString& m, const char* fn, int ln ) :
     mMessage(m), mFile(fn), mLineNumber(ln) {}
 
 OpenCLError::OpenCLError( const std::string& function, cl_int error, const std::string& file, int line ) :
