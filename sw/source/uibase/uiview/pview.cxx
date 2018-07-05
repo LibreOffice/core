@@ -1164,7 +1164,8 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
     SfxShell::BroadcastContextForActivation(true);
     //removelisteners for notebookbar
-    SfxViewFrame::Current()->GetWindow().GetSystemWindow()->GetNotebookBar()->ControlListener(true);
+    if (auto& pBar = SfxViewFrame::Current()->GetWindow().GetSystemWindow()->GetNotebookBar())
+        pBar->ControlListener(true);
 
     SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
     if ( !pOldSh )
@@ -1230,7 +1231,8 @@ SwPagePreview::~SwPagePreview()
     delete pVShell;
 
     m_pViewWin.disposeAndClear();
-    SfxViewFrame::Current()->GetWindow().GetSystemWindow()->GetNotebookBar()->ControlListener(false);
+    if (auto& pBar = SfxViewFrame::Current()->GetWindow().GetSystemWindow()->GetNotebookBar())
+        pBar->ControlListener(false);
     m_pScrollFill.disposeAndClear();
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
