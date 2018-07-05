@@ -213,6 +213,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/stbctrls/insctrl \
     svx/source/stbctrls/selctrl \
     svx/source/stbctrls/xmlsecctrl \
+    svx/source/stbctrls/capsctrl \
     svx/source/stbctrls/modctrl \
     svx/source/stbctrls/zoomsliderctrl \
     svx/source/stbctrls/zoomctrl \
