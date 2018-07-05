@@ -407,8 +407,8 @@ public:
     XclEscherEx& GetEscherEx() { return *mxEscherEx; }
     XclExpMsoDrawing*   GetMsodrawingPerSheet();
     bool                HasObj() const;
-    sal_uInt16          AddObj( XclObj* pObjRec );
-    XclObj*             RemoveLastObj();
+    sal_uInt16          AddObj( std::unique_ptr<XclObj> pObjRec );
+    std::unique_ptr<XclObj> RemoveLastObj();
 
 protected:
     explicit            XclExpObjectManager( const XclExpObjectManager& rParent );
