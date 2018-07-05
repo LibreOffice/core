@@ -135,6 +135,17 @@ class SC_DLLPUBLIC TextTransformation : public DataTransformation
 
 };
 
+class SC_DLLPUBLIC AggregateFunction : public DataTransformation
+{
+    std::set<SCCOL> mnCol;
+    AGGREGATE_FUNCTION maType;
+
+    public:
+    AggregateFunction(std::set<SCCOL> nCol, const AGGREGATE_FUNCTION rType);
+    virtual void Transform(ScDocument& rDoc) const override;
+};
+
+
 }
 
 #endif
