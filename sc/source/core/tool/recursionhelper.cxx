@@ -13,6 +13,7 @@
 void ScRecursionHelper::Init()
 {
     nRecursionCount    = 0;
+    nDependencyComputationLevel = 0;
     bInRecursionReturn = bDoingRecursion = bInIterationReturn = false;
     aInsertPos = GetIterationEnd();
     ResetIteration();
@@ -96,12 +97,22 @@ void ScRecursionHelper::Clear()
     Init();
 }
 
-bool ScRecursionHelper::PushFormulaGroup(ScFormulaCellGroup* pGrp)
+static ScFormulaCell* lcl_GetTopCell(ScFormulaCell* pCell)
 {
-    if (!pGrp)
-        return false;
+    if (!pCell)
+        return nullptr;
 
-    if (pGrp->mbSeenInPath)
+    const ScFormulaCellGroupRef& mxGroup = pCell->GetCellGroup();
+    if (!mxGroup)
+        return pCell;
+    return mxGroup->mpTopCell;
+}
+
+bool ScRecursionHelper::PushFormulaGroup(ScFormulaCell* pCell)
+{
+    assert(pCell);
+
+    if (pCell->GetSeenInPath())
     {
         // Found a simple cycle of formula-groups.
         // Disable group calc for all elements of this cycle.
@@ -111,14 +122,16 @@ bool ScRecursionHelper::PushFormulaGroup(ScFormulaCellGroup* pGrp)
         {
             --nIdx;
             assert(nIdx >= 0);
-            aFGList[nIdx]->mbPartOfCycle = true;
-        } while (aFGList[nIdx] != pGrp);
+            const ScFormulaCellGroupRef& mxGroup = aFGList[nIdx]->GetCellGroup();
+            if (mxGroup)
+                mxGroup->mbPartOfCycle = true;
+        } while (aFGList[nIdx] != pCell);
 
         return false;
     }
 
-    pGrp->mbSeenInPath = true;
-    aFGList.push_back(pGrp);
+    pCell->SetSeenInPath(true);
+    aFGList.push_back(pCell);
     return true;
 }
 
@@ -126,21 +139,51 @@ void ScRecursionHelper::PopFormulaGroup()
 {
     if (aFGList.empty())
         return;
-    ScFormulaCellGroup* pGrp = aFGList.back();
-    pGrp->mbSeenInPath = false;
+    ScFormulaCell* pCell = aFGList.back();
+    pCell->SetSeenInPath(false);
     aFGList.pop_back();
 }
 
-ScFormulaGroupCycleCheckGuard::ScFormulaGroupCycleCheckGuard(ScRecursionHelper& rRecursionHelper, ScFormulaCellGroup* pGrp) :
+bool ScRecursionHelper::AnyParentFGInCycle()
+{
+    sal_Int32 nIdx = aFGList.size() - 1;
+    while (nIdx >= 0)
+    {
+        const ScFormulaCellGroupRef& mxGroup = aFGList[nIdx]->GetCellGroup();
+        if (mxGroup)
+            return mxGroup->mbPartOfCycle;
+        --nIdx;
+    };
+    return false;
+}
+
+ScFormulaGroupCycleCheckGuard::ScFormulaGroupCycleCheckGuard(ScRecursionHelper& rRecursionHelper, ScFormulaCell* pCell) :
     mrRecHelper(rRecursionHelper)
 {
-    mbShouldPop = mrRecHelper.PushFormulaGroup(pGrp);
+    if (pCell)
+    {
+        pCell = lcl_GetTopCell(pCell);
+        mbShouldPop = mrRecHelper.PushFormulaGroup(pCell);
+    }
+    else
+        mbShouldPop = false;
 }
 
 ScFormulaGroupCycleCheckGuard::~ScFormulaGroupCycleCheckGuard()
 {
     if (mbShouldPop)
         mrRecHelper.PopFormulaGroup();
+}
+
+ScFormulaGroupDependencyComputeGuard::ScFormulaGroupDependencyComputeGuard(ScRecursionHelper& rRecursionHelper) :
+    mrRecHelper(rRecursionHelper)
+{
+    mrRecHelper.IncDepComputeLevel();
+}
+
+ScFormulaGroupDependencyComputeGuard::~ScFormulaGroupDependencyComputeGuard()
+{
+    mrRecHelper.DecDepComputeLevel();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
