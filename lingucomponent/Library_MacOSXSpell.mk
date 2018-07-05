@@ -56,11 +56,17 @@ $(eval $(call gb_Library_add_linked_libs,MacOSXSpell,\
 
 $(eval $(call gb_Library_add_libs,MacOSXSpell,\
 	-framework Cocoa \
+	-framework Carbon \
+	-framework CoreFoundation \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,MacOSXSpell,\
 	lingucomponent/source/spellcheck/macosxspell/macreg \
 	lingucomponent/source/spellcheck/macosxspell/macspellimp \
+))
+
+$(eval $(call gb_Library_add_cxxflags,MacOSXSpell,\
+    -x -objective-c++ -stdlib=libc++ \
 ))
 
 # vim: set noet sw=4 ts=4:

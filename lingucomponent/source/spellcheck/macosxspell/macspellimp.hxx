@@ -31,7 +31,9 @@
 #ifdef MACOSX
 #include <premac.h>
 #include <Carbon/Carbon.h>
+#include <CoreFoundation/CoreFoundation.h>
 #import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #include <postmac.h>
 #endif
 #include <com/sun/star/lang/XComponent.hpp>
