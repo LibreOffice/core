@@ -18,42 +18,14 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_tableconditionalformatobj,
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_tableconditionalformatobj, \
-	basegfx \
-	comphelper \
 	cppu \
-	cppuhelper \
-	drawinglayer \
-	editeng \
-	for \
-	forui \
-	i18nlangtag \
-	msfilter \
-	oox \
 	sal \
-	salhelper \
-	sax \
-	sb \
-	sc \
-	sfx \
-	sot \
 	subsequenttest \
-	svl \
-	svt \
-	svx \
-	svxcore \
 	test \
-	tk \
-	tl \
-	ucbhelper \
 	unotest \
-	utl \
-	vbahelper \
-	vcl \
-	xo \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_tableconditionalformatobj,\
-	-I$(SRCDIR)/sc/source/ui/inc \
 	-I$(SRCDIR)/sc/inc \
 	$$(INCLUDE) \
 ))
