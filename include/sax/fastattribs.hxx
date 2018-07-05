@@ -93,6 +93,9 @@ public:
     bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const;
     bool getAsDouble( sal_Int32 nToken, double &rDouble) const;
     bool getAsChar( sal_Int32 nToken, const char*& rPos ) const;
+    sal_Int32 getAsIntegerByIndex( sal_Int32 nTokenIndex ) const;
+    const char* getAsCharByIndex( sal_Int32 nTokenIndex ) const;
+    OUString getValueByIndex( sal_Int32 nTokenIndex ) const;
 
     // XFastAttributeList
     virtual sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) override;
@@ -102,6 +105,14 @@ public:
     virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) override;
     virtual css::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) override;
     virtual css::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() override;
+
+    sal_Int32 getAttributeIndex( ::sal_Int32 Token )
+    {
+        for (size_t i=0; i<maAttributeTokens.size(); ++i)
+            if (maAttributeTokens[i] == Token)
+                return i;
+        return -1;
+    }
 
     static FastAttributeList* castToFastAttributeList(
                         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
