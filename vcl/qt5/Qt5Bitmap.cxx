@@ -38,11 +38,11 @@ bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPale
            && "Unsupported BitCount!");
 
     if (nBitCount == 1)
-        assert(2 == rPal.GetEntryCount());
+        assert(2 >= rPal.GetEntryCount());
     if (nBitCount == 4)
-        assert(16 == rPal.GetEntryCount());
+        assert(16 >= rPal.GetEntryCount());
     if (nBitCount == 8)
-        assert(256 == rPal.GetEntryCount());
+        assert(256 >= rPal.GetEntryCount());
 
     if (nBitCount == 4)
     {
@@ -230,7 +230,7 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
     switch (pBuffer->mnBitCount)
     {
         case 1:
-            pBuffer->mnFormat = ScanlineFormat::N1BitLsbPal | ScanlineFormat::TopDown;
+            pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal | ScanlineFormat::TopDown;
             pBuffer->maPalette = m_aPalette;
             break;
         case 4:
