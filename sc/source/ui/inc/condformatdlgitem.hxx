@@ -42,6 +42,11 @@ public:
 
     virtual ~ScCondFormatDlgItem() override;
 
+    ScCondFormatDlgItem(ScCondFormatDlgItem const &) = default;
+    ScCondFormatDlgItem(ScCondFormatDlgItem &&) = default;
+    ScCondFormatDlgItem & operator =(ScCondFormatDlgItem const &) = default;
+    ScCondFormatDlgItem & operator =(ScCondFormatDlgItem &&) = default;
+
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 

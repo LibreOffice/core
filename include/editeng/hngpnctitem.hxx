@@ -42,13 +42,6 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
-
-    SvxHangingPunctuationItem& operator=(
-                                    const SvxHangingPunctuationItem& rItem )
-    {
-        SetValue( rItem.GetValue() );
-        return *this;
-    }
 };
 
 #endif

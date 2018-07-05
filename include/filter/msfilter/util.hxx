@@ -94,7 +94,6 @@ private:
     sal_Int32 nSavPtr;
 public:
     WW8ReadFieldParams( const OUString& rData );
-    ~WW8ReadFieldParams();
 
     bool GoToTokenParam();
     sal_Int32 SkipToNextToken();

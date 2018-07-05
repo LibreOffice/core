@@ -46,8 +46,13 @@ public:
     using Iterator_t = std::vector<Entry_t>::iterator;
     using ReverseIterator_t = std::vector<Entry_t>::reverse_iterator;
     RTFSprms();
-    RTFSprms(const RTFSprms& rSprms);
     ~RTFSprms() override;
+
+    RTFSprms(RTFSprms const&) = default;
+    RTFSprms(RTFSprms&&) = default;
+    RTFSprms& operator=(RTFSprms const&) = default;
+    RTFSprms& operator=(RTFSprms&&) = default;
+
     RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true, bool bForWrite = false);
     /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
     void set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = RTFOverwrite::YES);

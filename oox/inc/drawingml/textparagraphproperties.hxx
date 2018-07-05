@@ -80,7 +80,6 @@ class TextParagraphProperties
 public:
 
     TextParagraphProperties();
-    ~TextParagraphProperties();
 
     void                                setLevel( sal_Int16 nLevel ) { mnLevel = nLevel; }
     sal_Int16                           getLevel( ) const { return mnLevel; }

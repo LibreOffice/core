@@ -27,6 +27,11 @@ public:
     SdrTextAniStartInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn) {}
     virtual ~SdrTextAniStartInsideItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrTextAniStartInsideItem(SdrTextAniStartInsideItem const &) = default;
+    SdrTextAniStartInsideItem(SdrTextAniStartInsideItem &&) = default;
+    SdrTextAniStartInsideItem & operator =(SdrTextAniStartInsideItem const &) = default;
+    SdrTextAniStartInsideItem & operator =(SdrTextAniStartInsideItem &&) = default;
 };
 
 class SVX_DLLPUBLIC SdrTextAniStopInsideItem: public SdrYesNoItem {
@@ -34,6 +39,11 @@ public:
     SdrTextAniStopInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn) {}
     virtual ~SdrTextAniStopInsideItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrTextAniStopInsideItem(SdrTextAniStopInsideItem const &) = default;
+    SdrTextAniStopInsideItem(SdrTextAniStopInsideItem &&) = default;
+    SdrTextAniStopInsideItem & operator =(SdrTextAniStopInsideItem const &) = default;
+    SdrTextAniStopInsideItem & operator =(SdrTextAniStopInsideItem &&) = default;
 };
 
 #endif

@@ -54,6 +54,7 @@ public:
                 SetValue( rHorJustify.GetValue() );
                 return *this;
             }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxHorJustifyItem(SvxHorJustifyItem const &) = default;
 };
 
 
@@ -86,6 +87,7 @@ public:
                 SetValue( rVerJustify.GetValue() );
                 return *this;
             }
+    /*TODO: SfxPoolItem copy function dichotomy*/SvxVerJustifyItem(SvxVerJustifyItem const &) = default;
 };
 
 
@@ -107,8 +109,6 @@ public:
     virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellJustifyMethod nVal );
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    SvxJustifyMethodItem& operator=(const SvxJustifyMethodItem& r);
 };
 
 #endif
