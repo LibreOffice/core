@@ -23,6 +23,8 @@ import com.sun.star.script.framework.log.LogUtils;
 
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 /**
  *  Class Loader Factory
@@ -43,8 +45,11 @@ public class ClassLoaderFactory {
         return getURLClassLoader(parent, classPath);
     }
 
-    public static ClassLoader getURLClassLoader(ClassLoader parent,
-            URL[] classpath) {
-        return new URLClassLoader(classpath, parent);
+    public static ClassLoader getURLClassLoader(final ClassLoader parent,
+            final URL[] classpath) {
+        return AccessController.doPrivileged(
+            new PrivilegedAction<URLClassLoader>() {
+                public URLClassLoader run() { return new URLClassLoader(classpath, parent); }
+            });
     }
 }
