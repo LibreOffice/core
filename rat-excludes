@@ -10,8 +10,8 @@ ext_libraries/
 ##############################################################################
 #
 # external libraries that are not part of the source release, but may be built
-# for the binary AOO incarnations dependent on the used configure switches. 
-# Each subproject contains a framework to get the library as tarball (from 
+# for the binary AOO incarnations dependent on the used configure switches.
+# Each subproject contains a framework to get the library as tarball (from
 # ext_sources), patch and build it. It does not contain the external libraries
 # themselves.
 #
@@ -170,11 +170,11 @@ main/testautomation/writer/optional/input/import/amipro3.sam
 # AOO specific OpenSymbol source file, (S)ource(F)orge(D)ata, recently called (S)pline(F)ont(D)ata
 main/extras/source/truetype/symbol/OpenSymbol.sfd
 
-# used in main/writerfilter/source/rtftok/RTFScanner.skl (1), part of SGA 
+# used in main/writerfilter/source/rtftok/RTFScanner.skl (1), part of SGA
 # binary file (?)
 main/writerfilter/source/rtftok/RTFScanner.skl
 
-# used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/sylk.slk (1), part of SGA 
+# used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/sylk.slk (1), part of SGA
 # SYLK spreadsheet, ascii. Comments possible (see in file), ALv2 may be added here
 main/testautomation/spreadsheet/optional/input/loadsave/microsoft/sylk.slk
 
@@ -234,7 +234,7 @@ main/migrationanalysis/src/wizard/Wizard.DCA
 # Delphi Form
 main/odk/examples/OLE/delphi/InsertTables/SampleUI.dfm
 
-# used  in main/wizards/source/gimmicks/readdirs.dlg (1), part of SGA
+# used in main/wizards/source/gimmicks/readdirs.dlg (1), part of SGA
 # Dialog Creation Template (for Excel) (?)
 main/wizards/source/gimmicks/readdirs.dlg
 
@@ -266,7 +266,7 @@ main/odk/examples/OLE/delphi/InsertTables/Project1.dpr
 # Library definition files (21), no creative content
 **/*.def
 
-#  Developer Studio project file (4), no creative content
+# Developer Studio project file (4), no creative content
 **/*.dsp
 
 # Defines library export symbols (36), no creative content
@@ -275,7 +275,7 @@ main/odk/examples/OLE/delphi/InsertTables/Project1.dpr
 # symbnol export filter files (20), no creative content
 **/*.flt
 
-#  (>50), part of SGA
+# (>50), part of SGA
 # Install Definition Tables, ascii, not sure about comment support
 #**/*.idt
 main/instsetoo_native/inc_ooolangpack/windows/msi_templates/*.idt
@@ -293,7 +293,7 @@ main/instsetoo_native/inc_ure/windows/msi_templates/*.idt
 # no creative content
 **/*.mf
 
-# (3) used as *.patch.mingw, a diff for preparing external stuff for build, all  in SGA
+# (3) used as *.patch.mingw, a diff for preparing external stuff for build, all in SGA
 # no creative content
 **/*.mingw
 
@@ -351,9 +351,9 @@ main/testautomation/framework/optional/input/menu/en-us_writer.txt
 main/automation/source/miniapp/test.win
 main/testautomation/global/win/*.win
 
-# (7), part of SGA 
+# (7), part of SGA
 # ascii, ALv2 may be added here
-# Added ALv2 in these files 
+# Added ALv2 in these files
 # main/testautomation/global/sid/*.sid
 
 # (158), part of SGA
@@ -446,7 +446,7 @@ main/xmlsecurity/test_docs/CAs/*/*.pem
 main/bean/test/applet/oooapplet/bean.policy
 main/stoc/test/security/test_security.policy
 
-# Postscript files, used for configuration 
+# Postscript files, used for configuration
 main/psprint_config/configuration/ppds/**/*.PS
 main/testgraphical/references/**/*.PS
 
@@ -515,7 +515,7 @@ main/testautomation/writer/optional/input/export/filter/*.w95
 # patch files
 main/redland/raptor/raptor-1.4.18.patch.win32
 main/redland/rasqal/rasqal-0.9.16.patch.win32
-main/redland/redland/redland-1.0.8.patch.win32
+main/redland/redland/redland-1.0.17.patch.win32
 
 # (1000+), part of SGA
 # AOO library files, XML, ALv2 could be added
@@ -726,7 +726,7 @@ main/odk/examples/OLE/vbscript/WriterDemo.vbs
 
 ##############################################################################
 #
-# files not requiring a header - empty or generated files 
+# files not requiring a header - empty or generated files
 #
 
 main/accessibility/bridge/org/openoffice/accessibility/manifest
@@ -853,7 +853,7 @@ main/qadevOOo/testdocs/qadevlibs/source/test/manifest
 main/rat-excludes
 main/redland/raptor/raptor-1.4.18.patch.os2
 main/redland/rasqal/rasqal-0.9.16.patch.os2
-main/redland/redland/redland-1.0.8.patch.os2
+main/redland/redland/redland-1.0.17.patch.os2
 main/reportbuilder/java/com/sun/star/report/pentaho/parser/style-mapping.txt
 main/reportbuilder/template/delzip
 main/reportbuilder/template/post.xml
@@ -1073,9 +1073,10 @@ main/setup_native/source/packinfo/package_names_ext.txt
 main/setup_native/source/packinfo/package_names.txt
 main/officecfg/registry/schema/oo-common.conf
 main/icu/createmak.cfg
+main/icu/createmakWin64.cfg
 main/redland/raptor/raptor-1.4.18.patch.ooo_build
 main/redland/rasqal/rasqal-0.9.16.patch.ooo_build
-main/redland/redland/redland-1.0.8.patch.ooo_build
+main/redland/redland/redland-1.0.17.patch.ooo_build
 main/binfilter/bf_sfx2/util/makefile.prj
 main/testautomation/spreadsheet/optional/input/loadsave/microsoft/dif.DIF
 main/mysqlc/source/description/description_de.txt
@@ -1389,7 +1390,7 @@ main/ucb/source/ucp/odma/odma.h
 
 ##############################################################################
 #
-# Copyright © 2000 SuSE, Inc., license from text (see files)
+# Copyright (C) 2000 SuSE, Inc., license from text (see files)
 # equal to MIT1.1
 # A case for https://issues.apache.org/jira/browse/LEGAL-130
 #
