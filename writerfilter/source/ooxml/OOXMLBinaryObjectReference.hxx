@@ -37,7 +37,7 @@ class OOXMLBinaryObjectReference :
 
 public:
     explicit OOXMLBinaryObjectReference(OOXMLStream::Pointer_t const & pStream);
-    virtual ~OOXMLBinaryObjectReference();
+    virtual ~OOXMLBinaryObjectReference() override;
 
     virtual void resolve(BinaryObj & rHandler) override;
 };

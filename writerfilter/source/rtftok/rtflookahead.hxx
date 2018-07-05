@@ -12,6 +12,7 @@
 
 #include <memory>
 #include <sal/types.h>
+#include <tools/ref.hxx>
 #include "rtflistener.hxx"
 
 class SvStream;
@@ -49,7 +50,7 @@ public:
     bool hasTable() { return m_bHasTable; }
 
 private:
-    std::shared_ptr<RTFTokenizer> m_pTokenizer;
+    tools::SvRef<RTFTokenizer> m_pTokenizer;
     SvStream& m_rStream;
     bool m_bHasTable;
 };

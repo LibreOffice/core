@@ -66,7 +66,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   m_bTookChoice(false)
 {
     if (mpParserState.get() == nullptr)
-        mpParserState.reset(new OOXMLParserState());
+        mpParserState = new OOXMLParserState();
 
     mpParserState->incContextCount();
 }
@@ -86,7 +86,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   m_bTookChoice(pContext->m_bTookChoice)
 {
     if (mpParserState.get() == nullptr)
-        mpParserState.reset(new OOXMLParserState());
+        mpParserState = new OOXMLParserState();
 
     mpParserState->incContextCount();
 }
@@ -314,7 +314,7 @@ void OOXMLFastContextHandler::sendTableDepth() const
             pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
         }
 
-        mpStream->props(pProps);
+        mpStream->props(pProps.get());
     }
 }
 
@@ -394,7 +394,7 @@ void OOXMLFastContextHandler::startSdt()
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
     OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
     pProps->add(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLProperty::ATTRIBUTE);
-    mpStream->props(pProps);
+    mpStream->props(pProps.get());
 }
 
 void OOXMLFastContextHandler::endSdt()
@@ -402,7 +402,7 @@ void OOXMLFastContextHandler::endSdt()
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
     OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
     pProps->add(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLProperty::ATTRIBUTE);
-    mpStream->props(pProps);
+    mpStream->props(pProps.get());
 }
 
 void OOXMLFastContextHandler::startSectionGroup()
@@ -718,7 +718,7 @@ void OOXMLFastContextHandler::sendTableProperties()
 
 void OOXMLFastContextHandler::clearTableProps()
 {
-    mpParserState->setTableProperties(std::make_shared<OOXMLPropertySet>());
+    mpParserState->setTableProperties(new OOXMLPropertySet());
 }
 
 void OOXMLFastContextHandler::sendPropertiesWithId(Id nId)
@@ -727,12 +727,12 @@ void OOXMLFastContextHandler::sendPropertiesWithId(Id nId)
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
 
     pPropertySet->add(nId, pValue, OOXMLProperty::SPRM);
-    mpStream->props(pPropertySet);
+    mpStream->props(pPropertySet.get());
 }
 
 void OOXMLFastContextHandler::clearProps()
 {
-    setPropertySet(std::make_shared<OOXMLPropertySet>());
+    setPropertySet(new OOXMLPropertySet());
 }
 
 void OOXMLFastContextHandler::setDefaultBooleanValue()
@@ -980,7 +980,7 @@ void OOXMLFastContextHandlerProperties::lcl_endFastElement
         {
             if (isForwardEvents())
             {
-                mpStream->props(mpPropertySet);
+                mpStream->props(mpPropertySet.get());
             }
         }
         else
@@ -1356,7 +1356,7 @@ void OOXMLFastContextHandlerTextTableCell::startCell()
             pProps->add(NS_ooxml::LN_tcStart, pVal, OOXMLProperty::SPRM);
         }
 
-        mpStream->props(pProps);
+        mpStream->props(pProps.get());
     }
 }
 
@@ -1382,7 +1382,7 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
             pProps->add(NS_ooxml::LN_tcEnd, pVal, OOXMLProperty::SPRM);
         }
 
-        mpStream->props(pProps);
+        mpStream->props(pProps.get());
     }
 }
 
@@ -1432,7 +1432,7 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
             pProps->add(NS_ooxml::LN_tblRow, pVal, OOXMLProperty::SPRM);
         }
 
-        mpStream->props(pProps);
+        mpStream->props(pProps.get());
     }
 
     startCharacterGroup();
@@ -1494,7 +1494,7 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Po
                 pProps->add(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM);
             }
 
-            mpStream->props(pProps);
+            mpStream->props(pProps.get());
 
             // fake <w:tcBorders> with no border
             OOXMLPropertySet::Pointer_t pCellProps( new OOXMLPropertySet );
@@ -2110,7 +2110,7 @@ void OOXMLFastContextHandlerMath::process()
         OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
         pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
-        mpStream->props( pProps );
+        mpStream->props( pProps.get() );
     }
 }
 

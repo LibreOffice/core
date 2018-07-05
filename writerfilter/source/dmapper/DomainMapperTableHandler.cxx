@@ -96,7 +96,7 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
     }
     else
     {
-        pRet.reset( new PropertyMap );
+        pRet = new PropertyMap;
     }
 
     if (pRet)
@@ -382,7 +382,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             if( pStyleSheet )
             {
                 // First get the style properties, then the table ones
-                PropertyMapPtr pTableProps( m_aTableProperties );
+                PropertyMapPtr pTableProps( m_aTableProperties.get() );
                 TablePropertyMapPtr pEmptyProps( new TablePropertyMap );
 
                 m_aTableProperties = pEmptyProps;
@@ -443,7 +443,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         // Set the table default attributes for the cells
-        rInfo.pTableDefaults->InsertProps(m_aTableProperties);
+        rInfo.pTableDefaults->InsertProps(m_aTableProperties.get());
 
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().startElement("TableDefaults");
@@ -491,17 +491,17 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         table::TableBorder aTableBorder;
         table::BorderLine2 aBorderLine, aLeftBorder;
 
-        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_TOP_BORDER, rInfo, aBorderLine))
+        if (lcl_extractTableBorderProperty(m_aTableProperties.get(), PROP_TOP_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.TopLine = aBorderLine;
             aTableBorder.IsTopLineValid = true;
         }
-        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_BOTTOM_BORDER, rInfo, aBorderLine))
+        if (lcl_extractTableBorderProperty(m_aTableProperties.get(), PROP_BOTTOM_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.BottomLine = aBorderLine;
             aTableBorder.IsBottomLineValid = true;
         }
-        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_LEFT_BORDER, rInfo, aLeftBorder))
+        if (lcl_extractTableBorderProperty(m_aTableProperties.get(), PROP_LEFT_BORDER, rInfo, aLeftBorder))
         {
             aTableBorder.LeftLine = aLeftBorder;
             aTableBorder.IsLeftLineValid = true;
@@ -514,17 +514,17 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                     lcl_DecrementHoriOrientPosition(rFrameProperties, aLeftBorder.LineWidth * 0.5);
             }
         }
-        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_RIGHT_BORDER, rInfo, aBorderLine))
+        if (lcl_extractTableBorderProperty(m_aTableProperties.get(), PROP_RIGHT_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.RightLine = aBorderLine;
             aTableBorder.IsRightLineValid = true;
         }
-        if (lcl_extractTableBorderProperty(m_aTableProperties, META_PROP_HORIZONTAL_BORDER, rInfo, aBorderLine))
+        if (lcl_extractTableBorderProperty(m_aTableProperties.get(), META_PROP_HORIZONTAL_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.HorizontalLine = aBorderLine;
             aTableBorder.IsHorizontalLineValid = true;
         }
-        if (lcl_extractTableBorderProperty(m_aTableProperties, META_PROP_VERTICAL_BORDER, rInfo, aBorderLine))
+        if (lcl_extractTableBorderProperty(m_aTableProperties.get(), META_PROP_VERTICAL_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.VerticalLine = aBorderLine;
             aTableBorder.IsVerticalLineValid = true;
@@ -1170,7 +1170,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         m_rDMapper_Impl.m_bConvertedTable = true;
     }
 
-    m_aTableProperties.reset();
+    m_aTableProperties.clear();
     m_aCellProperties.clear();
     m_aRowProperties.clear();
     m_bHadFootOrEndnote = false;
@@ -1183,7 +1183,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
 
 void DomainMapperTableHandler::startRow(const TablePropertyMapPtr& pProps)
 {
-    m_aRowProperties.push_back( pProps );
+    m_aRowProperties.push_back( pProps.get() );
     m_aCellProperties.emplace_back( );
 
 #ifdef DEBUG_WRITERFILTER
@@ -1208,13 +1208,13 @@ void DomainMapperTableHandler::startCell(const css::uno::Reference< css::text::X
 {
     sal_uInt32 nRow = m_aRowProperties.size();
     if ( pProps.get( ) )
-        m_aCellProperties[nRow - 1].push_back( pProps );
+        m_aCellProperties[nRow - 1].push_back( pProps.get() );
     else
     {
         // Adding an empty cell properties map to be able to get
         // the table defaults properties
         TablePropertyMapPtr pEmptyProps( new TablePropertyMap( ) );
-        m_aCellProperties[nRow - 1].push_back( pEmptyProps );
+        m_aCellProperties[nRow - 1].push_back( pEmptyProps.get() );
     }
 
 #ifdef DEBUG_WRITERFILTER

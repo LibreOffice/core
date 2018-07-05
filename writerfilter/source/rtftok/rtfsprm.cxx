@@ -147,7 +147,7 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id)
         case NS_ooxml::LN_CT_Ind_left:
         case NS_ooxml::LN_CT_Ind_right:
         case NS_ooxml::LN_CT_Ind_firstLine:
-            return std::make_shared<RTFValue>(0);
+            return new RTFValue(0);
 
         default:
             return RTFValue::Pointer_t();
@@ -235,7 +235,7 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
                 RTFSprms().cloneAndDeduplicate(rSprm.second->getAttributes()));
             if (!sprms.empty() || !attributes.empty())
             {
-                ret.set(rSprm.first, std::make_shared<RTFValue>(attributes, sprms));
+                ret.set(rSprm.first, new RTFValue(attributes, sprms));
             }
         }
     }
@@ -372,7 +372,11 @@ RTFSprms::RTFSprms()
 
 RTFSprms::~RTFSprms() = default;
 
-RTFSprms::RTFSprms(const RTFSprms& rSprms) { *this = rSprms; }
+RTFSprms::RTFSprms(const RTFSprms& rSprms)
+    : SvRefBase()
+{
+    *this = rSprms;
+}
 
 void RTFSprms::clear()
 {

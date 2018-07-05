@@ -117,8 +117,8 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
 {
     if (mpCharacterProps.get() != nullptr)
     {
-        rStream.props(mpCharacterProps);
-        mpCharacterProps.reset(new OOXMLPropertySet);
+        rStream.props(mpCharacterProps.get());
+        mpCharacterProps = new OOXMLPropertySet;
     }
 }
 
@@ -164,8 +164,8 @@ void OOXMLParserState::resolveCellProperties(Stream & rStream)
 
         if (rCellProps.get() != nullptr)
         {
-            rStream.props(rCellProps);
-            rCellProps.reset(new OOXMLPropertySet);
+            rStream.props(rCellProps.get());
+            rCellProps = new OOXMLPropertySet;
         }
     }
 }
@@ -178,8 +178,8 @@ void OOXMLParserState::resolveRowProperties(Stream & rStream)
 
         if (rRowProps.get() != nullptr)
         {
-            rStream.props(rRowProps);
-            rRowProps.reset(new OOXMLPropertySet);
+            rStream.props(rRowProps.get());
+            rRowProps = new OOXMLPropertySet;
         }
     }
 }
@@ -192,7 +192,7 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
 
         if (rTableProps.get() != nullptr)
         {
-            rStream.props(rTableProps);
+            rStream.props(rTableProps.get());
             // Don't clean the table props to send them again for each row
             // This mimics the behaviour from RTF tokenizer.
         }

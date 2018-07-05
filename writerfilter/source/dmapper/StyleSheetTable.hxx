@@ -49,7 +49,7 @@ enum StyleType
 };
 
 struct StyleSheetTable_Impl;
-class StyleSheetEntry
+class StyleSheetEntry : public virtual SvRefBase
 {
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 public:
@@ -72,10 +72,10 @@ public:
     css::beans::PropertyValues GetInteropGrabBagSeq(); ///< Used for existing styles, just a list of properties.
 
     StyleSheetEntry();
-    virtual ~StyleSheetEntry();
+    virtual ~StyleSheetEntry() override;
 };
 
-typedef std::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
+typedef tools::SvRef<StyleSheetEntry> StyleSheetEntryPtr;
 
 class DomainMapper;
 class StyleSheetTable :
@@ -112,7 +112,7 @@ private:
 
     void applyDefaults(bool bParaProperties);
 };
-typedef std::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
+typedef tools::SvRef< StyleSheetTable >    StyleSheetTablePtr;
 
 
 class TableStyleSheetEntry :

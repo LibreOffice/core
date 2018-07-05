@@ -236,7 +236,7 @@ namespace dmapper {
                 if( pProperties.get())
                 {
                     //in OOXML there's one set of borders at each cell (if there is any)
-                    std::shared_ptr< TDefTableHandler > pTDefTableHandler( new TDefTableHandler());
+                    tools::SvRef< TDefTableHandler > pTDefTableHandler( new TDefTableHandler());
                     if (m_pCurrentInteropGrabBag)
                         pTDefTableHandler->enableInteropGrabBag("tcBorders");
                     pProperties->resolve( *pTDefTableHandler );
