@@ -513,8 +513,8 @@ main/testautomation/writer/optional/input/export/filter/*.w95
 
 # part of SGA
 # patch files
-main/redland/raptor/raptor-1.4.18.patch.win32
-main/redland/rasqal/rasqal-0.9.16.patch.win32
+main/redland/raptor/raptor2-2.0.15.patch.win32
+main/redland/rasqal/rasqal-0.9.33.patch.win32
 main/redland/redland/redland-1.0.17.patch.win32
 
 # (1000+), part of SGA
@@ -851,8 +851,8 @@ main/qadevOOo/testdocs/backend/org/openoffice/manifest
 main/qadevOOo/testdocs/qadevlibs/source/com/sun/star/cmp/manifest
 main/qadevOOo/testdocs/qadevlibs/source/test/manifest
 main/rat-excludes
-main/redland/raptor/raptor-1.4.18.patch.os2
-main/redland/rasqal/rasqal-0.9.16.patch.os2
+main/redland/raptor/raptor2-2.0.15.patch.os2
+main/redland/rasqal/rasqal-0.9.33.patch.os2
 main/redland/redland/redland-1.0.17.patch.os2
 main/reportbuilder/java/com/sun/star/report/pentaho/parser/style-mapping.txt
 main/reportbuilder/template/delzip
@@ -1074,8 +1074,8 @@ main/setup_native/source/packinfo/package_names.txt
 main/officecfg/registry/schema/oo-common.conf
 main/icu/createmak.cfg
 main/icu/createmakWin64.cfg
-main/redland/raptor/raptor-1.4.18.patch.ooo_build
-main/redland/rasqal/rasqal-0.9.16.patch.ooo_build
+main/redland/raptor/raptor2-2.0.15.patch.ooo_build
+main/redland/rasqal/rasqal-0.9.33.patch.ooo_build
 main/redland/redland/redland-1.0.17.patch.ooo_build
 main/binfilter/bf_sfx2/util/makefile.prj
 main/testautomation/spreadsheet/optional/input/loadsave/microsoft/dif.DIF
