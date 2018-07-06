@@ -45,7 +45,8 @@ class XTextDocument;
 
 using namespace ::com::sun::star;
 
-static void lcl_GetDataArea(const uno::Reference<text::XTextTable>& xTable, sal_Int32& rColumnCount, sal_Int32& rRowCount)
+static void lcl_GetDataArea(const uno::Reference<text::XTextTable>& xTable, sal_Int32& rColumnCount,
+                            sal_Int32& rRowCount)
 {
     uno::Reference<container::XIndexAccess> xColumns(xTable->getColumns(), uno::UNO_QUERY);
     if (xColumns.is())
@@ -54,18 +55,18 @@ static void lcl_GetDataArea(const uno::Reference<text::XTextTable>& xTable, sal_
     uno::Reference<container::XIndexAccess> xRows(xTable->getRows(), uno::UNO_QUERY);
     if (xRows.is())
         rRowCount = xRows->getCount() - 1; // first row (headers) is not counted
-
 }
 
-static void lcl_GetColumnInfo(const uno::Reference<text::XTextTable>& xTable,
-                              sal_Int32 nDocColumn, bool bHasHeaders,
-                              OUString& rName, sal_Int32& rDataType, bool& rCurrency)
+static void lcl_GetColumnInfo(const uno::Reference<text::XTextTable>& xTable, sal_Int32 nDocColumn,
+                              bool bHasHeaders, OUString& rName, sal_Int32& rDataType,
+                              bool& rCurrency)
 {
     uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
     // get column name from first row, if range contains headers
     if (bHasHeaders)
     {
-        uno::Reference<text::XText> xHeaderText(xCellRange->getCellByPosition(nDocColumn, /*nStartRow*/0), uno::UNO_QUERY);
+        uno::Reference<text::XText> xHeaderText(
+            xCellRange->getCellByPosition(nDocColumn, /*nStartRow*/ 0), uno::UNO_QUERY);
         if (xHeaderText.is())
             rName = xHeaderText->getString();
     }
@@ -74,12 +75,11 @@ static void lcl_GetColumnInfo(const uno::Reference<text::XTextTable>& xTable,
     rDataType = sdbc::DataType::VARCHAR;
 }
 
-
-static void lcl_SetValue(connectivity::ORowSetValue& rValue, const uno::Reference<text::XTextTable>& xTable,
-                         sal_Int32 nStartCol, bool bHasHeaders,
-                         sal_Int32 nDBRow, sal_Int32 nDBColumn)
+static void lcl_SetValue(connectivity::ORowSetValue& rValue,
+                         const uno::Reference<text::XTextTable>& xTable, sal_Int32 nStartCol,
+                         bool bHasHeaders, sal_Int32 nDBRow, sal_Int32 nDBColumn)
 {
-    sal_Int32 nDocColumn = nStartCol + nDBColumn - 1;   // database counts from 1
+    sal_Int32 nDocColumn = nStartCol + nDBColumn - 1; // database counts from 1
     sal_Int32 nDocRow = nDBRow - 1;
     if (bHasHeaders)
         ++nDocRow;
@@ -92,7 +92,8 @@ static void lcl_SetValue(connectivity::ORowSetValue& rValue, const uno::Referenc
     }
     catch (const lang::IndexOutOfBoundsException& /*rException*/)
     {
-        SAL_WARN("connectivity.writer", "getCellByPosition(" << nDocColumn << ", " << nDocRow << ") failed");
+        SAL_WARN("connectivity.writer",
+                 "getCellByPosition(" << nDocColumn << ", " << nDocRow << ") failed");
         rValue = OUString();
     }
 
@@ -108,15 +109,16 @@ namespace connectivity
 {
 namespace writer
 {
-
 void OWriterTable::fillColumns()
 {
     if (!m_xTable.is())
         throw sdbc::SQLException();
 
     OUString aTypeName;
-    ::comphelper::UStringMixEqual aCase(m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
-    const bool bStoresMixedCaseQuotedIdentifiers = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+    ::comphelper::UStringMixEqual aCase(
+        m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+    const bool bStoresMixedCaseQuotedIdentifiers
+        = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
 
     for (sal_Int32 i = 0; i < m_nDataCols; i++)
     {
@@ -124,53 +126,53 @@ void OWriterTable::fillColumns()
         sal_Int32 eType = sdbc::DataType::OTHER;
         bool bCurrency = false;
 
-        lcl_GetColumnInfo(m_xTable, m_nStartCol + i, m_bHasHeaders,
-                          aColumnName, eType, bCurrency);
+        lcl_GetColumnInfo(m_xTable, m_nStartCol + i, m_bHasHeaders, aColumnName, eType, bCurrency);
 
-        sal_Int32 nPrecision = 0;   //! ...
-        sal_Int32 nDecimals = 0;    //! ...
+        sal_Int32 nPrecision = 0; //! ...
+        sal_Int32 nDecimals = 0; //! ...
 
         switch (eType)
         {
-        case sdbc::DataType::VARCHAR:
-            aTypeName = "VARCHAR";
-            break;
-        case sdbc::DataType::DECIMAL:
-            aTypeName = "DECIMAL";
-            break;
-        case sdbc::DataType::BIT:
-            aTypeName = "BOOL";
-            break;
-        case sdbc::DataType::DATE:
-            aTypeName = "DATE";
-            break;
-        case sdbc::DataType::TIME:
-            aTypeName = "TIME";
-            break;
-        case sdbc::DataType::TIMESTAMP:
-            aTypeName = "TIMESTAMP";
-            break;
-        default:
-            SAL_WARN("connectivity.writer", "missing type name");
-            aTypeName.clear();
+            case sdbc::DataType::VARCHAR:
+                aTypeName = "VARCHAR";
+                break;
+            case sdbc::DataType::DECIMAL:
+                aTypeName = "DECIMAL";
+                break;
+            case sdbc::DataType::BIT:
+                aTypeName = "BOOL";
+                break;
+            case sdbc::DataType::DATE:
+                aTypeName = "DATE";
+                break;
+            case sdbc::DataType::TIME:
+                aTypeName = "TIME";
+                break;
+            case sdbc::DataType::TIMESTAMP:
+                aTypeName = "TIMESTAMP";
+                break;
+            default:
+                SAL_WARN("connectivity.writer", "missing type name");
+                aTypeName.clear();
         }
 
         // check if the column name already exists
         OUString aAlias = aColumnName;
-        auto aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
+        auto aFind
+            = connectivity::find(m_aColumns->get().begin(), m_aColumns->get().end(), aAlias, aCase);
         sal_Int32 nExprCnt = 0;
         while (aFind != m_aColumns->get().end())
         {
             (aAlias = aColumnName) += OUString::number(++nExprCnt);
-            aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
+            aFind = connectivity::find(m_aColumns->get().begin(), m_aColumns->get().end(), aAlias,
+                                       aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias, aTypeName, OUString(),OUString(),
-                sdbc::ColumnValue::NULLABLE, nPrecision, nDecimals,
-                eType, false, false, bCurrency,
-                bStoresMixedCaseQuotedIdentifiers,
-                m_CatalogName, getSchema(), getName());
-        uno::Reference< XPropertySet> xCol = pColumn;
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn(
+            aAlias, aTypeName, OUString(), OUString(), sdbc::ColumnValue::NULLABLE, nPrecision,
+            nDecimals, eType, false, false, bCurrency, bStoresMixedCaseQuotedIdentifiers,
+            m_CatalogName, getSchema(), getName());
+        uno::Reference<XPropertySet> xCol = pColumn;
         m_aColumns->get().push_back(xCol);
         m_aTypes.push_back(eType);
         m_aPrecisions.push_back(nPrecision);
@@ -178,19 +180,14 @@ void OWriterTable::fillColumns()
     }
 }
 
-
 OWriterTable::OWriterTable(sdbcx::OCollection* _pTables, OWriterConnection* _pConnection,
-                           const OUString& Name,
-                           const OUString& Type
-                          ) : OWriterTable_BASE(_pTables,_pConnection,Name,
-                                      Type,
-                                      OUString()/*Description*/,
-                                      OUString()/*SchemaName*/,
-                                      OUString()/*CatalogName*/)
-    ,m_pWriterConnection(_pConnection)
-    ,m_nStartCol(0)
-    ,m_nDataCols(0)
-    ,m_bHasHeaders(false)
+                           const OUString& Name, const OUString& Type)
+    : OWriterTable_BASE(_pTables, _pConnection, Name, Type, OUString() /*Description*/,
+                        OUString() /*SchemaName*/, OUString() /*CatalogName*/)
+    , m_pWriterConnection(_pConnection)
+    , m_nStartCol(0)
+    , m_nDataCols(0)
+    , m_bHasHeaders(false)
 {
 }
 
@@ -229,25 +226,24 @@ void SAL_CALL OWriterTable::disposing()
     if (m_pWriterConnection)
         m_pWriterConnection->releaseDoc();
     m_pWriterConnection = nullptr;
-
 }
 
-uno::Sequence< sal_Int8 > OWriterTable::getUnoTunnelImplementationId()
+uno::Sequence<sal_Int8> OWriterTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId implId;
 
     return implId.getImplementationId();
 }
 
-sal_Int64 OWriterTable::getSomething(const uno::Sequence< sal_Int8 >& rId)
+sal_Int64 OWriterTable::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16))
-           ? reinterpret_cast< sal_Int64 >(this)
-           : OWriterTable_BASE::getSomething(rId);
+    return (rId.getLength() == 16
+            && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(), rId.getConstArray(), 16))
+               ? reinterpret_cast<sal_Int64>(this)
+               : OWriterTable_BASE::getSomething(rId);
 }
 
-bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols,
-                            bool bRetrieveData)
+bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData)
 {
     // read the bookmark
 
@@ -262,13 +258,12 @@ bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols,
     auto aIter = _rCols.get().begin();
     auto aEnd = _rCols.get().end();
     const OValueRefVector::Vector::size_type nCount = _rRow->get().size();
-    for (OValueRefVector::Vector::size_type i = 1; aIter != aEnd && i < nCount;
-            ++aIter, i++)
+    for (OValueRefVector::Vector::size_type i = 1; aIter != aEnd && i < nCount; ++aIter, i++)
     {
         if ((_rRow->get())[i]->isBound())
         {
-            lcl_SetValue((_rRow->get())[i]->get(), m_xTable, m_nStartCol, m_bHasHeaders,
-                         m_nFilePos, i);
+            lcl_SetValue((_rRow->get())[i]->get(), m_xTable, m_nStartCol, m_bHasHeaders, m_nFilePos,
+                         i);
         }
     }
     return true;

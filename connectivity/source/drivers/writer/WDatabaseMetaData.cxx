@@ -27,8 +27,8 @@ namespace connectivity
 {
 namespace writer
 {
-
-OWriterDatabaseMetaData::OWriterDatabaseMetaData(file::OConnection* pConnection) :OComponentDatabaseMetaData(pConnection)
+OWriterDatabaseMetaData::OWriterDatabaseMetaData(file::OConnection* pConnection)
+    : OComponentDatabaseMetaData(pConnection)
 {
 }
 
@@ -41,10 +41,9 @@ OUString SAL_CALL OWriterDatabaseMetaData::getURL()
     return "sdbc:writer:" + m_pConnection->getURL();
 }
 
-
 uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
     const uno::Any& /*catalog*/, const OUString& /*schemaPattern*/,
-    const OUString& tableNamePattern, const uno::Sequence< OUString >& types)
+    const OUString& tableNamePattern, const uno::Sequence<OUString>& types)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -89,12 +88,12 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet::ORows aRows;
     sal_Int32 nTableCount = aTableNames.getLength();
-    for (sal_Int32 nTable=0; nTable<nTableCount; nTable++)
+    for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
     {
         OUString aName = aTableNames[nTable];
-        if (match(tableNamePattern,aName,'\0'))
+        if (match(tableNamePattern, aName, '\0'))
         {
-            ODatabaseMetaDataResultSet::ORow aRow { nullptr, nullptr, nullptr };
+            ODatabaseMetaDataResultSet::ORow aRow{ nullptr, nullptr, nullptr };
             aRow.reserve(6);
             aRow.push_back(new ORowSetValueDecorator(aName));
             aRow.push_back(new ORowSetValueDecorator(aTable));

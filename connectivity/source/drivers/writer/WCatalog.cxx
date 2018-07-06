@@ -34,21 +34,21 @@ namespace connectivity
 {
 namespace writer
 {
-
-OWriterCatalog::OWriterCatalog(OWriterConnection* pConnection) : file::OFileCatalog(pConnection)
+OWriterCatalog::OWriterCatalog(OWriterConnection* pConnection)
+    : file::OFileCatalog(pConnection)
 {
 }
 
 void OWriterCatalog::refreshTables()
 {
-    ::std::vector< OUString> aVector;
+    ::std::vector<OUString> aVector;
     uno::Sequence<OUString> aTypes;
     OWriterConnection::ODocHolder aDocHolder(static_cast<OWriterConnection*>(m_pConnection));
-    uno::Reference< sdbc::XResultSet > xResult = m_xMetaData->getTables(uno::Any(), "%", "%", aTypes);
+    uno::Reference<sdbc::XResultSet> xResult = m_xMetaData->getTables(uno::Any(), "%", "%", aTypes);
 
     if (xResult.is())
     {
-        uno::Reference< sdbc::XRow > xRow(xResult, uno::UNO_QUERY);
+        uno::Reference<sdbc::XRow> xRow(xResult, uno::UNO_QUERY);
         while (xResult->next())
             aVector.push_back(xRow->getString(3));
     }

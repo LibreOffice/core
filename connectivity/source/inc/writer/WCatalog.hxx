@@ -26,7 +26,6 @@ namespace connectivity
 {
 namespace writer
 {
-
 class OWriterConnection;
 class OWriterCatalog : public file::OFileCatalog
 {

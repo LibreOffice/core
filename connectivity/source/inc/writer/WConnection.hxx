@@ -46,7 +46,6 @@ namespace utl
 class CloseVeto;
 }
 
-
 namespace connectivity
 {
 namespace writer
@@ -55,12 +54,13 @@ class ODriver;
 class OWriterConnection : public file::OConnection
 {
     // the spreadsheet document:
-    css::uno::Reference< css::text::XTextDocument > m_xDoc;
+    css::uno::Reference<css::text::XTextDocument> m_xDoc;
     OUString m_sPassword;
     OUString m_aFileName;
     oslInterlockedCount m_nDocCount;
 
-    class CloseVetoButTerminateListener : public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
+    class CloseVetoButTerminateListener
+        : public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
     {
     private:
         /// close listener that vetoes so nobody else disposes m_xDoc
@@ -69,6 +69,7 @@ class OWriterConnection : public file::OConnection
         /// its still possible to do so properly
         css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
         osl::Mutex m_aMutex;
+
     public:
         CloseVetoButTerminateListener()
             : cppu::WeakComponentImplHelper<css::frame::XTerminateListener>(m_aMutex)
@@ -93,9 +94,7 @@ class OWriterConnection : public file::OConnection
         }
 
         // XTerminateListener
-        void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
-        {
-        }
+        void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override {}
 
         void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
         {
@@ -123,7 +122,7 @@ public:
     ~OWriterConnection() override;
 
     void construct(const OUString& rURL,
-                   const css::uno::Sequence< css::beans::PropertyValue >& rInfo) override;
+                   const css::uno::Sequence<css::beans::PropertyValue>& rInfo) override;
 
     // XServiceInfo
     DECLARE_SERVICE_INFO();
@@ -132,22 +131,26 @@ public:
     void SAL_CALL disposing() override;
 
     // XConnection
-    css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData() override;
-    css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
-    css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement() override;
-    css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement(const OUString& sql) override;
-    css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall(const OUString& sql) override;
+    css::uno::Reference<css::sdbc::XDatabaseMetaData> SAL_CALL getMetaData() override;
+    css::uno::Reference<css::sdbcx::XTablesSupplier> createCatalog() override;
+    css::uno::Reference<css::sdbc::XStatement> SAL_CALL createStatement() override;
+    css::uno::Reference<css::sdbc::XPreparedStatement>
+        SAL_CALL prepareStatement(const OUString& sql) override;
+    css::uno::Reference<css::sdbc::XPreparedStatement>
+        SAL_CALL prepareCall(const OUString& sql) override;
 
     // no interface methods
-    css::uno::Reference< css::text::XTextDocument> const& acquireDoc();
+    css::uno::Reference<css::text::XTextDocument> const& acquireDoc();
     void releaseDoc();
 
     class ODocHolder
     {
         OWriterConnection* m_pConnection;
-        css::uno::Reference< css::text::XTextDocument> m_xDoc;
+        css::uno::Reference<css::text::XTextDocument> m_xDoc;
+
     public:
-        ODocHolder(OWriterConnection* _pConnection) : m_pConnection(_pConnection)
+        ODocHolder(OWriterConnection* _pConnection)
+            : m_pConnection(_pConnection)
         {
             m_xDoc = m_pConnection->acquireDoc();
         }
@@ -156,10 +159,7 @@ public:
             m_xDoc.clear();
             m_pConnection->releaseDoc();
         }
-        const css::uno::Reference< css::text::XTextDocument>& getDoc() const
-        {
-            return m_xDoc;
-        }
+        const css::uno::Reference<css::text::XTextDocument>& getDoc() const { return m_xDoc; }
     };
 };
 }

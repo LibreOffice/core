@@ -32,10 +32,14 @@ class OWriterTables : public OWriterTables_BASE
 {
 protected:
     sdbcx::ObjectType createObject(const OUString& rName) override;
+
 public:
-    OWriterTables(const css::uno::Reference<css::sdbc::XDatabaseMetaData>& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                  const ::std::vector< OUString>& _rVector) : OWriterTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
-    {}
+    OWriterTables(const css::uno::Reference<css::sdbc::XDatabaseMetaData>& _rMetaData,
+                  ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+                  const ::std::vector<OUString>& _rVector)
+        : OWriterTables_BASE(_rMetaData, _rParent, _rMutex, _rVector)
+    {
+    }
 };
 }
 }
