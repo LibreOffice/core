@@ -128,6 +128,10 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CLIPPED_PICTURES,
     HANDLE_BACKGROUND_PARA_OVER_DRAWINGS,
     HANDLE_EMBED_FONTS,
+    HANDLE_EMBED_USED_FONTS,
+    HANDLE_EMBED_LATIN_SCRIPT_FONTS,
+    HANDLE_EMBED_ASIAN_SCRIPT_FONTS,
+    HANDLE_EMBED_COMPLEX_SCRIPT_FONTS,
     HANDLE_EMBED_SYSTEM_FONTS,
     HANDLE_TAB_OVER_MARGIN,
     HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK,
@@ -208,6 +212,10 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("ClippedPictures"), HANDLE_CLIPPED_PICTURES, cppu::UnoType<bool>::get(), 0},
         { OUString("BackgroundParaOverDrawings"), HANDLE_BACKGROUND_PARA_OVER_DRAWINGS, cppu::UnoType<bool>::get(), 0},
         { OUString("EmbedFonts"), HANDLE_EMBED_FONTS, cppu::UnoType<bool>::get(), 0},
+        { OUString("EmbedOnlyUsedFonts"), HANDLE_EMBED_USED_FONTS, cppu::UnoType<bool>::get(), 0},
+        { OUString("EmbedLatinScriptFonts"), HANDLE_EMBED_LATIN_SCRIPT_FONTS, cppu::UnoType<bool>::get(), 0},
+        { OUString("EmbedAsianScriptFonts"), HANDLE_EMBED_ASIAN_SCRIPT_FONTS, cppu::UnoType<bool>::get(), 0},
+        { OUString("EmbedComplexScriptFonts"), HANDLE_EMBED_COMPLEX_SCRIPT_FONTS, cppu::UnoType<bool>::get(), 0},
         { OUString("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, cppu::UnoType<bool>::get(), 0},
         { OUString("TabOverMargin"), HANDLE_TAB_OVER_MARGIN, cppu::UnoType<bool>::get(), 0},
         { OUString("TreatSingleColumnBreakAsPageBreak"), HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK, cppu::UnoType<bool>::get(), 0},
@@ -826,6 +834,30 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::EMBED_FONTS, bTmp);
         }
         break;
+        case HANDLE_EMBED_USED_FONTS:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::EMBED_USED_FONTS, bTmp);
+        }
+        break;
+        case HANDLE_EMBED_LATIN_SCRIPT_FONTS:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::EMBED_LATIN_SCRIPT_FONTS, bTmp);
+        }
+        break;
+        case HANDLE_EMBED_ASIAN_SCRIPT_FONTS:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::EMBED_ASIAN_SCRIPT_FONTS, bTmp);
+        }
+        break;
+        case HANDLE_EMBED_COMPLEX_SCRIPT_FONTS:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::EMBED_COMPLEX_SCRIPT_FONTS, bTmp);
+        }
+        break;
         case HANDLE_EMBED_SYSTEM_FONTS:
         {
             bool bTmp = *o3tl::doAccess<bool>(rValue);
@@ -1285,6 +1317,26 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_EMBED_FONTS:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS );
+        }
+        break;
+        case HANDLE_EMBED_USED_FONTS:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_USED_FONTS );
+        }
+        break;
+        case HANDLE_EMBED_LATIN_SCRIPT_FONTS:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_LATIN_SCRIPT_FONTS );
+        }
+        break;
+        case HANDLE_EMBED_ASIAN_SCRIPT_FONTS:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_ASIAN_SCRIPT_FONTS );
+        }
+        break;
+        case HANDLE_EMBED_COMPLEX_SCRIPT_FONTS:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_COMPLEX_SCRIPT_FONTS );
         }
         break;
         case HANDLE_EMBED_SYSTEM_FONTS:

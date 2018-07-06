@@ -523,7 +523,11 @@ private:
 
     std::set<ScFormulaCell*> maSubTotalCells;
 
-    bool                mbUseEmbedFonts;
+    bool mbUseEmbedFonts : 1;
+    bool mbEmbedUsedFonts : 1;
+    bool mbEmbedFontScriptLatin : 1;
+    bool mbEmbedFontScriptAsian : 1;
+    bool mbEmbedFontScriptComplex : 1;
 
     std::unique_ptr<sc::IconSetBitmapMap> m_pIconSetBitmapMap;
 
@@ -535,8 +539,19 @@ private:
 public:
     bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder);
     void                     GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
-    bool                     IsUsingEmbededFonts() { return mbUseEmbedFonts; }
-    void                     SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
+
+    bool IsUsingEmbededFonts() { return mbUseEmbedFonts; }
+    bool IsEmbedUsedFonts() { return mbEmbedUsedFonts; }
+    bool IsEmbedFontScriptLatin() { return mbEmbedFontScriptLatin; }
+    bool IsEmbedFontScriptAsian() { return mbEmbedFontScriptAsian; }
+    bool IsEmbedFontScriptComplex() { return mbEmbedFontScriptComplex; }
+
+    void SetIsUsingEmbededFonts(bool bUse) { mbUseEmbedFonts = bUse; }
+    void SetEmbedUsedFonts(bool bUse) { mbEmbedUsedFonts = bUse; }
+    void SetEmbedFontScriptLatin(bool bUse) { mbEmbedFontScriptLatin = bUse; }
+    void SetEmbedFontScriptAsian(bool bUse) { mbEmbedFontScriptAsian = bUse; }
+    void SetEmbedFontScriptComplex(bool bUse) { mbEmbedFontScriptComplex = bUse; }
+
     SC_DLLPUBLIC sal_uLong   GetCellCount() const;       // all cells
     SC_DLLPUBLIC sal_uLong   GetFormulaGroupCount() const;       // all cells
     sal_uLong                GetCodeCount() const;       // RPN-Code in formulas

@@ -196,7 +196,12 @@ private:
 
     std::vector<css::uno::Reference< css::xml::dom::XNode> > maPresObjectInfo;
 
-    bool                mbUseEmbedFonts;
+    bool mbUseEmbedFonts : 1;
+    bool mbEmbedUsedFonts : 1;
+    bool mbEmbedFontScriptLatin : 1;
+    bool mbEmbedFontScriptAsian : 1;
+    bool mbEmbedFontScriptComplex : 1;
+
 protected:
 
     SAL_DLLPRIVATE virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
@@ -619,7 +624,16 @@ public:
     SAL_DLLPRIVATE sal_uInt16 GetAnnotationAuthorIndex( const OUString& rAuthor );
 
     SAL_DLLPRIVATE bool IsUsingEmbededFonts() { return mbUseEmbedFonts; }
-    SAL_DLLPRIVATE void SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
+    SAL_DLLPRIVATE bool IsEmbedUsedFonts() { return mbEmbedUsedFonts; }
+    SAL_DLLPRIVATE bool IsEmbedFontScriptLatin() { return mbEmbedFontScriptLatin; }
+    SAL_DLLPRIVATE bool IsEmbedFontScriptAsian() { return mbEmbedFontScriptAsian; }
+    SAL_DLLPRIVATE bool IsEmbedFontScriptComplex() { return mbEmbedFontScriptComplex; }
+
+    SAL_DLLPRIVATE void SetIsUsingEmbededFonts(bool bUse) { mbUseEmbedFonts = bUse; }
+    SAL_DLLPRIVATE void SetEmbedUsedFonts(bool bUse) { mbEmbedUsedFonts = bUse; }
+    SAL_DLLPRIVATE void SetEmbedFontScriptLatin(bool bUse) { mbEmbedFontScriptLatin = bUse; }
+    SAL_DLLPRIVATE void SetEmbedFontScriptAsian(bool bUse) { mbEmbedFontScriptAsian = bUse; }
+    SAL_DLLPRIVATE void SetEmbedFontScriptComplex(bool bUse) { mbEmbedFontScriptComplex = bUse; }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 

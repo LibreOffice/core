@@ -141,7 +141,8 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_UPDATEFROMTEMPLATE, HANDLE_PRINTER_INDEPENDENT_LAYOUT
     // #i33095#
     ,HANDLE_LOAD_READONLY, HANDLE_MODIFY_PASSWD, HANDLE_SAVE_VERSION
-    ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL, HANDLE_EMBED_FONTS
+    ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL,
+    HANDLE_EMBED_FONTS, HANDLE_EMBED_USED_FONTS, HANDLE_EMBED_LATIN_SCRIPT_FONTS, HANDLE_EMBED_ASIAN_SCRIPT_FONTS, HANDLE_EMBED_COMPLEX_SCRIPT_FONTS,
 };
 
 #define MID_PRINTER 1
@@ -205,7 +206,11 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("LoadReadonly"),          HANDLE_LOAD_READONLY,       cppu::UnoType<bool>::get(),                0,  0 },
             { OUString("ModifyPasswordInfo"),    HANDLE_MODIFY_PASSWD,       cppu::UnoType<uno::Sequence < beans::PropertyValue >>::get(),  0,  0 },
             { OUString("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        cppu::UnoType<bool>::get(),                0,  0 },
-            { OUString("EmbedFonts"),            HANDLE_EMBED_FONTS,         cppu::UnoType<bool>::get(),                0,  0 },
+            { OUString("EmbedFonts"),              HANDLE_EMBED_FONTS,                cppu::UnoType<bool>::get(), 0,  0 },
+            { OUString("EmbedOnlyUsedFonts"),      HANDLE_EMBED_USED_FONTS,           cppu::UnoType<bool>::get(), 0,  0 },
+            { OUString("EmbedLatinScriptFonts"),   HANDLE_EMBED_LATIN_SCRIPT_FONTS,   cppu::UnoType<bool>::get(), 0,  0 },
+            { OUString("EmbedAsianScriptFonts"),   HANDLE_EMBED_ASIAN_SCRIPT_FONTS,   cppu::UnoType<bool>::get(), 0,  0 },
+            { OUString("EmbedComplexScriptFonts"), HANDLE_EMBED_COMPLEX_SCRIPT_FONTS, cppu::UnoType<bool>::get(), 0,  0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 
@@ -960,13 +965,41 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
 
             case HANDLE_EMBED_FONTS:
             {
-                bool bNewValue = false;
-                if ( *pValues >>= bNewValue )
-                {
-                    bChanged = ( pDoc->IsUsingEmbededFonts() != bNewValue );
-                    pDoc->SetIsUsingEmbededFonts( bNewValue );
-                    bOk = true;
-                }
+                bool bNewValue = pValues->has<bool>() && pValues->get<bool>();
+                bChanged = (pDoc->IsUsingEmbededFonts() != bNewValue);
+                pDoc->SetIsUsingEmbededFonts(bNewValue);
+            }
+            break;
+
+            case HANDLE_EMBED_USED_FONTS:
+            {
+                bool bNewValue = pValues->has<bool>() && pValues->get<bool>();
+                bChanged = (pDoc->IsEmbedUsedFonts() != bNewValue);
+                pDoc->SetEmbedUsedFonts(bNewValue);
+            }
+            break;
+
+            case HANDLE_EMBED_LATIN_SCRIPT_FONTS:
+            {
+                bool bNewValue = pValues->has<bool>() && pValues->get<bool>();
+                bChanged = (pDoc->IsEmbedFontScriptLatin() != bNewValue);
+                pDoc->SetEmbedFontScriptLatin(bNewValue);
+            }
+            break;
+
+            case HANDLE_EMBED_ASIAN_SCRIPT_FONTS:
+            {
+                bool bNewValue = pValues->has<bool>() && pValues->get<bool>();
+                bChanged = (pDoc->IsEmbedFontScriptAsian() != bNewValue);
+                pDoc->SetEmbedFontScriptAsian(bNewValue);
+            }
+            break;
+
+            case HANDLE_EMBED_COMPLEX_SCRIPT_FONTS:
+            {
+                bool bNewValue = pValues->has<bool>() && pValues->get<bool>();
+                bChanged = (pDoc->IsEmbedFontScriptComplex() != bNewValue);
+                pDoc->SetEmbedFontScriptComplex(bNewValue);
             }
             break;
 
@@ -1221,6 +1254,30 @@ DocumentSettings::_getPropertyValues(
             case HANDLE_EMBED_FONTS:
             {
                 *pValue <<= pDoc->IsUsingEmbededFonts();
+            }
+            break;
+
+            case HANDLE_EMBED_USED_FONTS:
+            {
+                *pValue <<= pDoc->IsEmbedUsedFonts();
+            }
+            break;
+
+            case HANDLE_EMBED_LATIN_SCRIPT_FONTS:
+            {
+                *pValue <<= pDoc->IsEmbedFontScriptLatin();
+            }
+            break;
+
+            case HANDLE_EMBED_ASIAN_SCRIPT_FONTS:
+            {
+                *pValue <<= pDoc->IsEmbedFontScriptAsian();
+            }
+            break;
+
+            case HANDLE_EMBED_COMPLEX_SCRIPT_FONTS:
+            {
+                *pValue <<= pDoc->IsEmbedFontScriptComplex();
             }
             break;
 

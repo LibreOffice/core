@@ -2694,6 +2694,11 @@ SERVICE( XMLImpressClipboardExport, "com.sun.star.comp.Impress.XMLClipboardExpor
 XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
 {
     bool bEmbedFonts = false;
+    bool bEmbedUsedOnly = false;
+    bool bEmbedLatinScript = true;
+    bool bEmbedAsianScript = true;
+    bool bEmbedComplexScript = true;
+
     if (getExportFlags() & SvXMLExportFlags::CONTENT)
     {
         Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
@@ -2704,6 +2709,10 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
                 Reference<beans::XPropertySet> const xProps( xFac->createInstance(
                              "com.sun.star.document.Settings"), UNO_QUERY_THROW );
                 xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
+                xProps->getPropertyValue("EmbedOnlyUsedFonts") >>= bEmbedUsedOnly;
+                xProps->getPropertyValue("EmbedLatinScriptFonts") >>= bEmbedLatinScript;
+                xProps->getPropertyValue("EmbedAsianScriptFonts") >>= bEmbedAsianScript;
+                xProps->getPropertyValue("EmbedComplexScriptFonts") >>= bEmbedComplexScript;
             }
             catch (...)
             {
@@ -2714,6 +2723,8 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
     }
 
     XMLFontAutoStylePool *pPool = new XMLFontAutoStylePool( *this, bEmbedFonts );
+    pPool->setEmbedOnlyUsedFonts(bEmbedUsedOnly);
+    pPool->setEmbedFontScripts(bEmbedLatinScript, bEmbedAsianScript, bEmbedComplexScript);
 
     Reference< beans::XPropertySet > xProps( GetModel(), UNO_QUERY );
     if ( xProps.is() ) {
