@@ -2487,12 +2487,14 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
 
     ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd; ++itr)
+    {
         rFunc.ProtectSheet(*itr, rProtect);
+        SetTabProtectionSymbol(*itr, true);
+    }
 
     if (bUndo)
         pDocSh->GetUndoManager()->LeaveListAction();
 
-    SetTabProtectionSymbol(nTab, true);
     UpdateLayerLocks();         //! broadcast to all views
 }
 
@@ -2550,18 +2552,20 @@ bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
 
         ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd; ++itr)
+        {
             if ( rFunc.Unprotect( *itr, rPassword, false ) )
-                    bChanged = true;
+            {
+                bChanged = true;
+                SetTabProtectionSymbol( *itr, false);
+            }
+        }
 
         if (bUndo)
             pDocSh->GetUndoManager()->LeaveListAction();
     }
 
     if (bChanged)
-    {
-        SetTabProtectionSymbol(nTab, false);
         UpdateLayerLocks();     //! broadcast to all views
-    }
 
     return bChanged;
 }
