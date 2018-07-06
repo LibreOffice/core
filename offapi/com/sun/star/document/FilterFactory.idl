@@ -51,7 +51,7 @@ published service FilterFactory
         The methods createInstance() or createInstanceWithArguments() of this interface must be
         called with an internal type name!. This name is used internally to search a suitable
         (mostly the default) filter for this type then. The found filter will be created, initialized
-        and returned then. Creation of a filter by using it's internal filter name directly can be
+        and returned then. Creation of a filter by using its internal filter name directly can be
         reached by using createInstanceWithArguments() with an optional property "FilterName" only.
         See the following example:
 

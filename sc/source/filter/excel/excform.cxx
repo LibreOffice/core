@@ -1810,7 +1810,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
         OSL_FAIL( "ExcelToSc::ReadExtensionArray - missing matrix" );
     }
 
-    //assuming worse case scenario of unknown types
+    //assuming worst case scenario of unknown types
     const size_t nMinRecordSize = 1;
     const size_t nMaxRows = aIn.GetRecLeft() / (nMinRecordSize * nCols);
     if (nRows > nMaxRows)

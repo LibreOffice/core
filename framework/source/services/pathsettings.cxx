@@ -396,7 +396,7 @@ private:
     void impl_rebuildPropertyDescriptor();
 
     /** provides direct access to the list of path values
-        using it's internal property id.
+        using its internal property id.
      */
     css::uno::Any impl_getPathValue(      sal_Int32      nID ) const;
     void          impl_setPathValue(      sal_Int32      nID ,
