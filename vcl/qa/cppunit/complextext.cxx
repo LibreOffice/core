@@ -9,8 +9,8 @@
 
 #include <ostream>
 #include <vector>
-#if !defined(_WIN32)
-std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
+#if !defined(_WIN32) && !TEST_FONTS_MISSING
+static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
 #endif
 
 #include <unotest/filters-test.hxx>
@@ -25,8 +25,8 @@ std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
 
 #include <config_test.h>
 
-#if !defined(_WIN32)
-std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
+#if !defined(_WIN32) && !TEST_FONTS_MISSING
+static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
 {
     rStream << "{ ";
     for (size_t i = 0; i < rVec.size() - 1; i++)
@@ -42,8 +42,10 @@ class VclComplexTextTest : public test::BootstrapFixture
 public:
     VclComplexTextTest() : BootstrapFixture(true, false) {}
 
+#if !TEST_FONTS_MISSING
     /// Play with font measuring etc.
     void testArabic();
+#endif
 #if defined(_WIN32)
     void testTdf95650(); // Windows-only issue
 #endif
