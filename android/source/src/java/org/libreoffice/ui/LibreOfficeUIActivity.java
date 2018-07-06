@@ -432,10 +432,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 // these operations may imply network access and must be run in
                 // a different thread
                 try {
-                    documentProvider = provider[0];
-                    homeDirectory = documentProvider.getRootDirectory(LibreOfficeUIActivity.this);
-                    currentDirectory = homeDirectory;
-                    List<IFile> paths = currentDirectory.listFiles(FileUtilities
+                    homeDirectory = provider[0].getRootDirectory(LibreOfficeUIActivity.this);
+                    List<IFile> paths = homeDirectory.listFiles(FileUtilities
                             .getFileFilter(filterMode));
                     filePaths = new ArrayList<IFile>();
                     for(IFile file: paths) {
@@ -455,13 +453,15 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                         public void run() {
                             Toast.makeText(activity, e.getMessage(),
                                     Toast.LENGTH_SHORT).show();
-                            // switch back to the default provider.
-                            switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
                         }
                     });
                     startActivity(new Intent(activity, DocumentProviderSettingsActivity.class));
                     Log.e(LOGTAG, "failed to switch document provider "+ e.getMessage(), e.getCause());
+                    return null;
                 }
+                //no exception
+                documentProvider = provider[0];
+                currentDirectory = homeDirectory;
                 return null;
             }
 
