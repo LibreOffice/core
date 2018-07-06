@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_cc4490ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-06T11:29:58Z",
+      "side": 1,
+      "message": "OK, thanks for considering it.",
+      "revId": "b64b4d2d80e1361f1a075cb48cd6895c39c37f52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
