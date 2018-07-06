@@ -580,9 +580,12 @@ SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nL
 }
 
 
-SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor )
+SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor, bool bXHTML )
 {
-    rStream.WriteCharPtr( "\"#" );
+    rStream.WriteCharPtr( "\"" );
+    if (bXHTML)
+        rStream.WriteCharPtr( "color: " );
+    rStream.WriteCharPtr( "#" );
     if( rColor == COL_AUTO )
     {
         rStream.WriteCharPtr( "000000" );
