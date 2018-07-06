@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_ec587457",
+        "filename": "filter/source/svg/svgfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-06T13:33:08Z",
+      "side": 1,
+      "message": "while at it, kill also this part of comment w/ fire",
+      "range": {
+        "startLine": 125,
+        "startChar": 47,
+        "endLine": 125,
+        "endChar": 62
+      },
+      "revId": "f26718932ee5490651c7e1d97a6d2e4391206e24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
