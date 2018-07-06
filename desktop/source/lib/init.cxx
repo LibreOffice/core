@@ -3926,6 +3926,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 VclBuilder::preload();
                 VclAbstractDialogFactory::Create();
 
+                preloadData();
+
                 // Initialize fonts.
                 css::uno::Sequence< css::lang::Locale > aLocales;
                 css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
@@ -3949,8 +3951,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                     nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), COMPLEX);
                     OutputDevice::GetDefaultFont(DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
                 }
-
-                preloadData();
 
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
