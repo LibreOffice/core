@@ -656,8 +656,7 @@ class SdrObjCustomShape;
 
 struct EscherPropSortStruct
 {
-    sal_uInt8*  pBuf;
-    sal_uInt32  nPropSize;
+    std::vector<sal_uInt8>    nProp;
     sal_uInt32  nPropValue;
     sal_uInt16  nPropId;
 };
@@ -703,21 +702,26 @@ public:
                                                     // GraphicObjects are saved to PowerPoint
     ~EscherPropertyContainer();
 
-    void        AddOpt( sal_uInt16 nPropertyID, const OUString& rString );
+    void AddOpt(
+        sal_uInt16 nPropID,
+        bool bBlib,
+        sal_uInt32 nSizeReduction,
+        SvMemoryStream& rStream);
 
-    void        AddOpt(
-                    sal_uInt16 nPropertyID,
-                    sal_uInt32 nPropValue,
-                    bool bBlib = false
-                );
+    void AddOpt(
+        sal_uInt16 nPropertyID,
+        const OUString& rString);
 
-    void        AddOpt(
-                    sal_uInt16 nPropertyID,
-                    bool bBlib,
-                    sal_uInt32 nPropValue,
-                    sal_uInt8* pProp,
-                    sal_uInt32 nPropSize
-                );
+    void AddOpt(
+        sal_uInt16 nPropertyID,
+        sal_uInt32 nPropValue,
+        bool bBlib = false);
+
+    void AddOpt(
+        sal_uInt16 nPropertyID,
+        bool bBlib,
+        sal_uInt32 nPropValue,
+        const std::vector<sal_uInt8>& rProp);
 
     bool        GetOpt( sal_uInt16 nPropertyID, sal_uInt32& rPropValue ) const;
 
