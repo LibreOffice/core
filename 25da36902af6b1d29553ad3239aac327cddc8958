@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_7f6408ba",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-06T16:03:04Z",
+      "side": 1,
+      "message": "Unexpectedly, MSO2003 and 2010 actually have this as Date.  Need to test with 2013...",
+      "range": {
+        "startLine": 565,
+        "startChar": 44,
+        "endLine": 565,
+        "endChar": 45
+      },
+      "revId": "25da36902af6b1d29553ad3239aac327cddc8958",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
