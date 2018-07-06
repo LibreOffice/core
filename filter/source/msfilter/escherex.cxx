@@ -1776,143 +1776,190 @@ bool EscherPropertyContainer::CreatePolygonProperties(
     awt::Rectangle& rGeoRect,
     tools::Polygon const * pPolygon )
 {
-    bool    bRetValue = true;
-    bool    bLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) != 0;
-
     tools::PolyPolygon aPolyPolygon;
 
-    if ( pPolygon )
-        aPolyPolygon.Insert( *pPolygon );
+    if(nullptr != pPolygon)
+    {
+        aPolyPolygon.Insert(*pPolygon);
+    }
     else
     {
         uno::Any aAny;
-        bRetValue = EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        bBezier ? OUString("PolyPolygonBezier") : OUString("PolyPolygon"), true );
-        if ( bRetValue )
+
+        if(EscherPropertyValueHelper::GetPropertyValue(
+            aAny,
+            rXPropSet,
+            bBezier ? OUString("PolyPolygonBezier") : OUString("PolyPolygon"),
+            true))
         {
-            aPolyPolygon = GetPolyPolygon( aAny );
-            bRetValue = aPolyPolygon.Count() != 0;
-        }
-    }
-    if ( bRetValue )
-    {
-        if ( bLine )
-        {
-            if ( ( aPolyPolygon.Count() == 1 ) && ( aPolyPolygon[ 0 ].GetSize() == 2 ) )
-            {
-                const tools::Polygon& rPoly = aPolyPolygon[ 0 ];
-                rGeoRect = awt::Rectangle(
-                    rPoly[0].X(), rPoly[0].Y(),
-                    rPoly[1].X() - rPoly[0].X(),
-                    rPoly[1].Y() - rPoly[0].Y());
-            }
-            else
-                bRetValue = false;
+            aPolyPolygon = GetPolyPolygon(aAny);
         }
         else
         {
-            tools::Polygon aPolygon;
-
-            sal_uInt16 nPolyCount = aPolyPolygon.Count();
-            sal_uInt32 nTotalPoints(0), nTotalBezPoints(0);
-            tools::Rectangle aRect( aPolyPolygon.GetBoundRect() );
-            rGeoRect = awt::Rectangle( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
-
-            for (sal_uInt16 i = 0; i < nPolyCount; ++i)
-            {
-                sal_uInt16 k = aPolyPolygon[ i ].GetSize();
-                nTotalPoints += k;
-                for (sal_uInt16 j = 0; j < k; ++j)
-                {
-                    if ( aPolyPolygon[ i ].GetFlags( j ) != PolyFlags::Control )
-                        nTotalBezPoints++;
-                }
-            }
-            sal_uInt32 nVerticesBufSize = ( nTotalPoints << 2 ) + 6;
-            sal_uInt8* pVerticesBuf = new sal_uInt8[ nVerticesBufSize ];
-
-
-            sal_uInt32 nSegmentBufSize = ( ( nTotalBezPoints << 2 ) + 8 );
-            if ( nPolyCount > 1 )
-                nSegmentBufSize += ( nPolyCount << 1 );
-            sal_uInt8* pSegmentBuf = new sal_uInt8[ nSegmentBufSize ];
-
-            sal_uInt8* pPtr = pVerticesBuf;
-            *pPtr++ = static_cast<sal_uInt8>(nTotalPoints);                    // Little endian
-            *pPtr++ = static_cast<sal_uInt8>( nTotalPoints >> 8 );
-            *pPtr++ = static_cast<sal_uInt8>(nTotalPoints);
-            *pPtr++ = static_cast<sal_uInt8>( nTotalPoints >> 8 );
-            *pPtr++ = sal_uInt8(0xf0);
-            *pPtr++ = sal_uInt8(0xff);
-
-            for (sal_uInt16 j = 0; j < nPolyCount; ++j)
-            {
-                aPolygon = aPolyPolygon[ j ];
-                sal_uInt16 nPoints = aPolygon.GetSize();
-                for (sal_uInt16 i = 0; i < nPoints; ++i)             // write points from polygon to buffer
-                {
-                    Point aPoint = aPolygon[ i ];
-                    aPoint.AdjustX( -(rGeoRect.X) );
-                    aPoint.AdjustY( -(rGeoRect.Y) );
-
-                    *pPtr++ = static_cast<sal_uInt8>( aPoint.X() );
-                    *pPtr++ = static_cast<sal_uInt8>( aPoint.X() >> 8 );
-                    *pPtr++ = static_cast<sal_uInt8>( aPoint.Y() );
-                    *pPtr++ = static_cast<sal_uInt8>( aPoint.Y() >> 8 );
-                }
-            }
-
-            pPtr = pSegmentBuf;
-            *pPtr++ = static_cast<sal_uInt8>( ( nSegmentBufSize - 6 ) >> 1 );
-            *pPtr++ = static_cast<sal_uInt8>( ( nSegmentBufSize - 6 ) >> 9 );
-            *pPtr++ = static_cast<sal_uInt8>( ( nSegmentBufSize - 6 ) >> 1 );
-            *pPtr++ = static_cast<sal_uInt8>( ( nSegmentBufSize - 6 ) >> 9 );
-            *pPtr++ = sal_uInt8(2);
-            *pPtr++ = sal_uInt8(0);
-
-            for (sal_uInt16 j = 0; j < nPolyCount; ++j)
-            {
-                *pPtr++ = 0x0;          // Polygon start
-                *pPtr++ = 0x40;
-                aPolygon = aPolyPolygon[ j ];
-                sal_uInt16 nPoints = aPolygon.GetSize();
-                for (sal_uInt16 i = 0; i < nPoints; ++i)         // write Polyflags to Buffer
-                {
-                    *pPtr++ = 0;
-                    if ( bBezier )
-                        *pPtr++ = 0xb3;
-                    else
-                        *pPtr++ = 0xac;
-                    if ( ( i + 1 ) != nPoints )
-                    {
-                        *pPtr++ = 1;
-                        if ( aPolygon.GetFlags( i + 1 ) == PolyFlags::Control )
-                        {
-                            *pPtr++ = 0x20;
-                            i += 2;
-                        }
-                        else
-                            *pPtr++ = 0;
-                    }
-                }
-                if ( nPolyCount > 1 )
-                {
-                    *pPtr++ = 1;                        // end of polygon
-                    *pPtr++ = 0x60;
-                }
-            }
-            *pPtr++ = 0;
-            *pPtr++ = 0x80;
-
-            AddOpt( ESCHER_Prop_geoRight, rGeoRect.Width );
-            AddOpt( ESCHER_Prop_geoBottom, rGeoRect.Height );
-
-            AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-            AddOpt( ESCHER_Prop_pVertices, true, nVerticesBufSize - 6, pVerticesBuf, nVerticesBufSize );
-            AddOpt( ESCHER_Prop_pSegmentInfo, true, nSegmentBufSize, pSegmentBuf, nSegmentBufSize );
+            return false;
         }
     }
-    return bRetValue;
+
+    if(0 == aPolyPolygon.Count())
+    {
+        return false;
+    }
+
+    if(0 != (nFlags & ESCHER_CREATEPOLYGON_LINE))
+    {
+        if((1 == aPolyPolygon.Count()) && (2 == aPolyPolygon[0].GetSize()))
+        {
+            const tools::Polygon& rPoly(aPolyPolygon[0]);
+
+            rGeoRect = awt::Rectangle(
+                rPoly[0].X(),
+                rPoly[0].Y(),
+                rPoly[1].X() - rPoly[0].X(),
+                rPoly[1].Y() - rPoly[0].Y());
+
+            return true;
+        }
+
+        return false;
+    }
+
+    const tools::Rectangle aRect(aPolyPolygon.GetBoundRect());
+
+    rGeoRect = awt::Rectangle(
+        aRect.Left(),
+        aRect.Top(),
+        aRect.GetWidth(),
+        aRect.GetHeight());
+
+    const sal_uInt16 nPolyCount(aPolyPolygon.Count());
+    sal_uInt32 nTotalPoints(0);
+    std::vector< sal_uInt8 > aVertices(4, 0);
+    std::vector< sal_uInt8 > aSegments(4, 0);
+
+    aVertices.push_back(static_cast<sal_uInt8>(0xf0));
+    aVertices.push_back(static_cast<sal_uInt8>(0xff));
+
+    aSegments.push_back(static_cast<sal_uInt8>(2));
+    aSegments.push_back(static_cast<sal_uInt8>(0));
+
+    for(sal_uInt16 j(0); j < nPolyCount; ++j)
+    {
+        const tools::Polygon aPolygon(aPolyPolygon[j]);
+        const sal_uInt16 nPoints(aPolygon.GetSize());
+
+        if(0 == nPoints)
+        {
+            continue;
+        }
+
+        // Polygon start
+        aSegments.push_back(static_cast<sal_uInt8>(0x0));
+        aSegments.push_back(static_cast<sal_uInt8>(0x40));
+
+        sal_uInt16 nSegmentIgnoreCounter(0);
+
+        // write points from polygon to buffer
+        for(sal_uInt16 i(0); i < nPoints; ++i)
+        {
+            Point aPoint(aPolygon[i]);
+
+            aPoint.AdjustX(-(rGeoRect.X));
+            aPoint.AdjustY(-(rGeoRect.Y));
+
+            aVertices.push_back(static_cast<sal_uInt8>(aPoint.X()));
+            aVertices.push_back(static_cast<sal_uInt8>(aPoint.X() >> 8));
+            aVertices.push_back(static_cast<sal_uInt8>(aPoint.Y()));
+            aVertices.push_back(static_cast<sal_uInt8>(aPoint.Y() >> 8));
+
+            nTotalPoints++;
+
+            if(0 != nSegmentIgnoreCounter)
+            {
+                nSegmentIgnoreCounter--;
+            }
+            else
+            {
+                aSegments.push_back(static_cast<sal_uInt8>(0));
+
+                if(bBezier)
+                {
+                    aSegments.push_back(static_cast<sal_uInt8>(0xb3));
+                }
+                else
+                {
+                    aSegments.push_back(static_cast<sal_uInt8>(0xac));
+                }
+
+                if(i + 1 == nPoints)
+                {
+                    if(nPolyCount > 1)
+                    {
+                        // end of polygon
+                        aSegments.push_back(static_cast<sal_uInt8>(1));
+                        aSegments.push_back(static_cast<sal_uInt8>(0x60));
+                    }
+                }
+                else
+                {
+                    aSegments.push_back(static_cast<sal_uInt8>(1));
+
+                    if(PolyFlags::Control == aPolygon.GetFlags(i + 1))
+                    {
+                        aSegments.push_back(static_cast<sal_uInt8>(0x20));
+                        nSegmentIgnoreCounter = 2;
+                    }
+                    else
+                    {
+                        aSegments.push_back(static_cast<sal_uInt8>(0));
+                    }
+                }
+            }
+        }
+    }
+
+    if(0 != nTotalPoints && aSegments.size() >= 6 && aVertices.size() >= 6)
+    {
+        // Little endian
+        aVertices[0] = static_cast<sal_uInt8>(nTotalPoints);
+        aVertices[1] = static_cast<sal_uInt8>(nTotalPoints >> 8);
+        aVertices[2] = static_cast<sal_uInt8>(nTotalPoints);
+        aVertices[3] = static_cast<sal_uInt8>(nTotalPoints >> 8);
+
+        aSegments.push_back(static_cast<sal_uInt8>(0));
+        aSegments.push_back(static_cast<sal_uInt8>(0x80));
+
+        const sal_uInt32 nSegmentBufSize(aSegments.size() - 6);
+        aSegments[0] = static_cast<sal_uInt8>(nSegmentBufSize >> 1);
+        aSegments[1] = static_cast<sal_uInt8>(nSegmentBufSize >> 9);
+        aSegments[2] = static_cast<sal_uInt8>(nSegmentBufSize >> 1);
+        aSegments[3] = static_cast<sal_uInt8>(nSegmentBufSize >> 9);
+
+        AddOpt(
+            ESCHER_Prop_geoRight,
+            rGeoRect.Width);
+        AddOpt(
+            ESCHER_Prop_geoBottom,
+            rGeoRect.Height);
+        AddOpt(
+            ESCHER_Prop_shapePath,
+            ESCHER_ShapeComplex);
+        AddOpt(
+            ESCHER_Prop_pVertices,
+            true,
+            aVertices.size() - 6,
+            &aVertices[0],
+            aVertices.size());
+        AddOpt(
+            ESCHER_Prop_pSegmentInfo,
+            true,
+            aSegments.size(),
+            &aSegments[0],
+            aSegments.size());
+
+        return true;
+    }
+
+    return false;
 }
 
 
