@@ -407,7 +407,7 @@ void Qt5Graphics::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
     SalTwoRect aPosAry = rPosAry;
     if (!pSrcGraphics || this == pSrcGraphics)
     {
-        pImage = static_cast<Qt5Graphics*>(this)->m_pQImage;
+        pImage = m_pQImage;
         aImage
             = pImage->copy(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
         pImage = &aImage;
