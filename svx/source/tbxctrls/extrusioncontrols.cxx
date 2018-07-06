@@ -36,7 +36,6 @@
 #include <svx/sdasitm.hxx>
 #include <svx/dialmgr.hxx>
 
-#include <coreservices.hxx>
 #include <helpids.h>
 #include "extrusioncontrols.hxx"
 #include <extrusiondepthdialog.hxx>
@@ -320,36 +319,27 @@ void SAL_CALL ExtrusionDirectionControl::initialize( const css::uno::Sequence< c
 // XServiceInfo
 
 
-OUString ExtrusionDirectionControl_getImplementationName()
+OUString ExtrusionDirectionControl::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionDirectionController" );
 }
 
 
-Sequence< OUString > ExtrusionDirectionControl_getSupportedServiceNames()
+Sequence< OUString > ExtrusionDirectionControl::getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > ExtrusionDirectionControl_createInstance(
-    const Reference< XMultiServiceFactory >& rSMgr
-)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_svx_ExtrusionDirectionControl_get_implementation(
+    css::uno::XComponentContext* xContext,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return *new ExtrusionDirectionControl( comphelper::getComponentContext(rSMgr) );
+    return cppu::acquire(new ExtrusionDirectionControl(xContext));
 }
 
-
-OUString SAL_CALL ExtrusionDirectionControl::getImplementationName(  )
-{
-    return ExtrusionDirectionControl_getImplementationName();
-}
-
-Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceNames(  )
-{
-    return ExtrusionDirectionControl_getSupportedServiceNames();
-}
 
 ExtrusionDepthDialog::ExtrusionDepthDialog(weld::Window* pParent, double fDepth, FieldUnit eDefaultUnit)
     : GenericDialogController(pParent, "svx/ui/extrustiondepthdialog.ui", "ExtrustionDepthDialog")
@@ -565,33 +555,27 @@ void SAL_CALL ExtrusionDepthController::initialize( const css::uno::Sequence< cs
 // XServiceInfo
 
 
-OUString ExtrusionDepthController_getImplementationName()
+OUString ExtrusionDepthController::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionDepthController" );
 }
 
 
-Sequence< OUString > ExtrusionDepthController_getSupportedServiceNames()
+Sequence< OUString > ExtrusionDepthController::getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > ExtrusionDepthController_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_svx_ExtrusionDepthController_get_implementation(
+    css::uno::XComponentContext* xContext,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return *new ExtrusionDepthController( comphelper::getComponentContext(rSMgr) );
+    return cppu::acquire(new ExtrusionDepthController(xContext));
 }
 
-OUString SAL_CALL ExtrusionDepthController::getImplementationName(  )
-{
-    return ExtrusionDepthController_getImplementationName();
-}
-
-Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames(  )
-{
-    return ExtrusionDepthController_getSupportedServiceNames();
-}
 
 static const char g_sExtrusionLightingDirection[] = ".uno:ExtrusionLightingDirection";
 static const char g_sExtrusionLightingIntensity[] = ".uno:ExtrusionLightingIntensity";
@@ -825,37 +809,27 @@ void SAL_CALL ExtrusionLightingControl::initialize( const css::uno::Sequence< cs
 // XServiceInfo
 
 
-OUString ExtrusionLightingControl_getImplementationName()
+OUString ExtrusionLightingControl::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionLightingController" );
 }
 
 
-Sequence< OUString > ExtrusionLightingControl_getSupportedServiceNames()
+Sequence< OUString > ExtrusionLightingControl::getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > ExtrusionLightingControl_createInstance(
-    const Reference< XMultiServiceFactory >& rSMgr
-)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation(
+    css::uno::XComponentContext* xContext,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return *new ExtrusionLightingControl( comphelper::getComponentContext(rSMgr) );
+    return cppu::acquire(new ExtrusionLightingControl(xContext));
 }
 
-
-OUString SAL_CALL ExtrusionLightingControl::getImplementationName(  )
-{
-    return ExtrusionLightingControl_getImplementationName();
-}
-
-
-Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames(  )
-{
-    return ExtrusionLightingControl_getSupportedServiceNames();
-}
 
 static const char g_sExtrusionSurface[] = ".uno:ExtrusionSurface";
 
@@ -961,36 +935,25 @@ void SAL_CALL ExtrusionSurfaceControl::initialize( const css::uno::Sequence< css
 // XServiceInfo
 
 
-OUString ExtrusionSurfaceControl_getImplementationName()
+OUString ExtrusionSurfaceControl::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionSurfaceController" );
 }
 
 
-Sequence< OUString > ExtrusionSurfaceControl_getSupportedServiceNames()
+Sequence< OUString > ExtrusionSurfaceControl::getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > ExtrusionSurfaceControl_createInstance(
-    const Reference< XMultiServiceFactory >& rSMgr
-)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_svx_ExtrusionSurfaceControl_get_implementation(
+    css::uno::XComponentContext* xContext,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return *new ExtrusionSurfaceControl( comphelper::getComponentContext(rSMgr) );
-}
-
-
-OUString SAL_CALL ExtrusionSurfaceControl::getImplementationName(  )
-{
-    return ExtrusionSurfaceControl_getImplementationName();
-}
-
-
-Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(  )
-{
-    return ExtrusionSurfaceControl_getSupportedServiceNames();
+    return cppu::acquire(new ExtrusionSurfaceControl(xContext));
 }
 
 }

@@ -17,27 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="svxcore" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.Draw.GraphicExporter"
       constructor="com_sun_star_comp_Draw_GraphicExporter_get_implementation">
     <service name="com.sun.star.drawing.GraphicExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.ExtrusionDepthController">
+  <implementation name="com.sun.star.comp.svx.ExtrusionDepthController"
+      constructor="com_sun_star_comp_svx_ExtrusionDepthController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.ExtrusionDirectionController">
+  <implementation name="com.sun.star.comp.svx.ExtrusionDirectionController"
+      constructor="com_sun_star_comp_svx_ExtrusionDirectionControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.ExtrusionLightingController">
+  <implementation name="com.sun.star.comp.svx.ExtrusionLightingController"
+      constructor="com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.ExtrusionSurfaceController">
+  <implementation name="com.sun.star.comp.svx.ExtrusionSurfaceController"
+      constructor="com_sun_star_comp_svx_ExtrusionSurfaceControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.FontworkAlignmentController">
+  <implementation name="com.sun.star.comp.svx.FontworkAlignmentController"
+      constructor="com_sun_star_comp_svx_FontworkAlignmentControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.FontworkCharacterSpacingController">
+  <implementation name="com.sun.star.comp.svx.FontworkCharacterSpacingController"
+      constructor="com_sun_star_comp_svx_FontworkCharacterSpacingControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
   <implementation name="com.sun.star.comp.svx.FrameToolBoxControl"

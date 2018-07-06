@@ -46,9 +46,7 @@
 
 #include <svx/gallery.hxx>
 #include <svx/dlgutil.hxx>
-
 #include <svx/fontworkgallery.hxx>
-#include <coreservices.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -404,35 +402,27 @@ void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< cs
 // XServiceInfo
 
 
-OUString FontworkAlignmentControl_getImplementationName()
+OUString FontworkAlignmentControl::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.FontworkAlignmentController" );
 }
 
 
-Sequence< OUString > FontworkAlignmentControl_getSupportedServiceNames()
+Sequence< OUString > FontworkAlignmentControl::getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > FontworkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_svx_FontworkAlignmentControl_get_implementation(
+    css::uno::XComponentContext* xContext,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return *new FontworkAlignmentControl( comphelper::getComponentContext(rSMgr) );
+    return cppu::acquire(new FontworkAlignmentControl(xContext));
 }
 
-
-OUString SAL_CALL FontworkAlignmentControl::getImplementationName(  )
-{
-    return FontworkAlignmentControl_getImplementationName();
-}
-
-
-Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames(  )
-{
-    return FontworkAlignmentControl_getSupportedServiceNames();
-}
 
 class FontworkCharacterSpacingWindow : public ToolbarMenu
 {
@@ -628,35 +618,27 @@ void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Seque
 // XServiceInfo
 
 
-OUString FontworkCharacterSpacingControl_getImplementationName()
+OUString FontworkCharacterSpacingControl::getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.FontworkCharacterSpacingController" );
 }
 
 
-Sequence< OUString > FontworkCharacterSpacingControl_getSupportedServiceNames()
+Sequence< OUString > FontworkCharacterSpacingControl::getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > FontworkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_svx_FontworkCharacterSpacingControl_get_implementation(
+    css::uno::XComponentContext* xContext,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return *new FontworkCharacterSpacingControl( comphelper::getComponentContext(rSMgr) );
+    return cppu::acquire(new FontworkCharacterSpacingControl(xContext));
 }
 
-
-OUString SAL_CALL FontworkCharacterSpacingControl::getImplementationName(  )
-{
-    return FontworkCharacterSpacingControl_getImplementationName();
-}
-
-
-Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl::getSupportedServiceNames(  )
-{
-    return FontworkCharacterSpacingControl_getSupportedServiceNames();
-}
 
 FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( vcl::Window* pParent, sal_Int32 nScale )
 :   ModalDialog( pParent, "FontworkSpacingDialog" , "svx/ui/fontworkspacingdialog.ui" )
