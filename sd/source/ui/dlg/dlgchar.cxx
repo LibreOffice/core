@@ -41,7 +41,7 @@ SdCharDlg::SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr,
     AddTabPage("RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
     AddTabPage("RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
     AddTabPage("RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION), nullptr);
-    AddTabPage("RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), nullptr);
+    AddTabPage("RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
 }
 
 void SdCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
