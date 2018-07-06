@@ -17,6 +17,12 @@ extern "C"
 {
 #endif
 
+#if defined __GNUC__ || defined __clang__
+#  define LOK_TOLERATE_UNUSED __attribute__((used))
+#else
+#  define LOK_TOLERATE_UNUSED
+#endif
+
 #if defined(__linux__) || defined (__FreeBSD_kernel__) || defined(_AIX) ||\
     defined(_WIN32) || defined(__APPLE__) || defined (__NetBSD__) ||\
     defined (__sun) || defined(__OpenBSD__)
@@ -290,14 +296,40 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     return pSym2( install_path, user_profile_url );
 }
 
-static
-#if defined __GNUC__ || defined __clang__
-__attribute__((used))
-#endif
+static LOK_TOLERATE_UNUSED
 LibreOfficeKit *lok_init( const char *install_path )
 {
     return lok_init_2( install_path, NULL );
 }
+
+#if !defined(IOS)
+static LOK_TOLERATE_UNUSED
+int lok_preinit( const char *install_path,  const char *user_profile_url )
+{
+    void *dlhandle;
+    char *imp_lib;
+    LokHookPreInit *pSym;
+
+    dlhandle = lok_dlopen(install_path, &imp_lib);
+    if (!dlhandle)
+        return -1;
+
+    pSym = (LokHookPreInit *) lok_dlsym(dlhandle, "lok_preinit");
+    if (!pSym)
+    {
+        fprintf( stderr, "failed to find pre-init hook in library '%s'\n", imp_lib );
+        lok_dlclose( dlhandle );
+        free( imp_lib );
+        return -1;
+    }
+
+    free( imp_lib );
+
+    // dlhandle is "leaked"
+    // coverity[leaked_storage]
+    return pSym( install_path, user_profile_url );
+}
+#endif
 
 #undef SEPARATOR // It is used at least in enum class MenuItemType
 
