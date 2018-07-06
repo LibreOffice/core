@@ -84,8 +84,6 @@
 
 #include <memory>
 
-#include <svx/unobrushitemhelper.hxx>
-
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -589,8 +587,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 aCoreSet.Put( aBrush );
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
-
-            setSvxBrushItemAsFillAttributesToTargetSet(aBrush, aCoreSet);
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(GetView().GetWindow(), &aCoreSet, &rSh));

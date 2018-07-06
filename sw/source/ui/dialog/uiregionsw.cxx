@@ -63,8 +63,6 @@
 #include <svx/flagsdef.hxx>
 #include <memory>
 
-#include <svx/unobrushitemhelper.hxx>
-
 using namespace ::com::sun::star;
 
 namespace {
@@ -1072,8 +1070,6 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
     aSet.Put( pSectRepr->GetBalance() );
     aSet.Put( pSectRepr->GetFrameDir() );
     aSet.Put( pSectRepr->GetLRSpace() );
-
-    setSvxBrushItemAsFillAttributesToTargetSet(pSectRepr->GetBackground(), aSet);
 
     const SwSectionFormats& rDocFormats = rSh.GetDoc()->GetSections();
     SwSectionFormats aOrigArray(rDocFormats);

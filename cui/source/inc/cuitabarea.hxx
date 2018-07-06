@@ -221,7 +221,6 @@ public:
 
 class SvxAreaTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
     static const sal_uInt16 pAreaRanges[];
 private:
     ScopedVclPtr<SfxTabPage>   m_pFillTabPage;
@@ -268,6 +267,7 @@ private:
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 
 public:
+    using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
     SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
