@@ -68,7 +68,7 @@ struct HTMLOutFuncs
                         OUString *pNonConvertableChars = nullptr );
     SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
-    SVT_DLLPUBLIC static SvStream& Out_Color( SvStream&, const Color& );
+    SVT_DLLPUBLIC static SvStream& Out_Color( SvStream&, const Color&, bool bXHTML = false );
     SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const OUString&, const ImageMap&, const OUString&,
                                    const HTMLOutEvent *pEventTable,
                                    bool bOutStarBasic,

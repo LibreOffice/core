@@ -2640,13 +2640,29 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         if( COL_AUTO == aColor.GetColor() )
             aColor.SetColor( COL_BLACK );
 
-        OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font " "
-            OOO_STRING_SVTOOLS_HTML_O_color "=";
-        rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor ).WriteChar( '>' );
+        if (rHTMLWrt.mbXHTML)
+        {
+            OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span
+                           " " OOO_STRING_SVTOOLS_HTML_O_style "=";
+            rWrt.Strm().WriteOString(sOut);
+            HTMLOutFuncs::Out_Color(rWrt.Strm(), aColor, /*bXHTML=*/true).WriteChar('>');
+        }
+        else
+        {
+            OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font " "
+                OOO_STRING_SVTOOLS_HTML_O_color "=";
+            rWrt.Strm().WriteOString( sOut );
+            HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor ).WriteChar( '>' );
+        }
     }
     else
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font, false );
+    {
+        if (rHTMLWrt.mbXHTML)
+            HTMLOutFuncs::Out_AsciiTag(
+                rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false);
+        else
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font, false );
+    }
 
     return rWrt;
 }
