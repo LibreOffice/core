@@ -1136,7 +1136,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                 {
                                     beans::PropertyValue aNew;
                                     aNew.Name = "FollowStyle";
-                                    aNew.Value <<= ConvertStyleName((*it)->sStyleIdentifierD);
+                                    aNew.Value <<= ConvertStyleName((*it)->sStyleName);
                                     aSortedPropVals.Insert(aNew);
                                     break;
                                 }
