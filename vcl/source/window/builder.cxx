@@ -2083,6 +2083,22 @@ namespace BuilderUtils
     }
 }
 
+namespace
+{
+    void getUsedIDs(std::set<OUString>& rUsedIDs, VclPtr<vcl::Window> pParent, OUString& aLastID)
+    {
+        aLastID = pParent->get_id();
+        rUsedIDs.insert(aLastID);
+
+        sal_uInt16 nChildCount = pParent->GetChildCount();
+        if (nChildCount)
+        {
+            for (sal_uInt16 nCount = 0; nCount < nChildCount; nCount++)
+                getUsedIDs(rUsedIDs, pParent->GetChild(nCount), aLastID);
+        }
+    }
+}
+
 VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
     const OString &rID, stringmap &rProps, stringmap &rPango, stringmap &rAtk)
 {
@@ -2128,7 +2144,24 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
 
     if (pCurrentChild)
     {
-        pCurrentChild->set_id(OStringToOUString(rID, RTL_TEXTENCODING_UTF8));
+        if (pCurrentChild->GetParentDialog() && pCurrentChild != pCurrentChild->GetParentDialog())
+        {
+            OUString aTemporaryID = OStringToOUString(rID, RTL_TEXTENCODING_UTF8);
+            std::set<OUString> aUsedIDs;
+            OUString aLastID;
+
+            //check if the ID is already given to another element
+            getUsedIDs(aUsedIDs, pCurrentChild->GetParentDialog(), aLastID);
+            aUsedIDs.erase(aLastID);
+            while (aUsedIDs.find(aTemporaryID) != aUsedIDs.end())
+            {
+                aTemporaryID += "_";
+            }
+            pCurrentChild->set_id(aTemporaryID);
+        }
+        else
+            pCurrentChild->set_id(OStringToOUString(rID, RTL_TEXTENCODING_UTF8));
+
         if (pCurrentChild == m_pParent.get() && m_bToplevelHasDeferredProperties)
             m_aDeferredProperties = rProps;
         else
