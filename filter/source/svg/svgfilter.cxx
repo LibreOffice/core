@@ -117,12 +117,10 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             // use MediaDescriptor to get needed data out of Sequence< PropertyValue >
             utl::MediaDescriptor aMediaDescriptor(rDescriptor);
             uno::Reference<io::XInputStream> xInputStream;
-            uno::Reference<task::XStatusIndicator> xStatus;
 
             xInputStream.set(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
-            xStatus.set(aMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()], UNO_QUERY);
 
-            if(!xInputStream.is() || !xStatus.is())
+            if(!xInputStream.is())
             {
                 // we need the InputStream and StatusIndicator
                 break;
