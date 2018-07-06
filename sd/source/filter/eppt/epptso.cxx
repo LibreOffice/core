@@ -2054,19 +2054,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 if ( !aControlName.isEmpty() )
                 {
-                    sal_uInt16 nBufSize;
-                    nBufSize = ( aControlName.getLength() + 1 ) << 1;
-                    sal_uInt8* pBuf = new sal_uInt8[ nBufSize ];
-                    sal_uInt8* pTmp = pBuf;
-                    for ( sal_Int32 i = 0; i < aControlName.getLength(); i++ )
-                    {
-                        sal_Unicode nUnicode = aControlName[i];
-                        *pTmp++ = static_cast<sal_uInt8>(nUnicode);
-                        *pTmp++ = static_cast<sal_uInt8>( nUnicode >> 8 );
-                    }
-                    *pTmp++ = 0;
-                    *pTmp = 0;
-                    aPropOpt.AddOpt( ESCHER_Prop_wzName, true, nBufSize, pBuf, nBufSize );
+                    aPropOpt.AddOpt(ESCHER_Prop_wzName, aControlName);
                 }
             }
             else if ( mType == "drawing.Connector" )
@@ -3140,7 +3128,6 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
             EscherPropertyContainer aPropOpt2;
 
             SvMemoryStream aMemStrm;
-            aMemStrm.ObjectOwnsMemory( false );
             aMemStrm.WriteUInt16( nRowCount )
                     .WriteUInt16( nRowCount )
                     .WriteUInt16( 4 );
@@ -3151,7 +3138,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
 
             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x1000100 );
             aPropOpt2.AddOpt( ESCHER_Prop_tableProperties, 1 );
-            aPropOpt2.AddOpt( ESCHER_Prop_tableRowProperties, true, aMemStrm.Tell(), static_cast< sal_uInt8* >( const_cast< void* >( aMemStrm.GetData() ) ), aMemStrm.Tell() );
+            aPropOpt2.AddOpt(ESCHER_Prop_tableRowProperties, true, 0, aMemStrm);
             aPropOpt.CreateShapeProperties( rXShape );
             aPropOpt.Commit( *mpStrm );
             aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
