@@ -116,6 +116,8 @@ using namespace ::com::sun::star;
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <helpids.h>
 
+#include <svx/xdef.hxx>
+
 void ScDocShell::ReloadAllLinks()
 {
     m_aDocument.SetLinkFormulaNeedingCheck(false);
@@ -1690,6 +1692,7 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                             aOldData.InitFromStyle( pStyleSheet );
 
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
+                        rStyleSet.MergeRange( XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 

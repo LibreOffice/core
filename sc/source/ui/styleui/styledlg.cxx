@@ -126,6 +126,10 @@ void ScStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
             aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(*pInfoItem).GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rTabPage.PageCreated(aSet);
         }
+        else if (rPageId == "background")
+        {
+            rTabPage.PageCreated(aSet);
+        }
     }
 }
 
