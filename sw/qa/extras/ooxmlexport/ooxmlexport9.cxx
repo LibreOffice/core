@@ -251,6 +251,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth,"tdf97648_relativeWidth.docx
 DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSectionColumns.docx")
 {
     CPPUNIT_ASSERT_MESSAGE("There should be two or three pages", getPages() <= 3 );
+
+    //tdf#95114 - follow style is Text Body - DOCX test
+    uno::Reference< beans::XPropertySet > properties(getStyles("ParagraphStyles")->getByName("annotation subject"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("annotation text"), getProperty<OUString>(properties, "FollowStyle"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf46940_dontEquallyDistributeColumns, "tdf46940_dontEquallyDistributeColumns.docx")
@@ -270,6 +274,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf98700_keepWithNext, "tdf98700_keepWithNext.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading 1 style inherits keeps with next", true, getProperty<bool>(getParagraph(3), "ParaKeepTogether"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading 2 style disabled keep with next", false, getProperty<bool>(getParagraph(4), "ParaKeepTogether"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Text Body style toggled off keep with next", false, getProperty<bool>(getParagraph(5), "ParaKeepTogether"));
+
+    //tdf#95114 - follow style is Text Body - ODT test
+    uno::Reference< beans::XPropertySet > properties(getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text body"), getProperty<OUString>(properties, "FollowStyle"));
 }
 
 // base class to supply a helper method for testHFLinkToPrev

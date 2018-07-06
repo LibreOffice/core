@@ -797,6 +797,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89791, "tdf89791.docx")
         uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
         CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("docProps/custom.xml")));
     }
+
+    //tdf#102619 - setting FollowStyle with a not-yet-created style was failing. (Titre is created before Corps de texte).
+    uno::Reference< beans::XPropertySet > properties(getStyles("ParagraphStyles")->getByName("Titre"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Corps de texte"), getProperty<OUString>(properties, "FollowStyle"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")
