@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_ecef54e7",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2562,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-06T09:47:03Z",
+      "side": 1,
+      "message": "Missing block braces, this should be\n\n    if (bChanged)\n    {\n        SetTabProtectionSymbol(nTab, false);\n        UpdateLayerLocks();     //! broadcast to all views\n    }",
+      "revId": "c1296363ae2cff50c77becea8f4fb5cb07567308",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
