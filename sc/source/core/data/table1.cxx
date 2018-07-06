@@ -1498,63 +1498,28 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
             const SCCOL nColCount = nEndCol - nStartCol + 1;
             std::unique_ptr<SCROW[]> pNextRows( new SCROW[nColCount]);
             const SCCOL nLastCol = aCol.size() - 1;
+            const bool bUp = (nMovX < 0);   // Moving left also means moving up in rows.
+            const SCROW nRowAdd = (bUp ? -1 : 1);
             sal_uInt16 nWrap = 0;
 
-            if ( nMovX > 0 )                            //  forward
+            for (SCCOL i = 0; i < nColCount; ++i)
+                pNextRows[i] = (i + nStartCol < nCol) ? (nRow + nRowAdd) : nRow;
+            do
             {
-                for (SCCOL i = 0; i < nColCount; ++i)
-                    pNextRows[i] = (i + nStartCol < nCol) ? (nRow+1) : nRow;
-                do
+                SCROW nNextRow = pNextRows[nCol - nStartCol] + nRowAdd;
+                if ( bMarked )
+                    nNextRow = rMark.GetNextMarked( nCol, nNextRow, bUp );
+                if ( bUnprotected )
+                    nNextRow = ( nCol <= nLastCol ) ? aCol[nCol].GetNextUnprotected( nNextRow, bUp ) :
+                        aDefaultColAttrArray.GetNextUnprotected( nNextRow, bUp );
+                pNextRows[nCol - nStartCol] = nNextRow;
+
+                if (bUp)
                 {
-                    SCROW nNextRow = pNextRows[nCol - nStartCol] + 1;
-                    if ( bMarked )
-                        nNextRow = rMark.GetNextMarked( nCol, nNextRow, false );
-                    if ( bUnprotected )
-                        nNextRow = ( nCol <= nLastCol ) ? aCol[nCol].GetNextUnprotected( nNextRow, false ) :
-                            aDefaultColAttrArray.GetNextUnprotected( nNextRow, false );
-                    pNextRows[nCol - nStartCol] = nNextRow;
-
-                    SCROW nMinRow = nEndRow + 1;
-                    for (SCCOL i = 0; i < nColCount; ++i)
-                    {
-                        if (pNextRows[i] < nMinRow)     // when two equal on the left
-                        {
-                            nMinRow = pNextRows[i];
-                            nCol = i + nStartCol;
-                        }
-                    }
-                    nRow = nMinRow;
-
-                    if ( nRow > nEndRow )
-                    {
-                        if (++nWrap >= 2)
-                            return;
-                        nCol = nStartCol;
-                        nRow = nStartRow;
-                        for (SCCOL i = 0; i < nColCount; ++i)
-                            pNextRows[i] = nStartRow;   // do it all over again
-                    }
-                }
-                while ( !ValidNextPos(nCol, nRow, rMark, bMarked, bUnprotected) );
-            }
-            else                                        //  backwards
-            {
-                for (SCCOL i = 0; i < nColCount; ++i)
-                    pNextRows[i] = (i + nStartCol > nCol) ? (nRow-1) : nRow;
-                do
-                {
-                    SCROW nNextRow = pNextRows[nCol - nStartCol] - 1;
-                    if ( bMarked )
-                        nNextRow = rMark.GetNextMarked( nCol, nNextRow, true );
-                    if ( bUnprotected )
-                        nNextRow = ( nCol <= nLastCol ) ? aCol[nCol].GetNextUnprotected( nNextRow, true ) :
-                            aDefaultColAttrArray.GetNextUnprotected( nNextRow, true );
-                    pNextRows[nCol - nStartCol] = nNextRow;
-
                     SCROW nMaxRow = nStartRow - 1;
                     for (SCCOL i = 0; i < nColCount; ++i)
                     {
-                        if (pNextRows[i] >= nMaxRow)    // when two equal on the right
+                        if (pNextRows[i] >= nMaxRow)    // when two equal the right one
                         {
                             nMaxRow = pNextRows[i];
                             nCol = i + nStartCol;
@@ -1572,8 +1537,31 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
                             pNextRows[i] = nEndRow;     // do it all over again
                     }
                 }
-                while ( !ValidNextPos(nCol, nRow, rMark, bMarked, bUnprotected) );
+                else
+                {
+                    SCROW nMinRow = nEndRow + 1;
+                    for (SCCOL i = 0; i < nColCount; ++i)
+                    {
+                        if (pNextRows[i] < nMinRow)     // when two equal the left one
+                        {
+                            nMinRow = pNextRows[i];
+                            nCol = i + nStartCol;
+                        }
+                    }
+                    nRow = nMinRow;
+
+                    if ( nRow > nEndRow )
+                    {
+                        if (++nWrap >= 2)
+                            return;
+                        nCol = nStartCol;
+                        nRow = nStartRow;
+                        for (SCCOL i = 0; i < nColCount; ++i)
+                            pNextRows[i] = nStartRow;   // do it all over again
+                    }
+                }
             }
+            while ( !ValidNextPos(nCol, nRow, rMark, bMarked, bUnprotected) );
         }
     }
 
