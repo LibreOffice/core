@@ -7263,7 +7263,7 @@ SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -7281,7 +7281,7 @@ SfxVoidItem PreviousTrackedChange FN_REDLINE_PREV_CHANGE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
