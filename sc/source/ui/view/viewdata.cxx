@@ -766,8 +766,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
 
     aScrSize = Size( long( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
                      static_cast<long>( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
-    maTabData.push_back( new ScViewDataTable );
-    pThisTab = maTabData[nTabNo];
+    maTabData.emplace_back( new ScViewDataTable );
+    pThisTab = maTabData[nTabNo].get();
     for (sal_uInt16 j=0; j<4; j++)
     {
         pEditView[j] = nullptr;
@@ -790,10 +790,10 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         while ( !pDoc->IsVisible(nTabNo) && pDoc->HasTable(nTabNo+1) )
         {
             ++nTabNo;
-            maTabData.push_back(nullptr);
+            maTabData.emplace_back(nullptr);
         }
-        maTabData[nTabNo] = new ScViewDataTable() ;
-        pThisTab = maTabData[nTabNo];
+        maTabData[nTabNo].reset( new ScViewDataTable() );
+        pThisTab = maTabData[nTabNo].get();
     }
 
     if (pDoc)
@@ -802,73 +802,6 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         EnsureTabDataSize(nTableCount);
     }
 
-    CalcPPT();
-}
-
-ScViewData::ScViewData( const ScViewData& rViewData ) :
-        nPPTX(0.0),
-        nPPTY(0.0),
-        maTabData( rViewData.maTabData ),
-        mpMarkData(new ScMarkData(*rViewData.mpMarkData)),
-        pDocShell   ( rViewData.pDocShell ),
-        pDoc        ( rViewData.pDoc ),
-        pView       ( rViewData.pView ),
-        pViewShell  ( rViewData.pViewShell ),
-        pOptions    ( new ScViewOptions( *(rViewData.pOptions) )  ),
-        pSpellingView ( rViewData.pSpellingView ),
-        aLogicMode  ( rViewData.aLogicMode ),
-        eDefZoomType( rViewData.eDefZoomType ),
-        aDefZoomX   ( rViewData.aDefZoomX ),
-        aDefZoomY   ( rViewData.aDefZoomY ),
-        aDefPageZoomX( rViewData.aDefPageZoomX ),
-        aDefPageZoomY( rViewData.aDefPageZoomY ),
-        eRefType    ( SC_REFTYPE_NONE ),
-        nTabNo      ( rViewData.nTabNo ),
-        nRefTabNo   ( rViewData.nTabNo ),           // no RefMode
-        nRefStartX(0),
-        nRefStartY(0),
-        nRefStartZ(0),
-        nRefEndX(0),
-        nRefEndY(0),
-        nRefEndZ(0),
-        nFillStartX(0),
-        nFillStartY(0),
-        nFillEndX(0),
-        nFillEndY(0),
-        nPasteFlags ( ScPasteFlags::NONE ),
-        eEditActivePart( rViewData.eEditActivePart ),
-        nFillMode   ( ScFillMode::NONE ),
-        eEditAdjust ( rViewData.eEditAdjust ),
-        bActive     ( true ),                               // how to initialize?
-        bIsRefMode  ( false ),
-        bDelMarkValid( false ),
-        bPagebreak  ( rViewData.bPagebreak ),
-        bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick ),
-        bMoveArea ( rViewData.bMoveArea ),
-        bGrowing( rViewData.bGrowing ),
-        m_nLOKPageUpDownOffset( rViewData.m_nLOKPageUpDownOffset )
-{
-
-    SetGridMode     ( rViewData.IsGridMode() );
-    SetSyntaxMode   ( rViewData.IsSyntaxMode() );
-    SetHeaderMode   ( rViewData.IsHeaderMode() );
-    SetTabMode      ( rViewData.IsTabMode() );
-    SetVScrollMode  ( rViewData.IsVScrollMode() );
-    SetHScrollMode  ( rViewData.IsHScrollMode() );
-    SetOutlineMode  ( rViewData.IsOutlineMode() );
-
-    aScrSize = rViewData.aScrSize;
-
-    pThisTab = maTabData[nTabNo];
-    for (sal_uInt16 j=0; j<4; j++)
-    {
-        pEditView[j] = nullptr;
-        bEditActive[j] = false;
-    }
-
-    nEditEndCol = nEditStartCol = nEditCol = 0;
-    nEditEndRow = nEditRow = 0;
-    nTabStartCol = SC_TABSTART_NONE;
     CalcPPT();
 }
 
@@ -892,28 +825,29 @@ ScDocument* ScViewData::GetDocument() const
 ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
 {
     KillEditView();
-    delete pOptions;
-    ::std::for_each(
-        maTabData.begin(), maTabData.end(), std::default_delete<ScViewDataTable>());
+    pOptions.reset();
 }
 
 void ScViewData::UpdateCurrentTab()
 {
     assert(0 <= nTabNo && static_cast<size_t>(nTabNo) < maTabData.size());
-    pThisTab = maTabData[nTabNo];
+    pThisTab = maTabData[nTabNo].get();
     while (!pThisTab)
     {
         if (nTabNo > 0)
-            pThisTab = maTabData[--nTabNo];
+            pThisTab = maTabData[--nTabNo].get();
         else
-            pThisTab = maTabData[0] = new ScViewDataTable;
+        {
+            maTabData[0].reset(new ScViewDataTable);
+            pThisTab = maTabData[0].get();
+        }
     }
 }
 
 void ScViewData::InsertTab( SCTAB nTab )
 {
     if( nTab >= static_cast<SCTAB>(maTabData.size()))
-        maTabData.resize(nTab+1, nullptr);
+        maTabData.resize(nTab+1);
     else
         maTabData.insert( maTabData.begin() + nTab, nullptr );
     CreateTabData( nTab );
@@ -925,10 +859,13 @@ void ScViewData::InsertTab( SCTAB nTab )
 void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
 {
     if (nTab >= static_cast<SCTAB>(maTabData.size()))
-        maTabData.resize(nTab+nNewSheets, nullptr);
+        maTabData.resize(nTab+nNewSheets);
     else
     {
-        maTabData.insert( maTabData.begin() + nTab, nNewSheets, nullptr );
+        // insert nNewSheets new tables at position nTab
+        auto prevSize = maTabData.size();
+        maTabData.resize(prevSize + nNewSheets);
+        std::move_backward(maTabData.begin() + nTab, maTabData.begin() + prevSize, maTabData.end());
     }
     for (SCTAB i = nTab; i < nTab + nNewSheets; ++i)
     {
@@ -941,7 +878,6 @@ void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
 void ScViewData::DeleteTab( SCTAB nTab )
 {
     assert(nTab < static_cast<SCTAB>(maTabData.size()));
-    delete maTabData.at(nTab);
     maTabData.erase(maTabData.begin() + nTab);
 
     if (static_cast<size_t>(nTabNo) >= maTabData.size())
@@ -958,9 +894,7 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
     for (SCTAB i = 0; i < nSheets; ++i)
     {
         mpMarkData->DeleteTab( nTab + i );
-        delete maTabData.at(nTab + i);
     }
-
     maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
     if (static_cast<size_t>(nTabNo) >= maTabData.size())
     {
@@ -987,7 +921,7 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
     EnsureTabDataSize(nDestTab + 1);
 
     if ( maTabData[nSrcTab] )
-        maTabData.insert(maTabData.begin() + nDestTab, new ScViewDataTable( *maTabData[nSrcTab] ));
+        maTabData.emplace(maTabData.begin() + nDestTab, new ScViewDataTable( *maTabData[nSrcTab] ));
     else
         maTabData.insert(maTabData.begin() + nDestTab, nullptr);
 
@@ -999,19 +933,19 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = pDoc->GetTableCount() - 1;
-    ScViewDataTable* pTab = nullptr;
+    std::unique_ptr<ScViewDataTable> pTab;
     if (nSrcTab < static_cast<SCTAB>(maTabData.size()))
     {
-        pTab = maTabData[nSrcTab];
+        pTab = std::move(maTabData[nSrcTab]);
         maTabData.erase( maTabData.begin() + nSrcTab );
     }
 
     if (nDestTab < static_cast<SCTAB>(maTabData.size()))
-        maTabData.insert( maTabData.begin() + nDestTab, pTab );
+        maTabData.insert( maTabData.begin() + nDestTab, std::move(pTab) );
     else
     {
         EnsureTabDataSize(nDestTab + 1);
-        maTabData[nDestTab] = pTab;
+        maTabData[nDestTab] = std::move(pTab);
     }
 
     UpdateCurrentTab();
@@ -1490,7 +1424,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
     else
     {
-        pEditView[eWhich] = new EditView( pNewEngine, pWin );
+        pEditView[eWhich].reset(new EditView( pNewEngine, pWin ));
 
         if (comphelper::LibreOfficeKit::isActive())
         {
@@ -1656,7 +1590,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                                     // here bEditActive needs to be set already
                                                     // (due to Map-Mode during Paint)
     if (!bWasThere)
-        pNewEngine->InsertView(pEditView[eWhich]);
+        pNewEngine->InsertView(pEditView[eWhich].get());
 
     //      background color of the cell
     Color aBackCol = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
@@ -1705,7 +1639,7 @@ void ScViewData::EditGrowX()
 
     ScSplitPos eWhich = GetActivePart();
     ScHSplitPos eHWhich = WhichH(eWhich);
-    EditView* pCurView = pEditView[eWhich];
+    EditView* pCurView = pEditView[eWhich].get();
 
     if ( !pCurView || !bEditActive[eWhich])
         return;
@@ -1893,7 +1827,7 @@ void ScViewData::EditGrowY( bool bInitial )
 
     ScSplitPos eWhich = GetActivePart();
     ScVSplitPos eVWhich = WhichV(eWhich);
-    EditView* pCurView = pEditView[eWhich];
+    EditView* pCurView = pEditView[eWhich].get();
 
     if ( !pCurView || !bEditActive[eWhich])
         return;
@@ -1982,7 +1916,7 @@ void ScViewData::ResetEditView()
             {
                 lcl_LOKRemoveWindow(GetViewShell(), static_cast<ScSplitPos>(i));
                 pEngine = pEditView[i]->GetEditEngine();
-                pEngine->RemoveView(pEditView[i]);
+                pEngine->RemoveView(pEditView[i].get());
                 pEditView[i]->SetOutputArea( tools::Rectangle() );
             }
             bEditActive[i] = false;
@@ -2002,16 +1936,15 @@ void ScViewData::KillEditView()
             {
                 pEngine = pEditView[i]->GetEditEngine();
                 if (pEngine)
-                    pEngine->RemoveView(pEditView[i]);
+                    pEngine->RemoveView(pEditView[i].get());
             }
-            delete pEditView[i];
-            pEditView[i] = nullptr;
+            pEditView[i].reset();
         }
 }
 
 void ScViewData::GetEditView( ScSplitPos eWhich, EditView*& rViewPtr, SCCOL& rCol, SCROW& rRow )
 {
-    rViewPtr = pEditView[eWhich];
+    rViewPtr = pEditView[eWhich].get();
     rCol = nEditCol;
     rRow = nEditRow;
 }
@@ -2022,7 +1955,7 @@ void ScViewData::CreateTabData( SCTAB nNewTab )
 
     if (!maTabData[nNewTab])
     {
-        maTabData[nNewTab] = new ScViewDataTable;
+        maTabData[nNewTab].reset( new ScViewDataTable );
 
         maTabData[nNewTab]->eZoomType  = eDefZoomType;
         maTabData[nNewTab]->aZoomX     = aDefZoomX;
@@ -2042,10 +1975,7 @@ void ScViewData::CreateSelectedTabData()
 void ScViewData::EnsureTabDataSize(size_t nSize)
 {
     if (nSize > maTabData.size())
-    {
-        size_t n = nSize - maTabData.size();
-        maTabData.insert(maTabData.end(), n, nullptr);
-    }
+        maTabData.resize(nSize);
 }
 
 void ScViewData::SetTabNo( SCTAB nNewTab )
@@ -2058,7 +1988,7 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
 
     nTabNo = nNewTab;
     CreateTabData(nTabNo);
-    pThisTab = maTabData[nTabNo];
+    pThisTab = maTabData[nTabNo].get();
 
     CalcPPT();          //  for common column width correction
     RecalcPixPos();     //! not always needed!
@@ -2956,7 +2886,7 @@ void ScViewData::ReadUserData(const OUString& rData)
         aTabOpt = rData.getToken(static_cast<sal_Int32>(nPos+nTabStart), ';');
         EnsureTabDataSize(nPos + 1);
         if (!maTabData[nPos])
-            maTabData[nPos] = new ScViewDataTable;
+            maTabData[nPos].reset( new ScViewDataTable );
 
         sal_Unicode cTabSep = 0;
         if (comphelper::string::getTokenCount(aTabOpt, SC_OLD_TABSEP) >= 11)
@@ -3020,7 +2950,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
     // sheet settings
     for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabData.size()); ++nTab )
     {
-        if( const ScViewDataTable* pViewTab = maTabData[ nTab ] )
+        if( const ScViewDataTable* pViewTab = maTabData[ nTab ].get() )
         {
             ScExtTabSettings& rTabSett = rDocOpt.GetOrCreateTabSettings( nTab );
 
@@ -3129,7 +3059,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
         if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nTab ) )
         {
             if( !maTabData[ nTab ] )
-                maTabData[ nTab ] = new ScViewDataTable;
+                maTabData[ nTab ].reset( new ScViewDataTable );
 
             const ScExtTabSettings& rTabSett = *pTabSett;
             ScViewDataTable& rViewTab = *maTabData[ nTab ];
@@ -3404,7 +3334,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                         {
                             EnsureTabDataSize(nTab + 1);
                             if (!maTabData[nTab])
-                                maTabData[nTab] = new ScViewDataTable;
+                                maTabData[nTab].reset( new ScViewDataTable );
 
                             bool bHasZoom = false;
                             maTabData[nTab]->ReadUserDataSequence(aTabSettings, *this, nTab, bHasZoom);

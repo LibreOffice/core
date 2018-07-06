@@ -275,15 +275,15 @@ class SC_DLLPUBLIC ScViewData
 private:
     double              nPPTX, nPPTY;               // Scaling factors
 
-    ::std::vector<ScViewDataTable*> maTabData;
+    ::std::vector<std::unique_ptr<ScViewDataTable>> maTabData;
     std::unique_ptr<ScMarkData> mpMarkData;
     ScViewDataTable*    pThisTab;                   // Data of the displayed sheet
     ScDocShell*         pDocShell;
     ScDocument*         pDoc;
     ScDBFunc*           pView;
     ScTabViewShell*     pViewShell;
-    EditView*           pEditView[4];               // Belongs to the window
-    ScViewOptions*      pOptions;
+    std::unique_ptr<EditView> pEditView[4];               // Belongs to the window
+    std::unique_ptr<ScViewOptions> pOptions;
     EditView*           pSpellingView;
 
     Size                aScenButSize;
@@ -348,7 +348,6 @@ private:
 
 public:
                     ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
-                    ScViewData( const ScViewData& rViewData );
                     ~ScViewData() COVERITY_NOEXCEPT_FALSE;
 
     void            InitData( ScDocument* pDocument );
@@ -568,7 +567,7 @@ public:
     bool            HasEditView( ScSplitPos eWhich ) const
                                         { return pEditView[eWhich] && bEditActive[eWhich]; }
     EditView*       GetEditView( ScSplitPos eWhich ) const
-                                        { return pEditView[eWhich]; }
+                                        { return pEditView[eWhich].get(); }
 
     /**
      * Extend the output area for the edit engine view in a horizontal
