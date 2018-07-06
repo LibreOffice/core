@@ -490,7 +490,7 @@ public:
     virtual void    Select();
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
 
-    OUString        GetText() const { return maText; }
+    OUString const & GetText() const { return maText; }
     void            SetText(const OUString& rText) { maText = rText; }
     void            SetStyle(WinBits nStyle);
     WinBits         GetStyle() const { return mnStyle; }

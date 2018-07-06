@@ -1075,7 +1075,7 @@ bool SdrGrafObj::isEmbeddedPdfData() const
    return mpGraphicObject->GetGraphic().hasPdfData();
 }
 
-std::shared_ptr<uno::Sequence<sal_Int8>> SdrGrafObj::getEmbeddedPdfData() const
+std::shared_ptr<uno::Sequence<sal_Int8>> const & SdrGrafObj::getEmbeddedPdfData() const
 {
    return mpGraphicObject->GetGraphic().getPdfData();
 }

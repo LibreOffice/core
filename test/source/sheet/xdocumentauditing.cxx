@@ -57,8 +57,7 @@ void XDocumentAuditing::dispatch(const uno::Reference<frame::XFrame>& xFrame,
 }
 
 bool XDocumentAuditing::hasRightAmountOfShapes(const uno::Reference<drawing::XDrawPage>& xDrawPage,
-                                               const sal_Int32& nElementCount,
-                                               const sal_Int32& nShapes)
+                                               sal_Int32 nElementCount, sal_Int32 nShapes)
 {
     const sal_Int32 nCount = xDrawPage->getCount();
     if (nCount != nElementCount + nShapes)
