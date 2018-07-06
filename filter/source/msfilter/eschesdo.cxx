@@ -243,10 +243,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             const std::unique_ptr< SvMemoryStream >& pMemStrm = pInteraction->getHyperlinkRecord();
             if ( pMemStrm.get() )
             {
-                pMemStrm->ObjectOwnsMemory( false );
-                sal_uInt8 const * pBuf = static_cast<sal_uInt8 const *>(pMemStrm->GetData());
-                sal_uInt32 nSize = pMemStrm->Seek( STREAM_SEEK_TO_END );
-                aPropOpt.AddOpt( ESCHER_Prop_pihlShape, false, nSize, const_cast<sal_uInt8 *>(pBuf), nSize );
+                aPropOpt.AddOpt(ESCHER_Prop_pihlShape, false, 0, *pMemStrm.get());
             }
             aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x00080008 );
         }

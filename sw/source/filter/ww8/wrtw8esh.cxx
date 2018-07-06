@@ -291,11 +291,9 @@ void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrameFormat& rFormat,Es
         const SwFormatURL *pINetFormat = dynamic_cast<const SwFormatURL*>(pItem);
         if (pINetFormat && !pINetFormat->GetURL().isEmpty())
         {
-            SvMemoryStream *rStrm = new SvMemoryStream ;
-            WriteHyperlinkWithinFly( *rStrm, pINetFormat );
-            sal_uInt8 const * pBuf = static_cast<sal_uInt8 const *>(rStrm->GetData());
-            sal_uInt32 nSize = rStrm->Seek( STREAM_SEEK_TO_END );
-            rPropOpt.AddOpt( ESCHER_Prop_pihlShape, true, nSize, const_cast<sal_uInt8 *>(pBuf), nSize );
+            SvMemoryStream aStrm;
+            WriteHyperlinkWithinFly( aStrm, pINetFormat );
+            rPropOpt.AddOpt(ESCHER_Prop_pihlShape, true, 0, aStrm);
             sal_uInt32 nValue;
             OUString aNamestr = pINetFormat->GetName();
             if (!aNamestr.isEmpty())
@@ -1634,11 +1632,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
         SwWW8Writer::InsAsString16( aBuf, sURL );
         SwWW8Writer::InsUInt16( aBuf, 0 );
 
-        sal_uInt16 nArrLen = aBuf.size();
-        sal_uInt8* pArr = new sal_uInt8[ nArrLen ];
-        std::copy( aBuf.begin(), aBuf.end(), pArr);
-
-        aPropOpt.AddOpt(ESCHER_Prop_pibName, true, nArrLen, pArr, nArrLen);
+        aPropOpt.AddOpt(ESCHER_Prop_pibName, true, aBuf.size(), aBuf);
         nFlags = ESCHER_BlipFlagLinkToFile | ESCHER_BlipFlagURL |
                     ESCHER_BlipFlagDoNotSave;
     }
@@ -2145,12 +2139,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eS
                     aPolyDump.WriteUInt32( aPoly[nI].Y() );
                 }
 
-                sal_uInt16 nArrLen = msword_cast<sal_uInt16>(aPolyDump.Tell());
-                void *pArr = const_cast<void *>(aPolyDump.GetData());
-                //PropOpt wants to own the buffer
-                aPolyDump.ObjectOwnsMemory(false);
-                rPropOpt.AddOpt(DFF_Prop_pWrapPolygonVertices, false,
-                    nArrLen, static_cast<sal_uInt8 *>(pArr), nArrLen);
+                rPropOpt.AddOpt(DFF_Prop_pWrapPolygonVertices, false, 0, aPolyDump);
             }
         }
     }
