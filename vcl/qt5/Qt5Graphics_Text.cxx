@@ -112,7 +112,7 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
                 continue;
             QString aFilename = toQString(
                 OStringToOUString(rMgr.getFontFileSysPath(aInfo.m_nID), RTL_TEXTENCODING_UTF8));
-            aFDB.addApplicationFont(aFilename);
+            QFontDatabase::addApplicationFont(aFilename);
         }
 
         SalGenericInstance::RegisterFontSubstitutors(pPFC);
