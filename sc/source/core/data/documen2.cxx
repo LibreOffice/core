@@ -221,7 +221,11 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbStreamValidLocked( false ),
         mbUserInteractionEnabled(true),
         mnNamedRangesLockCount(0),
-        mbUseEmbedFonts(false),
+        mbEmbedFonts(false),
+        mbEmbedUsedFontsOnly(false),
+        mbEmbedFontScriptLatin(true),
+        mbEmbedFontScriptAsian(true),
+        mbEmbedFontScriptComplex(true),
         mbTrackFormulasPending(false),
         mbFinalTrackFormulas(false),
         mnMutationGuardFlags(0)

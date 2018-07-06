@@ -61,6 +61,10 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbStylesNoDefault(false),
     mbFloattableNomargins(false),
     mEmbedFonts(false),
+    mEmbedUsedFonts(false),
+    mEmbedLatinScriptFonts(true),
+    mEmbedAsianScriptFonts(true),
+    mEmbedComplexScriptFonts(true),
     mEmbedSystemFonts(false),
     mbOldNumbering(false),
     mbIgnoreFirstLineIndentInNumbering(false),
@@ -204,6 +208,10 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::STYLES_NODEFAULT: return mbStylesNoDefault;
         case DocumentSettingId::FLOATTABLE_NOMARGINS: return mbFloattableNomargins;
         case DocumentSettingId::EMBED_FONTS: return mEmbedFonts;
+        case DocumentSettingId::EMBED_USED_FONTS: return mEmbedUsedFonts;
+        case DocumentSettingId::EMBED_LATIN_SCRIPT_FONTS: return mEmbedLatinScriptFonts;
+        case DocumentSettingId::EMBED_ASIAN_SCRIPT_FONTS: return mEmbedAsianScriptFonts;
+        case DocumentSettingId::EMBED_COMPLEX_SCRIPT_FONTS: return mEmbedComplexScriptFonts;
         case DocumentSettingId::EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
         case DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING: return mbDisableOffPagePositioning;
@@ -415,6 +423,18 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::EMBED_FONTS:
             mEmbedFonts = value;
+            break;
+        case DocumentSettingId::EMBED_USED_FONTS:
+            mEmbedUsedFonts = value;
+            break;
+        case DocumentSettingId::EMBED_LATIN_SCRIPT_FONTS:
+            mEmbedLatinScriptFonts = value;
+            break;
+        case DocumentSettingId::EMBED_ASIAN_SCRIPT_FONTS:
+            mEmbedAsianScriptFonts = value;
+            break;
+        case DocumentSettingId::EMBED_COMPLEX_SCRIPT_FONTS:
+            mEmbedComplexScriptFonts = value;
             break;
         case DocumentSettingId::EMBED_SYSTEM_FONTS:
             mEmbedSystemFonts = value;

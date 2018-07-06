@@ -35,6 +35,10 @@ protected:
     virtual void Reset( const SfxItemSet* set ) override;
 private:
     std::unique_ptr<weld::CheckButton> embedFontsCheckbox;
+    std::unique_ptr<weld::CheckButton> embedUsedFontsCheckbox;
+    std::unique_ptr<weld::CheckButton> embedLatinScriptFontsCheckbox;
+    std::unique_ptr<weld::CheckButton> embedAsianScriptFontsCheckbox;
+    std::unique_ptr<weld::CheckButton> embedComplexScriptFontsCheckbox;
 };
 
 #endif

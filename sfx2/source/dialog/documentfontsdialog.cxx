@@ -31,6 +31,10 @@ VclPtr<SfxTabPage> SfxDocumentFontsPage::Create(TabPageParent pParent, const Sfx
 SfxDocumentFontsPage::SfxDocumentFontsPage(TabPageParent parent, const SfxItemSet& set)
     : SfxTabPage(parent, "sfx/ui/documentfontspage.ui", "DocumentFontsPage", &set)
     , embedFontsCheckbox(m_xBuilder->weld_check_button("embedFonts"))
+    , embedUsedFontsCheckbox(m_xBuilder->weld_check_button("embedUsedFonts"))
+    , embedLatinScriptFontsCheckbox(m_xBuilder->weld_check_button("embedLatinScriptFonts"))
+    , embedAsianScriptFontsCheckbox(m_xBuilder->weld_check_button("embedAsianScriptFonts"))
+    , embedComplexScriptFontsCheckbox(m_xBuilder->weld_check_button("embedComplexScriptFonts"))
 {
 }
 
@@ -40,26 +44,48 @@ SfxDocumentFontsPage::~SfxDocumentFontsPage()
 
 void SfxDocumentFontsPage::Reset( const SfxItemSet* )
 {
-    bool bVal = false;
+    bool bEmbedFonts = false;
+    bool bEmbedUsedFonts = false;
+
+    bool bEmbedLatinScriptFonts  = false;
+    bool bEmbedAsianScriptFonts  = false;
+    bool bEmbedComplexScriptFonts  = false;
+
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    if ( pDocSh )
+    if (pDocSh)
     {
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue("EmbedFonts") >>= bVal;
+
+            xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
+            xProps->getPropertyValue("EmbedOnlyUsedFonts") >>= bEmbedUsedFonts;
+            xProps->getPropertyValue("EmbedLatinScriptFonts") >>= bEmbedLatinScriptFonts;
+            xProps->getPropertyValue("EmbedAsianScriptFonts") >>= bEmbedAsianScriptFonts;
+            xProps->getPropertyValue("EmbedComplexScriptFonts") >>= bEmbedComplexScriptFonts;
         }
         catch( uno::Exception& )
         {
         }
     }
-    embedFontsCheckbox->set_active(bVal);
+    embedFontsCheckbox->set_active(bEmbedFonts);
+    embedUsedFontsCheckbox->set_active(bEmbedUsedFonts);
+
+    embedLatinScriptFontsCheckbox->set_active(bEmbedLatinScriptFonts);
+    embedAsianScriptFontsCheckbox->set_active(bEmbedAsianScriptFonts);
+    embedComplexScriptFontsCheckbox->set_active(bEmbedComplexScriptFonts);
 }
 
 bool SfxDocumentFontsPage::FillItemSet( SfxItemSet* )
 {
-    bool bVal = embedFontsCheckbox->get_active();
+    bool bEmbedFonts = embedFontsCheckbox->get_active();
+    bool bEmbedUsedFonts = embedUsedFontsCheckbox->get_active();
+
+    bool bEmbedLatinScriptFonts  = embedLatinScriptFontsCheckbox->get_active();
+    bool bEmbedAsianScriptFonts  = embedAsianScriptFontsCheckbox->get_active();
+    bool bEmbedComplexScriptFonts  = embedComplexScriptFontsCheckbox->get_active();
+
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
     {
@@ -67,7 +93,11 @@ bool SfxDocumentFontsPage::FillItemSet( SfxItemSet* )
         {
             uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue("EmbedFonts", uno::makeAny( bVal ) );
+            xProps->setPropertyValue("EmbedFonts", uno::makeAny(bEmbedFonts));
+            xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::makeAny(bEmbedUsedFonts));
+            xProps->setPropertyValue("EmbedLatinScriptFonts", uno::makeAny(bEmbedLatinScriptFonts));
+            xProps->setPropertyValue("EmbedAsianScriptFonts", uno::makeAny(bEmbedAsianScriptFonts));
+            xProps->setPropertyValue("EmbedComplexScriptFonts", uno::makeAny(bEmbedComplexScriptFonts));
         }
         catch( uno::Exception& )
         {

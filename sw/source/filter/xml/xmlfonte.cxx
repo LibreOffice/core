@@ -32,13 +32,12 @@ using namespace ::com::sun::star::text;
 
 class SwXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
-    public:
-    SwXMLFontAutoStylePool_Impl( SwXMLExport& rExport, bool blockFontEmbedding );
+public:
+    SwXMLFontAutoStylePool_Impl(SwXMLExport& rExport, bool bFontEmbedding);
 };
 
-SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
-    SwXMLExport& _rExport, bool blockFontEmbedding ) :
-    XMLFontAutoStylePool( _rExport, blockFontEmbedding )
+SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, bool bFontEmbedding)
+    : XMLFontAutoStylePool(_rExport, bFontEmbedding)
 {
     sal_uInt16 const aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                       RES_CHRATR_CTL_FONT };
@@ -65,6 +64,13 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
             }
         }
     }
+    auto const & pDocument = _rExport.getDoc();
+
+    m_bEmbedUsedOnly = pDocument->getIDocumentSettingAccess().get(DocumentSettingId::EMBED_USED_FONTS);
+    m_bEmbedLatinScript = pDocument->getIDocumentSettingAccess().get(DocumentSettingId::EMBED_LATIN_SCRIPT_FONTS);
+    m_bEmbedAsianScript = pDocument->getIDocumentSettingAccess().get(DocumentSettingId::EMBED_ASIAN_SCRIPT_FONTS);
+    m_bEmbedComplexScript = pDocument->getIDocumentSettingAccess().get(DocumentSettingId::EMBED_COMPLEX_SCRIPT_FONTS);
+
 }
 
 XMLFontAutoStylePool* SwXMLExport::CreateFontAutoStylePool()
@@ -87,4 +93,3 @@ void SwXMLImport::NotifyEmbeddedFontRead()
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

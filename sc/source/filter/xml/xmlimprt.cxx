@@ -2012,8 +2012,8 @@ const ScXMLEditAttributeMap& ScXMLImport::GetEditAttributeMap() const
 
 void ScXMLImport::NotifyEmbeddedFontRead()
 {
-    if ( pDoc )
-        pDoc->SetIsUsingEmbededFonts( true );
+    if (pDoc)
+        pDoc->SetEmbedFonts(true);
 }
 
 ScMyImpDetectiveOpArray* ScXMLImport::GetDetectiveOpArray()
