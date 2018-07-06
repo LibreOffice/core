@@ -56,7 +56,7 @@ ScStyleDlg::ScStyleDlg(weld::Window* pParent,
     {
         AddTabPage("page", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ) );
         AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
-        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
         AddTabPage("header", &ScHeaderPage::Create,      &ScHeaderPage::GetRanges );
         AddTabPage("footer", &ScFooterPage::Create,      &ScFooterPage::GetRanges );
         AddTabPage("sheet", &ScTablePage::Create,     &ScTablePage::GetRanges );
@@ -75,7 +75,7 @@ ScStyleDlg::ScStyleDlg(weld::Window* pParent,
         else
             RemoveTabPage("asiantypo");
         AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ));
-        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ));
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ));
         AddTabPage("protection", &ScTabPageProtection::Create,    &ScTabPageProtection::GetRanges);
     }
 }
@@ -124,6 +124,10 @@ void ScStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
             OSL_ENSURE( pInfoItem, "FontListItem not found!" );
 
             aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(*pInfoItem).GetFontList(), SID_ATTR_CHAR_FONTLIST));
+            rTabPage.PageCreated(aSet);
+        }
+        else if (rPageId == "background")
+        {
             rTabPage.PageCreated(aSet);
         }
     }

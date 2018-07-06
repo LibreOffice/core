@@ -71,7 +71,7 @@ SdTabTemplateDlg::SdTabTemplateDlg(weld::Window* pParent,
     AddTabPage("transparency", RID_SVXPAGE_TRANSPARENCE);
     AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
     AddTabPage("fonteffect", RID_SVXPAGE_CHAR_EFFECTS);
-    AddTabPage("background", RID_SVXPAGE_BACKGROUND);
+    AddTabPage("background", RID_SVXPAGE_BKG);
     AddTabPage("indents", RID_SVXPAGE_STD_PARAGRAPH);
     AddTabPage("text", RID_SVXPAGE_TEXTATTR);
     AddTabPage("animation", RID_SVXPAGE_TEXTANIMATION);

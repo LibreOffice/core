@@ -158,7 +158,10 @@ class SvxBkgTabPage : public SvxAreaTabPage
 {
     std::unique_ptr<weld::ComboBox> m_xTblLBox;
     bool        bHighlighting       : 1;
+    bool        bCharBackColor      : 1;
+    SfxItemSet maSet;
 public:
+    using SvxAreaTabPage::ActivatePage;
     using SvxAreaTabPage::DeactivatePage;
 
     SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
@@ -167,6 +170,7 @@ public:
 
     static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
     virtual void PageCreated( const SfxAllItemSet& aSet ) override;
 };

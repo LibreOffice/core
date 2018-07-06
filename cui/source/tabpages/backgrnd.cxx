@@ -1346,8 +1346,10 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
 }
 
 SvxBkgTabPage::SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxAreaTabPage(pParent, rInAttrs)
-    , bHighlighting(false)
+    : SvxAreaTabPage(pParent, rInAttrs),
+    bHighlighting(false),
+    bCharBackColor(false),
+    maSet(rInAttrs)
 {
     m_xBtnGradient->hide();
     m_xBtnHatch->hide();
@@ -1389,9 +1391,14 @@ void SvxBkgTabPage::dispose()
     SvxAreaTabPage::dispose();
 }
 
+void SvxBkgTabPage::ActivatePage( const SfxItemSet& )
+{
+    SvxAreaTabPage::ActivatePage( maSet );
+}
+
 DeactivateRC SvxBkgTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( DeactivateRC::KeepPage == SvxAreaTabPage::DeactivatePage( _pSet ) )
+    if ( DeactivateRC::KeepPage == SvxAreaTabPage::DeactivatePage( &maSet ) )
         return DeactivateRC::KeepPage;
 
     if ( _pSet )
@@ -1420,26 +1427,46 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     }
     else if ( bHighlighting )
         nSlot = SID_ATTR_BRUSH_CHAR;
+    else if( bCharBackColor )
+        nSlot = SID_ATTR_CHAR_BACK_COLOR;
 
     sal_uInt16 nWhich = GetWhich(nSlot);
 
-    drawing::FillStyle eFillType = rCoreSet->Get( XATTR_FILLSTYLE ).GetValue();
+    drawing::FillStyle eFillType = maSet.Get( XATTR_FILLSTYLE ).GetValue();
     switch( eFillType )
     {
         case drawing::FillStyle_NONE:
         {
-            rCoreSet->Put( SvxBrushItem( COL_TRANSPARENT, nWhich ) );
+            if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
+            {
+                maSet.Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
+                rCoreSet->Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
+            }
+            else
+            {
+                maSet.Put( SvxBrushItem( COL_TRANSPARENT, nWhich ) );
+                rCoreSet->Put( SvxBrushItem( COL_TRANSPARENT, nWhich ) );
+            }
             break;
         }
         case drawing::FillStyle_SOLID:
         {
-            XFillColorItem aColorItem( rCoreSet->Get( XATTR_FILLCOLOR ) );
-            rCoreSet->Put( SvxBrushItem( aColorItem.GetColorValue(), nWhich ) );
+            XFillColorItem aColorItem( maSet.Get( XATTR_FILLCOLOR ) );
+            if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
+            {
+                maSet.Put( SvxBackgroundColorItem( aColorItem.GetColorValue(), nWhich ) );
+                rCoreSet->Put( SvxBackgroundColorItem( aColorItem.GetColorValue(), nWhich ) );
+            }
+            else
+            {
+                maSet.Put( SvxBrushItem( aColorItem.GetColorValue(), nWhich ) );
+                rCoreSet->Put( SvxBrushItem( aColorItem.GetColorValue(), nWhich ) );
+            }
             break;
         }
         case drawing::FillStyle_BITMAP:
         {
-            SvxBrushItem aBrushItem( getSvxBrushItemFromSourceSet( *rCoreSet, nWhich ) );
+            SvxBrushItem aBrushItem( getSvxBrushItemFromSourceSet( maSet, nWhich ) );
             if ( GraphicType::NONE != aBrushItem.GetGraphicObject()->GetType() ) // no selection so use current
                 rCoreSet->Put( aBrushItem );
             break;
@@ -1469,12 +1496,31 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
             m_xTblLBox->set_active(0);
             m_xTblLBox->show();
         }
-        else if (nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)
+        if ((nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING) ||
+            (nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR))
+        {
             bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
-        else if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
+            bCharBackColor = bool(nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR);
+        }
+        if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
             m_xBtnBitmap->show();
     }
-    SvxAreaTabPage::PageCreated( aSet );
+
+    if ( bCharBackColor )
+    {
+        sal_uInt16 nWhich(maSet.GetPool()->GetWhich(SID_ATTR_CHAR_BACK_COLOR));
+        Color aBackColor(static_cast<const SvxBackgroundColorItem&>(maSet.Get(nWhich)).GetValue());
+        SvxBrushItem aBrushItem(SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR));
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
+    }
+    else
+    {
+        sal_uInt16 nWhich(maSet.GetPool()->GetWhich(bHighlighting ? SID_ATTR_BRUSH_CHAR : SID_ATTR_BRUSH));
+        SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
+    }
+
+    SvxAreaTabPage::PageCreated(aSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
