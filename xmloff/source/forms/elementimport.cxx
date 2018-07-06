@@ -2041,7 +2041,7 @@ namespace xmloff
                 )
             {
                 OUString sValue = _xAttrList->getValueByIndex( i );
-
+                sValue = _rImport.GetAbsoluteReference(sValue);
                 INetURLObject aURL(sValue);
                 if ( aURL.GetProtocol() == INetProtocol::File )
                     _xElement->setPropertyValue(PROPERTY_DATASOURCENAME,makeAny(sValue));
