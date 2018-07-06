@@ -198,7 +198,7 @@ sub execute_msimsp
 {
     my ($fullpcpfilename, $mspfilename, $localmspdir) = @_;
 
-    my $msimsp = "msimsp.exe";  # Has to be in the path
+    my $msimsp = "/cygdrive/c/PROGRA~2/MICROS~1/Windows/v7.1A/Bin/MsiMsp.Exe"; # FIXME Higher versions of Windows SDK do not have mspatchc.dll :(
     my $infoline = "";
     my $systemcall = "";
     my $returnvalue = "";
