@@ -57,10 +57,10 @@ public class UnoRuntime {
     public UnoRuntime() {}
 
     /**
-     * Generates a world wide unique identifier string.
+     * Generates a worldwide unique identifier string.
      *
      * <p>It is guaranteed that every invocation of this method generates a new
-     * ID, which is unique within the VM.  The quality of &ldquo;world wide
+     * ID, which is unique within the VM.  The quality of &ldquo;worldwide
      * unique&rdquo; will depend on the actual implementation, you should look
      * at the source to determine if it meets your requirements.</p>
      *
@@ -89,7 +89,7 @@ public class UnoRuntime {
     }
 
     /**
-     * Generates a world wide unique object identifier (OID) for the given
+     * Generates a worldwide unique object identifier (OID) for the given
      * Java object.
      *
      * <p>It is guaranteed that subsequent calls to this method with the same

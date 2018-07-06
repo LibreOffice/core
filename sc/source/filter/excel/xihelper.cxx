@@ -834,7 +834,7 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
         ++mnScRows;
     }
 
-    //assuming worse case scenario of unknown types
+    //assuming worst case scenario of unknown types
     const size_t nMinRecordSize = 1;
     const size_t nMaxRows = rStrm.GetRecLeft() / (nMinRecordSize * mnScCols);
     if (mnScRows > nMaxRows)

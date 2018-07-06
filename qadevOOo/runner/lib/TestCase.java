@@ -38,7 +38,7 @@ import java.io.PrintWriter;
  * <code>TestEnvironment</code> instances. The
  * <code>createTestEnvironment()</code> is called to create a
  * <code>TestEnvironment</code> instance and the
- * <code>disposeTestEnvironment()</code> is called when the instane is not used
+ * <code>disposeTestEnvironment()</code> is called when the instance is not used
  * anymore.
  *
  * @see lib.TestEnvironment

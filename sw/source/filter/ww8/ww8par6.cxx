@@ -1915,7 +1915,7 @@ bToggelPos(false)
     // #i36649# - adjustments for certain horizontal alignments
     // Note: These special adjustments found by an investigation of documents
     //       containing frames with different left/right border distances and
-    //       distances to text. The outcome is some how strange.
+    //       distances to text. The outcome is somehow strange.
     // Note: These adjustments causes wrong horizontal positions for frames,
     //       which are aligned inside|outside to page|margin on even pages,
     //       the left and right border distances are different.

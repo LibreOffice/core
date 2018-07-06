@@ -86,7 +86,7 @@ OUString lcl_DataTypetoFbTypeName(sal_Int32 eType)
 OUString lcl_getTypeModifier(sal_Int32 eType)
 {
     // TODO bind -9546 magic number to a common definition. It also appears
-    // in the connectivity modul.
+    // in the connectivity module.
     switch (eType)
     {
         case DataType::CLOB:

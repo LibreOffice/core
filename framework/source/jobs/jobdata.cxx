@@ -525,9 +525,9 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
         return std::vector< OUString >();
 
     // get all alias names of jobs, which are part of this job list
-    // But Some of them can be disabled by its time stamp values.
-    // We create an additional job name list with the same size, then the original list ...
-    // step over all job entries ... check her time stamps ... and put only job names to the
+    // But Some of them can be disabled by its timestamp values.
+    // We create an additional job name list with the same size, then the original list...
+    // step over all job entries... check her timestamps... and put only job names to the
     // destination list, which represent an enabled job.
     css::uno::Sequence< OUString > lAllJobs = xJobList->getElementNames();
     sal_Int32 c = lAllJobs.getLength();

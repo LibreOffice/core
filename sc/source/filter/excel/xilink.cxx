@@ -275,7 +275,7 @@ XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
     SCSIZE nLastCol = rStrm.ReaduInt8();
     SCSIZE nLastRow = rStrm.ReaduInt16();
 
-    //assuming worse case scenario of nOp + one byte unistring len
+    //assuming worst case scenario of nOp + one byte unistring len
     const size_t nMinRecordSize = 2;
     const size_t nMaxRows = rStrm.GetRecLeft() / (nMinRecordSize * (nLastCol+1));
     if (nLastRow >= nMaxRows)

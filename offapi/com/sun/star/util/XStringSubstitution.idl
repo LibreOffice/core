@@ -43,7 +43,7 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
         defined for the variables.
 
         <p>
-        The method iterates through it's internal variables list to match the
+        The method iterates through its internal variables list to match the
         variables in the given string. A match replaces the variable with the
         string defined for this variable. If no variable can be found in the string
         it will be returned unchanged. The behavior if a variable is found in
@@ -71,7 +71,7 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
         these sub strings.
 
         <p>
-        The method iterates through it's internal variable list and tries to match
+        The method iterates through its internal variable list and tries to match
         parts of the given string Tries to replace parts of <var>aText</var> with
         variables that represents these sub strings.If more than one variable
         matches the one with the longest matching sub string will be chosen.
@@ -91,7 +91,7 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
     /** Returns the current value of a variable.
 
         <p>
-        The method iterates through it's internal variable list and tries to
+        The method iterates through its internal variable list and tries to
         find the given variable. If the variable is unknown a
         com::sun::star::container::NoSuchElementException
         is thrown.
