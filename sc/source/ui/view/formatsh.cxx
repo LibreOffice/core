@@ -857,6 +857,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 pTabViewShell->SetInFormatDialog(true);
 
+                SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
+                rStyleSet.MergeRange( XATTR_FILL_FIRST, XATTR_FILL_LAST );
+
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 pDlg.disposeAndReset(pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc ));

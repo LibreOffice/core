@@ -82,7 +82,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     m_nTransparencyId = AddTabPage("transparency", RID_SVXPAGE_TRANSPARENCE);
     m_nFontId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
     m_nFontEffectId = AddTabPage("fonteffect", RID_SVXPAGE_CHAR_EFFECTS);
-    m_nBackgroundId = AddTabPage("background", RID_SVXPAGE_BACKGROUND);
+    m_nBackgroundId = AddTabPage("background", RID_SVXPAGE_BKG);
     AddTabPage("indents", RID_SVXPAGE_STD_PARAGRAPH);
     m_nTextId = AddTabPage("text", RID_SVXPAGE_TEXTATTR);
     AddTabPage("animation", RID_SVXPAGE_TEXTANIMATION);

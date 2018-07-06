@@ -58,7 +58,7 @@ ScAttrDlg::ScAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs)
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
     AddTabPage( "borders",      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
+    m_nBackgroundPageId = AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
     AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    nullptr );
 }
 
@@ -82,6 +82,10 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
         OSL_ENSURE( pInfoItem, "FontListItem  not found :-(" );
 
         aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem*>(pInfoItem)->GetFontList(), SID_ATTR_CHAR_FONTLIST ));
+        rTabPage.PageCreated(aSet);
+    }
+    else if (nPageId == m_nBackgroundPageId)
+    {
         rTabPage.PageCreated(aSet);
     }
 }
