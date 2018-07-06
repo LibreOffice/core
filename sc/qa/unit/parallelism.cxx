@@ -52,6 +52,8 @@ public:
     void testVLOOKUPSUM();
     void testSingleRef();
     void testSUMIFImplicitRange();
+    void testFGCycleWithPlainFormulaCell1();
+    void testFGCycleWithPlainFormulaCell2();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -60,6 +62,8 @@ public:
     CPPUNIT_TEST(testVLOOKUPSUM);
     CPPUNIT_TEST(testSingleRef);
     CPPUNIT_TEST(testSUMIFImplicitRange);
+    CPPUNIT_TEST(testFGCycleWithPlainFormulaCell1);
+    CPPUNIT_TEST(testFGCycleWithPlainFormulaCell2);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -393,6 +397,94 @@ void ScParallelismTest::testSUMIFImplicitRange()
         OString aMsg = "At row " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nConstCellValue, static_cast<size_t>(m_pDoc->GetValue(2, i, 0)));
     }
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testFGCycleWithPlainFormulaCell1()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+    const size_t nNumRows = 1048;
+    // Column A contains no formula-group
+    // A1 = 100
+    m_pDoc->SetValue(0, 0, 0, 100.0);
+    // A500 = B499 + 1
+    m_pDoc->SetFormula(ScAddress(0, 499, 0),
+                       "=$B499 + 1",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // Column B has a formula-group referencing column A.
+    OUString aFormula;
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        aFormula = "=$A" + OUString::number(i+1) + " + 100";
+        m_pDoc->SetFormula(ScAddress(1, i, 0),
+                           aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+    m_xDocShell->DoHardRecalc();
+    // Value at A500 must be 101
+    const size_t nVal = 100;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value at A500", nVal + 1, static_cast<size_t>(m_pDoc->GetValue(0, 499, 0)));
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        OString aMsg = "Value at cell B" + OString::number(i+1);
+        size_t nExpected = nVal;
+        if (i == 0)
+            nExpected = 200;
+        else if (i == 499)
+            nExpected = 201;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected, static_cast<size_t>(m_pDoc->GetValue(1, i, 0)));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testFGCycleWithPlainFormulaCell2()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+    const size_t nNumRows = 1048;
+    // Column A
+    OUString aFormula;
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        aFormula = "=$B" + OUString::number(i+1) + " + 1";
+        m_pDoc->SetFormula(ScAddress(0, i, 0),
+                           aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+    // Column B
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        aFormula = "=$C" + OUString::number(i+1) + " + 1";
+        m_pDoc->SetFormula(ScAddress(1, i, 0),
+                           aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    // Column C has no FG but a cell at C500 that references A499
+    m_pDoc->SetFormula(ScAddress(2, 499, 0), // C500
+                       "=$A499 + 1",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    m_xDocShell->DoHardRecalc();
+
+    size_t nExpected = 0;
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        OString aMsg = "Value at cell A" + OString::number(i+1);
+        nExpected = 2;
+        if (i == 499)  // A500 must have value = 5
+            nExpected = 5;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected, static_cast<size_t>(m_pDoc->GetValue(0, i, 0)));
+        aMsg = "Value at cell B" + OString::number(i+1);
+        nExpected = 1;
+        if (i == 499)  // B500 must have value = 4
+            nExpected = 4;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected, static_cast<size_t>(m_pDoc->GetValue(1, i, 0)));
+    }
+
+    // C500 must have value = 3
+    nExpected = 3;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value at cell C500", nExpected, static_cast<size_t>(m_pDoc->GetValue(2, 499, 0)));
     m_pDoc->DeleteTab(0);
 }
 
