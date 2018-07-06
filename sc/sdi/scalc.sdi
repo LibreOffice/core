@@ -2892,7 +2892,7 @@ SfxVoidItem InsertColumnsBefore FID_INS_COLUMNS_BEFORE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -2910,7 +2910,7 @@ SfxVoidItem InsertColumnsAfter FID_INS_COLUMNS_AFTER
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -3129,7 +3129,7 @@ SfxVoidItem InsertRowsBefore FID_INS_ROWS_BEFORE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -3147,7 +3147,7 @@ SfxVoidItem InsertRowsAfter FID_INS_ROWS_AFTER
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
