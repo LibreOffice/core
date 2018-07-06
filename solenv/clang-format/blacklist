@@ -2412,13 +2412,6 @@ connectivity/source/drivers/postgresql/pq_xview.cxx
 connectivity/source/drivers/postgresql/pq_xview.hxx
 connectivity/source/drivers/postgresql/pq_xviews.cxx
 connectivity/source/drivers/postgresql/pq_xviews.hxx
-connectivity/source/drivers/writer/WCatalog.cxx
-connectivity/source/drivers/writer/WConnection.cxx
-connectivity/source/drivers/writer/WDatabaseMetaData.cxx
-connectivity/source/drivers/writer/WDriver.cxx
-connectivity/source/drivers/writer/WTable.cxx
-connectivity/source/drivers/writer/WTables.cxx
-connectivity/source/drivers/writer/Wservices.cxx
 connectivity/source/inc/AutoRetrievingBase.hxx
 connectivity/source/inc/FDatabaseMetaDataResultSet.hxx
 connectivity/source/inc/FDatabaseMetaDataResultSetMetaData.hxx
@@ -2592,12 +2585,6 @@ connectivity/source/inc/odbc/OTools.hxx
 connectivity/source/inc/odbc/odbcbasedllapi.hxx
 connectivity/source/inc/propertyids.hxx
 connectivity/source/inc/resource/sharedresources.hxx
-connectivity/source/inc/writer/WCatalog.hxx
-connectivity/source/inc/writer/WConnection.hxx
-connectivity/source/inc/writer/WDatabaseMetaData.hxx
-connectivity/source/inc/writer/WDriver.hxx
-connectivity/source/inc/writer/WTable.hxx
-connectivity/source/inc/writer/WTables.hxx
 connectivity/source/manager/mdrivermanager.cxx
 connectivity/source/manager/mdrivermanager.hxx
 connectivity/source/manager/mregistration.cxx

@@ -41,26 +41,28 @@ namespace connectivity
 namespace writer
 {
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+css::uno::Reference<css::uno::XInterface>
+ODriver_CreateInstance(const css::uno::Reference<css::lang::XMultiServiceFactory>& _rxFactory);
 
 class ODriver : public file::OFileDriver
 {
 public:
-    ODriver(const css::uno::Reference<
-            css::uno::XComponentContext >& _rxContext) :
-        file::OFileDriver(_rxContext) {}
+    ODriver(const css::uno::Reference<css::uno::XComponentContext>& _rxContext)
+        : file::OFileDriver(_rxContext)
+    {
+    }
 
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();
     OUString SAL_CALL getImplementationName() override;
 
     // XDriver
-    css::uno::Reference< css::sdbc::XConnection > SAL_CALL
-    connect(const OUString& url, const css::uno::Sequence<
-            css::beans::PropertyValue >& info) override;
+    css::uno::Reference<css::sdbc::XConnection>
+        SAL_CALL connect(const OUString& url,
+                         const css::uno::Sequence<css::beans::PropertyValue>& info) override;
     sal_Bool SAL_CALL acceptsURL(const OUString& url) override;
-    css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info) override;
+    css::uno::Sequence<css::sdbc::DriverPropertyInfo> SAL_CALL getPropertyInfo(
+        const OUString& url, const css::uno::Sequence<css::beans::PropertyValue>& info) override;
 };
 }
 }

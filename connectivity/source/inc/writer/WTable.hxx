@@ -50,7 +50,6 @@ class XNumberFormats;
 }
 }
 
-
 namespace connectivity
 {
 namespace writer
@@ -58,34 +57,33 @@ namespace writer
 using OWriterTable_BASE = component::OComponentTable;
 class OWriterConnection;
 
-class OWriterTable :  public OWriterTable_BASE
+class OWriterTable : public OWriterTable_BASE
 {
 private:
-    std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
+    std::vector<sal_Int32>
+        m_aTypes; // holds all type for columns just to avoid to ask the propertyset
     std::vector<sal_Int32> m_aPrecisions; // same as aboth
     std::vector<sal_Int32> m_aScales;
-    css::uno::Reference< css::text::XTextTable > m_xTable;
+    css::uno::Reference<css::text::XTextTable> m_xTable;
     OWriterConnection* m_pWriterConnection;
     sal_Int32 m_nStartCol;
     sal_Int32 m_nDataCols;
-    bool      m_bHasHeaders;
-    css::uno::Reference< css::util::XNumberFormats > m_xFormats;
+    bool m_bHasHeaders;
+    css::uno::Reference<css::util::XNumberFormats> m_xFormats;
 
     void fillColumns();
 
 public:
     OWriterTable(sdbcx::OCollection* _pTables, OWriterConnection* _pConnection,
-                 const OUString& Name,
-                 const OUString& Type
-                );
+                 const OUString& Name, const OUString& Type);
 
     bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
 
     void SAL_CALL disposing() override;
 
     // css::lang::XUnoTunnel
-    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence< sal_Int8 >& rId) override;
-    static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
+    static css::uno::Sequence<sal_Int8> getUnoTunnelImplementationId();
 
     void construct() override;
 };

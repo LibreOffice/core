@@ -32,37 +32,32 @@ namespace connectivity
 {
 namespace writer
 {
-
 OUString ODriver::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.sdbc.writer.ODriver");
 }
 
-OUString SAL_CALL ODriver::getImplementationName()
-{
-    return getImplementationName_Static();
-}
+OUString SAL_CALL ODriver::getImplementationName() { return getImplementationName_Static(); }
 
-uno::Reference< css::uno::XInterface >
-ODriver_CreateInstance(const uno::Reference<
-                       lang::XMultiServiceFactory >& _rxFactory)
+uno::Reference<css::uno::XInterface>
+ODriver_CreateInstance(const uno::Reference<lang::XMultiServiceFactory>& _rxFactory)
 {
     return *(new ODriver(comphelper::getComponentContext(_rxFactory)));
 }
 
-uno::Reference< sdbc::XConnection > SAL_CALL ODriver::connect(const OUString& url,
-        const uno::Sequence< beans::PropertyValue >& info)
+uno::Reference<sdbc::XConnection>
+    SAL_CALL ODriver::connect(const OUString& url, const uno::Sequence<beans::PropertyValue>& info)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (ODriver_BASE::rBHelper.bDisposed)
         throw lang::DisposedException();
 
-    if (! acceptsURL(url))
+    if (!acceptsURL(url))
         return nullptr;
 
     auto pCon = new OWriterConnection(this);
     pCon->construct(url, info);
-    uno::Reference< sdbc::XConnection > xCon = pCon;
+    uno::Reference<sdbc::XConnection> xCon = pCon;
     m_xConnections.push_back(uno::WeakReferenceHelper(*pCon));
 
     return xCon;
@@ -73,15 +68,16 @@ sal_Bool SAL_CALL ODriver::acceptsURL(const OUString& url)
     return url.startsWith("sdbc:writer:");
 }
 
-uno::Sequence< sdbc::DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo(const OUString& url, const uno::Sequence< beans::PropertyValue >& /*info*/)
+uno::Sequence<sdbc::DriverPropertyInfo> SAL_CALL
+ODriver::getPropertyInfo(const OUString& url, const uno::Sequence<beans::PropertyValue>& /*info*/)
 {
     if (!acceptsURL(url))
     {
         SharedResources aResources;
         const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
-        ::dbtools::throwGenericSQLException(sMessage,*this);
+        ::dbtools::throwGenericSQLException(sMessage, *this);
     }
-    return uno::Sequence< sdbc::DriverPropertyInfo >();
+    return uno::Sequence<sdbc::DriverPropertyInfo>();
 }
 
 } // namespace writer

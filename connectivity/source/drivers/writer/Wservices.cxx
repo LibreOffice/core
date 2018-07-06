@@ -22,43 +22,31 @@
 
 using namespace com::sun::star;
 
-using createFactoryFunc = uno::Reference<lang::XSingleServiceFactory> (*)
-                          (
-                              const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
-                              const OUString& rComponentName,
-                              ::cppu::ComponentInstantiation pCreateFunction,
-                              const uno::Sequence< OUString >& rServiceNames,
-                              rtl_ModuleCount*
-                          );
-
+using createFactoryFunc = uno::Reference<lang::XSingleServiceFactory> (*)(
+    const uno::Reference<lang::XMultiServiceFactory>& rServiceManager,
+    const OUString& rComponentName, ::cppu::ComponentInstantiation pCreateFunction,
+    const uno::Sequence<OUString>& rServiceNames, rtl_ModuleCount*);
 
 struct ProviderRequest
 {
-    uno::Reference< lang::XSingleServiceFactory > xRet;
-    uno::Reference< lang::XMultiServiceFactory > const xServiceManager;
+    uno::Reference<lang::XSingleServiceFactory> xRet;
+    uno::Reference<lang::XMultiServiceFactory> const xServiceManager;
     OUString const sImplementationName;
 
-    ProviderRequest(
-        void* pServiceManager,
-        sal_Char const* pImplementationName
-    )
+    ProviderRequest(void* pServiceManager, sal_Char const* pImplementationName)
         : xServiceManager(static_cast<lang::XMultiServiceFactory*>(pServiceManager))
         , sImplementationName(OUString::createFromAscii(pImplementationName))
     {
     }
 
-    bool CREATE_PROVIDER(
-        const OUString& Implname,
-        const uno::Sequence< OUString >& Services,
-        ::cppu::ComponentInstantiation Factory,
-        createFactoryFunc creator
-    )
+    bool CREATE_PROVIDER(const OUString& Implname, const uno::Sequence<OUString>& Services,
+                         ::cppu::ComponentInstantiation Factory, createFactoryFunc creator)
     {
         if (!xRet.is() && (Implname == sImplementationName))
         {
             try
             {
-                xRet = creator(xServiceManager, sImplementationName,Factory, Services,nullptr);
+                xRet = creator(xServiceManager, sImplementationName, Factory, Services, nullptr);
             }
             catch (...)
             {
@@ -67,28 +55,22 @@ struct ProviderRequest
         return xRet.is();
     }
 
-    void* getProvider() const
-    {
-        return xRet.get();
-    }
+    void* getProvider() const { return xRet.get(); }
 };
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT void* connectivity_writer_component_getFactory(
-    const sal_Char* pImplementationName,
-    void* pServiceManager,
-    void* /*pRegistryKey*/)
+extern "C" SAL_DLLPUBLIC_EXPORT void*
+connectivity_writer_component_getFactory(const sal_Char* pImplementationName, void* pServiceManager,
+                                         void* /*pRegistryKey*/)
 {
     void* pRet = nullptr;
     if (pServiceManager)
     {
-        ProviderRequest aReq(pServiceManager,pImplementationName);
+        ProviderRequest aReq(pServiceManager, pImplementationName);
 
-        aReq.CREATE_PROVIDER(
-            connectivity::writer::ODriver::getImplementationName_Static(),
-            connectivity::writer::ODriver::getSupportedServiceNames_Static(),
-            connectivity::writer::ODriver_CreateInstance, ::cppu::createSingleFactory)
-        ;
+        aReq.CREATE_PROVIDER(connectivity::writer::ODriver::getImplementationName_Static(),
+                             connectivity::writer::ODriver::getSupportedServiceNames_Static(),
+                             connectivity::writer::ODriver_CreateInstance,
+                             ::cppu::createSingleFactory);
 
         if (aReq.xRet.is())
             aReq.xRet->acquire();
