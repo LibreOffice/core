@@ -2557,9 +2557,8 @@ bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
             pDocSh->GetUndoManager()->LeaveListAction();
     }
 
-    SetTabProtectionSymbol(nTab, false);
-
     if (bChanged)
+        SetTabProtectionSymbol(nTab, false);
         UpdateLayerLocks();     //! broadcast to all views
 
     return bChanged;
