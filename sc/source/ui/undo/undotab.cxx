@@ -1256,6 +1256,8 @@ void ScUndoTabProtect::DoProtect(bool bProtect)
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
+        if (ScTabView* pTabView = pViewShell->GetViewData().GetView())
+            pTabView->SetTabProtectionSymbol( mnTab, bProtect);
         pViewShell->UpdateLayerLocks();
         pViewShell->UpdateInputHandler(true);   // so that input can be immediately entered again
     }
