@@ -60,6 +60,7 @@ main/desktop/win32/source/rebase/rctmpl.txt
 main/desktop/win32/source/setup/rcfooter.txt
 main/helpcontent2/helpers/unocmds.txt
 main/officecfg/util/delcomment.sed
+main/ridljar/java/unoloader/src/main/java/com/sun/star/lib/unoloader/manifest
 main/sd/util/sdfilt.map
 main/sdext/source/minimizer/help/component.txt
 main/sdext/source/pdfimport/help/component.txt
@@ -735,6 +736,7 @@ main/accessibility/workben/TODO
 main/accessibility/workben/org/openoffice/accessibility/awb/manifest
 main/afms/delzip
 main/automation/prj/l10n
+main/avmedia/source/java/avmedia.jar.processed.component
 main/avmedia/source/java/manifest
 main/bean/util/delzip
 main/binfilter/no_localization
@@ -746,6 +748,7 @@ main/cli_ure/source/native/cli_cppuhelper_config
 main/cli_ure/source/ure/cli_ure_config
 main/cli_ure/unotypes/cli_uretypes_config
 main/configmgr/qa/unit/no_localization
+main/cppuhelper/inc/cppuhelper/cppuhelperdllapi.h
 main/cppuhelper/qa/propertysetmixin/manifest
 main/desktop/scripts/basis-link
 main/desktop/scripts/odf-basis-link
@@ -883,6 +886,7 @@ main/setup_native/source/packinfo/solariscopyrightfile
 main/sfx2/workben/custompanel/delzip
 main/smoketestdoc/com/sun/star/comp/smoketest/MANIFEST.MF
 main/smoketestdoc/com/sun/star/comp/smoketest/delzip
+main/solenv/ant/manifest.empty
 main/solenv/bin/genmap
 main/solenv/bin/install-sh
 main/solenv/inc/startup/summary
