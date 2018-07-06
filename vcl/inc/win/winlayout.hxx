@@ -154,15 +154,15 @@ public:
     GlyphCache& GetGlyphCache() { return maGlyphCache; }
     bool hasHScale() const;
 
-    void SetHDC(const HDC);
+    void SetHFONT(const HFONT);
     HFONT GetHFONT() const { return m_hFont; }
+    void UnsetHFONT() { m_hFont = nullptr; }
 
 private:
     explicit WinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     virtual hb_font_t* ImplInitHbFont() override;
 
-    HDC m_hDC;
     HFONT m_hFont;
     GlyphCache maGlyphCache;
 };

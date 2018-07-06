@@ -289,18 +289,20 @@ std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs
 
     assert(mpWinFontEntry[nFallbackLevel]->GetFontFace());
 
-    mpWinFontEntry[nFallbackLevel]->SetHDC(getHDC());
     GenericSalLayout *aLayout = new GenericSalLayout(*mpWinFontEntry[nFallbackLevel]);
     return std::unique_ptr<SalLayout>(aLayout);
 }
 
 WinFontInstance::WinFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
+    , m_hFont( nullptr )
 {
 }
 
 WinFontInstance::~WinFontInstance()
 {
+    if( m_hFont )
+        ::DeleteFont( m_hFont );
 }
 
 bool WinFontInstance::hasHScale() const
@@ -336,8 +338,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
 hb_font_t* WinFontInstance::ImplInitHbFont()
 {
-    assert(m_hDC);
-    m_hFont = static_cast<HFONT>(GetCurrentObject(m_hDC, OBJ_FONT));
+    assert(m_hFont);
     hb_font_t* pHbFont = InitHbFont(hb_face_create_for_tables(getFontTable, m_hFont, nullptr));
 
     // Calculate the AverageWidthFactor, see LogicalFontInstance::GetScale().
@@ -355,11 +356,13 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
 
         // Get the font metrics.
         HFONT hNewFont = CreateFontIndirectW(&aLogFont);
-        HFONT hOldFont = static_cast<HFONT>(SelectObject(m_hDC, hNewFont));
+        HDC hDC = GetDC(nullptr);
+        HGDIOBJ hOrigFont = SelectObject(hDC, hNewFont);
         TEXTMETRICW aFontMetric;
-        GetTextMetricsW(m_hDC, &aFontMetric);
-        SelectObject(m_hDC, hOldFont);
+        GetTextMetricsW(hDC, &aFontMetric);
+        SelectObject(hDC, hOrigFont);
         DeleteObject(hNewFont);
+        ReleaseDC(nullptr, hDC);
 
         SetAverageWidthFactor(nUPEM / aFontMetric.tmAveCharWidth);
     }
@@ -367,12 +370,12 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
     return pHbFont;
 }
 
-void WinFontInstance::SetHDC(const HDC hDC)
+void WinFontInstance::SetHFONT(const HFONT hFont)
 {
-    if (m_hDC == hDC)
-        return;
     ReleaseHbFont();
-    m_hDC = hDC;
+    if (m_hFont)
+        ::DeleteFont(m_hFont);
+    m_hFont = hFont;
 }
 
 bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
@@ -448,18 +451,23 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     HDC hDC = getHDC();
 
-    HFONT hFont = static_cast<const WinFontInstance*>(&rLayout.GetFont())->GetHFONT();
-    HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
+    const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
+    HFONT hDCFont = static_cast<HFONT>(::GetCurrentObject(hDC, OBJ_FONT));
+    HFONT hLayoutFont = pWinFont->GetHFONT();
 
     // Our DirectWrite renderer is incomplete, skip it for non-horizontal or
     // stretched text.
-    bool bForceGDI = rLayout.GetOrientation() || static_cast<const WinFontInstance*>(&rLayout.GetFont())->hasHScale();
+    bool bForceGDI = rLayout.GetOrientation() || pWinFont->hasHScale();
 
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
     if (!bUseOpenGL)
     {
         // no OpenGL, just classic rendering
+        if (hDCFont != hLayoutFont)
+            ::SelectFont(hDC, hLayoutFont);
         DrawTextLayout(rLayout, hDC, false);
+        if (hDCFont != hLayoutFont)
+            ::SelectFont(hDC, hDCFont);
     }
     else if (!bForceGDI && CacheGlyphs(rLayout) &&
              DrawCachedGlyphs(rLayout))
@@ -516,7 +524,7 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
             // setup the hidden DC with black color and white background, we will
             // use the result of the text drawing later as a mask only
-            HFONT hOFont = ::SelectFont(aDC.getCompatibleHDC(), hFont);
+            HFONT hOrigFont = ::SelectFont(aDC.getCompatibleHDC(), hLayoutFont);
 
             ::SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
             ::SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
@@ -534,13 +542,11 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
             if (xTexture)
                 pImpl->DrawMask(*xTexture, salColor, aDC.getTwoRect());
 
-            ::SelectFont(aDC.getCompatibleHDC(), hOFont);
+            ::SelectFont(aDC.getCompatibleHDC(), hOrigFont);
 
             pImpl->PostDraw();
         }
     }
-
-    SelectObject(hDC, hOrigFont);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
