@@ -1406,8 +1406,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
     {
         nStartCol = 0;
         nStartRow = 0;
-        nEndCol = nCol;
-        nEndRow = nRow;
+        nEndCol = rCol;
+        nEndRow = rRow;
         pDocument->GetPrintArea( nTab, nEndCol, nEndRow, true );
         // Add some cols/rows to the print area (which is "content or
         // visually different from empty") to enable travelling through
