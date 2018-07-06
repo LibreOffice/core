@@ -3715,9 +3715,35 @@ static void preloadData()
     images.getImageUrl("forcefed.png", "style", "FO_oo");
 
     std::cerr << "Preload languages\n";
+
     // force load language singleton
     SvtLanguageTable::HasLanguageType(LANGUAGE_SYSTEM);
     LanguageTag::isValidBcp47("foo");
+
+    std::cerr << "Preload fonts\n";
+
+    // Initialize fonts.
+    css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
+    if (xLangSrv.is())
+    {
+        css::uno::Reference<css::linguistic2::XSpellChecker> xSpell(xLangSrv->getSpellChecker(), css::uno::UNO_QUERY);
+        css::uno::Reference<css::linguistic2::XSupportedLocales> xLocales(xSpell, css::uno::UNO_QUERY);
+        if (xLocales.is())
+            aLocales = xLocales->getLocales();
+    }
+
+    for (const auto& aLocale : aLocales)
+    {
+        //TODO: Add more types and cache more aggessively. For now this initializes the fontcache.
+        using namespace ::com::sun::star::i18n::ScriptType;
+        LanguageType nLang;
+        nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), LATIN);
+        OutputDevice::GetDefaultFont(DefaultFontType::LATIN_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
+        nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), ASIAN);
+        OutputDevice::GetDefaultFont(DefaultFontType::CJK_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
+        nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), COMPLEX);
+        OutputDevice::GetDefaultFont(DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
+    }
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
@@ -3836,30 +3862,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 aService->initialize({css::uno::makeAny<OUString>("preload")});
 
                 preloadData();
-
-                // Initialize fonts.
-                css::uno::Sequence< css::lang::Locale > aLocales;
-                css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
-                if (xLangSrv.is())
-                {
-                    css::uno::Reference<css::linguistic2::XSpellChecker> xSpell(xLangSrv->getSpellChecker(), css::uno::UNO_QUERY);
-                    css::uno::Reference<css::linguistic2::XSupportedLocales> xLocales(xSpell, css::uno::UNO_QUERY);
-                    if (xLocales.is())
-                        aLocales = xLocales->getLocales();
-                }
-
-                for (const auto& aLocale : aLocales)
-                {
-                    //TODO: Add more types and cache more aggessively. For now this initializes the fontcache.
-                    using namespace ::com::sun::star::i18n::ScriptType;
-                    LanguageType nLang;
-                    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), LATIN);
-                    OutputDevice::GetDefaultFont(DefaultFontType::LATIN_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
-                    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), ASIAN);
-                    OutputDevice::GetDefaultFont(DefaultFontType::CJK_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
-                    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), COMPLEX);
-                    OutputDevice::GetDefaultFont(DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
-                }
 
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
