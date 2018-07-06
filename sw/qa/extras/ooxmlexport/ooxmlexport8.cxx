@@ -559,6 +559,10 @@ DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    //tdf#102619 - only unit test where FollowStyle's sStyleName.isEmpty().
+    uno::Reference< beans::XPropertySet > properties(getStyles("ParagraphStyles")->getByName("Date"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(properties, "FollowStyle"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN780843, "n780843.docx")
