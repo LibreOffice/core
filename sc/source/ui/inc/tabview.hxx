@@ -148,7 +148,10 @@ private:
     Size                aFrameSize;             // passed on as for DoResize
     Point               aBorderPos;
 
-    std::unique_ptr<FuPoor> pDrawActual;
+    // The ownership of these two is rather weird. we seem to need
+    // to keep an old copy alive for some period of time to avoid crashing.
+    FuPoor*             pDrawActual;
+    FuPoor*             pDrawOld;
 
     std::array<VclPtr<ScGridWindow>, 4> pGridWin;
     std::array<VclPtr<ScColBar>, 2> pColBar;
@@ -325,8 +328,10 @@ public:
     bool            IsDrawSelMode() const       { return bDrawSelMode; }
     void            SetDrawSelMode(bool bNew)   { bDrawSelMode = bNew; }
 
-    void            SetDrawFuncPtr(std::unique_ptr<FuPoor> pFuncPtr);
-    FuPoor*         GetDrawFuncPtr()  { return pDrawActual.get(); }
+    void            SetDrawFuncPtr(FuPoor* pFuncPtr)    { pDrawActual = pFuncPtr; }
+    void            SetDrawFuncOldPtr(FuPoor* pFuncPtr) { pDrawOld = pFuncPtr; }
+    FuPoor*         GetDrawFuncPtr()                    { return pDrawActual; }
+    FuPoor*         GetDrawFuncOldPtr()                 { return pDrawOld; }
 
     void            DrawDeselectAll();
     void            DrawMarkListHasChanged();
