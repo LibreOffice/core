@@ -1328,14 +1328,18 @@ void VclBuilder::cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Wind
 
 extern "C" { static void thisModule() {} }
 
-// We store these forever, closing modules is non-ideal from a performance
-// perspective, code pages will be freed up by the OS anyway if unused for
-// a while in many cases, and this helps us pre-init.
-typedef std::map<OUString, std::shared_ptr<osl::Module>> ModuleMap;
+// Don't unload the module on destruction
+class NoAutoUnloadModule : public osl::Module
+{
+public:
+    ~NoAutoUnloadModule() { release(); }
+};
+
+typedef std::map<OUString, std::shared_ptr<NoAutoUnloadModule>> ModuleMap;
 static ModuleMap g_aModuleMap;
 
 #if ENABLE_MERGELIBS
-static std::shared_ptr<osl::Module> g_pMergedLib = std::make_shared<osl::Module>();
+static std::shared_ptr<NoAutoUnloadModule> g_pMergedLib = std::make_shared<NoAutoUnloadModule>();
 #endif
 
 #ifndef SAL_DLLPREFIX
@@ -1366,10 +1370,10 @@ void VclBuilder::preload()
         sModuleBuf.append(SAL_DLLPREFIX);
         sModuleBuf.append(OUString::createFromAscii(lib));
         sModuleBuf.append(SAL_DLLEXTENSION);
-        osl::Module* pModule = new osl::Module;
+        NoAutoUnloadModule* pModule = new NoAutoUnloadModule;
         OUString sModule = sModuleBuf.makeStringAndClear();
         if (pModule->loadRelative(&thisModule, sModule))
-            g_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<osl::Module>(pModule)));
+            g_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<NoAutoUnloadModule>(pModule)));
         else
             delete pModule;
     }
@@ -1908,7 +1912,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             ModuleMap::iterator aI = g_aModuleMap.find(sModule);
             if (aI == g_aModuleMap.end())
             {
-                std::shared_ptr<osl::Module> pModule;
+                std::shared_ptr<NoAutoUnloadModule> pModule;
 #if ENABLE_MERGELIBS
                 if (!g_pMergedLib->is())
                     g_pMergedLib->loadRelative(&thisModule, SVLIBRARY("merged"));
@@ -1917,7 +1921,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 #endif
                 if (!pFunction)
                 {
-                    pModule.reset(new osl::Module);
+                    pModule.reset(new NoAutoUnloadModule);
                     bool ok = pModule->loadRelative(&thisModule, sModule);
                     assert(ok && "bad module name in .ui");
                     (void) ok;
