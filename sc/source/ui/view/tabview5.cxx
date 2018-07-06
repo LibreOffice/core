@@ -131,6 +131,7 @@ void ScTabView::Init()
     //  UpdateShow is done during resize or a copy of an existing view from ctor
 
     pDrawActual = nullptr;
+    pDrawOld = nullptr;
 
     //  DrawView cannot be create in the TabView - ctor
     //  when the ViewShell isn't constructed yet...
@@ -158,7 +159,10 @@ ScTabView::~ScTabView()
 
     pPageBreakData.reset();
 
-    pDrawActual.reset();
+    delete pDrawActual;
+    pDrawActual = nullptr;
+    delete pDrawOld;
+    pDrawOld = nullptr;
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -246,7 +250,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
                                             // so that immediately can be drawn
             }
         SfxRequest aSfxRequest(SID_OBJECT_SELECT, SfxCallMode::SLOT, aViewData.GetViewShell()->GetPool());
-        SetDrawFuncPtr(o3tl::make_unique<FuSelection>(*aViewData.GetViewShell(), GetActiveWin(), pDrawView,
+        SetDrawFuncPtr(new FuSelection(*aViewData.GetViewShell(), GetActiveWin(), pDrawView,
                                        pLayer,aSfxRequest));
 
         //  used when switching back from page preview: restore saved design mode state
@@ -682,13 +686,6 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
-}
-
-void ScTabView::SetDrawFuncPtr(std::unique_ptr<FuPoor> pNew)
-{
-    if (pDrawActual)
-        pDrawActual->Deactivate();
-    pDrawActual = std::move(pNew);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
