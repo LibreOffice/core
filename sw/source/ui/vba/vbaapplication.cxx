@@ -139,7 +139,7 @@ SwVbaApplication::getActiveSwVbaWindow()
     return new SwVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel, xController );
 }
 
-uno::Reference< css::uno::XComponentContext >
+uno::Reference< css::uno::XComponentContext > const &
 SwVbaApplication::getContext()
 {
     return mxContext;

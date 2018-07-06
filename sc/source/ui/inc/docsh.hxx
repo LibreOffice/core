@@ -227,7 +227,7 @@ public:
     ScDocument&     GetDocument()   { return m_aDocument; }
     ScDocFunc&      GetDocFunc()    { return *m_pDocFunc; }
 
-    css::uno::Reference<css::datatransfer::XTransferable2> GetClipData() { return m_xClipData; }
+    css::uno::Reference<css::datatransfer::XTransferable2> const & GetClipData() { return m_xClipData; }
     void SetClipData(const css::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );

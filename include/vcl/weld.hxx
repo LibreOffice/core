@@ -286,7 +286,7 @@ public:
     }
 
     void save_value() { m_sSavedValue = get_active_text(); }
-    OUString get_saved_value() const { return m_sSavedValue; }
+    OUString const & get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_active_text(); }
 };
 

@@ -37,9 +37,9 @@ private:
 public:
     FeatureParser(OUString const& sFontName);
 
-    OUString getLanguage() const { return m_sLanguage; }
+    OUString const & getLanguage() const { return m_sLanguage; }
 
-    std::vector<std::pair<sal_uInt32, sal_uInt32>> getFeatures() const { return m_aFeatures; }
+    std::vector<std::pair<sal_uInt32, sal_uInt32>> const & getFeatures() const { return m_aFeatures; }
 
     std::unordered_map<sal_uInt32, sal_uInt32> getFeaturesMap();
 };

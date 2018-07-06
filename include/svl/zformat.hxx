@@ -93,7 +93,7 @@ public:
     bool            IsSet() const       { return bSet; }
     void            SetDate( bool bDateP )   { bDate = bDateP; }
     void            SetParams(const OUString& s) { sParams = s; }
-    OUString        GetParams() const { return sParams; }
+    OUString const & GetParams() const { return sParams; }
 };
 
 class CharClass;
