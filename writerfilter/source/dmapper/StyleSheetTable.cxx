@@ -904,6 +904,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
         if(xCharStyles.is() && xParaStyles.is())
         {
             std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingParent;
+            std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingFollow;
             std::vector<beans::PropertyValue> aTableStylesVec;
             std::vector< StyleSheetEntryPtr >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
             while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
@@ -1134,10 +1135,16 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             {
                                 if (!(*it)->sStyleName.isEmpty() && (*it)->sStyleIdentifierD == pEntry->sNextStyleIdentifier)
                                 {
-                                    beans::PropertyValue aNew;
-                                    aNew.Name = "FollowStyle";
-                                    aNew.Value <<= ConvertStyleName((*it)->sStyleName);
-                                    aSortedPropVals.Insert(aNew);
+                                    const OUString sFollowStyle = ConvertStyleName((*it)->sStyleName);
+                                    if ( !xStyles->hasByName( sFollowStyle ) )
+                                        aMissingFollow.emplace_back( sFollowStyle, xStyle );
+                                    else
+                                    {
+                                        beans::PropertyValue aNew;
+                                        aNew.Name = "FollowStyle";
+                                        aNew.Value <<= sFollowStyle;
+                                        aSortedPropVals.Insert(aNew);
+                                    }
                                     break;
                                 }
                             }
@@ -1211,10 +1218,20 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                 ++aIt;
             }
 
-            // Update the styles that were created before their parents
+            // Update the styles that were created before their parents or next-styles
             for( auto const & iter : aMissingParent )
             {
                 iter.second->setParentStyle( iter.first );
+            }
+
+            for( auto const & iter : aMissingFollow )
+            {
+                try
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(iter.second, uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue( "FollowStyle", uno::makeAny(iter.first) );
+                }
+                catch( uno::Exception & ) {}
             }
 
             if (!aTableStylesVec.empty())
