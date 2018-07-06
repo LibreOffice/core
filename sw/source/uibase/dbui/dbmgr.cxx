@@ -2782,10 +2782,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
         sFind = sNewName;
         sal_Int32 nIndex = 0;
         while (xDBContext->hasByName(sFind))
-        {
-            sFind = sNewName;
-            sFind += OUString::number(++nIndex);
-        }
+            sFind = sNewName + OUString::number(++nIndex);
 
         uno::Reference<uno::XInterface> xNewInstance;
         if (!bStore)
