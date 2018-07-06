@@ -45,6 +45,10 @@ private:
     OUString embedFontFile(OUString const & rFileUrl, OUString const & rFamilyName);
 
 protected:
+    bool m_bEmbedUsedOnly;
+    bool m_bEmbedLatinScript;
+    bool m_bEmbedAsianScript;
+    bool m_bEmbedComplexScript;
 
     SvXMLExport& GetExport() { return rExport; }
 
@@ -68,6 +72,17 @@ public:
             rtl_TextEncoding eEnc )const;
 
     void exportXML();
+
+    void setEmbedOnlyUsedFonts(bool bEmbedUsedOnly)
+    {
+        m_bEmbedUsedOnly = bEmbedUsedOnly;
+    }
+    void setEmbedFontScripts(bool bEmbedLatinScript, bool bEmbedAsianScript, bool bEmbedComplexScript)
+    {
+        m_bEmbedLatinScript = bEmbedLatinScript;
+        m_bEmbedAsianScript = bEmbedAsianScript;
+        m_bEmbedComplexScript = bEmbedComplexScript;
+    }
 };
 
 #endif // INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX

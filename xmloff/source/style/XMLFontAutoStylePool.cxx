@@ -141,7 +141,11 @@ public:
 XMLFontAutoStylePool::XMLFontAutoStylePool(SvXMLExport& rExp, bool bTryToEmbedFonts) :
     rExport( rExp ),
     m_pFontAutoStylePool( new XMLFontAutoStylePool_Impl ),
-    m_bTryToEmbedFonts( bTryToEmbedFonts )
+    m_bTryToEmbedFonts( bTryToEmbedFonts ),
+    m_bEmbedUsedOnly(false),
+    m_bEmbedLatinScript(true),
+    m_bEmbedAsianScript(true),
+    m_bEmbedComplexScript(true)
 {
 }
 

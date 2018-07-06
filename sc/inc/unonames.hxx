@@ -691,7 +691,11 @@
 // Named ranges
 #define SC_UNO_MODIFY_BROADCAST     "ModifyAndBroadcast"
 
-#define SC_UNO_EMBED_FONTS     "EmbedFonts"
+#define SC_UNO_EMBED_FONTS               "EmbedFonts"
+#define SC_UNO_EMBED_ONLY_USED_FONTS     "EmbedOnlyUsedFonts"
+#define SC_UNO_EMBED_FONT_SCRIPT_LATIN   "EmbedLatinScriptFonts"
+#define SC_UNO_EMBED_FONT_SCRIPT_ASIAN   "EmbedAsianScriptFonts"
+#define SC_UNO_EMBED_FONT_SCRIPT_COMPLEX "EmbedComplexScriptFonts"
 
 #define SC_UNO_ODS_LOCK_SOLAR_MUTEX "ODSLockSolarMutex"
 #define SC_UNO_ODS_IMPORT_STYLES    "ODSImportStyles"

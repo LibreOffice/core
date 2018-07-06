@@ -6521,7 +6521,11 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasNotes() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsCutMode() );
 
-    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsUsingEmbededFonts() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsEmbedFonts() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsEmbedUsedFontsOnly() );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsEmbedFontScriptLatin() );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsEmbedFontScriptAsian() );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsEmbedFontScriptComplex() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsEmbedded() );
 
     CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsDocEditable() );

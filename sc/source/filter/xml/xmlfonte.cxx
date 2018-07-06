@@ -39,7 +39,7 @@ private:
     void AddFontItems(const sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const bool bExportDefaults);
 
 public:
-    ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport, bool bBlockFontEmbedding );
+    ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport, bool bEmbedFonts);
     virtual ~ScXMLFontAutoStylePool_Impl() override;
 };
 
@@ -70,8 +70,8 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(const sal_uInt16* pWhichIds, sal_
     }
 }
 
-ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, bool bBlockFontEmbedding)
-    : XMLFontAutoStylePool(rExportP, bBlockFontEmbedding)
+ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, bool bEmbedFonts)
+    : XMLFontAutoStylePool(rExportP, bEmbedFonts)
     , mpEditEnginePool(nullptr)
 {
     sal_uInt16 const aWhichIds[]     { ATTR_FONT, ATTR_CJK_FONT,
@@ -87,6 +87,11 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
     AddFontItems(aEditWhichIds, 3, pEditPool, false);
 
     std::shared_ptr<SfxStyleSheetIterator> pItr = rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Page, SfxStyleSearchBits::All);
+
+    m_bEmbedUsedOnly = rExportP.GetDocument()->IsEmbedUsedFontsOnly();
+    m_bEmbedLatinScript = rExportP.GetDocument()->IsEmbedFontScriptLatin();
+    m_bEmbedAsianScript = rExportP.GetDocument()->IsEmbedFontScriptAsian();
+    m_bEmbedComplexScript = rExportP.GetDocument()->IsEmbedFontScriptComplex();
 
     if(pItr)
     {
@@ -157,7 +162,7 @@ XMLFontAutoStylePool* ScXMLExport::CreateFontAutoStylePool()
     // the embedding only in one of them.
     if(!( getExportFlags() & SvXMLExportFlags::CONTENT ))
         blockFontEmbedding = true;
-    if( !GetDocument()->IsUsingEmbededFonts())
+    if (!GetDocument()->IsEmbedFonts())
         blockFontEmbedding = true;
     return new ScXMLFontAutoStylePool_Impl( *this, !blockFontEmbedding );
 }
