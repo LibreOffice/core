@@ -35,7 +35,7 @@ protected:
 
 private:
     bool hasRightAmountOfShapes(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage,
-                                const sal_Int32& nElementCount, const sal_Int32& nShapes);
+                                sal_Int32 nElementCount, sal_Int32 nShapes);
     void dispatch(const css::uno::Reference<css::frame::XFrame>& xFrame,
                   const css::uno::Sequence<css::beans::PropertyValue>& rArguments);
     css::awt::Point m_Position;

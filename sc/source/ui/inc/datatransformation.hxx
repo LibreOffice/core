@@ -60,7 +60,7 @@ public:
     virtual ~ColumnRemoveTransformation() override;
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
-    std::set<SCCOL> getColumns() const;
+    const std::set<SCCOL> & getColumns() const;
 };
 
 class SC_DLLPUBLIC SplitColumnTransformation : public DataTransformation
@@ -87,8 +87,8 @@ public:
     MergeColumnTransformation(const std::set<SCCOL>& rColumns, const OUString& rMergeString);
     virtual void Transform(ScDocument& rDoc) const  override;
     virtual TransformationType getTransformationType() const override;
-    OUString getMergeString() const;
-    std::set<SCCOL> getColumns() const;
+    const OUString & getMergeString() const;
+    const std::set<SCCOL> & getColumns() const;
 };
 
 class SC_DLLPUBLIC SortTransformation : public DataTransformation
@@ -99,7 +99,7 @@ public:
     SortTransformation(const ScSortParam& rParam);
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
-    ScSortParam getSortParam() const;
+    const ScSortParam & getSortParam() const;
 };
 
 class SC_DLLPUBLIC TextTransformation : public DataTransformation
