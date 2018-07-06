@@ -27,7 +27,7 @@ class SwVbaMailMerge : public SwVbaMailMerge_BASE
 public:
     virtual ~SwVbaMailMerge() override;
 
-    static rtl::Reference<SwVbaMailMerge>
+    static rtl::Reference<SwVbaMailMerge> const&
     get(const css::uno::Reference<ooo::vba::XHelperInterface>& xParent,
         const css::uno::Reference<css::uno::XComponentContext>& xContext);
 

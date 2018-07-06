@@ -49,7 +49,7 @@ TransformationType ColumnRemoveTransformation::getTransformationType() const
     return TransformationType::DELETE_TRANSFORMATION;
 }
 
-std::set<SCCOL> ColumnRemoveTransformation::getColumns() const
+const std::set<SCCOL> & ColumnRemoveTransformation::getColumns() const
 {
     return maColumns;
 }
@@ -144,12 +144,12 @@ TransformationType MergeColumnTransformation::getTransformationType() const
     return TransformationType::MERGE_TRANSFORMATION;
 }
 
-OUString MergeColumnTransformation::getMergeString() const
+const OUString & MergeColumnTransformation::getMergeString() const
 {
     return maMergeString;
 }
 
-std::set<SCCOL> MergeColumnTransformation::getColumns() const
+const std::set<SCCOL> & MergeColumnTransformation::getColumns() const
 {
     return maColumns;
 }
@@ -169,7 +169,7 @@ TransformationType SortTransformation::getTransformationType() const
     return TransformationType::SORT_TRANSFORMATION;
 }
 
-ScSortParam SortTransformation::getSortParam() const
+const ScSortParam & SortTransformation::getSortParam() const
 {
     return maSortParam;
 }

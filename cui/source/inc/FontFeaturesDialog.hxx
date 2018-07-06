@@ -54,7 +54,7 @@ public:
     void dispose() override;
     short Execute() override;
 
-    OUString getResultFontName() { return m_sResultFontName; }
+    OUString const& getResultFontName() { return m_sResultFontName; }
 
     void updateFontPreview();
 };
