@@ -1061,15 +1061,19 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     }
 
                     auto aPropValues = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pEntry->pProperties->GetPropertyValues());
-                    bool bAddFollowStyle = false;
-                    if(bParaStyle && !pEntry->sNextStyleIdentifier.isEmpty() )
-                    {
-                        bAddFollowStyle = true;
-                    }
 
                     // remove Left/RightMargin values from TOX heading styles
                     if( bParaStyle )
                     {
+                        // delay adding FollowStyle property: all styles need to be created first
+
+                        if ( !pEntry->sNextStyleIdentifier.isEmpty() )
+                        {
+                            StyleSheetEntryPtr pFollowStyle = FindStyleSheetByISTD( pEntry->sNextStyleIdentifier );
+                            if ( pFollowStyle && !pFollowStyle->sStyleName.isEmpty() )
+                                aMissingFollow.emplace_back( ConvertStyleName( pFollowStyle->sStyleName ), xStyle );
+                        }
+
                         // Set the outline levels
                         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
                         if ( pStyleSheetProperties )
@@ -1114,7 +1118,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
                     }
 
-                    if(bAddFollowStyle || !aPropValues.empty())
+                    if ( !aPropValues.empty() )
                     {
                         PropValVector aSortedPropVals;
                         for (const beans::PropertyValue& rValue : aPropValues)
@@ -1125,28 +1129,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             if ( !bIsParaStyleName && !bIsCharStyleName )
                             {
                                 aSortedPropVals.Insert(rValue);
-                            }
-                        }
-                        if(bAddFollowStyle)
-                        {
-                            //find the name of the Next style
-                            std::vector< StyleSheetEntryPtr >::iterator it = m_pImpl->m_aStyleSheetEntries.begin();
-                            for (; it != m_pImpl->m_aStyleSheetEntries.end(); ++it)
-                            {
-                                if (!(*it)->sStyleName.isEmpty() && (*it)->sStyleIdentifierD == pEntry->sNextStyleIdentifier)
-                                {
-                                    const OUString sFollowStyle = ConvertStyleName((*it)->sStyleName);
-                                    if ( !xStyles->hasByName( sFollowStyle ) )
-                                        aMissingFollow.emplace_back( sFollowStyle, xStyle );
-                                    else
-                                    {
-                                        beans::PropertyValue aNew;
-                                        aNew.Name = "FollowStyle";
-                                        aNew.Value <<= sFollowStyle;
-                                        aSortedPropVals.Insert(aNew);
-                                    }
-                                    break;
-                                }
                             }
                         }
 
