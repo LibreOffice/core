@@ -16,6 +16,24 @@
       "revId": "8a7a4d408e563aca9fea8122b1d50e02c7b2d414",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_6cffc467",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2018-07-06T11:12:28Z",
+      "side": 1,
+      "message": "Yes, fixed already in master in https://gerrit.libreoffice.org/#/c/56602/\n\nI think we should squash these two together for backport",
+      "parentUuid": "ffe62b97_a936deb3",
+      "revId": "8a7a4d408e563aca9fea8122b1d50e02c7b2d414",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
