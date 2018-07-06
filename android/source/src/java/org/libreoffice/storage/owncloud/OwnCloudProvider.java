@@ -181,6 +181,6 @@ public class OwnCloudProvider implements IDocumentProvider,
 
     @Override
     public boolean checkProviderAvailability(Context context) {
-        return result != null && this.result.isSuccess();
+        return client != null;
     }
 }
