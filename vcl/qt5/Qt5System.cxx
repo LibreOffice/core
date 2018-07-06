@@ -7,21 +7,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+
 #include <string.h>
 #include <tools/gen.hxx>
 #include <Qt5System.hxx>
+#include <Qt5Tools.hxx>
 
 Qt5System::Qt5System() {}
 Qt5System::~Qt5System() {}
 
-unsigned int Qt5System::GetDisplayScreenCount() { return 1; }
+unsigned int Qt5System::GetDisplayScreenCount() { return QApplication::desktop()->screenCount(); }
 
 tools::Rectangle Qt5System::GetDisplayScreenPosSizePixel(unsigned int nScreen)
 {
-    tools::Rectangle aRect;
-    if (nScreen == 0)
-        aRect = tools::Rectangle(Point(0, 0), Size(1024, 768));
-    return aRect;
+    QRect qRect = QApplication::desktop()->screenGeometry(nScreen);
+    return toRectangle(qRect);
 }
 
 int Qt5System::ShowNativeDialog(const OUString&, const OUString&, const std::vector<OUString>&)
