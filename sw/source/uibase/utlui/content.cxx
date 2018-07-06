@@ -930,7 +930,7 @@ Size SwContentTree::GetOptimalSize() const
 
 OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
 {
-    if( pEntry == nullptr)
+    if (pEntry == nullptr || !lcl_IsContent(pEntry))
         return OUString();
 
     assert(pEntry->GetUserData() == nullptr || dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
