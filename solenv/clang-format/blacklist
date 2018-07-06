@@ -14211,7 +14211,6 @@ svx/source/accessibility/lookupcolorname.cxx
 svx/source/accessibility/lookupcolorname.hxx
 svx/source/accessibility/svxpixelctlaccessiblecontext.cxx
 svx/source/accessibility/svxrectctaccessiblecontext.cxx
-svx/source/core/coreservices.cxx
 svx/source/core/extedit.cxx
 svx/source/core/graphichelper.cxx
 svx/source/customshapes/EnhancedCustomShape2d.cxx
@@ -14405,7 +14404,6 @@ svx/source/inc/cell.hxx
 svx/source/inc/celltypes.hxx
 svx/source/inc/charmapacc.hxx
 svx/source/inc/clonelist.hxx
-svx/source/inc/coreservices.hxx
 svx/source/inc/datalistener.hxx
 svx/source/inc/datanavi.hxx
 svx/source/inc/delayedevent.hxx
