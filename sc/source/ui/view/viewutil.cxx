@@ -328,14 +328,13 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
 bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
                                  SfxViewFrame& rFrame )
 {
-    bool bRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
     aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
     aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
     ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rFrame.GetWindow().GetFrameWeld(), aSet, true));
     pDlg->Execute();
-    return bRet;
+    return false;
 }
 
 bool ScViewUtil::IsFullScreen( const SfxViewShell& rViewShell )

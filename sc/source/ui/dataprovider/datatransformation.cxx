@@ -215,7 +215,7 @@ void TextTransformation::Transform(ScDocument& rDoc) const
         break;
         case TEXT_TRANSFORM_TYPE::CAPITALIZE:
         {
-            sal_Unicode separator = sal_Unicode(U' ');
+            const sal_Unicode separator = sal_Unicode(U' ');
             for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
             {
                 CellType eType;
