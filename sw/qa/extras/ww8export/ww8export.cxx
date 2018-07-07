@@ -1129,6 +1129,12 @@ DECLARE_WW8EXPORT_TEST(testWw8Cjklist35, "cjklist35.doc")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf118564, "tdf118564.doc")
+{
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(3);
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
 {
         uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
