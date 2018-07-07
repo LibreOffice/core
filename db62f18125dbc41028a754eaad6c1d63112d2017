@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_c28d777c",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-07T05:06:05Z",
+      "side": 1,
+      "message": "since I just added this property, it can\u0027t be set anywhere else, so technically no need for \"false\" here.  HOWEVER, just assuming that at some time in the future, MSO has a variable that allows something like centering the footnote separator, then perhaps just for the \"best practices\" programming this should only set if not already explicitly set.",
+      "range": {
+        "startLine": 1061,
+        "startChar": 114,
+        "endLine": 1061,
+        "endChar": 117
+      },
+      "revId": "db62f18125dbc41028a754eaad6c1d63112d2017",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
