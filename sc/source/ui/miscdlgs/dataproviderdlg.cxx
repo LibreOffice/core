@@ -223,7 +223,8 @@ MenuData aColumnData[] = {
     { 1, "Split Column", &ScDataProviderDlg::splitColumn },
     { 2, "Merge Columns", &ScDataProviderDlg::mergeColumns },
     { 3, "Text Transformation", &ScDataProviderDlg::textTransformation },
-    { 4, "Sort Columns", &ScDataProviderDlg::sortTransformation }
+    { 4, "Sort Columns", &ScDataProviderDlg::sortTransformation },
+    { 5, "Aggregate Functions", &ScDataProviderDlg::aggregateFunction}
 };
 
 class ScDataTransformationBaseControl : public VclContainer,
@@ -563,6 +564,77 @@ std::shared_ptr<sc::DataTransformation> ScColumnTextTransformation::getTransform
     return nullptr;
 }
 
+class ScAggregateFunction : public ScDataTransformationBaseControl
+{
+private:
+    VclPtr<Edit> maColumnNums;
+    VclPtr<ListBox> maType;
+
+public:
+
+    ScAggregateFunction(vcl::Window* pParent);
+    ~ScAggregateFunction() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+
+};
+
+ScAggregateFunction::ScAggregateFunction(vcl::Window* pParent):
+    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/aggregatefunctionentry.ui")
+{
+    get(maColumnNums, "ed_columns");
+    get(maType, "ed_lst");
+}
+
+ScAggregateFunction::~ScAggregateFunction()
+{
+    disposeOnce();
+}
+
+void ScAggregateFunction::dispose()
+{
+    maColumnNums.clear();
+    maType.clear();
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScAggregateFunction::getTransformation()
+{
+    OUString aColumnString = maColumnNums->GetText();
+    sal_Int32 nPos = maType->GetSelectedEntryPos();
+    std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
+    std::set<SCCOL> aColumns;
+    for (auto& rColStr : aSplitColumns)
+    {
+        sal_Int32 nCol = rColStr.toInt32();
+        if (nCol <= 0)
+            continue;
+
+        if (nCol > MAXCOL)
+            continue;
+
+        // translate from 1-based column notations to internal Calc one
+        aColumns.insert(nCol - 1);
+    }
+    switch (nPos)
+    {
+        case 0:
+            return std::make_shared<sc::AggregateFunction>(aColumns,sc::AGGREGATE_FUNCTION::SUM);
+        case 1:
+            return std::make_shared<sc::AggregateFunction>(aColumns,sc::AGGREGATE_FUNCTION::AVERAGE);
+        case 2:
+            return std::make_shared<sc::AggregateFunction>(aColumns,sc::AGGREGATE_FUNCTION::MIN);
+        case 3:
+            return std::make_shared<sc::AggregateFunction>(aColumns,sc::AGGREGATE_FUNCTION::MAX);
+        default:
+            assert(false);
+    }
+
+    return nullptr;
+}
+    
 }
 
 ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument):
@@ -719,6 +791,12 @@ void ScDataProviderDlg::sortTransformation()
 {
     VclPtr<ScSortTransformationControl> pSortTransforamtionEntry = VclPtr<ScSortTransformationControl>::Create(mpList);
     mpList->addEntry(pSortTransforamtionEntry);
+}
+
+void ScDataProviderDlg::aggregateFunction()
+{
+    VclPtr<ScAggregateFunction> pAggregateFuntionEntry = VclPtr<ScAggregateFunction>::Create(mpList);
+    mpList->addEntry(pAggregateFuntionEntry);
 }
 
 void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)

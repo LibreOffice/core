@@ -63,6 +63,7 @@ public:
     void mergeColumns();
     void textTransformation();
     void sortTransformation();
+    void aggregateFunction();
 
     void import(ScDocument* pDoc, bool bInternal = false);
 };
