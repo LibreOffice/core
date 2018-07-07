@@ -58,7 +58,6 @@ bool DocumentDecryption::readEncryptionInfo()
             break;
         case msfilter::VERSION_INFO_AGILE:
             mCryptoType = AGILE; // Set encryption info format
-            xEncryptionInfo->skipBytes(4);
             mEngine.reset(new AgileEngine);
             break;
         default:

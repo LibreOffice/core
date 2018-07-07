@@ -486,6 +486,16 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
 
 bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputStream)
 {
+    // Check reserved value
+    std::vector<sal_uInt8> aExpectedReservedBytes(sizeof(sal_uInt32));
+    ByteOrderConverter::writeLittleEndian(aExpectedReservedBytes.data(), msfilter::AGILE_ENCRYPTION_RESERVED);
+
+    uno::Sequence<sal_Int8> aReadReservedBytes(sizeof(sal_uInt32));
+    rxInputStream->readBytes(aReadReservedBytes, aReadReservedBytes.getLength());
+
+    if (!std::equal(aReadReservedBytes.begin(), aReadReservedBytes.end(), aExpectedReservedBytes.begin()))
+        return false;
+
     mInfo.spinCount = 0;
     mInfo.saltSize = 0;
     mInfo.keyBits = 0;
@@ -695,7 +705,7 @@ bool AgileEngine::setupEncryptionKey(OUString const & rPassword)
 void AgileEngine::writeEncryptionInfo(BinaryXOutputStream & rStream)
 {
     rStream.WriteUInt32(msfilter::VERSION_INFO_AGILE);
-    rStream.WriteUInt32(0); // reserved
+    rStream.WriteUInt32(msfilter::AGILE_ENCRYPTION_RESERVED);
 
     SvMemoryStream aMemStream;
     tools::XmlWriter aXmlWriter(&aMemStream);
