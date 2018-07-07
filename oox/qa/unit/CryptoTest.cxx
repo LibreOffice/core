@@ -224,7 +224,6 @@ void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
                 new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
 
             xInputStream->skipBytes(4); // Encryption type -> Agile
-            xInputStream->skipBytes(4); // Reserved
 
             CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xInputStream));
 
@@ -271,7 +270,6 @@ void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
                 new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
 
             xInputStream->skipBytes(4); // Encryption type -> Agile
-            xInputStream->skipBytes(4); // Reserved
 
             CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xInputStream));
 
@@ -324,7 +322,6 @@ void CryptoTest::testAgileDataIntegrityHmacKey()
             new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
 
         xInputStream->skipBytes(4); // Encryption type -> Agile
-        xInputStream->skipBytes(4); // Reserved
 
         CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xInputStream));
         CPPUNIT_ASSERT(aEngine.generateEncryptionKey(aPassword));
@@ -391,7 +388,6 @@ void CryptoTest::testAgileEncryptingAndDecrypting()
             new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
 
         xEncryptionInfo->skipBytes(4); // Encryption type -> Agile
-        xEncryptionInfo->skipBytes(4); // Reserved
 
         CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xEncryptionInfo));
 

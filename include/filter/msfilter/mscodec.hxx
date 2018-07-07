@@ -438,6 +438,8 @@ const sal_uInt32 VERSION_INFO_2007_FORMAT_SP2   = 0x00020004;
 // version of encryption info - agile (major = 4, minor = 4)
 const sal_uInt32 VERSION_INFO_AGILE         = 0x00040004;
 
+const sal_uInt32 AGILE_ENCRYPTION_RESERVED  = 0x00000040;
+
 const sal_uInt32 SALT_LENGTH                    = 16;
 const sal_uInt32 ENCRYPTED_VERIFIER_LENGTH      = 16;
 const sal_uInt32 SHA1_HASH_LENGTH = RTL_DIGEST_LENGTH_SHA1; // 20
