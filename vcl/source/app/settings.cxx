@@ -59,26 +59,23 @@ using namespace ::com::sun::star;
 
 struct ImplMouseData
 {
-                                    ImplMouseData();
-                                    ImplMouseData( const ImplMouseData& rData );
-
-    MouseSettingsOptions            mnOptions;
-    sal_uInt64                      mnDoubleClkTime;
-    long                            mnDoubleClkWidth;
-    long                            mnDoubleClkHeight;
-    long                            mnStartDragWidth;
-    long                            mnStartDragHeight;
-    sal_uInt16                      mnStartDragCode;
-    sal_uInt16                      mnContextMenuCode;
-    sal_uInt16                      mnContextMenuClicks;
-    sal_uLong                       mnScrollRepeat;
-    sal_uLong                       mnButtonStartRepeat;
-    sal_uLong                       mnButtonRepeat;
-    sal_uLong                       mnActionDelay;
-    sal_uLong                       mnMenuDelay;
-    MouseFollowFlags                mnFollow;
-    MouseMiddleButtonAction         mnMiddleButtonAction;
-    MouseWheelBehaviour             mnWheelBehavior;
+    MouseSettingsOptions            mnOptions           = MouseSettingsOptions::NONE;
+    sal_uInt64                      mnDoubleClkTime     = 500;
+    long                            mnDoubleClkWidth    = 2;
+    long                            mnDoubleClkHeight   = 2;
+    long                            mnStartDragWidth    = 2 ;
+    long                            mnStartDragHeight   = 2;
+    sal_uInt16                      mnStartDragCode     = MOUSE_LEFT;
+    sal_uInt16                      mnContextMenuCode   = MOUSE_RIGHT;
+    sal_uInt16                      mnContextMenuClicks = 1;
+    sal_uLong                       mnScrollRepeat      = 100;
+    sal_uLong                       mnButtonStartRepeat = 370;
+    sal_uLong                       mnButtonRepeat      = 90;
+    sal_uLong                       mnActionDelay       = 250;
+    sal_uLong                       mnMenuDelay         = 150;
+    MouseFollowFlags                mnFollow            = MouseFollowFlags::Menu | MouseFollowFlags::DDList;
+    MouseMiddleButtonAction         mnMiddleButtonAction= MouseMiddleButtonAction::AutoScroll;
+    MouseWheelBehaviour             mnWheelBehavior     = MouseWheelBehaviour::ALWAYS;
 };
 
 struct ImplStyleData
@@ -213,7 +210,6 @@ struct ImplStyleData
 struct ImplMiscData
 {
                                     ImplMiscData();
-                                    ImplMiscData( const ImplMiscData& rData );
     TriState                        mnEnableATT;
     bool                            mbEnableLocalizedDecimalSep;
     TriState                        mnDisablePrinting;
@@ -222,12 +218,9 @@ struct ImplMiscData
 
 struct ImplHelpData
 {
-    ImplHelpData();
-    ImplHelpData( const ImplHelpData& rData );
-
-    sal_uLong                           mnTipDelay;
-    sal_uLong                           mnTipTimeout;
-    sal_uLong                           mnBalloonDelay;
+    sal_uLong                           mnTipDelay = 500;
+    sal_uLong                           mnTipTimeout = 3000;
+    sal_uLong                           mnBalloonDelay = 1500;
 };
 
 struct ImplAllSettingsData
@@ -249,48 +242,6 @@ struct ImplAllSettingsData
     std::unique_ptr<vcl::I18nHelper>        mpUII18nHelper;
     SvtSysLocale                            maSysLocale;
 };
-
-ImplMouseData::ImplMouseData()
-{
-    mnOptions                   = MouseSettingsOptions::NONE;
-    mnDoubleClkTime             = 500;
-    mnDoubleClkWidth            = 2;
-    mnDoubleClkHeight           = 2;
-    mnStartDragWidth            = 2;
-    mnStartDragHeight           = 2;
-    mnStartDragCode             = MOUSE_LEFT;
-    mnContextMenuCode           = MOUSE_RIGHT;
-    mnContextMenuClicks         = 1;
-    mnMiddleButtonAction        = MouseMiddleButtonAction::AutoScroll;
-    mnScrollRepeat              = 100;
-    mnButtonStartRepeat         = 370;
-    mnButtonRepeat              = 90;
-    mnActionDelay               = 250;
-    mnMenuDelay                 = 150;
-    mnFollow                    = MouseFollowFlags::Menu | MouseFollowFlags::DDList;
-    mnWheelBehavior             = MouseWheelBehaviour::ALWAYS;
-}
-
-ImplMouseData::ImplMouseData( const ImplMouseData& rData )
-{
-    mnOptions                   = rData.mnOptions;
-    mnDoubleClkTime             = rData.mnDoubleClkTime;
-    mnDoubleClkWidth            = rData.mnDoubleClkWidth;
-    mnDoubleClkHeight           = rData.mnDoubleClkHeight;
-    mnStartDragWidth            = rData.mnStartDragWidth;
-    mnStartDragHeight           = rData.mnStartDragHeight;
-    mnStartDragCode             = rData.mnStartDragCode;
-    mnContextMenuCode           = rData.mnContextMenuCode;
-    mnContextMenuClicks         = rData.mnContextMenuClicks;
-    mnMiddleButtonAction        = rData.mnMiddleButtonAction;
-    mnScrollRepeat              = rData.mnScrollRepeat;
-    mnButtonStartRepeat         = rData.mnButtonStartRepeat;
-    mnButtonRepeat              = rData.mnButtonRepeat;
-    mnActionDelay               = rData.mnActionDelay;
-    mnMenuDelay                 = rData.mnMenuDelay;
-    mnFollow                    = rData.mnFollow;
-    mnWheelBehavior             = rData.mnWheelBehavior;
-}
 
 void
 MouseSettings::SetOptions(MouseSettingsOptions nOptions)
@@ -521,38 +472,33 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 }
 
 ImplStyleData::ImplStyleData() :
+    mnScrollBarSize(16),
+    mnSplitSize(3),
+    mnSpinSize(16),
+    mnCursorSize(2),
+    mnAntialiasedMin(0),
+    mnCursorBlinkTime(STYLE_CURSOR_NOBLINKTIME),
+    mnDragFullOptions(DragFullOptions::All),
+    mnSelectionOptions(SelectionOptions::NONE),
+    mnDisplayOptions(DisplayOptions::NONE),
+    mnToolbarIconSize(ToolbarIconSize::Unknown),
+    mnOptions(StyleSettingsOptions::NONE),
+    mbAutoMnemonic(true),
+    meUseImagesInMenus(TRISTATE_INDET),
+    mnMinThumbSize(16),
     mIconThemeSelector(new vcl::IconThemeSelector()),
-    maPersonaHeaderFooter(),
-    maPersonaHeaderBitmap(),
-    maPersonaFooterBitmap(),
-    maPersonaMenuBarTextColor()
+    meContextMenuShortcuts(TRISTATE_INDET),
+    mnEdgeBlending(35),
+    maEdgeBlendingTopLeftColor(Color(0xC0, 0xC0, 0xC0)),
+    maEdgeBlendingBottomRightColor(Color(0x40, 0x40, 0x40)),
+    mnListBoxMaximumLineCount(25),
+    mnColorValueSetColumnCount(12),
+    mnColorValueSetMaximumRowCount(10),
+    maListBoxPreviewDefaultLogicSize(Size(15, 7)),
+    maListBoxPreviewDefaultPixelSize(Size(0, 0)), // on-demand calculated in GetListBoxPreviewDefaultPixelSize(),
+    mnListBoxPreviewDefaultLineWidth(1),
+    mbPreviewUsesCheckeredBackground(true)
 {
-    mnScrollBarSize             = 16;
-    mnMinThumbSize              = 16;
-    mnSplitSize                 = 3;
-    mnSpinSize                  = 16;
-    mnAntialiasedMin            = 0;
-    mnCursorSize                = 2;
-    mnCursorBlinkTime           = STYLE_CURSOR_NOBLINKTIME;
-    mnDragFullOptions           = DragFullOptions::All;
-    mnSelectionOptions          = SelectionOptions::NONE;
-    mnDisplayOptions            = DisplayOptions::NONE;
-    mnOptions                   = StyleSettingsOptions::NONE;
-    mbAutoMnemonic              = true;
-    mnToolbarIconSize           = ToolbarIconSize::Unknown;
-    meUseImagesInMenus          = TRISTATE_INDET;
-    meContextMenuShortcuts      = TRISTATE_INDET;
-    mnEdgeBlending = 35;
-    maEdgeBlendingTopLeftColor = Color(0xC0, 0xC0, 0xC0);
-    maEdgeBlendingBottomRightColor = Color(0x40, 0x40, 0x40);
-    mnListBoxMaximumLineCount = 25;
-    mnColorValueSetColumnCount = 12;
-    mnColorValueSetMaximumRowCount = 10;
-    maListBoxPreviewDefaultLogicSize = Size(15, 7);
-    maListBoxPreviewDefaultPixelSize = Size(0, 0); // on-demand calculated in GetListBoxPreviewDefaultPixelSize()
-    mnListBoxPreviewDefaultLineWidth = 1;
-    mbPreviewUsesCheckeredBackground = true;
-
     SetStandardStyles();
 }
 
@@ -623,54 +569,53 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maIconFont( rData.maIconFont ),
     maTabFont( rData.maTabFont ),
     maGroupFont( rData.maGroupFont ),
+    mnBorderSize(rData.mnBorderSize),
+    mnTitleHeight(rData.mnTitleHeight),
+    mnFloatTitleHeight(rData.mnFloatTitleHeight),
+    mnScrollBarSize(rData.mnScrollBarSize),
+    mnSplitSize(rData.mnSplitSize),
+    mnSpinSize(rData.mnSpinSize),
+    mnCursorSize(rData.mnCursorSize),
+    mnAntialiasedMin(rData.mnAntialiasedMin),
+    mnCursorBlinkTime(rData.mnCursorBlinkTime),
+    mnDragFullOptions(rData.mnDragFullOptions),
+    mnSelectionOptions(rData.mnSelectionOptions),
+    mnDisplayOptions(rData.mnDisplayOptions),
+    mnToolbarIconSize(rData.mnToolbarIconSize),
+    mnUseFlatMenus(rData.mnUseFlatMenus),
+    mnOptions(rData.mnOptions),
+    mbHighContrast(rData.mbHighContrast),
+    mbUseSystemUIFonts(rData.mbUseSystemUIFonts),
+    mbAutoMnemonic(rData.mbAutoMnemonic),
+    meUseImagesInMenus(rData.meUseImagesInMenus),
+    mnUseFlatBorders(rData.mnUseFlatBorders),
+    mbPreferredUseImagesInMenus(rData.mbPreferredUseImagesInMenus),
+    mnMinThumbSize(rData.mnMinThumbSize),
+    mIconThemeScanner(rData.mIconThemeScanner?new vcl::IconThemeScanner(*rData.mIconThemeScanner):nullptr),
+    mIconThemeSelector(new vcl::IconThemeSelector(*rData.mIconThemeSelector)),
     mIconTheme(rData.mIconTheme),
+    mbSkipDisabledInMenus(rData.mbSkipDisabledInMenus),
+    mbHideDisabledMenuItems(rData.mbHideDisabledMenuItems),
+    mbPreferredContextMenuShortcuts(rData.mbPreferredContextMenuShortcuts),
+    meContextMenuShortcuts(rData.meContextMenuShortcuts),
+    mbPrimaryButtonWarpsSlider(rData.mbPrimaryButtonWarpsSlider),
     maDialogStyle( rData.maDialogStyle ),
     maFrameStyle( rData.maFrameStyle ),
+    mnEdgeBlending(rData.mnEdgeBlending),
+    maEdgeBlendingTopLeftColor(rData.maEdgeBlendingTopLeftColor),
+    maEdgeBlendingBottomRightColor(rData.maEdgeBlendingBottomRightColor),
+    mnListBoxMaximumLineCount(rData.mnListBoxMaximumLineCount),
+    mnColorValueSetColumnCount(rData.mnColorValueSetColumnCount),
+    mnColorValueSetMaximumRowCount(rData.mnColorValueSetMaximumRowCount),
+    maListBoxPreviewDefaultLogicSize(rData.maListBoxPreviewDefaultLogicSize),
+    maListBoxPreviewDefaultPixelSize(rData.maListBoxPreviewDefaultPixelSize),
+    mnListBoxPreviewDefaultLineWidth(rData.mnListBoxPreviewDefaultLineWidth),
+    mbPreviewUsesCheckeredBackground(rData.mbPreviewUsesCheckeredBackground),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
     maPersonaHeaderBitmap( rData.maPersonaHeaderBitmap ),
     maPersonaFooterBitmap( rData.maPersonaFooterBitmap ),
     maPersonaMenuBarTextColor( rData.maPersonaMenuBarTextColor )
 {
-    mnBorderSize                = rData.mnBorderSize;
-    mnTitleHeight               = rData.mnTitleHeight;
-    mnFloatTitleHeight          = rData.mnFloatTitleHeight;
-    mnScrollBarSize             = rData.mnScrollBarSize;
-    mnMinThumbSize              = rData.mnMinThumbSize;
-    mnSplitSize                 = rData.mnSplitSize;
-    mnSpinSize                  = rData.mnSpinSize;
-    mnAntialiasedMin            = rData.mnAntialiasedMin;
-    mnCursorSize                = rData.mnCursorSize;
-    mnCursorBlinkTime           = rData.mnCursorBlinkTime;
-    mnDragFullOptions           = rData.mnDragFullOptions;
-    mnSelectionOptions          = rData.mnSelectionOptions;
-    mnDisplayOptions            = rData.mnDisplayOptions;
-    mnOptions                   = rData.mnOptions;
-    mbHighContrast              = rData.mbHighContrast;
-    mbUseSystemUIFonts          = rData.mbUseSystemUIFonts;
-    mnUseFlatBorders            = rData.mnUseFlatBorders;
-    mnUseFlatMenus              = rData.mnUseFlatMenus;
-    mbAutoMnemonic              = rData.mbAutoMnemonic;
-    meUseImagesInMenus          = rData.meUseImagesInMenus;
-    mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
-    mbSkipDisabledInMenus       = rData.mbSkipDisabledInMenus;
-    mbHideDisabledMenuItems     = rData.mbHideDisabledMenuItems;
-    mbPreferredContextMenuShortcuts = rData.mbPreferredContextMenuShortcuts;
-    meContextMenuShortcuts      = rData.meContextMenuShortcuts;
-    mbPrimaryButtonWarpsSlider  = rData.mbPrimaryButtonWarpsSlider;
-    mnToolbarIconSize           = rData.mnToolbarIconSize;
-    if (rData.mIconThemeScanner)
-        mIconThemeScanner.reset(new vcl::IconThemeScanner(*rData.mIconThemeScanner));
-    mIconThemeSelector.reset(new vcl::IconThemeSelector(*rData.mIconThemeSelector));
-    mnEdgeBlending              = rData.mnEdgeBlending;
-    maEdgeBlendingTopLeftColor  = rData.maEdgeBlendingTopLeftColor;
-    maEdgeBlendingBottomRightColor = rData.maEdgeBlendingBottomRightColor;
-    mnListBoxMaximumLineCount   = rData.mnListBoxMaximumLineCount;
-    mnColorValueSetColumnCount  = rData.mnColorValueSetColumnCount;
-    mnColorValueSetMaximumRowCount = rData.mnColorValueSetMaximumRowCount;
-    maListBoxPreviewDefaultLogicSize = rData.maListBoxPreviewDefaultLogicSize;
-    maListBoxPreviewDefaultPixelSize = rData.maListBoxPreviewDefaultPixelSize;
-    mnListBoxPreviewDefaultLineWidth = rData.mnListBoxPreviewDefaultLineWidth;
-    mbPreviewUsesCheckeredBackground = rData.mbPreviewUsesCheckeredBackground;
 }
 
 void ImplStyleData::SetStandardStyles()
@@ -2384,24 +2329,16 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mbPreviewUsesCheckeredBackground == rSet.mxData->mbPreviewUsesCheckeredBackground);
 }
 
-ImplMiscData::ImplMiscData()
+ImplMiscData::ImplMiscData() :
+    mnEnableATT(TRISTATE_INDET),
+    mnDisablePrinting(TRISTATE_INDET)
 {
-    mnEnableATT                 = TRISTATE_INDET;
-    mnDisablePrinting           = TRISTATE_INDET;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != nullptr);
     // Should we display any windows?
 
     // need to hardly mask here for now, needs to be adapted of course...
     mbPseudoHeadless = getenv("VCL_HIDE_WINDOWS") || comphelper::LibreOfficeKit::isActive();
-}
-
-ImplMiscData::ImplMiscData( const ImplMiscData& rData )
-{
-    mnEnableATT                 = rData.mnEnableATT;
-    mnDisablePrinting           = rData.mnDisablePrinting;
-    mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
-    mbPseudoHeadless = rData.mbPseudoHeadless;
 }
 
 MiscSettings::MiscSettings()
@@ -2585,20 +2522,6 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
 bool MiscSettings::GetPseudoHeadless() const
 {
     return mxData->mbPseudoHeadless;
-}
-
-ImplHelpData::ImplHelpData()
-{
-    mnTipDelay                  = 500;
-    mnTipTimeout                = 3000;
-    mnBalloonDelay              = 1500;
-}
-
-ImplHelpData::ImplHelpData( const ImplHelpData& rData )
-{
-    mnTipDelay                  = rData.mnTipDelay;
-    mnTipTimeout                = rData.mnTipTimeout;
-    mnBalloonDelay              = rData.mnBalloonDelay;
 }
 
 HelpSettings::HelpSettings()
