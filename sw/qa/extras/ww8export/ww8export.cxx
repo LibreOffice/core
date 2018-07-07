@@ -46,7 +46,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 
-#include <config_test.h>
+#include <config_features.h>
 
 #include <bordertest.hxx>
 
@@ -613,7 +613,7 @@ DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
     // This must not hang in layout
 }
 
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
 DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 {
     // The problem was that the text was not displayed.
@@ -1294,7 +1294,7 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
 }
 
 #if !defined(MACOSX) && !defined(_WIN32)
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
 DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
 {
     //emulate table "keep with next" -do not split table

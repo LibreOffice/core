@@ -8,7 +8,6 @@
  */
 
 #include <memory>
-#include <config_test.h>
 
 #ifdef MACOSX
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0

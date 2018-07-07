@@ -11435,43 +11435,6 @@ fi
 AC_SUBST(OPENSYMBOL_TTF)
 AC_SUBST(FONTFORGE)
 
-TEST_FONTS_MISSING=0
-
-# $1  = font family
-# $2+ = accepted font mappings
-test_font_map()
-{
-    FONT="$1" ; shift
-    FONT_LOWER="$(echo "$FONT" | $AWK '{print tolower($0)}')"
-    AC_MSG_CHECKING([font mapping for '$FONT'])
-    FONTFILE="$(basename `$FCMATCH -f '%{file}' "$FONT"`)"
-    FONTFILE_LOWER="$(echo "$FONTFILE" | $AWK '{print tolower($0)}')"
-
-    CURRENT_FONT_FOUND=0
-    if test "${FONTFILE_LOWER}" = "${FONT_LOWER}".ttf
-    then
-        CURRENT_FONT_FOUND=1
-    else
-        while test "$#" -ge 1 ; do
-            MAPPING_LOWER="$(echo "$1" | $AWK '{print tolower($0)}')"; shift
-            if test \( "${FONTFILE_LOWER}" = "${MAPPING_LOWER}"-regular.ttf \) -o \
-                \( "${FONTFILE_LOWER}" = "${MAPPING_LOWER}".ttf \)
-            then
-                CURRENT_FONT_FOUND=1
-                break
-            fi
-        done
-    fi
-    if test $CURRENT_FONT_FOUND -eq 1
-    then
-        AC_MSG_RESULT([ok])
-    else
-        AC_MSG_RESULT([unknown map '$FONTFILE'])
-        add_warning "unknown map '$FONTFILE' for '$FONT'"
-        TEST_FONTS_MISSING=1
-    fi
-}
-
 dnl ===================================================================
 dnl Test whether to include fonts
 dnl ===================================================================
@@ -11485,27 +11448,8 @@ else
     AC_MSG_RESULT([no])
     WITH_FONTS=
     SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
-    if test "$test_fontconfig" = "yes"; then
-        AC_PATH_PROG([FCMATCH], [fc-match])
-        if test -z "$FCMATCH"; then
-            AC_MSG_WARN([Unable to query installed fonts - unit tests disabled.])
-            TEST_FONTS_MISSING=1
-        else
-            test_font_map 'Calibri' 'Carlito'
-            test_font_map 'DejaVuSans' 'DejaVuSans'
-            test_font_map 'Linux Libertine G' 'LinLibertine_R_G'
-            if test ${TEST_FONTS_MISSING} -eq 1
-            then
-                AC_MSG_WARN([Unknown font mappings - unit tests disabled.])
-                add_warning "Unknown font mappings - unit tests disabled."
-            fi
-        fi
-    else
-        TEST_FONTS_MISSING=1
-    fi
 fi
 AC_SUBST(WITH_FONTS)
-AC_DEFINE_UNQUOTED([TEST_FONTS_MISSING], $TEST_FONTS_MISSING)
 
 
 dnl ===================================================================
@@ -12906,7 +12850,6 @@ AC_CONFIG_HEADERS([config_host/config_gtk3_kde5.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
-AC_CONFIG_HEADERS([config_host/config_test.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
 AC_CONFIG_HEADERS([config_host/config_vendor.h])
 AC_CONFIG_HEADERS([config_host/config_vcl.h])
