@@ -2368,6 +2368,43 @@ static bool lcl_SeqHasProperty(
     return bRes;
 }
 
+static bool lcl_GetBoolProperty(
+    const uno::Sequence< beans::PropertyValue >& rOptions,
+    const sal_Char *pPropName )
+{
+    bool bRes = false;
+    const sal_Int32 nLen = rOptions.getLength();
+    const beans::PropertyValue *pProps = rOptions.getConstArray();
+    for ( sal_Int32 i = 0;  i < nLen;  ++i )
+    {
+        if ( pProps[i].Name.equalsAscii( pPropName ) )
+        {
+            pProps[i].Value >>= bRes;
+            break;
+        }
+    }
+    return bRes;
+}
+
+static sal_Int32 lcl_GetIntProperty(
+    const uno::Sequence< beans::PropertyValue >& rOptions,
+    const sal_Char *pPropName,
+    sal_Int32 nDefault )
+{
+    sal_Int32 nRes = nDefault;
+    const sal_Int32 nLen = rOptions.getLength();
+    const beans::PropertyValue *pProps = rOptions.getConstArray();
+    for ( sal_Int32 i = 0;  i < nLen;  ++i )
+    {
+        if ( pProps[i].Name.equalsAscii( pPropName ) )
+        {
+            pProps[i].Value >>= nRes;
+            break;
+        }
+    }
+    return nRes;
+}
+
 SfxViewShell * SwXTextDocument::GetRenderView(
     bool &rbIsSwSrcView,
     const uno::Sequence< beans::PropertyValue >& rOptions,
@@ -2561,6 +2598,13 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         if (!pViewShell || !pViewShell->GetLayout())
             return 0;
 
+        // make sure document orientation matches printer paper orientation
+        sal_Int32 nLandscape = lcl_GetIntProperty( rxOptions, "IsLandscape", -1 );
+        if ( nLandscape == 1 )
+            pViewShell->ChgAllPageOrientation( Orientation::Landscape );
+        else if ( nLandscape == 0 )
+            pViewShell->ChgAllPageOrientation( Orientation::Portrait );
+
         if (bFormat)
         {
             // #i38289
@@ -2603,18 +2647,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                     ? nullptr : m_pRenderData->GetSwPrtOptions();
                 bool setShowPlaceHoldersInPDF = false;
                 if(bIsPDFExport)
-                {
-                    const sal_Int32 nLen = rxOptions.getLength();
-                    const beans::PropertyValue *pProps = rxOptions.getConstArray();
-                    for (sal_Int32 i = 0;  i < nLen;  ++i)
-                    {
-                        if (pProps[i].Name == "ExportPlaceholders")
-                        {
-                            pProps[i].Value >>= setShowPlaceHoldersInPDF;
-                            break;
-                        }
-                    }
-                }
+                    setShowPlaceHoldersInPDF = lcl_GetBoolProperty( rxOptions, "ExportPlaceholders" );
                 m_pRenderData->ViewOptionAdjust( pPrtOptions, setShowPlaceHoldersInPDF );
             }
 
