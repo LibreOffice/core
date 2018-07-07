@@ -7,11 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_test.h>
-
 #include <ostream>
 #include <vector>
-#if !defined(_WIN32) && !TEST_FONTS_MISSING
+#if !defined(_WIN32) && HAVE_MORE_FONTS
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
 #endif
 
@@ -25,7 +23,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& 
 #include <osl/file.hxx>
 #include <osl/process.h>
 
-#if !defined(_WIN32) && !TEST_FONTS_MISSING
+#if !defined(_WIN32) && HAVE_MORE_FONTS
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
 {
     rStream << "{ ";
@@ -42,7 +40,7 @@ class VclComplexTextTest : public test::BootstrapFixture
 public:
     VclComplexTextTest() : BootstrapFixture(true, false) {}
 
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
     /// Play with font measuring etc.
     void testArabic();
 #endif
@@ -51,7 +49,7 @@ public:
 #endif
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testArabic);
 #endif
 #if defined(_WIN32)
@@ -60,7 +58,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
 void VclComplexTextTest::testArabic()
 {
     const unsigned char pOneTwoThreeUTF8[] = {
