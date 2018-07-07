@@ -815,6 +815,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
 
         // get current data
         Size aPaperSize(xPrinter->GetPaperSize());
+        Orientation eOrientation = xPrinter->GetOrientation();
         sal_uInt16 nPaperBin = xPrinter->GetPaperBin();
 
         // reset paper size back to last configured size, not
@@ -862,6 +863,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
         else
         {
             //restore to whatever it was before we entered this method
+            xPrinter->SetOrientation( eOrientation );
             if (aPaperSize != aNewPaperSize)
                 xPrinter->SetPaperSizeUser(aPaperSize, !mpImplData->isFixedPageSize());
         }
