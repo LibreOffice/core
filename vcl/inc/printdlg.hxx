@@ -186,7 +186,7 @@ namespace vcl
         VclPtr<MetricField>                     mpSheetMarginEdt;
         VclPtr<FixedText>                       mpSheetMarginTxt2;
         VclPtr<ListBox>                         mpPaperSizeBox;
-        VclPtr<ListBox>                         mpNupOrientationBox;
+        VclPtr<ListBox>                         mpOrientationBox;
 
         // page order ("left to right, then down")
         VclPtr<FixedText>                       mpNupOrderTxt;
@@ -228,6 +228,9 @@ namespace vcl
 
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
         void setupPaperSidesBox();
+        void setPaperOrientation( Orientation eOrientation );
+        void updateOrientationBox( bool bAutomatic = true );
+        bool hasOrientationChanged() const;
         void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();
@@ -236,8 +239,8 @@ namespace vcl
         void updateWindowFromProperty( const OUString& );
         void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
         void showAdvancedControls( bool );
-        void updateNup();
-        void updateNupFromPages();
+        void updateNup( bool i_bMayUseCache = true );
+        void updateNupFromPages( bool i_bMayUseCache = true );
         void enableNupControls( bool bEnable );
         void setupOptionalUI();
         Size const & getJobPageSize();
