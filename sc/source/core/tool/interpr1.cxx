@@ -714,10 +714,44 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     }
                 }
                 break;
+                case svExternalSingleRef:
+                {
+                    ScExternalRefCache::TokenRef pToken;
+                    PopExternalSingleRef(pToken);
+                    if (nGlobalError != FormulaError::NONE)
+                    {
+                        pJumpMatrix->PutResultDouble( CreateDoubleError( nGlobalError), nC, nR );
+                        nGlobalError = FormulaError::NONE;
+                    }
+                    else
+                    {
+                        switch (pToken->GetType())
+                        {
+                            case svDouble:
+                                pJumpMatrix->PutResultDouble( pToken->GetDouble(), nC, nR );
+                            break;
+                            case svString:
+                                pJumpMatrix->PutResultString( pToken->GetString(), nC, nR );
+                            break;
+                            case svEmptyCell:
+                                pJumpMatrix->PutResultEmpty( nC, nR );
+                            break;
+                            default:
+                                // svError was already handled (set by
+                                // PopExternalSingleRef()) with nGlobalError
+                                // above.
+                                assert(!"unhandled svExternalSingleRef case");
+                                pJumpMatrix->PutResultDouble( CreateDoubleError(
+                                            FormulaError::UnknownStackVariable), nC, nR );
+                        }
+                    }
+                }
+                break;
+                case svExternalDoubleRef:
                 case svMatrix:
                 {   // match matrix offsets
                     double fVal;
-                    ScMatrixRef pMat = PopMatrix();
+                    ScMatrixRef pMat = GetMatrix();
                     if ( nGlobalError != FormulaError::NONE )
                     {
                         fVal = CreateDoubleError( nGlobalError );
