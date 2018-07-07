@@ -743,10 +743,7 @@ namespace osl_StreamPipe
         /// print statement in thread process must use fflush() to force display.
         fflush(stdout);
 
-        TimeValue nTV;
-        nTV.Seconds = _nSec;
-        nTV.Nanosec = 0;
-        osl_waitThread(&nTV);
+        osl::Thread::wait(std::chrono::seconds(_nSec));
     }
     // test read/write & send/recv data to pipe
 

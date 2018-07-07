@@ -22,7 +22,7 @@
 #include <cppu/unotype.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
-#include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 
@@ -465,10 +465,7 @@ namespace {
 
 void wait(sal_Int32 microSeconds) {
     OSL_ASSERT(microSeconds >= 0 && microSeconds <= SAL_MAX_INT32 / 1000);
-    TimeValue t = {
-        static_cast< sal_uInt32 >(microSeconds / 1000000),
-        static_cast< sal_uInt32 >(microSeconds * 1000) };
-    osl_waitThread(&t);
+    osl::Thread::wait(std::chrono::microseconds(microSeconds));
 }
 
 }

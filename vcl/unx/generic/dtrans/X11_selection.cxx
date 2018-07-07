@@ -943,11 +943,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
             }
             else
             {
-                TimeValue aTVal;
-                aTVal.Seconds = 0;
-                aTVal.Nanosec = 100000000;
-                aGuard.clear();
-                osl_waitThread( &aTVal );
+                osl::Thread::wait(std::chrono::milliseconds(100));
                 aGuard.reset();
             }
             if( bHandle )
@@ -3369,15 +3365,12 @@ void SelectionManager::dragDoDispatch()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "begin executeDrag dispatching\n" );
 #endif
-    TimeValue aTVal;
-    aTVal.Seconds = 0;
-    aTVal.Nanosec = 200000000;
     oslThread aThread = m_aDragExecuteThread;
     while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(nullptr)-m_nDropTimeout < 5 ) && osl_scheduleThread( aThread ) )
     {
         // let the thread in the run method do the dispatching
         // just look occasionally here whether drop timed out or is completed
-        osl_waitThread( &aTVal );
+        osl::Thread::wait(std::chrono::milliseconds(200));
     }
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "end executeDrag dispatching\n" );

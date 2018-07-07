@@ -67,15 +67,7 @@ namespace ThreadHelper
         //     printf("wait %d tenth seconds. ", _nTenthSec );
         //     fflush(stdout);
         // }
-#ifdef _WIN32      //Windows
-        Sleep(_nTenthSec * 100 );
-#endif
-#if ( defined UNX )
-        TimeValue nTV;
-        nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
-        nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
-        osl_waitThread(&nTV);
-#endif
+        osl::Thread::wait(std::chrono::milliseconds(_nTenthSec * 100));
         // if (nVerbose == VERBOSE)
         // {
         //     printf("done\n");
