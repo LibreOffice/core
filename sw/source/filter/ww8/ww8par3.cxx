@@ -761,11 +761,11 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
         case 35:
         case 36:
         case 37:
+        case 11:
         case 39:nType = SVX_NUM_NUMBER_LOWER_ZH; break;
         case 34:nType = SVX_NUM_NUMBER_UPPER_ZH_TW; break;
         case 38:nType = SVX_NUM_NUMBER_UPPER_ZH; break;
-        case 10:
-        case 11:nType = SVX_NUM_NUMBER_TRADITIONAL_JA; break;
+        case 10:nType = SVX_NUM_NUMBER_TRADITIONAL_JA; break;
         case 20:nType = SVX_NUM_AIU_FULLWIDTH_JA; break;
         case 12:nType = SVX_NUM_AIU_HALFWIDTH_JA; break;
         case 21:nType = SVX_NUM_IROHA_FULLWIDTH_JA; break;
