@@ -917,8 +917,7 @@ namespace cppcanvas
                                           rRenderState );
 
                 //rhbz#1589029 non-transparent text fill background support
-                ::Color aEmptyColor( COL_AUTO );
-                if (rTextFillColor != aEmptyColor)
+                if (rTextFillColor != COL_AUTO)
                 {
                     rendering::RenderState aLocalState( rRenderState );
                     aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
@@ -1380,8 +1379,7 @@ namespace cppcanvas
                                           rRenderState );
 
                 //rhbz#1589029 non-transparent text fill background support
-                ::Color aEmptyColor( COL_AUTO );
-                if (rTextFillColor != aEmptyColor)
+                if (rTextFillColor != COL_AUTO)
                 {
                     rendering::RenderState aLocalState(rRenderState);
                     aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
@@ -1438,8 +1436,7 @@ namespace cppcanvas
                                                rRenderState );
 
                     //rhbz#1589029 non-transparent text fill background support
-                    ::Color aEmptyColor( COL_AUTO );
-                    if (rTextFillColor != aEmptyColor)
+                    if (rTextFillColor != COL_AUTO)
                     {
                         rendering::RenderState aLocalState(rRenderState);
                         aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(

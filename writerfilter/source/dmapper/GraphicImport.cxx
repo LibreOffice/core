@@ -109,10 +109,9 @@ sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence<sal_Int8>& aData, sal
             nRet = nMaxBytesToRead;
         aData.realloc( nRet );
         sal_Int8* pData = aData.getArray();
-        sal_Int32 nHeaderRead = 0;
         if( nRet )
         {
-            memcpy( pData + nHeaderRead, m_pBuffer + m_nPosition, nRet );
+            memcpy( pData, m_pBuffer + m_nPosition, nRet );
             m_nPosition += nRet;
         }
     }

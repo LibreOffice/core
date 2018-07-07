@@ -637,9 +637,8 @@ bool ShutdownIcon::GetAutostart( )
 {
 #if defined MACOSX
     return true;
-#else
+#elif defined ENABLE_QUICKSTART_APPLET
     bool bRet = false;
-#ifdef ENABLE_QUICKSTART_APPLET
     OUString aShortcut( getShortcutName() );
     OUString aShortcutUrl;
     osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
@@ -650,8 +649,9 @@ bool ShutdownIcon::GetAutostart( )
         f.close();
         bRet = true;
     }
-#endif // ENABLE_QUICKSTART_APPLET
     return bRet;
+#else // ENABLE_QUICKSTART_APPLET
+    return false;
 #endif
 }
 

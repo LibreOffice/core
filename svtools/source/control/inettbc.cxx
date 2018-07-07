@@ -698,9 +698,8 @@ void MatchContext_Impl::ReadFolder( const OUString& rURL,
         try
         {
             uno::Reference< XDynamicResultSet > xDynResultSet;
-            ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
 
-            xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
+            xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
 
             uno::Reference < XAnyCompareFactory > xCompare;
             uno::Reference < XSortedDynamicResultSetFactory > xSRSFac =
