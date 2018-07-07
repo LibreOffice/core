@@ -192,6 +192,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_solver \
 	UITest_goalSeek \
 	UITest_protect \
+	UITest_options \
 ))
 endif
 
