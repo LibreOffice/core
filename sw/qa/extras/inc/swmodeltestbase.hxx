@@ -579,6 +579,36 @@ protected:
         return xParagraph;
     }
 
+    sal_Int16 getNumberingTypeOfParagraph(int nPara)
+    {
+        sal_Int16 nNumberingType = -1;
+        uno::Reference<text::XTextRange> xPara(getParagraph(nPara));
+        uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+        bool isNumber = false;
+        properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
+        if (isNumber)
+        {
+            uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+            sal_Int16 nNumberingLevel = -1;
+            properties->getPropertyValue("NumberingLevel") >>= nNumberingLevel;
+            if (nNumberingLevel >= 0 && nNumberingLevel < xLevels->getCount())
+            {
+                uno::Sequence< beans::PropertyValue > aPropertyValue;
+                xLevels->getByIndex(nNumberingLevel) >>= aPropertyValue;
+                for( int j = 0 ; j< aPropertyValue.getLength() ; ++j)
+                {
+                    beans::PropertyValue aProp= aPropertyValue[j];
+                    if (aProp.Name == "NumberingType")
+                    {
+                        nNumberingType = aProp.Value.get<sal_Int16>();
+                        break;
+                    }
+                }
+            }
+        }
+        return nNumberingType;
+    }
+
     uno::Reference<text::XTextRange> getParagraphOfText(int number, uno::Reference<text::XText> const & xText, const OUString& content = OUString()) const
     {
         uno::Reference<text::XTextRange> const xParagraph(getParagraphOrTable(number, xText), uno::UNO_QUERY_THROW);

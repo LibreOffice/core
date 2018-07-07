@@ -54,30 +54,6 @@ protected:
 
         return std::find(vWhitelist.begin(), vWhitelist.end(), filename) != vWhitelist.end();
     }
-protected:
-    bool CjkNumberedListTestHelper(sal_Int16 &nValue)
-    {
-        bool isNumber = false;
-        uno::Reference<text::XTextRange> xPara(getParagraph(1));
-        uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
-        properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
-        if (!isNumber)
-            return false;
-        uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-        uno::Sequence< beans::PropertyValue > aPropertyValue;
-        xLevels->getByIndex(0) >>= aPropertyValue;
-        for( int j = 0 ; j< aPropertyValue.getLength() ; ++j)
-        {
-            beans::PropertyValue aProp= aPropertyValue[j];
-            if (aProp.Name == "NumberingType")
-            {
-                nValue = aProp.Value.get<sal_Int16>();
-                return true;
-            }
-        }
-        return false;
-
-    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testfdo81381, "fdo81381.docx")
@@ -635,57 +611,49 @@ DECLARE_OOXMLEXPORT_TEST(testTableRtl, "table-rtl.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist30, "cjklist30.docx")
 {
-    sal_Int16   numFormat;
-    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist31, "cjklist31.docx")
 {
-    sal_Int16   numFormat;
-    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist34, "cjklist34.docx")
 {
-    sal_Int16   numFormat;
-    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist35, "cjklist35.docx")
 {
-    sal_Int16   numFormat;
-    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist44, "cjklist44.docx")
 {
-    sal_Int16   numFormat;
-    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HANGUL_KO, numFormat);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlTextNumberList, "text_number_list.docx")
 {
-    sal_Int16   numFormat;
-    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::TEXT_NUMBER, numFormat);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlTextCardinalList, "text_cardinal_list.docx")
 {
-    sal_Int16   numFormat;
-    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::TEXT_CARDINAL, numFormat);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlTextOrdinalList, "text_ordinal_list.docx")
 {
-    sal_Int16   numFormat;
-    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::TEXT_ORDINAL, numFormat);
 }
 
