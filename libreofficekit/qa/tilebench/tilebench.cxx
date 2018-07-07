@@ -31,8 +31,8 @@ static int help( const char *error = nullptr )
 {
     if (error)
         fprintf (stderr, "Error: %s\n\n", error);
-    fprintf( stderr, "Usage: tilebench <absolute-path-to-libreoffice-install> [path to document]\n");
-    fprintf( stderr, "\trenders a selection of small tiles from the document, checksums them and times the process\n" );
+    fprintf( stderr, "Usage: tilebench <absolute-path-to-libreoffice-install> [path to document] [--preinit] <options>\n");
+    fprintf( stderr, "\trenders a selection of small tiles from the document, checksums them and times the process based on options:\n" );
     fprintf( stderr, "\t--tile\t[max parts|-1] [max tiles|-1]\n" );
     fprintf( stderr, "\t--dialog\t<.uno:Command>\n" );
     return 1;
@@ -286,6 +286,11 @@ void testDialog( Document *pDocument, const char *uno_cmd )
 
 int main( int argc, char* argv[] )
 {
+    int arg;
+
+    // avoid X oddness etc.
+    unsetenv("DISPLAY");
+
     origin = getTimeNow();
     if( argc < 4 ||
         ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
@@ -297,19 +302,41 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
+    arg = 2;
+    const char *doc_url = argv[arg++];
+    const char *mode = argv[arg++];
+
+    bool pre_init = false;
+    if (!strcmp(mode, "--preinit"))
+    {
+        pre_init = true;
+        mode = argv[arg++];
+    }
+
+    char user_url[8046];;
+    strcpy(user_url, "file:///");
+    strcat(user_url, argv[1]);
+    strcat(user_url, "../user");
+
+    if (pre_init)
+    {
+        aTimes.emplace_back("pre-initialization");
+        setenv("LOK_WHITELIST_LANGUAGES", "en_US", 0);
+        // coverity[tainted_string] - build time test tool
+        lok_preinit(argv[1], user_url);
+        aTimes.emplace_back();
+    }
+
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
-    Office *pOffice = lok_cpp_init(argv[1]);
+    Office *pOffice = lok_cpp_init(argv[1], user_url);
     if (pOffice == nullptr)
     {
         fprintf(stderr, "Failed to initialize Office from %s\n", argv[1]);
         return 1;
     }
-
     aTimes.emplace_back();
 
-    const char *doc_url = argv[2];
-    const char *mode = argv[3];
     Document *pDocument = nullptr;
 
     aTimes.emplace_back("load document");
@@ -321,15 +348,15 @@ int main( int argc, char* argv[] )
     {
         if (!strcmp(mode, "--tile"))
         {
-            const int max_parts = (argc > 4 ? atoi(argv[4]) : -1);
-            int max_tiles = (argc > 5 ? atoi(argv[5]) : -1);
+            const int max_parts = (argc > arg ? atoi(argv[arg++]) : -1);
+            int max_tiles = (argc > arg ? atoi(argv[arg++]) : -1);
             const bool dump = true;
 
             testTile (pDocument, max_parts, max_tiles, dump);
         }
         else if (!strcmp (mode, "--dialog"))
         {
-            const char *uno_cmd = argc > 4 ? argv[4] : nullptr;
+            const char *uno_cmd = argc > arg ? argv[arg++] : nullptr;
             if (!uno_cmd)
             {
                 switch (pDocument->getDocumentType())
