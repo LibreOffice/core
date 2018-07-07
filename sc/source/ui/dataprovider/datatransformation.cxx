@@ -8,7 +8,7 @@
  */
 
 #include <datatransformation.hxx>
-
+#include <limits>
 #include <document.hxx>
 #include <limits>
 #include <rtl/math.hxx>
