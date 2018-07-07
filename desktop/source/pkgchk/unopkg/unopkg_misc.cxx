@@ -323,6 +323,7 @@ void printf_packages(
             else
                 printf_package( extension, xCmdEnv, level );
             dp_misc::writeConsole("\n");
+            ++index;
         }
     }
 }
