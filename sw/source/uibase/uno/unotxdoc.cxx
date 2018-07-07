@@ -2561,6 +2561,23 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         if (!pViewShell || !pViewShell->GetLayout())
             return 0;
 
+        // make sure document orientation matches printer paper orientation
+        const sal_Int32 nLen = rxOptions.getLength();
+        const beans::PropertyValue *pProps = rxOptions.getConstArray();
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
+        {
+            if (pProps[i].Name == "PaperLandscape" )
+            {
+                bool bLandscape;
+                pProps[i].Value >>= bLandscape;
+                if ( bLandscape )
+                    pViewShell->ChgAllPageOrientation( Orientation::Landscape );
+                else
+                    pViewShell->ChgAllPageOrientation( Orientation::Portrait );
+                break;
+            }
+        }
+
         if (bFormat)
         {
             // #i38289
@@ -2604,8 +2621,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 bool setShowPlaceHoldersInPDF = false;
                 if(bIsPDFExport)
                 {
-                    const sal_Int32 nLen = rxOptions.getLength();
-                    const beans::PropertyValue *pProps = rxOptions.getConstArray();
                     for (sal_Int32 i = 0;  i < nLen;  ++i)
                     {
                         if (pProps[i].Name == "ExportPlaceholders")
