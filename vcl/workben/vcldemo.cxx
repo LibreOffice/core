@@ -1716,14 +1716,13 @@ class DemoWin : public WorkWindow
 
     class RenderThread : public salhelper::Thread {
         DemoWin  &mrWin;
-        TimeValue maDelay;
+        sal_uInt32 mnDelaySecs = 0;
     public:
         RenderThread(DemoWin &rWin, sal_uInt32 nDelaySecs)
             : Thread("vcldemo render thread")
             , mrWin(rWin)
+            , mnDelaySecs(nDelaySecs)
         {
-            maDelay.Seconds = nDelaySecs;
-            maDelay.Nanosec = 0;
             launch();
         }
         virtual ~RenderThread() override
@@ -1732,7 +1731,7 @@ class DemoWin : public WorkWindow
         }
         virtual void execute() override
         {
-            osl_waitThread(&maDelay);
+            wait(std::chrono::seconds(mnDelaySecs));
 
             SolarMutexGuard aGuard;
             fprintf (stderr, "render from a different thread\n");
@@ -1933,20 +1932,18 @@ public:
 IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
 {
     sal_Int32 nSelected = mpGLCombo->GetSelectedEntryPos();
+    sal_uInt32 nDelaySeconds = 0;
 
-    TimeValue aDelay;
-    aDelay.Seconds = 0;
-    aDelay.Nanosec = 0;
     switch (nSelected)
     {
     case 0:
-        aDelay.Seconds = 1;
+        nDelaySeconds = 1;
         break;
     case 1:
-        aDelay.Seconds = 3;
+        nDelaySeconds = 3;
         break;
     case 2:
-        aDelay.Seconds = 7;
+        nDelaySeconds = 7;
         break;
     default:
         break;
@@ -1956,7 +1953,7 @@ IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
     if (bEnterLeave)
         OpenGLZoneTest::enter();
 
-    osl_waitThread(&aDelay);
+    osl::Thread::wait(std::chrono::seconds(nDelaySeconds));
 
     if (bEnterLeave)
         OpenGLZoneTest::leave();

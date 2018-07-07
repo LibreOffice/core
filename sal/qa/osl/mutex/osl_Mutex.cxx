@@ -34,10 +34,7 @@ namespace ThreadHelper
 {
     void thread_sleep_tenth_sec(sal_uInt32 _nTenthSec)
     {
-        TimeValue nTV;
-        nTV.Seconds = _nTenthSec/10;
-        nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
-        osl_waitThread(&nTV);
+        osl::Thread::wait(std::chrono::milliseconds(_nTenthSec * 100));
     }
     void thread_sleep( sal_uInt32 _nSec )
     {

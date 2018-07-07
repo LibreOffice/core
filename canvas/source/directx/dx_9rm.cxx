@@ -27,7 +27,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <tools/diagnose_ex.h>
 #include <vcl/syschild.hxx>
@@ -880,10 +880,7 @@ namespace dxcanvas
                             return true;
                     }
 
-                    TimeValue aTimeout;
-                    aTimeout.Seconds=1;
-                    aTimeout.Nanosec=0;
-                    osl_waitThread(&aTimeout);
+                    osl::Thread::wait(std::chrono::seconds(1));
                 }
                 while(hr == D3DERR_DEVICELOST);
 

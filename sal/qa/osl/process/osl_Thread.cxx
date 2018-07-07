@@ -180,14 +180,7 @@ namespace ThreadHelper
 {
     void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
     {
-#ifdef _WIN32
-        Sleep(_nTenthSec * 100 );
-#else
-        TimeValue nTV;
-        nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
-        nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
-        osl_waitThread(&nTV);
-#endif
+        osl::Thread::wait(std::chrono::milliseconds(_nTenthSec * 100));
     }
 
     void outputPriority(oslThreadPriority const& _aPriority)

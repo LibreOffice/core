@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 #include <osl/module.h>
 #include <osl/process.h>
-#include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <osl/time.h>
 
@@ -1103,9 +1103,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             osl_freeProcessHandle( hProcess );
 
             // wait three seconds
-            TimeValue threeSeconds;
-            threeSeconds.Seconds = 3;
-            osl_waitThread( &threeSeconds );
+            osl::Thread::wait(std::chrono::seconds(3));
 
             // connect and resolve outer process object
             Reference< XInterface > xResolvedObject( resolveObject( OUString("uno:socket,host=localhost,port=6000;iiop;TestRemoteObject") ) );
