@@ -52,9 +52,9 @@
 #include <o3tl/make_unique.hxx>
 
 // BaseProperties section
-sdr::properties::BaseProperties* SdrObjGroup::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrObjGroup::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::GroupProperties(*this);
+    return o3tl::make_unique<sdr::properties::GroupProperties>(*this);
 }
 
 // DrawContact section

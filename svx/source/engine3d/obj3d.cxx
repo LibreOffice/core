@@ -75,12 +75,13 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
-sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> E3dObject::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::E3dProperties(*this);
+    return o3tl::make_unique<sdr::properties::E3dProperties>(*this);
 }
 
 E3dObject::E3dObject(SdrModel& rSdrModel)
@@ -486,9 +487,9 @@ void E3dObject::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     SetGlueReallyAbsolute(false);       // from now they are again relative to BoundRect (that is defined as aOutRect)
 }
 
-sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> E3dCompoundObject::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::E3dCompoundProperties(*this);
+    return o3tl::make_unique<sdr::properties::E3dCompoundProperties>(*this);
 }
 
 E3dCompoundObject::E3dCompoundObject(SdrModel& rSdrModel)

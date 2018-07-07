@@ -40,9 +40,9 @@ std::unique_ptr<sdr::contact::ViewContact> E3dSphereObj::CreateObjectSpecificVie
     return o3tl::make_unique<sdr::contact::ViewContactOfE3dSphere>(*this);
 }
 
-sdr::properties::BaseProperties* E3dSphereObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> E3dSphereObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::E3dSphereProperties(*this);
+    return o3tl::make_unique<sdr::properties::E3dSphereProperties>(*this);
 }
 
 // Build Sphere from polygon facets in latitude and longitude

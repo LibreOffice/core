@@ -669,9 +669,9 @@ static bool ImplIsMathObj( const uno::Reference < embed::XEmbeddedObject >& rObj
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* SdrOle2Obj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrOle2Obj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::OleProperties(*this);
+    return o3tl::make_unique<sdr::properties::OleProperties>(*this);
 }
 
 // DrawContact section

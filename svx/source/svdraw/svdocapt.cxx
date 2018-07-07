@@ -175,9 +175,9 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const tools::Rectangle& rRe
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* SdrCaptionObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrCaptionObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::CaptionProperties(*this);
+    return o3tl::make_unique<sdr::properties::CaptionProperties>(*this);
 }
 
 

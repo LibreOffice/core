@@ -33,7 +33,7 @@ const sal_uInt16 SwFlyDrawObjIdentifier = 0x0001;
 class SwFlyDrawObj : public SdrObject
 {
 private:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
 protected:
     // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()

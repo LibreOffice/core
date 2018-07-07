@@ -79,7 +79,7 @@ private:
     friend class E3dDragMethod;
 
  protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object (from the geometry generation)
     basegfx::B3DHomMatrix       maTransformation;   // local transformation
@@ -173,7 +173,7 @@ private:
     friend class sdr::properties::E3dSphereProperties;
 
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     // material of the object
     Color                   aMaterialAmbientColor;

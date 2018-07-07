@@ -65,9 +65,9 @@
 using namespace com::sun::star;
 
 // BaseProperties section
-sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrTextObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::TextProperties(*this);
+    return o3tl::make_unique<sdr::properties::TextProperties>(*this);
 }
 
 // DrawContact section

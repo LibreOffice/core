@@ -109,10 +109,10 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SwFlyDrawObj::CreateObjectSpecificProperties()
 {
     // create default properties
-    return new sdr::properties::DefaultProperties(*this);
+    return o3tl::make_unique<sdr::properties::DefaultProperties>(*this);
 }
 
 std::unique_ptr<sdr::contact::ViewContact> SwFlyDrawObj::CreateObjectSpecificViewContact()

@@ -267,7 +267,7 @@ private:
     void init( sal_Int32 nColumns, sal_Int32 nRows );
 
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     virtual SdrObjGeoData* NewGeoData() const override;

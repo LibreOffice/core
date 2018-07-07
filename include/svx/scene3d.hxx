@@ -60,7 +60,7 @@ class Imp3DDepthRemapper;
 class SVX_DLLPUBLIC E3dScene : public E3dObject, public SdrObjList
 {
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     // transformations

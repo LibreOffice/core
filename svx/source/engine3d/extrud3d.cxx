@@ -45,9 +45,9 @@ std::unique_ptr<sdr::contact::ViewContact> E3dExtrudeObj::CreateObjectSpecificVi
     return o3tl::make_unique<sdr::contact::ViewContactOfE3dExtrude>(*this);
 }
 
-sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> E3dExtrudeObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::E3dExtrudeProperties(*this);
+    return o3tl::make_unique<sdr::properties::E3dExtrudeProperties>(*this);
 }
 
 // Constructor creates a two cover surface tools::PolyPolygon and (point-count 1) side
