@@ -1388,7 +1388,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
 
     if ( nFlags & FontToSubsFontFlags::IMPORT )
     {
-        int nEntries = 2; // only StarMath+StarBats
+        const int nEntries = 2; // only StarMath+StarBats
         for( int i = 0; i < nEntries; ++i )
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
