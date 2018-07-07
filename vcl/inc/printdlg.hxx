@@ -161,7 +161,7 @@ namespace vcl
         VclPtr<FixedText>                       mpSheetMarginTxt1;
         VclPtr<MetricField>                     mpSheetMarginEdt;
         VclPtr<FixedText>                       mpSheetMarginTxt2;
-        VclPtr<ListBox>                         mpNupOrientationBox;
+        VclPtr<ListBox>                         mpOrientationBox;
 
         // page order ("left to right, then down")
         VclPtr<FixedText>                       mpNupOrderTxt;

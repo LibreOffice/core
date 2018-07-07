@@ -56,8 +56,9 @@ using namespace com::sun::star::beans;
 
 enum
 {
-    SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT,
-    SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE
+    ORIENTATION_AUTOMATIC,
+    ORIENTATION_PORTRAIT,
+    ORIENTATION_LANDSCAPE
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makePrintPreviewWindow(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
@@ -517,7 +518,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     get(mpCopyCountField, "copycount");
     get(mpNupOrderWin, "orderpreview");
     get(mpNupPagesBox, "pagespersheetbox");
-    get(mpNupOrientationBox, "pageorientationbox");
+    get(mpOrientationBox, "pageorientationbox");
     get(mpNupOrderTxt, "labelorder");
     get(mpNupOrderBox, "orderbox");
     get(mpPagesBtn, "pagespersheetbtn");
@@ -582,6 +583,9 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     // not printing to file
     maPController->resetPrinterOptions( false );
 
+    // get the first page
+    preparePreview( true, true );
+
     // update the text fields for the printer
     updatePrinterText();
 
@@ -632,7 +636,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     // setup select hdl
     mpPrinters->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     mpNupPagesBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
-    mpNupOrientationBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    mpOrientationBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     mpNupOrderBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
     // setup modify hdl
@@ -643,7 +647,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     mpPageMarginEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     mpSheetMarginEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
-    preparePreview( true, true );
+    updateNupFromPages();
 }
 
 
@@ -690,7 +694,7 @@ void PrintDialog::dispose()
     mpSheetMarginTxt1.clear();
     mpSheetMarginEdt.clear();
     mpSheetMarginTxt2.clear();
-    mpNupOrientationBox.clear();
+    mpOrientationBox.clear();
     mpNupOrderBox.clear();
     mpNupOrderWin.clear();
     mpNupOrderTxt.clear();
@@ -905,10 +909,10 @@ void PrintDialog::updateNup()
 
     aMPS.nOrder = static_cast<NupOrderType>(mpNupOrderBox->GetSelectedEntryPos());
 
-    int nOrientationMode = mpNupOrientationBox->GetSelectedEntryPos();
-    if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE )
+    int nOrientationMode = mpOrientationBox->GetSelectedEntryPos();
+    if( nOrientationMode == ORIENTATION_LANDSCAPE )
         aMPS.aPaperSize = maNupLandscapeSize;
-    else if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT )
+    else if( nOrientationMode == ORIENTATION_PORTRAIT )
         aMPS.aPaperSize = maNupPortraitSize;
     else // automatic mode
     {
@@ -918,9 +922,15 @@ void PrintDialog::updateNup()
 
         Size aMultiSize( aPageSize.Width() * nCols, aPageSize.Height() * nRows );
         if( aMultiSize.Width() > aMultiSize.Height() ) // fits better on landscape
+        {
             aMPS.aPaperSize = maNupLandscapeSize;
+            maPController->getPrinter()->SetOrientation( Orientation::Landscape );
+        }
         else
+        {
             aMPS.aPaperSize = maNupPortraitSize;
+            maPController->getPrinter()->SetOrientation( Orientation::Portrait );
+        }
     }
 
     maPController->setMultipage( aMPS );
@@ -1600,6 +1610,8 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
         }
         if( mpBrochureBtn->IsChecked() )
         {
+            mpOrientationBox->Enable( false );
+            mpOrientationBox->SelectEntryPos( ORIENTATION_LANDSCAPE );
             mpNupPagesBox->SelectEntryPos( 0 );
             updateNupFromPages();
             showAdvancedControls( false );
@@ -1608,6 +1620,8 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
     }
     else if( pButton == mpPagesBtn )
     {
+        mpOrientationBox->Enable( true );
+        mpOrientationBox->SelectEntryPos( ORIENTATION_AUTOMATIC );
         enableNupControls( true );
         updateNupFromPages();
     }
@@ -1635,6 +1649,14 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
         {
             maPController->setupPrinter(GetFrameWeld());
 
+            // update orientation box if needed
+            int nOrientation = mpOrientationBox->GetSelectedEntryPos();
+            Orientation eOrientation = maPController->getPrinter()->GetOrientation();
+            if ( nOrientation == ORIENTATION_LANDSCAPE && eOrientation == Orientation::Portrait )
+                mpOrientationBox->SelectEntryPos( ORIENTATION_PORTRAIT );
+            else if (nOrientation == ORIENTATION_PORTRAIT && eOrientation == Orientation::Landscape )
+                mpOrientationBox->SelectEntryPos( ORIENTATION_LANDSCAPE );
+
             // tdf#63905 don't use cache: page size may change
             preparePreview();
         }
@@ -1654,6 +1676,16 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             // set new printer
             maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
             maPController->resetPrinterOptions( false  );
+
+            // update orientation box if needed
+            int nOrientation = mpOrientationBox->GetSelectedEntryPos();
+            Orientation eOrientation = maPController->getPrinter()->GetOrientation();
+            if ( nOrientation == ORIENTATION_LANDSCAPE && eOrientation == Orientation::Portrait
+                || nOrientation == ORIENTATION_PORTRAIT && eOrientation == Orientation::Landscape )
+            {
+                mpOrientationBox->SelectEntryPos( ORIENTATION_AUTOMATIC );
+            }
+
             // update text fields
             mpOKButton->SetText( maPrintText );
             updatePrinterText();
@@ -1665,12 +1697,26 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             maPController->setPrinter( VclPtrInstance<Printer>( Printer::GetDefaultPrinterName() ) );
             mpOKButton->SetText( maPrintToFileText );
             maPController->resetPrinterOptions( true );
+
+            // update orientation box if needed
+            int nOrientation = mpOrientationBox->GetSelectedEntryPos();
+            Orientation eOrientation = maPController->getPrinter()->GetOrientation();
+            if ( nOrientation == ORIENTATION_LANDSCAPE && eOrientation == Orientation::Portrait
+                || nOrientation == ORIENTATION_PORTRAIT && eOrientation == Orientation::Landscape )
+            {
+                mpOrientationBox->SelectEntryPos( ORIENTATION_AUTOMATIC );
+            }
+
             preparePreview( true, true );
         }
     }
-    else if( &rBox == mpNupOrientationBox || &rBox == mpNupOrderBox )
+    else if( &rBox == mpOrientationBox || &rBox == mpNupOrderBox )
     {
-       updateNup();
+        int nOrientation = mpOrientationBox->GetSelectedEntryPos();
+        if ( nOrientation != ORIENTATION_AUTOMATIC )
+            maPController->getPrinter()->SetOrientation( static_cast<Orientation>( nOrientation - 1 ) );
+
+        updateNup();
     }
     else if( &rBox == mpNupPagesBox )
     {
