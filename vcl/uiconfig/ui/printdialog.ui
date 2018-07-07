@@ -87,12 +87,29 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="liststore4">
+  <object class="GtkListStore" id="liststore3">
     <columns>
       <!-- column-name gchararray -->
       <column type="gchararray"/>
     </columns>
     <data>
+      <row>
+        <col id="0" translatable="yes" context="printdialog|liststore3">Automatic</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="printdialog|liststore3">Portrait</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="printdialog|liststore3">Landscape</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore4">
+    <columns>
+    <!-- column-name gchararray -->
+    <column type="gchararray"/>
+    </columns>
+   <data>
       <row>
         <col id="0" translatable="yes" context="printdialog|liststore4">Print only in one side</col>
       </row>
@@ -878,6 +895,7 @@
                                           <object class="GtkComboBox" id="pageorientationbox">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="model">liststore3</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
