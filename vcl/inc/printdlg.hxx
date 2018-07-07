@@ -161,7 +161,7 @@ namespace vcl
         VclPtr<FixedText>                       mpSheetMarginTxt1;
         VclPtr<MetricField>                     mpSheetMarginEdt;
         VclPtr<FixedText>                       mpSheetMarginTxt2;
-        VclPtr<ListBox>                         mpNupOrientationBox;
+        VclPtr<ListBox>                         mpOrientationBox;
 
         // page order ("left to right, then down")
         VclPtr<FixedText>                       mpNupOrderTxt;
@@ -199,6 +199,7 @@ namespace vcl
         css::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
+        void updateOrientationBox();
         void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();
