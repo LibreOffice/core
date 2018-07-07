@@ -8,7 +8,7 @@
  */
 
 #include <memory>
-#include <config_test.h>
+#include <config_features.h>
 
 #ifdef MACOSX
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
@@ -559,7 +559,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-5741), xShape->getPosition().Y);
 
-#if ! TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
     xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
     // This was 887, i.e. border distances were included in the height.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(686), xShape->getSize().Height);

@@ -9,7 +9,6 @@
 
 #include <memory>
 #include <sstream>
-#include <config_test.h>
 
 #include <swmodeltestbase.hxx>
 

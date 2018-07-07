@@ -8,7 +8,6 @@
  */
 
 #include <config_features.h>
-#include <config_test.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>

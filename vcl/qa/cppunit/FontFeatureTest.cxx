@@ -8,7 +8,7 @@
  */
 
 #include <test/bootstrapfixture.hxx>
-#include <config_test.h>
+#include <config_features.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
@@ -38,7 +38,7 @@ void FontFeatureTest::testGetFontFeatures()
 {
 // "Linux Libertine G" is a font bundled with LO, but sometimes the
 // bundled fonts aren't available so we need to disable test in that case
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
                                               DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
     aVDev->SetOutputSizePixel(Size(10, 10));
@@ -114,7 +114,7 @@ void FontFeatureTest::testGetFontFeatures()
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), rParameter2.getCode());
         CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
     }
-#endif // !TEST_FONTS_MISSING
+#endif // HAVE_MORE_FONTS
 }
 
 void FontFeatureTest::testParseFeature()
