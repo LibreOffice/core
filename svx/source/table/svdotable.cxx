@@ -837,9 +837,9 @@ void SdrTableObjImpl::UpdateCells( tools::Rectangle const & rArea )
 // BaseProperties section
 
 
-sdr::properties::BaseProperties* SdrTableObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrTableObj::CreateObjectSpecificProperties()
 {
-    return new TableProperties(*this);
+    return o3tl::make_unique<TableProperties>(*this);
 }
 
 

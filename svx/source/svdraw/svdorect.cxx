@@ -49,9 +49,9 @@ using namespace com::sun::star;
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* SdrRectObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrRectObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::RectangleProperties(*this);
+    return o3tl::make_unique<sdr::properties::RectangleProperties>(*this);
 }
 
 

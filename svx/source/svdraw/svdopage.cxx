@@ -36,9 +36,9 @@
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* SdrPageObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrPageObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::PageProperties(*this);
+    return o3tl::make_unique<sdr::properties::PageProperties>(*this);
 }
 
 

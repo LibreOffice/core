@@ -86,7 +86,7 @@ private:
     friend class SdrGraphicLink;
 
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     void ImpSetAttrToGrafInfo(); // Copy values from the pool
     GraphicAttr aGrafInfo;

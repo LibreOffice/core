@@ -148,9 +148,9 @@ long SdrEdgeInfoRec::ImpGetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon&
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* SdrEdgeObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrEdgeObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::ConnectorProperties(*this);
+    return o3tl::make_unique<sdr::properties::ConnectorProperties>(*this);
 }
 
 

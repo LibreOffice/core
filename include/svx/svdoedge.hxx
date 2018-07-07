@@ -137,7 +137,7 @@ private:
 
 protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     SdrObjConnection            aCon1;  // Connection status of the beginning of the line
     SdrObjConnection            aCon2;  // Connection status of the end of the line

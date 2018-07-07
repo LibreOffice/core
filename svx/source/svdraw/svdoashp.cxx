@@ -804,9 +804,9 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
     }
 }
 
-sdr::properties::BaseProperties* SdrObjCustomShape::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrObjCustomShape::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::CustomShapeProperties(*this);
+    return o3tl::make_unique<sdr::properties::CustomShapeProperties>(*this);
 }
 
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)

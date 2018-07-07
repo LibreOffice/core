@@ -216,9 +216,9 @@ struct SdrObject::Impl
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* SdrObject::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrObject::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::EmptyProperties(*this);
+    return o3tl::make_unique<sdr::properties::EmptyProperties>(*this);
 }
 
 sdr::properties::BaseProperties& SdrObject::GetProperties() const
@@ -229,8 +229,8 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
         // that will lead to wrong type-casts (dependent on constructor-level)
         // and thus eventually create the wrong sdr::properties (!). Is there
         // a way to check if on the stack is a SdrObject-constructor (?)
-        const_cast< SdrObject* >(this)->mpProperties.reset(
-            const_cast< SdrObject* >(this)->CreateObjectSpecificProperties() );
+        const_cast< SdrObject* >(this)->mpProperties =
+            const_cast< SdrObject* >(this)->CreateObjectSpecificProperties();
     }
 
     return *mpProperties;

@@ -84,7 +84,7 @@ protected:
     virtual void impl_setUnoShape(const css::uno::Reference<css::uno::XInterface>& rxUnoShape) override;
 
 public:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     // to allow sdr::properties::CustomShapeProperties access
     friend class sdr::properties::CustomShapeProperties;

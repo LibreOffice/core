@@ -71,12 +71,13 @@
 #include <sdr/properties/attributeproperties.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/xlinjoit.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
-sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrAttrObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::AttributeProperties(*this);
+    return o3tl::make_unique<sdr::properties::AttributeProperties>(*this);
 }
 
 

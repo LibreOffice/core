@@ -265,9 +265,9 @@ void SdrGraphicLink::UpdateAsynchron()
     }
 }
 
-sdr::properties::BaseProperties* SdrGrafObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrGrafObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::GraphicProperties(*this);
+    return o3tl::make_unique<sdr::properties::GraphicProperties>(*this);
 }
 
 

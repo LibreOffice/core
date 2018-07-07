@@ -157,9 +157,9 @@ sal_uInt32 Imp3DDepthRemapper::RemapOrdNum(sal_uInt32 nOrdNum) const
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* E3dScene::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> E3dScene::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::E3dSceneProperties(*this);
+    return o3tl::make_unique<sdr::properties::E3dSceneProperties>(*this);
 }
 
 

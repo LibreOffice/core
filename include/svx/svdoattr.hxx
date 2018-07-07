@@ -42,7 +42,7 @@ private:
     friend class                SdrOutliner;
 
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     tools::Rectangle                   maSnapRect;
 

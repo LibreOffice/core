@@ -92,9 +92,9 @@ Point GetAnglePnt(const tools::Rectangle& rR, long nAngle)
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* SdrCircObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrCircObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::CircleProperties(*this);
+    return o3tl::make_unique<sdr::properties::CircleProperties>(*this);
 }
 
 

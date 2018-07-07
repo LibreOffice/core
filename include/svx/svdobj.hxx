@@ -949,7 +949,7 @@ protected:
 
     virtual ~SdrObject() override;
 
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties();
 
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact();
 

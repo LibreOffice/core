@@ -185,9 +185,9 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
 // BaseProperties section
 
-sdr::properties::BaseProperties* SdrMeasureObj::CreateObjectSpecificProperties()
+std::unique_ptr<sdr::properties::BaseProperties> SdrMeasureObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::MeasureProperties(*this);
+    return o3tl::make_unique<sdr::properties::MeasureProperties>(*this);
 }
 
 
