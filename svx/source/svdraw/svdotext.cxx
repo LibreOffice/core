@@ -1697,9 +1697,8 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // build and set BaseRect (use scale)
-    Point aPoint = Point();
     Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
-    tools::Rectangle aBaseRect(aPoint, aSize);
+    tools::Rectangle aBaseRect(Point(), aSize);
     SetSnapRect(aBaseRect);
 
     // flip?

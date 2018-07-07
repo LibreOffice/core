@@ -560,9 +560,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     pSheet->SetHelpId( OUString(), HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
 
-    Color    aNullCol(COL_BLACK);
-
-    XHatch    aNullHatch(aNullCol);
+    XHatch    aNullHatch(COL_BLACK);
 
     rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
     rISet.Put(XFillColorItem(OUString(), Color(0x00ccccff)));
