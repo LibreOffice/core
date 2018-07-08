@@ -108,6 +108,15 @@ $(eval $(call gb_Library_use_externals,sd,\
 	icu_headers \
 ))
 
+ifneq ($(DBUS_HAVE_GLIB),)
+$(eval $(call gb_Library_add_defs,sd,\
+	$(DBUS_GLIB_CFLAGS) \
+))
+$(eval $(call gb_Library_add_libs,sd,\
+	$(DBUS_GLIB_LIBS) \
+))
+endif
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,sd,\
 	uuid \
@@ -172,7 +181,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/accessibility/AccessibleSlideSorterView \
 	sd/source/ui/accessibility/AccessibleViewForwarder \
 	sd/source/ui/accessibility/SdShapeTypes \
-    sd/source/ui/animations/CategoryListBox \
+	sd/source/ui/animations/CategoryListBox \
 	sd/source/ui/animations/CustomAnimationBox \
 	sd/source/ui/animations/CustomAnimationDialog \
 	sd/source/ui/animations/CustomAnimationList \

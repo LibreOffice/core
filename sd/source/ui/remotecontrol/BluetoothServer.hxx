@@ -15,7 +15,7 @@
 
 #include <config_dbus.h>
 
-#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && ENABLE_DBUS
+#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && ENABLE_DBUS && DBUS_HAVE_GLIB
 #  define LINUX_BLUETOOTH
 #endif
 

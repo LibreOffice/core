@@ -2676,7 +2676,7 @@ define gb_LinkTarget__use_cups
 
 endef
 
-endif # ENABLE_DBUS
+endif # ENABLE_CUPS
 
 ifeq ($(ENABLE_DBUS),TRUE)
 
