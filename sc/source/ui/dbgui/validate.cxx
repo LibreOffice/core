@@ -767,7 +767,7 @@ ScTPValidationError::ScTPValidationError( vcl::Window*           pParent,
     get(m_pTsbShow,"tsbshow");
     get(m_pLbAction,"actionCB");
     get(m_pBtnSearch,"browseBtn");
-    get(m_pEdtTitle,"title");
+    get(m_pEdtTitle,"erroralert_title");
     get(m_pFtError,"errormsg_label");
     get(m_pEdError,"errorMsg");
     m_pEdError->set_height_request(m_pEdError->GetTextHeight() * 12);
