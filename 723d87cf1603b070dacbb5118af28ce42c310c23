@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_dd4b1cae",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T15:49:45Z",
+      "side": 1,
+      "message": "used_IDs can be passed as reference.\n\nAlso please follow the naming convention of the surrounding code. E.g. for the reference Version rUsedIDs.",
+      "revId": "723d87cf1603b070dacbb5118af28ce42c310c23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_bdc61816",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T15:49:45Z",
+      "side": 1,
+      "message": "Same naming here. aTemporaryID",
+      "revId": "723d87cf1603b070dacbb5118af28ce42c310c23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_9dcb541d",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T15:49:45Z",
+      "side": 1,
+      "message": "aUsedIDs",
+      "revId": "723d87cf1603b070dacbb5118af28ce42c310c23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
