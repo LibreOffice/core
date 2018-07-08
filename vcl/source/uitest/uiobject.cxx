@@ -421,8 +421,15 @@ void addChildren(vcl::Window const * pParent, std::set<OUString>& rChildren)
 
 std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
 {
-    vcl::Window* pDialogParent = get_top_parent(mxWindow.get());
-    vcl::Window* pWindow = findChild(pDialogParent, rID);
+    // in a first step try the real children before moving to the top level parent
+    // This makes it easier to handle cases with the same ID as there is a way
+    // to resolve conflicts
+    vcl::Window* pWindow = findChild(mxWindow.get(), rID);
+    if (!pWindow)
+    {
+        vcl::Window* pDialogParent = get_top_parent(mxWindow.get());
+        pWindow = findChild(pDialogParent, rID);
+    }
 
     if (!pWindow)
         throw css::uno::RuntimeException("Could not find child with id: " + rID);
