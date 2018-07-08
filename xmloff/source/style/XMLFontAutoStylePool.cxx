@@ -32,8 +32,12 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <XMLBase64Export.hxx>
+#include <xmloff/AutoStyleEntry.hxx>
 #include <comphelper/hash.hxx>
 
 using namespace ::com::sun::star;
@@ -290,6 +294,93 @@ OUString FontItalicToString(FontItalic eWeight)
 
 }
 
+std::unordered_set<OUString> XMLFontAutoStylePool::getUsedFontList()
+{
+    std::unordered_set<OUString> aReturnSet;
+
+    uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupp(GetExport().GetModel(), UNO_QUERY);
+    if (!xFamiliesSupp.is())
+        return aReturnSet;
+
+    // Check styles first
+    uno::Reference<container::XNameAccess> xFamilies(xFamiliesSupp->getStyleFamilies());
+    if (xFamilies.is())
+    {
+        for (OUString const & sFamilyName : xFamilies->getElementNames())
+        {
+            uno::Reference<container::XNameAccess> xStyleContainer;
+            xFamilies->getByName(sFamilyName) >>= xStyleContainer;
+
+            if (xStyleContainer.is())
+            {
+                for (OUString const & rName : xStyleContainer->getElementNames())
+                {
+                    uno::Reference<style::XStyle> xStyle;
+                    xStyleContainer->getByName(rName) >>= xStyle;
+                    if (xStyle->isInUse())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(xStyle, UNO_QUERY);
+                        if (xPropertySet.is())
+                        {
+                            uno::Reference<beans::XPropertySetInfo> xInfo(xPropertySet->getPropertySetInfo());
+                            if (m_bEmbedLatinScript && xInfo->hasPropertyByName("CharFontName"))
+                            {
+                                OUString sCharFontName;
+                                Any aFontAny = xPropertySet->getPropertyValue("CharFontName");
+                                aFontAny >>= sCharFontName;
+                                if (!sCharFontName.isEmpty())
+                                    aReturnSet.insert(sCharFontName);
+                            }
+                            if (m_bEmbedAsianScript && xInfo->hasPropertyByName("CharFontNameAsian"))
+                            {
+                                OUString sCharFontNameAsian;
+                                Any aFontAny = xPropertySet->getPropertyValue("CharFontNameAsian");
+                                aFontAny >>= sCharFontNameAsian;
+                                if (!sCharFontNameAsian.isEmpty())
+                                    aReturnSet.insert(sCharFontNameAsian);
+                            }
+                            if (m_bEmbedComplexScript && xInfo->hasPropertyByName("CharFontNameComplex"))
+                            {
+                                OUString sCharFontNameComplex;
+                                Any aFontAny = xPropertySet->getPropertyValue("CharFontNameComplex");
+                                aFontAny >>= sCharFontNameComplex;
+                                if (!sCharFontNameComplex.isEmpty())
+                                    aReturnSet.insert(sCharFontNameComplex);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // make sure auto-styles are collected
+    GetExport().GetTextParagraphExport()->collectTextAutoStylesOptimized(false);
+
+    // Check auto-styles for fonts
+    std::vector<xmloff::AutoStyleEntry> aAutoStyleEntries;
+    aAutoStyleEntries = GetExport().GetAutoStylePool()->GetAutoStyleEntries();
+    for (auto const & rAutoStyleEntry : aAutoStyleEntries)
+    {
+        for (auto const & rPair : rAutoStyleEntry.m_aXmlProperties)
+        {
+            if (rPair.first == "font-name" ||
+                rPair.first == "font-weight-asian" ||
+                rPair.first == "font-weight-complex")
+            {
+                if (rPair.second.has<OUString>())
+                {
+                    OUString sFontName = rPair.second.get<OUString>();
+                    if (!sFontName.isEmpty())
+                        aReturnSet.insert(sFontName);
+                }
+            }
+        }
+    }
+
+    return aReturnSet;
+}
+
 void XMLFontAutoStylePool::exportXML()
 {
     SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
@@ -305,6 +396,10 @@ void XMLFontAutoStylePool::exportXML()
 
     std::map<OUString, OUString> fontFilesMap; // our url to document url
     sal_uInt32 nCount = m_pFontAutoStylePool->size();
+
+    std::unordered_set<OUString> aUsedFontNames;
+    if (m_bEmbedUsedOnly)
+        aUsedFontNames = getUsedFontList();
 
     for (sal_uInt32 i = 0; i < nCount; i++)
     {
@@ -369,20 +464,25 @@ void XMLFontAutoStylePool::exportXML()
                 if (sFileUrl.isEmpty())
                     continue;
 
-                if (!fontFilesMap.count(sFileUrl))
+                // When embeded only is not set or font is used
+                if (!m_bEmbedUsedOnly ||
+                    aUsedFontNames.find(pEntry->GetFamilyName()) != aUsedFontNames.end())
                 {
-                    const OUString docUrl = bExportFlat ?
-                                                lcl_checkFontFile(sFileUrl) : embedFontFile(sFileUrl, pEntry->GetFamilyName());
-                    if (!docUrl.isEmpty())
-                        fontFilesMap[sFileUrl] = docUrl;
-                    else
-                        continue; // --> failed to embed
+                    if (!fontFilesMap.count(sFileUrl))
+                    {
+                        const OUString docUrl = bExportFlat ?
+                                                    lcl_checkFontFile(sFileUrl) : embedFontFile(sFileUrl, pEntry->GetFamilyName());
+                        if (!docUrl.isEmpty())
+                            fontFilesMap[sFileUrl] = docUrl;
+                        else
+                            continue; // --> failed to embed
+                    }
+                    EmbeddedFontInfo aEmbeddedFont;
+                    aEmbeddedFont.aURL = sFileUrl;
+                    aEmbeddedFont.eWeight = aCombinationPair.first;
+                    aEmbeddedFont.eItalic = aCombinationPair.second;
+                    aEmbeddedFonts.push_back(aEmbeddedFont);
                 }
-                EmbeddedFontInfo aEmbeddedFont;
-                aEmbeddedFont.aURL = sFileUrl;
-                aEmbeddedFont.eWeight = aCombinationPair.first;
-                aEmbeddedFont.eItalic = aCombinationPair.second;
-                aEmbeddedFonts.push_back(aEmbeddedFont);
             }
             if (!aEmbeddedFonts.empty())
             {

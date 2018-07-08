@@ -1173,6 +1173,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     bOpenRuby( false ),
     mpTextListsHelper( nullptr ),
     maTextListsHelperStack(),
+    mbCollected(false),
     // Implement Title/Description Elements UI (#i73249#)
     sTitle("Title"),
     sDescription("Description"),
@@ -1432,6 +1433,9 @@ void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
 {
     GetExport().GetShapeExport(); // make sure the graphics styles family is added
 
+    if (mbCollected)
+        return;
+
     const bool bAutoStyles = true;
     const bool bExportContent = false;
 
@@ -1630,6 +1634,7 @@ void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             }
         }
     }
+    mbCollected = true;
 }
 
 void XMLTextParagraphExport::exportText(
