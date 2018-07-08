@@ -186,14 +186,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="copygraphic">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="readonlymenu|copygraphic">Copy _Image</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="menuitem6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

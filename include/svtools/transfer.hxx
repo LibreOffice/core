@@ -487,9 +487,6 @@ public:
                         virtual ~TransferDataContainer() override;
 
     void                CopyINetBookmark( const INetBookmark& rBkmk );
-    void                CopyINetImage( const INetImage& rINtImg );
-    void                CopyImageMap( const ImageMap& rImgMap );
-    void                CopyGraphic( const Graphic& rGrf );
     void                CopyString( const OUString& rStr );
     void                CopyString( SotClipboardFormatId nFmt, const OUString& rStr );
     void                CopyAny( SotClipboardFormatId nFmt, const css::uno::Any& rAny );

@@ -102,7 +102,6 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     , m_nReadonlyBackgroundTogallerylink(m_xMenu->GetItemId("backaslink"))
     , m_nReadonlyBackgroundTogallerycopy(m_xMenu->GetItemId("backascopy"))
     , m_nReadonlyCopylink(m_xMenu->GetItemId("copylink"))
-    , m_nReadonlyCopyGraphic(m_xMenu->GetItemId("copygraphic"))
     , m_nReadonlyLoadGraphic(m_xMenu->GetItemId("loadgraphic"))
     , m_nReadonlyGraphicoff(m_xMenu->GetItemId("imagesoff"))
     , m_nReadonlyFullscreen(m_xMenu->GetItemId("fullscreen"))
@@ -133,7 +132,6 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     if ( nullptr == (pGrf = rSh.GetGrfAtPos( m_rDocPos, m_sGrfName, bLink )) )
     {
         m_xMenu->EnableItem(m_nReadonlySaveGraphic, false);
-        m_xMenu->EnableItem(m_nReadonlyCopyGraphic, false);
     }
     else
     {
@@ -317,16 +315,6 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
     {
         pClipCntnr = new TransferDataContainer;
         pClipCntnr->CopyString( m_sURL );
-    }
-    else if (nId == m_nReadonlyCopyGraphic)
-    {
-        pClipCntnr = new TransferDataContainer;
-        pClipCntnr->CopyGraphic( m_aGraphic );
-
-        if( m_pImageMap )
-            pClipCntnr->CopyImageMap( *m_pImageMap );
-        if( m_pTargetURL )
-            pClipCntnr->CopyINetImage( *m_pTargetURL );
     }
     else if (nId == m_nReadonlyLoadGraphic)
     {

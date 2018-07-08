@@ -427,51 +427,6 @@ void TransferDataContainer::CopyByteString( SotClipboardFormatId nFormatId,
 }
 
 
-void TransferDataContainer::CopyINetImage( const INetImage& rINtImg )
-{
-    SvMemoryStream aMemStm( 1024, 1024 );
-    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    rINtImg.Write( aMemStm, SotClipboardFormatId::INET_IMAGE );
-    CopyAnyData( SotClipboardFormatId::INET_IMAGE, static_cast<sal_Char const *>(aMemStm.GetData()),
-                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
-}
-
-
-void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
-{
-    SvMemoryStream aMemStm( 8192, 8192 );
-    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    rImgMap.Write( aMemStm );
-    CopyAnyData( SotClipboardFormatId::SVIM, static_cast<sal_Char const *>(aMemStm.GetData()),
-                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
-}
-
-
-void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
-{
-    GraphicType nType = rGrf.GetType();
-    if( GraphicType::NONE == nType )
-        return;
-
-    if( !pImpl->pGrf )
-        pImpl->pGrf.reset( new Graphic( rGrf ) );
-    else
-        *pImpl->pGrf = rGrf;
-
-    AddFormat( SotClipboardFormatId::SVXB );
-
-    if( GraphicType::Bitmap == nType )
-    {
-        AddFormat( SotClipboardFormatId::PNG );
-        AddFormat( SotClipboardFormatId::BITMAP );
-    }
-    else if( GraphicType::GdiMetafile == nType )
-    {
-        AddFormat( SotClipboardFormatId::GDIMETAFILE );
-    }
-}
-
-
 void TransferDataContainer::CopyString( SotClipboardFormatId nFmt, const OUString& rStr )
 {
     if( !rStr.isEmpty() )
