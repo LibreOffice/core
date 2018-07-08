@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_9df4745d",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T17:14:54Z",
+      "side": 1,
+      "message": "Actually, why are you not using a std::set? That would allow you O(log(n)) lookup instead of O(n) look-up.",
+      "revId": "96a12cf1f9bf32f004dba1c0e0a6ff13f24ec229",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
