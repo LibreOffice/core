@@ -24,6 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmlprmap.hxx>
+#include <xmloff/AutoStyleEntry.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
 
@@ -116,6 +117,8 @@ public:
     void exportXML( sal_Int32 nFamily ) const;
 
     void ClearEntries();
+
+    std::vector<xmloff::AutoStyleEntry> GetAutoStyleEntries() const;
 };
 
 #endif // INCLUDED_XMLOFF_XMLAUSTP_HXX

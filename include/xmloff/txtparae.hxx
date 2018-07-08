@@ -111,6 +111,8 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< std::unique_ptr<XMLTextListsHelper> > maTextListsHelperStack;
 
+    bool mbCollected;
+
     enum class FrameType { Text, Graphic, Embedded, Shape };
 public:
 

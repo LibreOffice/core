@@ -26,6 +26,7 @@
 #include <tools/fontenum.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <set>
+#include <unordered_set>
 #include <unordered_map>
 #include <memory>
 
@@ -44,6 +45,8 @@ private:
 
     OUString embedFontFile(OUString const & rFileUrl, OUString const & rFamilyName);
 
+    std::unordered_set<OUString> getUsedFontList();
+
 protected:
     bool m_bEmbedUsedOnly;
     bool m_bEmbedLatinScript;
@@ -53,7 +56,6 @@ protected:
     SvXMLExport& GetExport() { return rExport; }
 
 public:
-
     XMLFontAutoStylePool( SvXMLExport& rExport, bool tryToEmbedFonts = false );
     virtual ~XMLFontAutoStylePool() override;
 
