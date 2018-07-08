@@ -39,6 +39,7 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>

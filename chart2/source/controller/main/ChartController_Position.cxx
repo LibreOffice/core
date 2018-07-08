@@ -30,6 +30,7 @@
 #include <CommonConverters.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 
+#include <sal/log.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
 #include <svl/aeitem.hxx>

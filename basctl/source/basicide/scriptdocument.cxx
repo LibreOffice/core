@@ -57,6 +57,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <rtl/uri.hxx>
 #include <set>

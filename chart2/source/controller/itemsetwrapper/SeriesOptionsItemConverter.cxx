@@ -37,6 +37,7 @@
 #include <svl/ilstitem.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <functional>
 #include <algorithm>

@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
+#include <sal/log.hxx>
 #include <errobject.hxx>
 #include <memory>
 #include <unordered_map>

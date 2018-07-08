@@ -29,6 +29,7 @@
 
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 // AppData-Structure for SBX:
 

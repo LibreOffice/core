@@ -32,6 +32,7 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

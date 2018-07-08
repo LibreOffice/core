@@ -59,6 +59,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <algorithm>
 

@@ -49,6 +49,7 @@
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

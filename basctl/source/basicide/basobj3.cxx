@@ -34,6 +34,7 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sal/log.hxx>
 
 namespace basctl
 {

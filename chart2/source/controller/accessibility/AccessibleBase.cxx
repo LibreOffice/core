@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>

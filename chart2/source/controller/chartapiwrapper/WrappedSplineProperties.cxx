@@ -22,6 +22,8 @@
 #include <DiagramHelper.hxx>
 #include <unonames.hxx>
 
+#include <sal/log.hxx>
+
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

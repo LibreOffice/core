@@ -25,6 +25,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 namespace chart
 {

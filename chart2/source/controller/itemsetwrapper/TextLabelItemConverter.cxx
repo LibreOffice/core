@@ -27,6 +27,7 @@
 #include "SchWhichPairs.hxx"
 #include <unonames.hxx>
 
+#include <sal/log.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svl/ilstitem.hxx>

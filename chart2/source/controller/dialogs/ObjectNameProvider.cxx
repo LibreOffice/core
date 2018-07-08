@@ -32,6 +32,7 @@
 #include <RegressionCurveHelper.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

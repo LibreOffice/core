@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>

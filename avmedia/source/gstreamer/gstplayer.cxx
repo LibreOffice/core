@@ -31,6 +31,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
+#include <sal/log.hxx>
 #include <rtl/string.hxx>
 #include <salhelper/thread.hxx>
 #include <vcl/svapp.hxx>

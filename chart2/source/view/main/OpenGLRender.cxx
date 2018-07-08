@@ -33,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 

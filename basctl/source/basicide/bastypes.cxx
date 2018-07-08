@@ -27,6 +27,7 @@
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 #include <svl/intitem.hxx>

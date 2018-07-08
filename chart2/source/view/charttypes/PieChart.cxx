@@ -32,6 +32,7 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 

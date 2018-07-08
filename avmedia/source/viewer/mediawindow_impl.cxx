@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>

@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>

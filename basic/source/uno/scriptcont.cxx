@@ -40,6 +40,7 @@
 #include <osl/thread.h>
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 // For password functionality
 #include <tools/urlobj.hxx>

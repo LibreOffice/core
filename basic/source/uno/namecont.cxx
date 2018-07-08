@@ -34,6 +34,7 @@
 #include <vcl/errinf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>

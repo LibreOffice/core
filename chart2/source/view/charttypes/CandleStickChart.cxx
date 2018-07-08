@@ -30,6 +30,7 @@
 #include <DateHelper.hxx>
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
+#include <sal/log.hxx>
 
 namespace chart
 {

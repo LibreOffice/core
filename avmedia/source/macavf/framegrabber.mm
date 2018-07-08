@@ -20,6 +20,7 @@
 #include "framegrabber.hxx"
 #include "player.hxx"
 
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>

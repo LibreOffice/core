@@ -42,6 +42,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
