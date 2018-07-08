@@ -33,6 +33,7 @@
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
+#include <xmloff/AutoStyleEntry.hxx>
 
 class SvXMLAutoStylePoolP;
 class XMLAutoStylePoolParent;
@@ -174,6 +175,8 @@ public:
         const SvXMLAutoStylePoolP *pAntiImpl) const;
 
     void ClearEntries();
+
+    std::vector<xmloff::AutoStyleEntry> GetAutoStyleEntries() const;
 };
 
 #endif

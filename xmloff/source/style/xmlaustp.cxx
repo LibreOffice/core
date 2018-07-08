@@ -382,4 +382,9 @@ void SvXMLAutoStylePoolP::ClearEntries()
     pImpl->ClearEntries();
 }
 
+std::vector<xmloff::AutoStyleEntry> SvXMLAutoStylePoolP::GetAutoStyleEntries() const
+{
+    return pImpl->GetAutoStyleEntries();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
