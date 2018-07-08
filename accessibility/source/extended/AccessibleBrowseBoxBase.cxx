@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 
 using ::com::sun::star::uno::Reference;

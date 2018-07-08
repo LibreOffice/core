@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <vector>
 #include <algorithm>

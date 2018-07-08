@@ -56,6 +56,7 @@
 
 #include <memory>
 
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 

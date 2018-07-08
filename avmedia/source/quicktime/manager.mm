@@ -21,6 +21,7 @@
 #include "player.hxx"
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

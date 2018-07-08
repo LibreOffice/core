@@ -36,6 +36,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <BaseGFXHelper.hxx>
 #include <basegfx/point/b2dpoint.hxx>

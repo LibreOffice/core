@@ -46,6 +46,7 @@
 #include <rtl/digest.h>
 #include <rtl/random.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <ucbhelper/content.hxx>

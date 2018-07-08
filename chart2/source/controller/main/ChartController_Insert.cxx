@@ -57,6 +57,7 @@
 #include <svx/ActionDescriptionProvider.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

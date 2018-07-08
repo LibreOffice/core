@@ -18,6 +18,7 @@
  */
 
 #include <sbxitem.hxx>
+#include <sal/log.hxx>
 
 namespace basctl
 {

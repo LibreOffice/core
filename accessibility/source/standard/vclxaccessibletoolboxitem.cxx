@@ -42,6 +42,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <strings.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 

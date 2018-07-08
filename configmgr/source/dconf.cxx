@@ -25,6 +25,7 @@ extern "C" {
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include "data.hxx"
 #include "dconf.hxx"

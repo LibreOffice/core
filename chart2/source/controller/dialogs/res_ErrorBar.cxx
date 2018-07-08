@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <svl/stritem.hxx>

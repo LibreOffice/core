@@ -56,6 +56,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <vector>
 #include <algorithm>
 #include <string.h>

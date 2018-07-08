@@ -27,6 +27,7 @@
 #include "uno/mapping.hxx"
 #include "typelib/typedescription.hxx"
 #include "rtl/ustring.hxx"
+#include <sal/log.hxx>
 
 #include "cli_bridge.h"
 #include "cli_proxy.h"

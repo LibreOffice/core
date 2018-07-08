@@ -120,6 +120,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <osl/conditn.hxx>
 #include <o3tl/make_unique.hxx>

@@ -33,6 +33,7 @@
 #include <basic/sbmod.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>

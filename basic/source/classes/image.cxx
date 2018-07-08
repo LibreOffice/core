@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <basic/sbx.hxx>
 #include <sb.hxx>
 #include <string.h>

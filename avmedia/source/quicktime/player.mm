@@ -23,6 +23,8 @@
 #include "framegrabber.hxx"
 #include "window.hxx"
 
+#include <sal/log.hxx>
+
 using namespace ::com::sun::star;
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9

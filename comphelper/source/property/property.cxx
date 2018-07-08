@@ -21,6 +21,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
     #include <rtl/strbuf.hxx>

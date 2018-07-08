@@ -33,6 +33,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 namespace chart
 {

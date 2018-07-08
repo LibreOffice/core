@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <rtl/digest.h>
 #include <rtl/random.h>
 #include <string.h>

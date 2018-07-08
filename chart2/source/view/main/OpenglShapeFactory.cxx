@@ -47,6 +47,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/openglwin.hxx>
+#include <sal/log.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>

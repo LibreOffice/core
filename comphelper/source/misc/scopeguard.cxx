@@ -20,6 +20,7 @@
 
 #include <comphelper/flagguard.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 namespace comphelper {

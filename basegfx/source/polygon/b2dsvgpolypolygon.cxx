@@ -24,6 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <rtl/math.hxx>
 #include <stringconversiontools.hxx>
 
