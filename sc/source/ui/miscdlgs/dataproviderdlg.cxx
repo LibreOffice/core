@@ -222,9 +222,10 @@ MenuData aColumnData[] = {
     { 0, "Delete Column", &ScDataProviderDlg::deleteColumn },
     { 1, "Split Column", &ScDataProviderDlg::splitColumn },
     { 2, "Merge Columns", &ScDataProviderDlg::mergeColumns },
-    { 3, "Text Transformation", &ScDataProviderDlg::texttransformation },
+    { 3, "Text Transformations", &ScDataProviderDlg::texttransformation },
     { 4, "Sort Columns", &ScDataProviderDlg::sortTransformation },
-    { 5, "Aggregate Functions", &ScDataProviderDlg::aggregateFunction}
+    { 5, "Aggregate Functions", &ScDataProviderDlg::aggregateFunction},
+    { 6, "Number Transformations", &ScDataProviderDlg::numberTransformation }
 };
 
 class ScDataTransformationBaseControl : public VclContainer,
@@ -631,6 +632,102 @@ std::shared_ptr<sc::DataTransformation> ScAggregateFunction::getTransformation()
         return std::make_shared<sc::AggregateFunction>(ColNums,sc::AGGREGATE_FUNCTION::MAX);
 }
 
+class ScNumberTransformation : public ScDataTransformationBaseControl
+{
+private:
+    VclPtr<Edit> maColumnNums;
+    VclPtr<ListBox> maType;
+
+public:
+
+    ScNumberTransformation(vcl::Window* pParent);
+    ~ScNumberTransformation() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+
+};
+
+ScNumberTransformation::ScNumberTransformation(vcl::Window* pParent):
+    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/numbertransformationentry.ui")
+{
+    get(maColumnNums, "ed_columns");
+    get(maType, "ed_lst");
+
+    maType->InsertEntry("Round");
+    maType->InsertEntry("Round Up");
+    maType->InsertEntry("Round Down");
+    maType->InsertEntry("absolute Value");
+    maType->InsertEntry("Log with base e");
+    maType->InsertEntry("Log with base 10");
+    maType->InsertEntry("Cube");
+    maType->InsertEntry("Square");
+    maType->InsertEntry("Square Root");
+    maType->InsertEntry("Exponent");
+    maType->InsertEntry("Is Even");
+    maType->InsertEntry("Is Odd");
+    maType->InsertEntry("Sign");
+}
+
+ScNumberTransformation::~ScNumberTransformation()
+{
+    disposeOnce();
+}
+
+void ScNumberTransformation::dispose()
+{
+    maColumnNums.clear();
+    maType.clear();
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScNumberTransformation::getTransformation()
+{
+    OUString aColumnString = maColumnNums->GetText();
+    OUString aTypeString = maType->GetSelectedEntry();
+    std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
+    std::set<SCCOL> ColNums;
+    for (auto& rColStr : aSplitColumns)
+    {
+        sal_Int32 nCol = rColStr.toInt32();
+        if (nCol <= 0)
+            continue;
+
+        if (nCol > MAXCOL)
+            continue;
+
+        // translate from 1-based column notations to internal Calc one
+        ColNums.insert(nCol - 1);
+    }
+    if(aTypeString == "Sign")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::SIGN);
+    else if(aTypeString == "Round Up")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::ROUND);
+    else if(aTypeString == "Round Up")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::ROUND_UP);
+    else if(aTypeString == "Round Down")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN);
+    else if(aTypeString == "Absolute Value")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE);
+    else if(aTypeString == "Log with base e")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::LOG_E);
+    else if(aTypeString == "Log with base 10")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::LOG_10);
+    else if(aTypeString == "Cube")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::CUBE);
+    else if(aTypeString == "Square")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::SQUARE);
+    else if(aTypeString == "Square Root")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT);
+    else if(aTypeString == "Exponent")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::EXPONENT);
+    else if(aTypeString == "Is Even")
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::IS_EVEN);
+    else
+        return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::IS_ODD);
+}
+
 }
 
 ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument):
@@ -793,6 +890,12 @@ void ScDataProviderDlg::aggregateFunction()
 {
     VclPtr<ScAggregateFunction> pAggregateFuntionEntry = VclPtr<ScAggregateFunction>::Create(mpList);
     mpList->addEntry(pAggregateFuntionEntry);
+}
+
+void ScDataProviderDlg::numberTransformation()
+{
+    VclPtr<ScNumberTransformation> pNumberTransformationEntry = VclPtr<ScNumberTransformation>::Create(mpList);
+    mpList->addEntry(pNumberTransformationEntry);
 }
 
 void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)

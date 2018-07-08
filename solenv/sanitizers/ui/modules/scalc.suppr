@@ -109,6 +109,11 @@ sc/uiconfig/scalc/ui/aggregatefunctionentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGri
 sc/uiconfig/scalc/ui/aggregatefunctionentry.ui://GtkComboBox[@id='ed_lst'] no-labelled-by
 sc/uiconfig/scalc/ui/aggregatefunctionentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/aggregatefunctionentry.ui://GtkEntry[@id='ed_columns'] no-labelled-by
+sc/uiconfig/scalc/ui/numbertransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label
+sc/uiconfig/scalc/ui/numbertransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
+sc/uiconfig/scalc/ui/numbertransformationentry.ui://GtkComboBox[@id='ed_lst'] no-labelled-by
+sc/uiconfig/scalc/ui/numbertransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
+sc/uiconfig/scalc/ui/numbertransformationentry.ui://GtkEntry[@id='ed_columns'] no-labelled-by
 sc/uiconfig/scalc/ui/sorttransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/sorttransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/sorttransformationentry.ui://GtkCheckButton[@id='ed_ascending'] no-labelled-by

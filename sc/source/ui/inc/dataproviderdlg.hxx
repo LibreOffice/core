@@ -64,6 +64,7 @@ public:
     void texttransformation();
     void sortTransformation();
     void aggregateFunction();
+    void numberTransformation();
 
     void import(ScDocument* pDoc, bool bInternal = false);
 };
