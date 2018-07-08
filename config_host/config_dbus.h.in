@@ -11,6 +11,7 @@
 #define INCLUDED_CONFIG_DBUS_H
 
 #define ENABLE_DBUS 0
+#define DBUS_HAVE_GLIB 0
 
 #endif
 

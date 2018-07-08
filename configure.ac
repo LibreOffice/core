@@ -10132,6 +10132,9 @@ dnl ===================================================================
 ENABLE_DBUS=""
 DBUS_CFLAGS=""
 DBUS_LIBS=""
+DBUS_GLIB_CFLAGS=""
+DBUS_GLIB_LIBS=""
+DBUS_HAVE_GLIB=""
 
 if test "$enable_dbus" = "no"; then
     test_dbus=no
@@ -10141,11 +10144,21 @@ AC_MSG_CHECKING([whether to enable DBUS support])
 if test "$test_dbus" = "yes"; then
     ENABLE_DBUS="TRUE"
     AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.70)
+    PKG_CHECK_MODULES(DBUS, dbus-1 >= 0.60)
     AC_DEFINE(ENABLE_DBUS)
     DBUS_CFLAGS=$(printf '%s' "$DBUS_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${DBUS_LIBS}"
     DBUS_LIBS="${filteredlibs}"
+
+    # Glib is needed for BluetoothServer
+    # Sets also DBUS_GLIB_CFLAGS/DBUS_GLIB_LIBS if successful.
+    PKG_CHECK_MODULES(DBUS_GLIB,[glib-2.0 >= 2.4],
+        [
+            DBUS_HAVE_GLIB="TRUE"
+            AC_DEFINE(DBUS_HAVE_GLIB,1)
+        ],
+        AC_MSG_WARN([[No Glib found, Bluetooth support will be disabled]])
+    )
 else
     AC_MSG_RESULT([no])
 fi
@@ -10153,6 +10166,9 @@ fi
 AC_SUBST(ENABLE_DBUS)
 AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
+AC_SUBST(DBUS_GLIB_CFLAGS)
+AC_SUBST(DBUS_GLIB_LIBS)
+AC_SUBST(DBUS_HAVE_GLIB)
 
 AC_MSG_CHECKING([whether to enable Impress remote control])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
@@ -10177,7 +10193,7 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
 
     if test "$enable_sdremote_bluetooth" != "no"; then
         if test "$OS" = "LINUX"; then
-            if test "$ENABLE_DBUS" = "TRUE"; then
+            if test "$ENABLE_DBUS" = "TRUE" -a "$DBUS_HAVE_GLIB" = "TRUE"; then
                 AC_MSG_RESULT([yes])
                 ENABLE_SDREMOTE_BLUETOOTH=TRUE
                 dnl ===================================================================
