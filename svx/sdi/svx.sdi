@@ -4261,7 +4261,7 @@ SfxVoidItem RotateLeft SID_ROTATE_GRAPHIC_LEFT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4277,7 +4277,7 @@ SfxVoidItem Rotate180 SID_ROTATE_GRAPHIC_180
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4293,7 +4293,7 @@ SfxVoidItem RotateRight SID_ROTATE_GRAPHIC_RIGHT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4310,7 +4310,7 @@ SfxVoidItem RotateReset SID_ROTATE_GRAPHIC_RESET
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4327,7 +4327,7 @@ SfxBoolItem Crop SID_OBJECT_CROP
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
