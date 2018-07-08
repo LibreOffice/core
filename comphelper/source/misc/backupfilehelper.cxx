@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 #include <comphelper/backupfilehelper.hxx>
 #include <rtl/crc.h>
 #include <algorithm>

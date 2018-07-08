@@ -27,6 +27,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <sal/log.hxx>
 
 namespace chart
 {

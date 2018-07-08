@@ -19,6 +19,7 @@
 #include <CommonConverters.hxx>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>

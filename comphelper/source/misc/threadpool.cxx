@@ -11,6 +11,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/string.hxx>
 #include <salhelper/thread.hxx>

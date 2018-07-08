@@ -10,6 +10,7 @@
 #include <3DChartObjects.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/opengl/GLMHelper.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>

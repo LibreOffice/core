@@ -67,6 +67,7 @@
 #include <com/sun/star/chart2/XTimeBased.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
+#include <sal/log.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/diagnose_ex.h>
 

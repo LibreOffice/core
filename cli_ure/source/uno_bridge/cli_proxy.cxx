@@ -19,6 +19,7 @@
 
 #include "typelib/typedescription.h"
 #include "rtl/ustrbuf.hxx"
+#include <sal/log.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "cli_proxy.h"
 #include "cli_base.h"

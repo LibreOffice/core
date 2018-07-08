@@ -77,6 +77,7 @@
 #include <rtl/math.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #define DRGPIX    2     // Drag MinMove in Pixel
 

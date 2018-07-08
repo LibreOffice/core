@@ -19,6 +19,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <sal/log.hxx>
 
 #include "vlccommon.hxx"
 #include "vlcmanager.hxx"

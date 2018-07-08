@@ -33,6 +33,7 @@
 #include "ShapeController.hxx"
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>

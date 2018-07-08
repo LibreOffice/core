@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/uno/Any.hxx>

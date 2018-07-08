@@ -46,6 +46,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 #include <svl/zforlist.hxx>
 
 #include <o3tl/make_unique.hxx>

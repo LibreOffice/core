@@ -18,6 +18,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 namespace chart {
 

@@ -69,6 +69,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 
+#include <sal/log.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

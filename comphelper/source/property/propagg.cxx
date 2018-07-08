@@ -22,6 +22,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #if OSL_DEBUG_LEVEL > 0

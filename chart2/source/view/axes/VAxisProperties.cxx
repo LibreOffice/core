@@ -29,6 +29,8 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
+#include <sal/log.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 

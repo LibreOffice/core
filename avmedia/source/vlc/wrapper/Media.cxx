@@ -13,6 +13,7 @@
 #include <wrapper/Instance.hxx>
 #include "Types.hxx"
 #include <wrapper/Common.hxx>
+#include <sal/log.hxx>
 
 struct libvlc_instance_t;
 

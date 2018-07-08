@@ -42,6 +42,7 @@
 #include <i18nlangtag/lang.h>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <runtime.hxx>
 #include <sbunoobj.hxx>

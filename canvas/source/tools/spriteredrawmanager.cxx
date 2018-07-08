@@ -25,6 +25,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <canvas/spriteredrawmanager.hxx>
 #include <boost/range/adaptor/reversed.hpp>

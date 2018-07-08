@@ -34,6 +34,7 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <sal/log.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/dinfdlg.hxx>

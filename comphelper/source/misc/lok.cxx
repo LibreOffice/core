@@ -10,6 +10,7 @@
 #include <comphelper/lok.hxx>
 
 #include <iostream>
+#include <sstream>
 
 namespace comphelper
 {

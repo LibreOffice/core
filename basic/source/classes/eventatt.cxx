@@ -40,6 +40,7 @@
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
 
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <sbunoobj.hxx>

@@ -24,6 +24,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 namespace chart
 {

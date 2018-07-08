@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <sal/log.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;

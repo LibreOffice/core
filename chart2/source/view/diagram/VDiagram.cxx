@@ -40,6 +40,7 @@
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 namespace chart
 {

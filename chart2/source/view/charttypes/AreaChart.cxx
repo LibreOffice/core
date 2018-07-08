@@ -38,6 +38,7 @@
 
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>

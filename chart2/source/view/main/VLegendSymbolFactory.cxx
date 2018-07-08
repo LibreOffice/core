@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
