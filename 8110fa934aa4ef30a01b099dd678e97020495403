@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_bd629815",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T20:17:34Z",
+      "side": 1,
+      "message": "Move this to the UI file as GTKComboBoxText. That allows these strings to be translated.",
+      "revId": "8110fa934aa4ef30a01b099dd678e97020495403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_7d6c1008",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T20:17:34Z",
+      "side": 1,
+      "message": "Better naming would be aColumns.",
+      "revId": "8110fa934aa4ef30a01b099dd678e97020495403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_9d67d426",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T20:17:34Z",
+      "side": 1,
+      "message": "Switch that if-else chain to position based testing with a switch-case approach.",
+      "revId": "8110fa934aa4ef30a01b099dd678e97020495403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
