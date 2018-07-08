@@ -937,6 +937,7 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("table"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("draw"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("fo"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("config"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:config:1.0"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xlink"), BAD_CAST("http://www.w3.org/1999/xlink"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("meta"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:meta:1.0"));
