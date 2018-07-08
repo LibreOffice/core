@@ -23,6 +23,8 @@ import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.WRONG_CONNECTION;
+
 /**
  * Implementation of IDocumentProvider for ownCloud servers.
  */
@@ -79,15 +81,20 @@ public class OwnCloudProvider implements IDocumentProvider,
 
     @Override
     public IFile createFromUri(Context context, URI uri) {
-        ReadRemoteFileOperation refreshOperation = new ReadRemoteFileOperation(
-                uri.getPath());
-        this.result = refreshOperation.execute(client);
-        if (!result.isSuccess()) {
-            throw buildRuntimeExceptionForResultCode(result.getCode());
+        if(serverUrl != "" || userName != "" || password != ""){
+            ReadRemoteFileOperation refreshOperation = new ReadRemoteFileOperation(
+                    uri.getPath());
+            this.result = refreshOperation.execute(client);
+            if (!result.isSuccess()) {
+                throw buildRuntimeExceptionForResultCode(result.getCode());
+            }
+            if (result.getData().size() > 0) {
+                return new OwnCloudFile(this, (RemoteFile) result.getData().get(0));
+            }
+        } else {
+            throw buildRuntimeExceptionForResultCode(WRONG_CONNECTION);
         }
-        if (result.getData().size() > 0) {
-            return new OwnCloudFile(this, (RemoteFile) result.getData().get(0));
-        }
+
         return null;
     }
 
