@@ -17,7 +17,6 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -63,7 +62,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xConfigManager, m_xModuleConfigManager;
     void addVerbs( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbs );
-    void fillToolbarData();
     virtual void SAL_CALL disposing() override;
 };
 
@@ -206,10 +204,7 @@ void ResourceMenuController::updatePopupMenu()
 
     // Now fill the menu with the configuration data.
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
-    if ( m_bToolbarContainer )
-        fillToolbarData();
-    else
-        framework::MenuBarManager::FillMenu( m_nNewMenuId, VCLXMenu::GetImplementation( m_xPopupMenu )->GetMenu(), m_aModuleName, m_xMenuContainer, xDispatchProvider );
+    framework::MenuBarManager::FillMenu( m_nNewMenuId, VCLXMenu::GetImplementation( m_xPopupMenu )->GetMenu(), m_aModuleName, m_xMenuContainer, xDispatchProvider );
 
     // For context menus, add object verbs.
     if ( m_bContextMenu )
@@ -254,60 +249,6 @@ void ResourceMenuController::addVerbs( const css::uno::Sequence< css::embed::Ver
         pVCLMenu->InsertItem( m_nNewMenuId, rVerb.VerbName );
         pVCLMenu->SetItemCommand( m_nNewMenuId, ".uno:ObjectMenue?VerbID:short=" + OUString::number( rVerb.VerbID ) );
         ++m_nNewMenuId;
-    }
-}
-
-void ResourceMenuController::fillToolbarData()
-{
-    VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( m_xPopupMenu );
-    Menu* pVCLMenu = pAwtMenu->GetMenu();
-
-    css::uno::Sequence< css::beans::PropertyValue > aPropSequence;
-    for ( sal_Int32 i = 0; i < m_xMenuContainer->getCount(); ++i )
-    {
-        try
-        {
-            if ( m_xMenuContainer->getByIndex( i ) >>= aPropSequence )
-            {
-                OUString aCommandURL;
-                OUString aLabel;
-                sal_uInt16 nType = css::ui::ItemType::DEFAULT;
-                bool bVisible = true;
-
-                for ( const auto& aProp: aPropSequence )
-                {
-                    if ( aProp.Name == "CommandURL" )
-                        aProp.Value >>= aCommandURL;
-                    else if ( aProp.Name == "Label" )
-                        aProp.Value >>= aLabel;
-                    else if ( aProp.Name == "Type" )
-                        aProp.Value >>= nType;
-                    else if ( aProp.Name == "IsVisible" )
-                        aProp.Value >>= bVisible;
-                }
-
-                switch ( nType )
-                {
-                case css::ui::ItemType::DEFAULT:
-                    if ( bVisible )
-                    {
-                        pVCLMenu->InsertItem( m_nNewMenuId, aLabel );
-                        pVCLMenu->SetItemCommand( m_nNewMenuId++, aCommandURL );
-                    }
-                    break;
-                case css::ui::ItemType::SEPARATOR_LINE:
-                case css::ui::ItemType::SEPARATOR_LINEBREAK:
-                    if ( bVisible && pVCLMenu->GetItemId( pVCLMenu->GetItemCount() - 1 ) != 0 )
-                        pVCLMenu->InsertSeparator();
-                    break;
-                default: ;
-                }
-            }
-        }
-        catch ( const css::uno::Exception& )
-        {
-            break;
-        }
     }
 }
 
