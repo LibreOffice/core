@@ -323,6 +323,7 @@ public:
     void testTdf113287();
     void testTdf113445();
     void testTdf113686();
+    void testFontEmbedding();
 #endif
     void testLinesInSectionInTable();
     void testParagraphOfTextRange();
@@ -520,6 +521,7 @@ public:
     CPPUNIT_TEST(testTdf113287);
     CPPUNIT_TEST(testTdf113445);
     CPPUNIT_TEST(testTdf113686);
+    CPPUNIT_TEST(testFontEmbedding);
 #endif
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testParagraphOfTextRange);
@@ -6333,6 +6335,143 @@ void SwUiWriterTest::testTdf51223()
     CPPUNIT_ASSERT_EQUAL(OUString("i"), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
 }
+
+void SwUiWriterTest::testFontEmbedding()
+{
+#if HAVE_MORE_FONTS
+    createDoc("testFontEmbedding.odt");
+
+    OString aContentBaseXpath("/office:document-content/office:font-face-decls");
+    OString aSettingsBaseXpath("/office:document-settings/office:settings/config:config-item-set");
+
+    xmlDocPtr pXmlDoc = nullptr;
+    uno::Sequence<beans::PropertyValue> aDescriptor;
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    // Get document settings
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProps(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
+
+    // Check font embedding state
+    CPPUNIT_ASSERT_EQUAL(false, xProps->getPropertyValue("EmbedFonts").get<bool>());
+    CPPUNIT_ASSERT_EQUAL(false, xProps->getPropertyValue("EmbedOnlyUsedFonts").get<bool>());
+    // Font scripts should be enabled by default, however this has no effect unless "EmbedOnlyUsedFonts" is enabled
+    CPPUNIT_ASSERT_EQUAL(true, xProps->getPropertyValue("EmbedLatinScriptFonts").get<bool>());
+    CPPUNIT_ASSERT_EQUAL(true, xProps->getPropertyValue("EmbedAsianScriptFonts").get<bool>());
+    CPPUNIT_ASSERT_EQUAL(true, xProps->getPropertyValue("EmbedComplexScriptFonts").get<bool>());
+
+    // CASE 1 - no font embedding enabled
+
+    // Save the document
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    CPPUNIT_ASSERT(aTempFile.IsValid());
+
+    // Check setting - No font enbedding should be enabled
+    pXmlDoc = parseExportInternal(aTempFile.GetURL(),"settings.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", "false");
+
+    // Check content - No font-face-src nodes should be present
+    pXmlDoc = parseExportInternal(aTempFile.GetURL(),"content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']/svg:font-face-src", 0);
+
+    // CASE 2 - font embedding enabled, but embed used fonts disabled
+
+    // Enable font embedding, diable embedding used font only
+    xProps->setPropertyValue("EmbedFonts", uno::makeAny(true));
+    xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::makeAny(false));
+
+    // Save the document again
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    CPPUNIT_ASSERT(aTempFile.IsValid());
+
+    // Check setting - font embedding should be enabled + embed only used fonts and scripts
+    pXmlDoc = parseExportInternal(aTempFile.GetURL(),"settings.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", "true");
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedOnlyUsedFonts']", "false");
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedLatinScriptFonts']", "true");
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedAsianScriptFonts']", "true");
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedComplexScriptFonts']", "true");
+
+    // Check content - font-face-src should be present only for "Liberation Sans" fonts
+
+    pXmlDoc = parseExportInternal(aTempFile.GetURL(),"content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']/svg:font-face-src", 1);
+
+    // CASE 3 - font embedding enabled, embed only used fonts enabled
+
+    // Enable font embedding and setting to embed used fonts only
+    xProps->setPropertyValue("EmbedFonts", uno::makeAny(true));
+    xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::makeAny(true));
+    xProps->setPropertyValue("EmbedLatinScriptFonts", uno::makeAny(true));
+    xProps->setPropertyValue("EmbedAsianScriptFonts", uno::makeAny(true));
+    xProps->setPropertyValue("EmbedComplexScriptFonts", uno::makeAny(true));
+
+    // Save the document again
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    CPPUNIT_ASSERT(aTempFile.IsValid());
+
+    // Check setting - font embedding should be enabled + embed only used fonts and scripts
+    pXmlDoc = parseExportInternal(aTempFile.GetURL(),"settings.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", "true");
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedOnlyUsedFonts']", "true");
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedLatinScriptFonts']", "true");
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedAsianScriptFonts']", "true");
+    assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedComplexScriptFonts']", "true");
+
+    // Check content - font-face-src should be present only for "Liberation Sans" fonts
+
+    pXmlDoc = parseExportInternal(aTempFile.GetURL(),"content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']");
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']/svg:font-face-src", 0);
+#endif
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
