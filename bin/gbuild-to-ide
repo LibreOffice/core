@@ -379,7 +379,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
         command += ' -c '
         command += file
         # Help clang when the tree is configured for gcc.
-        for gnu in ('-std=gnu++11', '-std=gnu++1y'):
+        for gnu in ('-std=gnu++11', '-std=gnu++1y', '-std=gnu++17'):
             command = command.replace(gnu, '-std=c++11')
         return command
 
