@@ -1277,7 +1277,7 @@ private:
     rtl_TextEncoding m_eHardCharSet;    // Hard rtl_TextEncoding-Attribute
     sal_uInt16 m_nProgress;           // percentage for Progressbar
     sal_uInt16 m_nCurrentColl;          // per WW-count
-    sal_uInt16 m_nFieldNum;             // serial nummer for that
+    sal_uInt16 m_nFieldNum;             // serial number for that
     sal_uInt16 m_nLFOPosition;
 
     short m_nCharFormat;             // per WW-count, <0 for none
