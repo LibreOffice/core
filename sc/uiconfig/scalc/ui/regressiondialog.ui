@@ -3,6 +3,12 @@
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="confidencelevel-adjustment">
+    <property name="upper">1</property>
+    <property name="value">0.94999999999999996</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">0.10000000000000001</property>
+  </object>
   <object class="GtkDialog" id="RegressionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -466,7 +472,8 @@
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="valign">center</property>
-                        <property name="text" translatable="yes" context="regressiondialog|confidencelevel-spin">0.95</property>
+                        <property name="text" context="regressiondialog|confidencelevel-spin">0,95</property>
+                        <property name="adjustment">confidencelevel-adjustment</property>
                         <property name="digits">2</property>
                         <property name="numeric">True</property>
                         <property name="value">0.94999999999999996</property>
