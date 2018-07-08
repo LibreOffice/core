@@ -203,7 +203,7 @@ private:
     long nStartX;   /* Start in x direction */
     long nEndX;     /* End in x direction */
     long nStartY;   /* Start in y direction */
-    long nEndY;     /* Ende in y direction */
+    long nEndY;     /* End in y direction */
     bool bLimits;   /* boundary limit control by the application */
 
 protected:

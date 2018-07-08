@@ -1676,5 +1676,5 @@ interface BaseText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";  // e.g. disable for read-only documents
     ]
 
-}  //ende interface text
+}  // end of interface text
 

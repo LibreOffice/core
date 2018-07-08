@@ -723,7 +723,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     sal_uInt16 nRul = m_rDoc.MakeNumRule( aName, nullptr, false,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
     m_xStyles->mpStyRule = m_rDoc.GetNumRuleTable()[nRul];
-    // Auto == false-> Nummerierungsvorlage
+    // Auto == false-> numbering template
     m_xStyles->mpStyRule->SetAutoRule(false);
 
     return m_xStyles->mpStyRule;

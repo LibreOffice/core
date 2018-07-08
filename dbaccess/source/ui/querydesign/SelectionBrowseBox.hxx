@@ -210,12 +210,11 @@ namespace dbaui
 
         OTableFieldDescRef          FindFirstFreeCol(sal_uInt16& _rColumnPosition);
 
-            // rCol contains the Nummer (in pOTableFieldDescList) of the first column, which itself tells it is empty
+            // rCol contains the number (in pOTableFieldDescList) of the first column, which itself tells it is empty
             // if there are none, rCol is undefined and the returnvalue NULL
         void                        CheckFreeColumns(sal_uInt16& _rColumnPosition);
-
-            // check if empty columns are available, if not,  a new Packen is appended
-            // rCol contains the Nummer of the first empty column (in pOTableFieldDescList)
+            // checks if empty columns are available, if not, a new pack is appended
+            // rCol contains the number of the first empty column (in pOTableFieldDescList)
 
         void            RemoveField( sal_uInt16 nId );
         tools::Rectangle       GetInvalidRect( sal_uInt16 nColId );
