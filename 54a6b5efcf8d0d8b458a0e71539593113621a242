@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_1d73c4e9",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T20:20:51Z",
+      "side": 1,
+      "message": "Again please move them to the UI file.",
+      "revId": "54a6b5efcf8d0d8b458a0e71539593113621a242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_bd4bb885",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T20:20:51Z",
+      "side": 1,
+      "message": "Again variable naming.",
+      "revId": "54a6b5efcf8d0d8b458a0e71539593113621a242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_dd7c3cb7",
+        "filename": "sc/source/ui/miscdlgs/dataproviderdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T20:20:51Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "54a6b5efcf8d0d8b458a0e71539593113621a242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
