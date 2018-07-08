@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_ac4b8c85",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-08T20:33:14Z",
+      "side": 1,
+      "message": "Missing indentation.",
+      "revId": "fe40426389f14513b3b5f914e20a99a4a49014d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
