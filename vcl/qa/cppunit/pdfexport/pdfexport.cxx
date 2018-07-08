@@ -771,6 +771,14 @@ void PdfExportTest::testTdf108963()
     mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
     CPPUNIT_ASSERT(mpPdfPage);
 
+    // Test page size (28x15.75 cm, was 1/100th mm off, tdf#112690)
+    // bad: MediaBox[0 0 793.672440944882 446.428346456693]
+    // good: MediaBox[0 0 793.700787401575 446.456692913386]
+    const double aWidth = FPDF_GetPageWidth(mpPdfPage);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(793.7, aWidth, 0.01);
+    const double aHeight = FPDF_GetPageHeight(mpPdfPage);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(446.46, aHeight, 0.01);
+
     // Make sure there is a filled rectangle inside.
     int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
     int nYellowPathCount = 0;
@@ -794,35 +802,35 @@ void PdfExportTest::testTdf108963()
             float fY = 0;
             FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
             CPPUNIT_ASSERT_EQUAL(245395, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(244233, static_cast<int>(round(fY * 1000)));
+            CPPUNIT_ASSERT_EQUAL(244261, static_cast<int>(round(fY * 1000)));
             CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
 
             pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 1);
             CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
             FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
             CPPUNIT_ASSERT_EQUAL(275102, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(267590, static_cast<int>(round(fY * 1000)));
+            CPPUNIT_ASSERT_EQUAL(267618, static_cast<int>(round(fY * 1000)));
             CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
 
             pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 2);
             CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
             FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
             CPPUNIT_ASSERT_EQUAL(287518, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(251801, static_cast<int>(round(fY * 1000)));
+            CPPUNIT_ASSERT_EQUAL(251829, static_cast<int>(round(fY * 1000)));
             CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
 
             pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 3);
             CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
             FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
             CPPUNIT_ASSERT_EQUAL(257839, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(228444, static_cast<int>(round(fY * 1000)));
+            CPPUNIT_ASSERT_EQUAL(228472, static_cast<int>(round(fY * 1000)));
             CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
 
             pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 4);
             CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
             FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
             CPPUNIT_ASSERT_EQUAL(245395, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(244233, static_cast<int>(round(fY * 1000)));
+            CPPUNIT_ASSERT_EQUAL(244261, static_cast<int>(round(fY * 1000)));
             CPPUNIT_ASSERT(FPDFPathSegment_GetClose(pSegment));
         }
     }
