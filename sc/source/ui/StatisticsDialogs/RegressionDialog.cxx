@@ -513,7 +513,7 @@ void ScRegressionDialog::WriteRegressionANOVAResults(AddressWalkerWriter& rOutpu
     rOutput.newLine();
     rOutput.writeString(ScResId(STR_LABEL_CONFIDENCE_LEVEL));
     rOutput.nextColumn();
-    rOutput.writeString(OUString::number(mpConfidenceLevelField->GetValue() / 100.0));
+    rOutput.writeValue(mpConfidenceLevelField->GetValue() / 100.0);
     rTemplate.autoReplaceAddress("%CONFIDENCE_LEVEL_ADDR%", rOutput.current());
     rOutput.newLine();
 }
