@@ -1625,7 +1625,7 @@ void OSelectionBrowseBox::CheckFreeColumns(sal_uInt16& _rColumnPosition)
 {
     if (FindFirstFreeCol(_rColumnPosition) == nullptr)
     {
-        // it is full, append a Packen column
+        // it is full, so append a pack of columns
         AppendNewCol(DEFAULT_QUERY_COLS);
         OSL_VERIFY(FindFirstFreeCol(_rColumnPosition).is());
     }
