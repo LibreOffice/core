@@ -52,7 +52,6 @@ class SwReadOnlyPopup
     sal_uInt16 m_nReadonlyBackgroundTogallerylink;
     sal_uInt16 m_nReadonlyBackgroundTogallerycopy;
     sal_uInt16 m_nReadonlyCopylink;
-    sal_uInt16 m_nReadonlyCopyGraphic;
     sal_uInt16 m_nReadonlyLoadGraphic;
     sal_uInt16 m_nReadonlyGraphicoff;
     sal_uInt16 m_nReadonlyFullscreen;
