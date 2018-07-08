@@ -130,13 +130,13 @@ class SC_DLLPUBLIC AggregateFunction : public DataTransformation
 
 class SC_DLLPUBLIC NumberTransformation : public DataTransformation
 {
-    SCCOL mnCol;
+    std::set<SCCOL> mnCol;
     NUMBER_TRANSFORM_TYPE maType;
     int maPrecision;
 
     public:
-    NumberTransformation(SCCOL nCol, const NUMBER_TRANSFORM_TYPE rType);
-    NumberTransformation(SCCOL nCol, const NUMBER_TRANSFORM_TYPE rType, int nPrecision);
+    NumberTransformation(const std::set<SCCOL> nCol, const NUMBER_TRANSFORM_TYPE rType);
+    NumberTransformation(const std::set<SCCOL> nCol, const NUMBER_TRANSFORM_TYPE rType, int nPrecision);
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
 };
