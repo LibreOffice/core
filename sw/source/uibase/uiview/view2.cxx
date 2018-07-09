@@ -2108,7 +2108,8 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
     else
     {
         m_pViewImpl->StartDocumentInserter(
-            pDocSh->GetFactory().GetFactoryName(),
+            // tdf#118578 allow inserting any Writer document except GlobalDoc
+            SwDocShell::Factory().GetFactoryName(),
             LINK( this, SwView, DialogClosedHdl ),
             nSlotId
         );
