@@ -24,6 +24,8 @@
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
 #include <rcid.hrc>
+#include <poolfmt.hrc>
+#include <swtypes.hxx>
 
 #ifdef _NEED_TO_DEBUG_MAPPING
 #include <stdlib.h>
@@ -604,6 +606,9 @@ void SwStyleNameMapper::FillProgName(
         // If we aren't trying to disambiguate, then just do a normal fill
         fillNameFromId(nId, rFillName, true);
     }
+
+    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == SwResId(STR_POOLCOLL_STANDARD))
+        rFillName = "Standard";
 }
 
 // Get the UI name from the programmatic name in rName and put it into rFillName
@@ -611,11 +616,15 @@ void SwStyleNameMapper::FillUIName(
         const OUString& rName, OUString& rFillName,
         SwGetPoolIdFromName const eFlags, bool const bDisambiguate)
 {
-    sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
+    OUString aName = rName;
+    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == "Standard")
+        aName = SwResId(STR_POOLCOLL_STANDARD);
+
+    sal_uInt16 nId = GetPoolIdFromProgName ( aName, eFlags );
     if ( bDisambiguate && nId == USHRT_MAX )
     {
-        rFillName = rName;
-        // rName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
+        rFillName = aName;
+        // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
         lcl_CheckSuffixAndDelete ( rFillName );
     }
     else
