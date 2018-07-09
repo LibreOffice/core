@@ -777,7 +777,14 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_INSERT_FIELD_TITLE:
             case SID_INSERT_FIELD_DATE_VAR:
             break;
+            case SID_CAPS_LOCK_STATUS:
+            {
+                vcl::Window* pFrameWin = pViewData->GetActiveWin();
+                if(pFrameWin && pFrameWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK)
+                    rSet.Put(SfxBoolItem ( SID_CAPS_LOCK_STATUS, true ) );
 
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }

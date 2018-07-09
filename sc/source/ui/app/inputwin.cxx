@@ -1113,7 +1113,11 @@ void ScTextWnd::StartEditEngine()
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
+
+    {
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+        pViewFrm->GetBindings().Invalidate( SID_CAPS_LOCK_STATUS );
+    }
 }
 
 static void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
@@ -1582,7 +1586,10 @@ void ScTextWnd::StopEditEngine( bool bAll )
 
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
         if (pViewFrm)
+        {
             pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+            pViewFrm->GetBindings().Invalidate( SID_CAPS_LOCK_STATUS );
+        }
 
         if (bSelection)
             Invalidate(); // So that the Selection is not left there

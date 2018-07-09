@@ -3463,6 +3463,12 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     if (pViewFrm)
                         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
                 }
+                if ( KEY_CAPSLOCK == nCode )
+                {
+                  SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                    if (pViewFrm)
+                        pViewFrm->GetBindings().Invalidate( SID_CAPS_LOCK_STATUS );
+                }
                 if( bUsed && bFormulaMode && ( bCursorKey || bInsKey || nCode == KEY_DELETE || nCode == KEY_BACKSPACE ) )
                 {
                     ShowTipCursor();

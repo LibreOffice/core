@@ -594,6 +594,11 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             aZoomItem.AddSnappingPoint(100);
             rSet.Put( aZoomItem );
         }
+
+        //caps lock
+        vcl::Window* pActiveWin = GetActiveWindow();
+        if(pActiveWin &&( pActiveWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK))
+          rSet.Put( SfxBoolItem( SID_CAPS_LOCK_STATUS, true ) );
     }
 
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();
