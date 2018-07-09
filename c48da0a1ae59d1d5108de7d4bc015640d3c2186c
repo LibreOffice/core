@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_535b7b2d",
+        "filename": "vcl/inc/win/salgdi.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-07-09T16:03:11Z",
+      "side": 1,
+      "message": "IIUC, GetEmbedFontData() is for getting font file data to embed it in the document, so that is not used for layout and font metrics does not matter at all.",
+      "parentUuid": "ffe62b97_58eefa88",
+      "revId": "c48da0a1ae59d1d5108de7d4bc015640d3c2186c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_d8e0ca99",
         "filename": "vcl/win/gdi/salfont.cxx",
         "patchSetId": 3
