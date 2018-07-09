@@ -49,6 +49,8 @@ private:
     ScColorScaleEntryType meType;
     ScConditionalFormat* mpFormat;
 
+    void setListener();
+
 public:
     ScColorScaleEntry(double nVal, const Color& rCol);
     ScColorScaleEntry();

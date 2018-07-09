@@ -187,10 +187,12 @@ private:
     std::function<void()> maCallbackFunction;
 
     void startListening(const ScTokenArray* pTokens, const ScRange& rPos);
+    void startListening(const ScRangeList& rPos);
 
 public:
     explicit ScFormulaListener(ScFormulaCell* pCell);
     explicit ScFormulaListener(ScDocument* pDoc);
+    explicit ScFormulaListener(ScDocument* pDoc, const ScRangeList& rRange);
     virtual ~ScFormulaListener() override;
 
     void Notify( const SfxHint& rHint ) override;
@@ -200,6 +202,7 @@ public:
     void addTokenArray(const ScTokenArray* pTokens, const ScRange& rRange);
     void stopListening();
     void setCallback(const std::function<void()>& aCallbackFunction);
+
 };
 
 class ScConditionalFormat;
@@ -550,6 +553,8 @@ public:
 
     bool IsEmpty() const;
     size_t size() const;
+
+    ScDocument* GetDocument();
 
     void            CompileAll();
     void            CompileXML();
