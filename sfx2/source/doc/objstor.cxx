@@ -3121,7 +3121,16 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SfxObjectCreateMode::EMBEDDED == eCreateMode,xStorage);
     }
 
-    return CopyStoragesOfUnknownMediaType(GetStorage(), xStorage);
+    uno::Sequence<OUString> aExceptions;
+    if (const SfxBoolItem* pNoEmbDS
+        = SfxItemSet::GetItem(rMedium.GetItemSet(), SID_NO_EMBEDDED_DS, false))
+    {
+        // Don't save data source in case a temporary is being saved for preview in MM wizard
+        if (pNoEmbDS->GetValue())
+            aExceptions = uno::Sequence<OUString>{ "EmbeddedDatabase" };
+    }
+
+    return CopyStoragesOfUnknownMediaType(GetStorage(), xStorage, aExceptions);
 }
 
 bool SfxObjectShell::SaveCompletedChildren()
@@ -3350,8 +3359,9 @@ bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >&
     return bResult;
 }
 
-bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed::XStorage >& xSource,
-                                                         const uno::Reference< embed::XStorage >& xTarget )
+bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed::XStorage >& xSource,
+                                                    const uno::Reference< embed::XStorage >& xTarget,
+                                                    const uno::Sequence<OUString>& rExceptions)
 {
     // This method does not commit the target storage and should not do it
     bool bResult = true;
@@ -3360,6 +3370,9 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
     {
         for (const OUString& rSubElement : xSource->getElementNames())
         {
+            if (std::find(rExceptions.begin(), rExceptions.end(), rSubElement) != rExceptions.end())
+                continue;
+
             if (rSubElement == "Configurations")
             {
                 // The workaround for compatibility with SO7, "Configurations" substorage must be preserved
