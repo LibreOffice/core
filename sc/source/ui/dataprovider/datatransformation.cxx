@@ -277,6 +277,16 @@ TransformationType TextTransformation::getTransformationType() const
     return TransformationType::TEXT_TRANSFORMATION;
 }
 
+TEXT_TRANSFORM_TYPE TextTransformation::getTextTransformationType() const
+{
+    return maType;
+}
+
+std::set<SCCOL> TextTransformation::getColumns() const
+{
+    return mnCol;
+}
+
 AggregateFunction::AggregateFunction(const std::set<SCCOL>& rColumns, const AGGREGATE_FUNCTION rType):
     maColumns(rColumns),
     maType(rType)
@@ -372,6 +382,16 @@ void AggregateFunction::Transform(ScDocument& rDoc) const
 TransformationType AggregateFunction::getTransformationType() const
 {
     return TransformationType::AGGREGATE_FUNCTION;
+}
+
+AGGREGATE_FUNCTION AggregateFunction::getAggregateType() const
+{
+     return maType;
+}
+
+std::set<SCCOL> AggregateFunction::getColumns() const
+{
+     return maColumns;
 }
 
 NumberTransformation::NumberTransformation(SCCOL nCol, const NUMBER_TRANSFORM_TYPE rType):
@@ -608,6 +628,20 @@ TransformationType NumberTransformation::getTransformationType() const
     return TransformationType::NUMBER_TRANSFORMATION;
 }
 
+NUMBER_TRANSFORM_TYPE NumberTransformation::getNumberTransfromationType() const
+{
+    return maType;
+}
+
+int NumberTransformation::getPrecision() const
+{
+    return maPrecision;
+}
+
+SCCOL NumberTransformation::getColumn() const
+{
+    return mnCol;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -115,6 +115,8 @@ class SC_DLLPUBLIC TextTransformation : public DataTransformation
     TextTransformation(const std::set<SCCOL>& nCol, const TEXT_TRANSFORM_TYPE rType);
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
+    TEXT_TRANSFORM_TYPE getTextTransformationType() const;
+    std::set<SCCOL> getColumns() const;
 };
 
 class SC_DLLPUBLIC AggregateFunction : public DataTransformation
@@ -126,6 +128,8 @@ class SC_DLLPUBLIC AggregateFunction : public DataTransformation
     AggregateFunction(const std::set<SCCOL>& rColumns, const AGGREGATE_FUNCTION rType);
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
+    AGGREGATE_FUNCTION getAggregateType() const;
+    std::set<SCCOL> getColumns() const;
 };
 
 class SC_DLLPUBLIC NumberTransformation : public DataTransformation
@@ -139,6 +143,9 @@ class SC_DLLPUBLIC NumberTransformation : public DataTransformation
     NumberTransformation(SCCOL nCol, const NUMBER_TRANSFORM_TYPE rType, int nPrecision);
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
+    NUMBER_TRANSFORM_TYPE getNumberTransfromationType() const;
+    int getPrecision() const;
+    SCCOL getColumn() const;
 };
 
 }

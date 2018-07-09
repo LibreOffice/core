@@ -4075,10 +4075,9 @@ void ScXMLExport::WriteExternalDataMapping()
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_ID, itr.getID());
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATABASE_NAME, itr.getDBName());
 
+            SvXMLElementExport aMapping(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_MAPPING, true, true);
             // Add the data transformations
             WriteExternalDataTransformations(itr.getDataTransformation());
-
-            SvXMLElementExport aMapping(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_MAPPING, true, true);
         }
     }
 }
@@ -4149,6 +4148,130 @@ void ScXMLExport::WriteExternalDataTransformations(const std::vector<std::shared
                 SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_SORT_TRANSFORMATION, true, true);
 
                 writeSort(*this, aSortParam, aRange, pDoc);
+            }
+            break;
+            case sc::TransformationType::TEXT_TRANSFORMATION:
+            {
+                // Text Transformation
+                std::shared_ptr<sc::TextTransformation> aTextTransformation = std::dynamic_pointer_cast<sc::TextTransformation>(itr);
+
+                sc::TEXT_TRANSFORM_TYPE aTextTransformType = aTextTransformation->getTextTransformationType();
+
+                switch ( aTextTransformType )
+                {
+                    case sc::TEXT_TRANSFORM_TYPE::TO_LOWER:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_CASEMAP_LOWERCASE);
+                    break;
+                    case sc::TEXT_TRANSFORM_TYPE::TO_UPPER:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_CASEMAP_UPPERCASE);
+                    break;
+                    case sc::TEXT_TRANSFORM_TYPE::CAPITALIZE:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_CASEMAP_CAPITALIZE);
+                    break;
+                    case sc::TEXT_TRANSFORM_TYPE::TRIM:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TRIM);
+                    break;
+                }
+
+                std::set<SCCOL> aColumns = aTextTransformation->getColumns();
+
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_TEXT_TRANSFORMATION, true, true);
+
+                for(auto& col : aColumns)
+                {
+                    // Columns
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(col));
+                    SvXMLElementExport aCol(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN, true, true);
+                }
+            }
+            break;
+            case sc::TransformationType::AGGREGATE_FUNCTION:
+            {
+                // Aggregate Transformation
+                std::shared_ptr<sc::AggregateFunction> aAggregateFunction = std::dynamic_pointer_cast<sc::AggregateFunction>(itr);
+                std::set<SCCOL> aColumns = aAggregateFunction->getColumns();
+
+                sc::AGGREGATE_FUNCTION aAggregateType = aAggregateFunction->getAggregateType();
+
+                switch (aAggregateType)
+                {
+                    case sc::AGGREGATE_FUNCTION::SUM:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_SUM);
+                    break;
+                    case sc::AGGREGATE_FUNCTION::AVERAGE:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_AVERAGE);
+                    break;
+                    case sc::AGGREGATE_FUNCTION::MIN:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_MIN);
+                    break;
+                    case sc::AGGREGATE_FUNCTION::MAX:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_MAX);
+                    break;
+                }
+
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT,XML_COLUMN_AGGREGATE_TRANSFORMATION, true, true);
+
+                for(auto& col : aColumns)
+                {
+                    // Columns
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(col));
+                    SvXMLElementExport aCol(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN, true, true);
+                }
+            }
+            break;
+            case sc::TransformationType::NUMBER_TRANSFORMATION:
+            {
+                // Number Transformation
+                std::shared_ptr<sc::NumberTransformation> aNumberTransformation = std::dynamic_pointer_cast<sc::NumberTransformation>(itr);
+
+                sc::NUMBER_TRANSFORM_TYPE aNumberTransformType = aNumberTransformation->getNumberTransfromationType();
+
+                switch ( aNumberTransformType )
+                {
+                    case sc::NUMBER_TRANSFORM_TYPE::ROUND:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_ROUND);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::ROUND_UP:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_ROUND_UP);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_ROUND_DOWN);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_ABS);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::LOG_E:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_LOG);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::LOG_10:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_LOG_10);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::CUBE:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_CUBE);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::SQUARE:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_SQUARE);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_SQUARE_ROOT);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::EXPONENT:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_EXPONENTIAL);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::IS_EVEN:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_EVEN);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::IS_ODD:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_ODD);
+                    break;
+                    case sc::NUMBER_TRANSFORM_TYPE::SIGN:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_SIGN);
+                    break;
+                }
+
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(aNumberTransformation->getColumn()));
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_PRECISION, OUString::number(aNumberTransformation->getPrecision()));
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_NUMBER_TRANSFORMATION, true, true);
             }
             break;
             default:
