@@ -4983,11 +4983,6 @@
           <value xml:lang="en-US">~Function Bar</value>
         </prop>
       </node>
-      <node oor:name=".uno:ShowImeStatusWindow" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Input M~ethod Status</value>
-        </prop>
-      </node>
       <node oor:name=".uno:OptionBarVisible" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Optio~n Bar</value>
