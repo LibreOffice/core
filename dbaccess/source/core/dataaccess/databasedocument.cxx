@@ -1233,7 +1233,27 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
     try
     {
         // create storage for target URL
-        Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( _rURL ) );
+        Reference<XStorage> xTargetStorage;
+        const PropertyValue* pFoundVal
+            = std::find_if(_rArguments.begin(), _rArguments.end(),
+                           [](const PropertyValue& pVal) { return pVal.Name == "TargetStorage"; });
+        if (pFoundVal != _rArguments.end())
+            pFoundVal->Value >>= xTargetStorage;
+        if (!xTargetStorage.is())
+            (impl_createStorageFor_throw(_rURL));
+
+        // In case we got a StreamRelPath, then xTargetStorage should reference that sub-storage.
+        pFoundVal
+            = std::find_if(_rArguments.begin(), _rArguments.end(),
+                           [](const PropertyValue& pVal) { return pVal.Name == "StreamRelPath"; });
+        if (pFoundVal != _rArguments.end())
+        {
+            OUString sStreamRelPath;
+            pFoundVal->Value >>= sStreamRelPath;
+            if (!sStreamRelPath.isEmpty())
+                xTargetStorage = xTargetStorage->openStorageElement(sStreamRelPath,
+                                                                    embed::ElementModes::READWRITE);
+        }
 
         // extend media descriptor with URL
         Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
