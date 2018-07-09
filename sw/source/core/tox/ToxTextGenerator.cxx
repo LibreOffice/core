@@ -315,10 +315,10 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
         if (attributesToClone->Count() <= 0) {
             continue;
         }
-        SwFormatAutoFormat* clone = static_cast<SwFormatAutoFormat*>(hint->GetAutoFormat().Clone());
+        std::unique_ptr<SwFormatAutoFormat> clone(static_cast<SwFormatAutoFormat*>(hint->GetAutoFormat().Clone()));
         clone->SetStyleHandle(attributesToClone);
 
-        result.autoFormats.push_back(clone);
+        result.autoFormats.push_back(std::move(clone));
 
         ModelToViewHelper aConversionMap( *pSrc, ExpandMode::ExpandFields );
         result.startPositions.push_back(

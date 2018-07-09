@@ -76,7 +76,7 @@ private:
      */
     struct HandledTextToken {
         OUString text;
-        std::vector<SwFormatAutoFormat*> autoFormats;
+        std::vector<std::unique_ptr<SwFormatAutoFormat>> autoFormats;
         std::vector<sal_Int32> startPositions;
         std::vector<sal_Int32> endPositions;
     };
