@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f8e38ea3",
+        "filename": "vcl/inc/win/salgdi.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-07-09T13:57:21Z",
+      "side": 1,
+      "message": "What are embedded fonts and why can’t we just get WinFontInstance from them and simplify things?",
+      "revId": "c48da0a1ae59d1d5108de7d4bc015640d3c2186c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d8e0ca99",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-07-09T13:57:21Z",
+      "side": 1,
+      "message": "I’d like to keep the previous code here if possible. It is a potential source of cross-platform layout inconsistency if HarfBuzz and GDI disagree on the glyph advance width (due to different rounding or hunting strategies or whatever).",
+      "revId": "c48da0a1ae59d1d5108de7d4bc015640d3c2186c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
