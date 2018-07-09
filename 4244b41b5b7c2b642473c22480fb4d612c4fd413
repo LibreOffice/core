@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_383e9629",
+        "filename": "writerfilter/inc/ooxml/OOXMLDocument.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-09T12:36:41Z",
+      "side": 1,
+      "message": "Why is it a good idea to use virtual inheritance here instead of just a normal one? Do we have a case somewhere where we hit the diamond problem with the SvRefBase base?",
+      "revId": "4244b41b5b7c2b642473c22480fb4d612c4fd413",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
