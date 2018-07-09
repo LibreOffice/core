@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f875cefb",
+        "filename": "sc/inc/chgtrack.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-09T13:21:57Z",
+      "side": 1,
+      "message": "if you are interested in looking for unnecessary usage of std::deque, std::stack also uses a std::deque by default",
+      "revId": "3e3af4a5fe0c8ef0ef5e0fc519ed70e6ad678034",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
