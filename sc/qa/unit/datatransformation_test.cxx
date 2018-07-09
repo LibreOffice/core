@@ -303,7 +303,7 @@ void ScDataTransformationTest::testNumberRound()
     m_pDoc->SetValue(2, 2, 0, 57453.651345687654345676);
     m_pDoc->SetValue(2, 3, 0, -453.22234567543);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::ROUND, 4);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::ROUND, 4);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(2034.3425, m_pDoc->GetValue(2, 0, 0));
@@ -319,7 +319,7 @@ void ScDataTransformationTest::testNumberRoundUp()
     m_pDoc->SetValue(2, 2, 0, 57453.65);
     m_pDoc->SetValue(2, 3, 0, -453.22);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::ROUND_UP);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::ROUND_UP);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(2035.0, m_pDoc->GetValue(2, 0, 0));
@@ -335,7 +335,7 @@ void ScDataTransformationTest::testNumberRoundDown()
     m_pDoc->SetValue(2, 2, 0, 57453.65);
     m_pDoc->SetValue(2, 3, 0, -453.22);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(2034.0, m_pDoc->GetValue(2, 0, 0));
@@ -351,7 +351,7 @@ void ScDataTransformationTest::testNumberAbsolute()
     m_pDoc->SetValue(2, 2, 0, 57453.65);
     m_pDoc->SetValue(2, 3, 0, -453.22);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(2034.34, m_pDoc->GetValue(2, 0, 0));
@@ -367,7 +367,7 @@ void ScDataTransformationTest::testNumberLogE()
     m_pDoc->SetValue(2, 2, 0, -9);
     m_pDoc->SetValue(2, 3, 0, 500);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::LOG_E);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::LOG_E);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(2, 0, 0), 1e-10);
@@ -383,7 +383,7 @@ void ScDataTransformationTest::testNumberLog10()
     m_pDoc->SetValue(2, 2, 0, -9);
     m_pDoc->SetValue(2, 3, 0, 500);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::LOG_10);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::LOG_10);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(2, 0, 0), 1e-10);
@@ -399,7 +399,7 @@ void ScDataTransformationTest::testNumberCube()
     m_pDoc->SetValue(2, 2, 0, 8);
     m_pDoc->SetValue(2, 3, 0, -8);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::CUBE);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::CUBE);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(2, 0, 0));
@@ -415,7 +415,7 @@ void ScDataTransformationTest::testNumberSquare()
     m_pDoc->SetValue(2, 2, 0, 8);
     m_pDoc->SetValue(2, 3, 0, -8);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::SQUARE);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::SQUARE);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(2, 0, 0));
@@ -430,7 +430,7 @@ void ScDataTransformationTest::testNumberSquareRoot()
     m_pDoc->SetValue(2, 1, 0, 4);
     m_pDoc->SetValue(2, 2, 0, 9);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.82842712475, m_pDoc->GetValue(2, 0, 0), 1e-10);
@@ -445,7 +445,7 @@ void ScDataTransformationTest::testNumberEven()
     m_pDoc->SetValue(2, 2, 0, 57453.65);
     m_pDoc->SetValue(2, 3, 0, -453);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::IS_EVEN);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::IS_EVEN);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 0, 0));
@@ -461,7 +461,7 @@ void ScDataTransformationTest::testNumberOdd()
     m_pDoc->SetValue(2, 2, 0, 57453.65);
     m_pDoc->SetValue(2, 3, 0, -453);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::IS_ODD);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::IS_ODD);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 0, 0));
@@ -477,7 +477,7 @@ void ScDataTransformationTest::testNumberSign()
     m_pDoc->SetValue(2, 2, 0, 0);
     m_pDoc->SetValue(2, 3, 0, -453.22);
 
-    sc::NumberTransformation aTransform(2, sc::NUMBER_TRANSFORM_TYPE::SIGN);
+    sc::NumberTransformation aTransform({2}, sc::NUMBER_TRANSFORM_TYPE::SIGN);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 0, 0));
