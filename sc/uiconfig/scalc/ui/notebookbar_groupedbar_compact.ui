@@ -2973,7 +2973,7 @@
       <object class="GtkMenuItem" id="defaultD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Default&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Default&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|defaultD">Default</property>
       </object>
     </child>
@@ -2987,7 +2987,7 @@
       <object class="GtkMenuItem" id="Accent1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent 1&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent 1&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Accent1">Accent 1</property>
       </object>
     </child>
@@ -2995,7 +2995,7 @@
       <object class="GtkMenuItem" id="Accent2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent 2&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent 2&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Accent2">Accent 2</property>
       </object>
     </child>
@@ -3003,7 +3003,7 @@
       <object class="GtkMenuItem" id="Accent3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent 3&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent 3&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Accent3">Accent 3</property>
       </object>
     </child>
@@ -3017,7 +3017,7 @@
       <object class="GtkMenuItem" id="Header1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Header1">Header 1</property>
       </object>
     </child>
@@ -3025,7 +3025,7 @@
       <object class="GtkMenuItem" id="Header2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Header2">Header 2</property>
       </object>
     </child>
@@ -3036,26 +3036,26 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="bad">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Bad&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|bad">Bad</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="good">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Good&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Good&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|good">Good</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="bad">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Bad&amp;FamilyName:string=CellStyles</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|bad">Bad</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="neutral">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Neutral&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Neutral&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|neutral">Neutral</property>
       </object>
     </child>
@@ -3063,7 +3063,7 @@
       <object class="GtkMenuItem" id="error">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Error&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Error&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|error">Error</property>
       </object>
     </child>
@@ -3071,7 +3071,7 @@
       <object class="GtkMenuItem" id="warning">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Warning&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Warning&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|warning">Warning</property>
       </object>
     </child>
@@ -3085,7 +3085,7 @@
       <object class="GtkMenuItem" id="footnote">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Footnote&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Footnote&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|footnote">Footnote</property>
       </object>
     </child>
@@ -3093,7 +3093,7 @@
       <object class="GtkMenuItem" id="note">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Note&amp;amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Note&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|note">Note</property>
       </object>
     </child>
