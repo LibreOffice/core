@@ -978,11 +978,8 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
 void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
-    const HFONT hFallbackFont = mhFonts[nFallbackLevel] ? mhFonts[nFallbackLevel]
-                                                        : mpWinFontEntry[nFallbackLevel]->GetHFONT();
-    assert((mhFonts[nFallbackLevel] && !mpWinFontEntry[nFallbackLevel]) ||
-           (!mhFonts[nFallbackLevel] && mpWinFontEntry[nFallbackLevel]));
-    const HFONT hOldFont = SelectFont(getHDC(), hFallbackFont);
+    assert(!mhFonts[nFallbackLevel] && mpWinFontEntry[nFallbackLevel]);
+    const HFONT hOldFont = SelectFont(getHDC(), mpWinFontEntry[nFallbackLevel]->GetHFONT());
 
     wchar_t aFaceName[LF_FACESIZE+60];
     if( GetTextFaceW( getHDC(), SAL_N_ELEMENTS(aFaceName), aFaceName ) )
@@ -993,21 +990,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     const RawFontData aHheaRawData(getHDC(), nHheaTag);
     const RawFontData aOS2RawData(getHDC(), nOS2Tag);
 
-    if (mpWinFontEntry[nFallbackLevel])
-        rxFontMetric->SetMinKashida(mpWinFontEntry[nFallbackLevel]->GetKashidaWidth());
-    else
-    {
-        // Calculate Kashida width without mpWinFontEntry for embedded fonts
-        WCHAR nKashidaCh = 0x0640;
-        WORD nKashidaGid;
-        DWORD ret = GetGlyphIndicesW(getHDC(), &nKashidaCh, 1, &nKashidaGid, GGI_MARK_NONEXISTING_GLYPHS);
-        if (ret != GDI_ERROR && nKashidaGid != 0xFFFF)
-        {
-            int nKashidaWidth = 0;
-            if (GetCharWidthI(getHDC(), nKashidaGid, 1, nullptr, &nKashidaWidth))
-                rxFontMetric->SetMinKashida(static_cast<int>(mfFontScale[nFallbackLevel] * nKashidaWidth));
-        }
-    }
+    rxFontMetric->SetMinKashida(mpWinFontEntry[nFallbackLevel]->GetKashidaWidth());
 
     // get the font metric
     OUTLINETEXTMETRICW aOutlineMetric;
