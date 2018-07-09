@@ -1297,7 +1297,7 @@ ErrCode GraphicFilter::ImportGraphic(
 struct GraphicImportContext
 {
     /// Pixel data is read from this stream.
-    std::shared_ptr<SvStream> m_pStream;
+    std::unique_ptr<SvStream> m_pStream;
     /// The Graphic the import filter gets.
     std::shared_ptr<Graphic> m_pGraphic;
     /// Write pixel data using this access.
@@ -1342,34 +1342,34 @@ void GraphicImportTask::doImport(GraphicImportContext& rContext)
         rContext.m_eLinkType = GfxLinkType::NativeJpg;
 }
 
-void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, const std::vector< std::shared_ptr<SvStream> >& rStreams)
+void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, std::vector< std::unique_ptr<SvStream> > vStreams)
 {
     static bool bThreads = !getenv("VCL_NO_THREAD_IMPORT");
     std::vector<GraphicImportContext> aContexts;
-    aContexts.reserve(rStreams.size());
+    aContexts.reserve(vStreams.size());
     comphelper::ThreadPool& rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
     std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
 
-    for (const auto& pStream : rStreams)
+    for (auto& pStream : vStreams)
     {
         aContexts.emplace_back();
         GraphicImportContext& rContext = aContexts.back();
 
         if (pStream)
         {
-            rContext.m_pStream = pStream;
+            rContext.m_pStream = std::move(pStream);
             rContext.m_pGraphic = std::make_shared<Graphic>();
             rContext.m_nStatus = ERRCODE_NONE;
 
             // Detect the format.
             ResetLastError();
-            rContext.m_nStreamBegin = pStream->Tell();
+            rContext.m_nStreamBegin = rContext.m_pStream->Tell();
             sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
-            rContext.m_nStatus = ImpTestOrFindFormat(OUString(), *pStream, nFormat);
-            pStream->Seek(rContext.m_nStreamBegin);
+            rContext.m_nStatus = ImpTestOrFindFormat(OUString(), *rContext.m_pStream, nFormat);
+            rContext.m_pStream->Seek(rContext.m_nStreamBegin);
 
             // Import the graphic.
-            if (rContext.m_nStatus == ERRCODE_NONE && !pStream->GetError())
+            if (rContext.m_nStatus == ERRCODE_NONE && !rContext.m_pStream->GetError())
             {
                 OUString aFilterName = pConfig->GetImportFilterName(nFormat);
 
@@ -1377,13 +1377,13 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                 {
                     rContext.m_nImportFlags = GraphicFilterImportFlags::SetLogsizeForJpeg;
 
-                    if (!ImportJPEG( *pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
+                    if (!ImportJPEG( *rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
                         rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
                     else
                     {
                         Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmapRef());
                         rContext.m_pAccess = o3tl::make_unique<BitmapScopedWriteAccess>(rBitmap);
-                        pStream->Seek(rContext.m_nStreamBegin);
+                        rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
                             rSharedPool.pushTask(o3tl::make_unique<GraphicImportTask>(pTag, rContext));
                         else
@@ -2574,7 +2574,7 @@ ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilt
 
     std::unique_ptr<SvStream> pStream;
     if ( INetProtocol::File != aURL.GetProtocol() )
-        pStream.reset(::utl::UcbStreamHelper::CreateStream( rPath, StreamMode::READ ));
+        pStream = ::utl::UcbStreamHelper::CreateStream( rPath, StreamMode::READ );
 
     ErrCode nRes = ERRCODE_NONE;
     if ( !pStream )

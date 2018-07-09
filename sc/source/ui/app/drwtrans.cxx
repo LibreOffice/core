@@ -565,12 +565,12 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                     if ( xTransact.is() )
                         xTransact->commit();
 
-                    SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ );
+                    std::unique_ptr<SvStream> pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ );
                     if( pSrcStm )
                     {
                         rxOStm->SetBufferSize( 0xff00 );
                         rxOStm->WriteStream( *pSrcStm );
-                        delete pSrcStm;
+                        pSrcStm.reset();
                     }
 
                     xWorkStore->dispose();

@@ -188,7 +188,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         OUString aPrivDatName(aURL.getName());
         std::unique_ptr<SvStream> pInStream;
         if ( xInputStream.is() )
-            pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
+            pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
         ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(nullptr, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
         if ( pDlg->Execute() == RET_OK )
@@ -272,7 +272,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
             std::unique_ptr<SvStream> pInStream;
             if ( xInputStream.is() )
-                pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
+                pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
             switch(load_CharSet( eEncoding, bExport, pInStream.get()))
             {
                 case charsetSource::charset_from_file:

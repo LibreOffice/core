@@ -260,8 +260,8 @@ public:
     std::shared_ptr<const SfxFilter> m_pFilter;
     std::shared_ptr<const SfxFilter> m_pCustomFilter;
 
-    SvStream* m_pInStream;
-    SvStream* m_pOutStream;
+    std::unique_ptr<SvStream> m_pInStream;
+    std::unique_ptr<SvStream> m_pOutStream;
 
     std::shared_ptr<const SfxFilter> pOrigFilter;
     OUString    aOrigURL;
@@ -536,11 +536,11 @@ bool SfxMedium::IsSkipImages()
 SvStream* SfxMedium::GetInStream()
 {
     if ( pImpl->m_pInStream )
-        return pImpl->m_pInStream;
+        return pImpl->m_pInStream.get();
 
     if ( pImpl->pTempFile )
     {
-        pImpl->m_pInStream = new SvFileStream(pImpl->m_aName, pImpl->m_nStorOpenMode);
+        pImpl->m_pInStream.reset( new SvFileStream(pImpl->m_aName, pImpl->m_nStorOpenMode) );
 
         pImpl->m_eError = pImpl->m_pInStream->GetError();
 
@@ -548,11 +548,10 @@ SvStream* SfxMedium::GetInStream()
                     && ! pImpl->m_pInStream->IsWritable() )
         {
             pImpl->m_eError = ERRCODE_IO_ACCESSDENIED;
-            delete pImpl->m_pInStream;
-            pImpl->m_pInStream = nullptr;
+            pImpl->m_pInStream.reset();
         }
         else
-            return pImpl->m_pInStream;
+            return pImpl->m_pInStream.get();
     }
 
     GetMedium_Impl();
@@ -560,7 +559,7 @@ SvStream* SfxMedium::GetInStream()
     if ( GetError() )
         return nullptr;
 
-    return pImpl->m_pInStream;
+    return pImpl->m_pInStream.get();
 }
 
 
@@ -586,7 +585,7 @@ void SfxMedium::CloseInStream_Impl()
         return;
     }
 
-    DELETEZ( pImpl->m_pInStream );
+    pImpl->m_pInStream.reset();
     if ( pImpl->m_pSet )
         pImpl->m_pSet->ClearItem( SID_INPUTSTREAM );
 
@@ -628,14 +627,14 @@ SvStream* SfxMedium::GetOutStream()
             {
             // On Unix don't try to re-use XOutStream from xStream if that exists;
             // it causes fdo#59022 (fails opening files via SMB on Linux)
-                pImpl->m_pOutStream = new SvFileStream(
-                            pImpl->m_aName, StreamMode::STD_READWRITE);
+                pImpl->m_pOutStream.reset( new SvFileStream(
+                            pImpl->m_aName, StreamMode::STD_READWRITE) );
             }
             CloseStorage();
         }
     }
 
-    return pImpl->m_pOutStream;
+    return pImpl->m_pOutStream.get();
 }
 
 
@@ -659,8 +658,7 @@ void SfxMedium::CloseOutStream_Impl()
                 CloseStorage();
         }
 
-        delete pImpl->m_pOutStream;
-        pImpl->m_pOutStream = nullptr;
+        pImpl->m_pOutStream.reset();
     }
 
     if ( !pImpl->m_pInStream )
@@ -752,7 +750,7 @@ bool SfxMedium::IsStorage()
     }
     else if ( GetInStream() )
     {
-        pImpl->bIsStorage = SotStorage::IsStorageFile( pImpl->m_pInStream ) && !SotStorage::IsOLEStorage( pImpl->m_pInStream );
+        pImpl->bIsStorage = SotStorage::IsStorageFile( pImpl->m_pInStream.get() ) && !SotStorage::IsOLEStorage( pImpl->m_pInStream.get() );
         if ( !pImpl->m_pInStream->GetError() && !pImpl->bIsStorage )
             pImpl->m_bTriedStorage = true;
     }

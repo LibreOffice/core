@@ -140,7 +140,7 @@ HsqlRowInputStream::HsqlRowInputStream() {}
 
 void HsqlRowInputStream::setInputStream(Reference<XInputStream> const& rStream)
 {
-    m_pStream.reset(utl::UcbStreamHelper::CreateStream(rStream, true));
+    m_pStream = utl::UcbStreamHelper::CreateStream(rStream, true);
     m_pStream->SetEndian(SvStreamEndian::BIG);
 }
 

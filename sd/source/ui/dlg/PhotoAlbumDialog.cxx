@@ -610,13 +610,12 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, weld::TreeView&, void)
         // remote?
         if ( INetProtocol::File != aURLObj.GetProtocol() )
         {
-            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( sImgUrl, StreamMode::READ );
+            std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( sImgUrl, StreamMode::READ );
 
             if( pStream )
                 m_pGraphicFilter->ImportGraphic( aGraphic, sImgUrl, *pStream, nFilter, nullptr, nFilterImportFlags );
             else
                 m_pGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
-            delete pStream;
         }
         else
         {

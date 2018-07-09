@@ -24,8 +24,8 @@ Graphic loadFromURL(OUString const& rURL)
 {
     Graphic aGraphic;
 
-    std::unique_ptr<SvStream> pInputStream;
-    pInputStream.reset(utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ));
+    std::unique_ptr<SvStream> pInputStream
+        = utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ);
 
     if (pInputStream)
     {

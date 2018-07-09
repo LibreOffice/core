@@ -2866,7 +2866,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
     meEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );
 
     ErrCode     nErr = ERRCODE_NONE;
-    SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
+    std::unique_ptr<SvStream> pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
     if( pIStm )
     {
@@ -2886,7 +2886,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
         }
 
         nErr = pIStm->GetError();
-        delete pIStm;
+        pIStm.reset();
     }
 
     if( nErr != ERRCODE_NONE )
@@ -3141,7 +3141,7 @@ ErrCode EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
     createFileName( rUrl, aFileName );
 
     ErrCode nErr = ERRCODE_NONE;
-    pOStm.reset( ::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC ) );
+    pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC );
     if( pOStm )
     {
         bOpen = true;

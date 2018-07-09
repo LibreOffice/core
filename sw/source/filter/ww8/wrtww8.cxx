@@ -3775,7 +3775,7 @@ void WW8Export::RestoreMacroCmds()
     {
         uno::Reference < io::XStream > xSrcStream =
                 xSrcRoot->openStreamElement( SL::aMSMacroCmds, embed::ElementModes::READ );
-        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xSrcStream );
+        std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( xSrcStream );
 
         if ( pStream && ERRCODE_NONE == pStream->GetError())
         {
@@ -3788,8 +3788,6 @@ void WW8Export::RestoreMacroCmds()
             if (bReadOk)
                 pTableStrm->WriteBytes(pBuffer.get(), pFib->m_lcbCmds);
         }
-
-        delete pStream;
     }
     catch ( const uno::Exception& )
     {

@@ -85,7 +85,7 @@ SvStream* XclEscherExGlobal::ImplQueryPictureStream()
     if( mxPicTempFile->IsValid() )
     {
         mxPicTempFile->EnableKillingFile();
-        mxPicStrm.reset( ::utl::UcbStreamHelper::CreateStream( mxPicTempFile->GetURL(), StreamMode::STD_READWRITE ) );
+        mxPicStrm = ::utl::UcbStreamHelper::CreateStream( mxPicTempFile->GetURL(), StreamMode::STD_READWRITE );
         mxPicStrm->SetEndian( SvStreamEndian::LITTLE );
     }
     return mxPicStrm.get();

@@ -545,7 +545,7 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const OUString& rMe
     mpImpl->bNeedUpdate = false;
 }
 
-SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
+std::unique_ptr<SvStream> EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
 {
     DBG_ASSERT( bUpdate || mpImpl->pContainer, "Can't retrieve current graphic!" );
     uno::Reference < io::XInputStream > xStream;
@@ -557,7 +557,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
         if ( xStream.is() )
         {
             const sal_Int32 nConstBufferSize = 32000;
-            SvStream *pStream = new SvMemoryStream( 32000, 32000 );
+            std::unique_ptr<SvStream> pStream(new SvMemoryStream( 32000, 32000 ));
             try
             {
                 sal_Int32 nRead=0;
@@ -574,7 +574,6 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
             catch (const uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("svtools.misc", "discarding broken embedded object preview");
-                delete pStream;
                 xStream.clear();
             }
         }
@@ -607,7 +606,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
                 if (mpImpl->pContainer)
                     mpImpl->pContainer->InsertGraphicStream(xStream,mpImpl->aPersistName,mpImpl->aMediaType);
 
-                SvStream* pResult = ::utl::UcbStreamHelper::CreateStream( xStream );
+                std::unique_ptr<SvStream> pResult = ::utl::UcbStreamHelper::CreateStream( xStream );
                 if (pResult && bUpdate)
                     mpImpl->bNeedUpdate = false;
 

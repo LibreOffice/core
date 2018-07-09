@@ -43,8 +43,8 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDes
     utl::MediaDescriptor aMediaDesc = aDescriptor;
     uno::Reference<io::XStream> xStream = aMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference<io::XStream>());
-    SvStream* pStream = utl::UcbStreamHelper::CreateStream(xStream, true);
-    m_aWriter.SetStream(pStream);
+    std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(xStream, true);
+    m_aWriter.SetStream(pStream.get());
 
     // get SwDoc*
     uno::Reference<uno::XInterface> xIfc(m_xSrcDoc, uno::UNO_QUERY);
@@ -83,7 +83,6 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDes
     // delete the pCurPam
     while (pCurPam->GetNext() != pCurPam.get())
         delete pCurPam->GetNext();
-    delete pStream;
 
     return true;
 }
