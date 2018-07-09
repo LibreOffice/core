@@ -87,13 +87,13 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
         OUString aMetaFile = aTempFile.GetFileName();
         OUString aMetaURL = aTempFile.GetURL();
 
-        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aMetaURL, StreamMode::STD_READWRITE );
+        std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( aMetaURL, StreamMode::STD_READWRITE );
         if ( pStream )
         {
             Graphic aGraph( *pGDIMeta );
             ErrCode nFailed = GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::EMF );
             pStream->Flush();
-            delete pStream;
+            pStream.reset();
 
             if ( !nFailed )
                 pResult = GetEnhMetaFileW( o3tl::toW(aMetaFile.getStr()) );

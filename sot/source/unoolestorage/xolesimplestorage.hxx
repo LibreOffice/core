@@ -44,7 +44,7 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
 
     css::uno::Reference< css::io::XStream > m_xStream;
     css::uno::Reference< css::io::XStream > m_xTempStream;
-    SvStream* m_pStream;
+    std::unique_ptr<SvStream> m_pStream;
     BaseStorage* m_pStorage;
 
     ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners

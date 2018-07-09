@@ -65,10 +65,10 @@ Reference< XInputStream > createStreamFromFile (
     Reference<  XInputStream >  xInputStream;
     OUString aInStr;
     FileBase::getFileURLFromSystemPath(filePath, aInStr);
-    SvStream* pStream = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
+    std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
     if(pStream == nullptr)
         CPPUNIT_ASSERT(false);
-    Reference< XStream > xStream(new utl::OStreamWrapper(*pStream));
+    Reference< XStream > xStream(new utl::OStreamWrapper(std::move(pStream)));
     xInputStream.set(xStream, UNO_QUERY);
     return xInputStream;
 }

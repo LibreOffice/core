@@ -372,7 +372,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         try
         {
             uno::Reference < io::XStream > xStm = xStg->openStreamElement( "layout-cache", embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-            SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStm );
+            std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStream->GetError() )
             {
                 uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
@@ -381,8 +381,6 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
                 xSet->setPropertyValue("MediaType", aAny2 );
                 m_pDoc->WriteLayoutCache( *pStream );
             }
-
-            delete pStream;
         }
         catch ( uno::Exception& )
         {

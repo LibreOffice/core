@@ -123,8 +123,8 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescrip
         {
             OUString aInStr;
             osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pEnv), aInStr);
-            SvStream* pStream = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
-            uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+            std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
+            uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
             xInputStream.set(xStream, uno::UNO_QUERY);
         }
 

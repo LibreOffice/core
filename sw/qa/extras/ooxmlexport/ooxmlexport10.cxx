@@ -100,8 +100,8 @@ protected:
         uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.WriterFilter"), uno::UNO_QUERY_THROW);
         uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
         xImporter->setTargetDocument(mxComponent);
-        SvStream* pStream = utl::UcbStreamHelper::CreateStream(m_directories.getURLFromSrc("/sw/qa/extras/ooxmlexport/data/") + rFilename, StreamMode::READ);
-        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+        std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(m_directories.getURLFromSrc("/sw/qa/extras/ooxmlexport/data/") + rFilename, StreamMode::READ);
+        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         {
             {"InputStream", uno::makeAny(xStream)},

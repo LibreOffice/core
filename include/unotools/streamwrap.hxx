@@ -29,6 +29,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <memory>
 
 class SvStream;
 
@@ -53,6 +54,7 @@ protected:
 public:
     OInputStreamWrapper(SvStream& _rStream);
     OInputStreamWrapper(SvStream* pStream, bool bOwner=false);
+    OInputStreamWrapper(std::unique_ptr<SvStream> pStream);
     virtual ~OInputStreamWrapper() override;
 
 // css::io::XInputStream
@@ -152,6 +154,7 @@ protected:
 
 public:
     OStreamWrapper(SvStream& _rStream);
+    OStreamWrapper(std::unique_ptr<SvStream> _rStream);
 
 // css::io::XStream
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;

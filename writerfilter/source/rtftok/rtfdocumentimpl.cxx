@@ -297,7 +297,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_bAfterCellBeforeRow(false)
 {
     OSL_ASSERT(xInputStream.is());
-    m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, true);
 
     m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
 

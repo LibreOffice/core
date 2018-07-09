@@ -765,13 +765,12 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
     // non-local?
     if ( INetProtocol::File != aURLObj.GetProtocol() )
     {
-        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ );
+        std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ );
 
         if( pStream )
             nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter, nullptr, nFilterImportFlags );
         else
             nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
-        delete pStream;
     }
     else
     {

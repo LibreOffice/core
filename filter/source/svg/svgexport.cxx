@@ -517,7 +517,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             OUString aFileName;
 
             pValue[ i ].Value >>= aFileName;
-            pOStm.reset(::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC ));
+            pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC );
 
             if( pOStm )
                 xOStm.set( new ::utl::OOutputStreamWrapper ( *pOStm ) );

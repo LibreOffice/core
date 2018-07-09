@@ -48,7 +48,7 @@ class SVT_DLLPUBLIC EmbeddedObjectRef
 {
     std::unique_ptr<EmbeddedObjectRef_Impl> mpImpl;
 
-    SVT_DLLPRIVATE SvStream* GetGraphicStream( bool bUpdate ) const;
+    SVT_DLLPRIVATE std::unique_ptr<SvStream> GetGraphicStream( bool bUpdate ) const;
     SVT_DLLPRIVATE void GetReplacement( bool bUpdate );
 
     EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& ) = delete;

@@ -209,9 +209,9 @@ void ImageProducer::SetImage( const OUString& rPath )
     }
     else if( !maURL.isEmpty() )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, StreamMode::STD_READ );
+        std::unique_ptr<SvStream> pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, StreamMode::STD_READ );
         if (pIStm)
-            mpStm.reset( new SvStream( new ImgProdLockBytes( pIStm, true ) ) );
+            mpStm.reset( new SvStream( new ImgProdLockBytes( pIStm.release(), true ) ) );
     }
 }
 

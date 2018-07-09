@@ -855,10 +855,9 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
         try
         {
             uno::Reference < io::XStream > xStm = xStorage->openStreamElement( "layout-cache", embed::ElementModes::READ );
-            SvStream* pStrm2 = utl::UcbStreamHelper::CreateStream( xStm );
+            std::unique_ptr<SvStream> pStrm2 = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStrm2->GetError() )
                 rDoc.ReadLayoutCache( *pStrm2 );
-            delete pStrm2;
         }
         catch (const uno::Exception&)
         {

@@ -246,7 +246,7 @@ namespace frm
                     if ( nResult == ERRCODE_NONE )
                     {
                         OUString sFileName = aFP.GetPath();
-                        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream(
+                        std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream(
                             sFileName, ( bLoad ? StreamMode::READ : StreamMode::WRITE | StreamMode::TRUNC ) | StreamMode::SHARE_DENYALL
                         );
                         if ( pStream )
@@ -272,7 +272,6 @@ namespace frm
                                 getEngine().Write( *pStream, eFormat );
                             }
                         }
-                        DELETEZ( pStream );
                     }
                     return true;   // handled
                 }
