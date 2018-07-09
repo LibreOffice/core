@@ -624,7 +624,9 @@ bool ImpEditEngine::MouseMove( const MouseEvent& rMEvt, EditView* pView )
 
 EditPaM ImpEditEngine::InsertText(const EditSelection& aSel, const OUString& rStr)
 {
+    EnterBlockNotifications();
     EditPaM aPaM = ImpInsertText( aSel, rStr );
+    LeaveBlockNotifications();
     return aPaM;
 }
 
