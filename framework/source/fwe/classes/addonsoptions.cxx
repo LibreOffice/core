@@ -1277,7 +1277,7 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
 {
     Image aImage;
 
-    SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, StreamMode::STD_READ );
+    std::unique_ptr<SvStream> pStream = UcbStreamHelper::CreateStream( aImageURL, StreamMode::STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == ERRCODE_NONE ))
     {
         // Use graphic class to also support more graphic formats (bmp,png,...)
@@ -1298,8 +1298,6 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
             aImage = Image(aBitmapEx);
         }
     }
-
-    delete pStream;
 
     return aImage;
 }

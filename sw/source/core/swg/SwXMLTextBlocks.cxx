@@ -505,9 +505,8 @@ bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
         aName = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
-    SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aName, StreamMode::STD_READ );
-    bool bRet = UCBStorage::IsStorageFile( pStm );
-    delete pStm;
+    std::unique_ptr<SvStream> pStm = ::utl::UcbStreamHelper::CreateStream( aName, StreamMode::STD_READ );
+    bool bRet = UCBStorage::IsStorageFile( pStm.get() );
     return bRet;
 }
 

@@ -390,11 +390,11 @@ void SvxHyperlinkNewDocTp::DoApply ()
         try
         {
             // check if file exists, warn before we overwrite it
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
+            std::unique_ptr<SvStream> pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
             bool bOk = pIStm && ( pIStm->GetError() == ERRCODE_NONE);
 
-            delete pIStm;
+            pIStm.reset();
 
             if( bOk )
             {

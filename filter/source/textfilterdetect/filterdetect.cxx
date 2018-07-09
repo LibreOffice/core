@@ -165,9 +165,9 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             ZCodec aCodecGZ;
             std::unique_ptr<SvStream> pInStream;
             if (xStream.is())
-                pInStream.reset(utl::UcbStreamHelper::CreateStream(xStream));
+                pInStream = utl::UcbStreamHelper::CreateStream(xStream);
             else
-                pInStream.reset(utl::UcbStreamHelper::CreateStream(xInStream));
+                pInStream = utl::UcbStreamHelper::CreateStream(xInStream);
             std::unique_ptr<SvMemoryStream> pDecompressedStream(new SvMemoryStream());
             if (aCodecGZ.AttemptDecompression(*pInStream, *pDecompressedStream))
             {

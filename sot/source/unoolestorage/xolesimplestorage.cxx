@@ -397,7 +397,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         if ( !pStrg )
             throw lang::WrappedTargetException(); // io::IOException(); // TODO
 
-        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile, false ); // do not close the original stream
+        std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile, false ); // do not close the original stream
         if ( !pStream )
             throw uno::RuntimeException();
 
@@ -407,7 +407,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 
         DELETEZ( pNewStor );
         DELETEZ( pStrg );
-        DELETEZ( pStream );
+        pStream.reset();
 
         if ( !bSuccess )
             throw uno::RuntimeException();
@@ -572,7 +572,7 @@ void SAL_CALL OLESimpleStorage::dispose()
     }
 
     DELETEZ( m_pStorage );
-    DELETEZ( m_pStream );
+    m_pStream.reset();
 
     m_xStream.clear();
     m_xTempStream.clear();

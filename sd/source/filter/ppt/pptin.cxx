@@ -1961,7 +1961,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                             std::vector<sal_uInt8> aBuf(nSoundDataLen);
 
                             rStCtrl.ReadBytes(aBuf.data(), nSoundDataLen);
-                            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC );
+                            std::unique_ptr<SvStream> pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC );
 
                             if( pOStm )
                             {
@@ -1972,8 +1972,6 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                                     GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                                     aRetval = aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                                 }
-
-                                delete pOStm;
                             }
                         }
                     }

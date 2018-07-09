@@ -304,7 +304,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
         }
 
         // check the stream
-        m_pStorStm = ::utl::UcbStreamHelper::CreateStream( m_aName, nMode );
+        m_pStorStm = ::utl::UcbStreamHelper::CreateStream( m_aName, nMode ).release();
         if ( m_pStorStm && m_pStorStm->GetError() )
             DELETEZ( m_pStorStm );
 
@@ -730,7 +730,7 @@ SotStorage* SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::
     if ( nMode & StreamMode::NOCREATE )
         nEleMode |= embed::ElementModes::NOCREATE;
 
-    SvStream* pStream = nullptr;
+    std::unique_ptr<SvStream> pStream;
     try
     {
         uno::Reference < io::XStream > xStream = xStorage->openStreamElement( rEleName, nEleMode );
@@ -748,11 +748,11 @@ SotStorage* SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::
     catch ( uno::Exception& )
     {
         //TODO/LATER: ErrorHandling
-        pStream = new SvMemoryStream;
+        pStream.reset( new SvMemoryStream );
         pStream->SetError( ERRCODE_IO_GENERAL );
     }
 
-    return new SotStorage( pStream, true );
+    return new SotStorage( pStream.release(), true );
 }
 
 SotClipboardFormatId SotStorage::GetFormatID( const css::uno::Reference < css::embed::XStorage >& xStorage )

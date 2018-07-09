@@ -81,7 +81,7 @@ sal_Int16 SwXFilterOptions::execute()
 
     std::unique_ptr<SvStream> pInStream;
     if ( xInputStream.is() )
-        pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
+        pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
     uno::Reference< XUnoTunnel > xTunnel(xModel, uno::UNO_QUERY);
     SwDocShell* pDocShell = nullptr;

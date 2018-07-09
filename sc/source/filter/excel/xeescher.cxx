@@ -1575,7 +1575,7 @@ void XclExpObjectManager::InitStream( bool bTempFile )
         if( mxTempFile->IsValid() )
         {
             mxTempFile->EnableKillingFile();
-            mxDffStrm.reset( ::utl::UcbStreamHelper::CreateStream( mxTempFile->GetURL(), StreamMode::STD_READWRITE ) );
+            mxDffStrm = ::utl::UcbStreamHelper::CreateStream( mxTempFile->GetURL(), StreamMode::STD_READWRITE );
         }
     }
 

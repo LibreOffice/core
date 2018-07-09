@@ -702,8 +702,8 @@ namespace svt
         aStorageURL.Append( ".templdir.cache" );
 
         // open the stream
-        m_pCacheStream.reset( UcbStreamHelper::CreateStream( aStorageURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ),
-            _bForRead ? StreamMode::READ | StreamMode::NOCREATE : StreamMode::WRITE | StreamMode::TRUNC ) );
+        m_pCacheStream = UcbStreamHelper::CreateStream( aStorageURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ),
+            _bForRead ? StreamMode::READ | StreamMode::NOCREATE : StreamMode::WRITE | StreamMode::TRUNC );
         DBG_ASSERT( m_pCacheStream, "TemplateFolderCacheImpl::openCacheStream: could not open/create the cache stream!" );
         if ( m_pCacheStream && m_pCacheStream->GetErrorCode() )
         {

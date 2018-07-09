@@ -194,11 +194,11 @@ protected:
         xImporter->setTargetDocument(mxComponent);
         uno::Sequence<beans::PropertyValue> aDescriptor(3);
         aDescriptor[0].Name = "InputStream";
-        SvStream* pStream = utl::UcbStreamHelper::CreateStream(
+        std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(
             m_directories.getURLFromSrc("/sw/qa/extras/") + aFilename,
             StreamMode::STD_READ);
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, pStream->GetError());
-        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
         aDescriptor[0].Value <<= xStream;
         aDescriptor[1].Name = "InsertMode";
         aDescriptor[1].Value <<= true;

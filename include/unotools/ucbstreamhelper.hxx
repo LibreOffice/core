@@ -25,6 +25,7 @@
 #include <unotools/unotoolsdllapi.h>
 
 #include <tools/stream.hxx>
+#include <memory>
 
 namespace com
 {
@@ -52,13 +53,13 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC UcbStreamHelper
     {
     public:
-        static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode );
-        static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                          bool bFileExists );
-        static SvStream*    CreateStream( const css::uno::Reference < css::io::XInputStream >& xStream );
-        static SvStream*    CreateStream( const css::uno::Reference < css::io::XStream >& xStream );
-        static SvStream*    CreateStream( const css::uno::Reference < css::io::XInputStream >& xStream, bool bCloseStream );
-        static SvStream*    CreateStream( const css::uno::Reference < css::io::XStream >& xStream, bool bCloseStream );
+        static std::unique_ptr<SvStream> CreateStream( const OUString& rFileName, StreamMode eOpenMode );
+        static std::unique_ptr<SvStream> CreateStream( const OUString& rFileName, StreamMode eOpenMode,
+                                                       bool bFileExists );
+        static std::unique_ptr<SvStream> CreateStream( const css::uno::Reference < css::io::XInputStream >& xStream );
+        static std::unique_ptr<SvStream> CreateStream( const css::uno::Reference < css::io::XStream >& xStream );
+        static std::unique_ptr<SvStream> CreateStream( const css::uno::Reference < css::io::XInputStream >& xStream, bool bCloseStream );
+        static std::unique_ptr<SvStream> CreateStream( const css::uno::Reference < css::io::XStream >& xStream, bool bCloseStream );
     };
 }
 
