@@ -110,6 +110,8 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
         aSource.setID(aID);
         aSource.setDBData(aDBName);
         rDataMapper.insertDataSource(aSource);
+        auto& rDataSources = rDataMapper.getDataSources();
+        rDataSources[0].refresh(pDoc, true);
     }
 }
 

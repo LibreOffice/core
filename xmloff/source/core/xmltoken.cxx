@@ -3279,8 +3279,21 @@ namespace xmloff { namespace token {
         TOKEN( "column-split-transformation", XML_COLUMN_SPLIT_TRANSFORMATION),
         TOKEN( "column-merge-transformation", XML_COLUMN_MERGE_TRANSFORMATION),
         TOKEN( "column-sort-transformation", XML_COLUMN_SORT_TRANSFORMATION),
+        TOKEN( "column-text-transformation", XML_COLUMN_TEXT_TRANSFORMATION),
+        TOKEN( "column-aggregate-transformation", XML_COLUMN_AGGREGATE_TRANSFORMATION),
+        TOKEN( "column-number-transformation", XML_COLUMN_NUMBER_TRANSFORMATION),
+
         TOKEN( "sort-param", XML_SORT_PARAM ),
         TOKEN( "merge-string", XML_MERGE_STRING ),
+        TOKEN( "trim", XML_TRIM ),
+        TOKEN( "round-up", XML_ROUND_UP ),
+        TOKEN( "round-down", XML_ROUND_DOWN ),
+        TOKEN( "log-base-10", XML_LOG_10 ),
+        TOKEN( "number-square", XML_SQUARE ),
+        TOKEN( "square-root", XML_SQUARE_ROOT ),
+        TOKEN( "even", XML_EVEN ),
+        TOKEN( "odd", XML_ODD ),
+        TOKEN( "sign", XML_SIGN ),
 
         // regina, ODF1.2 additional symbols in charts
         TOKEN( "star",                         XML_STAR ),
