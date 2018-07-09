@@ -550,6 +550,14 @@ DECLARE_RTFIMPORT_TEST(testPoshPosv, "posh-posv.rtf")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "FrameIsAutomaticHeight"));
 }
 
+DECLARE_RTFIMPORT_TEST(testPoshLeftRight, "posh-leftright.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT,
+                         getProperty<sal_Int16>(getShape(1), "HoriOrient"));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT,
+                         getProperty<sal_Int16>(getShape(2), "HoriOrient"));
+}
+
 DECLARE_RTFIMPORT_TEST(testTdf96326, "tdf96326.rtf")
 {
     // Make sure this is not checked.
