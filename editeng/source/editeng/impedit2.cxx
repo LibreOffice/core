@@ -2670,6 +2670,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
 EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUString& rStr)
 {
     UndoActionStart( EDITUNDO_INSERT );
+    bIsFormatting = true;
 
     EditPaM aPaM;
     if ( aCurSel.HasRange() )
@@ -2759,6 +2760,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
         nStart = nEnd+1;
     }
 
+    bIsFormatting = false;
     UndoActionEnd();
 
     TextModified();
