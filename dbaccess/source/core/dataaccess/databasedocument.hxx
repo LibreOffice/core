@@ -546,6 +546,19 @@ private:
                 const OUString& _rURL
             ) const;
 
+    /** Extracts storage from arguments, or creates for the given URL, truncating it if a file with
+        this name already exists
+
+        @throws Exception
+            if creating the storage failed
+
+        @return
+            the storage that is either extracted from arguments, or newly created for the file at
+            the given URL
+    */
+    css::uno::Reference<css::embed::XStorage> impl_GetStorageOrCreateFor_throw(
+        const ::comphelper::NamedValueCollection& _rArguments, const OUString& _rURL) const;
+
     /** sets our "modified" flag
 
         will notify all our respective listeners, if the "modified" state actually changed

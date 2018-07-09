@@ -460,7 +460,7 @@ public:
     static void StoreEmbeddedDataSource(const css::uno::Reference<css::frame::XStorable>& xStorable,
                                         const css::uno::Reference<css::embed::XStorage>& xStorage,
                                         const OUString& rStreamRelPath,
-                                        const OUString& rOwnURL);
+                                        const OUString& rOwnURL, bool bCopyTo = false);
 
     SwDoc* getDoc() const;
     /// Stop reacting to removed database registrations.

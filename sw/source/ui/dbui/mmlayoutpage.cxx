@@ -111,10 +111,13 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
         aTempFile.EnableKillingFile();
     }
     SwView* pView = m_pWizard->GetSwView();
-    uno::Sequence< beans::PropertyValue > aValues(1);
+    uno::Sequence< beans::PropertyValue > aValues(2);
     beans::PropertyValue* pValues = aValues.getArray();
     pValues[0].Name = "FilterName";
     pValues[0].Value <<= pSfxFlt->GetFilterName();
+    // Don't save embedded data set! It would steal it from current document.
+    pValues[1].Name = "NoEmbDataSet";
+    pValues[1].Value <<= true;
 
     uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( m_sExampleURL, aValues   );
