@@ -15,7 +15,10 @@ To rerun just this failed test without all others, use:
     make UITest_$2
 
 Or to run just a specific test case method, use:
-    make UITest_$2 UITEST_TEST_NAME="package.ClassName.methodName"
+    make UITest_$2 UITEST_TEST_NAME="Module.ClassName.methodName"
+where
+    Module - the name of the python file (without the .py extension)
+    Class - is the name in the "class Class" declaration
 
 Or to do interactive debugging, put a long sleep in the beginning of the .py
 uitest file, and attach gdb to the running soffice process.

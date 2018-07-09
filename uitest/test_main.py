@@ -19,6 +19,8 @@ from uitest.framework import UITestCase
 
 from libreoffice.connection import OfficeConnection
 
+test_name_limit_found = False
+
 def parseArgs(argv):
     (optlist,args) = getopt.getopt(argv[1:], "hdr",
             ["help", "debug", "soffice=", "userdir=", "dir=", "file=", "gdb"])
@@ -73,12 +75,15 @@ def add_tests_for_file(test_file, test_suite):
     loader = importlib.machinery.SourceFileLoader(module_name, test_file)
     mod = loader.load_module()
     classes = get_test_case_classes_of_module(mod)
+    global test_name_limit_found
     for c in classes:
         test_names = test_loader.getTestCaseNames(c)
         for test_name in test_names:
             full_name = ".".join([module_name, c.__name__, test_name])
-            if len(test_name_limit) > 0 and not test_name_limit.startswith(full_name):
-                continue
+            if len(test_name_limit) > 0:
+                if not test_name_limit.startswith(full_name):
+                    continue
+                test_name_limit_found = True
 
             obj = c(test_name, opts)
             test_suite.addTest(obj)
@@ -102,6 +107,11 @@ if __name__ == '__main__':
         sys.exit(1)
     elif "--dir" in opts:
         test_suite = get_test_suite_for_dir(opts)
+        test_name_limit = os.environ.get('UITEST_TEST_NAME', '')
+        print(test_name_limit_found)
+        if len(test_name_limit) > 0 and not test_name_limit_found:
+            print("UITEST_TEST_NAME '%s' does not match any test" % test_name_limit)
+            sys.exit(1)
     elif "--file" in opts:
         test_suite = unittest.TestSuite()
         add_tests_for_file(opts['--file'], test_suite)
