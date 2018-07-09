@@ -1451,18 +1451,39 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_CT_PPrBase_bidi:
         {
-            if (nIntValue != 0)
+            sal_Int16 nParentBidi = -1;
+            m_pImpl->GetPropertyFromStyleSheet(PROP_WRITING_MODE) >>= nParentBidi;
+            // Paragraph justification reverses its meaning in an RTL context.
+            // Only make adjustments if the BiDi changes.
+            if ( nParentBidi != nIntValue )
             {
-                rContext->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode2::RL_TB) ));
-                if (!IsRTFImport())
-                    rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_RIGHT ), /*bOverwrite=*/false);
+                style::ParagraphAdjust eAdjust = (style::ParagraphAdjust) -1;
+                sal_Int16 nAdjust = -1;
+                uno::Any aParaAdjust = m_pImpl->GetAnyProperty(PROP_PARA_ADJUST, rContext);
+                aParaAdjust >>= nAdjust;
+                if ( nAdjust != -1 )
+                    eAdjust = (style::ParagraphAdjust)nAdjust;
+                else
+                    aParaAdjust >>= eAdjust;
+
+                if ( aParaAdjust == uno::Any() ) // no adjust property exists yet
+                {
+                    // RTL defaults to right adjust
+                    eAdjust = nIntValue ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT;
+                    rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( eAdjust ), false);
+                }
+                // existing adjust: if RTL, then swap. If LTR, but previous was RTL, also swap.
+                else if ( nIntValue || nParentBidi != -1 )
+                {
+                    if ( eAdjust == style::ParagraphAdjust_RIGHT )
+                        rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_LEFT ));
+                    else if ( eAdjust == style::ParagraphAdjust_LEFT )
+                        rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_RIGHT ));
+                }
+                // else LTR first time defined = no need to do anything with existing adjust.
             }
-            else
-            {
-                rContext->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode2::LR_TB) ));
-                if (!IsRTFImport())
-                    rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_LEFT ), /*bOverwrite=*/false);
-            }
+            sal_Int16 nWritingMode = nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB;
+            rContext->Insert(PROP_WRITING_MODE, uno::makeAny( nWritingMode ));
         }
 
         break;
