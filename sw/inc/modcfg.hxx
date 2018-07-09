@@ -94,12 +94,12 @@ class SwCompareConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    SwCompareMode  eCmpMode;       //Compare/CompareDocuments;
-    bool            bUseRsid;       //Compare/Settings/Use RSID
+    SwCompareMode  m_eCmpMode;       //Compare/CompareDocuments;
+    bool            m_bUseRsid;       //Compare/Settings/Use RSID
     /// Compare/Settings/Store RSID
     bool            m_bStoreRsid;
-    bool            bIgnorePieces;  //Compare/Settings/Ignore pieces of length
-    sal_uInt16      nPieceLen;      //Compare/Settings/Ignore pieces of length
+    bool            m_bIgnorePieces;  //Compare/Settings/Ignore pieces of length
+    sal_uInt16      m_nPieceLen;      //Compare/Settings/Ignore pieces of length
 
     static const css::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -351,20 +351,20 @@ public:
     bool    IsHideFieldTips() const {return bHideFieldTips;}
     void        SetHideFieldTips(bool bSet) {bHideFieldTips = bSet;}
 
-    SwCompareMode  GetCompareMode() const { return aCompareConfig.eCmpMode; }
-    void            SetCompareMode( SwCompareMode eMode ) { aCompareConfig.eCmpMode = eMode;
+    SwCompareMode  GetCompareMode() const { return aCompareConfig.m_eCmpMode; }
+    void            SetCompareMode( SwCompareMode eMode ) { aCompareConfig.m_eCmpMode = eMode;
                                                              aCompareConfig.SetModified(); }
 
-    bool    IsUseRsid() const { return aCompareConfig.bUseRsid; }
-    void        SetUseRsid( bool b ) { aCompareConfig.bUseRsid = b;
+    bool    IsUseRsid() const { return aCompareConfig.m_bUseRsid; }
+    void        SetUseRsid( bool b ) { aCompareConfig.m_bUseRsid = b;
                                                             aCompareConfig.SetModified(); }
 
-    bool    IsIgnorePieces() const { return aCompareConfig.bIgnorePieces; }
-    void        SetIgnorePieces( bool b ) { aCompareConfig.bIgnorePieces = b;
+    bool    IsIgnorePieces() const { return aCompareConfig.m_bIgnorePieces; }
+    void        SetIgnorePieces( bool b ) { aCompareConfig.m_bIgnorePieces = b;
                                                 aCompareConfig.SetModified(); }
 
-    sal_uInt16  GetPieceLen() const { return aCompareConfig.nPieceLen; }
-    void        SetPieceLen( sal_uInt16 nLen ) { aCompareConfig.nPieceLen = nLen;
+    sal_uInt16  GetPieceLen() const { return aCompareConfig.m_nPieceLen; }
+    void        SetPieceLen( sal_uInt16 nLen ) { aCompareConfig.m_nPieceLen = nLen;
                                                  aCompareConfig.SetModified(); }
 
     bool IsStoreRsid() const

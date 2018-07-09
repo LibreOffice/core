@@ -1317,10 +1317,10 @@ SwCompareConfig::SwCompareConfig() :
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
     ,m_bStoreRsid(true)
 {
-    eCmpMode = SwCompareMode::Auto;
-    bUseRsid = false;
-    bIgnorePieces = false;
-    nPieceLen = 1;
+    m_eCmpMode = SwCompareMode::Auto;
+    m_bUseRsid = false;
+    m_bIgnorePieces = false;
+    m_nPieceLen = 1;
 
     Load();
 }
@@ -1335,10 +1335,10 @@ void SwCompareConfig::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    pValues[0] <<= static_cast<sal_Int32>(eCmpMode);
-    pValues[1] <<= bUseRsid;
-    pValues[2] <<= bIgnorePieces;
-    pValues[3] <<= static_cast<sal_Int32>(nPieceLen);
+    pValues[0] <<= static_cast<sal_Int32>(m_eCmpMode);
+    pValues[1] <<= m_bUseRsid;
+    pValues[2] <<= m_bIgnorePieces;
+    pValues[3] <<= static_cast<sal_Int32>(m_nPieceLen);
     pValues[4] <<= m_bStoreRsid;
 
     PutProperties(aNames, aValues);
@@ -1359,10 +1359,10 @@ void SwCompareConfig::Load()
 
             switch(nProp)
             {
-                case 0 : eCmpMode = static_cast<SwCompareMode>(nVal); break;
-                case 1 : bUseRsid = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 2 : bIgnorePieces = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 3 : nPieceLen = nVal; break;
+                case 0 : m_eCmpMode = static_cast<SwCompareMode>(nVal); break;
+                case 1 : m_bUseRsid = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 2 : m_bIgnorePieces = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 3 : m_nPieceLen = nVal; break;
                 case 4 : m_bStoreRsid = *o3tl::doAccess<bool>(pValues[nProp]); break;
             }
         }
