@@ -23,6 +23,7 @@
  <statusbar:statusbaritem xlink:href=".uno:StatusPageStyle" statusbar:align="left" statusbar:autosize="true" statusbar:width="83"/>
  <statusbar:statusbaritem xlink:href=".uno:LanguageStatus" statusbar:align="center" statusbar:autosize="true" statusbar:width="100"/>
  <statusbar:statusbaritem xlink:href=".uno:InsertMode" statusbar:align="center" statusbar:mandatory="false" statusbar:width="55"/>
+ <statusbar:statusbaritem xlink:href=".uno:CapsLockStatus" statusbar:align="center" statusbar:mandatory="false" statusbar:width="55"/>
  <statusbar:statusbaritem xlink:href=".uno:StatusSelectionMode" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16"/>
  <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16"/>
  <statusbar:statusbaritem xlink:href=".uno:Signature" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16"/>

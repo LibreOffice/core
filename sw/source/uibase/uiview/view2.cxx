@@ -1587,6 +1587,15 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     rSet.Put(SfxBoolItem(SID_ATTR_INSERT,rShell.IsInsMode()));
                 }
                 break;
+            case SID_CAPS_LOCK_STATUS:
+            {
+                vcl::Window* pFrameWin = &GetFrame()->GetWindow();
+                if(pFrameWin &&( pFrameWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK))
+                    rSet.Put(SfxBoolItem ( SID_CAPS_LOCK_STATUS, true ) );
+            }
+            break;
+
+
         }
         nWhich = aIter.NextWhich();
     }
