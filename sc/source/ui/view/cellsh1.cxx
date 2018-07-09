@@ -2959,12 +2959,17 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     ScSubTotalParam aSubTotalParam;
     SfxItemSet aArgSet( GetPool(), svl::Items<SCITEM_SUBTDATA, SCITEM_SUBTDATA>{} );
 
+    bool bAnonymous;
+
     // Only get existing named database range.
     ScDBData* pDBData = pTabViewShell->GetDBData(true, SC_DB_OLD);
-    if (!pDBData)
+    if (pDBData)
+        bAnonymous = false;
+    else
     {
         // No existing DB data at this position.  Create an
         // anonymous DB.
+        bAnonymous = true;
         pDBData = pTabViewShell->GetAnonymousDBData();
         ScRange aDataRange;
         pDBData->GetArea(aDataRange);
@@ -2973,6 +2978,13 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     pDBData->GetSubTotalParam( aSubTotalParam );
     aSubTotalParam.bRemoveOnly = false;
+    if (bAnonymous)
+    {
+        // Preset sort formatting along with values and also create formula
+        // cells with "needs formatting". Subtotals on data of different types
+        // doesn't make much sense anyway.
+        aSubTotalParam.bIncludePattern = true;
+    }
 
     aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, GetViewData(), &aSubTotalParam ) );
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
