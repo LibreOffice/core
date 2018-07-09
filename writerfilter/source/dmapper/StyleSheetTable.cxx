@@ -1280,18 +1280,9 @@ const StyleSheetEntryPtr StyleSheetTable::FindDefaultParaStyle()
     return pRet;
 }
 
-const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(const OUString& _sBaseStyle)
+const StyleSheetEntryPtr StyleSheetTable::GetCurrentEntry()
 {
-    if( _sBaseStyle.isEmpty() )
-    {
-        StyleSheetEntryPtr pEmptyPtr;
-        return pEmptyPtr;
-    }
-    OUString sBaseStyle = _sBaseStyle;
-    if( m_pImpl->m_pCurrentEntry)
-        sBaseStyle = m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier;
-
-    return FindStyleSheetByISTD( sBaseStyle );
+    return m_pImpl->m_pCurrentEntry;
 }
 
 
