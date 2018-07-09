@@ -407,7 +407,11 @@ interface BaseTextEditView
     [
         StateMethod = StateStatusLine ;
     ]
-
+    SID_CAPS_LOCK_STATUS // status()
+    [
+        StateMethod = StateStatusLine ;
+        ExecMethod = ExecuteStatusLine ;
+    ]
      //End of the statusbar
 
     SID_ATTR_BORDER_SHADOW // status()
