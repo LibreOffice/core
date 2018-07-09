@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_5845da16",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-09T07:48:09Z",
+      "side": 1,
+      "message": "Could you please add a comment here, so the next reader gets the reason you avoid the (Point, Size) ctor is that version works with Size::Width/Height()-1?",
+      "revId": "a5f45c131261874179ff1daa7f6c0ac6f0c10d62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
