@@ -1,0 +1,265 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f8470ebc",
+        "filename": "sc/source/ui/app/scdll.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Including once below is sufficient..",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_981802d4",
+        "filename": "sc/source/ui/view/editsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Please use proper indendation, 4 spaces.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b813c6b8",
+        "filename": "sc/source/ui/view/editsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "If there is no pFrameWin then it doesn\u0027t make much sense to put the item either, with a CapsLock forced to off because there was no pFrameWin, or what am I overlooking?",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d8444aba",
+        "filename": "sc/source/ui/view/editsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Please align the break statement with case.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_780d3e8f",
+        "filename": "sd/source/ui/view/drviewsa.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Unnecessary blank line.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_f8202efa",
+        "filename": "sd/source/ui/view/drviewsa.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "A blank line here instead ;-)",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_58127ab3",
+        "filename": "sd/source/ui/view/drviewsa.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Please indent by 4 spaces.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_1824f20c",
+        "filename": "sd/source/ui/view/outlnvsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "One blank line would be enough.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_18ae322e",
+        "filename": "sd/source/ui/view/outlnvsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Also here, putting an item with status Off because there\u0027s no pActiveWin doesn\u0027t make sense.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b84bc685",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 5
+      },
+      "lineNbr": 7236,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Rather than adding new source files to the blacklist, let clang-format format them as needed, if there is no compelling reason not to.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_98500235",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 5
+      },
+      "lineNbr": 14656,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_58715ae0",
+        "filename": "svx/source/stbctrls/capsctrl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Don\u0027t use DBG_ASSERT() in new code, either assert() or SAL_WARN_IF(). As the following code does a static_cast on pState and assumes an SfxBoolItem, this should be an assert() then. But maybe the following code should rather check the dynamic_cast instead? Can it be called with another item type? If yes, then check dynamic_cast result below; if no, then assert the dynamic_cast here.",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 18
+      },
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_f87f0ea9",
+        "filename": "sw/source/uibase/uiview/view2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Please indent by 4 spaces.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_1873d2e9",
+        "filename": "sw/source/uibase/uiview/view2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Same here, putting an item with state Off because there\u0027s no pFrameWin doesn\u0027t make sense.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d87c4ab7",
+        "filename": "sw/source/uibase/uiview/view2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T14:41:54Z",
+      "side": 1,
+      "message": "Best place the break statement after the block brace and align with the case.",
+      "revId": "7e73585f809d997ae23697ab3e03987b1d51d504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
