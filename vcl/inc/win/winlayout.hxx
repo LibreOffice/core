@@ -148,21 +148,24 @@ class WinFontInstance : public LogicalFontInstance
     friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
 public:
-    virtual                 ~WinFontInstance() override;
+    virtual ~WinFontInstance() override;
 
     bool CacheGlyphToAtlas(HDC hDC, int nGlyphIndex, SalGraphics& rGraphics);
     GlyphCache& GetGlyphCache() { return maGlyphCache; }
     bool hasHScale() const;
 
-    void SetHDC(const HDC);
+    void SetHFONT(const HFONT);
     HFONT GetHFONT() const { return m_hFont; }
+
+    // Prevend deletion of the HFONT in the WinFontInstance destructor
+    // Used for the ScopedFont handling
+    void UnsetHFONT() { m_hFont = nullptr; }
 
 private:
     explicit WinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     virtual hb_font_t* ImplInitHbFont() override;
 
-    HDC m_hDC;
     HFONT m_hFont;
     GlyphCache maGlyphCache;
 };
