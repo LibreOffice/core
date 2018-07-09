@@ -9176,9 +9176,9 @@ ScCellFormatsEnumeration::ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScR
     OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
                 "CellFormatsEnumeration: different tables" );
 
-    pIter = new ScAttrRectIterator( &rDoc, nTab,
+    pIter.reset( new ScAttrRectIterator( &rDoc, nTab,
                                     rRange.aStart.Col(), rRange.aStart.Row(),
-                                    rRange.aEnd.Col(), rRange.aEnd.Row() );
+                                    rRange.aEnd.Col(), rRange.aEnd.Row() ) );
     Advance_Impl();
 }
 
@@ -9188,7 +9188,6 @@ ScCellFormatsEnumeration::~ScCellFormatsEnumeration()
 
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
-    delete pIter;
 }
 
 void ScCellFormatsEnumeration::Advance_Impl()
@@ -9240,8 +9239,7 @@ void ScCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( nId == SfxHintId::Dying )
         {
             pDocShell = nullptr;
-            delete pIter;
-            pIter = nullptr;
+            pIter.reset();
         }
         else if ( nId == SfxHintId::DataChanged )
         {

@@ -1150,7 +1150,7 @@ class ScCellFormatsEnumeration : public cppu::WeakImplHelper<
 private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;
-    ScAttrRectIterator*     pIter;
+    std::unique_ptr<ScAttrRectIterator> pIter;
     ScRange                 aNext;
     bool                    bAtEnd;
     bool                    bDirty;
