@@ -398,6 +398,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
                         ScConditionalFormat* pFormat):
     ScXMLImportContext( rImport ),
     mpFormatData(nullptr),
+    mpParent(pFormat),
     mnIndex(0)
 {
     OUString sPositiveColor;
@@ -521,6 +522,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarF
         {
             ScColorScaleEntry* pEntry(nullptr);
             pContext = new ScXMLFormattingEntryContext( GetScImport(), pAttribList, pEntry );
+            pEntry->SetRepaintCallback(mpParent);
             if(mnIndex == 0)
             {
                 mpFormatData->mpLowerLimit.reset(pEntry);
@@ -547,7 +549,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarF
 ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat):
-    ScXMLImportContext( rImport )
+    ScXMLImportContext( rImport ),
+    mpParent(pFormat)
 {
     OUString aIconSetType, sShowValue;
     if ( rAttrList.is() )
@@ -611,6 +614,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLIconSetF
                 ScColorScaleEntry* pEntry(nullptr);
                 pContext = new ScXMLFormattingEntryContext( GetScImport(), pAttribList, pEntry );
                 mpFormatData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(pEntry));
+                pEntry->SetRepaintCallback(mpParent);
             }
             break;
         default:

@@ -1778,6 +1778,11 @@ size_t ScConditionalFormat::size() const
     return maEntries.size();
 }
 
+ScDocument* ScConditionalFormat::GetDocument()
+{
+    return pDoc;
+}
+
 ScConditionalFormat::~ScConditionalFormat()
 {
 }
