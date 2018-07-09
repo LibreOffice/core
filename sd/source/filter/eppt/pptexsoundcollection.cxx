@@ -127,7 +127,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
 
         rSt.WriteUInt32( EPP_SoundData << 16 ).WriteUInt32( nFileSize );
         sal_uInt32 nBytesLeft = nFileSize;
-        SvStream* pSourceFile = ::utl::UcbStreamHelper::CreateStream( aSoundURL, StreamMode::READ );
+        std::unique_ptr<SvStream> pSourceFile = ::utl::UcbStreamHelper::CreateStream( aSoundURL, StreamMode::READ );
         if ( pSourceFile )
         {
             std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ 0x10000 ] );   // 64 kB  Buffer
@@ -138,7 +138,6 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
                 rSt.WriteBytes(pBuf.get(), nToDo);
                 nBytesLeft -= nToDo;
             }
-            delete pSourceFile;
         }
     }
     catch( css::uno::Exception& )

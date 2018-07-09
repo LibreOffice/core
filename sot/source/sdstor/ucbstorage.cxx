@@ -86,7 +86,7 @@ class FileStreamWrapper_Impl : public FileInputStreamWrapper_Base
 protected:
     ::osl::Mutex    m_aMutex;
     OUString        m_aURL;
-    SvStream*       m_pSvStream;
+    std::unique_ptr<SvStream> m_pSvStream;
 
 public:
     explicit FileStreamWrapper_Impl(const OUString& rName);
@@ -119,7 +119,7 @@ FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
 {
     if ( m_pSvStream )
     {
-        delete m_pSvStream;
+        m_pSvStream.reset();
 #if OSL_DEBUG_LEVEL > 0
         --nOpenFiles;
 #endif
@@ -224,7 +224,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput()
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
-    DELETEZ( m_pSvStream );
+    m_pSvStream.reset();
 #if OSL_DEBUG_LEVEL > 0
     --nOpenFiles;
 #endif
@@ -414,7 +414,7 @@ public:
     OString                     m_aKey;
     ::ucbhelper::Content*       m_pContent;     // the content that provides the data
     Reference<XInputStream>     m_rSource;      // the stream covering the original data of the content
-    SvStream*                   m_pStream;      // the stream worked on; for readonly streams it is the original stream of the content
+    std::unique_ptr<SvStream>   m_pStream;      // the stream worked on; for readonly streams it is the original stream of the content
                                                 // for read/write streams it's a copy into a temporary file
     OUString                    m_aTempURL;     // URL of this temporary stream
     ErrCode                     m_nError;
@@ -672,7 +672,7 @@ UCBStorageStream_Impl::~UCBStorageStream_Impl()
     if( m_rSource.is() )
         m_rSource.clear();
 
-    delete m_pStream;
+    m_pStream.reset();
 
     if (!m_aTempURL.isEmpty())
         osl::File::remove(m_aTempURL);
@@ -1175,7 +1175,7 @@ void UCBStorageStream_Impl::Free()
 #endif
 
     m_rSource.clear();
-    DELETEZ( m_pStream );
+    m_pStream.reset();
 }
 
 void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
@@ -1520,8 +1520,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
         if ( m_nMode & StreamMode::WRITE )
         {
             // the root storage opens the package, so make sure that there is any
-            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aName, StreamMode::STD_READWRITE, m_pTempFile != nullptr /* bFileExists */ );
-            delete pStream;
+            ::utl::UcbStreamHelper::CreateStream( aName, StreamMode::STD_READWRITE, m_pTempFile != nullptr /* bFileExists */ );
         }
     }
     else

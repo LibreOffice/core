@@ -1514,11 +1514,9 @@ void SdPublishingDlg::Load()
 
     // check if file exists, SfxMedium shows an errorbox else
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
+        std::unique_ptr<SvStream> pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
         bool bOk = pIStm && ( pIStm->GetError() == ERRCODE_NONE);
-
-        delete pIStm;
 
         if( !bOk )
             return;

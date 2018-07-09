@@ -963,7 +963,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
 {
     OUString aFileName(rFileName);
     OUString aContentType(CONTENT_TYPE_STR_TEXT_PLAIN);
-    SvStream *pStream = nullptr;
+    std::unique_ptr<SvStream> pStream;
 
     if (!aFileName.isEmpty())
     {
@@ -977,8 +977,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
             pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, StreamMode::READ);
             if (!pStream || (pStream->GetError() != ERRCODE_NONE))
             {
-                delete pStream;
-                pStream = nullptr;
+                pStream.reset();
             }
             sal_Int32 nSepInd = aFileName.lastIndexOf('.');
             OUString aExtension = aFileName.copy( nSepInd + 1 );
@@ -990,7 +989,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
 
     // If something didn't work, we create an empty MemoryStream
     if( !pStream )
-        pStream = new SvMemoryStream;
+        pStream.reset( new SvMemoryStream );
 
 
     // Create part as MessageChild
@@ -1013,7 +1012,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
 
 
     // Body
-    pChild->SetDocumentLB( new SvLockBytes(pStream, true) );
+    pChild->SetDocumentLB( new SvLockBytes(pStream.release(), true) );
     rParent.AttachChild( std::move(pChild) );
 
     return true;

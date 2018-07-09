@@ -117,7 +117,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             if ( xStg->isStreamElement( aName ) )
                             {
                                 uno::Reference < io::XStream > xStm = xStg->cloneStreamElement( aName );
-                                pStream = utl::UcbStreamHelper::CreateStream( xStm );
+                                pStream = utl::UcbStreamHelper::CreateStream( xStm ).release();
                                 bDeleteStream = true;
                             }
                             else

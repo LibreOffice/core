@@ -366,7 +366,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     if( xIStm.is() )
     {
-        pIStm.reset(::utl::UcbStreamHelper::CreateStream( xIStm ));
+        pIStm = ::utl::UcbStreamHelper::CreateStream( xIStm );
     }
     else if( !aPath.isEmpty() )
     {
@@ -379,7 +379,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             xRet = implLoadStandardImage( aPath );
 
         if( !xRet.is() )
-            pIStm.reset(::utl::UcbStreamHelper::CreateStream( aPath, StreamMode::READ ));
+            pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, StreamMode::READ );
     }
     else if( xBtm.is() )
     {
@@ -441,10 +441,10 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
     SolarMutexGuard aGuard;
 
     // Turn properties into streams.
-    std::vector< std::shared_ptr<SvStream> > aStreams;
+    std::vector< std::unique_ptr<SvStream> > aStreams;
     for (const auto& rMediaProperties : rMediaPropertiesSeq)
     {
-        SvStream* pStream = nullptr;
+        std::unique_ptr<SvStream> pStream;
         uno::Reference<io::XInputStream> xStream;
 
         for (sal_Int32 i = 0; rMediaProperties.getLength(); ++i)
@@ -458,14 +458,13 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
             }
         }
 
-        aStreams.push_back(std::shared_ptr<SvStream>(pStream));
-
+        aStreams.push_back(std::move(pStream));
     }
 
     // Import: streams to graphics.
     std::vector< std::shared_ptr<Graphic> > aGraphics;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-    rFilter.ImportGraphics(aGraphics, aStreams);
+    rFilter.ImportGraphics(aGraphics, std::move(aStreams));
 
     // Returning: graphics to UNO objects.
     std::vector< uno::Reference<graphic::XGraphic> > aRet;
@@ -718,7 +717,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             OUString aURL;
 
             aValue >>= aURL;
-            pOStm.reset(::utl::UcbStreamHelper::CreateStream( aURL, StreamMode::WRITE | StreamMode::TRUNC ));
+            pOStm = ::utl::UcbStreamHelper::CreateStream( aURL, StreamMode::WRITE | StreamMode::TRUNC );
             aPath = aURL;
         }
         else if (aName == "OutputStream")
@@ -728,7 +727,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             aValue >>= xOStm;
 
             if( xOStm.is() )
-                pOStm.reset(::utl::UcbStreamHelper::CreateStream( xOStm ));
+                pOStm = ::utl::UcbStreamHelper::CreateStream( xOStm );
         }
     }
 

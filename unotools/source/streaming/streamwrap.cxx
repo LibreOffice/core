@@ -43,6 +43,12 @@ OInputStreamWrapper::OInputStreamWrapper( SvStream* pStream, bool bOwner )
 {
 }
 
+OInputStreamWrapper::OInputStreamWrapper( std::unique_ptr<SvStream> pStream )
+                 :m_pSvStream( pStream.release() )
+                 ,m_bSvStreamOwner( true )
+{
+}
+
 OInputStreamWrapper::~OInputStreamWrapper()
 {
     if( m_bSvStreamOwner )
@@ -286,6 +292,11 @@ OStreamWrapper::~OStreamWrapper() = default;
 OStreamWrapper::OStreamWrapper(SvStream& _rStream)
 {
     SetStream( &_rStream, false );
+}
+
+OStreamWrapper::OStreamWrapper(std::unique_ptr<SvStream> pStream)
+{
+    SetStream( pStream.release(), true );
 }
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  )

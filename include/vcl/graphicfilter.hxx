@@ -285,7 +285,7 @@ public:
     /// Imports multiple graphics.
     ///
     /// The resulting graphic is added to rGraphics on success, nullptr is added on failure.
-    void ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, const std::vector< std::shared_ptr<SvStream> >& rStreams);
+    void ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, std::vector< std::unique_ptr<SvStream> > vStreams);
 
     ErrCode             ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,
