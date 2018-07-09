@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SC_INC_CHGTRACK_HXX
 #define INCLUDED_SC_INC_CHGTRACK_HXX
 
-#include <deque>
 #include <map>
 #include <memory>
 #include <set>
 #include <stack>
+#include <vector>
 
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>
@@ -827,7 +827,7 @@ struct ScChangeTrackMsgInfo
 };
 
 // MsgQueue for notification via ModifiedLink
-typedef std::deque<ScChangeTrackMsgInfo*> ScChangeTrackMsgQueue;
+typedef std::vector<ScChangeTrackMsgInfo*> ScChangeTrackMsgQueue;
 typedef std::stack<ScChangeTrackMsgInfo*> ScChangeTrackMsgStack;
 typedef std::map<sal_uLong, ScChangeAction*> ScChangeActionMap;
 
