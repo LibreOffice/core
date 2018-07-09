@@ -3108,8 +3108,6 @@ bool SfxObjectShell::SaveChildren( bool bObjectsOnly )
 
 bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
 {
-    bool bResult = true;
-
     uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
     if ( !xStorage.is() )
         return false;
@@ -3123,10 +3121,7 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SfxObjectCreateMode::EMBEDDED == eCreateMode,xStorage);
     }
 
-    if ( bResult )
-        bResult = CopyStoragesOfUnknownMediaType( GetStorage(), xStorage );
-
-    return bResult;
+    return CopyStoragesOfUnknownMediaType(GetStorage(), xStorage);
 }
 
 bool SfxObjectShell::SaveCompletedChildren()
