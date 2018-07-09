@@ -24,6 +24,7 @@
 #include <svx/fmobjfac.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/tbxcolor.hxx>
+#include <svx/capsctrl.hxx>
 
 #include <comphelper/classids.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
@@ -82,6 +83,7 @@
 #include <svx/grafctrl.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
+#include <svx/capsctrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include <tbzoomsliderctrl.hxx>
@@ -204,7 +206,7 @@ void ScDLL::Init()
     SvxZoomSliderControl            ::RegisterControl(SID_ATTR_ZOOMSLIDER,  pMod);
     SvxModifyControl                ::RegisterControl(SID_DOC_MODIFIED,     pMod);
     XmlSecStatusBarControl          ::RegisterControl( SID_SIGNATURE,       pMod );
-
+    SvxCapsLockStatusBarControl     ::RegisterControl(SID_CAPS_LOCK_STATUS, pMod);
     SvxPosSizeStatusBarControl      ::RegisterControl(SID_ATTR_SIZE,        pMod);
 
     // Child Windows

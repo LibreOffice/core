@@ -64,6 +64,10 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetStatusBarState ;
     ]
+    SID_CAPS_LOCK_STATUS
+    [
+        StateMethod = GetStatusBarState ;
+    ]
     SID_ATTR_ZOOM // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

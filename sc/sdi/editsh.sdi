@@ -19,8 +19,8 @@ interface TableText
 {
     // not accessible from Basic, therefore everything with Export = FALSE
 
-    SID_ATTR_INSERT     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-
+    SID_ATTR_INSERT      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CAPS_LOCK_STATUS [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_DELETE
     [
         ExecMethod = Execute ;

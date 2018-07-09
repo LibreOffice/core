@@ -33,6 +33,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svl/eitem.hxx>
+#include <iostream>
 
 #include <sdcommands.h>
 #include <svx/dialogs.hrc>
@@ -529,6 +530,7 @@ void DrawViewShell::SetupPage (Size const &rSize,
 
 void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 {
+
     /* Zoom-Item
        Here we should propagate the corresponding value (Optimal ?, page width
        or page) with the help of the ZoomItems !!!   */
@@ -594,6 +596,10 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             aZoomItem.AddSnappingPoint(100);
             rSet.Put( aZoomItem );
         }
+    //caps lock
+    vcl::Window* pActiveWin = GetActiveWindow();
+    bool bCapsLockOn = pActiveWin &&( pActiveWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK);
+    rSet.Put( SfxBoolItem( SID_CAPS_LOCK_STATUS, bCapsLockOn ) );
     }
 
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();

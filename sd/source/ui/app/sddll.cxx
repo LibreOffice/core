@@ -84,6 +84,7 @@
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/xmlsecctrl.hxx>
 #include <svx/zoomctrl.hxx>
+#include <svx/capsctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/tbxctl.hxx>
 #include <sfx2/docfilt.hxx>
@@ -211,6 +212,8 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxPosSizeStatusBarControl::RegisterControl( SID_ATTR_SIZE, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
+    SvxCapsLockStatusBarControl     ::RegisterControl(SID_CAPS_LOCK_STATUS, pMod);
+
 
     // #UndoRedo#
     SvxUndoRedoControl::RegisterControl( SID_UNDO , pMod );

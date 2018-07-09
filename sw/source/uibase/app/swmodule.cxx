@@ -42,6 +42,7 @@
 #include <svx/contdlg.hxx>
 #include <svx/layctrl.hxx>
 #include <svx/fontwork.hxx>
+#include <svx/capsctrl.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/tbxcolor.hxx>
@@ -325,6 +326,7 @@ void SwDLL::RegisterControls()
     SwPreviewZoomControl::RegisterControl(FN_PREVIEW_ZOOM, pMod);
     SvxPosSizeStatusBarControl::RegisterControl(0, pMod );
     SvxInsertStatusBarControl::RegisterControl(SID_ATTR_INSERT, pMod );
+    SvxCapsLockStatusBarControl::RegisterControl(SID_CAPS_LOCK_STATUS, pMod);
     SvxSelectionModeControl::RegisterControl(FN_STAT_SELMODE, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SwWordCountStatusBarControl::RegisterControl(FN_STAT_WORDCOUNT, pMod);

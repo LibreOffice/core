@@ -120,6 +120,11 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
+    SID_CAPS_LOCK_STATUS
+    [
+        StateMethod = GetStatusBarState ;
+    ]
+
      // Menu messages for temporary functions with dialog
     SID_ATTR_ZOOM // ole : no, status : no
     [

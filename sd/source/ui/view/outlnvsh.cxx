@@ -43,6 +43,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <iostream>
 
 #include <svl/whiter.hxx>
 #include <editeng/editstat.hxx>
@@ -1273,6 +1274,8 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         rSet.Put( *pZoomItem );
     }
 
+
+
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
     {
         if (GetDocSh()->IsUIActive() || !GetActiveWindow() )
@@ -1349,6 +1352,12 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     }
     rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
+
+    //caps lock
+    vcl::Window* pActiveWin = GetActiveWindow();
+    bool bCapsLockOn = pActiveWin &&( pActiveWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK);
+    rSet.Put( SfxBoolItem( SID_CAPS_LOCK_STATUS, bCapsLockOn ) );
+
 }
 
 void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )

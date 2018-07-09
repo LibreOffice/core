@@ -7233,6 +7233,7 @@ include/svx/algitem.hxx
 include/svx/anchorid.hxx
 include/svx/bmpmask.hxx
 include/svx/camera3d.hxx
+include/svx/capsctrl.hxx
 include/svx/charmap.hxx
 include/svx/charthelper.hxx
 include/svx/checklbx.hxx
@@ -14652,6 +14653,7 @@ svx/source/sidebar/text/TextUnderlineControl.hxx
 svx/source/sidebar/text/TextUnderlinePopup.cxx
 svx/source/sidebar/tools/ValueSetWithTextControl.cxx
 svx/source/smarttags/SmartTagMgr.cxx
+svx/source/stbctrls/capsctrl.cxx
 svx/source/stbctrls/insctrl.cxx
 svx/source/stbctrls/modctrl.cxx
 svx/source/stbctrls/modctrl_internal.hxx

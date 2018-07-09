@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+ /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -57,6 +57,7 @@
 #include <svtools/transfer.hxx>
 #include <svl/stritem.hxx>
 
+#include <iostream>
 #include <editsh.hxx>
 #include <global.hxx>
 #include <sc.hrc>
@@ -777,7 +778,13 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_INSERT_FIELD_TITLE:
             case SID_INSERT_FIELD_DATE_VAR:
             break;
-
+            case SID_CAPS_LOCK_STATUS:
+            {
+                vcl::Window* pFrameWin = pViewData->GetActiveWin();
+              bool bCapsLockOn = pFrameWin &&( pFrameWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK);
+              rSet.Put(SfxBoolItem ( SID_CAPS_LOCK_STATUS, bCapsLockOn ) );
+            }
+              break;
         }
         nWhich = aIter.NextWhich();
     }

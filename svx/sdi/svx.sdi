@@ -4700,7 +4700,23 @@ SfxBoolItem InsertMode SID_ATTR_INSERT
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Edit;
 ]
+SfxBoolItem CapsLockStatus SID_CAPS_LOCK_STATUS
 
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
 
 SfxBoolItem DefaultNumbering FN_NUM_NUMBERING_ON
 (SfxBoolItem On FN_PARAM_1)
