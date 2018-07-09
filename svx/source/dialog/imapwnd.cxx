@@ -513,7 +513,7 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
                 aMenu->EnableItem(aMenu->GetItemId("url"));
                 aMenu->EnableItem(aMenu->GetItemId("active"));
                 aMenu->EnableItem(aMenu->GetItemId("macro"));
-                aMenu->CheckItem(aMenu->GetItemId("active"), GetIMapObj(pSdrObj)->IsActive());
+                aMenu->CheckItem("active", GetIMapObj(pSdrObj)->IsActive());
             }
 
             aMenu->EnableItem(aMenu->GetItemId("arrange"));

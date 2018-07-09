@@ -238,7 +238,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("add"), bValidURL && SgaObjKind::Sound != eObjKind);
 
     mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("preview"), bValidURL);
-    mpPopupMenu->CheckItem(mpPopupMenu->GetItemId("preview"), mbPreview);
+    mpPopupMenu->CheckItem("preview", mbPreview);
 
     if( mpTheme->IsReadOnly() || !mpTheme->GetObjectCount() )
     {

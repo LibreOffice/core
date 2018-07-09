@@ -1459,7 +1459,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         {
             // test if break point is enabled...
             VclPtr<PopupMenu> xBrkPropMenu = mpUIBuilder->get_menu("breakmenu");
-            xBrkPropMenu->CheckItem(xBrkPropMenu->GetItemId("active"), pBrk->bEnabled);
+            xBrkPropMenu->CheckItem("active", pBrk->bEnabled);
             OString sCommand = xBrkPropMenu->GetItemIdent(xBrkPropMenu->Execute(this, aPos));
             if (sCommand == "active")
             {
