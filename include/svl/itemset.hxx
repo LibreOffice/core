@@ -174,6 +174,12 @@ public:
 
         return nullptr;
     }
+    template <class T>
+    static const T* GetItem(const SfxItemSet* pItemSet, TypedWhichId<T> nWhich,
+                            bool bSearchInParent)
+    {
+        return GetItem<T>(pItemSet, static_cast<sal_uInt16>(nWhich), bSearchInParent);
+    }
 
     sal_uInt16                  GetWhichByPos(sal_uInt16 nPos) const;
 
