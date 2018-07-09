@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_58b6fadb",
+        "filename": "sc/uiconfig/scalc/ui/regressiondialog.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T11:07:21Z",
+      "side": 1,
+      "message": "This looks odd, likely should be 0.1 instead?",
+      "revId": "187af5be47db42e2f4ab94319f932b847f897ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_38cb3654",
+        "filename": "sc/uiconfig/scalc/ui/regressiondialog.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-09T11:07:21Z",
+      "side": 1,
+      "message": "Same here, 0.95",
+      "revId": "187af5be47db42e2f4ab94319f932b847f897ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
