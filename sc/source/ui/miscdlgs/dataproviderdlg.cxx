@@ -224,7 +224,8 @@ MenuData aColumnData[] = {
     { 2, "Merge Columns", &ScDataProviderDlg::mergeColumns },
     { 3, "Text Transformation", &ScDataProviderDlg::textTransformation },
     { 4, "Sort Columns", &ScDataProviderDlg::sortTransformation },
-    { 5, "Aggregate Functions", &ScDataProviderDlg::aggregateFunction}
+    { 5, "Aggregate Functions", &ScDataProviderDlg::aggregateFunction},
+    { 6, "Number Transformations", &ScDataProviderDlg::numberTransformation }
 };
 
 class ScDataTransformationBaseControl : public VclContainer,
@@ -634,7 +635,96 @@ std::shared_ptr<sc::DataTransformation> ScAggregateFunction::getTransformation()
 
     return nullptr;
 }
-    
+
+class ScNumberTransformation : public ScDataTransformationBaseControl
+{
+private:
+    VclPtr<Edit> maColumnNums;
+    VclPtr<ListBox> maType;
+
+public:
+
+    ScNumberTransformation(vcl::Window* pParent);
+    ~ScNumberTransformation() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+
+};
+
+ScNumberTransformation::ScNumberTransformation(vcl::Window* pParent):
+    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/numbertransformationentry.ui")
+{
+    get(maColumnNums, "ed_columns");
+    get(maType, "ed_lst");
+}
+
+ScNumberTransformation::~ScNumberTransformation()
+{
+    disposeOnce();
+}
+
+void ScNumberTransformation::dispose()
+{
+    maColumnNums.clear();
+    maType.clear();
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScNumberTransformation::getTransformation()
+{
+    OUString aColumnString = maColumnNums->GetText();
+    sal_Int32 nPos = maType->GetSelectedEntryPos();
+    std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
+    std::set<SCCOL> aColumns;
+    for (auto& rColStr : aSplitColumns)
+    {
+        sal_Int32 nCol = rColStr.toInt32();
+        if (nCol <= 0)
+            continue;
+
+        if (nCol > MAXCOL)
+            continue;
+
+        // translate from 1-based column notations to internal Calc one
+        aColumns.insert(nCol - 1);
+    }
+    switch (nPos)
+    {
+        case 0:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::SIGN);
+        case 1:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::ROUND);
+        case 2:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::ROUND_UP);
+        case 3:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN);
+        case 4:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE);
+        case 5:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::LOG_E);
+        case 6:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::LOG_10);
+        case 7:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::CUBE);
+        case 8:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::SQUARE);
+        case 9:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT);
+        case 10:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::EXPONENT);
+        case 11:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::IS_EVEN);
+        case 12:
+            return std::make_shared<sc::NumberTransformation>(ColNums,sc::NUMBER_TRANSFORM_TYPE::IS_ODD);
+        default:
+            assert(false);
+    }
+
+    return nullptr;
+}
+
 }
 
 ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument):
@@ -797,6 +887,12 @@ void ScDataProviderDlg::aggregateFunction()
 {
     VclPtr<ScAggregateFunction> pAggregateFuntionEntry = VclPtr<ScAggregateFunction>::Create(mpList);
     mpList->addEntry(pAggregateFuntionEntry);
+}
+
+void ScDataProviderDlg::numberTransformation()
+{
+    VclPtr<ScNumberTransformation> pNumberTransformationEntry = VclPtr<ScNumberTransformation>::Create(mpList);
+    mpList->addEntry(pNumberTransformationEntry);
 }
 
 void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
