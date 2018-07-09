@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_7882deca",
+        "filename": "include/vcl/EnumContext.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-07-09T12:56:56Z",
+      "side": 1,
+      "message": "also merge here 508f14b13614c9f5f9611589e7f744d1bc523ff3",
+      "revId": "22ba989c6f723c4aff679b8aac895235cf2234a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_58871ad9",
+        "filename": "vcl/source/window/EnumContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-07-09T12:56:56Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "22ba989c6f723c4aff679b8aac895235cf2234a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
