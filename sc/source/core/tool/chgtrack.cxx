@@ -45,6 +45,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/datetime.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <algorithm>
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
@@ -2163,16 +2164,10 @@ void ScChangeTrack::ClearMsgQueue()
         delete pBlockModifyMsg;
         pBlockModifyMsg = nullptr;
     }
-    while ( !aMsgStackTmp.empty() )
-    {
-        delete aMsgStackTmp.top();
-        aMsgStackTmp.pop();
-    }
-    while ( !aMsgStackFinal.empty() )
-    {
-        delete aMsgStackFinal.top();
-        aMsgStackFinal.pop();
-    }
+    std::for_each(aMsgStackTmp.rbegin(), aMsgStackTmp.rend(), std::default_delete<ScChangeTrackMsgInfo>());
+    aMsgStackTmp.clear();
+    std::for_each(aMsgStackFinal.rbegin(), aMsgStackFinal.rend(), std::default_delete<ScChangeTrackMsgInfo>());
+    aMsgStackFinal.clear();
 
     ScChangeTrackMsgQueue::iterator itQueue;
     for ( itQueue = aMsgQueue.begin(); itQueue != aMsgQueue.end(); ++itQueue)
@@ -2279,7 +2274,7 @@ void ScChangeTrack::StartBlockModify( ScChangeTrackMsgType eMsgType,
     if ( aModifiedLink.IsSet() )
     {
         if ( pBlockModifyMsg )
-            aMsgStackTmp.push( pBlockModifyMsg ); // Block in Block
+            aMsgStackTmp.push_back( pBlockModifyMsg ); // Block in Block
         pBlockModifyMsg = new ScChangeTrackMsgInfo;
         pBlockModifyMsg->eMsgType = eMsgType;
         pBlockModifyMsg->nStartAction = nStartAction;
@@ -2296,7 +2291,7 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
             {
                 pBlockModifyMsg->nEndAction = nEndAction;
                 // Blocks dissolved in Blocks
-                aMsgStackFinal.push( pBlockModifyMsg );
+                aMsgStackFinal.push_back( pBlockModifyMsg );
             }
             else
                 delete pBlockModifyMsg;
@@ -2304,19 +2299,16 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
                 pBlockModifyMsg = nullptr;
             else
             {
-                pBlockModifyMsg = aMsgStackTmp.top(); // Maybe Block in Block
-                aMsgStackTmp.pop();
+                pBlockModifyMsg = aMsgStackTmp.back(); // Maybe Block in Block
+                aMsgStackTmp.pop_back();
             }
         }
         if ( !pBlockModifyMsg )
         {
-            bool bNew = false;
-            while ( !aMsgStackFinal.empty() )
-            {
-                aMsgQueue.push_back( aMsgStackFinal.top() );
-                aMsgStackFinal.pop();
-                bNew = true;
-            }
+            bool bNew = !aMsgStackFinal.empty();
+            aMsgQueue.reserve(aMsgQueue.size() + aMsgStackFinal.size());
+            aMsgQueue.insert(aMsgQueue.end(), aMsgStackFinal.rbegin(), aMsgStackFinal.rend());
+            aMsgStackFinal.clear();
             if ( bNew )
                 aModifiedLink.Call( *this );
         }
