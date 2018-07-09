@@ -584,7 +584,8 @@ public:
 
     static bool                 CopyStoragesOfUnknownMediaType(
                                     const css::uno::Reference< css::embed::XStorage >& xSource,
-                                    const css::uno::Reference< css::embed::XStorage >& xTarget );
+                                    const css::uno::Reference<css::embed::XStorage>& xTarget,
+                                    const css::uno::Sequence<OUString>& rExceptions = css::uno::Sequence<OUString>());
 
     // The functions from SvPersist
     void            EnableSetModified( bool bEnable = true );

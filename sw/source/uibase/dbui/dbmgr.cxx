@@ -2932,7 +2932,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
 void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>& xStorable,
                                           const uno::Reference<embed::XStorage>& xStorage,
                                           const OUString& rStreamRelPath,
-                                          const OUString& rOwnURL)
+                                          const OUString& rOwnURL, bool bCopyTo)
 {
     // Construct vnd.sun.star.pkg:// URL for later loading, and TargetStorage/StreamRelPath for storing.
     OUString const sTmpName = ConstructVndSunStarPkgUrl(rOwnURL, rStreamRelPath);
@@ -2943,7 +2943,10 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
         {"StreamRelPath", uno::makeAny(rStreamRelPath)},
         {"BaseURI", uno::makeAny(rOwnURL)}
     });
-    xStorable->storeAsURL(sTmpName, aSequence);
+    if (bCopyTo)
+        xStorable->storeToURL(sTmpName, aSequence);
+    else
+        xStorable->storeAsURL(sTmpName, aSequence);
 }
 
 OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUString *pDestDir)

@@ -1029,15 +1029,8 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         if ( bLocationChanged )
         {
             // create storage for target URL
-            uno::Reference<embed::XStorage> xTargetStorage;
-            _rArguments.get("TargetStorage") >>= xTargetStorage;
-            if (!xTargetStorage.is())
-                xTargetStorage = impl_createStorageFor_throw(_rURL);
-
-            // In case we got a StreamRelPath, then xTargetStorage should reference that sub-storage.
-            OUString sStreamRelPath = _rArguments.getOrDefault("StreamRelPath", OUString());
-            if (!sStreamRelPath.isEmpty())
-                xTargetStorage = xTargetStorage->openStorageElement(sStreamRelPath, embed::ElementModes::READWRITE);
+            uno::Reference<embed::XStorage> xTargetStorage(
+                impl_GetStorageOrCreateFor_throw(_rArguments, _rURL));
 
             if ( m_pImpl->isEmbeddedDatabase() )
                 m_pImpl->clearConnections();
@@ -1128,6 +1121,24 @@ Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const OUSt
 
     Reference< XSingleServiceFactory > xStorageFactory( m_pImpl->createStorageFactory(), UNO_SET_THROW );
     return Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aParam ), UNO_QUERY_THROW );
+}
+
+css::uno::Reference<css::embed::XStorage> ODatabaseDocument::impl_GetStorageOrCreateFor_throw(
+    const ::comphelper::NamedValueCollection& _rArguments, const OUString& _rURL) const
+{
+    // Try to get the storage from arguments, then create storage for target URL
+    uno::Reference<embed::XStorage> xTargetStorage;
+    _rArguments.get("TargetStorage") >>= xTargetStorage;
+    if (!xTargetStorage.is())
+        xTargetStorage = impl_createStorageFor_throw(_rURL);
+
+    // In case we got a StreamRelPath, then xTargetStorage should reference that sub-storage.
+    OUString sStreamRelPath = _rArguments.getOrDefault("StreamRelPath", OUString());
+    if (!sStreamRelPath.isEmpty())
+        xTargetStorage
+            = xTargetStorage->openStorageElement(sStreamRelPath, embed::ElementModes::READWRITE);
+
+    return xTargetStorage;
 }
 
 void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments )
@@ -1232,11 +1243,12 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
 
     try
     {
+        const ::comphelper::NamedValueCollection aArguments(_rArguments);
         // create storage for target URL
-        Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( _rURL ) );
+        Reference<XStorage> xTargetStorage(impl_GetStorageOrCreateFor_throw(aArguments, _rURL));
 
         // extend media descriptor with URL
-        Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
+        Sequence<PropertyValue> aMediaDescriptor(lcl_appendFileNameToDescriptor(aArguments, _rURL));
 
         // store to this storage
         impl_storeToStorage_throw( xTargetStorage, aMediaDescriptor, aGuard );
