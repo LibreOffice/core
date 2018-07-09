@@ -156,6 +156,18 @@ private:
     bool                    mbScreen : 1;           // is Screen compatible
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
 
+    /** HFONT lifecycle
+     *
+     * The HFONT has to be shared between mhFonts and mpWinFontEntry.
+     * As mpWinFontEntry is reference counted and just freed in SetFont, the HFONT is
+     * transferred from mhFonts to the mpWinFontEntry.
+     *
+     * We need the mhFonts list, as embedded fonts don't have a corresponding WinFontInstance
+     * so for these there is just the mhFonts entry.
+     *
+     * The HFONT object can just be assigned to mhFonts _or_ mpWinFontEntry!
+     **/
+
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     rtl::Reference<WinFontInstance>
                             mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
@@ -173,6 +185,7 @@ private:
 
     bool CacheGlyphs(const GenericSalLayout& rLayout);
     bool DrawCachedGlyphs(const GenericSalLayout& rLayout);
+    HFONT ImplDoSetFont(FontSelectPattern const * i_pFont, const PhysicalFontFace * i_pFontFace, float& o_rFontScale, HFONT& o_rOldFont);
 
 public:
     HDC getHDC() const { return mhLocalDC; }
@@ -198,7 +211,6 @@ public:
 
     HWND gethWnd();
 
-    HFONT                   ImplDoSetFont( FontSelectPattern const * i_pFont, const PhysicalFontFace * i_pFontFace, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
     explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd,

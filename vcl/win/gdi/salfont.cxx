@@ -884,6 +884,7 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont,
     if( hdcScreen )
     {
         // select font into screen hdc first to get an antialiased font
+        // and instantly restore the default font!
         // see knowledge base article 305290:
         // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
         SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
@@ -915,18 +916,22 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
     if( !pFont )
     {
         // deselect still active font
-        if( mhDefFont )
-            ::SelectFont( getHDC(), mhDefFont );
+        if (mhDefFont)
+        {
+            ::SelectFont(getHDC(), mhDefFont);
+            mhDefFont = nullptr;
+        }
         mfCurrentFontScale = mfFontScale[nFallbackLevel];
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
         {
             if( mhFonts[i] )
+            {
                 ::DeleteFont( mhFonts[i] );
-            mhFonts[ i ] = nullptr;
+                mhFonts[ i ] = nullptr;
+            }
             mpWinFontEntry[i] = nullptr;
         }
-        mhDefFont = nullptr;
         return;
     }
 
@@ -953,25 +958,31 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
                 ::DeleteFont( mhFonts[i] );
                 mhFonts[i] = nullptr;
             }
-            // note: removing mpWinFontEntry[i] here has obviously bad effects
+            if (i > nFallbackLevel)
+                mpWinFontEntry[i] = nullptr;
         }
     }
 
     // store new font in correct layer
-    mhFonts[ nFallbackLevel ] = hNewFont;
-
-    // now the font is live => update font face
     if (mpWinFontEntry[nFallbackLevel])
     {
+        mpWinFontEntry[nFallbackLevel]->SetHFONT(hNewFont);
+        // now the font is live => update font face
         const WinFontFace* pFontFace = static_cast<const WinFontFace*>(mpWinFontEntry[nFallbackLevel]->GetFontFace());
         pFontFace->UpdateFromHDC(getHDC());
     }
+    else
+        mhFonts[ nFallbackLevel ] = hNewFont;
 }
 
 void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
-    HFONT hOldFont = SelectFont( getHDC(), mhFonts[nFallbackLevel] );
+    const HFONT hFallbackFont = mhFonts[nFallbackLevel] ? mhFonts[nFallbackLevel]
+                                                        : mpWinFontEntry[nFallbackLevel]->GetHFONT();
+    assert((mhFonts[nFallbackLevel] && !mpWinFontEntry[nFallbackLevel]) ||
+           (!mhFonts[nFallbackLevel] && mpWinFontEntry[nFallbackLevel]));
+    const HFONT hOldFont = SelectFont(getHDC(), hFallbackFont);
 
     wchar_t aFaceName[LF_FACESIZE+60];
     if( GetTextFaceW( getHDC(), SAL_N_ELEMENTS(aFaceName), aFaceName ) )
@@ -982,8 +993,21 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     const RawFontData aHheaRawData(getHDC(), nHheaTag);
     const RawFontData aOS2RawData(getHDC(), nOS2Tag);
 
-    mpWinFontEntry[nFallbackLevel]->SetHDC(getHDC());
-    rxFontMetric->SetMinKashida(mpWinFontEntry[nFallbackLevel]->GetKashidaWidth());
+    if (mpWinFontEntry[nFallbackLevel])
+        rxFontMetric->SetMinKashida(mpWinFontEntry[nFallbackLevel]->GetKashidaWidth());
+    else
+    {
+        // Get Kashida width has without mpWinFontEntry for embedded fonts
+        WCHAR nKashidaCh = 0x0640;
+        WORD nKashidaGid;
+        DWORD ret = GetGlyphIndicesW(getHDC(), &nKashidaCh, 1, &nKashidaGid, GGI_MARK_NONEXISTING_GLYPHS);
+        if (ret != GDI_ERROR && nKashidaGid != 0xFFFF)
+        {
+            int nKashidaWidth = 0;
+            if (GetCharWidthI(getHDC(), nKashidaGid, 1, nullptr, &nKashidaWidth))
+                rxFontMetric->SetMinKashida(static_cast<int>(mfFontScale[nFallbackLevel] * nKashidaWidth));
+        }
+    }
 
     // get the font metric
     OUTLINETEXTMETRICW aOutlineMetric;
@@ -1580,8 +1604,16 @@ private:
 
 ScopedFont::ScopedFont(WinSalGraphics & rData): m_rData(rData)
 {
-    m_hOrigFont = m_rData.mhFonts[0];
-    m_rData.mhFonts[0] = nullptr; // avoid deletion of current font
+    if (m_rData.mpWinFontEntry[0])
+    {
+        m_hOrigFont = m_rData.mpWinFontEntry[0]->GetHFONT();
+        m_rData.mpWinFontEntry[0]->UnsetHFONT();
+    }
+    else
+    {
+        m_hOrigFont = m_rData.mhFonts[0];
+        m_rData.mhFonts[0] = nullptr; // avoid deletion of current font
+    }
 }
 
 ScopedFont::~ScopedFont()
@@ -1590,7 +1622,10 @@ ScopedFont::~ScopedFont()
     {
         // restore original font, destroy temporary font
         HFONT hTempFont = m_rData.mhFonts[0];
-        m_rData.mhFonts[0] = m_hOrigFont;
+        if (m_rData.mpWinFontEntry[0])
+            m_rData.mpWinFontEntry[0]->SetHFONT(m_hOrigFont);
+        else
+            m_rData.mhFonts[0] = m_hOrigFont;
         SelectObject( m_rData.getHDC(), m_hOrigFont );
         DeleteObject( hTempFont );
     }
