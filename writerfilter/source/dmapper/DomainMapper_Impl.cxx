@@ -660,19 +660,17 @@ const OUString DomainMapper_Impl::GetCurrentParaStyleName()
 }
 
 /*-------------------------------------------------------------------------
-    returns a the value from the current paragraph style - if available
-    TODO: What about parent styles?
+    returns the value from the current paragraph style - if available
   -----------------------------------------------------------------------*/
 uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
 {
     StyleSheetEntryPtr pEntry;
     if( m_bInStyleSheetImport )
-        pEntry = GetStyleSheetTable()->FindParentStyleSheet(OUString());
+        pEntry = GetStyleSheetTable()->GetCurrentEntry();
     else
         pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
     while(pEntry.get( ) )
     {
-        //is there a tab stop set?
         if(pEntry->pProperties)
         {
             boost::optional<PropertyMap::Property> aProperty =
@@ -683,7 +681,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
             }
         }
         //search until the property is set or no parent is available
-        StyleSheetEntryPtr pNewEntry = GetStyleSheetTable()->FindParentStyleSheet(pEntry->sBaseStyleIdentifier);
+        StyleSheetEntryPtr pNewEntry = GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
 
         SAL_WARN_IF( pEntry == pNewEntry, "writerfilter.dmapper", "circular loop in style hierarchy?");
 
