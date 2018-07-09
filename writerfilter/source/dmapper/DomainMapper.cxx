@@ -1466,6 +1466,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_CT_PPrBase_bidi:
         {
+            sal_Int32 nStyleValue = -1;
+            m_pImpl->GetPropertyFromStyleSheet( PROP_WRITING_MODE ) >>= nStyleValue;
+            if ( nIntValue == nStyleValue )
+                break;
+
             if (nIntValue != 0)
             {
                 rContext->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode2::RL_TB) ));
