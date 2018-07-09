@@ -3363,21 +3363,21 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
 
     try
     {
-        uno::Sequence< OUString > aSubElements = xSource->getElementNames();
-        for ( sal_Int32 nInd = 0; nInd < aSubElements.getLength(); nInd++ )
+        for (const OUString& rSubElement : xSource->getElementNames())
         {
-            if ( aSubElements[nInd] == "Configurations" )
+            if (rSubElement == "Configurations")
             {
                 // The workaround for compatibility with SO7, "Configurations" substorage must be preserved
-                if ( xSource->isStorageElement( aSubElements[nInd] ) )
+                if (xSource->isStorageElement(rSubElement))
                 {
-                    OSL_ENSURE( !xTarget->hasByName( aSubElements[nInd] ),
-                                "The target storage is an output storage, the element should not exist in the target!" );
+                    OSL_ENSURE(!xTarget->hasByName(rSubElement), "The target storage is an output "
+                                                                 "storage, the element should not "
+                                                                 "exist in the target!");
 
-                    xSource->copyElementTo( aSubElements[nInd], xTarget, aSubElements[nInd] );
+                    xSource->copyElementTo(rSubElement, xTarget, rSubElement);
                 }
             }
-            else if ( xSource->isStorageElement( aSubElements[nInd] ) )
+            else if (xSource->isStorageElement(rSubElement))
             {
                 OUString aMediaType;
                 const OUString aMediaTypePropName( "MediaType"  );
@@ -3386,8 +3386,8 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                 try
                 {
                     uno::Reference< embed::XOptimizedStorage > xOptStorage( xSource, uno::UNO_QUERY_THROW );
-                    bGotMediaType =
-                        ( xOptStorage->getElementPropertyValue( aSubElements[nInd], aMediaTypePropName ) >>= aMediaType );
+                    bGotMediaType = (xOptStorage->getElementPropertyValue(rSubElement, aMediaTypePropName)
+                           >>= aMediaType);
                 }
                 catch( uno::Exception& )
                 {}
@@ -3396,7 +3396,8 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                 {
                     uno::Reference< embed::XStorage > xSubStorage;
                     try {
-                        xSubStorage = xSource->openStorageElement( aSubElements[nInd], embed::ElementModes::READ );
+                        xSubStorage
+                            = xSource->openStorageElement(rSubElement, embed::ElementModes::READ);
                     } catch( uno::Exception& )
                     {}
 
@@ -3406,7 +3407,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                         //             instead of the temporary storage; this substorage should be removed later
                         //             if the MimeType is wrong
                         xSubStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                        xSource->copyStorageElementLastCommitTo( aSubElements[nInd], xSubStorage );
+                        xSource->copyStorageElementLastCommitTo(rSubElement, xSubStorage);
                     }
 
                     uno::Reference< beans::XPropertySet > xProps( xSubStorage, uno::UNO_QUERY_THROW );
@@ -3444,12 +3445,15 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
 
                         default:
                         {
-                            OSL_ENSURE( aSubElements[nInd] == "Configurations2" || nFormat == SotClipboardFormatId::STARBASE_8 || !xTarget->hasByName( aSubElements[nInd] ),
-                                        "The target storage is an output storage, the element should not exist in the target!" );
+                            OSL_ENSURE(rSubElement == "Configurations2"
+                                           || nFormat == SotClipboardFormatId::STARBASE_8
+                                           || !xTarget->hasByName(rSubElement),
+                                       "The target storage is an output storage, the element "
+                                       "should not exist in the target!");
 
-                            if ( !xTarget->hasByName( aSubElements[nInd] ) )
+                            if (!xTarget->hasByName(rSubElement))
                             {
-                                xSource->copyElementTo( aSubElements[nInd], xTarget, aSubElements[nInd] );
+                                xSource->copyElementTo(rSubElement, xTarget, rSubElement);
                             }
                         }
                     }
