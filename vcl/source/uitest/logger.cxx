@@ -96,7 +96,9 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     if (!mbValid)
         return;
 
-    const OUString& rID = xUIElement->get_id();
+    //We need to check for Parent's ID in case the UI Element is SubEdit of Combobox/SpinField
+    const OUString& rID = xUIElement->get_id().isEmpty() ?
+        xUIElement->GetParent()->get_id() : xUIElement->get_id();
     if (rID.isEmpty())
         return;
 
@@ -159,10 +161,17 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
 
     std::unique_ptr<UIObject> pUIObject = xUIElement->GetUITestFactory()(xUIElement.get());
 
-    OUString parent_id = xUIElement->GetParent()->get_id();
+    VclPtr <vcl::Window> pParent = xUIElement->GetParent();
+
+    while (!pParent->IsTopWindow())
+    {
+        pParent = pParent->GetParent();
+    }
+
+    OUString aParentID = pParent->get_id();
 
     OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
-            rID + " Parent:"+ parent_id +" " + aKeyCode;
+            rID + " Parent:"+ aParentID +" " + aKeyCode;
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
 
