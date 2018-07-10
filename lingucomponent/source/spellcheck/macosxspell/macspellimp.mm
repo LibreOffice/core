@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -115,8 +115,106 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         for (NSUInteger i = 0; i < [aSpellCheckLanguages count]; i++)
         {
             NSString* pLangStr = static_cast<NSString*>([aSpellCheckLanguages objectAtIndex:i]);
-            postspdict.push_back( pLangStr );
+
+            // Fix up generic languages (without territory code) and odd combinations that LO
+            // doesn't handle.
+            if ([pLangStr isEqualToString:@"da"])
+            {
+                postspdict.push_back( @"da_DK" );
+            }
+            else if ([pLangStr isEqualToString:@"de"])
+            {
+                const std::vector<NSString*> aDE
+                    { @"AT", @"BE", @"CH", @"DE", @"LI", @"LU" };
+                for (auto c: aDE)
+                {
+                    pLangStr = [@"de_" stringByAppendingString: c];
+                    postspdict.push_back( pLangStr );
+                }
+            }
+            else if ([pLangStr isEqualToString:@"en"])
+            {
+                // System has en_AU, en_CA, en_GB, and en_IN. Add the rest.
+                const std::vector<NSString*> aEN
+                    { @"BW", @"BZ", @"GH", @"GM", @"IE", @"JM", @"MU", @"MW", @"MY", @"NA",
+                      @"NZ", @"PH", @"TT", @"US", @"ZA", @"ZW" };
+                for (auto c: aEN)
+                {
+                    pLangStr = [@"en_" stringByAppendingString: c];
+                    postspdict.push_back( pLangStr );
+                }
+            }
+            else if ([pLangStr isEqualToString:@"en_JP"]
+                     || [pLangStr isEqualToString:@"en_SG"])
+            {
+                // Just skip, LO doesn't have those yet in this context.
+            }
+            else if ([pLangStr isEqualToString:@"es"])
+            {
+                const std::vector<NSString*> aES
+                    { @"AR", @"BO", @"CL", @"CO", @"CR", @"CU", @"DO", @"EC", @"ES", @"GT",
+                      @"HN", @"MX", @"NI", @"PA", @"PE", @"PR", @"PY", @"SV", @"UY", @"VE" };
+                for (auto c: aES)
+                {
+                    pLangStr = [@"es_" stringByAppendingString: c];
+                    postspdict.push_back( pLangStr );
+                }
+            }
+            else if ([pLangStr isEqualToString:@"fi"])
+            {
+                postspdict.push_back( @"fi_FI" );
+            }
+            else if ([pLangStr isEqualToString:@"fr"])
+            {
+                const std::vector<NSString*> aFR
+                    { @"BE", @"BF", @"BJ", @"CA", @"CH", @"CI", @"FR", @"LU", @"MC", @"ML",
+                      @"MU", @"NE", @"SN", @"TG" };
+                for (auto c: aFR)
+                {
+                    pLangStr = [@"fr_" stringByAppendingString: c];
+                    postspdict.push_back( pLangStr );
+                }
+            }
+            else if ([pLangStr isEqualToString:@"it"])
+            {
+                postspdict.push_back( @"it_CH" );
+                postspdict.push_back( @"it_IT" );
+            }
+            else if ([pLangStr isEqualToString:@"ko"])
+            {
+                postspdict.push_back( @"ko_KR" );
+            }
+            else if ([pLangStr isEqualToString:@"nl"])
+            {
+                postspdict.push_back( @"nl_BE" );
+                postspdict.push_back( @"nl_NL" );
+            }
+            else if ([pLangStr isEqualToString:@"nb"])
+            {
+                postspdict.push_back( @"nb_NO" );
+            }
+            else if ([pLangStr isEqualToString:@"pl"])
+            {
+                postspdict.push_back( @"pl_PL" );
+            }
+            else if ([pLangStr isEqualToString:@"ru"])
+            {
+                postspdict.push_back( @"ru_RU" );
+            }
+            else if ([pLangStr isEqualToString:@"sv"])
+            {
+                postspdict.push_back( @"sv_FI" );
+                postspdict.push_back( @"sv_SE" );
+            }
+            else if ([pLangStr isEqualToString:@"tr"])
+            {
+                postspdict.push_back( @"tr_TR" );
+            }
+            else
+                postspdict.push_back( pLangStr );
         }
+        // System has pt_BR and pt_PT, add pt_AO.
+        postspdict.push_back( @"pt_AO" );
 
         numshr = postspdict.size();
 
@@ -147,16 +245,6 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
                 NSString* aCountry = [ aLocDict objectForKey:NSLocaleCountryCode ];
                 OUString lang([aLang cStringUsingEncoding: NSUTF8StringEncoding], [aLang length], aEnc);
                 OUString country([ aCountry cStringUsingEncoding: NSUTF8StringEncoding], [aCountry length], aEnc);
-                // Fix some overly generic or odd locales LO doesn't know
-                if (lang == "en" && country.isEmpty())
-                    country = "US"; // I guess that is what it means
-                else if (lang == "nb" && country.isEmpty())
-                    country = "NO";
-                else if (lang == "es" && country.isEmpty())
-                    country = "ES"; // Probably better than claiming it to be for all es-* ?
-                else if ((lang == "en" && country == "JP")
-                         || (lang == "en" && country == "SG"))
-                    continue; // Just skip, LO doesn't have those yet in this context
                 Locale nLoc( lang, country, OUString() );
                 newloc = 1;
                 //eliminate duplicates (is this needed for MacOS?)
