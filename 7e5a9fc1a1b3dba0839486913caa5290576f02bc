@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_ae193c89",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-07-10T14:12:13Z",
+      "side": 1,
+      "message": "\"style\" is better in this context",
+      "revId": "7e5a9fc1a1b3dba0839486913caa5290576f02bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
