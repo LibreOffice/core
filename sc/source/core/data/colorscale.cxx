@@ -346,6 +346,11 @@ void ScColorScaleEntry::setListener()
     }
 }
 
+void ScColorScaleEntry::SetRepaintCallback(std::function<void()> func)
+{
+    mpListener->setCallback(func);
+}
+
 ScColorFormat::ScColorFormat(ScDocument* pDoc)
     : ScFormatEntry(pDoc)
     , mpParent(nullptr)
