@@ -69,6 +69,35 @@ using namespace ::com::sun::star;
 static sal_Int32 GetNextAttrImpl(SwTextNode const* pTextNode,
         size_t nStartIndex, size_t nEndIndex, sal_Int32 nPosition);
 
+SwAttrIter::SwAttrIter(SwTextNode const * pTextNode)
+    : m_pViewShell(nullptr)
+    , m_pFont(nullptr)
+    , m_pScriptInfo(nullptr)
+    , m_pLastOut(nullptr)
+    , m_nChgCnt(0)
+    , m_nStartIndex(0)
+    , m_nEndIndex(0)
+    , m_nPosition(0)
+    , m_nPropFont(0)
+    , m_pTextNode(pTextNode)
+    , m_pMergedPara(nullptr)
+{
+    m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
+}
+
+SwAttrIter::SwAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const*const pFrame)
+    : m_pViewShell(nullptr)
+    , m_pFont(nullptr)
+    , m_pScriptInfo(nullptr)
+    , m_pLastOut(nullptr)
+    , m_nChgCnt(0)
+    , m_nPropFont(0)
+    , m_pTextNode(&rTextNode)
+    , m_pMergedPara(nullptr)
+{
+    CtorInitAttrIter(rTextNode, rScrInf, pFrame);
+}
+
 void SwAttrIter::Chg( SwTextAttr const *pHt )
 {
     assert(pHt && m_pFont && "No attribute of font available for change");
@@ -92,7 +121,7 @@ void SwAttrIter::Rst( SwTextAttr const *pHt )
 
 SwAttrIter::~SwAttrIter()
 {
-    delete m_pRedline;
+    m_pRedline.reset();
     delete m_pFont;
 }
 
