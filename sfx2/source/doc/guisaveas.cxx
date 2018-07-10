@@ -76,6 +76,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/asyncfunc.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -334,7 +335,7 @@ public:
                                 const css::uno::Sequence< OUString >& rBlackList
                                 );
 
-    bool ShowDocumentInfoDialog();
+    bool ShowDocumentInfoDialog(const std::function< void () >&);
 
     static OUString GetRecommendedExtension( const OUString& aTypeName );
     OUString GetRecommendedDir( const OUString& aSuggestedDir );
@@ -1102,7 +1103,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 }
 
 
-bool ModelData_Impl::ShowDocumentInfoDialog()
+bool ModelData_Impl::ShowDocumentInfoDialog(const std::function< void () >& aFunc)
 {
     bool bDialogUsed = false;
 
@@ -1125,7 +1126,11 @@ bool ModelData_Impl::ShowDocumentInfoDialog()
                                                                                 0 );
                     if ( xDispatch.is() )
                     {
-                        xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
+                        uno::Sequence< beans::PropertyValue > aProperties(1);
+                        uno::Reference< lang::XUnoTunnel > aAsyncFunc(new AsyncFunc(aFunc));
+                        aProperties[0].Name = "AsyncFunc";
+                        aProperties[0].Value <<= aAsyncFunc;
+                        xDispatch->dispatch( aURL, aProperties );
                         bDialogUsed = true;
                     }
                 }
@@ -1631,34 +1636,33 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         uno::Reference<document::XDocumentProperties> xOldDocProps(
             xCloneable->createClone(), uno::UNO_QUERY_THROW);
 
+        std::function< void () > aFunc = [xModel, xOldDocProps, nStoreMode, aURL, aArgsSequence]() {
+            SfxStoringHelper aStoringHelper;
+            ModelData_Impl aModel(aStoringHelper, xModel, aArgsSequence );
+
+            try
+            {
+                if ( nStoreMode & EXPORT_REQUESTED )
+                    aModel.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
+                else
+                    aModel.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
+            }
+            catch( const uno::Exception& )
+            {
+            }
+
+            if ( nStoreMode & EXPORT_REQUESTED )
+            {
+                SfxStoringHelper::SetDocInfoState(aModel.GetModel(), xOldDocProps, true);
+            }
+        };
+
         // use dispatch API to show document info dialog
-        if ( aModelData.ShowDocumentInfoDialog() )
+        if ( aModelData.ShowDocumentInfoDialog(aFunc) )
             bDialogUsed = true;
         else
         {
             OSL_FAIL( "Can't execute document info dialog!" );
-        }
-
-        try {
-            // Document properties can contain streams that should be freed before storing
-            aModelData.FreeDocumentProps();
-            if ( nStoreMode & EXPORT_REQUESTED )
-                aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
-            else
-                aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
-        }
-        catch( const uno::Exception& )
-        {
-            if ( nStoreMode & EXPORT_REQUESTED )
-            {
-                SetDocInfoState(aModelData.GetModel(), xOldDocProps, true);
-            }
-            throw;
-        }
-
-        if ( nStoreMode & EXPORT_REQUESTED )
-        {
-            SetDocInfoState(aModelData.GetModel(), xOldDocProps, true);
         }
     }
     else
