@@ -1733,7 +1733,39 @@ void ScInterpreter::ScPi()
 
 void ScInterpreter::ScRandom()
 {
-    PushDouble(::comphelper::rng::uniform_real_distribution());
+    if (bMatrixFormula && pMyFormulaCell)
+    {
+        SCCOL nCols;
+        SCROW nRows;
+        pMyFormulaCell->GetMatColsRows( nCols, nRows);
+        // ScViewFunc::EnterMatrix() might be asking for
+        // ScFormulaCell::GetResultDimensions(), which here are none so create
+        // a 1x1 matrix at least which exactly is the case when EnterMatrix()
+        // asks for a not selected range.
+        if (nCols == 0)
+            nCols = 1;
+        if (nRows == 0)
+            nRows = 1;
+        ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), static_cast<SCSIZE>(nRows));
+        if (!pResMat)
+            PushError( FormulaError::MatrixSize);
+        else
+        {
+            for (SCCOL i=0; i < nCols; ++i)
+            {
+                for (SCROW j=0; j < nRows; ++j)
+                {
+                    pResMat->PutDouble( comphelper::rng::uniform_real_distribution(),
+                            static_cast<SCSIZE>(i), static_cast<SCSIZE>(j));
+                }
+            }
+            PushMatrix( pResMat);
+        }
+    }
+    else
+    {
+        PushDouble( comphelper::rng::uniform_real_distribution());
+    }
 }
 
 void ScInterpreter::ScTrue()
