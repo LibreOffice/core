@@ -229,6 +229,14 @@ bool DigitalSignaturesDialog::Init()
 
 void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore )
 {
+    if (!rxStore.is())
+    {
+        // PDF supports AdES.
+        m_bAdESCompliant = true;
+        m_pAdESCompliantCB->Check(m_bAdESCompliant);
+        return;
+    }
+
     maSignatureManager.mxStore = rxStore;
     maSignatureManager.maSignatureHelper.SetStorage( maSignatureManager.mxStore, m_sODFVersion);
 
