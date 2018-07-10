@@ -254,7 +254,7 @@ cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
-cmd/sc_grafgamma.png cmd/f.png
+cmd/sc_grafgamma.png cmd/sc_graphicfilterinvert.png
 cmd/sc_colorsettings.png cmd/sc_graphicfiltersmooth.png
 cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
