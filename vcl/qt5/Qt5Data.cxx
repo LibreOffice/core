@@ -161,12 +161,9 @@ Qt5Data::~Qt5Data() {}
 static QCursor* getQCursorFromXBM(const unsigned char* pBitmap, const unsigned char* pMask,
                                   int nWidth, int nHeight, int nXHot, int nYHot)
 {
-    QBitmap aPixmap;
-    aPixmap.loadFromData(pBitmap, nWidth * nHeight / 8, "XPM");
-    QBitmap aMask;
-    aMask.loadFromData(pMask, nWidth * nHeight / 8, "XPM");
-    aPixmap.setMask(aMask);
-    return new QCursor(aPixmap, nXHot, nYHot);
+    QBitmap aPixmap = QBitmap::fromData(QSize(nWidth, nHeight), pBitmap);
+    QBitmap aMask = QBitmap::fromData(QSize(nWidth, nHeight), pMask);
+    return new QCursor(aPixmap, aMask, nXHot, nYHot);
 }
 
 #define MAKE_CURSOR(vcl_name, name)                                                                \
