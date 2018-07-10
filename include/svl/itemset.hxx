@@ -158,11 +158,7 @@ public:
     }
     template<class T> const T* GetItem( TypedWhichId<T> nWhich, bool bSearchInParent = true ) const
     {
-        const SfxPoolItem* pItem = GetItem(sal_uInt16(nWhich), bSearchInParent);
-        const T* pCastedItem = dynamic_cast<const T*>(pItem);
-
-        assert(!pItem || pCastedItem); // if it exists, must have the correct type
-        return pCastedItem;
+        return GetItem<T>(sal_uInt16(nWhich), bSearchInParent);
     }
 
 
