@@ -150,7 +150,7 @@ class WinFontInstance : public LogicalFontInstance
 public:
     virtual ~WinFontInstance() override;
 
-    bool CacheGlyphToAtlas(HDC hDC, int nGlyphIndex, SalGraphics& rGraphics);
+    bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics);
     GlyphCache& GetGlyphCache() { return maGlyphCache; }
     bool hasHScale() const;
 
