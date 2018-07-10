@@ -137,6 +137,7 @@ struct NamespaceDefine
     OUString    maNamespaceURL;
 
     NamespaceDefine( const OString& rPrefix, sal_Int32 nToken, const OUString& rNamespaceURL ) : maPrefix( rPrefix ), mnToken( nToken ), maNamespaceURL( rNamespaceURL ) {}
+    NamespaceDefine() : mnToken(-1) {}
 };
 
 // Entity binds all information needed for a single file | single call of parseStream
@@ -185,8 +186,7 @@ struct Entity : public ParserData
     std::stack< SaxContext, std::vector<SaxContext> >  maContextStack;
     // Determines which elements of maNamespaceDefines are valid in current context
     std::stack< sal_uInt32, std::vector<sal_uInt32> >  maNamespaceCount;
-    std::vector< std::shared_ptr< NamespaceDefine > >
-                                          maNamespaceDefines;
+    std::vector< NamespaceDefine >                     maNamespaceDefines;
 
     explicit Entity( const ParserData& rData );
     Entity( const Entity& rEntity ) = delete;
@@ -653,7 +653,7 @@ void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const OUString&
     if( rEntity.maNamespaceDefines.size() <= nOffset )
         rEntity.maNamespaceDefines.resize( rEntity.maNamespaceDefines.size() + 64 );
 
-    rEntity.maNamespaceDefines[nOffset].reset( new NamespaceDefine( rPrefix, GetNamespaceToken( namespaceURL ), namespaceURL ) );
+    rEntity.maNamespaceDefines[nOffset] = NamespaceDefine( rPrefix, GetNamespaceToken( namespaceURL ), namespaceURL );
 }
 
 sal_Int32 FastSaxParserImpl::GetToken( const xmlChar* pName, sal_Int32 nameLen /* = 0 */ )
@@ -675,11 +675,11 @@ sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, int nPr
     while( nNamespace-- )
     {
         const auto & rNamespaceDefine = rEntity.maNamespaceDefines[nNamespace];
-        const OString& rPrefix( rNamespaceDefine->maPrefix );
+        const OString& rPrefix( rNamespaceDefine.maPrefix );
         if( (rPrefix.getLength() == nPrefixLen) &&
-            (strncmp( rPrefix.getStr(), XML_CAST( pPrefix ), nPrefixLen ) == 0 ) )
+            rtl_str_reverseCompare_WithLength(rPrefix.pData->buffer, rPrefix.pData->length, XML_CAST( pPrefix ), nPrefixLen ) == 0 )
         {
-            nNamespaceToken = rNamespaceDefine->mnToken;
+            nNamespaceToken = rNamespaceDefine.mnToken;
             break;
         }
 
@@ -714,8 +714,8 @@ OUString const & FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix )
     {
         sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
         while( nNamespace-- )
-            if( rEntity.maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
-                return rEntity.maNamespaceDefines[nNamespace]->maNamespaceURL;
+            if( rEntity.maNamespaceDefines[nNamespace].maPrefix == rPrefix )
+                return rEntity.maNamespaceDefines[nNamespace].maNamespaceURL;
     }
 
     throw SAXException("No namespace defined for " + OUString::fromUtf8(rPrefix),
