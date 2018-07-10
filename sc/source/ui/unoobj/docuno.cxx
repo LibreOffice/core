@@ -410,8 +410,8 @@ ScModelObj::~ScModelObj()
     if (xNumberAgg.is())
         xNumberAgg->setDelegator(uno::Reference<uno::XInterface>());
 
-    delete pPrintFuncCache;
-    delete pPrinterOptions;
+    pPrintFuncCache.reset();
+    pPrinterOptions.reset();
 }
 
 uno::Reference< uno::XAggregation> const & ScModelObj::GetFormatter()
@@ -1336,7 +1336,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 pNumFmt->SetNumberFormatter( nullptr );
         }
 
-        DELETEZ( pPrintFuncCache );     // must be deleted because it has a pointer to the DocShell
+        pPrintFuncCache.reset();     // must be deleted because it has a pointer to the DocShell
         m_pPrintState.reset();
     }
     else if ( nId == SfxHintId::DataChanged )
@@ -1344,7 +1344,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         //  cached data for rendering become invalid when contents change
         //  (if a broadcast is added to SetDrawModified, is has to be tested here, too)
 
-        DELETEZ( pPrintFuncCache );
+        pPrintFuncCache.reset();
         m_pPrintState.reset();
 
         // handle "OnCalculate" sheet events (search also for VBA event handlers)
@@ -1708,8 +1708,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
     {
-        delete pPrintFuncCache;
-        pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
+        pPrintFuncCache.reset(new ScPrintFuncCache( pDocShell, aMark, aStatus ));
     }
     sal_Int32 nPages = pPrintFuncCache->GetPageCount();
 
@@ -1763,8 +1762,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     {
         if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
         {
-            delete pPrintFuncCache;
-            pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
+            pPrintFuncCache.reset(new ScPrintFuncCache( pDocShell, aMark, aStatus ));
         }
         nTotalPages = pPrintFuncCache->GetPageCount();
     }
@@ -1802,7 +1800,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         }));
 
         if( ! pPrinterOptions )
-            pPrinterOptions = new ScPrintUIOptions;
+            pPrinterOptions.reset(new ScPrintUIOptions);
         else
             pPrinterOptions->SetDefaults();
         pPrinterOptions->appendPrintUIOptions( aSequence );
@@ -1886,7 +1884,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     }
 
     if( ! pPrinterOptions )
-        pPrinterOptions = new ScPrintUIOptions;
+        pPrinterOptions.reset(new ScPrintUIOptions);
     else
         pPrinterOptions->SetDefaults();
     pPrinterOptions->appendPrintUIOptions( aSequence );
@@ -1912,8 +1910,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
     {
-        delete pPrintFuncCache;
-        pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
+        pPrintFuncCache.reset(new ScPrintFuncCache( pDocShell, aMark, aStatus ));
     }
     long nTotalPages = pPrintFuncCache->GetPageCount();
     sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
