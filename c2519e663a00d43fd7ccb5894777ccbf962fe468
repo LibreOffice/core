@@ -56,6 +56,24 @@
       "revId": "c2519e663a00d43fd7ccb5894777ccbf962fe468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d0dc1e1a",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2018-07-10T21:34:09Z",
+      "side": 1,
+      "message": "\u003e If you put a text into the statusbar, it needs to be translatable.\n \u003e \n \u003e But probably an icon would be a better choice?\n\nSamuel, please see Heiko\u0027s comment: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d88296#c14 \"I don\u0027t think its a good idea. A short abbreviation is better here. CAP, NUM, INS always visible but disabled when inactive.\"",
+      "parentUuid": "ffe62b97_02036a44",
+      "revId": "c2519e663a00d43fd7ccb5894777ccbf962fe468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
