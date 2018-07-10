@@ -272,13 +272,13 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
                 Seek( TextFrameIndex(0) );
             }
 
-            m_pRedline = new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
+            m_pRedline.reset(new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
                             m_pMergedPara
                                 ? SwRedlineItr::Mode::Hide
                                 : bShow
                                     ? SwRedlineItr::Mode::Show
                                     : SwRedlineItr::Mode::Ignore,
-                            pArr, pExtInp ? pExtInp->Start() : nullptr);
+                            pArr, pExtInp ? pExtInp->Start() : nullptr));
 
             if( m_pRedline->IsOn() )
                 ++m_nChgCnt;
