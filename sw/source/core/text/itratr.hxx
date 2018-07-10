@@ -42,14 +42,14 @@ protected:
 
     SwAttrHandler m_aAttrHandler;
     SwViewShell *m_pViewShell;
-    SwFont *m_pFont;
+    std::unique_ptr<SwFont> m_pFont;
     SwScriptInfo* m_pScriptInfo;
 
 private:
     VclPtr<OutputDevice> m_pLastOut;
     /// count currently open hints, redlines, ext-input
     short m_nChgCnt;
-    SwRedlineItr *m_pRedline;
+    std::unique_ptr<SwRedlineItr> m_pRedline;
     /// current iteration index in HintStarts
     size_t m_nStartIndex;
     /// current iteration index in HintEnds
@@ -64,7 +64,7 @@ private:
     sw::MergedPara const* m_pMergedPara;
 
     void SeekFwd( const sal_Int32 nPos );
-    void SetFnt( SwFont* pNew ) { m_pFont = pNew; }
+    void SetFnt( std::unique_ptr<SwFont> pNew );
     void InitFontAndAttrHandler(SwTextNode const& rTextNode,
         OUString const& rText, bool const* pbVertLayout);
 
@@ -72,44 +72,17 @@ protected:
     void Chg( SwTextAttr const *pHt );
     void Rst( SwTextAttr const *pHt );
     void CtorInitAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const* pFrame = nullptr);
-    explicit SwAttrIter(SwTextNode const * pTextNode)
-        : m_pViewShell(nullptr)
-        , m_pFont(nullptr)
-        , m_pScriptInfo(nullptr)
-        , m_pLastOut(nullptr)
-        , m_nChgCnt(0)
-        , m_pRedline(nullptr)
-        , m_nStartIndex(0)
-        , m_nEndIndex(0)
-        , m_nPosition(0)
-        , m_nPropFont(0)
-        , m_pTextNode(pTextNode)
-        , m_pMergedPara(nullptr)
-        {
-            m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
-        }
+    explicit SwAttrIter(SwTextNode const * pTextNode);
 
 public:
     /// All subclasses of this always have a SwTextFrame passed to the
     /// constructor, but SwAttrIter itself may be created without a
     /// SwTextFrame in certain special cases via this ctor here
-    SwAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const*const pFrame = nullptr)
-        : m_pViewShell(nullptr)
-        , m_pFont(nullptr)
-        , m_pScriptInfo(nullptr)
-        , m_pLastOut(nullptr)
-        , m_nChgCnt(0)
-        , m_pRedline(nullptr)
-        , m_nPropFont(0)
-        , m_pTextNode(&rTextNode)
-        , m_pMergedPara(nullptr)
-    {
-        CtorInitAttrIter(rTextNode, rScrInf, pFrame);
-    }
+    SwAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const*const pFrame = nullptr);
 
     virtual ~SwAttrIter();
 
-    SwRedlineItr *GetRedln() { return m_pRedline; }
+    SwRedlineItr *GetRedln() { return m_pRedline.get(); }
     // The parameter returns the position of the next change before or at the
     // char position.
     TextFrameIndex GetNextAttr() const;
@@ -131,8 +104,8 @@ public:
     // Returns the attribute for a position
     SwTextAttr *GetAttr(TextFrameIndex nPos) const;
 
-    SwFont *GetFnt() { return m_pFont; }
-    const SwFont *GetFnt() const { return m_pFont; }
+    SwFont *GetFnt() { return m_pFont.get(); }
+    const SwFont *GetFnt() const { return m_pFont.get(); }
 
     sal_uInt8 GetPropFont() const { return m_nPropFont; }
     void SetPropFont( const sal_uInt8 nNew ) { m_nPropFont = nNew; }
