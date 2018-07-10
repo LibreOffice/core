@@ -46,7 +46,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 {
     OUString aStrSelection;
 
-    if ( pEditShell && pEditShell == GetMySubShell() )
+    if ( pEditShell && pEditShell.get() == GetMySubShell() )
     {
         aStrSelection = pEditShell->GetSelectionText( bWholeWord );
     }
