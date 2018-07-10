@@ -66,6 +66,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <tools/link.hxx>
 
+#include <sfx2/asyncfunc.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -496,6 +497,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             pReq->AppendItem( SfxDocumentInfoItem( GetTitle(),
                                 getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave() ) );
                         }
+
+                        css::uno::Reference< css::uno::XInterface > xInterface;
+                        const SfxUnoAnyItem* pUnoAny = pReq->GetArg<SfxUnoAnyItem>(FN_PARAM_2);
+                        AsyncFunc* pAsyncFunc = pUnoAny && (pUnoAny->GetValue() >>= xInterface ) ?
+                            AsyncFunc::getImplementation(xInterface) : nullptr;
+                        if (pAsyncFunc)
+                            pAsyncFunc->Execute();
+
                         pReq->Done();
                     }
                     else
