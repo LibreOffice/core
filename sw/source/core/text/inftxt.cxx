@@ -1861,7 +1861,7 @@ SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
         if( pItr && pItr->GetFnt() == pFnt )
         {
             pIter = pItr;
-            pIter->SetFnt( pNew );
+            pIter->SetFnt( std::unique_ptr<SwFont>(pNew) );
         }
     }
 }
@@ -1875,7 +1875,7 @@ SwFontSave::~SwFontSave()
         pInf->SetFont( pFnt );
         if( pIter )
         {
-            pIter->SetFnt( pFnt );
+            pIter->SetFnt( std::unique_ptr<SwFont>(pFnt) );
             pIter->m_nPosition = COMPLETE_STRING;
         }
     }

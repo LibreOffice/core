@@ -135,8 +135,7 @@ void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
 {
     // Build a font matching the default paragraph style:
     SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), m_pViewShell );
-    delete m_pFont;
-    m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
+    m_pFont.reset(new SwFont( aFontAccess.Get()->GetFont() ));
 
     // set font to vertical if frame layout is vertical
     // if it's a re-init, the vert flag never changes
@@ -272,13 +271,13 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
                 Seek( TextFrameIndex(0) );
             }
 
-            m_pRedline = new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
+            m_pRedline.reset(new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
                             m_pMergedPara
                                 ? SwRedlineItr::Mode::Hide
                                 : bShow
                                     ? SwRedlineItr::Mode::Show
                                     : SwRedlineItr::Mode::Ignore,
-                            pArr, pExtInp ? pExtInp->Start() : nullptr);
+                            pArr, pExtInp ? pExtInp->Start() : nullptr));
 
             if( m_pRedline->IsOn() )
                 ++m_nChgCnt;
