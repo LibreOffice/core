@@ -814,10 +814,6 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
     if (!pViewFrm)
         return;
 
-    SfxStringItem aUrl( SID_FILE_NAME, rURL );
-    SfxStringItem aTarget( SID_TARGETNAME, rTarget );
-    if ( nScClickMouseModifier & KEY_SHIFT )     // control-click -> into new window
-        aTarget.SetValue("_blank");
     SfxViewFrame* pFrame = nullptr;
     OUString aReferName;
     if ( pScActiveViewShell )
@@ -827,6 +823,11 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
         if (pMed)
             aReferName = pMed->GetName();
     }
+
+    SfxStringItem aUrl( SID_FILE_NAME, rURL );
+    SfxStringItem aTarget( SID_TARGETNAME, rTarget );
+    if ( nScClickMouseModifier & KEY_SHIFT )     // control-click -> into new window
+        aTarget.SetValue("_blank");
 
     SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
     SfxStringItem aReferer( SID_REFERER, aReferName );
