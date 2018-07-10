@@ -257,7 +257,6 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
           <menu:menuitem menu:id=".uno:InsertObject"/>
-          <menu:menuitem menu:id=".uno:InsertDoc"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:ShapesMenu">
@@ -284,6 +283,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertSection"/>
+      <menu:menuitem menu:id=".uno:InsertDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawText"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
