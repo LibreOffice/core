@@ -264,8 +264,8 @@ private:
 
     sc::PrintPageRanges m_aRanges;
 
-    ScHeaderEditEngine* pEditEngine;
-    SfxItemSet*         pEditDefaults;
+    std::unique_ptr<ScHeaderEditEngine> pEditEngine;
+    std::unique_ptr<SfxItemSet>         pEditDefaults;
 
     ScHeaderFieldData   aFieldData;
 
