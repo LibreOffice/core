@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_0e85c8ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-10T12:28:38Z",
+      "side": 1,
+      "message": "Comments about the flow in gerrit change patch sets don\u0027t belong into the commit message.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 28
+      },
+      "revId": "ef17440ccb33fb0176c0ee85fc8d6c58a4bb5389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_6eb7b488",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-10T12:28:38Z",
+      "side": 1,
+      "message": "This is not true, the unnamed DB case wasn\u0027t touch (and shouldn\u0027t).",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "ef17440ccb33fb0176c0ee85fc8d6c58a4bb5389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_eefce43f",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-10T12:28:38Z",
+      "side": 1,
+      "message": "We certainly do not want to throw an exception for an overflow, specifically not if overflow was allowed in the validateCellRange() call. Rather live with the adjusted aDestRange then.",
+      "revId": "ef17440ccb33fb0176c0ee85fc8d6c58a4bb5389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_cef9204e",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-10T12:28:38Z",
+      "side": 1,
+      "message": "Don\u0027t throw. Rather check return value of insert() and if false don\u0027t operate on pRange anymore because it was deleted.",
+      "revId": "ef17440ccb33fb0176c0ee85fc8d6c58a4bb5389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
