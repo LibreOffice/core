@@ -208,7 +208,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
 void ScTabViewShell::AddAccessibilityObject( SfxListener& rObject )
 {
     if (!pAccessibilityBroadcaster)
-        pAccessibilityBroadcaster = new SfxBroadcaster;
+        pAccessibilityBroadcaster.reset( new SfxBroadcaster );
 
     rObject.StartListening( *pAccessibilityBroadcaster );
     ScDocument* pDoc = GetViewData().GetDocument();

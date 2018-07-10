@@ -27,16 +27,12 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
 {
     if ( pLine )
     {
-        delete pCurFrameLine;
-        pCurFrameLine = new ::editeng::SvxBorderLine( &pLine->GetColor(),
+        pCurFrameLine.reset( new ::editeng::SvxBorderLine( &pLine->GetColor(),
                                             pLine->GetWidth(),
-                                            pLine->GetBorderLineStyle() );
+                                            pLine->GetBorderLineStyle() ) );
     }
-    else if ( pCurFrameLine )
-    {
-        delete pCurFrameLine;
-        pCurFrameLine = nullptr;
-    }
+    else
+        pCurFrameLine.reset();
 }
 
 bool ScTabViewShell::HasSelection( bool bText ) const

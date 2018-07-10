@@ -2758,7 +2758,7 @@ void ScCellShell::ExecuteDataPilotDialog()
     ScViewData* pData = GetViewData();
     ScDocument* pDoc = pData->GetDocument();
 
-    std::unique_ptr<ScDPObject> pNewDPObject(nullptr);
+    std::unique_ptr<ScDPObject> pNewDPObject;
 
     // ScPivot is no longer used...
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(
@@ -2917,8 +2917,9 @@ void ScCellShell::ExecuteDataPilotDialog()
             pNewDPObject->SetOutRange( aDestPos );
     }
 
-    pTabViewShell->SetDialogDPObject( pNewDPObject.get() );   // is copied
-    if ( pNewDPObject )
+    bool bHadNewDPObject = pNewDPObject != nullptr;
+    pTabViewShell->SetDialogDPObject( std::move(pNewDPObject) );
+    if ( bHadNewDPObject )
     {
         //  start layout dialog
 
