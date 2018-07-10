@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_10b84628",
+        "filename": "sc/source/filter/xml/xmltransformationi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-10T18:12:09Z",
+      "side": 1,
+      "message": "This looks incredibly dangerous. Why is this needed?",
+      "revId": "b67769ea23d59af7cbdde2301c9f5007924a9c64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
