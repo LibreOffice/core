@@ -239,6 +239,11 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         spec.setIndicator("Insert");
         host.addTab(spec);
 
+        spec = host.newTabSpec("Style");
+        spec.setContent(R.id.tab_style);
+        spec.setIndicator("Style");
+        host.addTab(spec);
+
         LinearLayout bottomToolbarLayout = findViewById(R.id.toolbar_bottom);
         LinearLayout toolbarColorPickerLayout = findViewById(R.id.toolbar_color_picker);
         LinearLayout toolbarBackColorPickerLayout = findViewById(R.id.toolbar_back_color_picker);
