@@ -8,6 +8,7 @@
  */
 
 #include "xmlmappingi.hxx"
+#include "xmltransformationi.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -49,6 +50,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
         case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPING ):
         {
             pContext = new ScXMLMappingContext( GetScImport(), pAttribList );
+        }
+        break;
+        case XML_ELEMENT( CALC_EXT, XML_DATA_TRANSFORMATIONS):
+        {
+             pContext = new ScXMLTransformationsContext( GetScImport() );
         }
         break;
     }
@@ -110,13 +116,36 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
         aSource.setID(aID);
         aSource.setDBData(aDBName);
         rDataMapper.insertDataSource(aSource);
-        auto& rDataSources = rDataMapper.getDataSources();
-        rDataSources[0].refresh(pDoc, true);
     }
 }
 
 ScXMLMappingContext::~ScXMLMappingContext()
 {
+    ScDocument* pDoc = GetScImport().GetDocument();
+    auto& rDataMapper = pDoc->GetExternalDataMapper();
+    auto& rDataSources = rDataMapper.getDataSources();
+    if(!rDataSources.empty())
+        rDataSources[0].refresh(pDoc, true);
 }
 
+uno::Reference<xml::sax::XFastContextHandler>
+    SAL_CALL ScXMLMappingContext::createFastChildContext(
+        sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& /*xAttrList*/)
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    switch( nElement )
+    {
+        case XML_ELEMENT( CALC_EXT, XML_DATA_TRANSFORMATIONS):
+        {
+             pContext = new ScXMLTransformationsContext( GetScImport() );
+        }
+        break;
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
