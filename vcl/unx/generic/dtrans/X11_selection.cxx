@@ -943,6 +943,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
             }
             else
             {
+                aGuard.clear();
                 osl::Thread::wait(std::chrono::milliseconds(100));
                 aGuard.reset();
             }
