@@ -1110,9 +1110,21 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 void SwHTMLWriter::OutAnchor( const OUString& rName )
 {
     OStringBuffer sOut;
-    sOut.append("<" OOO_STRING_SVTOOLS_HTML_anchor " " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
-    Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( Strm(), rName, m_eDestEnc, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
+    sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor " ");
+    if (!mbXHTML)
+    {
+        sOut.append(OOO_STRING_SVTOOLS_HTML_O_name "=\"");
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        HTMLOutFuncs::Out_String( Strm(), rName, m_eDestEnc, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
+    }
+    else
+    {
+        // XHTML wants 'id' instead of 'name', also the value can't contain
+        // spaces.
+        sOut.append(OOO_STRING_SVTOOLS_HTML_O_id "=\"");
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_'), m_eDestEnc, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
+    }
     HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor, false );
 }
 
