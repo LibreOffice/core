@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_733affe7",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-10T04:50:44Z",
+      "side": 0,
+      "message": "skips the currentEntry properties, and jumps to the parent (well, it would have IF it hadn\u0027t passed a null string, thus guaranteeing a null pEntry).",
+      "range": {
+        "startLine": 670,
+        "startChar": 39,
+        "endLine": 670,
+        "endChar": 69
+      },
+      "revId": "1947730e9810cfbe5f1f7612aa48879b89c8ed6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_533ffbd5",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-10T04:50:44Z",
+      "side": 0,
+      "message": "Umm, BaseStyleIdentifier IS the parent style.  If FindParentStyleSheet actually did what it said, then we would be skipping every other style.",
+      "range": {
+        "startLine": 686,
+        "startChar": 82,
+        "endLine": 686,
+        "endChar": 110
+      },
+      "revId": "1947730e9810cfbe5f1f7612aa48879b89c8ed6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d3554b1f",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-10T04:50:44Z",
+      "side": 0,
+      "message": "\u003e //  - if empty the parent of the current style sheet is returned\nNope. If empty, returns null",
+      "range": {
+        "startLine": 1303,
+        "startChar": 8,
+        "endLine": 1303,
+        "endChar": 29
+      },
+      "revId": "1947730e9810cfbe5f1f7612aa48879b89c8ed6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b3308709",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-10T04:50:44Z",
+      "side": 0,
+      "message": "\u003e  // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned\nNope: If current style exists, its parent is returned regardless of the given given).",
+      "range": {
+        "startLine": 1309,
+        "startChar": 8,
+        "endLine": 1309,
+        "endChar": 32
+      },
+      "revId": "1947730e9810cfbe5f1f7612aa48879b89c8ed6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_933583fa",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-10T04:50:44Z",
+      "side": 0,
+      "message": "\u003e // returns the parent of the one with the given name\nNope: It was PASSED the parent AS the given name, not FINDS the parent.",
+      "range": {
+        "startLine": 1312,
+        "startChar": 33,
+        "endLine": 1312,
+        "endChar": 43
+      },
+      "revId": "1947730e9810cfbe5f1f7612aa48879b89c8ed6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
