@@ -93,8 +93,8 @@ class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
 private:
     SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
-    ScPrintFuncCache*       pPrintFuncCache;
-    ScPrintUIOptions*       pPrinterOptions;
+    std::unique_ptr<ScPrintFuncCache> pPrintFuncCache;
+    std::unique_ptr<ScPrintUIOptions> pPrinterOptions;
     std::unique_ptr<ScPrintState> m_pPrintState;
     css::uno::Reference<css::uno::XAggregation> xNumberAgg;
     css::uno::Reference<css::uno::XInterface> xDrawGradTab;
