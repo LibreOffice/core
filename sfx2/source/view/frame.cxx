@@ -73,12 +73,16 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-SfxPoolItem* SfxUnoAnyItem::CreateDefault() { SAL_WARN( "sfx", "No SfxUnoAnyItem factory available"); return nullptr; }
+SfxPoolItem* SfxUnoAnyItem::CreateDefault()
+{
+    return new SfxUnoAnyItem();
+}
 
 SfxPoolItem* SfxUnoFrameItem::CreateDefault()
 {
     return new SfxUnoFrameItem();
 }
+
 void SfxFrame::Construct_Impl()
 {
     pImpl.reset(new SfxFrame_Impl);
@@ -456,6 +460,10 @@ bool SfxFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
     return false;
 }
 
+SfxUnoAnyItem::SfxUnoAnyItem()
+    : SfxPoolItem( 0 )
+{
+}
 
 SfxUnoAnyItem::SfxUnoAnyItem( sal_uInt16 nWhichId, const css::uno::Any& rAny )
     : SfxPoolItem( nWhichId )
