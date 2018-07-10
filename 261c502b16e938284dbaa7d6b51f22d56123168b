@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_53181b80",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-10T05:14:33Z",
+      "side": 1,
+      "message": "Oops. Extra space here.",
+      "range": {
+        "startLine": 1470,
+        "startChar": 45,
+        "endLine": 1470,
+        "endChar": 47
+      },
+      "revId": "261c502b16e938284dbaa7d6b51f22d56123168b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_130a9325",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-10T05:14:33Z",
+      "side": 1,
+      "message": "Should this add an \"\u0026\u0026 IsStyleSheetImport()\" qualifier? It shouldn\u0027t be necessary for the way the document looks, but it could effect how the document reacts to manual style changes. I personally would rather have a cleaned up, styles managed document, so I\u0027m all for eliminating duplicate settings if at all possible...\n\nThis kind of if-already-in-style-properties block could be useful in almost every one of these cases I\u0027m thinking...",
+      "range": {
+        "startLine": 1471,
+        "startChar": 41,
+        "endLine": 1471,
+        "endChar": 43
+      },
+      "revId": "261c502b16e938284dbaa7d6b51f22d56123168b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
