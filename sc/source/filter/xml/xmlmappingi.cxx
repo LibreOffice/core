@@ -8,6 +8,7 @@
  */
 
 #include "xmlmappingi.hxx"
+#include "xmltransformationi.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -49,6 +50,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
         case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPING ):
         {
             pContext = new ScXMLMappingContext( GetScImport(), pAttribList );
+        }
+        break;
+        case XML_ELEMENT( CALC_EXT, XML_DATA_TRANSFORMATIONS):
+        {
+             pContext = new ScXMLTransformationsContext( GetScImport() );
         }
         break;
     }
