@@ -231,6 +231,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354, "tdf104354.docx")
     // margin for the first paragraph in a text frame.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
+    // still 494 in the second paragraph
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494),
+                         getProperty<sal_Int32>(xShape->getEnd(), "ParaTopMargin"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")

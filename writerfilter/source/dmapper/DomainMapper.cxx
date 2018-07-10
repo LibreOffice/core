@@ -669,8 +669,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     default_spacing = 49;
                 else
                 {
-                    // tdf#104354 fist paragraph has got zero top margin
-                    if (m_pImpl->GetIsFirstParagraphInSection())
+                    // tdf#104354, tdf#118533 first paragraph of sections and shapes got zero top margin
+                    if ((m_pImpl->GetIsFirstParagraphInSection() && !m_pImpl->IsInShape()) ||
+                         m_pImpl->GetIsFirstParagraphInShape())
                         default_spacing = 0;
                     else
                         default_spacing = 280;
