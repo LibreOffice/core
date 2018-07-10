@@ -11,7 +11,6 @@
 #include <FontFeaturesDialog.hxx>
 
 #include <vcl/font/FeatureParser.hxx>
-#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
 using namespace css;
@@ -34,7 +33,6 @@ VclPtr<ComboBox> makeEnumComboBox(vcl::Window* pParent,
 {
     VclPtr<ComboBox> aNameBox(
         VclPtr<ComboBox>::Create(pParent, WB_TABSTOP | WB_DROPDOWN | WB_AUTOHSCROLL));
-    aNameBox->InsertEntry(SvxResId(RID_SVXSTR_NONE));
     for (vcl::font::FeatureParameter const& rParameter : rFeatureDefinition.getEnumParameters())
     {
         aNameBox->InsertEntry(rParameter.getDescription());

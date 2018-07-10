@@ -26,7 +26,7 @@ bool FeatureCollector::collectGraphiteFeatureDefinition(vcl::font::Feature& rFea
 
     bool bFound = false;
 
-    gr_uint16 nUILanguage = 0x0409;
+    gr_uint16 nUILanguage = gr_uint16(m_eLanguageType);
 
     gr_uint16 nNumberOfFeatures = gr_face_n_fref(grFace);
     gr_feature_val* pFeatures = gr_face_featureval_for_lang(grFace, rFeature.m_aID.m_aLanguageCode);
@@ -49,22 +49,21 @@ bool FeatureCollector::collectGraphiteFeatureDefinition(vcl::font::Feature& rFea
                 gr_uint16 nNumberOfValues = gr_fref_n_values(pFeatureRef);
                 for (gr_uint16 j = 0; j < nNumberOfValues; ++j)
                 {
-                    if (gr_fref_value(pFeatureRef, j))
-                    {
-                        gr_uint32 nValueLabelLength = 0;
-                        void* pValueLabel = gr_fref_value_label(pFeatureRef, j, &nUILanguage,
-                                                                gr_utf8, &nValueLabelLength);
-                        OUString sValueLabel(
-                            OUString::createFromAscii(static_cast<char*>(pValueLabel)));
-                        aParameters.emplace_back(sal_uInt32(j), sValueLabel);
-                        gr_label_destroy(pValueLabel);
-                    }
+                    gr_uint32 nValueLabelLength = 0;
+                    void* pValueLabel = gr_fref_value_label(pFeatureRef, j, &nUILanguage, gr_utf8,
+                                                            &nValueLabelLength);
+                    OUString sValueLabel(
+                        OUString::createFromAscii(static_cast<char*>(pValueLabel)));
+                    aParameters.emplace_back(sal_uInt32(j), sValueLabel);
+                    gr_label_destroy(pValueLabel);
                 }
 
                 auto eFeatureParameterType = vcl::font::FeatureParameterType::ENUM;
 
                 // Check if the parameters are boolean
-                if (aParameters.size() == 1 && aParameters[0].getDescription() == "True")
+                if (aParameters.size() == 2
+                    && (aParameters[0].getDescription() == "True"
+                        || aParameters[0].getDescription() == "False"))
                 {
                     eFeatureParameterType = vcl::font::FeatureParameterType::BOOL;
                     aParameters.clear();
@@ -99,15 +98,14 @@ void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript
         vcl::font::Feature& rFeature = m_rFontFeatures.back();
         rFeature.m_aID = { aFeatureTag, aScriptTag, aLanguageTag };
 
-        FeatureDefinition aDefinition
-            = OpenTypeFeatureDefinitonList::get().getDefinition(aFeatureTag);
-        if (aDefinition)
+        if (!collectGraphiteFeatureDefinition(rFeature))
         {
-            rFeature.m_aDefinition = vcl::font::FeatureDefinition(aDefinition);
-        }
-        else
-        {
-            collectGraphiteFeatureDefinition(rFeature);
+            FeatureDefinition aDefinition
+                = OpenTypeFeatureDefinitonList::get().getDefinition(aFeatureTag);
+            if (aDefinition)
+            {
+                rFeature.m_aDefinition = vcl::font::FeatureDefinition(aDefinition);
+            }
         }
     }
 }
