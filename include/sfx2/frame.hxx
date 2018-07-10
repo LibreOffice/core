@@ -200,6 +200,7 @@ class SFX2_DLLPUBLIC SfxUsrAnyItem : public SfxPoolItem
     css::uno::Any  aValue;
 public:
                                 static SfxPoolItem* CreateDefault();
+                                SfxUsrAnyItem();
                                 SfxUsrAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
     const css::uno::Any&        GetValue() const
                                 { return aValue; }
