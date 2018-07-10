@@ -400,8 +400,8 @@ void ScPrintFunc::FillPageData()
 
 ScPrintFunc::~ScPrintFunc()
 {
-    delete pEditDefaults;
-    delete pEditEngine;
+    pEditDefaults.reset();
+    pEditEngine.reset();
 
     //  Printer settings are now restored from outside
 
@@ -1704,7 +1704,7 @@ void ScPrintFunc::MakeEditEngine()
     {
         //  can't use document's edit engine pool here,
         //  because pool must have twips as default metric
-        pEditEngine = new ScHeaderEditEngine( EditEngine::CreatePool() );
+        pEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool() ) );
 
         pEditEngine->EnableUndo(false);
         //fdo#45869 we want text to be positioned as it would be for the
@@ -1718,10 +1718,10 @@ void ScPrintFunc::MakeEditEngine()
         pEditEngine->EnableAutoColor( bUseStyleColor );
 
         //  Default-Set for alignment
-        pEditDefaults = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
+        pEditDefaults.reset( new SfxItemSet( pEditEngine->GetEmptyItemSet() ) );
 
         const ScPatternAttr& rPattern = pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN);
-        rPattern.FillEditItemSet( pEditDefaults );
+        rPattern.FillEditItemSet( pEditDefaults.get() );
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
         std::unique_ptr<SfxPoolItem> pNewItem(rPattern.GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT));
