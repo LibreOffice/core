@@ -14,6 +14,7 @@
 #include <vcl/font/Feature.hxx>
 #include <o3tl/make_unique.hxx>
 #include <hb.h>
+#include <i18nlangtag/lang.h>
 
 namespace vcl
 {
@@ -24,11 +25,14 @@ class FeatureCollector
 private:
     hb_face_t* m_pHbFace;
     std::vector<vcl::font::Feature>& m_rFontFeatures;
+    LanguageType m_eLanguageType;
 
 public:
-    FeatureCollector(hb_face_t* pHbFace, std::vector<vcl::font::Feature>& rFontFeatures)
+    FeatureCollector(hb_face_t* pHbFace, std::vector<vcl::font::Feature>& rFontFeatures,
+                     LanguageType eLanguageType)
         : m_pHbFace(pHbFace)
         , m_rFontFeatures(rFontFeatures)
+        , m_eLanguageType(eLanguageType)
     {
     }
 

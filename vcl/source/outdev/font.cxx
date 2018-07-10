@@ -18,6 +18,7 @@
  */
 
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/lang.h>
 
 #include <unotools/configmgr.hxx>
 #include <vcl/virdev.hxx>
@@ -189,7 +190,9 @@ bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeature
     if (!pHbFace)
         return false;
 
-    vcl::font::FeatureCollector aFeatureCollector(pHbFace, rFontFeatures);
+    const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
+
+    vcl::font::FeatureCollector aFeatureCollector(pHbFace, rFontFeatures, eOfficeLanguage);
     aFeatureCollector.collectForTable(HB_OT_TAG_GSUB); // substitution
     aFeatureCollector.collectForTable(HB_OT_TAG_GPOS); // positioning
 

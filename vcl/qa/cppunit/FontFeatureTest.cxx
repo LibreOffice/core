@@ -102,16 +102,21 @@ void FontFeatureTest::testGetFontFeatures()
         CPPUNIT_ASSERT_EQUAL(vcl::font::FeatureParameterType::ENUM,
                              rFracFeatureDefinition.getType());
 
-        CPPUNIT_ASSERT_EQUAL(size_t(2), rFracFeatureDefinition.getEnumParameters().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rFracFeatureDefinition.getEnumParameters().size());
 
         vcl::font::FeatureParameter const& rParameter1
             = rFracFeatureDefinition.getEnumParameters()[0];
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), rParameter1.getCode());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), rParameter1.getCode());
         CPPUNIT_ASSERT(!rParameter1.getDescription().isEmpty());
 
         vcl::font::FeatureParameter const& rParameter2
             = rFracFeatureDefinition.getEnumParameters()[1];
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), rParameter2.getCode());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), rParameter2.getCode());
+        CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
+
+        vcl::font::FeatureParameter const& rParameter3
+            = rFracFeatureDefinition.getEnumParameters()[2];
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), rParameter3.getCode());
         CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
     }
 #endif // HAVE_MORE_FONTS
