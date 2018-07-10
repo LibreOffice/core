@@ -1188,4 +1188,42 @@ void Test::testDeduplicateMultipleCondFormats()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondFormatListenToOwnRange()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,10,0,0));
+    pFormat->SetRange(aRangeList);
+
+    ScIconSetFormat* pEntry = new ScIconSetFormat(m_pDoc);
+    ScIconSetFormatData* pData = new ScIconSetFormatData;
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(0, COL_BLUE));
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(1, COL_GREEN));
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(2, COL_RED));
+    pEntry->SetIconSetData(pData);
+    pEntry->SetParent(pFormat);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pFormat->AddEntry(pEntry);
+    pList->InsertNew(pFormat);
+
+    bool bFirstCallbackCalled = false;
+    bool bSecondCallbackCalled = false;
+    bool bThirdCallbackCalled = false;
+    std::function<void()> aFirstCallback = [&]() {bFirstCallbackCalled = true;};
+    std::function<void()> aSecondCallback = [&]() {bSecondCallbackCalled = true;};
+    std::function<void()> aThirdCallback = [&]() {bThirdCallbackCalled = true;};
+    pData->m_Entries[0]->SetType(COLORSCALE_PERCENT);
+    pData->m_Entries[0]->SetRepaintCallback(aFirstCallback);
+
+    m_pDoc->SetValue(0, 0, 0, -1.0);
+
+    CPPUNIT_ASSERT(bFirstCallbackCalled);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

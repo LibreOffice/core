@@ -522,6 +522,7 @@ public:
     void testCondFormatUndoList();
     void testMultipleSingleCellCondFormatCopyPaste();
     void testDeduplicateMultipleCondFormats();
+    void testCondFormatListenToOwnRange();
 
     void testImportStream();
     void testDeleteContents();
