@@ -2019,7 +2019,13 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     {
         nFlags &= (~LBoxFlags::StartEditTimer);
         pView->pHdlEntry = pEntry;
-        if( pView->DoubleClickHdl() )
+        if( !pView->DoubleClickHdl() )
+        {
+            // Handler signals nothing to be done anymore, bail out, 'this' may
+            // even be dead and destroyed.
+            return;
+        }
+        else
         {
             // if the entry was deleted within the handler
             pEntry = GetClickedEntry( aPos );
