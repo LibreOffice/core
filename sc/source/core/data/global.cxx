@@ -809,6 +809,11 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
         // other key combo. and security option is set, so return
         return;
     }
+
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
+        return;
+
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
     if ( nScClickMouseModifier & KEY_SHIFT )     // control-click -> into new window
@@ -830,13 +835,9 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
     SfxBoolItem aBrowsing( SID_BROWSE, true );
 
     // No SID_SILENT anymore
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if (pViewFrm)
-    {
-        pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                { &aUrl, &aTarget, &aFrm, &aReferer, &aNewView, &aBrowsing });
-    }
+    pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
+            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            { &aUrl, &aTarget, &aFrm, &aReferer, &aNewView, &aBrowsing });
 }
 
 bool ScGlobal::IsSystemRTL()
