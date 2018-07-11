@@ -126,8 +126,8 @@ enum Paper
 class I18NPOOL_DLLPUBLIC PaperInfo
 {
     Paper m_eType;
-    long m_nPaperWidth;     // width in 100thMM
-    long m_nPaperHeight;    // height in 100thMM
+    long m_nPaperWidth;  // width in 100thMM
+    long m_nPaperHeight; // height in 100thMM
 public:
     PaperInfo(Paper eType);
     PaperInfo(long nPaperWidth, long nPaperHeight);
