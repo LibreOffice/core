@@ -155,7 +155,8 @@ XInputStream_impl::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL
 XInputStream_impl::available()
 {
-    return 0;
+    sal_Int64 avail = getLength() - getPosition();
+    return std::min<sal_Int64>(avail, SAL_MAX_INT32);
 }
 
 
