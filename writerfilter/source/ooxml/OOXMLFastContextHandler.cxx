@@ -22,6 +22,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
+#include <sal/log.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/globname.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include <XMLShapePropertySetContext.hxx>
 #include <xmloff/contextid.hxx>

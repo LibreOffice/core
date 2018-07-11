@@ -20,6 +20,7 @@
 #include <config_gpgme.h>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <rtl/uuid.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/xmlsignature_gpgimpl.hxx>

@@ -35,6 +35,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>

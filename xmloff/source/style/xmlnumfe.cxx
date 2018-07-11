@@ -29,6 +29,7 @@
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/color.hxx>
 #include <sax/tools/converter.hxx>
 

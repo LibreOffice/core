@@ -12,6 +12,8 @@
 #include "xmlimp.hxx"
 #include "xmltext.hxx"
 
+#include <sal/log.hxx>
+
 using namespace com::sun::star;
 
 namespace writerperfect

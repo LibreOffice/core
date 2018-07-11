@@ -37,6 +37,7 @@
 #include <o3tl/any.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <sax/tools/converter.hxx>
 

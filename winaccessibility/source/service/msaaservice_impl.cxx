@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>

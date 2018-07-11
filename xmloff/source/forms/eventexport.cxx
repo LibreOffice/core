@@ -20,6 +20,7 @@
 #include "eventexport.hxx"
 #include "strings.hxx"
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
 
 namespace xmloff
 {

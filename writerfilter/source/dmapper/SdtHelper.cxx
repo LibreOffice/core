@@ -12,6 +12,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <sal/log.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <editeng/unoprnms.hxx>
 #include <vcl/svapp.hxx>

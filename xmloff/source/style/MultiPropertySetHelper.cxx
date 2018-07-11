@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 
+#include <sal/log.hxx>
 
 using ::com::sun::star::beans::XMultiPropertySet;
 using ::com::sun::star::beans::XPropertySet;

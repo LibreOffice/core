@@ -22,6 +22,8 @@
 #include "OOXMLParserState.hxx"
 #include "Handler.hxx"
 
+#include <sal/log.hxx>
+
 namespace writerfilter {
 namespace ooxml
 {

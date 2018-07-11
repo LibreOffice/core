@@ -29,6 +29,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <tools/color.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlexp.hxx>

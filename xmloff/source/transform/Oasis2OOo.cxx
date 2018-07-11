@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

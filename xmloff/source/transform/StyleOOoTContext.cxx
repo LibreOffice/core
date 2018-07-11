@@ -42,6 +42,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;

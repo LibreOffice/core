@@ -22,6 +22,8 @@
 #include "DomainMapper_Impl.hxx"
 #include "util.hxx"
 
+#include <sal/log.hxx>
+
 namespace writerfilter
 {
 namespace dmapper

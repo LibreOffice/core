@@ -92,6 +92,7 @@
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <sax/tools/converter.hxx>
 

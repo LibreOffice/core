@@ -24,6 +24,7 @@
 #include <xmloff/xmltypes.hxx>
 #include "txtprhdl.hxx"
 #include <xmlsdtypes.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

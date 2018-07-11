@@ -21,6 +21,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>

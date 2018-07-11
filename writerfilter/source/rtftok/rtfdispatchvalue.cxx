@@ -15,6 +15,7 @@
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/mapunit.hxx>
 

@@ -32,6 +32,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/graph.hxx>

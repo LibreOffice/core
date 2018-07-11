@@ -17,6 +17,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include <rtl/character.hxx>
 #include <tools/stream.hxx>
+#include <sal/log.hxx>
 
 #include <dmapper/DomainMapperFactory.hxx>
 #include <ooxml/resourceids.hxx>

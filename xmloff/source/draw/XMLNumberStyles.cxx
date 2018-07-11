@@ -24,6 +24,8 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
+#include <sal/log.hxx>
+
 #include "sdxmlexp_impl.hxx"
 #include "sdxmlimp_impl.hxx"
 

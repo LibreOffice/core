@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

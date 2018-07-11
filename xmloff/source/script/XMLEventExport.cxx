@@ -25,6 +25,7 @@
 
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>

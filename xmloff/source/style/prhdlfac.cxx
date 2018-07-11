@@ -25,6 +25,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 
 
+#include <sal/log.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprhdl.hxx>

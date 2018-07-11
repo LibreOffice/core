@@ -26,6 +26,8 @@
 #include "WrapPolygonHandler.hxx"
 #include "util.hxx"
 
+#include <sal/log.hxx>
+
 namespace writerfilter {
 
 using namespace com::sun::star;

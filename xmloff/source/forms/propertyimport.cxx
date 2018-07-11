@@ -30,6 +30,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <comphelper/extract.hxx>
 #include "callbacks.hxx"
 #include <xmloff/xmlnmspe.hxx>

@@ -33,6 +33,7 @@
 #include <ooxml/resourceids.hxx>
 #include "DomainMapper.hxx"
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 namespace writerfilter {
 namespace dmapper {

@@ -47,6 +47,7 @@
 #include <svx/unoapi.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceashashmap.hxx>

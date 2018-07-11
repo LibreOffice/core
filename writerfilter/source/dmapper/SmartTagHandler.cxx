@@ -15,6 +15,8 @@
 
 #include <ooxml/resourceids.hxx>
 
+#include <sal/log.hxx>
+
 namespace
 {
 OUString lcl_getTypePath(OUString& rType)

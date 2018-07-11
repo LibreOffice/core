@@ -24,6 +24,7 @@
 #include "xformsapi.hxx"
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>

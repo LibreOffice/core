@@ -42,6 +42,7 @@
 #include "table.hxx"
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <memory>
 

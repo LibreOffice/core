@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>

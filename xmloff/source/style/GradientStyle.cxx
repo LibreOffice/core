@@ -30,6 +30,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>

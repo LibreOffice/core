@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include <cppuhelper/supportsservice.hxx>

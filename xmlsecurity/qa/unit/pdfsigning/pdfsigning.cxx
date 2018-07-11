@@ -12,6 +12,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/streamwrap.hxx>

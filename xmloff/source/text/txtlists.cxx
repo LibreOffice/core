@@ -24,6 +24,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <tools/datetime.hxx>
+#include <sal/log.hxx>
 
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlimp.hxx>

@@ -53,6 +53,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
+#include <sal/log.hxx>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include "sdxmlexp_impl.hxx"

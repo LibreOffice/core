@@ -19,6 +19,7 @@
 
 #include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <comphelper/base64.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>

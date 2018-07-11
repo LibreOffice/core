@@ -30,6 +30,7 @@
 #include <xmloff/contextid.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
 #include <xmloff/maptype.hxx>
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include "controlpropertymap.hxx"
