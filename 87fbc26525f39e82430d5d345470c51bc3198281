@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_b3a524b8",
+        "filename": "vcl/uiconfig/ui/moreoptionsdialog.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-11T14:00:08Z",
+      "side": 1,
+      "message": "More printing options maybe",
+      "revId": "87fbc26525f39e82430d5d345470c51bc3198281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d3a0a8a8",
+        "filename": "vcl/uiconfig/ui/moreoptionsdialog.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-11T14:00:08Z",
+      "side": 1,
+      "message": "The missing label is why this crashes :) Add a label and magic! It starts to work again",
+      "revId": "87fbc26525f39e82430d5d345470c51bc3198281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
