@@ -116,7 +116,13 @@ XInputStream_impl::skipBytes(
 sal_Int32 SAL_CALL
 XInputStream_impl::available()
 {
-    return 0;
+    sal_uInt64 uPos;
+    if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
+        throw io::IOException();
+    sal_uInt64 uSize;
+    if( osl::FileBase::E_None != m_aFile.getSize( uSize ) )
+        throw io::IOException();
+    return std::min<sal_uInt64>(SAL_MAX_INT32, uSize - uPos);
 }
 
 

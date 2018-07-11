@@ -924,7 +924,7 @@ void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL InputStreamTransformer::available()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    return std::max<sal_Int32>(buffer.getLength() - pos, 0);
+    return std::min<sal_Int64>(SAL_MAX_INT32, buffer.getLength() - pos);
 }
 
 

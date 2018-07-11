@@ -203,17 +203,10 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::available()
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
-    sal_uInt32 nPos = m_pSvStream->Tell();
+    sal_Int64 nAvailable = m_pSvStream->remainingSize();
     checkError();
 
-    m_pSvStream->Seek(STREAM_SEEK_TO_END);
-    checkError();
-
-    sal_Int32 nAvailable = static_cast<sal_Int32>(m_pSvStream->Tell()) - nPos;
-    m_pSvStream->Seek(nPos);
-    checkError();
-
-    return nAvailable;
+    return std::min<sal_Int64>(SAL_MAX_INT32, nAvailable);
 }
 
 

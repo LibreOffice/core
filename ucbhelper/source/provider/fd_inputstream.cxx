@@ -99,7 +99,7 @@ namespace ucbhelper
 
     sal_Int32 SAL_CALL FdInputStream::available()
     {
-        return sal::static_int_cast<sal_Int32>(m_nLength - getPosition());
+        return std::min<sal_Int64>(SAL_MAX_INT32, m_nLength - getPosition());
     }
 
 

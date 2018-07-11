@@ -127,7 +127,7 @@ namespace cmis
 
     sal_Int32 SAL_CALL StdInputStream::available( )
     {
-        return sal::static_int_cast< sal_Int32 >( m_nLength - getPosition() );
+        return std::min<sal_Int64>( SAL_MAX_INT32, m_nLength - getPosition() );
     }
 
     void SAL_CALL StdInputStream::closeInput( )
