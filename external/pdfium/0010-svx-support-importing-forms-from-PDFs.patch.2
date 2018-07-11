@@ -29,7 +29,7 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index 9c353a4..bf68250 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -780,3 +780,33 @@ FPDFTextObj_GetColor(FPDF_PAGEOBJECT text_object,
+@@ -704,3 +704,31 @@ FPDFTextObj_GetColor(FPDF_PAGEOBJECT text_object,
  
    return true;
  }
@@ -54,8 +54,6 @@ index 9c353a4..bf68250 100644
 +  CPDF_FormObject* pFrmObj = CPDFFormObjectFromFPDFPageObject(form_object);
 +  if (pFrmObj)
 +  {
-+    const CFX_Matrix& matrix = pFrmObj->form_matrix();
-+    fprintf(stderr, "Form matrix a: %f, b: %f, c: %f, d: %f, e: %f, f: %f\n", matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
 +    const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
 +    if (pObjectList)
 +        return pObjectList->GetPageObjectByIndex(index);

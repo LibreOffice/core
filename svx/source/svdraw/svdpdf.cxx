@@ -816,7 +816,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         return;
 
     double a, b, c, d, e, f;
-    FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    FPDFText_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
     Matrix aTextMatrix(mCurMatrix);
 
     aTextMatrix.Transform(left, right, top, bottom);

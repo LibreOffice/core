@@ -12,7 +12,15 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index a52e1a9..9daffc0 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -648,6 +648,29 @@ FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object)
+@@ -20,6 +20,7 @@
+ #include "core/fpdfapi/page/cpdf_pageobject.h"
+ #include "core/fpdfapi/page/cpdf_pathobject.h"
+ #include "core/fpdfapi/page/cpdf_shadingobject.h"
++#include "core/fpdfapi/page/cpdf_textobject.h"
+ #include "core/fpdfapi/parser/cpdf_array.h"
+ #include "core/fpdfapi/parser/cpdf_document.h"
+ #include "core/fpdfapi/parser/cpdf_number.h"
+@@ -458,6 +459,29 @@ FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object)
    return pTxtObj->GetFontSize();
  }
  
@@ -40,15 +48,15 @@ index a52e1a9..9daffc0 100644
 +}
 +
  FPDF_EXPORT void FPDF_CALLCONV
- FPDFTextObj_GetMatrix(FPDF_PAGEOBJECT text_object,
-                       double* a,
+ FPDFPageObj_SetBlendMode(FPDF_PAGEOBJECT page_object,
+                          FPDF_BYTESTRING blend_mode) {
 diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index 4351649..f858ab2 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1030,6 +1030,17 @@ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
- FPDF_EXPORT int FPDF_CALLCONV
- FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object);
+@@ -1068,6 +1068,17 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+                           FPDF_FONT font,
+                           float font_size);
  
 +// Get the font name of a text object.
 +//
@@ -61,7 +69,7 @@ index 4351649..f858ab2 100644
 +FPDF_EXPORT int FPDF_CALLCONV
 +FPDFTextObj_GetFontName(FPDF_PAGEOBJECT text_object, char* result);
 +
- // Get the matrix of a particular text object.
+ // Get the number of characters from a text object.
  //
  // text_object - Handle of text object returned by FPDFPageObj_NewTextObj
 -- 
