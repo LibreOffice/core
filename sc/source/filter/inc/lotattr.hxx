@@ -93,9 +93,9 @@ private:
     const Color& GetColor( const sal_uInt8 nLotIndex ) const;
 
     ScDocumentPool*     pDocPool;
-    SvxColorItem*       ppColorItems[6];        // 0 and 7 are missing!
-    SvxColorItem*       pWhite;
-    Color*              pColTab;
+    std::unique_ptr<SvxColorItem> ppColorItems[6];        // 0 and 7 are missing!
+    std::unique_ptr<SvxColorItem> pWhite;
+    std::unique_ptr<Color[]>      pColTab;
     std::vector< std::unique_ptr<ENTRY> > aEntries;
 
     LOTUS_ROOT* mpLotusRoot;

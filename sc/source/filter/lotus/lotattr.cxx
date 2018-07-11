@@ -50,7 +50,7 @@ LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
 {
     pDocPool = mpLotusRoot->pDoc->GetPool();
 
-    pColTab = new Color [ 8 ];
+    pColTab.reset( new Color [ 8 ] );
     pColTab[ 0 ] = COL_WHITE;
     pColTab[ 1 ] = COL_LIGHTBLUE;
     pColTab[ 2 ] = COL_LIGHTGREEN;
@@ -60,24 +60,18 @@ LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
     pColTab[ 6 ] = COL_YELLOW;
     pColTab[ 7 ] = COL_BLACK;
 
-    ppColorItems[ 0 ] = new SvxColorItem( GetColor( 1 ), ATTR_FONT_COLOR );     // 1
-    ppColorItems[ 1 ] = new SvxColorItem( GetColor( 2 ), ATTR_FONT_COLOR );
-    ppColorItems[ 2 ] = new SvxColorItem( GetColor( 3 ), ATTR_FONT_COLOR );
-    ppColorItems[ 3 ] = new SvxColorItem( GetColor( 4 ), ATTR_FONT_COLOR );
-    ppColorItems[ 4 ] = new SvxColorItem( GetColor( 5 ), ATTR_FONT_COLOR );
-    ppColorItems[ 5 ] = new SvxColorItem( GetColor( 6 ), ATTR_FONT_COLOR );     // 6
+    ppColorItems[ 0 ].reset( new SvxColorItem( GetColor( 1 ), ATTR_FONT_COLOR ) );     // 1
+    ppColorItems[ 1 ].reset( new SvxColorItem( GetColor( 2 ), ATTR_FONT_COLOR ) );
+    ppColorItems[ 2 ].reset( new SvxColorItem( GetColor( 3 ), ATTR_FONT_COLOR ) );
+    ppColorItems[ 3 ].reset( new SvxColorItem( GetColor( 4 ), ATTR_FONT_COLOR ) );
+    ppColorItems[ 4 ].reset( new SvxColorItem( GetColor( 5 ), ATTR_FONT_COLOR ) );
+    ppColorItems[ 5 ].reset( new SvxColorItem( GetColor( 6 ), ATTR_FONT_COLOR ) );     // 6
 
-    pWhite = new SvxColorItem( COL_WHITE, ATTR_FONT_COLOR );
+    pWhite.reset( new SvxColorItem( COL_WHITE, ATTR_FONT_COLOR ) );
 }
 
 LotAttrCache::~LotAttrCache()
 {
-    for(SvxColorItem* p : ppColorItems)
-        delete p;
-
-    delete pWhite;
-
-    delete[] pColTab;
 }
 
 const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
