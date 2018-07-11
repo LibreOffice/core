@@ -4269,9 +4269,16 @@ void ScXMLExport::WriteExternalDataTransformations(const std::vector<std::shared
                     break;
                 }
 
-                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(aNumberTransformation->getColumn()));
                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_PRECISION, OUString::number(aNumberTransformation->getPrecision()));
                 SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_NUMBER_TRANSFORMATION, true, true);
+
+                std::set<SCCOL> aColumns = aNumberTransformation->getColumn();
+                for(auto& col : aColumns)
+                {
+                    // Columns
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(col));
+                    SvXMLElementExport aCol(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN, true, true);
+                }
             }
             break;
             default:

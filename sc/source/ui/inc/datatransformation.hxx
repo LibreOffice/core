@@ -145,7 +145,7 @@ class SC_DLLPUBLIC NumberTransformation : public DataTransformation
     virtual TransformationType getTransformationType() const override;
     NUMBER_TRANSFORM_TYPE getNumberTransfromationType() const;
     int getPrecision() const;
-    SCCOL getColumn() const;
+    std::set<SCCOL> getColumn() const;
 };
 
 }

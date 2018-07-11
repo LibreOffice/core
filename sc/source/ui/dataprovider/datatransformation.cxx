@@ -645,7 +645,7 @@ int NumberTransformation::getPrecision() const
     return maPrecision;
 }
 
-SCCOL NumberTransformation::getColumn() const
+std::set<SCCOL> NumberTransformation::getColumn() const
 {
     return mnCol;
 }
