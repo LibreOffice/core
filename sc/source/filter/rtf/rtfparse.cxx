@@ -47,12 +47,12 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
     long nMM = OutputDevice::LogicToLogic( 12, MapUnit::MapPoint, MapUnit::Map100thMM );
     pPool->SetPoolDefaultItem( SvxFontHeightItem( nMM, 100, EE_CHAR_FONTHEIGHT ) );
     // Free-flying pInsDefault
-    pInsDefault = new ScRTFCellDefault( pPool );
+    pInsDefault.reset( new ScRTFCellDefault( pPool ) );
 }
 
 ScRTFParser::~ScRTFParser()
 {
-    delete pInsDefault;
+    pInsDefault.reset();
     maDefaultList.clear();
 }
 
@@ -271,7 +271,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
                 nLastWidth = maDefaultList.back()->nTwips;
 
             nColCnt = 0;
-            if (pActDefault != pInsDefault)
+            if (pActDefault != pInsDefault.get())
                 pActDefault = nullptr;
             maDefaultList.clear();
             pDefMerge = nullptr;
@@ -281,7 +281,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
         break;
         case RTF_CLMGF:         // The first cell of cells to be merged
         {
-            pDefMerge = pInsDefault;
+            pDefMerge = pInsDefault.get();
             nRtfLastToken = pInfo->nToken;
         }
         break;
@@ -304,9 +304,9 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
             bNewDef = true;
             pInsDefault->nCol = nColCnt;
             pInsDefault->nTwips = pInfo->nTokenValue; // Right cell border
-            maDefaultList.push_back( std::unique_ptr<ScRTFCellDefault>(pInsDefault) );
+            maDefaultList.push_back( std::move(pInsDefault) );
             // New free-flying pInsDefault
-            pInsDefault = new ScRTFCellDefault( pPool );
+            pInsDefault.reset( new ScRTFCellDefault( pPool ) );
             if ( ++nColCnt > nColMax )
                 nColMax = nColCnt;
             nRtfLastToken = pInfo->nToken;
@@ -330,7 +330,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
                 NewCellRow();    // before was no \intbl, bad behavior
             // Broken RTF? Let's save what we can
             if ( !pActDefault )
-                pActDefault = pInsDefault;
+                pActDefault = pInsDefault.get();
             if ( pActDefault->nColOverlap > 0 )
             {   // Not merged with preceding
                 mxActEntry->nCol = pActDefault->nCol;
