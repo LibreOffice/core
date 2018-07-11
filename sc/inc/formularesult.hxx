@@ -82,6 +82,8 @@ class ScFormulaResult
     bool                mbEmpty :1; // empty cell result
     bool                mbEmptyDisplayedAsString :1;    // only if mbEmpty
     Multiline           meMultiline :2; // result is multiline
+    // If set it implies that the result is a simple double (in mfValue) and no error
+    bool                mbValueCached :1;
 
     /** Reset mnError, mbEmpty and mbEmptyDisplayedAsString to their defaults
         prior to assigning other types */
