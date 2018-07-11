@@ -9,7 +9,10 @@
 
 $(eval $(call gb_Package_Package,infoplist,$(call gb_CustomTarget_get_workdir,sysui/infoplist)))
 
-$(eval $(call gb_Package_add_files,infoplist,,\
+# workaround to avoid gb_Package_add_files with empty directory adding extra '/'
+$(eval $(call gb_Package_set_outdir,infoplist,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,infoplist,$(PRODUCTNAME_WITHOUT_SPACES).app/Contents,\
 	PkgInfo \
 	Info.plist \
 ))
