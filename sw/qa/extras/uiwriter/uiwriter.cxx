@@ -323,8 +323,8 @@ public:
     void testTdf113287();
     void testTdf113445();
     void testTdf113686();
-    void testFontEmbedding();
 #endif
+    void testFontEmbedding();
     void testLinesInSectionInTable();
     void testParagraphOfTextRange();
     void testTdf99689TableOfContents();
