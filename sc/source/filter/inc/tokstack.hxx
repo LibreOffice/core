@@ -211,7 +211,7 @@ private:
 #ifdef DBG_UTIL
         sal_uInt16                      m_nRek; // recursion counter
 #endif
-        ScTokenArray*               pScToken;   // Token array
+        std::unique_ptr<ScTokenArray>   pScToken;   // Token array
 
         bool                        GrowTripel( sal_uInt16 nByMin );
         bool                        GrowId();
@@ -426,7 +426,7 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId& rId )
         GetElement( static_cast<sal_uInt16>(rId) - 1 );
     }
 
-    return pScToken;
+    return pScToken.get();
 }
 
 
