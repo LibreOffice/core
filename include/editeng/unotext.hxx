@@ -333,7 +333,7 @@ public:
     /// @throws css::uno::RuntimeException
     static bool GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertySimpleEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  );
 
-    void attachField( const SvxFieldData* pData ) throw();
+    void attachField( std::unique_ptr<SvxFieldData> pData ) throw();
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextRangeBase )
 

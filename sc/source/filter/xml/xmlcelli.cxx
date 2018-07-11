@@ -110,7 +110,7 @@ using namespace xmloff::token;
 ScXMLTableRowCellContext::ParaFormat::ParaFormat(ScEditEngineDefaulter& rEditEngine) :
     maItemSet(rEditEngine.GetEmptyItemSet()) {}
 
-ScXMLTableRowCellContext::Field::Field(SvxFieldData* pData) : mpData(pData) {}
+ScXMLTableRowCellContext::Field::Field(std::unique_ptr<SvxFieldData> pData) : mpData(std::move(pData)) {}
 
 ScXMLTableRowCellContext::Field::~Field()
 {
@@ -325,10 +325,10 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
     PushFormat(nBegin, nEnd, rStyleName);
 }
 
-void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData, const OUString& rStyleName)
+void ScXMLTableRowCellContext::PushParagraphField(std::unique_ptr<SvxFieldData> pData, const OUString& rStyleName)
 {
     mbHasFormatRuns = true;
-    maFields.push_back(o3tl::make_unique<Field>(pData));
+    maFields.push_back(o3tl::make_unique<Field>(std::move(pData)));
     Field& rField = *maFields.back().get();
 
     sal_Int32 nPos = maParagraph.getLength();
@@ -583,27 +583,27 @@ OUString ScXMLTableRowCellContext::GetFirstParagraph() const
 
 void ScXMLTableRowCellContext::PushParagraphFieldDate(const OUString& rStyleName)
 {
-    PushParagraphField(new SvxDateField, rStyleName);
+    PushParagraphField(o3tl::make_unique<SvxDateField>(), rStyleName);
 }
 
 void ScXMLTableRowCellContext::PushParagraphFieldSheetName(const OUString& rStyleName)
 {
     SCTAB nTab = GetScImport().GetTables().GetCurrentCellPos().Tab();
-    PushParagraphField(new SvxTableField(nTab), rStyleName);
+    PushParagraphField(o3tl::make_unique<SvxTableField>(nTab), rStyleName);
 }
 
 void ScXMLTableRowCellContext::PushParagraphFieldDocTitle(const OUString& rStyleName)
 {
-    PushParagraphField(new SvxFileField, rStyleName);
+    PushParagraphField(o3tl::make_unique<SvxFileField>(), rStyleName);
 }
 
 void ScXMLTableRowCellContext::PushParagraphFieldURL(
     const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame)
 {
     OUString aAbsURL = GetScImport().GetAbsoluteReference(rURL);
-    SvxURLField* pURLField = new SvxURLField(aAbsURL, rRep, SvxURLFormat::Repr);
+    std::unique_ptr<SvxURLField> pURLField(new SvxURLField(aAbsURL, rRep, SvxURLFormat::Repr));
     pURLField->SetTargetFrame(rTargetFrame);
-    PushParagraphField(pURLField, rStyleName);
+    PushParagraphField(std::move(pURLField), rStyleName);
 }
 
 void ScXMLTableRowCellContext::PushParagraphEnd()

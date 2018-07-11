@@ -279,18 +279,15 @@ void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
 
 /** puts a field item with a copy of the given FieldData into the itemset
     corresponding with this range */
-void SvxUnoTextRangeBase::attachField( const SvxFieldData* pData ) throw()
+void SvxUnoTextRangeBase::attachField( std::unique_ptr<SvxFieldData> pData ) throw()
 {
     SolarMutexGuard aGuard;
 
-    if( pData )
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
+    if( pForwarder )
     {
-        SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
-        if( pForwarder )
-        {
-            SvxFieldItem aField( *pData, EE_FEATURE_FIELD );
-            pForwarder->QuickInsertField( aField, maSelection );
-        }
+        SvxFieldItem aField( std::move(pData), EE_FEATURE_FIELD );
+        pForwarder->QuickInsertField( std::move(aField), maSelection );
     }
 }
 

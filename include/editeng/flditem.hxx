@@ -40,19 +40,19 @@ class MetaAction;
 // class SvxFieldItem ---------------------------------------------------
 
 
-class EDITENG_DLLPUBLIC SvxFieldData : public SvPersistBase
+class EDITENG_DLLPUBLIC SvxFieldData
 {
 public:
     static const sal_Int32 UNKNOWN_FIELD;
 
     static SvxFieldData* Create(const css::uno::Reference<css::text::XTextContent>& xContent);
 
-    SV_DECL_PERSIST1( SvxFieldData, css::text::textfield::Type::UNSPECIFIED)
+    virtual sal_Int32  GetClassId() const { return css::text::textfield::Type::UNSPECIFIED; }
 
                             SvxFieldData();
-    virtual                 ~SvxFieldData() override;
+    virtual                 ~SvxFieldData();
 
-    virtual tools::SvRef<SvxFieldData> Clone() const;
+    virtual std::unique_ptr<SvxFieldData> Clone() const;
     virtual bool            operator==( const SvxFieldData& ) const;
 
     virtual MetaAction*     createBeginComment() const;
@@ -66,8 +66,9 @@ public:
  */
 class EDITENG_DLLPUBLIC SvxFieldItem : public SfxPoolItem
 {
-    tools::SvRef<SvxFieldData>      mxField;
+    std::unique_ptr<SvxFieldData>  mpField;
 public:
+            SvxFieldItem( std::unique_ptr<SvxFieldData> pField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldItem& rItem );
             virtual ~SvxFieldItem() override;
@@ -75,7 +76,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    const SvxFieldData*     GetField() const    { return mxField.get(); }
+    const SvxFieldData*     GetField() const    { return mpField.get(); }
 };
 
 
@@ -124,7 +125,7 @@ public:
     OUString                GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
     static OUString         GetFormatted( Date const & rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 
     virtual MetaAction* createBeginComment() const override;
@@ -163,7 +164,7 @@ public:
     SvxURLFormat            GetFormat() const { return eFormat; }
     void                    SetFormat( SvxURLFormat eFmt ) { eFormat = eFmt; }
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 
     virtual MetaAction* createBeginComment() const override;
@@ -175,7 +176,7 @@ public:
     SV_DECL_PERSIST1( SvxPageField, css::text::textfield::Type::PAGE )
     SvxPageField();
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 
     virtual MetaAction* createBeginComment() const override;
@@ -187,7 +188,7 @@ public:
     SV_DECL_PERSIST1( SvxPageTitleField, css::text::textfield::Type::PAGE_NAME )
     SvxPageTitleField();
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 
     virtual MetaAction* createBeginComment() const override;
@@ -199,7 +200,7 @@ public:
     SV_DECL_PERSIST1( SvxPagesField, css::text::textfield::Type::PAGES )
     SvxPagesField();
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
@@ -209,7 +210,7 @@ public:
     SV_DECL_PERSIST1( SvxTimeField, css::text::textfield::Type::TIME )
     SvxTimeField();
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 
     virtual MetaAction* createBeginComment() const override;
@@ -221,7 +222,7 @@ public:
     SV_DECL_PERSIST1( SvxFileField, css::text::textfield::Type::DOCINFO_TITLE )
     SvxFileField();
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
@@ -236,7 +237,7 @@ public:
     void SetTab(int nTab);
     int GetTab() const { return mnTab;}
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
@@ -288,7 +289,7 @@ public:
     OUString                GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
     static OUString         GetFormatted( tools::Time const & rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 
     virtual MetaAction* createBeginComment() const override;
@@ -332,7 +333,7 @@ public:
 
     OUString                GetFormatted() const;
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
@@ -373,7 +374,7 @@ public:
 
     OUString                GetFormatted() const;
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
@@ -385,7 +386,7 @@ public:
     SV_DECL_PERSIST1( SvxHeaderField, css::text::textfield::Type::PRESENTATION_HEADER )
     SvxHeaderField();
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
@@ -396,7 +397,7 @@ class EDITENG_DLLPUBLIC SvxFooterField final: public SvxFieldData
 public:
     SV_DECL_PERSIST1( SvxFooterField, css::text::textfield::Type::PRESENTATION_FOOTER )
     SvxFooterField();
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
@@ -412,7 +413,7 @@ public:
                                      SvxDateFormat eDateFormat, SvxTimeFormat eTimeFormat,
                                      SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 

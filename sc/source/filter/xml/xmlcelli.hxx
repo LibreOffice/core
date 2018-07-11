@@ -48,13 +48,13 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     struct Field
     {
-        tools::SvRef<SvxFieldData> mpData;
+        std::unique_ptr<SvxFieldData> mpData;
         ESelection maSelection;
 
         Field(const Field&) = delete;
         const Field& operator=(const Field&) = delete;
 
-        explicit Field(SvxFieldData* pData);
+        explicit Field(std::unique_ptr<SvxFieldData> pData);
         ~Field();
     };
 
@@ -121,7 +121,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     bool IsPossibleErrorString() const;
 
-    void PushParagraphField(SvxFieldData* pData, const OUString& rStyleName);
+    void PushParagraphField(std::unique_ptr<SvxFieldData> pData, const OUString& rStyleName);
 
     void PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, const OUString& rStyleName);
 
