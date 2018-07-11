@@ -19,8 +19,30 @@
 
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
+#include <com/sun/star/animations/ValuePair.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/color.hxx>
+
+namespace {
+    int lcl_gethex(int nChar)
+    {
+        if (nChar >= '0' && nChar <= '9')
+            return nChar - '0';
+        else if (nChar >= 'a' && nChar <= 'f')
+            return nChar - 'a' + 10;
+        else if (nChar >= 'A' && nChar <= 'F')
+            return nChar - 'A' + 10;
+        else
+            return 0;
+    }
+}
 
 namespace oox { namespace ppt {
 
@@ -118,6 +140,267 @@ namespace oox { namespace ppt {
         }
 
         return nullptr;
+    }
+
+    bool convertMeasure(OUString& rString)
+    {
+        bool bRet = false;
+
+        const sal_Char* pSource[] = { "ppt_x", "ppt_y", "ppt_w", "ppt_h", nullptr };
+        const sal_Char* pDest[] = { "x", "y", "width", "height", nullptr };
+
+        /* here we want to substitute all occurrences of
+         * [#]ppt_[xyhw] with
+         * x,y,height and width respectively
+         */
+        sal_Int32 nIndex = 0;
+
+        const sal_Char** ps = pSource;
+        const sal_Char** pd = pDest;
+
+        while (*ps)
+        {
+            const OUString aSearch(OUString::createFromAscii(*ps));
+            while ((nIndex = rString.indexOf(aSearch, nIndex)) != -1)
+            {
+                sal_Int32 nLength = aSearch.getLength();
+                if (nIndex && (rString[nIndex - 1] == '#'))
+                {
+                    nIndex--;
+                    nLength++;
+                }
+
+                const OUString aNew(OUString::createFromAscii(*pd));
+                rString = rString.replaceAt(nIndex, nLength, aNew);
+                nIndex += aNew.getLength();
+                bRet = true;
+            }
+            ps++;
+            pd++;
+        }
+
+        return bRet;
+    }
+
+    bool convertAnimationValue(MS_AttributeNames eAttribute, css::uno::Any& rValue)
+    {
+        using css::animations::ValuePair;
+        bool bRet = false;
+        switch (eAttribute)
+        {
+            case MS_PPT_X:
+            case MS_PPT_Y:
+            case MS_PPT_W:
+            case MS_PPT_H:
+            {
+                OUString aString;
+
+                if (rValue.getValueType() == cppu::UnoType<ValuePair>::get())
+                {
+                    ValuePair aValuePair;
+                    if (rValue >>= aValuePair)
+                    {
+                        if (aValuePair.First >>= aString)
+                        {
+                            if (convertMeasure(aString))
+                            {
+                                aValuePair.First <<= aString;
+                                bRet = true;
+                            }
+                        }
+
+                        if (aValuePair.Second >>= aString)
+                        {
+                            if (convertMeasure(aString))
+                            {
+                                aValuePair.Second <<= aString;
+                                bRet = true;
+                            }
+                        }
+                    }
+                }
+                else if (rValue.getValueType() == cppu::UnoType<OUString>::get())
+                {
+                    if (rValue >>= aString)
+                    {
+                        bRet = convertMeasure(aString);
+
+                        if (bRet)
+                            rValue <<= aString;
+                    }
+                }
+            }
+            break;
+
+            case MS_XSHEAR:
+            case MS_R:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue <<= aString.toDouble();
+                    bRet = true;
+                }
+            }
+            break;
+
+            case MS_STYLEROTATION:
+            {
+                if (rValue.getValueType() == cppu::UnoType<OUString>::get())
+                {
+                    OUString aString;
+                    rValue >>= aString;
+                    rValue <<= static_cast<sal_Int16>(aString.toDouble());
+                    bRet = true;
+                }
+                else if (rValue.getValueType() == cppu::UnoType<double>::get())
+                {
+                    double fValue = 0.0;
+                    rValue >>= fValue;
+                    rValue <<= static_cast<sal_Int16>(fValue);
+                    bRet = true;
+                }
+            }
+            break;
+
+            case MS_FILLCOLOR:
+            case MS_STROKECOLOR:
+            case MS_STYLECOLOR:
+            case MS_PPT_C:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    if (aString.getLength() >= 7 && aString[0] == '#')
+                    {
+                        Color aColor;
+                        aColor.SetRed(static_cast<sal_uInt8>(lcl_gethex(aString[1]) * 16
+                                                             + lcl_gethex(aString[2])));
+                        aColor.SetGreen(static_cast<sal_uInt8>(lcl_gethex(aString[3]) * 16
+                                                               + lcl_gethex(aString[4])));
+                        aColor.SetBlue(static_cast<sal_uInt8>(lcl_gethex(aString[5]) * 16
+                                                              + lcl_gethex(aString[6])));
+                        rValue <<= aColor;
+                        bRet = true;
+                    }
+                    else if (aString.startsWith("rgb("))
+                    {
+                        aString = aString.copy(4, aString.getLength() - 5);
+                        Color aColor;
+                        sal_Int32 index = 0;
+                        aColor.SetRed(
+                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                        aColor.SetGreen(
+                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                        aColor.SetRed(
+                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                        rValue <<= aColor;
+                        bRet = true;
+                    }
+                    else if (aString.startsWith("hsl("))
+                    {
+                        sal_Int32 index = 0;
+                        sal_Int32 nA = aString.getToken(0, ',', index).toInt32();
+                        sal_Int32 nB = aString.getToken(0, ',', index).toInt32();
+                        sal_Int32 nC = aString.getToken(0, ',', index).toInt32();
+                        css::uno::Sequence<double> aHSL(3);
+                        aHSL[0] = nA * 360.0 / 255.0;
+                        aHSL[1] = nB / 255.0;
+                        aHSL[2] = nC / 255.0;
+                        rValue <<= aHSL;
+                        bRet = true;
+                    }
+                }
+            }
+            break;
+
+            case MS_FILLTYPE:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue <<= aString == "solid" ? css::drawing::FillStyle_SOLID
+                                                  : css::drawing::FillStyle_NONE;
+                    bRet = true;
+                }
+            }
+            break;
+
+            case MS_STROKEON:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue <<= aString == "true" ? css::drawing::LineStyle_SOLID
+                                                 : css::drawing::LineStyle_NONE;
+                    bRet = true;
+                }
+            }
+            break;
+
+            case MS_FONTWEIGHT:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue <<= aString == "bold" ? css::awt::FontWeight::BOLD
+                                                 : css::awt::FontWeight::NORMAL;
+                    bRet = true;
+                }
+            }
+            break;
+
+            case MS_STYLEFONTSTYLE:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue
+                        <<= aString == "italic" ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE;
+                    bRet = true;
+                }
+            }
+            break;
+
+            case MS_STYLEUNDERLINE:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue <<= aString == "true" ? css::awt::FontUnderline::SINGLE
+                                                 : css::awt::FontUnderline::NONE;
+                    bRet = true;
+                }
+            }
+            break;
+
+            case MS_STYLEOPACITY:
+            case MS_STYLEFONTSIZE:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue <<= static_cast<float>(aString.toDouble());
+                    bRet = true;
+                }
+            }
+            break;
+
+            case MS_STYLEVISIBILITY:
+            {
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue <<= aString == "visible";
+                    bRet = true;
+                }
+            }
+            break;
+            default:
+                break;
+        }
+
+        return bRet;
     }
 
 } }
