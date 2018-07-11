@@ -668,7 +668,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 aPop->SetPopupMenu( 2, aDocMenu.get() );
 
                 sal_uInt16 nSelected = aPop->Execute(this, rCEvt.GetMousePosPixel());
-                OString sIdent = aPop->GetItemIdent(nSelected);
+                OString sIdent = aPop->GetItemIdentFromSubMenu(nSelected);
 
                 if (sIdent.startsWith("document"))
                 {
