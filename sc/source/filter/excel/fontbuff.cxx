@@ -30,6 +30,7 @@
 #include <editeng/wghtitem.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/printer.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <attrib.hxx>
 #include <document.hxx>
@@ -94,7 +95,7 @@ void LotusFontBuffer::SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeig
 {
     OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetHeight(): Array too small!" );
     if( nIndex < nSize )
-        pData[ nIndex ].Height( *( new SvxFontHeightItem( static_cast<sal_uLong>(nHeight) * 20, 100, ATTR_FONT_HEIGHT ) ) );
+        pData[ nIndex ].Height( o3tl::make_unique<SvxFontHeightItem>( static_cast<sal_uLong>(nHeight) * 20, 100, ATTR_FONT_HEIGHT ) );
 }
 
 void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
@@ -105,7 +106,7 @@ void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
         ENTRY* pEntry = pData + nIndex;
         pEntry->Type( nType );
 
-        if( pEntry->pTmpName )
+        if( pEntry->xTmpName )
             MakeFont( pEntry );
     }
 }
@@ -134,10 +135,9 @@ void LotusFontBuffer::MakeFont( ENTRY* pEntry )
             break;
     }
 
-    pEntry->pFont = new SvxFontItem( eFamily, *pEntry->pTmpName, EMPTY_OUSTRING, ePitch, eCharSet, ATTR_FONT );
+    pEntry->pFont.reset( new SvxFontItem( eFamily, *pEntry->xTmpName, EMPTY_OUSTRING, ePitch, eCharSet, ATTR_FONT ) );
 
-    delete pEntry->pTmpName;
-    pEntry->pTmpName = nullptr;
+    pEntry->xTmpName.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
