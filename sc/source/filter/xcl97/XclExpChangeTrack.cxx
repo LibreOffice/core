@@ -609,8 +609,8 @@ void XclExpChTrTabIdBuffer::Remove()
 XclExpChTrTabId::XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer )
     : nTabCount( rBuffer.GetBufferCount() )
 {
-    pBuffer = new sal_uInt16[ nTabCount ];
-    rBuffer.GetBufferCopy( pBuffer );
+    pBuffer.reset( new sal_uInt16[ nTabCount ] );
+    rBuffer.GetBufferCopy( pBuffer.get() );
 }
 
 XclExpChTrTabId::~XclExpChTrTabId()
@@ -622,16 +622,15 @@ void XclExpChTrTabId::Copy( const XclExpChTrTabIdBuffer& rBuffer )
 {
     Clear();
     nTabCount = rBuffer.GetBufferCount();
-    pBuffer = new sal_uInt16[ nTabCount ];
-    rBuffer.GetBufferCopy( pBuffer );
+    pBuffer.reset( new sal_uInt16[ nTabCount ] );
+    rBuffer.GetBufferCopy( pBuffer.get() );
 }
 
 void XclExpChTrTabId::SaveCont( XclExpStream& rStrm )
 {
     rStrm.EnableEncryption();
     if( pBuffer )
-        for( sal_uInt16* pElem = pBuffer; pElem < (pBuffer + nTabCount); pElem++ )
-            rStrm << *pElem;
+        rStrm.Write(pBuffer.get(), nTabCount);
     else
         for( sal_uInt16 nIndex = 1; nIndex <= nTabCount; nIndex++ )
             rStrm << nIndex;
