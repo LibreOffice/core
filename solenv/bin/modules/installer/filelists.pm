@@ -53,6 +53,7 @@ sub resolve_filelist_flag
                     if ((index $path, $outdir) != 0)
                     {
                         installer::logger::print_error("file '$path' is not in '$outdir'");
+                        $error = 1;
                     }
                     if ($path =~ '\/\/')
                     {
@@ -68,6 +69,7 @@ sub resolve_filelist_flag
                         if (!-e $path)
                         {
                             installer::logger::print_error("file '$path' does not exist");
+                            $error = 1;
                         }
                     }
 
