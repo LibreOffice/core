@@ -152,13 +152,13 @@ class ScHTMLLayoutParser : public ScHTMLParser
 private:
     Size                aPageSize;
     OUString            aBaseURL;
-    ::std::stack< ScHTMLTableStackEntry* >
+    ::std::stack< std::unique_ptr<ScHTMLTableStackEntry> >
                         aTableStack;
     OUString            aString;
     ScRangeListRef      xLockedList;        // per table
-    OuterMap*           pTables;
+    std::unique_ptr<OuterMap> pTables;
     ScHTMLColOffset     maColOffset;
-    ScHTMLColOffset*    pLocalColOffset;    // per table
+    std::unique_ptr<ScHTMLColOffset> pLocalColOffset;    // per table
     sal_uLong           nFirstTableCell;    // per table
     short               nTableLevel;
     sal_uInt16          nTable;
