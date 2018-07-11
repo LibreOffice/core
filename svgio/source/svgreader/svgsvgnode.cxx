@@ -713,6 +713,23 @@ namespace svgio
                     }
                 }
             }
+
+            if(aSequence.empty() && !getParent() && getViewBox())
+            {
+                // tdf#118232 No geometry, Outermost SVG element and we have a ViewBox.
+                // Create a HiddenGeometry Primitive containing an expanded
+                // hairline geometry to have the size contained
+                const drawinglayer::primitive2d::Primitive2DReference xLine(
+                    new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                        basegfx::utils::createPolygonFromRect(
+                            *getViewBox()),
+                        basegfx::BColor(0.0, 0.0, 0.0)));
+                const drawinglayer::primitive2d::Primitive2DReference xHidden(
+                    new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
+                        drawinglayer::primitive2d::Primitive2DContainer { xLine }));
+
+                rTarget.push_back(xHidden);
+            }
         }
 
         const basegfx::B2DRange SvgSvgNode::getCurrentViewPort() const
