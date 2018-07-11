@@ -61,7 +61,7 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     ppP_Matrix.reset( new ScMatrix*[ nP_Matrix ] );
     memset( ppP_Matrix.get(), 0, sizeof( ScMatrix* ) * nP_Matrix );
 
-    pScToken = new ScTokenArray;
+    pScToken.reset(new ScTokenArray);
 
     Reset();
 }
@@ -69,8 +69,6 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
 TokenPool::~TokenPool()
 {
     ClearMatrix();
-
-    delete pScToken;
 }
 
 /** Returns the new number of elements, or 0 if overflow. */
