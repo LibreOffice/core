@@ -205,7 +205,7 @@ The current presentation contains no OLE objects.</value>
             <value>true</value>
         </prop>
         <prop oor:name="JPEGQuality">
-            <value>50</value>
+            <value>75</value>
         </prop>
         <prop oor:name="RemoveCropArea">
             <value>true</value>
@@ -248,7 +248,7 @@ The current presentation contains no OLE objects.</value>
                     <value>true</value>
                 </prop>
                 <prop oor:name="JPEGQuality">
-                    <value>25</value>
+                    <value>70</value>
                 </prop>
                 <prop oor:name="RemoveCropArea">
                     <value>true</value>
@@ -289,7 +289,7 @@ The current presentation contains no OLE objects.</value>
                     <value>true</value>
                 </prop>
                 <prop oor:name="JPEGQuality">
-                    <value>50</value>
+                    <value>75</value>
                 </prop>
                 <prop oor:name="RemoveCropArea">
                     <value>true</value>
@@ -330,7 +330,7 @@ The current presentation contains no OLE objects.</value>
                     <value>true</value>
                 </prop>
                 <prop oor:name="JPEGQuality">
-                    <value>75</value>
+                    <value>80</value>
                 </prop>
                 <prop oor:name="RemoveCropArea">
                     <value>true</value>
