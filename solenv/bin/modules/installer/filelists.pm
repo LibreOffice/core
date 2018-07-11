@@ -53,6 +53,10 @@ sub resolve_filelist_flag
                     {
                         installer::logger::print_error("file '$path' is not in '$outdir'");
                     }
+                    if ($path =~ '\/\/')
+                    {
+                        installer::logger::print_error("file '$path' contains 2 consecutive '/' which breaks MSIs");
+                    }
                     if (-l $path)
                     {
                         $is_symlink = 1;
