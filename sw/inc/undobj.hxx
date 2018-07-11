@@ -186,7 +186,7 @@ public:
 class SwUndoSaveSection : private SwUndoSaveContent
 {
     std::unique_ptr<SwNodeIndex> m_pMovedStart;
-    SwRedlineSaveDatas* pRedlSaveData;
+    std::unique_ptr<SwRedlineSaveDatas> pRedlSaveData;
     sal_uLong nMvLen;           // Index into UndoNodes-Array.
     sal_uLong nStartPos;
 
