@@ -309,18 +309,37 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             const sal_Int32 nStartAngle = maMap.count(XML_stAng) ? maMap.find(XML_stAng)->second : 0;
             const sal_Int32 nSpanAngle = maMap.count(XML_spanAng) ? maMap.find(XML_spanAng)->second : 360;
             const sal_Int32 nRotationPath = maMap.count(XML_rotPath) ? maMap.find(XML_rotPath)->second : XML_none;
+            const sal_Int32 nctrShpMap = maMap.count(XML_ctrShpMap) ? maMap.find(XML_ctrShpMap)->second : XML_none;
             const sal_Int32 nShapes = rShape->getChildren().size();
             const awt::Size aCenter(rShape->getSize().Width / 2, rShape->getSize().Height / 2);
-            const awt::Size aChildSize(rShape->getSize().Width / 5, rShape->getSize().Height / 5);
+            const awt::Size aChildSize(rShape->getSize().Width / nShapes, rShape->getSize().Height / nShapes);
             const sal_Int32 nRadius = std::min(
                 (rShape->getSize().Width - aChildSize.Width) / 2,
                 (rShape->getSize().Height - aChildSize.Height) / 2);
 
             sal_Int32 idx = 0;
+            double fAngle = 0;
             for (auto & aCurrShape : rShape->getChildren())
             {
-                const double fAngle = static_cast<double>(idx)*nSpanAngle/nShapes + nStartAngle;
-                const awt::Point aCurrPos(
+                if(nctrShpMap == XML_fNode && idx!=0)
+                   fAngle = static_cast<double>(idx-1)*nSpanAngle/nShapes + nStartAngle;
+                else
+                {
+                    if(nctrShpMap == XML_fNode && idx==0)
+                        fAngle = 0;
+                    else
+                        fAngle = static_cast<double>(idx)*nSpanAngle/nShapes + nStartAngle;
+                }
+                if(nctrShpMap == XML_fNode && idx == 0)
+                {
+                    const awt::Point aCurrPos(aCenter.Width - aChildSize.Width/2,aCenter.Height - aChildSize.Height/2);
+                    aCurrShape->setPosition(aCurrPos);
+                    aCurrShape->setSize(aChildSize);
+                    aCurrShape->setChildSize(aChildSize);
+                }
+                else
+                {
+                    const awt::Point aCurrPos(
                     aCenter.Width + nRadius*sin(fAngle*F_PI180) - aChildSize.Width/2,
                     aCenter.Height - nRadius*cos(fAngle*F_PI180) - aChildSize.Height/2);
 
@@ -332,6 +351,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     aCurrShape->setRotation(fAngle * PER_DEGREE);
 
                 idx++;
+                }
             }
             break;
         }
