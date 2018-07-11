@@ -54,7 +54,7 @@
 						</info>
 					</maxInclusive>
 				</constraints>
-				<value>45</value>
+				<value>75</value>
 			</prop>
 			<prop oor:name="RemoveCropArea" oor:type="xs:boolean">
 				<info>
