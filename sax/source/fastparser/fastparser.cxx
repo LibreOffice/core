@@ -22,6 +22,7 @@
 #include <xml2utf.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -780,8 +781,13 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
         rEntity.mxDocumentHandler->startDocument();
     }
 
-    rEntity.mbEnableThreads = rEntity.maStructSource.aInputStream->available() > 10000
-        && !getenv("SAX_DISABLE_THREADS");
+    if (!getenv("SAX_DISABLE_THREADS"))
+    {
+        Reference<css::io::XSeekable> xSeekable(rEntity.maStructSource.aInputStream, UNO_QUERY);
+        // available() is not __really__ relevant here, but leave it in as a heuristic for non-seekable streams
+        rEntity.mbEnableThreads = (xSeekable.is() && xSeekable->getLength() > 10000)
+                || (rEntity.maStructSource.aInputStream->available() > 10000);
+    }
 
     if (rEntity.mbEnableThreads)
     {
