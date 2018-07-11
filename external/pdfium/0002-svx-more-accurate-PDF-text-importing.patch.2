@@ -20,8 +20,8 @@ index 912df63..3244943 100644
  #include "core/fpdfapi/page/cpdf_form.h"
  #include "core/fpdfapi/page/cpdf_formobject.h"
  #include "core/fpdfapi/page/cpdf_imageobject.h"
-@@ -626,6 +627,26 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
-   return true;
+@@ -436,6 +437,26 @@ FPDFPageObj_Transform(FPDF_PAGEOBJECT page_object,
+   pPageObj->Transform(matrix);
  }
  
 +FPDF_EXPORT int FPDF_CALLCONV
@@ -45,80 +45,12 @@ index 912df63..3244943 100644
 +}
 +
  FPDF_EXPORT void FPDF_CALLCONV
- FPDFTextObj_GetMatrix(FPDF_PAGEOBJECT text_object,
-                       double* a,
-@@ -642,3 +663,66 @@ FPDFTextObj_GetMatrix(FPDF_PAGEOBJECT text_object,
-   *c = matrix.c;
-   *d = matrix.d;
- }
-+
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFTextObj_GetUnicode(FPDF_PAGEOBJECT text_object, int index)
-+{
-+  if (!text_object || index < 0)
-+    return 0;
-+
-+  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
-+  if (index > pTxtObj->CountChars())
-+    return 0;
-+
-+  CPDF_TextObjectItem info;
-+  pTxtObj->GetCharInfo(index, &info);
-+  return info.m_CharCode;
-+}
-+
-+FPDF_EXPORT int FPDF_CALLCONV FPDFTextObj_GetText(FPDF_PAGEOBJECT text_object,
-+                                                  int char_start,
-+                                                  int char_count,
-+                                                  unsigned short* result) {
-+  if (!text_object || char_start < 0 || char_count < 0 || !result)
-+    return 0;
-+
-+  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
-+  int char_available = pTxtObj->CountChars() - char_start;
-+  if (char_available <= 0)
-+    return 0;
-+
-+  char_count = std::min(char_count, char_available);
-+  if (char_count == 0) {
-+    // Writing out "", which has a character count of 1 due to the NUL.
-+    *result = '\0';
-+    return 1;
-+  }
-+
-+  CPDF_Font* pFont = pTxtObj->GetFont();
-+  WideString str;
-+  for (uint32_t charcode : pTxtObj->GetCharCodes()) {
-+    if (charcode != CPDF_Font::kInvalidCharCode)
-+      str += pFont->UnicodeFromCharCode(charcode);
-+  }
-+
-+//   CFX_WideTextBuf m_TextBuf;
-+//   WideString str = textpage->GetPageText(char_start, char_count);
-+//   return WideString(m_TextBuf.AsStringView().Mid(
-+//       static_cast<size_t>(text_start), static_cast<size_t>(text_count)));
-+
-+//   if (str.GetLength() > static_cast<size_t>(char_count))
-+//     str = str.Left(static_cast<size_t>(char_count));
-+
-+  // Reincode in UTF-16.
-+//   WideString str = text.UTF8Decode();
-+
-+  // UFT16LE_Encode doesn't handle surrogate pairs properly, so it is expected
-+  // the number of items to stay the same.
-+  ByteString byte_str = str.UTF16LE_Encode();
-+  size_t byte_str_len = byte_str.GetLength();
-+  int ret_count = byte_str_len / sizeof(unsigned short);
-+
-+  ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
-+  memcpy(result, byte_str.GetBuffer(byte_str_len), byte_str_len);
-+  return ret_count;
-+}
+ FPDFPageObj_SetBlendMode(FPDF_PAGEOBJECT page_object,
+                          FPDF_BYTESTRING blend_mode) {
 diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
-index 3f45495..602849f 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -971,6 +971,26 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -996,6 +996,26 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
@@ -141,29 +73,6 @@ index 3f45495..602849f 100644
 +// The value of the font size
 +FPDF_EXPORT int FPDF_CALLCONV
 +FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object);
-+
- // Get the matrix of a particular text object.
- //
- // text_object - Handle of text object returned by FPDFPageObj_NewTextObj
-@@ -986,6 +1006,22 @@ FPDFTextObj_GetMatrix(FPDF_PAGEOBJECT text_object,
-                       double* c,
-                       double* d);
- 
-+// Get the unicode of a special character in a text object.
-+//
-+// text_object - Handle of text object returned by FPDFPageObj_NewTextObj
-+//               or FPDFPageObj_NewTextObjEx.
-+// index - The index of the character to get the unicode.
-+// Return Value:
-+// The unicode value.
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFTextObj_GetUnicode(FPDF_PAGEOBJECT text_object, int index);
-+
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFTextObj_GetText(FPDF_PAGEOBJECT text_object,
-+                    int char_start,
-+                    int char_count,
-+                    unsigned short* result);
 +
  #ifdef __cplusplus
  }  // extern "C"

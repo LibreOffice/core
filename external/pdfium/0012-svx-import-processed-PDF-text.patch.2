@@ -64,7 +64,7 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index f4a1688..f34d3b5 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -27,6 +27,7 @@
+@@ -26,6 +26,7 @@
  #include "core/fpdfapi/parser/cpdf_string.h"
  #include "core/fpdfdoc/cpdf_annot.h"
  #include "core/fpdfdoc/cpdf_annotlist.h"
@@ -72,8 +72,8 @@ index f4a1688..f34d3b5 100644
  #include "fpdfsdk/cpdfsdk_helpers.h"
  #include "public/fpdf_formfill.h"
  #include "third_party/base/logging.h"
-@@ -732,6 +733,46 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFTextObj_GetText(FPDF_PAGEOBJECT text_object,
-   return ret_count;
+@@ -656,6 +657,46 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
+   return true;
  }
  
 +FPDF_EXPORT int FPDF_CALLCONV
@@ -123,9 +123,9 @@ diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index f249e64..e14b2a5 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1065,6 +1065,19 @@ FPDFTextObj_GetText(FPDF_PAGEOBJECT text_object,
-                     int char_count,
-                     unsigned short* result);
+@@ -1088,6 +1088,19 @@ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
+ FPDF_EXPORT int FPDF_CALLCONV
+ FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object);
  
 +// Get the processed text of a text object.
 +//

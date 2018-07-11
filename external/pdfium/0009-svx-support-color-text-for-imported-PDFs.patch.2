@@ -10,41 +10,6 @@ Subject: [PATCH 09/14] svx: support color text for imported PDFs
  pdfium/public/fpdf_edit.h                     | 10 +++---
  4 files changed, 46 insertions(+), 17 deletions(-)
 
-diff --git a/pdfium/core/fpdfapi/page/cpdf_imageobject.cpp b/pdfium/core/fpdfapi/page/cpdf_imageobject.cpp
-index 58ef90a..416d82d 100644
---- a/pdfium/core/fpdfapi/page/cpdf_imageobject.cpp
-+++ b/pdfium/core/fpdfapi/page/cpdf_imageobject.cpp
-@@ -43,7 +43,7 @@ const CPDF_ImageObject* CPDF_ImageObject::AsImage() const {
- void CPDF_ImageObject::CalcBoundingBox() {
-   std::tie(m_Left, m_Right, m_Top, m_Bottom) =
-       m_Matrix.TransformRect(0.f, 1.f, 1.f, 0.f);
--    fprintf(stderr, "Image BB: %f, %f, %f, %f\n", m_Left, m_Right, m_Top, m_Bottom);
-+    // fprintf(stderr, "Image BB: %f, %f, %f, %f\n", m_Left, m_Right, m_Top, m_Bottom);
- }
- 
- void CPDF_ImageObject::SetImage(const RetainPtr<CPDF_Image>& pImage) {
-diff --git a/pdfium/core/fxge/cfx_pathdata.cpp b/pdfium/core/fxge/cfx_pathdata.cpp
-index a483edf..13e2cdb 100644
---- a/pdfium/core/fxge/cfx_pathdata.cpp
-+++ b/pdfium/core/fxge/cfx_pathdata.cpp
-@@ -199,7 +199,7 @@ void CFX_PathData::Append(const CFX_PathData* pSrc, const CFX_Matrix* pMatrix) {
- void CFX_PathData::AppendPoint(const CFX_PointF& point,
-                                FXPT_TYPE type,
-                                bool closeFigure) {
--  fprintf(stderr, "Append: %f, %f (%s)\n", point.x, point.y, closeFigure ? "CLOSE" : "OPEN");
-+//   fprintf(stderr, "Append: %f, %f (%s)\n", point.x, point.y, closeFigure ? "CLOSE" : "OPEN");
-   m_Points.push_back(FX_PATHPOINT(point, type, closeFigure));
- }
- 
-@@ -295,7 +295,7 @@ CFX_FloatRect CFX_PathData::GetBoundingBox(float line_width,
- void CFX_PathData::Transform(const CFX_Matrix* pMatrix) {
-   if (!pMatrix)
-     return;
--  fprintf(stderr, "XForm: %f, %f %f, %f, %f, %f\n", pMatrix->a, pMatrix->b, pMatrix->c, pMatrix->d, pMatrix->e, pMatrix->f);
-+//   fprintf(stderr, "XForm: %f, %f %f, %f, %f, %f\n", pMatrix->a, pMatrix->b, pMatrix->c, pMatrix->d, pMatrix->e, pMatrix->f);
-   for (auto& point : m_Points)
-     point.m_Point = pMatrix->Transform(point.m_Point);
- }
 diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index 2249e8e..9c353a4 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp

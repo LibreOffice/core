@@ -40,16 +40,7 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index 29c8b01..a52e1a9 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -718,7 +718,7 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFTextObj_GetText(FPDF_PAGEOBJECT text_object,
-   int ret_count = byte_str_len / sizeof(unsigned short);
- 
-   ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
--  memcpy(result, byte_str.GetBuffer(byte_str_len), byte_str_len);
-+  memcpy(result, byte_str.GetBuffer(byte_str_len).data(), byte_str_len);
-   return ret_count;
- }
- 
-@@ -758,7 +758,7 @@ FPDFTextObj_GetTextProcessed(FPDF_PAGEOBJECT text_object,
+@@ -693,7 +693,7 @@ FPDFTextObj_GetTextProcessed(FPDF_PAGEOBJECT text_object,
    int ret_count = byte_str_len / kBytesPerCharacter;
  
    ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
@@ -58,7 +49,7 @@ index 29c8b01..a52e1a9 100644
    return ret_count;
  }
  
-@@ -801,10 +801,15 @@ FPDFTextObj_GetColor(FPDF_PAGEOBJECT text_object,
+@@ -736,10 +736,15 @@ FPDFTextObj_GetColor(FPDF_PAGEOBJECT text_object,
        return false;
    }
  
@@ -78,8 +69,8 @@ index 29c8b01..a52e1a9 100644
    *A = static_cast<unsigned int>(
        (pTxtObj->m_GeneralState.GetStrokeAlpha() * 255.f) + 0.5f);
  
-@@ -834,7 +839,7 @@ FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index)
-     const CFX_Matrix& matrix = pFrmObj->form_matrix();
+@@ -768,7 +773,7 @@ FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index)
+   {
      const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
      if (pObjectList)
 -        return pObjectList->GetPageObjectByIndex(index);
