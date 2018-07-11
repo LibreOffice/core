@@ -317,6 +317,21 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
     {
         SvxFrameDirection eDir =
             *pData ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
+
+        // perhaps ParaAdjust has already been set without knowing about BiDi and the need to swap the value?
+        if ( eDir == SvxFrameDirection::Horizontal_RL_TB && !IsRightToLeft() )
+        {
+            const SvxAdjustItem* pItem = static_cast<const SvxAdjustItem*>(GetFormatAttr(RES_PARATR_ADJUST));
+            if ( pItem )
+            {
+                const SvxAdjust eJustify = pItem->GetAdjust();
+                if ( eJustify == SvxAdjust::Left )
+                    NewAttr( SvxAdjustItem( SvxAdjust::Right, RES_PARATR_ADJUST ) );
+                else if ( eJustify == SvxAdjust::Right )
+                    NewAttr( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
+            }
+        }
+
         NewAttr(SvxFrameDirectionItem(eDir, RES_FRAMEDIR));
     }
 }
