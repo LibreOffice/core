@@ -24,6 +24,7 @@
 #include <oox/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace animations { class XAnimationNode; }
@@ -82,6 +83,15 @@ namespace oox { namespace ppt {
     OOX_DLLPUBLIC void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     OOX_DLLPUBLIC void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+
+    /** convert attribute values of the animation target so that LibreOffice understand.
+     */
+    OOX_DLLPUBLIC bool convertAnimationValue(MS_AttributeNames eAttribute, css::uno::Any& rValue);
+
+    /** convert the measure string to LibreOffice format.
+     * i.e. convert occurence of #{0,1}ppt_[xywh] to x,y, width, height.
+     */
+    OOX_DLLPUBLIC bool convertMeasure(OUString& rString);
 } }
 
 #endif
