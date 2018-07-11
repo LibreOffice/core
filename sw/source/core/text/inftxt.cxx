@@ -1702,11 +1702,13 @@ SwTwips SwTextFormatInfo::GetLineWidth()
     if (!pLastTab)
         return nLineWidth;
 
+    // Consider tab portions over the printing bounds of the text frame.
     if (pLastTab->GetTabPos() <= Width())
         return nLineWidth;
 
-    // Consider tab portions over the printing bounds of the text frame.
-    nLineWidth = pLastTab->GetTabPos() - X();
+    // If there is one such tab portion, then text is allowed to use the full
+    // text frame area (even over the actual tab portion).
+    nLineWidth = GetTextFrame()->getFrameArea().Width() - X();
 
     return nLineWidth;
 }
