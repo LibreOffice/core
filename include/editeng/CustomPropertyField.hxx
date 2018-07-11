@@ -36,7 +36,7 @@ public:
 
     SV_DECL_PERSIST1(CustomPropertyField, css::text::textfield::Type::DOCINFO_CUSTOM)
 
-    virtual tools::SvRef<SvxFieldData> Clone() const override;
+    virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool operator==(const SvxFieldData&) const override;
 
     virtual MetaAction* createBeginComment() const override;

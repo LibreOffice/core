@@ -167,7 +167,7 @@ class ScUnoEditEngine : public ScEditEngineDefaulter
     ScUnoCollectMode    eMode;
     sal_uInt16          nFieldCount;
     sal_Int32           mnFieldType;
-    tools::SvRef<SvxFieldData>
+    std::unique_ptr<SvxFieldData>
                         pFound;         // local copy
     sal_Int32           nFieldPar;
     sal_Int32           nFieldPos;
