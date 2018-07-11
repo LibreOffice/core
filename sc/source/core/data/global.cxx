@@ -814,17 +814,36 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
     if (!pViewFrm)
         return;
 
+    OUString aUrlName( rURL );
     SfxViewFrame* pFrame = nullptr;
+    const SfxObjectShell* pObjShell = nullptr;
     OUString aReferName;
     if ( pScActiveViewShell )
     {
         pFrame = pScActiveViewShell->GetViewFrame();
-        SfxMedium* pMed = pFrame->GetObjectShell()->GetMedium();
+        pObjShell = pFrame->GetObjectShell();
+        const SfxMedium* pMed = pObjShell->GetMedium();
         if (pMed)
             aReferName = pMed->GetName();
     }
 
-    SfxStringItem aUrl( SID_FILE_NAME, rURL );
+    // Don't fiddle with fragments pointing into current document.
+    if (!aUrlName.startsWith("#"))
+    {
+        // Any relative reference would fail with "not an absolute URL"
+        // error, try to construct an absolute URI with the path relative
+        // to the current document's path or work path, as usual for all
+        // external references.
+        // This then also, as ScGlobal::GetAbsDocName() uses
+        // INetURLObject::smartRel2Abs(), supports "\\" UNC path names as
+        // smb:// Samba shares and DOS path separators converted to proper
+        // file:// URI.
+        const OUString aNewUrlName( ScGlobal::GetAbsDocName( aUrlName, pObjShell));
+        if (!aNewUrlName.isEmpty())
+            aUrlName = aNewUrlName;
+    }
+
+    SfxStringItem aUrl( SID_FILE_NAME, aUrlName );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
     if ( nScClickMouseModifier & KEY_SHIFT )     // control-click -> into new window
         aTarget.SetValue("_blank");
