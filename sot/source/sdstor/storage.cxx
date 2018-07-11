@@ -456,10 +456,9 @@ SotStorage::~SotStorage()
         delete m_pStorStm;
 }
 
-SvMemoryStream * SotStorage::CreateMemoryStream()
+std::unique_ptr<SvMemoryStream> SotStorage::CreateMemoryStream()
 {
-    SvMemoryStream * pStm = nullptr;
-    pStm = new SvMemoryStream( 0x8000, 0x8000 );
+    std::unique_ptr<SvMemoryStream> pStm(new SvMemoryStream( 0x8000, 0x8000 ));
     tools::SvRef<SotStorage> aStg = new SotStorage( *pStm );
     if( CopyTo( aStg.get() ) )
     {
@@ -468,8 +467,7 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
     else
     {
         aStg.clear(); // release storage beforehand
-        delete pStm;
-        pStm = nullptr;
+        pStm.reset();
     }
     return pStm;
 }

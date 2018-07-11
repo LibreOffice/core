@@ -85,7 +85,7 @@ public:
                         SotStorage( bool bUCBStorage, SvStream & rStm );
                         SotStorage( SvStream * pStm, bool bDelete );
 
-    SvMemoryStream *    CreateMemoryStream();
+    std::unique_ptr<SvMemoryStream> CreateMemoryStream();
 
     static bool         IsStorageFile( const OUString & rFileName );
     static bool         IsStorageFile( SvStream* pStream );

@@ -1261,7 +1261,7 @@ void PPTWriter::ImplWriteOLE( )
     for ( auto it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
     {
         PPTExOleObjEntry* pPtr = it->get();
-        SvMemoryStream* pStrm = nullptr;
+        std::unique_ptr<SvMemoryStream> pStrm;
         pPtr->nOfsB = mpStrm->Tell();
         switch ( pPtr->eType )
         {
@@ -1324,7 +1324,7 @@ void PPTWriter::ImplWriteOLE( )
             aZCodec.BeginCompression();
             aZCodec.Compress( *pStrm, *mpStrm );
             aZCodec.EndCompression();
-            delete pStrm;
+            pStrm.reset();
             mpPptEscherEx->EndAtom( EPP_ExOleObjStg, 0, 1 );
         }
     }
