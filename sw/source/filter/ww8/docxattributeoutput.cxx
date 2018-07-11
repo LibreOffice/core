@@ -7711,7 +7711,11 @@ static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
 
 void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 {
-    const SvxTabStopItem* pInheritedTabs = GetExport().m_pStyAttr ? GetExport().m_pStyAttr->GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP) : nullptr;
+    const SvxTabStopItem* pInheritedTabs = nullptr;
+    if ( GetExport().m_pStyAttr )
+        pInheritedTabs = GetExport().m_pStyAttr->GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP);
+    else if ( GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom() )
+        pInheritedTabs = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet().GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP);
     const sal_uInt16 nInheritedTabCount = pInheritedTabs ? pInheritedTabs->Count() : 0;
     const sal_uInt16 nCount = rTabStop.Count();
 

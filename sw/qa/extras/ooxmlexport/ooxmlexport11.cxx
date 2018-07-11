@@ -58,7 +58,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf46938_clearTabStop, "tdf46938_clearTabStop.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testTdf63561_clearTabs, "tdf63561_clearTabs.docx")
 {
-    // MSO2013 gives 5,7, and 4 respectively
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), getProperty< uno::Sequence<style::TabStop> >(getParagraph(1), "ParaTabStops").getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), getProperty< uno::Sequence<style::TabStop> >(getParagraph(3), "ParaTabStops").getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty< uno::Sequence<style::TabStop> >(getParagraph(4), "ParaTabStops").getLength());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf63561_clearTabs2, "tdf63561_clearTabs2.docx")
+{
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<style::TabStop> >(getParagraph(1), "ParaTabStops").getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty< uno::Sequence<style::TabStop> >(getParagraph(3), "ParaTabStops").getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty< uno::Sequence<style::TabStop> >(getParagraph(4), "ParaTabStops").getLength());
