@@ -25,7 +25,7 @@
 #include <com/sun/star/xml/Attribute.hpp>
 #include <com/sun/star/xml/FastAttribute.hpp>
 
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <sax/saxdllapi.h>
 
 #include <map>
@@ -70,12 +70,18 @@ class SAX_DLLPUBLIC FastTokenHandlerBase
                          const char *pStr, size_t nLength );
 };
 
-class SAX_DLLPUBLIC FastAttributeList : public cppu::WeakImplHelper< css::xml::sax::XFastAttributeList >
+class SAX_DLLPUBLIC FastAttributeList : public cppu::ImplHelper1< css::xml::sax::XFastAttributeList >
 {
 public:
     FastAttributeList( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& xTokenHandler,
                        FastTokenHandlerBase *pOptHandlerBase = nullptr );
-    virtual ~FastAttributeList() override;
+    virtual ~FastAttributeList();
+
+    virtual void SAL_CALL  acquire() override
+    { osl_atomic_increment(&m_nCount); }
+
+    virtual void SAL_CALL  release() override
+    { if (osl_atomic_decrement(&m_nCount) == 0) delete this; }
 
     void clear();
     void add( sal_Int32 nToken, const sal_Char* pValue );
@@ -195,6 +201,7 @@ public:
     const FastAttributeIter find( sal_Int32 nToken ) const;
 
 private:
+    oslInterlockedCount m_nCount = 0;
     sal_Char *mpChunk; ///< buffer to store all attribute values - null terminated strings
     sal_Int32 mnChunkLength; ///< size of allocated memory for mpChunk
     // maAttributeValues stores pointers, relative to mpChunk, for each attribute value string

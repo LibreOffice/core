@@ -21,7 +21,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 
 #include <set>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
@@ -35,7 +35,7 @@ namespace ooxml
 {
 class OOXMLDocumentImpl;
 
-class OOXMLFastContextHandler: public ::cppu::WeakImplHelper<css::xml::sax::XFastContextHandler>
+class OOXMLFastContextHandler: public ::cppu::ImplHelper1<css::xml::sax::XFastContextHandler>
 {
 public:
     typedef tools::SvRef<OOXMLFastContextHandler> Pointer_t;
@@ -46,7 +46,13 @@ public:
 
     explicit OOXMLFastContextHandler(OOXMLFastContextHandler * pContext);
 
-    virtual ~OOXMLFastContextHandler() override;
+    virtual ~OOXMLFastContextHandler();
+
+    virtual void acquire()
+    { osl_atomic_increment(&m_nCount); }
+
+    virtual void release()
+    { if (osl_atomic_decrement(&m_nCount) == 0) delete this; }
 
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement (Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
@@ -188,6 +194,7 @@ public:
     void setGridAfter(const OOXMLValue::Pointer_t& pGridAfter) { mpGridAfter = pGridAfter; }
 
 protected:
+    oslInterlockedCount m_nCount = 0;
     OOXMLFastContextHandler * mpParent;
     Id mId;
     Id mnDefine;
