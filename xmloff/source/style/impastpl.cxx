@@ -21,6 +21,7 @@
 #include <algorithm>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/solar.h>
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <xmloff/attrlist.hxx>

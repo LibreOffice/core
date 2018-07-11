@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <propimp0.hxx>
 #include "sdxmlexp_impl.hxx"
 #include <com/sun/star/drawing/LineDash.hpp>

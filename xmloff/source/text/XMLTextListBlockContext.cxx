@@ -29,6 +29,7 @@
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include <txtlists.hxx>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star;

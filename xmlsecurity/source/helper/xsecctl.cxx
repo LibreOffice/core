@@ -40,6 +40,7 @@
 #include <xmloff/attrlist.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 #include <unotools/datetime.hxx>
 #include <sax/tools/converter.hxx>
 #include "ooxmlsecexporter.hxx"

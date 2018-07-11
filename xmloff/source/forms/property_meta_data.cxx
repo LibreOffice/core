@@ -26,6 +26,7 @@
 
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <unordered_map>
 

@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <xmloff/xmlexp.hxx>

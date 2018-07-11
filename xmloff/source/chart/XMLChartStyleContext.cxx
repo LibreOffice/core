@@ -24,6 +24,8 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmltypes.hxx>
 
+#include <sal/log.hxx>
+
 #include "XMLChartPropertyContext.hxx"
 
 using namespace com::sun::star;

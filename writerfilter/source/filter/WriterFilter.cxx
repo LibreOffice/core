@@ -41,6 +41,8 @@
 #include <oox/ole/vbaproject.hxx>
 #include <ooxml/OOXMLDocument.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

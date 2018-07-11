@@ -34,6 +34,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <tools/fontenum.hxx>

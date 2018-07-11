@@ -28,6 +28,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -29,6 +29,7 @@
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <map>
 #include <iterator>

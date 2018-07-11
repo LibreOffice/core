@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/nmspmap.hxx>

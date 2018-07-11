@@ -33,6 +33,7 @@
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 

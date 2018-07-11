@@ -27,6 +27,7 @@
 #include "transporttypes.hxx"
 #include <XMLStringBufferImportContext.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>

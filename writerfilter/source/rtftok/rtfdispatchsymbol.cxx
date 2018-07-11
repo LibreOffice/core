@@ -14,6 +14,8 @@
 
 #include <ooxml/resourceids.hxx>
 
+#include <sal/log.hxx>
+
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"
 

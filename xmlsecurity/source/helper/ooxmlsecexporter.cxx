@@ -18,6 +18,7 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 #include <svx/xoutbmp.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/salctype.hxx>

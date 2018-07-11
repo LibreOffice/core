@@ -32,6 +32,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
+#include <sal/log.hxx>
 #include <svx/svdtrans.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>

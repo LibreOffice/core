@@ -21,6 +21,8 @@
 
 #include <xmlsec-wrapper.h>
 
+#include <sal/log.hxx>
+
 #ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>

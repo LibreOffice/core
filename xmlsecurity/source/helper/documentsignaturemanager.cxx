@@ -34,6 +34,7 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/datetime.hxx>
 #include <o3tl/make_unique.hxx>
 

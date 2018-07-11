@@ -19,6 +19,7 @@
 
 #include <o3tl/make_unique.hxx>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <xmloff/xmlscripti.hxx>

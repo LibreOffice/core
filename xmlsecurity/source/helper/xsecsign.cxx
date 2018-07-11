@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <rtl/uuid.h>
+#include <sal/log.hxx>
 
 #include <framework/signaturecreatorimpl.hxx>
 #include <framework/saxeventkeeperimpl.hxx>

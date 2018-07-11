@@ -22,6 +22,7 @@
 #include <xmlsignaturehelper.hxx>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <sal/log.hxx>
 
 #include <string.h>
 

@@ -19,6 +19,7 @@
 
 #include "xmlbahdl.hxx"
 
+#include <sal/log.hxx>
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
