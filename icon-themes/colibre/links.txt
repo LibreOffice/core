@@ -1059,8 +1059,8 @@ cmd/sc_insertslidefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertslidesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertslidetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertfilefield.png cmd/sc_open.png
-cmd/sc_insertdatefielfix.png cmd/sc_datefield.png
-cmd/sc_insertdatefielvar.png cmd/sc_datefield.png
+cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
+cmd/sc_insertdatefieldvar.png cmd/sc_datefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
 
