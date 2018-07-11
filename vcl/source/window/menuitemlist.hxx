@@ -116,6 +116,7 @@ public:
     void            Clear();
 
     MenuItemData*   GetData( sal_uInt16 nSVId, size_t& rPos ) const;
+    MenuItemData*   GetDataFromSubMenu( sal_uInt16 nSVId ) const;
     MenuItemData*   GetData( sal_uInt16 nSVId ) const
                     {
                         size_t nTemp;

@@ -140,6 +140,17 @@ MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
     return nullptr;
 }
 
+MenuItemData* MenuItemList::GetDataFromSubMenu(sal_uInt16 nSVId) const
+{
+    for ( size_t i = 0, n = maItemList.size(); i < n; ++i )
+    {
+        if ( maItemList[i]->pSubMenu
+            && maItemList[i]->pSubMenu->GetCurItemId() != 0 ) // if something is selected
+            return maItemList[i].get()->pSubMenu->GetItemList()->GetDataFromPos(nSVId - 1);
+    }
+    return nullptr;
+}
+
 MenuItemData* MenuItemList::SearchItem(
     sal_Unicode cSelectChar,
     KeyCode aKeyCode,
