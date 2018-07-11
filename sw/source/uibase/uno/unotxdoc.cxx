@@ -1130,7 +1130,7 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
         else if(sName == "IsLandscape")
         {
             auto b = o3tl::tryAccess<bool>(rVal);
-            bException = bool(b);
+            bException = !b;
             if (b)
             {
                 aData.SetLandscape(*b);
