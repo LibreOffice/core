@@ -1195,7 +1195,7 @@ SwUndoSaveSection::~SwUndoSaveSection()
 
         m_pMovedStart.reset();
     }
-    delete pRedlSaveData;
+    pRedlSaveData.reset();
 }
 
 void SwUndoSaveSection::SaveSection( const SwNodeIndex& rSttIdx )
@@ -1219,11 +1219,10 @@ void SwUndoSaveSection::SaveSection(
         SwDoc::CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), true );
     }
 
-    pRedlSaveData = new SwRedlineSaveDatas;
+    pRedlSaveData.reset( new SwRedlineSaveDatas );
     if( !SwUndo::FillSaveData( aPam, *pRedlSaveData ))
     {
-        delete pRedlSaveData;
-        pRedlSaveData = nullptr;
+        pRedlSaveData.reset();
     }
 
     nStartPos = rRange.aStart.GetIndex();
@@ -1278,8 +1277,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
         if( pRedlSaveData )
         {
             SwUndo::SetSaveData( *pDoc, *pRedlSaveData );
-            delete pRedlSaveData;
-            pRedlSaveData = nullptr;
+            pRedlSaveData.reset();
         }
     }
 }
