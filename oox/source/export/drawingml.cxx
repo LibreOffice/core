@@ -2057,7 +2057,7 @@ bool DrawingML::IsInGroupShape () const
 bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape, bool bOrChildShape ) const
 {
     bool bRet = bOrChildShape && IsInGroupShape();
-    if ( !bRet )
+    if ( !bRet && rXShape.is() )
     {
         uno::Reference<lang::XServiceInfo> xServiceInfo(rXShape, uno::UNO_QUERY_THROW);
         bRet = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
