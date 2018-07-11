@@ -52,7 +52,7 @@ public:
 private:
     OUString aChars;
     std::vector<std::unique_ptr<ScFormatEntry> > maEntries;
-    IconSetRule* mpCurrentRule;
+    std::unique_ptr<IconSetRule> mpCurrentRule;
 };
 
 /**
