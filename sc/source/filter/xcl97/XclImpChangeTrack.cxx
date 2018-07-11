@@ -56,7 +56,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
         if( (xInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != STREAM_SEEK_TO_END) )
         {
             xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-            pStrm = new XclImpStream( *xInStrm, GetRoot() );
+            pStrm.reset( new XclImpStream( *xInStrm, GetRoot() ) );
             pStrm->CopyDecrypterFrom( rBookStrm );
             pChangeTrack.reset(new ScChangeTrack( &GetDocRef() ));
 
@@ -71,7 +71,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
 XclImpChangeTrack::~XclImpChangeTrack()
 {
     pChangeTrack.reset();
-    delete pStrm;
+    pStrm.reset();
 }
 
 void XclImpChangeTrack::DoAcceptRejectAction( ScChangeAction* pAction )
