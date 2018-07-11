@@ -4315,7 +4315,7 @@
                                       <object class="GtkToolButton" id="Underline1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:UnderlineSimple</property>
+                                        <property name="action_name">.uno:Underline</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -5341,7 +5341,7 @@
                                       <object class="GtkToolButton" id="Underline2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:UnderlineSimple</property>
+                                        <property name="action_name">.uno:Underline</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>

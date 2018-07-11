@@ -4801,7 +4801,7 @@
                                           <object class="GtkToolButton" id="InsertSymbole">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:InsertSymbol</property>
+                                            <property name="action_name">.uno:CharmapControl</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -12174,7 +12174,7 @@
                                       <object class="GtkToolButton" id="InsertSymbole1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:InsertSymbol</property>
+                                        <property name="action_name">.uno:CharmapControl</property>
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
