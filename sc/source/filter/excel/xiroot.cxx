@@ -74,7 +74,7 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
         mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
         mrImpData.mxValidMgr.reset( new XclImpValidationManager( GetRoot() ) );
         // TODO still in old RootData (deleted by RootData)
-        GetOldRoot().pAutoFilterBuffer = new XclImpAutoFilterBuffer;
+        GetOldRoot().pAutoFilterBuffer.reset( new XclImpAutoFilterBuffer );
         mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
         mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
         mrImpData.mxTabProtect.reset( new XclImpSheetProtectBuffer( GetRoot() ) );
