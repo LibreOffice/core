@@ -602,6 +602,7 @@ public:
                 >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }
 
+#if 0
     value_type get(difference_type const & d) const
     {
         const int remainder( x(d.x) % num_intraword_positions );
@@ -610,6 +611,7 @@ public:
                                           get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
                 >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }
+#endif
 
     void set( value_type v ) const
     {
