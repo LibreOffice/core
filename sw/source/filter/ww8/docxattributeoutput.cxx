@@ -7711,31 +7711,13 @@ static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
 
 void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 {
-    sal_uInt16 nCount = rTabStop.Count();
+    const SvxTabStopItem* pInheritedTabs = GetExport().m_pStyAttr ? GetExport().m_pStyAttr->GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP) : nullptr;
+    const sal_uInt16 nInheritedTabCount = pInheritedTabs ? pInheritedTabs->Count() : 0;
+    const sal_uInt16 nCount = rTabStop.Count();
 
     // <w:tabs> must contain at least one <w:tab>, so don't write it empty
-    if( nCount == 0 )
-    {
-        // clear style tabs - otherwise style will override...
-        if( GetExport().m_pStyAttr )
-        {
-            const SvxTabStopItem* pStyleTabs = GetExport().m_pStyAttr->GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP);
-            if( pStyleTabs && pStyleTabs->Count() )
-            {
-                m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
-                for( int i = 0; i < pStyleTabs->Count(); ++i )
-                {
-                    m_pSerializer->singleElementNS( XML_w, XML_tab,
-                        FSNS( XML_w, XML_val ), OString("clear"),
-                        FSNS( XML_w, XML_pos ), OString::number(pStyleTabs->At(i).GetTabPos()),
-                        FSEND );
-                }
-                m_pSerializer->endElementNS( XML_w, XML_tabs );
-            }
-        }
-
+    if ( !nCount && !nInheritedTabCount )
         return;
-    }
     if( nCount == 1 && rTabStop[ 0 ].GetAdjustment() == SvxTabAdjust::Default )
     {
         GetExport().setDefaultTabStop( rTabStop[ 0 ].GetTabPos());
@@ -7743,6 +7725,22 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     }
 
     m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
+
+    // clear unused inherited tabs - otherwise the style will add them back in
+    sal_Int32 nCurrTab = 0;
+    for ( sal_uInt16 i = 0; i < nInheritedTabCount; ++i )
+    {
+        while ( nCurrTab < nCount && rTabStop[nCurrTab] < pInheritedTabs->At(i) )
+            ++nCurrTab;
+
+        if ( nCurrTab == nCount || pInheritedTabs->At(i) < rTabStop[nCurrTab] )
+        {
+            m_pSerializer->singleElementNS( XML_w, XML_tab,
+                FSNS( XML_w, XML_val ), OString("clear"),
+                FSNS( XML_w, XML_pos ), OString::number(pInheritedTabs->At(i).GetTabPos()),
+                FSEND );
+        }
+    }
 
     for (sal_uInt16 i = 0; i < nCount; i++ )
     {
