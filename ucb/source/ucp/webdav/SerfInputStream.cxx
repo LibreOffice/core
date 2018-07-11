@@ -120,7 +120,7 @@ void SAL_CALL SerfInputStream::skipBytes( sal_Int32 nBytesToSkip )
 
 sal_Int32 SAL_CALL SerfInputStream::available(  )
 {
-    return sal::static_int_cast<sal_Int32>(mLen - mPos);
+    return std::min<sal_Int64>(SAL_MAX_INT32, mLen - mPos);
 }
 
 

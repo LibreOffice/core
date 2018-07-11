@@ -206,11 +206,10 @@ sal_Int32 SAL_CALL OTempFileService::available(  )
 
     checkConnected();
 
-    sal_uInt32 const nAvailable =
-        static_cast<sal_uInt32>(mpStream->remainingSize());
+    sal_Int64 nAvailable = mpStream->remainingSize();
     checkError();
 
-    return nAvailable;
+    return std::min<sal_Int64>(SAL_MAX_INT32, nAvailable);
 }
 void SAL_CALL OTempFileService::closeInput(  )
 {
