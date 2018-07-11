@@ -52,17 +52,17 @@ class XclExpRoot;
 
 struct RootData     // -> incarnation in each case in the ImportExcel object!
 {
-    BiffTyp             eDateiTyp;              // fine differentiation
-    ExtSheetBuffer*     pExtSheetBuff;
-    SharedFormulaBuffer*      pShrfmlaBuff;
-    ExtNameBuff*        pExtNameBuff;
+    BiffTyp             eDateiTyp;           // fine differentiation
+    std::unique_ptr<ExtSheetBuffer>         pExtSheetBuff;
+    std::unique_ptr<SharedFormulaBuffer>    pShrfmlaBuff;
+    std::unique_ptr<ExtNameBuff>            pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
     XclImpColRowSettings* pColRowBuff;        // col/row settings 1 table
 
     // Biff8
-    XclImpAutoFilterBuffer* pAutoFilterBuffer;      // ranges for autofilter and advanced filter
-    ScRangeListTabs*       pPrintRanges;
-    ScRangeListTabs*       pPrintTitles;
+    std::unique_ptr<XclImpAutoFilterBuffer> pAutoFilterBuffer;      // ranges for autofilter and advanced filter
+    std::unique_ptr<ScRangeListTabs>        pPrintRanges;
+    std::unique_ptr<ScRangeListTabs>        pPrintTitles;
 
     // extensions for export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
