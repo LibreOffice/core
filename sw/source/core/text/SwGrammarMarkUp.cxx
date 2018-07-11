@@ -23,9 +23,9 @@ SwGrammarMarkUp::~SwGrammarMarkUp()
 {
 }
 
-SwWrongList* SwGrammarMarkUp::Clone()
+std::unique_ptr<SwWrongList> SwGrammarMarkUp::Clone()
 {
-    SwWrongList* pClone = new SwGrammarMarkUp();
+    std::unique_ptr<SwWrongList> pClone(new SwGrammarMarkUp());
     pClone->CopyFrom( *this );
     return pClone;
 }
