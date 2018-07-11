@@ -591,8 +591,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             }
 
             // explicit alignment
-            ParamMap::const_iterator aDir = maMap.find(XML_parTxLTRAlign);
-            // TODO: XML_parTxRTLAlign
+            ParamMap::const_iterator aDir = maMap.count(XML_parTxRTLAlign) ? maMap.find(XML_parTxRTLAlign)
+                                                                                            : maMap.find(XML_parTxLTRAlign);
+
             if (aDir != maMap.end())
             {
                 css::style::ParagraphAdjust aAlignment = GetParaAdjust(aDir->second);
