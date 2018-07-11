@@ -702,6 +702,12 @@ OString Menu::GetItemIdent(sal_uInt16 nId) const
     return pData ? pData->sIdent : OString();
 }
 
+OString Menu::GetItemIdentFromSubMenu(sal_uInt16 nId) const
+{
+    const MenuItemData* pData = pItemList->GetDataFromSubMenu(nId);
+    return pData ? pData->sIdent : OString();
+}
+
 void Menu::SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
