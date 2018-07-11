@@ -411,9 +411,9 @@ SvxUnoTextField::~SvxUnoTextField() throw()
 {
 }
 
-SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
+std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const throw()
 {
-    SvxFieldData* pData = nullptr;
+    std::unique_ptr<SvxFieldData> pData;
 
     switch( mnServiceId )
     {
@@ -424,25 +424,25 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         if( mpImpl->mbBoolean2 ) // IsDate?
         {
             Date aDate( setDate( mpImpl->maDateTime ) );
-            pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SvxDateType::Fix:SvxDateType::Var );
+            pData.reset( new SvxDateField( aDate, mpImpl->mbBoolean1?SvxDateType::Fix:SvxDateType::Var ) );
             if( mpImpl->mnInt32 >= static_cast<sal_Int32>(SvxDateFormat::AppDefault) &&
                 mpImpl->mnInt32 <= static_cast<sal_Int32>(SvxDateFormat::F) )
-                static_cast<SvxDateField*>(pData)->SetFormat( static_cast<SvxDateFormat>(mpImpl->mnInt32) );
+                static_cast<SvxDateField*>(pData.get())->SetFormat( static_cast<SvxDateFormat>(mpImpl->mnInt32) );
         }
         else
         {
             if( mnServiceId != text::textfield::Type::TIME && mnServiceId != text::textfield::Type::DATE )
             {
                 tools::Time aTime( setTime( mpImpl->maDateTime ) );
-                pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SvxTimeType::Fix:SvxTimeType::Var );
+                pData.reset( new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SvxTimeType::Fix:SvxTimeType::Var ) );
 
                 if( static_cast<SvxTimeFormat>(mpImpl->mnInt32) >= SvxTimeFormat::AppDefault &&
                     static_cast<SvxTimeFormat>(mpImpl->mnInt32) <= SvxTimeFormat::HH12_MM_SS_00_AMPM )
-                    static_cast<SvxExtTimeField*>(pData)->SetFormat( static_cast<SvxTimeFormat>(mpImpl->mnInt32) );
+                    static_cast<SvxExtTimeField*>(pData.get())->SetFormat( static_cast<SvxTimeFormat>(mpImpl->mnInt32) );
             }
             else
             {
-                pData = new SvxTimeField();
+                pData.reset( new SvxTimeField() );
             }
         }
 
@@ -450,35 +450,35 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         break;
 
     case text::textfield::Type::URL:
-        pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1, !mpImpl->msString1.isEmpty() ? SvxURLFormat::Repr : SvxURLFormat::Url );
-        static_cast<SvxURLField*>(pData)->SetTargetFrame( mpImpl->msString2 );
+        pData.reset( new SvxURLField( mpImpl->msString3, mpImpl->msString1, !mpImpl->msString1.isEmpty() ? SvxURLFormat::Repr : SvxURLFormat::Url ) );
+        static_cast<SvxURLField*>(pData.get())->SetTargetFrame( mpImpl->msString2 );
         if( static_cast<SvxURLFormat>(mpImpl->mnInt16) >= SvxURLFormat::AppDefault &&
             static_cast<SvxURLFormat>(mpImpl->mnInt16) <= SvxURLFormat::Repr )
-            static_cast<SvxURLField*>(pData)->SetFormat( static_cast<SvxURLFormat>(mpImpl->mnInt16) );
+            static_cast<SvxURLField*>(pData.get())->SetFormat( static_cast<SvxURLFormat>(mpImpl->mnInt16) );
         break;
 
     case text::textfield::Type::PAGE:
-        pData = new SvxPageField();
+        pData.reset( new SvxPageField() );
         break;
 
     case text::textfield::Type::PAGES:
-        pData = new SvxPagesField();
+        pData.reset( new SvxPagesField() );
         break;
 
     case text::textfield::Type::DOCINFO_TITLE:
-        pData = new SvxFileField();
+        pData.reset( new SvxFileField() );
         break;
 
     case text::textfield::Type::TABLE:
-        pData = new SvxTableField();
+        pData.reset( new SvxTableField() );
         break;
 
     case text::textfield::Type::EXTENDED_FILE:
     {
         // #92009# pass fixed attribute to constructor
-        pData = new SvxExtFileField( mpImpl->msString1,
+        pData.reset( new SvxExtFileField( mpImpl->msString1,
                                      mpImpl->mbBoolean1 ? SvxFileType::Fix : SvxFileType::Var,
-                                     setFileNameDisplayFormat(mpImpl->mnInt16 ) );
+                                     setFileNameDisplayFormat(mpImpl->mnInt16 ) ) );
         break;
     }
 
@@ -509,17 +509,17 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         }
 
         // #92009# pass fixed attribute to constructor
-        pData = new SvxAuthorField( aFirstName, aLastName, "",
-                                    mpImpl->mbBoolean1 ? SvxAuthorType::Fix : SvxAuthorType::Var );
+        pData.reset( new SvxAuthorField( aFirstName, aLastName, "",
+                                    mpImpl->mbBoolean1 ? SvxAuthorType::Fix : SvxAuthorType::Var ) );
 
         if( !mpImpl->mbBoolean2 )
         {
-            static_cast<SvxAuthorField*>(pData)->SetFormat( SvxAuthorFormat::ShortName );
+            static_cast<SvxAuthorField*>(pData.get())->SetFormat( SvxAuthorFormat::ShortName );
         }
         else if( static_cast<SvxAuthorFormat>(mpImpl->mnInt16) >= SvxAuthorFormat::FullName &&
                  static_cast<SvxAuthorFormat>(mpImpl->mnInt16) <= SvxAuthorFormat::ShortName )
         {
-            static_cast<SvxAuthorField*>(pData)->SetFormat( static_cast<SvxAuthorFormat>(mpImpl->mnInt16) );
+            static_cast<SvxAuthorField*>(pData.get())->SetFormat( static_cast<SvxAuthorFormat>(mpImpl->mnInt16) );
         }
 
         break;
@@ -530,23 +530,23 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         SdrMeasureFieldKind eKind = SdrMeasureFieldKind::Value;
         if( mpImpl->mnInt16 == sal_Int16(SdrMeasureFieldKind::Unit) || mpImpl->mnInt16 == sal_Int16(SdrMeasureFieldKind::Rotate90Blanks) )
             eKind = static_cast<SdrMeasureFieldKind>(mpImpl->mnInt16);
-        pData = new SdrMeasureField( eKind);
+        pData.reset( new SdrMeasureField( eKind) );
         break;
     }
     case text::textfield::Type::PRESENTATION_HEADER:
-        pData = new SvxHeaderField();
+        pData.reset( new SvxHeaderField() );
         break;
     case text::textfield::Type::PRESENTATION_FOOTER:
-        pData = new SvxFooterField();
+        pData.reset( new SvxFooterField() );
         break;
     case text::textfield::Type::PRESENTATION_DATE_TIME:
-        pData = new SvxDateTimeField();
+        pData.reset( new SvxDateTimeField() );
         break;
     case text::textfield::Type::PAGE_NAME:
-        pData = new SvxPageTitleField();
+        pData.reset( new SvxPageTitleField() );
         break;
     case text::textfield::Type::DOCINFO_CUSTOM:
-        pData = new editeng::CustomPropertyField(mpImpl->msString1, mpImpl->msString2);
+        pData.reset( new editeng::CustomPropertyField(mpImpl->msString1, mpImpl->msString2) );
         break;
     };
 
@@ -666,11 +666,9 @@ void SAL_CALL SvxUnoTextField::attach( const uno::Reference< text::XTextRange >&
     if(pRange == nullptr)
         throw lang::IllegalArgumentException();
 
-    SvxFieldData* pData = CreateFieldData();
+    std::unique_ptr<SvxFieldData> pData = CreateFieldData();
     if( pData )
-        pRange->attachField( pData );
-
-    delete pData;
+        pRange->attachField( std::move(pData) );
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextField::getAnchor()

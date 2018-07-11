@@ -33,7 +33,7 @@
     sal_Int32       Class::GetClassId() const                       \
                     { return StaticClassId(); }                     \
 
-class SvPersistBase : public SvRefBase
+class SvPersistBase
 {
 public:
     virtual sal_Int32  GetClassId() const = 0;
