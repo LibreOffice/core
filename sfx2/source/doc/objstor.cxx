@@ -1072,18 +1072,40 @@ bool SfxObjectShell::DoSave()
     return bOk;
 }
 
-void Lock_Impl( SfxObjectShell const * pDoc, bool bLock )
+namespace
 {
-    SfxViewFrame *pFrame= SfxViewFrame::GetFirst( pDoc );
-    while ( pFrame )
+class LockUIGuard
+{
+public:
+    LockUIGuard(SfxObjectShell const* pDoc)
+        : m_pDoc(pDoc)
     {
-        pFrame->GetDispatcher()->Lock( bLock );
-        pFrame->Enable( !bLock );
-        pFrame = SfxViewFrame::GetNext( *pFrame, pDoc );
+        Lock_Impl();
+    }
+    ~LockUIGuard() { Unlock(); }
+
+    void Unlock()
+    {
+        if (m_bUnlock)
+            Lock_Impl();
     }
 
+private:
+    void Lock_Impl()
+    {
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst(m_pDoc);
+        while (pFrame)
+        {
+            pFrame->GetDispatcher()->Lock(!m_bUnlock);
+            pFrame->Enable(m_bUnlock);
+            pFrame = SfxViewFrame::GetNext(*pFrame, m_pDoc);
+        }
+        m_bUnlock = !m_bUnlock;
+    }
+    SfxObjectShell const* m_pDoc;
+    bool m_bUnlock = false;
+};
 }
-
 
 bool SfxObjectShell::SaveTo_Impl
 (
@@ -1351,7 +1373,7 @@ bool SfxObjectShell::SaveTo_Impl
     pImpl->bForbidReload = true;
 
     // lock user interface while saving the document
-    Lock_Impl( this, true );
+    LockUIGuard aLockUIGuard(this);
 
     bool bOk = false;
     // TODO/LATER: get rid of bOk
@@ -1360,8 +1382,7 @@ bool SfxObjectShell::SaveTo_Impl
         uno::Reference< embed::XStorage > xMedStorage = rMedium.GetStorage();
         if ( !xMedStorage.is() )
         {
-            // no saving without storage, unlock UI and return
-            Lock_Impl( this, false );
+            // no saving without storage
             pImpl->bForbidReload = bOldStat;
             return false;
         }
@@ -1663,7 +1684,7 @@ bool SfxObjectShell::SaveTo_Impl
     }
 
     // unlock user interface
-    Lock_Impl( this, false );
+    aLockUIGuard.Unlock();
     pImpl->bForbidReload = bOldStat;
 
     if ( bOk )
