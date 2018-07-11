@@ -22,6 +22,7 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/fontenum.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>

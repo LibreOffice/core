@@ -36,6 +36,7 @@
 #include "ConversionHelper.hxx"
 #include "util.hxx"
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
 
 #ifdef DEBUG_WRITERFILTER

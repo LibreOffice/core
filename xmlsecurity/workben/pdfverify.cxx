@@ -16,6 +16,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <sal/main.h>
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>

@@ -20,6 +20,7 @@
 #include "FontTable.hxx"
 #include <ooxml/resourceids.hxx>
 #include <vector>
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <rtl/tencinfo.h>
 #include <vcl/embeddedfontshelper.hxx>

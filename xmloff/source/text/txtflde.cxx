@@ -67,6 +67,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 

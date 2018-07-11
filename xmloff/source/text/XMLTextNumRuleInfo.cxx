@@ -19,6 +19,7 @@
 
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>

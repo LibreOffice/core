@@ -34,6 +34,7 @@
 #include <com/sun/star/xforms/XModel2.hpp>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xforms::XModel2;

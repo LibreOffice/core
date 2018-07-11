@@ -31,6 +31,7 @@
 #include <sax/tools/converter.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

@@ -38,6 +38,7 @@
 #include <PropertySetMerger.hxx>
 #include <animationimport.hxx>
 #include <osl/diagnose.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

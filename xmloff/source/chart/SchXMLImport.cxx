@@ -26,6 +26,7 @@
 
 #include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/prstylei.hxx>

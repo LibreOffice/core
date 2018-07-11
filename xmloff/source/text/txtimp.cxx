@@ -37,6 +37,7 @@
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/maptype.hxx>
 
+#include <sal/log.hxx>
 #include "txtparai.hxx"
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/txtimppr.hxx>

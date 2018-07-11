@@ -24,6 +24,7 @@
 #include <i18nutil/paper.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

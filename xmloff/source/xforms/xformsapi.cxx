@@ -32,6 +32,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>

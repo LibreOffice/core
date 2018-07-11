@@ -20,6 +20,7 @@
 #include <XMLClipPropertyHandler.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>

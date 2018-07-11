@@ -19,6 +19,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlexp.hxx>

@@ -24,6 +24,7 @@
 #include <biginteger.hxx>
 
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 

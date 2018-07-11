@@ -14,6 +14,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 #include "rtfskipdestination.hxx"
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>

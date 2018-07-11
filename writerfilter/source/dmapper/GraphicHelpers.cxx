@@ -28,6 +28,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <sal/log.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

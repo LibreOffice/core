@@ -15,6 +15,7 @@
 #include <comphelper/seekableinput.hxx>
 
 #include <rtl/string.hxx>
+#include <sal/log.hxx>
 
 #include <sot/storage.hxx>
 

@@ -21,6 +21,7 @@
 
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <set>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

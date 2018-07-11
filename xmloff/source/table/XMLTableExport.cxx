@@ -22,6 +22,7 @@
 #include <xmloff/dllapi.h>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <rtl/ustring.hxx>

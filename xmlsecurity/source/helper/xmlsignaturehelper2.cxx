@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

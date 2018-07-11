@@ -22,6 +22,7 @@
 #include <ooxml/resourceids.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
 
 namespace writerfilter {
 namespace dmapper {

@@ -20,6 +20,7 @@
 #include <string.h>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tvread.hxx>
 #include <expat.h>

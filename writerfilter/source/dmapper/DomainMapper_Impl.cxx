@@ -93,6 +93,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star;

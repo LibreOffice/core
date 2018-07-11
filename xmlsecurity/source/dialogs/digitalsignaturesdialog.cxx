@@ -44,6 +44,7 @@
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>

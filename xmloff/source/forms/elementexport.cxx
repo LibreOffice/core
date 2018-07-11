@@ -62,6 +62,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include <algorithm>
 

@@ -26,6 +26,7 @@
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 // Used to parse Scripting Framework URLs
 #include <com/sun/star/uri/UriReferenceFactory.hpp>

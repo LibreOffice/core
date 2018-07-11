@@ -27,6 +27,7 @@
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>

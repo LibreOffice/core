@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
+#include <sal/log.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

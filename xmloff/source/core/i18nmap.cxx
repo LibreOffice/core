@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <xmloff/i18nmap.hxx>
 
 void SvI18NMap::Add( sal_uInt16 nKind, const OUString& rName,

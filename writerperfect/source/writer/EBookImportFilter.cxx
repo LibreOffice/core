@@ -10,6 +10,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 #include <libe-book/libe-book.h>
 

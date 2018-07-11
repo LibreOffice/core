@@ -23,6 +23,7 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
 #include <sax/tools/converter.hxx>
+#include <sal/log.hxx>
 
 #include <list>
 #include <comphelper/extract.hxx>

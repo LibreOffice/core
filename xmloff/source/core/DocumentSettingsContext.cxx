@@ -43,6 +43,7 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <unotools/configmgr.hxx>
 #include "xmlenums.hxx"

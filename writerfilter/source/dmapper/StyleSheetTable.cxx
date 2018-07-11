@@ -40,6 +40,7 @@
 #include <set>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>

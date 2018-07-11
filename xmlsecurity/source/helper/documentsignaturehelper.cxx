@@ -38,6 +38,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 #include <svx/xoutbmp.hxx>
 #include <xmloff/attrlist.hxx>
 

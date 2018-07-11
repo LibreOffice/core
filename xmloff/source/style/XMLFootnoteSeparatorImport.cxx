@@ -21,6 +21,7 @@
 #include "XMLFootnoteSeparatorImport.hxx"
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>

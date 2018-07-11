@@ -31,6 +31,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmltkmap.hxx>
 
 using namespace ::com::sun::star;

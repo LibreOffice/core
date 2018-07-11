@@ -32,6 +32,7 @@
 #include <xmloff/xmlnume.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 
