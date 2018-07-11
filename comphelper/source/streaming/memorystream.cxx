@@ -150,7 +150,7 @@ void SAL_CALL UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip )
 
 sal_Int32 SAL_CALL UNOMemoryStream::available()
 {
-    return static_cast< sal_Int32 >( maData.size() ) - mnCursor;
+    return std::min<sal_Int64>( SAL_MAX_INT32, maData.size() - mnCursor);
 }
 
 void SAL_CALL UNOMemoryStream::closeInput()

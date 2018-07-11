@@ -76,7 +76,7 @@ void SAL_CALL ZipPackageBuffer::skipBytes( sal_Int32 nBytesToSkip )
 }
 sal_Int32 SAL_CALL ZipPackageBuffer::available(  )
 {
-    return static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
+    return std::min<sal_Int64>(SAL_MAX_INT32, m_nEnd - m_nCurrent);
 }
 void SAL_CALL ZipPackageBuffer::closeInput(  )
 {
