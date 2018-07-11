@@ -3101,7 +3101,7 @@
                                           <object class="GtkToolButton" id="Home-Underline">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:UnderlineSimple</property>
+                                            <property name="action_name">.uno:Underline</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -5367,7 +5367,7 @@
                               <object class="GtkToolButton" id="Insert-InsertSymbol">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:InsertSymbol</property>
+                                <property name="action_name">.uno:CharmapControl</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
