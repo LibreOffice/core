@@ -3263,7 +3263,7 @@
                               <object class="GtkToolButton" id="Home-Underline">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:UnderlineSimple</property>
+                                <property name="action_name">.uno:Underline</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
