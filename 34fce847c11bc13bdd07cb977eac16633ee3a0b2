@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_d3bb08e3",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-11T13:36:21Z",
+      "side": 1,
+      "message": "Imo you can use simple string concatenation with + operator:\n\nOUString(foo) + OUString (bar) + OUString (baz)\n\nOr is there any specific reason for OUStringBuffer? It complicates things mildly",
+      "revId": "34fce847c11bc13bdd07cb977eac16633ee3a0b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_f3ecccf4",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-11T13:36:21Z",
+      "side": 1,
+      "message": "please add some spacing \" x \"",
+      "revId": "34fce847c11bc13bdd07cb977eac16633ee3a0b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_13f050c9",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-11T13:36:21Z",
+      "side": 1,
+      "message": "The reason why this wouldn\u0027t work for user-defined papers is that Printer::SetPaper is somehow ineffective for user-defined formats as long as JobSetup (ImplJobSetup respectively) of the printer doesn\u0027t have the new paper width/height and refers to default paper format instead. To demonstrate this is indeed the case, put a breakpoint into Printer::ImplFindFormatForUserSize and print the content of rData variable.\n\nSo in 1st instance what I\u0027d try here is to use Printer::SetPaperSizeUser() instead for user-defined formats. \n\nFailing that, we need to find a way how to update JobSetup with the dimensions of the new user-defined format",
+      "revId": "34fce847c11bc13bdd07cb977eac16633ee3a0b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
