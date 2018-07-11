@@ -32,6 +32,8 @@ class XmlPortionDumper:public SwPortionHandler
   private:
     xmlTextWriterPtr writer;
     TextFrameIndex ofs;
+    const OUString& m_rText;
+    OUString m_aLine;
 
     static const char* getTypeName( sal_uInt16 nType )
     {
@@ -105,7 +107,7 @@ class XmlPortionDumper:public SwPortionHandler
 
   public:
 
-    explicit XmlPortionDumper( xmlTextWriterPtr some_writer ):writer( some_writer ), ofs( 0 )
+    explicit XmlPortionDumper( xmlTextWriterPtr some_writer, const OUString& rText ):writer( some_writer ), ofs( 0 ), m_rText(rText)
     {
     }
 
@@ -120,7 +122,6 @@ class XmlPortionDumper:public SwPortionHandler
                        sal_Int32 nHeight,
                        sal_Int32 nWidth) override
     {
-        ofs += nLength;
         xmlTextWriterStartElement( writer, BAD_CAST( "Text" ) );
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nLength" ),
@@ -132,8 +133,13 @@ class XmlPortionDumper:public SwPortionHandler
             xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
         if (nWidth > 0)
             xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
+        if (nLength > 0)
+            xmlTextWriterWriteAttribute(writer, BAD_CAST("Portion"),
+                                        BAD_CAST(m_rText.copy(ofs, nLength).toUtf8().getStr()));
 
         xmlTextWriterEndElement( writer );
+        m_aLine += m_rText.copy(ofs, nLength);
+        ofs += nLength;
     }
 
     /**
@@ -174,6 +180,7 @@ class XmlPortionDumper:public SwPortionHandler
             pFont->dumpAsXml(writer);
 
         xmlTextWriterEndElement( writer );
+        m_aLine += rText;
         ofs += nLength;
     }
 
@@ -184,6 +191,12 @@ class XmlPortionDumper:public SwPortionHandler
             xmlTextWriterWriteFormatAttribute( writer,
                                                BAD_CAST( "nWidth" ),
                                                "%i", static_cast<int>(nWidth) );
+        if (!m_aLine.isEmpty())
+        {
+            xmlTextWriterWriteAttribute(writer, BAD_CAST("Line"),
+                                        BAD_CAST(m_aLine.toUtf8().getStr()));
+            m_aLine.clear();
+        }
         xmlTextWriterEndElement( writer );
     }
 
@@ -379,7 +392,7 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                                                           RTL_TEXTENCODING_UTF8 );
             xmlTextWriterWriteString( writer,
                                       reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
-            XmlPortionDumper pdumper( writer );
+            XmlPortionDumper pdumper( writer, aText );
             pTextFrame->VisitPortions( pdumper );
 
         }
