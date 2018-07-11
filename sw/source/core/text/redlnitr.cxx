@@ -314,8 +314,8 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     if( pArr )
     {
         assert(pExtInputStart);
-        m_pExt = new SwExtend(*pArr, pExtInputStart->nNode.GetIndex(),
-                                     pExtInputStart->nContent.GetIndex());
+        m_pExt.reset( new SwExtend(*pArr, pExtInputStart->nNode.GetIndex(),
+                                     pExtInputStart->nContent.GetIndex()) );
     }
     else
         m_pExt = nullptr;
@@ -326,7 +326,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
 SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
 {
     Clear( nullptr );
-    delete m_pExt;
+    m_pExt.reset();
 }
 
 // The return value of SwRedlineItr::Seek tells you if the current font
