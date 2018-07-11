@@ -55,7 +55,7 @@ private:
     size_t mnCurPos;
 
     ScRTFColTwips       aColTwips;
-    ScRTFCellDefault*   pInsDefault;
+    std::unique_ptr<ScRTFCellDefault> pInsDefault;
     ScRTFCellDefault*   pActDefault;
     ScRTFCellDefault*   pDefMerge;
     sal_uLong           nStartAdjust;
