@@ -24,6 +24,7 @@ public:
     void testTableExtrusion2();
     void testTdf116848();
     void testTdf117245();
+    void testTdf118672();
     void testTdf117923();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
@@ -35,6 +36,7 @@ public:
     CPPUNIT_TEST(testTableExtrusion2);
     CPPUNIT_TEST(testTdf116848);
     CPPUNIT_TEST(testTdf117245);
+    CPPUNIT_TEST(testTdf118672);
     CPPUNIT_TEST(testTdf117923);
     CPPUNIT_TEST_SUITE_END();
 
@@ -194,6 +196,19 @@ void SwLayoutWriter::testTdf117245()
 
     // This was 2, same problem elsewhere due to code duplication.
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
+}
+
+void SwLayoutWriter::testTdf118672()
+{
+    createDoc("tdf118672.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    OUString aLine1("He heard quiet steps behind him. That didn't bode well. Who could be fol*1 2 "
+                    "3 4 5 6 7 8 9 10con-");
+    // This ended as "fol*1 2 3 4 5 6 7 8 9", i.e. "10con-" was moved to the next line.
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak[1]", "Line", aLine1);
+    OUString aLine2("setetur");
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak[2]", "Line", aLine2);
 }
 
 void SwLayoutWriter::testTdf117923()
