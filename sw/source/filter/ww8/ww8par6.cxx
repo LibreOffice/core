@@ -318,6 +318,33 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
     {
         SvxFrameDirection eDir =
             *pData ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
+
+        // Previous adjust or bidi values require changing paraAdjust.
+        // Only change if ParaBiDi doesn't match previous setting.
+        const bool bParentRTL = IsRightToLeft();
+        if ( (eDir == SvxFrameDirection::Horizontal_RL_TB && !bParentRTL) ||
+             (eDir == SvxFrameDirection::Horizontal_LR_TB && bParentRTL) )
+        {
+            const SvxAdjustItem* pItem = static_cast<const SvxAdjustItem*>(GetFormatAttr(RES_PARATR_ADJUST));
+            if ( !pItem )
+            {
+                // no previous adjust: set appropriate default
+                if ( eDir == SvxFrameDirection::Horizontal_LR_TB )
+                    NewAttr( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
+                else
+                    NewAttr( SvxAdjustItem( SvxAdjust::Right, RES_PARATR_ADJUST ) );
+            }
+            else
+            {
+                // previous adjust and bidi has changed: swap Left/Right
+                const SvxAdjust eJustify = pItem->GetAdjust();
+                if ( eJustify == SvxAdjust::Left )
+                    NewAttr( SvxAdjustItem( SvxAdjust::Right, RES_PARATR_ADJUST ) );
+                else if ( eJustify == SvxAdjust::Right )
+                    NewAttr( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
+            }
+        }
+
         NewAttr(SvxFrameDirectionItem(eDir, RES_FRAMEDIR));
     }
 }
