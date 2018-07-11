@@ -49,6 +49,9 @@
 #include <unotools/streamwrap.hxx>
 #include <tools/zcodec.hxx>
 
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+
 #include "svgfilter.hxx"
 #include "svgwriter.hxx"
 
@@ -208,17 +211,59 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 break;
             }
 
+            // tdf#118232 Get the sequence of primitives and check if geometry is completely
+            // hidden. If so, there is no need to add a SdrObject at all
+            const VectorGraphicDataPtr& rVectorGraphicData(aGraphic.getVectorGraphicData());
+            bool bContainsNoGeometry(false);
+
+            if(bool(rVectorGraphicData) && VectorGraphicDataType::Svg == rVectorGraphicData->getVectorGraphicDataType())
+            {
+                const drawinglayer::primitive2d::Primitive2DContainer aContainer(rVectorGraphicData->getPrimitive2DSequence());
+
+                if(!aContainer.empty())
+                {
+                    bool bAllAreHiddenGeometry(true);
+
+                    for(const auto& rCandidate : aContainer)
+                    {
+                        if(rCandidate.is())
+                        {
+                            // try to cast to BasePrimitive2D implementation
+                            const drawinglayer::primitive2d::BasePrimitive2D* pBasePrimitive(
+                                dynamic_cast< const drawinglayer::primitive2d::BasePrimitive2D* >(rCandidate.get()));
+
+                            if(pBasePrimitive && PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D != pBasePrimitive->getPrimitive2DID())
+                            {
+                                bAllAreHiddenGeometry = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(bAllAreHiddenGeometry)
+                    {
+                        bContainsNoGeometry = true;
+                    }
+                }
+            }
+
             // create a SdrModel-GraphicObject to insert to page
             SdrPage* pTargetSdrPage(pSvxDrawPage->GetSdrPage());
-            std::unique_ptr< SdrGrafObj, SdrObjectFreeOp > aNewSdrGrafObj(
-                new SdrGrafObj(
-                    pTargetSdrPage->getSdrModelFromSdrPage(),
-                    aGraphic));
+            std::unique_ptr< SdrGrafObj, SdrObjectFreeOp > aNewSdrGrafObj;
 
-            if(!aNewSdrGrafObj.get())
+            // tdf#118232 only add an SdrGrafObj when we have Geometry
+            if(!bContainsNoGeometry)
             {
-                // could not create GraphicObject
-                break;
+                aNewSdrGrafObj.reset(
+                    new SdrGrafObj(
+                        pTargetSdrPage->getSdrModelFromSdrPage(),
+                        aGraphic));
+
+                if(!aNewSdrGrafObj.get())
+                {
+                    // could not create GraphicObject
+                    break;
+                }
             }
 
             // Evtl. adapt the GraphicPrefSize to target-MapMode of target-Model
@@ -264,15 +309,18 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 nAllBorder,
                 nAllBorder);
 
-            // set pos/size at SdrGraphicObj - use zero position for
+            // tdf#118232 set pos/size at SdrGraphicObj - use zero position for
             // better turn-around results
-            aNewSdrGrafObj->SetSnapRect(
-                tools::Rectangle(
-                    Point(0, 0),
-                    aGraphicSize));
+            if(!bContainsNoGeometry)
+            {
+                aNewSdrGrafObj->SetSnapRect(
+                    tools::Rectangle(
+                        Point(0, 0),
+                        aGraphicSize));
 
-            // insert to page (owner change of SdrGrafObj)
-            pTargetSdrPage->InsertObject(aNewSdrGrafObj.release());
+                // insert to page (owner change of SdrGrafObj)
+                pTargetSdrPage->InsertObject(aNewSdrGrafObj.release());
+            }
 
             // done - set positive result now
             bRet = true;
