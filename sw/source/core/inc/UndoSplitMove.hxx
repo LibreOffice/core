@@ -25,7 +25,7 @@
 class SwUndoSplitNode: public SwUndo
 {
     std::unique_ptr<SwHistory> m_pHistory;
-    SwRedlineData* pRedlData;
+    std::unique_ptr<SwRedlineData> pRedlData;
     sal_uLong nNode;
     sal_Int32 nContent;
     bool bTableFlag : 1;
