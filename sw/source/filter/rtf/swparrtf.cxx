@@ -92,7 +92,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
             uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(*m_pStream))) },
           { "InsertMode", uno::Any(true) },
           { "TextInsertModeRange", uno::Any(xInsertTextRange) } }));
-    ErrCode ret = ERRCODE_NONE;
+    auto ret = ERRCODE_NONE;
     try
     {
         xFilter->filter(aDescriptor);

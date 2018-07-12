@@ -660,7 +660,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         auto it = aGrabBag.find("EG_WrapType");
         if (it != aGrabBag.end())
         {
-            OUString sType = it->second.get<OUString>();
+            auto sType = it->second.get<OUString>();
             if (sType == "wrapTight")
                 nWrapToken = XML_wrapTight;
             else if (sType == "wrapThrough")
@@ -677,10 +677,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             {
                 m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_wrapPolygon, XML_edited, "0",
                                                        FSEND);
-                drawing::PointSequenceSequence aSeqSeq
-                    = it->second.get<drawing::PointSequenceSequence>();
-                std::vector<awt::Point> aPoints(
-                    comphelper::sequenceToContainer<std::vector<awt::Point>>(aSeqSeq[0]));
+                auto aSeqSeq = it->second.get<drawing::PointSequenceSequence>();
+                auto aPoints(comphelper::sequenceToContainer<std::vector<awt::Point>>(aSeqSeq[0]));
                 for (auto i = aPoints.begin(); i != aPoints.end(); ++i)
                 {
                     awt::Point& rPoint = *i;

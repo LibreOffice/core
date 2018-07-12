@@ -165,9 +165,8 @@ void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame,
             = { "TopBorder", "LeftBorder", "BottomBorder", "RightBorder" };
         for (const char* pBorder : aBorders)
         {
-            table::BorderLine2 aBorderLine
-                = xPropertySet->getPropertyValue(OUString::createFromAscii(pBorder))
-                      .get<table::BorderLine2>();
+            auto aBorderLine = xPropertySet->getPropertyValue(OUString::createFromAscii(pBorder))
+                                   .get<table::BorderLine2>();
             if (rLineColor.hasValue())
                 aBorderLine.Color = rLineColor.get<sal_Int32>();
             if (rLineWidth.hasValue())
