@@ -293,15 +293,15 @@ then
     if [ "${OFFICE_HOME}" ]
     then
 	mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppu3.${soext}" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppu.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppuhelper3${comid}.${soext}" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_sal3.${soext}" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_sal.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_salhelper3${comid}.${soext}" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_purpenvhelper3${comid}.${soext}" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
     fi
