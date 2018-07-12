@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <new>
 #include <ostream>
-#include <utility>
 #include <string.h>
 
 #include "rtl/textenc.h"

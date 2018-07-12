@@ -22,7 +22,6 @@
 #include "sal/config.h"
 
 #include "rtl/alloc.h"
-#include "rtl/ustring.h"
 #include "sal/saldllapi.h"
 #include "sal/types.h"
 
