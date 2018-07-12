@@ -44,6 +44,7 @@
 #include <ndole.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 #include <comphelper/classids.hxx>
 #include <vcl/graph.hxx>
@@ -193,6 +194,8 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
     }
 
     pOleNode->GetNewReplacement();
+    pOleNode->SetChanged();
+
     return SUCCESS;
 }
 
@@ -628,6 +631,36 @@ bool SwOLENode::IsChart() const
     }
 
     return bIsChart;
+}
+
+// react on visual change (invalidate)
+void SwOLENode::SetChanged()
+{
+    SwFrame* pFrame(getLayoutFrame(nullptr));
+
+    if(nullptr == pFrame)
+    {
+        return;
+    }
+
+    const SwRect aFrameArea(pFrame->getFrameArea());
+    SwViewShell* pVSh(GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell());
+
+    if(nullptr == pVSh)
+    {
+        return;
+    }
+
+    for(SwViewShell& rShell : pVSh->GetRingContainer())
+    {
+        SET_CURR_SHELL(&rShell);
+
+        if(rShell.VisArea().IsOver(aFrameArea) && OUTDEV_WINDOW == rShell.GetOut()->GetOutDevType())
+        {
+            // invalidate instead of painting
+            rShell.GetWin()->Invalidate(aFrameArea.SVRect());
+        }
+    }
 }
 
 namespace { class DeflateThread; }
