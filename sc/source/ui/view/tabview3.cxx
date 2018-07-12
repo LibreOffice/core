@@ -30,6 +30,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
@@ -326,6 +328,20 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_NUMBER_THOUSANDS );
 }
 
+namespace {
+
+void collectUIInformation(std::map<OUString, OUString> aParameters)
+{
+    EventDescription aDescription;
+    aDescription.aID = "grid_window";
+    aDescription.aAction = "SELECT";
+    aDescription.aParameters = aParameters;
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
+
 // SetCursor - Cursor, set, draw, update InputWin
 // or send reference
 // Optimising breaks the functionality
@@ -360,6 +376,9 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         ShowAllCursors();
 
         CursorPosChanged();
+
+        OUString aCurrAddress = ScAddress(nPosX,nPosY,0).GetColRowString();
+        collectUIInformation({{"CELL", aCurrAddress}});
 
         if (comphelper::LibreOfficeKit::isActive())
         {
@@ -430,6 +449,17 @@ void ScTabView::CheckSelectionTransfer()
 
             pScMod->SetSelectionTransfer( pNew.get() );
             pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
+
+            // Log the selection change
+            ScMarkData& rMark = aViewData.GetMarkData();
+            if (rMark.IsMarked())
+            {
+                ScRange aMarkRange;
+                rMark.GetMarkArea( aMarkRange );
+                OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
+                OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
+                collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}});
+            }
         }
         else if ( pOld && pOld->GetView() == this )
         {
@@ -1868,6 +1898,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         }
 
         TabChanged(bSameTabButMoved);                                       // DrawView
+        collectUIInformation({{"TABLE", OUString::number(nTab)}});
         UpdateVisibleRange();
 
         aViewData.GetViewShell()->WindowChanged();          // if the active window has changed

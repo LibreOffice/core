@@ -68,6 +68,8 @@
 #include <editeng/editview.hxx>
 #include <PostItMgr.hxx>
 #include <DocumentSettingManager.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -1067,6 +1069,19 @@ bool SwCursorShell::SetInFrontOfLabel( bool bNew )
     return false;
 }
 
+namespace {
+
+void collectUIInformation(OUString aPage)
+{
+    EventDescription aDescription;
+    aDescription.aAction = "GOTO";
+    aDescription.aParameters = {{"PAGE", aPage}};
+    aDescription.aID = "writer_edit";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
+
 bool SwCursorShell::GotoPage( sal_uInt16 nPage )
 {
     SET_CURR_SHELL( this );
@@ -1077,6 +1092,8 @@ bool SwCursorShell::GotoPage( sal_uInt16 nPage )
                                          SwCursorSelOverFlags::ChangePos );
     if( bRet )
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
+
+    collectUIInformation(OUString::number(nPage));
     return bRet;
 }
 

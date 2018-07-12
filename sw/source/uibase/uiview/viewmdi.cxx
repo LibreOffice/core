@@ -53,10 +53,26 @@
 
 #include <svx/srchdlg.hxx>
 
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+
 sal_uInt16  SwView::m_nMoveType = NID_PGE;
 sal_Int32 SwView::m_nActMark = 0;
 
 using namespace ::com::sun::star::uno;
+
+namespace {
+
+void collectUIInformation(OUString aFactor)
+{
+    EventDescription aDescription;
+    aDescription.aID = "writer_edit";
+    aDescription.aParameters = {{"ZOOM", aFactor}};
+    aDescription.aAction = "SET";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
 
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
 {
@@ -65,6 +81,8 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
     // fdo#40465 force the cursor to stay in view whilst zooming
     if (bCursorIsVisible)
         m_pWrtShell->ShowCursor();
+
+    collectUIInformation(OUString::number(nFactor));
 }
 
 void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,

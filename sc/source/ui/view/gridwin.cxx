@@ -140,6 +140,8 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
@@ -619,6 +621,17 @@ public:
     }
 };
 
+void collectUIInformation(OUString aRow, OUString aCol)
+{
+    EventDescription aDescription;
+    aDescription.aAction = "LAUNCH";
+    aDescription.aID = "grid_window";
+    aDescription.aParameters = {{"AUTOFILTER", ""},
+        {"ROW", aRow}, {"COL", aCol}};
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
 }
 
 void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
@@ -705,6 +718,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     aConfig.mbRTL = pViewData->GetDocument()->IsLayoutRTL(pViewData->GetTabNo());
     mpAutoFilterPopup->setConfig(aConfig);
     mpAutoFilterPopup->launch(aCellRect);
+
+    collectUIInformation(OUString::number(nRow), OUString::number(nCol));
 }
 
 void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)

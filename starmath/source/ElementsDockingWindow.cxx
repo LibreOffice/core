@@ -36,6 +36,8 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText) :
     mpNode(std::move(pNode)),
@@ -482,19 +484,36 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
     Control::MouseMove(rMouseEvent);
 }
 
+namespace {
+
+void collectUIInformation(OUString aID)
+{
+    EventDescription aDescription;
+    aDescription.aID = aID;
+    aDescription.aParent = "element_selector";
+    aDescription.aAction = "SELECT";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
+
 void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
     GrabFocus();
 
     if (rMouseEvent.IsLeft() && tools::Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
     {
-        for (std::unique_ptr<SmElement> & i : maElementList)
+        sal_uInt16 nElementCount = maElementList.size();
+
+        for (sal_uInt16 n = 0; n < nElementCount; n++)
         {
+            std::unique_ptr<SmElement> & i = maElementList[n];
             SmElement* element = i.get();
             tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
                 maSelectHdlLink.Call(*element);
+                collectUIInformation(OUString::number(n));
                 return;
             }
         }

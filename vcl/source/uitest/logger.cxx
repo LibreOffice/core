@@ -14,6 +14,7 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 #include <svdata.hxx>
 
 #include <memory>
@@ -35,12 +36,51 @@ UITestLogger::UITestLogger():
     }
 }
 
-void UITestLogger::logCommand(const OUString& rAction)
+void UITestLogger::logCommand(const OUString& rAction, const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     if (!mbValid)
         return;
 
-    maStream.WriteLine(OUStringToOString(rAction, RTL_TEXTENCODING_UTF8));
+    OUStringBuffer aBuffer(rAction);
+    sal_Int32 nCount = rArgs.getLength();
+
+    if (nCount > 0)
+    {
+        aBuffer.append(" {");
+        for (sal_Int32 n = 0; n < nCount; n++)
+        {
+            const css::beans::PropertyValue& rProp = rArgs[n];
+            if (n > 0)
+                aBuffer.append(" ");
+            aBuffer.append(rProp.Name + ":<");
+
+            OUString aTypeName = rProp.Value.getValueTypeName();
+            aBuffer.append(aTypeName + ">");
+
+            if (aTypeName == "long" || aTypeName == "short")
+            {
+                sal_Int32 nValue = 0;
+                rProp.Value >>= nValue;
+                aBuffer.append(nValue);
+            }
+            else if (aTypeName == "unsigned long")
+            {
+                sal_uInt32 nValue = 0;
+                rProp.Value >>= nValue;
+                aBuffer.append(OUString::number(nValue));
+            }
+            else if (aTypeName == "boolean")
+            {
+                bool bValue = true;
+                rProp.Value >>= bValue;
+                aBuffer.append(OUString::boolean(bValue));
+            }
+        }
+        aBuffer.append("}");
+    }
+
+    OUString aCommand(aBuffer.makeStringAndClear());
+    maStream.WriteLine(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8));
 }
 
 namespace {
@@ -164,6 +204,68 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
             rID + " Parent:"+ parent_id +" " + aKeyCode;
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
+}
+
+namespace {
+
+OUString StringMapToOUString(std::map<OUString, OUString>& rParameters)
+{
+    if (rParameters.empty())
+        return OUString("");
+
+    OUString aParameterString = " {";
+
+    for (std::map<OUString, OUString>::iterator itr = rParameters.begin();
+        itr != rParameters.end(); ++itr)
+    {
+        if (itr != rParameters.begin())
+            aParameterString += ", ";
+        aParameterString += "\"" + itr->first + "\": \"" + itr->second + "\"";
+    }
+
+    aParameterString += "}";
+
+    return aParameterString;
+}
+
+}
+
+void UITestLogger::logEvent(EventDescription& rDescription)
+{
+    OUString aParameterString = StringMapToOUString(rDescription.aParameters);
+
+    if (rDescription.aID == "writer_edit")
+    {
+        rDescription.aKeyWord = "SwEditWinUIObject";
+        rDescription.aParent = "MainWindow";
+    }
+    else if (rDescription.aID == "grid_window")
+    {
+        rDescription.aKeyWord = "ScGridWinUIObject";
+        rDescription.aParent = "MainWindow";
+    }
+    else if (rDescription.aID == "impress_win")
+    {
+        rDescription.aKeyWord = "ImpressWindowUIObject";
+        rDescription.aParent = "MainWindow";
+    }
+    else if (rDescription.aParent == "element_selector")
+    {
+        rDescription.aKeyWord = "ElementUIObject";
+    }
+
+    OUString aLogLine = rDescription.aKeyWord + " Action:" +
+        rDescription.aAction + " Id:" + rDescription.aID +
+        " Parent:" + rDescription.aParent + aParameterString;
+
+    log(aLogLine);
+}
+
+void UITestLogger::logObjectSelection(const OUString& rID)
+{
+    OUString aLogLine = "ObjectSelected " + rID;
+
+    UITestLogger::log(aLogLine);
 }
 
 UITestLogger& UITestLogger::getInstance()
