@@ -2434,6 +2434,8 @@ void ScInterpreter::ScConfidenceT()
         double alpha = GetDouble();
         if (sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1.0)
             PushIllegalArgument();
+        else if (n == 1.0) // for interoperability with Excel
+            PushError(FormulaError::DivisionByZero);
         else
             PushDouble( sigma * GetTInv( alpha, n - 1, 2 ) / sqrt( n ) );
     }
