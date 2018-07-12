@@ -140,6 +140,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/uitest/logger.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
@@ -705,6 +706,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     aConfig.mbRTL = pViewData->GetDocument()->IsLayoutRTL(pViewData->GetTabNo());
     mpAutoFilterPopup->setConfig(aConfig);
     mpAutoFilterPopup->launch(aCellRect);
+
+    StringMap aParameters = {{"AUTOFILTER", ""}};
+    aParameters.insert({"ROW", OUString::number(nRow)});
+    aParameters.insert({"COL", OUString::number(nCol)});
+    UITestLogger::getInstance().logScGridWinEvent("LAUNCH", aParameters);
 }
 
 void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
