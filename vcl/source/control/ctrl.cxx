@@ -433,7 +433,16 @@ tools::Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const t
         nPStyle &= ~DrawTextFlags::HideMnemonic;
     }
 
-    if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
+    if( !mpControlData->mpReferenceDevice
+        // tdf#118377 It can happen that mpReferenceDevice is already disposed and
+        // stays disposed (see task, even when Dialog is closed). I have no idea if
+        // this may be very bad - someone who knows morte about lifetime of OutputDevice's
+        // will have to decide.
+        // Fact is that this fixes the crash -> of course a disposed OutputDevice
+        // is forbidden to be used (what would happen when ControlTextRenderer below
+        // would be used)
+        || mpControlData->mpReferenceDevice->isDisposed()
+        || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
     {
         const tools::Rectangle aRet = _rTargetDevice.GetTextRect(rRect, rPStr, nPStyle);
         _rTargetDevice.DrawText(aRet, rPStr, nPStyle, _pVector, _pDisplayText);
