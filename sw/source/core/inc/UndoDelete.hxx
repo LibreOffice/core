@@ -38,9 +38,9 @@ class SwUndoDelete
     , private SwUndRng
     , private SwUndoSaveContent
 {
-    SwNodeIndex* m_pMvStt;            // Position of Nodes in UndoNodes-Array
+    std::unique_ptr<SwNodeIndex> m_pMvStt;            // Position of Nodes in UndoNodes-Array
     boost::optional<OUString> m_aSttStr, m_aEndStr;
-    SwRedlineSaveDatas* m_pRedlSaveData;
+    std::unique_ptr<SwRedlineSaveDatas> m_pRedlSaveData;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 

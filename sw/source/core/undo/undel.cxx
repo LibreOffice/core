@@ -122,11 +122,10 @@ SwUndoDelete::SwUndoDelete(
 
     if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
-        m_pRedlSaveData = new SwRedlineSaveDatas;
+        m_pRedlSaveData.reset(new SwRedlineSaveDatas);
         if( !FillSaveData( rPam, *m_pRedlSaveData ))
         {
-            delete m_pRedlSaveData;
-            m_pRedlSaveData = nullptr;
+            m_pRedlSaveData.reset();
         }
     }
 
@@ -302,7 +301,7 @@ SwUndoDelete::SwUndoDelete(
         // Step 3: Moving into UndoArray...
         m_nNode = rNds.GetEndOfContent().GetIndex();
         rDocNds.MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
-        m_pMvStt = new SwNodeIndex( rNds, m_nNode );
+        m_pMvStt.reset( new SwNodeIndex( rNds, m_nNode ) );
         // remember difference!
         m_nNode = rNds.GetEndOfContent().GetIndex() - m_nNode;
 
@@ -518,9 +517,9 @@ SwUndoDelete::~SwUndoDelete()
     {
         // Insert saves content in IconSection
         m_pMvStt->GetNode().GetNodes().Delete( *m_pMvStt, m_nNode );
-        delete m_pMvStt;
+        m_pMvStt.reset();
     }
-    delete m_pRedlSaveData;
+    m_pRedlSaveData.reset();
 }
 
 static SwRewriter lcl_RewriterFromHistory(SwHistory & rHistory)
@@ -974,8 +973,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             "SwUndoDelete::Redo: used to have redline data, but now none?");
         if (!bSuccess)
         {
-            delete m_pRedlSaveData;
-            m_pRedlSaveData = nullptr;
+            m_pRedlSaveData.reset();
         }
     }
 
