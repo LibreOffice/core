@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_b9886571",
+        "filename": "extensions/source/propctrlr/pcrunodialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-07-12T12:40:43Z",
+      "side": 1,
+      "message": "aSupported is no more returned. Why do we still have these lines?\n\nPlease get rid of them.",
+      "range": {
+        "startLine": 103,
+        "startChar": 8,
+        "endLine": 105,
+        "endChar": 70
+      },
+      "revId": "e0c87ab3562661ba8a63ec66d2d49251193430d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
