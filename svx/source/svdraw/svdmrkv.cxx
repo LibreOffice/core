@@ -48,6 +48,8 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdograf.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <editeng/editdata.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -1634,6 +1636,25 @@ void SdrMarkView::MarkObj(const tools::Rectangle& rRect, bool bUnmark)
     }
 }
 
+namespace {
+
+void collectUIInformation(SdrObject* pObj)
+{
+    EventDescription aDescription;
+    aDescription.aAction = "SELECT";
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "CurrentApp";
+
+    if (!pObj->GetName().isEmpty())
+        aDescription.aParameters = {{"OBJECT", pObj->GetName()}};
+    else
+        aDescription.aParameters = {{"OBJECT", "Unnamed_Obj_" + OUString::number(pObj->GetOrdNum())}};
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
+
 void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool bImpNoSetMarkHdl)
 {
     if (pObj!=nullptr && pPV!=nullptr && IsObjMarkable(pObj, pPV)) {
@@ -1641,6 +1662,7 @@ void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool 
         if (!bUnmark)
         {
             GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pObj,pPV));
+            collectUIInformation(pObj);
         }
         else
         {
