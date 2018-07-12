@@ -30,6 +30,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/uitest/logger.hxx>
 
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
@@ -430,6 +431,18 @@ void ScTabView::CheckSelectionTransfer()
 
             pScMod->SetSelectionTransfer( pNew.get() );
             pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
+
+            // Log the selection change
+            ScMarkData& rMark = aViewData.GetMarkData();
+            if (rMark.IsMarked())
+            {
+                ScRange aMarkRange;
+                rMark.GetMarkArea( aMarkRange );
+                OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
+                OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
+                StringMap aLogParameters = {{"RANGE", aStartAddress + ":" + aEndAddress}};
+                UITestLogger::getInstance().logScGridWinEvent(OUString("SELECT"), aLogParameters);
+            }
         }
         else if ( pOld && pOld->GetView() == this )
         {
