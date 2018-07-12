@@ -23,7 +23,6 @@
 #include "sal/config.h"
 
 #include <cassert>
-#include <cstddef>
 #include <cstring>
 
 #include "rtl/strbuf.h"

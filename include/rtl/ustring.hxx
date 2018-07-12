@@ -26,14 +26,11 @@
 #include <cstddef>
 #include <new>
 #include <ostream>
-#include <utility>
-#include <string.h>
 
 #include "rtl/ustring.h"
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
 #include "rtl/textenc.h"
-#include "sal/log.hxx"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "config_global.h"

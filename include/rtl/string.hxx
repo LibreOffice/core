@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <new>
 #include <ostream>
-#include <utility>
 #include <string.h>
 
 #include "rtl/textenc.h"
@@ -36,8 +35,6 @@
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "rtl/stringconcat.hxx"
 #endif
-
-#include "sal/log.hxx"
 
 #ifdef RTL_STRING_UNITTEST
 extern bool rtl_string_unittest_const_literal;
