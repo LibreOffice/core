@@ -11,6 +11,13 @@
 
 #include <tools/stream.hxx>
 #include <vcl/ctrl.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { struct PropertyValue; }
+} } }
+
+typedef std::map<const OUString, OUString> StringMap;
 
 class UITEST_DLLPUBLIC UITestLogger
 {
@@ -24,13 +31,21 @@ public:
 
     UITestLogger();
 
-    void logCommand(const OUString& rAction);
+    void logCommand(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
 
     void logAction(VclPtr<Control> const & xUIElement, VclEventId nEvent);
 
     void log(const OUString& rString);
 
     void logKeyInput(VclPtr<vcl::Window> const & xUIElement, const KeyEvent& rEvent);
+
+    void logSwEditWinEvent(const OUString& rAction, const StringMap& rParameters = StringMap());
+
+    void logScGridWinEvent(const OUString& rAction, const StringMap& rParameters = StringMap());
+
+    void logImpressWinEvent(const OUString& rAction, const StringMap& rParameters = StringMap());
+
+    void logStarMathEvent(const OUString& rID, const OUString& rAction);
 
     static UITestLogger& getInstance();
 

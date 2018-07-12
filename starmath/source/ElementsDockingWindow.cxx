@@ -36,6 +36,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/uitest/logger.hxx>
 
 SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText) :
     mpNode(std::move(pNode)),
@@ -488,13 +489,17 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 
     if (rMouseEvent.IsLeft() && tools::Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
     {
-        for (std::unique_ptr<SmElement> & i : maElementList)
+        sal_uInt16 nElementCount = maElementList.size();
+
+        for (sal_uInt16 n = 0; n < nElementCount; n++)
         {
+            std::unique_ptr<SmElement> & i = maElementList[n];
             SmElement* element = i.get();
             tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
                 maSelectHdlLink.Call(*element);
+                UITestLogger::getInstance().logStarMathEvent(OUString::number(n), "SELECT");
                 return;
             }
         }
