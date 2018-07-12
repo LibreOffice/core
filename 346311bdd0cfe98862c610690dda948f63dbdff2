@@ -22,6 +22,30 @@
       "revId": "346311bdd0cfe98862c610690dda948f63dbdff2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_f6e03a99",
+        "filename": "include/rtl/math.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-12T08:39:10Z",
+      "side": 1,
+      "message": "First you could just rebase on top of cd6a441a77d1d34a79c928b54ae40a43fb09825b to see if this is just a problem with VS2015 (but not with VS2017). If it stays, then blacklist with a comment saying VS2017 is not happy about this.",
+      "parentUuid": "ffe62b97_566c8635",
+      "range": {
+        "startLine": 32,
+        "startChar": 9,
+        "endLine": 32,
+        "endChar": 16
+      },
+      "revId": "346311bdd0cfe98862c610690dda948f63dbdff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
