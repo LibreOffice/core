@@ -763,7 +763,7 @@ XclExpChTrData::~XclExpChTrData()
 
 void XclExpChTrData::Clear()
 {
-    DELETEZ( pString );
+    pString.reset();
     mpFormulaCell = nullptr;
     mxTokArr.reset();
     maRefLog.clear();
@@ -911,7 +911,7 @@ void XclExpChTrCellContent::GetCellData(
                         rRoot, EMPTY_OUSTRING, nullptr);
                 }
             }
-            rpData->pString = new XclExpString( sCellStr, XclStrFlags::NONE, 32766 );
+            rpData->pString.reset( new XclExpString( sCellStr, XclStrFlags::NONE, 32766 ) );
             rpData->nType = EXC_CHTR_TYPE_STRING;
             rpData->nSize = 3 + rpData->pString->GetSize();
             rXclLength1 = 64 + (sCellStr.getLength() << 1);
