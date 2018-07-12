@@ -147,7 +147,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 102 );
         Scale = TRUE;
-        Size = MAP_APPFONT( 60, 45 );
+        Size = MAP_APPFONT( 60, 48 );
         Fixed = Bitmap { File = "pubdes1.png"; };
         OutputSize = TRUE ;
         Border = TRUE;
@@ -157,7 +157,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 102 );
         Scale = TRUE;
-        Size = MAP_APPFONT( 60, 45 );
+        Size = MAP_APPFONT( 60, 48 );
         Fixed = Bitmap { File = "pubdes2.png"; };
         OutputSize = TRUE ;
         Border = TRUE;
@@ -167,7 +167,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 102 );
         Scale = TRUE;
-        Size = MAP_APPFONT( 60, 45 );
+        Size = MAP_APPFONT( 60, 48 );
         Fixed = Bitmap { File = "pubdes3.png"; };
         OutputSize = TRUE ;
         Border = TRUE;
@@ -177,7 +177,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 102 );
         Scale = TRUE;
-        Size = MAP_APPFONT( 60, 45 );
+        Size = MAP_APPFONT( 60, 48 );
         Fixed = Bitmap { File = "pubdes4.png"; };
         OutputSize = TRUE ;
         Border = TRUE;
