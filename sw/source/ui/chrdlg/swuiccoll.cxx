@@ -228,7 +228,7 @@ IMPL_LINK( SwCondCollPage, AssignRemoveClickHdl, Button*, pBtn, void)
 IMPL_LINK( SwCondCollPage, AssignRemoveTreeListBoxHdl, SvTreeListBox*, pBtn, bool)
 {
     AssignRemove(pBtn);
-    return false;
+    return true;    // signal more to be done
 }
 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, ListBox&, rBox, void)
 {
