@@ -78,6 +78,7 @@
 #include <sfx2/request.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <vcl/uitest/logger.hxx>
 
 using namespace com::sun::star;
 
@@ -273,6 +274,8 @@ void DrawViewShell::SetZoom( long nZoom )
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
     mpViewOverlayManager->onZoomChanged();
+    UITestLogger::getInstance().logImpressWinEvent(
+        "SET", {{"ZOOM", OUString::number(nZoom)}});
 }
 
 /**
