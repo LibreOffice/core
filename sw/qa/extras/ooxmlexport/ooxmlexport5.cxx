@@ -555,6 +555,15 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78907,"fdo78907.docx")
     assertXPath ( pXmlDoc1, "/w:ftr[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl", 0 );
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf118702,"tdf118702.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:type", "val", "nextPage" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:pgSz", "orient", "landscape" );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo79822, "fdo79822.docx")
 {
     /* File getting crash while saving in LO.
