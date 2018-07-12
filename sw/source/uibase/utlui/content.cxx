@@ -1569,7 +1569,10 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
     if(pEntry)
     {
         if(lcl_IsContentType(pEntry) && !pEntry->HasChildren())
+        {
             RequestingChildren(pEntry);
+            return true;    // signal more to be done, i.e. expand children
+        }
         else if (!lcl_IsContentType(pEntry) && (State::HIDDEN != m_eState))
         {
             if (State::CONSTANT == m_eState)
