@@ -1571,7 +1571,6 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
         if(lcl_IsContentType(pEntry) && !pEntry->HasChildren())
         {
             RequestingChildren(pEntry);
-            return true;    // signal more to be done, i.e. expand children
         }
         else if (!lcl_IsContentType(pEntry) && (State::HIDDEN != m_eState))
         {
@@ -1586,7 +1585,9 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
             GotoContent(pCnt);
             if(pCnt->GetParent()->GetType() == ContentTypeId::FRAME)
                 m_pActiveShell->EnterStdMode();
+            return false;   // treelist processing finished
         }
+        return true;        // signal more to be done, i.e. expand/collapse children
     }
     return false;
 }
