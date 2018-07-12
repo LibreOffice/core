@@ -438,7 +438,7 @@ inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) cons
 
 struct XclExpChTrData
 {
-    XclExpString*               pString;
+    std::unique_ptr<XclExpString> pString;
     XclExpStringRef             mpFormattedString;
     const ScFormulaCell*        mpFormulaCell;
     XclTokenArrayRef            mxTokArr;
