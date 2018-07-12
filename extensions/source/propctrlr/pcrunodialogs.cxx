@@ -100,10 +100,7 @@ namespace pcr
 
     css::uno::Sequence<OUString> OTabOrderDialog::getSupportedServiceNames_static()
     {
-        css::uno::Sequence<OUString> aSupported(2);
-        aSupported.getArray()[0] = "com.sun.star.form.ui.TabOrderDialog";
-        aSupported.getArray()[1] = "com.sun.star.form.TabOrderDialog";
-        return aSupported;
+        return css::uno::Sequence<OUString>{ "com.sun.star.form.ui.TabOrderDialog", "com.sun.star.form.TabOrderDialog" };
     }
 
 
