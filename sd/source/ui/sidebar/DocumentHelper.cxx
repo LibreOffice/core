@@ -268,7 +268,7 @@ void DocumentHelper::ProvideStyles (
     // Add an undo action for the copied style sheets.
     if( !aCreatedStyles.empty() )
     {
-        ::svl::IUndoManager* pUndoManager = rTargetDocument.GetDocSh()->GetUndoManager();
+        SfxUndoManager* pUndoManager = rTargetDocument.GetDocSh()->GetUndoManager();
        if (pUndoManager != nullptr)
        {
            SdMoveStyleSheetsUndoAction* pMovStyles =
@@ -315,7 +315,7 @@ void DocumentHelper::AssignMasterPageToPageList (
         if (aCleanedList.empty() )
         return;
 
-    ::svl::IUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
+    SfxUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
     if( pUndoMgr )
         pUndoMgr->EnterListAction(SdResId(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, rTargetDocument.GetDocSh()->GetViewShell()->GetViewShellBase().GetViewShellId());
 

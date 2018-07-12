@@ -1906,7 +1906,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
 
 void SentenceEditWindow_Impl::Undo()
 {
-    ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
+    SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
     DBG_ASSERT(GetUndoActionCount(), "no undo actions available" );
     if(!GetUndoActionCount())
         return;
@@ -1932,7 +1932,7 @@ void SentenceEditWindow_Impl::ResetUndo()
 
 void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction )
 {
-    ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
+    SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
     rUndoMgr.AddUndoAction(pAction);
     GetSpellDialog()->m_pUndoPB->Enable();
 }

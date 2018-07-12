@@ -291,7 +291,7 @@ void CustomAnimationPane::dispose()
 
 void CustomAnimationPane::addUndo()
 {
-    ::svl::IUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
+    SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
     if( pManager )
     {
         SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
@@ -2511,7 +2511,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
         CustomAnimationEffectPtr pEffect = xTag->getEffect();
         if( (pPathObj != nullptr) && pEffect.get() != nullptr )
         {
-            ::svl::IUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
+            SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
             if( pManager )
             {
                 SdPage* pPage = SdPage::getImplementation( mxCurrentPage );

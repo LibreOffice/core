@@ -61,7 +61,7 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
             vcl::EnumContext::Context::Cell))
 {
     SetPool( &pViewData->GetScDrawView()->GetModel()->GetItemPool() );
-    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
     {

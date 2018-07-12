@@ -54,12 +54,7 @@ class OutputDevice;
 class SfxUndoAction;
 class KeyEvent;
 class Timer;
-
-namespace svl
-{
-    class IUndoManager;
-}
-
+class SfxUndoManager;
 class TextLine;
 class TETextPortion;
 struct TEIMEInfos;
@@ -267,7 +262,7 @@ public:
     bool                IsRightToLeft() const { return mbRightToLeft; }
 
     bool                HasUndoManager() const { return mpUndoManager != nullptr; }
-    ::svl::IUndoManager&
+    SfxUndoManager&
                         GetUndoManager();
     void                UndoActionStart( sal_uInt16 nId = 0 );
     void                UndoActionEnd();

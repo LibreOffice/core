@@ -622,7 +622,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                   pSh;
                   ++nIdx, pSh = pDispat->GetShell(nIdx) )
             {
-                ::svl::IUndoManager *pShUndoMgr = pSh->GetUndoManager();
+                SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
                 if ( pShUndoMgr )
                     pShUndoMgr->SetMaxUndoActionCount( nUndoCount );
             }

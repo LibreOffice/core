@@ -596,7 +596,7 @@ bool ScTabViewShell::IsSignatureLineSelected()
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {
     SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
-    ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
+    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -680,7 +680,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 {
     SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
-    ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
+    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();

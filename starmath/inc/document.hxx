@@ -193,7 +193,7 @@ public:
 
     void        Repaint();
 
-    virtual ::svl::IUndoManager *GetUndoManager () override;
+    virtual SfxUndoManager *GetUndoManager () override;
 
     static SfxItemPool& GetPool();
 

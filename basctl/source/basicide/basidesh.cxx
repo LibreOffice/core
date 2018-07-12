@@ -473,9 +473,9 @@ bool Shell::NextPage( bool bPrev )
     return bRet;
 }
 
-::svl::IUndoManager* Shell::GetUndoManager()
+SfxUndoManager* Shell::GetUndoManager()
 {
-    ::svl::IUndoManager* pMgr = nullptr;
+    SfxUndoManager* pMgr = nullptr;
     if( pCurWin )
         pMgr = pCurWin->GetUndoManager();
 

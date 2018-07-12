@@ -35,11 +35,7 @@ class SfxRequest;
 class SvxSearchItem;
 class Printer;
 enum class SearchOptionFlags;
-
-namespace svl
-{
-    class IUndoManager;
-}
+class SfxUndoManager;
 
 namespace weld
 {
@@ -215,7 +211,7 @@ public:
     void AddStatus(int n) { nStatus |= n; }
     void ClearStatus(int n) { nStatus &= ~n; }
 
-    virtual svl::IUndoManager* GetUndoManager ();
+    virtual SfxUndoManager* GetUndoManager ();
 
     virtual SearchOptionFlags  GetSearchOptions();
     virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false);

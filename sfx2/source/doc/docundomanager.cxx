@@ -48,15 +48,12 @@ namespace sfx2
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::frame::XModel;
 
-    using ::svl::IUndoManager;
-
-
     //= DocumentUndoManager_Impl
 
     struct DocumentUndoManager_Impl : public ::framework::IUndoManagerImplementation
     {
         DocumentUndoManager&                rAntiImpl;
-        IUndoManager*                       pUndoManager;
+        SfxUndoManager*                     pUndoManager;
         ::framework::UndoManagerHelper      aUndoHelper;
 
         explicit DocumentUndoManager_Impl( DocumentUndoManager& i_antiImpl )
@@ -73,7 +70,7 @@ namespace sfx2
         };
 
         // IUndoManagerImplementation
-        virtual ::svl::IUndoManager&        getImplUndoManager() override;
+        virtual SfxUndoManager&        getImplUndoManager() override;
         virtual Reference< XUndoManager >   getThis() override;
 
         void disposing()
@@ -86,9 +83,9 @@ namespace sfx2
         void invalidateXDo_nolck();
 
     private:
-        static IUndoManager* impl_retrieveUndoManager( SfxBaseModel& i_baseModel )
+        static SfxUndoManager* impl_retrieveUndoManager( SfxBaseModel& i_baseModel )
         {
-            IUndoManager* pUndoManager( nullptr );
+            SfxUndoManager* pUndoManager( nullptr );
             SfxObjectShell* pObjectShell = i_baseModel.GetObjectShell();
             if ( pObjectShell != nullptr )
                 pUndoManager = pObjectShell->GetUndoManager();
@@ -99,7 +96,7 @@ namespace sfx2
     };
 
 
-    ::svl::IUndoManager& DocumentUndoManager_Impl::getImplUndoManager()
+    SfxUndoManager& DocumentUndoManager_Impl::getImplUndoManager()
     {
         ENSURE_OR_THROW( pUndoManager != nullptr, "DocumentUndoManager_Impl::getImplUndoManager: no access to the doc's UndoManager implementation!" );
 

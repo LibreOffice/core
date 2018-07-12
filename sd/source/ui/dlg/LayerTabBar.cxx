@@ -139,7 +139,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
                 assert (pDrView && "Change layer attribute undo action is only working with a SdDrawView");
                 if(pDrView)
                 {
-                    ::svl::IUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
+                    SfxUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
                     SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
                         &rDoc,
                         pLayer,
@@ -320,7 +320,7 @@ void LayerTabBar::EndRenaming()
             assert (pDrView && "Rename layer undo action is only working with a SdDrawView");
             if( pDrView )
             {
-                ::svl::IUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
+                SfxUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
                 SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
                     &rDoc,
                     pLayer,

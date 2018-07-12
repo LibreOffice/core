@@ -833,7 +833,7 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
 
     if (bUndo)
     {
-        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
         ScCellValue aNewVal;
         aNewVal.assign(rDoc, rPos);
         pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldVal, aNewVal));
@@ -871,7 +871,7 @@ void ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>&
         sc::UndoSetCells* pUndoObj = new sc::UndoSetCells(&rDocShell, rPos);
         rDoc.TransferCellValuesTo(rPos, aVals.size(), pUndoObj->GetOldValues());
         pUndoObj->SetNewValues(aVals);
-        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
         pUndoMgr->AddUndoAction(pUndoObj);
     }
 
@@ -903,7 +903,7 @@ bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool
 
     if (bUndo)
     {
-        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
         ScCellValue aNewVal;
         aNewVal.assign(rDoc, rPos);
         pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldVal, aNewVal));
@@ -938,7 +938,7 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
 
     if (bUndo)
     {
-        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
         ScCellValue aNewVal;
         aNewVal.assign(rDoc, rPos);
         pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldVal, aNewVal));
@@ -1002,7 +1002,7 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
 
     if (bUndo)
     {
-        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
         ScCellValue aNewVal;
         aNewVal.assign(rDoc, rPos);
         pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldVal, aNewVal));
@@ -1248,7 +1248,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
     if (aTester.IsEditable())
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        ::svl::IUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : nullptr;
+        SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : nullptr;
 
         ScNoteData aOldData;
         ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );

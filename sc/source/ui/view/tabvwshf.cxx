@@ -695,7 +695,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     //  handle several sheets
 
-                    ::svl::IUndoManager* pUndoManager = pDocSh->GetUndoManager();
+                    SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
                     OUString aUndo = ScResId( STR_UNDO_TAB_RTL );
                     pUndoManager->EnterListAction( aUndo, aUndo, 0, rViewData.GetViewShell()->GetViewShellId() );
 

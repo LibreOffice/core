@@ -440,7 +440,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
 
         }
 
-        ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
         pUndoMgr->EnterListAction(rUndoStr, rUndoStr, 0, rViewData.GetViewShell()->GetViewShellId());
 
         pDocSh->GetDocFunc().SetValueCell(aCurPos, fVal, true);

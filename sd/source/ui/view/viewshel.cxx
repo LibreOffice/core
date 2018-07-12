@@ -1123,7 +1123,7 @@ void ViewShell::UpdatePreview (SdPage*, bool )
     // useful is still done.
 }
 
-::svl::IUndoManager* ViewShell::ImpGetUndoManager() const
+SfxUndoManager* ViewShell::ImpGetUndoManager() const
 {
     const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell().get();
 
@@ -1160,7 +1160,7 @@ void ViewShell::UpdatePreview (SdPage*, bool )
 
 void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 {
-    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
+    SfxUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
@@ -1187,7 +1187,7 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 
 void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
-    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
+    SfxUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
@@ -1237,7 +1237,7 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
     if (pSlideSorterViewShell)
         xWatcher.reset(new KeepSlideSorterInSyncWithPageChanges(pSlideSorterViewShell->GetSlideSorter()));
 
-    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
+    SfxUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     bool bRepair = false;
@@ -1306,7 +1306,7 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
     if (pSlideSorterViewShell)
         xWatcher.reset(new KeepSlideSorterInSyncWithPageChanges(pSlideSorterViewShell->GetSlideSorter()));
 
-    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
+    SfxUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     bool bRepair = false;

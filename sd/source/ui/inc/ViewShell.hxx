@@ -492,7 +492,7 @@ protected:
     std::unique_ptr<Implementation, o3tl::default_delete<Implementation>> mpImpl;
 
     // Support methods for centralized UNDO/REDO
-    virtual ::svl::IUndoManager* ImpGetUndoManager() const;
+    virtual SfxUndoManager* ImpGetUndoManager() const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
     void ImpSidUndo(SfxRequest& rReq);

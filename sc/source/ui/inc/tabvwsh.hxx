@@ -305,7 +305,7 @@ public:
     bool            IsDrawTextShell() const;
     bool            IsAuditShell() const;
 
-    void            SetDrawTextUndo( ::svl::IUndoManager* pUndoMgr );
+    void            SetDrawTextUndo( SfxUndoManager* pUndoMgr );
 
     void            FillFieldData( ScHeaderFieldData& rData );
 

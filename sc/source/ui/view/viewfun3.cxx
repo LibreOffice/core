@@ -952,7 +952,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     ScDocument* pDoc = GetViewData().GetDocument();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     const bool bRecord(pDoc->IsUndoEnabled());
 
     ScDocShellModificator aModificator( *pDocSh );
@@ -1582,7 +1582,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 
     if (pDoc->IsUndoEnabled())
     {
-        ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
         OUString aUndo = ScResId(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
         pUndoMgr->EnterListAction(aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId());
@@ -1747,7 +1747,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     if (pDoc->IsUndoEnabled())
     {
-        svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
         OUString aUndo = ScResId(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
         pUndoMgr->EnterListAction(aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId());
@@ -1937,7 +1937,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScMarkData& rMark = GetViewData().GetMarkData();
     ScDocShellModificator aModificator( *pDocSh );
-    ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     if ( pDoc )
     {
         const bool bRecord( pDoc->IsUndoEnabled());

@@ -201,12 +201,12 @@ SfxInterface* SfxShell::GetInterface() const
     return GetStaticInterface();
 }
 
-::svl::IUndoManager* SfxShell::GetUndoManager()
+SfxUndoManager* SfxShell::GetUndoManager()
 {
     return pUndoMgr;
 }
 
-void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
+void SfxShell::SetUndoManager( SfxUndoManager *pNewUndoMgr )
 {
     OSL_ENSURE( ( pUndoMgr == nullptr ) || ( pNewUndoMgr == nullptr ) || ( pUndoMgr == pNewUndoMgr ),
         "SfxShell::SetUndoManager: exchanging one non-NULL manager with another non-NULL manager? Suspicious!" );
