@@ -48,10 +48,10 @@ class SwUndoInsTable : public SwUndo
 {
     OUString sTableNm;
     SwInsertTableOptions aInsTableOpts;
-    SwDDEFieldType* pDDEFieldType;
-    std::vector<sal_uInt16> *pColWidth;
-    SwRedlineData*  pRedlData;
-    SwTableAutoFormat* pAutoFormat;
+    std::unique_ptr<SwDDEFieldType> pDDEFieldType;
+    std::unique_ptr<std::vector<sal_uInt16>> pColWidth;
+    std::unique_ptr<SwRedlineData>  pRedlData;
+    std::unique_ptr<SwTableAutoFormat> pAutoFormat;
     sal_uLong nSttNode;
     sal_uInt16 nRows, nCols;
     sal_uInt16 nAdjust;
