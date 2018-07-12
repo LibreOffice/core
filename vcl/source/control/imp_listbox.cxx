@@ -115,6 +115,21 @@ sal_Int32 ListBox::NaturalSortCompare(const OUString &rA, const OUString &rB)
     return rSorter.compare(rA, rB);
 }
 
+// sort for non-ascii character(ex: chinese character)
+sal_Int32 ImplEntryList::NatualSortCompareExtend(const OUString &rA, const OUString &rB)
+{
+    const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
+    OString strA = OUStringToOString(rA.copy(0, 1), RTL_TEXTENCODING_UTF8).getStr();
+    OString strB = OUStringToOString(rB.copy(0, 1), RTL_TEXTENCODING_UTF8).getStr();
+    if(strA.getLength()  > 1)
+    {
+        if(strB.getLength() == 1)  // ascii
+            return -1;
+        return 1;
+    }
+    return rSorter.compare(rA, rB);
+}
+
 sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, bool bSort )
 {
     if (nPos < 0 || LISTBOX_MAX_ENTRIES <= maEntries.size())
@@ -141,7 +156,6 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
     }
     else
     {
-        const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
 
         const OUString& rStr = pNewEntry->maStr;
 
@@ -149,7 +163,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
 
         try
         {
-            sal_Int32 nComp = rSorter.compare(rStr, pTemp->maStr);
+            sal_Int32 nComp = NaturalSortCompareExtend(rStr, pTemp->maStr);
 
             // fast insert for sorted data
             if ( nComp >= 0 )
@@ -161,7 +175,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
             {
                 pTemp = GetEntry( mnMRUCount );
 
-                nComp = rSorter.compare(rStr, pTemp->maStr);
+                nComp = NaturalSortCompareExtend(rStr, pTemp->maStr);
                 if ( nComp <= 0 )
                 {
                     insPos = 0;
@@ -179,7 +193,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
                         nMid = static_cast<sal_Int32>((nLow + nHigh) / 2);
                         pTemp = GetEntry( nMid );
 
-                        nComp = rSorter.compare(rStr, pTemp->maStr);
+                        nComp = NaturalSortCompareExtend(rStr, pTemp->maStr);
 
                         if ( nComp < 0 )
                             nHigh = nMid-1;
