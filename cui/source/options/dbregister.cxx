@@ -284,7 +284,9 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl, Button*, void)
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathBoxDoubleClickHdl, SvTreeListBox*, bool)
 {
     EditHdl(nullptr);
-    return false;
+    // Signal more to be done, i.e. when entry removed/inserted via
+    // openLinkDialog().
+    return true;
 }
 
 
