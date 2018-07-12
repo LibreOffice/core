@@ -956,7 +956,10 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
     if ( pBox && bChanged )
     {
         if ( *ppFontList )
+        {
+            pBox->SetStyle( pBox->GetStyle() | WB_SORT );
             pBox->Fill( *ppFontList );
+        }
         else
             pBox->Clear();
     }
