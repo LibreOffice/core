@@ -529,51 +529,45 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
         {
             case svString:
             {
-                if( eFunc == ifCOUNT )
+                if( eFunc == ifCOUNT  || eFunc == ifAVERAGE ||
+                    eFunc == ifSUM    || eFunc == ifSUMSQ ||
+                    eFunc == ifPRODUCT )
                 {
-                    OUString aStr = PopString().getString();
                     if ( bTextAsZero )
+                    {
+                        Pop();
                         nCount++;
+                        if ( eFunc == ifPRODUCT )
+                            fRes = 0.0;
+                    }
                     else
                     {
-                        // Only check if string can be converted to number, no
-                        // error propagation.
-                        FormulaError nErr = nGlobalError;
-                        nGlobalError = FormulaError::NONE;
-                        ConvertStringToValue( aStr );
+                        OUString aStr = PopString().getString();
+                        fVal = ConvertStringToValue( aStr );
                         if (nGlobalError == FormulaError::NONE)
-                            ++nCount;
-                        nGlobalError = nErr;
+                        {
+                            nCount++;
+                            switch( eFunc )
+                            {
+                                case ifAVERAGE:
+                                case ifSUM:
+                                    if ( fMem )
+                                        fRes += fVal;
+                                    else
+                                        fMem = fVal;
+                                    break;
+                                case ifSUMSQ:   fRes += fVal * fVal; break;
+                                case ifPRODUCT: fRes *= fVal; break;
+                                default: ; // nothing
+                            }
+                            nFuncFmtType = SvNumFormatType::NUMBER;
+                        }
                     }
                 }
                 else
                 {
-                    switch ( eFunc )
-                    {
-                        case ifAVERAGE:
-                        case ifSUM:
-                        case ifSUMSQ:
-                        case ifPRODUCT:
-                        {
-                            if ( bTextAsZero )
-                            {
-                                Pop();
-                                nCount++;
-                                if ( eFunc == ifPRODUCT )
-                                    fRes = 0.0;
-                            }
-                            else
-                            {
-                                while (nParamCount-- > 0)
-                                    Pop();
-                                SetError( FormulaError::NoValue );
-                            }
-                        }
-                        break;
-                        default:
-                            Pop();
-                            nCount++;
-                    }
+                    Pop();
+                    nCount++;
                 }
             }
             break;
