@@ -66,7 +66,7 @@ ScInsertTableDlg::~ScInsertTableDlg()
 {
     if (pDocShTables)
         pDocShTables->DoClose();
-    delete pDocInserter;
+    pDocInserter.reset();
 }
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
@@ -262,8 +262,8 @@ IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl, weld::Button&, void)
 {
-    delete pDocInserter;
-    pDocInserter = new ::sfx2::DocumentInserter(m_xDialog.get(), ScDocShell::Factory().GetFactoryName());
+    pDocInserter.reset();
+    pDocInserter.reset( new ::sfx2::DocumentInserter(m_xDialog.get(), ScDocShell::Factory().GetFactoryName()) );
     pDocInserter->StartExecuteModal( LINK( this, ScInsertTableDlg, DialogClosedHdl ) );
 }
 
