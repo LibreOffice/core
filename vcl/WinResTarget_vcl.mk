@@ -24,8 +24,8 @@
 $(eval $(call gb_WinResTarget_WinResTarget,vcl/src))
 
 $(eval $(call gb_WinResTarget_set_include,vcl/src,\
-        $$(INCLUDE) \
-        -I$(SRCDIR)/vcl/inc \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/inc \
 ))
 
 ifeq ($(OS),WNT)
@@ -49,7 +49,7 @@ $(eval $(call gb_WinResTarget_add_dependency,vcl/src,\
     vcl/win/source/src/copyf.cur \
     vcl/win/source/src/drect.cur \
     vcl/win/source/src/movef.cur \
-    vcl/win/source/src/sd.ico \
+    vcl/win/source/src/oo.ico \
     vcl/win/source/src/ase.cur \
     vcl/win/source/src/copyf2.cur \
     vcl/win/source/src/dtext.cur \
@@ -127,8 +127,8 @@ $(eval $(call gb_WinResTarget_add_file,vcl/src,\
 ))
 
 $(eval $(call gb_WinResTarget_set_include,vcl/src,\
-        $$(INCLUDE) \
-        -I$(SRCDIR)/vcl/os2/source/src \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/os2/source/src \
 ))
 
 endif
