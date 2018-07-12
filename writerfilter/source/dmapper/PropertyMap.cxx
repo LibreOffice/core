@@ -316,20 +316,23 @@ void PropertyMap::dumpXml() const
 }
 #endif
 
-void PropertyMap::InsertProps( const PropertyMapPtr& rMap )
+void PropertyMap::InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite )
 {
     if ( rMap )
     {
         for ( const auto& rPropPair : rMap->m_vMap )
-            m_vMap[rPropPair.first] = rPropPair.second;
+        {
+            if ( bOverwrite || !m_vMap.count(rPropPair.first) )
+                m_vMap[rPropPair.first] = rPropPair.second;
+        }
 
-        insertTableProperties( rMap.get() );
+        insertTableProperties( rMap.get(), bOverwrite );
 
         Invalidate();
     }
 }
 
-void PropertyMap::insertTableProperties( const PropertyMap* )
+void PropertyMap::insertTableProperties( const PropertyMap*, const bool )
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().element( "PropertyMap.insertTableProperties" );
@@ -1818,7 +1821,7 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
         OSL_FAIL( "invalid TablePropertyMapTarget" );
 }
 
-void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
+void TablePropertyMap::insertTableProperties( const PropertyMap* pMap, const bool bOverwrite )
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement( "TablePropertyMap.insertTableProperties" );
@@ -1831,7 +1834,7 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
         for ( sal_Int32 eTarget = TablePropertyMapTarget_START;
             eTarget < TablePropertyMapTarget_MAX; ++eTarget )
         {
-            if ( pSource->m_aValidValues[eTarget].bValid )
+            if ( pSource->m_aValidValues[eTarget].bValid && (bOverwrite || !m_aValidValues[eTarget].bValid) )
             {
                 m_aValidValues[eTarget].bValid = true;
                 m_aValidValues[eTarget].nValue = pSource->m_aValidValues[eTarget].nValue;
