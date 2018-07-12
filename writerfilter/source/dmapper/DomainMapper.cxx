@@ -684,6 +684,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
             {
+                m_pImpl->SetParaAutoAfter(true);
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
             }
             else
