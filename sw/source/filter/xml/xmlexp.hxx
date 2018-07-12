@@ -114,6 +114,8 @@ public:
 
     virtual ~SwXMLExport() override;
 
+    void collectAutoStyles() override;
+
     virtual ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
