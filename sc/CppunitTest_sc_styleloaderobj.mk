@@ -14,48 +14,19 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_styleloaderobj))
 $(eval $(call gb_CppunitTest_use_external,sc_styleloaderobj,boost_headers))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_styleloaderobj, \
-    sc/qa/extras/scstyleloaderobj \
+	sc/qa/extras/scstyleloaderobj \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_styleloaderobj, \
-    basegfx \
-    comphelper \
-    cppu \
-    cppuhelper \
-    drawinglayer \
-    editeng \
-    for \
-    forui \
-    i18nlangtag \
-    msfilter \
-    oox \
-    sal \
-    salhelper \
-    sax \
-    sb \
-    sc \
-    sfx \
-    sot \
-    subsequenttest \
-    svl \
-    svt \
-    svx \
-    svxcore \
+	cppu \
+	sal \
+	subsequenttest \
 	test \
-    tk \
-    tl \
-    ucbhelper \
 	unotest \
-    utl \
-    vbahelper \
-    vcl \
-    xo \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_styleloaderobj,\
-    -I$(SRCDIR)/sc/source/ui/inc \
-    -I$(SRCDIR)/sc/inc \
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sc_styleloaderobj))
@@ -64,7 +35,7 @@ $(eval $(call gb_CppunitTest_use_ure,sc_styleloaderobj))
 $(eval $(call gb_CppunitTest_use_vcl,sc_styleloaderobj))
 
 $(eval $(call gb_CppunitTest_use_components,sc_styleloaderobj,\
-    $(sc_unoapi_common_components) \
+	$(sc_unoapi_common_components) \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_styleloaderobj))
