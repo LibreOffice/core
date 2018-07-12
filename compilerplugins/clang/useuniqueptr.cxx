@@ -69,6 +69,12 @@ public:
         // ScTempDocSource::pTempDoc
         if (fn == SRCDIR "/sc/source/ui/unoobj/funcuno.cxx")
             return;
+        // SwAttrIter::m_pFont
+        if (fn == SRCDIR "/sw/source/core/text/itratr.cxx")
+            return;
+        // SwWrongList
+        if (fn == SRCDIR "/sw/source/core/text/wrong.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
