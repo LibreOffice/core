@@ -29,7 +29,7 @@
 #include "sal/types.h"
 
 #include <cstddef>
-#include <math.h>
+#include <cmath>
 
 namespace rtl {
 
