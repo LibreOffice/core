@@ -20,7 +20,9 @@ with io.open("workdir/loplugin.virtualdown.log", "rb", buffering=1024*1024) as t
         elif tokens[0] == "call:":
             fullMethodName = tokens[1]
             callSet.add(fullMethodName)
-            
+        else:
+            print( "unknown line: " + line)
+
 unnecessaryVirtualSet = set()
 
 for clazz in (definitionSet - callSet):

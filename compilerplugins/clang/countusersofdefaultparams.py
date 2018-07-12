@@ -35,6 +35,8 @@ with io.open("workdir/loplugin.countusersofdefaultparams.log", "rb", buffering=1
             if not funcInfo in callDict:
                 callDict[funcInfo] = set()
             callDict[funcInfo].add(sourceLocationOfCall)
+        else:
+            print( "unknown line: " + line)
 
 # Invert the definitionToSourceLocationMap.
 sourceLocationToDefinitionMap = {}

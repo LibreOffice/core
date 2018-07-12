@@ -34,6 +34,8 @@ with io.open("workdir/loplugin.singlevalfields.log", "rb", buffering=1024*1024) 
             if not fieldInfo in fieldAssignDict:
                 fieldAssignDict[fieldInfo] = set()
             fieldAssignDict[fieldInfo].add(assignValue)
+        else:
+            print( "unknown line: " + line)
 
 tmp1list = list()
 for fieldInfo, assignValues in fieldAssignDict.iteritems():

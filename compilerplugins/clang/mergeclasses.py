@@ -56,6 +56,7 @@ def extractModuleName(clazz):
 with open("compilerplugins/clang/mergeclasses.results", "wt") as f:
     # loop over defined, but not instantiated classes
     for clazz in sorted(definitionSet - instantiatedSet):
+        if clazz == "svl::IUndoManager": print parentChildDict[clazz]
         # ignore classes without any children, and classes with more than one child
         if (clazz not in parentChildDict) or (len(parentChildDict[clazz]) != 1):
             continue
@@ -68,6 +69,8 @@ with open("compilerplugins/clang/mergeclasses.results", "wt") as f:
         if ("mutex" in clazz) or ("Mutex" in clazz):
             continue
         otherclazz = next(iter(parentChildDict[clazz]))
+        if clazz == "svl::IUndoManager": print extractModuleName(clazz)
+        if clazz == "svl::IUndoManager": print extractModuleName(otherclazz)
         # exclude combinations that span modules because we often use those to make cross-module dependencies more manageable.
         if extractModuleName(clazz) != extractModuleName(otherclazz):
             continue

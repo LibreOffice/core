@@ -29,6 +29,9 @@ with open("workdir/loplugin.finalclasses.log") as txt:
                 parent = parent[7:]
             inheritFromSet.add(parent);
 
+        else:
+            print( "unknown line: " + line)
+
 tmpset = set()
 for clazz in sorted(definitionSet - inheritFromSet):
     file = definitionToFileDict[clazz]
