@@ -34,3 +34,6 @@ blacklist:
     include/osl/thread.hxx:
     # ODK API test would fail with fw decl here
     - osl/time.h
+    include/rtl/instance.hxx:
+    # Needed for template functions
+    - osl/getglobalmutex.hxx
