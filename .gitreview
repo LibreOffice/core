@@ -3,5 +3,5 @@ host=logerrit
 port=29418
 project=core
 defaultremote=logerrit
-defaultbranch=libreoffice-4-1-6
+defaultbranch=distro/lhm/libreoffice-4-1-6+backports
 
