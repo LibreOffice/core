@@ -65,6 +65,7 @@ is \
 it \
 ja \
 ka \
+kab \
 kk \
 km \
 kmr-Latn \
