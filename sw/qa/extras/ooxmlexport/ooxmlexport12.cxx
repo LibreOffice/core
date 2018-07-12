@@ -729,6 +729,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingInde
 {
     OUString sName = getProperty<OUString>(getParagraph(1), "NumberingStyleName");
     CPPUNIT_ASSERT_MESSAGE("Paragraph has numbering style", !sName.isEmpty());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("ParagraphStyles")->getByName("Revision"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));
+    xPropertySet.set(getStyles("ParagraphStyles")->getByName("Body Note"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")

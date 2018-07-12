@@ -142,8 +142,8 @@ public:
     // Remove a named property from *this, does nothing if the property id has not been set
     void Erase( PropertyIds eId);
 
-    // Imports properties from pMap, overwriting those with the same PropertyIds as the current map
-    void InsertProps( const std::shared_ptr< PropertyMap >& rMap );
+   // Imports properties from pMap
+    void InsertProps( const tools::SvRef< PropertyMap >& rMap, const bool bOverwrite = true );
 
     // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
     boost::optional< Property > getProperty( PropertyIds eId ) const;
@@ -155,7 +155,7 @@ public:
 
     void SetFootnote( const css::uno::Reference< css::text::XFootnote >& xF ) { m_xFootnote = xF; }
 
-    virtual void insertTableProperties( const PropertyMap* );
+    virtual void insertTableProperties( const PropertyMap*, const bool bOverwrite = true );
 
     const std::vector< RedlineParamsPtr >& Redlines() const { return m_aRedlines; }
 
@@ -559,7 +559,7 @@ public:
     bool getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill );
     void setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet );
 
-    virtual void insertTableProperties( const PropertyMap* ) override;
+    virtual void insertTableProperties( const PropertyMap*, const bool bOverwrite = true ) override;
 };
 
 typedef std::shared_ptr< TablePropertyMap > TablePropertyMapPtr;

@@ -994,6 +994,10 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     }
                     else if( bParaStyle )
                     {
+                        // Paragraph styles that don't inherit from some parent need to apply the DocDefaults
+                        if ( sConvertedStyleName != "Standard" )
+                            pEntry->pProperties->InsertProps( m_pImpl->m_pDefaultParaProps, /*bAllowOverwrite=*/false );
+
                         //now it's time to set the default parameters - for paragraph styles
                         //Fonts: Western first entry in font table
                         //CJK: second entry
