@@ -1,0 +1,14 @@
+--- misc/hsqldb/src/org/hsqldb/lib/java/JavaSystem.java	2008-03-16 23:51:35.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/lib/java/JavaSystem.java	2018-07-12 11:46:57.997837180 +0200
+@@ -160,8 +160,9 @@
+     public static void runFinalizers() {
+ 
+ //#ifdef JAVA2FULL
+-        System.runFinalizersOnExit(true);
+-
++        try {
++            System.class.getMethod("runFinalizersOnExit", boolean.class).invoke(null, true);
++        } catch (Exception e) {}
+ //#endif
+     }
+ 
