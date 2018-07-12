@@ -87,6 +87,8 @@
 
 #include <SdUnoDrawView.hxx>
 
+#include <sfx2/zoomitem.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::sd::framework::FrameworkHelper;
@@ -858,11 +860,14 @@ void DrawDocShell::GotoBookmark(const OUString& rBookmark)
                     pDrawViewShell->SwitchPage(nSdPgNum);
                 }
 
+                // show page
+                SvxZoomItem aZoom;
+                aZoom.SetType( SvxZoomType::WHOLEPAGE );
+                pDrawViewShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
+
                 if (pObj != nullptr)
                 {
-                    // show and select object
-                    pDrawViewShell->MakeVisible(pObj->GetLogicRect(),
-                        *pDrawViewShell->GetActiveWindow());
+                    // select object
                     pDrawViewShell->GetView()->UnmarkAll();
                     pDrawViewShell->GetView()->MarkObj(
                         pObj,
