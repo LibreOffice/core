@@ -390,6 +390,20 @@ void Control::SetReferenceDevice( OutputDevice* _referenceDevice )
 
 OutputDevice* Control::GetReferenceDevice() const
 {
+    // tdf#118377 It can happen that mpReferenceDevice is already disposed and
+    // stays disposed (see task, even when Dialog is closed). I have no idea if
+    // this may be very bad - someone who knows more about lifetime of OutputDevice's
+    // will have to decide.
+    // To secure this, I changed all accesses to mpControlData->mpReferenceDevice to
+    // use Control::GetReferenceDevice() - only use mpControlData->mpReferenceDevice
+    // inside Control::SetReferenceDevice and Control::GetReferenceDevice().
+    // Control::GetReferenceDevice() will now reset mpReferenceDevice if it is already
+    // disposed. This way all usages will do a kind of 'test-and-get' call.
+    if(nullptr != mpControlData->mpReferenceDevice && mpControlData->mpReferenceDevice->isDisposed())
+    {
+        const_cast<Control*>(this)->SetReferenceDevice(nullptr);
+    }
+
     return mpControlData->mpReferenceDevice;
 }
 
@@ -433,14 +447,14 @@ tools::Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const t
         nPStyle &= ~DrawTextFlags::HideMnemonic;
     }
 
-    if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
+    if( !GetReferenceDevice() || ( GetReferenceDevice() == &_rTargetDevice ) )
     {
         const tools::Rectangle aRet = _rTargetDevice.GetTextRect(rRect, rPStr, nPStyle);
         _rTargetDevice.DrawText(aRet, rPStr, nPStyle, _pVector, _pDisplayText);
         return aRet;
     }
 
-    ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
+    ControlTextRenderer aRenderer( *this, _rTargetDevice, *GetReferenceDevice() );
     return aRenderer.DrawText(rRect, rPStr, nPStyle, _pVector, _pDisplayText, i_pDeviceSize);
 }
 
@@ -459,7 +473,7 @@ tools::Rectangle Control::GetControlTextRect( OutputDevice& _rTargetDevice, cons
         nPStyle &= ~DrawTextFlags::HideMnemonic;
     }
 
-    if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
+    if ( !GetReferenceDevice() || ( GetReferenceDevice() == &_rTargetDevice ) )
     {
         tools::Rectangle aRet = _rTargetDevice.GetTextRect( rRect, rPStr, nPStyle );
         if (o_pDeviceSize)
@@ -469,7 +483,7 @@ tools::Rectangle Control::GetControlTextRect( OutputDevice& _rTargetDevice, cons
         return aRet;
     }
 
-    ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
+    ControlTextRenderer aRenderer( *this, _rTargetDevice, *GetReferenceDevice() );
     return aRenderer.GetTextRect(rRect, rPStr, nPStyle, o_pDeviceSize);
 }
 
