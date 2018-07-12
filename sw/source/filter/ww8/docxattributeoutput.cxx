@@ -7601,10 +7601,10 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     SvxFrameDirection nDir = SvxFrameDirection::Environment;
     if( rFrameDir != nullptr )
         nDir = rFrameDir->GetValue();
-    if ( nDir == SvxFrameDirection::Environment )
+    // ww8atr ::ParaAdjust has a lot more ways to set nDir! Do we need those too?
+    if ( nDir == SvxFrameDirection::Environment && AllSettings::GetLayoutRTL() )
         nDir = GetExport( ).GetDefaultFrameDirection( );
     bool bRtl = ( nDir == SvxFrameDirection::Horizontal_RL_TB );
-
     switch ( rAdjust.GetAdjust() )
     {
         case SvxAdjust::Left:
@@ -8635,7 +8635,8 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
     bool bBiDi = false;
     SvxFrameDirection nDir = rDirection.GetValue();
 
-    if ( nDir == SvxFrameDirection::Environment )
+    // ww8atr ::FormatFrameDirection has a lot more ways to set nDir! Do we need those too?
+    if ( nDir == SvxFrameDirection::Environment && AllSettings::GetLayoutRTL() )
         nDir = GetExport( ).GetDefaultFrameDirection( );
 
     switch ( nDir )

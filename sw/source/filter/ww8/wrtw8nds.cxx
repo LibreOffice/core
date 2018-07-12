@@ -2777,7 +2777,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
             if (
                 (!pItem || pItem->GetValue() == SvxFrameDirection::Environment) &&
-                aAttrIter.IsParaRTL()
+                aAttrIter.IsParaRTL() && GetExportFormat() == MSWordExportBase::DOC
                )
             {
                 if ( !pTmpSet )
