@@ -838,21 +838,21 @@ XclExpChTrCellContent::XclExpChTrCellContent(
 
 XclExpChTrCellContent::~XclExpChTrCellContent()
 {
-    delete pOldData;
-    delete pNewData;
+    pOldData.reset();
+    pNewData.reset();
 }
 
-void XclExpChTrCellContent::MakeEmptyChTrData( XclExpChTrData*& rpData )
+void XclExpChTrCellContent::MakeEmptyChTrData( std::unique_ptr<XclExpChTrData>& rpData )
 {
     if( rpData )
         rpData->Clear();
     else
-        rpData = new XclExpChTrData;
+        rpData.reset( new XclExpChTrData );
 }
 
 void XclExpChTrCellContent::GetCellData(
     const XclExpRoot& rRoot, const ScCellValue& rScCell,
-    XclExpChTrData*& rpData, sal_uInt32& rXclLength1, sal_uInt16& rXclLength2 )
+    std::unique_ptr<XclExpChTrData>& rpData, sal_uInt32& rXclLength1, sal_uInt16& rXclLength2 )
 {
     MakeEmptyChTrData( rpData );
     rXclLength1 = 0x0000003A;
@@ -860,8 +860,7 @@ void XclExpChTrCellContent::GetCellData(
 
     if (rScCell.isEmpty())
     {
-        delete rpData;
-        rpData = nullptr;
+        rpData.reset();
         return;
     }
 
@@ -1069,7 +1068,7 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
             FSEND );
     if( pOldData )
     {
-        lcl_WriteCell( rRevisionLogStrm, XML_oc, aPosition, pOldData );
+        lcl_WriteCell( rRevisionLogStrm, XML_oc, aPosition, pOldData.get() );
         if (!pNewData)
         {
             pStream->singleElement(XML_nc,
@@ -1079,7 +1078,7 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     }
     if( pNewData )
     {
-        lcl_WriteCell( rRevisionLogStrm, XML_nc, aPosition, pNewData );
+        lcl_WriteCell( rRevisionLogStrm, XML_nc, aPosition, pNewData.get() );
     }
     // OOXTODO: XML_odxf, XML_ndxf, XML_extLst elements
     pStream->endElement( XML_rcc );
