@@ -926,7 +926,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
 
     SdPage* pPageToRename = nullptr;
 
-    ::svl::IUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
+    SfxUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
 
     if( mrSlideSorter.GetModel().GetEditMode() == EditMode::Page )
     {

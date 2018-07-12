@@ -179,7 +179,7 @@ public:
     explicit        ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT );
                     virtual ~ScDocShell() override;
 
-    virtual ::svl::IUndoManager*
+    virtual SfxUndoManager*
                     GetUndoManager() override;
 
     virtual void    FillClass( SvGlobalName * pClassName,

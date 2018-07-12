@@ -91,8 +91,7 @@ public:
 
     virtual ::tools::Rectangle       GetVisArea(sal_uInt16 nAspect) const override;
     virtual void            Draw(OutputDevice*, const JobSetup& rSetup, sal_uInt16 nAspect) override;
-    virtual ::svl::IUndoManager*
-                            GetUndoManager() override;
+    virtual SfxUndoManager* GetUndoManager() override;
     virtual Printer*        GetDocumentPrinter() override;
     virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter) override;
     virtual SfxStyleSheetBasePool* GetStyleSheetPool() override;

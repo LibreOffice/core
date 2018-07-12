@@ -1131,7 +1131,7 @@ bool DialogWindow::IsModified()
     return m_pEditor->IsModified();
 }
 
-::svl::IUndoManager* DialogWindow::GetUndoManager()
+SfxUndoManager* DialogWindow::GetUndoManager()
 {
     return m_pUndoMgr.get();
 }

@@ -853,7 +853,7 @@ void ScDrawView::DeleteMarked()
     {
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : nullptr;
-        ::svl::IUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : nullptr;
+        SfxUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : nullptr;
         bool bUndo = pDrawLayer && pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now

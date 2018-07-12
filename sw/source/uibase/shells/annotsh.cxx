@@ -160,7 +160,7 @@ SwAnnotationShell::~SwAnnotationShell()
 {
 }
 
-::svl::IUndoManager* SwAnnotationShell::GetUndoManager()
+SfxUndoManager* SwAnnotationShell::GetUndoManager()
 {
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr ||
@@ -1477,7 +1477,7 @@ void SwAnnotationShell::ExecRotateTransliteration( SfxRequest const & rReq )
 void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    ::svl::IUndoManager* pUndoManager = GetUndoManager();
+    SfxUndoManager* pUndoManager = GetUndoManager();
     SwWrtShell &rSh = rView.GetWrtShell();
     SwUndoId nUndoId(SwUndoId::EMPTY);
 
@@ -1570,7 +1570,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
     SwUndoId nUndoId(SwUndoId::EMPTY);
     sal_uInt16 nWhich = aIter.FirstWhich();
-    ::svl::IUndoManager* pUndoManager = GetUndoManager();
+    SfxUndoManager* pUndoManager = GetUndoManager();
     SfxViewFrame *pSfxViewFrame = rView.GetViewFrame();
     SwWrtShell &rSh = rView.GetWrtShell();
 
@@ -1617,25 +1617,25 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
             {
                 if( pUndoManager )
                 {
-                    OUString (::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
+                    OUString (SfxUndoManager:: *fnGetComment)( size_t, bool const ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
                     {
                         nCount = pUndoManager->GetUndoActionCount();
-                        fnGetComment = &::svl::IUndoManager::GetUndoActionComment;
+                        fnGetComment = &SfxUndoManager::GetUndoActionComment;
                     }
                     else
                     {
                         nCount = pUndoManager->GetRedoActionCount();
-                        fnGetComment = &::svl::IUndoManager::GetRedoActionComment;
+                        fnGetComment = &SfxUndoManager::GetRedoActionComment;
                     }
 
                     OUString sList;
                     if( nCount )
                     {
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            sList += (pUndoManager->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) + "\n";
+                            sList += (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) + "\n";
                     }
 
                     SfxStringListItem aItem( nWhich );

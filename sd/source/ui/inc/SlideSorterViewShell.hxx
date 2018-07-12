@@ -199,7 +199,7 @@ protected:
     /** Override this method to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
     */
-    virtual ::svl::IUndoManager* ImpGetUndoManager() const override;
+    virtual SfxUndoManager* ImpGetUndoManager() const override;
 
 private:
     std::shared_ptr<SlideSorter> mpSlideSorter;

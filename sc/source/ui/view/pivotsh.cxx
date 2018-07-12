@@ -55,7 +55,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
 {
     SetPool( &pViewSh->GetPool() );
     ScViewData& rViewData = pViewSh->GetViewData();
-    ::svl::IUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !rViewData.GetDocument()->IsUndoEnabled() )
     {

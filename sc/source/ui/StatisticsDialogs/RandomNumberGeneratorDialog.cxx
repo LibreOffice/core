@@ -288,7 +288,7 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const 
     aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);
 
     ScDocShell* pDocShell = mpViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
+    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo, 0, mpViewData->GetViewShell()->GetViewShellId() );
 
     SCROW nRowStart = maInputRange.aStart.Row();

@@ -271,7 +271,7 @@ void SdPage::EnsureMasterPageDefaultBackground()
 */
 SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect )
 {
-    ::svl::IUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
+    SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     SdrObject* pSdrObj = nullptr;
@@ -733,7 +733,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const ::tools
                     {
                         if( pObj->GetUserCall() )
                         {
-                            ::svl::IUndoManager* pUndoManager = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager();
+                            SfxUndoManager* pUndoManager = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager();
                             const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
                             if( bUndo )
@@ -781,7 +781,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const ::tools
 
 void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
 {
-    ::svl::IUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
+    SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     SdPage* pMasterPage = this;
@@ -1601,7 +1601,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
 
     const bool bSwitchLayout = eLayout != GetAutoLayout();
 
-    ::svl::IUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
+    SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     meAutoLayout = eLayout;
@@ -2080,7 +2080,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
     if( !pSourceObj )
         return pSourceObj;
 
-    ::svl::IUndoManager* pUndoManager = rModel.GetUndoManager();
+    SfxUndoManager* pUndoManager = rModel.GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && rPage.IsInserted();
 
     SdrObject* pNewObj = pSourceObj;
@@ -2218,7 +2218,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
 */
 SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit)
 {
-    ::svl::IUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
+    SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     if (!pObj && bInit)

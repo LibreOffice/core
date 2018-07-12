@@ -82,7 +82,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         SdrLayerID nBgObj = rLayerAdmin.GetLayerID( SdResId(STR_LAYER_BCKGRNDOBJ) );
         SdrLayerIDSet aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
-        ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
+        SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
             GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
             aVisibleLayers.IsSet( nBackground ),

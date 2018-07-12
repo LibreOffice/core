@@ -285,7 +285,7 @@ void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()
 {
     OUString aUndo(ScResId(GetUndoNameId()));
     ScDocShell* pDocShell = mViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
+    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData->GetViewShell()->GetViewShellId() );
 
     ScRange aOutputRange = ApplyOutput(pDocShell);

@@ -162,7 +162,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         SdPage* pUndoPage =
             bHandoutMode ? pHandoutMPage : pCurrentPage;
 
-        ::svl::IUndoManager* pUndoManager = mrViewShell.GetDocSh()->GetUndoManager();
+        SfxUndoManager* pUndoManager = mrViewShell.GetDocSh()->GetUndoManager();
         DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
 
         if( pUndoManager )

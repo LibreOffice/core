@@ -2924,7 +2924,7 @@ ScDocShell::~ScDocShell()
     }
 }
 
-::svl::IUndoManager* ScDocShell::GetUndoManager()
+SfxUndoManager* ScDocShell::GetUndoManager()
 {
     return m_aDocument.GetUndoManager();
 }

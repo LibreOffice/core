@@ -1110,7 +1110,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             }
             case SID_DOC_REPAIR:
             {
-                svl::IUndoManager* pIUndoMgr = GetUndoManager();
+                SfxUndoManager* pIUndoMgr = GetUndoManager();
                 if (pIUndoMgr)
                     rSet.Put( SfxBoolItem(nWhich, pIUndoMgr->IsEmptyActions()) );
                 else

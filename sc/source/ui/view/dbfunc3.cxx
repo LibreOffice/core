@@ -2069,7 +2069,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     pInsDoc->GetCellArea( nNewTab, nEndCol, nEndRow );
     pInsDoc->SetClipArea( ScRange( 0, 0, nNewTab, nEndCol, nEndRow, nNewTab ) );
 
-    ::svl::IUndoManager* pMgr = GetViewData().GetDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = GetViewData().GetDocShell()->GetUndoManager();
     OUString aUndo = ScResId( STR_UNDO_DOOUTLINE );
     pMgr->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
 

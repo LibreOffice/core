@@ -67,7 +67,7 @@ namespace chart
 
             ::osl::Mutex&                       getMutex();
             // IUndoManagerImplementation
-            virtual ::svl::IUndoManager&        getImplUndoManager() override;
+            virtual SfxUndoManager&             getImplUndoManager() override;
             virtual Reference< XUndoManager >   getThis() override;
 
             // attribute access
@@ -97,7 +97,7 @@ namespace chart
             return m_rMutex;
         }
 
-        ::svl::IUndoManager& UndoManager_Impl::getImplUndoManager()
+        SfxUndoManager& UndoManager_Impl::getImplUndoManager()
         {
             return m_aUndoManager;
         }

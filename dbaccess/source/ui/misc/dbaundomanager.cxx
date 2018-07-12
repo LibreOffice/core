@@ -69,11 +69,11 @@ namespace dbaui
         ::framework::UndoManagerHelper  aUndoHelper;
 
         // IUndoManagerImplementation
-        virtual ::svl::IUndoManager&        getImplUndoManager() override;
+        virtual SfxUndoManager&             getImplUndoManager() override;
         virtual Reference< XUndoManager >   getThis() override;
     };
 
-    ::svl::IUndoManager& UndoManager_Impl::getImplUndoManager()
+    SfxUndoManager& UndoManager_Impl::getImplUndoManager()
     {
         return aUndoManager;
     }

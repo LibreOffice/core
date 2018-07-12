@@ -898,7 +898,7 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
 {
     // Is there an Undo-Manager on the top Shell?
     SfxShell *pSh = GetDispatcher()->GetShell(0);
-    ::svl::IUndoManager* pShUndoMgr = pSh->GetUndoManager();
+    SfxUndoManager* pShUndoMgr = pSh->GetUndoManager();
     bool bOK = false;
     if ( pShUndoMgr )
     {
@@ -948,7 +948,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         // I'm just on reload and am yielding myself ...
         return;
 
-    ::svl::IUndoManager *pShUndoMgr = pSh->GetUndoManager();
+    SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
     if ( !pShUndoMgr )
     {
         // The SW has its own undo in the View

@@ -72,7 +72,7 @@ void FuText::StopEditMode()
     }
 
     ScDocShell* pDocShell = rViewData.GetDocShell();
-    ::svl::IUndoManager* pUndoMgr = rDoc.IsUndoEnabled() ? pDocShell->GetUndoManager() : nullptr;
+    SfxUndoManager* pUndoMgr = rDoc.IsUndoEnabled() ? pDocShell->GetUndoManager() : nullptr;
     bool bNewNote = false;
     if( pNote && pUndoMgr )
     {

@@ -1151,12 +1151,12 @@ void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
-::svl::IUndoManager& Outliner::GetUndoManager()
+SfxUndoManager& Outliner::GetUndoManager()
 {
     return pEditEngine->GetUndoManager();
 }
 
-::svl::IUndoManager* Outliner::SetUndoManager(::svl::IUndoManager* pNew)
+SfxUndoManager* Outliner::SetUndoManager(SfxUndoManager* pNew)
 {
     return pEditEngine->SetUndoManager(pNew);
 }

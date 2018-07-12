@@ -239,7 +239,7 @@ void lcl_CreateUndoForPages(
     ::sd::DrawDocShell* pDocSh      = rBase.GetDocShell();
     if (!pDocSh)
         return;
-    ::svl::IUndoManager* pManager   = pDocSh->GetUndoManager();
+    SfxUndoManager* pManager   = pDocSh->GetUndoManager();
     if (!pManager)
         return;
     SdDrawDocument* pDoc            = pDocSh->GetDoc();

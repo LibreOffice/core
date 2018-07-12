@@ -478,7 +478,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
     // Get the necessary presentation stylesheets and transfer them before
     // the pages, else, the text objects won't reference their styles anymore.
-    ::svl::IUndoManager* pUndoMgr = nullptr;
+    SfxUndoManager* pUndoMgr = nullptr;
     if( mpDocSh )
     {
         pUndoMgr = mpDocSh->GetUndoManager();
@@ -1183,7 +1183,7 @@ SdCustomShowList* SdDrawDocument::GetCustomShowList(bool bCreate)
 void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnlyDuplicatePages, bool bUndo)
 {
     ::sd::View* pView = nullptr;
-    ::svl::IUndoManager* pUndoMgr = nullptr;
+    SfxUndoManager* pUndoMgr = nullptr;
 
     if( bUndo && !IsUndoEnabled() )
         bUndo = false;
@@ -1397,7 +1397,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                                    bool bMaster,
                                    bool bCheckMasters)
 {
-    ::svl::IUndoManager* pUndoMgr = nullptr;
+    SfxUndoManager* pUndoMgr = nullptr;
 
     if( mpDocSh )
     {

@@ -102,7 +102,7 @@ protected:
     rtl::Reference< sdr::SelectionController > mxLastSelectionController;
 
 private:
-    ::svl::IUndoManager* mpOldTextEditUndoManager;
+    SfxUndoManager* mpOldTextEditUndoManager;
 
     SVX_DLLPRIVATE void ImpClearVars();
 

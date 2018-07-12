@@ -57,11 +57,7 @@ class SbxVariable;
 class SbxBase;
 class SfxBindings;
 class SfxModule;
-
-namespace svl
-{
-    class IUndoManager;
-}
+class SfxUndoManager;
 
 /**
     Id for <SfxInterface>s, gives a quasi-static access to the interface
@@ -143,7 +139,7 @@ class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 
     std::unique_ptr< SfxShell_Impl >              pImpl;
     SfxItemPool*                pPool;
-    ::svl::IUndoManager*        pUndoMgr;
+    SfxUndoManager*             pUndoMgr;
 
 private:
                                 SfxShell( const SfxShell & ) = delete;
@@ -298,7 +294,7 @@ public:
         The class SfxShell itself does not have a SfxUndoManager, a NULL-pointer
         is therefore returned.
         */
-    virtual ::svl::IUndoManager* GetUndoManager();
+    virtual SfxUndoManager*     GetUndoManager();
 
     /**
         Sets a <SfxUndoManager> for this <SfxShell> Instance. For the undo
@@ -311,7 +307,7 @@ public:
         'pNewUndoMgr' must exist until the Destructor of SfxShell instance is called
         or until the next 'SetUndoManager()'.
         */
-    void                        SetUndoManager( ::svl::IUndoManager *pNewUndoMgr );
+    void                        SetUndoManager( SfxUndoManager *pNewUndoMgr );
 
     /**
         Returns a pointer to the <SfxRepeatTarget> instance that is used in

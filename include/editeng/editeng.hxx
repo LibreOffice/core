@@ -62,7 +62,7 @@ struct SpellPortion;
 typedef std::vector<SpellPortion> SpellPortions;
 }
 
-namespace svl { class IUndoManager; }
+class SfxUndoManager;
 namespace basegfx { class B2DPolyPolygon; }
 namespace editeng {
     struct MisspellRanges;
@@ -337,8 +337,8 @@ public:
 
     void            ShowParagraph( sal_Int32 nParagraph, bool bShow );
 
-    ::svl::IUndoManager& GetUndoManager();
-    ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
+    SfxUndoManager& GetUndoManager();
+    SfxUndoManager* SetUndoManager(SfxUndoManager* pNew);
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionStart(sal_uInt16 nId, const ESelection& rSel);
     void            UndoActionEnd();

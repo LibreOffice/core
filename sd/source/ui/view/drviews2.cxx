@@ -566,7 +566,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
     {
         case SID_OUTLINE_TEXT_AUTOFIT:
         {
-            ::svl::IUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+            SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
@@ -2027,7 +2027,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 break;
             }
 
-            ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
+            SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
             SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
                 GetDoc(),
                 pLayer,

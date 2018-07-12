@@ -81,7 +81,7 @@ public:
     size_t GetRedoActionCount(const bool bCurrentLevel = true) const override;
     void SetView(SwView* pView) override;
 
-    // ::svl::IUndoManager
+    // SfxUndoManager
     virtual void AddUndoAction(SfxUndoAction *pAction,
                                    bool bTryMerg = false) override;
     virtual bool Undo() override;
