@@ -79,6 +79,8 @@
 #include <sfx2/request.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 using namespace com::sun::star;
 
@@ -262,6 +264,22 @@ void DrawViewShell::SelectionHasChanged()
     GetViewShellBase().GetDrawController().FireSelectionChangeListener();
 }
 
+namespace {
+
+void collectUIInformation(const OUString& aZoom)
+{
+    EventDescription aDescription;
+    aDescription.aID = "impress_win";
+    aDescription.aParameters = {{"ZOOM", aZoom}};
+    aDescription.aAction = "SET";
+    aDescription.aKeyWord = "ImpressWindowUIObject";
+    aDescription.aParent = "MainWindow";
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
+
 /**
  * set zoom factor
  */
@@ -274,6 +292,7 @@ void DrawViewShell::SetZoom( long nZoom )
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
     mpViewOverlayManager->onZoomChanged();
+    collectUIInformation(OUString::number(nZoom));
 }
 
 /**

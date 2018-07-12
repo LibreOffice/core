@@ -14,6 +14,7 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 #include <svdata.hxx>
 
 #include <memory>
@@ -35,12 +36,53 @@ UITestLogger::UITestLogger():
     }
 }
 
-void UITestLogger::logCommand(const OUString& rAction)
+void UITestLogger::logCommand(const OUString& rAction, const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     if (!mbValid)
         return;
 
-    maStream.WriteLine(OUStringToOString(rAction, RTL_TEXTENCODING_UTF8));
+    OUStringBuffer aBuffer(rAction);
+    sal_Int32 nCount = rArgs.getLength();
+
+    if (nCount > 0)
+    {
+        aBuffer.append(" {");
+        for (sal_Int32 n = 0; n < nCount; n++)
+        {
+            const css::beans::PropertyValue& rProp = rArgs[n];
+
+            OUString aTypeName = rProp.Value.getValueTypeName();
+
+            if (aTypeName == "long" || aTypeName == "short")
+            {
+                sal_Int32 nValue = 0;
+                rProp.Value >>= nValue;
+                aBuffer.append("\"" + rProp.Name + "\": ");
+                aBuffer.append(OUString::number(nValue) + ", ");
+            }
+            else if (aTypeName == "unsigned long")
+            {
+                sal_uInt32 nValue = 0;
+                rProp.Value >>= nValue;
+                aBuffer.append("\"" + rProp.Name + "\": ");
+                aBuffer.append(OUString::number(nValue) + ", ");
+            }
+            else if (aTypeName == "boolean")
+            {
+                bool bValue = false;
+                rProp.Value >>= bValue;
+                aBuffer.append("\"" + rProp.Name + "\": ");
+                if (bValue)
+                    aBuffer.append("True, ");
+                else
+                    aBuffer.append("False, ");
+            }
+        }
+        aBuffer.append("}");
+    }
+
+    OUString aCommand(aBuffer.makeStringAndClear());
+    maStream.WriteLine(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8));
 }
 
 namespace {
@@ -173,6 +215,41 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
             rID + " Parent:"+ aParentID +" " + aKeyCode;
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
+}
+
+namespace {
+
+OUString StringMapToOUString(const std::map<OUString, OUString>& rParameters)
+{
+    if (rParameters.empty())
+        return OUString("");
+
+    OUStringBuffer aParameterString = " {";
+
+    for (std::map<OUString, OUString>::const_iterator itr = rParameters.begin();
+        itr != rParameters.end(); ++itr)
+    {
+        if (itr != rParameters.begin())
+            aParameterString.append(", ");
+        aParameterString.append("\"" + itr->first + "\": \"" + itr->second + "\"");
+    }
+
+    aParameterString.append("}");
+
+    return aParameterString.makeStringAndClear();
+}
+
+}
+
+void UITestLogger::logEvent(const EventDescription& rDescription)
+{
+    OUString aParameterString = StringMapToOUString(rDescription.aParameters);
+
+    OUString aLogLine = rDescription.aKeyWord + " Action:" +
+        rDescription.aAction + " Id:" + rDescription.aID +
+        " Parent:" + rDescription.aParent + aParameterString;
+
+    log(aLogLine);
 }
 
 UITestLogger& UITestLogger::getInstance()
