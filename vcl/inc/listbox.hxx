@@ -93,6 +93,8 @@ private:
         return maEntries[nPos].get();
     }
 
+    sal_Int32 NaturalSortCompareExtend(const OUString &rA, const OUString &rB);
+
 public:
                     ImplEntryList( vcl::Window* pWindow );
                     ~ImplEntryList();
