@@ -44,7 +44,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveContent
     std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
     boost::optional<OUString> maText;
     boost::optional<OUString> maUndoText;
-    SwRedlineData* pRedlData;
+    std::unique_ptr<SwRedlineData> pRedlData;
     sal_uLong nNode;
     sal_Int32 nContent, nLen;
     bool bIsWordDelim : 1;
