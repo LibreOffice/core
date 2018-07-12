@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_16ab9e1d",
+        "filename": "vcl/source/control/ctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-12T09:43:31Z",
+      "side": 1,
+      "message": "Noel, do you have an opinion on this? VclPtr, isDisposed() usage.",
+      "revId": "1cacdad4db1de08a3bd6bf229bd8592c4d18d657",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
