@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hsqldb,\
 	external/hsqldb/patches/i104901.patch \
 	external/hsqldb/patches/fdo36824.patch \
 	external/hsqldb/patches/limit_as_table_alias.patch \
+	external/hsqldb/patches/hsqldb-runFinalizersOnExit.patch \
 	$(if $(HSQLDB_USE_JDBC_4_1),\
 		external/hsqldb/patches/jdbc-4.1.patch \
 		external/hsqldb/patches/multipleResultSets.patch \
