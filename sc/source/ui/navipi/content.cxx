@@ -438,7 +438,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
         ScNavigatorDlg::ReleaseFocus();     // set focus into document
     }
 
-    return false;
+    return true;
 }
 
 void ScContentTree::MouseButtonDown( const MouseEvent& rMEvt )
