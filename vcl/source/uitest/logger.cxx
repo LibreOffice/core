@@ -35,12 +35,30 @@ UITestLogger::UITestLogger():
     }
 }
 
-void UITestLogger::logCommand(const OUString& rAction)
+void UITestLogger::logCommand(const OUString& rAction, const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     if (!mbValid)
         return;
 
-    maStream.WriteLine(OUStringToOString(rAction, RTL_TEXTENCODING_UTF8));
+    OUStringBuffer aBuffer(rAction);
+    sal_Int32 nCount = rArgs.getLength();
+
+    if (nCount > 0)
+    {
+        aBuffer.append(" {");
+        for (sal_Int32 n = 0; n < nCount; n++)
+        {
+            const css::beans::PropertyValue& rProp = rArgs[n];
+            if (n > 0)
+                aBuffer.append(", ");
+            aBuffer.append(rProp.Name);
+            //TODO : how to convert rProp.Value from Any to OUString?
+        }
+        aBuffer.append("}");
+    }
+
+    OUString aCommand(aBuffer.makeStringAndClear());
+    maStream.WriteLine(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8));
 }
 
 namespace {
@@ -164,6 +182,49 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
             rID + " Parent:"+ parent_id +" " + aKeyCode;
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
+}
+
+namespace {
+
+OUString StringMapToOUString(const StringMap& rParameters)
+{
+    if (rParameters.empty())
+        return OUString("");
+
+    OUString aParameterString = "{";
+
+    for (StringMap::const_iterator itr = rParameters.begin(); itr != rParameters.end(); ++itr)
+    {
+        if (itr != rParameters.begin())
+            aParameterString += ", ";
+        aParameterString += "\"" + itr->first + "\": \"" + itr->second + "\"";
+    }
+
+    aParameterString += "}";
+
+    return aParameterString;
+}
+
+}
+
+void UITestLogger::logSwEditWinEvent(const OUString& rAction, const StringMap& rParameters)
+{
+    OUString aParameterString = StringMapToOUString(rParameters);
+
+    OUString aLogLine = "SwEditWinUIObject Action:" + rAction +
+        " Id:writer_edit Parent:MainWindow " + aParameterString;
+
+    UITestLogger::log(aLogLine);
+}
+
+void UITestLogger::logScGridWinEvent(const OUString& rAction, const StringMap& rParameters)
+{
+    OUString aParameterString = StringMapToOUString(rParameters);
+
+    OUString aLogLine = "ScGridWinUIObject Action:" + rAction +
+        " Id:grid_window Parent:MainWindow " + aParameterString;
+
+    UITestLogger::log(aLogLine);
 }
 
 UITestLogger& UITestLogger::getInstance()

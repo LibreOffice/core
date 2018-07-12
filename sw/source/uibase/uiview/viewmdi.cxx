@@ -53,6 +53,8 @@
 
 #include <svx/srchdlg.hxx>
 
+#include <vcl/uitest/logger.hxx>
+
 sal_uInt16  SwView::m_nMoveType = NID_PGE;
 sal_Int32 SwView::m_nActMark = 0;
 
@@ -65,6 +67,9 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
     // fdo#40465 force the cursor to stay in view whilst zooming
     if (bCursorIsVisible)
         m_pWrtShell->ShowCursor();
+
+    StringMap aLogParameters = {{"ZOOM", OUString::number(nFactor)}};
+    UITestLogger::getInstance().logSwEditWinEvent("SET", aLogParameters);
 }
 
 void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
