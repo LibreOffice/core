@@ -172,7 +172,8 @@ namespace sc {
 
 ColumnIterator::ColumnIterator( const CellStoreType& rCells, SCROW nRow1, SCROW nRow2 ) :
     maPos(rCells.position(nRow1)),
-    maPosEnd(rCells.position(maPos.first, nRow2+1))
+    maPosEnd(rCells.position(maPos.first, nRow2)),
+    mbComplete(false)
 {
 }
 
@@ -180,7 +181,10 @@ ColumnIterator::~ColumnIterator() {}
 
 void ColumnIterator::next()
 {
-    maPos = CellStoreType::next_position(maPos);
+    if ( maPos == maPosEnd)
+        mbComplete = true;
+    else
+        maPos = CellStoreType::next_position(maPos);
 }
 
 SCROW ColumnIterator::getRow() const
@@ -190,7 +194,7 @@ SCROW ColumnIterator::getRow() const
 
 bool ColumnIterator::hasCell() const
 {
-    return maPos != maPosEnd;
+    return !mbComplete;
 }
 
 mdds::mtv::element_t ColumnIterator::getType() const
