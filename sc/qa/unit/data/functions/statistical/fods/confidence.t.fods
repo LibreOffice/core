@@ -3016,12 +3016,12 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=COM.MICROSOFT.CONFIDENCE.T(0.05;1.5;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:523</text:p>
+      <text:p>#DIV/0!</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Err:523</text:p>
+     <table:table-cell table:formula="of:#DIV/0!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#DIV/0!</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A10])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=ERROR.TYPE([.A10])=2" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce30" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=CONFIDENCE.T(0.05,1.5,1)" calcext:value-type="string">
