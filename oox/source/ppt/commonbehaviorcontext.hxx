@@ -31,7 +31,7 @@ namespace oox { namespace ppt {
     struct Attribute
     {
         OUString   name;
-        MS_AttributeNames type;
+        AnimationAttributeEnum type;
     };
 
     /** CT_TLCommonBehaviorData */

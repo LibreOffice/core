@@ -50,29 +50,29 @@ namespace oox { namespace ppt {
     {
         static const ImplAttributeNameConversion aList[] =
         {
-            { MS_PPT_X,             "ppt_x",                        "X" },
-            { MS_PPT_Y,             "ppt_y",                        "Y" },
-            { MS_PPT_W,             "ppt_w",                        "Width" },
-            { MS_PPT_H,             "ppt_h",                        "Height" },
-            { MS_PPT_C,             "ppt_c",                        "DimColor" },
-            { MS_R,                 "r",                            "Rotate" },
-            { MS_XSHEAR,            "xshear",                       "SkewX" },
-            { MS_FILLCOLOR,         "fillColor",                    "FillColor" },
-            { MS_FILLCOLOR,         "fillcolor",                    "FillColor" },
-            { MS_FILLTYPE,          "fill.type",                    "FillStyle" },
-            { MS_FILLTYPE,          "fill.on",                      "FillOn" },
-            { MS_STROKECOLOR,       "stroke.color",                 "LineColor" },
-            { MS_STROKEON,          "stroke.on",                    "LineStyle" },
-            { MS_STYLECOLOR,        "style.color",                  "CharColor" },
-            { MS_STYLEROTATION,     "style.rotation",               "Rotate" },
-            { MS_FONTWEIGHT,        "style.fontWeight",             "CharWeight" },
-            { MS_STYLEUNDERLINE,    "style.textDecorationUnderline","CharUnderline" },
-            { MS_STYLEFONTFAMILY,   "style.fontFamily",             "CharFontName" },
-            { MS_STYLEFONTSIZE,     "style.fontSize",               "CharHeight" },
-            { MS_STYLEFONTSTYLE,    "style.fontStyle",              "CharPosture" },
-            { MS_STYLEVISIBILITY,   "style.visibility",             "Visibility" },
-            { MS_STYLEOPACITY,      "style.opacity",                "Opacity" },
-            { MS_UNKNOWN, nullptr, nullptr }
+            { AnimationAttributeEnum::PPT_X,             "ppt_x",                        "X" },
+            { AnimationAttributeEnum::PPT_Y,             "ppt_y",                        "Y" },
+            { AnimationAttributeEnum::PPT_W,             "ppt_w",                        "Width" },
+            { AnimationAttributeEnum::PPT_H,             "ppt_h",                        "Height" },
+            { AnimationAttributeEnum::PPT_C,             "ppt_c",                        "DimColor" },
+            { AnimationAttributeEnum::R,                 "r",                            "Rotate" },
+            { AnimationAttributeEnum::XSHEAR,            "xshear",                       "SkewX" },
+            { AnimationAttributeEnum::FILLCOLOR,         "fillColor",                    "FillColor" },
+            { AnimationAttributeEnum::FILLCOLOR,         "fillcolor",                    "FillColor" },
+            { AnimationAttributeEnum::FILLTYPE,          "fill.type",                    "FillStyle" },
+            { AnimationAttributeEnum::FILLTYPE,          "fill.on",                      "FillOn" },
+            { AnimationAttributeEnum::STROKECOLOR,       "stroke.color",                 "LineColor" },
+            { AnimationAttributeEnum::STROKEON,          "stroke.on",                    "LineStyle" },
+            { AnimationAttributeEnum::STYLECOLOR,        "style.color",                  "CharColor" },
+            { AnimationAttributeEnum::STYLEROTATION,     "style.rotation",               "Rotate" },
+            { AnimationAttributeEnum::FONTWEIGHT,        "style.fontWeight",             "CharWeight" },
+            { AnimationAttributeEnum::STYLEUNDERLINE,    "style.textDecorationUnderline","CharUnderline" },
+            { AnimationAttributeEnum::STYLEFONTFAMILY,   "style.fontFamily",             "CharFontName" },
+            { AnimationAttributeEnum::STYLEFONTSIZE,     "style.fontSize",               "CharHeight" },
+            { AnimationAttributeEnum::STYLEFONTSTYLE,    "style.fontStyle",              "CharPosture" },
+            { AnimationAttributeEnum::STYLEVISIBILITY,   "style.visibility",             "Visibility" },
+            { AnimationAttributeEnum::STYLEOPACITY,      "style.opacity",                "Opacity" },
+            { AnimationAttributeEnum::UNKNOWN, nullptr, nullptr }
         };
 
         return aList;
@@ -182,16 +182,16 @@ namespace oox { namespace ppt {
         return bRet;
     }
 
-    bool convertAnimationValue(MS_AttributeNames eAttribute, css::uno::Any& rValue)
+    bool convertAnimationValue(AnimationAttributeEnum eAttribute, css::uno::Any& rValue)
     {
         using css::animations::ValuePair;
         bool bRet = false;
         switch (eAttribute)
         {
-            case MS_PPT_X:
-            case MS_PPT_Y:
-            case MS_PPT_W:
-            case MS_PPT_H:
+            case AnimationAttributeEnum::PPT_X:
+            case AnimationAttributeEnum::PPT_Y:
+            case AnimationAttributeEnum::PPT_W:
+            case AnimationAttributeEnum::PPT_H:
             {
                 OUString aString;
 
@@ -232,8 +232,8 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_XSHEAR:
-            case MS_R:
+            case AnimationAttributeEnum::XSHEAR:
+            case AnimationAttributeEnum::R:
             {
                 OUString aString;
                 if (rValue >>= aString)
@@ -244,7 +244,7 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_STYLEROTATION:
+            case AnimationAttributeEnum::STYLEROTATION:
             {
                 if (rValue.getValueType() == cppu::UnoType<OUString>::get())
                 {
@@ -263,10 +263,10 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_FILLCOLOR:
-            case MS_STROKECOLOR:
-            case MS_STYLECOLOR:
-            case MS_PPT_C:
+            case AnimationAttributeEnum::FILLCOLOR:
+            case AnimationAttributeEnum::STROKECOLOR:
+            case AnimationAttributeEnum::STYLECOLOR:
+            case AnimationAttributeEnum::PPT_C:
             {
                 OUString aString;
                 if (rValue >>= aString)
@@ -314,7 +314,7 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_FILLTYPE:
+            case AnimationAttributeEnum::FILLTYPE:
             {
                 OUString aString;
                 if (rValue >>= aString)
@@ -326,7 +326,7 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_STROKEON:
+            case AnimationAttributeEnum::STROKEON:
             {
                 OUString aString;
                 if (rValue >>= aString)
@@ -338,7 +338,7 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_FONTWEIGHT:
+            case AnimationAttributeEnum::FONTWEIGHT:
             {
                 OUString aString;
                 if (rValue >>= aString)
@@ -350,7 +350,7 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_STYLEFONTSTYLE:
+            case AnimationAttributeEnum::STYLEFONTSTYLE:
             {
                 OUString aString;
                 if (rValue >>= aString)
@@ -362,7 +362,7 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_STYLEUNDERLINE:
+            case AnimationAttributeEnum::STYLEUNDERLINE:
             {
                 OUString aString;
                 if (rValue >>= aString)
@@ -374,8 +374,8 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_STYLEOPACITY:
-            case MS_STYLEFONTSIZE:
+            case AnimationAttributeEnum::STYLEOPACITY:
+            case AnimationAttributeEnum::STYLEFONTSIZE:
             {
                 OUString aString;
                 if (rValue >>= aString)
@@ -386,7 +386,7 @@ namespace oox { namespace ppt {
             }
             break;
 
-            case MS_STYLEVISIBILITY:
+            case AnimationAttributeEnum::STYLEVISIBILITY:
             {
                 OUString aString;
                 if (rValue >>= aString)

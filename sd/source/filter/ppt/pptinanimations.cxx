@@ -481,7 +481,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
 
     const oox::ppt::ImplAttributeNameConversion* p = oox::ppt::getAttributeConversionList();
 
-    oox::ppt::MS_AttributeNames eAttribute = oox::ppt::MS_UNKNOWN;
+    oox::ppt::AnimationAttributeEnum eAttribute = oox::ppt::AnimationAttributeEnum::UNKNOWN;
 
     if( (nNodeType == AnimationNodeType::ANIMATEMOTION) ||
         (nNodeType == AnimationNodeType::ANIMATETRANSFORM) )
@@ -511,7 +511,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
 
     xAnimate->setAttributeName( aAttributeName );
 
-    if( eAttribute != oox::ppt::MS_UNKNOWN )
+    if(eAttribute != oox::ppt::AnimationAttributeEnum::UNKNOWN)
     {
         Any aAny( xAnimate->getFrom() );
         if( aAny.hasValue() )
