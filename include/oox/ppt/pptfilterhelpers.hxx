@@ -33,17 +33,17 @@ namespace com { namespace sun { namespace star {
 namespace oox { namespace ppt {
 
     // conversion of MS to OOo attributes.
-    enum MS_AttributeNames
+    enum class AnimationAttributeEnum
     {
-        MS_PPT_X, MS_PPT_Y, MS_PPT_W, MS_PPT_H, MS_PPT_C, MS_R, MS_XSHEAR, MS_FILLCOLOR, MS_FILLTYPE,
-        MS_STROKECOLOR, MS_STROKEON, MS_STYLECOLOR, MS_STYLEROTATION, MS_FONTWEIGHT,
-        MS_STYLEUNDERLINE, MS_STYLEFONTFAMILY, MS_STYLEFONTSIZE, MS_STYLEFONTSTYLE,
-        MS_STYLEVISIBILITY, MS_STYLEOPACITY, MS_UNKNOWN
+        PPT_X, PPT_Y, PPT_W, PPT_H, PPT_C, R, XSHEAR, FILLCOLOR, FILLTYPE,
+        STROKECOLOR, STROKEON, STYLECOLOR, STYLEROTATION, FONTWEIGHT,
+        STYLEUNDERLINE, STYLEFONTFAMILY, STYLEFONTSIZE, STYLEFONTSTYLE,
+        STYLEVISIBILITY, STYLEOPACITY, UNKNOWN
     };
 
     struct ImplAttributeNameConversion
     {
-        MS_AttributeNames meAttribute;
+        AnimationAttributeEnum meAttribute;
         const char* mpMSName;
         const char* mpAPIName;
     };
@@ -86,7 +86,7 @@ namespace oox { namespace ppt {
 
     /** convert attribute values of the animation target so that LibreOffice understand.
      */
-    OOX_DLLPUBLIC bool convertAnimationValue(MS_AttributeNames eAttribute, css::uno::Any& rValue);
+    OOX_DLLPUBLIC bool convertAnimationValue(AnimationAttributeEnum eAttribute, css::uno::Any& rValue);
 
     /** convert the measure string to LibreOffice format.
      * i.e. convert occurence of #{0,1}ppt_[xywh] to x,y, width, height.
