@@ -47,7 +47,7 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     nFunction( SID_FILL_ADD_PRED )
 {
     SetPool( &pViewData->GetViewShell()->GetPool() );
-    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
     {

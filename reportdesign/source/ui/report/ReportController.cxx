@@ -434,13 +434,13 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                     ( _nId == SID_UNDO ) ? &SfxUndoManager::GetUndoActionCount : &SfxUndoManager::GetRedoActionCount;
 
                 SfxUndoManager& rUndoManager( getUndoManager() );
-                aReturn.bEnabled = ( rUndoManager.*retrieveCount )( ::svl::IUndoManager::TopLevel ) > 0;
+                aReturn.bEnabled = ( rUndoManager.*retrieveCount )( SfxUndoManager::TopLevel ) > 0;
                 if ( aReturn.bEnabled )
                 {
                     // TODO: add "Undo/Redo: prefix"
                     OUString ( SfxUndoManager::*retrieveComment )( size_t, bool const ) const =
                         ( _nId == SID_UNDO ) ? &SfxUndoManager::GetUndoActionComment : &SfxUndoManager::GetRedoActionComment;
-                    aReturn.sTitle = (rUndoManager.*retrieveComment)( 0, ::svl::IUndoManager::TopLevel );
+                    aReturn.sTitle = (rUndoManager.*retrieveComment)( 0, SfxUndoManager::TopLevel );
                 }
             }
             break;

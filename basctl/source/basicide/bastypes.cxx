@@ -196,7 +196,7 @@ bool BaseWindow::IsModified ()
     return true;
 }
 
-::svl::IUndoManager* BaseWindow::GetUndoManager()
+SfxUndoManager* BaseWindow::GetUndoManager()
 {
     return nullptr;
 }

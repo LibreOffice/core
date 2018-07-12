@@ -1277,7 +1277,7 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
     EditView* pTopView = pHdl->GetTopView();
     if (pTopView)
     {
-        ::svl::IUndoManager& rTopMgr = pTopView->GetEditEngine()->GetUndoManager();
+        SfxUndoManager& rTopMgr = pTopView->GetEditEngine()->GetUndoManager();
         if ( rTopMgr.GetUndoActionCount() == 0 )
             rSet.DisableItem( SID_UNDO );
         if ( rTopMgr.GetRedoActionCount() == 0 )

@@ -87,11 +87,8 @@ class OutlinerViewShell;
 enum class CharCompressType;
 enum class TransliterationFlags;
 class SvxFieldData;
+class SfxUndoManager;
 
-namespace svl
-{
-    class IUndoManager;
-}
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
     class XHyphenator;
@@ -881,8 +878,8 @@ public:
 
     ErrCode             Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
-    ::svl::IUndoManager& GetUndoManager();
-    ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
+    SfxUndoManager& GetUndoManager();
+    SfxUndoManager* SetUndoManager(SfxUndoManager* pNew);
 
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );

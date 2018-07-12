@@ -2991,7 +2991,7 @@ static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
     if (!pObjectShell)
         return nullptr;
 
-    svl::IUndoManager* pUndoManager = pObjectShell->GetUndoManager();
+    SfxUndoManager* pUndoManager = pObjectShell->GetUndoManager();
     if (!pUndoManager)
         return nullptr;
 

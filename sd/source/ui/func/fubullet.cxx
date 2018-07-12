@@ -126,7 +126,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
         pOV->InsertText( "" );
 
         // prepare undo
-        ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
+        SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
         rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
                                     "", 0, mpViewShell->GetViewShellBase().GetViewShellId() );
 
@@ -237,7 +237,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
             SfxItemSet aOldSet( mpDoc->GetPool(), svl::Items<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO>{} );
             aOldSet.Put( pOV->GetAttribs() );
 
-            ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
+            SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
             ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
             rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
                                      "", 0, nViewShellId );

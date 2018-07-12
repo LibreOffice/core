@@ -506,7 +506,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                     1 < (nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
                 {
                     // then we make by ourself.
-                    ::svl::IUndoManager* pUndoManager = GetUndoManager();
+                    SfxUndoManager* pUndoManager = GetUndoManager();
                     if( pUndoManager )
                     {
                         if( SID_UNDO == nId )
@@ -547,27 +547,27 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
         case SID_GETUNDOSTRINGS:
         case SID_GETREDOSTRINGS:
             {
-                ::svl::IUndoManager* pUndoManager = GetUndoManager();
+                SfxUndoManager* pUndoManager = GetUndoManager();
                 if( pUndoManager )
                 {
-                    OUString (::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
+                    OUString (SfxUndoManager:: *fnGetComment)( size_t, bool const ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
                     {
                         nCount = pUndoManager->GetUndoActionCount();
-                        fnGetComment = &::svl::IUndoManager::GetUndoActionComment;
+                        fnGetComment = &SfxUndoManager::GetUndoActionComment;
                     }
                     else
                     {
                         nCount = pUndoManager->GetRedoActionCount();
-                        fnGetComment = &::svl::IUndoManager::GetRedoActionComment;
+                        fnGetComment = &SfxUndoManager::GetRedoActionComment;
                     }
                     if( nCount )
                     {
                         OUString sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            sList += (pUndoManager->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) + "\n";
+                            sList += (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) + "\n";
 
                         SfxStringListItem aItem( nWhich );
                         aItem.SetString( sList );
@@ -787,7 +787,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
 }
 
-::svl::IUndoManager* SwDrawTextShell::GetUndoManager()
+SfxUndoManager* SwDrawTextShell::GetUndoManager()
 {
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();

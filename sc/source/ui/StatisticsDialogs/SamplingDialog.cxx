@@ -269,7 +269,7 @@ void ScSamplingDialog::PerformSampling()
 {
     OUString aUndo(ScResId(STR_SAMPLING_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
+    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
 
     ScRange aModifiedRange;
 

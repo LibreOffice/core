@@ -1297,7 +1297,7 @@ void TextEngine::EnableUndo( bool bEnable )
     mbUndoEnabled = bEnable;
 }
 
-::svl::IUndoManager& TextEngine::GetUndoManager()
+SfxUndoManager& TextEngine::GetUndoManager()
 {
     if ( !mpUndoManager )
         mpUndoManager.reset( new TextUndoManager( this ) );

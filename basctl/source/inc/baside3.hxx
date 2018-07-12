@@ -103,7 +103,7 @@ public:
     virtual bool        IsModified() override;
     bool                IsPasteAllowed();
 
-    virtual svl::IUndoManager* GetUndoManager() override;
+    virtual SfxUndoManager* GetUndoManager() override;
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter ) override;
     // print page

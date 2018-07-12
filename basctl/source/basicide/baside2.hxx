@@ -386,7 +386,7 @@ public:
     virtual void        BasicStarted() override;
     virtual void        BasicStopped() override;
 
-    virtual ::svl::IUndoManager*
+    virtual SfxUndoManager*
                         GetUndoManager() override;
 
     const OUString&         GetModule() const { return m_aModule; }

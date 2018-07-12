@@ -75,7 +75,7 @@ rtl::Reference<FuPoor> FuObjectAnimationParameters::Create( ViewShell* pViewSh, 
 
 void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 {
-    ::svl::IUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
+    SfxUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
 
     const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();

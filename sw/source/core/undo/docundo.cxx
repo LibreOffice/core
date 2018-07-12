@@ -509,7 +509,7 @@ SwUndo * UndoManager::RemoveLastUndo()
     return dynamic_cast<SwUndo *>(pLastUndo);
 }
 
-// svl::IUndoManager
+// SfxUndoManager
 
 void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
 {

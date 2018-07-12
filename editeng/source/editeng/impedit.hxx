@@ -732,7 +732,7 @@ public:
     ImpEditEngine&          operator=(const ImpEditEngine&) = delete;
 
     inline EditUndoManager& GetUndoManager();
-    inline ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
+    inline SfxUndoManager* SetUndoManager(SfxUndoManager* pNew);
 
     void                    SetUpdateMode( bool bUp, EditView* pCurView = nullptr, bool bForceUpdate = false );
     bool                    GetUpdateMode() const   { return bUpdate; }
@@ -1145,9 +1145,9 @@ inline EditUndoManager& ImpEditEngine::GetUndoManager()
     return *pUndoManager;
 }
 
-inline ::svl::IUndoManager* ImpEditEngine::SetUndoManager(::svl::IUndoManager* pNew)
+inline SfxUndoManager* ImpEditEngine::SetUndoManager(SfxUndoManager* pNew)
 {
-    ::svl::IUndoManager* pRetval = pUndoManager;
+    SfxUndoManager* pRetval = pUndoManager;
 
     if(pUndoManager)
     {

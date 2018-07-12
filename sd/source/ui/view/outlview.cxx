@@ -1428,7 +1428,7 @@ void OutlineView::EndModelChange()
 {
     UpdateDocument();
 
-    ::svl::IUndoManager* pDocUndoMgr = mpDocSh->GetUndoManager();
+    SfxUndoManager* pDocUndoMgr = mpDocSh->GetUndoManager();
 
     bool bHasUndoActions = pDocUndoMgr->GetUndoActionCount() != 0;
 
@@ -1482,7 +1482,7 @@ void OutlineView::UpdateDocument()
 /** merge edit engine undo actions if possible */
 void OutlineView::TryToMergeUndoActions()
 {
-    ::svl::IUndoManager& rOutlineUndo = mrOutliner.GetUndoManager();
+    SfxUndoManager& rOutlineUndo = mrOutliner.GetUndoManager();
     if( rOutlineUndo.GetUndoActionCount() > 1 )
     {
         SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction* >( rOutlineUndo.GetUndoAction() );
