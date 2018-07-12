@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_99dc8147",
+        "filename": "oox/source/ppt/animvariantcontext.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-12T14:11:13Z",
+      "side": 0,
+      "message": "please preserve this comment in the new method",
+      "revId": "c290f692dd28094d41dff686f3faa1c4e14b556e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

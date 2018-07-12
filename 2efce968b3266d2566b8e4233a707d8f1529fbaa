@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_b9d74524",
+        "filename": "include/oox/ppt/pptfilterhelpers.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-12T14:11:13Z",
+      "side": 1,
+      "message": "vairalbes -\u003e variables",
+      "revId": "2efce968b3266d2566b8e4233a707d8f1529fbaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
