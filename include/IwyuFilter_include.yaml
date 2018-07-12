@@ -34,3 +34,9 @@ blacklist:
     include/osl/thread.hxx:
     # ODK API test would fail with fw decl here
     - osl/time.h
+    include/rtl/instance.hxx:
+    # Needed for template functions
+    - osl/getglobalmutex.hxx
+    include/rtl/math.hxx:
+    # TODO MSVC does not compile basegfx/numeric/ftools.hxx when this is replaced
+    - math.h
