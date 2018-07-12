@@ -16,6 +16,24 @@
       "revId": "1cacdad4db1de08a3bd6bf229bd8592c4d18d657",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_966c4e09",
+        "filename": "vcl/source/control/ctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-12T09:57:47Z",
+      "side": 1,
+      "message": "The isDisposed() stuff is a little hacky. Normally we use it to avoid stomping on stuff when we are inside the disposal logic e.g. on disposal, lots of the UI code calls other stuff, which ends up triggering listeners, etc, so we use isDisposed() to short circuit that.\n\nI\u0027m not opposed to using it here, but it seems to me that somewhere up in the sw/ code we are probably trying to paint on the wrong OutputDevice, if that OutputDevice is already disposed by the time get here.\n\nSwViewShell::DLPostPaint2 looks particularly suspicious in that regard, perhaps some interaction between that and the dialog logic is going wrong?",
+      "parentUuid": "ffe62b97_16ab9e1d",
+      "revId": "1cacdad4db1de08a3bd6bf229bd8592c4d18d657",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
