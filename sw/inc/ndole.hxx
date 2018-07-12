@@ -149,6 +149,10 @@ public:
 
     const OUString& GetChartTableName() const { return msChartTableName; }
     void SetChartTableName( const OUString& rNm ) { msChartTableName = rNm; }
+
+
+    // react on visual change (invalidate)
+    void SetChanged();
 };
 
 /// Inline methods from Node.hxx
