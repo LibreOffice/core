@@ -492,7 +492,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     }
                 }
             }
-            bNewPageDesc = false; // if next node has RES_BREAK(page break) then bNewPageDesc value should be false.
             bBreakSet = true;
 
             if ( !bRemoveHardBreakInsideTable )
