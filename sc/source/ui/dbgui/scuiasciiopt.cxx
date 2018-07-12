@@ -531,7 +531,7 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 
 void ScImportAsciiDlg::dispose()
 {
-    delete[] mpRowPosArray;
+    mpRowPosArray.reset();
     pFtCharSet.clear();
     pLbCharSet.clear();
     pFtCustomLang.clear();
@@ -568,11 +568,11 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& r
     bool bFixed = pRbFixed->IsChecked();
 
     if (!mpRowPosArray)
-        mpRowPosArray = new sal_uLong[ASCIIDLG_MAXROWS + 2];
+        mpRowPosArray.reset( new sal_uLong[ASCIIDLG_MAXROWS + 2] );
 
     if (!mnRowPosCount) // complete re-fresh
     {
-        memset( mpRowPosArray, 0, sizeof(mpRowPosArray[0]) * (ASCIIDLG_MAXROWS+2));
+        memset( mpRowPosArray.get(), 0, sizeof(mpRowPosArray[0]) * (ASCIIDLG_MAXROWS+2));
 
         Seek(0);
         mpDatStream->StartReadingUnicodeText( mpDatStream->GetStreamCharSet() );
