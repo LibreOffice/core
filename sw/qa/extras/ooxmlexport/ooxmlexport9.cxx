@@ -531,10 +531,6 @@ DECLARE_OOXMLEXPORT_TEST(testBnc519228OddBreaks, "bnc519228_odd-breaksB.docx")
 
     // Page2 comes from follow of style for page 1 and should be a normal page. Also check the two page style have the same properties,
     // since page style for page1 was created from page style for page 2.
-    uno::Any page2StyleAny = uno::Reference<beans::XPropertySet>(
-        getParagraph(2, "This is page 2, which is obviously an even page."),
-        uno::UNO_QUERY_THROW)->getPropertyValue("PageDescName");
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), page2StyleAny);
     OUString page2StyleName = getProperty<OUString>( page1Style, "FollowStyle" );
     uno::Reference<beans::XPropertySet> page2Style(getStyles("PageStyles")->getByName(page2StyleName), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_ALL), page2Style->getPropertyValue("PageStyleLayout"));
