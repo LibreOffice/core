@@ -12,6 +12,8 @@
 #include <tools/stream.hxx>
 #include <vcl/ctrl.hxx>
 
+typedef std::map<const OUString, OUString> StringMap;
+
 class UITEST_DLLPUBLIC UITestLogger
 {
 private:
@@ -31,6 +33,10 @@ public:
     void log(const OUString& rString);
 
     void logKeyInput(VclPtr<vcl::Window> const & xUIElement, const KeyEvent& rEvent);
+
+    void logSwEditWinEvent(const OUString& rAction, const StringMap& rParameters = StringMap());
+
+    void logScGridWinEvent(const OUString& rAction, const StringMap& rParameters = StringMap());
 
     static UITestLogger& getInstance();
 
