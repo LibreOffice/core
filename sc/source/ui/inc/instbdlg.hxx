@@ -53,7 +53,7 @@ private:
     ScViewData&             rViewData;
     ScDocument&             rDoc;
     ScDocShell*             pDocShTables;
-    sfx2::DocumentInserter* pDocInserter;
+    std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
     SfxObjectShellRef       aDocShTablesRef;
 
     bool                bMustClose;
