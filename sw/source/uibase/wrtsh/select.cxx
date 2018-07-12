@@ -40,6 +40,7 @@
 #include <doc.hxx>
 #include <wordcountdialog.hxx>
 #include <memory>
+#include <vcl/uitest/logger.hxx>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions2;
@@ -390,6 +391,20 @@ void SwWrtShell::SttSelect()
     SwTransferable::CreateSelection( *this );
 }
 
+namespace {
+
+void collectUIInformation(SwShellCursor* pCursor)
+{
+    OUString aSelStart = OUString::number(pCursor->Start()->nContent.GetIndex());
+    OUString aSelEnd = OUString::number(pCursor->End()->nContent.GetIndex());
+
+    StringMap aParameters = {{"START_POS", aSelStart}, {"END_POS", aSelEnd}};
+
+    UITestLogger::getInstance().logSwEditWinEvent("SELECT", aParameters);
+}
+
+}
+
 // End of a selection process.
 
 void SwWrtShell::EndSelect()
@@ -411,6 +426,8 @@ void SwWrtShell::EndSelect()
     SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
     if (pWrdCnt)
         pWrdCnt->UpdateCounts();
+
+    collectUIInformation(GetCursor_());
 }
 
 void SwWrtShell::ExtSelWrd(const Point *pPt, bool )

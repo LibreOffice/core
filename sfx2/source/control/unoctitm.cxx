@@ -593,13 +593,13 @@ void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::P
     theUsageInfo::get().increment(aCommand);
 }
 
-void collectUIInformation(const util::URL& rURL)
+void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     static const char* pFile = std::getenv("LO_COLLECT_UIINFO");
     if (!pFile)
         return;
 
-    UITestLogger::getInstance().logCommand("CommandSent Name:" + rURL.Complete);
+    UITestLogger::getInstance().logCommand("CommandSent Name:" + rURL.Complete, rArgs);
 }
 
 }
@@ -609,7 +609,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
     collectUsageInformation(aURL, aArgs);
-    collectUIInformation(aURL);
+    collectUIInformation(aURL,aArgs);
 
     SolarMutexGuard aGuard;
     if (

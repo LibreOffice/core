@@ -68,6 +68,7 @@
 #include <editeng/editview.hxx>
 #include <PostItMgr.hxx>
 #include <DocumentSettingManager.hxx>
+#include <vcl/uitest/logger.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -1077,6 +1078,9 @@ bool SwCursorShell::GotoPage( sal_uInt16 nPage )
                                          SwCursorSelOverFlags::ChangePos );
     if( bRet )
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
+
+    StringMap aLogParameters = {{"PAGE", OUString::number(nPage)}};
+    UITestLogger::getInstance().logSwEditWinEvent("GOTO", aLogParameters);
     return bRet;
 }
 
