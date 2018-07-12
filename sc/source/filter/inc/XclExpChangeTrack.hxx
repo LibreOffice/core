@@ -464,15 +464,15 @@ struct XclExpChTrData
 
 class XclExpChTrCellContent final : public XclExpChTrAction, protected XclExpRoot
 {
-    XclExpChTrData*             pOldData;
-    XclExpChTrData*             pNewData;
+    std::unique_ptr<XclExpChTrData> pOldData;
+    std::unique_ptr<XclExpChTrData> pNewData;
     sal_uInt16                  nOldLength;     // this is not the record size
     ScAddress                   aPosition;
 
-    static void                 MakeEmptyChTrData( XclExpChTrData*& rpData );
+    static void                 MakeEmptyChTrData( std::unique_ptr<XclExpChTrData>& rpData );
 
     void GetCellData(
-        const XclExpRoot& rRoot, const ScCellValue& rScCell, XclExpChTrData*& rpData,
+        const XclExpRoot& rRoot, const ScCellValue& rScCell, std::unique_ptr<XclExpChTrData>& rpData,
         sal_uInt32& rXclLength1, sal_uInt16& rXclLength2 );
 
     virtual void                SaveActionData( XclExpStream& rStrm ) const override;
