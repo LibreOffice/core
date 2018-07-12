@@ -94,8 +94,8 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
     pDoc = rNd.GetNode().GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
-                                       pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() );
+        pRedlData.reset( new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
+                                       pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
@@ -202,7 +202,7 @@ SwUndoInsert::~SwUndoInsert()
     {
         maText.reset();
     }
-    delete pRedlData;
+    pRedlData.reset();
 }
 
 void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
