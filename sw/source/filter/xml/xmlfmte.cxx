@@ -169,12 +169,16 @@ void SwXMLExport::ExportStyles_( bool bUsed )
     GetPageExport()->exportDefaultStyle();
 }
 
-void SwXMLExport::ExportAutoStyles_()
+void SwXMLExport::collectAutoStyles()
 {
+    SvXMLExport::collectAutoStyles();
+
+    if (mbAutoStylesCollected)
+        return;
+
     // The order in which styles are collected *MUST* be the same as
     // the order in which they are exported. Otherwise, caching will
     // fail.
-
     if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         if( !(getExportFlags() & SvXMLExportFlags::CONTENT) )
@@ -190,17 +194,10 @@ void SwXMLExport::ExportAutoStyles_()
     if( getExportFlags() & SvXMLExportFlags::MASTERSTYLES )
         GetPageExport()->collectAutoStyles( false );
 
-    // if we don't export styles (i.e. in content stream only, but not
-    // in single-stream case), then we can save ourselves a bit of
-    // work and memory by not collecting field masters
-    if( !(getExportFlags() & SvXMLExportFlags::STYLES) )
-        GetTextParagraphExport()->exportUsedDeclarations();
 
     // exported in ExportContent_
     if( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
-        GetTextParagraphExport()->exportTrackedChanges( true );
-
         // collect form autostyle
         // (do this before collectTextAutoStyles, 'cause the shapes need the results of the work
         // done by examineForms)
@@ -213,6 +210,25 @@ void SwXMLExport::ExportAutoStyles_()
         }
 
         GetTextParagraphExport()->collectTextAutoStylesOptimized( m_bShowProgress );
+    }
+
+    mbAutoStylesCollected = true;
+}
+
+void SwXMLExport::ExportAutoStyles_()
+{
+    collectAutoStyles();
+
+    // if we don't export styles (i.e. in content stream only, but not
+    // in single-stream case), then we can save ourselves a bit of
+    // work and memory by not collecting field masters
+    if( !(getExportFlags() & SvXMLExportFlags::STYLES) )
+        GetTextParagraphExport()->exportUsedDeclarations();
+
+    // exported in ExportContent_
+    if( getExportFlags() & SvXMLExportFlags::CONTENT )
+    {
+        GetTextParagraphExport()->exportTrackedChanges( true );
     }
 
     GetTextParagraphExport()->exportTextAutoStyles();

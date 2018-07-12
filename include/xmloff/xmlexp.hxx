@@ -264,6 +264,7 @@ protected:
 
     void SetDocHandler( const css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
 
+    bool mbAutoStylesCollected;
 public:
 
     SvXMLExport(
@@ -290,6 +291,8 @@ public:
         SvXMLExportFlags nExportFlag );
 
     virtual ~SvXMLExport() override;
+
+    virtual void collectAutoStyles();
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     static SvXMLExport* getImplementation( const css::uno::Reference< css::uno::XInterface >& ) throw();

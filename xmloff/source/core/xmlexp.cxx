@@ -448,7 +448,8 @@ SvXMLExport::SvXMLExport(
     mnExportFlags( nExportFlags ),
     mnErrorFlags( SvXMLErrorFlags::NO ),
     msWS( GetXMLToken(XML_WS) ),
-    mbSaveLinkedSections(true)
+    mbSaveLinkedSections(true),
+    mbAutoStylesCollected(false)
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
@@ -477,7 +478,8 @@ SvXMLExport::SvXMLExport(
     mnExportFlags( SvXMLExportFlags::NONE ),
     mnErrorFlags( SvXMLErrorFlags::NO ),
     msWS( GetXMLToken(XML_WS) ),
-    mbSaveLinkedSections(true)
+    mbSaveLinkedSections(true),
+    mbAutoStylesCollected(false)
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
@@ -516,7 +518,8 @@ SvXMLExport::SvXMLExport(
     mnExportFlags( nExportFlag ),
     mnErrorFlags( SvXMLErrorFlags::NO ),
     msWS( GetXMLToken(XML_WS) ),
-    mbSaveLinkedSections(true)
+    mbSaveLinkedSections(true),
+    mbAutoStylesCollected(false)
 {
     SAL_WARN_IF(!xContext.is(), "xmloff.core", "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
@@ -1751,6 +1754,10 @@ XMLShapeExport* SvXMLExport::CreateShapeExport()
 SvXMLAutoStylePoolP* SvXMLExport::CreateAutoStylePool()
 {
     return new SvXMLAutoStylePoolP(*this);
+}
+
+void SvXMLExport::collectAutoStyles()
+{
 }
 
 XMLPageExport* SvXMLExport::CreatePageExport()

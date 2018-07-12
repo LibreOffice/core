@@ -2271,8 +2271,13 @@ static uno::Any lcl_GetEnumerated( uno::Reference<container::XEnumerationAccess>
     return aRet;
 }
 
-void ScXMLExport::ExportAutoStyles_()
+void ScXMLExport::collectAutoStyles()
 {
+    SvXMLExport::collectAutoStyles();
+
+    if (mbAutoStylesCollected)
+        return;
+
     if (!GetModel().is())
         return;
 
@@ -2664,7 +2669,31 @@ void ScXMLExport::ExportAutoStyles_()
         }
 
         pChangeTrackingExportHelper->CollectAutoStyles();
+    }
 
+    if (getExportFlags() & SvXMLExportFlags::MASTERSTYLES)
+        GetPageExport()->collectAutoStyles(true);
+
+    mbAutoStylesCollected = true;
+}
+
+void ScXMLExport::ExportAutoStyles_()
+{
+    if (!GetModel().is())
+        return;
+
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
+    if (!xSpreadDoc.is())
+        return;
+
+    uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
+    if (!xIndex.is())
+        return;
+
+    collectAutoStyles();
+
+    if (getExportFlags() & SvXMLExportFlags::CONTENT)
+    {
         GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN);
         GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW);
         GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE);
@@ -2693,7 +2722,6 @@ void ScXMLExport::ExportAutoStyles_()
 
     if (getExportFlags() & SvXMLExportFlags::MASTERSTYLES)
     {
-        GetPageExport()->collectAutoStyles(true);
         GetPageExport()->exportAutoStyles();
     }
 

@@ -3531,8 +3531,13 @@ void SchXMLExport::ExportMasterStyles_()
     SAL_INFO("xmloff.chart", "Master Style Export requested. Not available for Chart" );
 }
 
-void SchXMLExport::ExportAutoStyles_()
+void SchXMLExport::collectAutoStyles()
 {
+    SvXMLExport::collectAutoStyles();
+
+    if (mbAutoStylesCollected)
+        return;
+
     // there are no styles that require their own autostyles
     if( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
@@ -3540,6 +3545,24 @@ void SchXMLExport::ExportAutoStyles_()
         if( xChartDoc.is())
         {
             maExportHelper->m_pImpl->collectAutoStyles( xChartDoc );
+        }
+        else
+        {
+            SAL_WARN("xmloff.chart", "Couldn't export chart due to wrong XModel (must be XChartDocument)" );
+        }
+    }
+    mbAutoStylesCollected = true;
+}
+
+void SchXMLExport::ExportAutoStyles_()
+{
+    collectAutoStyles();
+
+    if( getExportFlags() & SvXMLExportFlags::CONTENT )
+    {
+        Reference< chart::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
+        if( xChartDoc.is())
+        {
             maExportHelper->m_pImpl->exportAutoStyles();
         }
         else

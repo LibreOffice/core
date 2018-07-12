@@ -236,6 +236,8 @@ public:
 
     virtual ~ScXMLExport() override;
 
+    void collectAutoStyles() override;
+
     static sal_Int16 GetMeasureUnit();
     ScDocument*          GetDocument()           { return pDoc; }
     const ScDocument*    GetDocument() const     { return pDoc; }

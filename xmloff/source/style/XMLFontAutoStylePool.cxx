@@ -356,7 +356,7 @@ std::unordered_set<OUString> XMLFontAutoStylePool::getUsedFontList()
     }
 
     // make sure auto-styles are collected
-    GetExport().GetTextParagraphExport()->collectTextAutoStylesOptimized(false);
+    GetExport().collectAutoStyles();
 
     // Check auto-styles for fonts
     std::vector<xmloff::AutoStyleEntry> aAutoStyleEntries;
