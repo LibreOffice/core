@@ -161,6 +161,8 @@ public:
         bool bIsDraw, SvXMLExportFlags nExportFlags );
     virtual ~SdXMLExport() override;
 
+    void collectAutoStyles() override;
+
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 

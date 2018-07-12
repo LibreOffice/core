@@ -2084,8 +2084,12 @@ void SdXMLExport::ExportStyles_(bool bUsed)
     }
 }
 
-void SdXMLExport::ExportAutoStyles_()
+void SdXMLExport::collectAutoStyles()
 {
+    SvXMLExport::collectAutoStyles();
+    if (mbAutoStylesCollected)
+        return;
+
     Reference< beans::XPropertySet > xInfoSet( getExportInfo() );
     if( xInfoSet.is() )
     {
@@ -2105,9 +2109,6 @@ void SdXMLExport::ExportAutoStyles_()
         // prepare page-master infos
         ImpPrepPageMasterInfos();
 
-        // write page-master infos
-        ImpWritePageMasterInfos();
-
         // prepare draw:style-name for master page export
         ImpPrepMasterPageInfos();
     }
@@ -2117,9 +2118,6 @@ void SdXMLExport::ExportAutoStyles_()
         // prepare draw:style-name for page export
         ImpPrepDrawPageInfos();
     }
-
-    // export draw-page styles
-    GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID );
 
     if( getExportFlags() & SvXMLExportFlags::STYLES )
     {
@@ -2255,12 +2253,28 @@ void SdXMLExport::ExportAutoStyles_()
                 collectAnnotationAutoStyles( xDrawPage );
             }
         }
-        if(IsImpress())
+        if (IsImpress())
         {
             rtl::Reference< XMLAnimationsExporter > xAnimExport;
             GetShapeExport()->setAnimationsExporter( xAnimExport );
         }
     }
+
+    mbAutoStylesCollected = true;
+}
+
+void SdXMLExport::ExportAutoStyles_()
+{
+    collectAutoStyles();
+
+    if( getExportFlags() & SvXMLExportFlags::STYLES )
+    {
+        // write page-master infos
+        ImpWritePageMasterInfos();
+    }
+
+    // export draw-page styles
+    GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID );
 
     exportAutoDataStyles();
 

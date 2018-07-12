@@ -54,6 +54,7 @@ public:
         SvXMLExportFlags nExportFlags );
     virtual ~SchXMLExport() override;
 
+    void collectAutoStyles() override;
     rtl::Reference< XMLPropertySetMapper > const & GetPropertySetMapper() const;
 };
 
