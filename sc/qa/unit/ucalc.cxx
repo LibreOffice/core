@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -437,6 +438,23 @@ void Test::testInput()
     m_pDoc->SetString(0, 0, 0, "000123", &aParam);
     test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Text content should have been treated as string, not number.", OUString("000123"), test);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testColumnIterator() // tdf#118620
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, "foo"));
+
+    m_pDoc->SetString(0, 0, 0, "'10.5");
+    m_pDoc->SetString(0, MAXROW-5, 0, "42.0");
+    std::unique_ptr<sc::ColumnIterator> it = m_pDoc->GetColumnIterator(0, 0, MAXROW - 10, MAXROW);
+    while (it->hasCell())
+    {
+        it->getCell();
+        it->next();
+    }
 
     m_pDoc->DeleteTab(0);
 }
