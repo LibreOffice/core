@@ -60,6 +60,7 @@ class ColumnIterator
 {
     CellStoreType::const_position_type maPos;
     CellStoreType::const_position_type maPosEnd;
+    bool mbComplete;
 
 public:
     ColumnIterator( const CellStoreType& rCells, SCROW nRow1, SCROW nRow2 );
