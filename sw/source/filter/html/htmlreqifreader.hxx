@@ -23,7 +23,7 @@ namespace SwReqIfReader
 bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle, bool& bOwnFormat);
 
 /// Wraps an OLE2 container binary in an RTF fragment.
-bool WrapOleInRtf(SvStream& rOle, SvStream& rRtf);
+bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf);
 
 /**
  * Wraps an image in an RTF fragment.

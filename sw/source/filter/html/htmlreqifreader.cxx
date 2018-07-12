@@ -27,7 +27,7 @@ class ReqIfRtfReader : public SvRTFParser
 public:
     ReqIfRtfReader(SvStream& rStream);
     void NextToken(int nToken) override;
-    bool WriteObjectData(SvStream& rStream);
+    bool WriteObjectData(SvStream& rOLE);
 
 private:
     bool m_bInObjData = false;

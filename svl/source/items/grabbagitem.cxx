@@ -47,7 +47,7 @@ bool SfxGrabBagItem::PutValue(const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
         comphelper::OSequenceIterator<beans::PropertyValue> i(aValue);
         while (i.hasMoreElements())
         {
-            beans::PropertyValue aPropertyValue = i.nextElement().get<beans::PropertyValue>();
+            auto aPropertyValue = i.nextElement().get<beans::PropertyValue>();
             m_aMap[aPropertyValue.Name] = aPropertyValue.Value;
         }
         return true;
