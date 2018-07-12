@@ -717,6 +717,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     const FontList* pFontList = GetFontList();
+    pNameBox->SetStyle( pNameBox->GetStyle() | WB_SORT );
     pNameBox->Fill( pFontList );
 
     const SvxFontItem* pFontItem = nullptr;
