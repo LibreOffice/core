@@ -62,9 +62,9 @@ SwWrongList::~SwWrongList()
     ClearList();
 }
 
-std::unique_ptr<SwWrongList> SwWrongList::Clone()
+SwWrongList* SwWrongList::Clone()
 {
-    std::unique_ptr<SwWrongList> pClone(new SwWrongList( meType ));
+    SwWrongList* pClone = new SwWrongList( meType );
     pClone->CopyFrom( *this );
     return pClone;
 }
@@ -78,7 +78,7 @@ void SwWrongList::CopyFrom( const SwWrongList& rCopy )
     for(SwWrongArea & i : maList)
     {
         if( i.mpSubList )
-            i.mpSubList = i.mpSubList->Clone().release();
+            i.mpSubList = i.mpSubList->Clone();
     }
 }
 

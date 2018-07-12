@@ -41,7 +41,7 @@ public:
     SwGrammarMarkUp() : SwWrongList( WRONGLIST_GRAMMAR ) {}
 
     virtual ~SwGrammarMarkUp() override;
-    virtual std::unique_ptr<SwWrongList> Clone() override;
+    virtual SwWrongList* Clone() override;
     virtual void CopyFrom( const SwWrongList& rCopy ) override;
 
     /* SwWrongList::Move() + handling of maSentence */

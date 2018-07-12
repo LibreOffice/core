@@ -259,7 +259,7 @@ public:
     SwWrongList( WrongListType eType );
 
     virtual ~SwWrongList();
-    virtual std::unique_ptr<SwWrongList> Clone();
+    virtual SwWrongList* Clone();
     virtual void CopyFrom( const SwWrongList& rCopy );
 
     WrongListType GetWrongListType() const { return meType; }
