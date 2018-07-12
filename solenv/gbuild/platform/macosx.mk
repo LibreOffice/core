@@ -294,7 +294,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(LIBS) \
-		-o $(1) \
+		-o $(if $(call gb_Library_is_udk_versioned,$(1)),$(patsubst %.dylib,%$(gb_UDK_MAJOR).dylib,$(1)),$(1)) \
 		`cat $${DYLIB_FILE}` && \
 	$(if $(filter Library,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
@@ -305,9 +305,7 @@ endef
 define gb_LinkTarget__command_symlink_udk_versioned_library
 	$(if $(call gb_Library_is_udk_versioned,$(1)),
 		$(call gb_Helper_abbreviate_dirs,\
-			rm -f $(1).$(gb_UDK_MAJOR) $(notdir $(1)).$(gb_UDK_MAJOR) && \
-			ln $(1) $(1).$(gb_UDK_MAJOR) && \
-			ln $(1) $(notdir $(1)).$(gb_UDK_MAJOR) ))
+			rm -f $(1) && ln -s $(patsubst %.dylib,%$(gb_UDK_MAJOR).dylib,$(notdir $(1))) $(1)))
 endef
 
 # parameters: 1-linktarget 2-cobjects 3-cxxobjects

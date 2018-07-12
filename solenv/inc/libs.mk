@@ -21,7 +21,7 @@
 
 LIBSMKREV!:="$$Revision$$"
 
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC" || "$(OS)"=="MACOSX")
 
 #
 #externe libs in plattform.mk
@@ -98,7 +98,7 @@ OPENSSLLIBST=-lssl_static -lcrypto_static
 OPENSSLLIBST=$(STATIC) -lssl -lcrypto $(DYNAMIC)
 .ENDIF          # "$(GUI)$(COM)"=="WNTGCC"
 .ENDIF          # "$(SYSTEM_OPENSSL)" == "YES"
-.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2" || "$(OS)"=="MACOSX"
 REGLIB=-lreg$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
@@ -109,6 +109,9 @@ XMLOFFLLIB=-lxol
 .IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
 STORELIB=-lstore$(UDK_MAJOR)
 SALLIB=-lsal$(UDK_MAJOR)
+.ELIF "$(OS)"=="MACOSX"
+STORELIB=-lstore$(UDK_MAJOR)
+SALLIB=-luno_sal$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 STORELIB=-lstore
 SALLIB=-luno_sal
@@ -117,7 +120,7 @@ SALLIB=-luno_sal
 ODBCLIB=-lodbc$(DLLPOSTFIX)
 ODBCBASELIB=-lodbcbase$(DLLPOSTFIX)
 DBFILELIB=-lfile$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2" || "$(OS)"=="MACOSX"
 RMCXTLIB=-lrmcxt$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 RMCXTLIB=-lrmcxt
@@ -270,7 +273,7 @@ ISCLIB=-lsc$(DLLPOSTFIX)
 ISDLIB=-lsd$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(DLLPOSTFIX)
 HELPLINKERLIB=-lhelplinker$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2" || "$(OS)"=="MACOSX"
 JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
@@ -283,7 +286,7 @@ XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
 XSLTLIB=-lxslt $(LIBXML2LIB)
 .ENDIF
-.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
+.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2" || "$(OS)"=="MACOSX"
 JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMFWKLIB = -ljvmfwk

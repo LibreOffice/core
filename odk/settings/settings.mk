@@ -436,23 +436,23 @@ URLPREFIX=file://
 # Include UDK version numbers
 include $(PRJ)/include/udkversion.mk
 
-SALLIB=-luno_sal
-CPPULIB=-luno_cppu
-CPPUHELPERLIB=-luno_cppuhelper$(COMID)
-SALHELPERLIB=-luno_salhelper$(COMID)
-REGLIB=-lreg
-STORELIB=-lstore
+SALLIB=-luno_sal3
+CPPULIB=-luno_cppu3
+CPPUHELPERLIB=-luno_cppuhelper3$(COMID)
+SALHELPERLIB=-luno_salhelper3$(COMID)
+REGLIB=-lreg3
+STORELIB=-lstore3
 
-SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_sal.dylib'
-CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_cppu.dylib'
-CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper'$(COMID).dylib.3:$(OO_SDK_OFFICE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib'
-SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_salhelper$(COMID).dylib'
-REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libreg.dylib'
-STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libstore.dylib'
+SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal3.dylib:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_sal.dylib'
+CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu3.dylib:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_cppu.dylib'
+CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper3'$(COMID).dylib:$(OO_SDK_OFFICE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib'
+SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper3$(COMID).dylib:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_salhelper$(COMID).dylib'
+REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg3.dylib:'$(OO_SDK_OFFICE_LIB_DIR)/libreg.dylib'
+STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore3.dylib:'$(OO_SDK_OFFICE_LIB_DIR)/libstore.dylib'
 
-INSTALL_NAME_URELIBS=$(INSTALLTOOL) -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/libstore.dylib.3
+INSTALL_NAME_URELIBS=$(INSTALLTOOL) -change @__________________________________________________URELIB/libuno3_sal.dylib @executable_path/libuno_sal3.dylib -change  @__________________________________________________URELIB/libuno_cppu3.dylib @executable_path/libuno_cppu3.dylib -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID)3.dylib @executable_path/libuno_cppuhelper$(COMID)3.dylib -change @__________________________________________________URELIB/libuno_salhelper$(COMID)3.dylib @executable_path/libuno_salhelper$(COMID)3.dylib -change @__________________________________________________URELIB/libreg3.dylib @executable_path/libreg3.dylib -change @__________________________________________________URELIB/libstore3.dylib @executable_path/libstore3.dylib
 
-INSTALL_NAME_URELIBS_BIN=$(INSTALLTOOL) -change @__________________________________________________URELIB/libuno_sal.dylib.3 libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 libstore.dylib.3
+INSTALL_NAME_URELIBS_BIN=$(INSTALLTOOL) -change @__________________________________________________URELIB/libuno_sal3.dylib libuno_sal3.dylib -change  @__________________________________________________URELIB/libuno_cppu3.dylib libuno_cppu3.dylib -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID)3.dylib libuno_cppuhelper$(COMID)3.dylib -change @__________________________________________________URELIB/libuno_salhelper$(COMID)3.dylib libuno_salhelper$(COMID)3.dylib -change @__________________________________________________URELIB/libreg3.dylib libreg3.dylib -change @__________________________________________________URELIB/libstore3.dylib libstore3.dylib
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
