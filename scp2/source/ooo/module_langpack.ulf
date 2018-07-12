@@ -82,6 +82,12 @@ en-US = "Japanese"
 [STR_DESC_MODULE_LANGPACK_JA]
 en-US = "Installs the Japanese user interface"
 
+[STR_NAME_MODULE_LANGPACK_KAB]
+en-US = "Kabyle"
+
+[STR_DESC_MODULE_LANGPACK_KAB]
+en-US = "Installs the Kabyle user interface"
+
 [STR_NAME_MODULE_LANGPACK_KO]
 en-US = "Korean"
 
