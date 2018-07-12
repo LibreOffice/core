@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_566c8635",
+        "filename": "include/rtl/math.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-07-12T08:21:55Z",
+      "side": 1,
+      "message": "Looks like MSVC doesn\u0027t like this change.\nWhat should I do, blacklist?",
+      "range": {
+        "startLine": 32,
+        "startChar": 9,
+        "endLine": 32,
+        "endChar": 16
+      },
+      "revId": "346311bdd0cfe98862c610690dda948f63dbdff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
