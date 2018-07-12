@@ -166,6 +166,49 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
 
+namespace {
+
+OUString StringMapToOUString(const StringMap& rParameters)
+{
+    if (rParameters.empty())
+        return OUString("");
+
+    OUString aParameterString = "{";
+
+    for (StringMap::const_iterator itr = rParameters.begin(); itr != rParameters.end(); ++itr)
+    {
+        if (itr != rParameters.begin())
+            aParameterString += ", ";
+        aParameterString += "\"" + itr->first + "\": \"" + itr->second + "\"";
+    }
+
+    aParameterString += "}";
+
+    return aParameterString;
+}
+
+}
+
+void UITestLogger::logSwEditWinEvent(const OUString& rAction, const StringMap& rParameters)
+{
+    OUString aParameterString = StringMapToOUString(rParameters);
+
+    OUString aLogLine = "SwEditWinUIObject Action:" + rAction +
+        " Id:writer_edit Parent:MainWindow " + aParameterString;
+
+    UITestLogger::log(aLogLine);
+}
+
+void UITestLogger::logScGridWinEvent(const OUString& rAction, const StringMap& rParameters)
+{
+    OUString aParameterString = StringMapToOUString(rParameters);
+
+    OUString aLogLine = "ScGridWinUIObject Action:" + rAction +
+        "Id:grid_window Parent:MainWindow " + aParameterString;
+
+    UITestLogger::log(aLogLine);
+}
+
 UITestLogger& UITestLogger::getInstance()
 {
     ImplSVData *const pSVData = ImplGetSVData();
