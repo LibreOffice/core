@@ -283,6 +283,8 @@ public:
 
     static sal_Int32 NaturalSortCompare(const OUString &rA, const OUString &rB);
 
+    static sal_Int32 NatualSortCompareExtend(const OUString &rA, const OUString &rB);
+
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
