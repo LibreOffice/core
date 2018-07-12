@@ -41,7 +41,7 @@ class ScImportAsciiDlg : public ModalDialog
 {
     SvStream*                   mpDatStream;
     sal_uLong                       mnStreamPos;
-    sal_uLong*                      mpRowPosArray;
+    std::unique_ptr<sal_uLong[]>    mpRowPosArray;
     sal_uLong                       mnRowPosCount;
 
     OUString               maPreviewLine[ CSV_PREVIEW_LINES ];
