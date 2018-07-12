@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_b6c2b2e8",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-12T09:21:27Z",
+      "side": 1,
+      "message": "Next time please use DBG_UNHANDLED_EXCEPTION() for such empty catch blocks.",
+      "revId": "9945121d6fc213ac37e262b4a2c6a460d71f1f8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
