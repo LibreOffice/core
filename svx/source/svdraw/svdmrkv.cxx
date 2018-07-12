@@ -48,6 +48,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdograf.hxx>
+#include <vcl/uitest/logger.hxx>
 
 #include <editeng/editdata.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -1634,6 +1635,18 @@ void SdrMarkView::MarkObj(const tools::Rectangle& rRect, bool bUnmark)
     }
 }
 
+namespace {
+
+void collectUIInformation(SdrObject* pObj)
+{
+    if (!pObj->GetName().isEmpty())
+        UITestLogger::getInstance().logObjectSelection(pObj->GetName());
+    else
+        UITestLogger::getInstance().logObjectSelection("Unnamed Obj " + OUString::number(pObj->GetOrdNum()));
+}
+
+}
+
 void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool bImpNoSetMarkHdl)
 {
     if (pObj!=nullptr && pPV!=nullptr && IsObjMarkable(pObj, pPV)) {
@@ -1641,6 +1654,7 @@ void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool 
         if (!bUnmark)
         {
             GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pObj,pPV));
+            collectUIInformation(pObj);
         }
         else
         {

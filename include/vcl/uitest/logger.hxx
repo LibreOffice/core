@@ -11,6 +11,13 @@
 
 #include <tools/stream.hxx>
 #include <vcl/ctrl.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { struct PropertyValue; }
+} } }
+
+struct EventDescription;
 
 class UITEST_DLLPUBLIC UITestLogger
 {
@@ -24,13 +31,17 @@ public:
 
     UITestLogger();
 
-    void logCommand(const OUString& rAction);
+    void logCommand(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
 
     void logAction(VclPtr<Control> const & xUIElement, VclEventId nEvent);
 
     void log(const OUString& rString);
 
     void logKeyInput(VclPtr<vcl::Window> const & xUIElement, const KeyEvent& rEvent);
+
+    void logEvent(EventDescription& rDescription);
+
+    void logObjectSelection(const OUString& rID);
 
     static UITestLogger& getInstance();
 
