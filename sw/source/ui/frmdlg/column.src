@@ -28,17 +28,17 @@
 #include "helpid.h"
 #include "access.hrc"
 
- // #define TP_COLUMN 256
+// #define TP_COLUMN 256
 TabPage TP_COLUMN
 {
     HelpID = HID_COLUMN ;
     Hide = TRUE;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( 260, 188 ) ;
     Text [ en-US ] = "Columns" ;
     FixedText FT_NUMBER
     {
-        Pos = MAP_APPFONT ( 12 , 19 ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 19 ) ;
+        Size = MAP_APPFONT ( 28, 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Columns";
     };
@@ -46,8 +46,8 @@ TabPage TP_COLUMN
     {
         HelpID = "sw:NumericField:TP_COLUMN:ED_NUMBER";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 30 ) ;
-        Size = MAP_APPFONT ( 24 , 12 ) ;
+        Pos = MAP_APPFONT ( 12, 30 ) ;
+        Size = MAP_APPFONT ( 24, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -61,63 +61,63 @@ TabPage TP_COLUMN
     };
     Control VS_DEFAULTS
     {
-        Pos = MAP_APPFONT ( 50 , 14 ) ;
-        Size = MAP_APPFONT ( 110 , 28 ) ;
+        Pos = MAP_APPFONT ( 50, 14 ) ;
+        Size = MAP_APPFONT ( 110, 28 ) ;
         TabStop = TRUE ;
     };
     CheckBox CB_BALANCECOLS
     {
         HelpID = "sw:CheckBox:TP_COLUMN:CB_BALANCECOLS";
-        Pos = MAP_APPFONT ( 7 , 46 ) ;
-        Size = MAP_APPFONT ( 163 , 10 ) ;
+        Pos = MAP_APPFONT ( 7, 46 ) ;
+        Size = MAP_APPFONT ( 163, 10 ) ;
         Hide = TRUE;
         Text [ en-US ] = "Evenly distribute contents ~to all columns";
     };
     FixedLine FL_COLUMNS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 164 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 164, 8 ) ;
         Text [ en-US ] = "Settings";
     };
     FixedText FT_COLUMN
     {
-        Pos = MAP_APPFONT ( 12 , 70 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 70 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Column";
     };
     Window WN_BSP
     {
-        Pos = MAP_APPFONT ( 176 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 46 ) ;
+        Pos = MAP_APPFONT ( 176, 6 ) ;
+        Size = MAP_APPFONT ( 75, 46 ) ;
     };
     ImageButton BTN_DOWN
     {
         HelpID = "sw:ImageButton:TP_COLUMN:BTN_DOWN";
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 69 ) ;
-        Size = MAP_APPFONT ( 10 , 10 ) ;
+        Pos = MAP_APPFONT ( 62, 69 ) ;
+        Size = MAP_APPFONT ( 10, 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
     };
     FixedText FT_1
     {
-        Pos = MAP_APPFONT ( 100 , 71 ) ;
-        Size = MAP_APPFONT ( 10 , 8 ) ;
+        Pos = MAP_APPFONT ( 100, 71 ) ;
+        Size = MAP_APPFONT ( 10, 8 ) ;
         Text = "~1" ;
         Center = TRUE ;
     };
     FixedText FT_2
     {
-        Pos = MAP_APPFONT ( 150 , 71 ) ;
-        Size = MAP_APPFONT ( 10 , 8 ) ;
+        Pos = MAP_APPFONT ( 150, 71 ) ;
+        Size = MAP_APPFONT ( 10, 8 ) ;
         Text = "~2" ;
         Center = TRUE ;
     };
     FixedText FT_3
     {
-        Pos = MAP_APPFONT ( 200 , 71 ) ;
-        Size = MAP_APPFONT ( 10 , 8 ) ;
+        Pos = MAP_APPFONT ( 200, 71 ) ;
+        Size = MAP_APPFONT ( 10, 8 ) ;
         Text = "~3" ;
         Center = TRUE ;
     };
@@ -125,15 +125,15 @@ TabPage TP_COLUMN
     {
         HelpID = "sw:ImageButton:TP_COLUMN:BTN_UP";
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 238 , 69 ) ;
-        Size = MAP_APPFONT ( 10 , 10 ) ;
+        Pos = MAP_APPFONT ( 238, 69 ) ;
+        Size = MAP_APPFONT ( 10, 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_RIGHT ;
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 85 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 85 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Width" ;
     };
@@ -142,8 +142,8 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_1";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 83 ) ;
-        Size = MAP_APPFONT ( 36 , 12 ) ;
+        Pos = MAP_APPFONT ( 87, 83 ) ;
+        Size = MAP_APPFONT ( 36, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -161,8 +161,8 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_2";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 137 , 83 ) ;
-        Size = MAP_APPFONT ( 36 , 12 ) ;
+        Pos = MAP_APPFONT ( 137, 83 ) ;
+        Size = MAP_APPFONT ( 36, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -180,8 +180,8 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_3";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 187 , 83 ) ;
-        Size = MAP_APPFONT ( 36 , 12 ) ;
+        Pos = MAP_APPFONT ( 187, 83 ) ;
+        Size = MAP_APPFONT ( 36, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -196,8 +196,8 @@ TabPage TP_COLUMN
     };
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 101 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 101 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Spacing" ;
     };
@@ -206,8 +206,8 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_DIST1";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 112 , 99 ) ;
-        Size = MAP_APPFONT ( 36 , 12 ) ;
+        Pos = MAP_APPFONT ( 112, 99 ) ;
+        Size = MAP_APPFONT ( 36, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -225,8 +225,8 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_DIST2";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 162 , 99 ) ;
-        Size = MAP_APPFONT ( 36 , 12 ) ;
+        Pos = MAP_APPFONT ( 162, 99 ) ;
+        Size = MAP_APPFONT ( 36, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -242,30 +242,30 @@ TabPage TP_COLUMN
     CheckBox CB_AUTO_WIDTH
     {
         HelpID = "sw:CheckBox:TP_COLUMN:CB_AUTO_WIDTH";
-        Pos = MAP_APPFONT ( 87 , 115 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 87, 115 ) ;
+        Size = MAP_APPFONT ( 100, 10 ) ;
         Text [ en-US ] = "Auto~Width" ;
         TabStop = TRUE ;
     };
     FixedLine FL_LAYOUT
     {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 58 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Width and spacing";
     };
 
     FixedText FT_STYLE
     {
-        Pos = MAP_APPFONT ( 12 , 140 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 140 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
         Text [ en-US ] = "~Line" ;
         Left = TRUE ;
     };
     ListBox LB_STYLE
     {
         HelpID = "sw:ListBox:TP_COLUMN:LB_STYLE";
-        Pos = MAP_APPFONT ( 50 , 138 ) ;
-        Size = MAP_APPFONT ( 60 , 66 ) ;
+        Pos = MAP_APPFONT ( 50, 138 ) ;
+        Size = MAP_APPFONT ( 60, 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList [ en-US ] =
@@ -275,8 +275,8 @@ TabPage TP_COLUMN
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 156 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 156 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
         Text [ en-US ] = "H~eight" ;
         Left = TRUE ;
     };
@@ -284,8 +284,8 @@ TabPage TP_COLUMN
     {
         HelpID = "sw:MetricField:TP_COLUMN:ED_HEIGHT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 154 ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( 50, 154 ) ;
+        Size = MAP_APPFONT ( 60, 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -299,16 +299,16 @@ TabPage TP_COLUMN
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 12 , 172 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 172 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "~Position" ;
     };
     ListBox LB_POSITION
     {
         HelpID = "sw:ListBox:TP_COLUMN:LB_POSITION";
-        Pos = MAP_APPFONT ( 50 , 170 ) ;
-        Size = MAP_APPFONT ( 60 , 40 ) ;
+        Pos = MAP_APPFONT ( 50, 170 ) ;
+        Size = MAP_APPFONT ( 60, 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList [ en-US ] =
@@ -320,42 +320,42 @@ TabPage TP_COLUMN
     };
     FixedLine FL_LINETYPE
     {
-        Pos = MAP_APPFONT ( 6 , 127 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 127 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Separator line" ;
     };
-    FixedLine  FL_VERT
+    FixedLine FL_VERT
     {
-        Pos = MAP_APPFONT ( 116 , 138 ) ;
-        Size = MAP_APPFONT ( 4 , 43 ) ;
+        Pos = MAP_APPFONT ( 116, 138 ) ;
+        Size = MAP_APPFONT ( 4, 43 ) ;
         Hide = TRUE ;
         Vert = TRUE;
     };
-    FixedLine   FL_PROPERTIES
+    FixedLine FL_PROPERTIES
     {
-        Pos = MAP_APPFONT ( 121 , 127 ) ;
-        Size = MAP_APPFONT ( 133 , 8 ) ;
+        Pos = MAP_APPFONT ( 121, 127 ) ;
+        Size = MAP_APPFONT ( 133, 8 ) ;
         Hide = TRUE ;
         Text [ en-US ] = "Properties";
     };
-    FixedText   FT_TEXTDIRECTION
+    FixedText FT_TEXTDIRECTION
     {
-        Pos = MAP_APPFONT ( 127 , 138 ) ;
-        Size = MAP_APPFONT ( 127 , 8 ) ;
+        Pos = MAP_APPFONT ( 127, 138 ) ;
+        Size = MAP_APPFONT ( 127, 8 ) ;
         Hide = TRUE ;
         Text [ en-US ] = "Text ~direction";
     };
-    ListBox     LB_TEXTDIRECTION
+    ListBox LB_TEXTDIRECTION
     {
         HelpID = "sw:ListBox:TP_COLUMN:LB_TEXTDIRECTION";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 127 , 149 ) ;
-        Size = MAP_APPFONT ( 127 , 50 ) ;
+        Pos = MAP_APPFONT ( 127, 149 ) ;
+        Size = MAP_APPFONT ( 127, 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
     StringList [ en-US ] =
     {
-         < "Left-to-right" ; 0; > ;
+        < "Left-to-right" ; 0; > ;
         < "Right-to-left" ; 1; > ;
         < "Use superordinate object settings" ; 4; > ;
     };
@@ -367,47 +367,47 @@ ModalDialog DLG_COLUMN
     HelpID = HID_FORMAT_COLUMN;
     Hide = TRUE;
     Moveable = TRUE;
-    Size = MAP_APPFONT ( 316 , 135 ) ;
+    Size = MAP_APPFONT ( 316, 135 ) ;
     OKButton PB_OK
     {
         DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 260 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 260, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 260 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 260, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 260 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 260, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_APPLY_TO
     {
-        Pos = MAP_APPFONT ( 260 , 63 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 260, 63 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "~Apply to";
     };
     ListBox LB_APPLY_TO
     {
         HelpID = "sw:ListBox:DLG_COLUMN:LB_APPLY_TO";
-        Pos = MAP_APPFONT ( 260 , 74 ) ;
-        Size = MAP_APPFONT ( 50 , 66 ) ;
+        Pos = MAP_APPFONT ( 260, 74 ) ;
+        Size = MAP_APPFONT ( 50, 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList [ en-US ] =
         {
-            < "Selection" ;             LISTBOX_SELECTION; > ;
+            < "Selection" ;     LISTBOX_SELECTION   ; > ;
             < "Current Section" ;   LISTBOX_SECTION     ; > ;
             < "Selected section" ;  LISTBOX_SECTIONS    ; > ;
-            < "Frame" ;                 LISTBOX_FRAME       ; > ;
-            < "Page Style: " ;          LISTBOX_PAGE        ; > ;
+            < "Frame" ;     LISTBOX_FRAME       ; > ;
+            < "Page Style: " ;  LISTBOX_PAGE        ; > ;
         };
     };
     Text [ en-US ] = "Columns";
