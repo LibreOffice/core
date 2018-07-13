@@ -845,15 +845,27 @@ FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
 
 void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 {
-    //! Order is important.
-    if ( nBits & ScRecalcMode::ALWAYS )
-        SetExclusiveRecalcModeAlways();
-    else if ( !IsRecalcModeAlways() )
+    const unsigned nExclusive = static_cast<sal_uInt8>(nBits & ScRecalcMode::EMask);
+    if (nExclusive)
     {
-        if ( nBits & ScRecalcMode::ONLOAD )
-            SetExclusiveRecalcModeOnLoad();
-        else if ( nBits & ScRecalcMode::ONLOAD_ONCE && !IsRecalcModeOnLoad() )
-            SetExclusiveRecalcModeOnLoadOnce();
+        unsigned nExBit;
+        if (nExclusive & (nExclusive - 1))
+        {
+            // More than one bit set, use highest priority.
+            for (nExBit = 1; (nExBit & static_cast<sal_uInt8>(ScRecalcMode::EMask)) != 0; nExBit <<= 1)
+            {
+                if (nExclusive & nExBit)
+                    break;
+            }
+        }
+        else
+        {
+            // Only one bit is set.
+            nExBit = nExclusive;
+        }
+        // Set exclusive bit if priority is higher than existing.
+        if (nExBit < static_cast<sal_uInt8>(nMode & ScRecalcMode::EMask))
+            SetMaskedRecalcMode( static_cast<ScRecalcMode>(nExBit));
     }
     SetCombinedBitsRecalcMode( nBits );
 }
