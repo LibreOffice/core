@@ -237,7 +237,33 @@ void SdImportTestSmartArt::testBasicProcess()
 
 void SdImportTestSmartArt::testPyramid()
 {
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-pyramid.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xShapeGroup->getCount());
+
+    /*
+    TODO FIX:
+    Getting Error: An uncaught exception of type com.sun.star.uno.RuntimeException
+    - unsatisfied query for interface of type com.sun.star.text.XText!
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xText0->getString());
+    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xText1->getString());
+    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), xText2->getString());
+    */
+
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xShape1->getPosition().Y > xShape0->getPosition().Y);
+    CPPUNIT_ASSERT(xShape2->getPosition().Y > xShape1->getPosition().Y);
+
+    CPPUNIT_ASSERT_EQUAL(xShape0->getSize().Height, xShape1->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(xShape1->getSize().Height, xShape2->getSize().Height);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTestSmartArt::testChevron()
