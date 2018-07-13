@@ -39,10 +39,11 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
     CommonBehaviorContext::CommonBehaviorContext( FragmentHandler2 const & rParent,
-            const TimeNodePtr & pNode )
-        : TimeNodeContext( rParent, PPT_TOKEN( cBhvr ), pNode )
+            const TimeNodePtr & pNode)
+        : FragmentHandler2(rParent)
             , mbInAttrList( false )
             , mbIsInAttrName( false )
+            , mpNode(pNode)
     {
     }
 
