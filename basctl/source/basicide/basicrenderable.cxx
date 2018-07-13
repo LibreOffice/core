@@ -48,7 +48,9 @@ Renderable::Renderable (BaseWindow* pWin)
     // create a choice for the range to print
     OUString aPrintContentName( "PrintContent" );
     const Sequence<OUString> aChoices{IDEResId(RID_STR_PRINTDLG_PRINTALLPAGES),
-                                      IDEResId(RID_STR_PRINTDLG_PRINTPAGES)};
+                                      IDEResId(RID_STR_PRINTDLG_PRINTPAGES),
+                                      IDEResId(RID_STR_PRINTDLG_PRINTEVENPAGES),
+                                      IDEResId(RID_STR_PRINTDLG_PRINTODDPAGES)};
     const Sequence<OUString> aHelpIds{".HelpID:vcl:PrintDialog:PrintContent:ListBox"};
     m_aUIProperties[1].Value = setChoiceListControlOpt( "printpagesbox", OUString(),
                                                    aHelpIds, aPrintContentName,
@@ -80,11 +82,25 @@ VclPtr< Printer > Renderable::getPrinter()
     return pPrinter;
 }
 
+bool Renderable::isPrintOddPages()
+{
+    sal_Int64 nContent = getIntValue( "PrintContent", -1 );
+    return nContent != 2;
+}
+
+bool Renderable::isPrintEvenPages()
+{
+    sal_Int64 nContent = getIntValue( "PrintContent", -1 );
+    return nContent != 3;
+}
+
 sal_Int32 SAL_CALL Renderable::getRendererCount (
         const Any&, const Sequence<beans::PropertyValue >& i_xOptions
         )
 {
     processProperties( i_xOptions );
+
+    maValidPages.clear();
 
     sal_Int32 nCount = 0;
     if( mpWindow )
@@ -94,6 +110,16 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
             throw lang::IllegalArgumentException();
 
         nCount = mpWindow->countPages( pPrinter );
+
+        for (sal_Int32 nPage = 1; nPage <= nCount; nPage++)
+        {
+            if ( (isPrintEvenPages() && isOnEvenPage( nPage ))
+                || (isPrintOddPages() && !isOnEvenPage( nPage )) )
+            {
+                maValidPages.push_back( nPage-1 );
+            }
+        }
+
         sal_Int64 nContent = getIntValue( "PrintContent", -1 );
         if( nContent == 1 )
         {
@@ -106,6 +132,8 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
                     nCount = nSelCount;
             }
         }
+        else if ( nContent == 2 || nContent == 3 ) // even/odd pages
+            return static_cast<sal_Int32>( maValidPages.size() );
     }
 
     return nCount;
@@ -170,7 +198,7 @@ void SAL_CALL Renderable::render (
                 mpWindow->printPage( nRenderer, pPrinter );
         }
         else
-            mpWindow->printPage( nRenderer, pPrinter );
+            mpWindow->printPage( maValidPages.at( nRenderer ), pPrinter );
     }
 }
 
