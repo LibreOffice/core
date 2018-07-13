@@ -488,8 +488,8 @@ SwXTextSearch::SwXTextSearch() :
 
 SwXTextSearch::~SwXTextSearch()
 {
-    delete m_pSearchProperties;
-    delete m_pReplaceProperties;
+    m_pSearchProperties.reset();
+    m_pReplaceProperties.reset();
 }
 
 namespace
