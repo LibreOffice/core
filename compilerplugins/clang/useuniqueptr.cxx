@@ -288,10 +288,7 @@ void UseUniquePtr::CheckDeleteExpr(const CXXMethodDecl* methodDecl, const CXXDel
     // the std::vector is being passed to another class
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sfx2/source/explorer/nochaos.cxx"))
         return;
-    // ignore std::map and std::unordered_map, MSVC 2015 has problems with mixing these with std::unique_ptr
     auto tc = loplugin::TypeCheck(fieldDecl->getType());
-    if (tc.Class("map").StdNamespace() || tc.Class("unordered_map").StdNamespace())
-        return;
     // these sw::Ring based classes do not lend themselves to std::unique_ptr management
     if (tc.Pointer().Class("SwNodeIndex").GlobalNamespace() || tc.Pointer().Class("SwShellTableCursor").GlobalNamespace()
         || tc.Pointer().Class("SwBlockCursor").GlobalNamespace() || tc.Pointer().Class("SwVisibleCursor").GlobalNamespace()

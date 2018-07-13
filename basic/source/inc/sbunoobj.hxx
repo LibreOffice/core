@@ -71,7 +71,7 @@ class SbUnoStructRefObject: public SbxObject
             return rProp.compareToIgnoreAsciiCase( rOtherProp ) < 0;
         }
     };
-    typedef std::map< OUString, StructRefInfo*, caseLessComp > StructFieldInfo;
+    typedef std::map< OUString, std::unique_ptr<StructRefInfo>, caseLessComp > StructFieldInfo;
     StructFieldInfo maFields;
     StructRefInfo maMemberInfo;
     bool mbMemberCacheInit;
