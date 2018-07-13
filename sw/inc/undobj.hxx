@@ -230,9 +230,9 @@ class SwUndoInsLayFormat;
 class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
 {
     SwTextFormatColl *pTextFormatColl, *pLastNdColl;
-    std::vector<SwFrameFormat*>* pFrameFormats;
+    std::unique_ptr<std::vector<SwFrameFormat*>> pFrameFormats;
     std::vector< std::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
-    SwRedlineData* pRedlData;
+    std::unique_ptr<SwRedlineData> pRedlData;
     bool bSttWasTextNd;
 protected:
     sal_uLong nNdDiff;

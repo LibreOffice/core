@@ -156,8 +156,8 @@ SwUndoInserts::~SwUndoInserts()
             rUNds.GetEndOfExtras().GetIndex() - m_pUndoNodeIndex->GetIndex());
         m_pUndoNodeIndex.reset();
     }
-    delete pFrameFormats;
-    delete pRedlData;
+    pFrameFormats.reset();
+    pRedlData.reset();
 }
 
 // Undo Insert operation
