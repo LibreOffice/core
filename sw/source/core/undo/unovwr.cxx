@@ -322,16 +322,15 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
 struct UndoTransliterate_Data
 {
     OUString        sText;
-    SwHistory*      pHistory;
-    Sequence< sal_Int32 >*  pOffsets;
+    std::unique_ptr<SwHistory> pHistory;
+    std::unique_ptr<Sequence< sal_Int32 >> pOffsets;
     sal_uLong           nNdIdx;
     sal_Int32      nStart, nLen;
 
     UndoTransliterate_Data( sal_uLong nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rText )
-        : sText( rText ), pHistory( nullptr ), pOffsets( nullptr ),
+        : sText( rText ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
-    ~UndoTransliterate_Data() { delete pOffsets; delete pHistory; }
 
     void SetChangeAtNode( SwDoc& rDoc );
 };
@@ -396,7 +395,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
     if( *p != ( nStart + n ))
     {
         // create the Offset array
-        pNew->pOffsets = new Sequence <sal_Int32> ( nLen );
+        pNew->pOffsets.reset( new Sequence <sal_Int32> ( nLen ) );
         sal_Int32* pIdx = pNew->pOffsets->getArray();
         p = pOffsets;
         long nMyOff, nNewVal = nStart;
@@ -428,16 +427,15 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
             if( pD->nNdIdx == pNew->nNdIdx && pD->pHistory )
             {
                 // same node and have a history?
-                pNew->pHistory = pD->pHistory;
-                pD->pHistory = nullptr;
+                pNew->pHistory = std::move(pD->pHistory);
                 break;          // more can't exist
             }
         }
 
         if( !pNew->pHistory )
         {
-            pNew->pHistory = new SwHistory;
-            SwRegHistory aRHst( rTNd, pNew->pHistory );
+            pNew->pHistory.reset( new SwHistory );
+            SwRegHistory aRHst( rTNd, pNew->pHistory.get() );
             pNew->pHistory->CopyAttr( rTNd.GetpSwpHints(),
                     pNew->nNdIdx, 0, rTNd.GetText().getLength(), false );
         }
