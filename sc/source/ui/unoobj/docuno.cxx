@@ -299,10 +299,12 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // create a choice for the range to print
     OUString aPrintRangeName( "PrintRange" );
-    aChoices.realloc( 2 );
+    aChoices.realloc( 4 );
     aHelpIds.realloc( 1 );
     aChoices[0] = ScResId( SCSTR_PRINTOPT_PRINTALLPAGES );
     aChoices[1] = ScResId( SCSTR_PRINTOPT_PRINTPAGES );
+    aChoices[2] = ScResId( SCSTR_PRINTOPT_PRINTEVENPAGES );
+    aChoices[3] = ScResId( SCSTR_PRINTOPT_PRINTODDPAGES );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:ListBox";
     m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( "printextrabox", OUString(),
                                                     aHelpIds,
@@ -1517,7 +1519,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
     bool bHasPrintContent = false;
     sal_Int32 nPrintContent = 0;        // all sheets / selected sheets / selected cells
-    sal_Int32 nPrintRange = 0;          // all pages / pages
+    sal_Int32 nPrintRange = 0;          // all pages / pages / even pages / odd pages
     OUString aPageRange;           // "pages" edit value
 
     for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
@@ -1702,8 +1704,32 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     sal_Int32 nPages = pPrintFuncCache->GetPageCount();
 
     m_pPrintState.reset();
+    maValidPages.clear();
 
-    sal_Int32 nSelectCount = nPages;
+    sal_Int32 nContent = 0;
+    for ( const auto& rValue : rOptions)
+    {
+        if ( rValue.Name == "PrintRange" )
+        {
+            rValue.Value >>= nContent;
+            break;
+        }
+    }
+
+    bool bIsPrintEvenPages = nContent != 3;
+    bool bIsPrintOddPages = nContent != 2;
+
+    for ( sal_Int32 nPage = 1; nPage <= nPages; nPage++ )
+    {
+        if ( (bIsPrintEvenPages && IsOnEvenPage( nPage )) || (bIsPrintOddPages && !IsOnEvenPage( nPage )) )
+            maValidPages.push_back( nPage );
+    }
+
+    sal_Int32 nSelectCount = static_cast<sal_Int32>( maValidPages.size() );
+
+    if ( nContent == 2 || nContent == 3 ) // even pages / odd pages
+        return nSelectCount;
+
     if ( !aPagesStr.isEmpty() )
     {
         StringRangeEnumerator aRangeEnum( aPagesStr, 0, nPages-1 );
@@ -1799,7 +1825,12 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
     //  printer is used as device (just for page layout), draw view is not needed
 
-    SCTAB nTab = pPrintFuncCache->GetTabForPage( nRenderer );
+    SCTAB nTab;
+    if ( !maValidPages.empty() )
+        nTab = pPrintFuncCache->GetTabForPage( maValidPages.at( nRenderer )-1 );
+    else
+        nTab = pPrintFuncCache->GetTabForPage( nRenderer );
+
 
     ScRange aRange;
     const ScRange* pSelRange = nullptr;
@@ -1832,10 +1863,27 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
                                              pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
         pPrintFunc->SetRenderFlag( true );
 
-        Range aPageRange( nRenderer+1, nRenderer+1 );
-        MultiSelection aPage( aPageRange );
-        aPage.SetTotalRange( Range(0,RANGE_MAX) );
-        aPage.Select( aPageRange );
+        sal_Int32 nContent = 0;
+        for ( const auto& rValue : rOptions)
+        {
+            if ( rValue.Name == "PrintRange" )
+            {
+                rValue.Value >>= nContent;
+                break;
+            }
+        }
+
+        MultiSelection aPage;
+        if ( nContent == 2 || nContent == 3 ) // even pages or odd pages
+        {
+            aPage.SetTotalRange( Range(0,RANGE_MAX) );
+            aPage.Select( maValidPages.at( nRenderer ) );
+        }
+        else
+        {
+            aPage.SetTotalRange( Range(0,RANGE_MAX) );
+            aPage.Select( nRenderer+1 );
+        }
 
         long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
         long nTabStart = pPrintFuncCache->GetTabStart( nTab );
@@ -1955,7 +2003,12 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         }
     } aDrawViewKeeper;
 
-    SCTAB nTab = pPrintFuncCache->GetTabForPage( nRenderer );
+    SCTAB nTab;
+    if ( !maValidPages.empty() )
+        nTab = pPrintFuncCache->GetTabForPage( maValidPages.at( nRenderer )-1 );
+    else
+        nTab = pPrintFuncCache->GetTabForPage( nRenderer );
+
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
     if( pModel )
@@ -1982,10 +2035,27 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
         pPrintFunc->SetExclusivelyDrawOleAndDrawObjects();
 
-    Range aPageRange( nRenderer+1, nRenderer+1 );
-    MultiSelection aPage( aPageRange );
-    aPage.SetTotalRange( Range(0,RANGE_MAX) );
-    aPage.Select( aPageRange );
+    sal_Int32 nContent = 0;
+    for ( const auto& rValue : rOptions)
+    {
+        if ( rValue.Name == "PrintRange" )
+        {
+            rValue.Value >>= nContent;
+            break;
+        }
+    }
+
+    MultiSelection aPage;
+    if ( nContent == 2 || nContent == 3 ) // even pages or odd pages
+    {
+        aPage.SetTotalRange( Range(0,RANGE_MAX) );
+        aPage.Select( maValidPages.at( nRenderer ) );
+    }
+    else
+    {
+        aPage.SetTotalRange( Range(0,RANGE_MAX) );
+        aPage.Select( nRenderer+1 );
+    }
 
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );

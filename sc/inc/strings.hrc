@@ -109,6 +109,8 @@
 #define SCSTR_PRINTOPT_FROMWHICH                    NC_("SCSTR_PRINTOPT_FROMWHICH", "From which:")
 #define SCSTR_PRINTOPT_PRINTALLPAGES                NC_("SCSTR_PRINTOPT_PRINTALLPAGES", "Print all pages")
 #define SCSTR_PRINTOPT_PRINTPAGES                   NC_("SCSTR_PRINTOPT_PRINTPAGES", "Print pages")
+#define SCSTR_PRINTOPT_PRINTEVENPAGES               NC_("SCSTR_PRINTOPT_PRINTEVENPAGES", "Print even pages")
+#define SCSTR_PRINTOPT_PRINTODDPAGES                NC_("SCSTR_PRINTOPT_PRINTODDPAGES", "Print odd pages")
 #define SCSTR_PRINTOPT_PRODNAME                     NC_("SCSTR_PRINTOPT_PRODNAME", "%PRODUCTNAME %s")
 #define SCSTR_WARN_ME_IN_FUTURE_CHECK               NC_("SCSTR_WARN_ME_IN_FUTURE_CHECK", "Warn me about this in the future.")
 #define SCSTR_DDEDOC_NOT_LOADED                     NC_("SCSTR_DDEDOC_NOT_LOADED", "The following DDE source could not be updated possibly because the source document was not open. Please launch the source document and try again." )
