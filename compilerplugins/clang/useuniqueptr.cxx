@@ -70,10 +70,14 @@ public:
         if (fn == SRCDIR "/sc/source/ui/unoobj/funcuno.cxx")
             return;
         // SwAttrIter::m_pFont
-        if (fn == SRCDIR "/sw/source/core/text/itratr.cxx")
+        if (fn == SRCDIR "/sw/source/core/text/itratr.cxx"
+            || fn == SRCDIR "/sw/source/core/text/redlnitr.cxx")
             return;
         // SwWrongList
         if (fn == SRCDIR "/sw/source/core/text/wrong.cxx")
+            return;
+        // SwLineLayout::m_pNext
+        if (fn == SRCDIR "/sw/source/core/text/porlay.cxx")
             return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
