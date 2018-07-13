@@ -75,27 +75,25 @@ SwSdrUndo::SwSdrUndo( SdrUndoAction* pUndo, const SdrMarkList* pMrkLst, const Sw
     : SwUndo( SwUndoId::DRAWUNDO, pDoc ), pSdrUndo( pUndo )
 {
     if( pMrkLst && pMrkLst->GetMarkCount() )
-        pMarkList = new SdrMarkList( *pMrkLst );
-    else
-        pMarkList = nullptr;
+        pMarkList.reset( new SdrMarkList( *pMrkLst ) );
 }
 
 SwSdrUndo::~SwSdrUndo()
 {
-    delete pSdrUndo;
-    delete pMarkList;
+    pSdrUndo.reset();
+    pMarkList.reset();
 }
 
 void SwSdrUndo::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     pSdrUndo->Undo();
-    rContext.SetSelections(nullptr, pMarkList);
+    rContext.SetSelections(nullptr, pMarkList.get());
 }
 
 void SwSdrUndo::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     pSdrUndo->Redo();
-    rContext.SetSelections(nullptr, pMarkList);
+    rContext.SetSelections(nullptr, pMarkList.get());
 }
 
 OUString SwSdrUndo::GetComment() const
