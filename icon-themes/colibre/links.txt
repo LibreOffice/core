@@ -318,6 +318,10 @@ cmd/sc_filecontrol.png cmd/sc_open.png
 cmd/lc_mergedocument.png cmd/lc_mergedocuments.png
 cmd/sc_mergedocument.png cmd/sc_mergedocuments.png
 
+# Layout
+cmd/sc_attributepagesize.png cmd/sc_ruler.png
+cmd/sc_pagecolumntype.png cmd/sc_insertsection.png
+
 # Print
 cmd/lc_printpagepreview.png cmd/lc_printpreview.png
 cmd/lc_printlayout.png cmd/lc_printpreview.png
