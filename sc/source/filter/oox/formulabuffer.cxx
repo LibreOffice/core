@@ -158,6 +158,11 @@ void applySharedFormulas(
                 case XML_n:
                     // numeric value.
                     pCell->SetResultDouble(rDesc.maCellValue.toDouble());
+                    /* TODO: is it on purpose that we never reset dirty here
+                     * and thus recalculate anyway if cell was dirty? Or is it
+                     * never dirty and therefor set dirty below otherwise? This
+                     * is different from the non-shared case in
+                     * applyCellFormulaValues(). */
                 break;
                 case XML_str:
                     if (bGeneratorKnownGood)

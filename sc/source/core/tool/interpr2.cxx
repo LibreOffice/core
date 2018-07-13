@@ -2748,10 +2748,8 @@ void ScInterpreter::ScDde()
             return;
         }
 
-            // Need to reinterpret after loading (build links)
-
-        if ( rArr.IsRecalcModeNormal() )
-            rArr.SetExclusiveRecalcModeOnLoad();
+        // Need to reinterpret after loading (build links)
+        rArr.AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
 
             //  while the link is not evaluated, idle must be disabled (to avoid circular references)
 

@@ -22,6 +22,8 @@
 #include <listenercontext.hxx>
 #include <attarray.hxx>
 #include <sharedformula.hxx>
+#include <bcaslot.hxx>
+#include <scopetools.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
@@ -718,6 +720,56 @@ void ScDocumentImport::initColumn(ScColumn& rCol)
     aFunc.swap(rCol.maCellTextAttrs);
 
     rCol.CellStorageModified();
+}
+
+namespace {
+
+class CellStoreAfterImportBroadcaster
+{
+public:
+
+    CellStoreAfterImportBroadcaster() {}
+
+    void operator() (const sc::CellStoreType::value_type& node)
+    {
+        if (node.type == sc::element_type_formula)
+        {
+            // Broadcast all formula cells marked for recalc.
+            ScFormulaCell** pp = &sc::formula_block::at(*node.data, 0);
+            ScFormulaCell** ppEnd = pp + node.size;
+            for (; pp != ppEnd; ++pp)
+            {
+                if ((*pp)->GetCode()->IsRecalcModeMustAfterImport())
+                    (*pp)->SetDirty();
+            }
+        }
+    }
+};
+
+}
+
+void ScDocumentImport::broadcastRecalcAfterImport()
+{
+    sc::AutoCalcSwitch aACSwitch( mpImpl->mrDoc, false);
+    ScBulkBroadcast aBulkBroadcast( mpImpl->mrDoc.GetBASM(), SfxHintId::ScDataChanged);
+
+    ScDocument::TableContainer::iterator itTab = mpImpl->mrDoc.maTabs.begin(), itTabEnd = mpImpl->mrDoc.maTabs.end();
+    for (; itTab != itTabEnd; ++itTab)
+    {
+        if (!*itTab)
+            continue;
+
+        ScTable& rTab = **itTab;
+        SCCOL nNumCols = rTab.aCol.size();
+        for (SCCOL nColIdx = 0; nColIdx < nNumCols; ++nColIdx)
+            broadcastRecalcAfterImportColumn(rTab.aCol[nColIdx]);
+    }
+}
+
+void ScDocumentImport::broadcastRecalcAfterImportColumn(ScColumn& rCol)
+{
+    CellStoreAfterImportBroadcaster aFunc;
+    std::for_each(rCol.maCells.begin(), rCol.maCells.end(), aFunc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2698,8 +2698,7 @@ void ScInterpreter::ScExternal()
                 else
                 {
                     // enable asyncs after loading
-                    if ( rArr.IsRecalcModeNormal() )
-                        rArr.SetExclusiveRecalcModeOnLoad();
+                    rArr.AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                     // assure identical handler with identical call?
                     double nErg = 0.0;
                     ppParam[0] = &nErg;
@@ -3059,10 +3058,7 @@ void ScInterpreter::ScExternal()
 
             if ( aCall.HasVarRes() )                        // handle async functions
             {
-                if ( rArr.IsRecalcModeNormal() )
-                {
-                    rArr.SetExclusiveRecalcModeOnLoad();
-                }
+                rArr.AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                 uno::Reference<sheet::XVolatileResult> xRes = aCall.GetVarRes();
                 ScAddInListener* pLis = ScAddInListener::Get( xRes );
                 if ( !pLis )
