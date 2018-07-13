@@ -61,9 +61,9 @@ typedef std::vector<SwNodeIndex*> SwUndoSortList;
 
 class SwUndoSort : public SwUndo, private SwUndRng
 {
-    SwSortOptions*    pSortOpt;
+    std::unique_ptr<SwSortOptions>    pSortOpt;
     std::vector<std::unique_ptr<SwSortUndoElement>> m_SortList;
-    SwUndoAttrTable*  pUndoTableAttr;
+    std::unique_ptr<SwUndoAttrTable>  pUndoTableAttr;
     sal_uLong         nTableNd;
 
 public:
