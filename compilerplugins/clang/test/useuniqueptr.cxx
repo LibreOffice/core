@@ -77,13 +77,12 @@ class Class7 {
             delete m_pbar[i]; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
-// don't warn for maps, MSVC 2015 has problems with mixing std::map/std::unordered_map and std::unique_ptr
 class Class8 {
-    std::unordered_map<int, int*> m_pbar;
+    std::unordered_map<int, int*> m_pbar; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Class8()
     {
         for (auto i : m_pbar)
-            delete i.second;
+            delete i.second; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 class Foo8 {
