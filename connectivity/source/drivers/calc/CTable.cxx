@@ -39,6 +39,7 @@
 #include <component/CColumns.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <svl/zforlist.hxx>

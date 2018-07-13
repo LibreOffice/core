@@ -51,6 +51,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <editeng/optitems.hxx>

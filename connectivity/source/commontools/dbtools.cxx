@@ -77,6 +77,7 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase.hxx>
 #include <strings.hrc>

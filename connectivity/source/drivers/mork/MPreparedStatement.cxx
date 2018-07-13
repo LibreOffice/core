@@ -12,6 +12,7 @@
 #include "MResultSetMetaData.hxx"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <sal/log.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

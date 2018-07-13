@@ -20,6 +20,7 @@
 #include <stdio.h>
 
 #include <sal/main.h>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>

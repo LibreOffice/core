@@ -64,6 +64,7 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/searchopt.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>

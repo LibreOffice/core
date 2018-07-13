@@ -2,6 +2,7 @@
 
 #include "MorkParser.hxx"
 #include <iostream>
+#include <sal/log.hxx>
 
 bool openAddressBook(const std::string& path)
 {

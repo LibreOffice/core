@@ -19,6 +19,7 @@
 
 #include "MNSINIParser.hxx"
 #include <rtl/byteseq.hxx>
+#include <sal/log.hxx>
 
 IniParser::IniParser(OUString const & rIniName)
 {

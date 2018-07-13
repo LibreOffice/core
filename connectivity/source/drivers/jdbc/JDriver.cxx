@@ -24,6 +24,7 @@
 #include <java/sql/Connection.hxx>
 #include <java/util/Property.hxx>
 #include <java/tools.hxx>
+#include <sal/log.hxx>
 #include <connectivity/dbexception.hxx>
 #include <jvmfwk/framework.hxx>
 #include <strings.hrc>

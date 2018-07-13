@@ -22,6 +22,7 @@
 #include <ado/Awrapadox.hxx>
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace connectivity::ado;
 

@@ -30,6 +30,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
+#include <sal/log.hxx>
 
 #include <cppcanvas/canvas.hxx>
 

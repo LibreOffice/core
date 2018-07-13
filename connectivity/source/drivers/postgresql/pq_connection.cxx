@@ -54,6 +54,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 #include <o3tl/enumarray.hxx>
 #include <osl/module.h>
 

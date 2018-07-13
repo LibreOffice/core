@@ -51,6 +51,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <strings.hrc>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <cassert>

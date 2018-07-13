@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <sal/log.hxx>
 #include <vcl/canvastools.hxx>
 #include <implrenderer.hxx>
 

@@ -24,6 +24,7 @@
 #include <osl/endian.h>
 #include <odbc/OConnection.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <string.h>
 #include <string>

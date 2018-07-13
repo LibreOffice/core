@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <connectivity/TTableHelper.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>

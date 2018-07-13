@@ -43,6 +43,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

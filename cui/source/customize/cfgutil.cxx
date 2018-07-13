@@ -54,6 +54,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/treelistentry.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <dialmgr.hxx>
 #include <svl/stritem.hxx>

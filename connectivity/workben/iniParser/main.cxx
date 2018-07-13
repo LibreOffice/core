@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <osl/process.h>
 

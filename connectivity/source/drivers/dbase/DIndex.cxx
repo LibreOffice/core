@@ -24,6 +24,7 @@
 #include <dbase/DTable.hxx>
 #include <dbase/DIndexIter.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <tools/config.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>

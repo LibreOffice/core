@@ -33,6 +33,7 @@
 #include <strings.hrc>
 
 #include <unotools/textsearch.hxx>
+#include <sal/log.hxx>
 
 using namespace connectivity::mork;
 using namespace connectivity;

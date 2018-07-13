@@ -46,6 +46,7 @@
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/opengrf.hxx>
+#include <sal/log.hxx>
 
 #include <o3tl/make_unique.hxx>
 
