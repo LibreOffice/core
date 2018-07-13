@@ -47,7 +47,7 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
         {
         case SwUndoId::DELETE:
         case SwUndoId::REPLACE:
-            mpRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_DELETE, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() );
+            mpRedlData.reset( new SwRedlineData( nsRedlineType_t::REDLINE_DELETE, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
             break;
         default:
             ;
@@ -57,11 +57,10 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
 
     sal_uLong nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
-    mpRedlSaveData = new SwRedlineSaveDatas;
+    mpRedlSaveData.reset( new SwRedlineSaveDatas );
     if( !FillSaveData( rRange, *mpRedlSaveData, false, SwUndoId::REJECT_REDLINE != mnUserId ))
     {
-        delete mpRedlSaveData;
-        mpRedlSaveData = nullptr;
+        mpRedlSaveData.reset();
     }
     else
     {
@@ -77,8 +76,8 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
 
 SwUndoRedline::~SwUndoRedline()
 {
-    delete mpRedlData;
-    delete mpRedlSaveData;
+    mpRedlData.reset();
+    mpRedlSaveData.reset();
 }
 
 sal_uInt16 SwUndoRedline::GetRedlSaveCount() const

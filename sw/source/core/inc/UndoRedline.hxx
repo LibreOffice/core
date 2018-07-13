@@ -31,8 +31,8 @@ class SwUndoDelete;
 class SwUndoRedline : public SwUndo, public SwUndRng
 {
 protected:
-    SwRedlineData* mpRedlData;
-    SwRedlineSaveDatas* mpRedlSaveData;
+    std::unique_ptr<SwRedlineData> mpRedlData;
+    std::unique_ptr<SwRedlineSaveDatas> mpRedlSaveData;
     SwUndoId mnUserId;
     bool mbHiddenRedlines;
 
