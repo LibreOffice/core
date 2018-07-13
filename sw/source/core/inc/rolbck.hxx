@@ -311,7 +311,7 @@ class SwHistory
     friend class SwDoc;         // actually only SwDoc::DelUndoObj may access
     friend class SwRegHistory;  // for inserting History attributes
 
-    std::vector<SwHistoryHint*> m_SwpHstry;
+    std::vector<std::unique_ptr<SwHistoryHint>> m_SwpHstry;
     sal_uInt16 m_nEndDiff;
 
 public:
@@ -338,9 +338,9 @@ public:
     sal_uInt16 Count() const { return m_SwpHstry.size(); }
     sal_uInt16 GetTmpEnd() const { return m_SwpHstry.size() - m_nEndDiff; }
     sal_uInt16 SetTmpEnd( sal_uInt16 nTmpEnd );        // return previous value
-    SwHistoryHint      * operator[]( sal_uInt16 nPos ) { return m_SwpHstry[nPos]; }
+    SwHistoryHint      * operator[]( sal_uInt16 nPos ) { return m_SwpHstry[nPos].get(); }
     SwHistoryHint const* operator[]( sal_uInt16 nPos ) const
-        { return m_SwpHstry[nPos]; }
+        { return m_SwpHstry[nPos].get(); }
 
     // for SwUndoDelete::Undo/Redo
     void Move( sal_uInt16 nPos, SwHistory *pIns,
@@ -348,8 +348,9 @@ public:
     {
         auto itSourceBegin = pIns->m_SwpHstry.begin() + nStart;
         auto itSourceEnd = pIns->m_SwpHstry.end();
-        if (itSourceBegin == itSourceEnd) return;
-        m_SwpHstry.insert(m_SwpHstry.begin() + nPos, itSourceBegin, itSourceEnd);
+        if (itSourceBegin == itSourceEnd)
+            return;
+        m_SwpHstry.insert(m_SwpHstry.begin() + nPos, std::make_move_iterator(itSourceBegin), std::make_move_iterator(itSourceEnd));
         pIns->m_SwpHstry.erase( itSourceBegin, itSourceEnd );
     }
 
