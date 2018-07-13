@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_845bf485",
+        "filename": "icon-themes/breeze_svg/cmd/sc_adddirect.svg",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-07-13T10:31:28Z",
+      "side": 1,
+      "message": "I see this file’s source is no longer minified. Can you do that?",
+      "revId": "a681d657834f305e6f2f4fb76f135ffc0bd951df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
