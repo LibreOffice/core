@@ -36,7 +36,7 @@ namespace oox { namespace ppt {
 
     /** CT_TLCommonBehaviorData */
     class CommonBehaviorContext
-        : public TimeNodeContext
+        : public ::oox::core::FragmentHandler2
     {
     public:
         CommonBehaviorContext( ::oox::core::FragmentHandler2 const & rParent,
@@ -55,6 +55,7 @@ namespace oox { namespace ppt {
         bool              mbIsInAttrName;
         std::vector< Attribute > maAttributes;
         OUString   msCurrentAttribute;
+        const TimeNodePtr& mpNode;
     };
 
 } }
