@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_2400a834",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7605,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-07-13T11:33:20Z",
+      "side": 1,
+      "message": "It seems to me that this will make document formatting depend on user setting - that\u0027s really a bad sign. It should get the direction of the upper-level frame, up to the page level in the worst case.",
+      "range": {
+        "startLine": 7605,
+        "startChar": 51,
+        "endLine": 7605,
+        "endChar": 78
+      },
+      "revId": "a69244e00fe558eac057380984cc3d47bab51655",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
