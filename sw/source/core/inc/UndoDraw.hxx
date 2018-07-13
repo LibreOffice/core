@@ -36,8 +36,8 @@ class SwDoc;
 // Undo for Draw Objects
 class SwSdrUndo : public SwUndo
 {
-    SdrUndoAction* pSdrUndo;
-    SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
+    std::unique_ptr<SdrUndoAction> pSdrUndo;
+    std::unique_ptr<SdrMarkList> pMarkList; // MarkList for all selected SdrObjects
 
 public:
     SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList, const SwDoc* pDoc );
