@@ -28,7 +28,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-mkdir.patch.1 \
 	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch.1 \
 	external/icu/icu4c-ubsan.patch.1 \
-	external/icu/icu4c-icu11100.patch.1 \
 	external/icu/icu4c-scriptrun.patch.1 \
 	external/icu/icu4c-rtti.patch.1 \
 	external/icu/icu4c-clang-cl.patch.1 \
