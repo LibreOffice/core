@@ -378,7 +378,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
         RedlineType_t eTyp = bInsert ? nsRedlineType_t::REDLINE_INSERT : nsRedlineType_t::REDLINE_DELETE;
-        pRedlData = new SwRedlineData( eTyp, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() );
+        pRedlData.reset( new SwRedlineData( eTyp, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 }
@@ -392,24 +392,23 @@ SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     SwDoc* pDoc = rRedl.GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( rRedl.GetRedlineData() );
+        pRedlData.reset( new SwRedlineData( rRedl.GetRedlineData() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
-    pRedlSaveData = new SwRedlineSaveDatas;
+    pRedlSaveData.reset( new SwRedlineSaveDatas );
     if( !FillSaveData( rRedl, *pRedlSaveData, false ))
     {
-        delete pRedlSaveData;
-        pRedlSaveData = nullptr;
+        pRedlSaveData.reset();
     }
 }
 
 SwUndoCompDoc::~SwUndoCompDoc()
 {
-    delete pRedlData;
-    delete pUnDel;
-    delete pUnDel2;
-    delete pRedlSaveData;
+    pRedlData.reset();
+    pUnDel.reset();
+    pUnDel2.reset();
+    pRedlSaveData.reset();
 }
 
 void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -441,7 +440,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         bool bJoinText, bJoinPrev;
         sw_GetJoinFlags(rPam, bJoinText, bJoinPrev);
 
-        pUnDel = new SwUndoDelete(rPam, false);
+        pUnDel.reset( new SwUndoDelete(rPam, false) );
 
         if( bJoinText )
             sw_JoinText(rPam, bJoinPrev);
@@ -458,7 +457,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
                 ++rPam.GetPoint()->nNode;
                 rPam.GetBound().nContent.Assign( nullptr, 0 );
                 rPam.GetBound( false ).nContent.Assign( nullptr, 0 );
-                pUnDel2 = new SwUndoDelete(rPam, true);
+                pUnDel2.reset( new SwUndoDelete(rPam, true) );
             }
         }
         rPam.DeleteMark();
@@ -501,12 +500,10 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         if( pUnDel2 )
         {
             pUnDel2->UndoImpl(rContext);
-            delete pUnDel2;
-            pUnDel2 = nullptr;
+            pUnDel2.reset();
         }
         pUnDel->UndoImpl(rContext);
-        delete pUnDel;
-        pUnDel = nullptr;
+        pUnDel.reset();
 
         // note: don't call SetPaM before executing Undo of members
         SwPaM& rPam(AddUndoRedoPaM(rContext));
