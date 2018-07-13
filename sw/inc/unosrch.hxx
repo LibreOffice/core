@@ -45,8 +45,8 @@ class SwXTextSearch : public cppu::WeakImplHelper
     OUString                m_sSearchText;
     OUString                m_sReplaceText;
 
-    SwSearchProperties_Impl*    m_pSearchProperties;
-    SwSearchProperties_Impl*    m_pReplaceProperties;
+    std::unique_ptr<SwSearchProperties_Impl> m_pSearchProperties;
+    std::unique_ptr<SwSearchProperties_Impl> m_pReplaceProperties;
 
     const SfxItemPropertySet*   m_pPropSet;
     bool                    m_bAll  : 1;
