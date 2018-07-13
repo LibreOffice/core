@@ -116,7 +116,7 @@ public:
 class SwUndoDrawDelete : public SwUndo
 {
     std::unique_ptr<SwUndoGroupObjImpl[]> pObjArr;
-    SdrMarkList* pMarkLst;  // MarkList for all selected SdrObjects
+    std::unique_ptr<SdrMarkList> pMarkLst;  // MarkList for all selected SdrObjects
     bool bDelFormat;
 
 public:
