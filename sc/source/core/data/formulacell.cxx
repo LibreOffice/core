@@ -1366,8 +1366,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     pDocument->CheckLinkFormulaNeedingCheck(*pCode);
 
     //volatile cells must be added here for import
-    if( pCode->IsRecalcModeAlways() || pCode->IsRecalcModeForced() ||
-        pCode->IsRecalcModeOnLoad() || pCode->IsRecalcModeOnLoadOnce() )
+    if( !pCode->IsRecalcModeNormal() || pCode->IsRecalcModeForced())
     {
         // During load, only those cells that are marked explicitly dirty get
         // recalculated.  So we need to set it dirty here.

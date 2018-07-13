@@ -1424,14 +1424,15 @@ void FormulaCompiler::Factor()
             switch( eOp )
             {
                     // Functions recalculated on every document load.
-                    // Don't use SetExclusiveRecalcModeOnLoad() which would
-                    // override ModeAlways, use
-                    // AddRecalcMode(ScRecalcMode::ONLOAD) instead.
+                    // ONLOAD_LENIENT here to be able to distinguish and not
+                    // force a recalc (if not in an ALWAYS or ONLOAD_MUST
+                    // context) but keep an imported result from for example
+                    // OOXML a DDE call. Will be recalculated for ODFF.
                 case ocConvertOOo :
                 case ocDde:
                 case ocMacro:
                 case ocExternal:
-                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD );
+                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                 break;
                     // If the referred cell is moved the value changes.
                 case ocColumn :
@@ -1439,15 +1440,15 @@ void FormulaCompiler::Factor()
                     pArr->SetRecalcModeOnRefMove();
                 break;
                     // ocCell needs recalc on move for some possible type values.
-                    // and recalc mode on load, fdo#60646
+                    // And recalc mode on load, tdf#60645
                 case ocCell :
                     pArr->SetRecalcModeOnRefMove();
-                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD );
+                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
                 break;
                 case ocHyperLink :
-                    // cell with hyperlink needs to be calculated on load to
+                    // Cell with hyperlink needs to be calculated on load to
                     // get its matrix result generated.
-                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD );
+                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
                     pArr->SetHyperLink( true);
                 break;
                 default:
