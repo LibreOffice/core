@@ -508,6 +508,20 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable2, "reqif-table2.odt")
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:td>") != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testReqIfWellFormed, "reqif.odt")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_uInt64 nLength = pStream->Tell();
+    pStream->Seek(0);
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    // This failed, <font face="..."> was written.
+    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:span style=\"font-family:") != -1);
+    // This failed, <font size="..."> was written.
+    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:span style=\"font-size:") != -1);
+}
+
 DECLARE_HTMLEXPORT_TEST(testReqIfList, "reqif-list.xhtml")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
