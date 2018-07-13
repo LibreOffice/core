@@ -401,6 +401,7 @@ public:
     virtual void startRendering() override;
 
     bool NeedsRepaint() const;
+    void CalcAll();
 
 protected:
     virtual void    DataChanged() const;
@@ -589,6 +590,9 @@ public:
 
     void startRendering();
     void endRendering();
+
+    // Forced recalculation for formulas
+    void CalcAll();
 };
 
 //  List of all conditional formats in a sheet
@@ -654,6 +658,9 @@ public:
     void endRendering();
 
     sal_uInt32 getMaxKey() const;
+
+    /// Forced recalculation of formulas
+    void CalcAll();
 };
 
 #endif
