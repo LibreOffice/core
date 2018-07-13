@@ -119,7 +119,10 @@ private:
         OUString const & aServiceSpecifier,
         css::uno::Sequence<css::uno::Any> const * arguments);
 
-    OUString           maBuildId;
+    static bool             IsOnEvenPage( sal_Int32 nPage ) { return nPage % 2 == 0; };
+
+    OUString                maBuildId;
+    std::vector<sal_Int32>  maValidPages;
 protected:
     const SfxItemPropertySet&   GetPropertySet() const { return aPropSet; }
 
