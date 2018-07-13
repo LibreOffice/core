@@ -479,7 +479,7 @@ SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc* pDoc )
     : SwUndo( SwUndoId::DRAWDELETE, pDoc ), bDelFormat( true )
 {
     pObjArr.reset( new SwUndoGroupObjImpl[ nCnt ] );
-    pMarkLst = new SdrMarkList();
+    pMarkLst.reset( new SdrMarkList() );
 }
 
 SwUndoDrawDelete::~SwUndoDrawDelete()
@@ -490,7 +490,6 @@ SwUndoDrawDelete::~SwUndoDrawDelete()
         for( size_t n = 0; n < pMarkLst->GetMarkCount(); ++n, ++pTmp )
             delete pTmp->pFormat;
     }
-    delete pMarkLst;
 }
 
 void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -516,7 +515,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         if (pDrawFrameFormat)
             pDrawFrameFormat->PosAttrSet();
     }
-    rContext.SetSelections(nullptr, pMarkLst);
+    rContext.SetSelections(nullptr, pMarkLst.get());
 }
 
 void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
