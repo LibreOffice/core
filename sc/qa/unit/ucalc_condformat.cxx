@@ -1226,4 +1226,42 @@ void Test::testCondFormatListenToOwnRange()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondFormatVolatileFunctionRecalc()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue(0, 0, 0, 0.5);
+
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,10,0,0));
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Greater,"RAND()","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    pEntry->SetParent(pFormat);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pFormat->AddEntry(pEntry);
+    pList->InsertNew(pFormat);
+
+    ScRefCellValue aCell(*m_pDoc, ScAddress(0, 0, 0));
+    bool bValid = pEntry->IsCellValid(aCell, ScAddress(0, 0, 0));
+
+    bool bNewValid = bValid;
+    // chance of a random failure is 0.5^100, anyone hitting that will get a beer from me
+    for (size_t i = 0; i < 100; ++i)
+    {
+        pFormat->CalcAll();
+        bNewValid = pEntry->IsCellValid(aCell, ScAddress(0, 0, 0));
+
+        if (bValid != bNewValid)
+            break;
+    }
+
+    CPPUNIT_ASSERT(bValid != bNewValid);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
