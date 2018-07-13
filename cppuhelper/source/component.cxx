@@ -19,6 +19,7 @@
 
 #include <rtl/string.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>

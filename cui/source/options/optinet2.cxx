@@ -72,6 +72,7 @@
 #endif
 #include <sal/types.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>

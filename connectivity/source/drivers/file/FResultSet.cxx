@@ -36,6 +36,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <sal/log.hxx>
 #include <iterator>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>

@@ -15,6 +15,7 @@
 #include "MorkParser.hxx"
 
 #include <connectivity/dbexception.hxx>
+#include <sal/log.hxx>
 
 #include <strings.hrc>
 

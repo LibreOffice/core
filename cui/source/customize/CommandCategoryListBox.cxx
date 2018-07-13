@@ -42,6 +42,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/make_unique.hxx>
 #include <i18nutil/searchopt.hxx>
+#include <sal/log.hxx>
 
 #include <cfg.hxx> //for SaveInData
 

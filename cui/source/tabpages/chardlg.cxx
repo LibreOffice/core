@@ -70,6 +70,7 @@
 #include <sfx2/request.hxx>
 #include <svx/flagsdef.hxx>
 #include <FontFeaturesDialog.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

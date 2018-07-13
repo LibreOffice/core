@@ -22,6 +22,7 @@
 
 #include <ibase.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <FDatabaseMetaDataResultSet.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>

@@ -18,6 +18,7 @@
  */
 
 #include <linkdlg.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/urlobj.hxx>

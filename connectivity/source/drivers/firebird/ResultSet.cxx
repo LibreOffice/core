@@ -28,6 +28,7 @@
 #include <propertyids.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <time.h>
 #include <TConnection.hxx>
 

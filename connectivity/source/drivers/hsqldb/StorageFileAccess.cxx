@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <hsqldb/HStorageMap.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star::container;

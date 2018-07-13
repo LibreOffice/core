@@ -29,6 +29,7 @@
 #include <TPrivilegesResultSet.hxx>
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;

@@ -26,6 +26,7 @@
 #include "NStatement.hxx"
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 using namespace connectivity::evoab;
 using namespace dbtools;

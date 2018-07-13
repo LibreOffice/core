@@ -22,6 +22,8 @@ static ::osl::Mutex m_aMetaMutex;
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 
+#include <sal/log.hxx>
+
 #include "MorkParser.hxx"
 
 using namespace connectivity;

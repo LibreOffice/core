@@ -39,6 +39,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
+#include <sal/log.hxx>
 
 using namespace ::css;
 

@@ -19,6 +19,7 @@
 
 #include "optctl.hxx"
 #include <svl/ctloptions.hxx>
+#include <sal/log.hxx>
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 

@@ -106,6 +106,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/treelistentry.hxx>
+#include <sal/log.hxx>
 
 #ifdef LINUX
 #include <sys/stat.h>

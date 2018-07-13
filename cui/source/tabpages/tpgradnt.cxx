@@ -41,6 +41,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
+#include <sal/log.hxx>
 
 #include <o3tl/make_unique.hxx>
 

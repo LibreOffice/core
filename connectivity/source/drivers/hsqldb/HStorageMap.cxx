@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <uno/mapping.hxx>
 #include <algorithm>
 

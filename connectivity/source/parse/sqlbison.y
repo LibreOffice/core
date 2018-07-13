@@ -45,6 +45,7 @@
 #include "connectivity/dbconversion.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #if defined _MSC_VER
 #pragma warning(push)

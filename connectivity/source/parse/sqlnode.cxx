@@ -56,6 +56,7 @@
 #include <functional>
 #include <memory>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;

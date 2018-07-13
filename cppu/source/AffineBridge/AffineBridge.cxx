@@ -22,6 +22,7 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <cppu/Enterable.hxx>
 #include <cppu/helper/purpenv/Environment.hxx>

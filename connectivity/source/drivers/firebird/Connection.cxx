@@ -53,6 +53,7 @@
 #include <unotools/localfilehelper.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace connectivity::firebird;
 using namespace connectivity;

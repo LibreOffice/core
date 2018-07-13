@@ -24,6 +24,7 @@
 #include <strings.hrc>
 
 #include <algorithm>
+#include <sal/log.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>

@@ -10,6 +10,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
 
 #include "tsaurls.hxx"
 

@@ -35,6 +35,7 @@
 #include <vcl/fixed.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/optionsdlg.hxx>
+#include <sal/log.hxx>
 
 #include <sfx2/fcontnr.hxx>
 

@@ -38,6 +38,7 @@
 #include <implrenderer.hxx>
 #include "emfpbrush.hxx"
 #include "emfppath.hxx"
+#include <sal/log.hxx>
 
 namespace cppcanvas
 {

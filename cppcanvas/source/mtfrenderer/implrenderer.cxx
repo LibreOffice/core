@@ -63,6 +63,7 @@
 #include <tools.hxx>
 #include <outdevstate.hxx>
 #include <action.hxx>
+#include <sal/log.hxx>
 #include "bitmapaction.hxx"
 #include "lineaction.hxx"
 #include "pointaction.hxx"

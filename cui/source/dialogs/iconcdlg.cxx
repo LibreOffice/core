@@ -22,6 +22,7 @@
 #include <iconcdlg.hxx>
 #include <cuihyperdlg.hxx>
 
+#include <sal/log.hxx>
 #include <unotools/viewoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/mnemonic.hxx>

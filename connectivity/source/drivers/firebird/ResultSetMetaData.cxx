@@ -25,6 +25,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
+#include <sal/log.hxx>
+
 using namespace connectivity::firebird;
 
 using namespace com::sun::star::lang;

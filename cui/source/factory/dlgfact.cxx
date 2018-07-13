@@ -24,6 +24,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/pageids.hxx>
 #include <sfx2/request.hxx>
+#include <sal/log.hxx>
 #include <svx/dialogs.hrc>
 #include <numfmt.hxx>
 #include <splitcelldlg.hxx>

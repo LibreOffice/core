@@ -12,6 +12,8 @@
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 
+#include <sal/log.hxx>
+
 using namespace connectivity::mork;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * com_sun_star_comp_sdbc_MorkDriver_get_implementation(

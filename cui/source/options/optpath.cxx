@@ -51,6 +51,7 @@
 #include "optHeaderTabListbox.hxx"
 #include <vcl/help.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 using namespace css;
 using namespace css::beans;
