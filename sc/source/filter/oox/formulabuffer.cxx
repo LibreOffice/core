@@ -159,6 +159,11 @@ void applySharedFormulas(
                 case XML_n:
                     // numeric value.
                     pCell->SetResultDouble(rDesc.maCellValue.toDouble());
+                    /* TODO: is it on purpose that we never reset dirty here
+                     * and thus recalculate anyway if cell was dirty? Or is it
+                     * never dirty and therefor set dirty below otherwise? This
+                     * is different from the non-shared case in
+                     * applyCellFormulaValues(). */
                 break;
                 case XML_str:
                     if (bGeneratorKnownGood)
@@ -168,8 +173,11 @@ void applySharedFormulas(
                         pCell->SetResultToken(new formula::FormulaStringToken(aSS));
                         // If we don't reset dirty, then e.g. disabling macros makes all cells
                         // that use macro functions to show #VALUE!
-                        pCell->ResetDirty();
-                        pCell->SetChanged(false);
+                        if (!pCell->GetCode()->IsRecalcModeMustAfterImport())
+                        {
+                            pCell->ResetDirty();
+                            pCell->SetChanged(false);
+                        }
                         break;
                     }
                     SAL_FALLTHROUGH;
@@ -270,8 +278,11 @@ void applyCellFormulaValues(
             case XML_n:
             {
                 pCell->SetResultDouble(rValueStr.toDouble());
-                pCell->ResetDirty();
-                pCell->SetChanged(false);
+                if (!pCell->GetCode()->IsRecalcModeMustAfterImport())
+                {
+                    pCell->ResetDirty();
+                    pCell->SetChanged(false);
+                }
             }
             break;
             case XML_str:
@@ -289,8 +300,11 @@ void applyCellFormulaValues(
                 {
                     svl::SharedString aSS = rStrPool.intern(rValueStr);
                     pCell->SetResultToken(new formula::FormulaStringToken(aSS));
-                    pCell->ResetDirty();
-                    pCell->SetChanged(false);
+                    if (!pCell->GetCode()->IsRecalcModeMustAfterImport())
+                    {
+                        pCell->ResetDirty();
+                        pCell->SetChanged(false);
+                    }
                 }
             break;
             default:

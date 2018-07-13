@@ -58,8 +58,8 @@ enum class ScRecalcMode : sal_uInt8
 {
     ALWAYS         = 0x01,  // exclusive, always
     ONLOAD_MUST    = 0x02,  // exclusive, always after load
-    ONLOAD_LENIENT = 0x04,  // exclusive, lenient after load (eg. macros not always, aliens, ...)
-    ONLOAD_ONCE    = 0x08,  // exclusive, once after load, import filter
+    ONLOAD_ONCE    = 0x04,  // exclusive, once after load, import filter
+    ONLOAD_LENIENT = 0x08,  // exclusive, lenient after load (eg. macros not always, aliens, ...)
     NORMAL         = 0x10,  // exclusive
     FORCED         = 0x20,  // combined, also if cell isn't visible, for macros with side effects
     ONREFMOVE      = 0x40,  // combined, if reference was moved
@@ -416,6 +416,10 @@ public:
                                 { return bool(nMode & ScRecalcMode::FORCED); }
     bool            IsRecalcModeOnRefMove() const
                                 { return bool(nMode & ScRecalcMode::ONREFMOVE); }
+                    /** Whether recalculation must happen after import, for
+                        example OOXML. */
+    bool            IsRecalcModeMustAfterImport() const
+                                { return (nMode & ScRecalcMode::EMask) <= ScRecalcMode::ONLOAD_ONCE; }
 
                             /** Get OpCode of the most outer function */
     inline OpCode           GetOuterFuncOpCode();
