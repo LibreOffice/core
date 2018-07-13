@@ -1877,6 +1877,8 @@ void ScTable::CalcAll()
 {
     for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].CalcAll();
+
+    mpCondFormatList->CalcAll();
 }
 
 void ScTable::CompileAll( sc::CompileFormulaContext& rCxt )

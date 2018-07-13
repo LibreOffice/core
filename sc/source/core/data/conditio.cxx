@@ -1532,6 +1532,18 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
     return new ScCondFormatEntry( pDoc, *this );
 }
 
+void ScConditionEntry::CalcAll()
+{
+    if (pFCell1 || pFCell2)
+    {
+        if (pFCell1)
+            pFCell1->SetDirty();
+        if (pFCell2)
+            pFCell2->SetDirty();
+        pCondFormat->DoRepaint();
+    }
+}
+
 ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc )
     : ScFormatEntry( pDoc )
     , meType(condformat::TODAY)
@@ -2028,6 +2040,18 @@ void ScConditionalFormat::endRendering()
     }
 }
 
+void ScConditionalFormat::CalcAll()
+{
+    for(auto itr = maEntries.cbegin(); itr != maEntries.cend(); ++itr)
+    {
+        if ((*itr)->GetType() == ScFormatEntry::Type::Condition)
+        {
+            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(**itr);
+            rFormat.CalcAll();
+        }
+    }
+}
+
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
 {
     for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
@@ -2279,6 +2303,15 @@ sal_uInt32 ScConditionalFormatList::getMaxKey() const
     }
 
     return nMax;
+}
+
+void ScConditionalFormatList::CalcAll()
+{
+    for (const auto& aEntry : m_ConditionalFormats)
+    {
+        aEntry->CalcAll();
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
