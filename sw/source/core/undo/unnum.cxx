@@ -61,8 +61,8 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
 
 SwUndoInsNum::~SwUndoInsNum()
 {
-    delete pHistory;
-    delete pOldNumRule;
+    pHistory.reset();
+    pOldNumRule.reset();
 }
 
 SwRewriter SwUndoInsNum::GetRewriter() const
@@ -145,14 +145,14 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
 SwHistory* SwUndoInsNum::GetHistory()
 {
     if( !pHistory )
-        pHistory = new SwHistory;
-    return pHistory;
+        pHistory.reset(new SwHistory);
+    return pHistory.get();
 }
 
 void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 {
     if( !pOldNumRule )
-        pOldNumRule = new SwNumRule( rOld );
+        pOldNumRule.reset(new SwNumRule( rOld ));
 }
 
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )

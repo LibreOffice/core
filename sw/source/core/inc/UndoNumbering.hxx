@@ -29,8 +29,8 @@
 class SwUndoInsNum : public SwUndo, private SwUndRng
 {
     SwNumRule aNumRule;
-    SwHistory* pHistory;
-    SwNumRule* pOldNumRule;
+    std::unique_ptr<SwHistory> pHistory;
+    std::unique_ptr<SwNumRule> pOldNumRule;
     OUString sReplaceRule;
     sal_uInt16 nLRSavePos;
 
