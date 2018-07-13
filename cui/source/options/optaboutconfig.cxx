@@ -29,6 +29,7 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 #include <vector>

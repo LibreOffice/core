@@ -37,6 +37,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#include <sal/log.hxx>
 
 #include <iterator>
 #include <memory>

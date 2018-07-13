@@ -19,6 +19,7 @@
 
 
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>

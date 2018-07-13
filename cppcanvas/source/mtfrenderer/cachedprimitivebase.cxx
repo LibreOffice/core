@@ -25,6 +25,7 @@
 #include <cppcanvas/canvas.hxx>
 
 #include "cachedprimitivebase.hxx"
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 #include <osl/process.h>
+#include <sal/log.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>

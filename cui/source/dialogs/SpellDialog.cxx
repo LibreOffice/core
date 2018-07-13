@@ -54,6 +54,7 @@
 #include <treeopt.hxx>
 #include <svtools/langtab.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

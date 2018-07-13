@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <tools/urlobj.hxx>
+#include <sal/log.hxx>
 #include <component/CPreparedStatement.hxx>
 #include <component/CStatement.hxx>
 #include <unotools/pathoptions.hxx>

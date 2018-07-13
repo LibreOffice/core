@@ -37,6 +37,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/rendering/PanoseWeight.hpp>

@@ -47,6 +47,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <sal/log.hxx>
 
 #include "transparencygroupaction.hxx"
 #include <outdevstate.hxx>

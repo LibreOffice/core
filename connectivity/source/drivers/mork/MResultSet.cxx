@@ -22,6 +22,7 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <connectivity/dbtools.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 #include <algorithm>

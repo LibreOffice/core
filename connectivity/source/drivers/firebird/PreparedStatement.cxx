@@ -28,6 +28,7 @@
 #include <propertyids.hxx>
 #include <time.h>
 #include <connectivity/dbtools.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

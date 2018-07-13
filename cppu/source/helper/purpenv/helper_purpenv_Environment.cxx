@@ -21,6 +21,7 @@
 #include <cppu/helper/purpenv/Environment.hxx>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <uno/lbnames.h>
 #include <cppu/Enterable.hxx>
 

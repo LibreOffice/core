@@ -30,6 +30,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/canvastools.hxx>
+#include <sal/log.hxx>
 
 #include "cachedprimitivebase.hxx"
 #include "polypolyaction.hxx"

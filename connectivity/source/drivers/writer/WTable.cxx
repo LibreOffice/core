@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <writer/WConnection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
+#include <sal/log.hxx>
 
 namespace com
 {

@@ -12,6 +12,7 @@
 
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
+#include <sal/log.hxx>
 #include <strings.hrc>
 #include <vector>
 

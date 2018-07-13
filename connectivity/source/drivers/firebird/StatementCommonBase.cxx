@@ -22,6 +22,7 @@
 #include "StatementCommonBase.hxx"
 #include "Util.hxx"
 
+#include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <propertyids.hxx>

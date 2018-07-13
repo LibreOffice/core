@@ -39,6 +39,7 @@
 #include <o3tl/any.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

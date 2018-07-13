@@ -27,6 +27,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>

@@ -35,6 +35,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
+#include <sal/log.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

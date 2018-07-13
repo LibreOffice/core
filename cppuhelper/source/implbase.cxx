@@ -20,6 +20,7 @@
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/string.hxx>
 

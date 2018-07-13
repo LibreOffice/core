@@ -10,6 +10,7 @@
 #include "Util.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace ::connectivity;
 

@@ -38,6 +38,7 @@
 #include <implrenderer.hxx>
 #include <vcl/graphicfilter.hxx>
 #include "emfpimage.hxx"
+#include <sal/log.hxx>
 
 
 namespace cppcanvas

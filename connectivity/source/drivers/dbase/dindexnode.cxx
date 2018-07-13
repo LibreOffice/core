@@ -23,6 +23,7 @@
 #include <dbase/DIndex.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <memory>

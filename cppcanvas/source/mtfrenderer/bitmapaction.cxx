@@ -30,6 +30,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <sal/log.hxx>
 #include "cachedprimitivebase.hxx"
 #include "bitmapaction.hxx"
 #include <outdevstate.hxx>

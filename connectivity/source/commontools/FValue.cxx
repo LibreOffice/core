@@ -25,6 +25,7 @@
 #include <comphelper/extract.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;

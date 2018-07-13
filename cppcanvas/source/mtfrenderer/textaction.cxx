@@ -40,6 +40,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 #include <memory>
+#include <sal/log.hxx>
 
 #include "textaction.hxx"
 #include <outdevstate.hxx>

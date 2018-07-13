@@ -18,6 +18,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <sal/log.hxx>
 
 using namespace ::connectivity::firebird;
 

@@ -10,6 +10,7 @@
 #include <SignSignatureLineDialog.hxx>
 
 #include <sal/types.h>
+#include <sal/log.hxx>
 
 #include <dialmgr.hxx>
 #include <strings.hrc>
