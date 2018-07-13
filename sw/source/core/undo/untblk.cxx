@@ -65,7 +65,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
                  nSttNode == pAPos->nNode.GetIndex() )
             {
                 if( !pFrameFormats )
-                    pFrameFormats = new std::vector<SwFrameFormat*>;
+                    pFrameFormats.reset( new std::vector<SwFrameFormat*> );
                 pFrameFormats->push_back( pFormat );
             }
         }
@@ -73,7 +73,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     // consider Redline
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() );
+        pRedlData.reset( new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 }
@@ -141,8 +141,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
                     pFrameFormats->erase( it );
             }
         }
-        delete pFrameFormats;
-        pFrameFormats = nullptr;
+        pFrameFormats.reset();
     }
 }
 

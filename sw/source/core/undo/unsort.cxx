@@ -48,7 +48,7 @@ SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
     , pUndoTableAttr(nullptr)
     , nTableNd(0)
 {
-    pSortOpt = new SwSortOptions(rOpt);
+    pSortOpt.reset( new SwSortOptions(rOpt) );
 }
 
 SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTableNd,
@@ -59,15 +59,15 @@ SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTabl
     nEndNode = nEnd;
     nTableNd   = rTableNd.GetIndex();
 
-    pSortOpt = new SwSortOptions(rOpt);
+    pSortOpt.reset( new SwSortOptions(rOpt) );
     if( bSaveTable )
-        pUndoTableAttr = new SwUndoAttrTable( rTableNd );
+        pUndoTableAttr.reset( new SwUndoAttrTable( rTableNd ) );
 }
 
 SwUndoSort::~SwUndoSort()
 {
-    delete pSortOpt;
-    delete pUndoTableAttr;
+    pSortOpt.reset();
+    pUndoTableAttr.reset();
 }
 
 void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
