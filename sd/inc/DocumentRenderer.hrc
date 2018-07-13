@@ -81,6 +81,8 @@ const char* STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "Print all slides"),
     NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "Print slides"),
+    NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "Print even slides"),
+    NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "Print odd slides"),
     NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "Print selection")
 };
 
@@ -88,6 +90,8 @@ const char* STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE[] =
 {
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "Print all pages"),
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "Print pages"),
+    NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "Print even pages"),
+    NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "Print odd pages"),
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "Print selection")
 };
 

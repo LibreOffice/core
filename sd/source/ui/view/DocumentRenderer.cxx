@@ -183,14 +183,14 @@ namespace {
 
         bool IsPrintFrontPage() const
         {
-            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintProspectInclude", 0 ));
-            return nInclude == 0 || nInclude == 1;
+            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
+            return nInclude != 2;
         }
 
         bool IsPrintBackPage() const
         {
-            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintProspectInclude", 0 ));
-            return nInclude == 0 || nInclude == 2;
+            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
+            return nInclude != 3;
         }
 
         bool IsPaperBin() const
@@ -200,7 +200,7 @@ namespace {
 
         bool IsPrintMarkedOnly() const
         {
-            return GetBoolValue("PrintContent", sal_Int32(2));
+            return GetBoolValue("PrintContent", sal_Int32(4));
         }
 
         OUString GetPrinterSelection (sal_Int32 nPageCount, sal_Int32 nCurrentPageIndex) const
@@ -208,7 +208,7 @@ namespace {
             sal_Int32 nContent = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
             OUString sFullRange = "1-" + OUString::number(nPageCount);
 
-            if (nContent == 0) // all pages/slides
+            if (nContent == 0 || nContent == 2 || nContent == 3 ) // all pages/slides || even pages/slides || odd pages/slides
             {
                 return sFullRange;
             }
@@ -219,7 +219,7 @@ namespace {
                 return sValue.isEmpty() ? sFullRange : sValue;
             }
 
-            if (nContent == 2 && // selection
+            if (nContent == 4 && // selection
                 nCurrentPageIndex >= 0)
             {
                 return OUString::number(nCurrentPageIndex + 1);
@@ -1705,7 +1705,9 @@ private:
                 }
             }
 
-            maPrinterPages.push_back(
+            if ( CheckForFrontBackPages( nIndex ) )
+            {
+                maPrinterPages.push_back(
                 std::shared_ptr<PrinterPage>(
                     new OutlinerPrinterPage(
                         pOutliner->CreateParaObject(),
@@ -1715,6 +1717,7 @@ private:
                         rInfo.mnDrawMode,
                         rInfo.meOrientation,
                         rInfo.mpPrinter->GetPaperBin())));
+            }
         }
 
         pOutliner->SetRefMapMode(aSavedMapMode);
@@ -1819,7 +1822,8 @@ private:
 
             // Create a printer page when we have found one page for each
             // placeholder or when this is the last (and special) loop.
-            if (!aPageIndices.empty() && (aPageIndices.size() == nShapeCount || bLastLoop))
+            if ( !aPageIndices.empty() && CheckForFrontBackPages( nPageIndex )
+                && (aPageIndices.size() == nShapeCount || bLastLoop) )
             {
                 maPrinterPages.push_back(
                     std::shared_ptr<PrinterPage>(
@@ -2040,9 +2044,7 @@ private:
              nIndex < nCount;
              ++nIndex)
         {
-            const bool bIsIndexOdd (nIndex & 1);
-            if ((!bIsIndexOdd && mpOptions->IsPrintFrontPage())
-                || (bIsIndexOdd && mpOptions->IsPrintBackPage()))
+            if ( CheckForFrontBackPages( nIndex ) )
             {
                 const std::pair<sal_uInt16, sal_uInt16> aPair (aPairVector[nIndex]);
                 Point aSecondOffset (aOffset);
@@ -2083,7 +2085,9 @@ private:
         else
             nPaperBin = rInfo.mpPrinter->GetPaperBin();
 
-        maPrinterPages.push_back(
+        if ( CheckForFrontBackPages( nPageIndex ) )
+        {
+            maPrinterPages.push_back(
             std::shared_ptr<PrinterPage>(
                 new TiledPrinterPage(
                     sal::static_int_cast<sal_uInt16>(nPageIndex),
@@ -2094,6 +2098,7 @@ private:
                     rInfo.mnDrawMode,
                     rInfo.meOrientation,
                     nPaperBin)));
+        }
     }
 
     /** Print one standard slide or notes page on one to many printer
@@ -2124,7 +2129,7 @@ private:
         const bool bScalePage (mpOptions->IsPaperSize());
         const bool bCutPage (mpOptions->IsCutPage());
         MapMode aMap (rInfo.maMap);
-        if (bScalePage || bCutPage)
+        if ( (bScalePage || bCutPage) && CheckForFrontBackPages( nPageIndex ) )
         {
             // Handle 1 and 2.
 
@@ -2165,23 +2170,38 @@ private:
                      -aPageOrigin.X()<nPageWidth;
                      aPageOrigin.AdjustX(-rInfo.maPrintSize.Width()))
                 {
-                    aMap.SetOrigin(aPageOrigin);
-                    maPrinterPages.push_back(
-                        std::shared_ptr<PrinterPage>(
-                            new RegularPrinterPage(
-                                sal::static_int_cast<sal_uInt16>(nPageIndex),
-                                ePageKind,
-                                aMap,
-                                rInfo.mbPrintMarkedOnly,
-                                rInfo.msPageString,
-                                aPageOffset,
-                                rInfo.mnDrawMode,
-                                rInfo.meOrientation,
-                                nPaperBin)));
+                    if ( CheckForFrontBackPages( nPageIndex ) )
+                    {
+                        aMap.SetOrigin(aPageOrigin);
+                        maPrinterPages.push_back(
+                            std::shared_ptr<PrinterPage>(
+                                new RegularPrinterPage(
+                                    sal::static_int_cast<sal_uInt16>(nPageIndex),
+                                    ePageKind,
+                                    aMap,
+                                    rInfo.mbPrintMarkedOnly,
+                                    rInfo.msPageString,
+                                    aPageOffset,
+                                    rInfo.mnDrawMode,
+                                    rInfo.meOrientation,
+                                    nPaperBin)));
+                    }
                 }
             }
         }
     }
+
+bool CheckForFrontBackPages( sal_Int32 nPage )
+{
+    const bool bIsIndexOdd(nPage & 1);
+    if ((!bIsIndexOdd && mpOptions->IsPrintFrontPage())
+        || (bIsIndexOdd && mpOptions->IsPrintBackPage()))
+    {
+        return true;
+    }
+    else
+        return false;
+}
 };
 
 //===== DocumentRenderer ======================================================

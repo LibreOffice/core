@@ -100,6 +100,8 @@
 #define RID_STR_PRINTDLG_PAGES              NC_("RID_STR_PRINTDLG_PAGES", "Pages:")
 #define RID_STR_PRINTDLG_PRINTALLPAGES      NC_("RID_STR_PRINTDLG_PRINTALLPAGES", "Print all pages")
 #define RID_STR_PRINTDLG_PRINTPAGES         NC_("RID_STR_PRINTDLG_PRINTPAGES", "Print pages")
+#define RID_STR_PRINTDLG_PRINTEVENPAGES     NC_("RID_STR_PRINTDLG_PRINTEVENPAGES", "Print even pages")
+#define RID_STR_PRINTDLG_PRINTODDPAGES      NC_("RID_STR_PRINTDLG_PRINTODDPAGES", "Print odd pages")
 #define RID_STR_BTNDEL                      NC_("RID_STR_BTNDEL", "~Delete")
 #define RID_STR_BTNNEW                      NC_("RID_STR_BTNNEW", "~New")
 #define RID_STR_CHOOSE                      NC_("RID_STR_CHOOSE", "Choose")

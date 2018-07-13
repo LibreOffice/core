@@ -33,10 +33,14 @@ class Renderable :
     public cppu::WeakComponentImplHelper< css::view::XRenderable >,
     public vcl::PrinterOptionsHelper
 {
-    VclPtr<BaseWindow>  mpWindow;
-    osl::Mutex          maMutex;
+    VclPtr<BaseWindow>      mpWindow;
+    osl::Mutex              maMutex;
+    std::vector<sal_Int32>  maValidPages;
 
     VclPtr<Printer> getPrinter();
+    bool isPrintOddPages();
+    bool isPrintEvenPages();
+    static bool isOnEvenPage( sal_Int32 nPage ) { return nPage % 2 == 0; };
 public:
     explicit Renderable (BaseWindow*);
     virtual ~Renderable() override;
