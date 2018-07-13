@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_a40a7887",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-13T09:01:42Z",
+      "side": 0,
+      "message": "Fine to remove this.  This came from 2014-08-17 https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003db32881b6723072c8d1a652ea147d12e75766d504 which was after the regression commit from 2014-06-04.",
+      "range": {
+        "startLine": 557,
+        "startChar": 4,
+        "endLine": 557,
+        "endChar": 52
+      },
+      "revId": "508f14b13614c9f5f9611589e7f744d1bc523ff3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_84ff7466",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-13T09:01:42Z",
+      "side": 0,
+      "message": "Yeah, based on the description of \"table in footer crashing because....\", this looks like it had been an \"avoid the problem in my specific document in any way possible\" kind of fix.",
+      "range": {
+        "startLine": 496,
+        "startChar": 12,
+        "endLine": 496,
+        "endChar": 32
+      },
+      "revId": "508f14b13614c9f5f9611589e7f744d1bc523ff3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
