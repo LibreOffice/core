@@ -939,6 +939,50 @@ bool IsTextRule(ScConditionMode eMode)
     return false;
 }
 
+bool RequiresFixedFormula(ScConditionMode eMode)
+{
+    switch(eMode)
+    {
+        case ScConditionMode::NoError:
+        case ScConditionMode::Error:
+        case ScConditionMode::BeginsWith:
+        case ScConditionMode::EndsWith:
+        case ScConditionMode::ContainsText:
+        case ScConditionMode::NotContainsText:
+            return true;
+        default:
+        break;
+    }
+
+    return false;
+}
+
+OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const OString& rText)
+{
+    OStringBuffer aBuffer;
+    OStringBuffer aPosBuffer = XclXmlUtils::ToOString(aBuffer, rAddress);
+    OString aPos = aPosBuffer.makeStringAndClear();
+    switch (eMode)
+    {
+        case ScConditionMode::Error:
+            return "";
+        case ScConditionMode::NoError:
+            return "";
+        case ScConditionMode::BeginsWith:
+            return OString("LEFT(" + aPos + ",LEN(\"" + rText + "\"))=\"" + rText + "\"");
+        case ScConditionMode::EndsWith:
+            return OString("RIGHT(" + aPos +",LEN(\"" + rText + "\"))=\"" + rText + "\"");
+        case ScConditionMode::ContainsText:
+            return OString("NOT(ISERROR(SEARCH(\"" + rText + "\"," + aPos + ")))");
+        case ScConditionMode::NotContainsText:
+            return OString("ISERROR(SEARCH(\"" +  rText + "\"," + aPos + "))");
+        default:
+        break;
+    }
+
+    return OString("");
+}
+
 }
 
 void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
@@ -984,7 +1028,15 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
             XML_text, aText.getStr(),
             XML_dxfId, OString::number( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),
             FSEND );
-    if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
+
+    if (RequiresFixedFormula(eOperation))
+    {
+        rWorksheet->startElement( XML_formula, FSEND );
+        OString aFormula = GetFixedFormula(eOperation, mrFormatEntry.GetValidSrcPos(), aText);
+        rWorksheet->writeEscaped(aFormula.getStr());
+        rWorksheet->endElement( XML_formula );
+    }
+    else if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
         std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateFlatCopiedTokenArray(0));
@@ -999,16 +1051,6 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
                         pTokenArray2.get()));
             rWorksheet->endElement( XML_formula );
         }
-    }
-    else if (IsTextRule(eOperation))
-    {
-        OStringBuffer aBufferOld;
-        OStringBuffer aBuffer = XclXmlUtils::ToOString(aBufferOld, mrFormatEntry.GetValidSrcPos());
-        OString aTextTopCell = aBuffer.makeStringAndClear();
-        OString aFormula = "NOT(ISERROR(SEARCH(\"" + aText + "\"," + aTextTopCell + ")))";
-        rWorksheet->startElement( XML_formula, FSEND );
-        rWorksheet->writeEscaped(aFormula.getStr());
-        rWorksheet->endElement( XML_formula );
     }
     // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_cfRule );
