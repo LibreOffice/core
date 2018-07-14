@@ -31,12 +31,14 @@ public:
     void testDataLargerThanDB();
     void testHTMLImport();
     void testXMLImport();
+    void testBaseImport();
 
     CPPUNIT_TEST_SUITE(ScDataProvidersTest);
     CPPUNIT_TEST(testCSVImport);
     CPPUNIT_TEST(testDataLargerThanDB);
     CPPUNIT_TEST(testHTMLImport);
     CPPUNIT_TEST(testXMLImport);
+    CPPUNIT_TEST(testBaseImport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -180,6 +182,27 @@ void ScDataProvidersTest::testXMLImport()
     CPPUNIT_ASSERT_EQUAL(OUString("test4"), m_pDoc->GetString(1, 4, 0));
 }
 
+void ScDataProvidersTest::testBaseImport()
+{
+    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
+    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    CPPUNIT_ASSERT(bInserted);
+
+    sc::ExternalDataSource aDataSource("~/dummy.file", "org.libreoffice.calc.sql", m_pDoc);
+    aDataSource.setDBData("testDB");
+    aDataSource.setID("biblio@Bibliography");
+
+
+    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    CPPUNIT_ASSERT(!rDataSources.empty());
+
+    rDataSources[0].refresh(m_pDoc, true);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("ARJ00"), m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), m_pDoc->GetString(1, 1, 0));
+}
 
 ScDataProvidersTest::ScDataProvidersTest() :
     ScBootstrapFixture( "sc/qa/unit/data/dataprovider" ),
