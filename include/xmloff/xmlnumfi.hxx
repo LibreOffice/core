@@ -157,7 +157,7 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 
 public:
                 SvXMLNumFormatContext( SvXMLImport& rImport,
-                sal_uInt16 nPrfx,
+                                    sal_uInt16 nPrfx,
                                     const OUString& rLName,
                                     SvXMLNumImpData* pNewData,
                                     sal_uInt16 nNewType,

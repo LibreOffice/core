@@ -541,14 +541,34 @@ void SvXMLNumFmtExport::WriteAMPMElement_Impl()
 
 //  numbers
 
-void SvXMLNumFmtExport::WriteNumberElement_Impl(
-                            sal_Int32 nDecimals, sal_Int32 nMinDecimals,
-                            sal_Int32 nInteger, const OUString& rDashStr,
-                            bool bGrouping, sal_Int32 nTrailingThousands,
-                            const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
+void SvXMLNumFmtExport::WriteIntegerElement_Impl(
+                            sal_Int32 nInteger, sal_Int32 nBlankInteger, bool bGrouping )
 {
-    FinishTextElement_Impl();
+    //  integer digits: '0' and '?'
+    if ( nInteger >= 0 )    // negative = automatic
+    {
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,
+                              OUString::number( nInteger ) );
+    }
 
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+    //  blank integer digits: '?'
+    if ( nBlankInteger > 0 && ( (eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0 ) )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MAX_BLANK_INTEGER_DIGITS,
+                              OUString::number( nBlankInteger ) );
+    }
+
+    //  (automatic) grouping separator
+    if ( bGrouping )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_GROUPING, XML_TRUE );
+    }
+}
+
+void SvXMLNumFmtExport::WriteDecimalElement_Impl(
+                            sal_Int32 nDecimals, sal_Int32 nMinDecimals, const OUString& rDashStr, bool bIsScientific )
+{
     //  decimals
     if ( nDecimals >= 0 )   // negative = automatic
     {
@@ -556,10 +576,10 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                               OUString::number( nDecimals ) );
     }
 
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
     if ( nMinDecimals >= 0 )   // negative = automatic
     {
         // Export only for 1.2 with extensions or 1.3 and later.
-        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
             // For 1.2+ use loext namespace, for 1.3 use number namespace.
@@ -570,26 +590,30 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
         }
     }
 
-    //  integer digits
-    if ( nInteger >= 0 )    // negative = automatic
-    {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,
-                              OUString::number( nInteger ) );
-    }
-
-    //  decimal replacement (dashes) or variable decimals (#)
+    //  decimal replacement (dashes '-' or blank '?') or variable decimals (#)
     if ( !rDashStr.isEmpty() ||  nMinDecimals < nDecimals )
     {
         // full variable decimals means an empty replacement string
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,
-                              rDashStr );
+        if ( !bIsScientific )
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER,
+                                  XML_DECIMAL_REPLACEMENT,
+                                  rDashStr );
+        else if ( (eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0 )
+            rExport.AddAttribute( XML_NAMESPACE_LO_EXT,
+                                  XML_DECIMAL_REPLACEMENT,
+                                  rDashStr );
     }
+}
 
-    //  (automatic) grouping separator
-    if ( bGrouping )
-    {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_GROUPING, XML_TRUE );
-    }
+void SvXMLNumFmtExport::WriteNumberElement_Impl(
+                            sal_Int32 nDecimals, sal_Int32 nMinDecimals,
+                            sal_Int32 nInteger, sal_Int32 nBlankInteger, const OUString& rDashStr,
+                            bool bGrouping, sal_Int32 nTrailingThousands,
+                            const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
+{
+    FinishTextElement_Impl();
+    WriteIntegerElement_Impl( nInteger, nBlankInteger, bGrouping );
+    WriteDecimalElement_Impl( nDecimals, nMinDecimals, rDashStr, false );
 
     //  display-factor if there are trailing thousands separators
     if ( nTrailingThousands )
@@ -633,44 +657,15 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 }
 
 void SvXMLNumFmtExport::WriteScientificElement_Impl(
-                            sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger,
+                            sal_Int32 nDecimals, sal_Int32 nMinDecimals,
+                            sal_Int32 nInteger, sal_Int32 nBlankInteger, const OUString& rDashStr,
                             bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign )
 {
     FinishTextElement_Impl();
-
-    //  decimals
-    if ( nDecimals >= 0 )   // negative = automatic
-    {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,
-                              OUString::number( nDecimals ) );
-    }
+    WriteIntegerElement_Impl( nInteger, nBlankInteger, bGrouping );
+    WriteDecimalElement_Impl( nDecimals, nMinDecimals, rDashStr, true );
 
     SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
-    if ( nMinDecimals >= 0 )   // negative = automatic
-    {
-        // Export only for 1.2 with extensions or 1.3 and later.
-        if (eVersion > SvtSaveOptions::ODFSVER_012)
-        {
-            // For 1.2+ use loext namespace, for 1.3 use number namespace.
-            rExport.AddAttribute(
-                ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
-                                 XML_MIN_DECIMAL_PLACES,
-                                 OUString::number( nMinDecimals ) );
-        }
-    }
-
-    //  integer digits
-    if ( nInteger >= 0 )    // negative = automatic
-    {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,
-                              OUString::number( nInteger ) );
-    }
-
-    //  (automatic) grouping separator
-    if ( bGrouping )
-    {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_GROUPING, XML_TRUE );
-    }
 
     //  exponent digits
     if ( nExp >= 0 )
@@ -709,10 +704,12 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
 }
 
 void SvXMLNumFmtExport::WriteFractionElement_Impl(
-                            sal_Int32 nInteger, bool bGrouping,
+                            sal_Int32 nInteger, sal_Int32 nBlankInteger, bool bGrouping,
                             const SvNumberformat& rFormat, sal_uInt16 nPart )
 {
     FinishTextElement_Impl();
+    WriteIntegerElement_Impl( nInteger, nBlankInteger, bGrouping );
+
     const OUString aNumeratorString = rFormat.GetNumeratorString( nPart );
     const OUString aDenominatorString = rFormat.GetDenominatorString( nPart );
     const OUString aIntegerFractionDelimiterString = rFormat.GetIntegerFractionDelimiterString( nPart );
@@ -741,21 +738,9 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
         nZerosDenominatorDigits = 0;
     sal_Int32 nDenominator = aDenominatorString.toInt32();
 
-    //  integer digits
-    if ( nInteger >= 0 )        // negative = default (no integer part)
-    {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,
-                              OUString::number( nInteger ) );
-    }
-
-    //  (automatic) grouping separator
-    if ( bGrouping )
-    {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_GROUPING, XML_TRUE );
-    }
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
 
     // integer/fraction delimiter
-    SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
     if ( !aIntegerFractionDelimiterString.isEmpty() && aIntegerFractionDelimiterString != " "
         && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
     {   // Export only for 1.2 with extensions or 1.3 and later.
@@ -1261,7 +1246,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     if ( eBuiltIn == NF_NUMBER_STANDARD )
     {
         //  default number format contains just one number element
-        WriteNumberElement_Impl( -1, -1, 1, OUString(), false, 0, aEmbeddedEntries );
+        WriteNumberElement_Impl( -1, -1, 1, -1, OUString(), false, 0, aEmbeddedEntries );
         bAnyContent = true;
     }
     else if ( eBuiltIn == NF_BOOLEAN )
@@ -1284,6 +1269,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         sal_Int32 nIntegerSymbols = 0;          // for embedded-text, including "#"
         sal_Int32 nTrailingThousands = 0;       // thousands-separators after all digits
         sal_Int32 nMinDecimals = nPrecision;
+        sal_Int32 nBlankInteger = 0;
         OUString sCurrExt;
         OUString aCalendar;
         sal_uInt16 nPos = 0;
@@ -1306,7 +1292,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         bDecDashes = true;
                         nMinDecimals = 0;
                     }
-                    else if ( !bInInteger && pElemStr )
+                    else if ( nFmtType != SvNumFormatType::FRACTION && !bInInteger && pElemStr )
                     {
                         for ( sal_Int32 i = pElemStr->getLength()-1; i >= 0 ; i-- )
                         {
@@ -1322,9 +1308,17 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         }
                     }
                     if ( bInInteger && pElemStr )
+                    {
                         nIntegerSymbols += pElemStr->getLength();
+                        for ( sal_Int32 i = pElemStr->getLength()-1; i >= 0 ; i-- )
+                        {
+                            if ( (*pElemStr)[i] == '?' )
+                                nBlankInteger ++;
+                        }
+                    }
                     nTrailingThousands = 0;
                     break;
+                case NF_SYMBOLTYPE_FRACBLANK:
                 case NF_SYMBOLTYPE_DECSEP:
                     bInInteger = false;
                     break;
@@ -1474,7 +1468,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
                 case NF_KEY_GENERAL :
-                        WriteNumberElement_Impl( -1, -1, 1, OUString(), false, 0, aEmbeddedEntries );
+                        WriteNumberElement_Impl( -1, -1, 1, -1, OUString(), false, 0, aEmbeddedEntries );
                     break;
                 case NF_KEY_CCC:
                     if (pElemStr)
@@ -1509,6 +1503,18 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_SYMBOLTYPE_DIGIT:
                     if (!bNumWritten)           // write number part
                     {
+                        //  string for decimal replacement
+                        //  has to be taken from nPrecision
+                        //  (positive number even for automatic decimals)
+                        OUStringBuffer sDashStr;
+                        if ( nFmtType != SvNumFormatType::FRACTION )
+                        {
+                            if (bDecDashes && nPrecision > 0)
+                                comphelper::string::padToLength(sDashStr, nPrecision, '-');
+                            // "?" in decimal part are replaced by space character
+                            if (bDecAlign && nPrecision > 0)
+                                sDashStr = " ";
+                        }
                         switch ( nFmtType )
                         {
                             // for type 0 (not recognized as a special type),
@@ -1532,28 +1538,22 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     //  only one built-in format has automatic integer digits
                                     sal_Int32 nInteger = nLeading;
                                     if ( eBuiltIn == NF_NUMBER_SYSTEM )
+                                    {
                                         nInteger = -1;
+                                        nBlankInteger = -1;
+                                    }
 
-                                    //  string for decimal replacement
-                                    //  has to be taken from nPrecision
-                                    //  (positive number even for automatic decimals)
-                                    OUStringBuffer sDashStr;
-                                    if (bDecDashes && nPrecision > 0)
-                                        comphelper::string::padToLength(sDashStr, nPrecision, '-');
-                                    // "?" in decimal part are replaced by space character
-                                    if (bDecAlign && nPrecision > 0)
-                                        sDashStr = " ";
-
-                                    WriteNumberElement_Impl(nDecimals, nMinDecimals, nInteger, sDashStr.makeStringAndClear(),
+                                    WriteNumberElement_Impl(nDecimals, nMinDecimals, nInteger, nBlankInteger, sDashStr.makeStringAndClear(),
                                         bThousand, nTrailingThousands, aEmbeddedEntries);
                                     bAnyContent = true;
                                 }
                                 break;
                             case SvNumFormatType::SCIENTIFIC:
-                                // #i43959# for scientific numbers, count all integer symbols ("0" and "#")
+                                // #i43959# for scientific numbers, count all integer symbols ("0", "?" and "#")
                                 // as integer digits: use nIntegerSymbols instead of nLeading
                                 // nIntegerSymbols represents exponent interval (for engineering notation)
-                                WriteScientificElement_Impl( nPrecision, nMinDecimals, nLeading, bThousand, nExpDigits, nIntegerSymbols, bExpSign );
+                                WriteScientificElement_Impl( nPrecision, nMinDecimals, nLeading, nBlankInteger, sDashStr.makeStringAndClear(),
+                                                             bThousand, nExpDigits, nIntegerSymbols, bExpSign );
                                 bAnyContent = true;
                                 break;
                             case SvNumFormatType::FRACTION:
@@ -1565,8 +1565,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                         //  the fraction doesn't have an integer part, and no
                                         //  min-integer-digits attribute must be written.
                                         nInteger = -1;
+                                        nBlankInteger = -1;
                                     }
-                                    WriteFractionElement_Impl( nInteger, bThousand,  rFormat, nPart );
+                                    WriteFractionElement_Impl( nInteger, nBlankInteger, bThousand,  rFormat, nPart );
                                     bAnyContent = true;
                                 }
                                 break;

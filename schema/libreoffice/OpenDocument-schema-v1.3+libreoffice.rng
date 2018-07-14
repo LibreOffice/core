@@ -2053,11 +2053,31 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-      <!-- OFFICE-3860 -->
+  <rng:define name="common-number-attlist" combine="interleave">
+    <!-- TODO no proposal,  -->
+    <rng:optional>
+      <rng:attribute name="loext:max-blank-integer-digits">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <rng:define name="number-scientific-number-attlist" combine="interleave">
+      <!-- OFFICE-3860 -->
     <rng:optional>
       <rng:attribute name="loext:forced-exponent-sign">
         <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  <!-- https://issues.oasis-open.org/browse/OFFICE-1828 -->
+    <rng:optional>
+      <rng:attribute name="loext:exponent-interval">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+    <!-- TODO no proposal,  -->
+    <rng:optional>
+      <rng:attribute name="loext:decimal-replacement">
+        <rng:ref name="string"/>
       </rng:attribute>
     </rng:optional>
   </rng:define>
@@ -2183,15 +2203,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     <rng:optional>
       <rng:attribute name="loext:protection-key-digest-algorithm-2">
         <rng:ref name="anyURI"/>
-      </rng:attribute>
-    </rng:optional>
-  </rng:define>
-
-  <!-- https://issues.oasis-open.org/browse/OFFICE-1828 -->
-  <rng:define name="number-scientific-number-attlist" combine="interleave">
-    <rng:optional>
-      <rng:attribute name="loext:exponent-interval">
-        <rng:ref name="positiveInteger"/>
       </rng:attribute>
     </rng:optional>
   </rng:define>
