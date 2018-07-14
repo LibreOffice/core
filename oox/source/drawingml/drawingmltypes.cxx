@@ -73,7 +73,7 @@ double GetPositiveFixedPercentage( const OUString& sValue )
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
 awt::Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
 {
-    return awt::Point( GetPercent( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
+    return awt::Point(GetPercent(xAttribs->getOptionalValue(XML_x)), GetPercent(xAttribs->getOptionalValue(XML_y)));
 }
 
 /** converts the ST_TextFontSize to point */

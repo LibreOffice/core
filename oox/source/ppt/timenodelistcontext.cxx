@@ -26,6 +26,7 @@
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/animations/ValuePair.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -81,6 +82,15 @@ namespace {
 
         // only get first token.
         return oox::ppt::convertAnimationValue(getAttributeEnumByAPIName(aNameList.getToken(0, ';')), rAny);
+    }
+
+    css::uno::Any convertPointPercent(const css::awt::Point& rPoint)
+    {
+        css::animations::ValuePair aPair;
+        // rPoint.X and rPoint.Y are in 1000th of a percent, but we only need ratio.
+        aPair.First <<= static_cast<double>(rPoint.X) / 100000.0;
+        aPair.Second <<= static_cast<double>(rPoint.Y) / 100000.0;
+        return makeAny(aPair);
     }
 }
 
@@ -651,25 +661,19 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( to ):
                 {
                     // CT_TLPoint
-                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
-                    maTo <<= p.X;
-                    maTo <<= p.Y;
+                    maTo = convertPointPercent(GetPointPercent(rAttribs.getFastAttributeList()));
                     return this;
                 }
                 case PPT_TOKEN( from ):
                 {
                     // CT_TLPoint
-                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
-                    maFrom <<= p.X;
-                    maFrom <<= p.Y;
+                    maFrom  = convertPointPercent(GetPointPercent(rAttribs.getFastAttributeList()));
                     return this;
                 }
                 case PPT_TOKEN( by ):
                 {
                     // CT_TLPoint
-                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
-                    maBy <<= p.X;
-                    maBy <<= p.Y;
+                    maBy = convertPointPercent(GetPointPercent(rAttribs.getFastAttributeList()));
                     return this;
                 }
                 default:
