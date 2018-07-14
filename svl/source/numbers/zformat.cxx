@@ -4785,9 +4785,10 @@ void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, SvNumFormatType& rScanne
                 {
                     p++;
                 }
-                while ( *p++ == '0' )
+                while ( *p == '0' || *p == '?' )
                 {
                     nLeadingCnt++;
+                    p++;
                 }
             }
             else if (nType == NF_SYMBOLTYPE_DECSEP
