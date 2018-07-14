@@ -396,7 +396,7 @@ std::vector<sal_uInt8> CryptoHash::finalize()
     std::vector<sal_uInt8> aHash(mnHashSize, 0);
     unsigned int nSizeWritten;
 #if USE_TLS_OPENSSL
-    (void) HMAC_Final(mpImpl->mpHmacContext.get(), aHash.data(), &nSizeWritten) != 0;
+    (void) HMAC_Final(mpImpl->mpHmacContext.get(), aHash.data(), &nSizeWritten);
 #elif USE_TLS_NSS
     PK11_DigestFinal(mpImpl->mContext, aHash.data(), &nSizeWritten, aHash.size());
 #endif
