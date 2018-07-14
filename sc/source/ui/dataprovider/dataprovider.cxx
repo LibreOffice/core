@@ -16,6 +16,7 @@
 
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"
+#include "sqldataprovider.hxx"
 #include <datatransformation.hxx>
 
 using namespace com::sun::star;
@@ -289,6 +290,8 @@ std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* p
             return std::shared_ptr<DataProvider>(new HTMLDataProvider(pDoc, rDataSource));
         else if (rDataProvider == "org.libreoffice.calc.xml")
             return std::shared_ptr<DataProvider>(new XMLDataProvider(pDoc, rDataSource));
+        else if (rDataProvider == "org.libreoffice.calc.sql")
+            return std::shared_ptr<DataProvider>(new SQLDataProvider(pDoc, rDataSource));
     }
     else
     {
@@ -305,6 +308,7 @@ std::vector<OUString> DataProviderFactory::getDataProviders()
     aDataProviders.emplace_back("org.libreoffice.calc.csv");
     aDataProviders.emplace_back("org.libreoffice.calc.html");
     aDataProviders.emplace_back("org.libreoffice.calc.xml");
+    aDataProviders.emplace_back("org.libreoffice.calc.sql");
 
     return aDataProviders;
 }
