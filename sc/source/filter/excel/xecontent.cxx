@@ -939,6 +939,27 @@ bool IsTextRule(ScConditionMode eMode)
     return false;
 }
 
+bool RequiresFormula(ScConditionMode eMode)
+{
+    if (IsTopBottomRule(eMode))
+        return false;
+    else if (IsTextRule(eMode))
+        return false;
+
+    switch (eMode)
+    {
+        case ScConditionMode::NoError:
+        case ScConditionMode::Error:
+        case ScConditionMode::Duplicate:
+        case ScConditionMode::NotDuplicate:
+            return false;
+        default:
+        break;
+    }
+
+    return true;
+}
+
 bool RequiresFixedFormula(ScConditionMode eMode)
 {
     switch(eMode)
@@ -965,9 +986,9 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const 
     switch (eMode)
     {
         case ScConditionMode::Error:
-            return "";
+            return OString("ISERROR(" + aPos + ")") ;
         case ScConditionMode::NoError:
-            return "";
+            return OString("NOT(ISERROR(" + aPos + "))") ;
         case ScConditionMode::BeginsWith:
             return OString("LEFT(" + aPos + ",LEN(\"" + rText + "\"))=\"" + rText + "\"");
         case ScConditionMode::EndsWith:
@@ -1036,7 +1057,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         rWorksheet->writeEscaped(aFormula.getStr());
         rWorksheet->endElement( XML_formula );
     }
-    else if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
+    else if(RequiresFormula(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
         std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateFlatCopiedTokenArray(0));
