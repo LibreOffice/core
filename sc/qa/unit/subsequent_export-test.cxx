@@ -107,6 +107,7 @@ public:
     void testDataBarExportODS();
     void testDataBarExportXLSX();
     void testConditionalFormatRangeListXLSX();
+    void testConditionalFormatContainsTextXLSX();
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testBuiltinRangesXLSX();
@@ -226,6 +227,7 @@ public:
     CPPUNIT_TEST(testDataBarExportODS);
     CPPUNIT_TEST(testDataBarExportXLSX);
     CPPUNIT_TEST(testConditionalFormatRangeListXLSX);
+    CPPUNIT_TEST(testConditionalFormatContainsTextXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testBuiltinRangesXLSX);
@@ -3874,6 +3876,17 @@ void ScExportTest::testConditionalFormatRangeListXLSX()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "F4 F10");
+}
+
+void ScExportTest::testConditionalFormatContainsTextXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("conditionalformat_containstext.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula", "NOT(ISERROR(SEARCH(\"test\",A1)))");
 }
 
 void ScExportTest::testEscapeCharInNumberFormatXLSX()
