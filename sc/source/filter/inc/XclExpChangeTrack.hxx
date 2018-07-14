@@ -319,7 +319,7 @@ public:
 class XclExpChTrTabId : public ExcRecord
 {
 private:
-    std::unique_ptr<sal_uInt16> pBuffer;
+    std::unique_ptr<sal_uInt16[]> pBuffer;
     sal_uInt16                  nTabCount;
 
     void                 Clear() { pBuffer.reset(); }
