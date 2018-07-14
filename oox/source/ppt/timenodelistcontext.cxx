@@ -578,17 +578,17 @@ namespace oox { namespace ppt {
                         Any aTime = GetTimeAnimateValueTime( tav.msTime );
                         aTime >>= aKeyTimes[i];
                         aValues[i] = tav.maValue;
+                        convertAnimationValueWithTimeNode(mpNode, aValues[i]);
 
-                        OUString aTest;
-                        tav.maValue >>= aTest;
-                        if( !aTest.isEmpty() )
+                        // Examine pptx documents and find that only the first tav
+                        // has the formula set. The formula can be used for the whole.
+                        if (!tav.msFormula.isEmpty())
                         {
-                            aValues[i] = tav.maValue;
+                            OUString sFormula = tav.msFormula;
+                            convertMeasure(sFormula);
+                            aProps[NP_FORMULA] <<= sFormula;
                         }
-                        else
-                        {
-                            aProps[ NP_FORMULA ] <<= tav.msFormula;
-                        }
+
                         ++i;
                     }
                     aProps[ NP_VALUES ] <<= aValues;
