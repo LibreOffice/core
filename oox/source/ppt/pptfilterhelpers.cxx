@@ -60,7 +60,7 @@ namespace oox { namespace ppt {
             { AnimationAttributeEnum::FILLCOLOR,         "fillColor",                    "FillColor" },
             { AnimationAttributeEnum::FILLCOLOR,         "fillcolor",                    "FillColor" },
             { AnimationAttributeEnum::FILLTYPE,          "fill.type",                    "FillStyle" },
-            { AnimationAttributeEnum::FILLTYPE,          "fill.on",                      "FillOn" },
+            { AnimationAttributeEnum::FILLON,            "fill.on",                      "FillOn" },
             { AnimationAttributeEnum::STROKECOLOR,       "stroke.color",                 "LineColor" },
             { AnimationAttributeEnum::STROKEON,          "stroke.on",                    "LineStyle" },
             { AnimationAttributeEnum::STYLECOLOR,        "style.color",                  "CharColor" },
@@ -310,6 +310,18 @@ namespace oox { namespace ppt {
                         rValue <<= aHSL;
                         bRet = true;
                     }
+                }
+            }
+            break;
+            case AnimationAttributeEnum::FILLON:
+            {
+                // Slideshow doesn't support FillOn, but we need to convert the value type
+                // so it can be written out again.
+                OUString aString;
+                if (rValue >>= aString)
+                {
+                    rValue <<= aString == "true";
+                    bRet = true;
                 }
             }
             break;
