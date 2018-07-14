@@ -2074,12 +2074,12 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
         Size aSz(pGrfNd->GetTwipSize());
         // use type <sal_uInt64> instead of sal_uLong to get correct results
         // in the following calculations.
-        sal_uInt64 rHeight = aSz.Height();
-        sal_uInt64 rWidth  = aSz.Width();
-        if( !rWidth && pF)
-            rWidth  = pF->nXaRight  - pF->nXaLeft;
-        else if( !rHeight && pF)
-            rHeight = pF->nYaBottom - pF->nYaTop;
+        sal_uInt64 nHeight = aSz.Height();
+        sal_uInt64 nWidth  = aSz.Width();
+        if (!nWidth && pF)
+            nWidth = o3tl::saturating_sub(pF->nXaRight, pF->nXaLeft);
+        else if (!nHeight && pF)
+            nHeight = o3tl::saturating_sub(pF->nYaBottom, pF->nYaTop);
 
         if( pRecord->nCropFromTop || pRecord->nCropFromBottom ||
             pRecord->nCropFromLeft || pRecord->nCropFromRight )
@@ -2088,19 +2088,19 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
                                         // 16.16 (fraction times total
             if( pRecord->nCropFromTop ) //        image width or height resp.)
             {
-                aCrop.SetTop(lcl_ConvertCrop(pRecord->nCropFromTop, rHeight));
+                aCrop.SetTop(lcl_ConvertCrop(pRecord->nCropFromTop, nHeight));
             }
             if( pRecord->nCropFromBottom )
             {
-                aCrop.SetBottom(lcl_ConvertCrop(pRecord->nCropFromBottom, rHeight));
+                aCrop.SetBottom(lcl_ConvertCrop(pRecord->nCropFromBottom, nHeight));
             }
             if( pRecord->nCropFromLeft )
             {
-                aCrop.SetLeft(lcl_ConvertCrop(pRecord->nCropFromLeft, rWidth));
+                aCrop.SetLeft(lcl_ConvertCrop(pRecord->nCropFromLeft, nWidth));
             }
             if( pRecord->nCropFromRight )
             {
-                aCrop.SetRight(lcl_ConvertCrop(pRecord->nCropFromRight,rWidth));
+                aCrop.SetRight(lcl_ConvertCrop(pRecord->nCropFromRight, nWidth));
             }
 
             pGrfNd->SetAttr( aCrop );
