@@ -244,11 +244,11 @@ void SlideBackground::HandleContextChange(
             mpMasterSlide->Disable();
             mpDspMasterBackground->Disable();
             mpDspMasterObjects->Disable();
-            mpFillStyle->Show();
-            mpBackgroundLabel->Show();
+            mpFillStyle->Hide();
+            mpBackgroundLabel->Hide();
             mpInsertImage->Show();
         }
-        else if ( maContext == maImpressHandoutContext )
+        else if ( maContext == maImpressHandoutContext  || maContext == maImpressNotesContext )
         {
             mpCloseMaster->Hide();
             mpEditMaster->Hide();
@@ -270,17 +270,7 @@ void SlideBackground::HandleContextChange(
             mpBackgroundLabel->Show();
             mpInsertImage->Show();
         }
-        else if (maContext == maImpressNotesContext)
-        {
-            mpCloseMaster->Hide();
-            mpEditMaster->Hide();
-            mpMasterSlide->Disable();
-            mpDspMasterBackground->Disable();
-            mpDspMasterObjects->Disable();
-            mpFillStyle->Show();
-            mpBackgroundLabel->Show();
-            mpInsertImage->Hide();
-        }
+
         // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
         sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
         if(pPanel)
@@ -296,7 +286,7 @@ void SlideBackground::Update()
 {
     eFillStyle nPos = static_cast<eFillStyle>(mpFillStyle->GetSelectedEntryPos());
 
-    if(maContext == maImpressHandoutContext)
+    if(maContext != maImpressOtherContext)
         nPos = NONE;
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
