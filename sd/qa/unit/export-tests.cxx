@@ -95,6 +95,7 @@ public:
     void testEmbeddedText();
     void testAuthorField();
     void testTdf50499();
+    void testTdf113818();
     void testTdf100926();
     void testPageWithTransparentBackground();
     void testTextRotation();
@@ -121,6 +122,7 @@ public:
     CPPUNIT_TEST(testEmbeddedText);
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf50499);
+    CPPUNIT_TEST(testTdf113818);
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPageWithTransparentBackground);
     CPPUNIT_TEST(testTextRotation);
@@ -878,6 +880,19 @@ void SdExportTest::testTdf50499()
     assertXPath(pXmlDoc, "//anim:animate[1]", "to", "(x)");
     assertXPath(pXmlDoc, "//anim:animate[3]", "by", "(height/3+width*0.1)");
 
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf113818()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf113818-swivel.pptx"), PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    assertXPath(pXmlDoc, "//anim:animate[1]", "formula", "width*sin(2.5*pi*$)");
+    assertXPath(pXmlDoc, "//anim:animate[1]", "values", "0;1");
     xDocShRef->DoClose();
 }
 
