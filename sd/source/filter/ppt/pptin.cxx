@@ -2124,9 +2124,10 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                         if ( !pPtr->aTarget.isEmpty() )
                         {
                             ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
-                            if ( pDocShell )
+                            SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : nullptr;
+                            if (pMedium)
                             {
-                                OUString aBaseURL = pDocShell->GetMedium()->GetBaseURL();
+                                OUString aBaseURL = pMedium->GetBaseURL();
                                 OUString aBookmarkURL( pInfo->GetBookmark() );
                                 INetURLObject aURL( pPtr->aTarget );
                                 if( INetProtocol::NotValid == aURL.GetProtocol()
