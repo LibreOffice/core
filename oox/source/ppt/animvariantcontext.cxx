@@ -102,18 +102,7 @@ namespace oox { namespace ppt {
         case PPT_TOKEN( strVal ):
         {
             OUString val = rAttribs.getString( XML_val, OUString() );
-            if( convertMeasure( val ) )
-            {
-                maValue <<= val;
-            }
-            else
-            {
-                css::drawing::FillStyle eFillStyle;
-                if( convertFillStyle( val, eFillStyle ) )
-                    maValue <<= eFillStyle;
-                else
-                    maValue <<= val;
-            }
+            maValue <<= val;
             return this;
         }
         default:
