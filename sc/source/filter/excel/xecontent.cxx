@@ -1000,6 +1000,16 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
             rWorksheet->endElement( XML_formula );
         }
     }
+    else if (IsTextRule(eOperation))
+    {
+        OStringBuffer aBufferOld;
+        OStringBuffer aBuffer = XclXmlUtils::ToOString(aBufferOld, mrFormatEntry.GetValidSrcPos());
+        OString aTextTopCell = aBuffer.makeStringAndClear();
+        OString aFormula = "NOT(ISERROR(SEARCH(\"" + aText + "\"," + aTextTopCell + ")))";
+        rWorksheet->startElement( XML_formula, FSEND );
+        rWorksheet->writeEscaped(aFormula.getStr());
+        rWorksheet->endElement( XML_formula );
+    }
     // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_cfRule );
 }
