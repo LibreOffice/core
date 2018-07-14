@@ -577,7 +577,10 @@ void WorkbookFragment::recalcFormulaCells()
     if (bHardRecalc)
         rDocSh.DoHardRecalc();
     else
+    {
+        getDocImport().broadcastRecalcAfterImport();
         rDoc.CalcFormulaTree(false, true, false);
+    }
 }
 
 // private --------------------------------------------------------------------
