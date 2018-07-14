@@ -95,6 +95,7 @@ public:
     void testEmbeddedText();
     void testTdf98477();
     void testAuthorField();
+    void testTdf50499();
     void testTdf100926();
     void testPageWithTransparentBackground();
     void testTextRotation();
@@ -122,6 +123,7 @@ public:
     CPPUNIT_TEST(testEmbeddedText);
     CPPUNIT_TEST(testTdf98477);
     CPPUNIT_TEST(testAuthorField);
+    CPPUNIT_TEST(testTdf50499);
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPageWithTransparentBackground);
     CPPUNIT_TEST(testTextRotation);
@@ -876,6 +878,21 @@ void SdExportTest::testAuthorField()
     bool bFixed = false;
     xPropSet->getPropertyValue("IsFixed") >>= bFixed;
     CPPUNIT_ASSERT_MESSAGE("Author field is not fixed", bFixed);
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf50499()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf50499.pptx"), PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    assertXPath(pXmlDoc, "//anim:animate[1]", "from", "(-width/2)");
+    assertXPath(pXmlDoc, "//anim:animate[1]", "to", "(x)");
+    assertXPath(pXmlDoc, "//anim:animate[3]", "by", "(height/3+width*0.1)");
 
     xDocShRef->DoClose();
 }

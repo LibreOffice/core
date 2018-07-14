@@ -1291,7 +1291,7 @@ void SdOOXMLExportTest2::testTdf104788()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide6.xml");
 
     OUString sVal = getXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[2]/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]", "to");
-    CPPUNIT_ASSERT_EQUAL(OUString("-1.0"), sVal);
+    CPPUNIT_ASSERT_EQUAL(-1.0, sVal.toDouble());
 
     OUString sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[2]/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("xshear"), sAttributeName);
