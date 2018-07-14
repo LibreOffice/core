@@ -96,6 +96,7 @@ public:
     void testAuthorField();
     void testTdf50499();
     void testTdf113818();
+    void testTdf98477();
     void testTdf100926();
     void testPageWithTransparentBackground();
     void testTextRotation();
@@ -123,6 +124,7 @@ public:
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf50499);
     CPPUNIT_TEST(testTdf113818);
+    CPPUNIT_TEST(testTdf98477);
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPageWithTransparentBackground);
     CPPUNIT_TEST(testTextRotation);
@@ -893,6 +895,18 @@ void SdExportTest::testTdf113818()
     xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
     assertXPath(pXmlDoc, "//anim:animate[1]", "formula", "width*sin(2.5*pi*$)");
     assertXPath(pXmlDoc, "//anim:animate[1]", "values", "0;1");
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf98477()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf98477grow.pptx"), PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    assertXPath(pXmlDoc, "//anim:animateTransform", "by", "1.5,1.5");
     xDocShRef->DoClose();
 }
 
