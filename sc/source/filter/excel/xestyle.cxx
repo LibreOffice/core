@@ -2983,12 +2983,12 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     mxFormatter->FillKeywordTableForExcel( *mpKeywordTable );
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
+    sal_Int32 nIndex = 0;
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
         ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList(nTab);
         if (pList)
         {
-            sal_Int32 nIndex = 0;
             for (ScConditionalFormatList::const_iterator itr = pList->begin();
                     itr != pList->end(); ++itr)
             {
