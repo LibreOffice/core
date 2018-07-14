@@ -82,7 +82,15 @@ $(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
     chart2/source/controller/chartcontroller \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    connectivity/source/cpool/dbpool2 \
+    connectivity/source/drivers/hsqldb/hsqldb \
+    connectivity/source/drivers/dbase/dbase \
+    $(if $(ENABLE_FIREBIRD_SDBC),connectivity/source/drivers/firebird/firebird_sdbc) \
+    connectivity/source/drivers/jdbc/jdbc \
+    connectivity/source/manager/sdbc2 \
+    dbaccess/source/filter/xml/dbaxml \
     dbaccess/util/dba \
+    dbaccess/util/dbu \
     embeddedobj/util/embobj \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
@@ -91,6 +99,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
     i18npool/source/search/i18nsearch \
     i18npool/util/i18npool \
     linguistic/source/lng \
+    extensions/source/logging/log \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \
