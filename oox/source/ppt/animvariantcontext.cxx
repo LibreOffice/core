@@ -38,23 +38,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
-
-    bool convertFillStyle( const OUString& rString, css::drawing::FillStyle& rValue )
-    {
-        if( rString == "solid" )
-        {
-            rValue = css::drawing::FillStyle::FillStyle_SOLID;
-            return true;
-        }
-        else if( rString == "none" )
-        {
-            rValue = css::drawing::FillStyle::FillStyle_NONE;
-            return true;
-        }
-        else
-            return false;
-    }
-
     AnimVariantContext::AnimVariantContext( FragmentHandler2 const & rParent, sal_Int32 aElement, Any & aValue )
         : FragmentHandler2( rParent )
             , mnElement( aElement )
@@ -102,18 +85,7 @@ namespace oox { namespace ppt {
         case PPT_TOKEN( strVal ):
         {
             OUString val = rAttribs.getString( XML_val, OUString() );
-            if( convertMeasure( val ) )
-            {
-                maValue <<= val;
-            }
-            else
-            {
-                css::drawing::FillStyle eFillStyle;
-                if( convertFillStyle( val, eFillStyle ) )
-                    maValue <<= eFillStyle;
-                else
-                    maValue <<= val;
-            }
+            maValue <<= val;
             return this;
         }
         default:
