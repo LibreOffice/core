@@ -93,6 +93,7 @@ public:
     void testTransparentBackground();
     void testEmbeddedPdf();
     void testEmbeddedText();
+    void testTdf98477();
     void testAuthorField();
     void testTdf100926();
     void testPageWithTransparentBackground();
@@ -118,6 +119,7 @@ public:
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testEmbeddedPdf);
     CPPUNIT_TEST(testEmbeddedText);
+    CPPUNIT_TEST(testTdf98477);
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPageWithTransparentBackground);
@@ -845,6 +847,18 @@ void SdExportTest::testEmbeddedText()
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), xRange->getString()); //tdf#112547
 
     xShell->DoClose();
+}
+
+void SdExportTest::testTdf98477()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf98477grow.pptx"), PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    assertXPath(pXmlDoc, "//anim:animateTransform", "by", "1.5,1.5");
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testAuthorField()
