@@ -99,6 +99,7 @@ public:
     void testTextRotation();
     void testTdf115394PPT();
     void testBulletsAsImage();
+    void testTdf113822();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -123,6 +124,7 @@ public:
     CPPUNIT_TEST(testTextRotation);
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testBulletsAsImage);
+    CPPUNIT_TEST(testTdf113822);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1064,6 +1066,20 @@ void SdExportTest::testBulletsAsImage()
         xDocShRef->DoClose();
     }
 }
+
+void SdExportTest::testTdf113822()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf113822underline.pptx"), PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    assertXPath(pXmlDoc, "//anim:set[1]", "to", "solid");
+
+    xDocShRef->DoClose();
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
 

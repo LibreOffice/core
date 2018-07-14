@@ -55,6 +55,35 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
 using ::com::sun::star::beans::NamedValue;
 
+namespace {
+
+    oox::ppt::AnimationAttributeEnum getAttributeEnumByAPIName(const OUString &rAPIName)
+    {
+        oox::ppt::AnimationAttributeEnum eResult = oox::ppt::AnimationAttributeEnum::UNKNOWN;
+        const oox::ppt::ImplAttributeNameConversion *attrConv = oox::ppt::getAttributeConversionList();
+        while(attrConv->mpAPIName != nullptr)
+        {
+            if(rAPIName.equalsAscii(attrConv->mpAPIName))
+            {
+                eResult = attrConv->meAttribute;
+                break;
+            }
+            attrConv++;
+        }
+        return eResult;
+    }
+
+    bool convertAnimationValueWithTimeNode(const oox::ppt::TimeNodePtr& pNode, css::uno::Any &rAny)
+    {
+        css::uno::Any aAny = pNode->getNodeProperties()[oox::ppt::NP_ATTRIBUTENAME];
+        OUString aNameList;
+        aAny >>= aNameList;
+
+        // only get first token.
+        return oox::ppt::convertAnimationValue(getAttributeEnumByAPIName(aNameList.getToken(0, ';')), rAny);
+    }
+}
+
 namespace oox { namespace ppt {
 
     struct AnimColor
@@ -172,25 +201,10 @@ namespace oox { namespace ppt {
 
         virtual ~SetTimeNodeContext() throw () override
             {
-                if( maTo.hasValue() )
+                if(maTo.hasValue())
                 {
-                    // TODO
-                    // HACK !!! discard and refactor
-                    OUString aString;
-                    if( maTo >>= aString )
-                    {
-                        if( aString == "visible" || aString == "true" )
-                            maTo <<= true;
-                        else if( aString == "false" )
-                            maTo <<= false;
-
-                        if (!maTo.has<bool>())
-                        {
-                            SAL_WARN("oox.ppt", "conversion failed");
-                            maTo <<= false;
-                        }
-                    }
-                    mpNode->setTo( maTo );
+                    convertAnimationValueWithTimeNode(mpNode, maTo);
+                    mpNode->setTo(maTo);
                 }
 
             }
