@@ -173,11 +173,8 @@ void applySharedFormulas(
                         pCell->SetResultToken(new formula::FormulaStringToken(aSS));
                         // If we don't reset dirty, then e.g. disabling macros makes all cells
                         // that use macro functions to show #VALUE!
-                        if (!pCell->GetCode()->IsRecalcModeMustAfterImport())
-                        {
-                            pCell->ResetDirty();
-                            pCell->SetChanged(false);
-                        }
+                        pCell->ResetDirty();
+                        pCell->SetChanged(false);
                         break;
                     }
                     SAL_FALLTHROUGH;
@@ -278,11 +275,8 @@ void applyCellFormulaValues(
             case XML_n:
             {
                 pCell->SetResultDouble(rValueStr.toDouble());
-                if (!pCell->GetCode()->IsRecalcModeMustAfterImport())
-                {
-                    pCell->ResetDirty();
-                    pCell->SetChanged(false);
-                }
+                pCell->ResetDirty();
+                pCell->SetChanged(false);
             }
             break;
             case XML_str:
@@ -300,11 +294,8 @@ void applyCellFormulaValues(
                 {
                     svl::SharedString aSS = rStrPool.intern(rValueStr);
                     pCell->SetResultToken(new formula::FormulaStringToken(aSS));
-                    if (!pCell->GetCode()->IsRecalcModeMustAfterImport())
-                    {
-                        pCell->ResetDirty();
-                        pCell->SetChanged(false);
-                    }
+                    pCell->ResetDirty();
+                    pCell->SetChanged(false);
                 }
             break;
             default:
