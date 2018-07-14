@@ -28,8 +28,6 @@ CustomPropertyField::CustomPropertyField(OUString const & rName, OUString const 
 CustomPropertyField::~CustomPropertyField()
 {}
 
-SV_IMPL_PERSIST1(CustomPropertyField);
-
 std::unique_ptr<SvxFieldData> CustomPropertyField::Clone() const
 {
     return o3tl::make_unique<CustomPropertyField>(msName, msCurrentPresentation);

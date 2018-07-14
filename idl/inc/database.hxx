@@ -24,7 +24,6 @@
 #include "hash.hxx"
 #include "lex.hxx"
 #include <rtl/string.hxx>
-#include <tools/pstm.hxx>
 
 #include <rtl/ustring.hxx>
 #include <set>
