@@ -21,8 +21,6 @@
 #include <editeng/measfld.hxx>
 #include <o3tl/make_unique.hxx>
 
-SV_IMPL_PERSIST1(SdrMeasureField);
-
 SdrMeasureField::~SdrMeasureField()
 {
 }

@@ -21,6 +21,7 @@
 #define INCLUDED_IDL_INC_TYPES_HXX
 
 #include <rtl/strbuf.hxx>
+#include <tools/solar.h>
 #include <tools/ref.hxx>
 #include "basobj.hxx"
 

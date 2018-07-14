@@ -1140,19 +1140,10 @@ void SdrTextObj::ImpCheckMasterCachable()
     if(!bNotVisibleAsMaster && pOutlinerParaObject && pOutlinerParaObject->IsEditDoc() )
     {
         const EditTextObject& rText= pOutlinerParaObject->GetTextObject();
-        bNotMasterCachable=rText.HasField(SvxPageField::StaticClassId());
-        if( !bNotMasterCachable )
-        {
-            bNotMasterCachable=rText.HasField(SvxHeaderField::StaticClassId());
-            if( !bNotMasterCachable )
-            {
-                bNotMasterCachable=rText.HasField(SvxFooterField::StaticClassId());
-                if( !bNotMasterCachable )
-                {
-                    bNotMasterCachable=rText.HasField(SvxDateTimeField::StaticClassId());
-                }
-            }
-        }
+        bNotMasterCachable = rText.HasField(SvxPageField::CLASS_ID)
+            || rText.HasField(SvxHeaderField::CLASS_ID)
+            || rText.HasField(SvxFooterField::CLASS_ID)
+            || rText.HasField(SvxDateTimeField::CLASS_ID);
     }
 }
 
