@@ -543,27 +543,40 @@ namespace oox { namespace ppt {
                     }
                     aProps[ NP_CALCMODE ] <<= nEnum;
                 }
-                OUString aStr;
-                aStr = xAttribs->getOptionalValue( XML_from );
-                if( !aStr.isEmpty() )
-                {
-                    pNode->setFrom( makeAny( aStr ) );
-                }
-                aStr = xAttribs->getOptionalValue( XML_by );
-                if( !aStr.isEmpty() )
-                {
-                    pNode->setBy( makeAny( aStr ) );
-                }
-                aStr = xAttribs->getOptionalValue( XML_to );
-                if( !aStr.isEmpty() )
-                {
-                    pNode->setTo( makeAny( aStr ) );
-                }
+
+                msFrom = xAttribs->getOptionalValue(XML_from);
+                msTo = xAttribs->getOptionalValue(XML_to);
+                msBy = xAttribs->getOptionalValue(XML_by);
+
                 mnValueType = xAttribs->getOptionalValueToken( XML_valueType, 0 );
             }
 
         virtual ~AnimContext() throw () override
             {
+                if (!msFrom.isEmpty())
+                {
+                    css::uno::Any aAny;
+                    aAny <<= msFrom;
+                    convertAnimationValueWithTimeNode(mpNode, aAny);
+                    mpNode->setFrom(aAny);
+                }
+
+                if (!msTo.isEmpty())
+                {
+                    css::uno::Any aAny;
+                    aAny <<= msTo;
+                    convertAnimationValueWithTimeNode(mpNode, aAny);
+                    mpNode->setTo(aAny);
+                }
+
+                if (!msBy.isEmpty())
+                {
+                    css::uno::Any aAny;
+                    aAny <<= msBy;
+                    convertAnimationValueWithTimeNode(mpNode, aAny);
+                    mpNode->setBy(aAny);
+                }
+
                 int nKeyTimes = maTavList.size();
                 if( nKeyTimes > 0)
                 {
@@ -613,6 +626,9 @@ namespace oox { namespace ppt {
     private:
         sal_Int32              mnValueType;
         TimeAnimationValueList maTavList;
+        OUString msFrom;
+        OUString msTo;
+        OUString msBy;
     };
 
     /** CT_TLAnimateScaleBehavior */
