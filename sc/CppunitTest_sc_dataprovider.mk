@@ -82,7 +82,14 @@ $(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
     chart2/source/controller/chartcontroller \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    connectivity/source/cpool/dbpool2 \
+    connectivity/source/drivers/hsqldb/hsqldb \
+    $(if $(ENABLE_FIREBIRD_SDBC),connectivity/source/drivers/firebird/firebird_sdbc) \
+    connectivity/source/drivers/jdbc/jdbc \
+    connectivity/source/manager/sdbc2 \
+    dbaccess/source/filter/xml/dbaxml \
     dbaccess/util/dba \
+    dbaccess/util/dbu \
     embeddedobj/util/embobj \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
