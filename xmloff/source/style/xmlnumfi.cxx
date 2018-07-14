@@ -93,7 +93,8 @@ public:
 struct SvXMLNumberInfo
 {
     sal_Int32   nDecimals           = -1;
-    sal_Int32   nInteger            = -1;
+    sal_Int32   nInteger            = -1;       /// Total min number of digits in integer part ('0' + '?')
+    sal_Int32   nBlankInteger       = -1;       /// Number of '?' in integer part
     sal_Int32   nExpDigits          = -1;
     sal_Int32   nExpInterval        = -1;
     sal_Int32   nMinNumerDigits     = -1;
@@ -245,6 +246,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_DECIMAL_PLACES,
     XML_TOK_ELEM_ATTR_MIN_DECIMAL_PLACES,
     XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS,
+    XML_TOK_ELEM_ATTR_MAX_BLANK_INTEGER_DIGITS,
     XML_TOK_ELEM_ATTR_GROUPING,
     XML_TOK_ELEM_ATTR_DISPLAY_FACTOR,
     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT,
@@ -536,8 +538,11 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_PLACES,      XML_TOK_ELEM_ATTR_MIN_DECIMAL_PLACES   },
             { XML_NAMESPACE_NUMBER, XML_MIN_DECIMAL_PLACES,      XML_TOK_ELEM_ATTR_MIN_DECIMAL_PLACES   },
             { XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,      XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS   },
+            { XML_NAMESPACE_LO_EXT, XML_MAX_BLANK_INTEGER_DIGITS,XML_TOK_ELEM_ATTR_MAX_BLANK_INTEGER_DIGITS   },
+            { XML_NAMESPACE_NUMBER, XML_MAX_BLANK_INTEGER_DIGITS,XML_TOK_ELEM_ATTR_MAX_BLANK_INTEGER_DIGITS   },
             { XML_NAMESPACE_NUMBER, XML_GROUPING,                XML_TOK_ELEM_ATTR_GROUPING             },
             { XML_NAMESPACE_NUMBER, XML_DISPLAY_FACTOR,          XML_TOK_ELEM_ATTR_DISPLAY_FACTOR       },
+            { XML_NAMESPACE_LO_EXT, XML_DECIMAL_REPLACEMENT,     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT  }, // not strict ODF for scientific
             { XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT  },
             { XML_NAMESPACE_NUMBER, XML_DENOMINATOR_VALUE,       XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE  },
             { XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
@@ -923,6 +928,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nInteger = nAttrVal;
                 break;
+            case XML_TOK_ELEM_ATTR_MAX_BLANK_INTEGER_DIGITS:
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                    aNumInfo.nBlankInteger = nAttrVal;
+                break;
             case XML_TOK_ELEM_ATTR_GROUPING:
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     aNumInfo.bGrouping = bAttrBool;
@@ -1016,6 +1025,8 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 break;
         }
     }
+    if ( aNumInfo.nBlankInteger > aNumInfo.nInteger )
+        aNumInfo.nInteger = aNumInfo.nBlankInteger;
     if ( aNumInfo.nMinDecimalDigits == -1)
     {
         if ( bVarDecimals || aNumInfo.bDecReplace )
@@ -1884,6 +1895,25 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         // so it has to be removed if nLeading is 0 (".00E+0", not "#.00E+0").
 
         aNumStr.stripStart('#');
+    }
+
+    if ( rInfo.nBlankInteger > 0 )
+    {
+        // Replace nBlankInteger '0' by '?'
+        sal_Int32 nIndex = 0;
+        sal_Int32 nBlanks = rInfo.nBlankInteger;
+        sal_Int32 nIntegerEnd = aNumStr.indexOf( pFormatter->GetNumDecimalSep() );
+        if ( nIntegerEnd < 0 )
+            nIntegerEnd = aNumStr.getLength();
+        while ( nIndex < nIntegerEnd && nBlanks > 0 )
+        {
+            if ( aNumStr[nIndex] == '0' )
+            {
+                aNumStr[nIndex] = '?';
+                nBlanks--;
+            }
+            nIndex++;
+        }
     }
 
     if ( bGrouping && rInfo.nExpInterval > rInfo.nInteger )
