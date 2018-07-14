@@ -111,12 +111,12 @@ namespace drawinglayer
         {
             const EditTextObject& rETO = maOutlinerParaObject.GetTextObject();
 
-            mbContainsPageField = rETO.HasField(SvxPageField::StaticClassId());
-            mbContainsPageCountField = rETO.HasField(SvxPagesField::StaticClassId());
-            mbContainsOtherFields = rETO.HasField(SvxHeaderField::StaticClassId())
-                || rETO.HasField(SvxFooterField::StaticClassId())
-                || rETO.HasField(SvxDateTimeField::StaticClassId())
-                || rETO.HasField(SvxAuthorField::StaticClassId());
+            mbContainsPageField = rETO.HasField(SvxPageField::CLASS_ID);
+            mbContainsPageCountField = rETO.HasField(SvxPagesField::CLASS_ID);
+            mbContainsOtherFields = rETO.HasField(SvxHeaderField::CLASS_ID)
+                || rETO.HasField(SvxFooterField::CLASS_ID)
+                || rETO.HasField(SvxDateTimeField::CLASS_ID)
+                || rETO.HasField(SvxAuthorField::CLASS_ID);
         }
 
         const SdrText* SdrTextPrimitive2D::getSdrText() const { return mrSdrText.get(); }

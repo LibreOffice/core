@@ -322,9 +322,6 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 // The following are the derivatives of SvxFieldData ...
 
 
-SV_IMPL_PERSIST1( SvxDateField );
-
-
 SvxDateField::SvxDateField()
 {
     nFixDate = Date( Date::SYSTEM ).GetDate();
@@ -436,9 +433,6 @@ MetaAction* SvxDateField::createBeginComment() const
     return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
-SV_IMPL_PERSIST1( SvxURLField );
-
-
 SvxURLField::SvxURLField()
 {
     eFormat = SvxURLFormat::Url;
@@ -484,8 +478,6 @@ MetaAction* SvxURLField::createBeginComment() const
 // SvxPageTitleField methods
 //
 
-SV_IMPL_PERSIST1( SvxPageTitleField );
-
 SvxPageTitleField::SvxPageTitleField() {}
 
 std::unique_ptr<SvxFieldData> SvxPageTitleField::Clone() const
@@ -509,8 +501,6 @@ MetaAction* SvxPageTitleField::createBeginComment() const
 // The fields that were removed from Calc:
 
 
-SV_IMPL_PERSIST1( SvxPageField );
-
 SvxPageField::SvxPageField() {}
 
 std::unique_ptr<SvxFieldData> SvxPageField::Clone() const
@@ -529,8 +519,6 @@ MetaAction* SvxPageField::createBeginComment() const
 }
 
 
-SV_IMPL_PERSIST1( SvxPagesField );
-
 SvxPagesField::SvxPagesField() {}
 
 std::unique_ptr<SvxFieldData> SvxPagesField::Clone() const
@@ -542,8 +530,6 @@ bool SvxPagesField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( dynamic_cast< const SvxPagesField *>(&rCmp) != nullptr);
 }
-
-SV_IMPL_PERSIST1( SvxTimeField );
 
 SvxTimeField::SvxTimeField() {}
 
@@ -562,8 +548,6 @@ MetaAction* SvxTimeField::createBeginComment() const
     return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
-SV_IMPL_PERSIST1( SvxFileField );
-
 SvxFileField::SvxFileField() {}
 
 std::unique_ptr<SvxFieldData> SvxFileField::Clone() const
@@ -575,8 +559,6 @@ bool SvxFileField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( dynamic_cast< const SvxFileField *>(&rCmp) != nullptr );
 }
-
-SV_IMPL_PERSIST1( SvxTableField );
 
 SvxTableField::SvxTableField() : mnTab(0) {}
 
@@ -602,9 +584,6 @@ bool SvxTableField::operator==( const SvxFieldData& rCmp ) const
 }
 
 //      SvxExtTimeField
-
-
-SV_IMPL_PERSIST1( SvxExtTimeField );
 
 
 SvxExtTimeField::SvxExtTimeField()
@@ -721,9 +700,6 @@ MetaAction* SvxExtTimeField::createBeginComment() const
 //      SvxExtFileField
 
 
-SV_IMPL_PERSIST1( SvxExtFileField );
-
-
 SvxExtFileField::SvxExtFileField()
 {
     eType = SvxFileType::Var;
@@ -836,9 +812,6 @@ OUString SvxExtFileField::GetFormatted() const
 //      SvxAuthorField
 
 
-SV_IMPL_PERSIST1( SvxAuthorField );
-
-
 SvxAuthorField::SvxAuthorField( const OUString& rFirstName,
                                 const OUString& rLastName,
                                 const OUString& rShortName,
@@ -897,8 +870,6 @@ OUString SvxAuthorField::GetFormatted() const
     return aString;
 }
 
-SV_IMPL_PERSIST1( SvxHeaderField );
-
 SvxHeaderField::SvxHeaderField() {}
 
 std::unique_ptr<SvxFieldData> SvxHeaderField::Clone() const
@@ -911,8 +882,6 @@ bool SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxHeaderField *>(&rCmp) != nullptr );
 }
 
-SV_IMPL_PERSIST1( SvxFooterField );
-
 SvxFooterField::SvxFooterField() {}
 
 std::unique_ptr<SvxFieldData> SvxFooterField::Clone() const
@@ -924,8 +893,6 @@ bool SvxFooterField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( dynamic_cast< const SvxFooterField *>(&rCmp) != nullptr );
 }
-
-SV_IMPL_PERSIST1( SvxDateTimeField );
 
 std::unique_ptr<SvxFieldData> SvxDateTimeField::Clone() const
 {
