@@ -94,9 +94,11 @@ public:
     {
         switch( aElementToken )
         {
-            // TODO
             case DGM_TOKEN( animLvl ):
+                mrPoint.mnAnimLvl = rAttribs.getToken(XML_val, XML_none);
+                break;
             case DGM_TOKEN( animOne ):
+                mrPoint.mnAnimOne = rAttribs.getToken(XML_val, XML_one);
                 break;
             case DGM_TOKEN( bulletEnabled ):
                 mrPoint.mbBulletEnabled = rAttribs.getBool( XML_val, false );

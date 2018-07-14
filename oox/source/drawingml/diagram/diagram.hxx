@@ -70,6 +70,8 @@ struct Point
 {
     Point() :
         mnType(0),
+        mnAnimLvl(XML_none),
+        mnAnimOne(XML_one),
         mnMaxChildren(-1),
         mnPreferredChildren(-1),
         mnDirection(XML_norm),
@@ -115,6 +117,8 @@ struct Point
     OUString msQuickStyleTypeId;
 
     sal_Int32     mnType;
+    sal_Int32     mnAnimLvl;
+    sal_Int32     mnAnimOne;
     sal_Int32     mnMaxChildren;
     sal_Int32     mnPreferredChildren;
     sal_Int32     mnDirection;
