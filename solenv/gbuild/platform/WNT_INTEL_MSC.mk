@@ -22,6 +22,9 @@ gb_CPUDEFS := -D_X86_=1
 
 include $(GBUILDDIR)/platform/com_MSC_defs.mk
 
+gb_CXXFLAGS += \
+        $(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4702) \
+
 include $(GBUILDDIR)/platform/com_MSC_class.mk
 
 # vim: set noet sw=4:
