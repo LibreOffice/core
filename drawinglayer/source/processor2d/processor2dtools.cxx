@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <o3tl/make_unique.hxx>
 #include "vclpixelprocessor2d.hxx"
 #include "vclmetafileprocessor2d.hxx"
 
@@ -28,15 +29,15 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        BaseProcessor2D* createPixelProcessor2DFromOutputDevice(
+        std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
         {
             // create Pixel Vcl-Processor
-            return new VclPixelProcessor2D(rViewInformation2D, rTargetOutDev);
+            return o3tl::make_unique<VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
         }
 
-        BaseProcessor2D* createProcessor2DFromOutputDevice(
+        std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
         {
@@ -46,7 +47,7 @@ namespace drawinglayer
             if(bOutputToRecordingMetaFile)
             {
                 // create MetaFile Vcl-Processor and process
-                return new VclMetafileProcessor2D(rViewInformation2D, rTargetOutDev);
+                return o3tl::make_unique<VclMetafileProcessor2D>(rViewInformation2D, rTargetOutDev);
             }
             else
             {

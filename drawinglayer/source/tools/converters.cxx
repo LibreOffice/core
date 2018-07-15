@@ -80,7 +80,7 @@ namespace drawinglayer
             // create pixel processor, also already takes care of AAing and
             // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
             // not wanted, change after this call as needed
-            processor2d::BaseProcessor2D* pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
+            std::unique_ptr<processor2d::BaseProcessor2D> pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
                 *pContent.get(),
                 rViewInformation2D);
 
@@ -122,7 +122,7 @@ namespace drawinglayer
 
                 // render
                 pContentProcessor->process(xSeq);
-                delete pContentProcessor;
+                pContentProcessor.reset();
 
                 // get alpha channel from vdev
                 pContent->EnableMapMode(false);

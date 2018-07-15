@@ -234,7 +234,7 @@ private:
 
     void            DrawRotatedFrame(vcl::RenderContext& rRenderContext);       // pixel
 
-    drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> CreateProcessor2D( );
 
     void DrawEditStandard(DrawEditParam& rParam);
     void DrawEditBottomTop(DrawEditParam& rParam);

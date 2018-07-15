@@ -22,6 +22,7 @@
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <memory>
 
 class OutputDevice;
 
@@ -36,7 +37,7 @@ namespace drawinglayer
         // create a mating VCL-Processor for given OutputDevice. This includes
         // looking for MetaFile-recording. The returned renderer changes owner,
         // deletion is duty of the caller
-        DRAWINGLAYER_DLLPUBLIC drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
+        DRAWINGLAYER_DLLPUBLIC std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 
