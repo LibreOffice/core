@@ -18,8 +18,8 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_ITRATR_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_ITRATR_HXX
+#include <o3tl/deleter.hxx>
 #include "atrhndl.hxx"
-
 #include <swtypes.hxx>
 #include <swfont.hxx>
 #include "porlay.hxx"
@@ -49,7 +49,7 @@ private:
     VclPtr<OutputDevice> m_pLastOut;
     /// count currently open hints, redlines, ext-input
     short m_nChgCnt;
-    std::unique_ptr<SwRedlineItr> m_pRedline;
+    std::unique_ptr<SwRedlineItr, o3tl::default_delete<SwRedlineItr>> m_pRedline;
     /// current iteration index in HintStarts
     size_t m_nStartIndex;
     /// current iteration index in HintEnds
