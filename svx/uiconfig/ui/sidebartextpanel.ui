@@ -23,7 +23,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="font">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <child>
                   <object class="GtkToolButton" id="fontname">
                     <property name="visible">True</property>
@@ -46,7 +46,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="fontheight">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <child>
                   <object class="GtkToolButton" id="fontsize">
                     <property name="visible">True</property>
@@ -82,7 +82,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="fonteffects">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="bold">
@@ -164,7 +164,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="fontadjust">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="grow">
@@ -217,7 +217,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="colorbar_writer">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkMenuToolButton" id="fontcolor">
@@ -257,7 +257,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="colorbar_others">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <child>
                   <object class="GtkMenuToolButton" id="color">
                     <property name="use_action_appearance">False</property>
@@ -282,7 +282,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="colorbar_background">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                  <child>
                   <object class="GtkMenuToolButton" id="backgroundcolor">
                     <property name="use_action_appearance">False</property>
@@ -307,7 +307,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="position">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="superscript">
@@ -346,7 +346,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="spacingbar">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <child>
                   <object class="GtkToolButton" id="spacing">
                     <property name="use_action_appearance">False</property>
