@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DOCSH_HXX
 
 #include <ooo/vba/excel/XWorkbook.hpp>
+#include <o3tl/deleter.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -113,7 +114,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     std::unique_ptr<ScSheetSaveData>    m_pSheetSaveData;
     std::unique_ptr<ScFormatSaveData>   m_pFormatSaveData;
 
-    std::unique_ptr<ScDocShellModificator> m_pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
+    std::unique_ptr<ScDocShellModificator, o3tl::default_delete<ScDocShellModificator>> m_pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
     css::uno::Reference< ooo::vba::excel::XWorkbook> mxAutomationWorkbookObject;
 
