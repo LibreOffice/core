@@ -21,7 +21,7 @@
         <child>
           <object class="sfxlo-SidebarToolBox" id="numberbullet">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebarparagraph|numberbullet|tooltip_text">Bullets and Numbering</property>
             <property name="show_arrow">False</property>
@@ -66,7 +66,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="horizontalalignment">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|horizontalalignment|tooltip_text">Horizontal Alignment</property>
                 <property name="halign">start</property>
@@ -129,7 +129,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="writedirection">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="lefttoright">
@@ -167,7 +167,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="verticalalignment">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|verticalalignment|tooltip_text">Vertical Alignment</property>
                 <property name="halign">end</property>
@@ -249,7 +249,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="paraspacing">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|paraspacing|tooltip_text">Spacing</property>
                 <property name="show_arrow">False</property>
@@ -385,7 +385,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="linespacing">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="margin_left">1</property>
                 <property name="hexpand">True</property>
@@ -441,7 +441,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="indent">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|indent|tooltip_text">Indent</property>
                 <property name="show_arrow">False</property>
@@ -651,7 +651,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="backgroundcolor">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|backgroundcolor|tooltip_text">Paragraph Background Color</property>
                 <property name="halign">end</property>

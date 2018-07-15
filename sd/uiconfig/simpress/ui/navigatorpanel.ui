@@ -49,7 +49,7 @@
         <child>
           <object class="GtkToolbar" id="toolbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="toolbar_style">icons</property>
             <child>
               <object class="GtkToolButton" id="first">

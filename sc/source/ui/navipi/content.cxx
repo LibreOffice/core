@@ -123,7 +123,7 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 //          ScContentTree
 
 ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg)
-    : SvTreeListBox(pParent, WB_BORDER)
+    : SvTreeListBox(pParent, WB_BORDER | WB_TABSTOP)
     , pParentWindow(pNavigatorDlg)
     , nRootType(ScContentId::ROOT)
     , bHiddenDoc(false)
