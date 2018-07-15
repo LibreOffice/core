@@ -241,10 +241,10 @@ private:
     std::unique_ptr<weld::Button> m_xResetBtn;
     std::unique_ptr<weld::SizeGroup> m_xSizeGroup;
 
-    SfxItemSet*         m_pSet;
+    std::unique_ptr<SfxItemSet>           m_pSet;
     std::unique_ptr<SfxItemSet>           m_pOutSet;
-    std::unique_ptr< TabDlg_Impl >        m_pImpl;
-    sal_uInt16*         m_pRanges;
+    std::unique_ptr<TabDlg_Impl>          m_pImpl;
+    std::unique_ptr<sal_uInt16[]>         m_pRanges;
     OString             m_sAppPageId;
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
