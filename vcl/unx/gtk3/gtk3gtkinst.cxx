@@ -3133,6 +3133,7 @@ public:
     virtual void set_popover(weld::Widget* pPopover) override
     {
         GtkInstanceWidget* pPopoverWidget = dynamic_cast<GtkInstanceWidget*>(pPopover);
+        assert(pPopoverWidget);
         m_pPopover = pPopoverWidget->getWidget();
         if (m_pMenuHack)
         {
