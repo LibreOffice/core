@@ -1236,28 +1236,26 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
     }
     else
     {
-        OUString sTo;
+        OUString sFrom, sTo, sBy;
         if (rXAnimate.is() && nXmlNodeType == XML_anim)
         {
-            rXAnimate->getTo() >>= sTo;
+            OUString sAttributeName = rXAnimate->getAttributeName();
+            Any aFrom = AnimationExporter::convertAnimateValue(rXAnimate->getFrom(), sAttributeName);
+            aFrom >>= sFrom;
+            Any aTo = AnimationExporter::convertAnimateValue(rXAnimate->getTo(), sAttributeName);
+            aTo >>= sTo;
+            Any aBy = AnimationExporter::convertAnimateValue(rXAnimate->getBy(), sAttributeName);
+            aBy >>= sBy;
         }
-        if (!sTo.isEmpty())
-        {
-            pFS->startElementNS(XML_p, nXmlNodeType,
-                XML_calcmode, pCalcMode,
-                XML_valueType, pValueType,
-                XML_to, USS(sTo),
-                FSEND);
 
-            bTo = false;
-        }
-        else
-        {
-            pFS->startElementNS(XML_p, nXmlNodeType,
-                XML_calcmode, pCalcMode,
-                XML_valueType, pValueType,
-                FSEND);
-        }
+        pFS->startElementNS(XML_p, nXmlNodeType,
+            XML_calcmode, pCalcMode,
+            XML_valueType, pValueType,
+            XML_from, sFrom.getLength() ? USS(sFrom) : nullptr,
+            XML_to, sTo.getLength() ? USS(sTo) : nullptr,
+            XML_by, sBy.getLength() ? USS(sBy) : nullptr,
+            FSEND);
+        bTo = sTo.isEmpty() && sFrom.isEmpty() && sBy.isEmpty();
     }
 
     WriteAnimationNodeAnimateInside(pFS, rXNode, bMainSeqChild, bSimple, bTo);
@@ -1568,9 +1566,12 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
         }
     }
 
+    bool bAutoReverse = rXNode->getAutoReverse();
+
     pFS->startElementNS(XML_p, XML_cTn,
                         XML_id, I64S(mnAnimationNodeIdMax ++),
                         XML_dur, fDuration != 0 ? I32S(static_cast<sal_Int32>(fDuration * 1000.0)) : pDuration,
+                        XML_autoRev, bAutoReverse ? "1" : nullptr,
                         XML_restart, pRestart,
                         XML_nodeType, pNodeType,
                         XML_fill, pFill,

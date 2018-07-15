@@ -146,6 +146,7 @@ public:
     void testTdf104786();
     void testTdf104789();
     void testOpenDocumentAsReadOnly();
+    void testTdf118768();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -213,6 +214,7 @@ public:
     CPPUNIT_TEST(testTdf104786);
     CPPUNIT_TEST(testTdf104789);
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
+    CPPUNIT_TEST(testTdf118768);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1691,6 +1693,27 @@ void SdOOXMLExportTest2::testOpenDocumentAsReadOnly()
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     CPPUNIT_ASSERT(xDocShRef->IsSecurityOptOpenReadOnly());
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf118768()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf118768-brake.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // check that transition attribute didn't change from 'out' to 'in'
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "//p:anim[1]", "from", "(-#ppt_w/2)");
+    assertXPath(pXmlDocContent, "//p:anim[1]", "to", "(#ppt_x)");
+    assertXPath(pXmlDocContent, "//p:anim[2]", "from", "0");
+
+    assertXPath(pXmlDocContent, "//p:anim[2]", "to", "-1");
+    assertXPath(pXmlDocContent, "//p:anim[2]/p:cBhvr/p:cTn", "autoRev", "1");
+
+    assertXPath(pXmlDocContent, "//p:anim[3]", "by", "(#ppt_h/3+#ppt_w*0.1)");
+    assertXPath(pXmlDocContent, "//p:anim[3]/p:cBhvr/p:cTn", "autoRev", "1");
     xDocShRef->DoClose();
 }
 
