@@ -5292,12 +5292,15 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
 
 
 PageMar::PageMar()
-{
-    header = footer = ConversionHelper::convertTwipToMM100(sal_Int32(720));
-    top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
+    : top(ConversionHelper::convertTwipToMM100( sal_Int32(1440)))
     // This is strange, the RTF spec says it's 1800, but it's clearly 1440 in Word
     // OOXML seems not to specify a default value
-    right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
+    , right(ConversionHelper::convertTwipToMM100( sal_Int32(1440)))
+    , bottom(top)
+    , left(right)
+    , header(ConversionHelper::convertTwipToMM100(sal_Int32(720)))
+    , footer(header)
+{
 }
 
 

@@ -555,8 +555,8 @@ OOXMLHexValue::OOXMLHexValue(sal_uInt32 nValue)
 }
 
 OOXMLHexValue::OOXMLHexValue(const char * pValue)
+: mnValue(rtl_str_toUInt32(pValue, 16))
 {
-    mnValue = rtl_str_toUInt32(pValue, 16);
 }
 
 OOXMLHexValue::~OOXMLHexValue()
