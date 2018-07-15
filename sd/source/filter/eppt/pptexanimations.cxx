@@ -1401,6 +1401,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
     else if ( rAttributeName == "Rotate"         // "r" or "style.rotation" ?
             || rAttributeName == "Opacity"
             || rAttributeName == "CharHeight"
+            || rAttributeName == "SkewX"
         )
     {
         double fNumber = 0.0;
