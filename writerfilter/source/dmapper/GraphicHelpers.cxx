@@ -46,11 +46,11 @@ using namespace com::sun::star;
 PositionHandler::PositionHandler( std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns ) :
 LoggedProperties("PositionHandler"),
 m_nOrient(text::VertOrientation::NONE),
+m_nRelation(text::RelOrientation::FRAME),
 m_nPosition(0),
 m_rPositionOffsets(rPositionOffsets),
 m_rAligns(rAligns)
 {
-    m_nRelation = text::RelOrientation::FRAME;
 }
 
 PositionHandler::~PositionHandler( )

@@ -46,9 +46,9 @@ RTFValue::RTFValue(int nValue)
     : m_nValue(nValue)
     , m_pAttributes(new RTFSprms())
     , m_pSprms(new RTFSprms())
+    , m_pShape(new RTFShape())
     , m_pPicture(new RTFPicture())
 {
-    m_pShape = new RTFShape();
 }
 
 RTFValue::RTFValue(OUString sValue, bool bForce)
