@@ -1,0 +1,9 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(-.99749995 0 0 -.99749995 45.982263 33.857733)" gradientUnits="userSpaceOnUse" x1="35.452969" x2="35.452969" y1="31.550577" y2="18.89035"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+
+
+
+
+
+
+     /&gt;
+ <g stroke-linecap="round" stroke-linejoin="round"><rect fill="#e9e9e9" height="9.983051" rx=".218242" ry=".372906" stroke="#8c8c8c" width="15" x=".5" y="4.516949"/><rect fill="#46aaec" fill-opacity=".984314" height="3" rx=".218242" ry=".372906" stroke="#2f78c8" width="15" x=".5" y="1.516949"/></g><path d="m0 3.9999999h16v1h-16z" fill="#2f78c8"/><path d="m15.5 15.5-15-14.99999968v14.99999968zm-6.999999-3.000001h-5v-4.9999987z" fill="#9cde4a" fill-rule="evenodd"/><path d="m13.093343 14.5-11.593343-11.6248397v11.6248397z" fill="none" stroke="url(#a)"/><path d="m15.5 15.5-15-14.99999968v14.99999968zm-6.999999-3.000001h-5v-4.9999987z" fill="none" stroke="#5ca12a" stroke-linejoin="round"/></svg>
