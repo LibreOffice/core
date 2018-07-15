@@ -74,9 +74,23 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <document.hxx>
+#include <scmod.hxx>
 #include <sc.hrc>
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
+
+namespace {
+
+SvxFontItem* getDefaultFontItem(LanguageType eLang, DefaultFontType nFontType, sal_uInt16 nItemId)
+{
+    vcl::Font aDefFont = OutputDevice::GetDefaultFont( nFontType, eLang, GetDefaultFontFlags::OnlyOne );
+    SvxFontItem* pNewItem = new SvxFontItem( aDefFont.GetFamilyType(), aDefFont.GetFamilyName(), aDefFont.GetStyleName(),
+            aDefFont.GetPitch(), aDefFont.GetCharSet(), nItemId );
+
+    return pNewItem;
+}
+
+}
 
 static SfxItemInfo const  aItemInfos[] =
 {
@@ -179,18 +193,15 @@ ScDocumentPool::ScDocumentPool()
     mvPoolDefaults(ATTR_ENDINDEX-ATTR_STARTINDEX+1),
     mnCurrentMaxKey(0)
 {
-    //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
-    vcl::Font aStdFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
-                                                    GetDefaultFontFlags::OnlyOne );
-    SvxFontItem* pStdFont = new SvxFontItem( aStdFont.GetFamilyType(),
-                                            aStdFont.GetFamilyName(), aStdFont.GetStyleName(),
-                                            aStdFont.GetPitch(), aStdFont.GetCharSet(),
-                                            ATTR_FONT );
 
-    SvxFontItem* pCjkFont = new SvxFontItem( ATTR_CJK_FONT );
-    SvxFontItem* pCtlFont = new SvxFontItem( ATTR_CTL_FONT );
-    SvxFontItem aDummy( ATTR_FONT );
-    GetDefaultFonts( aDummy, *pCjkFont, *pCtlFont );
+    LanguageType nDefLang, nCjkLang, nCtlLang;
+    bool bAutoSpell;
+    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
+
+    //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
+    SvxFontItem* pStdFont = getDefaultFontItem(nDefLang, DefaultFontType::LATIN_SPREADSHEET, ATTR_FONT);
+    SvxFontItem* pCjkFont = getDefaultFontItem(nCjkLang, DefaultFontType::CJK_SPREADSHEET, ATTR_CJK_FONT);
+    SvxFontItem* pCtlFont = getDefaultFontItem(nCtlLang, DefaultFontType::CTL_SPREADSHEET, ATTR_CTL_FONT);
 
     SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
     auto pSet = o3tl::make_unique<SfxItemSet>( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
