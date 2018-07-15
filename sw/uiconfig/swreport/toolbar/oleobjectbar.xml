@@ -25,6 +25,13 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapOff"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapOn"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapThrough"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignLeft"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignRight"/>
@@ -33,20 +40,13 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapOff"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapOn"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapThrough"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
  <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
 </toolbar:toolbar>
