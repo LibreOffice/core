@@ -1075,7 +1075,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
             aPos1.AdjustY(nEntryHeightDIV2 );
 
             pChild = pView->FirstChild( pEntry );
-            DBG_ASSERT(pChild,"Child?");
+            assert(pChild && "Child?");
             pChild = pChild->LastSibling();
             nDistance = static_cast<sal_uInt16>(pView->GetVisiblePos(pChild) - pView->GetVisiblePos(pEntry));
             aPos2 = aPos1;
