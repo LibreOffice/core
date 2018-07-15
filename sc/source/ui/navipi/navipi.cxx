@@ -484,6 +484,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     nDataId = aTbxCmd->GetItemId("datarange");
     get(aContentBox, "contentbox");
     aLbEntries = VclPtr<ScContentTree>::Create(aContentBox, this);
+    aLbEntries->SetStyle(aLbEntries->GetStyle() | WB_TABSTOP);
     aLbEntries->set_hexpand(true);
     aLbEntries->set_vexpand(true);
     aLbEntries->Show();
