@@ -1298,7 +1298,16 @@ void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, c
                         FSEND);
     WriteAnimationNodeCommonPropsStart(pFS, rXNode, true, bMainSeqChild);
     WriteAnimationTarget(pFS, rXAnimate->getTarget());
-    WriteAnimationAttributeName(pFS, rXAnimate->getAttributeName());
+
+    Reference<XAnimateTransform> xTransform(rXNode, UNO_QUERY);
+
+    // The attribute name of AnimateTransform is "Transform", we have to fix it.
+    OUString sNewAttr;
+    if (xTransform.is() && xTransform->getTransformType() == AnimationTransformType::ROTATE)
+            sNewAttr = "Rotate";
+
+    WriteAnimationAttributeName(pFS, xTransform.is() ? sNewAttr : rXAnimate->getAttributeName());
+
     pFS->endElementNS(XML_p, XML_cBhvr);
     WriteAnimateValues(pFS, rXAnimate);
     if (bWriteTo)
