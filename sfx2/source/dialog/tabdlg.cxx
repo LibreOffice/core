@@ -1459,8 +1459,6 @@ SfxTabDialogController::SfxTabDialogController
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
     , m_xResetBtn(m_xBuilder->weld_button("reset"))
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
-    , m_pOutSet(nullptr)
-    , m_pRanges(nullptr)
 {
     m_pImpl.reset(new TabDlg_Impl(m_xTabCtrl->get_n_pages()));
     m_pImpl->bHideResetBtn = !m_xResetBtn->get_visible();
@@ -1538,7 +1536,7 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
     Data_Impl* pDataObject = Find( m_pImpl->aData, sId );
     DBG_ASSERT( pDataObject, "Id not known" );
 
-    pDataObject->pTabPage->Reset( m_pSet );
+    pDataObject->pTabPage->Reset( m_pSet.get() );
     // Also reset relevant items of ExampleSet and OutSet to initial state
     if (pDataObject->fnGetRanges)
     {
@@ -1608,7 +1606,7 @@ IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OString&, rPage, void)
         return;
 
     if (pDataObject->bRefresh)
-        pTabPage->Reset(m_pSet);
+        pTabPage->Reset(m_pSet.get());
     pDataObject->bRefresh = false;
 
     if (m_xExampleSet)
@@ -1757,7 +1755,7 @@ const sal_uInt16* SfxTabDialogController::GetInputRanges(const SfxItemPool& rPoo
     }
 
     if ( m_pRanges )
-        return m_pRanges;
+        return m_pRanges.get();
     std::vector<sal_uInt16> aUS;
 
     for (auto const& elem : m_pImpl->aData)
@@ -1787,10 +1785,10 @@ const sal_uInt16* SfxTabDialogController::GetInputRanges(const SfxItemPool& rPoo
         std::sort( aUS.begin(), aUS.end() );
     }
 
-    m_pRanges = new sal_uInt16[aUS.size() + 1];
-    std::copy( aUS.begin(), aUS.end(), m_pRanges );
+    m_pRanges.reset(new sal_uInt16[aUS.size() + 1]);
+    std::copy( aUS.begin(), aUS.end(), m_pRanges.get() );
     m_pRanges[aUS.size()] = 0;
-    return m_pRanges;
+    return m_pRanges.get();
 }
 
 SfxTabDialogController::~SfxTabDialogController()
@@ -1935,7 +1933,7 @@ void SfxTabDialogController::CreatePages()
         if (pDataObject->pTabPage)
            continue;
         weld::Container* pPage = m_xTabCtrl->get_page(pDataObject->sId);
-        pDataObject->pTabPage = (pDataObject->fnCreatePage)(pPage, m_pSet);
+        pDataObject->pTabPage = (pDataObject->fnCreatePage)(pPage, m_pSet.get());
         pDataObject->pTabPage->SetDialogController(this);
 
         OUString sConfigId = OStringToOUString(pDataObject->pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
@@ -1948,7 +1946,7 @@ void SfxTabDialogController::CreatePages()
         pDataObject->pTabPage->SetUserData(sUserData);
 
         PageCreated(pDataObject->sId, *pDataObject->pTabPage);
-        pDataObject->pTabPage->Reset(m_pSet);
+        pDataObject->pTabPage->Reset(m_pSet.get());
     }
 }
 
@@ -2074,8 +2072,7 @@ void SfxTabDialogController::SetInputSet( const SfxItemSet* pInSet )
 
 {
     bool bSet = ( m_pSet != nullptr );
-    delete m_pSet;
-    m_pSet = pInSet ? new SfxItemSet(*pInSet) : nullptr;
+    m_pSet.reset(pInSet ? new SfxItemSet(*pInSet) : nullptr);
 
     if (!bSet && !m_xExampleSet && !m_pOutSet && m_pSet)
     {
@@ -2093,7 +2090,7 @@ SfxItemSet* SfxTabDialogController::GetInputSetImpl()
 */
 
 {
-    return m_pSet;
+    return m_pSet.get();
 }
 
 void SfxTabDialogController::RemoveResetButton()
