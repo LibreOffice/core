@@ -38,7 +38,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="horizontalalignment">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebaralignment|horizontalalignment|tooltip_text">Horizontal Alignment</property>
                 <property name="halign">start</property>
@@ -102,7 +102,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="verticalalignment">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebaralignment|verticalalignment|tooltip_text">Vertical Alignment</property>
                 <property name="halign">end</property>
                 <property name="show_arrow">False</property>
@@ -153,7 +153,7 @@
             <child>
               <object class="sfxlo-SidebarToolBox" id="writedirection">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="lefttoright">
@@ -215,7 +215,7 @@
                     <child>
                       <object class="sfxlo-SidebarToolBox" id="indentbuttons">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="show_arrow">False</property>
                         <child>
                           <object class="GtkToolButton" id="incrementindent">
@@ -380,7 +380,7 @@
             <child>
               <object class="VclComboBoxNumeric" id="orientationdegrees:0degrees">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebaralignment|orientationdegrees|tooltip_text">Select the angle for rotation.</property>
                 <accessibility>
