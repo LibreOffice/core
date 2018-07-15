@@ -313,23 +313,22 @@ int main( int argc, char* argv[] )
         mode = argv[arg++];
     }
 
-    char user_url[8046];;
-    strcpy(user_url, "file:///");
-    strcat(user_url, argv[1]);
-    strcat(user_url, "../user");
+    std::string user_url("file:///");
+    user_url.append(argv[1]);
+    user_url.append("../user");
 
     if (pre_init)
     {
         aTimes.emplace_back("pre-initialization");
         setenv("LOK_WHITELIST_LANGUAGES", "en_US", 0);
         // coverity[tainted_string] - build time test tool
-        lok_preinit(argv[1], user_url);
+        lok_preinit(argv[1], user_url.c_str());
         aTimes.emplace_back();
     }
 
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
-    Office *pOffice = lok_cpp_init(argv[1], user_url);
+    Office *pOffice = lok_cpp_init(argv[1], user_url.c_str());
     if (pOffice == nullptr)
     {
         fprintf(stderr, "Failed to initialize Office from %s\n", argv[1]);
