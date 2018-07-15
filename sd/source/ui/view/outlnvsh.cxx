@@ -1598,6 +1598,7 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
         if (pOPO)
         {
             pOPO->SetOutlinerMode( OutlinerMode::TitleObject );
+            assert(pTO);
             pOPO->SetVertical( pTO->IsVerticalWriting() );
             if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
             {
