@@ -36,7 +36,7 @@
                       <object class="svtlo-ValueSet" id="LinesArrows">
                         <property name="height_request">50</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -73,7 +73,7 @@
                       <object class="svtlo-ValueSet" id="Curves">
                         <property name="height_request">50</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -110,7 +110,7 @@
                       <object class="svtlo-ValueSet" id="Connectors">
                         <property name="height_request">50</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -147,7 +147,7 @@
                       <object class="svtlo-ValueSet" id="BasicShapes">
                         <property name="height_request">100</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -184,7 +184,7 @@
                       <object class="svtlo-ValueSet" id="SymbolShapes">
                         <property name="height_request">75</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -221,7 +221,7 @@
                       <object class="svtlo-ValueSet" id="BlockArrows">
                         <property name="height_request">125</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -258,7 +258,7 @@
                       <object class="svtlo-ValueSet" id="Flowcharts">
                         <property name="height_request">125</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -295,7 +295,7 @@
                       <object class="svtlo-ValueSet" id="Callouts">
                         <property name="height_request">50</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -332,7 +332,7 @@
                       <object class="svtlo-ValueSet" id="Stars">
                         <property name="height_request">50</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
@@ -369,7 +369,7 @@
                       <object class="svtlo-ValueSet" id="3DObjects">
                         <property name="height_request">50</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>
