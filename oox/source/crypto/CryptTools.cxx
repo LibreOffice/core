@@ -134,6 +134,7 @@ struct CryptoImpl
         : mContext(nullptr)
         , mSecParam(nullptr)
         , mSymKey(nullptr)
+        , mpSlot(nullptr)
     {
         // Initialize NSS, database functions are not needed
         NSS_NoDB_Init(nullptr);
