@@ -1160,6 +1160,13 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
                 FSEND);
     }
 
+    if (maDxfData.nFontHeight)
+    {
+        rStyleSheet->singleElement(XML_sz,
+                XML_val, OString::number(*maDxfData.nFontHeight/20).getStr(),
+                FSEND);
+    }
+
     if (maDxfData.eUnder)
     {
         const char* pVal = getUnderlineOOXValue(maDxfData.eUnder.get());
