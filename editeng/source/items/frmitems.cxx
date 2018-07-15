@@ -3808,14 +3808,6 @@ SvxFrameDirectionItem::~SvxFrameDirectionItem()
 }
 
 
-bool SvxFrameDirectionItem::operator==( const SfxPoolItem& rCmp ) const
-{
-    assert(SfxPoolItem::operator==(rCmp));
-
-    return GetValue() == static_cast<const SvxFrameDirectionItem&>(rCmp).GetValue();
-}
-
-
 SfxPoolItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
 {
     return new SvxFrameDirectionItem( *this );
