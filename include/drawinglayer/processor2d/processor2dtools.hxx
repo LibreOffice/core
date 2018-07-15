@@ -22,6 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <memory>
 
 class OutputDevice;
 
@@ -42,7 +43,7 @@ namespace drawinglayer
             the created BaseProcessor2D (ownership change) or null if
             something went wrong
         */
-        DRAWINGLAYER_DLLPUBLIC BaseProcessor2D* createPixelProcessor2DFromOutputDevice(
+        DRAWINGLAYER_DLLPUBLIC std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 
@@ -61,7 +62,7 @@ namespace drawinglayer
             the created BaseProcessor2D (ownership change) or null if
             something went wrong
         */
-        DRAWINGLAYER_DLLPUBLIC BaseProcessor2D* createProcessor2DFromOutputDevice(
+        DRAWINGLAYER_DLLPUBLIC std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 

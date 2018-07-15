@@ -379,9 +379,8 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
                             basegfx::B2DHomMatrix(), GetViewTransformation(), aPaintRange, nullptr,
                             0.0, css::uno::Sequence<css::beans::PropertyValue >());
 
-            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor;
-            pProcessor.reset(drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext, aViewInformation2D));
-
+            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+                drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext, aViewInformation2D));
             if (pProcessor)
             {
                 pProcessor->process(aSequence);
@@ -727,9 +726,8 @@ void PageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
                             basegfx::B2DHomMatrix(), rRenderContext.GetViewTransformation(), aPaintRange, nullptr,
                             0.0, css::uno::Sequence<css::beans::PropertyValue >());
 
-            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor;
-            pProcessor.reset(drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext, aViewInformation2D));
-
+            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+                drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext, aViewInformation2D));
             if (pProcessor)
             {
                 pProcessor->process(aSequence);

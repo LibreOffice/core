@@ -1763,16 +1763,12 @@ bool DrawFillAttributes(
                     nullptr,
                     0.0,
                     uno::Sequence< beans::PropertyValue >());
-                drawinglayer::processor2d::BaseProcessor2D* pProcessor = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     rOut,
-                    aViewInformation2D);
-
+                    aViewInformation2D) );
                 if(pProcessor)
                 {
                     pProcessor->process(*pPrimitives);
-
-                    delete pProcessor;
-
                     return true;
                 }
             }
@@ -4959,7 +4955,7 @@ static const SwFrame* lcl_GetCellFrameForBorderAttrs( const SwFrame*         _pC
     return pRet;
 }
 
-drawinglayer::processor2d::BaseProcessor2D * SwFrame::CreateProcessor2D( ) const
+std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> SwFrame::CreateProcessor2D( ) const
 {
     basegfx::B2DRange aViewRange;
 
@@ -4979,12 +4975,10 @@ drawinglayer::processor2d::BaseProcessor2D * SwFrame::CreateProcessor2D( ) const
 
 void SwFrame::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DContainer& rSequence ) const
 {
-    drawinglayer::processor2d::BaseProcessor2D * pProcessor2D = CreateProcessor2D();
-
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D = CreateProcessor2D();
     if ( pProcessor2D )
     {
         pProcessor2D->process( rSequence );
-        delete pProcessor2D;
     }
 }
 

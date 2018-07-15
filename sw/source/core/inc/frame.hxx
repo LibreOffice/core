@@ -555,7 +555,7 @@ public:
                           const Color *pColor,
                           const SvxBorderLineStyle = SvxBorderLineStyle::SOLID ) const;
 
-    drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DContainer& rSequence ) const;
 
     // retouch, not in the area of the given Rect!
