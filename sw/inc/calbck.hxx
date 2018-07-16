@@ -223,6 +223,50 @@ public:
     bool HasOnlyOneListener() { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 };
 
+// SwDepend
+
+/*
+ * Helper class for objects that need to depend on more than one SwClient
+ */
+class SW_DLLPUBLIC SwDepend final : public SwClient
+{
+    SwClient *m_pToTell;
+
+public:
+    SwDepend(SwClient *pTellHim, SwModify *pDepend) : SwClient(pDepend), m_pToTell(pTellHim) {}
+    SwDepend(SwDepend&) = delete;
+    SwDepend(SwDepend&& o)
+        : SwClient(std::move(o)), m_pToTell(o.m_pToTell)
+    {
+        o.m_pToTell = nullptr;
+    }
+
+    /** get Client information */
+    virtual bool GetInfo( SfxPoolItem& rInfo) const override
+        { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
+private:
+    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) override
+    {
+        SwClientNotify(*GetRegisteredIn(), sw::LegacyModifyHint(pOldValue, pNewValue));
+    }
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override
+    {
+        if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+        {
+            if( pLegacyHint->m_pNew && pLegacyHint->m_pNew->Which() == RES_OBJECTDYING )
+            {
+                auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
+                if(pModifyChanged)
+                    m_pToTell->SwClientNotify(rModify, *pModifyChanged);
+            }
+            else if( m_pToTell )
+                m_pToTell->ModifyNotification(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        }
+        else if(m_pToTell)
+            m_pToTell->SwClientNotifyCall(rModify, rHint);
+    }
+};
+
 template<typename TElementType, typename TSource, sw::IteratorMode eMode> class SwIterator;
 
 namespace sw
