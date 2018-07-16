@@ -258,6 +258,7 @@ struct StyleSheetTable_Impl
     StringPairMap_t                         m_aStyleNameMap;
     /// Style names which should not be used without a " (user)" suffix.
     std::set<OUString>                      m_aReservedStyleNames;
+    OUString                                m_sDefaultParaStyleName; //WW8 name
     ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
     bool                                    m_bHasImportedDefaultParaProps;
     bool                                    m_bIsNewDoc;
@@ -282,6 +283,7 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
             m_pCurrentEntry(),
             m_pDefaultParaProps(new PropertyMap),
             m_pDefaultCharProps(new PropertyMap),
+            m_sDefaultParaStyleName("Normal"),
             m_bHasImportedDefaultParaProps(false),
             m_bIsNewDoc(bIsNewDoc)
 {
@@ -456,6 +458,10 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
 
             if (m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN)
             {
+                // "If this attribute is specified by multiple styles, then the last instance shall be used."
+                if ( m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA && !m_pImpl->m_pCurrentEntry->sStyleIdentifierD.isEmpty() )
+                    m_pImpl->m_sDefaultParaStyleName = m_pImpl->m_pCurrentEntry->sStyleIdentifierD;
+
                 beans::PropertyValue aValue;
                 aValue.Name = "default";
                 aValue.Value <<= m_pImpl->m_pCurrentEntry->bIsDefaultStyle;
@@ -1272,16 +1278,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(con
 
 const StyleSheetEntryPtr StyleSheetTable::FindDefaultParaStyle()
 {
-    StyleSheetEntryPtr pRet;
-    for (StyleSheetEntryPtr & pEntry : m_pImpl->m_aStyleSheetEntries)
-    {
-        if (pEntry->bIsDefaultStyle && pEntry->nStyleTypeCode == STYLE_TYPE_PARA)
-        {
-            pRet = pEntry;
-            break;
-        }
-    }
-    return pRet;
+    return FindStyleSheetByISTD( m_pImpl->m_sDefaultParaStyleName );
 }
 
 const StyleSheetEntryPtr StyleSheetTable::GetCurrentEntry()

@@ -2936,8 +2936,9 @@ void DomainMapper::lcl_startParagraphGroup()
     {
         if (!m_pImpl->IsInShape())
         {
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( OUString("Standard") ) ); //ConvertedStyleName
-            m_pImpl->SetCurrentParaStyleName("Standard");
+            const OUString& sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( sDefaultParaStyle ) );
+            m_pImpl->SetCurrentParaStyleName( sDefaultParaStyle );
         }
         if (m_pImpl->isBreakDeferred(PAGE_BREAK))
             m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));

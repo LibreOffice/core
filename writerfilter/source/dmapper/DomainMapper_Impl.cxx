@@ -209,6 +209,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
         m_sCurrentParaStyleName(),
+        m_sDefaultParaStyleName(),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
         m_bInHeaderFooterImport( false ),
@@ -662,6 +663,25 @@ const OUString DomainMapper_Impl::GetCurrentParaStyleName()
         pParaContext->getProperty(PROP_PARA_STYLE_NAME)->second >>= sName;
 
     return sName;
+}
+
+const OUString DomainMapper_Impl::GetDefaultParaStyleName()
+{
+    // After import the default style won't change and is frequently requested: cache the LO style name.
+    // TODO assert !InStyleSheetImport? This function really only makes sense once import is finished anyway.
+    if ( m_sDefaultParaStyleName.isEmpty() )
+    {
+        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindDefaultParaStyle();
+        if ( pEntry && !pEntry->sConvertedStyleName.isEmpty() )
+        {
+            if ( !m_bInStyleSheetImport )
+                m_sDefaultParaStyleName = pEntry->sConvertedStyleName;
+            return pEntry->sConvertedStyleName;
+        }
+        else
+            return OUString( "Standard");
+    }
+    return m_sDefaultParaStyleName;
 }
 
 /*-------------------------------------------------------------------------
