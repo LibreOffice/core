@@ -1257,8 +1257,7 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
 
 void SAL_CALL DocumentHolder::activated(  )
 {
-    if ( (m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
-        svt::EmbeddedObjectRef::IsGLChart(m_pEmbedObj) )
+    if ( m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
     {
         if ( m_pEmbedObj->getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
         !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )

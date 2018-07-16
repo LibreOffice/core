@@ -43,7 +43,6 @@ class SplineResourceGroup;
 class GeometryResourceGroup;
 class ChartTypeParameter;
 class SortByXValuesResourceGroup;
-class GL3DResourceGroup;
 
 class ChartTypeTabPage final : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider
 {
@@ -82,7 +81,6 @@ private:
     std::unique_ptr<SplineResourceGroup>        m_pSplineResourceGroup;
     std::unique_ptr<GeometryResourceGroup>      m_pGeometryResourceGroup;
     std::unique_ptr<SortByXValuesResourceGroup> m_pSortByXValuesResourceGroup;
-    std::unique_ptr<GL3DResourceGroup>          m_pGL3DResourceGroup;
 
     css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
 

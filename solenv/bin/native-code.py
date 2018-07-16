@@ -77,7 +77,6 @@ core_constructor_list = [
     "com_sun_star_comp_chart_DataSeries_get_implementation",
     "com_sun_star_comp_chart_DataSource_get_implementation",
     "com_sun_star_comp_chart_FilledNetChartType_get_implementation",
-    "com_sun_star_comp_chart_GL3DBarChartType_get_implementation",
     "com_sun_star_comp_chart_FormattedString_get_implementation",
     "com_sun_star_comp_chart_LineChartType_get_implementation",
     "com_sun_star_comp_chart_NetChartType_get_implementation",

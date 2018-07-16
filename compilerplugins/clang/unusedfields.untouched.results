@@ -22,16 +22,6 @@ canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-chart2/source/view/inc/GL3DRenderer.hxx:54
-    chart::opengl3D::MaterialParameters pad float
-chart2/source/view/inc/GL3DRenderer.hxx:55
-    chart::opengl3D::MaterialParameters pad1 float
-chart2/source/view/inc/GL3DRenderer.hxx:64
-    chart::opengl3D::LightSource pad1 float
-chart2/source/view/inc/GL3DRenderer.hxx:65
-    chart::opengl3D::LightSource pad2 float
-chart2/source/view/inc/GL3DRenderer.hxx:66
-    chart::opengl3D::LightSource pad3 float
 comphelper/source/container/enumerablemap.cxx:298
     comphelper::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
 connectivity/source/drivers/evoab2/EApi.h:122

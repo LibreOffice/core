@@ -54,8 +54,6 @@ namespace chart {
 class VCoordinateSystem;
 class DrawModelWrapper;
 class VDataSeries;
-class GL3DPlotterBase;
-class GL2DRenderer;
 struct CreateShapeParam2D;
 
 struct TimeBasedInfo
@@ -96,7 +94,6 @@ class ChartView : public ::cppu::WeakImplHelper<
         , public ExplicitValueProvider
         , private SfxListener
 {
-    friend class GL2DRenderer;
 private:
     void init();
 
@@ -182,14 +179,11 @@ public:
     virtual OUString SAL_CALL dump() override;
 
     void setViewDirty();
-    void updateOpenGLWindow();
 
 private: //methods
     void createShapes();
     void createShapes2D( const css::awt::Size& rPageSize );
     bool createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
-    void createShapes3D();
-    bool isReal3DChart();
     void getMetaFile( const css::uno::Reference< css::io::XOutputStream >& xOutStream
                       , bool bUseHighContrast );
     SdrPage* getSdrPage();
@@ -200,8 +194,6 @@ private: //methods
     void impl_refreshAddIn();
 
     void impl_updateView( bool bCheckLockedCtrler = true );
-
-    void render();
 
     css::awt::Rectangle impl_createDiagramAndContent( const CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
 
@@ -255,10 +247,8 @@ private: //member
 
     css::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 
-    std::shared_ptr<GL3DPlotterBase> m_pGL3DPlotter;
     TimeBasedInfo maTimeBased;
     osl::Mutex maTimeMutex;
-    std::unique_ptr<GL2DRenderer> mp2DRenderer;
 };
 
 }
