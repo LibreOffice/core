@@ -176,6 +176,8 @@ public:
     RTFSprms aWrapPolygonSprms;
     /// Anchor attributes like wrap distance, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
     RTFSprms aAnchorAttributes;
+    /// Wrap type, written by RTFDocumentImpl::popState(), read by RTFDocumentImpl::resolvePict().
+    std::pair<Id, RTFValue::Pointer_t> aWrapSprm{ 0, nullptr };
 };
 
 /// Stores the properties of a drawing object.

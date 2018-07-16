@@ -173,6 +173,12 @@ DECLARE_RTFIMPORT_TEST(testTdf115715, "tdf115715.rtf")
                          getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf81943, "tdf81943.rtf")
+{
+    // The shape wasn't in background.
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "Opaque"));
+}
+
 DECLARE_RTFIMPORT_TEST(testTdf115155, "tdf115155.rtf")
 {
     auto xLevels
