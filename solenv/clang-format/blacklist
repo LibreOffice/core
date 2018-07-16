@@ -12056,8 +12056,6 @@ sd/source/ui/framework/module/DrawModule.cxx
 sd/source/ui/framework/module/ImpressModule.cxx
 sd/source/ui/framework/module/ModuleController.cxx
 sd/source/ui/framework/module/PresentationModule.cxx
-sd/source/ui/framework/module/ResourceManager.cxx
-sd/source/ui/framework/module/ResourceManager.hxx
 sd/source/ui/framework/module/ShellStackGuard.cxx
 sd/source/ui/framework/module/ShellStackGuard.hxx
 sd/source/ui/framework/module/SlideSorterModule.cxx

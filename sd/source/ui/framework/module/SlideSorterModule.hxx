@@ -20,18 +20,34 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_SLIDESORTERMODULE_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_SLIDESORTERMODULE_HXX
 
-#include "ResourceManager.hxx"
-
+#include <MutexOwner.hxx>
+#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
+#include <cppuhelper/compbase.hxx>
+#include <memory>
+#include <set>
 
 namespace sd { namespace framework {
 
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XConfigurationChangeListener
+    > SlideSorterModuleBase;
+
 /** This module is responsible for showing the slide sorter bar and the
     slide sorter view in the center pane.
+
+    Manage the activation state of one resource depending on the view in the
+    center pane.  The ResourceManager remembers in which configuration to
+    activate and in which to deactivate the resource.  When the resource is
+    deactivated or activated manually by the user then the ResourceManager
+    detects this and remembers it for the future.
 */
 class SlideSorterModule
-    : public ResourceManager
+    : private sd::MutexOwner,
+      public SlideSorterModuleBase
 {
 public:
     SlideSorterModule (
@@ -39,16 +55,41 @@ public:
         const OUString& rsLeftPaneURL);
     virtual ~SlideSorterModule() override;
 
-    virtual void SaveResourceState() override;
-    // XConfigurationChangeListener
+    /** Remember the given URL as one of a center pane view for which to
+        activate the resource managed by the called object.
+    */
+    void AddActiveMainView (const OUString& rsMainViewURL);
+    bool IsResourceActive (const OUString& rsMainViewURL);
+    virtual void SaveResourceState();
 
+    virtual void SAL_CALL disposing() override;
+
+    // XConfigurationChangeListener
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
 
+    // XEventListener
+    virtual void SAL_CALL disposing (
+        const css::lang::EventObject& rEvent) override;
+
 private:
+    css::uno::Reference<css::drawing::framework::XConfigurationController>
+        mxConfigurationController;
+    ::std::set<OUString> maActiveMainViewContainer;
+    /// The resource managed by this class.
+    css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
+    /// The anchor of the main view.
+    css::uno::Reference<css::drawing::framework::XResourceId> mxMainViewAnchorId;
+    OUString msCurrentMainViewURL;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
     css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
 
+    void HandleMainViewSwitch (
+        const OUString& rsViewURL,
+        const bool bIsActivated);
+    void HandleResourceRequest(
+        bool bActivation,
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
     void UpdateViewTabBar (
         const css::uno::Reference<css::drawing::framework::XTabBar>& rxViewTabBar);
 };
