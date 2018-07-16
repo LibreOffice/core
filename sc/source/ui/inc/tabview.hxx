@@ -137,13 +137,13 @@ private:
     VclPtr<vcl::Window>             pFrameWin;              // First !!!
     ScViewData          aViewData;              // must be at the front !
 
-    ScViewSelectionEngine*  pSelEngine;
+    std::unique_ptr<ScViewSelectionEngine> pSelEngine;
     ScViewFunctionSet       aFunctionSet;
 
-    ScHeaderSelectionEngine* pHdrSelEng;
+    std::unique_ptr<ScHeaderSelectionEngine> pHdrSelEng;
     ScHeaderFunctionSet      aHdrFunc;
 
-    ScDrawView*         pDrawView;
+    std::unique_ptr<ScDrawView> pDrawView;
 
     Size                aFrameSize;             // passed on as for DoResize
     Point               aBorderPos;
@@ -346,13 +346,13 @@ public:
     const ScViewData&   GetViewData() const { return aViewData; }
 
     ScViewFunctionSet&      GetFunctionSet()    { return aFunctionSet; }
-    ScViewSelectionEngine*  GetSelEngine()      { return pSelEngine; }
+    ScViewSelectionEngine*  GetSelEngine()      { return pSelEngine.get(); }
 
     bool            SelMouseButtonDown( const MouseEvent& rMEvt );
 
-    ScDrawView*     GetScDrawView()         { return pDrawView; }
+    ScDrawView*     GetScDrawView()         { return pDrawView.get(); }
     // against CLOKs
-    SdrView*        GetSdrView()            { return pDrawView; }
+    SdrView*        GetSdrView()            { return pDrawView.get(); }
 
     bool            IsMinimized() const     { return bMinimized; }
 

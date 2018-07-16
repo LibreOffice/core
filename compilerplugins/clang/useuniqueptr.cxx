@@ -82,6 +82,9 @@ public:
         // ODatabaseExport::m_aDestColumns
         if (fn == SRCDIR "/dbaccess/source/ui/misc/DExport.cxx")
             return;
+        // ScTabView::pDrawActual and pDrawOld
+        if (fn == SRCDIR "/sc/source/ui/view/tabview5.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
