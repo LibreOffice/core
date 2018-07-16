@@ -398,6 +398,16 @@ public:
         m_xWidget->EnableRTL(bRTL);
     }
 
+    virtual void freeze() override
+    {
+        m_xWidget->SetUpdateMode(false);
+    }
+
+    virtual void thaw() override
+    {
+        m_xWidget->SetUpdateMode(true);
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual ~SalInstanceWidget() override
@@ -1588,16 +1598,6 @@ public:
         return nRet;
     }
 
-    virtual void freeze() override
-    {
-        m_xTreeView->SetUpdateMode(false);
-    }
-
-    virtual void thaw() override
-    {
-        m_xTreeView->SetUpdateMode(true);
-    }
-
     virtual void set_selection_mode(bool bMultiple) override
     {
         m_xTreeView->EnableMultiSelection(bMultiple);
@@ -2120,16 +2120,6 @@ public:
     virtual void make_sorted() override
     {
         m_xComboBoxText->SetStyle(m_xComboBoxText->GetStyle() | WB_SORT);
-    }
-
-    virtual void freeze() override
-    {
-        m_xComboBoxText->SetUpdateMode(false);
-    }
-
-    virtual void thaw() override
-    {
-        m_xComboBoxText->SetUpdateMode(true);
     }
 
     virtual ~SalInstanceComboBoxText() override

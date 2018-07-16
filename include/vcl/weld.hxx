@@ -103,6 +103,9 @@ public:
     virtual bool get_direction() const = 0;
     virtual void set_direction(bool bRTL) = 0;
 
+    virtual void freeze() = 0;
+    virtual void thaw() = 0;
+
     virtual Container* weld_parent() const = 0;
 
     virtual ~Widget() {}
@@ -277,9 +280,6 @@ public:
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_entry_completion(bool bEnable) = 0;
 
-    virtual void freeze() = 0;
-    virtual void thaw() = 0;
-
     void connect_entry_activate(const Link<ComboBoxText&, void>& rLink)
     {
         m_aEntryActivateHdl = rLink;
@@ -312,9 +312,6 @@ public:
     virtual int n_children() const = 0;
     virtual void clear() = 0;
     virtual int get_height_rows(int nRows) const = 0;
-
-    virtual void freeze() = 0;
-    virtual void thaw() = 0;
 
     virtual void set_selection_mode(bool bMultiple) = 0;
     virtual int count_selected_rows() const = 0;
