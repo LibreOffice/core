@@ -176,14 +176,14 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, weld::ToggleButton&, rBtn, void 
     bModified = true;
 }
 
-IMPL_LINK(SwFormatTablePage, AutoClickHdl, weld::ToggleButton&, rControl, void)
+IMPL_LINK_NOARG(SwFormatTablePage, AutoClickHdl, weld::ToggleButton&, void)
 {
     bool bRestore = true,
          bLeftEnable = false,
          bRightEnable= false,
          bWidthEnable= false,
          bOthers = true;
-    if (&rControl == m_xFullBtn.get())
+    if (m_xFullBtn->get_active())
     {
         m_xLeftMF->SetPrcntValue(0);
         m_xRightMF->SetPrcntValue(0);
@@ -192,26 +192,26 @@ IMPL_LINK(SwFormatTablePage, AutoClickHdl, weld::ToggleButton&, rControl, void)
         bFull = true;
         bRestore = false;
     }
-    else if (&rControl == m_xLeftBtn.get())
+    else if (m_xLeftBtn->get_active())
     {
         bRightEnable = bWidthEnable = true;
         m_xLeftMF->SetPrcntValue(0);
     }
-    else if (&rControl == m_xFromLeftBtn.get())
+    else if (m_xFromLeftBtn->get_active())
     {
         bLeftEnable = bWidthEnable = true;
         m_xRightMF->SetPrcntValue(0);
     }
-    else if (&rControl == m_xRightBtn.get())
+    else if (m_xRightBtn->get_active())
     {
         bLeftEnable = bWidthEnable = true;
         m_xRightMF->SetPrcntValue(0);
     }
-    else if (&rControl == m_xCenterBtn.get())
+    else if (m_xCenterBtn->get_active())
     {
         bLeftEnable = bWidthEnable = true;
     }
-    else if (&rControl == m_xFreeBtn.get())
+    else if (m_xFreeBtn->get_active())
     {
         RightModify();
         bLeftEnable = true;
