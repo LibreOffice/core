@@ -574,7 +574,7 @@ bool Reader::SetStrmStgPtr()
 
     if( m_pMedium->IsStorage() )
     {
-        if( SW_STORAGE_READER & GetReaderType() )
+        if( SwReaderType::Storage & GetReaderType() )
         {
             m_xStorage = m_pMedium->GetStorage();
             return true;
@@ -583,12 +583,12 @@ bool Reader::SetStrmStgPtr()
     else
     {
         m_pStream = m_pMedium->GetInStream();
-        if ( m_pStream && SotStorage::IsStorageFile(m_pStream) && (SW_STORAGE_READER & GetReaderType()) )
+        if ( m_pStream && SotStorage::IsStorageFile(m_pStream) && (SwReaderType::Storage & GetReaderType()) )
         {
             m_pStorage = new SotStorage( *m_pStream );
             m_pStream = nullptr;
         }
-        else if ( !(SW_STREAM_READER & GetReaderType()) )
+        else if ( !(SwReaderType::Stream & GetReaderType()) )
         {
             m_pStream = nullptr;
             return false;
@@ -599,9 +599,9 @@ bool Reader::SetStrmStgPtr()
     return false;
 }
 
-int Reader::GetReaderType()
+SwReaderType Reader::GetReaderType()
 {
-    return SW_STREAM_READER;
+    return SwReaderType::Stream;
 }
 
 void Reader::SetFltName( const OUString& )
@@ -678,9 +678,9 @@ bool Reader::ReadGlossaries( SwTextBlocks&, bool ) const
     return false;
 }
 
-int StgReader::GetReaderType()
+SwReaderType StgReader::GetReaderType()
 {
-    return SW_STORAGE_READER;
+    return SwReaderType::Storage;
 }
 
 /*

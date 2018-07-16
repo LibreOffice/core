@@ -29,6 +29,7 @@
 #include <tools/ref.hxx>
 #include <rtl/ref.hxx>
 #include <osl/thread.h>
+#include <o3tl/typed_flags_set.hxx>
 #include "swdllapi.h"
 #include "docfac.hxx"
 
@@ -172,8 +173,14 @@ protected:
 };
 
 // Special Readers can be both!! (Excel, W4W, .. ).
-#define SW_STREAM_READER    1
-#define SW_STORAGE_READER   2
+enum class SwReaderType {
+    NONE = 0x00,
+    Stream = 0x01,
+    Storage = 0x02
+};
+namespace o3tl {
+    template<> struct typed_flags<SwReaderType> : is_typed_flags<SwReaderType, 0x03> {};
+};
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOC(SvStream &rStream, const OUString &rFltName);
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream &rStream);
@@ -215,7 +222,7 @@ public:
     Reader();
     virtual ~Reader();
 
-    virtual int GetReaderType();
+    virtual SwReaderType GetReaderType();
     SwgReaderOption& GetReaderOpt() { return m_aOption; }
 
     virtual void SetFltName( const OUString& rFltNm );
@@ -277,7 +284,7 @@ class SW_DLLPUBLIC StgReader : public Reader
     OUString aFltName;
 
 public:
-    virtual int GetReaderType() override;
+    virtual SwReaderType GetReaderType() override;
     const OUString& GetFltName() { return aFltName; }
     virtual void SetFltName( const OUString& r ) override;
 };

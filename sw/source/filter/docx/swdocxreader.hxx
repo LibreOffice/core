@@ -28,7 +28,7 @@
 class SwDOCXReader : public StgReader
 {
 public:
-    virtual int GetReaderType() override;
+    virtual SwReaderType GetReaderType() override;
 
     virtual bool HasGlossaries() const override;
     virtual bool ReadGlossaries( SwTextBlocks& rBlocks, bool bSaveRelFiles ) const override;

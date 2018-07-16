@@ -134,7 +134,7 @@ class WW8Reader : public StgReader
     virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
     ErrCode OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize );
 public:
-    virtual int GetReaderType() override;
+    virtual SwReaderType GetReaderType() override;
 
     virtual bool HasGlossaries() const override;
     virtual bool ReadGlossaries( SwTextBlocks&, bool bSaveRelFiles ) const override;
