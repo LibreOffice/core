@@ -69,7 +69,6 @@ public:
                             throw();
 
     static bool IsChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj);
-    static bool IsGLChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj);
 
     const css::uno::Reference <css::embed::XEmbeddedObject>& operator->() const;
     const css::uno::Reference <css::embed::XEmbeddedObject>& GetObject() const;
@@ -111,7 +110,6 @@ public:
 
     bool IsLocked() const;
     bool IsChart() const;
-    bool IsGLChart() const;
 
     OUString GetChartType();
 

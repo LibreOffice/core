@@ -1,9 +1,6 @@
 chart2/source/model/main/DataPoint.hxx:107
     chart::DataPoint m_bNoParentPropAllowed
     0
-chart2/source/view/inc/GL3DRenderer.hxx:161
-    chart::opengl3D::TextInfoBatch batchNum
-    512
 connectivity/source/inc/dbase/DIndexIter.hxx:37
     connectivity::dbase::OIndexIterator m_pOperand
     0

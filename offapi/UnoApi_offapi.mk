@@ -601,7 +601,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart,\
 	AreaDiagram \
 	BarDiagram \
 	BubbleDiagram \
-	Chart3DBarProperties \
 	ChartArea \
 	ChartAxis \
 	ChartAxisXSupplier \
@@ -2013,7 +2012,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	SymbolStyle \
 	TickmarkStyle \
 	TransparencyStyle \
-	X3DChartWindowProvider \
 	XAnyDescriptionAccess \
 	XAxis \
 	XChartDocument \

@@ -842,7 +842,6 @@ gap-width
 gcd
 generator
 geq
-gl3d-bar
 gouraud
 gradient
 angle
@@ -1488,7 +1487,6 @@ rotation
 rotation-align
 rotation-angle
 round
-rounded-edge
 row
 row-height
 row-number
