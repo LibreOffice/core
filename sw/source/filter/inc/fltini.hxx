@@ -43,7 +43,7 @@ class XMLReader : public Reader
 {
     virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
 public:
-    virtual int GetReaderType() override;
+    virtual SwReaderType GetReaderType() override;
 
     XMLReader();
 

@@ -6347,9 +6347,9 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
     return nRet;
 }
 
-int WW8Reader::GetReaderType()
+SwReaderType WW8Reader::GetReaderType()
 {
-    return SW_STORAGE_READER | SW_STREAM_READER;
+    return SwReaderType::Storage | SwReaderType::Stream;
 }
 
 bool WW8Reader::HasGlossaries() const

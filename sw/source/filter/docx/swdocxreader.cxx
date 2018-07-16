@@ -99,9 +99,9 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
     return ret;
 }
 
-int SwDOCXReader::GetReaderType()
+SwReaderType SwDOCXReader::GetReaderType()
 {
-    return SW_STORAGE_READER | SW_STREAM_READER;
+    return SwReaderType::Storage | SwReaderType::Stream;
 }
 
 bool SwDOCXReader::HasGlossaries() const

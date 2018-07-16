@@ -191,8 +191,8 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         return nullptr;
 
     if( rMedium.IsStorage()
-        ? SW_STORAGE_READER & pRead->GetReaderType()
-        : SW_STREAM_READER & pRead->GetReaderType() )
+        ? SwReaderType::Storage & pRead->GetReaderType()
+        : SwReaderType::Stream & pRead->GetReaderType() )
     {
         *ppRdr = pPaM ? new SwReader( rMedium, aFileName, *pPaM ) :
             pCursorShell ?

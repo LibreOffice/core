@@ -277,7 +277,7 @@ void SwFilterOptions::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void StgReader::SetFltName( const OUString& rFltNm )
 {
-    if( SW_STORAGE_READER & GetReaderType() )
+    if( SwReaderType::Storage & GetReaderType() )
         aFltName = rFltNm;
 }
 

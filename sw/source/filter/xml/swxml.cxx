@@ -121,9 +121,9 @@ XMLReader::XMLReader()
 {
 }
 
-int XMLReader::GetReaderType()
+SwReaderType XMLReader::GetReaderType()
 {
-    return SW_STORAGE_READER;
+    return SwReaderType::Storage;
 }
 
 namespace
