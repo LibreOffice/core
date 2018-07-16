@@ -121,9 +121,16 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
         }
         catch (const ::com::sun::star::uno::RuntimeException & e)
         {
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4702) // In a 32-bit compilation MSVC2017 says this is unreachable, hmm.
+#endif
             SAL_WARN("bridges",
                 "### RuntimeException occurred during queryInterface(): "
                 << e.Message);
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
         }
     }
 }
