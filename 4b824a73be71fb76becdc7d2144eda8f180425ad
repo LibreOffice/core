@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_37f0d9c9",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-16T16:06:10Z",
+      "side": 1,
+      "message": "nParamCount is a *count*, not an offset, and is post-decremented so if it reaches 0 there is no parameter left to pop.",
+      "revId": "4b824a73be71fb76becdc7d2144eda8f180425ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
