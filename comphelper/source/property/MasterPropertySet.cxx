@@ -67,8 +67,6 @@ MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, 
 MasterPropertySet::~MasterPropertySet()
     throw()
 {
-    for( auto& rSlave : maSlaveMap )
-        delete rSlave.second;
 }
 
 // XPropertySet
@@ -80,7 +78,7 @@ Reference< XPropertySetInfo > SAL_CALL MasterPropertySet::getPropertySetInfo(  )
 void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )
     throw()
 {
-    maSlaveMap [ ++mnLastId ] = new SlaveData ( pNewSet );
+    maSlaveMap [ ++mnLastId ].reset( new SlaveData ( pNewSet ) );
     mxInfo->add ( pNewSet->mxInfo->maMap, mnLastId );
 }
 
@@ -91,7 +89,7 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const OUString& rPropertyName
     if (mpMutex)
         xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
-    PropertyDataHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
+    auto aIter = mxInfo->maMap.find ( rPropertyName );
 
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
@@ -124,7 +122,7 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const OUString& rPropertyName 
     if (mpMutex)
         xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
-    PropertyDataHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
+    auto aIter = mxInfo->maMap.find ( rPropertyName );
 
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
@@ -191,7 +189,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
 
         const Any * pAny = aValues.getConstArray();
         const OUString * pString = aPropertyNames.getConstArray();
-        PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
+        auto aEnd = mxInfo->maMap.end();
 
         //!! have a unique_ptr to an array of OGuards in order to have the
         //!! allocated memory properly freed (exception safe!).
@@ -202,7 +200,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
         {
-            aIter = mxInfo->maMap.find ( *pString );
+            auto aIter = mxInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
                 throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
@@ -210,7 +208,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
                 _setSingleValue( *((*aIter).second->mpInfo), *pAny );
             else
             {
-                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
+                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ].get();
                 if (!pSlave->IsInit())
                 {
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -253,7 +251,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
 
         Any * pAny = aValues.getArray();
         const OUString * pString = aPropertyNames.getConstArray();
-        PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
+        auto aEnd = mxInfo->maMap.end();
 
         //!! have an unique_ptr to an array of OGuards in order to have the
         //!! allocated memory properly freed (exception safe!).
@@ -264,7 +262,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
         {
-            aIter = mxInfo->maMap.find ( *pString );
+            auto aIter = mxInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
                 throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
@@ -272,7 +270,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
                 _getSingleValue( *((*aIter).second->mpInfo), *pAny );
             else
             {
-                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
+                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ].get();
                 if (!pSlave->IsInit())
                 {
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -317,7 +315,7 @@ void SAL_CALL MasterPropertySet::firePropertiesChangeEvent( const Sequence< OUSt
 // XPropertyState
 PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& PropertyName )
 {
-    PropertyDataHash::const_iterator aIter =  mxInfo->maMap.find( PropertyName );
+    auto aIter =  mxInfo->maMap.find( PropertyName );
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
@@ -344,18 +342,18 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
     {
         PropertyState * pState = aStates.getArray();
         const OUString * pString = rPropertyNames.getConstArray();
-        PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
+        auto aEnd = mxInfo->maMap.end();
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pState )
         {
-            aIter = mxInfo->maMap.find ( *pString );
+            auto aIter = mxInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
                 throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
 
             // 0 means it's one of ours !
             if ( (*aIter).second->mnMapId != 0 )
             {
-                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
+                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ].get();
                 if (!pSlave->IsInit())
                 {
                     pSlave->SetInit ( true );
@@ -375,7 +373,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
 
 void SAL_CALL MasterPropertySet::setPropertyToDefault( const OUString& rPropertyName )
 {
-    PropertyDataHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
+    auto aIter = mxInfo->maMap.find ( rPropertyName );
 
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
@@ -383,7 +381,7 @@ void SAL_CALL MasterPropertySet::setPropertyToDefault( const OUString& rProperty
 
 Any SAL_CALL MasterPropertySet::getPropertyDefault( const OUString& rPropertyName )
 {
-    PropertyDataHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
+    auto aIter = mxInfo->maMap.find ( rPropertyName );
 
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
