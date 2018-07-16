@@ -1074,7 +1074,7 @@ ErrCode ImportExcel8::Read()
                     case EXC_ID_SUPBOOK:        rLinkMgr.ReadSupbook( maStrm );     break;
                     case EXC_ID_XCT:            rLinkMgr.ReadXct( maStrm );         break;
                     case EXC_ID_CRN:            rLinkMgr.ReadCrn( maStrm );         break;
-                    case EXC_ID_EXTERNNAME:     rLinkMgr.ReadExternname( maStrm, pFormConv );  break;
+                    case EXC_ID_EXTERNNAME:     rLinkMgr.ReadExternname( maStrm, pFormConv.get() );  break;
 
                     case EXC_ID_MSODRAWINGGROUP:rObjMgr.ReadMsoDrawingGroup( maStrm ); break;
 

@@ -188,8 +188,8 @@ ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     ImportExcel( rImpData, rStrm )
 {
     // replace BIFF2-BIFF5 formula importer with BIFF8 formula importer
-    delete pFormConv;
-    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( GetRoot() );
+    pFormConv.reset(new ExcelToSc8( GetRoot() ));
+    pExcRoot->pFmlaConverter = pFormConv.get();
 }
 
 ImportExcel8::~ImportExcel8()
