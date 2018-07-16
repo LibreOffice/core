@@ -134,7 +134,7 @@ class SwXShape : public SwXShapeBaseClass,
     const SfxItemPropertySet*           m_pPropSet;
     const SfxItemPropertyMapEntry*      m_pPropertyMapEntries;
 
-    SwShapeDescriptor_Impl*     pImpl;
+    std::unique_ptr<SwShapeDescriptor_Impl>  pImpl;
 
     bool                        m_bDescriptor;
 
@@ -238,7 +238,7 @@ public:
     virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
     virtual OUString SAL_CALL getShapeType(  ) override;
 
-    SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
+    SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl.get();}
     SwFrameFormat*               GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() {return xShapeAgg;}
 
