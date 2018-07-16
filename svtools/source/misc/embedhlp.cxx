@@ -787,23 +787,6 @@ bool EmbeddedObjectRef::IsChart(const css::uno::Reference < css::embed::XEmbedde
         || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId;
 }
 
-bool EmbeddedObjectRef::IsGLChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj)
-{
-    static const char* env = getenv("CHART_DUMMY_FACTORY");
-    if (IsChart(xObj))
-    {
-        if (env)
-            return true;
-
-        uno::Reference< chart2::XChartDocument > xChartDoc(xObj->getComponent(), uno::UNO_QUERY);
-        if (!xChartDoc.is())
-            return false;
-
-        return xChartDoc->isOpenGLChart();
-    }
-    return false;
-}
-
 void EmbeddedObjectRef::UpdateReplacement()
 {
     if (mpImpl->bUpdating)
@@ -842,14 +825,6 @@ bool EmbeddedObjectRef::IsChart() const
         return false;
 
     return EmbeddedObjectRef::IsChart(mpImpl->mxObj);
-}
-
-bool EmbeddedObjectRef::IsGLChart() const
-{
-    if (!mpImpl->mxObj.is())
-        return false;
-
-    return EmbeddedObjectRef::IsGLChart(mpImpl->mxObj);
 }
 
 // MT: Only used for getting accessible attributes, which are not localized

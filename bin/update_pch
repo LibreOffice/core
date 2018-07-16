@@ -47,7 +47,6 @@ DEFAULTS = \
     'basic.sb'                          : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #  10.7
     'chart2.chartcontroller'            : ( 6, EXCLUDE, INCLUDE, INCLUDE), #  18.4
     'chart2.chartcore'                  : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #  22.5
-    'chart2.chartopengl'                : (12, EXCLUDE, EXCLUDE, EXCLUDE), #   5.3
     'comphelper.comphelper'             : ( 4, EXCLUDE, INCLUDE, INCLUDE), #   7.6
     'configmgr.configmgr'               : ( 6, EXCLUDE, INCLUDE, INCLUDE), #   6.0
     'connectivity.ado'                  : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #   6.4

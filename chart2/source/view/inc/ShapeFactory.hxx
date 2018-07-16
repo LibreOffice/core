@@ -227,14 +227,6 @@ public:
 
     virtual void setPageSize( css::uno::Reference < css::drawing::XShapes > xChartShapes, const css::awt::Size& rSize ) override;
 
-    /**
-     * not necessary right now
-     */
-    virtual void render(css::uno::Reference< css::drawing::XShapes >, bool ) override {}
-
-    virtual bool preRender(css::uno::Reference< css::drawing::XShapes >, OpenGLWindow*) override { return true; }
-    virtual void postRender(OpenGLWindow*) override {}
-
     virtual void clearPage(css::uno::Reference< css::drawing::XShapes > ) override {}
 
 private:

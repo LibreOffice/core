@@ -88,8 +88,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
                 }
 
                 SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-                if(pPageView && ((nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
-                    xObjRef.IsGLChart()))
+                if(pPageView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
                 {
                     // connect plugin object
                     pPageView->GetView().DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));

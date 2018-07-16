@@ -304,8 +304,6 @@ chart2/source/controller/chartapiwrapper/WrappedAutomaticPositionProperties.cxx:
     enum chart::wrapper::(anonymous namespace)::(anonymous at chart2/source/controller/chartapiwrapper/WrappedAutomaticPositionProperties.cxx:96:1) PROP_CHART_AUTOMATIC_POSITION
 chart2/source/controller/chartapiwrapper/WrappedDataCaptionProperties.cxx:54
     enum chart::wrapper::(anonymous namespace)::(anonymous at chart2/source/controller/chartapiwrapper/WrappedDataCaptionProperties.cxx:51:1) PROP_CHART_DATAPOINT_DATA_CAPTION
-chart2/source/controller/chartapiwrapper/WrappedGL3DProperties.cxx:28
-    enum chart::wrapper::(anonymous namespace)::(anonymous at chart2/source/controller/chartapiwrapper/WrappedGL3DProperties.cxx:26:1) PROP_GL3DCHARTTYPE_ROUNDED_EDGE
 chart2/source/controller/chartapiwrapper/WrappedScaleTextProperties.cxx:110
     enum chart::wrapper::(anonymous namespace)::(anonymous at chart2/source/controller/chartapiwrapper/WrappedScaleTextProperties.cxx:108:1) PROP_CHART_SCALE_TEXT
 chart2/source/controller/chartapiwrapper/WrappedSplineProperties.cxx:171
@@ -830,10 +828,6 @@ chart2/source/model/template/ColumnChartType.cxx:37
     enum (anonymous namespace)::(anonymous at chart2/source/model/template/ColumnChartType.cxx:34:1) PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE
 chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:47
     enum (anonymous namespace)::(anonymous at chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:45:1) PROP_COL_LINE_NUMBER_OF_LINES
-chart2/source/model/template/GL3DBarChartType.cxx:27
-    enum chart::(anonymous namespace)::(anonymous at chart2/source/model/template/GL3DBarChartType.cxx:25:1) PROP_GL3DCHARTTYPE_ROUNDED_EDGE
-chart2/source/model/template/GL3DBarChartTypeTemplate.cxx:30
-    enum chart::(anonymous namespace)::(anonymous at chart2/source/model/template/GL3DBarChartTypeTemplate.cxx:28:1) PROP_GL3DCHARTTYPE_ROUNDED_EDGE
 chart2/source/model/template/LineChartType.cxx:40
     enum (anonymous namespace)::(anonymous at chart2/source/model/template/LineChartType.cxx:38:1) PROP_LINECHARTTYPE_CURVE_STYLE
 chart2/source/model/template/LineChartType.cxx:41
@@ -6290,8 +6284,6 @@ include/xmloff/xmltoken.hxx:911
     enum xmloff::token::XMLTokenEnum XML_GENERATOR
 include/xmloff/xmltoken.hxx:912
     enum xmloff::token::XMLTokenEnum XML_GEQ
-include/xmloff/xmltoken.hxx:913
-    enum xmloff::token::XMLTokenEnum XML_GL3DBAR
 include/xmloff/xmltoken.hxx:914
     enum xmloff::token::XMLTokenEnum XML_GOURAUD
 include/xmloff/xmltoken.hxx:915
@@ -7534,8 +7526,6 @@ include/xmloff/xmltoken.hxx:1555
     enum xmloff::token::XMLTokenEnum XML_ROTATION_ANGLE
 include/xmloff/xmltoken.hxx:1556
     enum xmloff::token::XMLTokenEnum XML_ROUND
-include/xmloff/xmltoken.hxx:1557
-    enum xmloff::token::XMLTokenEnum XML_ROUNDED_EDGE
 include/xmloff/xmltoken.hxx:1559
     enum xmloff::token::XMLTokenEnum XML_ROW_HEIGHT
 include/xmloff/xmltoken.hxx:1560
@@ -16968,8 +16958,6 @@ xmloff/source/chart/SchXMLTools.hxx:63
     enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_BAR
 xmloff/source/chart/SchXMLTools.hxx:65
     enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_BUBBLE
-xmloff/source/chart/SchXMLTools.hxx:66
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_GL3DBAR
 xmloff/source/chart/SchXMLTools.hxx:67
     enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_ADDIN
 xmloff/source/chart/transporttypes.hxx:30

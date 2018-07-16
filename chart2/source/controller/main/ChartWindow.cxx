@@ -23,10 +23,8 @@
 #include <uiobject.hxx>
 
 #include <vcl/help.hxx>
-#include <vcl/openglwin.hxx>
 #include <vcl/settings.hxx>
 #include <config_features.h>
-#include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
 
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>
@@ -58,11 +56,6 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
         , m_pWindowController( pController )
         , m_bInPaint(false)
         , m_pViewShellWindow( nullptr )
-#if HAVE_FEATURE_OPENGL
-        , m_pOpenGLWindow(VclPtr<OpenGLWindow>::Create(this, false))
-#else
-        , m_pOpenGLWindow(nullptr)
-#endif
 {
     set_id("chart_window");
     SetHelpId( HID_SCH_WIN_DOCUMENT );
@@ -73,17 +66,6 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
     EnableRTL( false );
     if( pParent )
         pParent->EnableRTL( false );// #i96215# necessary for a correct position of the context menu in rtl mode
-
-    if( m_pOpenGLWindow )
-    {
-        m_pOpenGLWindow->Show();
-        uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(pController->getModel(), uno::UNO_QUERY_THROW);
-        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(m_pOpenGLWindow.get());
-        x3DWindowProvider->setWindow(nWindowPtr);
-        uno::Reference<util::XUpdatable> const xUpdatable(x3DWindowProvider,
-                uno::UNO_QUERY_THROW);
-        xUpdatable->update();
-    }
 }
 
 ChartWindow::~ChartWindow()
@@ -93,15 +75,6 @@ ChartWindow::~ChartWindow()
 
 void ChartWindow::dispose()
 {
-    if (m_pWindowController && m_pWindowController->getModel().is())
-    {
-        uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(m_pWindowController->getModel(), uno::UNO_QUERY_THROW);
-        x3DWindowProvider->setWindow(0);
-        uno::Reference<util::XUpdatable> const xUpdatable(x3DWindowProvider,
-                uno::UNO_QUERY_THROW);
-        xUpdatable->update();
-    }
-    m_pOpenGLWindow.disposeAndClear();
     m_pViewShellWindow.clear();
     vcl::Window::dispose();
 }
@@ -122,11 +95,7 @@ void ChartWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         return;
 
     m_bInPaint = true;
-    if (m_pOpenGLWindow && m_pOpenGLWindow->IsVisible())
-    {
-        m_pOpenGLWindow->Paint(rRenderContext, rRect);
-    }
-    else if (m_pWindowController)
+    if (m_pWindowController)
     {
         m_pWindowController->execute_Paint(rRenderContext, rRect);
     }
@@ -173,9 +142,6 @@ void ChartWindow::Resize()
         m_pWindowController->execute_Resize();
     else
         Window::Resize();
-
-    if( m_pOpenGLWindow )
-        m_pOpenGLWindow->SetSizePixel(GetSizePixel());
 }
 
 void ChartWindow::Activate()
@@ -293,40 +259,24 @@ void ChartWindow::adjustHighContrastMode()
 void ChartWindow::ForceInvalidate()
 {
     vcl::Window::Invalidate();
-    if(m_pOpenGLWindow)
-    {
-        m_pOpenGLWindow->Invalidate();
-    }
 }
 void ChartWindow::Invalidate( InvalidateFlags nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     vcl::Window::Invalidate( nFlags );
-    if(m_pOpenGLWindow)
-    {
-        m_pOpenGLWindow->Invalidate( nFlags );
-    }
 }
 void ChartWindow::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     vcl::Window::Invalidate( rRect, nFlags );
-    if(m_pOpenGLWindow)
-    {
-        m_pOpenGLWindow->Invalidate( rRect, nFlags );
-    }
 }
 void ChartWindow::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     vcl::Window::Invalidate( rRegion, nFlags );
-    if(m_pOpenGLWindow)
-    {
-        m_pOpenGLWindow->Invalidate( rRegion, nFlags );
-    }
 }
 
 void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
