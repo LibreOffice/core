@@ -259,7 +259,7 @@ class SW_DLLPUBLIC SwHTMLWriter : public Writer
 {
     SwHTMLPosFlyFrames *m_pHTMLPosFlyFrames;
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;// current numbering
-    SwHTMLNumRuleInfo *m_pNextNumRuleInfo;
+    std::unique_ptr<SwHTMLNumRuleInfo> m_pNextNumRuleInfo;
     sal_uInt32 m_nHTMLMode;               // description of export configuration
 
     FieldUnit m_eCSS1Unit;
@@ -521,10 +521,10 @@ public:
 
     // Fetch current numbering information of next paragraph. They
     // don't have to exist yet!
-    SwHTMLNumRuleInfo *GetNextNumInfo() { return m_pNextNumRuleInfo; }
+    SwHTMLNumRuleInfo *GetNextNumInfo() { return m_pNextNumRuleInfo.get(); }
 
     // Set the numbering information of next paragraph.
-    void SetNextNumInfo( SwHTMLNumRuleInfo *pNxt ) { m_pNextNumRuleInfo=pNxt; }
+    void SetNextNumInfo( std::unique_ptr<SwHTMLNumRuleInfo> pNxt );
 
     // Fill the numbering information of next paragraph.
     void FillNextNumInfo();
