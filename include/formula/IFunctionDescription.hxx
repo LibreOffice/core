@@ -108,16 +108,6 @@ namespace formula
         ~IFunctionDescription() {}
     };
 
-    class SAL_NO_VTABLE IFormulaToken
-    {
-    public:
-        virtual bool isFunction() const = 0;
-        virtual sal_uInt32 getArgumentCount() const = 0;
-
-    protected:
-        ~IFormulaToken() {}
-    };
-
     class SAL_NO_VTABLE IFormulaEditorHelper
     {
     public:
