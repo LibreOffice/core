@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <vector>
+#include <memory>
 #include <map>
 
 class SvXMLExport;
@@ -43,7 +44,7 @@ typedef ::std::vector<
 // store a list of redline properties for each XText
 typedef ::std::map<
             css::uno::Reference< css::text::XText>,
-            ChangesVectorType* > ChangesMapType;
+            std::unique_ptr<ChangesVectorType> > ChangesMapType;
 
 
 /**
