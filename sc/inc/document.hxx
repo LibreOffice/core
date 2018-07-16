@@ -35,10 +35,11 @@
 #include "typedstrdata.hxx"
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
+#include <o3tl/deleter.hxx>
 #include <svl/hint.hxx>
-#include <tools/gen.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/typedwhich.hxx>
+#include <svl/zforlist.hxx>
+#include <tools/gen.hxx>
 
 #include <cassert>
 #include <memory>
@@ -49,7 +50,6 @@
 #include "markdata.hxx"
 
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace o3tl { template <typename T> struct default_delete; }
 
 class Timer;
 
@@ -297,6 +297,8 @@ enum ScMutationGuardFlags
     CORE = 0x0001, /// Core calc data structures should not be mutated
 };
 
+typedef std::unique_ptr<ScTable, o3tl::default_delete<ScTable>> ScTableUniquePtr;
+
 class ScDocument
 {
 friend class ScValueIterator;
@@ -326,7 +328,7 @@ friend class sc::TableColumnBlockPositionSet;
 friend struct ScMutationGuard;
 friend struct ScMutationDisable;
 
-    typedef std::vector<std::unique_ptr<ScTable>> TableContainer;
+    typedef std::vector<ScTableUniquePtr> TableContainer;
 
 public:
     enum class HardRecalcState
