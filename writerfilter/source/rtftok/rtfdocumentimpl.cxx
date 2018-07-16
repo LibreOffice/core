@@ -1064,10 +1064,10 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
                 aAnchorSprms.set(rCharacterSprm.first, rCharacterSprm.second);
             }
         }
-        auto pAnchorWrapValue = new RTFValue(aAnchorWrapAttributes);
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
         if (!aAnchorWrapAttributes.empty() && nWrap == -1)
-            aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue);
+            aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare,
+                             new RTFValue(aAnchorWrapAttributes));
 
         // See OOXMLFastContextHandler::positionOffset(), we can't just put offset values in an RTFValue.
         RTFSprms aPoshAttributes;
@@ -1512,9 +1512,8 @@ void RTFDocumentImpl::prepareProperties(
                            NS_ooxml::LN_CT_TblWidth_w, pWValue);
     }
 
-    auto pRowValue = new RTFValue(1);
     if (nCells > 0)
-        rState.aTableRowSprms.set(NS_ooxml::LN_tblRow, pRowValue);
+        rState.aTableRowSprms.set(NS_ooxml::LN_tblRow, new RTFValue(1));
 
     RTFValue::Pointer_t const pCellMar
         = rState.aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
@@ -1700,7 +1699,7 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;
-    auto pBoolValue = new RTFValue(int(!bParam || nParam != 0));
+    tools::SvRef<RTFValue> pBoolValue(new RTFValue(int(!bParam || nParam != 0)));
 
     // Underline toggles.
     switch (nKeyword)
