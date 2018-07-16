@@ -108,7 +108,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         aNewAttr.Put( *pZoomItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(nullptr, aNewAttr) );
+        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(rReq.GetFrameWeld(), aNewAttr));
         pDlg->SetLimits( static_cast<sal_uInt16>(mpWindow->GetMinZoom()), static_cast<sal_uInt16>(mpWindow->GetMaxZoom()) );
         sal_uInt16 nResult = pDlg->Execute();
         switch( nResult )
