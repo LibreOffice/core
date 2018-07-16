@@ -283,7 +283,7 @@ void StgReader::SetFltName( const OUString& rFltNm )
 
 SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc const & rDoc, bool bNDoc )
 {
-    pNumRuleTable = new SwNumRuleTable;
+    pNumRuleTable.reset(new SwNumRuleTable);
     pNumRuleTable->reserve(8);
     if( !bNDoc )
         pNumRuleTable->insert( pNumRuleTable->begin(),
@@ -293,10 +293,7 @@ SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc const & rDoc, bool bNDoc )
 SwRelNumRuleSpaces::~SwRelNumRuleSpaces()
 {
     if( pNumRuleTable )
-    {
         pNumRuleTable->clear();
-        delete pNumRuleTable;
-    }
 }
 
 void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
