@@ -56,7 +56,7 @@ void SwHTMLWriter::FillNextNumInfo()
         const SwNode* pNd = m_pDoc->GetNodes()[nPos];
         if( pNd->IsTextNode() )
         {
-            m_pNextNumRuleInfo = new SwHTMLNumRuleInfo( *pNd->GetTextNode() );
+            m_pNextNumRuleInfo.reset( new SwHTMLNumRuleInfo( *pNd->GetTextNode() ) );
 
             // Before a table we keep the old level if the same numbering is
             // continued after the table and no new numbering is started.
@@ -78,7 +78,7 @@ void SwHTMLWriter::FillNextNumInfo()
         else
         {
             // In all other case the numbering is over.
-            m_pNextNumRuleInfo = new SwHTMLNumRuleInfo;
+            m_pNextNumRuleInfo.reset(new SwHTMLNumRuleInfo);
         }
     }
     while( !m_pNextNumRuleInfo );
@@ -86,8 +86,12 @@ void SwHTMLWriter::FillNextNumInfo()
 
 void SwHTMLWriter::ClearNextNumInfo()
 {
-    delete m_pNextNumRuleInfo;
-    m_pNextNumRuleInfo = nullptr;
+    m_pNextNumRuleInfo.reset();
+}
+
+void SwHTMLWriter::SetNextNumInfo( std::unique_ptr<SwHTMLNumRuleInfo> pNxt )
+{
+    m_pNextNumRuleInfo = std::move(pNxt);
 }
 
 Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,

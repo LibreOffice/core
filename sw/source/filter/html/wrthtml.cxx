@@ -1519,8 +1519,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
     if( bSaveNum )
     {
         pOldNumRuleInfo = new SwHTMLNumRuleInfo( rWrt.GetNumInfo() );
-        pOldNextNumRuleInfo = rWrt.GetNextNumInfo();
-        rWrt.SetNextNumInfo( nullptr );
+        pOldNextNumRuleInfo = rWrt.ReleaseNextNumInfo();
     }
     else
     {
@@ -1555,7 +1554,7 @@ HTMLSaveData::~HTMLSaveData()
     {
         rWrt.GetNumInfo().Set( *pOldNumRuleInfo );
         delete pOldNumRuleInfo;
-        rWrt.SetNextNumInfo( pOldNextNumRuleInfo );
+        rWrt.SetNextNumInfo( std::move(pOldNextNumRuleInfo) );
     }
     else
     {
