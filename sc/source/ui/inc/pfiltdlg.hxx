@@ -73,7 +73,7 @@ private:
 
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
-    ScQueryItem*        pOutItem;
+    std::unique_ptr<ScQueryItem> pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
     SCTAB               nSrcTab;
