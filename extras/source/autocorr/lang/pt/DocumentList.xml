@@ -172,6 +172,7 @@
 <block-list:block block-list:abbreviated-name="apezar" block-list:name="apesar"/>
 <block-list:block block-list:abbreviated-name="apiar" block-list:name="apear"/>
 <block-list:block block-list:abbreviated-name="apos" block-list:name="após"/>
+<block-list:block block-list:abbreviated-name="apótegma" block-list:name="apotegma"/>
 <block-list:block block-list:abbreviated-name="apra" block-list:name="para"/>
 <block-list:block block-list:abbreviated-name="apreenção" block-list:name="apreensão"/>
 <block-list:block block-list:abbreviated-name="aproveira" block-list:name="aproveita"/>
@@ -271,6 +272,8 @@
 <block-list:block block-list:abbreviated-name="axam" block-list:name="acham"/>
 <block-list:block block-list:abbreviated-name="axar" block-list:name="achar"/>
 <block-list:block block-list:abbreviated-name="axim" block-list:name="assim"/>
+<block-list:block block-list:abbreviated-name="azilo" block-list:name="asilo"/>
+<block-list:block block-list:abbreviated-name="azilos" block-list:name="asilos"/>
 <block-list:block block-list:abbreviated-name="azuleijo" block-list:name="azulejo"/>
 <block-list:block block-list:abbreviated-name="azuleijos" block-list:name="azulejos"/>
 <block-list:block block-list:abbreviated-name="baichela" block-list:name="baixela"/>
@@ -444,6 +447,7 @@
 <block-list:block block-list:abbreviated-name="cinsseridade" block-list:name="sinceridade"/>
 <block-list:block block-list:abbreviated-name="ckaro" block-list:name="claro"/>
 <block-list:block block-list:abbreviated-name="cliche" block-list:name="cliché"/>
+<block-list:block block-list:abbreviated-name="clorófila" block-list:name="clorofila"/>
 <block-list:block block-list:abbreviated-name="cmo" block-list:name="como"/>
 <block-list:block block-list:abbreviated-name="coachar" block-list:name="coaxar"/>
 <block-list:block block-list:abbreviated-name="codex" block-list:name="códex"/>
@@ -557,6 +561,8 @@
 <block-list:block block-list:abbreviated-name="criansisse" block-list:name="criancice"/>
 <block-list:block block-list:abbreviated-name="cristamente" block-list:name="cristãmente"/>
 <block-list:block block-list:abbreviated-name="culmatar" block-list:name="colmatar"/>
+<block-list:block block-list:abbreviated-name="cumer" block-list:name="comer"/>
+<block-list:block block-list:abbreviated-name="cumerem" block-list:name="comerem"/>
 <block-list:block block-list:abbreviated-name="cumplice" block-list:name="cúmplice"/>
 <block-list:block block-list:abbreviated-name="cuzinha" block-list:name="cozinha"/>
 <block-list:block block-list:abbreviated-name="danca" block-list:name="dança"/>
@@ -575,6 +581,7 @@
 <block-list:block block-list:abbreviated-name="deicho" block-list:name="deixo"/>
 <block-list:block block-list:abbreviated-name="deixão" block-list:name="deixam"/>
 <block-list:block block-list:abbreviated-name="deliniado" block-list:name="delineado"/>
+<block-list:block block-list:abbreviated-name="derimir" block-list:name="dirimir"/>
 <block-list:block block-list:abbreviated-name="denovo" block-list:name="de novo"/>
 <block-list:block block-list:abbreviated-name="derrepente" block-list:name="de repente"/>
 <block-list:block block-list:abbreviated-name="descança" block-list:name="descansa"/>
@@ -764,6 +771,12 @@
 <block-list:block block-list:abbreviated-name="engrachar" block-list:name="engraxar"/>
 <block-list:block block-list:abbreviated-name="enjôo" block-list:name="enjoo"/>
 <block-list:block block-list:abbreviated-name="ensiram" block-list:name="insiram"/>
+<block-list:block block-list:abbreviated-name="enssina" block-list:name="ensina"/>
+<block-list:block block-list:abbreviated-name="enssinar" block-list:name="ensinar"/>
+<block-list:block block-list:abbreviated-name="enssinaram" block-list:name="ensinaram"/>
+<block-list:block block-list:abbreviated-name="enssinarem" block-list:name="ensinarem"/>
+<block-list:block block-list:abbreviated-name="enssine" block-list:name="ensine"/>
+<block-list:block block-list:abbreviated-name="enssino" block-list:name="ensino"/>
 <block-list:block block-list:abbreviated-name="entao" block-list:name="então"/>
 <block-list:block block-list:abbreviated-name="entertê" block-list:name="entreter"/>
 <block-list:block block-list:abbreviated-name="entertedemento" block-list:name="entretenimento"/>
@@ -1402,6 +1415,8 @@
 <block-list:block block-list:abbreviated-name="moiem" block-list:name="moem"/>
 <block-list:block block-list:abbreviated-name="moínho" block-list:name="moinho"/>
 <block-list:block block-list:abbreviated-name="moínhos" block-list:name="moinhos"/>
+<block-list:block block-list:abbreviated-name="molher" block-list:name="mulher"/>
+<block-list:block block-list:abbreviated-name="molheres" block-list:name="mulheres"/>
 <block-list:block block-list:abbreviated-name="monje" block-list:name="monge"/>
 <block-list:block block-list:abbreviated-name="monjes" block-list:name="monges"/>
 <block-list:block block-list:abbreviated-name="mono-lingue" block-list:name="monolingue"/>
@@ -1873,6 +1888,8 @@
 <block-list:block block-list:abbreviated-name="públicos alvo" block-list:name="públicos-alvo"/>
 <block-list:block block-list:abbreviated-name="públicos alvos" block-list:name="públicos-alvos"/>
 <block-list:block block-list:abbreviated-name="puchar" block-list:name="puxar"/>
+<block-list:block block-list:abbreviated-name="pueta" block-list:name="poeta"/>
+<block-list:block block-list:abbreviated-name="puetas" block-list:name="poetas"/>
 <block-list:block block-list:abbreviated-name="purissu" block-list:name="por isso"/>
 <block-list:block block-list:abbreviated-name="puxao" block-list:name="puxão"/>
 <block-list:block block-list:abbreviated-name="qaundo" block-list:name="quando"/>
@@ -2135,12 +2152,15 @@
 <block-list:block block-list:abbreviated-name="umiudes" block-list:name="humildes"/>
 <block-list:block block-list:abbreviated-name="umor" block-list:name="humor"/>
 <block-list:block block-list:abbreviated-name="umores" block-list:name="humores"/>
+<block-list:block block-list:abbreviated-name="unanismo" block-list:name="onanismo"/>
 <block-list:block block-list:abbreviated-name="unica" block-list:name="única"/>
 <block-list:block block-list:abbreviated-name="unicas" block-list:name="únicas"/>
 <block-list:block block-list:abbreviated-name="unico" block-list:name="único"/>
 <block-list:block block-list:abbreviated-name="unicos" block-list:name="únicos"/>
 <block-list:block block-list:abbreviated-name="urémia" block-list:name="uremia"/>
 <block-list:block block-list:abbreviated-name="utilise" block-list:name="utilize"/>
+<block-list:block block-list:abbreviated-name="utupista" block-list:name="utopista"/>
+<block-list:block block-list:abbreviated-name="utupistas" block-list:name="utopistas"/>
 <block-list:block block-list:abbreviated-name="vagalume" block-list:name="vaga-lume"/>
 <block-list:block block-list:abbreviated-name="vagalumes" block-list:name="vaga-lumes"/>
 <block-list:block block-list:abbreviated-name="vagneriano" block-list:name="wagneriano"/>
