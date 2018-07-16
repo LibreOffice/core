@@ -122,10 +122,10 @@ private:
 
 private:
     XclExpObjectManager&    mrObjMgr;
-    std::stack< std::pair< XclObj*, XclEscherHostAppData* > > aStack;
+    std::stack< std::pair< XclObj*, std::unique_ptr<XclEscherHostAppData> > > aStack;
     XclObj*                 pCurrXclObj;
-    XclEscherHostAppData*   pCurrAppData;
-    XclEscherClientData*    pTheClientData; // always the same
+    std::unique_ptr<XclEscherHostAppData> pCurrAppData;
+    std::unique_ptr<XclEscherClientData>  pTheClientData; // always the same
     XclEscherClientTextbox* pAdditionalText;
     sal_uInt16              nAdditionalText;
     sal_uInt32              mnNextKey;
