@@ -58,12 +58,6 @@ public:
     explicit CachedTokenArray( ScDocument& rDoc ) :
         maCxt(&rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
 
-    ~CachedTokenArray()
-    {
-        for (const std::pair<SCCOL, Item*>& rCacheItem : maCache)
-            delete rCacheItem.second;
-    }
-
     Item* get( const ScAddress& rPos, const OUString& rFormula )
     {
         // Check if a token array is cached for this column.
@@ -87,7 +81,7 @@ public:
         {
             // Create an entry for this column.
             std::pair<ColCacheType::iterator,bool> r =
-                maCache.emplace(rPos.Col(), new Item);
+                maCache.emplace(rPos.Col(), o3tl::make_unique<Item>());
             if (!r.second)
                 // Insertion failed.
                 return;
@@ -101,7 +95,7 @@ public:
     }
 
 private:
-    typedef std::unordered_map<SCCOL, Item*> ColCacheType;
+    typedef std::unordered_map<SCCOL, std::unique_ptr<Item>> ColCacheType;
     ColCacheType maCache;
     sc::TokenStringContext maCxt;
 };
