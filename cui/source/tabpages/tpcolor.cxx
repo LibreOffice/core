@@ -166,7 +166,9 @@ SvxColorTabPage::~SvxColorTabPage()
 void SvxColorTabPage::dispose()
 {
     mpTopDlg.clear();
+    m_xValSetRecentListWin.reset();
     m_xValSetRecentList.reset();
+    m_xValSetColorListWin.reset();
     m_xValSetColorList.reset();
     SfxTabPage::dispose();
 }
