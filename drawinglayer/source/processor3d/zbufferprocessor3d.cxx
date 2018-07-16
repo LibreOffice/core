@@ -18,7 +18,7 @@
  */
 
 #include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
-#include <basegfx/raster/bpixelraster.hxx>
+#include <basegfx/raster/bzpixelraster.hxx>
 #include <basegfx/raster/rasterconvert3d.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>

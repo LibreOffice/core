@@ -5852,7 +5852,6 @@ include/basegfx/range/b2irectangle.hxx
 include/basegfx/range/b3drange.hxx
 include/basegfx/range/basicbox.hxx
 include/basegfx/range/basicrange.hxx
-include/basegfx/raster/bpixelraster.hxx
 include/basegfx/raster/bzpixelraster.hxx
 include/basegfx/raster/rasterconvert3d.hxx
 include/basegfx/tuple/b2dtuple.hxx

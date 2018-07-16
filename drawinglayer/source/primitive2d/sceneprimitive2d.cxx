@@ -40,7 +40,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    BitmapEx BPixelRasterToBitmapEx(const basegfx::BPixelRaster& rRaster, sal_uInt16 mnAntiAlialize)
+    BitmapEx BPixelRasterToBitmapEx(const basegfx::BZPixelRaster& rRaster, sal_uInt16 mnAntiAlialize)
     {
         BitmapEx aRetval;
         const sal_uInt32 nWidth(mnAntiAlialize ? rRaster.getWidth()/mnAntiAlialize : rRaster.getWidth());
