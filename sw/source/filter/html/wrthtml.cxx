@@ -171,6 +171,11 @@ SwHTMLWriter::~SwHTMLWriter()
 {
 }
 
+std::unique_ptr<SwHTMLNumRuleInfo> SwHTMLWriter::ReleaseNextNumInfo()
+{
+    return std::move(m_pNextNumRuleInfo);
+}
+
 void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 {
     const SfxItemSet* pSet = rMedium.GetItemSet();
@@ -1519,8 +1524,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
     if( bSaveNum )
     {
         pOldNumRuleInfo = new SwHTMLNumRuleInfo( rWrt.GetNumInfo() );
-        pOldNextNumRuleInfo = rWrt.GetNextNumInfo();
-        rWrt.SetNextNumInfo( nullptr );
+        pOldNextNumRuleInfo = rWrt.ReleaseNextNumInfo();
     }
     else
     {
@@ -1555,7 +1559,7 @@ HTMLSaveData::~HTMLSaveData()
     {
         rWrt.GetNumInfo().Set( *pOldNumRuleInfo );
         delete pOldNumRuleInfo;
-        rWrt.SetNextNumInfo( pOldNextNumRuleInfo );
+        rWrt.SetNextNumInfo( std::move(pOldNextNumRuleInfo) );
     }
     else
     {

@@ -79,6 +79,9 @@ public:
         // SwLineLayout::m_pNext
         if (fn == SRCDIR "/sw/source/core/text/porlay.cxx")
             return;
+        // ODatabaseExport::m_aDestColumns
+        if (fn == SRCDIR "/dbaccess/source/ui/misc/DExport.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
