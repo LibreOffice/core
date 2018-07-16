@@ -477,7 +477,7 @@ public:
         mpCxt->setColumnSet( rpColSet);
     }
 
-    void operator() (std::unique_ptr<ScTable> & p)
+    void operator() (ScTableUniquePtr & p)
     {
         if (p)
             p->StartListeners(*mpCxt, false);
