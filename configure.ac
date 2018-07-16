@@ -3289,7 +3289,7 @@ win_get_env_from_vsvars32bat()
     WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
     # Also seems to be located in another directory under the same name: vsvars32.bat
     # https://github.com/bazelbuild/bazel/blob/master/src/main/native/build_windows_jni.sh#L56-L57
-    printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
+    printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w \"$VC_PRODUCT_DIR\")" > $WRAPPERBATCHFILEPATH
     printf '@setlocal\r\n@echo %%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
     chmod +x $WRAPPERBATCHFILEPATH
     _win_get_env_from_vsvars32bat=$("$WRAPPERBATCHFILEPATH" | tr -d '\r')
@@ -3360,7 +3360,7 @@ find_msvc()
         15.0)
             vcyear=2017
             vcnum=150
-            vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
+            vcbuildnumber=`ls "$vctest/VC/Tools/MSVC" -A1r | head -1`
             ;;
         esac
     fi
@@ -5333,7 +5333,7 @@ find_msms()
 
     dnl Starting from MSVC 15.0, merge modules are located in different directory
     if test $VCVER = 150; then
-        for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
+        for l in `ls -1 "$VC_PRODUCT_DIR/redist/MSVC/"`; do
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules])
             my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
             for f in ${my_msm_files}; do
@@ -5362,7 +5362,7 @@ find_msvc_x64_dlls()
 {
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     if test "$VCVER" = 150; then
-        for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
+        for l in `ls -1 "$VC_PRODUCT_DIR/redist/MSVC/"`; do
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT])
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"
