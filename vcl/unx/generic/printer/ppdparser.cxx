@@ -597,9 +597,9 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
     m_pDefaultResolution( nullptr ),
     m_pTranslator( new PPDTranslator() )
 {
-    for (PPDKey* key: keys)
+    for (auto & key: keys)
     {
-        insertKey( key -> getKey(), key );
+        insertKey( std::unique_ptr<PPDKey>(key) );
     }
 
     // fill in shortcuts
@@ -608,8 +608,8 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
     pKey = getKey( OUString( "PageSize" ) );
 
     if ( pKey ) {
-        PPDKey* pImageableAreas = new PPDKey("ImageableArea");
-        PPDKey* pPaperDimensions = new PPDKey("PaperDimension");
+        std::unique_ptr<PPDKey> pImageableAreas(new PPDKey("ImageableArea"));
+        std::unique_ptr<PPDKey> pPaperDimensions(new PPDKey("PaperDimension"));
 #if defined(CUPS_VERSION_MAJOR)
 #if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 7) || CUPS_VERSION_MAJOR > 1
         for (int i = 0; i < pKey->countValues(); i++) {
@@ -641,8 +641,8 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
         }
 #endif // HAVE_CUPS_API_1_7
 #endif
-        insertKey("ImageableArea", pImageableAreas);
-        insertKey("PaperDimension", pPaperDimensions);
+        insertKey(std::move(pImageableAreas));
+        insertKey(std::move(pPaperDimensions));
     }
 
     m_pImageableAreas = getKey(  OUString( "ImageableArea" ) );
@@ -863,15 +863,13 @@ PPDParser::PPDParser( const OUString& rFile ) :
 
 PPDParser::~PPDParser()
 {
-    for (auto const& key : m_aKeys)
-        delete key.second;
     m_pTranslator.reset();
 }
 
-void PPDParser::insertKey( const OUString& rKey, PPDKey* pKey )
+void PPDParser::insertKey( std::unique_ptr<PPDKey> pKey )
 {
-    m_aKeys[ rKey ] = pKey;
-    m_aOrderedKeys.push_back( pKey );
+    m_aOrderedKeys.push_back( pKey.get() );
+    m_aKeys[ pKey->getKey() ] = std::move(pKey);
 }
 
 const PPDKey* PPDParser::getKey( int n ) const
@@ -882,7 +880,7 @@ const PPDKey* PPDParser::getKey( int n ) const
 const PPDKey* PPDParser::getKey( const OUString& rKey ) const
 {
     PPDParser::hash_type::const_iterator it = m_aKeys.find( rKey );
-    return it != m_aKeys.end() ? it->second : nullptr;
+    return it != m_aKeys.end() ? it->second.get() : nullptr;
 }
 
 bool PPDParser::hasKey( const PPDKey* pKey ) const
@@ -1037,7 +1035,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
             keyit = m_aKeys.find( aUniKey );
             if(keyit != m_aKeys.end())
             {
-                PPDKey* pKey = keyit->second;
+                PPDKey* pKey = keyit->second.get();
                 pKey->insertValue("Custom", eInvocation, true);
             }
             continue;
@@ -1193,10 +1191,10 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
         if( keyit == m_aKeys.end() )
         {
             pKey = new PPDKey( aUniKey );
-            insertKey( aUniKey, pKey );
+            insertKey( std::unique_ptr<PPDKey>(pKey) );
         }
         else
-            pKey = keyit->second;
+            pKey = keyit->second.get();
 
         if( eType == eNo && bQuery )
             continue;
@@ -1238,7 +1236,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                 keyit = m_aKeys.find( aKey );
                 if( keyit != m_aKeys.end() )
                 {
-                    PPDKey* pKey = keyit->second;
+                    PPDKey* pKey = keyit->second.get();
                     const PPDValue* pDefValue = pKey->getValue( aOption );
                     if( pKey->m_pDefaultValue == nullptr )
                         pKey->m_pDefaultValue = pDefValue;
@@ -1249,10 +1247,10 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                     // do not exist otherwise
                     // (example: DefaultResolution)
                     // so invent that key here and have a default value
-                    PPDKey* pKey = new PPDKey( aKey );
+                    std::unique_ptr<PPDKey> pKey(new PPDKey( aKey ));
                     pKey->insertValue( aOption, eInvocation /*or what ?*/ );
                     pKey->m_pDefaultValue = pKey->getValue( aOption );
-                    insertKey( aKey, pKey );
+                    insertKey( std::move(pKey) );
                 }
             }
         }
@@ -1287,10 +1285,10 @@ void PPDParser::parseOpenUI(const OString& rLine, const OString& rPPDGroup)
     if( keyit == m_aKeys.end() )
     {
         pKey = new PPDKey( aUniKey );
-        insertKey( aUniKey, pKey );
+        insertKey( std::unique_ptr<PPDKey>(pKey) );
     }
     else
-        pKey = keyit->second;
+        pKey = keyit->second.get();
 
     pKey->m_bUIOption = true;
     m_pTranslator->insertKey( pKey->getKey(), aTranslation );
@@ -1317,10 +1315,10 @@ void PPDParser::parseOrderDependency(const OString& rLine)
     if( keyit == m_aKeys.end() )
     {
         pKey = new PPDKey( aKey );
-        insertKey( aKey, pKey );
+        insertKey( std::unique_ptr<PPDKey>(pKey) );
     }
     else
-        pKey = keyit->second;
+        pKey = keyit->second.get();
 
     pKey->m_nOrderDependency = nOrder;
     if( aSetup == "ExitServer" )

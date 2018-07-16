@@ -124,10 +124,10 @@ class VCL_DLLPUBLIC PPDParser
     friend class CPDManager;
     friend class PPDCache;
 
-    typedef std::unordered_map< OUString, PPDKey* > hash_type;
+    typedef std::unordered_map< OUString, std::unique_ptr<PPDKey> > hash_type;
     typedef std::vector< PPDKey* > value_type;
 
-    void insertKey( const OUString& rKey, PPDKey* pKey );
+    void insertKey( std::unique_ptr<PPDKey> pKey );
 public:
     struct PPDConstraint
     {
