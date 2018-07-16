@@ -72,10 +72,13 @@ void FontFeatureTest::testGetFontFeatures()
 
     CPPUNIT_ASSERT_EQUAL(size_t(20), rDefaultFontFeatures.size());
 
+#if !defined(_WIN32)
     OUString aExpectedFeaturesString = "aalt c2sc case dlig frac hlig liga lnum "
                                        "onum pnum salt sinf smcp ss01 ss02 ss03 "
                                        "sups tnum zero cpsp ";
+    // periodically fails on windows tinderbox like tb72 with a missing "ss02"
     CPPUNIT_ASSERT_EQUAL(aExpectedFeaturesString, aFeaturesString);
+#endif
 
     // Check C2SC feature
     {
