@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_24d788c2",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport12.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-16T05:39:27Z",
+      "side": 1,
+      "message": "DocDefaults/pPrDefault",
+      "range": {
+        "startLine": 733,
+        "startChar": 34,
+        "endLine": 733,
+        "endChar": 38
+      },
+      "revId": "e0b2f298f5a242d1cbbb7ac9a136cae07050db54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_e4e08099",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport12.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-16T05:39:27Z",
+      "side": 1,
+      "message": "Body Note\u0027s w:after over-riding style setting.",
+      "range": {
+        "startLine": 735,
+        "startChar": 35,
+        "endLine": 735,
+        "endChar": 36
+      },
+      "revId": "e0b2f298f5a242d1cbbb7ac9a136cae07050db54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_4403ac43",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-16T05:39:27Z",
+      "side": 1,
+      "message": "At first I thought of duplicating the function to avoid performance overhead of testing the value on what is probably a rather frequently used function. But I expect that compilers will easily optimize this by probably duplicating it internally (or whatever).",
+      "range": {
+        "startLine": 325,
+        "startChar": 17,
+        "endLine": 325,
+        "endChar": 27
+      },
+      "revId": "e0b2f298f5a242d1cbbb7ac9a136cae07050db54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
