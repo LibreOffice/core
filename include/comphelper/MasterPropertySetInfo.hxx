@@ -19,10 +19,12 @@
 
 #ifndef INCLUDED_COMPHELPER_MASTERPROPERTYSETINFO_HXX
 #define INCLUDED_COMPHELPER_MASTERPROPERTYSETINFO_HXX
+
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <comphelper/PropertyInfoHash.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <memory>
 
 namespace comphelper
 {
@@ -45,7 +47,7 @@ namespace comphelper
         virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
         virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
-        PropertyDataHash                            maMap;
+        std::unordered_map<OUString, std::unique_ptr<::comphelper::PropertyData>> maMap;
         css::uno::Sequence < css::beans::Property > maProperties;
 
         friend class MasterPropertySet;
