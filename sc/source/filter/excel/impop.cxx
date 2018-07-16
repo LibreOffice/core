@@ -129,10 +129,11 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pExcRoot->pShrfmlaBuff.reset( new SharedFormulaBuffer( pExcRoot ) );     //&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff.reset( new ExtNameBuff ( *this ) );
 
-    pOutlineListBuffer = new XclImpOutlineListBuffer;
+    pOutlineListBuffer.reset(new XclImpOutlineListBuffer);
 
     // ab Biff8
-    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( GetRoot() );
+    pFormConv.reset(new ExcelToSc( GetRoot() ));
+    pExcRoot->pFmlaConverter = pFormConv.get();
 
     bTabTruncated = false;
 
@@ -154,9 +155,9 @@ ImportExcel::~ImportExcel()
 {
     GetDoc().SetSrcCharSet( GetTextEncoding() );
 
-    delete pOutlineListBuffer;
+    pOutlineListBuffer.reset();
 
-    delete pFormConv;
+    pFormConv.reset();
 }
 
 void ImportExcel::SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt16 nXF, ScFormulaCell* pCell )
