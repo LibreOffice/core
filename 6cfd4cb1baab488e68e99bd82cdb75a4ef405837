@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_9713250e",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-16T15:44:02Z",
+      "side": 1,
+      "message": "As SEARCH() supports wildcards also in Excel and the argument may contain such, shouldn\u0027t this and above rather be FIND() instead?",
+      "range": {
+        "startLine": 975,
+        "startChar": 36,
+        "endLine": 975,
+        "endChar": 42
+      },
+      "revId": "6cfd4cb1baab488e68e99bd82cdb75a4ef405837",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
