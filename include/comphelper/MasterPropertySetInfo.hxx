@@ -45,7 +45,7 @@ namespace comphelper
         virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
         virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
-        PropertyDataHash                            maMap;
+        std::unordered_map<OUString, std::unique_ptr<::comphelper::PropertyData>> maMap;
         css::uno::Sequence < css::beans::Property > maProperties;
 
         friend class MasterPropertySet;

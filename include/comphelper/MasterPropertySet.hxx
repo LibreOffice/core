@@ -62,7 +62,7 @@ namespace comphelper
     protected:
         SolarMutex* mpMutex;
         sal_uInt8 mnLastId;
-        std::map< sal_uInt8, comphelper::SlaveData* >  maSlaveMap;
+        std::map< sal_uInt8, std::unique_ptr<comphelper::SlaveData> >  maSlaveMap;
         rtl::Reference< MasterPropertySetInfo >        mxInfo;
 
         /// @throws css::beans::UnknownPropertyException

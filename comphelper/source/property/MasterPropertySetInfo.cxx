@@ -35,15 +35,13 @@ MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo const * pMap )
         SAL_WARN_IF(
             maMap.find(pMap->maName) != maMap.end(),
             "comphelper", "Duplicate property name \"" << pMap->maName << "\"");
-        maMap[pMap->maName] = new PropertyData ( 0, pMap );
+        maMap[pMap->maName].reset( new PropertyData ( 0, pMap ) );
     }
 }
 
 MasterPropertySetInfo::~MasterPropertySetInfo()
     throw()
 {
-    for( auto& rObj : maMap )
-        delete rObj.second;
 }
 
 void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
@@ -56,7 +54,7 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
         SAL_WARN_IF(
             maMap.find(rObj.first) != maMap.end(),
             "comphelper", "Duplicate property name \"" << rObj.first << "\"");
-        maMap[rObj.first] = new PropertyData ( nMapId, rObj.second );
+        maMap[rObj.first].reset( new PropertyData ( nMapId, rObj.second ) );
     }
 }
 
@@ -84,7 +82,7 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
 
 Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const OUString& rName )
 {
-    PropertyDataHash::iterator aIter = maMap.find( rName );
+    auto aIter = maMap.find( rName );
 
     if ( maMap.end() == aIter )
         throw UnknownPropertyException( rName, *this );
