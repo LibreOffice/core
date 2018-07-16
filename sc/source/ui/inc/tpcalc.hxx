@@ -70,8 +70,8 @@ private:
 
     VclPtr<CheckBox>       m_pBtnThread;
 
-    ScDocOptions*          pOldOptions;
-    ScDocOptions*          pLocalOptions;
+    std::unique_ptr<ScDocOptions> pOldOptions;
+    std::unique_ptr<ScDocOptions> pLocalOptions;
     sal_uInt16             nWhichCalc;
 
 private:
