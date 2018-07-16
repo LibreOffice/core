@@ -32,6 +32,7 @@
 #include <tools/link.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/event.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
@@ -80,8 +81,8 @@ public:
     void            SetFavClickHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aFavClickHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
     void            SetFont( const vcl::Font& rFont );
-    vcl::Font const & GetFont() const { return mxVirDev->GetFont(); }
-    bool            GetFontCharMap(FontCharMapRef& rxFontCharMap) const { return mxVirDev->GetFontCharMap(rxFontCharMap); }
+    vcl::Font const & GetFont() const { return maFont; }
+    FontCharMapRef  GetFontCharMap();
     bool            isFavChar(const OUString& sTitle, const OUString& rFont);
     void            getFavCharacterList(); //gets both Fav char and Fav char font list
     void            updateFavCharacterList(const OUString& rChar, const OUString& rFont);

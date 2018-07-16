@@ -667,8 +667,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
     bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
     if (bNeedSubset)
     {
-        FontCharMapRef xFontCharMap( new FontCharMap() );
-        m_xShowSet->GetFontCharMap( xFontCharMap );
+        FontCharMapRef xFontCharMap = m_xShowSet->GetFontCharMap();
         pSubsetMap.reset(new SubsetMap( xFontCharMap ));
 
         // update subset listbox for new font's unicode subsets
@@ -840,8 +839,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
 
         toggleSearchView(true);
 
-        FontCharMapRef xFontCharMap(new FontCharMap());
-        m_xSearchSet->GetFontCharMap(xFontCharMap);
+        FontCharMapRef xFontCharMap = m_xSearchSet->GetFontCharMap();
 
         sal_UCS4 sChar = xFontCharMap->GetFirstChar();
         while(sChar != xFontCharMap->GetLastChar())
@@ -1060,8 +1058,7 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
     // Convert the code back to a character using the appropriate radix
     sal_UCS4 cChar = aCodeString.toUInt32(static_cast<sal_Int16> (radix));
     // Use FontCharMap::HasChar(sal_UCS4 cChar) to see if the desired character is in the font
-    FontCharMapRef xFontCharMap(new FontCharMap());
-    m_xShowSet->GetFontCharMap(xFontCharMap);
+    FontCharMapRef xFontCharMap = m_xShowSet->GetFontCharMap();
     if (xFontCharMap->HasChar(cChar))
         // Select the corresponding character
         SetChar(cChar);
