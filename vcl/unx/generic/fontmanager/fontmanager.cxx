@@ -152,8 +152,6 @@ PrintFontManager::~PrintFontManager()
 {
     m_aFontInstallerTimer.Stop();
     deinitFontconfig();
-    for (auto const& font : m_aFonts)
-        delete font.second;
 }
 
 OString PrintFontManager::getDirectory( int nAtom ) const
@@ -196,7 +194,7 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
             for (auto & font : aNewFonts)
             {
                 fontID nFontId = m_nNextFontID++;
-                m_aFonts[nFontId] = font.release();
+                m_aFonts[nFontId] = std::move(font);
                 m_aFontFileToFontID[ aName ].insert( nFontId );
                 aFontIds.push_back(nFontId);
             }
@@ -305,10 +303,10 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, i
 
     for (auto const& elem : set_it->second)
     {
-        std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find(elem);
+        auto it = m_aFonts.find(elem);
         if( it == m_aFonts.end() )
             continue;
-        PrintFont* const pFont = (*it).second;
+        PrintFont* const pFont = (*it).second.get();
         if (pFont->m_nDirectory == nDirID &&
             pFont->m_aFontFile == rFontFile && pFont->m_nCollectionEntry == nFaceIndex)
         {
@@ -331,10 +329,10 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
 
     for (auto const& elem : set_it->second)
     {
-        std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find(elem);
+        auto it = m_aFonts.find(elem);
         if( it == m_aFonts.end() )
             continue;
-        PrintFont* const pFont = (*it).second;
+        PrintFont* const pFont = (*it).second.get();
         if (pFont->m_nDirectory == nDirID &&
             pFont->m_aFontFile == rFontFile)
             aIds.push_back(it->first);
@@ -707,8 +705,6 @@ void PrintFontManager::initialize()
     // gtk-fontconfig-timestamp changes to reflect new font installed and
     // PrintFontManager::initialize called again
     {
-        for (auto const& font : m_aFonts)
-            delete font.second;
         m_nNextFontID = 1;
         m_aFonts.clear();
     }
