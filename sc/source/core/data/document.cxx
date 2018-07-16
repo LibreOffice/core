@@ -123,7 +123,7 @@ using ::std::set;
 
 namespace {
 
-std::pair<SCTAB,SCTAB> getMarkedTableRange(const std::vector<std::unique_ptr<ScTable>>& rTables, const ScMarkData& rMark)
+std::pair<SCTAB,SCTAB> getMarkedTableRange(const std::vector<ScTableUniquePtr>& rTables, const ScMarkData& rMark)
 {
     SCTAB nTabStart = MAXTAB;
     SCTAB nTabEnd = 0;
@@ -724,7 +724,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1 ) );
 
-                for (std::unique_ptr<ScTable> & pTab : maTabs)
+                for (auto & pTab : maTabs)
                     if (pTab)
                         pTab->UpdateDeleteTab(aCxt);
 
@@ -819,7 +819,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1*nSheets ) );
 
-                for (std::unique_ptr<ScTable> & pTab : maTabs)
+                for (auto & pTab : maTabs)
                     if (pTab)
                         pTab->UpdateDeleteTab(aCxt);
 
@@ -1212,7 +1212,7 @@ namespace {
 
 struct SetDirtyIfPostponedHandler
 {
-    void operator() (std::unique_ptr<ScTable> & p)
+    void operator() (ScTableUniquePtr & p)
     {
         if (p)
             p->SetDirtyIfPostponed();
@@ -1221,7 +1221,7 @@ struct SetDirtyIfPostponedHandler
 
 struct BroadcastRecalcOnRefMoveHandler
 {
-    void operator() (std::unique_ptr<ScTable> & p)
+    void operator() (ScTableUniquePtr & p)
     {
         if (p)
             p->BroadcastRecalcOnRefMove();
@@ -1958,7 +1958,7 @@ void ScDocument::InitUndoSelected( const ScDocument* pSrcDoc, const ScMarkData& 
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
             {
-                std::unique_ptr<ScTable> pTable(new ScTable(this, nTab, OUString(), bColInfo, bRowInfo));
+                ScTableUniquePtr pTable(new ScTable(this, nTab, OUString(), bColInfo, bRowInfo));
                 if (nTab < static_cast<SCTAB>(maTabs.size()))
                     maTabs[nTab] = std::move(pTable);
                 else
@@ -3976,7 +3976,7 @@ void ScDocument::CompileXML()
         pRangeName->CompileUnresolvedXML(aCxt);
 
     std::for_each(maTabs.begin(), maTabs.end(),
-        [&](std::unique_ptr<ScTable> & pTab)
+        [&](ScTableUniquePtr & pTab)
         {
             if (pTab)
                 pTab->CompileXML(aCxt, aProgress);
@@ -6666,7 +6666,7 @@ SCROW ScDocument::GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const
 
 void ScDocument::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
-    for (const std::unique_ptr<ScTable> & pTab : maTabs)
+    for (const auto & pTab : maTabs)
     {
         if (!pTab)
             continue;
