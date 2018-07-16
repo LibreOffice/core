@@ -503,7 +503,7 @@ sal_uLong AbstractScLinkedAreaDlg_Impl::GetRefresh()
     return m_xDlg->GetRefresh();
 }
 
-ScConditionalFormatList* AbstractScCondFormatManagerDlg_Impl::GetConditionalFormatList()
+std::unique_ptr<ScConditionalFormatList> AbstractScCondFormatManagerDlg_Impl::GetConditionalFormatList()
 {
     return pDlg->GetConditionalFormatList();
 }

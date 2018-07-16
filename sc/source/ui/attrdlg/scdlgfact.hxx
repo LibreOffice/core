@@ -131,7 +131,7 @@ class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDl
 {
     DECL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl, ScCondFormatManagerDlg)
 
-    virtual ScConditionalFormatList* GetConditionalFormatList() override;
+    virtual std::unique_ptr<ScConditionalFormatList> GetConditionalFormatList() override;
 
     virtual bool CondFormatsChanged() const override;
 

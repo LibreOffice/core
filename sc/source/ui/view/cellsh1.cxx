@@ -2526,17 +2526,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pDlg->SetModified();
 
                 short nRet = pDlg->Execute();
-                ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
+                std::unique_ptr<ScConditionalFormatList> pCondFormatList = pDlg->GetConditionalFormatList();
                 if(nRet == RET_OK && pDlg->CondFormatsChanged())
                 {
-                    pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList, aPos.Tab());
+                    pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList.release(), aPos.Tab());
                 }
                 else if(nRet == DLG_RET_ADD)
                 {
                     // Put the xml string parameter to initialize the
                     // Conditional Format Dialog. ( add new )
                     pTabViewShell->GetPool().Put(ScCondFormatDlgItem(
-                                std::shared_ptr<ScConditionalFormatList>(pCondFormatList), -1, true));
+                                std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), -1, true));
                     // Queue message to open Conditional Format Dialog
                     GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
                 }
@@ -2547,13 +2547,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     // Put the xml string parameter to initialize the
                     // Conditional Format Dialog. ( edit selected conditional format )
                     pTabViewShell->GetPool().Put(ScCondFormatDlgItem(
-                                std::shared_ptr<ScConditionalFormatList>(pCondFormatList), nIndex, true));
+                                std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), nIndex, true));
 
                     // Queue message to open Conditional Format Dialog
                     GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
                 }
                 else
-                    delete pCondFormatList;
+                    pCondFormatList.reset();
 
                 if (pDlgItem)
                     pTabViewShell->GetPool().Remove(*pDlgItem);
