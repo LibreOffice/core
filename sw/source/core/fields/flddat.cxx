@@ -43,13 +43,13 @@ SwFieldType* SwDateTimeFieldType::Copy() const
 
 SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFormat, LanguageType nLng)
     : SwValueField(pInitType, nFormat, nLng, 0.0),
-    nSubType(nSub),
-    nOffset(0)
+    m_nSubType(nSub),
+    m_nOffset(0)
 {
     if (!nFormat)
     {
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-        if (nSubType & DATEFLD)
+        if (m_nSubType & DATEFLD)
             ChangeFormat(pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, GetLanguage()));
         else
             ChangeFormat(pFormatter->GetFormatIndex(NF_TIME_HHMMSS, GetLanguage()));
@@ -73,8 +73,8 @@ OUString SwDateTimeField::Expand() const
     else
         fVal = GetValue();
 
-    if (nOffset)
-        fVal += nOffset * ( 60 / 86400.0 );
+    if (m_nOffset)
+        fVal += m_nOffset * ( 60 / 86400.0 );
 
     return ExpandValue(fVal, GetFormat(), GetLanguage());
 }
@@ -82,11 +82,11 @@ OUString SwDateTimeField::Expand() const
 std::unique_ptr<SwField> SwDateTimeField::Copy() const
 {
     std::unique_ptr<SwDateTimeField> pTmp(
-        new SwDateTimeField(static_cast<SwDateTimeFieldType*>(GetTyp()), nSubType,
+        new SwDateTimeField(static_cast<SwDateTimeFieldType*>(GetTyp()), m_nSubType,
                                             GetFormat(), GetLanguage()) );
 
     pTmp->SetValue(GetValue());
-    pTmp->SetOffset(nOffset);
+    pTmp->SetOffset(m_nOffset);
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
 
     return std::unique_ptr<SwField>(pTmp.release());
@@ -94,23 +94,23 @@ std::unique_ptr<SwField> SwDateTimeField::Copy() const
 
 sal_uInt16 SwDateTimeField::GetSubType() const
 {
-    return nSubType;
+    return m_nSubType;
 }
 
 void SwDateTimeField::SetSubType(sal_uInt16 nType)
 {
-    nSubType = nType;
+    m_nSubType = nType;
 }
 
 void SwDateTimeField::SetPar2(const OUString& rStr)
 {
-    nOffset = rStr.toInt32();
+    m_nOffset = rStr.toInt32();
 }
 
 OUString SwDateTimeField::GetPar2() const
 {
-    if (nOffset)
-        return OUString::number(nOffset);
+    if (m_nOffset)
+        return OUString::number(m_nOffset);
     return OUString();
 }
 
@@ -165,13 +165,13 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= IsFixed();
         break;
     case FIELD_PROP_BOOL2:
-        rVal <<= (nSubType & DATEFLD) != 0;
+        rVal <<= (m_nSubType & DATEFLD) != 0;
         break;
     case FIELD_PROP_FORMAT:
         rVal <<= static_cast<sal_Int32>(GetFormat());
         break;
     case FIELD_PROP_SUBTYPE:
-        rVal <<= static_cast<sal_Int32>(nOffset);
+        rVal <<= static_cast<sal_Int32>(m_nOffset);
         break;
     case FIELD_PROP_DATE_TIME:
         {
@@ -192,13 +192,13 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_BOOL1:
         if(*o3tl::doAccess<bool>(rVal))
-            nSubType |= FIXEDFLD;
+            m_nSubType |= FIXEDFLD;
         else
-            nSubType &= ~FIXEDFLD;
+            m_nSubType &= ~FIXEDFLD;
         break;
     case FIELD_PROP_BOOL2:
-        nSubType &=  ~(DATEFLD|TIMEFLD);
-        nSubType |= *o3tl::doAccess<bool>(rVal) ? DATEFLD : TIMEFLD;
+        m_nSubType &=  ~(DATEFLD|TIMEFLD);
+        m_nSubType |= *o3tl::doAccess<bool>(rVal) ? DATEFLD : TIMEFLD;
         break;
     case FIELD_PROP_FORMAT:
         rVal >>= nTmp;
@@ -206,7 +206,7 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_SUBTYPE:
         rVal >>= nTmp;
-        nOffset = nTmp;
+        m_nOffset = nTmp;
         break;
     case FIELD_PROP_DATE_TIME:
         {
