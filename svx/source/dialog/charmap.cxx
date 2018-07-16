@@ -1744,6 +1744,41 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x11A00, 0x11A4F, SvxResId(RID_SUBSETSTR_ZANABAZAR_SQUARE) );
                     break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 62)
+                case UBLOCK_CHESS_SYMBOLS:
+                    aAllSubsets.emplace_back( 0x1FA00, 0x1FA6F, SvxResId(RID_SUBSETSTR_CHESS_SYMBOLS) );
+                    break;
+                case UBLOCK_DOGRA:
+                    aAllSubsets.emplace_back( 0x11800, 0x1184F, SvxResId(RID_SUBSETSTR_DOGRA) );
+                    break;
+                case UBLOCK_GEORGIAN_EXTENDED:
+                    aAllSubsets.emplace_back( 0x1C90, 0x1CBF, SvxResId(RID_SUBSETSTR_GEORGIAN_EXTENDED) );
+                    break;
+                case UBLOCK_GUNJALA_GONDI:
+                    aAllSubsets.emplace_back( 0x11D60, 0x11DAF, SvxResId(RID_SUBSETSTR_GUNJALA_GONDI) );
+                    break;
+                case UBLOCK_HANIFI_ROHINGYA:
+                    aAllSubsets.emplace_back( 0x10D00, 0x10D3F, SvxResId(RID_SUBSETSTR_HANIFI_ROHINGYA) );
+                    break;
+                case UBLOCK_INDIC_SIYAQ_NUMBERS:
+                    aAllSubsets.emplace_back( 0x1EC70, 0x1ECBF, SvxResId(RID_SUBSETSTR_INDIC_SIYAQ_NUMBERS) );
+                    break;
+                case UBLOCK_MAKASAR:
+                    aAllSubsets.emplace_back( 0x11EE0, 0x11EFF, SvxResId(RID_SUBSETSTR_MAKASAR) );
+                    break;
+                case UBLOCK_MAYAN_NUMERALS:
+                    aAllSubsets.emplace_back( 0x1D2E0, 0x1D2FF, SvxResId(RID_SUBSETSTR_MAYAN_NUMERALS) );
+                    break;
+                case UBLOCK_MEDEFAIDRIN:
+                    aAllSubsets.emplace_back( 0x16E40, 0x16E9F, SvxResId(RID_SUBSETSTR_MEDEFAIDRIN) );
+                    break;
+                case UBLOCK_OLD_SOGDIAN:
+                    aAllSubsets.emplace_back( 0x10F00, 0x10F2F, SvxResId(RID_SUBSETSTR_OLD_SOGDIAN) );
+                    break;
+                case UBLOCK_SOGDIAN:
+                    aAllSubsets.emplace_back( 0x10F30, 0x10F6F, SvxResId(RID_SUBSETSTR_SOGDIAN) );
+                    break;
+#endif
 
             }
 
