@@ -114,7 +114,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     checkUnicode(/*bUnicode =*/nKeyword != RTF_U, /*bHex =*/true);
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
-    auto pIntValue = new RTFValue(nParam);
+    tools::SvRef<RTFValue> pIntValue(new RTFValue(nParam));
     // Trivial table sprms.
     switch (nKeyword)
     {
@@ -600,7 +600,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_SL:
         {
             // This is similar to RTF_ABSH, negative value means 'exact', positive means 'at least'.
-            auto pValue = new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast);
+            tools::SvRef<RTFValue> pValue(
+                new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast));
             if (nParam < 0)
             {
                 pValue = new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact);
@@ -905,7 +906,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             OUString hRule("auto");
             if (nParam < 0)
             {
-                auto pAbsValue = new RTFValue(-nParam);
+                tools::SvRef<RTFValue> pAbsValue(new RTFValue(-nParam));
                 std::swap(pIntValue, pAbsValue);
 
                 hRule = "exact";
