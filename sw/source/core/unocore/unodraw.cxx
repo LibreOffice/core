@@ -984,7 +984,7 @@ SwXShape::~SwXShape()
         uno::Reference< uno::XInterface >  xRef;
         xShapeAgg->setDelegator(xRef);
     }
-    delete pImpl;
+    pImpl.reset();
     EndListeningAll();
 }
 
