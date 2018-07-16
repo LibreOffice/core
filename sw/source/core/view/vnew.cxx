@@ -54,7 +54,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
 
     if( !mpOpt )
     {
-        mpOpt = new SwViewOption;
+        mpOpt.reset(new SwViewOption);
 
         // ApplyViewOptions() does not need to be called
         if( pNewOpt )
@@ -319,8 +319,7 @@ SwViewShell::~SwViewShell()
             GetDoc()->StopNumRuleAnimations( mpOut );
         }
 
-        delete mpImp; // Delete first, so that the LayoutViews are destroyed.
-        mpImp = nullptr;   // Set to zero, because ~SwFrame relies on it.
+        mpImp.reset();
 
         if ( mxDoc.get() )
         {
@@ -328,7 +327,7 @@ SwViewShell::~SwViewShell()
                 GetLayout()->ResetNewLayout();
         }
 
-        delete mpOpt;
+        mpOpt.reset();
 
         // resize format cache.
         if ( SwTextFrame::GetTextCache()->GetCurMax() > 250 )
@@ -358,7 +357,7 @@ SwViewShell::~SwViewShell()
     }
 
     mpTmpRef.disposeAndClear();
-    delete mpAccOptions;
+    mpAccOptions.reset();
 }
 
 bool SwViewShell::HasDrawView() const
