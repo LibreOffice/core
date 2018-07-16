@@ -783,7 +783,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                 pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_REORDER,
                             aSourceRange, 0,0,nDz ) );
 
-            std::unique_ptr<ScTable> pSaveTab = std::move(maTabs[nOldPos]);
+            ScTableUniquePtr pSaveTab = std::move(maTabs[nOldPos]);
             maTabs.erase(maTabs.begin()+nOldPos);
             maTabs.insert(maTabs.begin()+nNewPos, std::move(pSaveTab));
             TableContainer::iterator it = maTabs.begin();
