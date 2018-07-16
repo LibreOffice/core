@@ -105,13 +105,10 @@ public:
 };
 
 ImpVclMEdit::ImpVclMEdit( VclMultiLineEdit* pEdt, WinBits nWinStyle )
-    :mpHScrollBar(nullptr)
-    ,mpVScrollBar(nullptr)
-    ,mpScrollBox(nullptr)
+    : pVclMultiLineEdit(pEdt)
+    , mpTextWindow(VclPtr<TextWindow>::Create(pEdt))
+    , mnTextWidth(0)
 {
-    pVclMultiLineEdit = pEdt;
-    mnTextWidth = 0;
-    mpTextWindow = VclPtr<TextWindow>::Create( pEdt );
     mpTextWindow->Show();
     InitFromStyle( nWinStyle );
     StartListening( *mpTextWindow->GetTextEngine() );

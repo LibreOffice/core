@@ -296,18 +296,16 @@ public:
 };
 
 LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
-        Ascii85Encoder (pOutputFile)
+        Ascii85Encoder (pOutputFile),
+        mpPrefix(nullptr),
+        mnDataSize(8),
+        mnClearCode(1 << mnDataSize),
+        mnEOICode(mnClearCode + 1),
+        mnTableSize(mnEOICode + 1),
+        mnCodeSize(mnDataSize + 1),
+        mnOffset(32),       // free bits in dwShift
+        mdwShift(0)
 {
-    mnDataSize  = 8;
-
-    mnClearCode = 1 << mnDataSize;
-    mnEOICode   = mnClearCode + 1;
-    mnTableSize = mnEOICode   + 1;
-    mnCodeSize  = mnDataSize  + 1;
-
-    mnOffset    = 32;   // free bits in dwShift
-    mdwShift    = 0;
-
     for (sal_uInt32 i = 0; i < 4096; i++)
     {
         mpTable[i].mpBrother    = nullptr;
@@ -315,8 +313,6 @@ LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
         mpTable[i].mnCode       = i;
         mpTable[i].mnValue      = static_cast<sal_uInt8>(mpTable[i].mnCode);
     }
-
-    mpPrefix = nullptr;
 
     WriteBits( mnClearCode, mnCodeSize );
 }

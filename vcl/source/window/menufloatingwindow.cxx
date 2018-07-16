@@ -28,22 +28,21 @@
 #include <window.h>
 
 MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBits nStyle ) :
-    FloatingWindow( pParent, nStyle )
+    FloatingWindow( pParent, nStyle ),
+    pMenu(pMen),
+    nHighlightedItem(ITEMPOS_INVALID),
+    nMBDownPos(ITEMPOS_INVALID),
+    nScrollerHeight(0),
+    nFirstEntry(0),
+    nPosInParent(ITEMPOS_INVALID),
+    bInExecute(false),
+    bScrollMenu(false),
+    bScrollUp(false),
+    bScrollDown(false),
+    bIgnoreFirstMove(true),
+    bKeyInput(false)
 {
     mpWindowImpl->mbMenuFloatingWindow= true;
-    pMenu               = pMen;
-    pActivePopup        = nullptr;
-    bInExecute          = false;
-    bScrollMenu         = false;
-    nHighlightedItem    = ITEMPOS_INVALID;
-    nMBDownPos          = ITEMPOS_INVALID;
-    nPosInParent        = ITEMPOS_INVALID;
-    nScrollerHeight     = 0;
-    nFirstEntry         = 0;
-    bScrollUp           = false;
-    bScrollDown         = false;
-    bIgnoreFirstMove    = true;
-    bKeyInput           = false;
 
     ApplySettings(*this);
 

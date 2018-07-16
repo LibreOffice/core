@@ -35,17 +35,17 @@ class GIFLZWDecompressor
     sal_uInt8*              pOutBufData;
     sal_uInt8*              pBlockBuf;
     sal_uLong               nInputBitsBuf;
-    sal_uInt16              nTableSize;
-    sal_uInt16              nClearCode;
-    sal_uInt16              nEOICode;
-    sal_uInt16              nCodeSize;
-    sal_uInt16              nOldCode;
-    sal_uInt16              nOutBufDataLen;
-    sal_uInt16              nInputBitsBufSize;
     bool                    bEOIFound;
     sal_uInt8               nDataSize;
     sal_uInt8               nBlockBufSize;
     sal_uInt8               nBlockBufPos;
+    sal_uInt16              nClearCode;
+    sal_uInt16              nEOICode;
+    sal_uInt16              nTableSize;
+    sal_uInt16              nCodeSize;
+    sal_uInt16              nOldCode;
+    sal_uInt16              nOutBufDataLen;
+    sal_uInt16              nInputBitsBufSize;
 
     bool                AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
     bool                ProcessOneCode();

@@ -155,8 +155,8 @@ class WinGlyphFallbackSubstititution
 {
 public:
     explicit WinGlyphFallbackSubstititution()
+        : mhDC(GetDC(nullptr))
     {
-        mhDC = GetDC(nullptr);
     };
 
     ~WinGlyphFallbackSubstititution() override

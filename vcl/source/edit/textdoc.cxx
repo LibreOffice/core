@@ -43,8 +43,8 @@ TextCharAttrib::TextCharAttrib( const TextCharAttrib& rTextCharAttrib )
 }
 
 TextCharAttribList::TextCharAttribList()
+    : mbHasEmptyAttribs(false)
 {
-    mbHasEmptyAttribs = false;
 }
 
 TextCharAttribList::~TextCharAttribList()
@@ -380,8 +380,8 @@ void TextNode::Append( const TextNode& rNode )
 }
 
 TextDoc::TextDoc()
+    : mnLeftMargin(0)
 {
-    mnLeftMargin = 0;
 };
 
 TextDoc::~TextDoc()
