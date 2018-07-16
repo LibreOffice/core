@@ -208,6 +208,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
         m_sCurrentParaStyleName(),
+        m_sDefaultParaStyleName(),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
         m_bInHeaderFooterImport( false ),
@@ -657,6 +658,20 @@ const OUString DomainMapper_Impl::GetCurrentParaStyleName()
         pParaContext->getProperty(PROP_PARA_STYLE_NAME)->second >>= sName;
 
     return sName;
+}
+
+const OUString DomainMapper_Impl::GetDefaultParaStyleName()
+{
+    // The default style doesn't change and is frequently requested: cache the LO style name.
+    if ( m_sDefaultParaStyleName.isEmpty() )
+    {
+        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindDefaultParaStyle();
+        if ( pEntry && !pEntry->sConvertedStyleName.isEmpty() )
+            m_sDefaultParaStyleName = pEntry->sConvertedStyleName;
+        else
+            return OUString( "Standard");
+    }
+    return m_sDefaultParaStyleName;
 }
 
 /*-------------------------------------------------------------------------
