@@ -85,7 +85,7 @@ void ScPivotFilterDlg::dispose()
 {
     for (auto& a : m_pEntryLists) a.reset();
 
-    delete pOutItem;
+    pOutItem.reset();
     m_pLbField1.clear();
     m_pLbCond1.clear();
     m_pEdVal1.clear();
@@ -413,8 +413,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     theParam.bCaseSens      = m_pBtnCase->IsChecked();
     theParam.eSearchType    = m_pBtnRegExp->IsChecked() ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
 
-    if ( pOutItem ) DELETEZ( pOutItem );
-    pOutItem = new ScQueryItem( nWhichQuery, &theParam );
+    pOutItem.reset( new ScQueryItem( nWhichQuery, &theParam ) );
 
     return *pOutItem;
 }
