@@ -16,6 +16,24 @@
       "revId": "4b824a73be71fb76becdc7d2144eda8f180425ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d793ed4e",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-16T16:41:32Z",
+      "side": 1,
+      "message": "Or, this is indeed correct (as nParamCount was decremented in the overall while() but nothing popped), but confusing.. rather Pop() before (i.e. move the bTextAsZero Pop() outside the if/else) and then keep this loop as is.\n\nIn the end it didn\u0027t hurt as a result is pushed and Interpret() restores the stack (but just had to unnecessarily pop and push the result).",
+      "parentUuid": "ffe62b97_37f0d9c9",
+      "revId": "4b824a73be71fb76becdc7d2144eda8f180425ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
