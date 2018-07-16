@@ -110,15 +110,65 @@ std::shared_ptr<HTMLAttrTable> const & HTMLAttrContext_SaveDoc::GetAttrTab( bool
 HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )
 {
     if( !m_pSaveDocContext && bCreate )
-        m_pSaveDocContext = new HTMLAttrContext_SaveDoc;
+        m_pSaveDocContext.reset(new HTMLAttrContext_SaveDoc);
 
-    return m_pSaveDocContext;
+    return m_pSaveDocContext.get();
+}
+
+HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const OUString& rClass,
+                  bool bDfltColl ) :
+    m_aClass( rClass ),
+    m_pSaveDocContext( nullptr ),
+    m_nToken( nTokn ),
+    m_nTextFormatColl( nPoolId ),
+    m_nLeftMargin( 0 ),
+    m_nRightMargin( 0 ),
+    m_nFirstLineIndent( 0 ),
+    m_nUpperSpace( 0 ),
+    m_nLowerSpace( 0 ),
+    m_eAppend( AM_NONE ),
+    m_bLRSpaceChanged( false ),
+    m_bULSpaceChanged( false ),
+    m_bDefaultTextFormatColl( bDfltColl ),
+    m_bSpansSection( false ),
+    m_bPopStack( false ),
+    m_bFinishPREListingXMP( false ),
+    m_bRestartPRE( false ),
+    m_bRestartXMP( false ),
+    m_bRestartListing( false ),
+    m_bHeaderOrFooter( false )
+{}
+
+HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn ) :
+    m_pSaveDocContext( nullptr ),
+    m_nToken( nTokn ),
+    m_nTextFormatColl( 0 ),
+    m_nLeftMargin( 0 ),
+    m_nRightMargin( 0 ),
+    m_nFirstLineIndent( 0 ),
+    m_nUpperSpace( 0 ),
+    m_nLowerSpace( 0 ),
+    m_eAppend( AM_NONE ),
+    m_bLRSpaceChanged( false ),
+    m_bULSpaceChanged( false ),
+    m_bDefaultTextFormatColl( false ),
+    m_bSpansSection( false ),
+    m_bPopStack( false ),
+    m_bFinishPREListingXMP( false ),
+    m_bRestartPRE( false ),
+    m_bRestartXMP( false ),
+    m_bRestartListing( false ),
+    m_bHeaderOrFooter( false )
+{}
+
+HTMLAttrContext::~HTMLAttrContext()
+{
+    m_pSaveDocContext.reset();
 }
 
 void HTMLAttrContext::ClearSaveDocContext()
 {
-    delete m_pSaveDocContext;
-    m_pSaveDocContext = nullptr;
+    m_pSaveDocContext.reset();
 }
 
 void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )

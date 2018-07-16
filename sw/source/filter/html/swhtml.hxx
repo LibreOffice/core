@@ -207,7 +207,7 @@ class HTMLAttrContext
 
     OUString    m_aClass;          // context class
 
-    HTMLAttrContext_SaveDoc *m_pSaveDocContext;
+    std::unique_ptr<HTMLAttrContext_SaveDoc> m_pSaveDocContext;
     std::unique_ptr<SfxItemSet> m_pFrameItemSet;
 
     HtmlTokenId m_nToken;         // the token of the context
@@ -238,52 +238,9 @@ public:
     void ClearSaveDocContext();
 
     HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const OUString& rClass,
-                      bool bDfltColl=false ) :
-        m_aClass( rClass ),
-        m_pSaveDocContext( nullptr ),
-        m_nToken( nTokn ),
-        m_nTextFormatColl( nPoolId ),
-        m_nLeftMargin( 0 ),
-        m_nRightMargin( 0 ),
-        m_nFirstLineIndent( 0 ),
-        m_nUpperSpace( 0 ),
-        m_nLowerSpace( 0 ),
-        m_eAppend( AM_NONE ),
-        m_bLRSpaceChanged( false ),
-        m_bULSpaceChanged( false ),
-        m_bDefaultTextFormatColl( bDfltColl ),
-        m_bSpansSection( false ),
-        m_bPopStack( false ),
-        m_bFinishPREListingXMP( false ),
-        m_bRestartPRE( false ),
-        m_bRestartXMP( false ),
-        m_bRestartListing( false ),
-        m_bHeaderOrFooter( false )
-    {}
-
-    explicit HTMLAttrContext( HtmlTokenId nTokn ) :
-        m_pSaveDocContext( nullptr ),
-        m_nToken( nTokn ),
-        m_nTextFormatColl( 0 ),
-        m_nLeftMargin( 0 ),
-        m_nRightMargin( 0 ),
-        m_nFirstLineIndent( 0 ),
-        m_nUpperSpace( 0 ),
-        m_nLowerSpace( 0 ),
-        m_eAppend( AM_NONE ),
-        m_bLRSpaceChanged( false ),
-        m_bULSpaceChanged( false ),
-        m_bDefaultTextFormatColl( false ),
-        m_bSpansSection( false ),
-        m_bPopStack( false ),
-        m_bFinishPREListingXMP( false ),
-        m_bRestartPRE( false ),
-        m_bRestartXMP( false ),
-        m_bRestartListing( false ),
-        m_bHeaderOrFooter( false )
-    {}
-
-    ~HTMLAttrContext() { ClearSaveDocContext(); }
+                      bool bDfltColl=false );
+    explicit HTMLAttrContext( HtmlTokenId nTokn );
+    ~HTMLAttrContext();
 
     HtmlTokenId GetToken() const { return m_nToken; }
 
