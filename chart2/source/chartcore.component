@@ -122,11 +122,6 @@
     <service name="com.sun.star.chart2.BubbleChartType"/>
     <service name="com.sun.star.chart2.ChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.GL3DBarChartType"
-    constructor="com_sun_star_comp_chart_GL3DBarChartType_get_implementation">
-    <service name="com.sun.star.chart2.GL3DBarChartType"/>
-    <service name="com.sun.star.chart2.ChartType"/>
-  </implementation>
   <implementation name="com.sun.star.comp.chart.CandleStickChartType"
     constructor="com_sun_star_comp_chart_CandleStickChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>

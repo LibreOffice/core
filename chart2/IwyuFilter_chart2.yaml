@@ -348,18 +348,6 @@ blacklist:
     chart2/source/view/inc/Linear3DTransformation.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XTransformation.hpp
-    chart2/source/view/inc/GL3DRenderer.hxx:
-    # base class has to be a complete type
-    - boost/shared_array.hpp
-    - map
-    - vector
-    chart2/source/view/inc/GL3DBarChart.hxx:
-    # base class has to be a complete type
-    - deque
-    - memory
-    - vector
-    - GL3DPlotterBase.hxx
-    - vcl/idle.hxx
     chart2/source/view/inc/VLineProperties.hxx:
     # base class has to be a complete type
     - com/sun/star/uno/Reference.h
