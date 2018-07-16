@@ -619,7 +619,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
 
                 // sort into known fonts
                 fontID aFont = m_nNextFontID++;
-                m_aFonts[ aFont ] = xUpdate.release();
+                m_aFonts[ aFont ] = std::move(xUpdate);
                 m_aFontFileToFontID[ aBase ].insert( aFont );
                 nFonts++;
                 SAL_INFO("vcl.fonts.detail", "inserted font " << family << " as fontID " << aFont);

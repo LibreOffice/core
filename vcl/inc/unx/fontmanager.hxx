@@ -136,7 +136,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     };
 
     fontID                                      m_nNextFontID;
-    std::unordered_map< fontID, PrintFont* >    m_aFonts;
+    std::unordered_map< fontID, std::unique_ptr<PrintFont> >    m_aFonts;
     // for speeding up findFontFileID
     std::unordered_map< OString, std::set< fontID > >
                                                 m_aFontFileToFontID;
@@ -163,9 +163,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     PrintFont* getFont( fontID nID ) const
     {
-        std::unordered_map< fontID, PrintFont* >::const_iterator it;
-        it = m_aFonts.find( nID );
-        return it == m_aFonts.end() ? nullptr : it->second;
+        auto it = m_aFonts.find( nID );
+        return it == m_aFonts.end() ? nullptr : it->second.get();
     }
     static void fillPrintFontInfo(PrintFont* pFont, FastPrintFontInfo& rInfo);
     void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
