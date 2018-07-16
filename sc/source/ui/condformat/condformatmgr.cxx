@@ -110,7 +110,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
     Size aSize(LogicToPixel(Size(290, 220), MapMode(MapUnit::MapAppFont)));
     pContainer->set_width_request(aSize.Width());
     pContainer->set_height_request(aSize.Height());
-    m_pCtrlManager = VclPtr<ScCondFormatManagerWindow>::Create(*pContainer, pDoc, mpFormatList);
+    m_pCtrlManager = VclPtr<ScCondFormatManagerWindow>::Create(*pContainer, pDoc, mpFormatList.get());
     get(m_pBtnAdd, "add");
     get(m_pBtnRemove, "remove");
     get(m_pBtnEdit, "edit");
@@ -128,7 +128,7 @@ ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
 
 void ScCondFormatManagerDlg::dispose()
 {
-    delete mpFormatList;
+    mpFormatList.reset();
     m_pBtnAdd.clear();
     m_pBtnRemove.clear();
     m_pBtnEdit.clear();
@@ -137,11 +137,9 @@ void ScCondFormatManagerDlg::dispose()
 }
 
 
-ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
+std::unique_ptr<ScConditionalFormatList> ScCondFormatManagerDlg::GetConditionalFormatList()
 {
-    ScConditionalFormatList* pList = mpFormatList;
-    mpFormatList = nullptr;
-    return pList;
+    return std::move(mpFormatList);
 }
 
 // Get the current conditional format selected.
