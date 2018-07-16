@@ -75,8 +75,8 @@ ScTpCalcOptions::~ScTpCalcOptions()
 
 void ScTpCalcOptions::dispose()
 {
-    delete pOldOptions;
-    delete pLocalOptions;
+    pOldOptions.reset();
+    pLocalOptions.reset();
     m_pBtnIterate.clear();
     m_pFtSteps.clear();
     m_pEdSteps.clear();
