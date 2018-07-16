@@ -704,6 +704,77 @@ DECLARE_OOXMLEXPORT_TEST( testTdf66401, "tdf66401.docx")
     }
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testFdo51034, "fdo51034.odt")
+{
+    // The problem was that the 'l' param of the HYPERLINK field was parsed with = "#", not += "#".
+    CPPUNIT_ASSERT_EQUAL(OUString("http://Www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+}
+
+
+DECLARE_OOXMLEXPORT_TEST(test76108, "test76108.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc) return;
+    //docx file after RT is getting corrupted.
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:fldChar[1]", "fldCharType", "begin");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testHyperlinkContainingPlaceholderField, "hyperlink-field.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO77122, "LinkedTextBoxes.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    //ensure that the text box links are preserved.
+    assertXPath(pXmlDoc, "//wps:txbx[1]", "id", "1");
+    assertXPath(pXmlDoc, "//wps:linkedTxbx[1]", "id", "1");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testRubyHyperlink, "rubyhyperlink.fodt")
+{
+    // test that export doesn't assert with overlapping ruby / hyperlink attr
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf107111, "tdf107111.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that hyperlink and its properties are in place.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr", 1);
+
+    // Ensure that hyperlink properties do not contain <w:webHidden/>.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr/w:webHidden", 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo69548, "fdo69548.docx")
+{
+    // The problem was that the last space in target URL was removed
+    CPPUNIT_ASSERT_EQUAL(OUString("#this is a bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf91417, "tdf91417.docx")
+{
+    // The first paragraph should contain a link to "http://www.google.com/"
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xTextCursor(xTextDocument->getText()->createTextCursor(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCursorProps(xTextCursor, uno::UNO_QUERY);
+    OUString aValue;
+    xCursorProps->getPropertyValue("HyperLinkURL") >>= aValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.google.com/"), aValue);
+}
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

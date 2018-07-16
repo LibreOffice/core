@@ -60,18 +60,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_htmlexport \
     CppunitTest_sw_htmlimport \
     CppunitTest_sw_macros_test \
-    CppunitTest_sw_ooxmlexport \
-    CppunitTest_sw_ooxmlexport2 \
-    CppunitTest_sw_ooxmlexport3 \
-    CppunitTest_sw_ooxmlexport4 \
-    CppunitTest_sw_ooxmlexport5 \
-    CppunitTest_sw_ooxmlexport6 \
-    CppunitTest_sw_ooxmlexport7 \
-    CppunitTest_sw_ooxmlexport8 \
-    CppunitTest_sw_ooxmlexport9 \
-    CppunitTest_sw_ooxmlexport10 \
-    CppunitTest_sw_ooxmlexport11 \
-    CppunitTest_sw_ooxmlexport12 \
     CppunitTest_sw_ooxmlfieldexport \
     CppunitTest_sw_ooxmllinks \
     CppunitTest_sw_ooxmlw14export \
@@ -95,6 +83,23 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_accessible_relation_set \
     CppunitTest_sw_apitests \
     CppunitTest_sw_unowriter \
+    CppunitTest_sw_ooxmlannotationexport \
+    CppunitTest_sw_ooxmlbookmarkexport \
+    CppunitTest_sw_ooxmlcomplexexport \
+    CppunitTest_sw_ooxmlcontrolexport \
+    CppunitTest_sw_ooxmldocumentexport \
+    CppunitTest_sw_ooxmldrawingexport \
+    CppunitTest_sw_ooxmldrawingobjectexport \
+    CppunitTest_sw_ooxmlformelexport \
+    CppunitTest_sw_ooxmlimageexport \
+    CppunitTest_sw_ooxmlnumberingexport \
+    CppunitTest_sw_ooxmloleexport \
+    CppunitTest_sw_ooxmlpageexport \
+    CppunitTest_sw_ooxmlparagraphexport \
+    CppunitTest_sw_ooxmlsectionexport \
+    CppunitTest_sw_ooxmlstyleexport \
+    CppunitTest_sw_ooxmltableexport \
+    CppunitTest_sw_ooxmltextboxexport \
 ))
 
 ifneq ($(ENABLE_HEADLESS),TRUE)
