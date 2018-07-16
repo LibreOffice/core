@@ -97,14 +97,14 @@ protected:
     ScfUInt32Vec            maSheetOffsets;
     ScRange                 maScOleSize;        /// Visible range if embedded.
 
-    ExcelToSc*              pFormConv;          // formula-converter
+    std::unique_ptr<ExcelToSc> pFormConv;          // formula-converter
 
     XclImpOutlineBuffer*    pColOutlineBuff;
     XclImpOutlineBuffer*    pRowOutlineBuff;
     XclImpColRowSettings*   pColRowBuff;        // Col/Row settings 1 table
 
     typedef std::vector< std::unique_ptr<XclImpOutlineDataBuffer> > XclImpOutlineListBuffer;
-    XclImpOutlineListBuffer* pOutlineListBuffer;
+    std::unique_ptr<XclImpOutlineListBuffer> pOutlineListBuffer;
 
     LastFormulaMapType maLastFormulaCells; // Keep track of last formula cells in each column.
     LastFormula* mpLastFormula;
