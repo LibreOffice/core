@@ -1462,6 +1462,16 @@ public:
         gtk_widget_set_direction(m_pWidget, bRTL ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
     }
 
+    virtual void freeze() override
+    {
+        gtk_widget_freeze_child_notify(m_pWidget);
+    }
+
+    virtual void thaw() override
+    {
+        gtk_widget_thaw_child_notify(m_pWidget);
+    }
+
     virtual ~GtkInstanceWidget() override
     {
         if (m_nFocusInSignalId)
@@ -3745,7 +3755,7 @@ public:
     {
         disable_notify_events();
         g_object_ref(m_pListStore);
-        gtk_widget_freeze_child_notify(GTK_WIDGET(m_pTreeView));
+        GtkInstanceContainer::freeze();
         gtk_tree_view_set_model(m_pTreeView, nullptr);
         enable_notify_events();
     }
@@ -3754,7 +3764,7 @@ public:
     {
         disable_notify_events();
         gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pListStore));
-        gtk_widget_thaw_child_notify(GTK_WIDGET(m_pTreeView));
+        GtkInstanceContainer::thaw();
         g_object_unref(m_pListStore);
         enable_notify_events();
     }
@@ -4762,7 +4772,7 @@ public:
 
     virtual void freeze() override
     {
-        gtk_widget_freeze_child_notify(GTK_WIDGET(m_pComboBoxText));
+        GtkInstanceContainer::freeze();
         if (m_xSorter)
         {
             GtkTreeModel* pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
@@ -4779,7 +4789,7 @@ public:
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
             gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
         }
-        gtk_widget_thaw_child_notify(GTK_WIDGET(m_pComboBoxText));
+        GtkInstanceContainer::thaw();
     }
 
     virtual ~GtkInstanceComboBoxText() override
