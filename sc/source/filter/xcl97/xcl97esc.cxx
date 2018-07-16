@@ -110,7 +110,7 @@ XclEscherEx::~XclEscherEx()
 {
     OSL_ENSURE( aStack.empty(), "~XclEscherEx: stack not empty" );
     DeleteCurrAppData();
-    delete pTheClientData;
+    pTheClientData.reset();
 }
 
 sal_uInt32 XclEscherEx::InitNextDffFragment()
@@ -199,8 +199,8 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             UpdateDffFragmentEnd();
         }
     }
-    aStack.push( std::make_pair( pCurrXclObj, pCurrAppData ) );
-    pCurrAppData = new XclEscherHostAppData;
+    aStack.push( std::make_pair( pCurrXclObj, std::move(pCurrAppData) ) );
+    pCurrAppData.reset( new XclEscherHostAppData );
     SdrObject* pObj = GetSdrObjectFromXShape( rxShape );
     //added for exporting OCX control
     sal_Int16 nMsCtlType = 0;
@@ -272,7 +272,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         }
         else
         {
-            pCurrAppData->SetClientData( pTheClientData );
+            pCurrAppData->SetClientData( pTheClientData.get() );
             if ( nAdditionalText == 0 )
             {
                 if ( pObj )
@@ -340,7 +340,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     }
     if ( !pCurrXclObj )
         pCurrAppData->SetDontWriteShape( true );
-    return pCurrAppData;
+    return pCurrAppData.get();
 }
 
 void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
@@ -382,8 +382,7 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
     else
     {
         pCurrXclObj = aStack.top().first;
-        pCurrAppData = aStack.top().second;
-        aStack.pop();
+        pCurrAppData = std::move(aStack.top().second);
     }
     if( nAdditionalText == 3 )
         nAdditionalText = 0;
@@ -394,7 +393,7 @@ EscherExHostAppData* XclEscherEx::EnterAdditionalTextGroup()
     nAdditionalText = 1;
     pAdditionalText = static_cast<XclEscherClientTextbox*>( pCurrAppData->GetClientTextbox() );
     pCurrAppData->SetClientTextbox( nullptr );
-    return pCurrAppData;
+    return pCurrAppData.get();
 }
 
 void XclEscherEx::EndDocument()
@@ -511,8 +510,8 @@ void XclEscherEx::DeleteCurrAppData()
         delete pCurrAppData->GetClientAnchor();
 //      delete pCurrAppData->GetClientData();
         delete pCurrAppData->GetClientTextbox();
-    delete pCurrAppData->GetInteractionInfo();
-        delete pCurrAppData;
+        delete pCurrAppData->GetInteractionInfo();
+        pCurrAppData.reset();
     }
 }
 
