@@ -548,6 +548,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 else
                 {
+                    Pop();
                     switch ( eFunc )
                     {
                         case ifAVERAGE:
@@ -557,7 +558,6 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         {
                             if ( bTextAsZero )
                             {
-                                Pop();
                                 nCount++;
                                 if ( eFunc == ifPRODUCT )
                                     fRes = 0.0;
@@ -571,7 +571,6 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         }
                         break;
                         default:
-                            Pop();
                             nCount++;
                     }
                 }
