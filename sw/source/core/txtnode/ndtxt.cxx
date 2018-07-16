@@ -3590,6 +3590,67 @@ namespace {
     // End of method <HandleModifyAtTextNode>
 }
 
+void SwTextNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+{
+    bool bWasNotifiable = m_bNotifiable;
+    m_bNotifiable = false;
+
+    // Override Modify so that deleting styles works properly (outline
+    // numbering!).
+    // Never call ChgTextCollUpdateNum for Nodes in Undo.
+    if( pOldValue && pNewValue && RES_FMT_CHG == pOldValue->Which() &&
+        GetRegisteredIn() == static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat &&
+        GetNodes().IsDocNodes() )
+    {
+        ChgTextCollUpdateNum(
+                        static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat),
+                        static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat) );
+    }
+
+    // reset fill information
+    if (maFillAttributes.get() && pNewValue)
+    {
+        const sal_uInt16 nWhich = pNewValue->Which();
+        bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
+
+        if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
+        {
+            SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet());
+
+            for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
+            {
+                bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
+            }
+        }
+
+        if(bReset)
+        {
+            maFillAttributes.reset();
+        }
+    }
+
+    if ( !mbInSetOrResetAttr )
+    {
+        HandleModifyAtTextNode( *this, pOldValue, pNewValue );
+    }
+
+    SwContentNode::Modify( pOldValue, pNewValue );
+
+    SwDoc * pDoc = GetDoc();
+    // #125329# - assure that text node is in document nodes array
+    if ( pDoc && !pDoc->IsInDtor() && &pDoc->GetNodes() == &GetNodes() )
+    {
+        pDoc->GetNodes().UpdateOutlineNode(*this);
+    }
+
+    m_bNotifiable = bWasNotifiable;
+
+    if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
+    {   // invalidate cached uno object
+        SetXParagraph(css::uno::Reference<css::text::XTextContent>(nullptr));
+    }
+}
+
 SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
 {
     OSL_ENSURE( pNewColl,"ChgFormatColl: Collectionpointer has value 0." );
@@ -4919,75 +4980,10 @@ bool SwTextNode::IsInContent() const
 
 void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-    {
-        bool bWasNotifiable = m_bNotifiable;
-        m_bNotifiable = false;
-
-        const auto pOldValue = pLegacyHint->m_pOld;
-        const auto pNewValue = pLegacyHint->m_pNew;
-        // Override Modify so that deleting styles works properly (outline
-        // numbering!).
-        // Never call ChgTextCollUpdateNum for Nodes in Undo.
-        if( pOldValue
-                && pNewValue
-                && RES_FMT_CHG == pOldValue->Which()
-                && GetRegisteredIn() == static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat
-                && GetNodes().IsDocNodes() )
-        {
-            ChgTextCollUpdateNum(
-                    static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat),
-                    static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat) );
-        }
-
-        // reset fill information
-        if (maFillAttributes.get() && pNewValue)
-        {
-            const sal_uInt16 nWhich = pNewValue->Which();
-            bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
-
-            if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
-            {
-                SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet());
-
-                for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
-                {
-                    bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
-                }
-            }
-
-            if(bReset)
-            {
-                maFillAttributes.reset();
-            }
-        }
-
-        if ( !mbInSetOrResetAttr )
-        {
-            HandleModifyAtTextNode( *this, pOldValue, pNewValue );
-        }
-
-        SwContentNode::SwClientNotify(rModify, rHint);
-
-        SwDoc* pDoc = GetDoc();
-        // #125329# - assure that text node is in document nodes array
-        if ( pDoc && !pDoc->IsInDtor() && &pDoc->GetNodes() == &GetNodes() )
-        {
-            pDoc->GetNodes().UpdateOutlineNode(*this);
-        }
-
-        m_bNotifiable = bWasNotifiable;
-
-        if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
-        {   // invalidate cached uno object
-            SetXParagraph(css::uno::Reference<css::text::XTextContent>(nullptr));
-        }
-    }
-    else if (auto pHint = dynamic_cast<const SwAttrHint*>(&rHint))
-    {
-        if ( pHint && &rModify == GetRegisteredIn() )
-            ChkCondColl();
-    }
+    SwClient::SwClientNotify(rModify, rHint);
+    const SwAttrHint* pHint = dynamic_cast<const SwAttrHint*>(&rHint);
+    if ( pHint && &rModify == GetRegisteredIn() )
+        ChkCondColl();
 }
 
 uno::Reference< rdf::XMetadatable >
