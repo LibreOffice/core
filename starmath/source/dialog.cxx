@@ -1987,8 +1987,7 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
     m_aSymbolDisplay.SetFont(aFontMetric);
 
     // update subset listbox for new font's unicode subsets
-    FontCharMapRef xFontCharMap;
-    m_xCharsetDisplay->GetFontCharMap( xFontCharMap );
+    FontCharMapRef xFontCharMap = m_xCharsetDisplay->GetFontCharMap();
     m_xSubsetMap.reset(new SubsetMap( xFontCharMap ));
 
     m_xFontsSubsetLB->clear();

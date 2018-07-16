@@ -20,7 +20,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/fontcharmap.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <rtl/textenc.h>
@@ -844,10 +843,15 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
     return aFind->second.get();
 }
 
-
 sal_Int32 SvxShowCharSet::getMaxCharCount() const
 {
     return mxFontCharMap->GetCharCount();
+}
+
+FontCharMapRef SvxShowCharSet::GetFontCharMap()
+{
+    RecalculateFont(*mxVirDev);
+    return mxFontCharMap;
 }
 
 // TODO: should be moved into Font Attributes stuff
