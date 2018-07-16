@@ -71,7 +71,7 @@ FormulaToken::FormulaToken( StackVar eTypeP, OpCode e ) :
 }
 
 FormulaToken::FormulaToken( const FormulaToken& r ) :
-    IFormulaToken(), eOp(r.eOp), eType( r.eType ), mnRefCnt(0)
+    eOp(r.eOp), eType( r.eType ), mnRefCnt(0)
 {
 }
 

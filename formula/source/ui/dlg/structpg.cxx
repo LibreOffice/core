@@ -26,6 +26,7 @@
 #include <formula/formdata.hxx>
 #include <formula/formula.hxx>
 #include <formula/IFunctionDescription.hxx>
+#include <formula/token.hxx>
 #include <bitmaps.hlst>
 
 namespace formula
@@ -45,10 +46,10 @@ StructListBox::StructListBox(vcl::Window* pParent, WinBits nBits ):
 SvTreeListEntry* StructListBox::InsertStaticEntry(
         const OUString& rText,
         const Image& rEntryImg,
-        SvTreeListEntry* pParent, sal_uLong nPos, const IFormulaToken* pToken )
+        SvTreeListEntry* pParent, sal_uLong nPos, const FormulaToken* pToken )
 {
     SvTreeListEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, false, nPos,
-            const_cast<IFormulaToken*>(pToken) );
+            const_cast<FormulaToken*>(pToken) );
     return pEntry;
 }
 
@@ -117,7 +118,7 @@ void StructPage::ClearStruct()
 }
 
 SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
-                                       sal_uInt16 nFlag, sal_uLong nPos, const IFormulaToken* pIFormulaToken )
+                                       sal_uInt16 nFlag, sal_uLong nPos, const FormulaToken* pIFormulaToken )
 {
     m_pTlbStruct->SetActiveFlag( false );
 
@@ -126,7 +127,7 @@ SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry
     {
         case STRUCT_FOLDER:
             pEntry = m_pTlbStruct->InsertEntry( rText, pParent, false, nPos,
-                    const_cast<IFormulaToken*>(pIFormulaToken));
+                    const_cast<FormulaToken*>(pIFormulaToken));
         break;
         case STRUCT_END:
             pEntry = m_pTlbStruct->InsertStaticEntry( rText, maImgEnd, pParent, nPos, pIFormulaToken );
@@ -149,14 +150,14 @@ OUString StructPage::GetEntryText(SvTreeListEntry* pEntry) const
     return  aString;
 }
 
-const IFormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
+const FormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
 {
     if (pEntry != nullptr)
     {
-        const IFormulaToken * pToken = static_cast<const IFormulaToken *>(pEntry->GetUserData());
+        const FormulaToken * pToken = static_cast<const FormulaToken *>(pEntry->GetUserData());
         if (pToken != nullptr)
         {
-            if ( !(pToken->isFunction() || pToken->getArgumentCount() > 1 ) )
+            if ( !(pToken->IsFunction() || pToken->GetParamCount() > 1 ) )
             {
                 return GetFunctionEntry(m_pTlbStruct->GetParent(pEntry));
             }
@@ -178,10 +179,10 @@ IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb, void )
             SvTreeListEntry*    pCurEntry = m_pTlbStruct->GetCurEntry();
             if (pCurEntry != nullptr)
             {
-                pSelectedToken = static_cast<const IFormulaToken *>(pCurEntry->GetUserData());
+                pSelectedToken = static_cast<const FormulaToken *>(pCurEntry->GetUserData());
                 if (pSelectedToken != nullptr)
                 {
-                    if ( !(pSelectedToken->isFunction() || pSelectedToken->getArgumentCount() > 1) )
+                    if ( !(pSelectedToken->IsFunction() || pSelectedToken->GetParamCount() > 1) )
                     {
                         pSelectedToken = GetFunctionEntry(pCurEntry);
                     }

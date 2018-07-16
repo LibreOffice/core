@@ -121,7 +121,7 @@ inline std::string StackVarEnumToString(StackVar const e)
     return os.str();
 }
 
-class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
+class FORMULA_DLLPUBLIC FormulaToken
 {
     OpCode                      eOp;
             FormulaToken&            operator=( const FormulaToken& ) = delete;
@@ -139,7 +139,7 @@ public:
     void                Delete()                { delete this; }
     void                DeleteIfZeroRef()       { if (mnRefCnt == 0) delete this; }
     StackVar            GetType() const         { return eType; }
-            bool                IsFunction() const; // pure functions, no operators
+    bool                IsFunction() const; // pure functions, no operators
 
     bool IsExternalRef() const;
     bool IsRef() const;
@@ -213,16 +213,6 @@ public:
 
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;
     virtual bool                operator==( const FormulaToken& rToken ) const;
-
-    virtual bool isFunction() const override
-    {
-        return IsFunction();
-    }
-
-    virtual sal_uInt32 getArgumentCount() const override
-    {
-        return GetParamCount();
-    }
 
     /** This is dirty and only the compiler should use it! */
     struct PrivateAccess { friend class FormulaCompiler; private: PrivateAccess() { }  };

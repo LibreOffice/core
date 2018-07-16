@@ -2193,7 +2193,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             // shall separate a function-name from the left parenthesis (()
             // that follows it." and Excel even chokes on it.
             const FormulaToken* p = maArrIterator.PeekPrevNoSpaces();
-            if (p && p->isFunction())
+            if (p && p->IsFunction())
             {
                 p = maArrIterator.PeekNextNoSpaces();
                 if (p && p->GetOpCode() == ocOpen)
