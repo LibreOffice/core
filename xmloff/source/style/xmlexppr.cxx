@@ -487,19 +487,13 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
 
 struct SvXMLExportPropertyMapper::Impl
 {
-    typedef std::map<css::uno::Reference<css::beans::XPropertySetInfo>, FilterPropertiesInfo_Impl*> CacheType;
+    typedef std::map<css::uno::Reference<css::beans::XPropertySetInfo>, std::unique_ptr<FilterPropertiesInfo_Impl>> CacheType;
     CacheType maCache;
 
     rtl::Reference<SvXMLExportPropertyMapper> mxNextMapper;
     rtl::Reference<XMLPropertySetMapper> mxPropMapper;
 
     OUString maStyleName;
-
-    ~Impl()
-    {
-        for (auto const& itemCache : maCache)
-            delete itemCache.second;
-    }
 };
 
 // ctor/dtor , class SvXMLExportPropertyMapper
@@ -573,7 +567,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
 
     Impl::CacheType::iterator aIter = mpImpl->maCache.find(xInfo);
     if (aIter != mpImpl->maCache.end())
-        pFilterInfo = (*aIter).second;
+        pFilterInfo = (*aIter).second.get();
 
     bool bDelInfo = false;
     if( !pFilterInfo )
@@ -608,7 +602,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
         xInfo = xWeakInfo;
         if( xInfo.is() )
         {
-            mpImpl->maCache.emplace(xInfo, pFilterInfo);
+            mpImpl->maCache.emplace(xInfo, std::unique_ptr<FilterPropertiesInfo_Impl>(pFilterInfo));
         }
         else
             bDelInfo = true;
