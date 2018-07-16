@@ -107,7 +107,8 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SwRect        maInvalidRect;
 
     SfxViewShell *mpSfxViewShell;
-    SwViewShellImp *mpImp;           // Core-internals of SwViewShell.
+    std::unique_ptr<SwViewShellImp>
+                  mpImp;             // Core-internals of SwViewShell.
                                      // The pointer is never 0.
 
     VclPtr<vcl::Window>   mpWin;     ///< = 0 during printing or pdf export
@@ -118,8 +119,8 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
                                      // (because a scaling has to be set at
                                      // the original printer)
 
-    SwViewOption *mpOpt;
-    SwAccessibilityOptions* mpAccOptions;
+    std::unique_ptr<SwViewOption> mpOpt;
+    std::unique_ptr<SwAccessibilityOptions> mpAccOptions;
 
     bool  mbDocSizeChgd     :1;  // For DocChgNotify(): Announce new DocSize
                                     // at EndAction to DocMDI.
@@ -183,8 +184,8 @@ protected:
 
 public:
 
-          SwViewShellImp *Imp() { return mpImp; }
-    const SwViewShellImp *Imp() const { return mpImp; }
+          SwViewShellImp *Imp() { return mpImp.get(); }
+    const SwViewShellImp *Imp() const { return mpImp.get(); }
 
     const SwNodes& GetNodes() const;
 
@@ -417,7 +418,7 @@ public:
     // Calls Idle-formatter of Layout.
     void LayoutIdle();
 
-    const SwViewOption *GetViewOptions() const { return mpOpt; }
+    const SwViewOption *GetViewOptions() const { return mpOpt.get(); }
     virtual void  ApplyViewOptions( const SwViewOption &rOpt );
            void  SetUIOptions( const SwViewOption &rOpt );
     virtual void  SetReadonlyOption(bool bSet);          // Set readonly-bit of ViewOptions.
@@ -425,7 +426,7 @@ public:
            void  SetPrtFormatOption(bool bSet);         // Set PrtFormat-Bit of ViewOptions.
            void  SetReadonlySelectionOption(bool bSet); // Change the selection mode in readonly docs.
 
-    const SwAccessibilityOptions* GetAccessibilityOptions() const { return mpAccOptions;}
+    const SwAccessibilityOptions* GetAccessibilityOptions() const { return mpAccOptions.get();}
 
     static void           SetShellRes( ShellResource* pRes ) { mpShellRes = pRes; }
     static ShellResource* GetShellRes();
