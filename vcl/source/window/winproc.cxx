@@ -1508,9 +1508,9 @@ private:
     CommandSwipeData m_aSwipeData;
 public:
     HandleSwipeEvent(vcl::Window *pWindow, const SalSwipeEvent& rEvt)
-        : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY))
+        : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY)),
+          m_aSwipeData(rEvt.mnVelocityX)
     {
-        m_aSwipeData = CommandSwipeData(rEvt.mnVelocityX);
     }
     virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) override
     {
@@ -1530,9 +1530,9 @@ private:
     CommandLongPressData m_aLongPressData;
 public:
     HandleLongPressEvent(vcl::Window *pWindow, const SalLongPressEvent& rEvt)
-        : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY))
+        : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY)),
+          m_aLongPressData(rEvt.mnX, rEvt.mnY)
     {
-        m_aLongPressData = CommandLongPressData(rEvt.mnX, rEvt.mnY);
     }
     virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) override
     {

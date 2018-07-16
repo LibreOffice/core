@@ -204,15 +204,13 @@ public:
 };
 
 ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
+    mpBuf ( static_cast<Scanline>(rtl_allocateZeroMemory(nWidth * nHeight)) ),
+    mpScan ( static_cast<Scanline*>(rtl_allocateMemory(nHeight * sizeof(Scanline))) ),
     mnWidth ( nWidth ),
     mnHeight( nHeight )
 {
     const long  nWidthAl = ( nWidth >> 2 ) + 1;
-    const long  nSize = nWidthAl * nHeight;
-    Scanline    pTmp = mpBuf = static_cast<Scanline>(rtl_allocateMemory( nSize ));
-
-    memset( mpBuf, 0, nSize );
-    mpScan = static_cast<Scanline*>(rtl_allocateMemory( nHeight * sizeof( Scanline ) ));
+    Scanline    pTmp = mpBuf;
 
     for( long nY = 0; nY < nHeight; pTmp += nWidthAl )
         mpScan[ nY++ ] = pTmp;
@@ -281,9 +279,9 @@ public:
 
 ImplChain::ImplChain() :
     mnArraySize ( 1024 ),
-    mnCount     ( 0 )
+    mnCount     ( 0 ),
+    mpCodes     ( new sal_uInt8[mnArraySize] )
 {
-    mpCodes.reset( new sal_uInt8[ mnArraySize ] );
 }
 
 void ImplChain::ImplGetSpace()

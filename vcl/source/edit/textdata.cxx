@@ -266,9 +266,9 @@ TEParaPortions::~TEParaPortions()
 }
 
 IdleFormatter::IdleFormatter()
+    : mpView(nullptr)
+    , mnRestarts(0)
 {
-    mpView = nullptr;
-    mnRestarts = 0;
     SetPriority(TaskPriority::HIGH_IDLE);
 }
 
@@ -314,12 +314,11 @@ TextHint::TextHint( SfxHintId Id, sal_uLong nValue ) : SfxHint( Id ), mnValue(nV
 }
 
 TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartPos )
-: aOldTextAfterStartPos( rOldTextAfterStartPos )
+    : aOldTextAfterStartPos(rOldTextAfterStartPos)
+    , aPos(rPos)
+    , nLen(0)
+    , bWasCursorOverwrite(false)
 {
-    aPos = rPos;
-    nLen = 0;
-    pAttribs = nullptr;
-    bWasCursorOverwrite = false;
 }
 
 TEIMEInfos::~TEIMEInfos()

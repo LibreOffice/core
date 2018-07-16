@@ -135,11 +135,11 @@ void TextUndo::SetSelection( const TextSelection& rSel )
 }
 
 TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uInt32 nPara )
-                    : TextUndo( pTextEngine )
+    : TextUndo( pTextEngine )
+    , mbDelObject( true)
+    , mnPara( nPara )
+    , mpNode( pNode )
 {
-    mpNode = pNode;
-    mnPara = nPara;
-    mbDelObject = true;
 }
 
 TextUndoDelPara::~TextUndoDelPara()
@@ -187,10 +187,10 @@ OUString TextUndoDelPara::GetComment () const
 }
 
 TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nPos )
-                    :   TextUndo( pTextEngine )
+    : TextUndo( pTextEngine )
+    , mnPara( nPara )
+    , mnSepPos( nPos )
 {
-    mnPara = nPara;
-    mnSepPos = nPos;
 }
 
 TextUndoConnectParas::~TextUndoConnectParas()
@@ -215,10 +215,10 @@ OUString TextUndoConnectParas::GetComment () const
 }
 
 TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nPos )
-                    : TextUndo( pTextEngine )
+    : TextUndo( pTextEngine )
+    , mnPara( nPara )
+    , mnSepPos ( nPos )
 {
-    mnPara = nPara;
-    mnSepPos = nPos;
 }
 
 TextUndoSplitPara::~TextUndoSplitPara()
