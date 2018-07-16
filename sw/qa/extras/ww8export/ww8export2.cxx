@@ -318,6 +318,7 @@ DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
 DECLARE_WW8EXPORT_TEST(testTdf70838b_verticalRotation, "tdf70838b_verticalRotation.odt")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     tools::Rectangle aGroupShape = pPage->GetObj(0)->GetSnapRect();
