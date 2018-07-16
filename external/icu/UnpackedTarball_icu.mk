@@ -34,7 +34,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-clang-cl.patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
 	external/icu/icu4c-khmerbreakengine.patch.1 \
-	external/icu/ofz4860.patch.2 \
 	external/icu/icu4c-61-werror-shadow.patch.1 \
 ))
 

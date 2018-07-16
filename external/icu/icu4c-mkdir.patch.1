@@ -1,10 +1,10 @@
 diff -ur icu.org/source/data/Makefile.in icu/source/data/Makefile.in
---- icu.org/source/data/Makefile.in	2016-06-15 20:58:17.000000000 +0200
-+++ icu/source/data/Makefile.in	2017-04-21 22:29:00.747158002 +0200
+--- icu.org/source/data/Makefile.in	2018-06-21 11:39:15.000000000 +0200
++++ icu/source/data/Makefile.in	2018-07-16 13:18:26.928109541 +0200
 @@ -367,6 +367,7 @@
  ifeq ($(PKGDATA_MODE),dll)
  SO_VERSION_DATA = $(OUTTMPDIR)/icudata.res
- $(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc
+ $(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc | build-dir
 +	mkdir -p $(OUTTMPDIR)
  ifeq ($(MSYS_RC_MODE),1)
  	rc.exe -i$(srcdir)/../common -i$(top_builddir)/common -fo$@ $(CPPFLAGS) $<
