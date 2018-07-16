@@ -1064,6 +1064,13 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
                 aAnchorSprms.set(rCharacterSprm.first, rCharacterSprm.second);
             }
         }
+
+        if (m_aStates.top().aShape.aWrapSprm.first != 0)
+            // Replay of a buffered shape, wrap sprm there has priority over
+            // character sprms of the current state.
+            aAnchorSprms.set(m_aStates.top().aShape.aWrapSprm.first,
+                             m_aStates.top().aShape.aWrapSprm.second);
+
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
         if (!aAnchorWrapAttributes.empty() && nWrap == -1)
             aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare,
@@ -1628,6 +1635,11 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             // otherwise it gets re-buffered.
             RTFBuffer_t* pCurrentBuffer = m_aStates.top().pCurrentBuffer;
             m_aStates.top().pCurrentBuffer = nullptr;
+
+            // Set current shape during replay, needed by e.g. wrap in
+            // background.
+            m_aStates.top().aShape = std::get<1>(aTuple)->getShape();
+
             m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), true, RTFSdrImport::SHAPE);
             m_aStates.top().pCurrentBuffer = pCurrentBuffer;
         }
@@ -2251,6 +2263,18 @@ RTFError RTFDocumentImpl::popState()
                     m_aStates.top().pCurrentBuffer->push_back(
                         Buf_t(BUFFER_PICTURE, pPictureValue, nullptr));
                     auto pValue = new RTFValue(m_aStates.top().aShape);
+
+                    // Buffer wrap type.
+                    for (auto& rCharacterSprm : m_aStates.top().aCharacterSprms)
+                    {
+                        if (rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapNone
+                            || rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapTight)
+                        {
+                            m_aStates.top().aShape.aWrapSprm = rCharacterSprm;
+                            break;
+                        }
+                    }
+
                     m_aStates.top().pCurrentBuffer->push_back(
                         Buf_t(BUFFER_RESOLVESHAPE, pValue, nullptr));
                 }
