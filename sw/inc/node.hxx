@@ -360,8 +360,9 @@ private:
 class SW_DLLPUBLIC SwContentNode: public SwModify, public SwNode, public SwIndexReg
 {
 
-    sw::WriterMultiListener m_aCondCollListener;
-    SwFormatColl* m_pCondColl;
+//FEATURE::CONDCOLL
+    std::unique_ptr<SwDepend> m_pCondColl;
+//FEATURE::CONDCOLL
     mutable bool mbSetModifyAtAttr;
 
 protected:
@@ -382,7 +383,7 @@ protected:
        SwAttrSet (handle): */
     sal_uInt16 ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds );
 
-    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
 
@@ -718,14 +719,14 @@ inline const SwDoc* SwNode::GetDoc() const
 
 inline SwFormatColl* SwContentNode::GetCondFormatColl() const
 {
-    return m_pCondColl;
+    return m_pCondColl ? static_cast<SwFormatColl*>(m_pCondColl->GetRegisteredIn()) : nullptr;
 }
 
 inline SwFormatColl& SwContentNode::GetAnyFormatColl() const
 {
-    return m_pCondColl
-            ? *m_pCondColl
-            : *const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn()));
+    return m_pCondColl && m_pCondColl->GetRegisteredIn()
+                ? *static_cast<SwFormatColl*>(m_pCondColl->GetRegisteredIn())
+                : *const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn()));
 }
 
 inline const SwAttrSet& SwContentNode::GetSwAttrSet() const
