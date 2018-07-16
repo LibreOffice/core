@@ -150,6 +150,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116410, "tdf116410.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDefaultStyle, "defaultStyle.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Default Style", OUString("Title"), getProperty<OUString>(getParagraph(1), "ParaStyleName") );
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
