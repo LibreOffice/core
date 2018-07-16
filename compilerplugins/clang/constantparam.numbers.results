@@ -78,26 +78,6 @@ chart2/source/tools/RangeHighlighter.cxx:43
     void lcl_fillRanges(class com::sun::star::uno::Sequence<struct com::sun::star::chart2::data::HighlightedRange> &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,class Color,int)
     int nIndex
     -1
-chart2/source/view/charttypes/GL3DBarChart.cxx:157
-    void chart::RenderAnimationThread::RenderAnimationThread(class chart::GL3DBarChart *,const struct glm::detail::tvec3<float> &,const struct glm::detail::tvec3<float> &,const int)
-    const int nSteps
-    200
-chart2/source/view/inc/GL3DRenderer.hxx:193
-    void chart::opengl3D::OpenGL3DRenderer::AddShape3DExtrudeObject(_Bool,class Color,unsigned int,const struct glm::detail::tmat4x4<float> &,unsigned int)
-    unsigned int specular
-    16777215
-chart2/source/view/inc/GL3DRenderer.hxx:260
-    void chart::opengl3D::OpenGL3DRenderer::CreateActualRoundedCube(float,int,int,float,float,float)
-    int iSubDivZ
-    20
-chart2/source/view/inc/GL3DRenderer.hxx:260
-    void chart::opengl3D::OpenGL3DRenderer::CreateActualRoundedCube(float,int,int,float,float,float)
-    int iSubDivY
-    20
-chart2/source/view/main/OpenGLRender.hxx:117
-    int OpenGLRender::Create2DCircle(int)
-    int detail
-    100
 codemaker/source/javamaker/classfile.cxx:86
     void writeU4(class FileStream &,unsigned int)
     unsigned int data

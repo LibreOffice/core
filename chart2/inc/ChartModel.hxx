@@ -46,7 +46,6 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
 
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -68,7 +67,6 @@ namespace com { namespace sun { namespace star { namespace frame { class XModel;
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 class SvNumberFormatter;
-class OpenGLWindow;
 
 namespace chart
 {
@@ -100,7 +98,6 @@ typedef cppu::WeakImplHelper<
         ,css::document::XDocumentPropertiesSupplier
         ,css::chart2::data::XDataSource
         ,css::document::XUndoManagerSupplier
-        ,css::chart2::X3DChartWindowProvider
         ,css::util::XUpdatable
         ,css::qa::XDumper
         >
@@ -371,8 +368,6 @@ public:
 
     virtual void SAL_CALL createDefaultChart() override;
 
-    virtual sal_Bool SAL_CALL isOpenGLChart() override;
-
     // ____ XDataReceiver (public API) ____
     virtual void SAL_CALL
         attachDataProvider( const css::uno::Reference< css::chart2::data::XDataProvider >& xProvider ) override;
@@ -450,9 +445,6 @@ public:
     // ____ XDataSource ____ allows access to the currently used data and data ranges
     virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences() override;
 
-    // X3DChartWindowProvider
-    virtual void SAL_CALL setWindow( sal_uInt64 nWindowPtr ) override;
-
     // XUpdatable
     virtual void SAL_CALL update() override;
 
@@ -475,16 +467,9 @@ public:
 
     void removeDataProviders();
 
-#if HAVE_FEATURE_OPENGL
-    OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
-#endif
-
 private:
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
-#if HAVE_FEATURE_OPENGL
-    VclPtr<OpenGLWindow> mpOpenGLWindow;
-#endif
 };
 
 }  // namespace chart

@@ -18,7 +18,6 @@
 
 #include <rtl/ustring.hxx>
 
-class OpenGLWindow;
 namespace chart { struct VLineProperties; }
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace chart2 { class XFormattedString; } } } }
@@ -237,14 +236,6 @@ public:
          getOrCreateChartRootShape( const css::uno::Reference< css::drawing::XDrawPage>& xPage ) = 0;
 
     virtual void setPageSize( css::uno::Reference < css::drawing::XShapes > xChartShapes, const css::awt::Size& rSize ) = 0;
-
-    /**
-     * Only necessary for stateless implementations
-     */
-    virtual void render(css::uno::Reference< css::drawing::XShapes > xRootShape, bool bInitOpenGL) = 0;
-
-    virtual bool preRender(css::uno::Reference< css::drawing::XShapes > xRootShape, OpenGLWindow* pWindow) = 0;
-    virtual void postRender(OpenGLWindow* pWindow) = 0;
 
     virtual void clearPage(css::uno::Reference< css::drawing::XShapes > xRootShape) = 0;
 

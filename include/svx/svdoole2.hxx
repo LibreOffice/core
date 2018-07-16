@@ -160,7 +160,6 @@ public:
     css::uno::Reference< css::frame::XModel > getXModel() const;
 
     bool IsChart() const;
-    bool IsReal3DChart() const;
     bool IsCalc() const;
 
     bool UpdateLinkURL_Impl();

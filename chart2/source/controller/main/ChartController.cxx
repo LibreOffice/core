@@ -796,10 +796,6 @@ void SAL_CALL ChartController::dispose()
 
         //--release all resources and references
         {
-            uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(getModel(), uno::UNO_QUERY);
-            if(x3DWindowProvider.is())
-                x3DWindowProvider->setWindow(0);
-
             uno::Reference< util::XModeChangeBroadcaster > xViewBroadcaster( m_xChartView, uno::UNO_QUERY );
             if( xViewBroadcaster.is() )
                 xViewBroadcaster->removeModeChangeListener(this);

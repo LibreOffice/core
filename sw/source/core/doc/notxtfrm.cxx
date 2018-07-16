@@ -1248,9 +1248,8 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             }
 
             sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
-            if ( !bPrn && dynamic_cast< const SwCursorShell *>( pShell ) !=  nullptr && (
-                    (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
-                    pOLENd->GetOLEObj().GetObject().IsGLChart()))
+            if ( !bPrn && dynamic_cast< const SwCursorShell *>( pShell ) !=  nullptr &&
+                    (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
             {
                 const SwFlyFrame *pFly = FindFlyFrame();
                 assert( pFly != nullptr );

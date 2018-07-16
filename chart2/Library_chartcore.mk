@@ -23,17 +23,10 @@ $(eval $(call gb_Library_add_defs,chartcore,\
     -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
 ))
 
-ifeq ($(SYSTEM_GLM),TRUE)
-$(eval $(call gb_Library_add_defs,chartcore,\
-        -DGLM_ENABLE_EXPERIMENTAL \
-))
-endif
-
 $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/pch/precompiled_chartcore))
 
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
-	glm_headers \
 ))
 
 ifeq ($(ENABLE_HEADLESS),)
@@ -125,14 +118,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/VTitle \
     chart2/source/view/main/VButton \
 ))
-ifeq ($(ENABLE_HEADLESS),)
-$(eval $(call gb_Library_add_exception_objects,chartcore,\
-    chart2/source/view/main/3DChartObjects \
-    chart2/source/view/main/GL3DPlotterBase \
-    chart2/source/view/main/GL3DRenderer \
-    chart2/source/view/charttypes/GL3DBarChart \
-))
-endif
 
 # model pieces ...
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
@@ -172,8 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/template/ColumnLineDataInterpreter \
     chart2/source/model/template/DataInterpreter \
     chart2/source/model/template/FilledNetChartType \
-    chart2/source/model/template/GL3DBarChartType \
-    chart2/source/model/template/GL3DBarChartTypeTemplate \
     chart2/source/model/template/LineChartType \
     chart2/source/model/template/LineChartTypeTemplate \
     chart2/source/model/template/NetChartType \
