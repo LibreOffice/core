@@ -66,14 +66,6 @@ chart2/source/inc/MediaDescriptorHelper.hxx:75
     apphelper::MediaDescriptorHelper ReadOnly _Bool
 chart2/source/view/charttypes/PieChart.hxx:128
     chart::PieChart::PieLabelInfo fValue double
-chart2/source/view/inc/GL3DRenderer.hxx:63
-    chart::opengl3D::LightSource lightPower float
-chart2/source/view/inc/GL3DRenderer.hxx:80
-    chart::opengl3D::Polygon3DInfo twoSidesLighting _Bool
-chart2/source/view/inc/GL3DRenderer.hxx:94
-    chart::opengl3D::Extrude3DInfo twoSidesLighting _Bool
-chart2/source/view/inc/GL3DRenderer.hxx:123
-    chart::opengl3D::RoundBarMesh topThreshold float
 codemaker/source/cppumaker/dependencies.hxx:105
     codemaker::cppumaker::Dependencies m_voidDependency _Bool
 codemaker/source/cppumaker/dependencies.hxx:111

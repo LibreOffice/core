@@ -380,8 +380,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
                 uno::Reference< embed::XEmbeddedObject > xObject = pObj->GetObjRef();
                 try
                 {
-                    if ( (xObject->getStatus( pObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
-                         svt::EmbeddedObjectRef::IsGLChart(xObject) )
+                    if ( xObject->getStatus( pObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
                         xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
                     else
                     {
@@ -1849,20 +1848,6 @@ bool SdrOle2Obj::IsChart() const
         mpImpl->mbTypeAsked = true;
     }
     return mpImpl->mbIsChart;
-}
-
-bool SdrOle2Obj::IsReal3DChart() const
-{
-    if (!IsChart())
-        return false;
-
-    uno::Reference<chart2::XChartDocument> xChart2Document(getXModel(), uno::UNO_QUERY);
-    uno::Reference<chart2::XDiagram> xChart2Diagram(xChart2Document->getFirstDiagram(), uno::UNO_QUERY);
-
-    if (!xChart2Diagram.is())
-        return false;
-
-    return ChartHelper::isGL3DDiagram(xChart2Diagram);
 }
 
 void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic )

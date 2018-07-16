@@ -31,7 +31,6 @@ namespace chart {
 #define CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET "com.sun.star.chart2.FilledNetChartType"
 #define CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK "com.sun.star.chart2.CandleStickChartType"
 #define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE "com.sun.star.chart2.BubbleChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR "com.sun.star.chart2.GL3DBarChartType"
 
 } //namespace chart
 

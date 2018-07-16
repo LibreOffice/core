@@ -45,7 +45,6 @@
 
 #include <osl/module.hxx>
 
-#include <OpenglShapeFactory.hxx>
 #include <ShapeFactory.hxx>
 
 #include <config_features.h>
@@ -54,71 +53,12 @@ using namespace com::sun::star;
 
 namespace chart {
 
-namespace {
-
-typedef opengl::OpenglShapeFactory* (*getOpenglShapeFactory_)(void);
-
-#if HAVE_FEATURE_UI
-
-#ifndef DISABLE_DYNLOADING
-
-void thisModule() {}
-
-osl::Module* getOpenGLModule()
-{
-    static osl::Module aModule;
-    if (aModule.is())
-        // Already loaded.
-        return &aModule;
-
-    OUString aLibName(SVLIBRARY("chartopengl"));
-    bool bLoaded = aModule.loadRelative(&thisModule, aLibName);
-    if (!bLoaded)
-        bLoaded = aModule.load(aLibName);
-
-    return bLoaded ? &aModule : nullptr;
-}
-
-#endif
-
-#endif
-
-}
-
-#ifdef DISABLE_DYNLOADING
-extern "C" opengl::OpenglShapeFactory* getOpenglShapeFactory();
-#endif
-
 AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(const uno::Reference< lang::XMultiServiceFactory>& xFactory)
 {
     static AbstractShapeFactory* pShapeFactory = nullptr;
 
     if (pShapeFactory)
         return pShapeFactory;
-
-#if HAVE_FEATURE_UI
-    if(getenv("CHART_DUMMY_FACTORY") && !Application::IsHeadlessModeEnabled())
-    {
-#ifndef DISABLE_DYNLOADING
-        osl::Module* pModule = getOpenGLModule();
-        if(pModule)
-        {
-            oslGenericFunction fn = pModule->getFunctionSymbol("getOpenglShapeFactory");
-            if(fn)
-            {
-
-                pShapeFactory = reinterpret_cast<getOpenglShapeFactory_>(fn)();
-                pShapeFactory->m_xShapeFactory = xFactory;
-            }
-        }
-#elif defined(IOS) || defined(ANDROID) // Library_chartopengl is not portable enough yet
-        pShapeFactory = NULL;
-#else
-        pShapeFactory = getOpenglShapeFactory();
-        pShapeFactory->m_xShapeFactory = xFactory;
-#endif
-    }
-#endif
 
     if (!pShapeFactory)
         pShapeFactory = new ShapeFactory(xFactory);
