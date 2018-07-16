@@ -82,7 +82,6 @@ private:
     ChartController* m_pWindowController;
     bool m_bInPaint;
     VclPtr<vcl::Window> m_pViewShellWindow;
-    VclPtr<vcl::Window> m_pOpenGLWindow;
 
     void adjustHighContrastMode();
 };

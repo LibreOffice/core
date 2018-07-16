@@ -30,16 +30,6 @@ chart2/source/controller/inc/dlg_View3D.hxx:53
     chart::View3DDialog m_aControllerLocker class chart::ControllerLockHelper
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-chart2/source/view/inc/GL3DRenderer.hxx:54
-    chart::opengl3D::MaterialParameters pad float
-chart2/source/view/inc/GL3DRenderer.hxx:55
-    chart::opengl3D::MaterialParameters pad1 float
-chart2/source/view/inc/GL3DRenderer.hxx:64
-    chart::opengl3D::LightSource pad1 float
-chart2/source/view/inc/GL3DRenderer.hxx:65
-    chart::opengl3D::LightSource pad2 float
-chart2/source/view/inc/GL3DRenderer.hxx:66
-    chart::opengl3D::LightSource pad3 float
 connectivity/source/commontools/RowFunctionParser.cxx:374
     connectivity::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::rule<ScannerT>
 connectivity/source/commontools/RowFunctionParser.cxx:375

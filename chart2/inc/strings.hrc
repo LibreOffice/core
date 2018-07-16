@@ -184,8 +184,6 @@
 #define STR_FILLED                                  NC_("STR_FILLED", "Filled")
 #define STR_TYPE_BUBBLE                             NC_("STR_TYPE_BUBBLE", "Bubble")
 #define STR_BUBBLE_1                                NC_("STR_BUBBLE_1", "Bubble Chart")
-#define STR_TYPE_GL3D_BAR                           NC_("STR_TYPE_GL3D_BAR", "GL3D Bar")
-#define STR_GL3D_BAR                                NC_("STR_GL3D_BAR", "GL3D Bar Chart")
 
 #define STR_INVALID_NUMBER                          NC_("STR_INVALID_NUMBER", "Numbers are required. Check your input.")
 #define STR_STEP_GT_ZERO                            NC_("STR_STEP_GT_ZERO", "The major interval requires a positive number. Check your input.")

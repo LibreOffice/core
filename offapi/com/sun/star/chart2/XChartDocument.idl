@@ -127,10 +127,6 @@ interface XChartDocument : ::com::sun::star::frame::XModel
     /** Creates a default chart type for a brand-new chart object.
      */
     void createDefaultChart();
-
-    /** Returns true if the chart is based on OpenGL
-     */
-    boolean isOpenGLChart();
 };
 
 } ; // chart2

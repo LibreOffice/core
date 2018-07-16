@@ -142,22 +142,6 @@ chart2/source/view/charttypes/CategoryPositionHelper.hxx:29
     void chart::CategoryPositionHelper::CategoryPositionHelper(double,double)
     double fSeriesCount
     1
-chart2/source/view/inc/GL3DBarChart.hxx:107
-    float chart::GL3DBarChart::addScreenTextShape(class rtl::OUString &,const struct glm::detail::tvec2<float> &,float,_Bool,const struct glm::detail::tvec4<float> &,const struct glm::detail::tvec3<float> &,unsigned int)
-    unsigned int nEvent
-    0
-chart2/source/view/inc/GL3DRenderer.hxx:184
-    void chart::opengl3D::OpenGL3DRenderer::Set3DSenceInfo(class Color,_Bool)
-    _Bool twoSidesLighting
-    1
-chart2/source/view/inc/GL3DRenderer.hxx:185
-    void chart::opengl3D::OpenGL3DRenderer::SetLightInfo(_Bool,class Color,const struct glm::detail::tvec4<float> &)
-    _Bool lightOn
-    1
-chart2/source/view/inc/GL3DRenderer.hxx:193
-    void chart::opengl3D::OpenGL3DRenderer::AddShape3DExtrudeObject(_Bool,class Color,unsigned int,const struct glm::detail::tmat4x4<float> &,unsigned int)
-    _Bool roundedCorner
-    1
 chart2/source/view/inc/PlottingPositionHelper.hxx:112
     void chart::PlottingPositionHelper::AllowShiftXAxisPos(_Bool)
     _Bool bAllowShift

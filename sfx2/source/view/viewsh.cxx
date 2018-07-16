@@ -1649,8 +1649,7 @@ void SfxViewShell::CheckIPClient_Impl(
     bool bAlwaysActive =
         ( ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) != 0 );
     bool bActiveWhenVisible =
-        ( (( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0 ) ||
-         svt::EmbeddedObjectRef::IsGLChart(pIPClient->GetObject()));
+        ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0;
 
     // this method is called when a client is created
     if (!pIPClient->IsObjectInPlaceActive())

@@ -36,9 +36,6 @@ namespace basegfx { class B2DRange; }
 class SAL_WARN_UNUSED SVX_DLLPUBLIC ChartHelper
 {
 public:
-    /// Check that the XDiagram is a real 3D chart.
-    static bool isGL3DDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram);
-
     /// Use chart's XUpdatable::update() to update values.
     static void updateChart( const css::uno::Reference< css::frame::XModel >& rXModel, bool bHardUpdate );
 

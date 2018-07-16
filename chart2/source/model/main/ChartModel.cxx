@@ -35,8 +35,6 @@
 #include <ModifyListenerHelper.hxx>
 #include <svx/charthelper.hxx>
 
-#include <vcl/openglwin.hxx>
-
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 
@@ -114,9 +112,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
                 "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ), uno::UNO_QUERY)
     , mnStart(0)
     , mnEnd(0)
-#if HAVE_FEATURE_OPENGL
-    , mpOpenGLWindow(nullptr)
-#endif
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -158,9 +153,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
     , mnStart(rOther.mnStart)
     , mnEnd(rOther.mnEnd)
-#if HAVE_FEATURE_OPENGL
-    , mpOpenGLWindow(nullptr)
-#endif
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -946,11 +938,6 @@ void SAL_CALL ChartModel::createDefaultChart()
     insertDefaultChart();
 }
 
-sal_Bool SAL_CALL ChartModel::isOpenGLChart()
-{
-    return ChartHelper::isGL3DDiagram(m_xDiagram);
-}
-
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
 {
@@ -1309,16 +1296,6 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
     mbTimeBased = true;
 }
 
-void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
-{
-#if HAVE_FEATURE_OPENGL
-    OpenGLWindow* pWindow = reinterpret_cast<OpenGLWindow*>(nWindowPtr);
-    mpOpenGLWindow = pWindow;
-#else
-    (void)nWindowPtr;
-#endif
-}
-
 void ChartModel::update()
 {
     if(!mxChartView.is())
@@ -1327,9 +1304,6 @@ void ChartModel::update()
     }
     mxChartView->setViewDirty();
     mxChartView->update();
-#if HAVE_FEATURE_OPENGL
-    mxChartView->updateOpenGLWindow();
-#endif
 }
 
 bool ChartModel::isDataFromSpreadsheet()
