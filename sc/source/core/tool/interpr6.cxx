@@ -564,7 +564,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                             }
                             else
                             {
-                                while (nParamCount-- > 0)
+                                while (nParamCount-- >= 0)
                                     Pop();
                                 SetError( FormulaError::NoValue );
                             }
