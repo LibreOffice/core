@@ -187,11 +187,11 @@ namespace sdr
                     // be the case already (SdrModel::Merge and SdDrawDocument::InsertBookmarkAsPage
                     // have already cloned the StyleSheets to the target-SdrModel when used in Draw/impress).
                     // If none is found, ImpGetDefaultStyleSheet will be used to set a 'default'
-                    // StyleSheet as StyleSheet implicitely later (that's what happened in the task,
+                    // StyleSheet as StyleSheet implicitly later (that's what happened in the task,
                     // thus the FillStyle changed to the 'default' Blue).
                     // Note: It *may* be necessary to do more for StyleSheets, e.g. clone/copy the
                     // StyleSheet Hierarchy from the source SdrModel and/or add the Items from there
-                    // as hard attibutes. If needed, have a look at the older AttributeProperties::SetModel
+                    // as hard attributes. If needed, have a look at the older AttributeProperties::SetModel
                     // implementation from e.g. libreoffice-6-0.
                     SfxStyleSheetBasePool* pTargetStyleSheetPool(rObj.getSdrModelFromSdrObject().GetStyleSheetPool());
 

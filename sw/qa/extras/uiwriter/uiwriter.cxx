@@ -6393,7 +6393,7 @@ void SwUiWriterTest::testFontEmbedding()
 
     // CASE 2 - font embedding enabled, but embed used fonts disabled
 
-    // Enable font embedding, diable embedding used font only
+    // Enable font embedding, disable embedding used font only
     xProps->setPropertyValue("EmbedFonts", uno::makeAny(true));
     xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::makeAny(false));
 

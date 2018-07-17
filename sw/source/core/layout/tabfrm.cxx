@@ -2861,7 +2861,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                     if ( nRightOffset > 0 )
                     {
                         // surrounding fly frames on the right
-                        // -> right indent is maximun of given right offset
+                        // -> right indent is maximum of given right offset
                         //    and wished right offset.
                         nRightSpacing = nRightLine + std::max( nRightOffset, nWishRight );
                     }
@@ -2892,7 +2892,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                     if ( nLeftOffset > 0 )
                     {
                         // surrounding fly frames on the left
-                        // -> right indent is maximun of given left offset
+                        // -> right indent is maximum of given left offset
                         //    and wished left offset.
                         nLeftSpacing = nLeftLine + std::max( nLeftOffset, nWishLeft );
                     }
@@ -2942,7 +2942,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                     {
                         // OD 07.03.2003 #i9040# - surround fly frames only, if
                         // they overlap with the table.
-                        // Thus, take maximun of left spacing and left offset.
+                        // Thus, take maximum of left spacing and left offset.
                         // OD 10.03.2003 #i9040# - consider left line attribute.
                         nLeftSpacing = std::max( nLeftSpacing, ( nLeftOffset + nLeftLine ) );
                     }
@@ -2952,7 +2952,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                     {
                         // OD 07.03.2003 #i9040# - surround fly frames only, if
                         // they overlap with the table.
-                        // Thus, take maximun of right spacing and right offset.
+                        // Thus, take maximum of right spacing and right offset.
                         // OD 10.03.2003 #i9040# - consider right line attribute.
                         nRightSpacing = std::max( nRightSpacing, ( nRightOffset + nRightLine ) );
                     }
@@ -2968,7 +2968,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                     {
                         // OD 10.03.2003 #i9040# - surround fly frames only, if
                         // they overlap with the table.
-                        // Thus, take maximun of right spacing and right offset.
+                        // Thus, take maximum of right spacing and right offset.
                         // OD 10.03.2003 #i9040# - consider left line attribute.
                         nLeftSpacing = std::max( nLeftSpacing, ( pAttrs->CalcLeftLine() + nLeftOffset ) );
                     }

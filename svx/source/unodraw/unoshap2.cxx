@@ -208,7 +208,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
     // pSdrShape->SetModel(GetSdrObject()->GetModel());
 
     // #85922# It makes no sense to set the layer asked
-    // from the group object since these is an iteration
+    // from the group object since this is an iteration
     // over the contained objects. In consequence, this
     // statement erases all layer information from the draw
     // objects. Layers need to be set at draw objects directly
