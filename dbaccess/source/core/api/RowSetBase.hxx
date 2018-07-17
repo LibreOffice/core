@@ -72,10 +72,10 @@ namespace dbaccess
                         public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
     {
     protected:
-        typedef std::vector<ORowSetDataColumn*>   TDataColumns;
+        typedef std::vector<ORowSetDataColumn*> TDataColumns;
         ::osl::Mutex*                           m_pMutex;           // this the mutex form the rowset itself
-        ::osl::Mutex                            // we need a extra mutex for columns to prevend deadlock when setting new values
-                                                // for a row
+        ::osl::Mutex                                                // we need a extra mutex for columns to prevent deadlock when setting new values
+                                                                    // for a row
                                                 m_aColumnsMutex;
 
         css::uno::Any                           m_aBookmark;
@@ -88,7 +88,7 @@ namespace dbaccess
         ORowSetCache*                           m_pCache;           // the cache is used by the rowset and his clone (shared)
         std::unique_ptr<ORowSetDataColumns>     m_pColumns;         // represent the select columns
         ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes
-        // is used when the formatkey for database types is set
+                                                                    // is used when the formatkey for database types is set
         css::uno::Reference< css::util::XNumberFormatTypes>   m_xNumberFormatTypes;
         std::unique_ptr<OEmptyCollection>       m_pEmptyCollection;
 
