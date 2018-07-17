@@ -881,6 +881,17 @@ void PrintDialog::initFromMultiPageSetup( const vcl::PrinterController::MultiPag
         showAdvancedControls( true );
         mpNupOrderWin->setValues( i_rMPS.nOrder, i_rMPS.nColumns, i_rMPS.nRows );
     }
+
+    if ( mpNupPagesBox->GetSelectedEntryPos() == 0 )
+    {
+        mpNupOrderBox->Show( false );
+        mpNupOrderTxt->Show( false );
+    }
+    else
+    {
+        mpNupOrderBox->Show( true );
+        mpNupOrderTxt->Show( true );
+    }
 }
 
 void PrintDialog::updateNup()
@@ -1676,6 +1687,18 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
     {
         if( !mpPagesBtn->IsChecked() )
             mpPagesBtn->Check();
+
+        if ( rBox.GetSelectedEntryPos() == 0 )
+        {
+            mpNupOrderBox->Show( false );
+            mpNupOrderTxt->Show( false );
+        }
+        else
+        {
+            mpNupOrderBox->Show( true );
+            mpNupOrderTxt->Show( true );
+        }
+
         updateNupFromPages();
     }
 }
