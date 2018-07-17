@@ -718,6 +718,16 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
     return uno::Any();
 }
 
+uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext)
+{
+    if ( rContext )
+    {
+        boost::optional<PropertyMap::Property> aProperty = rContext->getProperty(eId);
+        if ( aProperty )
+            return aProperty->second;
+    }
+    return GetPropertyFromStyleSheet(eId);
+}
 
 ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
 {
