@@ -715,6 +715,17 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
 
         pEntry = pNewEntry;
     }
+    // not found in style, try the document's DocDefault properties
+    if ( m_bInStyleSheetImport )
+    {
+        const PropertyMapPtr& pDefaultParaProps = GetStyleSheetTable()->GetDefaultParaProps();
+        if ( pDefaultParaProps )
+        {
+            boost::optional<PropertyMap::Property> aProperty = pDefaultParaProps->getProperty(eId);
+            if ( aProperty )
+                return aProperty->second;
+        }
+    }
     return uno::Any();
 }
 
