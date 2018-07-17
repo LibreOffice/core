@@ -144,7 +144,14 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
         Graphic aGrf;
 
-        if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
+        OUString sReferer;
+        SfxObjectShell * sh = pDoc->GetPersist();
+        if (sh != nullptr && sh->HasName())
+        {
+            sReferer = sh->GetMedium()->GetName();
+        }
+
+        if( sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, sReferer, aGrf) &&
             ( GraphicType::Default != aGrf.GetType() ||
               GraphicType::Default != rGrfObj.GetType() ) )
         {

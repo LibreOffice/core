@@ -226,7 +226,7 @@ void SdrGraphicLink::RemoveGraphicUpdater()
         sfx2::LinkManager::GetDisplayNames( this, nullptr, &rGrafObj.aFileName, nullptr, &rGrafObj.aFilterName );
 
         Graphic aGraphic;
-        if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
+        if (sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, getReferer(), aGraphic))
         {
             rGrafObj.ImpSetLinkedGraphic(aGraphic);
         }
