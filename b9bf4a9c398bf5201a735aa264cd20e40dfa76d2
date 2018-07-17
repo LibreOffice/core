@@ -16,6 +16,24 @@
       "revId": "b9bf4a9c398bf5201a735aa264cd20e40dfa76d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_2d4ac854",
+        "filename": "dbaccess/qa/unit/hsql_binary_import.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2018-07-17T12:51:46Z",
+      "side": 1,
+      "message": "It would fail without this change ( that\u0027s why patch 3 failed ) but it passes with it.",
+      "parentUuid": "ffe62b97_da8e742d",
+      "revId": "b9bf4a9c398bf5201a735aa264cd20e40dfa76d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
