@@ -50,7 +50,7 @@ using namespace ::std;
 
 namespace sd {
 
-FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK */)
+FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL */)
 :   SdrView(*pDrawDoc, nullptr), // TTTT SdDrawDocument* -> should be reference
     mnRefCount(0),
     mnPresViewShellId(SID_VIEWSHELL0),

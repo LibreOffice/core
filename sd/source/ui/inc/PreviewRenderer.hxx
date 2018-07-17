@@ -51,8 +51,8 @@ public:
 
     /** Render a page with the given pixel size.
         Use this version when only the width of the preview is known to the
-        caller.  The height is then calculated according to the aspect
-        ration of the given page.
+        caller. The height is then calculated according to the aspect
+        ratio of the given page.
         @param pPage
             The page to render.
         @param nWidth
