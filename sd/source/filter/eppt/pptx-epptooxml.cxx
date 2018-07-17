@@ -915,6 +915,27 @@ void PowerPointExport::WriteAnimationProperty(const FSHelperPtr& pFS, const Any&
     if (!rAny.hasValue())
         return;
 
+    ValuePair aPair;
+
+    if (rAny >>= aPair)
+    {
+        double x, y;
+        if ((aPair.First >>= x) && (aPair.Second >>= y))
+        {
+            if (nToken == XML_by)
+            {
+                // MS needs ending values but we have offset values.
+                x += 1.0;
+                y += 1.0;
+            }
+            pFS->singleElementNS(XML_p, nToken,
+                XML_x, OString::number(x*100000).getStr(),
+                XML_y, OString::number(y*100000).getStr(),
+                FSEND);
+        }
+        return;
+    }
+
     sal_uInt32 nRgb;
     double fDouble;
 
@@ -1310,7 +1331,13 @@ void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, c
 
     pFS->endElementNS(XML_p, XML_cBhvr);
     WriteAnimateValues(pFS, rXAnimate);
-    if (bWriteTo)
+    if (xTransform.is() && xTransform->getTransformType() == AnimationTransformType::SCALE)
+    {
+        WriteAnimationProperty(pFS, rXAnimate->getBy(), XML_by);
+        WriteAnimationProperty(pFS, rXAnimate->getFrom(), XML_from);
+        WriteAnimationProperty(pFS, rXAnimate->getTo(), XML_to);
+    }
+    else if (bWriteTo)
         WriteAnimateTo(pFS, rXAnimate->getTo(), rXAnimate->getAttributeName());
 }
 
@@ -1746,7 +1773,8 @@ void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS, const Referenc
             {
                 if (xTransform->getTransformType() == AnimationTransformType::SCALE)
                 {
-                    SAL_WARN("sd.eppt", "SCALE transform type not handled");
+                    xmlNodeType = XML_animScale;
+                    pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
                 }
                 else if (xTransform->getTransformType() == AnimationTransformType::ROTATE)
                 {

@@ -149,6 +149,7 @@ public:
     void testTdf104789();
     void testOpenDocumentAsReadOnly();
     void testTdf118768();
+    void testTdf118836();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -219,6 +220,7 @@ public:
     CPPUNIT_TEST(testTdf104789);
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
     CPPUNIT_TEST(testTdf118768);
+    CPPUNIT_TEST(testTdf118836);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1743,6 +1745,18 @@ void SdOOXMLExportTest2::testTdf118768()
 
     assertXPath(pXmlDocContent, "//p:anim[3]", "by", "(#ppt_h/3+#ppt_w*0.1)");
     assertXPath(pXmlDocContent, "//p:anim[3]/p:cBhvr/p:cTn", "autoRev", "1");
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf118836()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf118836.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "//p:animScale/p:by", "x", "250000");
+    assertXPath(pXmlDocContent, "//p:animScale/p:by", "y", "250000");
     xDocShRef->DoClose();
 }
 
