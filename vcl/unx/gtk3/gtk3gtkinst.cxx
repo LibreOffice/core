@@ -4975,8 +4975,11 @@ private:
         if (GTK_IS_BUTTON(pWidget))
         {
             GtkButton* pButton = GTK_BUTTON(pWidget);
-            if (m_pStringReplace != nullptr) {
-                set_label(pButton, (*m_pStringReplace)(get_label(pButton)));
+            if (m_pStringReplace != nullptr)
+            {
+                OUString aLabel(get_label(pButton));
+                if (!aLabel.isEmpty())
+                    set_label(pButton, (*m_pStringReplace)(aLabel));
             }
             if (gtk_button_get_use_underline(pButton) && !gtk_button_get_use_stock(pButton))
                 m_aMnemonicButtons.push_back(pButton);
@@ -4984,8 +4987,11 @@ private:
         else if (GTK_IS_LABEL(pWidget))
         {
             GtkLabel* pLabel = GTK_LABEL(pWidget);
-            if (m_pStringReplace != nullptr) {
-                set_label(pLabel, (*m_pStringReplace)(get_label(pLabel)));
+            if (m_pStringReplace != nullptr)
+            {
+                OUString aLabel(get_label(pLabel));
+                if (!aLabel.isEmpty())
+                    set_label(pLabel, (*m_pStringReplace)(aLabel));
             }
             if (gtk_label_get_use_underline(pLabel))
                 m_aMnemonicLabels.push_back(pLabel);
