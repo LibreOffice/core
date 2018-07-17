@@ -296,12 +296,12 @@ ways and often both.
 	the inheritance chain from children to parent, during dispose.
 
 	The easiest way to fix these is to just ensure that these
-	cleanup methods, especially LoseFocus continue to work even
+	cleanup methods, especially LoseFocus, continue to work even
 	on disposed Window sub-class instances.
 
-** It crashes with some invalid memory ...
+** It crashes with some invalid memory...
 
-        Assuming that the invalid memory is a Window sub-class itself,
+    Assuming that the invalid memory is a Window sub-class itself,
 	then almost certainly there is some cockup in the
 	reference-counting; eg. if you hit an OutputDevice::release
 	assert on mnRefCount - then almost certainly you have a
@@ -309,13 +309,12 @@ ways and often both.
 	happen via this sort of pattern:
 
 	ModelessDialog *pDlg = VclPtr<ModelessDialog>(nullptr /* parent */);
-	// by here the pDlg quite probably points to free'd memory
-	...
+	// by here the pDlg quite probably points to free'd memory...
 
 	It is necessary in these cases to ensure that the *pDlg is
 	a VclPtr<ModelessDialog> instead.
 
-** It crashes with some invalid memory #2 ...
+** It crashes with some invalid memory #2...
 
 	Often a ::dispose method will free some pImpl member, but
 	not NULL it; and (cf. above) we can now get various virtual

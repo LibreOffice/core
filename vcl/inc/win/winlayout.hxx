@@ -157,7 +157,7 @@ public:
     void SetHFONT(const HFONT);
     HFONT GetHFONT() const { return m_hFont; }
 
-    // Prevend deletion of the HFONT in the WinFontInstance destructor
+    // Prevent deletion of the HFONT in the WinFontInstance destructor
     // Used for the ScopedFont handling
     void UnsetHFONT() { m_hFont = nullptr; }
 
