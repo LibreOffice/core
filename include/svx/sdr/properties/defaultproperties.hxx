@@ -101,9 +101,6 @@ namespace sdr
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created.
             // Default implementation does nothing.
             virtual void ForceDefaultAttributes();
-
-            // Scale the included ItemSet.
-            void Scale(const Fraction& rScale);
         };
     } // end of namespace properties
 } // end of namespace sdr
