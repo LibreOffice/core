@@ -873,7 +873,7 @@ cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
 cmd/lc_insertauthoritiesentry.png cmd/lc_bibliographycomponent.png
 cmd/sc_insertauthoritiesentry.png cmd/sc_bibliographycomponent.png
 
-# Cacl
+# Calc
 cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
