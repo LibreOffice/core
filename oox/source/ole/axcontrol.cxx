@@ -1768,7 +1768,10 @@ ApiControlType AxTextBoxModel::getControlType() const
 
 void AxTextBoxModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
-    rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_MULTILINE ) );
+    if (getFlag( mnFlags, AX_FLAGS_MULTILINE ) && getFlag( mnFlags, AX_FLAGS_WORDWRAP ))
+        rPropMap.setProperty( PROP_MultiLine, true );
+    else
+        rPropMap.setProperty( PROP_MultiLine, false );
     rPropMap.setProperty( PROP_HideInactiveSelection, getFlag( mnFlags, AX_FLAGS_HIDESELECTION ) );
     rPropMap.setProperty( PROP_ReadOnly, getFlag( mnFlags, AX_FLAGS_LOCKED ) );
     rPropMap.setProperty( mbAwtModel ? PROP_Text : PROP_DefaultText, maValue );
@@ -1785,8 +1788,10 @@ void AxTextBoxModel::convertProperties( PropertyMap& rPropMap, const ControlConv
 void AxTextBoxModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
 {
     bool bRes = false;
-    if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
+    if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) ) {
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
+        setFlag( mnFlags, AX_FLAGS_MULTILINE, bRes );
+    }
     if ( rPropSet.getProperty( bRes,  PROP_HideInactiveSelection ) )
         setFlag( mnFlags, AX_FLAGS_HIDESELECTION, bRes );
     if ( rPropSet.getProperty( bRes,  PROP_ReadOnly ) )
