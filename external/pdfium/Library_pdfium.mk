@@ -24,6 +24,7 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DUSE_SYSTEM_LCMS2 \
     -DUSE_SYSTEM_LIBJPEG \
     -DUSE_SYSTEM_ZLIB \
+    -DUSE_SYSTEM_ICUUC \
     -DMEMORY_TOOL_REPLACES_ALLOCATOR \
     -DUNICODE \
 ))
@@ -278,6 +279,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_object_avail \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_page_object_avail \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_cross_ref_avail \
+    UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_pagecontentmanager \
+    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_transparency \
 ))
 
 # fpdfdoc
@@ -343,7 +346,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HtrdProc \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HuffmanDecoder \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HuffmanTable \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HuffmanTable_Standard \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_Image \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_PatternDict \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_PddProc \

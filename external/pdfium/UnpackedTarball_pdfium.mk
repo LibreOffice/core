@@ -10,21 +10,12 @@
 pdfium_patches :=
 pdfium_patches += visibility.patch.1
 pdfium_patches += ubsan.patch
-pdfium_patches += icu.patch.1
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
 # Adds missing editing API
-# Backport of <https://pdfium-review.googlesource.com/35434>.
-pdfium_patches += 0001-Add-FPDFText_GetMatrix-API.patch.1
 pdfium_patches += 0002-svx-more-accurate-PDF-text-importing.patch.2
 pdfium_patches += 0003-svx-import-PDF-images-as-BGRA.patch.2
 pdfium_patches += 0004-svx-support-PDF-text-color.patch.2
-# Backport of <https://pdfium-review.googlesource.com/32770>.
-pdfium_patches += 0005-svx-support-Paths-in-PDFs-while-importing.patch.1
-# Backport of <https://pdfium-review.googlesource.com/33010>.
-pdfium_patches += 0006-Add-FPDFPath_GetDrawMode-API.patch.1
-# Backport of <https://pdfium-review.googlesource.com/33670>.
-pdfium_patches += 0006-Add-FPDFPath_GetMatrix-and-FPDFPath_SetMatrix-APIs.patch.1
 pdfium_patches += 0009-svx-support-color-text-for-imported-PDFs.patch.2
 pdfium_patches += 0010-svx-support-importing-forms-from-PDFs.patch.2
 pdfium_patches += 0011-svx-correctly-possition-form-objects-from-PDF.patch.2
