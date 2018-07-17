@@ -977,8 +977,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         setCharName(cChar);
 
         // Update the hex and decimal codes only if necessary
-        if (m_xHexCodeText->get_text() != aHexText)
-            m_xHexCodeText->set_text( aHexText );
+        if (!m_xHexCodeText->get_text().equalsIgnoreAsciiCase(aHexText))
+            m_xHexCodeText->set_text(aHexText);
         if (m_xDecimalCodeText->get_text() != aDecimalText)
             m_xDecimalCodeText->set_text( aDecimalText );
 
@@ -1020,7 +1020,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
         setCharName(cChar);
 
         // Update the hex and decimal codes only if necessary
-        if (m_xHexCodeText->get_text() != aHexText)
+        if (!m_xHexCodeText->get_text().equalsIgnoreAsciiCase(aHexText))
             m_xHexCodeText->set_text(aHexText);
         if (m_xDecimalCodeText->get_text() != aDecimalText)
             m_xDecimalCodeText->set_text( aDecimalText );
