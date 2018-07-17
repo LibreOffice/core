@@ -90,9 +90,6 @@ void ScConsData::DeleteData()
     aCornerText.clear();
 }
 
-#undef DELETEARR
-#undef DELETESTR
-
 void ScConsData::InitData()
 {
     if (bReference && nColCount && !ppRefs)
