@@ -299,6 +299,20 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
     rTypeStr = GetScriptTypeString( pHeaderAttrs );
 }
 
+namespace
+{
+    bool allowAccessLink(SwDoc& rDoc)
+    {
+        OUString sReferer;
+        SfxObjectShell * sh = rDoc.GetPersist();
+        if (sh != nullptr && sh->HasName())
+        {
+            sReferer = sh->GetMedium()->GetName();
+        }
+        return !SvtSecurityOptions().isUntrustedReferer(sReferer);
+    }
+}
+
 /*  */
 
 void SwHTMLParser::InsertImage()
@@ -627,7 +641,7 @@ IMAGE_SETEVENT:
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
-    if (!nWidth || !nHeight)
+    if ((!nWidth || !nHeight) && allowAccessLink(*m_xDoc))
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(/*bExtendedInfo=*/true))
