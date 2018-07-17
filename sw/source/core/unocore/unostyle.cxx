@@ -180,6 +180,9 @@ namespace sw
         const StyleFamilyEntry& m_rEntry;
         SfxStyleSheetBasePool* m_pBasePool;
         SwDocShell* m_pDocShell;
+        /// Cached values for finding free page style names
+        int m_nMaxIndexForPrefix = -1;
+        OUString m_aMaxIndexPrefix;
 
         SwXStyle* FindStyle(const OUString& rStyleName) const;
         sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
@@ -884,6 +887,12 @@ OUString XStyleFamily::findUnusedPageStyleNameStartingWith(const OUString& rPref
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    if (m_nMaxIndexForPrefix != -1 && rPrefix == m_aMaxIndexPrefix)
+    {
+        ++m_nMaxIndexForPrefix;
+        return rPrefix + OUString::number(m_nMaxIndexForPrefix);
+    }
+
     sal_Int32 nMaxIndex = 0;
     std::unique_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SfxStyleSearchBits::All);
     for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
@@ -898,7 +907,9 @@ OUString XStyleFamily::findUnusedPageStyleNameStartingWith(const OUString& rPref
                 nMaxIndex = nIndex;
         }
     }
-    return rPrefix + OUString::number( nMaxIndex + 1 );
+    m_nMaxIndexForPrefix = nMaxIndex + 1;
+    m_aMaxIndexPrefix = rPrefix;
+    return rPrefix + OUString::number(m_nMaxIndexForPrefix);
 }
 
 sal_Bool XStyleFamily::hasByName(const OUString& rName)
