@@ -48,7 +48,7 @@ namespace drawinglayer
 
             An example: For blinking, the Child vector should exist of two entries;
             for values of [0.0 .. 0.5] the first, else the last entry will be used.
-            This mechanism is not limited to two entries, though.
+            This mechanism is not limited to two entries, through.
          */
         class DRAWINGLAYER_DLLPUBLIC AnimatedSwitchPrimitive2D : public GroupPrimitive2D
         {
@@ -68,7 +68,7 @@ namespace drawinglayer
         protected:
             /** write access right for classes deriving from this who want to do special
                 things (e.g. optimization, buffering).
-                Caution: This is an exception from the read-only, non-modifyable paradigm
+                Caution: This is an exception from the read-only, non-modifiable paradigm
                 for primitives, so special preparations may be needed. Usually should
                 only be used for initialization (e.g. in a derived constructor)
             */

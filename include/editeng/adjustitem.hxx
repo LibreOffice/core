@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
     bool    bCenter    : 1;
     bool    bBlock     : 1;
 
-    // only activ when bBlock
+    // only active when bBlock
     bool    bOneBlock : 1;
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
