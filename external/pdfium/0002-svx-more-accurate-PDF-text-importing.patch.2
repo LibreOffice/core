@@ -12,15 +12,15 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index 912df63..3244943 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -12,6 +12,7 @@
- #include <vector>
+@@ -13,6 +13,7 @@
  
+ #include "constants/page_object.h"
  #include "core/fpdfapi/edit/cpdf_pagecontentgenerator.h"
 +#include "core/fpdfapi/font/cpdf_font.h"
  #include "core/fpdfapi/page/cpdf_form.h"
  #include "core/fpdfapi/page/cpdf_formobject.h"
  #include "core/fpdfapi/page/cpdf_imageobject.h"
-@@ -436,6 +437,26 @@ FPDFPageObj_Transform(FPDF_PAGEOBJECT page_object,
+@@ -440,6 +441,26 @@ FPDFPageObj_Transform(FPDF_PAGEOBJECT page_object,
    pPageObj->Transform(matrix);
  }
  
@@ -50,7 +50,7 @@ index 912df63..3244943 100644
 diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -996,6 +996,26 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -1107,6 +1107,26 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
