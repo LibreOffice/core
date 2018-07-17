@@ -255,7 +255,7 @@ public:
     SfxItemPool&                GetPool() { return rPool;}
     const SfxItemPool&          GetPool() const { return rPool;}
 
-    virtual std::shared_ptr<SfxStyleSheetIterator> CreateIterator(SfxStyleFamily, SfxStyleSearchBits nMask);
+    virtual std::unique_ptr<SfxStyleSheetIterator> CreateIterator(SfxStyleFamily, SfxStyleSearchBits nMask);
     sal_uInt16              Count();
     SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 

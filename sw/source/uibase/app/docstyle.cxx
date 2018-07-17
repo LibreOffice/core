@@ -68,6 +68,7 @@
 #include <svx/xflftrit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 // The Format names in the list of all names have the
 // following family as their first character:
@@ -2430,9 +2431,9 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
     return nullptr;
 }
 
-std::shared_ptr<SfxStyleSheetIterator> SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, SfxStyleSearchBits _nMask )
+std::unique_ptr<SfxStyleSheetIterator> SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, SfxStyleSearchBits _nMask )
 {
-    return std::shared_ptr<SfxStyleSheetIterator>(new SwStyleSheetIterator( this, eFam, _nMask ));
+    return o3tl::make_unique<SwStyleSheetIterator>( this, eFam, _nMask );
 }
 
 void SwDocStyleSheetPool::dispose()
