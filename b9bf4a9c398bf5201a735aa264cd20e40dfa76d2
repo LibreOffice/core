@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_da8e742d",
+        "filename": "dbaccess/qa/unit/hsql_binary_import.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-07-17T06:47:47Z",
+      "side": 1,
+      "message": "so this means that Experimental mode would be on for this test and thus the test will be ran (and fail?). I\u0027d prefer a change like this not this late...\n\n(and yes, it failed horribly before https://bugs.debian.org/cgi-bin/bugreport.cgi?bug\u003d903900 starting from some point in time where it worked before.)",
+      "revId": "b9bf4a9c398bf5201a735aa264cd20e40dfa76d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
