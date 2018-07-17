@@ -406,6 +406,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107969, "tdf107969.docx")
     // SAXParseException: '[word/document.xml line 2]: Extra content at the end of the document', Stream 'word/document.xml'.
 }
 
+DECLARE_OOXMLEXPORT_TEST(testMarginsFromStyle, "margins_from_style.docx")
+{
+    // tdf#118521 paragraphs with direct formatting of top or bottom margins have
+    // lost the other margin comes from paragraph style, getting a bad
+    // margin from the default style
+
+    // from direct formatting
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(35), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
+    // from paragraph style
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(106), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+
+    // from paragraph style
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(388), getProperty<sal_Int32>(getParagraph(3), "ParaTopMargin"));
+    // from direct formatting
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(600), getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
