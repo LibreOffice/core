@@ -934,6 +934,31 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHanging
     CPPUNIT_ASSERT_MESSAGE( "Footnote starts with a tab", xTextRange->getString().startsWith("\t") );
 }
 
+DECLARE_OOXMLEXPORT_TEST( testActiveXTextfield, "activex_textbox.docx" )
+{
+    uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xControlShape.is() );
+
+    // Check control type
+    uno::Reference<beans::XPropertySet> xPropertySet( xControlShape->getControl(), uno::UNO_QUERY );
+    uno::Reference<lang::XServiceInfo> xServiceInfo( xPropertySet, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL( true, bool( xServiceInfo->supportsService ( "com.sun.star.form.component.TextField" ) ) );
+
+    // Check textfield is multi-line
+    CPPUNIT_ASSERT_EQUAL( true, getProperty<bool>(xPropertySet, "MultiLine") );
+
+    uno::Reference<drawing::XControlShape> xControlShape2( getShape(2), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xControlShape2.is() );
+
+    // Check control type
+    uno::Reference<beans::XPropertySet> xPropertySet2( xControlShape2->getControl(), uno::UNO_QUERY );
+    uno::Reference<lang::XServiceInfo> xServiceInfo2( xPropertySet2, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL( true, bool( xServiceInfo2->supportsService ( "com.sun.star.form.component.TextField" ) ) );
+
+    // Check textfield is single-line
+    CPPUNIT_ASSERT_EQUAL( false, getProperty<bool>(xPropertySet2, "MultiLine") );
+}
+
 DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
 {
     uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );

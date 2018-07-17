@@ -260,8 +260,9 @@ void SdActiveXControlsTest::testTextBoxProperties()
     xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
+    // These textfields are not multilines in the pptx testfile
     xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
-    CPPUNIT_ASSERT_EQUAL(true, bMultiLine);
+    CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x404040), nColor);
