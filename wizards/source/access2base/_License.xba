@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="_License" script:language="StarBasic">&apos;      Copyright 2012-2017 Jean-Pierre LEDURE
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="_License" script:language="StarBasic">
+&apos;      Copyright 2012-2017 Jean-Pierre LEDURE
 
 REM =======================================================================================================================
 REM ===					The Access2Base library is a part of the LibreOffice project.									===
