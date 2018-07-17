@@ -27,7 +27,7 @@ namespace comphelper
 {
 
 
-    using namespace ::com::sun::star; // MT 04/2003: was ::drafts::com::sun::star - otherwise to many changes
+    using namespace ::com::sun::star; // MT 04/2003: was ::drafts::com::sun::star - otherwise too many changes
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;

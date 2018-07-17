@@ -601,7 +601,7 @@ void OPropertySetHelper::fire
     sal_Int32 * pnHandles,
     const Any * pNewValues,
     const Any * pOldValues,
-    sal_Int32 nHandles, // These is the Count of the array
+    sal_Int32 nHandles, // This is the Count of the array
     sal_Bool bVetoable
 )
 {
