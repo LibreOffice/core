@@ -140,7 +140,7 @@ if it should do so.
     //mutex is acquired, call is registered
     {
         //you might access some private members here
-        //but than you need to protect access to these members always like this
+        //but then you need to protect access to these members always like this
         //never call to the outside here
     }
 
