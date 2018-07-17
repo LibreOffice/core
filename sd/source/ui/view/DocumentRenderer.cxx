@@ -383,13 +383,6 @@ namespace {
             uno::Sequence< OUString > aHelpIds, aWidgetIds;
             if( mbImpress )
             {
-                vcl::PrinterOptionsHelper::UIControlOptions aPrintOpt;
-                aPrintOpt.maGroupHint = "JobPage" ;
-                AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("extraimpressprintoptions",
-                                    SdResId(STR_IMPRESS_PRINT_UI_PRINT_GROUP),
-                                    "",
-                                    aPrintOpt ));
-
                 aHelpIds.realloc( 1 );
                 aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox" ;
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
