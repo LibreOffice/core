@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_9abc6c6a",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-17T10:23:19Z",
+      "side": 1,
+      "message": "Btw, for this there\u0027s comphelper::sequenceToContainer() from include/comphelper/sequence.hxx",
+      "revId": "9a5c56a9c4e04589b0a6bb710573922e459d9685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_ba6cd008",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-17T10:23:19Z",
+      "side": 1,
+      "message": "When working with an iterator anyway this should be\n\n for (auto aIt \u003d aprop2.begin(); aIt !\u003d aprop2.end(); ++aIt)",
+      "revId": "9a5c56a9c4e04589b0a6bb710573922e459d9685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
