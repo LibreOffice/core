@@ -1399,7 +1399,7 @@ void Window::queue_resize(StateChangedType eReason)
 
     if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
-        if (GetParentDialog())
+        if (!pParent->IsInInitShow())
             LogicInvalidate(nullptr);
     }
 }
