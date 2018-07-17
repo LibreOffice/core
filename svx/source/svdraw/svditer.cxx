@@ -123,6 +123,14 @@ void SdrObjListIter::ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMod
 
 void SdrObjListIter::ImpProcessObj(const SdrObject& rSdrObject, SdrIterMode eMode)
 {
+    // TTTT: Note: The behaviour has changed here, it will now deep-iterate
+    // for SdrObjGroup and E3dScene. Old version only deep-dived for SdrObjGroup,
+    // E3dScene was just added flat. This is now more correct, but potentially
+    // there will exist code in the 3D area that *self-iterates* with local
+    // functions/methods due to this iterator was not doing the expected thing.
+    // These will be difficult to find, but in most cases should do no harm,
+    // but cost runtime. Will need to have an eye on this aspect on continued
+    // changes...
     const SdrObjList* pChildren(rSdrObject.getChildrenOfSdrObject());
     const bool bIsGroup(nullptr != pChildren);
 
