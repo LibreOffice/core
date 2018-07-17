@@ -58,24 +58,27 @@ namespace sdr
                 // Clone may be to another model and thus another ItemPool.
                 // SfxItemSet supports that thus we are able to Clone all
                 // SfxItemState::SET items to the target pool.
-                mpItemSet =
-                    rProps.mpItemSet->Clone(
-                        true,
-                        &rObj.getSdrModelFromSdrObject().GetItemPool());
+                mpItemSet = rProps.mpItemSet->Clone(
+                    true,
+                    &rObj.getSdrModelFromSdrObject().GetItemPool());
 
                 // React on ModelChange: If metric has changed, scale items.
                 // As seen above, clone is supported, but scale is not included,
                 // thus: TTTT maybe add scale to SfxItemSet::Clone() (?)
-                if(&rObj.getSdrModelFromSdrObject() != &GetSdrObject().getSdrModelFromSdrObject())
+                // tdf#117707 correct ModelChange detection
+                const bool bModelChange(&rObj.getSdrModelFromSdrObject() != &rProps.GetSdrObject().getSdrModelFromSdrObject());
+
+                if(bModelChange)
                 {
-                    const MapUnit aOldUnit(GetSdrObject().getSdrModelFromSdrObject().GetScaleUnit());
+                    const MapUnit aOldUnit(rProps.GetSdrObject().getSdrModelFromSdrObject().GetScaleUnit());
                     const MapUnit aNewUnit(rObj.getSdrModelFromSdrObject().GetScaleUnit());
                     const bool bScaleUnitChanged(aNewUnit != aOldUnit);
 
                     if(bScaleUnitChanged)
                     {
                         const Fraction aMetricFactor(GetMapFactor(aOldUnit, aNewUnit).X());
-                        Scale(aMetricFactor);
+
+                        ScaleItemSet(*mpItemSet, aMetricFactor);
                     }
                 }
 
@@ -227,14 +230,6 @@ namespace sdr
 
         void DefaultProperties::ForceDefaultAttributes()
         {
-        }
-
-        void DefaultProperties::Scale(const Fraction& rScale)
-        {
-            if(mpItemSet)
-            {
-                ScaleItemSet(*mpItemSet, rScale);
-            }
         }
 
         void DefaultProperties::dumpAsXml(struct _xmlTextWriter * pWriter) const
