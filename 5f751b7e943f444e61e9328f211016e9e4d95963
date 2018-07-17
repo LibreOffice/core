@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_6d12105b",
+        "filename": "sc/source/filter/xml/xmltransformationi.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-17T12:00:50Z",
+      "side": 1,
+      "message": "No need to default inititalize a variable.",
+      "revId": "5f751b7e943f444e61e9328f211016e9e4d95963",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
