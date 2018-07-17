@@ -23,6 +23,8 @@
 
 #include "Qt5Frame.hxx"
 
-QWidget* createQt5Widget(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f);
+QWidget* createQt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f);
+
+QWidget* createQMainWindow(Qt5Frame& rFrame, Qt::WindowFlags f);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
