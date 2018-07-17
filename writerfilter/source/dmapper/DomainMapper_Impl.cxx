@@ -1415,6 +1415,31 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                                  uno::makeAny( ConversionHelper::convertTwipToMM100(nSize)));
                     }
                 }
+
+                // tdf#118521 set paragraph top or bottom margin based on the paragraph style
+                // if we already set the other margin with direct formatting
+                if (pParaContext && m_xPreviousParagraph.is() &&
+                        pParaContext->isSet(PROP_PARA_TOP_MARGIN) != pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN))
+                {
+                    const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
+                    OSL_ENSURE( pEntry.get(), "no style sheet found" );
+                    const StyleSheetPropertyMap* pStyleSheetProperties =
+                            dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+                    if (pStyleSheetProperties) {
+                        boost::optional<PropertyMap::Property> oProperty;
+                        if (pParaContext->isSet(PROP_PARA_TOP_MARGIN))
+                        {
+                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_BOTTOM_MARGIN)) )
+                                m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", oProperty->second);
+                        }
+                        else
+                        {
+                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_TOP_MARGIN)) )
+                                m_xPreviousParagraph->setPropertyValue("ParaTopMargin", oProperty->second);
+                        }
+                    }
+                }
+
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
