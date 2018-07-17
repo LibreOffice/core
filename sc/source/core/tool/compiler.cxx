@@ -5799,8 +5799,14 @@ formula::ParamClass ScCompiler::GetForceArrayParameter( const formula::FormulaTo
 
 bool ScCompiler::IsIIOpCode(OpCode nOpCode) const
 {
-    if (nOpCode == ocSumIf || nOpCode == ocAverageIf || (nOpCode >= SC_OPCODE_START_1_PAR && nOpCode < SC_OPCODE_STOP_1_PAR))
+    if (nOpCode == ocSumIf || nOpCode == ocAverageIf || (nOpCode >= SC_OPCODE_START_1_PAR && nOpCode < SC_OPCODE_STOP_1_PAR)
+        || (nOpCode >= SC_OPCODE_START_BIN_OP && nOpCode < SC_OPCODE_STOP_UN_OP
+             && nOpCode != ocIntersect && nOpCode != ocUnion && nOpCode != ocRange
+             && nOpCode != ocAnd && nOpCode != ocOr && nOpCode != ocXor )
+        || nOpCode == ocPercentSign)
+    {
         return true;
+    }
 
     return false;
 }
@@ -5860,6 +5866,34 @@ void ScCompiler::HandleIIOpCode(OpCode nOpCode, formula::ParamClass eClass, Form
             return;
 
         ReplaceDoubleRefII(pppToken[0]);
+    }
+    else if (nOpCode >= SC_OPCODE_START_BIN_OP && nOpCode < SC_OPCODE_STOP_BIN_OP)
+    {
+        assert(nOpCode != ocIntersect && nOpCode != ocUnion && nOpCode != ocRange);
+
+        if (nNumParams != 2)
+            return;
+
+        if (eClass == formula::ForceArray || mbMatrixFlag)
+            return;
+
+        // Convert only if the other parameter is not a matrix nor an array (which would force the result to be a matrix).
+        if ((*pppToken[0])->GetType() == svDoubleRef && (*pppToken[1])->GetType() != svMatrix && (*pppToken[1])->IsInForceArray())
+            ReplaceDoubleRefII(pppToken[0]);
+        if ((*pppToken[1])->GetType() == svDoubleRef && (*pppToken[0])->GetType() != svMatrix && (*pppToken[0])->IsInForceArray())
+            ReplaceDoubleRefII(pppToken[1]);
+    }
+    else if ((nOpCode >= SC_OPCODE_START_UN_OP && nOpCode < SC_OPCODE_STOP_UN_OP)
+              || nOpCode == ocPercentSign)
+    {
+        if (nNumParams != 1)
+            return;
+
+        if (eClass == formula::ForceArray || mbMatrixFlag)
+            return;
+
+        if ((*pppToken[0])->GetType() == svDoubleRef)
+            ReplaceDoubleRefII(pppToken[0]);
     }
 }
 
