@@ -40,6 +40,7 @@
 #include <sfx2/request.hxx>
 #include <vcl/dibtools.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/securityoptions.hxx>
 #include <vcl/GraphicLoader.hxx>
 
 #include "fileobj.hxx"
@@ -497,9 +498,10 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
     return nFormat;
 }
 
-bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
-                                const css::uno::Any & rValue,
-                                Graphic& rGraphic )
+bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
+                                    const css::uno::Any & rValue,
+                                    const OUString& rReferer,
+                                    Graphic& rGraphic )
 {
     bool bRet = false;
 
@@ -509,7 +511,8 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
     if (rValue.has<OUString>())
     {
         OUString sURL = rValue.get<OUString>();
-        rGraphic = vcl::graphic::loadFromURL(sURL);
+        if (!SvtSecurityOptions().isUntrustedReferer(rReferer))
+            rGraphic = vcl::graphic::loadFromURL(sURL);
         if (!rGraphic)
             rGraphic.SetDefaultType();
         rGraphic.setOriginURL(sURL);
