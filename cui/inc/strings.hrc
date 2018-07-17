@@ -384,7 +384,7 @@
 #define RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT          NC_("RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT", "Cast Shadow to Bottom Left")
 #define RID_SVXSTR_SHADOW_STYLE_TOPLEFT             NC_("RID_SVXSTR_SHADOW_STYLE_TOPLEFT", "Cast Shadow to Top Left")
 #define RID_SVXSTR_SIGNATURELINE_SIGNED_BY          NC_("RID_SVXSTR_SIGNATURELINE_SIGNED_BY", "Signed by: %1")
-
+#define RID_SVXSTR_OPENCL_RESTART                   NC_("RID_SVXSTR_OPENCL_RESTART", "For the OpenCL changes to take effect, %PRODUCTNAME must be restarted.")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
