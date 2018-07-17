@@ -4593,7 +4593,7 @@ void SbRtl_Partition(StarBASIC *, SbxArray & rPar, bool)
     // of the Partition function with several values of Number, the resulting text
     // will be handled properly during any subsequent sort operation.
 
-    // calculate the  maximun number of characters before lowervalue and uppervalue
+    // calculate the maximum number of characters before lowervalue and uppervalue
     OUString aBeforeStart = OUString::number( nStart - 1 );
     OUString aAfterStop = OUString::number( nStop + 1 );
     sal_Int32 nLen1 = aBeforeStart.getLength();

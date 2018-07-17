@@ -168,7 +168,7 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     }
 
     /*  After the container event has been fired (one listener will update the
-        core Basic manager), fire change event. Listeners can rely that the
+        core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
     if( maChangesListeners.getLength() > 0 )
     {
@@ -219,7 +219,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
     }
 
     /*  After the container event has been fired (one listener will update the
-        core Basic manager), fire change event. Listeners can rely that the
+        core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
     if( maChangesListeners.getLength() > 0 )
     {
@@ -273,7 +273,7 @@ void NameContainer::removeByName( const OUString& aName )
     }
 
     /*  After the container event has been fired (one listener will update the
-        core Basic manager), fire change event. Listeners can rely that the
+        core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
     if( maChangesListeners.getLength() > 0 )
     {
