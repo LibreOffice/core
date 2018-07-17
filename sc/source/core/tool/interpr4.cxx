@@ -948,6 +948,12 @@ void ScInterpreter::DoubleRefToVars( const formula::FormulaToken* p,
     const ScComplexRefData& rCRef = *p->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
+    if (rCol2 < rCol1)
+        std::swap( rCol2, rCol1);
+    if (rRow2 < rRow1)
+        std::swap( rRow2, rRow1);
+    if (rTab2 < rTab1)
+        std::swap( rTab2, rTab1);
     if (!pDok->m_TableOpList.empty())
     {
         ScRange aRange( rCol1, rRow1, rTab1, rCol2, rRow2, rTab2 );
