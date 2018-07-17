@@ -546,7 +546,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
     for (sal_Int32 n=0; n<aVerbs.getLength(); n++)
     {
         sal_uInt16 nSlotId = SID_VERB_START + nr++;
-        DBG_ASSERT(nSlotId <= SID_VERB_END, "To many Verbs!");
+        DBG_ASSERT(nSlotId <= SID_VERB_END, "Too many Verbs!");
         if (nSlotId > SID_VERB_END)
             break;
 

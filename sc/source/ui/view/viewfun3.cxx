@@ -914,7 +914,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         // include filtered rows until TransposeClip can skip them
         bIncludeFiltered = true;
         pClipDoc->GetClipArea( nX, nY, true );
-        if ( nY > static_cast<sal_Int32>(MAXCOL) )                      // to many lines for transpose
+        if ( nY > static_cast<sal_Int32>(MAXCOL) )                      // too many lines for transpose
         {
             ErrorMessage(STR_PASTE_FULL);
             return false;

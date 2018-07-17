@@ -1850,7 +1850,7 @@ void SAL_CALL
 
     if (mpChildrenShapes && mpViewShell)
     {
-        sal_Int32 nCount(mpChildrenShapes->GetCount()); //all shapes and the table
+        sal_Int32 nCount(mpChildrenShapes->GetCount()); // all shapes and the table
         if (mxTempAcc.is())
             ++nCount;
         if (nChildIndex < 0 || nChildIndex >= nCount)
@@ -1862,7 +1862,7 @@ void SAL_CALL
             bool bWasTableSelected(IsTableSelected());
 
             if (mpChildrenShapes)
-                mpChildrenShapes->Select(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is to high
+                mpChildrenShapes->Select(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is too high
 
             if (bWasTableSelected)
                 mpViewShell->SelectAll();
@@ -1884,7 +1884,7 @@ sal_Bool SAL_CALL
 
     if (mpChildrenShapes)
     {
-        sal_Int32 nCount(mpChildrenShapes->GetCount()); //all shapes and the table
+        sal_Int32 nCount(mpChildrenShapes->GetCount()); // all shapes and the table
         if (mxTempAcc.is())
             ++nCount;
         if (nChildIndex < 0 || nChildIndex >= nCount)
@@ -1894,7 +1894,7 @@ sal_Bool SAL_CALL
         if (xAccessible.is())
         {
             uno::Reference<drawing::XShape> xShape;
-            bResult = mpChildrenShapes->IsSelected(nChildIndex, xShape); // throws no lang::IndexOutOfBoundsException if Index is to high
+            bResult = mpChildrenShapes->IsSelected(nChildIndex, xShape); // throws no lang::IndexOutOfBoundsException if Index is too high
         }
         else
         {
@@ -1967,7 +1967,7 @@ uno::Reference<XAccessible > SAL_CALL
         bool bTabMarked(IsTableSelected());
 
         if (mpChildrenShapes)
-            xAccessible = mpChildrenShapes->GetSelected(nSelectedChildIndex, bTabMarked); // throws no lang::IndexOutOfBoundsException if Index is to high
+            xAccessible = mpChildrenShapes->GetSelected(nSelectedChildIndex, bTabMarked); // throws no lang::IndexOutOfBoundsException if Index is too high
         if (mxTempAcc.is() && nSelectedChildIndex == nCount - 1)
             xAccessible = mxTempAcc;
         else if (bTabMarked)
@@ -1987,7 +1987,7 @@ void SAL_CALL
 
     if (mpChildrenShapes && mpViewShell)
     {
-        sal_Int32 nCount(mpChildrenShapes->GetCount()); //all shapes and the table
+        sal_Int32 nCount(mpChildrenShapes->GetCount()); // all shapes and the table
         if (mxTempAcc.is())
             ++nCount;
         if (nChildIndex < 0 || nChildIndex >= nCount)
@@ -1999,7 +1999,7 @@ void SAL_CALL
         if (xAccessible.is())
         {
             if (mpChildrenShapes)
-                mpChildrenShapes->Deselect(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is to high
+                mpChildrenShapes->Deselect(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is too high
 
             if (bTabMarked)
                 mpViewShell->SelectAll(); // select the table again

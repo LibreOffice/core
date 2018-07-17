@@ -706,7 +706,7 @@ void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
 void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 {
     //  in order to only create a new SetItem, we don't need SfxItemPoolCache.
-    //TODO: Warning: SfxItemPoolCache seems to create to many Refs for the new SetItem ??
+    //TODO: Warning: SfxItemPoolCache seems to create too many Refs for the new SetItem ??
 
     ScDocumentPool* pDocPool = GetDoc()->GetPool();
 
