@@ -139,6 +139,7 @@ public:
     int testTdf115005_FallBack_Images(bool bAddReplacementImages);
     void testTdf115005_FallBack_Images_On();
     void testTdf115005_FallBack_Images_Off();
+    void testTdf118806();
     void testTdf111789();
     /// SmartArt animated elements
     void testTdf104792();
@@ -208,6 +209,7 @@ public:
     CPPUNIT_TEST(testTdf115005);
     CPPUNIT_TEST(testTdf115005_FallBack_Images_On);
     CPPUNIT_TEST(testTdf115005_FallBack_Images_Off);
+    CPPUNIT_TEST(testTdf118806);
     CPPUNIT_TEST(testTdf111789);
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
@@ -1595,6 +1597,18 @@ void SdOOXMLExportTest2::testTdf115005_FallBack_Images_Off()
 {
     const int nPNGFiles = testTdf115005_FallBack_Images(false);
     CPPUNIT_ASSERT_EQUAL(0, nPNGFiles);
+}
+
+void SdOOXMLExportTest2::testTdf118806()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf118806.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "//p:animMotion", "origin", "layout");
+
+    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf111789()
