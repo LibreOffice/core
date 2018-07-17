@@ -1018,7 +1018,7 @@ Selection Window::GetSurroundingTextSelection() const
 void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
 {
     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
-    if (pDrawViewShell && pDrawViewShell->IsInSwitchPage())
+    if (!pDrawViewShell || pDrawViewShell->IsInSwitchPage())
         return;
 
     OString sRectangle;
@@ -1031,7 +1031,7 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
             aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
         sRectangle = aRectangle.toString();
     }
-    SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
+    SfxViewShell& rSfxViewShell = pDrawViewShell->GetViewShellBase();
     SfxLokHelper::notifyInvalidation(&rSfxViewShell, sRectangle);
 }
 
