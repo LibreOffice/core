@@ -19,20 +19,6 @@ index 8e01127b0..f4ce4d915 100644
    if (m_Storer.GetBitmap()->IsAlphaMask()) {
      CalcAlpha(cdata);
    } else {
-diff --git a/core/fxcrt/string_view_template.h b/core/fxcrt/string_view_template.h
-index 05694cf24..101253814 100644
---- a/core/fxcrt/string_view_template.h
-+++ b/core/fxcrt/string_view_template.h
-@@ -231,9 +231,6 @@ inline bool operator<(const T* lhs, const StringViewTemplate<T>& rhs) {
-   return rhs > lhs;
- }
- 
--extern template class StringViewTemplate<char>;
--extern template class StringViewTemplate<wchar_t>;
--
- using ByteStringView = StringViewTemplate<char>;
- using WideStringView = StringViewTemplate<wchar_t>;
- 
 diff --git a/core/fpdfdoc/cpdf_metadata.cpp b/core/fpdfdoc/cpdf_metadata.cpp
 index 323de4ffc..f11a0b0ad 100644
 --- a/core/fpdfdoc/cpdf_metadata.cpp
@@ -122,3 +108,42 @@ index d3bf38d31..e8aea9707 100644
    }
  
    return FPDFPageObjectFromCPDFPageObject(
+diff --git a/third_party/base/span.h b/third_party/base/span.h
+index 0fb627ba8..dda1fc8bc 100644
+--- a/third_party/base/span.h
++++ b/third_party/base/span.h
+@@ -204,7 +204,7 @@ class span {
+   // size()|.
+   template <typename Container,
+             typename = internal::EnableIfSpanCompatibleContainer<Container, T>>
+-  constexpr span(Container& container)
++  span(Container& container)
+       : span(container.data(), container.size()) {}
+   template <
+       typename Container,
+diff --git a/core/fpdfdoc/cpdf_dest.h b/core/fpdfdoc/cpdf_dest.h
+index 7f4eb86c0..5e227f86e 100644
+--- a/core/fpdfdoc/cpdf_dest.h
++++ b/core/fpdfdoc/cpdf_dest.h
+@@ -46,7 +46,7 @@ class CPDF_Dest {
+               float* pZoom) const;
+ 
+  private:
+-  UnownedPtr<const CPDF_Array> const m_pObj;
++  UnownedPtr<const CPDF_Array> m_pObj;
+ };
+ 
+ #endif  // CORE_FPDFDOC_CPDF_DEST_H_
+diff --git a/core/fpdfdoc/cpdf_filespec.h b/core/fpdfdoc/cpdf_filespec.h
+index 7050f695b..916afed8b 100644
+--- a/core/fpdfdoc/cpdf_filespec.h
++++ b/core/fpdfdoc/cpdf_filespec.h
+@@ -41,7 +41,7 @@ class CPDF_FileSpec {
+ 
+  private:
+   UnownedPtr<const CPDF_Object> const m_pObj;
+-  UnownedPtr<CPDF_Object> const m_pWritableObj;
++  UnownedPtr<CPDF_Object> m_pWritableObj;
+ };
+ 
+ #endif  // CORE_FPDFDOC_CPDF_FILESPEC_H_
