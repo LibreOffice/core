@@ -579,7 +579,9 @@ void WorkbookFragment::recalcFormulaCells()
     else
     {
         getDocImport().broadcastRecalcAfterImport();
-        rDoc.CalcFormulaTree(false, true, false);
+        // Full ScDocument::CalcFormulaTree() of all dirty cells is not
+        // necessary here, the View will recalculate them in the visible area,
+        // or any other method accessing formula cell results.
     }
 }
 
