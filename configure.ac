@@ -81,6 +81,10 @@ PathFormat()
                 AC_MSG_ERROR([path conversion failed for "$1".])
             fi
         fi
+        fp_count_space=`echo "$formatted_path" | $GREP -c "[ ]"`
+        if test "$fp_count_space" != "0"; then
+            AC_MSG_ERROR([converted path "$formatted_path" still contains spaces. Short filenames (8.3 filenames) support was disabled on this system?])
+        fi
     fi
 }
 
