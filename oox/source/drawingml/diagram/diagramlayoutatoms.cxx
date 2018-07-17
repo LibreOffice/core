@@ -383,16 +383,17 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
 
             const sal_Int32 nDir = maMap.count(XML_linDir) ? maMap.find(XML_linDir)->second : XML_fromT;
-            const sal_Int32 npyraAcctPos = maMap.count(XML_pyraAcctPos) ? maMap.find(XML_pyraAcctPos)->second : XML_bef;
-            const sal_Int32 ntxDir = maMap.count(XML_txDir) ? maMap.find(XML_txDir)->second : XML_fromT;
-            const sal_Int32 npyraLvlNode = maMap.count(XML_pyraLvlNode) ? maMap.find(XML_pyraLvlNode)->second : XML_level;
+            // const sal_Int32 npyraAcctPos = maMap.count(XML_pyraAcctPos) ? maMap.find(XML_pyraAcctPos)->second : XML_bef;
+            // const sal_Int32 ntxDir = maMap.count(XML_txDir) ? maMap.find(XML_txDir)->second : XML_fromT;
+            // const sal_Int32 npyraLvlNode = maMap.count(XML_pyraLvlNode) ? maMap.find(XML_pyraLvlNode)->second : XML_level;
+            // uncomment when use in code.
 
             sal_Int32 nCount = rShape->getChildren().size();
-            double fAspectRatio = 0.32;
+            double fAspectRatio = 0.33;
 
             awt::Size aChildSize = rShape->getSize();
-                aChildSize.Width /= ((nCount) );
-                aChildSize.Height /= ((nCount));
+                aChildSize.Width /= nCount;
+                aChildSize.Height /= nCount;
 
             awt::Point aCurrPos(0, 0);
                 aCurrPos.X = fAspectRatio*aChildSize.Width*(nCount-1);
@@ -407,6 +408,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrShape->setChildSize(aChildSize);
                 aCurrPos.Y += (aChildSize.Height);
             }
+
+            if (nDir == XML_fromT)
+                    rShape->setRotation(180* PER_DEGREE);
             break;
         }
 
