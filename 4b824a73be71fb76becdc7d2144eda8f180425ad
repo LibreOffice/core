@@ -34,6 +34,24 @@
       "revId": "4b824a73be71fb76becdc7d2144eda8f180425ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_5af5c4ca",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2018-07-17T05:48:19Z",
+      "side": 1,
+      "message": "I had to look and check many times if there wasn\u0027t any unnoticed Pop() between the overall while and the cleaning up while before I was certain...\nI\u0027ll change it to a Pop before.",
+      "parentUuid": "ffe62b97_d793ed4e",
+      "revId": "4b824a73be71fb76becdc7d2144eda8f180425ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
