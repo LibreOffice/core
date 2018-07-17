@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ffe62b97_4dc2ac87",
+        "filename": "dbaccess/Module_dbaccess.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-17T14:58:09Z",
+      "side": 1,
+      "message": "Why is this necessary? The unit tests are passing fine on master. I would say setting the experimental mode in unit tests causes more problems than it is worth to have the test at all. Especially that all this is only for 6.1.",
+      "revId": "b9bf4a9c398bf5201a735aa264cd20e40dfa76d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_da8e742d",
         "filename": "dbaccess/qa/unit/hsql_binary_import.cxx",
         "patchSetId": 4
