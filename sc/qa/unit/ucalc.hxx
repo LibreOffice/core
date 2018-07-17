@@ -148,6 +148,7 @@ public:
     void testFormulaCompilerImplicitIntersection1ParamNoChange();
     void testFormulaCompilerImplicitIntersection1ParamWithChange();
     void testFormulaCompilerImplicitIntersection1NoGroup();
+    void testFormulaCompilerImplicitIntersectionOperators();
     void testFormulaRefUpdate();
     void testFormulaRefUpdateRange();
     void testFormulaRefUpdateSheets();
@@ -579,6 +580,7 @@ public:
     CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1ParamNoChange);
     CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1ParamWithChange);
     CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1NoGroup);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersectionOperators);
     CPPUNIT_TEST(testFormulaRefUpdate);
     CPPUNIT_TEST(testFormulaRefUpdateRange);
     CPPUNIT_TEST(testFormulaRefUpdateSheets);

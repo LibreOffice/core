@@ -1426,6 +1426,42 @@ void Test::testFormulaCompilerImplicitIntersection1NoGroup()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaCompilerImplicitIntersectionOperators()
+{
+    struct TestCase
+    {
+        OUString formula[3];
+        double result[3];
+    };
+
+    m_pDoc->InsertTab(0, "Test");
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->SetValue(2, 0, 0, 5); // C1
+    m_pDoc->SetValue(2, 1, 0, 4); // C2
+    m_pDoc->SetValue(2, 2, 0, 3); // C3
+    m_pDoc->SetValue(3, 0, 0, 1); // D1
+    m_pDoc->SetValue(3, 1, 0, 2); // D2
+    m_pDoc->SetValue(3, 2, 0, 3); // D3
+
+    TestCase tests[] =
+    {
+        { OUString("=C:C/D:D"), OUString("=C:C/D:D"), OUString("=C:C/D:D"), 5, 2, 1 },
+        { OUString("=C1:C2/D1:D2"), OUString("=C2:C3/D2:D3"), OUString("=C3:C4/D3:D4"), 5, 2, 1 }
+    };
+
+    for (const TestCase& test : tests)
+    {
+        for(int i = 0; i < 2; ++i )
+            m_pDoc->SetString(ScAddress(4,i,0), test.formula[i]); // E1-3
+        for(int i = 0; i < 2; ++i )
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString( test.formula[i] + " result incorrect in row " + OUString::number(i+1)).toUtf8().getStr(),
+                test.result[i], m_pDoc->GetValue(ScAddress(4,i,0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdate()
 {
     m_pDoc->InsertTab(0, "Formula");
