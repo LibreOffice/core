@@ -164,7 +164,7 @@ public class _XPrintable extends MultiMethodTest {
                 result &= fileExists ;
             }
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Error while while checking file '" +
+            log.println("Error while checking file '" +
                 fileURL + "': ");
             e.printStackTrace(log);
             result = false ;

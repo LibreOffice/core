@@ -84,7 +84,7 @@ interface XColorSpace
         If this color space has an ICC color profile, the sequence
         contains an element named ICCProfile. Some color spaces also
         have properties Gamma, Whitepoint and Blackpoint. Background
-        information for these is available <a
+        information for this is available <a
         href="http://en.wikipedia.org/wiki/Color_temperature">here</a>.
      */
     sequence< ::com::sun::star::beans::PropertyValue > getProperties();
