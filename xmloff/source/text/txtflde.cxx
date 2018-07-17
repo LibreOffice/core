@@ -2097,7 +2097,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     }
     // else: no declarations element
 
-    // user field field masters:
+    // user field masters:
     if ( !aUserName.empty() )
     {
         SvXMLElementExport aElem( GetExport(),

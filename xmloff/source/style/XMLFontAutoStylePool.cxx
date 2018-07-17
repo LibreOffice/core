@@ -465,7 +465,7 @@ void XMLFontAutoStylePool::exportXML()
                 if (sFileUrl.isEmpty())
                     continue;
 
-                // When embeded only is not set or font is used
+                // When embedded only is not set or font is used
                 if (!m_bEmbedUsedOnly ||
                     aUsedFontNames.find(pEntry->GetFamilyName()) != aUsedFontNames.end())
                 {
