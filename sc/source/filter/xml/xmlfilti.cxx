@@ -26,6 +26,7 @@
 #include <queryentry.hxx>
 #include <document.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -429,7 +430,7 @@ void SAL_CALL ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
 
     GetOperator(sOperator, mrQueryParam, rEntry);
     SCCOLROW nStartPos = mrQueryParam.bByRow ? mrQueryParam.nCol1 : mrQueryParam.nRow1;
-    rEntry.nField = nField + nStartPos;
+    rEntry.nField = o3tl::saturating_add(nField, nStartPos);
 
     if (maQueryItems.empty())
     {
