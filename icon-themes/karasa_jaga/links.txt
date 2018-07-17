@@ -121,7 +121,7 @@ cmd/32/insertdatefieldvar.png cmd/32/datefield.png
 cmd/32/insertedit.png cmd/32/edit.png
 cmd/32/insertfieldctrl.png cmd/32/insertfield.png
 cmd/32/insertfilecontrol.png cmd/32/filecontrol.png
-cmd/32/insertfilefield.png cmd/32/open.png
+cmd/32/insertfilefield.png cmd/32/filefield.png
 cmd/32/insertfootnotesmenu.png cmd/32/insertfootnote.png
 cmd/32/insertformattedfield.png cmd/32/formattedfield.png
 cmd/32/insertformcheck.png cmd/32/checkbox.png
@@ -431,7 +431,7 @@ cmd/lc_insertdatefieldvar.png cmd/lc_datefield.png
 cmd/lc_insertedit.png cmd/lc_edit.png
 cmd/lc_insertfieldctrl.png cmd/lc_insertfield.png
 cmd/lc_insertfilecontrol.png cmd/lc_filecontrol.png
-cmd/lc_insertfilefield.png cmd/lc_open.png
+cmd/lc_insertfilefield.png cmd/lc_filefield.png
 cmd/lc_insertfootnotesmenu.png cmd/lc_insertfootnote.png
 cmd/lc_insertformattedfield.png cmd/lc_formattedfield.png
 cmd/lc_insertformcheck.png cmd/lc_checkbox.png
@@ -693,7 +693,7 @@ cmd/sc_insertdatefieldvar.png cmd/sc_datefield.png
 cmd/sc_insertedit.png cmd/sc_edit.png
 cmd/sc_insertfieldctrl.png cmd/sc_insertfield.png
 cmd/sc_insertfilecontrol.png cmd/sc_filecontrol.png
-cmd/sc_insertfilefield.png cmd/sc_open.png
+cmd/sc_insertfilefield.png cmd/sc_filefield.png
 cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 cmd/sc_insertformattedfield.png cmd/sc_formattedfield.png
 cmd/sc_insertformcheck.png cmd/sc_checkbox.png
