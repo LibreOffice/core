@@ -32,7 +32,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	    > $(IOSGEN)/native-code.h
 
 	# generate resource files used to start/run LibreOffice
-	cp $(WORKDIR)/UnpackedTarball/icu/source/data/in/icudt60l.dat $(IOSRES)/icudt60l.dat
+	cp $(WORKDIR)/UnpackedTarball/icu/source/data/in/icudt$(ICU_MAJOR)l.dat $(IOSRES)/icudt$(ICU_MAJOR)l.dat
 	cp $(INSTDIR)/program/types.rdb             $(IOSRES)/udkapi.rdb
 	cp $(INSTDIR)/program/types/offapi.rdb      $(IOSRES)
 	cp $(INSTDIR)/program/types/oovbaapi.rdb    $(IOSRES)
