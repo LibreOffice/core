@@ -1186,6 +1186,8 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
             xMotion->getPath() >>= aPath;
 
         pFS->startElementNS(XML_p, nXmlNodeType,
+                            XML_origin, "layout",
+                            XML_pathEditMode, "relative",
                             XML_path, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8),
                             FSEND);
     }
