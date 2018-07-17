@@ -34,6 +34,9 @@
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/task/OfficeRestartManager.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <strings.hrc>
 #include <dialmgr.hxx>
@@ -103,10 +106,18 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
     if (bModified)
     {
         std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      CuiResId(RID_SVXSTR_OPTIONS_RESTART)));
-        xWarnBox->run();
+                                                      VclMessageType::Question, VclButtonsType::NONE,
+                                                      CuiResId(RID_SVXSTR_OPENCL_RESTART)));
+        xWarnBox->add_button("Restart Now",RET_YES);
+        xWarnBox->add_button("Restart Later",RET_NO);
+        sal_uInt16 nRet = xWarnBox->run();
         batch->commit();
+        if (nRet == RET_YES)
+        {
+            css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
+            css::uno::Reference< css::task::XInteractionHandler >());
+        }
+
     }
 
     return bModified;
