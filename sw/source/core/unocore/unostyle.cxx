@@ -63,6 +63,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -169,7 +170,7 @@ namespace sw
 {
     class XStyleFamily : public cppu::WeakImplHelper
     <
-        container::XNameContainer,
+        style::XStyleFamily,
         lang::XServiceInfo,
         container::XIndexAccess,
         beans::XPropertySet
@@ -217,6 +218,9 @@ namespace sw
                 throw uno::RuntimeException();
             return true;
         }
+
+        //XStyleFamily
+        virtual OUString SAL_CALL findUnusedPageStyleNameStartingWith(const OUString& rPrefix) override;
 
         //XNameAccess
         virtual uno::Any SAL_CALL getByName(const OUString& Name) override;
@@ -871,6 +875,30 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
         vRet.push_back(sName);
     }
     return comphelper::containerToSequence(vRet);
+}
+
+// Find the highest number x in each style with the name "rPrefix+x" and
+// return an incremented name.
+OUString XStyleFamily::findUnusedPageStyleNameStartingWith(const OUString& rPrefix)
+{
+    SolarMutexGuard aGuard;
+    if(!m_pBasePool)
+        throw uno::RuntimeException();
+    sal_Int32 nMaxIndex = 0;
+    std::shared_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SfxStyleSearchBits::All);
+    for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
+    {
+        OUString sName;
+        SwStyleNameMapper::FillProgName(pStyle->GetName(), sName, m_rEntry.m_aPoolId);
+        OUString aSuffix;
+        if (sName.startsWith(rPrefix, &aSuffix))
+        {
+            sal_Int32 nIndex = aSuffix.toInt32();
+            if ( nIndex > nMaxIndex )
+                nMaxIndex = nIndex;
+        }
+    }
+    return rPrefix + OUString::number( nMaxIndex + 1 );
 }
 
 sal_Bool XStyleFamily::hasByName(const OUString& rName)

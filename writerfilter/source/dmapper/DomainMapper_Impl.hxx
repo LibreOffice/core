@@ -26,7 +26,7 @@
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/style/TabStop.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <unotools/saveopt.hxx>
 #include <queue>
 #include <stack>
@@ -413,7 +413,7 @@ private:
     css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
-    css::uno::Reference<css::container::XNameContainer> m_xPageStyles;
+    css::uno::Reference<css::style::XStyleFamily> m_xPageStyles;
     css::uno::Reference<css::text::XText> m_xBodyText;
     css::uno::Reference<css::text::XTextContent> m_xEmbedded;
 
@@ -555,7 +555,7 @@ public:
         return dynamic_cast< SectionPropertyMap* >( m_pLastSectionContext.get( ) );
     }
 
-    css::uno::Reference<css::container::XNameContainer> const & GetPageStyles();
+    css::uno::Reference<css::style::XStyleFamily> const & GetPageStyles();
     css::uno::Reference<css::text::XText> const & GetBodyText();
     const css::uno::Reference<css::lang::XMultiServiceFactory>& GetTextFactory() const
     {

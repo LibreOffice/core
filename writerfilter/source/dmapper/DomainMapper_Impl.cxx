@@ -293,7 +293,7 @@ DomainMapper_Impl::~DomainMapper_Impl()
     }
 }
 
-uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetPageStyles()
+uno::Reference< style::XStyleFamily > const &  DomainMapper_Impl::GetPageStyles()
 {
     if(!m_xPageStyles.is())
     {

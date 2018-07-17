@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/XStyleFamily.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -310,7 +311,7 @@ public:
 
     const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
 
-    css::uno::Reference< css::beans::XPropertySet > GetPageStyle( const css::uno::Reference< css::container::XNameContainer >& xStyles,
+    css::uno::Reference< css::beans::XPropertySet > GetPageStyle( const css::uno::Reference< css::style::XStyleFamily >& xStyles,
                                                                   const css::uno::Reference< css::lang::XMultiServiceFactory >& xTextFactory,
                                                                   bool bFirst );
 
@@ -369,7 +370,7 @@ public:
     void addRelativeWidthShape( css::uno::Reference<css::drawing::XShape> xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
 
     // determine which style gets the borders
-    void ApplyBorderToPageStyles( const css::uno::Reference< css::container::XNameContainer >& xStyles,
+    void ApplyBorderToPageStyles( const css::uno::Reference< css::style::XStyleFamily >& xStyles,
                                   const css::uno::Reference< css::lang::XMultiServiceFactory >& xTextFactory,
                                   BorderApply eBorderApply, BorderOffsetFrom eOffsetFrom );
 

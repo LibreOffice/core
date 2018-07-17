@@ -445,28 +445,12 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     }
 }
 
-OUString lcl_FindUnusedPageStyleName( const uno::Sequence< OUString >& rPageStyleNames )
+OUString lcl_FindUnusedPageStyleName( const uno::Reference< style::XStyleFamily >& xPageStyles )
 {
-    static const char DEFAULT_STYLE[] = "Converted";
-    sal_Int32         nMaxIndex       = 0;
-    // find the highest number x in each style with the name "DEFAULT_STYLE+x" and
-    // return an incremented name
-
-    const OUString* pStyleNames = rPageStyleNames.getConstArray();
-    for ( sal_Int32 nStyle = 0; nStyle < rPageStyleNames.getLength(); ++nStyle )
-    {
-        if ( pStyleNames[nStyle].startsWith( DEFAULT_STYLE ) )
-        {
-            sal_Int32 nIndex = pStyleNames[nStyle].copy( strlen( DEFAULT_STYLE ) ).toInt32();
-            if ( nIndex > nMaxIndex )
-                nMaxIndex = nIndex;
-        }
-    }
-
-    return DEFAULT_STYLE + OUString::number( nMaxIndex + 1 );
+    return xPageStyles->findUnusedPageStyleNameStartingWith("Converted");
 }
 
-uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( const uno::Reference< container::XNameContainer >& xPageStyles,
+uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( const uno::Reference< style::XStyleFamily >& xPageStyles,
                                                                         const uno::Reference < lang::XMultiServiceFactory >& xTextFactory,
                                                                         bool bFirst )
 {
@@ -477,8 +461,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( const un
         {
             if ( m_sFirstPageStyleName.isEmpty() && xPageStyles.is() )
             {
-                uno::Sequence< OUString > aPageStyleNames = xPageStyles->getElementNames();
-                m_sFirstPageStyleName = lcl_FindUnusedPageStyleName( aPageStyleNames );
+                m_sFirstPageStyleName = lcl_FindUnusedPageStyleName(xPageStyles);
                 m_aFirstPageStyle.set( xTextFactory->createInstance( "com.sun.star.style.PageStyle" ),
                     uno::UNO_QUERY );
 
@@ -504,8 +487,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( const un
         {
             if ( m_sFollowPageStyleName.isEmpty() && xPageStyles.is() )
             {
-                uno::Sequence< OUString > aPageStyleNames = xPageStyles->getElementNames();
-                m_sFollowPageStyleName = lcl_FindUnusedPageStyleName( aPageStyleNames );
+                m_sFollowPageStyleName = lcl_FindUnusedPageStyleName( xPageStyles );
                 m_aFollowPageStyle.set( xTextFactory->createInstance( "com.sun.star.style.PageStyle" ),
                     uno::UNO_QUERY );
                 xPageStyles->insertByName( m_sFollowPageStyleName, uno::makeAny( m_aFollowPageStyle ) );
@@ -533,7 +515,7 @@ void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance
     m_bBorderShadows[ePos]   = bShadow;
 }
 
-void SectionPropertyMap::ApplyBorderToPageStyles( const uno::Reference< container::XNameContainer >& xPageStyles,
+void SectionPropertyMap::ApplyBorderToPageStyles( const uno::Reference< style::XStyleFamily >& xPageStyles,
                                                   const uno::Reference < lang::XMultiServiceFactory >& xTextFactory,
                                                   BorderApply eBorderApply, BorderOffsetFrom eOffsetFrom )
 {
@@ -1160,7 +1142,7 @@ bool SectionPropertyMap::FloatingTableConversion( DomainMapper_Impl& rDM_Impl, F
 
 void SectionPropertyMap::InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl )
 {
-    const uno::Reference< container::XNameContainer >& xPageStyles = rDM_Impl.GetPageStyles();
+    const uno::Reference< style::XStyleFamily >& xPageStyles = rDM_Impl.GetPageStyles();
     const uno::Reference < lang::XMultiServiceFactory >& xTextFactory = rDM_Impl.GetTextFactory();
 
     // if no new styles have been created for this section, inherit from the previous section,
@@ -1510,7 +1492,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) || m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage) )
             {
                 OUString* pageStyle = m_bTitlePage ? &m_sFirstPageStyleName : &m_sFollowPageStyleName;
-                OUString evenOddStyleName = lcl_FindUnusedPageStyleName( rDM_Impl.GetPageStyles()->getElementNames() );
+                OUString evenOddStyleName = lcl_FindUnusedPageStyleName( rDM_Impl.GetPageStyles() );
                 uno::Reference< beans::XPropertySet > evenOddStyle(
                     rDM_Impl.GetTextFactory()->createInstance( "com.sun.star.style.PageStyle" ),
                     uno::UNO_QUERY );
