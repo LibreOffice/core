@@ -54,7 +54,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	    > $(IOSGEN)/native-code.h
 
 	# copy resource files used to start/run LibreOffice
-	cp $(WORKDIR)/UnpackedTarball/icu/source/data/in/icudt61l.dat $(IOSRES)/icudt61l.dat
+	cp $(WORKDIR)/UnpackedTarball/icu/source/data/in/icudt$(ICU_MAJOR)l.dat $(IOSRES)/icudt$(ICU_MAJOR)l.dat
 	cp $(INSTDIR)/program/types.rdb             $(IOSRES)/udkapi.rdb
 	cp $(INSTDIR)/program/types/offapi.rdb      $(IOSRES)
 	cp $(INSTDIR)/program/types/oovbaapi.rdb    $(IOSRES)
