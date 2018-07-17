@@ -663,8 +663,10 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
                                     nLineWidth);
 
     // Change the margins with the border distance
-    xStyle->setPropertyValue( sMarginName, uno::makeAny( nMargin ) );
-    xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDistance ) );
+    uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );
+    uno::Sequence<OUString> aProperties { sMarginName, sBorderDistanceName };
+    uno::Sequence<uno::Any> aValues { uno::makeAny( nMargin ), uno::makeAny( nDistance ) };
+    xMultiSet->setPropertyValues( aProperties, aValues );
 }
 
 void SectionPropertyMap::DontBalanceTextColumns()
@@ -823,8 +825,10 @@ void SectionPropertyMap::CopyHeaderFooter( const uno::Reference< beans::XPropert
 
     if ( bHasPrevHeader )
     {
-        xStyle->setPropertyValue( sHeaderIsOn, uno::makeAny( true ) );
-        xStyle->setPropertyValue( sHeaderIsShared, uno::makeAny( bHeaderIsShared ) );
+        uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );
+        uno::Sequence<OUString> aProperties { sHeaderIsOn, sHeaderIsShared };
+        uno::Sequence<uno::Any> aValues { uno::makeAny( true ), uno::makeAny( bHeaderIsShared ) };
+        xMultiSet->setPropertyValues( aProperties, aValues );
         if ( !bOmitRightHeader )
         {
             CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
@@ -849,8 +853,10 @@ void SectionPropertyMap::CopyHeaderFooter( const uno::Reference< beans::XPropert
 
     if ( bHasPrevFooter )
     {
-        xStyle->setPropertyValue( sFooterIsOn, uno::makeAny( true ) );
-        xStyle->setPropertyValue( sFooterIsShared, uno::makeAny( bFooterIsShared ) );
+        uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );
+        uno::Sequence<OUString> aProperties { sFooterIsOn, sFooterIsShared };
+        uno::Sequence<uno::Any> aValues { uno::makeAny( true ), uno::makeAny( bFooterIsShared ) };
+        xMultiSet->setPropertyValues( aProperties, aValues );
         if ( !bOmitRightFooter )
         {
             CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
