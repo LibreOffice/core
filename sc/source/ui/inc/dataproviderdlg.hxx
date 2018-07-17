@@ -37,7 +37,7 @@ private:
     VclPtr<MenuBar> mpBar;
     VclPtr<ScDataProviderBaseControl> mpDataProviderCtrl;
     VclPtr<ListBox> mpDBRanges;
-
+    sal_uInt32 mpIndex;
     ScDBData* pDBData;
 
     void InitMenu();
@@ -65,6 +65,7 @@ public:
     void sortTransformation();
     void aggregateFunction();
     void numberTransformation();
+    void deletefromList(sal_uInt32 nIndex);
 
     void import(ScDocument* pDoc, bool bInternal = false);
 };
