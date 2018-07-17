@@ -293,7 +293,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
 void SwCursorShell::SttCursorMove()
 {
 #ifdef DBG_UTIL
-    OSL_ENSURE( m_nCursorMove < USHRT_MAX, "To many nested CursorMoves." );
+    OSL_ENSURE( m_nCursorMove < USHRT_MAX, "Too many nested CursorMoves." );
 #endif
     ++m_nCursorMove;
     StartAction();

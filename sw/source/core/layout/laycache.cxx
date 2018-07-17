@@ -1192,7 +1192,7 @@ void SwLayCacheIoImpl::CloseFlagRec()
     }
     else
     {
-        OSL_ENSURE( pStream->Tell() <= nFlagRecEnd, "To many data read" );
+        OSL_ENSURE( pStream->Tell() <= nFlagRecEnd, "Too many data read" );
         if( pStream->Tell() != nFlagRecEnd )
             pStream->Seek( nFlagRecEnd );
     }
