@@ -86,7 +86,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
     const SfxItemPool* pEditPool(rExportP.GetDocument()->GetEditPool());
     AddFontItems(aEditWhichIds, 3, pEditPool, false);
 
-    std::shared_ptr<SfxStyleSheetIterator> pItr = rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Page, SfxStyleSearchBits::All);
+    std::unique_ptr<SfxStyleSheetIterator> pItr = rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Page, SfxStyleSearchBits::All);
 
     m_bEmbedUsedOnly = rExportP.GetDocument()->IsEmbedUsedFontsOnly();
     m_bEmbedLatinScript = rExportP.GetDocument()->IsEmbedFontScriptLatin();
