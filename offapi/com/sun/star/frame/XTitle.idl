@@ -25,7 +25,7 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** an interface representing an entity with a modifyable title.
+/** an interface representing an entity with a modifiable title.
  */
 interface XTitle : com::sun::star::uno::XInterface
 {

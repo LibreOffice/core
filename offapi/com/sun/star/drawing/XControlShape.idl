@@ -40,7 +40,7 @@ published interface XControlShape: com::sun::star::drawing::XShape
 
         @return
             if there is already a control model assigned
-            to this ControlShape, than its returned.
+            to this ControlShape, then it's returned.
             Otherwise you get an empty reference.
      */
     com::sun::star::awt::XControlModel getControl();

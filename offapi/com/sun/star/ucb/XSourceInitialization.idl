@@ -38,7 +38,7 @@ published interface XSourceInitialization: com::sun::star::uno::XInterface
         <p>Hopefully you will only use this, when <var>Source</var>
         is an com::sun::star::lang::XComponent and this
         is an com::sun::star::lang::XEventListener.
-        Than you should call
+        Then you should call
         com::sun::star::lang::XComponent::addEventListener()
         from inside the implementation of this method.
 

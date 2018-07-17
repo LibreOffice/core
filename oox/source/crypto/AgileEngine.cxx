@@ -431,7 +431,7 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
     aCryptoHash.update(aSizeBytes);
 
     aInputStream.skip(4);  // Reserved 4 Bytes
-    // accout for reserved 4 bytes (must be 0)
+    // account for reserved 4 bytes (must be 0)
     std::vector<sal_uInt8> aReserved{0,0,0,0};
     aCryptoHash.update(aReserved);
 
