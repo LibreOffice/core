@@ -698,6 +698,8 @@ public:
     const OUString  GetDefaultParaStyleName();
 
     css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId);
+    // get property first from the given context, or secondly from its stylesheet
+    css::uno::Any GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
     bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}

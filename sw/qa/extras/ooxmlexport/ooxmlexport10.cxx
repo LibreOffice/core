@@ -290,6 +290,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560, "fdo72560.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( xParaRightLTR, "ParaAdjust" ));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
+{
+    // The problem was libreoffice confuse when RTL was specified in non-default style
+    uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, "RTL END"));
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, "WritingMode" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaEndRTL, "ParaAdjust" ));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testRPrChangeClosed, "rprchange_closed.docx")
 {
     // Redline defined by rPrChanged wasn't removed.
