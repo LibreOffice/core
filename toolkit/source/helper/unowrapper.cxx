@@ -275,7 +275,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
         xWindowPeerComp->dispose();
 
     // #102132# Iterate over frames after setting Window peer to NULL,
-    // because while destroying other frames, we get get into the method again and try
+    // because while destroying other frames, we get into the method again and try
     // to destroy this window again...
     // #i42462#/#116855# no, don't loop: Instead, just ensure that all our top-window-children
     // are disposed, too (which should also be a valid fix for #102132#, but doesn't have the extreme
