@@ -40,6 +40,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <unotools/eventcfg.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
@@ -296,6 +297,20 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
                                               : nullptr;
     rType = GetScriptType( pHeaderAttrs );
     rTypeStr = GetScriptTypeString( pHeaderAttrs );
+}
+
+namespace
+{
+    bool allowAccessLink(SwDoc& rDoc)
+    {
+        OUString sReferer;
+        SfxObjectShell * sh = rDoc.GetPersist();
+        if (sh != nullptr && sh->HasName())
+        {
+            sReferer = sh->GetMedium()->GetName();
+        }
+        return !SvtSecurityOptions().isUntrustedReferer(sReferer);
+    }
 }
 
 /*  */
@@ -595,7 +610,7 @@ IMAGE_SETEVENT:
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
-    if (!nWidth || !nHeight)
+    if ((!nWidth || !nHeight) && allowAccessLink(*m_pDoc))
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(/*bExtendedInfo=*/true))
@@ -603,7 +618,7 @@ IMAGE_SETEVENT:
             // Try to use size info from the image header before defaulting to
             // HTML_DFLT_IMG_WIDTH/HEIGHT.
             aTwipSz = Application::GetDefaultDevice()->PixelToLogic(aDescriptor.GetSizePixel(),
-                                                                    MapMode(MapUnit::MapTwip));
+                                                                    MapMode(MAP_TWIP));
             nWidth = aTwipSz.getWidth();
             nHeight = aTwipSz.getHeight();
         }
