@@ -384,23 +384,21 @@ namespace {
             if( mbImpress )
             {
                 vcl::PrinterOptionsHelper::UIControlOptions aPrintOpt;
-                aPrintOpt.maGroupHint = "JobPage" ;
-                AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("extraimpressprintoptions",
-                                    SdResId(STR_IMPRESS_PRINT_UI_PRINT_GROUP),
-                                    "",
-                                    aPrintOpt ));
+                aPrintOpt.mbInternalOnly = true;
+                AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("fromwhich",
+                                    SdResId( STR_IMPRESS_PRINT_UI_FROMWHICH ),
+                                    OUString(),
+                                    aPrintOpt));
+
+                AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("slidesperpagelb",
+                                    SdResId(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE),
+                                    ""));
+
+                AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("slidesorderlb",
+                                    SdResId(STR_IMPRESS_PRINT_UI_ORDER),
+                                    ""));
 
                 aHelpIds.realloc( 1 );
-                aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox" ;
-                AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
-                                    "impressdocument",
-                                    SdResId(STR_IMPRESS_PRINT_UI_CONTENT),
-                                    aHelpIds,
-                                    "PageContentType" ,
-                                    CreateChoice(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES)),
-                                    0)
-                                );
-
                 aHelpIds[0] = ".HelpID:vcl:PrintDialog:SlidesPerPage:ListBox" ;
                 vcl::PrinterOptionsHelper::UIControlOptions aContentOpt( "PageContentType" , 1 );
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
@@ -603,11 +601,34 @@ namespace {
             OUString aPrintRangeName( "PrintContent" );
             aHelpIds.realloc( 1 );
             aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox";
-            AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt( "printpagesbox", OUString(),
-                                aHelpIds, aPrintRangeName,
-                                mbImpress ? CreateChoice( STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE ) ) :
-                                            CreateChoice( STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE ) ),
-                                nPrintRange ) );
+
+            if ( mbImpress )
+            {
+                AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt( "printextrabox", OUString(),
+                                    aHelpIds, aPrintRangeName,
+                                    mbImpress ? CreateChoice( STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE ) ) :
+                                                CreateChoice( STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE ) ),
+                                    nPrintRange ) );
+
+                aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox" ;
+                AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
+                                    "printpagesbox",
+                                    SdResId(STR_IMPRESS_PRINT_UI_CONTENT),
+                                    aHelpIds,
+                                    "PageContentType" ,
+                                    CreateChoice(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES)),
+                                    0)
+                                );
+            }
+            else
+            {
+                AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt( "printpagesbox", OUString(),
+                                    aHelpIds, aPrintRangeName,
+                                    mbImpress ? CreateChoice( STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE ) ) :
+                                                CreateChoice( STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE ) ),
+                                    nPrintRange ) );
+            }
+
 
             // create a an Edit dependent on "Pages" selected
             vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
