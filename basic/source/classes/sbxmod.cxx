@@ -1218,7 +1218,7 @@ void SbModule::RunInit()
      && !pImage->bInit
      && pImage->IsFlag( SbiImageFlags::INITCODE ) )
     {
-        // Set flag, so that RunInit get activ (Testtool)
+        // Set flag, so that RunInit get active (Testtool)
         GetSbData()->bRunInit = true;
 
         SbModule* pOldMod = GetSbData()->pMod;
@@ -1236,7 +1236,7 @@ void SbModule::RunInit()
         pImage->bInit = true;
         pImage->bFirstInit = false;
 
-        // RunInit is not activ anymore
+        // RunInit is not active anymore
         GetSbData()->bRunInit = false;
     }
 }
