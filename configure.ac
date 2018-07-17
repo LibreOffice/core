@@ -5180,7 +5180,7 @@ find_al()
     done
 
     # We need this additional check to detect 4.6.1 or above.
-    for ver in 4.7.1 4.7 4.6.2 4.6.1; do
+    for ver in 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
         if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
             altest=$regvalue
@@ -5195,26 +5195,11 @@ find_al()
     done
 }
 
-find_dotnetsdk()
-{
-    # Return value: $frametest (that's a silly name...)
-
-    unset frametest
-
-    for ver in 1.1 2.0; do
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv$ver
-        if test -n "$regvalue"; then
-            frametest=$regvalue
-            return
-        fi
-    done
-}
-
 find_dotnetsdk46()
 {
     unset frametest
 
-    for ver in 4.7.1 4.7 4.6.2 4.6.1 4.6; do
+    for ver in 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
         reg_get_value_64 "HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
@@ -5591,23 +5576,17 @@ if test "$build_os" = "cygwin"; then
 
     dnl Check mscoree.lib / .NET Framework dir
     AC_MSG_CHECKING(.NET Framework)
-    find_dotnetsdk
-    if test -f "$frametest/lib/mscoree.lib"; then
+    find_dotnetsdk46
+    PathFormat "$frametest"
+    frametest="$formatted_path"
+    if test -f "$frametest/Lib/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
         DOTNET_FRAMEWORK_HOME="$frametest"
     else
         find_winsdk
         if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
             DOTNET_FRAMEWORK_HOME="$winsdktest"
-        else
-            find_dotnetsdk46
-            PathFormat "$frametest"
-            frametest="$formatted_path"
-            if test -f "$frametest/Lib/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
-                 DOTNET_FRAMEWORK_HOME="$frametest"
-            fi
         fi
     fi
-
     if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/Lib/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
         AC_MSG_ERROR([mscoree.lib not found])
     fi
