@@ -3422,6 +3422,9 @@ namespace
     }
 }
 
+static bool g_DropSuccessSet = false;
+static bool g_DropSuccess = false;
+
 class GtkDropTargetDropContext : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
 {
     GdkDragContext *m_pContext;
@@ -3447,6 +3450,11 @@ public:
     virtual void SAL_CALL dropComplete(sal_Bool bSuccess) override
     {
         gtk_drag_finish(m_pContext, bSuccess, false, m_nTime);
+        if (GtkDragSource::g_ActiveDragSource)
+        {
+            g_DropSuccessSet = true;
+            g_DropSuccess = bSuccess;
+        }
     }
 };
 
@@ -4341,9 +4349,12 @@ void GtkDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
         // For LibreOffice internal D&D we provide the Transferable without Gtk
         // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
         g_ActiveDragSource = this;
+        g_DropSuccessSet = false;
+        g_DropSuccess = false;
 
         m_pFrame->startDrag(nDragButton, rEvent.DragOriginX, rEvent.DragOriginY,
                             VclToGdk(sourceActions), pTargetList);
+
         gtk_target_list_unref(pTargetList);
         for (auto &a : aGtkTargets)
             g_free(a.target);
@@ -4428,7 +4439,12 @@ void GtkDragSource::dragEnd(GdkDragContext* context)
     {
         datatransfer::dnd::DragSourceDropEvent aEv;
         aEv.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
-        aEv.DropSuccess = true;
+        // an internal drop can accept the drop but fail with dropComplete( false )
+        // this is different than the GTK API
+        if (g_DropSuccessSet)
+            aEv.DropSuccess = g_DropSuccess;
+        else
+            aEv.DropSuccess = true;
         auto xListener = m_xListener;
         m_xListener.clear();
         xListener->dragDropEnd(aEv);
