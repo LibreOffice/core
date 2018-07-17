@@ -394,6 +394,11 @@ StyleSheetTable::~StyleSheetTable()
 {
 }
 
+PropertyMapPtr const & StyleSheetTable::GetDefaultParaProps()
+{
+    return m_pImpl->m_pDefaultParaProps;
+}
+
 PropertyMapPtr const & StyleSheetTable::GetDefaultCharProps()
 {
     return m_pImpl->m_pDefaultCharProps;
