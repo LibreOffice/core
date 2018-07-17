@@ -152,6 +152,11 @@ def getFastParser():
     if (!mxFastParser.is())
     {
         mxFastParser = css::xml::sax::FastParser::create(mxContext);
+        // the threaded parser is about 20% slower loading writer documents
+        css::uno::Reference< css::lang::XInitialization > xInit( mxFastParser, css::uno::UNO_QUERY_THROW );
+        css::uno::Sequence< css::uno::Any > args(1);
+        args[0] <<= OUString("DisableThreadedParser");
+        xInit->initialize(args);
 """)
     for url in sorted(ooxUrlAliases.keys()):
         print("""        mxFastParser->registerNamespace("%s", oox::NMSP_%s);""" % (url, ooxUrlAliases[url]))
@@ -167,6 +172,7 @@ def getFastParser():
 def createImpl(model):
     print("""
 #include <com/sun/star/xml/sax/FastParser.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include "ooxml/OOXMLFactory.hxx"
 #include "ooxml/OOXMLFastHelper.hxx"
 #include "ooxml/OOXMLStreamImpl.hxx"
