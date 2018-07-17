@@ -452,15 +452,8 @@ template <class ParentClassT> class Qt5Widget : public ParentClassT
     virtual void closeEvent(QCloseEvent* event) override { return maMixin.mixinCloseEvent(event); }
 
 private:
-    Qt5Widget(Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags())
-        : QWidget(parent, f)
-        , maMixin(&rFrame)
-    {
-        Init();
-    }
-
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
-        : QMainWindow(Q_NULLPTR, f)
+        : ParentClassT(Q_NULLPTR, f)
         , maMixin(&rFrame)
     {
         Init();
@@ -476,15 +469,18 @@ private:
 public:
     virtual ~Qt5Widget() override{};
 
-    friend QWidget* createQt5Widget(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f);
+    friend QWidget* createQt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f);
+    friend QWidget* createQMainWindow(Qt5Frame& rFrame, Qt::WindowFlags f);
 };
 
-QWidget* createQt5Widget(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
+QWidget* createQt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
 {
-    if (parent)
-        return new Qt5Widget<QWidget>(rFrame, parent, f);
-    else
-        return new Qt5Widget<QMainWindow>(rFrame, f);
+    return new Qt5Widget<QWidget>(rFrame, f);
+}
+
+QWidget* createQMainWindow(Qt5Frame& rFrame, Qt::WindowFlags f)
+{
+    return new Qt5Widget<QMainWindow>(rFrame, f);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
