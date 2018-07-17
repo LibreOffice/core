@@ -938,9 +938,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicusr \
 	wizards_properties \
 	wizards_wizardshare \
-	$(if $(ENABLE_HEADLESS),, \
-		chart2_opengl_shader \
-	) \
 	vcl_opengl_shader \
 	$(if $(filter WNT,$(OS)), \
 		vcl_opengl_blacklist \
