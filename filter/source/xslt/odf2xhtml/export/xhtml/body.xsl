@@ -190,7 +190,7 @@
     <xsl:template match="office:body/*">
         <xsl:param name="globalData"/>
 
-        <!-- not using of 'apply-styles-and-content' as the content table information migth have been added to 'globalData' variable -->
+        <!-- not using of 'apply-styles-and-content' as the content table information might have been added to 'globalData' variable -->
         <xsl:apply-templates select="@text:style-name | @draw:style-name | @draw:text-style-name | @table:style-name"><!-- | @presentation:style-name -->
             <xsl:with-param name="globalData" select="$globalData"/>
         </xsl:apply-templates>
@@ -675,7 +675,7 @@
 
         <xsl:element name="{$elementName}">
             <xsl:choose>
-                <!-- in ODF borders of paragraphs will be merged by default. Merging means the adjactend paragraphs are building a unit,
+                <!-- in ODF borders of paragraphs will be merged by default. Merging means the adjacent paragraphs are building a unit,
                     where only the first and the last will have a border to the surrounding (top / bottom border)
                                                 <xsl:variable name="precedingParagraphStyle" select="preceding-sibling::*[1][name() = 'text:p']/@text:style-name"/>
                     <xsl:variable name="followingParagraphStyle" select="following-sibling::*[1][name() = 'text:p']/@text:style-name"/>

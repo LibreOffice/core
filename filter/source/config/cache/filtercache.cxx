@@ -1025,8 +1025,8 @@ void FilterCache::impl_validateAndOptimize()
         const OUString* pExtensions = lExtensions.getConstArray();
         for (sal_Int32 e=0; e<ce; ++e)
         {
-            // Note: We must be sure that address the right hash entry
-            // does not depend from any upper/lower case problems ...
+            // Note: we must be sure that address the right hash entry
+            // does not depend on any upper/lower case problems...
             OUString sNormalizedExtension = pExtensions[e].toAsciiLowerCase();
 
             std::vector<OUString>& lTypesForExtension = m_lExtensions2Types[sNormalizedExtension];
