@@ -613,13 +613,13 @@ void SfxStyleSheetBasePool::SetSearchMask(SfxStyleFamily eFam, SfxStyleSearchBit
 }
 
 
-std::shared_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
+std::unique_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
 (
  SfxStyleFamily eFam,
  SfxStyleSearchBits mask
 )
 {
-    return std::make_shared<SfxStyleSheetIterator>(this,eFam,mask);
+    return o3tl::make_unique<SfxStyleSheetIterator>(this,eFam,mask);
 }
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Create
