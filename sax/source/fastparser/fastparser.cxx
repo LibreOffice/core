@@ -247,6 +247,7 @@ public:
     void parse();
     void produce( bool bForceFlush = false );
     bool m_bIgnoreMissingNSDecl;
+    bool m_bDisableThreadedParser;
 
 private:
     bool consume(EventList&);
@@ -634,6 +635,7 @@ namespace sax_fastparser {
 
 FastSaxParserImpl::FastSaxParserImpl() :
     m_bIgnoreMissingNSDecl(false),
+    m_bDisableThreadedParser(false),
     mpTop(nullptr)
 {
     mxDocumentLocator.set( new FastLocatorImpl( this ) );
@@ -781,7 +783,7 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
         rEntity.mxDocumentHandler->startDocument();
     }
 
-    if (!getenv("SAX_DISABLE_THREADS"))
+    if (!getenv("SAX_DISABLE_THREADS") && !m_bDisableThreadedParser)
     {
         Reference<css::io::XSeekable> xSeekable(rEntity.maStructSource.aInputStream, UNO_QUERY);
         // available() is not __really__ relevant here, but leave it in as a heuristic for non-seekable streams
@@ -1325,11 +1327,16 @@ FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
     if (rArguments.getLength())
     {
         OUString str;
-        if ( ( rArguments[0] >>= str ) && "IgnoreMissingNSDecl" == str )
-            mpImpl->m_bIgnoreMissingNSDecl = true;
-        else if ( str == "DoSmeplease" )
+        if ( rArguments[0] >>= str )
         {
-            //just ignore as this is already immune to billion laughs
+            if ( str == "IgnoreMissingNSDecl" )
+                mpImpl->m_bIgnoreMissingNSDecl = true;
+            else if ( str == "DoSmeplease" )
+                ; //just ignore as this is already immune to billion laughs
+            else if ( str == "DisableThreadedParser" )
+                mpImpl->m_bDisableThreadedParser = true;
+            else
+                throw IllegalArgumentException();
         }
         else
             throw IllegalArgumentException();
