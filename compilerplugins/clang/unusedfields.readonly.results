@@ -44,13 +44,13 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:135
     __cxxabiv1::__cxa_eh_globals uncaughtExceptions unsigned int
 bridges/source/jni_uno/jni_info.h:68
     jni_uno::JNI_type_info m_td ::com::sun::star::uno::TypeDescription
-bridges/source/jni_uno/jni_java2uno.cxx:148
-    jni_uno::largest n sal_Int64
 bridges/source/jni_uno/jni_java2uno.cxx:149
-    jni_uno::largest d double
+    jni_uno::largest n sal_Int64
 bridges/source/jni_uno/jni_java2uno.cxx:150
-    jni_uno::largest p void *
+    jni_uno::largest d double
 bridges/source/jni_uno/jni_java2uno.cxx:151
+    jni_uno::largest p void *
+bridges/source/jni_uno/jni_java2uno.cxx:152
     jni_uno::largest a uno_Any
 chart2/source/model/main/DataPoint.hxx:108
     chart::DataPoint m_bNoParentPropAllowed _Bool
@@ -92,13 +92,13 @@ connectivity/source/inc/TConnection.hxx:55
     connectivity::OMetaConnection m_aResources class connectivity::SharedResources
 connectivity/source/inc/writer/WTable.hxx:69
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
-cppcanvas/source/mtfrenderer/textaction.cxx:827
+cppcanvas/source/mtfrenderer/textaction.cxx:828
     cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextFillColor const ::Color
-cppcanvas/source/mtfrenderer/textaction.cxx:1663
+cppcanvas/source/mtfrenderer/textaction.cxx:1661
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
-cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:34
-    Mapping m_from uno::Environment
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:35
+    Mapping m_from uno::Environment
+cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:36
     Mapping m_to uno::Environment
 cppu/source/helper/purpenv/Proxy.hxx:36
     Proxy m_from css::uno::Environment
@@ -156,7 +156,7 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/options/optcolor.cxx:254
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
-cui/source/options/optpath.cxx:78
+cui/source/options/optpath.cxx:79
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
 cui/source/options/personalization.hxx:35
     SvxPersonalizationTabPage m_vDefaultPersonaImages VclPtr<class PushButton> [3]
@@ -164,7 +164,7 @@ cui/source/options/personalization.hxx:86
     SelectPersonaDialog m_vResultList VclPtr<class PushButton> [9]
 cui/source/options/personalization.hxx:87
     SelectPersonaDialog m_vSearchSuggestions VclPtr<class PushButton> [6]
-cui/source/options/treeopt.cxx:468
+cui/source/options/treeopt.cxx:469
     OptionsGroupInfo m_bLoadError _Bool
 dbaccess/source/core/api/RowSetBase.hxx:85
     dbaccess::ORowSetBase m_aEmptyValue connectivity::ORowSetValue
@@ -314,12 +314,48 @@ include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:33
     MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
-include/svx/colorbox.hxx:105
-    ColorListBox m_nSlotId sal_uInt16
-include/svx/colorbox.hxx:106
-    ColorListBox m_bShowNoneButton _Bool
-include/svx/fntctrl.hxx:93
-    FontPrevWindow maText class rtl::OUString
+include/svx/colorbox.hxx:99
+    ColorListBox m_aSelectedLink Link<class ColorListBox &, void>
+include/svx/colorwindow.hxx:118
+    ColorWindow maCommand class rtl::OUString
+include/svx/colorwindow.hxx:136
+    ColorWindow maSelectedLink Link<const NamedColor &, void>
+include/svx/pagectrl.hxx:44
+    SvxPageWindow bResetBackground _Bool
+include/svx/pagectrl.hxx:45
+    SvxPageWindow bFrameDirection _Bool
+include/svx/pagectrl.hxx:46
+    SvxPageWindow nFrameDirection enum SvxFrameDirection
+include/svx/pagectrl.hxx:64
+    SvxPageWindow bTable _Bool
+include/svx/pagectrl.hxx:65
+    SvxPageWindow bHorz _Bool
+include/svx/pagectrl.hxx:66
+    SvxPageWindow bVert _Bool
+include/svx/paraprev.hxx:43
+    SvxParaPrevWindow nLeftMargin long
+include/svx/paraprev.hxx:44
+    SvxParaPrevWindow nRightMargin long
+include/svx/paraprev.hxx:45
+    SvxParaPrevWindow nFirstLineOfst short
+include/svx/paraprev.hxx:47
+    SvxParaPrevWindow nUpper sal_uInt16
+include/svx/paraprev.hxx:48
+    SvxParaPrevWindow nLower sal_uInt16
+include/svx/paraprev.hxx:50
+    SvxParaPrevWindow eAdjust enum SvxAdjust
+include/svx/paraprev.hxx:52
+    SvxParaPrevWindow eLastLine enum SvxAdjust
+include/svx/paraprev.hxx:54
+    SvxParaPrevWindow eLine enum SvxPrevLineSpace
+include/svx/relfld.hxx:31
+    SvxRelativeField nRelMin sal_uInt16
+include/svx/relfld.hxx:32
+    SvxRelativeField nRelMax sal_uInt16
+include/svx/relfld.hxx:33
+    SvxRelativeField bRelativeMode _Bool
+include/svx/relfld.hxx:35
+    SvxRelativeField bNegativeEnabled _Bool
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/sdr/overlay/overlaymanager.hxx:73
@@ -332,8 +368,16 @@ include/svx/svdoedge.hxx:161
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
 include/svx/svdpntv.hxx:170
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
+include/test/sheet/xdatapilottable.hxx:31
+    apitest::XDataPilotTable xCellForChange css::uno::Reference<css::table::XCell>
+include/test/sheet/xdatapilottable.hxx:32
+    apitest::XDataPilotTable xCellForCheck css::uno::Reference<css::table::XCell>
+include/test/sheet/xnamedranges.hxx:38
+    apitest::XNamedRanges xSheet css::uno::Reference<css::sheet::XSpreadsheet>
+include/test/sheet/xspreadsheets2.hxx:46
+    apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo4/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -354,6 +398,8 @@ include/unoidl/unoidl.hxx:452
     unoidl::ConstantValue::(anonymous) floatValue float
 include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
+include/unotest/bootstrapfixturebase.hxx:37
+    test::BootstrapFixtureBase m_directories class test::Directories
 include/vcl/filter/pdfdocument.hxx:188
     vcl::filter::PDFNameElement m_nLength sal_uInt64
 include/vcl/opengl/OpenGLContext.hxx:57
@@ -380,6 +426,8 @@ linguistic/source/dlistimp.hxx:56
     DicList aOpt class LinguOptions
 oox/qa/token/tokenmap-test.cxx:34
     oox::TokenmapTest tokenMap class oox::TokenMap
+oox/qa/unit/vba_compression.cxx:71
+    TestVbaCompression m_directories test::Directories
 oox/source/drawingml/chart/objectformatter.cxx:708
     oox::drawingml::chart::ObjectFormatterData maFromLocale struct com::sun::star::lang::Locale
 oox/source/drawingml/diagram/diagramlayoutatoms.hxx:208
@@ -415,15 +463,13 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:129
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:130
-    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo/sc/inc/compiler.hxx:127:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /media/noel/disk2/libo4/sc/inc/compiler.hxx:127:9)
 sc/inc/compiler.hxx:135
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
     sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **
 sc/inc/reordermap.hxx:21
     sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
-sc/qa/extras/anchor.cxx:53
-    sc_apitest::ScAnchorTest mxComponent uno::Reference<lang::XComponent>
 sc/source/core/inc/adiasync.hxx:41
     ScAddInAsync::(anonymous) pStr class rtl::OUString *
 sc/source/core/inc/interpre.hxx:105
@@ -498,7 +544,7 @@ sfx2/source/appl/lnkbase2.cxx:96
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
 slideshow/source/engine/slideshowimpl.cxx:152
     (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
-sot/source/sdstor/ucbstorage.cxx:414
+sot/source/sdstor/ucbstorage.cxx:407
     UCBStorageStream_Impl m_aKey class rtl::OString
 starmath/source/view.cxx:855
     SmViewShell_Impl aOpts class SvtMiscOptions
@@ -534,6 +580,8 @@ svtools/source/dialogs/insdlg.cxx:52
     OleObjectDescriptor dwFullUserTypeName sal_uInt32
 svtools/source/dialogs/insdlg.cxx:53
     OleObjectDescriptor dwSrcOfCopy sal_uInt32
+svtools/source/misc/transfer2.cxx:322
+    TransferDataContainer_Impl pGrf std::unique_ptr<Graphic>
 svtools/source/table/gridtablerenderer.cxx:69
     svt::table::CachedSortIndicator m_sortAscending class BitmapEx
 svtools/source/table/gridtablerenderer.cxx:70
@@ -564,7 +612,7 @@ sw/inc/calc.hxx:194
     SwCalc m_aSysLocale class SvtSysLocale
 sw/inc/hints.hxx:199
     SwAttrSetChg m_bDelSet _Bool
-sw/inc/shellio.hxx:140
+sw/inc/shellio.hxx:141
     SwReader pStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
@@ -580,7 +628,7 @@ sw/source/core/inc/swblocks.hxx:68
     SwImpBlocks m_bInPutMuchBlocks _Bool
 sw/source/core/text/atrhndl.hxx:48
     SwAttrHandler::SwAttrStack m_pInitialArray class SwTextAttr *[3]
-sw/source/filter/html/swhtml.hxx:497
+sw/source/filter/html/swhtml.hxx:454
     SwHTMLParser m_bBodySeen _Bool
 sw/source/filter/inc/rtf.hxx:32
     RTFSurround::(anonymous) nVal sal_uInt8
@@ -594,7 +642,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:108
     SwMailMergeConfigItem_Impl m_aMaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:110
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
-sw/source/uibase/inc/fldmgr.hxx:77
+sw/source/uibase/inc/fldmgr.hxx:78
     SwInsertField_Data m_aDBDataSource css::uno::Any
 sw/source/uibase/inc/labimg.hxx:49
     SwLabItem m_aBin class rtl::OUString
@@ -668,6 +716,8 @@ vcl/inc/svdata.hxx:284
     ImplSVNWFData mbNoActiveTabTextRaise _Bool
 vcl/inc/svdata.hxx:286
     ImplSVNWFData mbProgressNeedsErase _Bool
+vcl/inc/svdata.hxx:295
+    ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/unx/i18n_status.hxx:56
     vcl::I18NStatus m_aCurrentIM class rtl::OUString
 vcl/inc/unx/saldisp.hxx:288
@@ -732,8 +782,8 @@ vcl/unx/generic/print/bitmap_gfx.cxx:67
     psp::HexEncoder mpFileBuffer sal_Char [16400]
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass AtkObjectClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:28
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
@@ -748,7 +798,7 @@ writerfilter/source/ooxml/OOXMLFactory.hxx:64
     writerfilter::ooxml::AttributeInfo m_nRef Id
 xmloff/inc/MultiPropertySetHelper.hxx:78
     MultiPropertySetHelper aEmptyAny css::uno::Any
-xmloff/source/chart/SchXMLChartContext.cxx:447
+xmloff/source/chart/SchXMLChartContext.cxx:448
     (anonymous namespace)::NewDonutSeries msStyleName class rtl::OUString
 xmloff/source/chart/SchXMLChartContext.hxx:54
     SeriesDefaultsAndStyles maErrorIndicatorDefault css::uno::Any
@@ -762,5 +812,5 @@ xmloff/source/chart/SchXMLChartContext.hxx:58
     SeriesDefaultsAndStyles maPercentageErrorDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:59
     SeriesDefaultsAndStyles maErrorMarginDefault css::uno::Any
-xmloff/source/core/xmlexp.cxx:257
+xmloff/source/core/xmlexp.cxx:258
     SvXMLExport_Impl maSaveOptions class SvtSaveOptions

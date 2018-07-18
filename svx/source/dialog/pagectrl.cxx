@@ -46,10 +46,6 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     nLeft(0),
     nRight(0),
 
-    bResetBackground(false),
-    bFrameDirection(false),
-    nFrameDirection(SvxFrameDirection::Horizontal_LR_TB),
-
     nHdLeft(0),
     nHdRight(0),
     nHdDist(0),
@@ -66,9 +62,7 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
 
     bFooter(false),
     bHeader(false),
-    bTable(false),
-    bHorz(false),
-    bVert(false),
+
     eUsage(SvxPageUsage::All)
 {
     // Count in Twips by default
@@ -148,15 +142,12 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     const Color& rDlgColor = rStyleSettings.GetDialogColor();
 
     // background
-    if (!bSecond || bResetBackground)
+    if (!bSecond)
     {
         rRenderContext.SetLineColor(COL_TRANSPARENT);
         rRenderContext.SetFillColor(rDlgColor);
         Size winSize(rRenderContext.GetOutputSize());
         rRenderContext.DrawRect(tools::Rectangle(Point(0,0), winSize));
-
-        if (bResetBackground)
-            bResetBackground = false;
     }
     rRenderContext.SetLineColor(rFieldTextColor);
 
@@ -234,101 +225,6 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     {
         // draw PageFill and outline
         drawFillAttributes(rRenderContext, maPageFillAttributes, aRect, aRect);
-    }
-
-    if (bFrameDirection && !bTable)
-    {
-        Point aPos;
-        vcl::Font aFont(rRenderContext.GetFont());
-        const Size aSaveSize = aFont.GetFontSize();
-        Size aDrawSize(0,aRect.GetHeight() / 6);
-        aFont.SetFontSize(aDrawSize);
-        rRenderContext.SetFont(aFont);
-        OUString sText("ABC");
-        Point aMove(1, rRenderContext.GetTextHeight());
-        sal_Unicode cArrow = 0x2193;
-        long nAWidth = rRenderContext.GetTextWidth(sText.copy(0,1));
-        switch (nFrameDirection)
-        {
-        case SvxFrameDirection::Horizontal_LR_TB:
-            aPos = aRect.TopLeft();
-            aPos.AdjustX(PixelToLogic(Point(1,1)).X() );
-            aMove.setY( 0 );
-            cArrow = 0x2192;
-            break;
-        case SvxFrameDirection::Horizontal_RL_TB:
-            aPos = aRect.TopRight();
-            aPos.AdjustX( -nAWidth );
-            aMove.setY( 0 );
-            aMove.setX( aMove.X() * -1 );
-            cArrow = 0x2190;
-            break;
-        case SvxFrameDirection::Vertical_LR_TB:
-            aPos = aRect.TopLeft();
-            aPos.AdjustX(rRenderContext.PixelToLogic(Point(1,1)).X() );
-            aMove.setX( 0 );
-            break;
-        case SvxFrameDirection::Vertical_RL_TB:
-            aPos = aRect.TopRight();
-            aPos.AdjustX( -nAWidth );
-            aMove.setX( 0 );
-            break;
-        default: break;
-        }
-        sText += OUStringLiteral1(cArrow);
-        for (sal_Int32 i = 0; i < sText.getLength(); i++)
-        {
-            OUString sDraw(sText.copy(i,1));
-            long nHDiff = 0;
-            long nCharWidth = GetTextWidth(sDraw);
-            bool bHorizontal = 0 == aMove.Y();
-            if (!bHorizontal)
-            {
-                nHDiff = (nAWidth - nCharWidth) / 2;
-                aPos.AdjustX(nHDiff );
-            }
-            rRenderContext.DrawText(aPos,sDraw);
-            if (bHorizontal)
-            {
-                aPos.AdjustX(aMove.X() < 0 ? -nCharWidth : nCharWidth );
-            }
-            else
-            {
-                aPos.AdjustX( -nHDiff );
-                aPos.AdjustY(aMove.Y() );
-            }
-        }
-        aFont.SetFontSize(aSaveSize);
-        rRenderContext.SetFont(aFont);
-
-    }
-    if (bTable)
-    {
-        // Paint Table, if necessary center it
-        rRenderContext.SetLineColor(COL_LIGHTGRAY);
-
-        long nW = aRect.GetWidth();
-        long nH = aRect.GetHeight();
-        long const nTW = CELL_WIDTH * 3;
-        long const nTH = CELL_HEIGHT * 3;
-        long _nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
-        long _nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
-        tools::Rectangle aCellRect(Point(_nLeft, _nTop),Size(CELL_WIDTH, CELL_HEIGHT));
-
-        for (sal_uInt16 i = 0; i < 3; ++i)
-        {
-            aCellRect.SetLeft( _nLeft );
-            aCellRect.SetRight( _nLeft + CELL_WIDTH );
-            if(i > 0)
-                aCellRect.Move(0,CELL_HEIGHT);
-
-            for (sal_uInt16 j = 0; j < 3; ++j)
-            {
-                if (j > 0)
-                    aCellRect.Move(CELL_WIDTH,0);
-                rRenderContext.DrawRect(aCellRect);
-            }
-        }
     }
 }
 

@@ -28,14 +28,7 @@
 class SVX_DLLPUBLIC SvxRelativeField : public MetricField
 {
 private:
-    sal_uInt16          nRelMin;
-    sal_uInt16          nRelMax;
-    bool                bRelativeMode;
     bool                bRelative;
-    bool                bNegativeEnabled;
-
-protected:
-    void            Modify() override;
 
 public:
     SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);

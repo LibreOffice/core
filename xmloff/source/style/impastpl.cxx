@@ -599,14 +599,12 @@ std::vector<xmloff::AutoStyleEntry> SvXMLAutoStylePoolP_Impl::GetAutoStyleEntrie
     for (std::unique_ptr<XMLAutoStyleFamily> const & rFamily : m_FamilySet)
     {
         rtl::Reference<XMLPropertySetMapper> aPropertyMapper = rFamily->mxMapper->getPropertySetMapper();
-        sal_Int32 nFamily = rFamily->mnFamily;
         for (auto const & rParent : rFamily->m_ParentSet)
         {
             for (auto const & rProperty : rParent->GetPropertiesList())
             {
                 rReturnVector.emplace_back();
                 xmloff::AutoStyleEntry & rEntry = rReturnVector.back();
-                rEntry.m_nFamily = nFamily;
                 rEntry.m_aParentName = rParent->GetParent();
                 rEntry.m_aName = rProperty->GetName();
                 for (XMLPropertyState const & rPropertyState : rProperty->GetProperties())

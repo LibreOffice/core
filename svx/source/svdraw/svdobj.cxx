@@ -369,7 +369,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
 
-    bNotMasterCachable=false;
     bIsEdge=false;
     bIs3DObj=false;
     bMarkProt=false;
@@ -998,7 +997,6 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     bEmptyPresObj =rObj.bEmptyPresObj;
     bNotVisibleAsMaster=rObj.bNotVisibleAsMaster;
     bSnapRectDirty=true;
-    bNotMasterCachable=rObj.bNotMasterCachable;
     pPlusData.reset();
     if (rObj.pPlusData!=nullptr) {
         pPlusData.reset(rObj.pPlusData->Clone(this));
