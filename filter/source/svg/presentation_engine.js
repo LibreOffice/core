@@ -12170,7 +12170,6 @@ SlideTransition.prototype.createSlideTransition = function( aLeavingSlide, aEnte
 
                 case PUSHWIPE_TRANSITION:
                 {
-                    var bCombined = false;
                     var aDirection = null;
                     switch( this.eTransitionSubType )
                     {
@@ -12192,10 +12191,7 @@ SlideTransition.prototype.createSlideTransition = function( aLeavingSlide, aEnte
                             aDirection = { x: -1.0, y: 0.0 };
                             break;
                     }
-                    if( bCombined )
-                        return null;
-                    else
-                        return new MovingSlideChange( aLeavingSlide, aEnteringSlide, aDirection, aDirection );
+                    return new MovingSlideChange( aLeavingSlide, aEnteringSlide, aDirection, aDirection );
                 }
 
                 case SLIDEWIPE_TRANSITION:
