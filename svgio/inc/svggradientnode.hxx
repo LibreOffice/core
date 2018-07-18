@@ -56,6 +56,7 @@ namespace svgio
             /// link to another gradient used as style. If maXLink
             /// is set, the node can be fetched on demand by using
             // tryToFindLink (buffered)
+            mutable bool mbResolvingLink; // protect against infinite link recursion
             OUString               maXLink;
             const SvgGradientNode*      mpXLink;
 
