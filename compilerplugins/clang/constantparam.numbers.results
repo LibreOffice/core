@@ -1,8 +1,8 @@
-avmedia/source/gstreamer/gstplayer.cxx:432
+avmedia/source/gstreamer/gstplayer.cxx:433
     int wrap_element_query_position(struct _GstElement *,GstFormat,long *)
     GstFormat format
     3
-avmedia/source/gstreamer/gstplayer.cxx:443
+avmedia/source/gstreamer/gstplayer.cxx:444
     int wrap_element_query_duration(struct _GstElement *,GstFormat,long *)
     GstFormat format
     3
@@ -18,7 +18,7 @@ basctl/source/inc/sbxitem.hxx:49
     void basctl::SbxItem::SbxItem(unsigned short,const class basctl::ScriptDocument &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum basctl::ItemType)
     unsigned short nWhich
     30799
-basic/source/classes/sbunoobj.cxx:3183
+basic/source/classes/sbunoobj.cxx:3184
     class com::sun::star::uno::Reference<class com::sun::star::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class com::sun::star::uno::Sequence<enum com::sun::star::uno::TypeClass> &,enum com::sun::star::reflection::TypeDescriptionSearchDepth)
     enum com::sun::star::reflection::TypeDescriptionSearchDepth depth
     -1
@@ -106,7 +106,7 @@ connectivity/source/drivers/mork/MQueryHelper.hxx:181
     _Bool connectivity::mork::MQueryHelper::getRowValue(class connectivity::ORowSetValue &,int,const class rtl::OUString &,int)
     int nType
     12
-connectivity/source/drivers/postgresql/pq_connection.cxx:428
+connectivity/source/drivers/postgresql/pq_connection.cxx:429
     void properties2arrays(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Reference<class com::sun::star::script::XTypeConverter> &,unsigned short,class pq_sdbc_driver::cstr_vector &,class pq_sdbc_driver::cstr_vector &)
     unsigned short enc
     76
@@ -162,7 +162,7 @@ cui/source/inc/SpellDialog.hxx:115
     void svx::SentenceEditWindow_Impl::UndoActionStart(unsigned short)
     unsigned short nId
     205
-cui/source/options/cfgchart.hxx:92
+cui/source/options/cfgchart.hxx:86
     void SvxChartColorTableItem::SvxChartColorTableItem(unsigned short,const class SvxChartColorTable &)
     unsigned short nWhich
     10437
@@ -298,10 +298,6 @@ filter/source/msfilter/mscodec.cxx:96
     unsigned short lclGetHash(const unsigned char *,unsigned long)
     unsigned long nBufferSize
     16
-filter/source/svg/svgfilter.cxx:596
-    void SVGFileInfo::SVGFileInfo(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,int)
-    int nFirstBytesSize
-    2048
 forms/source/richtext/richtextcontrol.cxx:79
     void implAdjustTriStateFlag(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,long &,long,long)
     long nNegativeFlag
@@ -535,6 +531,10 @@ include/editeng/fhgtitem.hxx:79
     enum MapUnit eUnit
     8
 include/editeng/flditem.hxx:71
+    void SvxFieldItem::SvxFieldItem(class std::unique_ptr<class SvxFieldData, struct std::default_delete<class SvxFieldData> >,const unsigned short)
+    const unsigned short nId
+    4057
+include/editeng/flditem.hxx:72
     void SvxFieldItem::SvxFieldItem(const class SvxFieldData &,const unsigned short)
     const unsigned short nId
     4057
@@ -554,19 +554,19 @@ include/editeng/opaqitem.hxx:38
     void SvxOpaqueItem::SvxOpaqueItem(const unsigned short,const _Bool)
     const unsigned short nId
     98
-include/editeng/outliner.hxx:167
+include/editeng/outliner.hxx:164
     void Paragraph::RemoveFlag(enum ParaFlag)
     enum ParaFlag nFlag
     256
-include/editeng/outliner.hxx:866
+include/editeng/outliner.hxx:863
     void Outliner::SetParaFlag(class Paragraph *,enum ParaFlag)
     enum ParaFlag nFlag
     256
-include/editeng/outliner.hxx:867
+include/editeng/outliner.hxx:864
     _Bool Outliner::HasParaFlag(const class Paragraph *,enum ParaFlag)
     enum ParaFlag nFlag
     256
-include/editeng/outlobj.hxx:105
+include/editeng/outlobj.hxx:106
     void OutlinerParaObject::SetStyleSheets(unsigned short,const class rtl::OUString &,const enum SfxStyleFamily &)
     const enum SfxStyleFamily & rNewFamily
     8
@@ -594,7 +594,7 @@ include/filter/msfilter/dffpropset.hxx:64
     class rtl::OUString DffPropSet::GetPropertyString(unsigned int,class SvStream &) const
     unsigned int nId
     896
-include/filter/msfilter/escherex.hxx:728
+include/filter/msfilter/escherex.hxx:732
     void EscherPropertyContainer::Commit(class SvStream &,unsigned short,unsigned short)
     unsigned short nVersion
     3
@@ -622,7 +622,7 @@ include/formula/FormulaCompiler.hxx:100
     void formula::FormulaCompiler::OpCodeMap::OpCodeMap(unsigned short,_Bool,enum formula::FormulaGrammar::Grammar)
     unsigned short nSymbols
     497
-include/formula/tokenarray.hxx:282
+include/formula/tokenarray.hxx:284
     unsigned short formula::FormulaTokenArray::RemoveToken(unsigned short,unsigned short)
     unsigned short nCount
     2
@@ -688,12 +688,12 @@ include/o3tl/string_view.hxx:371
     2
 include/o3tl/string_view.hxx:403
     unsigned long o3tl::basic_string_view::rfind(type-parameter-?-?,unsigned long) const
-    type-parameter-?-? c
-    111
-include/o3tl/string_view.hxx:403
-    unsigned long o3tl::basic_string_view::rfind(type-parameter-?-?,unsigned long) const
     unsigned long pos
     18446744073709551615
+include/o3tl/string_view.hxx:403
+    unsigned long o3tl::basic_string_view::rfind(type-parameter-?-?,unsigned long) const
+    type-parameter-?-? c
+    111
 include/o3tl/string_view.hxx:406
     unsigned long o3tl::basic_string_view::rfind(const type-parameter-?-? *,unsigned long,unsigned long) const
     unsigned long n
@@ -906,7 +906,7 @@ include/sfx2/fcontnr.hxx:112
     void SfxFilterMatcherIter::SfxFilterMatcherIter(const class SfxFilterMatcher &,enum SfxFilterFlags,enum SfxFilterFlags)
     enum SfxFilterFlags nNotMask
     393216
-include/sfx2/frame.hxx:217
+include/sfx2/frame.hxx:218
     void SfxUnoFrameItem::SfxUnoFrameItem(unsigned short,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &)
     unsigned short nWhich
     6516
@@ -994,7 +994,7 @@ include/svl/int64item.hxx:21
     void SfxInt64Item::SfxInt64Item(unsigned short,long)
     unsigned short nWhich
     11141
-include/svl/itemset.hxx:202
+include/svl/itemset.hxx:204
     void SfxItemSet::PutExtended(const class SfxItemSet &,enum SfxItemState,enum SfxItemState)
     enum SfxItemState eDontCareAs
     16
@@ -1110,11 +1110,11 @@ include/svtools/transfer.hxx:345
     class com::sun::star::uno::Sequence<signed char> TransferableDataHelper::GetSequence(enum SotClipboardFormatId,const class rtl::OUString &)
     enum SotClipboardFormatId nFormat
     59
-include/svtools/treelistbox.hxx:550
+include/svtools/treelistbox.hxx:548
     class SvLBoxTab * SvTreeListBox::GetFirstTab(enum SvLBoxTabFlags,unsigned short &)
     enum SvLBoxTabFlags nFlagMask
     64
-include/svtools/treelistbox.hxx:551
+include/svtools/treelistbox.hxx:549
     void SvTreeListBox::GetLastTab(enum SvLBoxTabFlags,unsigned short &)
     enum SvLBoxTabFlags nFlagMask
     64
@@ -1236,12 +1236,12 @@ include/svx/fmgridcl.hxx:42
     1051648
 include/svx/fmview.hxx:89
     void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormats> &,unsigned short,enum SdrInventor,unsigned short,class SdrPage *,class SdrPage *,class SdrModel *,class SdrUnoObj *&,class SdrUnoObj *&)
-    unsigned short _nLabelObjectID
-    37
-include/svx/fmview.hxx:89
-    void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormats> &,unsigned short,enum SdrInventor,unsigned short,class SdrPage *,class SdrPage *,class SdrModel *,class SdrUnoObj *&,class SdrUnoObj *&)
     enum SdrInventor _nInventor
     827609170
+include/svx/fmview.hxx:89
+    void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormats> &,unsigned short,enum SdrInventor,unsigned short,class SdrPage *,class SdrPage *,class SdrModel *,class SdrUnoObj *&,class SdrUnoObj *&)
+    unsigned short _nLabelObjectID
+    37
 include/svx/fntctrl.hxx:81
     void SvxFontPrevWindow::SetFontEscapement(unsigned char,unsigned char,short)
     unsigned char nProp
@@ -1310,7 +1310,7 @@ include/svx/optgrid.hxx:77
     void SvxGridItem::SvxGridItem(unsigned short)
     unsigned short _nWhich
     10298
-include/svx/relfld.hxx:65
+include/svx/relfld.hxx:62
     void RelativeField::EnableRelativeMode(unsigned short,unsigned short)
     unsigned short nMax
     999
@@ -1386,7 +1386,7 @@ include/svx/xlnclit.hxx:34
     void XLineColorItem::XLineColorItem(int,const class Color &)
     int nIndex
     -1
-include/svx/xoutbmp.hxx:71
+include/svx/xoutbmp.hxx:75
     class Bitmap XOutBitmap::DetectEdges(const class Bitmap &,const unsigned char)
     const unsigned char cThreshold
     128
@@ -1394,6 +1394,10 @@ include/svx/xpoly.hxx:73
     void XPolygon::Insert(unsigned short,const class XPolygon &)
     unsigned short nPos
     65535
+include/test/sheet/xsheetconditionalentries.hxx:28
+    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> apitest::XSheetConditionalEntries::createCondition(const int)
+    const int nr
+    4
 include/test/unoapi_property_testers.hxx:75
     void testLongProperty(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const int &)
     const int & nValue
@@ -1412,12 +1416,12 @@ include/tools/b3dtrans.hxx:111
     2
 include/tools/b3dtrans.hxx:111
     void B3dTransformationSet::SetDeviceRectangle(double,double,double,double)
-    double fR
-    2
-include/tools/b3dtrans.hxx:111
-    void B3dTransformationSet::SetDeviceRectangle(double,double,double,double)
     double fL
     -2
+include/tools/b3dtrans.hxx:111
+    void B3dTransformationSet::SetDeviceRectangle(double,double,double,double)
+    double fR
+    2
 include/tools/b3dtrans.hxx:111
     void B3dTransformationSet::SetDeviceRectangle(double,double,double,double)
     double fB
@@ -1634,7 +1638,7 @@ include/vcl/errinf.hxx:188
     void TwoStringErrorInfo::TwoStringErrorInfo(class ErrCode,const class rtl::OUString &,const class rtl::OUString &,enum DialogMask)
     enum DialogMask nMask
     4097
-include/vcl/field.hxx:523
+include/vcl/field.hxx:521
     double MetricField::ConvertDoubleValue(long,unsigned short,enum FieldUnit,enum MapUnit)
     enum MapUnit eOutUnit
     9
@@ -1682,7 +1686,7 @@ include/vcl/print.hxx:682
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     int i_nMinValue
     10
-include/vcl/texteng.hxx:145
+include/vcl/texteng.hxx:140
     class TextPaM TextEngine::ImpInsertText(const class TextSelection &,char16_t,_Bool)
     char16_t c
     9
@@ -1690,15 +1694,15 @@ include/vcl/vclevent.hxx:228
     void VclAccessibleEvent::VclAccessibleEvent(enum VclEventId,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &)
     enum VclEventId n
     38
-include/vcl/weld.hxx:223
+include/vcl/weld.hxx:226
     class weld::Button * weld::Dialog::get_widget_for_response(int)
     int response
     5
-include/vcl/window.hxx:1203
+include/vcl/window.hxx:1200
     void vcl::Window::InvertTracking(const class tools::Polygon &,enum ShowTrackFlags)
     enum ShowTrackFlags nFlags
     4097
-include/vcl/window.hxx:1596
+include/vcl/window.hxx:1593
     void vcl::Window::SimulateKeyPress(unsigned short) const
     unsigned short nKeyCode
     1312
@@ -1710,19 +1714,19 @@ include/vcl/wrkwin.hxx:70
     void WorkWindow::WorkWindow(class vcl::Window *,const class com::sun::star::uno::Any &,long)
     long nStyle
     1312
-include/xmloff/txtparae.hxx:404
+include/xmloff/txtparae.hxx:408
     void XMLTextParagraphExport::exportListAndSectionChange(class com::sun::star::uno::Reference<class com::sun::star::text::XTextSection> &,class MultiPropertySetHelper &,short,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextContent> &,const class XMLTextNumRuleInfo &,const class XMLTextNumRuleInfo &,_Bool)
     short nTextSectionId
     5
-include/xmloff/txtparae.hxx:432
+include/xmloff/txtparae.hxx:436
     void XMLTextParagraphExport::Add(unsigned short,class MultiPropertySetHelper &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &)
     unsigned short nFamily
     100
-include/xmloff/xmlaustp.hxx:84
+include/xmloff/xmlaustp.hxx:85
     void SvXMLAutoStylePoolP::SetFamilyPropSetMapper(int,const class rtl::Reference<class SvXMLExportPropertyMapper> &)
     int nFamily
     203
-include/xmloff/xmlaustp.hxx:91
+include/xmloff/xmlaustp.hxx:92
     void SvXMLAutoStylePoolP::RegisterDefinedName(int,const class rtl::OUString &)
     int nFamily
     204
@@ -1730,15 +1734,15 @@ include/xmloff/xmlerror.hxx:135
     void XMLErrors::ThrowErrorAsSAXException(int)
     int nIdMask
     1073741824
-include/xmloff/xmlexp.hxx:276
+include/xmloff/xmlexp.hxx:277
     void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const short,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
     const short eDefaultMeasureUnit
     3
-include/xmloff/xmlexp.hxx:342
+include/xmloff/xmlexp.hxx:345
     void SvXMLExport::AddAttributeASCII(unsigned short,const char *,const char *)
     unsigned short nPrefix
     24
-include/xmloff/xmlexp.hxx:516
+include/xmloff/xmlexp.hxx:519
     void SvXMLExport::SetError(int,const class com::sun::star::uno::Sequence<class rtl::OUString> &)
     int nId
     1074266113
@@ -1765,11 +1769,11 @@ include/xmloff/xmlnumfi.hxx:199
 include/xmloff/XMLSettingsExportContext.hxx:37
     void xmloff::XMLSettingsExportContext::AddAttribute(enum xmloff::token::XMLTokenEnum,const class rtl::OUString &)
     enum xmloff::token::XMLTokenEnum i_eName
-    1211
+    1210
 include/xmloff/XMLSettingsExportContext.hxx:39
     void xmloff::XMLSettingsExportContext::AddAttribute(enum xmloff::token::XMLTokenEnum,enum xmloff::token::XMLTokenEnum)
     enum xmloff::token::XMLTokenEnum i_eName
-    1860
+    1858
 lotuswordpro/inc/xfilter/xfdrawstyle.hxx:95
     void XFDrawStyle::SetLineDashStyle(enum enumXFLineStyle,double,double,double)
     enum enumXFLineStyle style
@@ -1882,7 +1886,7 @@ sal/osl/unx/uunxapi.hxx:93
     int mkdir(const class rtl::OUString &,unsigned int)
     unsigned int aMode
     511
-sal/qa/osl/file/osl_File.cxx:105
+sal/qa/osl/file/osl_File.cxx:106
     _Bool t_compareTime(struct TimeValue *,struct TimeValue *,int)
     int nDelta
     2000
@@ -1974,35 +1978,35 @@ sc/inc/compressedarray.hxx:187
     type-parameter-?-? ScBitMaskCompressedArray::GetLastAnyBitAccess(const type-parameter-?-? &) const
     const type-parameter-?-? & rBitMask
     15
-sc/inc/document.hxx:1259
+sc/inc/document.hxx:1277
     _Bool ScDocument::CompileErrorCells(enum FormulaError)
     enum FormulaError nErrCode
     525
-sc/inc/document.hxx:1581
+sc/inc/document.hxx:1599
     void ScDocument::UndoToDocument(short,int,short,short,int,short,enum InsertDeleteFlags,_Bool,class ScDocument &)
     enum InsertDeleteFlags nFlags
     2303
-sc/inc/document.hxx:1581
+sc/inc/document.hxx:1599
     void ScDocument::UndoToDocument(short,int,short,short,int,short,enum InsertDeleteFlags,_Bool,class ScDocument &)
     short nCol2
     1023
-sc/inc/document.hxx:1764
+sc/inc/document.hxx:1782
     void ScDocument::DeleteSelectionTab(short,enum InsertDeleteFlags,const class ScMarkData &)
     enum InsertDeleteFlags nDelFlag
     2303
-sc/inc/document.hxx:1821
+sc/inc/document.hxx:1839
     void ScDocument::SetRowFlags(int,int,short,enum CRFlags)
     enum CRFlags nNewFlags
     8
-sc/inc/document.hxx:1821
+sc/inc/document.hxx:1839
     void ScDocument::SetRowFlags(int,int,short,enum CRFlags)
     int nEndRow
     1048575
-sc/inc/document.hxx:1851
+sc/inc/document.hxx:1869
     int ScDocument::LastNonFilteredRow(int,int,short) const
     int nEndRow
     1048575
-sc/inc/document.hxx:2151
+sc/inc/document.hxx:2169
     void ScDocument::BroadcastCells(const class ScRange &,enum SfxHintId,_Bool)
     enum SfxHintId nHint
     34
@@ -2017,7 +2021,7 @@ sc/inc/externalrefmgr.hxx:796
 sc/inc/formulacell.hxx:368
     void ScFormulaCell::AddRecalcMode(enum ScRecalcMode)
     enum ScRecalcMode 
-    8
+    4
 sc/inc/global.hxx:636
     void ScGlobal::AddQuotes(class rtl::OUString &,char16_t,_Bool)
     char16_t cQuote
@@ -2142,23 +2146,15 @@ sc/qa/extras/new_cond_format.cxx:377
     void testColorScaleEntries(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,int,int,const class rtl::OUString &,class Color,int,const class rtl::OUString &,class Color,int,const class rtl::OUString &,class Color)
     int nMediumType
     2
-sc/qa/unit/parallelism.cxx:357
-    void lcl_setupCommon(class ScDocument *,unsigned long,unsigned long)
-    unsigned long nNumRows
-    1048
-sc/qa/unit/parallelism.cxx:357
-    void lcl_setupCommon(class ScDocument *,unsigned long,unsigned long)
-    unsigned long nConstCellValue
-    20
-sc/qa/unit/subsequent_export-test.cxx:1378
+sc/qa/unit/subsequent_export-test.cxx:1380
     _Bool ::isOverline(const struct editeng::Section &,enum FontLineStyle)
     enum FontLineStyle eStyle
     2
-sc/qa/unit/subsequent_export-test.cxx:1395
+sc/qa/unit/subsequent_export-test.cxx:1397
     _Bool ::isUnderline(const struct editeng::Section &,enum FontLineStyle)
     enum FontLineStyle eStyle
     2
-sc/qa/unit/ucalc.cxx:1139
+sc/qa/unit/ucalc.cxx:1157
     _Bool checkRelativeRefToken(class ScDocument &,const class ScAddress &,short,int)
     short nRelCol
     -1
@@ -2180,16 +2176,16 @@ sc/qa/unit/ucalc_formula.cxx:8053
     319
 sc/qa/unit/ucalc_formula.cxx:8053
     void (anonymous namespace)::ColumnTest::ColumnTest(class ScDocument *,int,int,int,int,int)
-    int nStart1
-    9
-sc/qa/unit/ucalc_formula.cxx:8053
-    void (anonymous namespace)::ColumnTest::ColumnTest(class ScDocument *,int,int,int,int,int)
     int nEnd1
     159
 sc/qa/unit/ucalc_formula.cxx:8053
     void (anonymous namespace)::ColumnTest::ColumnTest(class ScDocument *,int,int,int,int,int)
     int nStart2
     169
+sc/qa/unit/ucalc_formula.cxx:8053
+    void (anonymous namespace)::ColumnTest::ColumnTest(class ScDocument *,int,int,int,int,int)
+    int nStart1
+    9
 sc/source/core/data/documen3.cxx:1726
     _Bool lcl_AddTwipsWhile(long &,long,int &,int,const class ScTable *,_Bool)
     int nEndRow
@@ -2280,12 +2276,12 @@ sc/source/filter/inc/unitconverter.hxx:79
     8
 sc/source/filter/inc/xechart.hxx:192
     void XclExpChFutureRecordBase::XclExpChFutureRecordBase(const class XclExpChRoot &,enum XclFutureRecType,unsigned short,unsigned long)
-    unsigned long nRecSize
-    4
-sc/source/filter/inc/xechart.hxx:192
-    void XclExpChFutureRecordBase::XclExpChFutureRecordBase(const class XclExpChRoot &,enum XclFutureRecType,unsigned short,unsigned long)
     unsigned short nRecId
     2155
+sc/source/filter/inc/xechart.hxx:192
+    void XclExpChFutureRecordBase::XclExpChFutureRecordBase(const class XclExpChRoot &,enum XclFutureRecType,unsigned short,unsigned long)
+    unsigned long nRecSize
+    4
 sc/source/filter/inc/xeescher.hxx:151
     void XclExpImgData::XclExpImgData(const class Graphic &,unsigned short)
     unsigned short nRecId
@@ -2308,12 +2304,12 @@ sc/source/filter/inc/xeformula.hxx:68
     5
 sc/source/filter/inc/xehelper.hxx:242
     class std::shared_ptr<class XclExpString> XclExpStringHelper::CreateString(const class XclExpRoot &,char16_t,enum XclStrFlags,unsigned short)
-    enum XclStrFlags nFlags
-    2
-sc/source/filter/inc/xehelper.hxx:242
-    class std::shared_ptr<class XclExpString> XclExpStringHelper::CreateString(const class XclExpRoot &,char16_t,enum XclStrFlags,unsigned short)
     unsigned short nMaxLen
     32767
+sc/source/filter/inc/xehelper.hxx:242
+    class std::shared_ptr<class XclExpString> XclExpStringHelper::CreateString(const class XclExpRoot &,char16_t,enum XclStrFlags,unsigned short)
+    enum XclStrFlags nFlags
+    2
 sc/source/filter/inc/xelink.hxx:176
     unsigned short XclExpLinkManager::FindExtSheet(char16_t)
     char16_t cCode
@@ -2335,17 +2331,13 @@ sc/source/filter/inc/xestream.hxx:298
     int nAttribute
     3478
 sc/source/filter/inc/xestream.hxx:341
+    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
+    int attribute11
+    4112
+sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute11
     5628
-sc/source/filter/inc/xestream.hxx:341
-    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
-    int attribute8
-    4311
-sc/source/filter/inc/xestream.hxx:341
-    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
-    int attribute1
-    5808
 sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute12
@@ -2355,13 +2347,9 @@ sc/source/filter/inc/xestream.hxx:341
     int attribute7
     2686
 sc/source/filter/inc/xestream.hxx:341
-    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
-    int attribute13
-    4112
-sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
-    int attribute1
-    2550
+    int attribute8
+    4311
 sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute5
@@ -2375,10 +2363,6 @@ sc/source/filter/inc/xestream.hxx:341
     int attribute6
     5381
 sc/source/filter/inc/xestream.hxx:341
-    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
-    int attribute7
-    2138
-sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute2
     1668
@@ -2391,29 +2375,41 @@ sc/source/filter/inc/xestream.hxx:341
     int attribute4
     273746631
 sc/source/filter/inc/xestream.hxx:341
+    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
+    int attribute2
+    380637265
+sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute4
     1810
+sc/source/filter/inc/xestream.hxx:341
+    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
+    int attribute1
+    5808
 sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute4
     2966
 sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
+    int attribute7
+    2138
+sc/source/filter/inc/xestream.hxx:341
+    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute3
     4565
+sc/source/filter/inc/xestream.hxx:341
+    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
+    int attribute13
+    4112
+sc/source/filter/inc/xestream.hxx:341
+    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
+    int attribute1
+    2550
 sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute5
     2686
-sc/source/filter/inc/xestream.hxx:341
-    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
-    int attribute2
-    380637265
-sc/source/filter/inc/xestream.hxx:341
-    class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
-    int attribute11
-    4112
 sc/source/filter/inc/xestream.hxx:341
     class std::shared_ptr<class sax_fastparser::FastSerializerHelper> & XclExpXmlStream::WriteAttributes(int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,int,const char *,struct FSEND_t)
     int attribute2
@@ -2498,7 +2494,7 @@ sc/source/filter/inc/xlformula.hxx:526
     void XclTokenArrayHelper::ConvertStringToList(class ScTokenArray &,class svl::SharedStringPool &,char16_t)
     char16_t cStringSep
     10
-sc/source/filter/xcl97/XclExpChangeTrack.cxx:1399
+sc/source/filter/xcl97/XclExpChangeTrack.cxx:1397
     void EndXmlElement::EndXmlElement(int)
     int nElement
     2620
@@ -2534,6 +2530,10 @@ sc/source/ui/inc/content.hxx:144
     void ScContentTree::SelectEntryByName(const enum ScContentId,const class rtl::OUString &)
     const enum ScContentId nRoot
     8
+sc/source/ui/inc/datatransformation.hxx:143
+    void sc::NumberTransformation::NumberTransformation(const class std::__debug::set<short, struct std::less<short>, class std::allocator<short> >,const enum sc::NUMBER_TRANSFORM_TYPE,int)
+    int nPrecision
+    4
 sc/source/ui/inc/docfunc.hxx:112
     _Bool ScDocFunc::SetCellText(const class ScAddress &,const class rtl::OUString &,_Bool,_Bool,_Bool,const enum formula::FormulaGrammar::Grammar)
     const enum formula::FormulaGrammar::Grammar eGrammar
@@ -2550,11 +2550,11 @@ sc/source/ui/inc/spellparam.hxx:47
     void ScConversionParam::ScConversionParam(enum ScConversionType,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,const class vcl::Font &,int,_Bool)
     enum ScConversionType eConvType
     2
-sc/source/ui/inc/tabview.hxx:436
+sc/source/ui/inc/tabview.hxx:439
     void ScTabView::MoveCursorPage(short,int,enum ScFollowMode,_Bool,_Bool)
     enum ScFollowMode eMode
     2
-sc/source/ui/inc/tabview.hxx:438
+sc/source/ui/inc/tabview.hxx:441
     void ScTabView::MoveCursorArea(short,int,enum ScFollowMode,_Bool,_Bool)
     enum ScFollowMode eMode
     3
@@ -2594,7 +2594,7 @@ sc/source/ui/inc/viewdata.hxx:183
     void ScBoundsProvider::EnlargeBy(long)
     long nOffset
     2
-sc/source/ui/inc/viewdata.hxx:655
+sc/source/ui/inc/viewdata.hxx:654
     void ScViewData::AddPixelsWhile(long &,long,int &,int,double,const class ScDocument *,short)
     int nEndRow
     1048575
@@ -2618,23 +2618,23 @@ sc/source/ui/view/viewfun3.cxx:809
     _Bool lcl_SelHasAttrib(const class ScDocument *,short,int,short,int,const class ScMarkData &,enum HasAttrFlags)
     enum HasAttrFlags nMask
     4
-scaddins/source/analysis/analysishelper.hxx:105
+scaddins/source/analysis/analysishelper.hxx:102
     double ConvertToDec(const class rtl::OUString &,unsigned short,unsigned short)
     unsigned short nCharLim
     10
-scaddins/source/analysis/analysishelper.hxx:108
+scaddins/source/analysis/analysishelper.hxx:105
     class rtl::OUString ConvertFromDec(double,double,double,unsigned short,int,int,_Bool)
     int nMaxPlaces
     10
-scaddins/source/analysis/analysishelper.hxx:114
+scaddins/source/analysis/analysishelper.hxx:111
     class rtl::OUString GetString(double,_Bool,unsigned short)
     unsigned short nMaxNumOfDigits
     15
-scaddins/source/analysis/analysishelper.hxx:503
+scaddins/source/analysis/analysishelper.hxx:500
     void sca::analysis::ComplexList::Append(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<class rtl::OUString> > &,enum sca::analysis::ComplListAppendHandl)
     enum sca::analysis::ComplListAppendHandl eAH
     2
-scaddins/source/analysis/analysishelper.hxx:558
+scaddins/source/analysis/analysishelper.hxx:555
     void sca::analysis::ConvertDataLinear::ConvertDataLinear(const char *,double,double,enum sca::analysis::ConvertDataClass,_Bool)
     enum sca::analysis::ConvertDataClass eClass
     8
@@ -2834,7 +2834,7 @@ sfx2/source/control/thumbnailviewacc.hxx:183
     void ThumbnailViewItemAcc::FireAccessibleEvent(short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
     short nEventId
     4
-sfx2/source/dialog/filedlghelper.cxx:1934
+sfx2/source/dialog/filedlghelper.cxx:1933
     void SetToken(class rtl::OUString &,int,char16_t,const class rtl::OUString &)
     char16_t cTok
     32
@@ -3066,11 +3066,11 @@ sw/inc/authfld.hxx:131
     void SwAuthorityFieldType::SetSortKeys(unsigned short,const struct SwTOXSortKey *)
     unsigned short nKeyCount
     3
-sw/inc/crsrsh.hxx:796
+sw/inc/crsrsh.hxx:801
     void SwCursorShell::FireSectionChangeEvent(unsigned short,unsigned short)
     unsigned short nOldSection
     2
-sw/inc/crsrsh.hxx:797
+sw/inc/crsrsh.hxx:802
     void SwCursorShell::FireColumnChangeEvent(unsigned short,unsigned short)
     unsigned short nOldColumn
     2
@@ -3234,7 +3234,7 @@ sw/source/core/txtnode/txtedt.cxx:170
     _Bool lcl_MaskRedlinesAndHiddenText(const class SwTextNode &,class rtl::OUStringBuffer &,int,int,const char16_t)
     const char16_t cChar
     65529
-sw/source/core/undo/untbl.cxx:2284
+sw/source/core/undo/untbl.cxx:2282
     void RedlineFlagsInternGuard::RedlineFlagsInternGuard(class SwDoc &,enum RedlineFlags,enum RedlineFlags)
     enum RedlineFlags eRedlineFlagsMask
     2
@@ -3250,7 +3250,7 @@ sw/source/filter/html/svxcss1.hxx:241
     void SvxCSS1Parser::SvxCSS1Parser(class SfxItemPool &,const class rtl::OUString &,unsigned short *,unsigned short)
     unsigned short nWhichIds
     3
-sw/source/filter/html/swhtml.hxx:663
+sw/source/filter/html/swhtml.hxx:620
     void SwHTMLParser::NewStdAttr(enum HtmlTokenId)
     enum HtmlTokenId nToken
     414
@@ -3266,14 +3266,14 @@ sw/source/filter/inc/fltshell.hxx:228
     void SwFltRedline::SwFltRedline(unsigned short,unsigned long,const class DateTime &,unsigned short,unsigned long)
     unsigned long nAutorNoPrev_
     18446744073709551615
-sw/source/filter/ww8/docxattributeoutput.cxx:3452
-    class rtl::OString lcl_padStartToLength(const class rtl::OString &,int,char)
-    char cFill
-    48
-sw/source/filter/ww8/docxattributeoutput.cxx:3452
+sw/source/filter/ww8/docxattributeoutput.cxx:3451
     class rtl::OString lcl_padStartToLength(const class rtl::OString &,int,char)
     int nLen
     4
+sw/source/filter/ww8/docxattributeoutput.cxx:3451
+    class rtl::OString lcl_padStartToLength(const class rtl::OString &,int,char)
+    char cFill
+    48
 sw/source/filter/ww8/docxexport.hxx:188
     void DocxExport::WriteOutliner(const class OutlinerParaObject &,unsigned char)
     unsigned char nTyp
@@ -3298,7 +3298,7 @@ sw/source/filter/ww8/ww8glsy.hxx:61
     void WW8Glossary::WW8Glossary(class tools::SvRef<class SotStorageStream> &,unsigned char,class SotStorage *)
     unsigned char nVersion
     8
-sw/source/filter/ww8/ww8par.hxx:1581
+sw/source/filter/ww8/ww8par.hxx:1584
     class std::unique_ptr<class OutlinerParaObject, struct std::default_delete<class OutlinerParaObject> > SwWW8ImplReader::ImportAsOutliner(class rtl::OUString &,int,int,enum ManTypes)
     enum ManTypes eType
     4
@@ -3462,6 +3462,10 @@ vcl/inc/unx/gtk/gtkprintwrapper.hxx:59
     void vcl::unx::GtkPrintWrapper::print_unix_dialog_set_manual_capabilities(struct _GtkPrintUnixDialog *,GtkPrintCapabilities) const
     GtkPrintCapabilities capabilities
     846
+vcl/inc/unx/saldata.hxx:62
+    void X11SalData::X11SalData(enum GenericUnixSalDataType,class SalInstance *)
+    enum GenericUnixSalDataType t
+    4
 vcl/qa/cppunit/jpeg/JpegReaderTest.cxx:53
     _Bool checkRect(class Bitmap &,int,long,long,class Color,int)
     long nAreaHeight
@@ -3582,8 +3586,8 @@ writerfilter/source/ooxml/OOXMLPropertySet.hxx:343
     void writerfilter::ooxml::OOXMLPropertySetEntryToBool::OOXMLPropertySetEntryToBool(unsigned int)
     unsigned int nId
     92221
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:423
-    class std::shared_ptr<class writerfilter::rtftok::RTFValue> getNestedSprm(class writerfilter::rtftok::RTFSprms &,unsigned int,unsigned int)
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:425
+    class tools::SvRef<class writerfilter::rtftok::RTFValue> getNestedSprm(class writerfilter::rtftok::RTFSprms &,unsigned int,unsigned int)
     unsigned int nParent
     92164
 writerfilter/source/rtftok/rtfsprm.hxx:55
@@ -3593,7 +3597,7 @@ writerfilter/source/rtftok/rtfsprm.hxx:55
 xmloff/inc/txtflde.hxx:254
     void XMLTextFieldExport::ProcessIntegerDef(enum xmloff::token::XMLTokenEnum,int,int)
     enum xmloff::token::XMLTokenEnum eXmlName
-    1309
+    1308
 xmloff/inc/txtflde.hxx:280
     void XMLTextFieldExport::ProcessString(enum xmloff::token::XMLTokenEnum,unsigned short,const class rtl::OUString &,const class rtl::OUString &)
     enum xmloff::token::XMLTokenEnum eXmlName
@@ -3605,11 +3609,11 @@ xmloff/inc/txtflde.hxx:280
 xmloff/inc/txtflde.hxx:293
     void XMLTextFieldExport::ProcessString(enum xmloff::token::XMLTokenEnum,enum xmloff::token::XMLTokenEnum,enum xmloff::token::XMLTokenEnum)
     enum xmloff::token::XMLTokenEnum eXmlName
-    1438
+    1437
 xmloff/inc/txtflde.hxx:293
     void XMLTextFieldExport::ProcessString(enum xmloff::token::XMLTokenEnum,enum xmloff::token::XMLTokenEnum,enum xmloff::token::XMLTokenEnum)
     enum xmloff::token::XMLTokenEnum eDefault
-    1769
+    1767
 xmloff/inc/txtflde.hxx:325
     void XMLTextFieldExport::ProcessDateTime(enum xmloff::token::XMLTokenEnum,double,_Bool,_Bool,_Bool,unsigned short)
     unsigned short nPrefix
@@ -3621,11 +3625,11 @@ xmloff/inc/txtflde.hxx:341
 xmloff/inc/txtflde.hxx:346
     void XMLTextFieldExport::ProcessTimeOrDateTime(enum xmloff::token::XMLTokenEnum,const struct com::sun::star::util::DateTime &)
     enum xmloff::token::XMLTokenEnum eXMLName
-    1820
+    1818
 xmloff/inc/XMLBase64Export.hxx:39
     _Bool XMLBase64Export::exportElement(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,enum xmloff::token::XMLTokenEnum)
     enum xmloff::token::XMLTokenEnum eName
-    2029
+    2027
 xmloff/source/draw/animationimport.cxx:323
     int count_codes(const class rtl::OUString &,char16_t)
     char16_t nCode
@@ -3666,11 +3670,11 @@ xmloff/source/draw/ximpcustomshape.cxx:557
     void GetEnhancedRectangleSequence(class std::__debug::vector<struct com::sun::star::beans::PropertyValue, class std::allocator<struct com::sun::star::beans::PropertyValue> > &,const class rtl::OUString &,const enum xmloff::EnhancedCustomShapeToken::EnhancedCustomShapeTokenEnum)
     const enum xmloff::EnhancedCustomShapeToken::EnhancedCustomShapeTokenEnum eDestProp
     111
-xmloff/source/draw/ximpstyl.cxx:129
+xmloff/source/draw/ximpstyl.cxx:130
     void SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(class SvXMLImport &,unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,class SvXMLStylesContext &,unsigned short)
     unsigned short nFamily
     305
-xmloff/source/forms/elementimport.cxx:1417
+xmloff/source/forms/elementimport.cxx:1418
     void xmloff::EqualHandle::EqualHandle(int)
     int _nHandle
     2
@@ -3693,7 +3697,7 @@ xmloff/source/style/xmlbahdl.hxx:118
 xmloff/source/text/XMLIndexMarkExport.cxx:199
     void lcl_ExportPropertyBool(class SvXMLExport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,enum xmloff::token::XMLTokenEnum,class com::sun::star::uno::Any &)
     enum xmloff::token::XMLTokenEnum eToken
-    2138
+    2136
 xmloff/source/transform/TransformerContext.hxx:58
     _Bool XMLTransformerContext::HasNamespace(unsigned short) const
     unsigned short nPrefix

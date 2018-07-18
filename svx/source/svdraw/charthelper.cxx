@@ -36,7 +36,7 @@
 
 using namespace ::com::sun::star;
 
-void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel, bool bHardUpdate )
+void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel )
 {
     if (!rXModel.is())
         return;
@@ -47,10 +47,7 @@ void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel,
         const uno::Reference< lang::XUnoTunnel > xChartView(xChartFact->createInstance("com.sun.star.chart2.ChartView"), uno::UNO_QUERY_THROW);
         const uno::Reference<util::XUpdatable2> xUpdatable(xChartView, uno::UNO_QUERY_THROW);
 
-        if (bHardUpdate)
-            xUpdatable->updateHard();
-        else
-            xUpdatable->updateSoft();
+        xUpdatable->updateHard();
     }
     catch(uno::Exception&)
     {
@@ -67,7 +64,7 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
     if (!rXModel.is())
         return aRetval;
 
-    updateChart(rXModel, true);
+    updateChart(rXModel);
 
     try
     {
