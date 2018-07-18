@@ -85,6 +85,10 @@ public:
         // ScTabView::pDrawActual and pDrawOld
         if (fn == SRCDIR "/sc/source/ui/view/tabview5.cxx")
             return;
+        // SwHTMLParser::m_pPendStack
+        if (fn == SRCDIR "/sw/source/filter/html/htmlcss1.cxx")
+            return;
+
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
