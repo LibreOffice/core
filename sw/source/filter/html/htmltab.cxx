@@ -4908,8 +4908,7 @@ void SwHTMLParser::ClearFootnotesInRange(const SwNodeIndex& rMkNdIdx, const SwNo
             m_pFootEndNoteImpl->aTextFootnotes.end(), IndexInRange(rMkNdIdx, rPtNdIdx)), m_pFootEndNoteImpl->aTextFootnotes.end());
         if (m_pFootEndNoteImpl->aTextFootnotes.empty())
         {
-            delete m_pFootEndNoteImpl;
-            m_pFootEndNoteImpl = nullptr;
+            m_pFootEndNoteImpl.reset();
         }
     }
 

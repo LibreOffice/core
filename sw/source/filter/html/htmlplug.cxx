@@ -651,8 +651,7 @@ void SwHTMLParser::NewObject()
     bool bPrcWidth = false, bPrcHeight = false,
              bDeclare = false;
     // create a new Command list
-    delete m_pAppletImpl;
-    m_pAppletImpl = new SwApplet_Impl( m_xDoc->GetAttrPool() );
+    m_pAppletImpl.reset(new SwApplet_Impl( m_xDoc->GetAttrPool() ));
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -749,8 +748,7 @@ void SwHTMLParser::NewObject()
 
     if( !bIsApplet )
     {
-        delete m_pAppletImpl;
-        m_pAppletImpl = nullptr;
+        m_pAppletImpl.reset();
         return;
     }
 
@@ -799,8 +797,7 @@ void SwHTMLParser::EndObject()
         // if applicable create frames and register auto-bound frames
         RegisterFlyFrame( pFlyFormat );
 
-        delete m_pAppletImpl;
-        m_pAppletImpl = nullptr;
+        m_pAppletImpl.reset();
     }
 #else
     (void) this;                // Silence loplugin:staticmethods
@@ -818,8 +815,7 @@ void SwHTMLParser::InsertApplet()
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
     // create a new Command list
-    delete m_pAppletImpl;
-    m_pAppletImpl = new SwApplet_Impl( m_xDoc->GetAttrPool() );
+    m_pAppletImpl.reset(new SwApplet_Impl( m_xDoc->GetAttrPool() ));
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -879,8 +875,7 @@ void SwHTMLParser::InsertApplet()
 
     if( aCode.isEmpty() )
     {
-        delete m_pAppletImpl;
-        m_pAppletImpl = nullptr;
+        m_pAppletImpl.reset();
         return;
     }
 
@@ -931,8 +926,7 @@ void SwHTMLParser::EndApplet()
     // if applicable create frames and register auto-bound frames
     RegisterFlyFrame( pFlyFormat );
 
-    delete m_pAppletImpl;
-    m_pAppletImpl = nullptr;
+    m_pAppletImpl.reset();
 #else
     (void) this;
 #endif
