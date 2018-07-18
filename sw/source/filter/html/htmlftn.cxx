@@ -173,7 +173,7 @@ void SwHTMLParser::InsertFootEndNote( const OUString& rName, bool bEndNote,
                                       bool bFixed )
 {
     if( !m_pFootEndNoteImpl )
-        m_pFootEndNoteImpl = new SwHTMLFootEndNote_Impl;
+        m_pFootEndNoteImpl.reset(new SwHTMLFootEndNote_Impl);
 
     m_pFootEndNoteImpl->sName = rName;
     if( m_pFootEndNoteImpl->sName.getLength() > 3 )
@@ -213,8 +213,7 @@ void SwHTMLParser::InsertFootEndNoteText()
 
 void SwHTMLParser::DeleteFootEndNoteImpl()
 {
-    delete m_pFootEndNoteImpl;
-    m_pFootEndNoteImpl = nullptr;
+    m_pFootEndNoteImpl.reset();
 }
 
 SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
@@ -234,8 +233,7 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
                 m_pFootEndNoteImpl->aTextFootnotes.erase( m_pFootEndNoteImpl->aTextFootnotes.begin() + i );
                 if (m_pFootEndNoteImpl->aTextFootnotes.empty())
                 {
-                    delete m_pFootEndNoteImpl;
-                    m_pFootEndNoteImpl = nullptr;
+                    m_pFootEndNoteImpl.reset();
                 }
 
                 break;

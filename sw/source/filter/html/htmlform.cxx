@@ -583,8 +583,7 @@ void SwHTMLImageWatcher::disposing(const lang::EventObject& evt)
 
 void SwHTMLParser::DeleteFormImpl()
 {
-    delete m_pFormImpl;
-    m_pFormImpl = nullptr;
+    m_pFormImpl.reset();
 }
 
 static void lcl_html_setFixedFontProperty(
@@ -1219,7 +1218,7 @@ void SwHTMLParser::NewForm( bool bAppend )
     }
 
     if( !m_pFormImpl )
-        m_pFormImpl = new SwHTMLForm_Impl( m_xDoc->GetDocShell() );
+        m_pFormImpl.reset( new SwHTMLForm_Impl( m_xDoc->GetDocShell() ) );
 
     OUString aAction( m_sBaseURL );
     OUString sName, sTarget;
