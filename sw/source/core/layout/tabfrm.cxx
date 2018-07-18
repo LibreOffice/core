@@ -1712,16 +1712,16 @@ SwFrame* sw_FormatNextContentForKeep( SwTabFrame* pTabFrame )
 }
 
 namespace {
-    bool AreAllRowsKeepWithNext( const SwRowFrame* pFirstRowFrame )
+    bool AreAllRowsKeepWithNext( const SwRowFrame* pFirstRowFrame, const bool bCheckParents = true  )
     {
         bool bRet = pFirstRowFrame != nullptr &&
-                    pFirstRowFrame->ShouldRowKeepWithNext();
+                    pFirstRowFrame->ShouldRowKeepWithNext( bCheckParents );
 
         while ( bRet && pFirstRowFrame->GetNext() != nullptr )
         {
             pFirstRowFrame = dynamic_cast<const SwRowFrame*>(pFirstRowFrame->GetNext());
             bRet = pFirstRowFrame != nullptr &&
-                   pFirstRowFrame->ShouldRowKeepWithNext();
+                   pFirstRowFrame->ShouldRowKeepWithNext( bCheckParents );
         }
 
         return bRet;
@@ -1797,9 +1797,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     auto pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
+    const bool bEmulateTableKeep = AreAllRowsKeepWithNext( GetFirstNonHeadlineRow(), /*bCheckParents=*/false );
     // The beloved keep attribute
-    const bool bEmulateTableKeep = AreAllRowsKeepWithNext( GetFirstNonHeadlineRow() );
-    const bool bKeep = IsKeep( pAttrs->GetAttrSet(), bEmulateTableKeep );
+    const bool bKeep = IsKeep(pAttrs->GetAttrSet(), bEmulateTableKeep);
 
     // All rows should keep together
     const bool bDontSplit = !IsFollow() &&
@@ -4492,7 +4492,7 @@ bool SwRowFrame::IsRowSplitAllowed() const
     return rLP.GetValue();
 }
 
-bool SwRowFrame::ShouldRowKeepWithNext() const
+bool SwRowFrame::ShouldRowKeepWithNext( const bool bCheckParents ) const
 {
     // No KeepWithNext if nested in another table
     if ( GetUpper()->GetUpper()->IsCellFrame() )
@@ -4502,7 +4502,7 @@ bool SwRowFrame::ShouldRowKeepWithNext() const
     const SwFrame* pText = pCell->Lower();
 
     return pText && pText->IsTextFrame() &&
-           static_cast<const SwTextFrame*>(pText)->GetTextNode()->GetSwAttrSet().GetKeep().GetValue();
+           static_cast<const SwTextFrame*>(pText)->GetTextNode()->GetSwAttrSet().GetKeep(bCheckParents).GetValue();
 }
 
 SwCellFrame::SwCellFrame(const SwTableBox &rBox, SwFrame* pSib, bool bInsertContent)
