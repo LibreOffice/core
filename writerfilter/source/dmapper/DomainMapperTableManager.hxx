@@ -54,7 +54,6 @@ class DomainMapperTableManager : public TableManager
     std::vector< TablePositionHandlerPtr > m_aTablePositions;
     std::vector< TablePositionHandlerPtr > m_aTmpPosition; ///< Temporarily stores the position to compare it later
     std::vector< TablePropertyMapPtr > m_aTmpTableProperties; ///< Temporarily stores the table properties until end of row
-    PropertyMapPtr  m_pTableStyleTextProperies;
 
     ::std::vector< IntVectorPtr >  m_aTableGrid;
     ::std::vector< IntVectorPtr >  m_aGridSpans;

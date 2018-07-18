@@ -23,12 +23,7 @@
 SvxRelativeField::SvxRelativeField(
         vcl::Window *const pParent, WinBits const nBits, FieldUnit const eUnit)
     : MetricField( pParent, nBits)
-    , nRelMin(0)
-    , nRelMax(0)
-    , bRelativeMode(false)
     , bRelative(false)
-    , bNegativeEnabled(false)
-
 {
     SetUnit(eUnit);
     SetDecimalDigits( 2 );
@@ -46,44 +41,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxRelativeField(VclPtr<vcl::Window> & 
                                             eUnit);
 }
 
-void SvxRelativeField::Modify()
-{
-    MetricField::Modify();
-
-    if ( bRelativeMode )
-    {
-        OUString  aStr = GetText();
-        bool      bNewMode = bRelative;
-
-        if ( bRelative )
-        {
-            const sal_Unicode* pStr = aStr.getStr();
-
-            while ( *pStr )
-            {
-                if( ( ( *pStr < '0' ) || ( *pStr > '9' ) ) &&
-                    ( *pStr != '%' ) )
-                {
-                    bNewMode = false;
-                    break;
-                }
-                pStr++;
-            }
-        }
-        else
-        {
-            if ( aStr.indexOf( "%" ) != -1 )
-                bNewMode = true;
-        }
-
-        if ( bNewMode != bRelative )
-            SetRelative( bNewMode );
-
-        MetricField::Modify();
-    }
-}
-
-
 void SvxRelativeField::SetRelative( bool bNewRelative )
 {
     Selection aSelection = GetSelection();
@@ -93,15 +50,15 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
     {
         bRelative = true;
         SetDecimalDigits( 0 );
-        SetMin( nRelMin );
-        SetMax( nRelMax );
+        SetMin( 0 );
+        SetMax( 0 );
         SetUnit( FUNIT_PERCENT );
     }
     else
     {
         bRelative = false;
         SetDecimalDigits( 2 );
-        SetMin( bNegativeEnabled ? -9999 : 0 );
+        SetMin( 0 );
         SetMax( 9999 );
         SetUnit( FUNIT_CM );
     }

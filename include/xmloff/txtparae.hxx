@@ -206,8 +206,6 @@ private:
     const OUString sTextFieldStart;
     const OUString sTextFieldEnd;
     const OUString sTextFieldStartEnd;
-    const OUString m_sBookmarkHidden;
-    const OUString m_sBookmarkCondition;
 
 protected:
     const OUString sFrameStyleName;
