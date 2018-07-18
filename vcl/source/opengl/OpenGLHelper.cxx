@@ -534,30 +534,6 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     return LoadShaders(rVertexShaderName, rFragmentShaderName, OUString(), "", "");
 }
 
-void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer)
-{
-    long nBmpWidth = rBitmapEx.GetSizePixel().Width();
-    long nBmpHeight = rBitmapEx.GetSizePixel().Height();
-
-    Bitmap aBitmap (rBitmapEx.GetBitmap());
-    AlphaMask aAlpha (rBitmapEx.GetAlpha());
-    Bitmap::ScopedReadAccess pReadAccces( aBitmap );
-    AlphaMask::ScopedReadAccess pAlphaReadAccess( aAlpha );
-    size_t i = 0;
-    for (long ny = 0; ny < nBmpHeight; ny++)
-    {
-        Scanline pAScan = pAlphaReadAccess ? pAlphaReadAccess->GetScanline(ny) : nullptr;
-        for(long nx = 0; nx < nBmpWidth; nx++)
-        {
-            BitmapColor aCol = pReadAccces->GetColor( ny, nx );
-            o_pRGBABuffer[i++] = aCol.GetRed();
-            o_pRGBABuffer[i++] = aCol.GetGreen();
-            o_pRGBABuffer[i++] = aCol.GetBlue();
-            o_pRGBABuffer[i++] = pAScan ? 255 - *pAScan++ : 255;
-        }
-    }
-}
-
 void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFileName)
 {
     OpenGLZone aZone;

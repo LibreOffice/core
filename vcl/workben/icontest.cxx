@@ -36,7 +36,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/image.hxx>
-#include <vcl/openglwin.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/svapp.hxx>

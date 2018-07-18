@@ -525,12 +525,8 @@ OUString XMLSignature_GpgImpl::impl_getImplementationName() {
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignature_GpgImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) {
+Reference< XInterface > XMLSignature_GpgImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) {
     return Reference< XInterface >( *new XMLSignature_GpgImpl ) ;
-}
-
-Reference< XSingleServiceFactory > XMLSignature_GpgImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

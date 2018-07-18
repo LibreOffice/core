@@ -1474,11 +1474,6 @@ void SvxColorWindow::ShowNoneButton()
     mpButtonNoneColor->Show();
 }
 
-void ColorWindow::ShowNoneButton()
-{
-    mxButtonNoneColor->show();
-}
-
 SvxColorWindow::~SvxColorWindow()
 {
     disposeOnce();

@@ -135,7 +135,6 @@ public:
     void show();
 
     void setWinPosAndSize(const Point &rPos, const Size& rSize);
-    void setWinSize(const Size& rSize);
     virtual const GLWindow& getOpenGLWindow() const = 0;
 
     SystemChildWindow* getChildWindow();
