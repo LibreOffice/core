@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f0895726",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-18T09:21:50Z",
+      "side": 1,
+      "message": "Perhaps state the before/after times? I\u0027m sure you measured, but documenting this in the commit message is always a good idea.",
+      "revId": "f324ff905fb787eacabdd957523773efc9ba7b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_109b9b72",
+        "filename": "offapi/com/sun/star/style/XStyleFamily.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-18T09:21:50Z",
+      "side": 1,
+      "message": "Adding a new UNO interface is always a cost. Did you consider if there is a cheaper alternative? One idea: get the list of all pages styles in writerfilter/ at the start of the import (getElementNames() can give that to you) and then given that only the DOCX import inserts new styles, you could have the findUnusedPageStyleNameStartingWith() code to writerfilter/.\n\nWould that work? If it\u0027s as good as the current code, then that would be better, as it would not require a new UNO interface.",
+      "revId": "f324ff905fb787eacabdd957523773efc9ba7b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
