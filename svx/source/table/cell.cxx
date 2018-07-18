@@ -514,7 +514,14 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
     if( xSourceCell.is() && mpProperties )
     {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
-        SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
+
+        // tdf#118354 OutlinerParaObject may be nullptr, do not dereference when
+        // not set (!)
+        if(nullptr != xSourceCell->GetOutlinerParaObject())
+        {
+            SetOutlinerParaObject( o3tl::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
+        }
+
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
 
