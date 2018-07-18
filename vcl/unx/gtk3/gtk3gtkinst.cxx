@@ -3074,23 +3074,6 @@ public:
         gtk_box_pack_end(m_pBox, gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
         gtk_container_add(GTK_CONTAINER(m_pMenuButton), GTK_WIDGET(m_pBox));
         gtk_widget_show_all(GTK_WIDGET(m_pBox));
-
-#if defined(GDK_WINDOWING_X11)
-        //under wayland a Popover will work to "escape" the parent dialog, not
-        //so under X, so come up with this hack to use a raw GtkWindow
-        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-        if (GDK_IS_X11_DISPLAY(pDisplay))
-        {
-            m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
-            gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
-            gtk_window_set_modal(m_pMenuHack, true);
-            gtk_window_set_resizable(m_pMenuHack, false);
-            m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(pMenuButton), "toggled", G_CALLBACK(signalToggled), this);
-            g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
-            g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
-            g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
-        }
-#endif
     }
 
     virtual void set_label(const OUString& rText) override
@@ -3145,6 +3128,24 @@ public:
         GtkInstanceWidget* pPopoverWidget = dynamic_cast<GtkInstanceWidget*>(pPopover);
         assert(pPopoverWidget);
         m_pPopover = pPopoverWidget->getWidget();
+
+#if defined(GDK_WINDOWING_X11)
+        //under wayland a Popover will work to "escape" the parent dialog, not
+        //so under X, so come up with this hack to use a raw GtkWindow
+        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
+        if (GDK_IS_X11_DISPLAY(pDisplay))
+        {
+            m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
+            gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
+            gtk_window_set_modal(m_pMenuHack, true);
+            gtk_window_set_resizable(m_pMenuHack, false);
+            m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalToggled), this);
+            g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+            g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+            g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
+        }
+#endif
+
         if (m_pMenuHack)
         {
             gtk_menu_button_set_popover(m_pMenuButton, gtk_popover_new(GTK_WIDGET(m_pMenuButton)));
