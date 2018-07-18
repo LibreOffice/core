@@ -1837,6 +1837,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                 // output.
                 aFilterName = "PNG";
                 nFlags &= ~XOutFlags::UseNativeIfPossible;
+                nFlags &= ~XOutFlags::UseGifIfSensible;
                 aMimeType = "image/png";
             }
 
