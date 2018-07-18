@@ -221,16 +221,15 @@ public:
 };
 
 class SwUndoMove;
-using SwUndoMoves = std::vector<std::unique_ptr<SwUndoMove>>;
 
 class SwUndoTableMerge : public SwUndo, private SwUndRng
 {
     sal_uLong nTableNode;
-    SaveTable* pSaveTable;
+    std::unique_ptr<SaveTable> pSaveTable;
     std::set<sal_uLong> m_Boxes;
     std::vector<sal_uLong> aNewSttNds;
-    SwUndoMoves* m_pMoves;
-    SwHistory* pHistory;
+    std::vector<std::unique_ptr<SwUndoMove>> m_vMoves;
+    std::unique_ptr<SwHistory> pHistory;
 
 public:
     SwUndoTableMerge( const SwPaM& rTableSel );

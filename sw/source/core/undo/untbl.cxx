@@ -1914,20 +1914,18 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
 SwUndoTableMerge::SwUndoTableMerge( const SwPaM& rTableSel )
     : SwUndo( SwUndoId::TABLE_MERGE, rTableSel.GetDoc() ), SwUndRng( rTableSel )
-    , m_pMoves(new SwUndoMoves)
-    , pHistory(nullptr)
 {
     const SwTableNode* pTableNd = rTableSel.GetNode().FindTableNode();
     OSL_ENSURE( pTableNd, "Where is the TableNode?" );
-    pSaveTable = new SaveTable( pTableNd->GetTable() );
+    pSaveTable.reset( new SaveTable( pTableNd->GetTable() ) );
     nTableNode = pTableNd->GetIndex();
 }
 
 SwUndoTableMerge::~SwUndoTableMerge()
 {
-    delete pSaveTable;
-    delete m_pMoves;
-    delete pHistory;
+    pSaveTable.reset();
+    m_vMoves.clear();
+    pHistory.reset();
 }
 
 void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -1990,11 +1988,11 @@ CHECKTABLE(pTableNd->GetTable())
                     *pBox->GetSttNd()->EndOfSectionNode() ), pColl );
 
             // this was the separator -> restore moved ones
-            for (size_t i = m_pMoves->size(); i; )
+            for (size_t i = m_vMoves.size(); i; )
             {
                 SwTextNode* pTextNd = nullptr;
                 sal_Int32 nDelPos = 0;
-                SwUndoMove *const pUndo = (*m_pMoves)[ --i ].get();
+                SwUndoMove *const pUndo = m_vMoves[ --i ].get();
                 if( !pUndo->IsMoveRange() )
                 {
                     pTextNd = rDoc.GetNodes()[ pUndo->GetDestSttNode() ]->GetTextNode();
@@ -2093,7 +2091,7 @@ void SwUndoTableMerge::MoveBoxContent( SwDoc* pDoc, SwNodeRange& rRg, SwNodeInde
     ++aTmp2;
     pUndo->SetDestRange( aTmp2, rPos, aTmp );
 
-    m_pMoves->push_back(std::move(pUndo));
+    m_vMoves.push_back(std::move(pUndo));
 }
 
 void SwUndoTableMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
@@ -2116,7 +2114,7 @@ void SwUndoTableMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
 void SwUndoTableMerge::SaveCollection( const SwTableBox& rBox )
 {
     if( !pHistory )
-        pHistory = new SwHistory;
+        pHistory.reset(new SwHistory);
 
     SwNodeIndex aIdx( *rBox.GetSttNd(), 1 );
     SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
