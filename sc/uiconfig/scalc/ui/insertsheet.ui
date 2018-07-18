@@ -363,6 +363,7 @@
                                           <object class="GtkTreeView" id="tables">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
+                                            <property name="hexpand">True</property>
                                             <property name="vexpand">True</property>
                                             <property name="model">liststore1</property>
                                             <property name="headers_visible">False</property>
