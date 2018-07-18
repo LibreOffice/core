@@ -2132,7 +2132,6 @@ void SwUndoTableMerge::SaveCollection( const SwTableBox& rBox )
 SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
                                     const SfxItemSet* pNewSet )
     : SwUndo(SwUndoId::TBLNUMFMT, rBox.GetFrameFormat()->GetDoc())
-    , m_pBoxSet(nullptr)
     , m_nFormatIdx(getSwDefaultTextFormat())
     , m_nNewFormatIdx(0)
     , m_fNum(0.0)
@@ -2165,7 +2164,7 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
             pTNd->GetpSwpHints()->DeRegister();
     }
 
-    m_pBoxSet = new SfxItemSet( pDoc->GetAttrPool(), aTableBoxSetRange );
+    m_pBoxSet.reset( new SfxItemSet( pDoc->GetAttrPool(), aTableBoxSetRange ) );
     m_pBoxSet->Put( rBox.GetFrameFormat()->GetAttrSet() );
 
     if( pNewSet )
@@ -2201,7 +2200,7 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
 SwUndoTableNumFormat::~SwUndoTableNumFormat()
 {
     m_pHistory.reset();
-    delete m_pBoxSet;
+    m_pBoxSet.reset();
 }
 
 void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
