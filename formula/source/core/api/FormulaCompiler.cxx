@@ -1436,6 +1436,7 @@ void FormulaCompiler::Factor()
                 case ocDde:
                 case ocMacro:
                 case ocExternal:
+                case ocWebservice:
                     pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                 break;
                     // If the referred cell is moved the value changes.

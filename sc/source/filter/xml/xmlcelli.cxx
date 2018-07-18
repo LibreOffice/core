@@ -1009,6 +1009,8 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
 {
     if(pFCell)
     {
+        bool bMayForceNumberformat = true;
+
         if(mbErrorValue)
         {
             // don't do anything here
@@ -1021,6 +1023,9 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
                 ScDocument* pDoc = rXMLImport.GetDocument();
                 pFCell->SetHybridString(pDoc->GetSharedStringPool().intern(*maStringValue));
                 pFCell->ResetDirty();
+                // A General format doesn't force any other format for a string
+                // result, don't attempt to recalculate this later.
+                bMayForceNumberformat = false;
             }
         }
         else if (rtl::math::isFinite(fValue))
@@ -1035,6 +1040,10 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
             else
                 pFCell->ResetDirty();
         }
+
+        if (bMayForceNumberformat)
+            // Re-calculate to get number format only when style is not set.
+            pFCell->SetNeedNumberFormat(!mbHasStyle);
     }
 }
 
@@ -1398,9 +1407,6 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, ScMatrixMode::NONE);
         SetFormulaCell(pNewCell);
         rDoc.setFormulaCell(rCellPos, pNewCell);
-
-        // Re-calculate to get number format only when style is not set.
-        pNewCell->SetNeedNumberFormat(!mbHasStyle);
     }
 }
 
