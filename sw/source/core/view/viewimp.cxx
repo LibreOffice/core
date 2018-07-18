@@ -106,13 +106,13 @@ SwViewShellImp::~SwViewShellImp()
 {
     m_pAccessibleMap.reset();
 
-    delete m_pPagePreviewLayout;
+    m_pPagePreviewLayout.reset();
 
     // Make sure HideSdrPage is also executed after ShowSdrPage.
     if( m_pDrawView )
          m_pDrawView->HideSdrPage();
 
-    delete m_pDrawView;
+    m_pDrawView.reset();
 
     DelRegion();
 
@@ -227,10 +227,10 @@ void SwViewShellImp::MakeDrawView()
                 pOutDevForDrawView = GetShell()->GetOut();
             }
 
-            m_pDrawView = new SwDrawView(
+            m_pDrawView.reset( new SwDrawView(
                 *this,
                 *rIDDMA.GetOrCreateDrawModel(),
-                pOutDevForDrawView);
+                pOutDevForDrawView) );
         }
 
         GetDrawView()->SetActiveLayer("Heaven");
@@ -286,7 +286,7 @@ void SwViewShellImp::InitPagePreviewLayout()
 {
     OSL_ENSURE( m_pShell->GetLayout(), "no layout - page preview layout can not be created.");
     if ( m_pShell->GetLayout() )
-        m_pPagePreviewLayout = new SwPagePreviewLayout( *m_pShell, *(m_pShell->GetLayout()) );
+        m_pPagePreviewLayout.reset( new SwPagePreviewLayout( *m_pShell, *(m_pShell->GetLayout()) ) );
 }
 
 void SwViewShellImp::UpdateAccessible()
