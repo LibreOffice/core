@@ -36,6 +36,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/threadpool.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -3968,7 +3969,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     }
 
     if (eStage == PRE_INIT)
+    {
+        comphelper::ThreadPool::getSharedOptimalPool().shutdown();
         rtl_alloc_preInit(rtlAllocPostInit);
+    }
 
     return bInitialized;
 }
