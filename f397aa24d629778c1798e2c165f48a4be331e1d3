@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f01397b7",
+        "filename": "include/drawinglayer/primitive2d/animatedprimitive2d.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-07-18T10:57:21Z",
+      "side": 1,
+      "message": "seems not to be a typo here.",
+      "revId": "f397aa24d629778c1798e2c165f48a4be331e1d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
