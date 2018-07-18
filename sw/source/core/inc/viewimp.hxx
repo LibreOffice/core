@@ -65,7 +65,7 @@ class SwViewShellImp
     SwViewShell *m_pShell;           // If someone passes an Imp, but needs a SwViewShell, we
                                 // keep a backlink here
 
-    SwDrawView  *m_pDrawView;     // Our DrawView
+    std::unique_ptr<SwDrawView> m_pDrawView; // Our DrawView
     SdrPageView *m_pSdrPageView;  // Exactly one Page for our DrawView
 
     SwPageFrame     *m_pFirstVisiblePage; // Always points to the first visible Page
@@ -87,7 +87,7 @@ class SwViewShellImp
     sal_uInt16 m_nRestoreActions  ; // Count for the Action that need to be restored (UNO)
     SwRect m_aSmoothRect;
 
-    SwPagePreviewLayout* m_pPagePreviewLayout;
+    std::unique_ptr<SwPagePreviewLayout> m_pPagePreviewLayout;
 
     void SetFirstVisPage(OutputDevice const * pRenderContext); // Recalculate the first visible Page
 
@@ -156,8 +156,8 @@ public:
 
     /// New Interface for StarView Drawing
     bool  HasDrawView()             const { return nullptr != m_pDrawView; }
-          SwDrawView* GetDrawView()       { return m_pDrawView; }
-    const SwDrawView* GetDrawView() const { return m_pDrawView; }
+          SwDrawView* GetDrawView()       { return m_pDrawView.get(); }
+    const SwDrawView* GetDrawView() const { return m_pDrawView.get(); }
           SdrPageView*GetPageView()       { return m_pSdrPageView; }
     const SdrPageView*GetPageView() const { return m_pSdrPageView; }
     void MakeDrawView();
@@ -216,7 +216,7 @@ public:
 
     SwPagePreviewLayout* PagePreviewLayout()
     {
-        return m_pPagePreviewLayout;
+        return m_pPagePreviewLayout.get();
     }
 
     /// Is this view accessible?
