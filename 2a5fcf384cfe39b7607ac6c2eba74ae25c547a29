@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_8b889c1f",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-07-18T16:08:55Z",
+      "side": 1,
+      "message": "This makes also the \"else\" block of ColorWindow::statusChanged to be unused. In addition, calling AddStatusListener with an empty string won\u0027t do anything useful. (Also, given that the ColorWindow class is a WIP by Caolán, I would suggest to talk with him, before doing this change.)",
+      "revId": "2a5fcf384cfe39b7607ac6c2eba74ae25c547a29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
