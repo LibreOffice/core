@@ -51,6 +51,7 @@ namespace svgio
             maGradientUnits(objectBoundingBox),
             maSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad),
             mpaGradientTransform(nullptr),
+            mbResolvingLink(false),
             maXLink(),
             mpXLink(nullptr)
         {
@@ -246,9 +247,11 @@ namespace svgio
             {
                 const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-                if(mpXLink)
+                if (mpXLink && !mbResolvingLink)
                 {
+                    mbResolvingLink = true;
                     mpXLink->collectGradientEntries(aVector);
+                    mbResolvingLink = false;
                 }
             }
             else
@@ -312,9 +315,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getX1();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getX1();
+                mbResolvingLink = false;
+                return ret;
             }
 
             // default is 0%
@@ -330,9 +336,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getY1();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getY1();
+                mbResolvingLink = false;
+                return ret;
             }
 
             // default is 0%
@@ -348,9 +357,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getX2();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getX2();
+                mbResolvingLink = false;
+                return ret;
             }
 
             // default is 100%
@@ -366,9 +378,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getY2();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getY2();
+                mbResolvingLink = false;
+                return ret;
             }
 
             // default is 0%
@@ -384,9 +399,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getCx();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getCx();
+                mbResolvingLink = false;
+                return ret;
             }
 
             // default is 50%
@@ -402,9 +420,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getCy();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getCy();
+                mbResolvingLink = false;
+                return ret;
             }
 
             // default is 50%
@@ -420,9 +441,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getR();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getR();
+                mbResolvingLink = false;
+                return ret;
             }
 
             // default is 50%
@@ -438,9 +462,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getFx();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getFx();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return nullptr;
@@ -455,9 +482,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getFy();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getFy();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return nullptr;
@@ -472,9 +502,12 @@ namespace svgio
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getGradientTransform();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getGradientTransform();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return nullptr;
