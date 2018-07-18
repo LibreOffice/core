@@ -1840,7 +1840,13 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                 aMimeType = "image/png";
             }
 
-            ErrCode nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGraphicURL,
+            const Graphic& rGraphic = pGrfNd->GetGrf();
+
+            // So that Graphic::IsTransparent() can report true.
+            if (!rGraphic.isAvailable())
+                const_cast<Graphic&>(rGraphic).makeAvailable();
+
+            ErrCode nErr = XOutBitmap::WriteGraphic( rGraphic, aGraphicURL,
                     aFilterName, nFlags, &aMM100Size );
             if( nErr )
             {

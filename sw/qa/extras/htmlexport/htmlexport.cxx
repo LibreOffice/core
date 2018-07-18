@@ -589,6 +589,17 @@ DECLARE_HTMLEXPORT_TEST(testList, "list.html")
     CPPUNIT_ASSERT(aStream.indexOf("<li>") != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testTransparentImage, "transparent-image.odt")
+{
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    OUString aSource = getXPath(pDoc, "/html/body/p/img", "src");
+    OUString aMessage = "src attribute is: " + aSource;
+    // This was a jpeg, transparency was lost.
+    CPPUNIT_ASSERT_MESSAGE(aMessage.toUtf8().getStr(), aSource.endsWith(".gif"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
