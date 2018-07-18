@@ -49,10 +49,10 @@ sc/source/ui/view/cellsh1.cxx:134
 sw/source/core/view/viewsh.cxx:716
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
-sw/source/filter/html/swhtml.hxx:713
+sw/source/filter/html/swhtml.hxx:670
     void SwHTMLParser::SetFrameFormatAttrs(class SfxItemSet &,enum HtmlFrameFormatFlags,class SfxItemSet &)
     enum HtmlFrameFormatFlags nFlags setBits=0x1
-sw/source/filter/ww8/wrtw8esh.cxx:1540
+sw/source/filter/ww8/wrtw8esh.cxx:1538
     enum ShapeFlag AddMirrorFlags(enum ShapeFlag,const class SwMirrorGrf &)
     enum ShapeFlag nFlags setBits=0xa00 clearBits=0x5ef
 xmloff/inc/MetaExportComponent.hxx:32

@@ -64,17 +64,18 @@ public:
 
     /**
      * The caller is responsible for deleting the buffer objects identified by
-     * nFramebufferId, nRenderbufferDepthId and nRenderbufferColorId
+     * nFramebufferId, nRenderbufferDepthId and nRenderbufferColorId.
+     * This create a buffer for rendering to texture and should be freed with
+     * glDeleteTextures.
+     *
      * @param nWidth                Width of frame
      * @param nHeight               Height of frame
      * @param nFramebufferId        FrameBuffer ID
      * @param nRenderbufferDepthId  RenderBuffer's depth ID
      * @param nRenderbufferColorId  RenderBuffer's color ID
-     * @param bRenderbuffer         true => off-screen rendering, false => rendering to texture
-     *          This also affects whether to free with glDeleteRenderbuffers or glDeleteTextures
      */
     static void createFramebuffer(long nWidth, long nHeight, GLuint& nFramebufferId,
-            GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId, bool bRenderbuffer = true);
+            GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId);
 
     /// Get OpenGL version (needs a context)
     static float getGLVersion();

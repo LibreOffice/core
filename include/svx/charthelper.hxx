@@ -37,7 +37,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC ChartHelper
 {
 public:
     /// Use chart's XUpdatable::update() to update values.
-    static void updateChart( const css::uno::Reference< css::frame::XModel >& rXModel, bool bHardUpdate );
+    static void updateChart( const css::uno::Reference< css::frame::XModel >& rXModel );
 
     // try to access rXModel in case of a chart to get the chart content
     // as sequence of primitives. Return range of primitives (chart size) in rRange;

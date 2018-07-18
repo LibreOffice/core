@@ -542,7 +542,7 @@ namespace oglcanvas
                 mnTextureId(0)
             {
                 OpenGLHelper::createFramebuffer(rSize.getX(), rSize.getY(), mnFrambufferId,
-                        mnDepthId, mnTextureId, false);
+                        mnDepthId, mnTextureId);
             }
 
             virtual ~BufferContextImpl() override
