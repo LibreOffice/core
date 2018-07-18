@@ -1248,9 +1248,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     switch( nToken )
     {
     case HtmlTokenId::BODY_ON:
-        if (m_bBodySeen)
-            eState = SvParserState::Error;
-        else
+        if (!m_bBodySeen)
         {
             m_bBodySeen = true;
             if( !m_aStyleSource.isEmpty() )
