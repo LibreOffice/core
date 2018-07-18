@@ -2537,6 +2537,11 @@ svl::SharedString ScFormulaCell::GetResultString() const
     return aResult.GetString();
 }
 
+bool ScFormulaCell::HasHybridStringResult() const
+{
+    return aResult.GetType() == formula::svHybridCell && !aResult.GetString().isEmpty();
+}
+
 void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL )
 {
     aResult.SetMatrix(nCols, nRows, pMat, pUL);
