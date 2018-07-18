@@ -324,15 +324,15 @@ public:
 class SwUndoSplitTable : public SwUndo
 {
     sal_uLong nTableNode, nOffset;
-    SwSaveRowSpan* mpSaveRowSpan; // stores row span values at the splitting row
-    SaveTable* pSavTable;
-    SwHistory* pHistory;
+    std::unique_ptr<SwSaveRowSpan> mpSaveRowSpan; // stores row span values at the splitting row
+    std::unique_ptr<SaveTable> pSavTable;
+    std::unique_ptr<SwHistory> pHistory;
     SplitTable_HeadlineOption nMode;
     sal_uInt16 nFormulaEnd;
     bool bCalcNewSize;
 
 public:
-    SwUndoSplitTable( const SwTableNode& rTableNd, SwSaveRowSpan* pRowSp,
+    SwUndoSplitTable( const SwTableNode& rTableNd, std::unique_ptr<SwSaveRowSpan> pRowSp,
             SplitTable_HeadlineOption nMode, bool bCalcNewSize );
 
     virtual ~SwUndoSplitTable() override;
@@ -342,7 +342,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void SetTableNodeOffset( sal_uLong nIdx )     { nOffset = nIdx - nTableNode; }
-    SwHistory* GetHistory()                 { return pHistory; }
+    SwHistory* GetHistory()                 { return pHistory.get(); }
     void SaveFormula( SwHistory& rHistory );
 };
 

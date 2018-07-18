@@ -2062,17 +2062,13 @@ void SwTable::RestoreRowSpan( const SwSaveRowSpan& rSave )
     }
 }
 
-SwSaveRowSpan* SwTable::CleanUpTopRowSpan( sal_uInt16 nSplitLine )
+std::unique_ptr<SwSaveRowSpan> SwTable::CleanUpTopRowSpan( sal_uInt16 nSplitLine )
 {
-    SwSaveRowSpan* pRet = nullptr;
     if( !IsNewModel() )
-        return pRet;
-    pRet = new SwSaveRowSpan( GetTabLines()[0]->GetTabBoxes(), nSplitLine );
+        return nullptr;
+    std::unique_ptr<SwSaveRowSpan> pRet(new SwSaveRowSpan( GetTabLines()[0]->GetTabBoxes(), nSplitLine ));
     if( pRet->mnRowSpans.empty() )
-    {
-        delete pRet;
-        pRet = nullptr;
-    }
+        return nullptr;
     return pRet;
 }
 

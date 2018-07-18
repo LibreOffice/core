@@ -2843,19 +2843,19 @@ void SwUndoCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,
-    SwSaveRowSpan* pRowSp, SplitTable_HeadlineOption eMode, bool bNewSize )
+    std::unique_ptr<SwSaveRowSpan> pRowSp, SplitTable_HeadlineOption eMode, bool bNewSize )
     : SwUndo( SwUndoId::SPLIT_TABLE, rTableNd.GetDoc() ),
-    nTableNode( rTableNd.GetIndex() ), nOffset( 0 ), mpSaveRowSpan( pRowSp ), pSavTable( nullptr ),
-    pHistory( nullptr ), nMode( eMode ), nFormulaEnd( 0 ), bCalcNewSize( bNewSize )
+    nTableNode( rTableNd.GetIndex() ), nOffset( 0 ), mpSaveRowSpan( std::move(pRowSp) ),
+    nMode( eMode ), nFormulaEnd( 0 ), bCalcNewSize( bNewSize )
 {
     switch( nMode )
     {
     case SplitTable_HeadlineOption::BoxAttrAllCopy:
-            pHistory = new SwHistory;
+            pHistory.reset(new SwHistory);
             SAL_FALLTHROUGH;
     case SplitTable_HeadlineOption::BorderCopy:
     case SplitTable_HeadlineOption::BoxAttrCopy:
-        pSavTable = new SaveTable( rTableNd.GetTable(), 1, false );
+        pSavTable.reset(new SaveTable( rTableNd.GetTable(), 1, false ));
         break;
     default: break;
     }
@@ -2863,9 +2863,9 @@ SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,
 
 SwUndoSplitTable::~SwUndoSplitTable()
 {
-    delete pSavTable;
-    delete pHistory;
-    delete mpSaveRowSpan;
+    pSavTable.reset();
+    pHistory.reset();
+    mpSaveRowSpan.reset();
 }
 
 void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -2968,7 +2968,7 @@ void SwUndoSplitTable::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoSplitTable::SaveFormula( SwHistory& rHistory )
 {
     if( !pHistory )
-        pHistory = new SwHistory;
+        pHistory.reset(new SwHistory);
 
     nFormulaEnd = rHistory.Count();
     pHistory->Move( 0, &rHistory );
