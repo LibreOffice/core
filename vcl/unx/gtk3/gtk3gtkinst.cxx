@@ -2031,6 +2031,8 @@ private:
             ret = RET_OK;
         else if (ret == GTK_RESPONSE_CANCEL)
             ret = RET_CANCEL;
+        else if (ret == GTK_RESPONSE_DELETE_EVENT)
+            ret = RET_CANCEL;
         else if (ret == GTK_RESPONSE_CLOSE)
             ret = RET_CLOSE;
         else if (ret == GTK_RESPONSE_YES)
