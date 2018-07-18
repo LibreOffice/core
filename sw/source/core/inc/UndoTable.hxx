@@ -351,8 +351,8 @@ class SwUndoMergeTable : public SwUndo
 {
     OUString aName;
     sal_uLong nTableNode;
-    SaveTable* pSavTable, *pSavHdl;
-    SwHistory* pHistory;
+    std::unique_ptr<SaveTable> pSavTable, pSavHdl;
+    std::unique_ptr<SwHistory> pHistory;
     sal_uInt16 nMode;
     bool bWithPrev;
 
