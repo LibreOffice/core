@@ -278,12 +278,11 @@ public:
 };
 
 struct UndoTableCpyTable_Entry;
-using SwUndoTableCpyTable_Entries = std::vector<std::unique_ptr<UndoTableCpyTable_Entry>>;
 
 class SwUndoTableCpyTable : public SwUndo
 {
-    SwUndoTableCpyTable_Entries* m_pArr;
-    SwUndoTableNdsChg* pInsRowUndo;
+    std::vector<std::unique_ptr<UndoTableCpyTable_Entry>> m_vArr;
+    std::unique_ptr<SwUndoTableNdsChg> pInsRowUndo;
 
     //b6341295: When redlining is active, PrepareRedline has to create the
     //redlining attributes for the new and the old table cell content
