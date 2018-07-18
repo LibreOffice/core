@@ -196,7 +196,6 @@ class OfficeDocument(object):
                 bState = False
 
         else:
-            xComponent.dispose()
             bState = True
 
         return bState
