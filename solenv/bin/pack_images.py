@@ -511,7 +511,7 @@ def parse_image_list(imagelist_filenames):
 
                     if line.startswith('%MODULE%'):
                         key = line.replace('%MODULE%/', '')
-                        if key in global_image_list:
+                        if key in module_image_list:
                             module_image_list[key] += 1
                         else:
                             module_image_list[key] = 0
