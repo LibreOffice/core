@@ -997,6 +997,8 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("field"), BAD_CAST("urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("formx"), BAD_CAST("urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("css3t"), BAD_CAST("http://www.w3.org/TR/css3-text/"));
+        // reqif-xhtml
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("reqif-xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
     }
 };
 
