@@ -3067,13 +3067,19 @@ public:
         m_pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
 
         m_pLabel = GTK_LABEL(gtk_label_new_with_mnemonic(sLabel.getStr()));
-        gtk_label_set_ellipsize(m_pLabel, PANGO_ELLIPSIZE_MIDDLE);
         gtk_label_set_mnemonic_widget(m_pLabel, GTK_WIDGET(m_pMenuButton));
         gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pLabel), false, false, 0);
 
         gtk_box_pack_end(m_pBox, gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
         gtk_container_add(GTK_CONTAINER(m_pMenuButton), GTK_WIDGET(m_pBox));
         gtk_widget_show_all(GTK_WIDGET(m_pBox));
+    }
+
+    virtual void set_size_request(int nWidth, int nHeight) override
+    {
+        // tweak the label to get a narrower size to stick
+        gtk_label_set_ellipsize(m_pLabel, PANGO_ELLIPSIZE_MIDDLE);
+        gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
     virtual void set_label(const OUString& rText) override
