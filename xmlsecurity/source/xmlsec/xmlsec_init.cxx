@@ -15,7 +15,6 @@
 #include <xmlsec-wrapper.h>
 #include <svl/cryptosign.hxx>
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
-#include <xmlsec/mscrypto/crypto.h>
 #include <xmlsec/mscng/crypto.h>
 #else
 #include <xmlsec/nss/crypto.h>
@@ -32,19 +31,9 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
 
     //Init xmlsec crypto engine library
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
-    if (!svl::crypto::isMSCng())
-    {
-        if( xmlSecMSCryptoInit() < 0 ) {
-            xmlSecShutdown() ;
-            throw RuntimeException() ;
-        }
-    }
-    else
-    {
-        if( xmlSecMSCngInit() < 0 ) {
-            xmlSecShutdown();
-            throw RuntimeException();
-        }
+    if( xmlSecMSCngInit() < 0 ) {
+        xmlSecShutdown();
+        throw RuntimeException();
     }
 #else
     if( xmlSecNssInit() < 0 ) {
@@ -56,12 +45,9 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
     //Enable external stream handlers
     if( xmlEnableStreamInputCallbacks() < 0 ) {
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
-        if (!svl::crypto::isMSCng())
-            xmlSecMSCryptoShutdown();
-        else
-            xmlSecMSCngShutdown();
+        xmlSecMSCngShutdown();
 #else
-       xmlSecNssShutdown();
+        xmlSecNssShutdown();
 #endif
         xmlSecShutdown() ;
         throw RuntimeException() ;
@@ -72,10 +58,7 @@ XSECXMLSEC_DLLPUBLIC void deInitXmlSec()
 {
     xmlDisableStreamInputCallbacks();
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
-    if (!svl::crypto::isMSCng())
-        xmlSecMSCryptoShutdown();
-    else
-        xmlSecMSCngShutdown();
+    xmlSecMSCngShutdown();
 #else
     xmlSecNssShutdown();
 #endif

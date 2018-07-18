@@ -23,7 +23,6 @@
 #include "securityenvironment_mscryptimpl.hxx"
 
 #include <xmlsec-wrapper.h>
-#include <xmlsec/mscrypto/app.h>
 #include <xmlsec/mscng/app.h>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
@@ -71,10 +70,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         n_hStoreHandle = nullptr ;
     }
 
-    if (!svl::crypto::isMSCng())
-        xmlSecMSCryptoAppInit( n_pCertStore ) ;
-    else
-        xmlSecMSCngAppInit(n_pCertStore);
+    xmlSecMSCngAppInit(n_pCertStore);
 
     try {
         /* Build Security Environment */
@@ -90,10 +86,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
                 CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
             }
 
-            if (!svl::crypto::isMSCng())
-                xmlSecMSCryptoAppShutdown() ;
-            else
-                xmlSecMSCngAppShutdown();
+            xmlSecMSCngAppShutdown();
             return nullptr;
         }
 
@@ -120,10 +113,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
         }
 
-        if (!svl::crypto::isMSCng())
-            xmlSecMSCryptoAppShutdown() ;
-        else
-            xmlSecMSCngAppShutdown();
+        xmlSecMSCngAppShutdown();
         return nullptr;
     }
 }
@@ -154,10 +144,7 @@ void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const uno::Referen
     }
     */
 
-    if (!svl::crypto::isMSCng())
-        xmlSecMSCryptoAppShutdown() ;
-    else
-        xmlSecMSCngAppShutdown();
+    xmlSecMSCngAppShutdown();
 }
 
 /* XServiceInfo */
