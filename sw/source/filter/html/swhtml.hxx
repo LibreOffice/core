@@ -368,7 +368,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     //onto them until parsing is done
     std::vector<std::unique_ptr<SwTableBox>> m_aOrphanedTableBoxes;
 
-    SwApplet_Impl *m_pAppletImpl; // current applet
+    std::unique_ptr<SwApplet_Impl> m_pAppletImpl; // current applet
 
     SwCSS1Parser    *m_pCSS1Parser;   // Style-Sheet-Parser
     SwHTMLNumRuleInfo *m_pNumRuleInfo;
