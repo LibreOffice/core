@@ -689,11 +689,10 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
                                 sal_Unicode cCh, sal_uInt16 nAdj,
                                 const SwTableAutoFormat* pAFormat )
     : SwUndo( SwUndoId::TEXTTOTABLE, rRg.GetDoc() ), SwUndRng( rRg ), aInsTableOpts( rInsTableOpts ),
-      pDelBoxes( nullptr ), pAutoFormat( nullptr ),
       pHistory( nullptr ), cTrenner( cCh ), nAdjust( nAdj )
 {
     if( pAFormat )
-        pAutoFormat = new SwTableAutoFormat( *pAFormat );
+        pAutoFormat.reset( new SwTableAutoFormat( *pAFormat ) );
 
     const SwPosition* pEnd = rRg.End();
     SwNodes& rNds = rRg.GetDoc()->GetNodes();
@@ -704,8 +703,7 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
 
 SwUndoTextToTable::~SwUndoTextToTable()
 {
-    delete pDelBoxes;
-    delete pAutoFormat;
+    pAutoFormat.reset();
 }
 
 void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -729,13 +727,13 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
         pHistory->SetTmpEnd( pHistory->Count() );
     }
 
-    if( pDelBoxes )
+    if( !mvDelBoxes.empty() )
     {
         pTNd->DelFrames();
         SwTable& rTable = pTNd->GetTable();
-        for( size_t n = pDelBoxes->size(); n; )
+        for( size_t n = mvDelBoxes.size(); n; )
         {
-            SwTableBox* pBox = rTable.GetTableBox( (*pDelBoxes)[ --n ] );
+            SwTableBox* pBox = rTable.GetTableBox( mvDelBoxes[ --n ] );
             if( pBox )
                 ::DeleteBox_( rTable, pBox, nullptr, false, false );
             else {
@@ -794,7 +792,7 @@ void SwUndoTextToTable::RedoImpl(::sw::UndoRedoContext & rContext)
     SetPaM(rPam);
 
     SwTable const*const pTable = rContext.GetDoc().TextToTable(
-                aInsTableOpts, rPam, cTrenner, nAdjust, pAutoFormat );
+                aInsTableOpts, rPam, cTrenner, nAdjust, pAutoFormat.get() );
     static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
 }
 
@@ -805,15 +803,13 @@ void SwUndoTextToTable::RepeatImpl(::sw::RepeatContext & rContext)
     {
         rContext.GetDoc().TextToTable( aInsTableOpts, rContext.GetRepeatPaM(),
                                         cTrenner, nAdjust,
-                                        pAutoFormat );
+                                        pAutoFormat.get() );
     }
 }
 
 void SwUndoTextToTable::AddFillBox( const SwTableBox& rBox )
 {
-    if( !pDelBoxes )
-        pDelBoxes = new std::vector<sal_uLong>;
-    pDelBoxes->push_back( rBox.GetSttIdx() );
+    mvDelBoxes.push_back( rBox.GetSttIdx() );
 }
 
 SwHistory& SwUndoTextToTable::GetHistory()

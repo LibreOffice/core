@@ -75,8 +75,8 @@ class SwUndoTextToTable : public SwUndo, public SwUndRng
 {
     OUString sTableNm;
     SwInsertTableOptions aInsTableOpts;
-    std::vector<sal_uLong>* pDelBoxes;
-    SwTableAutoFormat* pAutoFormat;
+    std::vector<sal_uLong> mvDelBoxes;
+    std::unique_ptr<SwTableAutoFormat> pAutoFormat;
     SwHistory* pHistory;
     sal_Unicode cTrenner;
     sal_uInt16 nAdjust;
