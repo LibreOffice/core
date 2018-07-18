@@ -273,7 +273,7 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     if( !rHTMLWrt.m_pFootEndNotes )
-        rHTMLWrt.m_pFootEndNotes = new std::vector<SwTextFootnote*>;
+        rHTMLWrt.m_pFootEndNotes.reset(new std::vector<SwTextFootnote*>);
     rHTMLWrt.m_pFootEndNotes->insert( rHTMLWrt.m_pFootEndNotes->begin() + nPos, pTextFootnote );
 
     OStringBuffer sOut;
@@ -381,8 +381,7 @@ void SwHTMLWriter::OutFootEndNotes()
             "SwHTMLWriter::OutFootEndNotes: Number of endnotes does not match" );
 #endif
 
-    delete m_pFootEndNotes;
-    m_pFootEndNotes = nullptr;
+    m_pFootEndNotes.reset();
     m_nFootNote = m_nEndNote = 0;
 }
 
