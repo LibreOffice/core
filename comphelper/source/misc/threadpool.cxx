@@ -128,13 +128,12 @@ sal_Int32 ThreadPool::getPreferredConcurrency()
     return ThreadCount;
 }
 
-// FIXME: there should be no need for this as/when our baseline
-// is >VS2015 and drop WinXP; the sorry details are here:
-// https://connect.microsoft.com/VisualStudio/feedback/details/1282596
+// Used to order shutdown, and to ensure there are no lingering
+// threads after LibreOfficeKit pre-init.
 void ThreadPool::shutdown()
 {
-    if (mbTerminate)
-        return;
+//    if (mbTerminate)
+//        return;
 
     std::unique_lock< std::mutex > aGuard( maMutex );
     shutdownLocked(aGuard);
