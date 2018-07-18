@@ -97,7 +97,7 @@ public:
     // <-- split table rows
 
     // #131283# Table row keep feature
-    bool ShouldRowKeepWithNext() const;
+    bool ShouldRowKeepWithNext( const bool bCheckParents = true ) const;
 
     // #i4032# NEW TABLES
     bool IsRowSpanLine() const { return m_bIsRowSpanLine; }
