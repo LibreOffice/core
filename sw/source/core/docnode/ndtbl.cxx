@@ -3131,12 +3131,12 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
 
     if( pNew )
     {
-        SwSaveRowSpan* pSaveRowSp = pNew->GetTable().CleanUpTopRowSpan( rTable.GetTabLines().size() );
+        std::unique_ptr<SwSaveRowSpan> pSaveRowSp = pNew->GetTable().CleanUpTopRowSpan( rTable.GetTabLines().size() );
         SwUndoSplitTable* pUndo = nullptr;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             pUndo = new SwUndoSplitTable(
-                        *pNew, pSaveRowSp, eHdlnMode, bCalcNewSize);
+                        *pNew, std::move(pSaveRowSp), eHdlnMode, bCalcNewSize);
             GetIDocumentUndoRedo().AppendUndo(pUndo);
             if( aHistory.Count() )
                 pUndo->SaveFormula( aHistory );
