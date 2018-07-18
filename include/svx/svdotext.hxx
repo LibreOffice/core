@@ -251,7 +251,6 @@ protected:
     SdrOutliner& ImpGetDrawOutliner() const;
 
 private:
-    SVX_DLLPRIVATE void ImpCheckMasterCachable();
     // #101029#: Extracted from ImpGetDrawOutliner()
     SVX_DLLPRIVATE void ImpInitDrawOutliner( SdrOutliner& rOutl ) const;
     // #101029#: Extracted from Paint()

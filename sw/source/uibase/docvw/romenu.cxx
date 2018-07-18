@@ -52,8 +52,6 @@ using namespace ::sfx2;
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {
-    delete m_pImageMap;
-    delete m_pTargetURL;
     m_xMenu.disposeAndClear();
 }
 
@@ -109,8 +107,6 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     , m_rView(rV)
     , m_aBrushItem(RES_BACKGROUND)
     , m_rDocPos(rDPos)
-    , m_pImageMap(nullptr)
-    , m_pTargetURL(nullptr)
 {
     m_bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -136,19 +132,6 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     else
     {
         m_aGraphic = *pGrf;
-        const SwFrameFormat* pGrfFormat = rSh.GetFormatFromObj( m_rDocPos );
-        const SfxPoolItem* pURLItem;
-        if( pGrfFormat && SfxItemState::SET == pGrfFormat->GetItemState(
-            RES_URL, true, &pURLItem ))
-        {
-            const SwFormatURL& rURL = *static_cast<const SwFormatURL*>(pURLItem);
-            if( rURL.GetMap() )
-                m_pImageMap = new ImageMap( *rURL.GetMap() );
-            else if( !rURL.GetURL().isEmpty() )
-                m_pTargetURL = new INetImage( bLink ? m_sGrfName : OUString(),
-                                            rURL.GetURL(),
-                                            rURL.GetTargetFrameName() );
-        }
     }
 
     bool bEnableGraphicToGallery = bLink;

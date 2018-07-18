@@ -941,7 +941,6 @@ protected:
     bool                        bIsEdge : 1;
     bool                        bIs3DObj : 1;
     bool                        bIsUnoObj : 1;
-    bool                        bNotMasterCachable : 1;
     // #i25616#
     bool                        mbLineIsOutsideGeometry : 1;
     // #i25616#

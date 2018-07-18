@@ -1461,12 +1461,7 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     mxRecentColorSet->set_size_request(aSize.Width(), aSize.Height());
 
     AddStatusListener( ".uno:ColorTableState" );
-    AddStatusListener( maCommand );
-    if ( maCommand == ".uno:FrameLineColor" )
-    {
-        AddStatusListener( ".uno:BorderTLBR" );
-        AddStatusListener( ".uno:BorderBLTR" );
-    }
+    AddStatusListener( OUString() );
 }
 
 void SvxColorWindow::ShowNoneButton()
@@ -1625,9 +1620,7 @@ IMPL_LINK(ColorWindow, SelectHdl, SvtValueSet*, pColorSet, void)
     if (mpMenuButton->get_active())
         mpMenuButton->set_active(false);
 
-    maSelectedLink.Call(aNamedColor);
-
-    maColorSelectFunction(maCommand, aNamedColor);
+    maColorSelectFunction(OUString(), aNamedColor);
 }
 
 IMPL_LINK_NOARG(SvxColorWindow, SelectPaletteHdl, ListBox&, void)
@@ -1681,9 +1674,7 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
     if (mpMenuButton->get_active())
         mpMenuButton->set_active(false);
 
-    maSelectedLink.Call(aNamedColor);
-
-    maColorSelectFunction(maCommand, aNamedColor);
+    maColorSelectFunction(OUString(), aNamedColor);
 }
 
 IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
@@ -1710,7 +1701,7 @@ IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
 {
     if (mpMenuButton->get_active())
         mpMenuButton->set_active(false);
-    mxPaletteManager->PopupColorPicker(mpParentWindow, maCommand, GetSelectEntryColor().first);
+    mxPaletteManager->PopupColorPicker(mpParentWindow, OUString(), GetSelectEntryColor().first);
 }
 
 void SvxColorWindow::StartSelection()
@@ -3806,8 +3797,6 @@ void ColorListBox::Selected(const NamedColor& rColor)
 {
     ShowPreview(rColor);
     m_aSelectedColor = rColor;
-    if (m_aSelectedLink.IsSet())
-        m_aSelectedLink.Call(*this);
 }
 
 //to avoid the box resizing every time the color is changed to

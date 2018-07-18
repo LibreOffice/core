@@ -66,8 +66,6 @@ class SwReadOnlyPopup
     OUString    m_sGrfName;
     std::vector<OUString> m_aThemeList;
     bool        m_bGrfToGalleryAsLnk;
-    ImageMap*   m_pImageMap;
-    INetImage*  m_pTargetURL;
 
     void Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher const &rDis );
     OUString SaveGraphic( sal_uInt16 nId );

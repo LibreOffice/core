@@ -761,7 +761,6 @@ void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nHeaderRepeat = m_nTableWidth = m_nLayoutType = 0;
     m_sTableStyleName.clear();
-    m_pTableStyleTextProperies.clear();
 }
 
 }}

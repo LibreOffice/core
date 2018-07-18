@@ -1131,22 +1131,6 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
     return aP;
 }
 
-void SdrTextObj::ImpCheckMasterCachable()
-{
-    bNotMasterCachable=false;
-
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-
-    if(!bNotVisibleAsMaster && pOutlinerParaObject && pOutlinerParaObject->IsEditDoc() )
-    {
-        const EditTextObject& rText= pOutlinerParaObject->GetTextObject();
-        bNotMasterCachable = rText.HasField(SvxPageField::CLASS_ID)
-            || rText.HasField(SvxHeaderField::CLASS_ID)
-            || rText.HasField(SvxFooterField::CLASS_ID)
-            || rText.HasField(SvxDateTimeField::CLASS_ID);
-    }
-}
-
 // Extracted from ImpGetDrawOutliner()
 void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
 {
@@ -1421,7 +1405,6 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaOb
     ActionChanged();
 
     ImpSetTextStyleSheetListeners();
-    ImpCheckMasterCachable();
 }
 
 void SdrTextObj::NbcReformatText()
