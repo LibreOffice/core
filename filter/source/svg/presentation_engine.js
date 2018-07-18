@@ -7987,7 +7987,7 @@ AnimationBaseNode3.prototype.info = function( bVerbose )
             sInfo += ';  keyTimes: ' + this.getKeyTimes().join( ',' );
 
         // values
-        if( this.getKeyTimes().length )
+        if( this.getValues().length )
             sInfo += ';  values: ' + this.getValues().join( ',' );
 
         // formula
