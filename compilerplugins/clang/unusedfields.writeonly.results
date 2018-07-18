@@ -42,13 +42,13 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:125
     __cxxabiv1::__cxa_exception unwindHeader _Unwind_Exception
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:135
     __cxxabiv1::__cxa_eh_globals uncaughtExceptions unsigned int
-bridges/source/jni_uno/jni_java2uno.cxx:148
-    jni_uno::largest n sal_Int64
 bridges/source/jni_uno/jni_java2uno.cxx:149
-    jni_uno::largest d double
+    jni_uno::largest n sal_Int64
 bridges/source/jni_uno/jni_java2uno.cxx:150
-    jni_uno::largest p void *
+    jni_uno::largest d double
 bridges/source/jni_uno/jni_java2uno.cxx:151
+    jni_uno::largest p void *
+bridges/source/jni_uno/jni_java2uno.cxx:152
     jni_uno::largest a uno_Any
 canvas/source/cairo/cairo_spritedevicehelper.hxx:77
     cairocanvas::SpriteDeviceHelper mbFullScreen _Bool
@@ -56,9 +56,9 @@ canvas/source/cairo/cairo_spritehelper.hxx:103
     cairocanvas::SpriteHelper mbTextureDirty _Bool
 canvas/source/opengl/ogl_spritedevicehelper.hxx:124
     oglcanvas::SpriteDeviceHelper mpDevice css::rendering::XGraphicDevice *
-chart2/inc/ChartModel.hxx:483
+chart2/inc/ChartModel.hxx:471
     chart::ChartModel mnStart sal_Int32
-chart2/inc/ChartModel.hxx:484
+chart2/inc/ChartModel.hxx:472
     chart::ChartModel mnEnd sal_Int32
 chart2/source/controller/main/ElementSelector.hxx:37
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
@@ -74,8 +74,6 @@ codemaker/source/cppumaker/dependencies.hxx:114
     codemaker::cppumaker::Dependencies m_floatDependency _Bool
 codemaker/source/cppumaker/dependencies.hxx:115
     codemaker::cppumaker::Dependencies m_doubleDependency _Bool
-comphelper/qa/container/comphelper_ifcontainer.cxx:45
-    ContainerListener m_pStats struct ContainerStats *
 configmgr/source/components.cxx:164
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
 connectivity/source/drivers/mork/MorkParser.hxx:133
@@ -144,6 +142,8 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
+cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:47
+    ContainerListener m_pStats struct ContainerStats *
 cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:81
@@ -152,8 +152,6 @@ cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
 cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
-cui/source/options/cfgchart.hxx:33
-    SvxChartColorTable nNextElementNumber int
 dbaccess/source/core/dataaccess/documentdefinition.cxx:287
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:178
@@ -202,8 +200,6 @@ emfio/inc/mtftools.hxx:128
     emfio::LOGFONTW lfClipPrecision sal_uInt8
 emfio/inc/mtftools.hxx:129
     emfio::LOGFONTW lfQuality sal_uInt8
-emfio/inc/wmfreader.hxx:50
-    emfio::WmfReader mnCurrentAction sal_uInt32
 emfio/source/reader/emfreader.cxx:310
     (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
 emfio/source/reader/emfreader.cxx:311
@@ -250,6 +246,8 @@ include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
+include/svx/svdobj.hxx:944
+    SdrObject bNotMasterCachable _Bool
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:415
@@ -258,6 +256,8 @@ include/vcl/salnativewidgets.hxx:463
     PushButtonValue mbBevelButton _Bool
 include/vcl/salnativewidgets.hxx:464
     PushButtonValue mbSingleLine _Bool
+include/xmloff/AutoStyleEntry.hxx:22
+    xmloff::AutoStyleEntry m_nFamily sal_Int32
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/shapeimport.hxx:181
@@ -318,7 +318,7 @@ sc/inc/compiler.hxx:262
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:264
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2509
+sc/inc/document.hxx:2527
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
@@ -384,8 +384,6 @@ sc/source/ui/inc/datastream.hxx:108
     sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
-sc/source/ui/inc/tabvwsh.hxx:129
-    ScTabViewShell pPivotSource class ScArea *
 sd/source/filter/eppt/eppt.hxx:142
     PPTWriter mnTxId sal_uInt32
 sd/source/filter/ppt/ppt97animations.hxx:41
@@ -402,8 +400,6 @@ sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
 sd/source/ui/sidebar/SlideBackground.hxx:99
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
-sfx2/inc/bitset.hxx:28
-    IndexBitSet nCount sal_uInt16
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
@@ -458,22 +454,20 @@ svx/source/svdraw/svdpdf.hxx:192
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-sw/inc/shellio.hxx:145
+sw/inc/shellio.hxx:146
     SwReader aFileName class rtl::OUString
 sw/source/core/doc/tblafmt.cxx:185
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
-sw/source/core/inc/swfont.hxx:975
+sw/source/core/inc/swfont.hxx:973
     SvStatistics nGetTextSize sal_uInt16
-sw/source/core/inc/swfont.hxx:976
+sw/source/core/inc/swfont.hxx:974
     SvStatistics nDrawText sal_uInt16
-sw/source/core/inc/swfont.hxx:977
+sw/source/core/inc/swfont.hxx:975
     SvStatistics nGetStretchTextSize sal_uInt16
-sw/source/core/inc/swfont.hxx:978
+sw/source/core/inc/swfont.hxx:976
     SvStatistics nDrawStretchText sal_uInt16
-sw/source/core/inc/swfont.hxx:979
+sw/source/core/inc/swfont.hxx:977
     SvStatistics nChangeFont sal_uInt16
-sw/source/core/text/xmldump.cxx:34
-    XmlPortionDumper ofs TextFrameIndex
 sw/source/filter/html/htmlcss1.cxx:77
     SwCSS1ItemIds nFormatBreak sal_uInt16
 sw/source/filter/html/htmlcss1.cxx:78
@@ -487,7 +481,11 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
+sw/source/uibase/docvw/romenu.hxx:69
+    SwReadOnlyPopup m_pImageMap class ImageMap *
+sw/source/uibase/docvw/romenu.hxx:70
+    SwReadOnlyPopup m_pTargetURL class INetImage *
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -508,10 +506,6 @@ vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
 vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
-vcl/inc/qt5/Qt5Frame.hxx:59
-    Qt5Frame m_pSalMenu class Qt5Menu *
-vcl/inc/qt5/Qt5Graphics.hxx:50
-    Qt5Graphics m_pFontCollection class PhysicalFontCollection *
 vcl/inc/salmenu.hxx:34
     SalItemParams nBits enum MenuItemBits
 vcl/inc/salmenu.hxx:42
@@ -542,8 +536,6 @@ vcl/inc/sft.hxx:461
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/inc/unx/gtk/gtkframe.hxx:215
     GtkSalFrame m_nFloatFlags enum FloatWinPopupFlags
-vcl/inc/window.h:293
-    WindowImpl mnLockCount sal_uInt16
 vcl/opengl/salbmp.cxx:435
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/source/filter/graphicfilter.cxx:1008
@@ -558,8 +550,8 @@ vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints status unsigned long
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass AtkObjectClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:28
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
@@ -568,9 +560,7 @@ vcl/unx/gtk/hudawareness.cxx:20
     (anonymous) connection GDBusConnection *
 vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
-vcl/unx/kde4/KDEXLib.hxx:49
-    KDEXLib::SocketData pending YieldFunc
-vcl/unx/kde4/KDEXLib.hxx:50
-    KDEXLib::SocketData queued YieldFunc
-writerfilter/source/dmapper/PropertyMap.hxx:198
+writerfilter/source/dmapper/DomainMapperTableManager.hxx:57
+    writerfilter::dmapper::DomainMapperTableManager m_pTableStyleTextProperies writerfilter::dmapper::PropertyMapPtr
+writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

@@ -26,8 +26,7 @@ namespace core {
 
 using namespace css;
 
-DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage, uno::Reference<uno::XComponentContext> const & xContext) :
-    mxContext(xContext),
+DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage) :
     mrOleStorage(rOleStorage),
     mCryptoType(UNKNOWN)
 {}

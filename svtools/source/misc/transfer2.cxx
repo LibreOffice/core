@@ -319,7 +319,6 @@ struct TransferDataContainer_Impl
     TDataCntnrEntryList aFmtList;
     Link<sal_Int8,void> aFinshedLnk;
     std::unique_ptr<INetBookmark> pBookmk;
-    std::unique_ptr<Graphic> pGrf;
 
     TransferDataContainer_Impl()
     {
@@ -373,13 +372,6 @@ bool TransferDataContainer::GetData(
                 bFnd = SetINetBookmark( *pImpl->pBookmk, rFlavor );
             break;
 
-        case SotClipboardFormatId::SVXB:
-        case SotClipboardFormatId::PNG:
-        case SotClipboardFormatId::BITMAP:
-        case SotClipboardFormatId::GDIMETAFILE:
-            if( pImpl->pGrf )
-                bFnd = SetGraphic( *pImpl->pGrf );
-            break;
         default: break;
         }
 
