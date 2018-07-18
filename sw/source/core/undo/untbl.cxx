@@ -395,20 +395,19 @@ SwTableToTextSave::SwTableToTextSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEnd
 
 SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
     : SwUndo( SwUndoId::TABLETOTEXT, rTable.GetFrameFormat()->GetDoc() ),
-    sTableNm( rTable.GetFrameFormat()->GetName() ), pDDEFieldType( nullptr ), pHistory( nullptr ),
+    sTableNm( rTable.GetFrameFormat()->GetName() ), pHistory( nullptr ),
     nSttNd( 0 ), nEndNd( 0 ),
     cTrenner( cCh ), nHdlnRpt( rTable.GetRowsToRepeat() )
 {
-    pTableSave = new SaveTable( rTable );
-    m_pBoxSaves = new SwTableToTextSaves;
-    m_pBoxSaves->reserve(rTable.GetTabSortBoxes().size());
+    pTableSave.reset( new SaveTable( rTable ) );
+    m_vBoxSaves.reserve(rTable.GetTabSortBoxes().size());
 
-    if( dynamic_cast<const SwDDETable *>(&rTable) != nullptr )
-        pDDEFieldType = static_cast<SwDDEFieldType*>(static_cast<const SwDDETable&>(rTable).GetDDEFieldType()->Copy());
+    if( auto pDDETable = dynamic_cast<const SwDDETable *>(&rTable) )
+        pDDEFieldType.reset( static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy()) );
 
     bCheckNumFormat = rTable.GetFrameFormat()->GetDoc()->IsInsTableFormatNum();
 
-    pHistory = new SwHistory;
+    pHistory.reset(new SwHistory);
     const SwTableNode* pTableNd = rTable.GetTableNode();
     sal_uLong nTableStt = pTableNd->GetIndex(), nTableEnd = pTableNd->EndOfSectionIndex();
 
@@ -430,17 +429,16 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
 
     if( !pHistory->Count() )
     {
-        delete pHistory;
-        pHistory = nullptr;
+        pHistory.reset();
     }
 }
 
 SwUndoTableToText::~SwUndoTableToText()
 {
-    delete pDDEFieldType;
-    delete pTableSave;
-    delete m_pBoxSaves;
-    delete pHistory;
+    pDDEFieldType.reset();
+    pTableSave.reset();
+    m_vBoxSaves.clear();
+    pHistory.reset();
 }
 
 void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -461,7 +459,7 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNode2Layout aNode2Layout( aFrameIdx.GetNode() );
 
     // create TableNode structure
-    SwTableNode* pTableNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *m_pBoxSaves );
+    SwTableNode* pTableNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, m_vBoxSaves );
     pTableNd->GetTable().SetTableModel( pTableSave->IsNewModel() );
     SwTableFormat* pTableFormat = rDoc.MakeTableFrameFormat( sTableNm, rDoc.GetDfltFrameFormat() );
     pTableNd->GetTable().RegisterToFormat( *pTableFormat );
@@ -476,8 +474,7 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
                                                             *pDDEFieldType));
         std::unique_ptr<SwDDETable> pDDETable( new SwDDETable( pTableNd->GetTable(), pNewType ) );
         pTableNd->SetNewTable( std::move(pDDETable), false );
-        delete pDDEFieldType;
-        pDDEFieldType = nullptr;
+        pDDEFieldType.reset();
     }
 
     if( bCheckNumFormat )
@@ -635,9 +632,8 @@ void SwUndoTableToText::RedoImpl(::sw::UndoRedoContext & rContext)
     SwTableNode* pTableNd = pPam->GetNode().GetTableNode();
     OSL_ENSURE( pTableNd, "Could not find any TableNode" );
 
-    if( dynamic_cast<const SwDDETable *>(&pTableNd->GetTable()) != nullptr )
-        pDDEFieldType = static_cast<SwDDEFieldType*>(static_cast<SwDDETable&>(pTableNd->GetTable()).
-                                                GetDDEFieldType()->Copy());
+    if( auto pDDETable = dynamic_cast<const SwDDETable *>(&pTableNd->GetTable()) )
+        pDDEFieldType.reset( static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy()) );
 
     rDoc.TableToText( pTableNd, cTrenner );
 
@@ -680,8 +676,7 @@ void SwUndoTableToText::SetRange( const SwNodeRange& rRg )
 
 void SwUndoTableToText::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx, sal_Int32 nContentIdx )
 {
-
-    m_pBoxSaves->push_back(o3tl::make_unique<SwTableToTextSave>(rDoc, nNdIdx, nEndIdx, nContentIdx));
+    m_vBoxSaves.push_back(o3tl::make_unique<SwTableToTextSave>(rDoc, nNdIdx, nEndIdx, nContentIdx));
 }
 
 SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,

@@ -100,10 +100,10 @@ public:
 class SwUndoTableToText : public SwUndo
 {
     OUString sTableNm;
-    SwDDEFieldType* pDDEFieldType;
-    SaveTable* pTableSave;
-    SwTableToTextSaves* m_pBoxSaves;
-    SwHistory* pHistory;
+    std::unique_ptr<SwDDEFieldType> pDDEFieldType;
+    std::unique_ptr<SaveTable> pTableSave;
+    SwTableToTextSaves m_vBoxSaves;
+    std::unique_ptr<SwHistory> pHistory;
     sal_uLong nSttNd, nEndNd;
     sal_Unicode cTrenner;
     sal_uInt16 nHdlnRpt;
