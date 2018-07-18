@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <deque>
+#include <unordered_set>
 #include <swscanner.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -63,7 +64,7 @@ private:
     std::vector<DirectionChangeInfo> m_DirectionChanges;
     std::deque<TextFrameIndex> m_Kashida;
     /// indexes into m_Kashida
-    std::deque<size_t> m_KashidaInvalid;
+    std::unordered_set<size_t> m_KashidaInvalid;
     std::deque<TextFrameIndex> m_NoKashidaLine;
     std::deque<TextFrameIndex> m_NoKashidaLineEnd;
     std::deque<TextFrameIndex> m_HiddenChg;
@@ -84,9 +85,9 @@ private:
     sal_uInt8 m_nDefaultDir;
 
     void UpdateBidiInfo( const OUString& rText );
-
     bool IsKashidaValid(size_t nKashPos) const;
-    void MarkKashidaInvalid(size_t nKashPos);
+    // returns true if nKashPos is newly marked invalid
+    bool MarkKashidaInvalid(size_t nKashPos);
     void ClearKashidaInvalid(size_t nKashPos);
     bool MarkOrClearKashidaInvalid(TextFrameIndex nStt, TextFrameIndex nLen,
             bool bMark, sal_Int32 nMarkCount);
