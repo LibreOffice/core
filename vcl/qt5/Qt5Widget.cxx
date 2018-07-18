@@ -208,7 +208,7 @@ void VclQtMixinBase::mixinCloseEvent(QCloseEvent* pEvent)
         pEvent->accept();
     // SalEvent::Close returning false may mean that user has vetoed
     // closing the frame ("you have unsaved changes" dialog for example)
-    // We should't process the event in such case
+    // We shouldn't process the event in such case
     else
         pEvent->ignore();
 }
