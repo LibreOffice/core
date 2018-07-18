@@ -251,7 +251,7 @@ public:
 
 class SwUndoTableNumFormat : public SwUndo
 {
-    SfxItemSet *m_pBoxSet;
+    std::unique_ptr<SfxItemSet> m_pBoxSet;
     std::unique_ptr<SwHistory> m_pHistory;
     OUString m_aStr, m_aNewFormula;
 
