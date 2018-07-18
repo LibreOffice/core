@@ -59,9 +59,7 @@
   </node>
   <node oor:name="VCL">
     <prop oor:name="UseOpenGL" oor:type="xs:boolean">
-      <value install:module="macosx">false</value>
-      <value install:module="unx">false</value>
-      <value install:module="wnt">true</value>
+      <value>false</value>
     </prop>
   </node>
   <node oor:name="I18N">
