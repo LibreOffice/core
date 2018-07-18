@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_90120bb1",
+        "filename": "dbaccess/source/core/api/RowSetBase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-07-18T11:01:52Z",
+      "side": 1,
+      "message": "not just a typo fix IMHO - with alligning it to the right, it belongs to m_rBHelper, but as it was refers to m_xNumberFormatTypes\n\nsee also 2b4cb85a1359b4dc2790aef99c89ea271f565d07",
+      "revId": "b9ad466daf80bd834b220a3a1279b48c8f00e3d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
