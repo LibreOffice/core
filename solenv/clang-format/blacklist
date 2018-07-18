@@ -8018,7 +8018,6 @@ include/vcl/opengl/GLMHelper.hxx
 include/vcl/opengl/OpenGLContext.hxx
 include/vcl/opengl/OpenGLHelper.hxx
 include/vcl/opengl/OpenGLWrapper.hxx
-include/vcl/openglwin.hxx
 include/vcl/outdev.hxx
 include/vcl/outdevmap.hxx
 include/vcl/outdevstate.hxx

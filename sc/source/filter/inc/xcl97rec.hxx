@@ -46,8 +46,6 @@ public:
     ///! count>=0xFFFF: Obj will be deleted, return 0
     sal_uInt16              Add( std::unique_ptr<XclObj> );
 
-    XclObj* back () { return maObjs.empty() ? nullptr : maObjs.back().get(); }
-
     /**
      * @brief Remove last element in the list.
      */

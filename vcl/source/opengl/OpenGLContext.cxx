@@ -346,18 +346,6 @@ void OpenGLContext::adjustToNewSize()
     glViewport(0, 0, rGLWin.Width, rGLWin.Height);
 }
 
-void OpenGLContext::setWinSize(const Size& rSize)
-{
-    if(m_xWindow)
-        m_xWindow->SetSizePixel(rSize);
-    if( m_pChildWindow )
-        m_pChildWindow->SetSizePixel(rSize);
-
-    GLWindow& rGLWin = getModifiableOpenGLWindow();
-    rGLWin.Width = rSize.Width();
-    rGLWin.Height = rSize.Height();
-}
-
 void OpenGLContext::InitChildWindow(SystemChildWindow *pChildWindow)
 {
     pChildWindow->SetMouseTransparent(true);

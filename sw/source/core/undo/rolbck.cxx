@@ -1073,12 +1073,6 @@ bool SwHistory::TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool bToFirst )
     return true;
 }
 
-void SwHistory::Delete()
-{
-    m_SwpHstry.clear();
-    m_nEndDiff = 0;
-}
-
 sal_uInt16 SwHistory::SetTmpEnd( sal_uInt16 nNewTmpEnd )
 {
     OSL_ENSURE( nNewTmpEnd <= Count(), "SwHistory::SetTmpEnd: out of bounds" );

@@ -855,29 +855,6 @@ private:
     OUString referer_;
 };
 
-/*
- * This is a really ugly hack for the chart2 OpenGL backend
- * SvxShapeGroup::add only accepts objects derived from SvxShape and silently drops
- * other objects. This fixes my life time problems but I will burn for it in hell.
- *
- * The object does nothing and should not be painted. It is just there to ensure that the
- * wrapped object is not deleted prematurely.
- */
-class SVX_DLLPUBLIC SvxDummyShapeContainer : public SvxShape
-{
-private:
-    css::uno::Reference< css::drawing::XShapes >
-        m_xDummyObject;
-
-public:
-    SvxDummyShapeContainer( css::uno::Reference< css::drawing::XShapes > const & xWrappedObject );
-    virtual ~SvxDummyShapeContainer() throw() override;
-
-    const css::uno::Reference< css::drawing::XShapes >& getWrappedShape()
-            { return m_xDummyObject; }
-
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

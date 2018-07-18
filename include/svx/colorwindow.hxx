@@ -152,7 +152,6 @@ public:
                 ColorSelectFunction const& rColorSelectFunction);
     weld::Container* GetWidget() { return mxTopLevel.get(); }
     virtual ~ColorWindow() override;
-    void                ShowNoneButton();
     void                SetNoSelection();
     bool                IsNoSelection() const;
     void                SelectEntry(const NamedColor& rColor);

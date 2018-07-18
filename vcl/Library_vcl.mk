@@ -648,7 +648,6 @@ else
     vcl/opengl/LineRenderUtils \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
-    vcl/source/window/openglwin \
  ))
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\

@@ -72,9 +72,7 @@ class XSECGPG_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
 
         //Helper for registry
         /// @throws css::uno::RuntimeException
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
-
-        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
+        static css::uno::Reference< css::uno::XInterface > impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSIGNATURE_GPGIMPL_HXX
