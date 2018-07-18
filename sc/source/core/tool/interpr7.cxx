@@ -320,6 +320,7 @@ void ScInterpreter::ScWebservice()
         ScWebServiceLink* pLink = lcl_GetWebServiceLink(mpLinkManager, aURI);
 
         bool bWasError = (pMyFormulaCell && pMyFormulaCell->GetRawError() != FormulaError::NONE);
+        bool bLinkFormulaNeedingCheck = false;
 
         if (!pLink)
         {
@@ -335,7 +336,8 @@ void ScInterpreter::ScWebservice()
             //if the document was just loaded, but the ScDdeLink entry was missing, then
             //don't update this link until the links are updated in response to the users
             //decision
-            if (!pDok->HasLinkFormulaNeedingCheck())
+            bLinkFormulaNeedingCheck = pDok->HasLinkFormulaNeedingCheck();
+            if (!bLinkFormulaNeedingCheck)
             {
                 pLink->Update();
             }
@@ -360,7 +362,27 @@ void ScInterpreter::ScWebservice()
         if (pLink->HasResult())
             PushString(pLink->GetResult());
         else
-            PushError(FormulaError::NoValue);
+        {
+            // If this formula cell is recalculated just after load and the
+            // expression is exactly WEBSERVICE("literal_URI") (i.e. no other
+            // calculation involved, not even a cell reference) and a cached
+            // result is set as hybrid string then use that as result value to
+            // prevent a #VALUE! result due to the "Automatic update of
+            // external links has been disabled."
+            // This will work only once, as the new formula cell result won't
+            // be a hybrid anymore.
+            if (bLinkFormulaNeedingCheck && pMyFormulaCell && pMyFormulaCell->GetCode()->GetCodeLen() == 2 &&
+                    pMyFormulaCell->HasHybridStringResult())
+            {
+                formula::FormulaToken const * const * pRPN = pMyFormulaCell->GetCode()->GetCode();
+                if (pRPN[0]->GetType() == formula::svString && pRPN[1]->GetOpCode() == ocWebservice)
+                    PushString( pMyFormulaCell->GetResultString());
+                else
+                    PushError(FormulaError::NoValue);
+            }
+            else
+                PushError(FormulaError::NoValue);
+        }
 
         pDok->EnableIdle(bOldEnabled);
         mpLinkManager->CloseCachedComps();
