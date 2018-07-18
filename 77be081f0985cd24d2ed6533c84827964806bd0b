@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f07837f9",
+        "filename": "setup_native/scripts/langpackscript.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-07-18T11:06:22Z",
+      "side": 1,
+      "message": "while not used anyway \"you will need at least %s kBytes of free disk space\\n\" does sound IMHO",
+      "revId": "77be081f0985cd24d2ed6533c84827964806bd0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
