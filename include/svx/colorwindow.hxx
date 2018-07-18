@@ -115,7 +115,6 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
 
     const sal_uInt16    theSlotId;
-    OUString            maCommand;
     weld::Window* mpParentWindow;
     weld::MenuButton* mpMenuButton;
     std::shared_ptr<PaletteManager> mxPaletteManager;
@@ -133,7 +132,6 @@ private:
     std::unique_ptr<weld::CustomWeld> mxColorSetWin;
     std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
 
-    Link<const NamedColor&, void> maSelectedLink;
     DECL_LINK(SelectHdl, SvtValueSet*, void);
     DECL_LINK(SelectPaletteHdl, weld::ComboBoxText&, void);
     DECL_LINK(AutoColorClickHdl, weld::Button&, void);

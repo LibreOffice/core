@@ -41,10 +41,6 @@ private:
     long nLeft;
     long nRight;
 
-    bool bResetBackground;
-    bool bFrameDirection;
-    SvxFrameDirection nFrameDirection;
-
     long nHdLeft;
     long nHdRight;
     long nHdDist;
@@ -61,9 +57,6 @@ private:
 
     bool bFooter : 1;
     bool bHeader : 1;
-    bool bTable : 1;
-    bool bHorz : 1;
-    bool bVert : 1;
 
     SvxPageUsage eUsage;
 

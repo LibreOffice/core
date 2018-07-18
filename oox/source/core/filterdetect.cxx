@@ -318,7 +318,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
     {
         try
         {
-            DocumentDecryption aDecryptor(aOleStorage, mxContext);
+            DocumentDecryption aDecryptor(aOleStorage);
 
             if( aDecryptor.readEncryptionInfo() )
             {
