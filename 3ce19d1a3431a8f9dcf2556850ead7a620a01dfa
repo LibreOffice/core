@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_eb5f28e3",
+        "filename": "include/vcl/edit.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-07-18T15:13:07Z",
+      "side": 1,
+      "message": "why declare this virtual? or if it needs to be: why not have the setter method be virtual, too?",
+      "revId": "3ce19d1a3431a8f9dcf2556850ead7a620a01dfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_4b47341f",
+        "filename": "vcl/source/control/combobox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-07-18T15:13:07Z",
+      "side": 1,
+      "message": "nit: extra whitespace not needed",
+      "revId": "3ce19d1a3431a8f9dcf2556850ead7a620a01dfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
