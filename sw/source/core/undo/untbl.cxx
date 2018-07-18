@@ -2980,8 +2980,8 @@ void SwUndoSplitTable::SaveFormula( SwHistory& rHistory )
 SwUndoMergeTable::SwUndoMergeTable( const SwTableNode& rTableNd,
                                 const SwTableNode& rDelTableNd,
                                 bool bWithPrv, sal_uInt16 nMd )
-    : SwUndo( SwUndoId::MERGE_TABLE, rTableNd.GetDoc() ), pSavTable( nullptr ),
-    pHistory( nullptr ), nMode( nMd ), bWithPrev( bWithPrv )
+    : SwUndo( SwUndoId::MERGE_TABLE, rTableNd.GetDoc() ),
+    nMode( nMd ), bWithPrev( bWithPrv )
 {
     // memorize end node of the last table cell that'll stay in position
     if( bWithPrev )
@@ -2990,16 +2990,17 @@ SwUndoMergeTable::SwUndoMergeTable( const SwTableNode& rTableNd,
         nTableNode = rTableNd.EndOfSectionIndex() - 1;
 
     aName = rDelTableNd.GetTable().GetFrameFormat()->GetName();
-    pSavTable = new SaveTable( rDelTableNd.GetTable() );
+    pSavTable.reset(new SaveTable( rDelTableNd.GetTable() ));
 
-    pSavHdl = bWithPrev ? new SaveTable( rTableNd.GetTable(), 1 ) : nullptr;
+    if (bWithPrev)
+        pSavHdl.reset( new SaveTable( rTableNd.GetTable(), 1 ) );
 }
 
 SwUndoMergeTable::~SwUndoMergeTable()
 {
-    delete pSavTable;
-    delete pSavHdl;
-    delete pHistory;
+    pSavTable.reset();
+    pSavHdl.reset();
+    pHistory.reset();
 }
 
 void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -3096,7 +3097,7 @@ void SwUndoMergeTable::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoMergeTable::SaveFormula( SwHistory& rHistory )
 {
     if( !pHistory )
-        pHistory = new SwHistory;
+        pHistory.reset( new SwHistory );
     pHistory->Move( 0, &rHistory );
 }
 
