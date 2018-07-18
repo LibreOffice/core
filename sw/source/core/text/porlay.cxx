@@ -1795,7 +1795,7 @@ long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameInde
 // Note on calling KashidaJustify():
 // Kashida positions may be marked as invalid. Therefore KashidaJustify may return the clean
 // total number of kashida positions, or the number of kashida positions after some positions
-// have been dropped, depending on the state of the m_KashidaInvalid array.
+// have been dropped, depending on the state of the m_KashidaInvalid set.
 
 sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
                                         long* pScrArray,
@@ -1921,24 +1921,12 @@ bool SwScriptInfo::IsArabicText(const OUString& rText,
 
 bool SwScriptInfo::IsKashidaValid(size_t const nKashPos) const
 {
-    for (size_t i : m_KashidaInvalid)
-    {
-        if ( i == nKashPos )
-            return false;
-    }
-    return true;
+    return m_KashidaInvalid.find(nKashPos) == m_KashidaInvalid.end();
 }
 
 void SwScriptInfo::ClearKashidaInvalid(size_t const nKashPos)
 {
-    for (size_t i = 0; i < m_KashidaInvalid.size(); ++i)
-    {
-        if (m_KashidaInvalid [ i ] == nKashPos)
-        {
-            m_KashidaInvalid.erase(m_KashidaInvalid.begin() + i);
-            return;
-        }
-    }
+    m_KashidaInvalid.erase(nKashPos);
 }
 
 // bMark == true:
@@ -1965,9 +1953,8 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid(
             break;
         if(bMark)
         {
-            if ( IsKashidaValid ( nCntKash ) )
+            if ( MarkKashidaInvalid ( nCntKash ) )
             {
-                MarkKashidaInvalid ( nCntKash );
                 --nMarkCount;
                 if (!nMarkCount)
                     return true;
@@ -1982,9 +1969,9 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid(
     return false;
 }
 
-void SwScriptInfo::MarkKashidaInvalid(size_t const nKashPos)
+bool SwScriptInfo::MarkKashidaInvalid(size_t const nKashPos)
 {
-    m_KashidaInvalid.push_back(nKashPos);
+    return m_KashidaInvalid.insert(nKashPos).second;
 }
 
 // retrieve the kashida positions in the given text range
