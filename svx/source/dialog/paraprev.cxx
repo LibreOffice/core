@@ -23,15 +23,7 @@
 #include <vcl/settings.hxx>
 
 SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
-    Window( pParent, nBits),
-    nLeftMargin     ( 0 ),
-    nRightMargin    ( 0 ),
-    nFirstLineOfst  ( 0 ),
-    nUpper          ( 0 ),
-    nLower          ( 0 ),
-    eAdjust         ( SvxAdjust::Left ),
-    eLastLine       ( SvxAdjust::Left ),
-    eLine           ( SvxPrevLineSpace::N1 )
+    Window( pParent, nBits)
 {
     // Count in Twips by default
     SetMapMode(MapMode(MapUnit::MapTwip));
@@ -83,56 +75,9 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
     for (sal_uInt16 i = 0; i < 9; ++i)
     {
         if (i == 3)
-        {
             rRenderContext.SetFillColor(COL_GRAY);
-            auto nTop = nUpper * aLineSiz.Height() / aSize.Height();
-            aPnt.AdjustY(nTop * 2 );
-        }
-
-        if (i == 6 )
+        else if (i == 6 )
             rRenderContext.SetFillColor(aGrayColor);
-
-        if (3 <= i && 6 > i)
-        {
-            long nLeft = nLeftMargin * aLineSiz.Width() / aSize.Width();
-            long nFirst = nFirstLineOfst * aLineSiz.Width() / aSize.Width();
-            long nTmp = nLeft + nFirst;
-
-            if (i == 3)
-            {
-                aPnt.AdjustX(nTmp );
-                aSiz.AdjustWidth( -nTmp );
-            }
-            else
-            {
-                aPnt.AdjustX(nLeft );
-                aSiz.AdjustWidth( -nLeft );
-            }
-            long nRight = nRightMargin * aLineSiz.Width() / aSize.Width();
-            aSiz.AdjustWidth( -nRight );
-        }
-
-        if (4 == i || 5 == i || 6 == i)
-        {
-            switch (eLine)
-            {
-                case SvxPrevLineSpace::N1:
-                    break;
-                case SvxPrevLineSpace::N115:
-                    aPnt.AdjustY(nH / 6.67 ); // 1/.15 = 6.(6)
-                    break;
-                case SvxPrevLineSpace::N15:
-                    aPnt.AdjustY(nH / 2 );
-                    break;
-                case SvxPrevLineSpace::N2:
-                    aPnt.AdjustY(nH );
-                    break;
-                case SvxPrevLineSpace::Prop:
-                case SvxPrevLineSpace::Min:
-                case SvxPrevLineSpace::Leading:
-                    break;
-            }
-        }
 
         aPnt.AdjustY(nH );
 
@@ -155,41 +100,6 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
             if (nLW > aSiz.Width())
                 nLW = aSiz.Width();
 
-            switch (eAdjust)
-            {
-                case SvxAdjust::Left:
-                    break;
-                case SvxAdjust::Right:
-                    aPnt.AdjustX( aSiz.Width() - nLW );
-                    break;
-                case SvxAdjust::Center:
-                    aPnt.AdjustX(( aSiz.Width() - nLW ) / 2 );
-                    break;
-                default: ; //prevent warning
-            }
-            if (SvxAdjust::Block == eAdjust)
-            {
-                if(5 == i)
-                {
-                    switch( eLastLine )
-                    {
-                        case SvxAdjust::Left:
-                            break;
-                        case SvxAdjust::Right:
-                            aPnt.AdjustX( aSiz.Width() - nLW );
-                            break;
-                        case SvxAdjust::Center:
-                            aPnt.AdjustX(( aSiz.Width() - nLW ) / 2 );
-                            break;
-                        case SvxAdjust::Block:
-                            nLW = aSiz.Width();
-                            break;
-                        default: ; //prevent warning
-                    }
-                }
-                else
-                    nLW = aSiz.Width();
-            }
             aSiz.setWidth( nLW );
         }
 
@@ -197,12 +107,6 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
         rRenderContext.DrawRect( aRect );
         Lines[i] = aRect;
-
-        if (5 == i)
-        {
-            auto nBottom = nLower * aLineSiz.Height() / aSize.Height();
-            aPnt.AdjustY(nBottom * 2 );
-        }
 
         aPnt.AdjustY(nH );
         // Reset, recalculate for each line

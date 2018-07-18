@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -34,7 +34,7 @@ connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 cppu/source/threadpool/threadpool.cxx:355
     _uno_ThreadPool dummy sal_Int32
-cppu/source/typelib/typelib.cxx:62
+cppu/source/typelib/typelib.cxx:63
     AlignSize_Impl nInt16 sal_Int16
 cui/source/dialogs/colorpicker.cxx:721
     cui::ColorPickerDialog m_xColorField std::unique_ptr<weld::CustomWeld>
@@ -56,10 +56,6 @@ cui/source/inc/cuitabarea.hxx:704
     SvxColorTabPage m_xCtlPreviewOld std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuitabarea.hxx:705
     SvxColorTabPage m_xCtlPreviewNew std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:706
-    SvxColorTabPage m_xValSetColorListWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:707
-    SvxColorTabPage m_xValSetRecentListWin std::unique_ptr<weld::CustomWeld>
 cui/source/inc/insrc.hxx:31
     SvxInsRowColDlg m_xBeforeBtn std::unique_ptr<weld::RadioButton>
 cui/source/inc/page.hxx:105
@@ -104,6 +100,8 @@ include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
+include/oox/crypto/DocumentDecryption.hxx:38
+    oox::core::DocumentDecryption mxContext css::uno::Reference<css::uno::XComponentContext>
 include/oox/vml/vmlshapecontext.hxx:116
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/registry/registry.hxx:35
@@ -128,10 +126,14 @@ include/svx/colorwindow.hxx:134
     ColorWindow mxRecentColorSetWin std::unique_ptr<weld::CustomWeld>
 include/svx/hdft.hxx:87
     SvxHFPage m_xBspWin std::unique_ptr<weld::CustomWeld>
-include/vcl/uitest/uiobject.hxx:268
+include/vcl/uitest/uiobject.hxx:270
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
+include/xmloff/txtparae.hxx:209
+    XMLTextParagraphExport m_sBookmarkHidden const class rtl::OUString
+include/xmloff/txtparae.hxx:210
+    XMLTextParagraphExport m_sBookmarkCondition const class rtl::OUString
 libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:35
     GtvApplicationWindowPrivate lokDialog GtkWidget *
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
@@ -188,11 +190,11 @@ sc/inc/interpretercontext.hxx:31
     ScInterpreterContext mrDoc const class ScDocument &
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
-sc/source/core/data/document.cxx:1251
+sc/source/core/data/document.cxx:1237
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1252
+sc/source/core/data/document.cxx:1238
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
-sc/source/core/data/formulacell.cxx:1793
+sc/source/core/data/formulacell.cxx:1809
     (anonymous namespace)::StackCleaner pInt std::unique_ptr<ScInterpreter>
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
@@ -200,7 +202,7 @@ sc/source/ui/inc/crdlg.hxx:33
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
 sc/source/ui/inc/delcodlg.hxx:39
     ScDeleteContentsDlg m_xBtnOk std::unique_ptr<weld::Button>
-sc/source/ui/inc/docsh.hxx:462
+sc/source/ui/inc/docsh.hxx:463
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/instbdlg.hxx:66
     ScInsertTableDlg m_xBtnBehind std::unique_ptr<weld::RadioButton>
@@ -220,7 +222,7 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:106
     sd::TableDesignPane aImpl class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1322
+sd/source/ui/view/DocumentRenderer.cxx:1317
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1215
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -265,7 +267,7 @@ svl/source/crypto/cryptosign.cxx:280
 svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /media/noel/disk2/libo4/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
@@ -316,13 +318,9 @@ uui/source/unknownauthdlg.hxx:36
     UnknownAuthDialog m_xOptionButtonDontAccept std::unique_ptr<weld::RadioButton>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
-vcl/inc/qt5/Qt5Menu.hxx:74
-    Qt5MenuItem mbVisible _Bool
-vcl/inc/qt5/Qt5Object.hxx:34
-    Qt5Object m_aSystemData struct SystemEnvData
 vcl/inc/salprn.hxx:44
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
-vcl/source/app/salvtables.cxx:494
+vcl/source/app/salvtables.cxx:504
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
 vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
@@ -334,7 +332,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2221
+vcl/unx/gtk3/gtk3gtkinst.cxx:2231
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink

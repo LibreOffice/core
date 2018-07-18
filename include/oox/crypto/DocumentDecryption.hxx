@@ -35,8 +35,6 @@ namespace core {
 class OOX_DLLPUBLIC DocumentDecryption
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
-
     enum CryptoType
     {
         UNKNOWN,
@@ -49,9 +47,7 @@ private:
     CryptoType                      mCryptoType;
 
 public:
-    DocumentDecryption(
-        oox::ole::OleStorage& rOleStorage,
-        css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    DocumentDecryption(oox::ole::OleStorage& rOleStorage);
 
     bool decrypt(const css::uno::Reference< css::io::XStream >& xDocumentStream);
     bool readEncryptionInfo();
