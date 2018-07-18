@@ -396,6 +396,8 @@ public:
 
     svl::SharedString GetResultString() const;
 
+    bool HasHybridStringResult() const;
+
     /* Sets the shared code array to error state in addition to the cell result */
     void SetErrCode( FormulaError n );
 
