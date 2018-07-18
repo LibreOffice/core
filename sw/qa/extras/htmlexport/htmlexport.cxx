@@ -600,6 +600,26 @@ DECLARE_HTMLEXPORT_TEST(testTransparentImage, "transparent-image.odt")
     CPPUNIT_ASSERT_MESSAGE(aMessage.toUtf8().getStr(), aSource.endsWith(".gif"));
 }
 
+DECLARE_HTMLEXPORT_TEST(testTransparentImageReqIf, "transparent-image.odt")
+{
+    SvMemoryStream aStream;
+    aStream.WriteCharPtr("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    aStream.WriteStream(aFileStream);
+    aStream.WriteCharPtr("</reqif-xhtml:html>\n");
+    aStream.Seek(0);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    OUString aSource = getXPath(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object/reqif-xhtml:object",
+        "data");
+    OUString aMessage = "src attribute is: " + aSource;
+    // This was GIF, when the intention was to force PNG.
+    CPPUNIT_ASSERT_MESSAGE(aMessage.toUtf8().getStr(), aSource.endsWith(".png"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
