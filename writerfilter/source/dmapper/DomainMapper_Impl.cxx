@@ -1933,9 +1933,11 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             case XML_mod:
                 sType = getPropertyName( PROP_FORMAT );
                 break;
+            case XML_moveTo:
             case XML_ins:
                 sType = getPropertyName( PROP_INSERT );
                 break;
+            case XML_moveFrom:
             case XML_del:
                 sType = getPropertyName( PROP_DELETE );
                 break;

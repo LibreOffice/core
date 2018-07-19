@@ -3823,13 +3823,15 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
         case XML_mod:
         case XML_ins:
         case XML_del:
+        case XML_moveTo:
+        case XML_moveFrom:
         case XML_ParagraphFormat:
         case XML_tableRowInsert:
         case XML_tableRowDelete:
         case XML_tableCellInsert:
         case XML_tableCellDelete:
             break;
-        default: OSL_FAIL( "redline token other than mod, ins, del or table row" ); break;
+        default: OSL_FAIL( "redline token other than mod, ins, del, moveTo, moveFrom or table row" ); break;
     }
     m_pImpl->EndParaMarkerChange( );
     m_pImpl->SetCurrentRedlineIsRead();
