@@ -193,7 +193,9 @@ SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel)
 :   SdrRectObj(rSdrModel, OBJ_TEXT),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
-    mbFixedTail(false)
+    mbFixedTail(false),
+    mbSuppressGetBitmap(false),
+    maFixedTailPos()
 {
 }
 
@@ -204,7 +206,9 @@ SdrCaptionObj::SdrCaptionObj(
 :   SdrRectObj(rSdrModel, OBJ_TEXT,rRect),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
-    mbFixedTail(false)
+    mbFixedTail(false),
+    mbSuppressGetBitmap(false),
+    maFixedTailPos()
 {
     aTailPoly[0]=maFixedTailPos=rTail;
 }
