@@ -617,8 +617,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         rSh.SetRedlineComment(sMsg);
                     }
 
+                    SwViewShell::SetCareDialog(nullptr);
                     pDlg.disposeAndClear();
-                    SwViewShell::SetCareWin(nullptr);
                     g_bNoInterrupt = false;
                     rSh.ClearMark();
                     GetView().AttrChangedNotify(GetShellPtr());
