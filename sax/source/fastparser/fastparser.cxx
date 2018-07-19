@@ -273,7 +273,7 @@ private:
 
     Entity *mpTop;                          /// std::stack::top() is amazingly slow => cache this.
     std::stack< Entity > maEntities;        /// Entity stack for each call of parseStream().
-    OUString pendingCharacters;             /// Data from characters() callback that needs to be sent.
+    std::vector<char> pendingCharacters;    /// Data from characters() callback that needs to be sent.
 };
 
 } // namespace sax_fastparser
@@ -444,8 +444,7 @@ void Entity::startElement( Event const *pEvent )
                 xContext->startFastElement( nElementToken, xAttr );
         }
         // swap the reference we own in to avoid referencing thrash.
-        maContextStack.top().mxContext.set( xContext.get() );
-        xContext.set( nullptr, SAL_NO_ACQUIRE );
+        maContextStack.top().mxContext = std::move( xContext );
     }
     catch (...)
     {
@@ -461,10 +460,10 @@ void Entity::characters( const OUString& sChars )
         return;
     }
 
-    const Reference< XFastContextHandler >& xContext( maContextStack.top().mxContext );
-    if( xContext.is() ) try
+    XFastContextHandler * pContext( maContextStack.top().mxContext.get() );
+    if( pContext ) try
     {
-        xContext->characters( sChars );
+        pContext->characters( sChars );
     }
     catch (...)
     {
@@ -481,19 +480,20 @@ void Entity::endElement()
     }
 
     const SaxContext& aContext = maContextStack.top();
-    const Reference< XFastContextHandler >& xContext( aContext.mxContext );
-    if( xContext.is() ) try
-    {
-        sal_Int32 nElementToken = aContext.mnElementToken;
-        if( nElementToken != FastToken::DONTKNOW )
-            xContext->endFastElement( nElementToken );
-        else
-            xContext->endUnknownElement( aContext.maNamespace, aContext.maElementName );
-    }
-    catch (...)
-    {
-        saveException( ::cppu::getCaughtException() );
-    }
+    XFastContextHandler* pContext( aContext.mxContext.get() );
+    if( pContext )
+        try
+        {
+            sal_Int32 nElementToken = aContext.mnElementToken;
+            if( nElementToken != FastToken::DONTKNOW )
+                pContext->endFastElement( nElementToken );
+            else
+                pContext->endUnknownElement( aContext.maNamespace, aContext.maElementName );
+        }
+        catch (...)
+        {
+            saveException( ::cppu::getCaughtException() );
+        }
     maContextStack.pop();
 }
 
@@ -1083,7 +1083,7 @@ void FastSaxParserImpl::parse()
 void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
     int numNamespaces, const xmlChar** namespaces, int numAttributes, const xmlChar **attributes)
 {
-    if (!pendingCharacters.isEmpty())
+    if (!pendingCharacters.empty())
         sendPendingCharacters();
     Entity& rEntity = getEntity();
     if( rEntity.maNamespaceCount.empty() )
@@ -1254,7 +1254,7 @@ void FastSaxParserImpl::addUnknownElementWithPrefix(const xmlChar **attributes, 
 
 void FastSaxParserImpl::callbackEndElement()
 {
-    if (!pendingCharacters.isEmpty())
+    if (!pendingCharacters.empty())
         sendPendingCharacters();
     Entity& rEntity = getEntity();
     SAL_WARN_IF(rEntity.maNamespaceCount.empty(), "sax", "Empty NamespaceCount");
@@ -1279,24 +1279,33 @@ void FastSaxParserImpl::callbackCharacters( const xmlChar* s, int nLen )
     // simpler FastSaxParser's character callback provides the whole string at once,
     // so merge data from possible multiple calls and send them at once (before the element
     // ends or another one starts).
-    pendingCharacters += OUString( XML_CAST( s ), nLen, RTL_TEXTENCODING_UTF8 );
+    //
+    // We use a std::vector<char> to avoid calling into the OUString constructor more than once when
+    // we have multiple callbackCharacters() calls that we have to merge, which happens surprisingly
+    // often in writer documents.
+    int nOriginalLen = pendingCharacters.size();
+    pendingCharacters.resize(nOriginalLen + nLen);
+    memcpy(pendingCharacters.data() + nOriginalLen, s, nLen);
 }
 
 void FastSaxParserImpl::sendPendingCharacters()
 {
     Entity& rEntity = getEntity();
-    Event& rEvent = rEntity.getEvent( CHARACTERS );
-    rEvent.msChars = pendingCharacters;
-    pendingCharacters.clear();
+    OUString sChars( pendingCharacters.data(), pendingCharacters.size(), RTL_TEXTENCODING_UTF8 );
     if (rEntity.mbEnableThreads)
+    {
+        Event& rEvent = rEntity.getEvent( CHARACTERS );
+        rEvent.msChars = sChars;
         produce();
+    }
     else
-        rEntity.characters( rEvent.msChars );
+        rEntity.characters( sChars );
+    pendingCharacters.resize(0);
 }
 
 void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, const xmlChar *data )
 {
-    if (!pendingCharacters.isEmpty())
+    if (!pendingCharacters.empty())
         sendPendingCharacters();
     Entity& rEntity = getEntity();
     Event& rEvent = rEntity.getEvent( PROCESSING_INSTRUCTION );
