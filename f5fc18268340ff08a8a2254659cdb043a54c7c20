@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_e12747b6",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-19T12:01:21Z",
+      "side": 1,
+      "message": "Not sure if this second approxFloor() shouldn\u0027t even be the standard floor() instead. Anyway, not rounding up adding 0.5 is certainly correct..",
+      "range": {
+        "startLine": 165,
+        "startChar": 47,
+        "endLine": 165,
+        "endChar": 58
+      },
+      "revId": "f5fc18268340ff08a8a2254659cdb043a54c7c20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
