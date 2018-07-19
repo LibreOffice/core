@@ -323,7 +323,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)
         maSdrObjListOutRect.Union(pObj->GetCurrentBoundRect());
         maSdrObjListSnapRect.Union(pObj->GetSnapRect());
     }
-    pObj->SetInserted(true); // calls the UserCall (among others)
+    pObj->InsertedStateChange(); // calls the UserCall (among others)
 }
 
 void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)
@@ -384,7 +384,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
         pObj->GetViewContact().flushViewObjectContacts();
 
         DBG_ASSERT(pObj->IsInserted(),"The object does not have the status Inserted.");
-        pObj->SetInserted(false); // calls UserCall, among other
+        pObj->InsertedStateChange(); // calls UserCall, among other
         SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
         if (!mbObjOrdNumsDirty)
         {
@@ -426,7 +426,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
 
         pObj->getSdrModelFromSdrObject().SetChanged();
 
-        pObj->SetInserted(false); // calls, among other things, the UserCall
+        pObj->InsertedStateChange(); // calls, among other things, the UserCall
         SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
 
         if (!mbObjOrdNumsDirty)
@@ -463,7 +463,7 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::ReplaceObject: Could not find object to remove.");
     if (pObj!=nullptr) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: the object does not have status Inserted.");
-        pObj->SetInserted(false);
+        pObj->InsertedStateChange();
         SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
@@ -477,7 +477,7 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         // evtl. existing parent visualisations
         impChildInserted(*pNewObj);
 
-        pNewObj->SetInserted(true);
+        pNewObj->InsertedStateChange();
         SetSdrObjListRectsDirty();
     }
     return pObj;
@@ -508,7 +508,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
             pObj->getSdrModelFromSdrObject().Broadcast(aHint);
         }
 
-        pObj->SetInserted(false);
+        pObj->InsertedStateChange();
         SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
@@ -522,7 +522,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         // evtl. existing parent visualisations
         impChildInserted(*pNewObj);
 
-        pNewObj->SetInserted(true);
+        pNewObj->InsertedStateChange();
 
         // TODO: We need a different broadcast here.
         if (pNewObj->getSdrPageFromSdrObject()!=nullptr) {
