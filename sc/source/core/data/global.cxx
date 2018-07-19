@@ -423,6 +423,9 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
         case FormulaError::BadArrayContent:
             pErrNumber = STR_ERR_LONG_BAD_ARRAY_CONTENT;
         break;
+        case FormulaError::LinkFormulaNeedingCheck:
+            pErrNumber = STR_ERR_LONG_LINK_FORMULA_NEEDING_CHECK;
+        break;
         case FormulaError::NoValue:
             pErrNumber = STR_LONG_ERR_NO_VALUE;
         break;
