@@ -660,6 +660,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
     m_xShowSet->SetFont( aFont );
     m_xSearchSet->SetFont( aFont );
     m_aShowChar.SetFont( aFont );
+    // tdf#118304 reselect current glyph to see if its still there in new font
+    selectCharByCode(Radix::hexadecimal);
     if (isSearchMode)
     {
         SearchUpdateHdl(*m_xSearchText);
@@ -998,14 +1000,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
             m_xSubsetLB->set_active(-1);
     }
 
-    if(m_xShowSet->HasFocus() || m_xHexCodeText->has_focus() || m_xDecimalCodeText->has_focus() )
-    {
-        m_aShowChar.SetText( aText );
-        m_aShowChar.SetFont( aFont );
-        m_aShowChar.Invalidate();
+    m_aShowChar.SetText( aText );
+    m_aShowChar.SetFont( aFont );
+    m_aShowChar.Invalidate();
 
-        setFavButtonState(aText, aFont.GetFamilyName());
-    }
+    setFavButtonState(aText, aFont.GetFamilyName());
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
