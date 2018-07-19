@@ -65,7 +65,7 @@ public:
     void addEntry(OUString const & url, Data const & data);
 
     ::boost::optional<Data> getEntry(OUString const & url);
-    //must also return the data urls for entries with @activ="false". That is,
+    //must also return the data urls for entries with @active="false". That is,
     //those are currently revoked.
     std::vector< OUString> getAllDataUrls();
 
