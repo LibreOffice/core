@@ -92,7 +92,18 @@ public:
         if (fn == SRCDIR "/comphelper/source/property/MasterPropertySet.cxx"
             || fn == SRCDIR "/comphelper/source/property/MasterPropertySetInfo.cxx")
             return;
-
+        // SwTableLine::m_aBoxes
+        if (fn == SRCDIR "/sw/source/core/table/swtable.cxx")
+            return;
+        // SwHTMLParser::m_pFormImpl
+        if (fn == SRCDIR "/sw/source/filter/html/htmlform.cxx")
+            return;
+        // SwHTMLParser::m_pPendStack, pNext
+        if (fn == SRCDIR "/sw/source/filter/html/htmltab.cxx")
+            return;
+        // SaveLine::pBox, pNext
+        if (fn == SRCDIR "/sw/source/core/undo/untbl.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
