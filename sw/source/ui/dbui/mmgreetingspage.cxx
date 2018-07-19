@@ -93,6 +93,10 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, Button*, void)
     m_pFemaleFieldFT->Enable(bIndividual);
     m_pFemaleFieldCB->Enable(bIndividual);
 
+    bool bNotIndividual = m_pPersonalizedCB->IsEnabled() && !m_pPersonalizedCB->IsChecked();
+    m_pNeutralFT->Enable(bNotIndividual);
+    m_pNeutralCB->Enable(bNotIndividual);
+
     if( m_bIsTabPage )
     {
         m_rConfigItem.SetIndividualGreeting(bIndividual, false);
@@ -219,8 +223,9 @@ void    SwGreetingsHandler::Contains(bool bContainsGreeting)
     m_pFemaleFieldFT->Enable(bEnablePersonal);
     m_pFemaleFieldCB->Enable(bEnablePersonal);
 
-    m_pNeutralFT->Enable(bContainsGreeting);
-    m_pNeutralCB->Enable(bContainsGreeting);
+    bool bNotEnablePersonal = bContainsGreeting && !m_pPersonalizedCB->IsChecked();
+    m_pNeutralFT->Enable(bNotEnablePersonal);
+    m_pNeutralCB->Enable(bNotEnablePersonal);
 }
 
 SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
