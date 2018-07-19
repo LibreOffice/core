@@ -688,6 +688,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
                 if(nullptr != pbLevelOrVisibilityChanged)
                 {
+                    assert(pOldMember);
                     // need to check visibility (and equal entry number) after
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
