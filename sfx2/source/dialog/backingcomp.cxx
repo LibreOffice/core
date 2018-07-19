@@ -92,6 +92,8 @@ private:
 
     osl::Mutex m_aTypeProviderMutex;
 
+    Size m_aInitialWindowMinSize;
+
 public:
 
     explicit BackingComp();
@@ -425,6 +427,12 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         if( pMenu )
             nMenuHeight = pMenu->GetSizePixel().Height();
 
+        m_aInitialWindowMinSize = pParent->GetMinOutputSizePixel();
+        if (!m_aInitialWindowMinSize.Width())
+            m_aInitialWindowMinSize.AdjustWidth(1);
+        if (!m_aInitialWindowMinSize.Height())
+            m_aInitialWindowMinSize.AdjustHeight(1);
+
         pParent->SetMinOutputSizePixel(
             Size(
                 pBack->get_width_request(),
@@ -573,9 +581,12 @@ void SAL_CALL BackingComp::dispose()
     {
         css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
         VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow).get());
-
-        // hide NotebookBar
-        sfx2::SfxNotebookBar::CloseMethod(static_cast<SystemWindow*>(pParent));
+        if (pParent)
+        {
+            pParent->SetMinOutputSizePixel(m_aInitialWindowMinSize);
+            // hide NotebookBar
+            sfx2::SfxNotebookBar::CloseMethod(static_cast<SystemWindow*>(pParent));
+        }
     }
 
     // stop listening at the window
