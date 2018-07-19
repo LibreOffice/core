@@ -80,26 +80,25 @@ static void lcl_StoreGreetingsBox(ComboBox const & rBox,
 
 IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, Button*, void)
 {
-    bool bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
-    m_pFemaleFT->Enable(bIndividual);
-    m_pFemaleLB->Enable(bIndividual);
-    m_pFemalePB->Enable(bIndividual);
-    m_pMaleFT->Enable(bIndividual);
-    m_pMaleLB->Enable(bIndividual);
-    m_pMalePB->Enable(bIndividual);
-    m_pFemaleFI->Enable(bIndividual);
-    m_pFemaleColumnFT->Enable(bIndividual);
-    m_pFemaleColumnLB->Enable(bIndividual);
-    m_pFemaleFieldFT->Enable(bIndividual);
-    m_pFemaleFieldCB->Enable(bIndividual);
-
-    if( m_bIsTabPage )
+    if ( m_pGreetingLineCB->IsChecked() )
     {
-        m_rConfigItem.SetIndividualGreeting(bIndividual, false);
-        m_pWizard->UpdateRoadmap();
-        m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_LAYOUTPAGE));
+        EnableIndividual(m_pPersonalizedRB->IsChecked());
+        m_pNeutralRB->Check(!m_pPersonalizedRB->IsChecked());
+        EnableNeutral(m_pNeutralRB->IsChecked());
+
+        if( m_bIsTabPage )
+        {
+            m_rConfigItem.SetIndividualGreeting(m_pPersonalizedRB->IsChecked(), false);
+            m_pWizard->UpdateRoadmap();
+            m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_LAYOUTPAGE));
+        }
+        UpdatePreview();
     }
-    UpdatePreview();
+    else
+    {
+        EnableIndividual(false);
+        EnableNeutral(false);
+    }
 }
 
 IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, Button*, pButton, void)
@@ -205,22 +204,33 @@ void SwMailMergeGreetingsPage::UpdatePreview()
 
 void    SwGreetingsHandler::Contains(bool bContainsGreeting)
 {
-    m_pPersonalizedCB->Enable(bContainsGreeting);
-    bool bEnablePersonal = bContainsGreeting && m_pPersonalizedCB->IsChecked();
-    m_pFemaleFT->Enable(bEnablePersonal);
-    m_pFemaleLB->Enable(bEnablePersonal);
-    m_pFemalePB->Enable(bEnablePersonal);
-    m_pMaleFT->Enable(bEnablePersonal);
-    m_pMaleLB->Enable(bEnablePersonal);
-    m_pMalePB->Enable(bEnablePersonal);
-    m_pFemaleFI->Enable(bEnablePersonal);
-    m_pFemaleColumnFT->Enable(bEnablePersonal);
-    m_pFemaleColumnLB->Enable(bEnablePersonal);
-    m_pFemaleFieldFT->Enable(bEnablePersonal);
-    m_pFemaleFieldCB->Enable(bEnablePersonal);
+    m_pPersonalizedRB->Enable(bContainsGreeting);
+    bool bEnablePersonal = bContainsGreeting && m_pPersonalizedRB->IsChecked();
+    EnableIndividual(bEnablePersonal);
+    m_pNeutralRB->Enable(bContainsGreeting);
+    bool bEnableNeutral = bContainsGreeting && m_pNeutralRB->IsChecked();
+    EnableNeutral(bEnableNeutral);
+}
 
-    m_pNeutralFT->Enable(bContainsGreeting);
-    m_pNeutralCB->Enable(bContainsGreeting);
+void SwGreetingsHandler::EnableIndividual( bool bState )
+{
+    m_pFemaleFT->Enable(bState);
+    m_pFemaleLB->Enable(bState);
+    m_pFemalePB->Enable(bState);
+    m_pMaleFT->Enable(bState);
+    m_pMaleLB->Enable(bState);
+    m_pMalePB->Enable(bState);
+    m_pFemaleFI->Enable(bState);
+    m_pFemaleColumnFT->Enable(bState);
+    m_pFemaleColumnLB->Enable(bState);
+    m_pFemaleFieldFT->Enable(bState);
+    m_pFemaleFieldCB->Enable(bState);
+}
+
+void SwGreetingsHandler::EnableNeutral( bool bState )
+{
+    m_pNeutralFT->Enable(bState);
+    m_pNeutralCB->Enable(bState);
 }
 
 SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
@@ -231,7 +241,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_pWizard = _pParent;
 
     get(m_pGreetingLineCB, "greeting");
-    get(m_pPersonalizedCB, "personalized");
+    get(m_pPersonalizedRB, "personalized");
     get(m_pFemaleFT, "femaleft");
     get(m_pFemaleLB, "female");
     get(m_pFemalePB, "newfemale");
@@ -244,7 +254,8 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     get(m_pFemaleFieldFT, "femalefieldft");
     get(m_pFemaleFieldCB, "femalefield");
     get(m_pNeutralFT, "generalft");
-    get(m_pNeutralCB, "general");
+    get(m_pNeutralCB, "generalfield");
+    get(m_pNeutralRB, "general");
     get(m_pPreviewFI, "previewft");
     get(m_pPreviewWIN, "preview");
     Size aSize(LogicToPixel(Size(186, 21), MapMode(MapUnit::MapAppFont)));
@@ -260,7 +271,9 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
 
     m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailMergeGreetingsPage, ContainsHdl_Impl));
     Link<Button*,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
-    m_pPersonalizedCB->SetClickHdl(aIndividualLink);
+    m_pPersonalizedRB->SetClickHdl(aIndividualLink);
+    m_pNeutralRB->SetClickHdl(aIndividualLink);
+
     Link<Button*,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
     m_pFemalePB->SetClickHdl(aGreetingLink);
     m_pMalePB->SetClickHdl(aGreetingLink);
@@ -280,7 +293,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_pNextSetIB->SetClickHdl(aDataLink);
 
     m_pGreetingLineCB->Check(m_rConfigItem.IsGreetingLine(false));
-    m_pPersonalizedCB->Check(m_rConfigItem.IsIndividualGreeting(false));
+    m_pPersonalizedRB->Check(m_rConfigItem.IsIndividualGreeting(false));
     ContainsHdl_Impl(m_pGreetingLineCB);
     aIndividualLink.Call(nullptr);
 
@@ -298,6 +311,8 @@ SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
 
 void SwMailMergeGreetingsPage::dispose()
 {
+    m_pPersonalizedRB.clear();
+    m_pNeutralRB.clear();
     m_pPreviewFI.clear();
     m_pPreviewWIN.clear();
     m_pAssignPB.clear();
@@ -356,7 +371,7 @@ bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason 
     }
     lcl_StoreGreetingsBox(*m_pNeutralCB, m_rConfigItem, SwMailMergeConfigItem::NEUTRAL);
     m_rConfigItem.SetGreetingLine(m_pGreetingLineCB->IsChecked(), false);
-    m_rConfigItem.SetIndividualGreeting(m_pPersonalizedCB->IsChecked(), false);
+    m_rConfigItem.SetIndividualGreeting(m_pPersonalizedRB->IsChecked(), false);
     return true;
 }
 
@@ -408,7 +423,7 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent) :
     SwGreetingsHandler(*GetActiveView()->GetMailMergeConfigItem())
 {
     get(m_pGreetingLineCB, "greeting");
-    get(m_pPersonalizedCB, "personalized");
+    get(m_pPersonalizedRB, "personalized");
     get(m_pFemaleFT, "femaleft");
     get(m_pFemaleLB, "female");
     get(m_pFemalePB, "newfemale");
@@ -421,7 +436,8 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent) :
     get(m_pFemaleFieldFT, "femalefieldft");
     get(m_pFemaleFieldCB, "femalefield");
     get(m_pNeutralFT, "generalft");
-    get(m_pNeutralCB, "general");
+    get(m_pNeutralCB, "generalfield");
+    get(m_pNeutralRB, "general");
     get(m_pBodyFT, "bodyft");
     get(m_pBodyMLE, "bodymle");
     m_pBodyMLE->SetStyle(m_pBodyMLE->GetStyle() | WB_HSCROLL | WB_VSCROLL | WB_IGNORETAB);
@@ -433,14 +449,16 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent) :
 
     m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));
     Link<Button*,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
-    m_pPersonalizedCB->SetClickHdl(aIndividualLink);
+    m_pPersonalizedRB->SetClickHdl(aIndividualLink);
+    m_pNeutralRB->SetClickHdl(aIndividualLink);
+
     Link<Button*,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
     m_pFemalePB->SetClickHdl(aGreetingLink);
     m_pMalePB->SetClickHdl(aGreetingLink);
     m_pOK->SetClickHdl(LINK(this, SwMailBodyDialog, OKHdl));
 
     m_pGreetingLineCB->Check(m_rConfigItem.IsGreetingLine(true));
-    m_pPersonalizedCB->Check(m_rConfigItem.IsIndividualGreeting(true));
+    m_pPersonalizedRB->Check(m_rConfigItem.IsIndividualGreeting(true));
     ContainsHdl_Impl(m_pGreetingLineCB);
     aIndividualLink.Call(nullptr);
 
@@ -491,7 +509,7 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl, Button*, void)
     m_rConfigItem.SetGreetingLine(
                 m_pGreetingLineCB->IsChecked(), false);
     m_rConfigItem.SetIndividualGreeting(
-                m_pPersonalizedCB->IsChecked(), false);
+                m_pPersonalizedRB->IsChecked(), false);
 
     if(m_pFemaleColumnLB->IsValueChangedFromSaved())
     {

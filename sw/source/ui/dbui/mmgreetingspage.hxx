@@ -34,7 +34,7 @@ class SwGreetingsHandler
 protected:
     VclPtr<CheckBox>           m_pGreetingLineCB;
 
-    VclPtr<CheckBox>           m_pPersonalizedCB;
+    VclPtr<RadioButton>        m_pPersonalizedRB;
 
     VclPtr<FixedText>          m_pFemaleFT;
     VclPtr<ListBox>            m_pFemaleLB;
@@ -52,6 +52,7 @@ protected:
 
     VclPtr<FixedText>          m_pNeutralFT;
     VclPtr<ComboBox>           m_pNeutralCB;
+    VclPtr<RadioButton>        m_pNeutralRB;
 
     bool                m_bIsTabPage;
 
@@ -71,6 +72,8 @@ protected:
     DECL_LINK(GreetingHdl_Impl, Button*, void);
 
     void    Contains(bool bContainsGreeting);
+    void    EnableIndividual(bool bState);
+    void    EnableNeutral(bool bState);
     virtual void    UpdatePreview();
 };
 
