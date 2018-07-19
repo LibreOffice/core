@@ -192,10 +192,10 @@ class SvxCSS1Parser : public CSS1Parser
 
     OUString sBaseURL;
 
-    SfxItemSet *pSheetItemSet;  // item set of Style-Sheet
+    std::unique_ptr<SfxItemSet> pSheetItemSet;  // item set of Style-Sheet
     SfxItemSet *pItemSet;       // current item set
 
-    SvxCSS1PropertyInfo *pSheetPropInfo;
+    std::unique_ptr<SvxCSS1PropertyInfo> pSheetPropInfo;
     SvxCSS1PropertyInfo *pPropInfo;
 
     sal_uInt16 nMinFixLineSpace;    // minimum spacing for fixed line spacing
