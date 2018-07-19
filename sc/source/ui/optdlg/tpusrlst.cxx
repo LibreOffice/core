@@ -53,7 +53,6 @@ ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
         aStrCopyFrom    ( ScResId( STR_COPYFROM ) ),
         aStrCopyErr     ( ScResId( STR_COPYERR ) ),
         nWhichUserLists ( GetWhich( SID_SCUSERLISTS ) ),
-        pUserLists      ( nullptr ),
         pDoc            ( nullptr ),
         pViewData       ( nullptr ),
         bModifyMode     ( false ),
@@ -86,7 +85,7 @@ ScTpUserLists::~ScTpUserLists()
 
 void ScTpUserLists::dispose()
 {
-    delete pUserLists;
+    pUserLists.reset();
     mpFtLists.clear();
     mpLbLists.clear();
     mpFtEntries.clear();
@@ -165,7 +164,7 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
     if ( pCoreList )
     {
         if ( !pUserLists )
-            pUserLists = new ScUserList( *pCoreList );
+            pUserLists.reset( new ScUserList( *pCoreList ) );
         else
             *pUserLists = *pCoreList;
 
@@ -176,7 +175,7 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
         }
     }
     else if ( !pUserLists )
-        pUserLists = new ScUserList;
+        pUserLists.reset( new ScUserList );
 
     mpEdCopyFrom->SetText( aStrSelectedArea );
 
@@ -336,7 +335,7 @@ void ScTpUserLists::AddNewList( const OUString& rEntriesStr )
     OUString theEntriesStr( rEntriesStr );
 
     if ( !pUserLists )
-        pUserLists = new ScUserList;
+        pUserLists.reset( new ScUserList );
 
     MakeListStr( theEntriesStr );
 
