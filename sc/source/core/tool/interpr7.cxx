@@ -320,7 +320,6 @@ void ScInterpreter::ScWebservice()
         ScWebServiceLink* pLink = lcl_GetWebServiceLink(mpLinkManager, aURI);
 
         bool bWasError = (pMyFormulaCell && pMyFormulaCell->GetRawError() != FormulaError::NONE);
-        bool bLinkFormulaNeedingCheck = false;
 
         if (!pLink)
         {
@@ -336,8 +335,7 @@ void ScInterpreter::ScWebservice()
             //if the document was just loaded, but the ScDdeLink entry was missing, then
             //don't update this link until the links are updated in response to the users
             //decision
-            bLinkFormulaNeedingCheck = pDok->HasLinkFormulaNeedingCheck();
-            if (!bLinkFormulaNeedingCheck)
+            if (!pDok->HasLinkFormulaNeedingCheck())
             {
                 pLink->Update();
             }
@@ -361,7 +359,7 @@ void ScInterpreter::ScWebservice()
         //  check the value
         if (pLink->HasResult())
             PushString(pLink->GetResult());
-        else
+        else if (pDok->HasLinkFormulaNeedingCheck())
         {
             // If this formula cell is recalculated just after load and the
             // expression is exactly WEBSERVICE("literal_URI") (i.e. no other
@@ -371,18 +369,33 @@ void ScInterpreter::ScWebservice()
             // external links has been disabled."
             // This will work only once, as the new formula cell result won't
             // be a hybrid anymore.
-            if (bLinkFormulaNeedingCheck && pMyFormulaCell && pMyFormulaCell->GetCode()->GetCodeLen() == 2 &&
-                    pMyFormulaCell->HasHybridStringResult())
+            /* TODO: the FormulaError::LinkFormulaNeedingCheck could be used as
+             * a signal for the formula cell to keep the hybrid string as
+             * result of the overall formula *iff* no higher prioritized
+             * ScRecalcMode than ONLOAD_LENIENT is present in the entire
+             * document (i.e. the formula result could not be influenced by an
+             * ONLOAD_MUST or ALWAYS recalc, necessary as we don't track
+             * interim results of subexpressions that could be compared), which
+             * also means to track setting ScRecalcMode somehow.. note this is
+             * just a vague idea so far and might or might not work. */
+            if (pMyFormulaCell && pMyFormulaCell->HasHybridStringResult())
             {
-                formula::FormulaToken const * const * pRPN = pMyFormulaCell->GetCode()->GetCode();
-                if (pRPN[0]->GetType() == formula::svString && pRPN[1]->GetOpCode() == ocWebservice)
-                    PushString( pMyFormulaCell->GetResultString());
+                if (pMyFormulaCell->GetCode()->GetCodeLen() == 2)
+                {
+                    formula::FormulaToken const * const * pRPN = pMyFormulaCell->GetCode()->GetCode();
+                    if (pRPN[0]->GetType() == formula::svString && pRPN[1]->GetOpCode() == ocWebservice)
+                        PushString( pMyFormulaCell->GetResultString());
+                    else
+                        PushError(FormulaError::LinkFormulaNeedingCheck);
+                }
                 else
-                    PushError(FormulaError::NoValue);
+                    PushError(FormulaError::LinkFormulaNeedingCheck);
             }
             else
-                PushError(FormulaError::NoValue);
+                PushError(FormulaError::LinkFormulaNeedingCheck);
         }
+        else
+            PushError(FormulaError::NoValue);
 
         pDok->EnableIdle(bOldEnabled);
         mpLinkManager->CloseCachedComps();
