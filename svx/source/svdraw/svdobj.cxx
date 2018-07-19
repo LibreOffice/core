@@ -354,7 +354,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
 {
     bVirtObj         =false;
     bSnapRectDirty   =true;
-    bInserted        =false;
     bMovProt         =false;
     bSizProt         =false;
     bNoPrint         =false;
@@ -1715,7 +1714,7 @@ bool SdrObject::Equals(const SdrObject& rOtherObj) const
             bIs3DObj == rOtherObj.bIs3DObj && bIsEdge == rOtherObj.bIsEdge && bClosedObj == rOtherObj.bClosedObj &&
             bNotVisibleAsMaster == rOtherObj.bNotVisibleAsMaster && bEmptyPresObj == rOtherObj.bEmptyPresObj &&
             mbVisible == rOtherObj.mbVisible && bNoPrint == rOtherObj.bNoPrint && bSizProt == rOtherObj.bSizProt &&
-            bMovProt == rOtherObj.bMovProt && bInserted == rOtherObj.bInserted && bVirtObj == rOtherObj.bVirtObj &&
+            bMovProt == rOtherObj.bMovProt && bVirtObj == rOtherObj.bVirtObj &&
             mnLayerID == rOtherObj.mnLayerID && GetMergedItemSet().Equals(rOtherObj.GetMergedItemSet(), false) );
 }
 
@@ -2569,18 +2568,24 @@ SdrObject* SdrObject::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) co
 }
 
 
-void SdrObject::SetInserted(bool bIns)
+void SdrObject::InsertedStateChange()
 {
-    if (bIns!=IsInserted()) {
-        bInserted=bIns;
-        tools::Rectangle aBoundRect0(GetLastBoundRect());
-        if (bIns) SendUserCall(SdrUserCallType::Inserted,aBoundRect0);
-        else SendUserCall(SdrUserCallType::Removed,aBoundRect0);
+    const bool bIsInserted(nullptr != getParentSdrObjListFromSdrObject());
+    const tools::Rectangle aBoundRect0(GetLastBoundRect());
 
-        if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
-            SdrHint aHint(bIns?SdrHintKind::ObjectInserted:SdrHintKind::ObjectRemoved, *this);
-            pPlusData->pBroadcast->Broadcast(aHint);
-        }
+    if(bIsInserted)
+    {
+        SendUserCall(SdrUserCallType::Inserted, aBoundRect0);
+    }
+    else
+    {
+        SendUserCall(SdrUserCallType::Removed, aBoundRect0);
+    }
+
+    if(nullptr != pPlusData && nullptr != pPlusData->pBroadcast)
+    {
+        SdrHint aHint(bIsInserted ? SdrHintKind::ObjectInserted : SdrHintKind::ObjectRemoved, *this);
+        pPlusData->pBroadcast->Broadcast(aHint);
     }
 }
 

@@ -690,48 +690,80 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     DBG_TESTSOLARMUTEX();
     uno::Any aAny;
 
-    if( !HasSdrObject() || !GetSdrObject()->IsInserted() || nullptr == GetSdrObject()->getSdrPageFromSdrObject() )
-        return aAny;
-
-    ScopedVclPtrInstance< VirtualDevice > pVDev;
-    pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
-    SdrPage* pPage = GetSdrObject()->getSdrPageFromSdrObject();
-
-    std::unique_ptr<E3dView> pView(
-        new E3dView(
-            GetSdrObject()->getSdrModelFromSdrObject(),
-            pVDev.get()));
-    pView->hideMarkHandles();
-    SdrPageView* pPageView = pView->ShowSdrPage(pPage);
-
-    SdrObject *pTempObj = GetSdrObject();
-    pView->MarkObj(pTempObj,pPageView);
-
-    tools::Rectangle aRect(pTempObj->GetCurrentBoundRect());
-    aRect.Justify();
-    Size aSize(aRect.GetSize());
-
-    GDIMetaFile aMtf( pView->GetMarkedObjMetaFile() );
-    if( bMetaFile )
+    if(!HasSdrObject() || nullptr == GetSdrObject()->getSdrPageFromSdrObject())
     {
-        SvMemoryStream aDestStrm( 65535, 65535 );
-        ConvertGDIMetaFileToWMF( aMtf, aDestStrm, nullptr, false );
+        return aAny;
+    }
+
+    // tdf#118662 Emulate old behaviour of XclObjComment (see there)
+    const SdrCaptionObj* pSdrCaptionObj(dynamic_cast<SdrCaptionObj*>(GetSdrObject()));
+    if(nullptr != pSdrCaptionObj && pSdrCaptionObj->isSuppressGetBitmap())
+    {
+        return aAny;
+    }
+
+    // tdf#118662 instead of creating an E3dView instance every time to paint
+    // a single SdrObject, use the existing SdrObject::SingleObjectPainter to
+    // use less ressources and runtime
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
+    const tools::Rectangle aBoundRect(GetSdrObject()->GetCurrentBoundRect());
+
+    if(bMetaFile)
+    {
+        GDIMetaFile aMtf;
+
+        pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
+        pVDev->EnableOutput(false);
+        aMtf.Record(pVDev);
+        GetSdrObject()->SingleObjectPainter(*pVDev.get());
+        aMtf.Stop();
+        aMtf.WindStart();
+        aMtf.Move(-aBoundRect.Left(), -aBoundRect.Top());
+        aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+        aMtf.SetPrefSize(aBoundRect.GetSize());
+
+        SvMemoryStream aDestStrm(65535, 65535);
+
+        ConvertGDIMetaFileToWMF(
+            aMtf,
+            aDestStrm,
+            nullptr,
+            false);
+
         const uno::Sequence<sal_Int8> aSeq(
             static_cast< const sal_Int8* >(aDestStrm.GetData()),
             aDestStrm.GetEndOfData());
+
         aAny <<= aSeq;
     }
     else
     {
-        Graphic aGraph(aMtf);
-        aGraph.SetPrefSize(aSize);
-        aGraph.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+        const drawinglayer::primitive2d::Primitive2DContainer xPrimitives(
+            GetSdrObject()->GetViewContact().getViewIndependentPrimitive2DContainer());
 
-        Reference< awt::XBitmap > xBmp( aGraph.GetXGraphic(), UNO_QUERY );
-        aAny <<= xBmp;
+        if(!xPrimitives.empty())
+        {
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            const basegfx::B2DRange aRange(
+                xPrimitives.getB2DRange(aViewInformation2D));
+
+            if(!aRange.isEmpty())
+            {
+                const BitmapEx aBmp(
+                    convertPrimitive2DSequenceToBitmapEx(
+                        xPrimitives,
+                        aRange));
+
+                Graphic aGraph(aBmp);
+
+                aGraph.SetPrefSize(aBmp.GetPrefSize());
+                aGraph.SetPrefMapMode(aBmp.GetPrefMapMode());
+
+                Reference< awt::XBitmap > xBmp( aGraph.GetXGraphic(), UNO_QUERY );
+                aAny <<= xBmp;
+            }
+        }
     }
-
-    pView->UnmarkAll();
 
     return aAny;
 }
