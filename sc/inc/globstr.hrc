@@ -510,6 +510,7 @@
 #define STR_TEXT                                NC_("STR_TEXT", "Text")
 #define STR_QUERY_PIVOTTABLE_DELTAB             NC_("STR_QUERY_PIVOTTABLE_DELTAB", "The selected sheet(s) contain source data of related pivot tables that will be lost. Are you sure you want to delete the selected sheet(s)?")
 #define STR_ERR_NAME_INVALID_CELL_REF           NC_("STR_ERR_NAME_INVALID_CELL_REF", "Invalid name. Reference to a cell, or a range of cells not allowed.")
+#define STR_ERR_LONG_LINK_FORMULA_NEEDING_CHECK NC_("STR_ERR_LONG_LINK_FORMULA_NEEDING_CHECK", "External content disabled.")
 
 #endif
 
