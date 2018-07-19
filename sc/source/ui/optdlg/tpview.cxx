@@ -40,8 +40,7 @@
 
 ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
                              const SfxItemSet&  rArgSet ) :
-    SfxTabPage(pParent, "TpViewPage", "modules/scalc/ui/tpviewpage.ui", &rArgSet),
-    pLocalOptions(nullptr)
+    SfxTabPage(pParent, "TpViewPage", "modules/scalc/ui/tpviewpage.ui", &rArgSet)
 {
     get(pGridLB,"grid");
     get(pColorFT,"color_label");
@@ -103,7 +102,7 @@ ScTpContentOptions::~ScTpContentOptions()
 
 void ScTpContentOptions::dispose()
 {
-    delete pLocalOptions;
+    pLocalOptions.reset();
     pGridLB.clear();
     pColorFT.clear();
     pColorLB.clear();
@@ -184,10 +183,10 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
 {
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SCVIEWOPTIONS, false , &pItem))
-        pLocalOptions  = new ScViewOptions(
-                            static_cast<const ScTpViewItem*>(pItem)->GetViewOptions() );
+        pLocalOptions.reset( new ScViewOptions(
+                            static_cast<const ScTpViewItem*>(pItem)->GetViewOptions() ) );
     else
-        pLocalOptions = new ScViewOptions;
+        pLocalOptions.reset( new ScViewOptions );
     pFormulaCB ->Check(pLocalOptions->GetOption(VOPT_FORMULAS));
     pNilCB     ->Check(pLocalOptions->GetOption(VOPT_NULLVALS));
     pAnnotCB   ->Check(pLocalOptions->GetOption(VOPT_NOTES));
