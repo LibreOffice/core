@@ -89,7 +89,7 @@ namespace oox { namespace ppt {
     OOX_DLLPUBLIC bool convertAnimationValue(AnimationAttributeEnum eAttribute, css::uno::Any& rValue);
 
     /** convert the measure string to LibreOffice format.
-     * i.e. convert occurence of #{0,1}ppt_[xywh] to x,y, width, height.
+     * i.e. convert occurrence of #{0,1}ppt_[xywh] to x,y, width, height.
      */
     OOX_DLLPUBLIC bool convertMeasure(OUString& rString);
 } }

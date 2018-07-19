@@ -68,7 +68,7 @@ namespace drawinglayer
         protected:
             /** write access right for classes deriving from this who want to do special
                 things (e.g. optimization, buffering).
-                Caution: This is an exception from the read-only, non-modifyable paradigm
+                Caution: This is an exception from the read-only, non-modifiable paradigm
                 for primitives, so special preparations may be needed. Usually should
                 only be used for initialization (e.g. in a derived constructor)
             */

@@ -194,7 +194,7 @@ namespace editeng
 
             <p>Note an important thing about the indices: They are always relative to the <em>previous
             call</em> of ReplaceUnit. This means when you get a call to ReplaceUnit, and replace some text
-            in your document, than you have to remember the document position immediately <em>behind</em>
+            in your document, then you have to remember the document position immediately <em>behind</em>
             the changed text. In a next call to ReplaceUnit, an index of <em>0</em> will denote exactly
             this position behind the previous replacement<br/>
             The reason is that this class here does not know anything about your document structure,
