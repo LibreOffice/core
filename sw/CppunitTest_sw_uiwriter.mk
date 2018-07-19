@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sw_uiwriter))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_uiwriter, \
     sw/qa/extras/uiwriter/uiwriter \
+    sw/qa/extras/uiwriter/uiwriter2 \
 ))
 
 # note: this links msword only for the reason to have a order dependency,
