@@ -1493,7 +1493,7 @@
 						<desc>Specifies the maximum cache size for all graphical display objects.</desc>
 						<label>Total Graphic Cache Size</label>
 					</info>
-					<value>22000000</value>
+					<value>20971520</value>
 				</prop>
 				<prop oor:name="ObjectCacheSize" oor:type="xs:int">
 					<info>
@@ -1501,7 +1501,7 @@
 						<desc>Specifies the maximum cache size for a single graphic display object.</desc>
 						<label>Graphic Object Cache Size</label>
 					</info>
-					<value>5500000</value>
+					<value>5242880</value>
 				</prop>
 				<prop oor:name="ObjectReleaseTime" oor:type="xs:int">
 					<info>
