@@ -25,9 +25,10 @@
 #include "parcss1.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
+#include <array>
+#include <map>
 #include <memory>
 #include <vector>
-#include <map>
 
 class SfxItemPool;
 class SvxBoxItem;
@@ -96,7 +97,7 @@ namespace editeng { class SvxBorderLine; }
 struct SvxCSS1BorderInfo;
 class SvxCSS1PropertyInfo
 {
-    SvxCSS1BorderInfo *m_aBorderInfos[4];
+    std::array<std::unique_ptr<SvxCSS1BorderInfo>,4> m_aBorderInfos;
 
     void DestroyBorderInfos();
 

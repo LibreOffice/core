@@ -362,9 +362,6 @@ constexpr sal_uInt16 SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE;
 
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo()
 {
-    for(SvxCSS1BorderInfo* & rp : m_aBorderInfos)
-        rp = nullptr;
-
     Clear();
 }
 
@@ -400,24 +397,19 @@ SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
     m_ePageBreakBefore( rProp.m_ePageBreakBefore ),
     m_ePageBreakAfter( rProp.m_ePageBreakAfter )
 {
-    for( size_t i=0; i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
-        m_aBorderInfos[i] = rProp.m_aBorderInfos[i]
-                            ? new SvxCSS1BorderInfo( *rProp.m_aBorderInfos[i] )
-                            : nullptr;
+    for( size_t i=0; i<m_aBorderInfos.size(); ++i )
+        if (rProp.m_aBorderInfos[i])
+            m_aBorderInfos[i].reset( new SvxCSS1BorderInfo( *rProp.m_aBorderInfos[i] ) );
 }
 
 SvxCSS1PropertyInfo::~SvxCSS1PropertyInfo()
 {
-    DestroyBorderInfos();
 }
 
 void SvxCSS1PropertyInfo::DestroyBorderInfos()
 {
-    for(SvxCSS1BorderInfo* & rp : m_aBorderInfos)
-    {
-        delete rp;
-        rp = nullptr;
-    }
+    for(auto & rp : m_aBorderInfos)
+        rp.reset();
 }
 
 void SvxCSS1PropertyInfo::Clear()
@@ -469,15 +461,10 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
     if( rProp.m_bTextIndent )
         m_bTextIndent = true;
 
-    for( size_t i=0; i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
+    for( size_t i=0; i<m_aBorderInfos.size(); ++i )
     {
         if( rProp.m_aBorderInfos[i] )
-        {
-            if( m_aBorderInfos[i] )
-                delete m_aBorderInfos[i];
-
-            m_aBorderInfos[i] = new SvxCSS1BorderInfo( *rProp.m_aBorderInfos[i] );
-        }
+            m_aBorderInfos[i].reset( new SvxCSS1BorderInfo( *rProp.m_aBorderInfos[i] ) );
     }
 
     if( UNSET_BORDER_DISTANCE != rProp.m_nTopBorderDistance )
@@ -548,9 +535,9 @@ SvxCSS1BorderInfo *SvxCSS1PropertyInfo::GetBorderInfo( SvxBoxItemLine nLine, boo
     }
 
     if( !m_aBorderInfos[nPos] && bCreate )
-        m_aBorderInfos[nPos] = new SvxCSS1BorderInfo;
+        m_aBorderInfos[nPos].reset( new SvxCSS1BorderInfo );
 
-    return m_aBorderInfos[nPos];
+    return m_aBorderInfos[nPos].get();
 }
 
 void SvxCSS1PropertyInfo::CopyBorderInfo( SvxBoxItemLine nSrcLine, SvxBoxItemLine nDstLine,
@@ -596,7 +583,7 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
                 m_nLeftBorderDistance != UNSET_BORDER_DISTANCE ||
                 m_nRightBorderDistance != UNSET_BORDER_DISTANCE;
 
-    for( size_t i=0; !bChg && i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
+    for( size_t i=0; !bChg && i<m_aBorderInfos.size(); ++i )
         bChg = m_aBorderInfos[i]!=nullptr;
 
     if( !bChg )
@@ -622,7 +609,7 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     if( pInfo )
         pInfo->SetBorderLine( SvxBoxItemLine::RIGHT, aBoxItem );
 
-    for( size_t i=0; i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
+    for( size_t i=0; i<m_aBorderInfos.size(); ++i )
     {
         SvxBoxItemLine nLine = SvxBoxItemLine::TOP;
         sal_uInt16 nDist = 0;
