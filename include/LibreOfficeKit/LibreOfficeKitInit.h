@@ -200,7 +200,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
         return NULL;
     }
 
-    strncpy(imp_lib, install_path, imp_lib_size);
+    memcpy(imp_lib, install_path, partial_length);
 
     extendUnoPath(install_path);
 
