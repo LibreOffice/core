@@ -71,7 +71,7 @@ private:
     const OUString      aStrCopyErr;
 
     const sal_uInt16    nWhichUserLists;
-    ScUserList*     pUserLists;
+    std::unique_ptr<ScUserList> pUserLists;
 
     ScDocument*     pDoc;
     ScViewData*     pViewData;
