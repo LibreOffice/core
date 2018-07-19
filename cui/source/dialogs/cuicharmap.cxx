@@ -471,6 +471,8 @@ void SvxCharacterMap::init()
     else if (m_xFontLB->get_count() )
         m_xFontLB->set_active(0);
     FontSelectHdl(*m_xFontLB);
+    if (m_xSubsetLB->get_count())
+        m_xSubsetLB->set_active(0);
 
     m_xFontLB->connect_changed(LINK( this, SvxCharacterMap, FontSelectHdl));
     m_xSubsetLB->connect_changed(LINK( this, SvxCharacterMap, SubsetSelectHdl));
@@ -603,6 +605,8 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
     m_xFontLB->set_active_text(aTmp.GetFamilyName());
     aFont = aTmp;
     FontSelectHdl(*m_xFontLB);
+    if (m_xSubsetLB->get_count())
+        m_xSubsetLB->set_active(0);
 }
 
 void SvxCharacterMap::fillAllSubsets(weld::ComboBoxText& rListBox)
@@ -680,14 +684,10 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
         pSubsetMap = new SubsetMap( xFontCharMap );
 
         // update subset listbox for new font's unicode subsets
-        bool bFirst = true;
         for (auto const& subset : pSubsetMap->GetSubsetMap())
         {
             m_xSubsetLB->append(OUString::number(reinterpret_cast<sal_uInt64>(&subset)), subset.GetName());
             // NOTE: subset must live at least as long as the selected font
-            if (bFirst)
-                m_xSubsetLB->set_active(0);
-            bFirst = false;
         }
 
         if (m_xSubsetLB->get_count() <= 1)
@@ -696,6 +696,9 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
 
     m_xSubsetText->set_sensitive(bNeedSubset);
     m_xSubsetLB->set_sensitive(bNeedSubset);
+
+    // tdf#118304 reselect current glyph to see if its still there in new font
+    selectCharByCode(Radix::hexadecimal);
 }
 
 void SvxCharacterMap::toggleSearchView(bool state)
@@ -999,14 +1002,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
             m_xSubsetLB->set_active(-1);
     }
 
-    if(m_xShowSet->HasFocus() || m_xHexCodeText->has_focus() || m_xDecimalCodeText->has_focus() )
-    {
-        m_aShowChar.SetText( aText );
-        m_aShowChar.SetFont( aFont );
-        m_aShowChar.Invalidate();
+    m_aShowChar.SetText( aText );
+    m_aShowChar.SetFont( aFont );
+    m_aShowChar.Invalidate();
 
-        setFavButtonState(aText, aFont.GetFamilyName());
-    }
+    setFavButtonState(aText, aFont.GetFamilyName());
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
