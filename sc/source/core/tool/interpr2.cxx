@@ -146,7 +146,7 @@ void ScInterpreter::ScGetMin()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5)) % ::tools::Time::secondPerHour;
+    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR)) % ::tools::Time::secondPerHour;
     PushDouble( static_cast<double>(nVal / ::tools::Time::secondPerMinute) );
 }
 
@@ -154,7 +154,7 @@ void ScInterpreter::ScGetSec()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5)) % ::tools::Time::secondPerMinute;
+    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR)) % ::tools::Time::secondPerMinute;
     PushDouble( static_cast<double>(nVal) );
 }
 
@@ -162,7 +162,7 @@ void ScInterpreter::ScGetHour()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5)) / ::tools::Time::secondPerHour;
+    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR)) / ::tools::Time::secondPerHour;
     PushDouble(static_cast<double>(nVal));
 }
 
