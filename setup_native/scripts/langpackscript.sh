@@ -113,8 +113,8 @@ mkdir $outdir
 
 #diskSpace=`df -k $outdir | $tail_prog -1 | awk '{if ( $4 ~ /%/) { print $3 } else { print $4 } }'`
 #if [ $diskSpace -lt $diskSpaceRequired ]; then
-#    printf "You will need atleast %s kBytes of Disk Free\n" $diskSpaceRequired
-#    printf "Please free up the required Disk Space and try again\n"
+#    printf "You will need at least %s kBytes of free disk space\n" $diskSpaceRequired
+#    printf "Please free up the required disk space and try again\n"
 #    exit 3
 #fi
 
