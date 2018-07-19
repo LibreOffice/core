@@ -376,8 +376,8 @@ class HTMLTable
     OUString m_aClass;
     OUString m_aDir;
 
-    SdrObjects *m_pResizeDrawObjects;// SDR objects
-    std::vector<sal_uInt16> *m_pDrawObjectPrcWidths;   // column of draw object and its rel. width
+    std::unique_ptr<SdrObjects> m_pResizeDrawObjects;// SDR objects
+    std::unique_ptr<std::vector<sal_uInt16>> m_pDrawObjectPrcWidths;   // column of draw object and its rel. width
 
     HTMLTableRows m_aRows;         ///< table rows
     HTMLTableColumns m_aColumns;   ///< table columns
@@ -440,7 +440,7 @@ private:
     SwHTMLParser *m_pParser;          // the current parser
     std::unique_ptr<HTMLTableCnts> m_xParentContents;
 
-    HTMLTableContext *m_pContext;    // the context of the table
+    std::unique_ptr<HTMLTableContext> m_pContext;    // the context of the table
 
     std::shared_ptr<SwHTMLTableLayout> m_xLayoutInfo;
 
@@ -597,11 +597,11 @@ public:
 
     bool HasToFly() const { return m_bHasToFly; }
 
-    void SetTable( const SwStartNode *pStNd, HTMLTableContext *pCntxt,
+    void SetTable( const SwStartNode *pStNd, std::unique_ptr<HTMLTableContext> pCntxt,
                    sal_uInt16 nLeft, sal_uInt16 nRight,
                    const SwTable *pSwTab=nullptr, bool bFrcFrame=false );
 
-    HTMLTableContext *GetContext() const { return m_pContext; }
+    HTMLTableContext *GetContext() const { return m_pContext.get(); }
 
     const std::shared_ptr<SwHTMLTableLayout>& CreateLayoutInfo();
 
@@ -905,9 +905,6 @@ inline SwFrameFormat *HTMLTableColumn::GetFrameFormat( bool bBorderLine,
 
 void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
 {
-    m_pResizeDrawObjects = nullptr;
-    m_pDrawObjectPrcWidths = nullptr;
-
     m_nRows = 0;
     m_nCurrentRow = 0; m_nCurrentColumn = 0;
 
@@ -1059,10 +1056,10 @@ HTMLTable::~HTMLTable()
 {
     m_pParser->DeregisterHTMLTable(this);
 
-    delete m_pResizeDrawObjects;
-    delete m_pDrawObjectPrcWidths;
+    m_pResizeDrawObjects.reset();
+    m_pDrawObjectPrcWidths.reset();
 
-    delete m_pContext;
+    m_pContext.reset();
 
     // pLayoutInfo has either already been deleted or is now owned by SwTable
 }
@@ -2435,13 +2432,13 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
 }
 
-void HTMLTable::SetTable( const SwStartNode *pStNd, HTMLTableContext *pCntxt,
+void HTMLTable::SetTable( const SwStartNode *pStNd, std::unique_ptr<HTMLTableContext> pCntxt,
                           sal_uInt16 nLeft, sal_uInt16 nRight,
                           const SwTable *pSwTab, bool bFrcFrame )
 {
     m_pPrevStartNode = pStNd;
     m_pSwTable = pSwTab;
-    m_pContext = pCntxt;
+    m_pContext = std::move(pCntxt);
 
     m_nLeftMargin = nLeft;
     m_nRightMargin = nRight;
@@ -2452,11 +2449,11 @@ void HTMLTable::SetTable( const SwStartNode *pStNd, HTMLTableContext *pCntxt,
 void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPrcWidth )
 {
     if( !m_pResizeDrawObjects )
-        m_pResizeDrawObjects = new SdrObjects;
+        m_pResizeDrawObjects.reset(new SdrObjects);
     m_pResizeDrawObjects->push_back( pObj );
 
     if( !m_pDrawObjectPrcWidths )
-        m_pDrawObjectPrcWidths = new std::vector<sal_uInt16>;
+        m_pDrawObjectPrcWidths.reset(new std::vector<sal_uInt16>);
     m_pDrawObjectPrcWidths->push_back( m_nCurrentRow );
     m_pDrawObjectPrcWidths->push_back( m_nCurrentColumn );
     m_pDrawObjectPrcWidths->push_back( static_cast<sal_uInt16>(nPrcWidth) );
@@ -3338,9 +3335,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             }
 
             // create a table context
-            HTMLTableContext *pTCntxt =
+            std::unique_ptr<HTMLTableContext> pTCntxt(
                         new HTMLTableContext( pSavePos, m_nContextStMin,
-                                               m_nContextStAttrMin );
+                                               m_nContextStAttrMin ) );
 
             // end all open attributes and open them again behind the table
             HTMLAttrs *pPostIts = nullptr;
@@ -3501,7 +3498,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                 pTCntxt->SetTableNode( const_cast<SwTableNode *>(pNd->FindTableNode()) );
 
-                pCurTable->SetTable( pTCntxt->GetTableNode(), pTCntxt,
+                auto pTableNode = pTCntxt->GetTableNode();
+                pCurTable->SetTable( pTableNode, std::move(pTCntxt),
                                      nLeftSpace, nRightSpace,
                                      pSwTable, bForceFrame );
 
@@ -3533,7 +3531,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 const SwStartNode *pStNd = (m_xTable->m_bFirstCell ? pNd->FindTableNode()
                                                             : pNd->FindTableBoxStartNode() );
 
-                pCurTable->SetTable( pStNd, pTCntxt, nLeftSpace, nRightSpace );
+                pCurTable->SetTable( pStNd, std::move(pTCntxt), nLeftSpace, nRightSpace );
             }
 
             // Freeze the context stack, since there could be attributes set
