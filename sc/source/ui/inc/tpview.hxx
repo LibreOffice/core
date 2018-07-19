@@ -59,7 +59,7 @@ class ScTpContentOptions : public SfxTabPage
     VclPtr<CheckBox>        pTblRegCB;
     VclPtr<CheckBox>        pOutlineCB;
 
-    ScViewOptions*  pLocalOptions;
+    std::unique_ptr<ScViewOptions> pLocalOptions;
 
     void    InitGridOpt();
     DECL_LINK( GridHdl, ListBox&, void );
