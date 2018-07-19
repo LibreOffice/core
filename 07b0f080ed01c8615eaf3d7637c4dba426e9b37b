@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_a6e6f5e7",
+        "filename": "include/vcl/edit.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-07-19T07:37:32Z",
+      "side": 1,
+      "message": "Putting a space before \"bool\" would be nice for the sake of consistency in style.",
+      "revId": "07b0f080ed01c8615eaf3d7637c4dba426e9b37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_463ba937",
+        "filename": "vcl/source/control/combobox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-07-19T07:37:32Z",
+      "side": 1,
+      "message": "We use four-space indentation. Seeing the difference between four-space and three-space might be hard, so configuring your IDE accordingly might help.",
+      "range": {
+        "startLine": 512,
+        "startChar": 0,
+        "endLine": 512,
+        "endChar": 3
+      },
+      "revId": "07b0f080ed01c8615eaf3d7637c4dba426e9b37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
