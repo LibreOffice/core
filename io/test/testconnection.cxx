@@ -249,7 +249,7 @@ int SAL_CALL main( int argc, char * argv[] )
     }
     catch( ... )
     {
-        OSL_FAIL( "unknown exception, already existing existing expected" );
+        OSL_FAIL( "unknown exception, already existing exception expected" );
     }
 
     rAcceptor->stopAccepting();
