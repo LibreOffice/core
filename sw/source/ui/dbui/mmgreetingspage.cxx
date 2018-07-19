@@ -93,6 +93,9 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, Button*, void)
     m_pFemaleFieldFT->Enable(bIndividual);
     m_pFemaleFieldCB->Enable(bIndividual);
 
+    m_pNeutralFT->Enable(!bIndividual);
+    m_pNeutralCB->Enable(!bIndividual);
+
     if( m_bIsTabPage )
     {
         m_rConfigItem.SetIndividualGreeting(bIndividual, false);
