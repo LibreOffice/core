@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_819d1b5b",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-19T15:53:22Z",
+      "side": 0,
+      "message": "Removing this check whhether any properties are contained now writes an empty XML_Properties element, which likely is wrong.",
+      "revId": "e8bf2cb72dbe55f4e9ac7ace48e644a934cfc503",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
