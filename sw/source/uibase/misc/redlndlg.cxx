@@ -1125,8 +1125,8 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                 m_pTable->SetEntryText(sMsg.replace('\n', ' '), pEntry, 3);
             }
 
-            pDlg.disposeAndClear();
             SwViewShell::SetCareDialog(nullptr);
+            pDlg.disposeAndClear();
         }
     }
     else if (nRet)
