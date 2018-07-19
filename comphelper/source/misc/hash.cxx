@@ -67,7 +67,7 @@ struct HashImpl
     }
 #endif
 
-    HashType meType;
+    HashType const meType;
 
     HashImpl(HashType eType):
         meType(eType)

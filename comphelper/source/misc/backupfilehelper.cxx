@@ -549,7 +549,7 @@ namespace
     {
     private:
         ExtensionInfoEntryVector    maEntries;
-        OUString maRegPath;
+        OUString const maRegPath;
 
     public:
         ExtensionInfo()
@@ -998,7 +998,7 @@ namespace
         sal_uInt32          mnOffset;           // offset in File (zero identifies new file)
         sal_uInt32          mnCrc32;            // checksum
         FileSharedPtr       maFile;             // file where to find the data (at offset)
-        bool                mbDoCompress;       // flag if this file is scheduled to be compressed when written
+        bool const          mbDoCompress;       // flag if this file is scheduled to be compressed when written
 
         bool copy_content_straight(oslFileHandle& rTargetHandle)
         {
