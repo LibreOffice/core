@@ -1800,26 +1800,14 @@ Dim oControlEvents As Object, sEventName As String
 									End If
 								End If
 							Case Else
-								vCurrentValue = ControlModel.getCurrentValue()		&apos;	Space or uninitialized array if no selection at all
-								If IsArray(vCurrentValue) Then						&apos;	Is an array if MultiSelect
-									If UBound(vCurrentValue) &gt;= LBound(vCurrentValue) Then
-										vListboxValue = vCurrentValue(0)
-									Else
-										vListboxValue = &quot;&quot;
-									End If
-								Else
-									vListboxValue = vCurrentValue
-								End If
-								lListIndex = -1					&apos;	Speed up getting value PM PASTIM 12/02/2013
-								If vListboxValue &lt;&gt; &quot;&quot; Then
-									If Ubound(ControlModel.SelectedItems) &gt;= 0 Then lListIndex = Controlmodel.Selecteditems(0)
-								End If
+								&apos;getCurrentValue does not return any significant value anymore
+								&apos;	Speed up getting value PM PASTIM 12/02/2013
+								If Ubound(ControlModel.SelectedItems) &gt;= 0 Then lListIndex = Controlmodel.Selecteditems(0) Else lListIndex = -1
 								&apos; If listbox has hidden column = real bound field, then explore ValueItemList
-								bListboxBound = _ListboxBound()
-								If bListboxBound Then
+								If _ListboxBound() Then
 									If lListIndex &gt; -1 Then vGet = ControlModel.ValueItemList(lListIndex)	&apos;	PASTIM
 								Else
-									vGet = vListboxValue
+									If lListIndex &gt; -1 Then vGet = ControlModel.getItemText(lListIndex)
 								End If
 						End Select
 					End If
