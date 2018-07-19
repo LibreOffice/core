@@ -65,7 +65,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtCommandOptions : public utl::detail:
         /*-****************************************************************************************************
             @short      return complete specified list
             @descr      Call it to get all entries of an dynamic menu.
-                        We return a list of all nodes with his names and properties.
+                        We return a list of all nodes with its names and properties.
             @param      "eOption" select the list to retrieve.
             @return     A list of command strings is returned.
 

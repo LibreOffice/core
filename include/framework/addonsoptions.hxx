@@ -120,7 +120,7 @@ class FWE_DLLPUBLIC AddonsOptions
         /*-****************************************************************************************************
             @short      returns the  complete addons menu
             @descr      Call it to get all entries of the addon menu.
-                        We return a list of all nodes with his names and properties.
+                        We return a list of all nodes with its names and properties.
             @return     A list of menu items is returned.
 
             @onerror    We return an empty list.

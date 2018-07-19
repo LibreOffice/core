@@ -181,7 +181,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
 protected:
     void setExportFlags( SvXMLExportFlags nExportFlags ) { mnExportFlags = nExportFlags; }
 
-    // Get (modifyable) namespace map
+    // Get (modifiable) namespace map
     SvXMLNamespaceMap& GetNamespaceMap_() { return *mpNamespaceMap; }
 
     // get a new namespave map (used in starmath to have a default namespace)

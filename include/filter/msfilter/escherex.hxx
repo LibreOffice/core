@@ -818,7 +818,7 @@ public:
                 );
 
                 // Because shadow properties depends to the line and fillstyle, the CreateShadowProperties method should be called at last.
-                // It activ only when at least a FillStyle or LineStyle is set.
+                // It's active only when at least a FillStyle or LineStyle is set.
     void        CreateShadowProperties(
                     const css::uno::Reference< css::beans::XPropertySet > &
                 );
