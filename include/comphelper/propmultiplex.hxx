@@ -82,7 +82,7 @@ namespace comphelper
         OPropertyChangeListener*                        m_pListener;
         sal_Int32                                       m_nLockCount;
         bool                                            m_bListening        : 1;
-        bool                                            m_bAutoSetRelease   : 1;
+        bool const                                      m_bAutoSetRelease   : 1;
 
 
         virtual ~OPropertyChangeMultiplexer() override;

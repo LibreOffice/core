@@ -13,6 +13,7 @@ touchedFromOutsideSet = set()
 touchedFromOutsideConstructorSet = set()
 readFromSet = set()
 writeToSet = set()
+writeFromOutsideConstructorSet = set()
 sourceLocationSet = set()
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
@@ -55,6 +56,8 @@ with io.open("workdir/loplugin.unusedfields.log", "rb", buffering=1024*1024) as 
             readFromSet.add(parseFieldInfo(tokens))
         elif tokens[0] == "write:":
             writeToSet.add(parseFieldInfo(tokens))
+        elif tokens[0] == "write-outside-constructor:":
+            writeFromOutsideConstructorSet.add(parseFieldInfo(tokens))
         else:
             print( "unknown line: " + line)
 
@@ -223,6 +226,29 @@ for d in protectedAndPublicDefinitionSet:
 
     canBePrivateSet.add((clazz + " " + definitionToTypeMap[d], srcLoc))
 
+# Calculate can-be-const-field set
+canBeConstFieldSet = set()
+for d in definitionSet:
+    if d in writeFromOutsideConstructorSet:
+        continue
+    srcLoc = definitionToSourceLocationMap[d];
+    fieldType = definitionToTypeMap[d]
+    if fieldType.startswith("const "):
+        continue
+    if "std::unique_ptr" in fieldType:
+        continue
+    if "std::shared_ptr" in fieldType:
+        continue
+    if "Reference<" in fieldType:
+        continue
+    if "VclPtr<" in fieldType:
+        continue
+    if "osl::Mutex" in fieldType:
+        continue
+    if "::sfx2::sidebar::ControllerItem" in fieldType:
+        continue
+    canBeConstFieldSet.add((d[0] + " " + d[1] + " " + fieldType, srcLoc))
+
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
@@ -235,6 +261,7 @@ tmp2list = sorted(writeonlySet, key=lambda v: natural_sort_key(v[1]))
 tmp3list = sorted(canBePrivateSet, key=lambda v: natural_sort_key(v[1]))
 tmp4list = sorted(readonlySet, key=lambda v: natural_sort_key(v[1]))
 tmp5list = sorted(onlyUsedInConstructorSet, key=lambda v: natural_sort_key(v[1]))
+tmp6list = sorted(canBeConstFieldSet, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
 with open("compilerplugins/clang/unusedfields.untouched.results", "wt") as f:
@@ -256,6 +283,10 @@ with open("compilerplugins/clang/unusedfields.readonly.results", "wt") as f:
         f.write( "    " + t[0] + "\n" )
 with open("compilerplugins/clang/unusedfields.only-used-in-constructor.results", "wt") as f:
     for t in tmp5list:
+        f.write( t[1] + "\n" )
+        f.write( "    " + t[0] + "\n" )
+with open("compilerplugins/clang/unusedfields.can-be-const.results", "wt") as f:
+    for t in tmp6list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
 

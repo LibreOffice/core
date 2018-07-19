@@ -45,23 +45,23 @@ namespace comphelper {
 class OFOPXMLHelper_Impl
     : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
-    sal_uInt16 m_nFormat; // which format to parse
+    sal_uInt16 const m_nFormat; // which format to parse
 
     // Relations info related strings
-    OUString m_aRelListElement;
-    OUString m_aRelElement;
-    OUString m_aIDAttr;
-    OUString m_aTypeAttr;
-    OUString m_aTargetModeAttr;
-    OUString m_aTargetAttr;
+    OUString const m_aRelListElement;
+    OUString const m_aRelElement;
+    OUString const m_aIDAttr;
+    OUString const m_aTypeAttr;
+    OUString const m_aTargetModeAttr;
+    OUString const m_aTargetAttr;
 
     // ContentType related strings
-    OUString m_aTypesElement;
-    OUString m_aDefaultElement;
-    OUString m_aOverrideElement;
-    OUString m_aExtensionAttr;
-    OUString m_aPartNameAttr;
-    OUString m_aContentTypeAttr;
+    OUString const m_aTypesElement;
+    OUString const m_aDefaultElement;
+    OUString const m_aOverrideElement;
+    OUString const m_aExtensionAttr;
+    OUString const m_aPartNameAttr;
+    OUString const m_aContentTypeAttr;
 
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > m_aResultSeq;
     std::vector< OUString > m_aElementsSeq; // stack of elements being parsed

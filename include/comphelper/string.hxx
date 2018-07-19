@@ -339,7 +339,7 @@ COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const OUString &rLHS, const OUStr
 class COMPHELPER_DLLPUBLIC NaturalStringSorter
 {
 private:
-    css::lang::Locale                                m_aLocale;
+    css::lang::Locale const                          m_aLocale;
     css::uno::Reference< css::i18n::XCollator >      m_xCollator;
     css::uno::Reference< css::i18n::XBreakIterator > m_xBI;
 public:

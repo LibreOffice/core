@@ -92,7 +92,7 @@ private:
     std::mutex              maMutex;
     std::condition_variable maTasksChanged;
     bool                    mbTerminate;
-    std::size_t             mnWorkers;
+    std::size_t const       mnWorkers;
     std::vector< std::unique_ptr<ThreadTask> >   maTasks;
     std::vector< rtl::Reference< ThreadWorker > > maWorkers;
 };

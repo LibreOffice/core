@@ -36,7 +36,7 @@ class COMPHELPER_DLLPUBLIC ProfileZone
 {
 private:
     const char * m_sProfileId;
-    long long m_aCreateTime;
+    long long const m_aCreateTime;
 public:
 
     // Note that the char pointer is stored as such in the ProfileZone object and used in the

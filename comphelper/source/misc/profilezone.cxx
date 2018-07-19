@@ -92,9 +92,9 @@ css::uno::Sequence<OUString> getRecordingAndClear()
 
 
 ProfileZone::ProfileZone(const char * sProfileId) :
-    m_sProfileId(sProfileId)
+    m_sProfileId(sProfileId),
+    m_aCreateTime(ProfileRecording::addRecording(sProfileId, 0))
 {
-    m_aCreateTime = ProfileRecording::addRecording(sProfileId, 0);
 }
 
 ProfileZone::~ProfileZone()

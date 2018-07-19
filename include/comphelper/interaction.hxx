@@ -112,7 +112,7 @@ namespace comphelper
     */
     class COMPHELPER_DLLPUBLIC OInteractionRequest : public OInteractionRequest_Base
     {
-        css::uno::Any
+        css::uno::Any const
                     m_aRequest;         /// the request we represent
         std::vector< css::uno::Reference< css::task::XInteractionContinuation > >
                     m_aContinuations;   /// all registered continuations

@@ -204,7 +204,7 @@ namespace comphelper
         typedef EVENT_OBJECT    EventObjectType;
 
     private:
-        EventObjectType m_aEvent;
+        EventObjectType const m_aEvent;
 
     public:
         EventHolder( const EventObjectType& _rEvent )

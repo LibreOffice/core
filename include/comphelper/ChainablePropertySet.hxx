@@ -68,7 +68,7 @@ namespace comphelper
     {
         friend class MasterPropertySet;
     protected:
-        SolarMutex* mpMutex;
+        SolarMutex* const mpMutex;
         rtl::Reference < ChainablePropertySetInfo > mxInfo;
 
         /// @throws css::beans::UnknownPropertyException
