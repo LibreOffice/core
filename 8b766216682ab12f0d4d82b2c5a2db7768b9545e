@@ -16,6 +16,24 @@
       "revId": "8b766216682ab12f0d4d82b2c5a2db7768b9545e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_c13203a8",
+        "filename": "filter/source/config/cache/filtercache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-07-19T14:28:06Z",
+      "side": 1,
+      "message": "Can you help me, please, about this?",
+      "parentUuid": "ffe62b97_3021fffc",
+      "revId": "8b766216682ab12f0d4d82b2c5a2db7768b9545e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
