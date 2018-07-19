@@ -480,7 +480,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         if(bExample)
         {
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
-                eGender <= SwMailMergeConfigItem::NEUTRAL; ++eGender)
+                eGender <= SwMailMergeConfigItem::MALE; ++eGender)
             {
                 Sequence< OUString > aEntries =
                             rConfigItem.GetGreetings(static_cast<SwMailMergeConfigItem::Gender>(eGender));
@@ -516,12 +516,11 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 
 //          Female:  [database.sGenderColumn] != "rFemaleGenderValue" && [database.NameColumn]
 //          Male:    [database.sGenderColumn] == "rFemaleGenderValue" && [database.rGenderColumn]
-//          Neutral: [database.sNameColumn]
             OSL_ENSURE(!sGenderColumn.isEmpty() && !rFemaleGenderValue.isEmpty(),
                     "gender settings not available - how to form the condition?");
             //column used as lastname
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
-                eGender <= SwMailMergeConfigItem::NEUTRAL; ++eGender)
+                eGender <= SwMailMergeConfigItem::MALE; ++eGender)
             {
                 Sequence< OUString> aEntries = rConfigItem.GetGreetings(static_cast<SwMailMergeConfigItem::Gender>(eGender));
                 sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting(static_cast<SwMailMergeConfigItem::Gender>(eGender));
@@ -540,9 +539,6 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         case  SwMailMergeConfigItem::MALE:
                             sCondition = sConditionBase + " == \"" + rFemaleGenderValue
                                 + "\" OR NOT " + sNameColumnBase;
-                        break;
-                        case  SwMailMergeConfigItem::NEUTRAL:
-                            sCondition = sNameColumnBase;
                         break;
                     }
 
