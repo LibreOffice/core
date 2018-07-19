@@ -139,8 +139,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     sFieldSep = sFieldSep.replaceFirst( "%SPACE", ScResId(SCSTR_FIELDSEP_SPACE) );
 
     // not possible in the Ctor initializer (MSC cannot do that):
-    pFieldSepTab = new ScDelimiterTable(sFieldSep);
-    pTextSepTab  = new ScDelimiterTable(SCSTR_TEXTSEP);
+    pFieldSepTab.reset( new ScDelimiterTable(sFieldSep) );
+    pTextSepTab.reset( new ScDelimiterTable(SCSTR_TEXTSEP) );
 
     OUString aStr = pFieldSepTab->FirstDel();
     sal_Unicode nCode;
@@ -265,8 +265,8 @@ ScImportOptionsDlg::~ScImportOptionsDlg()
 
 void ScImportOptionsDlg::dispose()
 {
-    delete pFieldSepTab;
-    delete pTextSepTab;
+    pFieldSepTab.reset();
+    pTextSepTab.reset();
     m_pEncGrid.clear();
     m_pFieldFrame.clear();
     m_pFtCharset.clear();
@@ -305,9 +305,9 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
     sal_uInt16  nCode;
 
     if ( &rEd == m_pEdTextSep )
-        pTab = pTextSepTab;
+        pTab = pTextSepTab.get();
     else
-        pTab = pFieldSepTab;
+        pTab = pFieldSepTab.get();
 
     if ( aStr.isEmpty() )
     {
