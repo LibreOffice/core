@@ -3823,6 +3823,8 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
         case XML_mod:
         case XML_ins:
         case XML_del:
+        case XML_moveTo:
+        case XML_moveFrom:
         case XML_ParagraphFormat:
         case XML_tableRowInsert:
         case XML_tableRowDelete:
