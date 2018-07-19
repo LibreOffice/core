@@ -493,6 +493,14 @@ void SvxCharacterMap::init()
     m_xHexCodeText->connect_changed( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
     m_xFavouritesBtn->connect_clicked( LINK(this, SvxCharacterMap, FavSelectHdl));
 
+    // tdf#117038 set the buttons width to its max possible width so it doesn't
+    // make layout change when the label changes
+    m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_REMOVE_FAVORITES));
+    auto nMaxWidth = m_xFavouritesBtn->get_preferred_size().Width();
+    m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_ADD_FAVORITES));
+    nMaxWidth = std::max(nMaxWidth, m_xFavouritesBtn->get_preferred_size().Width());
+    m_xFavouritesBtn->set_size_request(nMaxWidth, -1);
+
     if( SvxShowCharSet::getSelectedChar() == ' ')
     {
         m_xOKBtn->set_sensitive(false);
@@ -560,7 +568,7 @@ void SvxCharacterMap::setFavButtonState(const OUString& sTitle, const OUString& 
     else
         m_xFavouritesBtn->set_sensitive(true);
 
-    if(isFavChar(sTitle, rFont))
+    if (isFavChar(sTitle, rFont))
     {
         m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_REMOVE_FAVORITES));
     }
