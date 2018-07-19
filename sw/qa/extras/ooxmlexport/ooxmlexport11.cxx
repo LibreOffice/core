@@ -464,6 +464,23 @@ DECLARE_OOXMLEXPORT_TEST(testMarginsFromStyle, "margins_from_style.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(600), getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf118521_marginsLR, "tdf118521_marginsLR.docx")
+{
+    // tdf#118521 paragraphs with direct formatting of only some of left, right, or first margins have
+    // lost the other unset margins coming from paragraph style, getting a bad margin from the default style instead
+
+    uno::Reference<beans::XPropertySet> xMyStyle(getStyles("ParagraphStyles")->getByName("MyStyle"), uno::UNO_QUERY);
+    // from paragraph style - this is what direct formatting should equal
+    sal_Int32 nMargin = getProperty<sal_Int32>(xMyStyle, "ParaLeftMargin");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nMargin);
+    // from direct formatting
+    CPPUNIT_ASSERT_EQUAL(nMargin, getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+
+    nMargin = getProperty<sal_Int32>(xMyStyle, "ParaRightMargin");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1900), nMargin);
+    CPPUNIT_ASSERT_EQUAL(nMargin, getProperty<sal_Int32>(getParagraph(2), "ParaRightMargin"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf104797, "tdf104797.docx")
 {
     // check moveFrom and moveTo

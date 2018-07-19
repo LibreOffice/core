@@ -1122,16 +1122,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
     TagLogger::getInstance().attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
 #endif
 
+    const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
+    OSL_ENSURE( pEntry.get(), "no style sheet found" );
+    const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
     //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
     //does not specify the numbering
-    if( pParaContext && !pParaContext->isSet(PROP_NUMBERING_RULES) )
+    if ( pStyleSheetProperties && pParaContext && !pParaContext->isSet(PROP_NUMBERING_RULES) )
     {
-        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
-        OSL_ENSURE( pEntry.get(), "no style sheet found" );
-        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
 
         sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable()) : -1;
-        if( pStyleSheetProperties && nListId >= 0 )
+        if ( nListId >= 0 )
         {
             pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
 
@@ -1169,7 +1169,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
             }
         }
 
-        if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
+        if ( pStyleSheetProperties->GetListLevel() >= 0 )
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
 
@@ -1418,28 +1418,49 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style
                 // if we already set the other margin with direct formatting
-                if (pParaContext && m_xPreviousParagraph.is() &&
+                if (pStyleSheetProperties && pParaContext && m_xPreviousParagraph.is() &&
                         pParaContext->isSet(PROP_PARA_TOP_MARGIN) != pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN))
                 {
-                    const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
-                    OSL_ENSURE( pEntry.get(), "no style sheet found" );
-                    const StyleSheetPropertyMap* pStyleSheetProperties =
-                            dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
-                    if (pStyleSheetProperties) {
-                        boost::optional<PropertyMap::Property> oProperty;
-                        if (pParaContext->isSet(PROP_PARA_TOP_MARGIN))
-                        {
-                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_BOTTOM_MARGIN)) )
-                                m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", oProperty->second);
-                        }
-                        else
-                        {
-                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_TOP_MARGIN)) )
-                                m_xPreviousParagraph->setPropertyValue("ParaTopMargin", oProperty->second);
-                        }
+                    boost::optional<PropertyMap::Property> oProperty;
+                    if (pParaContext->isSet(PROP_PARA_TOP_MARGIN))
+                    {
+                        if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_BOTTOM_MARGIN)) )
+                            m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", oProperty->second);
+                    }
+                    else
+                    {
+                        if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_TOP_MARGIN)) )
+                            m_xPreviousParagraph->setPropertyValue("ParaTopMargin", oProperty->second);
                     }
                 }
 
+                // Left, Right, and Hanging settings are also grouped. Ensure that all or none are set.
+                // m_xPreviousParagraph was set earlier, so really it still is the current paragraph...
+                if ( pStyleSheetProperties && pParaContext && m_xPreviousParagraph.is() )
+                {
+                    const bool bLeftSet  = pParaContext->isSet(PROP_PARA_LEFT_MARGIN);
+                    const bool bRightSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN);
+                    const bool bFirstSet = pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT);
+                    if ( !(bLeftSet == bRightSet && bRightSet == bFirstSet) )
+                    {
+                        boost::optional<PropertyMap::Property> oProperty;
+                        if ( !bLeftSet )
+                        {
+                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN)) )
+                                m_xPreviousParagraph->setPropertyValue("ParaLeftMargin", oProperty->second);
+                        }
+                        if ( !bRightSet )
+                        {
+                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) )
+                                m_xPreviousParagraph->setPropertyValue("ParaRightMargin", oProperty->second);
+                        }
+                        if ( !bFirstSet )
+                        {
+                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT)) )
+                                m_xPreviousParagraph->setPropertyValue("ParaFirstLineIndent", oProperty->second);
+                        }
+                    }
+                }
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
