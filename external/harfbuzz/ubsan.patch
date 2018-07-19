@@ -1,11 +1,11 @@
 --- src/hb-ot-hmtx-table.hh
 +++ src/hb-ot-hmtx-table.hh
-@@ -143,7 +143,7 @@
- 	  return default_advance;
+@@ -263,7 +263,7 @@ struct hmtxvmtx
+           return default_advance;
        }
  
--      return table->longMetric[MIN (glyph, (uint32_t) num_advances - 1)].advance
-+      return static_cast<OT::LongMetric const *>(table->longMetric)[MIN (glyph, (uint32_t) num_advances - 1)].advance
- 	   + var_table->get_advance_var (glyph, font->coords, font->num_coords); // TODO Optimize?!
+-      return table->longMetric[MIN (glyph, (uint32_t) num_advances - 1)].advance;
++      return static_cast<OT::LongMetric const *>(table->longMetric)[MIN (glyph, (uint32_t) num_advances - 1)].advance;
      }
  
+     inline unsigned int get_advance (hb_codepoint_t  glyph,
