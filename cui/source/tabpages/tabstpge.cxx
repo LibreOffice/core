@@ -292,7 +292,7 @@ void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
     else
         aNewTabs.Remove(0, aNewTabs.Count());
 
-    // Defaul tab distance
+    // Default tab distance
     nDefDist = SVX_TAB_DEFDIST;
     pItem = GetItem(*rSet, SID_ATTR_TABSTOP_DEFAULTS);
 
