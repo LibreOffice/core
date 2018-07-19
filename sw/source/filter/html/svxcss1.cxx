@@ -769,14 +769,14 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     if( pWhichIds && nWhichIds )
         BuildWhichTable( aWhichMap, pWhichIds, nWhichIds );
 
-    pSheetItemSet = new SfxItemSet( rPool, &aWhichMap[0] );
-    pSheetPropInfo = new SvxCSS1PropertyInfo;
+    pSheetItemSet.reset( new SfxItemSet( rPool, &aWhichMap[0] ) );
+    pSheetPropInfo.reset( new SvxCSS1PropertyInfo );
 }
 
 SvxCSS1Parser::~SvxCSS1Parser()
 {
-    delete pSheetItemSet;
-    delete pSheetPropInfo;
+    pSheetItemSet.reset();
+    pSheetPropInfo.reset();
 }
 
 void SvxCSS1Parser::InsertId( const OUString& rId,
@@ -841,8 +841,8 @@ SvxCSS1MapEntry* SvxCSS1Parser::GetTag( const OUString& rTag )
 
 bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
 {
-    pItemSet = pSheetItemSet;
-    pPropInfo = pSheetPropInfo;
+    pItemSet = pSheetItemSet.get();
+    pPropInfo = pSheetPropInfo.get();
 
     bool bSuccess = CSS1Parser::ParseStyleSheet( rIn );
 
