@@ -487,29 +487,32 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
         pTxo->Save( rStrm );
 }
 
-  // --- class XclObjComment ------------------------------------------
+// --- class XclObjComment ------------------------------------------
+
+// tdf#118662 static helper to allow single function access as friend in SdrCaptionObj
+void setSuppressGetBitmapFromXclObjComment(SdrCaptionObj* pSdrCaptionObj, bool bValue)
+{
+    if(nullptr != pSdrCaptionObj)
+    {
+        pSdrCaptionObj->setSuppressGetBitmap(true);
+    }
+}
 
 XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, const tools::Rectangle &rFrom, const tools::Rectangle &rTo ) :
     XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
             , maScPos( rAddress )
-
-            // No need to CloneSdrObject(...) here, the SdrCaptionObj will exist
-            // during the whole im/export time. Seems that this was done
-            // initially to make UnitTest CppunitTest_sc_subsequent_export_test
-            // work (better: not crash) which had not added emfio/emfio to
-            // CppunitTest_sc_subsequent_export_test.mk and thus failed.
-            // Probably the Graphic created from the Clone was wrong.
-            // Problem with creating a Clone here is that it gets cloned, but not inserted to a
-            // SdrPage. In deeper export layers this then goes wrong since without being inserted
-            // to a Page, no SvxPage/UnoApiPage can be accessed. This was different in previous
-            // revisions of the code in that a SdrObject could be *not* inserted, but have a
-            // SdrPage*. That again was redundant, wrong and inconsequent.
             , mpCaption( pCaption )
-
             , mbVisible( bVisible )
             , maFrom ( rFrom )
             , maTo ( rTo )
 {
+    // tdf#118662 due to no longer cloning the SdrCaptionObj an old 'hack' using the
+    // fact that no Graphics gets created when a SdrObject is not inserted in a SdrPage
+    // does not work anymore. In SvxShape::GetBitmap that info was used, and here the
+    // SdrCaptionObj was cloned for the only reason to have one not added to a SdrPage.
+    // To emulate old behaviour, use a boolean flag at the SdrCaptionObj.
+    setSuppressGetBitmapFromXclObjComment(mpCaption, true);
+
     ProcessEscherObj( rObjMgr.GetRoot(), rRect, pCaption, bVisible);
     // TXO
     pTxo .reset(new XclTxo( rObjMgr.GetRoot(), rEditObj, pCaption ));
@@ -590,6 +593,8 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const tools::Rect
 
 XclObjComment::~XclObjComment()
 {
+    // tdf#118662 reset flag
+    setSuppressGetBitmapFromXclObjComment(mpCaption, false);
 }
 
 void XclObjComment::Save( XclExpStream& rStrm )
