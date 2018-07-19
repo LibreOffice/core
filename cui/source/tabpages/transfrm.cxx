@@ -763,6 +763,8 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(TabPageParent pParent, const SfxI
     , mbProtectDisabled(false)
     , mbSizeDisabled(false)
     , mbAdjustDisabled(true)
+    , mbIgnoreAutoGrowWidth(true)
+    , mbIgnoreAutoGrowHeight(true)
     , mfOldWidth(0.0)
     , mfOldHeight(0.0)
     , m_aCtlPos(this)
@@ -890,6 +892,10 @@ void SvxPositionSizeTabPage::Construct()
 
             m_xTsbAutoGrowWidth->connect_toggled( LINK( this, SvxPositionSizeTabPage, ClickSizeProtectHdl ) );
             m_xTsbAutoGrowHeight->connect_toggled( LINK( this, SvxPositionSizeTabPage, ClickSizeProtectHdl ) );
+
+            // is used as flag to evaluate if its selectable
+            mbIgnoreAutoGrowWidth = false;
+            mbIgnoreAutoGrowHeight = false;
         }
     }
 
@@ -997,23 +1003,33 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if (m_xTsbAutoGrowWidth->get_state_changed_from_saved())
     {
-        if( m_xTsbAutoGrowWidth->get_inconsistent() )
-            rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_AUTOWIDTH );
-        else
-            rOutAttrs->Put(
-                SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOWIDTH ),
-                m_xTsbAutoGrowWidth->get_active() ) );
+        if (!mbIgnoreAutoGrowWidth)
+        {
+            if( m_xTsbAutoGrowWidth->get_inconsistent() )
+                rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_AUTOWIDTH );
+            else
+                rOutAttrs->Put(
+                    SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOWIDTH ),
+                    m_xTsbAutoGrowWidth->get_active() ) );
+        }
         bModified = true;
     }
 
     if (m_xTsbAutoGrowHeight->get_state_changed_from_saved())
     {
-        if (m_xTsbAutoGrowHeight->get_inconsistent())
-            rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_AUTOHEIGHT );
-        else
-            rOutAttrs->Put(
-                SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOHEIGHT ),
-                m_xTsbAutoGrowHeight->get_active() ) );
+        if (!mbIgnoreAutoGrowHeight)
+        {
+            if (m_xTsbAutoGrowHeight->get_inconsistent())
+            {
+                rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_AUTOHEIGHT );
+            }
+            else
+            {
+                rOutAttrs->Put(
+                    SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOHEIGHT ),
+                    m_xTsbAutoGrowHeight->get_active() ) );
+            }
+        }
         bModified = true;
     }
 
@@ -1170,8 +1186,8 @@ void SvxPositionSizeTabPage::UpdateControlStates()
 {
     const bool bPosProtect =  m_xTsbPosProtect->get_state() == TRISTATE_TRUE;
     const bool bSizeProtect = m_xTsbSizeProtect->get_state() == TRISTATE_TRUE;
-    const bool bHeightChecked = !m_xTsbAutoGrowHeight->get_inconsistent() && (m_xTsbAutoGrowHeight->get_active());
-    const bool bWidthChecked = !m_xTsbAutoGrowWidth->get_inconsistent() && (m_xTsbAutoGrowWidth->get_active());
+    const bool bHeightChecked = !mbIgnoreAutoGrowHeight && (m_xTsbAutoGrowHeight->get_active());
+    const bool bWidthChecked = !mbIgnoreAutoGrowWidth && (m_xTsbAutoGrowWidth->get_active());
 
     m_xFlPosition->set_sensitive(!bPosProtect && !mbPageDisabled);
 

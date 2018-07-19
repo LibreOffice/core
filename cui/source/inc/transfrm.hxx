@@ -85,6 +85,8 @@ private:
     bool                mbProtectDisabled;
     bool                mbSizeDisabled;
     bool                mbAdjustDisabled;
+    bool                mbIgnoreAutoGrowWidth;
+    bool                mbIgnoreAutoGrowHeight;
 
     // from size
     // #i75273#
