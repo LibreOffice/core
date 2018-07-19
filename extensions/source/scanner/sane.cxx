@@ -272,7 +272,7 @@ void Sane::ReloadOptions()
 
     mnOptions = pOptions[ 0 ];
     if( static_cast<size_t>(pZero->size) > sizeof( SANE_Word ) )
-        fprintf( stderr, "driver returned numer of options with larger size tha SANE_Word !!!\n" );
+        fprintf( stderr, "driver returned number of options with larger size tha SANE_Word !!!\n" );
     mppOptions.reset(new const SANE_Option_Descriptor*[ mnOptions ]);
     mppOptions[ 0 ] = pZero;
     for( int i = 1; i < mnOptions; i++ )

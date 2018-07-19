@@ -913,7 +913,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
                 xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONUPDATEACCESS,
                         comphelper::containerToSequence(lParams));
 
-            // If configuration could not be opened ... but factory method does not throwed an exception
+            // If configuration could not be opened... but factory method does not thrown an exception
             // trigger throwing of our own CorruptedFilterConfigurationException.
             // Let message empty. The normal exception text show enough information to the user.
             if (! xCfg.is())

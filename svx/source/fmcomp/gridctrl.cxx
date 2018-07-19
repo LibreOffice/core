@@ -2661,7 +2661,7 @@ sal_uInt32 DbGridControl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
         return GetDataWindow().GetTextWidth(GetCurrentRowCellText(pColumn,m_xPaintRow));
     }
     else
-        return 30;  // FIXME magic number for defaul cell width
+        return 30;  // FIXME magic number for default cell width
 }
 
 void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMenu)
