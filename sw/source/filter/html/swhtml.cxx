@@ -354,7 +354,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bOldIsHTMLMode = m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
     m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
-    m_pCSS1Parser = new SwCSS1Parser( m_xDoc.get(), m_aFontHeights, m_sBaseURL, IsNewDoc() );
+    m_pCSS1Parser.reset( new SwCSS1Parser( m_xDoc.get(), m_aFontHeights, m_sBaseURL, IsNewDoc() ) );
     m_pCSS1Parser->SetIgnoreFontFamily( rHtmlOptions.IsIgnoreFontFamily() );
 
     if( bReadUTF8 )
@@ -473,13 +473,13 @@ SwHTMLParser::~SwHTMLParser()
         m_aSetAttrTab.clear();
     }
 
-    delete m_pCSS1Parser;
-    delete m_pNumRuleInfo;
+    m_pCSS1Parser.reset();
+    m_pNumRuleInfo.reset();
     DeleteFormImpl();
     DeleteFootEndNoteImpl();
 
     OSL_ENSURE(!m_xTable.get(), "It exists still a open table");
-    delete m_pImageMaps;
+    m_pImageMaps.reset();
 
     OSL_ENSURE( !m_pPendStack,
             "SwHTMLParser::~SwHTMLParser: Here should not be Pending-Stack anymore" );
@@ -2033,7 +2033,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         if( ParseMapOptions( m_pImageMap) )
         {
             if (!m_pImageMaps)
-                m_pImageMaps = new ImageMaps;
+                m_pImageMaps.reset( new ImageMaps );
             m_pImageMaps->push_back(std::unique_ptr<ImageMap>(m_pImageMap));
         }
         else
