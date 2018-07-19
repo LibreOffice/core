@@ -87,8 +87,8 @@ class XclObj : public XclExpRecord
 protected:
         XclEscherEx&        mrEscherEx;
         XclExpMsoDrawing*   pMsodrawing;
-        XclExpMsoDrawing*   pClientTextbox;
-        XclTxo*             pTxo;
+        std::unique_ptr<XclExpMsoDrawing> pClientTextbox;
+        std::unique_ptr<XclTxo> pTxo;
         sal_uInt16          mnObjType;
         sal_uInt16          nObjId;
         sal_uInt16          nGrbit;
