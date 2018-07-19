@@ -16,6 +16,24 @@
       "revId": "e8bf2cb72dbe55f4e9ac7ace48e644a934cfc503",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_01e10b9b",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2018-07-19T18:25:36Z",
+      "side": 0,
+      "message": "We have already checked this in line 761 (I have added this extra check in an earlier sate of my patch, but I forgot to remove it, when I restore the first check.)",
+      "parentUuid": "ffe62b97_819d1b5b",
+      "revId": "e8bf2cb72dbe55f4e9ac7ace48e644a934cfc503",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
