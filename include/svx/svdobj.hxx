@@ -790,11 +790,14 @@ public:
     // is invalid, if this is a group object
     bool IsClosedObj() const { return bClosedObj;}
 
+    // tdf#118662 reorganize inserted state, no local bool needed anymore,
+    // it depends on being a member of a SdrObjList
+    void InsertedStateChange();
+    bool IsInserted() const { return nullptr != getParentSdrObjListFromSdrObject(); }
+
     bool IsEdgeObj() const { return bIsEdge;}
     bool Is3DObj() const { return bIs3DObj;}
     bool IsUnoObj() const { return bIsUnoObj;}
-    void SetInserted(bool bIns);
-    bool IsInserted() const { return bInserted;}
     void SetMoveProtect(bool bProt);
     bool IsMoveProtect() const { return bMovProt;}
     void SetResizeProtect(bool bProt);
@@ -1004,7 +1007,6 @@ private:
     // Position in the navigation order. SAL_MAX_UINT32 when not used.
     sal_uInt32                        mnNavigationPosition;
     SdrLayerID                        mnLayerID;
-    bool                              bInserted : 1;  // only if set to true, there are RepaintBroadcast & SetModify
     bool                              bNoPrint : 1;   // if true, the object is not printed.
     bool                              mbVisible : 1;  // if false, the object is not visible on screen (but maybe on printer, depending on bNoprint
     bool                              bMarkProt : 1;  // marking forbidden, persistent

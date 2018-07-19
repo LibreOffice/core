@@ -46,15 +46,23 @@ private:
     friend class sdr::properties::CaptionProperties;
     friend class                SdrTextObj; // for ImpRecalcTail() during AutoGrow
 
+    // tdf#118662 exclusive friend function and setter for SuppressGetBitmap
+    friend void setSuppressGetBitmapFromXclObjComment(SdrCaptionObj* pSdrCaptionObj, bool bValue);
+    void setSuppressGetBitmap(bool bNew)
+    {
+        mbSuppressGetBitmap = bNew;
+    }
+
 protected:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
 private:
-    tools::Polygon aTailPoly;  // the whole tail polygon
-    bool                        mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
-    bool                        mbFixedTail; // for calc note box fixed tail, default FALSE
-    Point                       maFixedTailPos; // for calc note box fixed tail position.
+    tools::Polygon  aTailPoly;              // the whole tail polygon
+    bool            mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
+    bool            mbFixedTail;            // for calc note box fixed tail, default FALSE
+    bool            mbSuppressGetBitmap;    // tdf#118662
+    Point           maFixedTailPos;         // for calc note box fixed tail position.
 
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
     SVX_DLLPRIVATE static void ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect);
@@ -73,6 +81,9 @@ public:
         SdrModel& rSdrModel,
         const tools::Rectangle& rRect,
         const Point& rTail);
+
+    // tdf#118662 getter for SuppressGetBitmap
+    bool isSuppressGetBitmap() const { return mbSuppressGetBitmap; }
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
