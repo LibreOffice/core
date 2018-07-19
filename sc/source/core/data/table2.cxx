@@ -571,14 +571,13 @@ bool CheckAndDeduplicateCondFormat(ScDocument* pDocument, ScConditionalFormat* p
 
     if (pOldFormat->EqualEntries(*pNewFormat, true))
     {
-        pDocument->RemoveCondFormatData(pOldFormat->GetRange(), nTab, pOldFormat->GetKey());
         const ScRangeList& rNewRangeList = pNewFormat->GetRange();
         ScRangeList& rDstRangeList = pOldFormat->GetRangeList();
         for (size_t i = 0; i < rNewRangeList.size(); ++i)
         {
             rDstRangeList.Join(rNewRangeList[i]);
         }
-        pDocument->AddCondFormatData(pOldFormat->GetRange(), nTab, pOldFormat->GetKey());
+        pDocument->AddCondFormatData(rNewRangeList, nTab, pOldFormat->GetKey());
         return true;
     }
 

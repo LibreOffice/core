@@ -298,11 +298,15 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
             std::vector< sal_uInt32 > aCondFormatData;
             if(pItem)
                 aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
-            aCondFormatData.push_back(nIndex);
+            if (std::find(aCondFormatData.begin(), aCondFormatData.end(), nIndex)
+                == aCondFormatData.end())
+            {
+                aCondFormatData.push_back(nIndex);
 
-            ScCondFormatItem aItem;
-            aItem.SetCondFormatData( aCondFormatData );
-            pNewPattern->GetItemSet().Put( aItem );
+                ScCondFormatItem aItem;
+                aItem.SetCondFormatData( aCondFormatData );
+                pNewPattern->GetItemSet().Put( aItem );
+            }
         }
         else
         {
