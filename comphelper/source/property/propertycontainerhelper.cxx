@@ -51,7 +51,7 @@ namespace
     // comparing two property descriptions (by name)
     struct PropertyDescriptionNameMatch
     {
-        OUString m_rCompare;
+        OUString const m_rCompare;
         explicit PropertyDescriptionNameMatch( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
 
         bool operator() (const PropertyDescription& x ) const

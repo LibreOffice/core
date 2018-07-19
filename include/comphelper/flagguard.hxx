@@ -45,7 +45,7 @@ namespace comphelper
         struct RestoreFlag
         {
             bool & rFlag;
-            bool originalValue;
+            bool const originalValue;
             RestoreFlag(bool & i_flagRef)
                 : rFlag(i_flagRef), originalValue(i_flagRef) {}
             void operator()()

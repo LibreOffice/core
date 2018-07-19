@@ -70,6 +70,7 @@ static std::set<MyFieldInfo> touchedFromOutsideSet;
 static std::set<MyFieldInfo> touchedFromOutsideConstructorSet;
 static std::set<MyFieldInfo> readFromSet;
 static std::set<MyFieldInfo> writeToSet;
+static std::set<MyFieldInfo> writeToOutsideConstructorSet;
 static std::set<MyFieldInfo> definitionSet;
 
 /**
@@ -159,6 +160,7 @@ public:
 private:
     MyFieldInfo niceName(const FieldDecl*);
     void checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr);
+    void checkWriteFromOutsideConstructor(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
     bool isSomeKindOfZero(const Expr* arg);
@@ -193,6 +195,8 @@ void UnusedFields::run()
             output += "read:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : writeToSet)
             output += "write:\t" + s.parentClass + "\t" + s.fieldName + "\n";
+        for (const MyFieldInfo & s : writeToOutsideConstructorSet)
+            output += "write-outside-constructor:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : definitionSet)
             output += "definition:\t" + s.access + "\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
         std::ofstream myfile;
@@ -671,7 +675,11 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         RecordDecl const * cxxRecordDecl1 = fieldDecl->getParent();
         // we don't care about writes to a field when inside the copy/move constructor/operator= for that field
         if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyOrCloneDeclParent))
+        {
+            // ... but they matter to tbe can-be-const analysis
+            checkWriteFromOutsideConstructor(fieldDecl, memberExpr);
             return;
+        }
     }
 
     // if we're inside a block that looks like
@@ -881,7 +889,10 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
 
     MyFieldInfo fieldInfo = niceName(fieldDecl);
     if (bPotentiallyWrittenTo)
+    {
         writeToSet.insert(fieldInfo);
+        checkWriteFromOutsideConstructor(fieldDecl, memberExpr);
+    }
 }
 
 bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, CallerWrapper callExpr,
@@ -1008,6 +1019,27 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
             touchedFromOutsideSet.insert(fieldInfo);
         }
     }
+}
+
+// For the const-field analysis.
+// Called when we have a write to a field, and we want to record that write only if it's writing from
+// outside the constructor.
+void UnusedFields::checkWriteFromOutsideConstructor(const FieldDecl* fieldDecl, const Expr* memberExpr) {
+    const FunctionDecl* memberExprParentFunction = getParentFunctionDecl(memberExpr);
+    bool doWrite = false;
+
+    if (!memberExprParentFunction)
+        // If we are not inside a function
+        doWrite = true;
+    else if (memberExprParentFunction->getParent() != fieldDecl->getParent())
+        // or we are inside a method from another class (than the one the field belongs to)
+        doWrite = true;
+    else if (!isa<CXXConstructorDecl>(memberExprParentFunction))
+        // or we are not inside constructor
+        doWrite = true;
+
+    if (doWrite)
+        writeToOutsideConstructorSet.insert(niceName(fieldDecl));
 }
 
 llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)

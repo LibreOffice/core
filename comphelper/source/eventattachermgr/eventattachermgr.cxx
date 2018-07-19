@@ -134,8 +134,8 @@ private:
 class AttacherAllListener_Impl : public WeakImplHelper< XAllListener >
 {
     rtl::Reference<ImplEventAttacherManager> mxManager;
-    OUString                            aScriptType;
-    OUString                            aScriptCode;
+    OUString const                           aScriptType;
+    OUString const                           aScriptCode;
 
     /// @throws CannotConvertException
     void convertToEventReturn( Any & rRet, const Type & rRetType );

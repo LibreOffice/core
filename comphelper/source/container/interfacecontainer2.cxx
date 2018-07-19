@@ -39,13 +39,13 @@ namespace comphelper
 {
 
 OInterfaceIteratorHelper2::OInterfaceIteratorHelper2( OInterfaceContainerHelper2 & rCont_ )
-    : rCont( rCont_ )
+    : rCont( rCont_ ),
+      bIsList( rCont_.bIsList )
 {
     MutexGuard aGuard( rCont.rMutex );
     if( rCont.bInUse )
         // worst case, two iterators at the same time
         rCont.copyAndResetInUse();
-    bIsList = rCont_.bIsList;
     aData = rCont_.aData;
     if( bIsList )
     {

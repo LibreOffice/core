@@ -45,7 +45,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
                          , public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                           css::lang::XEventListener    >
 {
-    css::uno::Sequence< OUString >                m_aNames;
+    css::uno::Sequence< OUString > const                m_aNames;
     sal_Int32                                           m_nPos;
     css::uno::Reference< css::container::XNameAccess >    m_xAccess;
     bool                                            m_bListening;

@@ -60,7 +60,7 @@ namespace comphelper
                               public css::beans::XMultiPropertySet
     {
     protected:
-        SolarMutex* mpMutex;
+        SolarMutex* const mpMutex;
         sal_uInt8 mnLastId;
         std::map< sal_uInt8, comphelper::SlaveData* >  maSlaveMap;
         rtl::Reference< MasterPropertySetInfo >        mxInfo;

@@ -39,7 +39,7 @@ class COMPHELPER_DLLPUBLIC SequenceInputStream
 : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >
 {
     ::osl::Mutex    m_aMutex;
-    css::uno::Sequence<sal_Int8> m_aData;
+    css::uno::Sequence<sal_Int8> const m_aData;
     sal_Int32       m_nPos;
 
 public:
@@ -75,7 +75,7 @@ private:
     void finalizeOutput();
     css::uno::Sequence< sal_Int8 >&                 m_rSequence;
     double                                          m_nResizeFactor;
-    sal_Int32                                       m_nMinimumResize;
+    sal_Int32 const                                 m_nMinimumResize;
     sal_Int32                                       m_nSize;
         // the size of the virtual stream. This is not the size of the sequence, but the number of bytes written
         // into the stream at a given moment.

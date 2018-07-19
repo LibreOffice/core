@@ -52,7 +52,7 @@ public:
 
 class UStringMixEqual
 {
-    bool m_bCaseSensitive;
+    bool const m_bCaseSensitive;
 
 public:
     UStringMixEqual(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
@@ -121,7 +121,7 @@ public:
     explicit mem_fun1_t(_fun_type pf) : M_f(pf) {}
     void operator()(Tp* p, Arg x) const { (p->*M_f)(x); }
 private:
-    _fun_type M_f;
+    _fun_type const M_f;
 };
 
 template <class Tp, class Arg>

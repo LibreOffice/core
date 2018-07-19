@@ -105,7 +105,7 @@ public:
 
 private:
     OInterfaceContainerHelper2 & rCont;
-    bool                         bIsList;
+    bool const                   bIsList;
     detail::element_alias2       aData;
     sal_Int32                    nRemain;
 
@@ -262,8 +262,8 @@ private:
     {
     private:
         typedef void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& );
-        NotificationMethod  m_pMethod;
-        const EventT&       m_rEvent;
+        NotificationMethod const m_pMethod;
+        const EventT&            m_rEvent;
     public:
         NotifySingleListener( NotificationMethod method, const EventT& event ) : m_pMethod( method ), m_rEvent( event ) { }
 

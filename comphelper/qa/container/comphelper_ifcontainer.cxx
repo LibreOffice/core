@@ -42,7 +42,7 @@ struct ContainerStats {
 
 class ContainerListener : public cppu::WeakImplHelper< XEventListener >
 {
-    ContainerStats *m_pStats;
+    ContainerStats * const m_pStats;
 public:
     explicit ContainerListener(ContainerStats *pStats)
         : m_pStats(pStats) { m_pStats->m_nAlive++; }
