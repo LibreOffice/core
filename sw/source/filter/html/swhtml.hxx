@@ -370,8 +370,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     std::unique_ptr<SwApplet_Impl> m_pAppletImpl; // current applet
 
-    SwCSS1Parser    *m_pCSS1Parser;   // Style-Sheet-Parser
-    SwHTMLNumRuleInfo *m_pNumRuleInfo;
+    std::unique_ptr<SwCSS1Parser> m_pCSS1Parser;   // Style-Sheet-Parser
+    std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;
     SwPendingStack  *m_pPendStack;
 
     rtl::Reference<SwDoc> m_xDoc;
@@ -385,7 +385,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SdrObject       *m_pMarquee;    // current marquee
     std::unique_ptr<SwField> m_xField; // current field
     ImageMap        *m_pImageMap;   // current image map
-    ImageMaps       *m_pImageMaps;  ///< all Image-Maps that have been read
+    std::unique_ptr<ImageMaps> m_pImageMaps;  ///< all Image-Maps that have been read
     std::unique_ptr<SwHTMLFootEndNote_Impl> m_pFootEndNoteImpl;
 
     Size    m_aHTMLPageSize;      // page size of HTML template
