@@ -88,6 +88,10 @@ public:
         // SwHTMLParser::m_pPendStack
         if (fn == SRCDIR "/sw/source/filter/html/htmlcss1.cxx")
             return;
+        // Visual Studio 2017 has trouble with these
+        if (fn == SRCDIR "/comphelper/source/property/MasterPropertySet.cxx"
+            || fn == SRCDIR "/comphelper/source/property/MasterPropertySetInfo.cxx")
+            return;
 
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
