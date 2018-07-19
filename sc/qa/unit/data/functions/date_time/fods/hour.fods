@@ -154,8 +154,8 @@ Function basISODateTime(dVal#)
 	basISODateTime = format(year(dt),&quot;0000&quot;)&amp;&quot;-&quot;&amp; format(Month(dt),&quot;00&quot;)&amp;&quot;-&quot;&amp; format(day(dt),&quot;00&quot;)&amp;&quot; &quot;&amp; format(Hour(dt),&quot;00&quot;)&amp;&quot;:&quot;&amp; format(Minute(dt),&quot;00&quot;)&amp;&quot;:&quot;&amp; format(Second(dt),&quot;00&quot;)
 End Function
 
-      
-      
+
+
       </ooo:source-code>
      </ooo:module>
     </ooo:library-embedded>
@@ -1755,11 +1755,26 @@ End Function
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce32"/>
-     <table:table-cell table:style-name="ce21"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="5"/>
+     <table:table-cell table:formula="of:=HOUR([.J10])" office:value-type="float" office:value="10" calcext:value-type="float">
+      <text:p>10</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="10" calcext:value-type="float">
+      <text:p>10</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=HOUR(J10)" calcext:value-type="string">
+      <text:p>=HOUR(J10)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf11880</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce39" office:value-type="time" office:time-value="PT10H59M59.6S" calcext:value-type="time">
+      <text:p>10:59:59.60</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce36" table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>

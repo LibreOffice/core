@@ -896,7 +896,29 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="3">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=MINUTE([.J9])" office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce35" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=MINUTE(J9)" calcext:value-type="string">
+      <text:p>=MINUTE(J9)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf11880</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce39" office:value-type="time" office:time-value="PT10H11M59.6S" calcext:value-type="time">
+      <text:p>10:11:59.60</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce40"/>
      <table:table-cell table:number-columns-repeated="12"/>
