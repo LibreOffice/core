@@ -5364,7 +5364,7 @@ css::uno::Sequence<css::beans::PropertyState> SAL_CALL SwXTextCellStyle::getProp
                     pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
                     break;
                 default:
-                    // falltrough to DIRECT_VALUE, to export properties for which getPropertyStates is not implemented
+                    // fallthrough to DIRECT_VALUE, to export properties for which getPropertyStates is not implemented
                     pStates[i] = beans::PropertyState_DIRECT_VALUE;
                     SAL_WARN("sw.uno", "SwXTextCellStyle getPropertyStates unknown nWID");
             }
