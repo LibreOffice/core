@@ -753,17 +753,13 @@ static void
 writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >& xProperties, bool bSecurityOptOpenReadOnly )
 {
     uno::Reference<beans::XPropertyAccess> xUserDefinedProperties( xProperties->getUserDefinedProperties(), uno::UNO_QUERY );
-    Sequence< PropertyValue > aprop( xUserDefinedProperties->getPropertyValues() );
-    sal_Int32 nbCustomProperties = aprop.getLength();
+    auto aprop = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(xUserDefinedProperties->getPropertyValues());
+    sal_Int32 nbCustomProperties = aprop.size();
     // tdf#89791 : if no custom properties, no need to add docProps/custom.x
     // tdf#107690: except the case of read-only documents, because that
     // is handled by the _MarkAsFinal custom property in MSO.
     if (!nbCustomProperties && !bSecurityOptOpenReadOnly)
         return;
-
-    std::vector<PropertyValue> aprop2;
-    for ( sal_Int32 n = 0; n < nbCustomProperties; ++n )
-        aprop2.push_back(aprop[n]);
 
     if (bSecurityOptOpenReadOnly)
     {
@@ -771,11 +767,8 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
         // MSO custom property for read-only documents
         aPropertyValue.Name = "_MarkAsFinal";
         aPropertyValue.Value <<= true;
-        aprop2.push_back(aPropertyValue);
+        aprop.push_back(aPropertyValue);
     }
-
-    if (!aprop2.size())
-        return;
 
     rSelf.addRelation(
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
@@ -788,8 +781,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             FSNS( XML_xmlns, XML_vt ),  OUStringToOString(rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 
-    auto aIt = aprop2.begin();
-    for ( size_t n = 0; n < aprop2.size(); ++n )
+    for (auto aIt = aprop.begin(); aIt != aprop.end(); ++aIt)
     {
         if ( !aIt->Name.isEmpty() )
         {
@@ -797,7 +789,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             // pid starts from 2 not from 1 as MS supports pid from 2
             pAppProps->startElement( XML_property ,
                 XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
-                XML_pid,    OString::number(n + 2),
+                XML_pid,    OString::number((aIt - aprop.begin()) + 2),
                 XML_name,   aName,
                 FSEND);
 
@@ -848,7 +840,6 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             }
             pAppProps->endElement( XML_property );
         }
-        ++aIt;
     }
     pAppProps->endElement( XML_Properties );
 }
