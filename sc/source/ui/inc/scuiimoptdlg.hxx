@@ -59,8 +59,8 @@ private:
     VclPtr<OKButton>           m_pBtnOk;
 
 
-    ScDelimiterTable*   pFieldSepTab;
-    ScDelimiterTable*   pTextSepTab;
+    std::unique_ptr<ScDelimiterTable> pFieldSepTab;
+    std::unique_ptr<ScDelimiterTable> pTextSepTab;
 
     bool m_bIsAsciiImport;
 
