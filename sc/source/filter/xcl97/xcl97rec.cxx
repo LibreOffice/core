@@ -338,8 +338,6 @@ void XclExpObjList::ResetCounters()
 XclObj::XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher ) :
     XclExpRecord( EXC_ID_OBJ, 26 ),
     mrEscherEx( rObjMgr.GetEscherEx() ),
-    pClientTextbox( nullptr ),
-    pTxo( nullptr ),
     mnObjType( nObjType ),
     nObjId(0),
     nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
@@ -358,8 +356,8 @@ XclObj::~XclObj()
 {
     if ( !bFirstOnSheet )
         delete pMsodrawing;
-    delete pClientTextbox;
-    delete pTxo;
+    pClientTextbox.reset();
+    pTxo.reset();
 }
 
 void XclObj::ImplWriteAnchor( const SdrObject* pSdrObj, const tools::Rectangle* pChildAnchor )
@@ -410,10 +408,10 @@ void XclObj::SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj )
     if ( !pClientTextbox )
     {
         mrEscherEx.UpdateDffFragmentEnd();
-        pClientTextbox = new XclExpMsoDrawing( mrEscherEx );
+        pClientTextbox.reset( new XclExpMsoDrawing( mrEscherEx ) );
         mrEscherEx.AddAtom( 0, ESCHER_ClientTextbox );    // TXO record
         mrEscherEx.UpdateDffFragmentEnd();
-        pTxo = new XclTxo( rRoot, rObj );
+        pTxo.reset( new XclTxo( rRoot, rObj ) );
     }
 }
 
@@ -514,7 +512,7 @@ XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectang
 {
     ProcessEscherObj( rObjMgr.GetRoot(), rRect, pCaption, bVisible);
     // TXO
-    pTxo = new XclTxo( rObjMgr.GetRoot(), rEditObj, pCaption );
+    pTxo .reset(new XclTxo( rObjMgr.GetRoot(), rEditObj, pCaption ));
 }
 
 static void lcl_FillProps( EscherPropertyContainer& rPropOpt, SdrObject* pCaption, bool bVisible )
@@ -584,7 +582,7 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const tools::Rect
 
     //! Be sure to construct the MSODRAWING ClientTextbox record _after_ the
     //! base OBJ's MSODRAWING record Escher data is completed.
-    pClientTextbox = new XclExpMsoDrawing( mrEscherEx );
+    pClientTextbox.reset( new XclExpMsoDrawing( mrEscherEx ) );
     mrEscherEx.AddAtom( 0, ESCHER_ClientTextbox );    // TXO record
     mrEscherEx.UpdateDffFragmentEnd();
     mrEscherEx.CloseContainer();   // ESCHER_SpContainer
