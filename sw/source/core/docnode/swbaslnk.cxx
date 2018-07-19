@@ -173,7 +173,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     if ( !bUpdate || bFrameInPaint )
         return SUCCESS;
 
-    if (bUpdate)
+    if (bUpdate && pSwGrfNode)
     {
         if (!SetGrfFlySize(aGrfSz, pSwGrfNode, aOldSz))
         {
