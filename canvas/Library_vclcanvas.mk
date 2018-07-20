@@ -21,7 +21,10 @@ $(eval $(call gb_Library_Library,vclcanvas))
 
 $(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas))
 
-$(eval $(call gb_Library_use_external,vclcanvas,boost_headers))
+$(eval $(call gb_Library_use_externals,vclcanvas,\
+	boost_headers \
+	epoxy \
+))
 
 $(eval $(call gb_Library_use_sdk_api,vclcanvas))
 
