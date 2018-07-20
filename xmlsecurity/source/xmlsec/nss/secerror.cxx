@@ -29,7 +29,7 @@
 #include <sal/types.h>
 
 struct ErrDesc {
-    PRErrorCode  errNum;
+    PRErrorCode const errNum;
     const char * errString;
 };
 

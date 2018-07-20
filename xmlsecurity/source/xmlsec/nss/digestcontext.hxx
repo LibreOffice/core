@@ -31,8 +31,8 @@ private:
     ::osl::Mutex m_aMutex;
 
     PK11Context* m_pContext;
-    sal_Int32 m_nDigestLength;
-    bool m_b1KData;
+    sal_Int32 const m_nDigestLength;
+    bool const m_b1KData;
     sal_Int32 m_nDigested;
 
     bool m_bDisposed;

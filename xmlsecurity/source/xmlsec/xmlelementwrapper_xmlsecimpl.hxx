@@ -51,7 +51,7 @@ class XSECXMLSEC_DLLPUBLIC XMLElementWrapper_XmlSecImpl : public cppu::WeakImplH
 {
 private:
     /* the libxml2 node wrapped by this object */
-    xmlNodePtr m_pElement;
+    xmlNodePtr const m_pElement;
 
 public:
     explicit XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNode);

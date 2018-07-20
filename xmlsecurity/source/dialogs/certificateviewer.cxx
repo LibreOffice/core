@@ -43,11 +43,11 @@ CertificateViewer::CertificateViewer(
         vcl::Window* _pParent,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
         const css::uno::Reference< css::security::XCertificate >& _rXCert, bool bCheckForPrivateKey )
-    : TabDialog(_pParent, "ViewCertDialog", "xmlsec/ui/viewcertdialog.ui" )
+    : TabDialog(_pParent, "ViewCertDialog", "xmlsec/ui/viewcertdialog.ui" ),
+    mbCheckForPrivateKey(bCheckForPrivateKey)
 {
     get(mpTabCtrl, "tabcontrol");
 
-    mbCheckForPrivateKey = bCheckForPrivateKey;
 
     mxSecurityEnvironment = _rxSecurityEnvironment;
     mxCert = _rXCert;
@@ -193,8 +193,8 @@ void CertificateViewerGeneralTP::ActivatePage()
 
 struct Details_UserDatat
 {
-    OUString        maTxt;
-    bool            mbFixedWidthFont;
+    OUString const  maTxt;
+    bool const      mbFixedWidthFont;
 
     inline          Details_UserDatat( const OUString& _rTxt, bool _bFixedWidthFont );
 };
@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl, SvTreeListBox*, vo
 struct CertPath_UserData
 {
     css::uno::Reference< css::security::XCertificate > mxCert;
-    bool mbValid;
+    bool const mbValid;
 
     CertPath_UserData( css::uno::Reference< css::security::XCertificate > const & xCert, bool bValid):
         mxCert(xCert),

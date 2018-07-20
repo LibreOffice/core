@@ -50,7 +50,7 @@ private:
     sal_uInt16          mnDetailsId;
     sal_uInt16          mnPathId;
 
-    bool                mbCheckForPrivateKey;
+    bool const          mbCheckForPrivateKey;
 
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     css::uno::Reference< css::security::XCertificate > mxCert;
@@ -100,8 +100,8 @@ private:
     VclPtr<SvSimpleTableContainer> m_pElementsLBContainer;
     VclPtr<SvSimpleTable>          m_pElementsLB;
     VclPtr<VclMultiLineEdit>       m_pValueDetails;
-    vcl::Font               m_aStdFont;
-    vcl::Font               m_aFixedWidthFont;
+    vcl::Font                      m_aStdFont;
+    vcl::Font                      m_aFixedWidthFont;
 
     DECL_LINK(    ElementSelectHdl, SvTreeListBox*, void );
     void                Clear();
