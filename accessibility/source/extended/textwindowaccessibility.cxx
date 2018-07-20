@@ -1577,18 +1577,6 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                             FOCUSED));
                 }
             }
-            /*
-                ::rtl::Reference< Paragraph > xParagraph(
-                    getParagraph(m_aFocused));
-                if (xParagraph.is())
-                    xParagraph->notifyEvent(
-                        css::accessibility::AccessibleEventId::
-                        STATE_CHANGED,
-                        css::uno::Any(),
-                        css::uno::Any(
-                            css::accessibility::AccessibleStateType::
-                            FOCUSED));
-            */
             break;
         }
     case VclEventId::WindowLoseFocus:
@@ -1612,22 +1600,6 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                             FOCUSED),
                         css::uno::Any());
             }
-
-            /*
-            if (m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd)
-            {
-                ::rtl::Reference< Paragraph > xParagraph(
-                    getParagraph(m_aFocused));
-                if (xParagraph.is())
-                    xParagraph->notifyEvent(
-                        css::accessibility::AccessibleEventId::
-                        STATE_CHANGED,
-                        css::uno::Any(
-                            css::accessibility::AccessibleStateType::
-                            FOCUSED),
-                        css::uno::Any());
-            }
-            */
             break;
         }
     default: break;
@@ -2261,83 +2233,6 @@ void Document::handleSelectionChangeNotification()
             break;
     }
 
-    /*
-    // Update both old and new selection.  (Regardless of how the two selections
-    // look like, there will always be two ranges to the left and right of the
-    // overlap---the overlap and/or the range to the right of it possibly being
-    // empty.  Only for these two ranges notifications have to be sent.)
-
-    TextPaM aOldTextStart( static_cast< sal_uLong >( m_nSelectionFirstPara ), static_cast< sal_uInt16 >( m_nSelectionFirstPos ) );
-    TextPaM aOldTextEnd( static_cast< sal_uLong >( m_nSelectionLastPara ), static_cast< sal_uInt16 >( m_nSelectionLastPos ) );
-    TextPaM aNewTextStart( static_cast< sal_uLong >( nNewFirstPara ), static_cast< sal_uInt16 >( nNewFirstPos ) );
-    TextPaM aNewTextEnd( static_cast< sal_uLong >( nNewLastPara ), static_cast< sal_uInt16 >( nNewLastPos ) );
-
-    // justify selections
-    justifySelection( aOldTextStart, aOldTextEnd );
-    justifySelection( aNewTextStart, aNewTextEnd );
-
-    sal_Int32 nFirst1;
-    sal_Int32 nLast1;
-    sal_Int32 nFirst2;
-    sal_Int32 nLast2;
-
-    if ( m_nSelectionFirstPara == -1 )
-    {
-        // old selection not initialized yet => notify events only for new selection (if not empty)
-        nFirst1 = aNewTextStart.GetPara();
-        nLast1 = aNewTextEnd.GetPara() + ( aNewTextStart != aNewTextEnd ? 1 : 0 );
-        nFirst2 = 0;
-        nLast2 = 0;
-    }
-    else if ( aOldTextStart == aOldTextEnd && aNewTextStart == aNewTextEnd )
-    {
-        // old and new selection empty => no events
-        nFirst1 = 0;
-        nLast1 = 0;
-        nFirst2 = 0;
-        nLast2 = 0;
-    }
-    else if ( aOldTextStart != aOldTextEnd && aNewTextStart == aNewTextEnd )
-    {
-        // old selection not empty + new selection empty => notify events only for old selection
-        nFirst1 = aOldTextStart.GetPara();
-        nLast1 = aOldTextEnd.GetPara() + 1;
-        nFirst2 = 0;
-        nLast2 = 0;
-    }
-    else if ( aOldTextStart == aOldTextEnd && aNewTextStart != aNewTextEnd )
-    {
-        // old selection empty + new selection not empty => notify events only for new selection
-        nFirst1 = aNewTextStart.GetPara();
-        nLast1 = aNewTextEnd.GetPara() + 1;
-        nFirst2 = 0;
-        nLast2 = 0;
-    }
-    else
-    {
-        // old and new selection not empty => notify events for the two ranges left and right of the overlap
-        std::vector< TextPaM > aTextPaMs(4);
-        aTextPaMs[0] = aOldTextStart;
-        aTextPaMs[1] = aOldTextEnd;
-        aTextPaMs[2] = aNewTextStart;
-        aTextPaMs[3] = aNewTextEnd;
-        std::sort( aTextPaMs.begin(), aTextPaMs.end() );
-
-        nFirst1 = aTextPaMs[0].GetPara();
-        nLast1 = aTextPaMs[1].GetPara() + ( aTextPaMs[0] != aTextPaMs[1] ? 1 : 0 );
-
-        nFirst2 = aTextPaMs[2].GetPara();
-        nLast2 = aTextPaMs[3].GetPara() + ( aTextPaMs[2] != aTextPaMs[3] ? 1 : 0 );
-
-        // adjust overlapping ranges
-        if ( nLast1 > nFirst2 )
-            nLast1 = nFirst2;
-    }
-
-    // notify selection changes
-    notifySelectionChange( nFirst1, nLast1 );
-    notifySelectionChange( nFirst2, nLast2 );
-    */
     m_nSelectionFirstPara = nNewFirstPara;
     m_nSelectionFirstPos = nNewFirstPos;
     m_nSelectionLastPara = nNewLastPara;
