@@ -373,7 +373,7 @@ RTFSprms::RTFSprms()
 RTFSprms::~RTFSprms() = default;
 
 RTFSprms::RTFSprms(const RTFSprms& rSprms)
-    : SvRefBase()
+    : SvRefBase(rSprms)
 {
     *this = rSprms;
 }

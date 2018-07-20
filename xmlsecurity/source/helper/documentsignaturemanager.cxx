@@ -268,8 +268,8 @@ bool DocumentSignatureManager::add(
     const uno::Reference<security::XCertificate>& xCert,
     const uno::Reference<xml::crypto::XXMLSecurityContext>& xSecurityContext,
     const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant,
-    const OUString& rSignatureLineId, const Reference<XGraphic> xValidGraphic,
-    const Reference<XGraphic> xInvalidGraphic)
+    const OUString& rSignatureLineId, const Reference<XGraphic>& xValidGraphic,
+    const Reference<XGraphic>& xInvalidGraphic)
 {
     if (!xCert.is())
     {

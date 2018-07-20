@@ -89,9 +89,9 @@ public:
              const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
              const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant,
              const OUString& rSignatureLineId = OUString(),
-             const css::uno::Reference<css::graphic::XGraphic> xValidGraphic
+             const css::uno::Reference<css::graphic::XGraphic>& xValidGraphic
              = css::uno::Reference<css::graphic::XGraphic>(),
-             const css::uno::Reference<css::graphic::XGraphic> xInvalidGraphic
+             const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic
              = css::uno::Reference<css::graphic::XGraphic>());
     /// Remove signature at nPosition.
     void remove(sal_uInt16 nPosition);
