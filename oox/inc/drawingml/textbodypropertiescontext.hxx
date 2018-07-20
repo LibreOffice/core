@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_TEXTBODYPROPERTIESCONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 namespace oox { namespace drawingml {
 
@@ -33,10 +34,14 @@ public:
              const ::oox::AttributeList& rAttributes,
              TextBodyProperties& rTextBodyProp );
 
+    TextBodyPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
+             const ::oox::AttributeList& rAttributes, ShapePtr pShapePtr );
+
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
     TextBodyProperties& mrTextBodyProp;
+    ShapePtr mpShapePtr;
 };
 
 } }
