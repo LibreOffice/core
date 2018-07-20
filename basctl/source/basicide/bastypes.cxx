@@ -775,7 +775,6 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( rLibName ) && !xPasswd->isLibraryPasswordVerified( rLibName ) )
                 {
                     rPassword = aDlg.GetPassword();
-                    //                    OUString aOUPassword( rPassword );
                     bOK = xPasswd->verifyLibraryPassword( rLibName, rPassword );
 
                     if ( !bOK )
