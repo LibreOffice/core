@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ffe62b97_3c24380d",
+        "filename": "vcl/source/window/menuitemlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-20T12:41:54Z",
+      "side": 1,
+      "message": "just 4 spaces indent please",
+      "revId": "47da262e00477ebc10f9e2761e54de0c64367d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_fceff0ad",
         "filename": "vcl/source/window/menuitemlist.cxx",
         "patchSetId": 1
@@ -42,6 +59,23 @@
         "endLine": 147,
         "endChar": 55
       },
+      "revId": "47da262e00477ebc10f9e2761e54de0c64367d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_1c2174fc",
+        "filename": "vcl/source/window/menuitemlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-20T12:41:54Z",
+      "side": 1,
+      "message": "same here",
       "revId": "47da262e00477ebc10f9e2761e54de0c64367d92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
