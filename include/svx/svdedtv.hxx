@@ -240,7 +240,7 @@ public:
     bool IsDistortAllowed(bool bNoContortion=false) const;
 
     // Unite several objects to a polygon:
-    // - rectangles/circles/text... are implicite converted.
+    // - rectangles/circles/text... are implicitly converted.
     // - polygones are closed automatically
     // - attributes and layer are taken from the first object marked
     //   (thus from lowest Z-order).
