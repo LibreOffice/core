@@ -7408,6 +7408,27 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
     if ( !nLineHeight )
         return;
 
+    // outline attribute ?
+    if (m_aCurrentPDFState.m_aFont.IsOutline() && eTextLine == LINESTYLE_SINGLE)
+    {
+        appendStrokingColor(aColor, aLine); // stroke with text color
+        aLine.append( " " );
+        Color aNonStrokeColor(COL_WHITE);   // fill with white
+        appendNonStrokingColor(aNonStrokeColor, aLine);
+        aLine.append( "\n" );
+        aLine.append( "0.25 w \n" ); // same line thickness as in drawLayout
+
+        // draw rectangle instead
+        aLine.append( "0 " );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos * 1.5), aLine );
+        aLine.append( " " );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nWidth), aLine, false );
+        aLine.append( ' ' );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine );
+        aLine.append( " re h B\n" );
+        return;
+    }
+
     m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine );
     aLine.append( " w " );
     appendStrokingColor( aColor, aLine );
