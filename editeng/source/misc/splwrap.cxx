@@ -57,7 +57,7 @@ void SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText )
     // the strings before passing them on to the autocorrect function in
     // order that the autocorrect function will hopefully
     // works properly with normal words and abbreviations (with trailing '.')
-    // independ of if they are at the end of the sentence or not.
+    // independent of if they are at the end of the sentence or not.
     //
     // rOldText: text to be replaced
     // rNewText: replacement text

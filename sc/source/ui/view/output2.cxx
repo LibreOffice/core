@@ -4728,7 +4728,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 double nAbsCos = fabs( nCos );
                                 double nAbsSin = fabs( nSin );
 
-                                // adjust witdh of papersize for height of text
+                                // adjust width of papersize for height of text
                                 int nSteps = 5;
                                 while (nSteps > 0)
                                 {

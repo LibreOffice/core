@@ -571,7 +571,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     if( pNewParser )
     {
         // this may actually be the SGENPRT parser,
-        // so ensure uniqueness here (but don't remove lest we delete us!)
+        // so ensure uniqueness here (but don't remove last we delete us!)
         if (std::find_if(
                     rPPDCache.aAllParsers.begin(),
                     rPPDCache.aAllParsers.end(),
