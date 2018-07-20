@@ -140,6 +140,7 @@ std::shared_ptr<SalBitmap> Qt5Instance::CreateSalBitmap()
 
 bool Qt5Instance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
 {
+    SolarMutexGuard aGuard;
     bool wasEvent = DispatchUserEvents(bHandleAllCurrentEvents);
     if (!bHandleAllCurrentEvents && wasEvent)
         return true;
@@ -161,6 +162,8 @@ bool Qt5Instance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     bool bWasEvent = false;
     if (qApp->thread() == QThread::currentThread())
     {
+        // release YieldMutex (and re-acquire in ImplYield)
+        SolarMutexReleaser aReleaser;
         bWasEvent = ImplYield(bWait, bHandleAllCurrentEvents);
         if (bWasEvent)
             m_aWaitingYieldCond.set();
