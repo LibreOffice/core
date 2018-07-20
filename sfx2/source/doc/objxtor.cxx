@@ -314,13 +314,13 @@ SfxObjectShell::~SfxObjectShell()
     DELETEX(AutoReloadTimer_Impl, pImpl->pReloadTimer );
 
     SfxApplication *pSfxApp = SfxGetpApp();
-    if ( USHRT_MAX != pImpl->nVisualDocumentNumber )
+    if ( USHRT_MAX != pImpl->nVisualDocumentNumber && pSfxApp )
         pSfxApp->ReleaseIndex(pImpl->nVisualDocumentNumber);
 
     // Destroy Basic-Manager
     pImpl->aBasicManager.reset( nullptr );
 
-    if ( pSfxApp->GetDdeService() )
+    if ( pSfxApp && pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
 
     pImpl->pBaseModel.set( nullptr );
