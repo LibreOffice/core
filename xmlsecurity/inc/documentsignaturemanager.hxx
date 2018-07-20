@@ -64,7 +64,7 @@ public:
     XMLSignatureHelper maSignatureHelper;
     std::unique_ptr<PDFSignatureHelper> mpPDFSignatureHelper;
     SignatureInformations maCurrentSignatureInformations;
-    DocumentSignatureMode meSignatureMode;
+    DocumentSignatureMode const meSignatureMode;
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> m_manifest;
     css::uno::Reference<css::io::XStream> mxSignatureStream;
     css::uno::Reference<css::io::XStream> mxTempSignatureStream;

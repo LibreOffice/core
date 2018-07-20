@@ -120,8 +120,8 @@ private:
 
     css::uno::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
 
-    bool                mbAuthorsReadonly;
-    bool                mbURLsReadonly;
+    bool          mbAuthorsReadonly;
+    bool          mbURLsReadonly;
 
     DECL_LINK(    ViewCertPBHdl, Button*, void );
     DECL_LINK(    RemoveCertPBHdl, Button*, void );

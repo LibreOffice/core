@@ -44,13 +44,13 @@ private:
      * BEFOREMODIFY - this ElementCollector must notify before any
      *                    internal modification happens.
      */
-    css::xml::crypto::sax::ElementMarkPriority m_nPriority;
+    css::xml::crypto::sax::ElementMarkPriority const m_nPriority;
 
     /*
      * the modify flag, representing whether which elementcollector will
      * modify its data.
      */
-    bool m_bToModify;
+    bool const m_bToModify;
 
     /* the notify enable flag, see notifyListener method */
     bool m_bAbleToNotify;

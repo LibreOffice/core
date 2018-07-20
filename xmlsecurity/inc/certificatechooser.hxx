@@ -73,7 +73,7 @@ private:
     VclPtr<Edit>            m_pDescriptionED;
 
     bool                    mbInitialized;
-    UserAction              meAction;
+    UserAction const        meAction;
     OUString                msPreferredKey;
     css::uno::Reference<css::security::XCertificate> mxEncryptToSelf;
 

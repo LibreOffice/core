@@ -79,10 +79,10 @@ private:
 
     VclPtr<CloseButton>        m_pCloseBtn;
 
-    OUString m_sODFVersion;
+    OUString const m_sODFVersion;
     //Signals if the document contains already a document signature. This is only
     //important when we are signing macros and if the value is true.
-    bool m_bHasDocumentSignature;
+    bool const m_bHasDocumentSignature;
     bool m_bWarningShowSignMacro;
 
     bool m_bAdESCompliant;

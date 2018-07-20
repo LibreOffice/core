@@ -44,7 +44,7 @@ protected:
     sal_Int32 m_nSecurityId;
 
     /* the buffer Id */
-    sal_Int32 m_nBufferId;
+    sal_Int32 const m_nBufferId;
 
     /*
      * the type value, is one of following values:
