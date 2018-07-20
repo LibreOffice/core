@@ -153,7 +153,7 @@ namespace sfx2
 
         Reference< XInterface > xInstance( (*m_pComponentFactoryFunc)( m_xServiceFactory, nCreationFlags ) );
 
-        // to mimic the bahaviour of the default factory's createInstanceWithArguments, we initialize
+        // to mimic the behaviour of the default factory's createInstanceWithArguments, we initialize
         // the object with the given arguments, stripped by the three special ones
         Sequence< Any > aStrippedArguments( _rArguments.getLength() );
         Any* pStrippedArgs = aStrippedArguments.getArray();

@@ -1002,7 +1002,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
             // SQL error 22001: String length exceeds field width (after encoding).
             bool bEncErr = (nError == 22018);
             bool bIsOctetTextEncoding = rtl_isOctetTextEncoding( eCharSet);
-            OSL_ENSURE( !bEncErr || bIsOctetTextEncoding, "ScDocShell::DBaseExport: encoding error and not an octect textencoding");
+            OSL_ENSURE( !bEncErr || bIsOctetTextEncoding, "ScDocShell::DBaseExport: encoding error and not an octet textencoding");
             SCCOL nDocCol = nFirstCol;
             const sal_Int32* pColTypes = aColTypes.getConstArray();
             const sal_Int32* pColLengths = aColLengths.getConstArray();
