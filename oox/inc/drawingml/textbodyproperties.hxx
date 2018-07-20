@@ -41,6 +41,7 @@ struct TextBodyProperties
     boost::optional< sal_Int32 >                    moTextOffLower;
     boost::optional< sal_Int32 >                    moTextOffRight;
     css::drawing::TextVerticalAdjust                meVA;
+    OUString                                        msPrst;
 
     explicit            TextBodyProperties();
 

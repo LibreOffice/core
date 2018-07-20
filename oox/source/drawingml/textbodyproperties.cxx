@@ -33,6 +33,7 @@ namespace drawingml {
 TextBodyProperties::TextBodyProperties()
     : mbAnchorCtr(false)
     , meVA( TextVerticalAdjust_TOP )
+    , msPrst()
 {
 }
 
