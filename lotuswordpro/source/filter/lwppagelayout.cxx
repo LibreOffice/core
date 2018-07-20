@@ -578,7 +578,7 @@ double LwpPageLayout::GetMarginWidth()
                               =LAST_LAYOUTPAGENO, return the last page number that current page layout covers
                                else, return the specified page number that current page layout covers
  * @param:
- * @return:  if reture value >=0, success to find the page number, or fail.
+ * @return:  if return value >=0, success to find the page number, or fail.
 */
 sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
 {
@@ -609,7 +609,7 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
                 nPageNumber = nNumber;
                 if(pPageHint->GetNext().IsNull())
                 {
-                    //if is last page number of entire document, reture directly
+                    //if is last page number of entire document, return directly
                     return nPageNumber + pDoc->GetNumberOfPagesBefore();
                 }
             }
