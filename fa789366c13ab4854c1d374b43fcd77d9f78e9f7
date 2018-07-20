@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_9cb584f1",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-20T10:00:51Z",
+      "side": 1,
+      "message": "Since ScContentTree is used only here ...",
+      "range": {
+        "startLine": 486,
+        "startChar": 24,
+        "endLine": 486,
+        "endChar": 38
+      },
+      "revId": "fa789366c13ab4854c1d374b43fcd77d9f78e9f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_7cbac0de",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-20T10:00:51Z",
+      "side": 1,
+      "message": "... you can achieve the same directly in the constructor, like this:\n\nScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg)\n : SvTreeListBox(pParent, WB_BORDER | WB_TABSTOP)\n\nIn fact I can\u0027t think of usage of this widget where WB_TABSTOP wouldn\u0027t be needed or desirable",
+      "range": {
+        "startLine": 487,
+        "startChar": 26,
+        "endLine": 487,
+        "endChar": 60
+      },
+      "revId": "fa789366c13ab4854c1d374b43fcd77d9f78e9f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
