@@ -2526,6 +2526,7 @@ void SwWW8ImplReader::StopApo()
         Color aBg(0xFE, 0xFF, 0xFF, 0xFF);  //Transparent by default
 
         SwTextNode* pNd = aPref.GetNode().GetTextNode();
+        SwTextNode* pJoinNext = nullptr;
         if (pNd && m_xSFlyPara->pFlyFormat)
         {
             /*
@@ -2555,13 +2556,16 @@ void SwWW8ImplReader::StopApo()
             }
 
             //Get rid of extra empty paragraph
-            pNd->JoinNext();
+            pJoinNext = pNd;
         }
 
         if (m_xSFlyPara->pFlyFormat)
             m_xSFlyPara->pFlyFormat->SetFormatAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
         DeleteAnchorStack();
+        if (pJoinNext)
+            pJoinNext->JoinNext();
+
         m_xAnchorStck = std::move(m_xSFlyPara->xOldAnchorStck);
 
         // When inserting a graphic into the fly frame using the auto
