@@ -213,14 +213,13 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
             case XML_r:
                 eLegendPos = cssc2::LegendPosition_LINE_END;
                 eLegendExpand = cssc::ChartLegendExpansion_HIGH;
-                break;
+            break;
             case XML_tr:    // top-right not supported
                 eLegendPos = LegendPosition_CUSTOM;
                 eRelPos.Primary = 1;
                 eRelPos.Secondary =0;
                 eRelPos.Anchor = Alignment_TOP_RIGHT;
                 bTopRight=true;
-
             break;
             case XML_t:
                 eLegendPos = cssc2::LegendPosition_PAGE_START;
@@ -236,9 +235,12 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         if( mrModel.mxLayout.get() )
         {
             LayoutConverter aLayoutConv( *this, *mrModel.mxLayout );
-            // manual size needs ChartLegendExpansion_CUSTOM
+            // manual size needs ChartLegendExpansion_CUSTOM and LegendPosition_CUSTOM (tdf#118150)
             if( aLayoutConv.convertFromModel( aPropSet ) )
+            {
+                eLegendPos = cssc2::LegendPosition_CUSTOM;
                 eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
+            }
             bManualLayout = !aLayoutConv.getAutoLayout();
         }
 
