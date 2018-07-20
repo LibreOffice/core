@@ -248,7 +248,7 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
         if (BitmapFilter::Filter(aAnim, BitmapMosaicFilter(aSize.getWidth(), aSize.getHeight())))
         {
             if( IsEnhanceEdges() )
-                BitmapFilter::Filter(aAnim, BitmapSharpenFilter());
+                (void)BitmapFilter::Filter(aAnim, BitmapSharpenFilter());
 
             aRet = aAnim;
         }
