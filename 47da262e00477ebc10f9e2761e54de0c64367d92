@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_fceff0ad",
+        "filename": "vcl/source/window/menuitemlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-20T12:18:08Z",
+      "side": 1,
+      "message": "This will crash if pSubMenu is null, please fix",
+      "range": {
+        "startLine": 147,
+        "startChar": 16,
+        "endLine": 147,
+        "endChar": 39
+      },
+      "revId": "47da262e00477ebc10f9e2761e54de0c64367d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_1c4854ca",
+        "filename": "vcl/source/window/menuitemlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-07-20T12:18:08Z",
+      "side": 1,
+      "message": "Also, GetCurItemId() returns sal_uInt16 and not bool, so you may want to be explicit:\n\nif ( ...-\u003eGetCurItemId() !\u003d 0) // if something is selected\n\ninstead of conflating non-zero values with \u0027true\u0027",
+      "range": {
+        "startLine": 147,
+        "startChar": 41,
+        "endLine": 147,
+        "endChar": 55
+      },
+      "revId": "47da262e00477ebc10f9e2761e54de0c64367d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
