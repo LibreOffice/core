@@ -22,13 +22,22 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/drawing/CircleKind.hpp>
 #include <drawingml/textbodyproperties.hxx>
+#include <drawingml/textbody.hxx>
+#include <drawingml/customshapegeometry.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <svx/EnhancedCustomShapeGeometry.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -41,9 +50,17 @@ namespace oox { namespace drawingml {
 
 // CT_TextBodyProperties
 TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper const & rParent,
+    const AttributeList& rAttribs, ShapePtr pShapePtr )
+: TextBodyPropertiesContext( rParent, rAttribs, pShapePtr->getTextBody()->getTextProperties() )
+{
+    mpShapePtr = pShapePtr;
+}
+
+TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper const & rParent,
     const AttributeList& rAttribs, TextBodyProperties& rTextBodyProp )
 : ContextHandler2( rParent )
 , mrTextBodyProp( rTextBodyProp )
+, mpShapePtr( nullptr )
 {
     // ST_TextWrappingType
     sal_Int32 nWrappingType = rAttribs.getToken( XML_wrap, XML_square );
@@ -111,12 +128,25 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     mrTextBodyProp.maPropertyMap.setProperty( PROP_TextFitToSize, drawing::TextFitToSizeType_NONE);
 }
 
-ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/)
+ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
     {
             // Sequence
             case A_TOKEN( prstTxWarp ):     // CT_PresetTextShape
+                if( mpShapePtr )
+                {
+                    const OptValue<OUString> sPrst = rAttribs.getString( XML_prst );
+                    if( sPrst.has() )
+                    {
+                        mrTextBodyProp.msPrst = sPrst.get();
+                        if( mrTextBodyProp.msPrst != "textNoShape" )
+                            return new PresetTextShapeContext( *this, rAttribs,
+                                                           *( mpShapePtr->getCustomShapeProperties() ) );
+                    }
+                }
+                break;
+
             case A_TOKEN( prot ):           // CT_TextProtectionProperty
                 break;
 

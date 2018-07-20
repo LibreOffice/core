@@ -24,6 +24,7 @@
 #include <drawingml/graphicproperties.hxx>
 #include <drawingml/scene3dcontext.hxx>
 #include <drawingml/lineproperties.hxx>
+#include <drawingml/presetgeometrynames.hxx>
 #include "effectproperties.hxx"
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <drawingml/textbody.hxx>
@@ -56,6 +57,7 @@
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -67,6 +69,8 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -87,6 +91,8 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
+#include <svx/unoshape.hxx>
 
 #include <vcl/wmf.hxx>
 
@@ -392,6 +398,172 @@ void Shape::addChildren(
         child->setMasterTextListStyle( mpMasterTextListStyle );
         child->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), pShapeMap );
     }
+}
+
+static inline void lcl_resetPropertyValue( std::vector<beans::PropertyValue>& rPropVec, const OUString& rName )
+{
+    auto aIterator = std::find_if( rPropVec.begin(), rPropVec.end(),
+        [rName]( const beans::PropertyValue& rValue ) { return rValue.Name == rName; } );
+
+    if (aIterator != rPropVec.end())
+        rPropVec.erase( aIterator );
+}
+
+static inline void lcl_setPropertyValue( std::vector<beans::PropertyValue>& rPropVec,
+                           const OUString& rName,
+                           const beans::PropertyValue& rPropertyValue )
+{
+    auto aIterator = std::find_if(
+        rPropVec.begin(), rPropVec.end(),
+        [rName]( const beans::PropertyValue& rValue ) { return rValue.Name == rName; } );
+
+    if (aIterator != rPropVec.end())
+        rPropVec.erase( aIterator );
+
+    rPropVec.push_back( rPropertyValue );
+}
+
+static inline SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
+{
+    if (eAdjust == ParagraphAdjust_LEFT)
+        return SDRTEXTHORZADJUST_LEFT;
+    else if (eAdjust == ParagraphAdjust_RIGHT)
+        return SDRTEXTHORZADJUST_RIGHT;
+    else if (eAdjust == ParagraphAdjust_CENTER)
+        return SDRTEXTHORZADJUST_CENTER;
+    return SDRTEXTHORZADJUST_LEFT;
+}
+
+static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShape,
+                                   const OUString& rClass,
+                                   const CustomShapePropertiesPtr pCustomShapePropertiesPtr,
+                                   const TextBodyPtr pTextBody,
+                                   const GraphicHelper& rGraphicHelper )
+{
+    if (!xShape.is() || !pCustomShapePropertiesPtr || !pTextBody)
+        return;
+
+    uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter( xShape,
+                                                                       uno::UNO_QUERY );
+
+    if (!xDefaulter.is() || rClass.isEmpty())
+        return;
+
+    Reference<XPropertySet> xSet( xShape, UNO_QUERY );
+    if (!xSet.is())
+        return;
+
+    auto aGdList = pCustomShapePropertiesPtr->getAdjustmentGuideList();
+    Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment(
+        aGdList.size() ? aGdList.size() : 1 );
+
+    int nIndex = 0;
+    for (auto& aEntry : aGdList)
+    {
+        double fAngle = NormAngle360( aEntry.maFormula.toDouble() / -600.0 );
+        fAngle = 360.0 - fAngle / 100.0;
+
+        aAdjustment[nIndex].Value <<= fAngle;
+        aAdjustment[nIndex++].State = css::beans::PropertyState_DIRECT_VALUE;
+    }
+
+    if (!aGdList.size())
+    {
+        // Default angle
+        double fAngle = 0;
+        if (rClass == "fontwork-arch-up-curve")
+            fAngle = 180;
+
+        aAdjustment[0].Value <<= fAngle;
+        aAdjustment[0].State = css::beans::PropertyState_DIRECT_VALUE;
+    }
+
+    // Set properties
+    xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::makeAny( false ) );
+    xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWWIDTH, uno::makeAny( false ) );
+    xSet->setPropertyValue( UNO_NAME_FILLSTYLE, uno::makeAny( drawing::FillStyle_SOLID ) );
+
+    const TextParagraphVector& rParagraphs = pTextBody->getParagraphs();
+    if (rParagraphs.size() && rParagraphs[0]->getRuns().size())
+    {
+        std::shared_ptr<TextParagraph> pParagraph = rParagraphs[0];
+        std::shared_ptr<TextRun> pRun = pParagraph->getRuns()[0];
+        TextCharacterProperties& pProperties = pRun->getTextCharacterProperties();
+
+        if (pProperties.moBold.has() && pProperties.moBold.get())
+        {
+            xSet->setPropertyValue( UNO_NAME_CHAR_WEIGHT, uno::makeAny( css::awt::FontWeight::BOLD ) );
+        }
+        if (pProperties.moItalic.has() && pProperties.moItalic.get())
+        {
+            xSet->setPropertyValue( UNO_NAME_CHAR_POSTURE, uno::makeAny( css::awt::FontSlant::FontSlant_ITALIC ) );
+        }
+        if (pProperties.moHeight.has())
+        {
+            sal_Int32 nHeight = pProperties.moHeight.get() / 100;
+            xSet->setPropertyValue( UNO_NAME_CHAR_HEIGHT, uno::makeAny( nHeight ) );
+        }
+        if (pProperties.maFillProperties.maFillColor.isUsed())
+        {
+            const sal_Int32 aFillColor = static_cast<sal_Int32>(
+                pProperties.maFillProperties.maFillColor.getColor( rGraphicHelper ).GetRGBColor() );
+            xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::makeAny( aFillColor ) );
+        }
+        else
+        {
+            // Set default color
+            xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::makeAny( COL_BLACK ) );
+        }
+        {
+            ParagraphAdjust eAdjust = ParagraphAdjust_LEFT;
+            if (pParagraph->getProperties().getParaAdjust())
+                eAdjust = pParagraph->getProperties().getParaAdjust().get();
+            xSet->setPropertyValue( "ParaAdjust", uno::makeAny( eAdjust ) );
+            SvxShape* pShape = SvxShape::getImplementation( xShape );
+            SdrTextHorzAdjust eHorzAdjust = lcl_convertAdjust( eAdjust );
+            pShape->GetSdrObject()->SetMergedItem( SdrTextHorzAdjustItem( eHorzAdjust ) );
+        }
+    }
+
+    // Apply preset shape
+    xDefaulter->createCustomShapeDefaults( rClass );
+
+    auto aGeomPropSeq = xSet->getPropertyValue( "CustomShapeGeometry" )
+                            .get<uno::Sequence<beans::PropertyValue>>();
+    auto aGeomPropVec
+        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
+            aGeomPropSeq );
+
+    // Reset old properties
+    const OUString sCoordinateSize( "CoordinateSize" );
+    const OUString sEquations( "Equations" );
+    const OUString sPath( "Path" );
+    const OUString sTextPath( "TextPath" );
+    const OUString sAdjustmentValues( "AdjustmentValues" );
+
+    lcl_resetPropertyValue( aGeomPropVec, sCoordinateSize );
+    lcl_resetPropertyValue( aGeomPropVec, sEquations );
+    lcl_resetPropertyValue( aGeomPropVec, sPath );
+
+    // Apply geometry properties
+    uno::Sequence<beans::PropertyValue> aPropertyValues(
+        comphelper::InitPropertySequence(
+            { { sTextPath, uno::makeAny( true ) },
+                { "TextPathMode",
+                uno::Any( drawing::EnhancedCustomShapeTextPathMode_PATH ) },
+                { "ScaleX", uno::Any( false ) } } ) );
+
+    lcl_setPropertyValue( aGeomPropVec, sTextPath,
+        comphelper::makePropertyValue( sTextPath, aPropertyValues ) );
+
+    if ( rClass == "fontwork-arch-up-curve" || rClass == "fontwork-circle-curve"
+        || rClass == "fontwork-arch-down-curve" || rClass == "fontwork-open-circle-curve" )
+        lcl_setPropertyValue( aGeomPropVec, sAdjustmentValues,
+            comphelper::makePropertyValue( sAdjustmentValues, aAdjustment ) );
+
+    xSet->setPropertyValue(
+        "CustomShapeGeometry",
+        uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
 }
 
 Reference< XShape > const & Shape::createAndInsert(
@@ -1127,6 +1299,19 @@ Reference< XShape > const & Shape::createAndInsert(
             SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");
             SAL_INFO("oox.csdata", "==csdata== shape name: '" << msName << "'");
             mpCustomShapePropertiesPtr->pushToPropSet( xSet, mxShape, maSize );
+
+            if (mpTextBody)
+            {
+                bool bIsPresetShape = !mpTextBody->getTextProperties().msPrst.isEmpty();
+                if (bIsPresetShape)
+                {
+                    OUString sClass;
+                    const OUString sPresetType = mpTextBody->getTextProperties().msPrst;
+                    sClass = PresetGeometryTypeNames::GetFontworkType( sPresetType );
+
+                    lcl_createPresetShape( mxShape, sClass, mpCustomShapePropertiesPtr, mpTextBody, rGraphicHelper );
+                }
+            }
         }
         else if( getTextBody() )
             getTextBody()->getTextProperties().pushVertSimulation();

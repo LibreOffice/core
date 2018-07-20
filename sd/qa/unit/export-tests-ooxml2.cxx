@@ -10,6 +10,7 @@
 #include "sdmodeltestbase.hxx"
 #include <Outliner.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
@@ -144,6 +145,7 @@ public:
     void testTdf104786();
     void testTdf104789();
     void testOpenDocumentAsReadOnly();
+    void testTdf116350TextEffects();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -211,6 +213,7 @@ public:
     CPPUNIT_TEST(testTdf104786);
     CPPUNIT_TEST(testTdf104789);
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
+    CPPUNIT_TEST(testTdf116350TextEffects);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1686,6 +1689,53 @@ void SdOOXMLExportTest2::testOpenDocumentAsReadOnly()
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     CPPUNIT_ASSERT(xDocShRef->IsSecurityOptOpenReadOnly());
+    xDocShRef->DoClose();
+}
+
+static inline double getAdjustmentValue( uno::Reference<beans::XPropertySet>& xSet )
+{
+    auto aGeomPropSeq = xSet->getPropertyValue( "CustomShapeGeometry" )
+                            .get<uno::Sequence<beans::PropertyValue>>();
+    auto aGeomPropVec
+        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
+            aGeomPropSeq );
+
+    const OUString sName = "AdjustmentValues";
+    auto aIterator = std::find_if(
+        aGeomPropVec.begin(), aGeomPropVec.end(),
+        [sName]( const beans::PropertyValue& rValue ) { return rValue.Name == sName; } );
+
+    if (aIterator != aGeomPropVec.end())
+    {
+        uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment;
+        double fResult;
+        aIterator->Value >>= aAdjustment;
+        aAdjustment[0].Value >>= fResult;
+        return fResult;
+    }
+
+    return -1.0;
+}
+
+void SdOOXMLExportTest2::testTdf116350TextEffects()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( "sd/qa/unit/data/pptx/tdf116350-texteffects.pptx" ), PPTX );
+
+    // Default angle for ArchUp
+    uno::Reference<beans::XPropertySet> xShape0( getShapeFromPage( 0, 0, xDocShRef ) );
+    double fAdjust = getAdjustmentValue( xShape0 );
+    CPPUNIT_ASSERT_EQUAL( 180.0, fAdjust );
+
+    // Default angle for ArchDown
+    uno::Reference<beans::XPropertySet> xShape14( getShapeFromPage( 14, 0, xDocShRef ) );
+    fAdjust = getAdjustmentValue( xShape14 );
+    CPPUNIT_ASSERT_EQUAL( 0.0, fAdjust );
+
+    // Angle directly set
+    uno::Reference<beans::XPropertySet> xShape1( getShapeFromPage( 1, 0, xDocShRef ) );
+    fAdjust = getAdjustmentValue( xShape1 );
+    CPPUNIT_ASSERT_EQUAL( 213.25, fAdjust );
+
     xDocShRef->DoClose();
 }
 

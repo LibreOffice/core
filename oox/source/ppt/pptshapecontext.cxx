@@ -173,7 +173,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
             oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody( mpShapePtr->getTextBody() ) );
             xTextBody->getTextProperties().maPropertyMap.setProperty( PROP_FontIndependentLineSpacing, true );
             mpShapePtr->setTextBody( xTextBody );
-            return new oox::drawingml::TextBodyContext( *this, *xTextBody );
+            return new oox::drawingml::TextBodyContext( *this, mpShapePtr );
         }
         case PPT_TOKEN( txXfrm ):
         {
