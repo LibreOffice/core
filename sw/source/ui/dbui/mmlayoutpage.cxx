@@ -416,6 +416,50 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
     return pRet;
 }
 
+void SwMailMergeLayoutPage::CheckForFieldsAndInsert(SwWrtShell& rShell, SwMailMergeConfigItem const & rConfigItem,
+        Sequence< OUString> rEntries, sal_uInt32 rCurrent)
+{
+    SwFieldMgr aFieldMgr(&rShell);
+    const SwDBData& rData = rConfigItem.GetCurrentDBData();
+    const OUString sDBName(rData.sDataSource + OUStringLiteral1(DB_DELIM)
+        + rData.sCommand + OUStringLiteral1(DB_DELIM)
+        + OUString::number(rData.nCommandType) + OUStringLiteral1(DB_DELIM));
+    const std::vector<std::pair<OUString, int>>& rHeaders = rConfigItem.GetDefaultAddressHeaders();
+    Sequence< OUString> aAssignment =
+        rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
+    const OUString* pAssignment = aAssignment.getConstArray();
+    const OUString sGreeting = rEntries[rCurrent];
+    SwAddressIterator aIter(sGreeting);
+    while(aIter.HasMore())
+    {
+        SwMergeAddressItem aItem = aIter.Next();
+        if(aItem.bIsColumn)
+        {
+            OUString sConvertedColumn = aItem.sText;
+            for(sal_uInt32 nColumn = 0;
+                    nColumn < rHeaders.size() &&
+                    nColumn < static_cast<sal_uInt32>(aAssignment.getLength());
+                                                                                ++nColumn)
+            {
+                if (rHeaders[nColumn].first == aItem.sText &&
+                    !pAssignment[nColumn].isEmpty())
+                {
+                    sConvertedColumn = pAssignment[nColumn];
+                    break;
+                }
+            }
+            SwInsertField_Data aData(TYP_DBFLD, 0,
+                sDBName + sConvertedColumn,
+                aEmptyOUStr, 0, &rShell );
+            aFieldMgr.InsertField( aData );
+        }
+        else
+        {
+            rShell.Insert(aItem.sText);
+        }
+    }
+
+}
 void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem const & rConfigItem, bool bExample)
 {
     //set the cursor to the desired position - if no text content is here then
@@ -510,10 +554,6 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             const OUString sConditionBase("[" + sCommonBase + sGenderColumn + "]");
             const OUString sNameColumnBase("[" + sCommonBase + sNameColumn + "]");
 
-            const OUString sDBName(rData.sDataSource + OUStringLiteral1(DB_DELIM)
-                + rData.sCommand + OUStringLiteral1(DB_DELIM)
-                + OUString::number(rData.nCommandType) + OUStringLiteral1(DB_DELIM));
-
 //          Female:  [database.sGenderColumn] != "rFemaleGenderValue" && [database.NameColumn]
 //          Male:    [database.sGenderColumn] == "rFemaleGenderValue" && [database.rGenderColumn]
 //          Neutral: [database.sNameColumn]
@@ -527,7 +567,6 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                 sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting(static_cast<SwMailMergeConfigItem::Gender>(eGender));
                 if( nCurrent >= 0 && nCurrent < aEntries.getLength())
                 {
-                    const OUString sGreeting = aEntries[nCurrent];
                     OUString sCondition;
                     OUString sHideParagraphsExpression;
                     switch(eGender)
@@ -557,41 +596,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, aEmptyOUStr, 0, &rShell );
                         aFieldMgr.InsertField( aData );
                     }
-                    //now the text has to be inserted
-                    const std::vector<std::pair<OUString, int>>& rHeaders = rConfigItem.GetDefaultAddressHeaders();
-                    Sequence< OUString> aAssignment =
-                                    rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-                    const OUString* pAssignment = aAssignment.getConstArray();
-                    SwAddressIterator aIter(sGreeting);
-                    while(aIter.HasMore())
-                    {
-                        SwMergeAddressItem aItem = aIter.Next();
-                        if(aItem.bIsColumn)
-                        {
-                            OUString sConvertedColumn = aItem.sText;
-                            for(sal_uInt32 nColumn = 0;
-                                    nColumn < rHeaders.size() &&
-                                    nColumn < static_cast<sal_uInt32>(aAssignment.getLength());
-                                                                                                ++nColumn)
-                            {
-                                if (rHeaders[nColumn].first == aItem.sText &&
-                                    !pAssignment[nColumn].isEmpty())
-                                {
-                                    sConvertedColumn = pAssignment[nColumn];
-                                    break;
-                                }
-                            }
-                            SwInsertField_Data aData(TYP_DBFLD, 0,
-                                sDBName + sConvertedColumn,
-                                aEmptyOUStr, 0, &rShell );
-                            aFieldMgr.InsertField( aData );
-                        }
-                        else
-                        {
-                            rShell.Insert(aItem.sText);
-                        }
-                    }
-                    //now add a new paragraph
+                    CheckForFieldsAndInsert(rShell, rConfigItem, aEntries, nCurrent);
                     rShell.SplitNode();
                 }
             }
@@ -603,9 +608,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         Sequence< OUString> aEntries = rConfigItem.GetGreetings(SwMailMergeConfigItem::NEUTRAL);
         sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting(SwMailMergeConfigItem::NEUTRAL);
-        // Greeting
-        rShell.Insert(( nCurrent >= 0 && nCurrent < aEntries.getLength() )
-            ? aEntries[nCurrent] : OUString());
+        CheckForFieldsAndInsert(rShell, rConfigItem, aEntries, nCurrent);
     }
     // now insert a new paragraph here if necessary
     if(bSplitNode)

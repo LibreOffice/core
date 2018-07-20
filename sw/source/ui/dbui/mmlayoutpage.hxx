@@ -77,6 +77,11 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
                             const Point& rDestination,
                             bool bAlignToBody,
                             bool bExample);
+    static void                 CheckForFieldsAndInsert(
+                            SwWrtShell& rShell,
+                            SwMailMergeConfigItem const & rConfigItem,
+                            css::uno::Sequence< OUString> rEntries,
+                            sal_uInt32 rCurrent);
     static void             InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem const & rConfigItem, bool bExample);
 
     virtual void        ActivatePage() override;
