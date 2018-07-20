@@ -1128,6 +1128,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
     SotExchangeDest nDestination = SwTransferable::GetSotDestination( rSh );
     SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     SotExchangeActionFlags nActionFlags = SotExchangeActionFlags::NONE;
+    bool bSingleCellTable = false;
 
     if( GetSwTransferable( rData ) )
     {
@@ -1153,8 +1154,26 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                                     &nActionFlags );
     }
 
-    // special case for tables from draw application
-    if( EXCHG_OUT_ACTION_INSERT_DRAWOBJ == nAction )
+    // content of 1-cell tables is inserted as simple text
+    if( EXCHG_OUT_ACTION_INSERT_OLE == nAction && ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
+                  rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) )
+    {
+        OUString aExpand;
+        if( rData.GetString( SotClipboardFormatId::STRING, aExpand ))
+        {
+            const sal_Int32 nNewlines{comphelper::string::getTokenCount(aExpand, '\n')};
+            const sal_Int32 nRows = nNewlines ? nNewlines-1 : 0;
+            if ( nRows == 1 )
+            {
+                const sal_Int32 nCols = comphelper::string::getTokenCount(aExpand.getToken(0, '\n'), '\t');
+                if (nCols == 1)
+                    bSingleCellTable = true;
+            }
+        }
+    }
+
+    // special case for tables from draw application or 1-cell tables
+    if( EXCHG_OUT_ACTION_INSERT_DRAWOBJ == nAction || bSingleCellTable )
     {
         if( rData.HasFormat( SotClipboardFormatId::RTF ) )
         {
