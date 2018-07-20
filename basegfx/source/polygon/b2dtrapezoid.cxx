@@ -961,7 +961,7 @@ namespace basegfx
         {
             if(fTools::lessOrEqual(fLineWidth, 0.0))
             {
-                // no line witdh
+                // no line width
                 return;
             }
 

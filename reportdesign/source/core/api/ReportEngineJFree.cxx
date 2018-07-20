@@ -266,7 +266,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
 uno::Reference< frame::XModel > OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame,bool _bHidden )
 {
     uno::Reference< frame::XModel > xModel;
-    OUString sOutputName = getNewOutputName(); // starts implicite the report generator
+    OUString sOutputName = getNewOutputName(); // starts implicitly the report generator
     if ( !sOutputName.isEmpty() )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
