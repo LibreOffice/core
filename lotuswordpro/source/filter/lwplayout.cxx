@@ -1377,7 +1377,7 @@ rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
 }
 
 /**
-* @descr:   Create and reture xfbgimage object for watermark
+* @descr:   Create and return xfbgimage object for watermark
 *
 */
 std::unique_ptr<XFBGImage> LwpMiddleLayout::GetXFBGImage()
