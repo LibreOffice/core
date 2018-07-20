@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_bc35e8f9",
+        "filename": "extensions/source/scanner/sane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-07-20T17:12:09Z",
+      "side": 1,
+      "message": "Also \"tha\" should be corrected to \"then\".",
+      "revId": "eb41e6e367a1e724fe49f4b175f36ec4b319bca2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_9c3a24e5",
+        "filename": "filter/source/config/cache/filtercache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-07-20T17:12:09Z",
+      "side": 1,
+      "message": "Better change also the tense: \"but factory method did not throw an ...\".",
+      "revId": "eb41e6e367a1e724fe49f4b175f36ec4b319bca2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
