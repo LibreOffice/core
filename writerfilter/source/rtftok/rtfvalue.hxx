@@ -42,7 +42,7 @@ class RTFValue : public Value
 {
 public:
     using Pointer_t = tools::SvRef<RTFValue>;
-    RTFValue(int nValue, OUString sValue, RTFSprms rAttributes, RTFSprms rSprms,
+    RTFValue(int nValue, OUString sValue, const RTFSprms& rAttributes, const RTFSprms& rSprms,
              css::uno::Reference<css::drawing::XShape> xShape,
              css::uno::Reference<css::io::XInputStream> xStream,
              css::uno::Reference<css::embed::XEmbeddedObject> xObject, bool bForceString,
@@ -50,8 +50,8 @@ public:
     RTFValue();
     explicit RTFValue(int nValue);
     RTFValue(OUString sValue, bool bForce = false);
-    explicit RTFValue(RTFSprms rAttributes);
-    RTFValue(RTFSprms rAttributes, RTFSprms rSprms);
+    explicit RTFValue(const RTFSprms& rAttributes);
+    RTFValue(const RTFSprms& rAttributes, const RTFSprms& rSprms);
     explicit RTFValue(css::uno::Reference<css::drawing::XShape> xShape);
     explicit RTFValue(css::uno::Reference<css::io::XInputStream> xStream);
     explicit RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> xObject);

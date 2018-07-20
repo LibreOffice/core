@@ -17,7 +17,7 @@ namespace writerfilter
 {
 namespace rtftok
 {
-RTFValue::RTFValue(int nValue, OUString sValue, RTFSprms rAttributes, RTFSprms rSprms,
+RTFValue::RTFValue(int nValue, OUString sValue, const RTFSprms& rAttributes, const RTFSprms& rSprms,
                    uno::Reference<drawing::XShape> xShape, uno::Reference<io::XInputStream> xStream,
                    uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString,
                    const RTFShape& aShape, const RTFPicture& rPicture)
@@ -61,7 +61,7 @@ RTFValue::RTFValue(OUString sValue, bool bForce)
 {
 }
 
-RTFValue::RTFValue(RTFSprms rAttributes)
+RTFValue::RTFValue(const RTFSprms& rAttributes)
     : m_pAttributes(new RTFSprms(rAttributes))
     , m_pSprms(new RTFSprms())
     , m_pShape(new RTFShape())
@@ -69,7 +69,7 @@ RTFValue::RTFValue(RTFSprms rAttributes)
 {
 }
 
-RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
+RTFValue::RTFValue(const RTFSprms& rAttributes, const RTFSprms& rSprms)
     : m_pAttributes(new RTFSprms(rAttributes))
     , m_pSprms(new RTFSprms(rSprms))
     , m_pShape(new RTFShape())

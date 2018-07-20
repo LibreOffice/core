@@ -29,7 +29,7 @@ RTFReferenceProperties::~RTFReferenceProperties() = default;
 void RTFReferenceProperties::resolve(Properties& rHandler)
 {
     for (auto& rAttribute : m_aAttributes)
-        rHandler.attribute(rAttribute.first, *rAttribute.second.get());
+        rHandler.attribute(rAttribute.first, *rAttribute.second);
     for (auto& rSprm : m_aSprms)
     {
         RTFSprm aSprm(rSprm.first, rSprm.second);
