@@ -399,9 +399,9 @@ sal_uInt64 tools::Time::GetMonotonicTicks()
     sal_uInt64 nMicroSeconds;
 #ifdef __MACH__
     static mach_timebase_info_data_t info = { 0, 0 };
-    if ( 0 == info.numer )
+    if ( 0 == info.number )
         mach_timebase_info( &info );
-    nMicroSeconds = mach_absolute_time() * static_cast<double>(info.numer / info.denom) / 1000;
+    nMicroSeconds = mach_absolute_time() * static_cast<double>(info.number / info.denom) / 1000;
 #else
 #if defined(USE_CLOCK_GETTIME)
     struct timespec currentTime;

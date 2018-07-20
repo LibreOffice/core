@@ -72,9 +72,9 @@ void NaturalSpline (int N, const double* x, const double* a, double*& b, double*
 
   for (i = 1; i < N; i++)
   {
-    double numer = 3.0*(a[i+1]*h[i-1]-a[i]*hdiff[i]+a[i-1]*h[i]);
+    double number = 3.0*(a[i+1]*h[i-1]-a[i]*hdiff[i]+a[i-1]*h[i]);
     double denom = h[i-1]*h[i];
-    alpha[i] = numer/denom;
+    alpha[i] = number/denom;
   }
 
   std::unique_ptr<double[]> ell(new double[N+1]);
