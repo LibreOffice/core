@@ -712,7 +712,7 @@ public:
 
     /** Creates the style sheet in the document described by this cell style object. */
     void                createCellStyle();
-    /** Stores tha passed final style name and creates the cell style, if it is
+    /** Stores the passed final style name and creates the cell style, if it is
         user-defined or modified built-in. */
     void                finalizeImport( const OUString& rFinalName );
 

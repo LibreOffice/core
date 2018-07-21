@@ -571,7 +571,7 @@ public:
      * they are control shapes, and if so, whether they should be exported or
      * not. If not, the form layer export will be notified accordingly.
      *
-     * The reason this method is located here is tha it needs to access the
+     * The reason this method is located here is that it needs to access the
      * XMLSectionExport, which is only available here.
      */
     void PreventExportOfControlsInMuteSections(
