@@ -339,19 +339,7 @@ bool ScRangeList::operator==( const ScRangeList& r ) const
     if ( this == &r )
         return true;
 
-    if (maRanges.size() != r.maRanges.size())
-        return false;
-
-    auto itr1 = maRanges.begin(), itrEnd = maRanges.end();
-    auto itr2 = r.maRanges.begin();
-    for (; itr1 != itrEnd; ++itr1, ++itr2)
-    {
-        const ScRange& r1 = *itr1;
-        const ScRange& r2 = *itr2;
-        if (r1 != r2)
-            return false;
-    }
-    return true;
+    return maRanges == r.maRanges;
 }
 
 bool ScRangeList::operator!=( const ScRangeList& r ) const
