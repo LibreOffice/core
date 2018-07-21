@@ -4453,7 +4453,7 @@ void wwSectionManager::InsertSegments()
         mySegIter aNext = aIter+1;
         mySegIter aPrev = (aIter == aStart) ? aIter : aIter-1;
 
-        // If two following sections are different in following properties, Word will interprete a continuous
+        // If two following sections are different in following properties, Word will interpret a continuous
         // section break between them as if it was a section break next page.
         bool bThisAndPreviousAreCompatible = ((aIter->GetPageWidth() == aPrev->GetPageWidth()) &&
             (aIter->GetPageHeight() == aPrev->GetPageHeight()) && (aIter->IsLandScape() == aPrev->IsLandScape()));

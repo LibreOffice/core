@@ -33,7 +33,7 @@
 struct CertAltNameEntry
 {
     /**
-     * defines the type of the value . With this information you can determine how to interprete the Any value.
+     * defines the type of the value. With this information you can determine how to interpret the Any value.
      * @see com::sun::star::security::ExtAltNameType
      */
     com::sun::star::security::ExtAltNameType Type;

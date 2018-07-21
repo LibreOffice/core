@@ -209,7 +209,7 @@ protected:
     SwgReaderOption m_aOption;
     bool m_bInsertMode : 1;
     bool m_bTemplateBrowseMode : 1;
-    bool m_bReadUTF8: 1;      // Interprete stream as UTF-8.
+    bool m_bReadUTF8: 1;      // Interpret stream as UTF-8.
     bool m_bBlockMode: 1;
     bool m_bOrganizerMode : 1;
     bool m_bHasAskTemplateName : 1;
