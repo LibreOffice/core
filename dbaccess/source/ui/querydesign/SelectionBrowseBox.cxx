@@ -678,7 +678,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
 
     OSQLParseNode* pParseNode = nullptr;
     {
-        // 4 passes in trying to interprete the field name
+        // 4 passes in trying to interpret the field name
         // - don't quote the field name, parse internationally
         // - don't quote the field name, parse en-US
         // - quote the field name, parse internationally
