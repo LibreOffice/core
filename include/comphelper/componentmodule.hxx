@@ -37,7 +37,7 @@ namespace comphelper
 {
 
 
-    /** factory factory declaration
+    /** factory declaration
     */
     typedef css::uno::Reference< css::lang::XSingleComponentFactory > (*FactoryInstantiation)
     (

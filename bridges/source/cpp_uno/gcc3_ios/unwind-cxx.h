@@ -87,7 +87,7 @@ struct __cxa_exception
   // Stack of exceptions in cleanups.
   __cxa_exception* nextPropagatingException;
 
-  // The nuber of active cleanup handlers for this exception.
+  // The number of active cleanup handlers for this exception.
   int propagationCount;
 #else
   // Cache parsed handler data from the personality routine Phase 1
@@ -135,7 +135,7 @@ struct __cxa_dependent_exception
   // Stack of exceptions in cleanups.
   __cxa_exception* nextPropagatingException;
 
-  // The nuber of active cleanup handlers for this exception.
+  // The number of active cleanup handlers for this exception.
   int propagationCount;
 #else
   // Cache parsed handler data from the personality routine Phase 1
@@ -173,7 +173,7 @@ struct __cxa_eh_globals
 extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
 extern "C" __cxa_eh_globals *__cxa_get_globals_fast () throw();
 
-// Allocate memory for the exception plus the thown object.
+// Allocate memory for the exception plus the thrown object.
 extern "C" void *__cxa_allocate_exception(size_t thrown_size) throw();
 
 // Free the space allocated for the exception.
