@@ -148,6 +148,7 @@ public:
     void testTdf118783();
     void testTdf104789();
     void testOpenDocumentAsReadOnly();
+    void testTdf118835();
     void testTdf118768();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
@@ -218,6 +219,7 @@ public:
     CPPUNIT_TEST(testTdf118783);
     CPPUNIT_TEST(testTdf104789);
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
+    CPPUNIT_TEST(testTdf118835);
     CPPUNIT_TEST(testTdf118768);
 
     CPPUNIT_TEST_SUITE_END();
@@ -1723,6 +1725,34 @@ void SdOOXMLExportTest2::testOpenDocumentAsReadOnly()
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     CPPUNIT_ASSERT(xDocShRef->IsSecurityOptOpenReadOnly());
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf118835()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf118835.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "(//p:animClr)[1]", "clrSpc", "rgb");
+    assertXPathContent(pXmlDocContent, "(//p:animClr)[1]//p:attrName", "style.color");
+    assertXPath(pXmlDocContent, "(//p:animClr)[1]//p:to/a:srgbClr", "val", "ed1c24");
+
+    assertXPath(pXmlDocContent, "(//p:animClr)[2]", "clrSpc", "rgb");
+    assertXPathContent(pXmlDocContent, "(//p:animClr)[2]//p:attrName", "stroke.color");
+    assertXPath(pXmlDocContent, "(//p:animClr)[2]//p:to/a:srgbClr", "val", "333399");
+
+    assertXPath(pXmlDocContent, "(//p:animClr)[3]", "clrSpc", "rgb");
+    assertXPathContent(pXmlDocContent, "(//p:animClr)[3]//p:attrName", "fillcolor");
+    assertXPath(pXmlDocContent, "(//p:animClr)[3]//p:to/a:srgbClr", "val", "fcd3c1");
+
+    assertXPath(pXmlDocContent, "(//p:animClr)[5]", "clrSpc", "hsl");
+    assertXPathContent(pXmlDocContent, "(//p:animClr)[5]//p:attrName", "fillcolor");
+    assertXPath(pXmlDocContent, "(//p:animClr)[5]//p:by/p:hsl", "h", "10800000");
+    assertXPath(pXmlDocContent, "(//p:animClr)[5]//p:by/p:hsl", "s", "0");
+    assertXPath(pXmlDocContent, "(//p:animClr)[5]//p:by/p:hsl", "l", "0");
+
     xDocShRef->DoClose();
 }
 
