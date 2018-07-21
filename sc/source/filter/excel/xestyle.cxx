@@ -2342,13 +2342,19 @@ static const char* lcl_StyleNameFromId( sal_Int32 nStyleId )
 
 void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
 {
+    constexpr sal_Int32 CELL_STYLE_MAX_BUILTIN_ID = 54;
     OString sName;
+    OString sBuiltinId;
+    const char* pBuiltinId = nullptr;
     if( IsBuiltIn() )
     {
         sName = OString( lcl_StyleNameFromId( mnStyleId ) );
+        sBuiltinId = OString::number( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) );
+        pBuiltinId = sBuiltinId.getStr();
     }
     else
         sName = XclXmlUtils::ToOString( maName );
+
     // get the index in sortedlist associated with the mnXId
     sal_Int32 nXFId = rStrm.GetRoot().GetXFBuffer().GetXFIndex( maXFId.mnXFId );
     // get the style index associated with index into sortedlist
@@ -2357,11 +2363,10 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
             XML_name,           sName.getStr(),
             XML_xfId,           OString::number( nXFId ).getStr(),
 // builtinId of 54 or above is invalid according to OpenXML SDK validator.
-#define CELL_STYLE_MAX_BUILTIN_ID 54
-                                             XML_builtinId, OString::number( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr(),
+            XML_builtinId, pBuiltinId,
             // OOXTODO: XML_iLevel,
             // OOXTODO: XML_hidden,
-            XML_customBuiltin,  ToPsz( ! IsBuiltIn() ),
+            // XML_customBuiltin,  ToPsz( ! IsBuiltIn() ),
             FSEND );
     // OOXTODO: XML_extLst
 }

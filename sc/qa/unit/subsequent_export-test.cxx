@@ -3884,7 +3884,7 @@ void ScExportTest::testNatNumInNumberFormatXLSX()
     xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[DBNum2][$-804]General;[RED][DBNum2][$-804]General");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode", "[DBNum2][$-804]General;[RED][DBNum2][$-804]General");
 
     xDocSh->DoClose();
 }
