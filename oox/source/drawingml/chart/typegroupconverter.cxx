@@ -267,7 +267,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
 {
     sal_Int32 nMaxValues = 0;
     Reference< XLabeledDataSequence > xLabeledSeq;
-    /*  Find first existing category sequence. The bahaviour of Excel 2007 is
+    /*  Find first existing category sequence. The behaviour of Excel 2007 is
         different to Excel 2003, which always used the category sequence of the
         first series, even if it was empty. */
     for (auto const& elem : mrModel.maSeries)

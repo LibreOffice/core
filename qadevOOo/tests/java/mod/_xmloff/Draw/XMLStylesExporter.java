@@ -137,7 +137,7 @@ public class XMLStylesExporter extends TestCase {
         //create new style
         Object SC = SOF.createInstance(xDrawDoc, "com.sun.star.style.Style");
         XStyle Style = UnoRuntime.queryInterface(XStyle.class,SC);
-        //add new style to style familiy with name[0]
+        //add new style to style family with name[0]
         xStyleFamilyName.insertByName(STYLE_NAME,Style);
 
         // Checking Head Tag existence and that property has changed

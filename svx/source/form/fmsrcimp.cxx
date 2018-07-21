@@ -642,7 +642,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
 {
     // analyze the fields
     // additionally, create the mapping: because the list of used columns can be shorter than the list
-    // of columns of the cursor, we need a mapping: "used column numer n" -> "cursor column m"
+    // of columns of the cursor, we need a mapping: "used column number n" -> "cursor column m"
     m_arrFieldMapping.clear();
 
     // important: The case of the columns does not need to be exact - for instance:

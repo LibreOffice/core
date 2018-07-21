@@ -534,7 +534,7 @@ OUString LwpFootnoteOptions::GetContinuedOnMessage()
     {
         return m_ContinuedOnMessage.str();
     }
-    // else reture defauls message
+    // else return default message
     return OUString(STRID_FOOTCONTINUEDON);
 }
 
@@ -547,7 +547,7 @@ OUString LwpFootnoteOptions::GetContinuedFromMessage()
     {
         return m_ContinuedFromMessage.str();
     }
-    // else reture defauls message
+    // else return default message
     return OUString(STRID_FOOTCONTINUEDFROM);
 }
 
