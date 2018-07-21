@@ -311,7 +311,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
 
 void SwDoc::RemoveAllFormatLanguageDependencies()
 {
-    /* Restore the language independ pool defaults and styles. */
+    /* Restore the language independent pool defaults and styles. */
     GetAttrPool().ResetPoolDefaultItem( RES_PARATR_ADJUST );
 
     SwTextFormatColl * pTextFormatColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD );
