@@ -4363,7 +4363,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     }
     rIn.Seek( nOldFilePos );
 
-    // will will create the default numbulletitem for each instance
+    // will create the default numbulletitem for each instance
     for ( auto i : o3tl::enumrange<TSS_Type>() )
     {
         sal_uInt16          nLevels, nDepth = 0;
