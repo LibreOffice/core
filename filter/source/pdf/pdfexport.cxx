@@ -703,7 +703,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             }
             // after this point we don't need the legacy clear passwords anymore
             // however they are still inside the passed filter data sequence
-            // which is sadly out out our control
+            // which is sadly out of our control
             aPermissionPassword.clear();
             aOpenPassword.clear();
 
