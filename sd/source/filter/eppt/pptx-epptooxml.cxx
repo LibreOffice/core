@@ -78,6 +78,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <oox/export/utils.hxx>
+#include <oox/ppt/pptfilterhelpers.hxx>
 
 #include "pptexanimations.hxx"
 #include "../ppt/pptanimations.hxx"
@@ -1020,21 +1021,7 @@ void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS, const
 
     SAL_INFO("sd.eppt", "write attribute name: " << USS(rAttributeName));
 
-    const char* pAttribute = nullptr;
-
-    if (rAttributeName == "Visibility")
-    {
-        pAttribute = "style.visibility";
-    }
-    else if (rAttributeName == "X")
-    {
-        pAttribute = "ppt_x";
-    }
-    else if (rAttributeName == "Y")
-    {
-        pAttribute = "ppt_y";
-    }
-    else if (rAttributeName == "X;Y")
+    if (rAttributeName == "X;Y")
     {
         pFS->startElementNS(XML_p, XML_attrName, FSEND);
         pFS->writeEscaped("ppt_x");
@@ -1044,52 +1031,31 @@ void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS, const
         pFS->writeEscaped("ppt_y");
         pFS->endElementNS(XML_p, XML_attrName);
     }
-    else if (rAttributeName == "Width")
-    {
-        pAttribute = "ppt_w";
-    }
-    else if (rAttributeName == "Height")
-    {
-        pAttribute = "ppt_h";
-    }
-    else if (rAttributeName == "Rotate")
-    {
-        pAttribute = "r";
-    }
-    else if (rAttributeName == "FillStyle")
-    {
-        pAttribute = "fill.type";
-    }
-    else if (rAttributeName == "FillOn")
-    {
-        pAttribute = "fill.on";
-    }
-    else if (rAttributeName == "FillColor")
-    {
-        pAttribute = "fillcolor";
-    }
-    else if (rAttributeName == "CharColor")
-    {
-        pAttribute = "style.color";
-    }
-    else if (rAttributeName == "Opacity")
-    {
-        pAttribute = "style.opacity";
-    }
-    else if (rAttributeName == "SkewX")
-    {
-        pAttribute = "xshear";
-    }
     else
     {
-        SAL_WARN("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
-    }
+        const oox::ppt::ImplAttributeNameConversion *attrConv = oox::ppt::getAttributeConversionList();
+        const char* pAttribute = nullptr;
 
-    if (pAttribute)
-    {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped(pAttribute);
-        pFS->endElementNS(XML_p, XML_attrName);
+        while(attrConv->mpAPIName != nullptr)
+        {
+            if(rAttributeName.equalsAscii(attrConv->mpAPIName))
+            {
+                pAttribute = attrConv->mpMSName;
+                break;
+            }
+            attrConv++;
+        }
+
+        if (pAttribute)
+        {
+            pFS->startElementNS(XML_p, XML_attrName, FSEND);
+            pFS->writeEscaped(pAttribute);
+            pFS->endElementNS(XML_p, XML_attrName);
+        }
+        else
+        {
+            SAL_WARN("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
+        }
     }
 
     pFS->endElementNS(XML_p, XML_attrNameLst);
