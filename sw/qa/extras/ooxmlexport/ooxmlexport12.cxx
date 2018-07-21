@@ -343,7 +343,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReferenceCustomFormat,
         uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table2_full"),
                                                     uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("3) Table Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("3) Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
