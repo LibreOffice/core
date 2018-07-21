@@ -1070,7 +1070,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aResults;
 
-    ODatabaseMetaDataResultSet::ORow aCurrentRow(8);
+    ODatabaseMetaDataResultSet::ORow aCurrentRow(9);
     aCurrentRow[0] = new ORowSetValueDecorator(); // Unused
     aCurrentRow[1] = new ORowSetValueDecorator(); // 1. TABLE_CAT Unsupported
     aCurrentRow[2] = new ORowSetValueDecorator(); // 1. TABLE_SCHEM Unsupported
@@ -1084,7 +1084,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         aCurrentRow[5] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(2))); // 5. GRANTOR
         aCurrentRow[6] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(3))); // 6. GRANTEE
         aCurrentRow[7] = new ORowSetValueDecorator(xRow->getString(4)); // 7. Privilege
-        aCurrentRow[7] = new ORowSetValueDecorator( ( xRow->getShort(5) == 1 ) ?
+        aCurrentRow[8] = new ORowSetValueDecorator( ( xRow->getShort(5) == 1 ) ?
                     OUString("YES") : OUString("NO")); // 8. Grantable
 
         aResults.push_back(aCurrentRow);
