@@ -251,7 +251,7 @@ static OUString  HelpLocaleString()
                 return aLocaleStr;
             }
 
-            sHelpPath = sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aEnglish;
+            sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aEnglish;
             if (impl_checkHelpLocalePath(sHelpPath))
             {
                 return aEnglish;
