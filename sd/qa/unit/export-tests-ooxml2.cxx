@@ -1731,7 +1731,6 @@ void SdOOXMLExportTest2::testTdf118768()
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf118768-brake.odp"), ODP);
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
 
     // check that transition attribute didn't change from 'out' to 'in'
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
