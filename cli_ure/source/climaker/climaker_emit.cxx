@@ -660,7 +660,7 @@ Assembly ^ TypeEmitter::type_resolve(
     }
 
     //In case of an instantiated polymorphic struct we want to return a
-    //uno.PolymorphicType (inherits Type) rather then Type. This is neaded for constructing
+    //uno.PolymorphicType (inherits Type) rather than Type. This is neaded for constructing
     //the service code. We can only do that if the struct is completed.
     if (m_generated_structs[cts_name])
     {
@@ -823,7 +823,7 @@ Assembly ^ TypeEmitter::type_resolve(
     {
         for (int i = 0; i < seqBaseTypes.getLength(); i++)
         {
-            //make sure we get the interface rather then a typedef
+            //make sure we get the interface rather than a typedef
             Reference<reflection::XInterfaceTypeDescription2> aBaseType =
                 resolveInterfaceTypedef( seqBaseTypes[i]);
 

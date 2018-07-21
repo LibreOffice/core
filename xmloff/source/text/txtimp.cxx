@@ -1615,7 +1615,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 bool bSameNumRules = xNewNumRules == xNumRules;
                 if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
                 {
-                    // If the interface pointers are different then this does
+                    // If the interface pointers are different than this does
                     // not mean that the num rules are different. Further tests
                     // are required then. However, if only one num rule is
                     // set, no tests are required of course.
