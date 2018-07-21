@@ -45,6 +45,7 @@
 #include <com/sun/star/animations/AnimationRestart.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/AnimationValueType.hpp>
+#include <com/sun/star/animations/AnimationColorSpace.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/Timing.hpp>
@@ -55,6 +56,7 @@
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -1195,8 +1197,18 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
     }
     else if (nXmlNodeType == XML_animClr)
     {
+        Reference<XAnimateColor> xColor(rXNode, UNO_QUERY);
+        const char *pColorSpace = "rgb";
+        const char *pDirection = nullptr;
+        if (xColor.is() && xColor->getColorInterpolation() == AnimationColorSpace::HSL)
+        {
+            // Note: from, to, by can still be specified in any supported format.
+            pColorSpace = "hsl";
+            pDirection = xColor->getDirection() ? "cw" : "ccw";
+        }
         pFS->startElementNS(XML_p, nXmlNodeType,
-            XML_clrSpc, "rgb",
+            XML_clrSpc, pColorSpace,
+            XML_dir, pDirection,
             XML_calcmode, pCalcMode,
             XML_valueType, pValueType,
             FSEND);
@@ -1227,6 +1239,54 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
 
     WriteAnimationNodeAnimateInside(pFS, rXNode, bMainSeqChild, bSimple, bTo);
     pFS->endElementNS(XML_p, nXmlNodeType);
+}
+
+void PowerPointExport::WriteAnimateColorColor(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 nToken)
+{
+    if (!rAny.hasValue())
+        return;
+
+    sal_Int32 nColor = 0;
+    if (rAny >>= nColor)
+    {
+        pFS->startElementNS(XML_p, nToken, FSEND);
+
+        if (nToken == XML_by)
+        {
+            // CT_TLByRgbColorTransform
+            SAL_WARN("sd.eppt", "Export p:rgb in p:by of animClr isn't implemented yet.");
+        }
+        else
+        {
+            // CT_Color
+            pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor), FSEND);
+        }
+
+        pFS->endElementNS(XML_p, nToken);
+    }
+
+    Sequence< double > aHSL(3);
+    if (rAny >>= aHSL)
+    {
+        pFS->startElementNS(XML_p, nToken, FSEND);
+
+        if (nToken == XML_by)
+        {
+            // CT_TLByHslColorTransform
+            pFS->singleElementNS(XML_p, XML_hsl,
+                             XML_h, I32S(aHSL[0] * 60000),  // ST_Angel
+                             XML_s, I32S(aHSL[1] * 100000),
+                             XML_l, I32S(aHSL[2] * 100000),
+                             FSEND);
+        }
+        else
+        {
+            // CT_Color
+            SAL_WARN("sd.eppt", "Export p:hsl in p:from or p:to of animClr isn't implemented yet.");
+        }
+
+        pFS->endElementNS(XML_p, nToken);
+    }
 }
 
 void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, const Reference< XAnimationNode >& rXNode, bool bMainSeqChild, bool bSimple, bool bWriteTo)
@@ -1276,7 +1336,16 @@ void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, c
 
     pFS->endElementNS(XML_p, XML_cBhvr);
     WriteAnimateValues(pFS, rXAnimate);
-    if (bWriteTo)
+
+    Reference<XAnimateColor> xColor(rXNode, UNO_QUERY);
+
+    if (xColor.is())
+    {
+        WriteAnimateColorColor(pFS, xColor->getBy(), XML_by);
+        WriteAnimateColorColor(pFS, xColor->getFrom(), XML_from);
+        WriteAnimateColorColor(pFS, xColor->getTo(), XML_to);
+    }
+    else if (bWriteTo)
         WriteAnimateTo(pFS, rXAnimate->getTo(), rXAnimate->getAttributeName());
 }
 
