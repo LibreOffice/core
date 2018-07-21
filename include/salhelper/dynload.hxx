@@ -143,7 +143,7 @@ public:
             m_pLoader->acquire();
     }
 
-    /// Destructor, decrease the reference count and unload the library if it is tha last instance.
+    /// Destructor, decrease the reference count and unload the library if it is the last instance.
     ~ODynamicLoader()
     {
         if( m_pLoader )
