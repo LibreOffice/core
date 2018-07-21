@@ -1083,7 +1083,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         aCurrentRow[4] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(6)));
         aCurrentRow[5] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(2))); // 5. GRANTOR
         aCurrentRow[6] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(3))); // 6. GRANTEE
-        aCurrentRow[7] = new ORowSetValueDecorator(xRow->getString(4)); // 7. Privilege
         aCurrentRow[7] = new ORowSetValueDecorator( ( xRow->getShort(5) == 1 ) ?
                     OUString("YES") : OUString("NO")); // 8. Grantable
 
