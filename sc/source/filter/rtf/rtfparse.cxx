@@ -265,7 +265,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
 {
     switch ( pInfo->nToken )
     {
-        case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
+        case RTF_TROWD:         // denotes table row default, before RTF_CELLX
         {
             if (!maDefaultList.empty())
                 nLastWidth = maDefaultList.back()->nTwips;

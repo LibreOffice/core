@@ -343,7 +343,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
     * At first <code>setHavingClause</code> sets a complex clause.
     * Then method <code>getStructuredHavingClause</code> from object relation
     * <code>xQueryAna</code> returns a valid <code>PropertyValue[][]</code>
-    * Method <code>setHavingClause</code> was called with an empty sting to
+    * Method <code>setHavingClause</code> was called with an empty string to
     * reset filter. Now <code>setStructuredHavingClause</code> with the valid
     * <code>PropertyValue[][]</code> as parameter was called.
     * Test is ok if <code>getHavingClause</code> from <code>xQueryAna</code>

@@ -121,7 +121,7 @@ public class SCalc  {
 
         //oooooooooooooooooooooooooooStep 3oooooooooooooooooooooooooooooooooooooooooo
         // create cell styles.
-        // For this purpose get the StyleFamiliesSupplier and the familiy
+        // For this purpose get the StyleFamiliesSupplier and the family
         // CellStyle. Create an instance of com.sun.star.style.CellStyle and
         // add it to the family. Now change some properties
 
