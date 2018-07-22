@@ -592,7 +592,7 @@ XMultiPropertySet
      *  Then, no conversion is necessary, since they can hold all possible values. However, if
      *  the member is an Object and <em>setVal</em> is an Any then the object contained in the any is assigned to
      *  the member. The extra type information which exists as Type object in the Any will get lost. If this is not
-     *  intended then use an Any variable rather then an Object.
+     *  intended then use an Any variable rather than an Object.
      *
      *  If a member is an Object or Any and the argument <em>setVal</em> is an Object, other than String or array,
      *  then it is presumed to be an UNO object and queried for XInterface. If successful, the out-param <em>newVal</em>

@@ -1500,7 +1500,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
         }
     }
 
-    // finally put the remembered entries at there new location
+    // finally put the remembered entries at their new location
     nTo = nPos + nOffset;
     for ( i=0; i<nCount; i++ )
     {

@@ -103,7 +103,7 @@ namespace sfx2
     into the file picker filter list, instead of the single filters which form the class.</p>
 
     <p>This is an interesting difference between local and global classes: Filters which are part of a global class
-    are listed in there own group, too. Filters in local classes aren't listed a second time - neither directly (as
+    are listed in their own group, too. Filters in local classes aren't listed a second time - neither directly (as
     the filter itself) nor indirectly (as part of another local group).</p>
 
     <p>The only exception are filters which are part of a global class <em>and</em> a local class. This is allowed.

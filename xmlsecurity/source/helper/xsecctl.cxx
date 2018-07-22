@@ -837,7 +837,7 @@ void XSecController::exportSignature(
 
                     OUStringBuffer buffer;
                     //If the xml signature was already contained in the document,
-                    //then we use the original date and time string, rather then the
+                    //then we use the original date and time string, rather than the
                     //converted one. This avoids writing a different string due to
                     //e.g. rounding issues and thus breaking the signature.
                     if (!signatureInfo.ouDateTime.isEmpty())

@@ -116,9 +116,9 @@ public class ImageReadHandler extends ElementReadHandler
     @Override
     protected void doneParsing() throws SAXException
     {
-        // if we have static content (as well or only), that one goes into the
+        // if we have static content (as well as or only), that one goes into the
         // alternate-content attribute right now. It is part of the output target
-        // and style rules to deal with them properly ..
+        // and style rules to deal with them properly.
         if (xLinkReadHandler != null)
         {
             contentElement.setAttribute(OfficeNamespaces.OOREPORT_NS,
