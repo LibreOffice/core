@@ -62,7 +62,7 @@ class JavaWindowPeerFake implements com.sun.star.awt.XSystemDependentWindowPeer,
         return aReturn;
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public com.sun.star.awt.XToolkit getToolkit()
         throws com.sun.star.uno.RuntimeException
