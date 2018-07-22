@@ -145,7 +145,7 @@ protected:
     TokenToValueSetIndex maTokenToValueSetIndex;
 
     ItemList maLockedMasterPages;
-    /** Lock master pages in the given list and release locks that where
+    /** Lock master pages in the given list and release locks that were
         previously acquired.
     */
     void UpdateLocks (const ItemList& rItemList);

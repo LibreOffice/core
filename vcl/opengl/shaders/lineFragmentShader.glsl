@@ -28,7 +28,7 @@ void main()
 
     float alpha = clamp(dist, 0.0, 1.0);
 
-    // modify the alpha chanel only
+    // modify the alpha channel only
     vec4 result_color = color;
     result_color.a = result_color.a * alpha;
 

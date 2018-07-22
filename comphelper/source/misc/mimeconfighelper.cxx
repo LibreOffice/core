@@ -733,8 +733,8 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
                             | SfxFilterFlags::IMPORT );
                         if ( ( ( nFlags & nRequired ) == nRequired ) && !( nFlags & SfxFilterFlags::TEMPLATEPATH ) )
                         {
-                            // if there are more than one filter the preffered one should be used
-                            // if there is no preffered filter the first one will be used
+                            // if there are more than one filter the preferred one should be used
+                            // if there is no preferred filter the first one will be used
                             if ( aResult.isEmpty() || ( nFlags & SfxFilterFlags::PREFERED ) )
                                 aResult = aPropsHM.getUnpackedValueOrDefault( "Name", OUString() );
                             if ( nFlags & SfxFilterFlags::PREFERED )

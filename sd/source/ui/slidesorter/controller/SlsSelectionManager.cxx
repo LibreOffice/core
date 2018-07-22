@@ -157,8 +157,8 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
         Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY_THROW );
         Reference<drawing::XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
 
-        // Iterate over all pages that where seleted when this method was called
-        // and delete the draw page the notes page.  The iteration is done in
+        // Iterate over all pages that were selected when this method was called
+        // and delete the draw page the notes page. The iteration is done in
         // reverse order so that when one slide is not deleted (to avoid an
         // empty document) the remaining slide is the first one.
         ::std::vector<SdPage*>::const_reverse_iterator aI;
@@ -190,8 +190,8 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
         Reference<drawing::XMasterPagesSupplier> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY_THROW );
         Reference<drawing::XDrawPages> xPages( xDrawPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
 
-        // Iterate over all pages that where seleted when this method was called
-        // and delete the draw page the notes page.  The iteration is done in
+        // Iterate over all pages that were selected when this method was called
+        // and delete the draw page the notes page. The iteration is done in
         // reverse order so that when one slide is not deleted (to avoid an
         // empty document) the remaining slide is the first one.
         ::std::vector<SdPage*>::const_reverse_iterator aI;
