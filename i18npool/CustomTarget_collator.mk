@@ -12,39 +12,28 @@ $(eval $(call gb_CustomTarget_CustomTarget,i18npool/collator))
 i18npool_ICULT53 := $(filter 1, $(shell expr $(ICU_MAJOR) \< 53))
 i18npool_CODIR := $(call gb_CustomTarget_get_workdir,i18npool/collator)
 i18npool_COTXTS := \
-    $(call gb_Helper_optional_locale,ca, \
-        ca_charset.txt) \
-    $(call gb_Helper_optional_locale,dz, \
-        dz_charset.txt) \
-    $(call gb_Helper_optional_locale,hu, \
-        hu_charset.txt) \
-    $(call gb_Helper_optional_locale,ja, \
-        ja_charset.txt \
-        ja_phonetic_alphanumeric_first.txt \
-        ja_phonetic_alphanumeric_last.txt) \
-	$(if $(i18npool_ICULT53), \
-		$(call gb_Helper_optional_locale,ko, \
-			ko_charset.txt) \
-			) \
-    $(call gb_Helper_optional_locale,ku, \
-        ku_alphanumeric.txt) \
-    $(call gb_Helper_optional_locale,ln, \
-        ln_charset.txt) \
-    $(call gb_Helper_optional_locale,my, \
-        my_dictionary.txt) \
-    $(call gb_Helper_optional_locale,ne, \
-        ne_charset.txt) \
-    $(call gb_Helper_optional_locale,sid, \
-        sid_charset.txt) \
-    $(call gb_Helper_optional_locale,zh, \
-        zh_charset.txt \
-        zh_pinyin.txt \
-        zh_radical.txt \
-        zh_stroke.txt \
-        zh_TW_charset.txt \
-        zh_TW_radical.txt \
-        zh_TW_stroke.txt \
-        zh_zhuyin.txt)
+    ca_charset.txt \
+    dz_charset.txt \
+    hu_charset.txt \
+    ja_charset.txt \
+    ja_phonetic_alphanumeric_first.txt \
+    ja_phonetic_alphanumeric_last.txt \
+    $(if $(i18npool_ICULT53), \
+        ko_charset.txt \
+        ) \
+    ku_alphanumeric.txt \
+    ln_charset.txt \
+    my_dictionary.txt \
+    ne_charset.txt \
+    sid_charset.txt \
+    zh_charset.txt \
+    zh_pinyin.txt \
+    zh_radical.txt \
+    zh_stroke.txt \
+    zh_TW_charset.txt \
+    zh_TW_radical.txt \
+    zh_TW_stroke.txt \
+    zh_zhuyin.txt
 
 $(call gb_CustomTarget_get_target,i18npool/collator) : $(SRCDIR)/i18npool/CustomTarget_collator.mk \
 	$(i18npool_CODIR)/lrl_include.hxx $(foreach txt,$(i18npool_COTXTS), \
