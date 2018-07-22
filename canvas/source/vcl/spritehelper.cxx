@@ -41,6 +41,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <canvas/canvastools.hxx>
+#include <config_features.h>
 
 #include "spritehelper.hxx"
 
@@ -186,9 +187,12 @@ namespace vclcanvas
             {
                 // Avoid the trick with the negative width in the OpenGL case,
                 // OutputDevice::DrawDeviceAlphaBitmap() doesn't like it.
-                if( !::basegfx::fTools::equalZero( aTransform.get(0,1) ) ||
-                    !::basegfx::fTools::equalZero( aTransform.get(1,0) ) ||
-                    OpenGLHelper::isVCLOpenGLEnabled())
+                if (!::basegfx::fTools::equalZero( aTransform.get(0,1) ) ||
+                    !::basegfx::fTools::equalZero( aTransform.get(1,0) )
+#if HAVE_FEATURE_UI
+                    || OpenGLHelper::isVCLOpenGLEnabled()
+#endif
+                   )
                 {
                     // "complex" transformation, employ affine
                     // transformator
