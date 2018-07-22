@@ -54,7 +54,7 @@ class JavaWindowPeerFake implements XSystemDependentWindowPeer,
         return aReturn;
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public XToolkit getToolkit()
         throws com.sun.star.uno.RuntimeException

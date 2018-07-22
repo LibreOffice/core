@@ -301,7 +301,7 @@ bool SwAccessibleFrameBase::GetSelectedState( )
         return true;
     }
 
-    // SELETED.
+    // SELECTED.
     SwFlyFrame* pFlyFrame = getFlyFrame();
     const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
     const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();

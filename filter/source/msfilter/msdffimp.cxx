@@ -5915,7 +5915,7 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
 
             if( !bOk )
             {
-                nPos++;                // ????????? TODO: trying to get an one-hit wonder, this code code should be rewritten...
+                nPos++;                // ????????? TODO: trying to get an one-hit wonder, this code should be rewritten...
                 if (nPos != rStCtrl.Seek(nPos))
                     break;
                 bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
