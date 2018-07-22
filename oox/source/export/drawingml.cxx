@@ -916,13 +916,16 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
     xOutStream->writeBytes( Sequence< sal_Int8 >( static_cast<const sal_Int8*>(aData), nDataSize ) );
     xOutStream->closeOutput();
 
-    OString sRelPathToMedia = "media/image";
+    const OString sRelPathToMedia = "media/image";
+    OString sRelationCompPrefix;
     if ( bRelPathToMedia )
-        sRelPathToMedia = "../" + sRelPathToMedia;
+        sRelationCompPrefix = "../";
+    else
+        sRelationCompPrefix = GetRelationCompPrefix();
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                                 oox::getRelationship(Relationship::IMAGE),
                                 OUStringBuffer()
-                                .appendAscii( GetRelationCompPrefix() )
+                                .appendAscii( sRelationCompPrefix.getStr() )
                                 .appendAscii( sRelPathToMedia.getStr() )
                                 .append( static_cast<sal_Int32>(mnImageCounter ++) )
                                 .appendAscii( pExtension )
