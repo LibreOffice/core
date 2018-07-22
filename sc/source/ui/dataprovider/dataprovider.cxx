@@ -186,6 +186,23 @@ ExternalDataMapper::~ExternalDataMapper()
 {
 }
 
+void ExternalDataMapper::insertEncryptionData(OUString maProvider, OUString maURL, OUString maUser, OUString maPassword)
+{
+    std::map< std::pair<OUString, OUString>, std::pair<OUString, OUString> >  aMap;
+    aMap[ {maProvider, maURL} ] = std::make_pair (maUser,maPassword);
+    maEncryptionData.push_back(aMap);
+}
+
+std::vector<std::map< std::pair<OUString, OUString>, std::pair<OUString, OUString> > > ExternalDataMapper::getEncryptionData()
+{
+    return maEncryptionData;
+}
+
+void ExternalDataMapper::writeEncryptedDocument()
+{
+
+}
+
 void ExternalDataMapper::insertDataSource(const sc::ExternalDataSource& rSource)
 {
     maDataSources.push_back(rSource);
