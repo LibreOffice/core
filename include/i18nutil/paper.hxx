@@ -108,11 +108,13 @@ enum Paper
     PAPER_ARCHD,
     PAPER_ARCHE,
     PAPER_SCREEN_16_9,
-    PAPER_SCREEN_16_10
+    PAPER_SCREEN_16_10,
+    PAPER_16K_195x270,
+    PAPER_16K_197x273
 };
 
 // defined for 'equal size' test with the implementation array
-#define NUM_PAPER_ENTRIES   (PAPER_SCREEN_16_10 - PAPER_A0 + 1)
+#define NUM_PAPER_ENTRIES   (PAPER_16K_197x273 - PAPER_A0 + 1)
 
 
 class I18NUTIL_DLLPUBLIC PaperInfo

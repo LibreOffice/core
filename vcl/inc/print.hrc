@@ -56,7 +56,7 @@ const char* RID_STR_PAPERNAMES[] =
     NC_("RID_STR_PAPERNAMES", "#10 Envelope"),
     NC_("RID_STR_PAPERNAMES", "#11 Envelope"),
     NC_("RID_STR_PAPERNAMES", "#12 Envelope"),
-    NC_("RID_STR_PAPERNAMES", "16 Kai"),
+    NC_("RID_STR_PAPERNAMES", "16 Kai (16k)"),
     NC_("RID_STR_PAPERNAMES", "32 Kai"),
     NC_("RID_STR_PAPERNAMES", "Big 32 Kai"),
     NC_("RID_STR_PAPERNAMES", "B4 (JIS)"),
@@ -104,8 +104,10 @@ const char* RID_STR_PAPERNAMES[] =
     NC_("RID_STR_PAPERNAMES", "Arch D"),
     NC_("RID_STR_PAPERNAMES", "Arch E"),
     NC_("RID_STR_PAPERNAMES", "Screen 16:9"),
-    // To translators: This is the last entry of the sequence of paper size names
     NC_("RID_STR_PAPERNAMES", "Screen 16:10"),
+    NC_("RID_STR_PAPERNAMES", "16k"),
+    // To translators: This is the last entry of the sequence of paper size names
+    NC_("RID_STR_PAPERNAMES", "16k")
 };
 
 #endif // INCLUDED_VCL_INC_PRINT_HRC
