@@ -18,6 +18,8 @@
 
 #include "orcusxml.hxx"
 
+#include <utility>
+
 class ScDocument;
 class ScDBData;
 
@@ -108,6 +110,7 @@ class SC_DLLPUBLIC ExternalDataMapper
 {
     //ScDocument* mpDoc;
     std::vector<ExternalDataSource> maDataSources;
+    std::vector<std::map< std::pair<OUString, OUString>, std::pair<OUString, OUString> > > maEncryptionData;
 
 public:
     ExternalDataMapper(ScDocument* pDoc);
@@ -115,6 +118,13 @@ public:
     ~ExternalDataMapper();
 
     void insertDataSource(const ExternalDataSource& rSource);
+
+    void insertEncryptionData(OUString maProvider, OUString maURL, OUString maUser, OUString maPassword);
+
+    virtual std::vector<std::map< std::pair<OUString, OUString>, std::pair<OUString, OUString> > > getEncryptionData();
+
+    virtual void writeEncryptedDocument();
+
 
     const std::vector<ExternalDataSource>& getDataSources() const;
     std::vector<ExternalDataSource>& getDataSources();
