@@ -2577,7 +2577,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl, CheckBox&, void)
 
     // if the controls are currently enabled, we still have to check
     // if the properties button should be disabled because the currently
-    // seleted smart tag type does not have a properties dialog.
+    // selected smart tag type does not have a properties dialog.
     // We do this by calling SelectHdl:
     if ( bEnable )
         SelectHdl(m_pSmartTagTypesLB);
