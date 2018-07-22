@@ -182,7 +182,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
     lbIndex = static_cast<sal_uInt8>(m_xLbFormat->get_selected_index());
     tbIndex = lbIndexToTableIndex( lbIndex );
 
-    // To understand this index maping, look InitAutoTableFormat function to
+    // To understand this index mapping, look InitAutoTableFormat function to
     // see how listbox item is implemented.
     if( tbIndex < 255 )
         m_aWndPreview.NotifyChange( (*pTableTable)[tbIndex] );

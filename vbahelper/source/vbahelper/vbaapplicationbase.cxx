@@ -127,7 +127,7 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
         {}
     }
 
-    // mast be the last call in the method since it deletes the timer
+    // must be the last call in the method since it deletes the timer
     try
     {
         m_xBase->OnTime( uno::makeAny( m_aTimerInfo.second.first ), m_aTimerInfo.first, uno::makeAny( m_aTimerInfo.second.second ), uno::makeAny( false ) );
