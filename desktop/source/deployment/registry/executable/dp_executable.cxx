@@ -244,7 +244,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
                 //installed. That is an executable must have the right flags
                 OSL_ASSERT(false);
 
-            //This won't have affect on Windows
+            //This won't have effect on Windows
             osl::File::setAttributes(
                     dp_misc::expandUnoRcUrl(m_url), attributes);
         }

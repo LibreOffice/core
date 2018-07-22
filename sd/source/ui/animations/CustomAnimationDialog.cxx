@@ -1335,7 +1335,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
 
     if( mpCBSmoothStart->IsVisible() )
     {
-        // set selected value for accelerate if different then in original set
+        // set selected value for accelerate if different than in original set
 
         double fTemp = mpCBSmoothStart->IsChecked() ? 0.5 : 0.0;
 
@@ -1348,7 +1348,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         if( fOldTemp != fTemp )
             pSet->setPropertyValue( nHandleAccelerate, makeAny( fTemp ) );
 
-        // set selected value for decelerate if different then in original set
+        // set selected value for decelerate if different than in original set
         fTemp = mpCBSmoothEnd->IsChecked() ? 0.5 : 0.0;
 
         if(mpSet->getPropertyState( nHandleDecelerate ) != STLPropertyState::Ambiguous)
