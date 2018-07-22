@@ -53,7 +53,7 @@ class JavaWindowPeerFake
         else return null;
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public XToolkit getToolkit()
         throws com.sun.star.uno.RuntimeException
@@ -61,49 +61,49 @@ class JavaWindowPeerFake
         return null;
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public void setPointer(/*IN*/ XPointer Pointer)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public void setBackground(/*IN*/ int Color)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public void invalidate(/*IN*/ short Flags)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public void invalidateRect(/*IN*/ com.sun.star.awt.Rectangle Rect, /*IN*/ short Flags)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public void dispose()
         throws com.sun.star.uno.RuntimeException
     {
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public void addEventListener(/*IN*/ com.sun.star.lang.XEventListener xListener)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public void removeEventListener(/*IN*/ com.sun.star.lang.XEventListener aListener)
         throws com.sun.star.uno.RuntimeException
