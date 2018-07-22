@@ -93,6 +93,8 @@ public:
     void testInvertIfNegativeXLSX();
     void testBubble3DXLSX();
     void testNoMarkerXLSX();
+    void testShapePropertiesBitmapFillXLSX();
+    void testShapePropertiesGradientFillXLSX();
     void testTitleManualLayoutXLSX();
     void testPlotAreaManualLayoutXLSX();
     void testLegendManualLayoutXLSX();
@@ -163,6 +165,8 @@ public:
     CPPUNIT_TEST(testInvertIfNegativeXLSX);
     CPPUNIT_TEST(testBubble3DXLSX);
     CPPUNIT_TEST(testNoMarkerXLSX);
+    CPPUNIT_TEST(testShapePropertiesBitmapFillXLSX);
+    CPPUNIT_TEST(testShapePropertiesGradientFillXLSX);
     CPPUNIT_TEST(testTitleManualLayoutXLSX);
     CPPUNIT_TEST(testPlotAreaManualLayoutXLSX);
     CPPUNIT_TEST(testLegendManualLayoutXLSX);
@@ -1403,6 +1407,45 @@ void Chart2ExportTest::testNoMarkerXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:marker/c:symbol", "val", "none");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:marker/c:symbol", "val", "none");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:marker", "val", "0");
+}
+
+void Chart2ExportTest::testShapePropertiesBitmapFillXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart-with-bitmaps.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Verify Plot Area bitmap
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill/a:blip", "embed", "rId1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "b3b3b3");
+
+    // Verify Legend bitmap
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:spPr/a:blipFill/a:blip", "embed", "rId2");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:spPr/a:ln/a:noFill", 1);
+
+    // Verify Chart bitmap
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:blipFill/a:blip", "embed", "rId3");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "b3b3b3");
+}
+
+void Chart2ExportTest::testShapePropertiesGradientFillXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart-with-gradients.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Verify Plot Area gradient
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "b5d2ec");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", "7030a0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "b3b3b3");
+
+    // Verify Legend gradient
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "ffff00");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", "cee1f2");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:spPr/a:ln/a:noFill", 1);
+
+    // Verify Chart gradient
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "ffc000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "b3b3b3");
 }
 
 void Chart2ExportTest::testTitleManualLayoutXLSX()
