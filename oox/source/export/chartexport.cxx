@@ -615,7 +615,6 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     // TODO: printSettings
     // TODO: style
     // TODO: text properties
-    // TODO: shape properties
     Reference< XPropertySet > xPropSet( xChartDoc->getArea(), uno::UNO_QUERY );
     if( xPropSet.is() )
         exportShapeProps( xPropSet );
@@ -1170,7 +1169,7 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
         Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
         if( xWallPropSet.is() )
         {
-            exportPlotAreaShapeProps( xWallPropSet );
+            exportShapeProps( xWallPropSet );
         }
     }
 
@@ -1260,18 +1259,6 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos,
     pFS->endElement(FSNS(XML_c, XML_layout));
 }
 
-void ChartExport::exportPlotAreaShapeProps( const Reference< XPropertySet >& xPropSet )
-{
-    FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_spPr ),
-            FSEND );
-
-    exportFill( xPropSet );
-    WriteOutline( xPropSet );
-
-    pFS->endElement( FSNS( XML_c, XML_spPr ) );
-}
-
 void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
 {
     if ( !GetProperty( xPropSet, "FillStyle" ) )
@@ -1282,12 +1269,12 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
     {
         case FillStyle_GRADIENT :
             exportGradientFill( xPropSet );
-            break;
+        break;
         case FillStyle_BITMAP :
             exportBitmapFill( xPropSet );
-            break;
+        break;
         case FillStyle_HATCH:
-            exportHatch(xPropSet);
+            exportHatch( xPropSet );
         break;
         default:
             WriteFill( xPropSet );
@@ -2311,7 +2298,7 @@ void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet )
     pFS->startElement( FSNS( XML_c, XML_spPr ),
             FSEND );
 
-    WriteFill( xPropSet );
+    exportFill( xPropSet );
     WriteOutline( xPropSet );
 
     pFS->endElement( FSNS( XML_c, XML_spPr ) );

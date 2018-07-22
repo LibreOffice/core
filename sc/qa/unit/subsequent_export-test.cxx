@@ -137,6 +137,7 @@ public:
     void testInlineArrayXLS();
     void testEmbeddedChartODS();
     void testEmbeddedChartXLS();
+    void testChartShapePropertiesBitmapFillXLSX();
     void testCellAnchoredGroupXLS();
 
     void testFormulaReferenceXLS();
@@ -255,6 +256,7 @@ public:
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartODS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
+    CPPUNIT_TEST(testChartShapePropertiesBitmapFillXLSX);
     CPPUNIT_TEST(testCellAnchoredGroupXLS);
 
     CPPUNIT_TEST(testFormulaReferenceXLS);
@@ -2146,6 +2148,37 @@ void ScExportTest::testEmbeddedChartXLS()
     CPPUNIT_ASSERT_MESSAGE("Data range (C3:C5) not found.", aRanges.In(ScRange(2,2,1,2,4,1)));
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testChartShapePropertiesBitmapFillXLSX()
+{
+    //tdf#100946 FILESAVE Excel on OS X ignored column widths in XLSX last saved by LO
+    ScDocShellRef xShell = loadDoc("chart-with-bitmaps.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pChart = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/charts/chart1.xml");
+    CPPUNIT_ASSERT(pChart);
+
+    // Verify Plot Area bitmap
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill/a:blip", "embed", "rId1");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "b3b3b3");
+
+    // Verify Legend bitmap
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:legend/c:spPr/a:blipFill/a:blip", "embed", "rId2");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:legend/c:spPr/a:ln/a:noFill", 1);
+
+    // Verify Chart bitmap
+    assertXPath(pChart, "/c:chartSpace/c:spPr/a:blipFill/a:blip", "embed", "rId3");
+    assertXPath(pChart, "/c:chartSpace/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "b3b3b3");
+
+    // Check if path to media files was correctly set
+    xmlDocPtr pChartRel = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/charts/_rels/chart1.xml.rels");
+    CPPUNIT_ASSERT(pChartRel);
+    assertXPath(pChartRel, "/r:Relationships/r:Relationship", 3);
+    assertXPath(pChartRel, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "../media/image1.jpeg");
+    assertXPath(pChartRel, "/r:Relationships/r:Relationship[@Id='rId2']", "Target", "../media/image2.jpeg");
+    assertXPath(pChartRel, "/r:Relationships/r:Relationship[@Id='rId3']", "Target", "../media/image3.jpeg");
 }
 
 void ScExportTest::testCellAnchoredGroupXLS()
