@@ -3623,7 +3623,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     officecfg::Office::Recovery::RecoveryInfo::Crashed::set(true, batch);
     batch->commit();
 
-    // for all docs, store their current view/names in the configurtion
+    // for all docs, store their current view/names in the configuration
     implts_persistAllActiveViewNames();
 
     // The called method for saving documents runs
@@ -3688,7 +3688,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     // Be sure to know all open documents really .-)
     implts_verifyCacheAgainstDesktopDocumentList();
 
-    // for all docs, store their current view/names in the configurtion
+    // for all docs, store their current view/names in the configuration
     implts_persistAllActiveViewNames();
 
     // The called method for saving documents runs
