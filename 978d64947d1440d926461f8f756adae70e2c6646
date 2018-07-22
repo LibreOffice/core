@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_413270f3",
+        "filename": "cli_ure/source/climaker/climaker_emit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-07-22T12:53:01Z",
+      "side": 1,
+      "message": "\"needed\"?",
+      "range": {
+        "startLine": 663,
+        "startChar": 68,
+        "endLine": 663,
+        "endChar": 74
+      },
+      "revId": "978d64947d1440d926461f8f756adae70e2c6646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_01522814",
+        "filename": "xmloff/source/text/txtimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-07-22T12:53:01Z",
+      "side": 1,
+      "message": "no it should be indeed \"then\", let\u0027s add a comma so it\u0027s more explicit:\n\"If the interface pointers are different, then this...\"",
+      "range": {
+        "startLine": 1618,
+        "startChar": 63,
+        "endLine": 1618,
+        "endChar": 67
+      },
+      "revId": "978d64947d1440d926461f8f756adae70e2c6646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
