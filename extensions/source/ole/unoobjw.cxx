@@ -1650,7 +1650,7 @@ static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
         // if caller accept VARIANT as out parameter, any value must be converted
         if (V_VT(pDest) == (VT_VARIANT | VT_BYREF))
         {
-            // When the user provides a VARIANT rather then a concrete type
+            // When the user provides a VARIANT rather than a concrete type
             // we just copy the source to the out, in/out parameter
             // VT_DISPATCH, VT_UNKNOWN, VT_ARRAY, VT_BSTR in the VARIANT that
             // is contained in pDest are released by VariantCopy

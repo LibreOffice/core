@@ -213,9 +213,9 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
 //used on a different platform.
 //
 //Then one needs to add the roots module oneself. This should be done with
-//SECMOD_LoadUserModule rather then SECMOD_AddNewModule. The latter would write
+//SECMOD_LoadUserModule rather than SECMOD_AddNewModule. The latter would write
 //the location of the roots module to the profile, which makes FF2 and TB2 use
-//it instead of there own module.
+//it instead of their own module.
 //
 //When using SYSTEM_NSS then the libnss3.so lib is typically found in /usr/lib.
 //This folder may, however, NOT contain the roots certificate module. That is,
