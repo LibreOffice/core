@@ -101,7 +101,7 @@ static const PageDesc aDinTab[] =
     { IN2MM100( 4.125 ), IN2MM100( 9.5 ),    "Env10",  "Comm10" },
     { IN2MM100( 4.5 ),   IN2MM100( 10.375 ), "Env11",  nullptr },
     { IN2MM100( 4.75 ),  IN2MM100( 11 ),     "Env12",  nullptr },
-    { MM2MM100( 184 ),   MM2MM100( 260 ),    nullptr,  nullptr }, //Kai16
+    { MM2MM100( 184 ),   MM2MM100( 260 ),    nullptr,  nullptr }, //Kai16 / 16k
     { MM2MM100( 130 ),   MM2MM100( 184 ),    nullptr,  nullptr }, //Kai32
     { MM2MM100( 140 ),   MM2MM100( 203 ),    nullptr,  nullptr }, //BigKai32
     { MM2MM100( 257 ),   MM2MM100( 364 ),    "B4",  nullptr }, //JIS
@@ -149,7 +149,9 @@ static const PageDesc aDinTab[] =
     { IN2MM100( 24 ),    IN2MM100( 36 ),     "ARCHD",  nullptr },
     { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  nullptr },
     { MM2MM100( 157.5),  MM2MM100( 280 ),    nullptr,  nullptr }, //Screen 16:9
-    { MM2MM100( 175 ),   MM2MM100( 280 ),    nullptr,  nullptr }  //Screen 16:10
+    { MM2MM100( 175 ),   MM2MM100( 280 ),    nullptr,  nullptr }, //Screen 16:10
+    { MM2MM100( 195 ),   MM2MM100( 270 ),    nullptr,  nullptr }, // 16k
+    { MM2MM100( 197 ),   MM2MM100( 273 ),    nullptr,  nullptr }  // 16k
 
 };
 
