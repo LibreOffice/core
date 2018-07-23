@@ -118,8 +118,8 @@ class SwInsertConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    InsCaptionOptArr*   pCapOptions;
-    InsCaptionOpt*      pOLEMiscOpt;
+    std::unique_ptr<InsCaptionOptArr> pCapOptions;
+    std::unique_ptr<InsCaptionOpt>    pOLEMiscOpt;
 
     SvGlobalName        aGlobalNames[5];
 

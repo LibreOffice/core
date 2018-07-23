@@ -77,7 +77,7 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
                 bFound = *pOleId == aInsertConfig.aGlobalNames[nId  ];
             if(!bFound)
-                return aInsertConfig.pOLEMiscOpt;
+                return aInsertConfig.pOLEMiscOpt.get();
         }
         return aInsertConfig.pCapOptions->Find(eType, pOleId);
     }
@@ -103,7 +103,7 @@ bool SwModuleOptions::SetCapOption(bool bHTML, const InsCaptionOpt* pOpt)
                 if(aInsertConfig.pOLEMiscOpt)
                     *aInsertConfig.pOLEMiscOpt = *pOpt;
                 else
-                    aInsertConfig.pOLEMiscOpt = new InsCaptionOpt(*pOpt);
+                    aInsertConfig.pOLEMiscOpt.reset(new InsCaptionOpt(*pOpt));
             }
         }
 
@@ -596,15 +596,15 @@ SwInsertConfig::SwInsertConfig(bool bWeb) :
     aGlobalNames[GLOB_NAME_MATH   ] = SvGlobalName(SO3_SM_CLASSID);
     aGlobalNames[GLOB_NAME_CHART  ] = SvGlobalName(SO3_SCH_CLASSID);
     if(!bIsWeb)
-        pCapOptions = new InsCaptionOptArr;
+        pCapOptions.reset(new InsCaptionOptArr);
 
     Load();
 }
 
 SwInsertConfig::~SwInsertConfig()
 {
-    delete pCapOptions;
-    delete pOLEMiscOpt;
+    pCapOptions.reset();
+    pOLEMiscOpt.reset();
 }
 
 static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
@@ -1072,7 +1072,7 @@ void SwInsertConfig::Load()
                 case INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES:
                     if(!pOLEMiscOpt)
                     {
-                        pOLEMiscOpt = new InsCaptionOpt(OLE_CAP);
+                        pOLEMiscOpt.reset(new InsCaptionOpt(OLE_CAP));
                     }
                     lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
                 break;
