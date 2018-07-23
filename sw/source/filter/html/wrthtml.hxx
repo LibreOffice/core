@@ -257,7 +257,7 @@ class IDocumentStylePoolAccess;
 
 class SW_DLLPUBLIC SwHTMLWriter : public Writer
 {
-    SwHTMLPosFlyFrames *m_pHTMLPosFlyFrames;
+    std::unique_ptr<SwHTMLPosFlyFrames> m_pHTMLPosFlyFrames;
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;// current numbering
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNextNumRuleInfo;
     sal_uInt32 m_nHTMLMode;               // description of export configuration
@@ -296,7 +296,7 @@ public:
     css::uno::Reference<css::container::XIndexContainer> mxFormComps; // current form
 
     rtl::Reference<SwDoc> m_xTemplate;               // HTML template
-    Color *m_pDfltColor;              // default colour
+    boost::optional<Color> m_xDfltColor;              // default colour
     SwNodeIndex *m_pStartNdIdx;       // index of first paragraph
     const SwPageDesc *m_pCurrPageDesc;// current page style
     const SwFormatFootnote *m_pFormatFootnote;
@@ -621,7 +621,7 @@ struct HTMLSaveData
 {
     SwHTMLWriter& rWrt;
     SwPaM* pOldPam, *pOldEnd;
-    SwHTMLNumRuleInfo *pOldNumRuleInfo;     // Owner = this
+    std::unique_ptr<SwHTMLNumRuleInfo> pOldNumRuleInfo;     // Owner = this
     std::unique_ptr<SwHTMLNumRuleInfo> pOldNextNumRuleInfo;
     sal_uInt16 nOldDefListLvl;
     SvxFrameDirection nOldDirection;

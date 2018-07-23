@@ -345,7 +345,7 @@ void SwHTMLWriter::CollectFlyFrames()
         }
 
         if( !m_pHTMLPosFlyFrames )
-            m_pHTMLPosFlyFrames = new SwHTMLPosFlyFrames;
+            m_pHTMLPosFlyFrames.reset(new SwHTMLPosFlyFrames);
 
         SwHTMLPosFlyFrame *pNew = new SwHTMLPosFlyFrame(**aIter, pSdrObj, nMode);
         m_pHTMLPosFlyFrames->insert( pNew );
@@ -385,8 +385,7 @@ bool SwHTMLWriter::OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx, HtmlPos
                 i--;
                 if( m_pHTMLPosFlyFrames->empty() )
                 {
-                    delete m_pHTMLPosFlyFrames;
-                    m_pHTMLPosFlyFrames = nullptr;
+                    m_pHTMLPosFlyFrames.reset();
                     bRestart = true;    // not really, only exit the loop
                 }
 
