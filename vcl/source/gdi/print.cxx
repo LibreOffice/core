@@ -1516,6 +1516,11 @@ void Printer::SetDuplexMode( DuplexMode eDuplex )
     }
 }
 
+DuplexMode Printer::GetDuplexMode() const
+{
+    return maJobSetup.ImplGetConstData().GetDuplexMode();
+}
+
 Paper Printer::GetPaper() const
 {
     return maJobSetup.ImplGetConstData().GetPaperFormat();

@@ -557,6 +557,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     get(mpStatusTxt, "status");
     get(mpCollateBox, "collate");
     get(mpCollateImage, "collateimage");
+    get(mpPaperSidesBox, "sidesbox");
     get(mpReverseOrderBox, "reverseorder");
     get(mpCopyCountField, "copycount");
     get(mpNupOrderWin, "orderpreview");
@@ -636,6 +637,9 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     // setup dependencies
     checkControlDependencies();
 
+    // setup paper sides box
+    setupPaperSidesBox();
+
     // set initial focus to "Number of copies"
     mpCopyCountField->GrabFocus();
     mpCopyCountField->SetSelection( Selection(0, 0xFFFF) );
@@ -680,6 +684,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
 
     // setup select hdl
     mpPrinters->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    mpPaperSidesBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     mpNupPagesBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     mpNupOrientationBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     mpNupOrderBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
@@ -726,6 +731,7 @@ void PrintDialog::dispose()
     mpCopyCountField.clear();
     mpCollateBox.clear();
     mpCollateImage.clear();
+    mpPaperSidesBox.clear();
     mpReverseOrderBox.clear();
     mpPagesBtn.clear();
     mpBrochureBtn.clear();
@@ -749,6 +755,22 @@ void PrintDialog::dispose()
     mpBorderCB.clear();
     mpMoreOptionsDlg.disposeAndClear();
     ModalDialog::dispose();
+}
+
+void PrintDialog::setupPaperSidesBox()
+{
+    DuplexMode eDuplex = maPController->getPrinter()->GetDuplexMode();
+
+    if ( eDuplex == DuplexMode::Unknown || isPrintToFile() )
+    {
+        mpPaperSidesBox->SelectEntryPos( 0 );
+        mpPaperSidesBox->Enable( false );
+    }
+    else
+    {
+        mpPaperSidesBox->SelectEntryPos( static_cast<sal_Int32>(eDuplex) - 1 );
+        mpPaperSidesBox->Enable( true );
+    }
 }
 
 void PrintDialog::setPaperSizes()
@@ -1789,6 +1811,13 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             setPaperSizes();
             preparePreview( true, true );
         }
+
+        setupPaperSidesBox();
+    }
+    else if ( &rBox == mpPaperSidesBox )
+    {
+        DuplexMode eDuplex = static_cast<DuplexMode>(mpPaperSidesBox->GetSelectedEntryPos() + 1);
+        maPController->getPrinter()->SetDuplexMode( eDuplex );
     }
     else if( &rBox == mpNupOrientationBox || &rBox == mpNupOrderBox )
     {
