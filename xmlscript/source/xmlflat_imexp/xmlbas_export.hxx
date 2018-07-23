@@ -45,7 +45,7 @@ namespace xmlscript
         ::osl::Mutex                                              m_aMutex;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
         css::uno::Reference< css::frame::XModel >                 m_xModel;
-        bool                                                      m_bOasis;
+        bool const                                                m_bOasis;
 
     public:
         explicit XMLBasicExporterBase(bool bOasis);

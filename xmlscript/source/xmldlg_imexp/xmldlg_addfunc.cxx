@@ -36,7 +36,7 @@ namespace xmlscript
 class InputStreamProvider
     : public ::cppu::WeakImplHelper< io::XInputStreamProvider >
 {
-    std::vector<sal_Int8> _bytes;
+    std::vector<sal_Int8> const _bytes;
 
 public:
     explicit InputStreamProvider( std::vector<sal_Int8> const & rBytes )

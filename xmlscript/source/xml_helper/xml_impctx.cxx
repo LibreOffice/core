@@ -105,8 +105,8 @@ class DocumentHandlerImpl :
     t_OUString2LongMap m_URI2Uid;
     sal_Int32 m_uid_count;
 
-    OUString m_sXMLNS_PREFIX_UNKNOWN;
-    OUString m_sXMLNS;
+    OUString const m_sXMLNS_PREFIX_UNKNOWN;
+    OUString const m_sXMLNS;
 
     sal_Int32 m_nLastURI_lookup;
     OUString m_aLastURI_lookup;
@@ -301,7 +301,7 @@ inline void DocumentHandlerImpl::getElementName(
 class ExtendedAttributes :
     public ::cppu::WeakImplHelper< xml::input::XAttributes >
 {
-    sal_Int32 m_nAttributes;
+    sal_Int32 const m_nAttributes;
     std::unique_ptr<sal_Int32[]> m_pUids;
     std::unique_ptr<OUString[]>  m_pLocalNames;
     std::unique_ptr<OUString[]>  m_pQNames;
