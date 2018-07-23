@@ -469,7 +469,7 @@ bool KDE5SalGraphics::drawNativeControl(ControlType type, ControlPart part,
         {
             QStyleOptionButton option;
             // clear FOCUSED bit, focus is drawn separately
-            nControlState &= ~(ControlState::FOCUSED);
+            nControlState &= ~ControlState::FOCUSED;
             draw(QStyle::CE_CheckBox, &option, m_image.get(),
                  vclStateValue2StateFlag(nControlState, value));
         }
@@ -551,7 +551,7 @@ bool KDE5SalGraphics::drawNativeControl(ControlType type, ControlPart part,
         {
             QStyleOptionButton option;
             // clear FOCUSED bit, focus is drawn separately
-            nControlState &= ~(ControlState::FOCUSED);
+            nControlState &= ~ControlState::FOCUSED;
             draw(QStyle::CE_RadioButton, &option, m_image.get(),
                  vclStateValue2StateFlag(nControlState, value));
         }
