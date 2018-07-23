@@ -778,7 +778,7 @@ void FontNameBox::Fill( const FontList* pList )
     for ( sal_uInt16 i = 0; i < nFontCount; i++ )
     {
         const FontMetric& rFontMetric = pList->GetFontName( i );
-        sal_uLong nIndex = InsertEntry( rFontMetric.GetFamilyName() );
+        sal_uInt32 nIndex = InsertEntry( rFontMetric.GetFamilyName() );
         if ( nIndex != LISTBOX_ERROR )
         {
             if ( nIndex < mpFontList->size() ) {
@@ -1402,8 +1402,8 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
         if ( pAry == FontList::GetStdSizeAry() )
         {
             // for scalable fonts all font size names
-            sal_uLong nCount = aFontSizeNames.Count();
-            for( sal_uLong i = 0; i < nCount; i++ )
+            sal_uInt32 nCount = aFontSizeNames.Count();
+            for( sal_uInt32 i = 0; i < nCount; i++ )
             {
                 OUString    aSizeName = aFontSizeNames.GetIndexName( i );
                 sal_IntPtr  nSize = aFontSizeNames.GetIndexSize( i );
