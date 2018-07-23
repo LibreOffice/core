@@ -32,8 +32,8 @@ class OOo2OasisTransformer :
         public css::document::XImporter,
         public css::document::XFilter
 {
-    OUString m_aImplName;
-    OUString m_aSubServiceName;
+    OUString const m_aImplName;
+    OUString const m_aSubServiceName;
 
     std::unique_ptr<XMLTransformerActions> m_aActions[MAX_OOO_ACTIONS];
     XMLTransformerOOoEventMap_Impl *m_pEventMap;
@@ -47,8 +47,8 @@ protected:
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n ) override;
 
 public:
-    OOo2OasisTransformer( const sal_Char *pImplName=nullptr,
-                          const sal_Char *pSubServiceName=nullptr ) throw();
+    OOo2OasisTransformer( OUString const & rImplName,
+                          OUString const & rSubServiceName ) throw();
     virtual ~OOo2OasisTransformer() throw() override;
 
     // XInterface

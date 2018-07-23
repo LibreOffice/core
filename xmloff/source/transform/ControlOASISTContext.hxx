@@ -24,8 +24,8 @@
 
 class XMLControlOASISTransformerContext : public XMLTransformerContext
 {
-    OUString m_aElemQName;
-    bool m_bCreateControl;
+    OUString const m_aElemQName;
+    bool const m_bCreateControl;
 
 public:
     XMLControlOASISTransformerContext( XMLTransformerBase& rTransformer,

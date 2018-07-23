@@ -31,7 +31,7 @@ class XMLMergeElemTransformerContext : public XMLTransformerContext
 {
     css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
     XMLPersTextContentTContextVector m_aChildContexts;
-    sal_uInt16 m_nActionMap;
+    sal_uInt16 const m_nActionMap;
     bool m_bStartElementExported;
 
     void ExportStartElement();

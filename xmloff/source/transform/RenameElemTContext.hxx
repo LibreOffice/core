@@ -26,9 +26,9 @@
 
 class XMLRenameElemTransformerContext : public XMLTransformerContext
 {
-    OUString m_aElemQName;
-    OUString m_aAttrQName;
-    OUString m_aAttrValue;
+    OUString const m_aElemQName;
+    OUString const m_aAttrQName;
+    OUString const m_aAttrValue;
 
 public:
     // The following constructor renames the element names "rQName"

@@ -25,8 +25,8 @@
 
 class XMLProcAttrTransformerContext : public XMLTransformerContext
 {
-    OUString m_aElemQName;
-    sal_uInt16 m_nActionMap;
+    OUString const m_aElemQName;
+    sal_uInt16 const m_nActionMap;
 
 protected:
 

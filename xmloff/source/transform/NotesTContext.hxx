@@ -25,7 +25,7 @@
 class XMLNotesTransformerContext : public XMLPersElemContentTContext
 {
     bool m_bEndNote;
-    bool m_bPersistent;
+    bool const m_bPersistent;
     ::xmloff::token::XMLTokenEnum m_eTypeToken;
 
 public:

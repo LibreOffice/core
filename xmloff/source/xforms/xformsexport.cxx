@@ -111,9 +111,9 @@ typedef OUString (*convert_t)( const Any& );
 typedef struct
 {
     const sal_Char* pPropertyName;
-    sal_uInt16 nNamespace;
+    sal_uInt16 const nNamespace;
     sal_uInt16 nToken;
-    convert_t aConverter;
+    convert_t const aConverter;
 } ExportTable;
 static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  SvXMLExport& rExport,

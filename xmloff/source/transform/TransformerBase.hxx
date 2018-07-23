@@ -68,7 +68,7 @@ class XMLTransformerBase : public XMLTransformer
     SvXMLNamespaceMap           m_vReplaceNamespaceMap;
     std::vector<rtl::Reference<XMLTransformerContext>> m_vContexts;
     XMLTransformerActions       m_ElemActions;
-    XMLTransformerTokenMap      m_TokenMap;
+    XMLTransformerTokenMap const m_TokenMap;
 
 protected:
     css::uno::Reference< css::frame::XModel >     mxModel;

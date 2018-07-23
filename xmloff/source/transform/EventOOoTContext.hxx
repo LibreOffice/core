@@ -26,7 +26,7 @@ class XMLTransformerOOoEventMap_Impl;
 
 class XMLEventOOoTransformerContext : public XMLPersElemContentTContext
 {
-    bool m_bPersistent;
+    bool const m_bPersistent;
 
 public:
     XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
