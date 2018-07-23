@@ -228,7 +228,7 @@ void UseUniquePtr::CheckForSimpleDelete(const CXXMethodDecl* methodDecl, const C
             auto ifDeleteExpr = dyn_cast<CXXDeleteExpr>(*j);
             if (ifDeleteExpr)
                 CheckDeleteExpr(methodDecl, ifDeleteExpr);
-            ParenExpr const * parenExpr = dyn_cast<ParenExpr>(*i);
+            ParenExpr const * parenExpr = dyn_cast<ParenExpr>(*j);
             if (parenExpr)
                 CheckParenExpr(methodDecl, parenExpr);
         }
