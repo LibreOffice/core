@@ -89,7 +89,7 @@ interface XSlideShowController
     void gotoNextEffect();
 
 
-    /** undo the last effects that where triggered by a generic trigger.
+    /** undo the last effects that were triggered by a generic trigger.
         <p>If there is no previous effect that can be undone then the
         previous slide will be displayed.
     */

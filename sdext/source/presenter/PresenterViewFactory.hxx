@@ -46,7 +46,7 @@ public:
     virtual void ActivatePresenterView();
 
     /** Called when the view is put into a cache.  The view must not paint
-        itself while being deactive.
+        itself while being deactivated.
     */
     virtual void DeactivatePresenterView();
 

@@ -197,7 +197,7 @@ enum ScCsvCmdType
     CSVCMD_REMOVEALLSPLITS      /// Remove all splits. [-]
 };
 
-/** Data for a CSV control command. The stored position data is aways character based,
+/** Data for a CSV control command. The stored position data is always character based,
     it's never a column index (required for internal consistency). */
 class ScCsvCmd
 {

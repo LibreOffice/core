@@ -118,7 +118,7 @@ Date:   Wed Sep 5 16:37:28 2007 +0000
 
     INTEGRATION: CWS i18n37 (1.22.6); FILE MERGED
     2007/09/03 18:27:39 khong 1.22.6.2: i8132 fixed a problem in skipping space for word breakiterator
-    2007/08/31 21:30:30 khong 1.22.6.1: i81158 fix skiping space problem
+    2007/08/31 21:30:30 khong 1.22.6.1: i81158 fix skipping space problem
 
 commit d2c2baf1a31d281d20e8b4d4c806dda027b2d5a3
 Author: Vladimir Glazounov <vg@openoffice.org>
