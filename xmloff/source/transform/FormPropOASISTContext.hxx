@@ -25,8 +25,8 @@
 class XMLFormPropOASISTransformerContext :
             public XMLRenameElemTransformerContext
 {
-    bool m_bIsList;
-    bool m_bIsListValue;
+    bool const m_bIsList;
+    bool const m_bIsListValue;
 
     static ::xmloff::token::XMLTokenEnum GetValueType( const OUString& rValue );
 

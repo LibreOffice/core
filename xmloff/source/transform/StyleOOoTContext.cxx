@@ -43,6 +43,7 @@
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <array>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
@@ -62,7 +63,7 @@ const sal_uInt16 MAX_PROP_TYPES = 4;
     { XML_PROP_TYPE_##a, XML_PROP_TYPE_##END, \
         XML_PROP_TYPE_END, XML_PROP_TYPE_END }
 
-static const XMLPropType aPropTypes[XML_FAMILY_TYPE_END][MAX_PROP_TYPES] =
+static const std::array<XMLPropType,MAX_PROP_TYPES> aPropTypes[XML_FAMILY_TYPE_END] =
 {
     ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_GRAPHIC,
     ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_PRESENTATION,
@@ -209,11 +210,11 @@ class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
     ::rtl::Reference < XMLTypedPropertiesOOoTContext_Impl >
         m_aPropContexts[MAX_PROP_TYPES];
 
-    typedef XMLPropType XMLPropTypes[MAX_PROP_TYPES];
+    using XMLPropTypes = std::array<XMLPropType, MAX_PROP_TYPES>;
 
-    XMLPropTypes m_aPropTypes;
+    XMLPropTypes const & m_rPropTypes;
 
-    bool m_bPersistent;
+    bool const m_bPersistent;
 
     XMLTypedPropertiesOOoTContext_Impl *GetPropContextAndAction(
             TransformerAction_Impl& rAction,
@@ -253,7 +254,7 @@ XMLTypedPropertiesOOoTContext_Impl
     sal_uInt16 nIndex = MAX_PROP_TYPES;
     for( sal_uInt16 i=0; i< MAX_PROP_TYPES; i++ )
     {
-        if( m_aPropTypes[i] == eType )
+        if( m_rPropTypes[i] == eType )
         {
             nIndex = i;
             break;
@@ -270,7 +271,7 @@ XMLTypedPropertiesOOoTContext_Impl
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_STYLE,
                         ::xmloff::token::GetXMLToken(
-                            aPropTokens[m_aPropTypes[nIndex]] ) ));
+                            aPropTokens[m_rPropTypes[nIndex]] ) ));
     }
 
     return m_aPropContexts[nIndex].get();
@@ -287,10 +288,10 @@ XMLTypedPropertiesOOoTContext_Impl
 
     XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
     sal_uInt16 i=0;
-    while( i < MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_aPropTypes[i])
+    while( i < MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_rPropTypes[i])
     {
         sal_uInt16 nActionMap =
-            (bElem ? aElemActionMaps : aAttrActionMaps)[m_aPropTypes[i]];
+            (bElem ? aElemActionMaps : aAttrActionMaps)[m_rPropTypes[i]];
         if( nActionMap < MAX_OOO_PROP_ACTIONS )
         {
             XMLTransformerActions *pActions =
@@ -315,15 +316,15 @@ XMLTypedPropertiesOOoTContext_Impl
 #ifdef DBG_UTIL
     if( !( XML_NAMESPACE_NONE == nPrefix ||
                 (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) ||
-                XML_PROP_TYPE_END==m_aPropTypes[1] ||
-                (i<MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_aPropTypes[i]) ) )
+                XML_PROP_TYPE_END==m_rPropTypes[1] ||
+                (i<MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_rPropTypes[i]) ) )
     {
         SAL_WARN("xmloff", "Didn't find property: "
                 << GetTransformer().GetNamespaceMap().GetPrefixByKey( nPrefix )
                 << ":"
                 << rLocalName
                 << ", assuming <style:"
-                << ::xmloff::token::GetXMLToken( aPropTokens[m_aPropTypes[0]] )
+                << ::xmloff::token::GetXMLToken( aPropTokens[m_rPropTypes[0]] )
                 << ">" );
     }
 #endif
@@ -336,7 +337,7 @@ XMLTypedPropertiesOOoTContext_Impl
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_STYLE,
                         ::xmloff::token::GetXMLToken(
-                            aPropTokens[m_aPropTypes[nIndex]] ) ));
+                            aPropTokens[m_rPropTypes[nIndex]] ) ));
     }
 
     return m_aPropContexts[nIndex].get();
@@ -348,13 +349,10 @@ XMLPropertiesOOoTContext_Impl::XMLPropertiesOOoTContext_Impl(
     const XMLPropTypes& rTypes,
     bool bPersistent    ) :
     XMLTransformerContext( rImp, rQName ),
+    // remember the types that belong to the attribute and element lists
+    m_rPropTypes(rTypes),
     m_bPersistent( bPersistent )
 {
-    for( sal_uInt16 i=0; i < MAX_PROP_TYPES; ++i )
-    {
-        // remember the types that belong to the attribute and element lists
-        m_aPropTypes[i] = rTypes[i];
-    }
 }
 
 rtl::Reference<XMLTransformerContext> XMLPropertiesOOoTContext_Impl::CreateChildContext(

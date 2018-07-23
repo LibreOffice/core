@@ -65,7 +65,7 @@ class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
     css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
 
     XMLPropType m_ePropType;
-    bool        m_bControlStyle;
+    bool const  m_bControlStyle;
 
 public:
 

@@ -38,9 +38,9 @@ namespace
 
     struct ServiceDescriptor
     {
-        GetImplementationName       getImplementationName;
-        GetSupportedServiceNames    getSupportedServiceNames;
-        CreateInstance              createInstance;
+        GetImplementationName const    getImplementationName;
+        GetSupportedServiceNames const getSupportedServiceNames;
+        CreateInstance const           createInstance;
     };
 
     const ServiceDescriptor* getServiceDescriptors()

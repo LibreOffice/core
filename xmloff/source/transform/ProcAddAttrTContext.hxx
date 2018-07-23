@@ -24,8 +24,8 @@
 
 class XMLProcAddAttrTransformerContext : public XMLProcAttrTransformerContext
 {
-    OUString m_aAttrQName;
-    OUString m_aAttrValue;
+    OUString const m_aAttrQName;
+    OUString const m_aAttrValue;
 
 public:
     XMLProcAddAttrTransformerContext( XMLTransformerBase& rTransformer,
