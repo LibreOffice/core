@@ -96,7 +96,7 @@ private:
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
     virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;
-    virtual const std::vector< WrappedProperty* > createWrappedProperties() override;
+    virtual const std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
 
     css::uno::Reference< css::beans::XPropertySet > getFirstCharacterPropertySet();
 

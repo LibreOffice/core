@@ -94,7 +94,7 @@ private:
 
     // ____ WrappedPropertySet ____
     virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;
-    virtual const std::vector< WrappedProperty* > createWrappedProperties() override;
+    virtual const std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;

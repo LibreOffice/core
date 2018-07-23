@@ -24,6 +24,7 @@
 #include "charttoolsdllapi.hxx"
 
 #include <map>
+#include <memory>
 
 namespace chart
 {
@@ -74,7 +75,7 @@ protected:
     OUString             m_aInnerName;
 };
 
-typedef std::map< sal_Int32, const WrappedProperty* > tWrappedPropertyMap;
+typedef std::map< sal_Int32, std::unique_ptr<const WrappedProperty> > tWrappedPropertyMap;
 
 } //namespace chart
 
