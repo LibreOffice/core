@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_8124f80e",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1821,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-07-23T09:47:21Z",
+      "side": 1,
+      "message": "could you fix with \"exist\" instead?",
+      "range": {
+        "startLine": 1821,
+        "startChar": 43,
+        "endLine": 1821,
+        "endChar": 49
+      },
+      "revId": "ba096b89c4527e2e95915f3ebb7c22fa4dfe0ff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
