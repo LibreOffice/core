@@ -160,7 +160,7 @@ SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     if(!m_pSpellState->m_bInitialCall && pWrtShell)
         pWrtShell->SpellEnd();
-    delete m_pSpellState;
+    m_pSpellState.reset();
 }
 
 SfxChildWinInfo SwSpellDialogChildWindow::GetInfo() const

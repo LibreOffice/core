@@ -29,7 +29,7 @@ class SwSpellDialogChildWindow
     : public svx::SpellDialogChildWindow
 {
     bool            m_bIsGrammarCheckingOn;
-    SpellState*     m_pSpellState;
+    std::unique_ptr<SpellState> m_pSpellState;
 
     SwWrtShell*     GetWrtShell_Impl();
     bool            MakeTextSelection_Impl(SwWrtShell& rSh, ShellMode eSelMode);
