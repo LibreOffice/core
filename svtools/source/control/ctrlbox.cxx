@@ -778,10 +778,10 @@ void FontNameBox::Fill( const FontList* pList )
     for ( sal_uInt16 i = 0; i < nFontCount; i++ )
     {
         const FontMetric& rFontMetric = pList->GetFontName( i );
-        sal_uLong nIndex = InsertEntry( rFontMetric.GetFamilyName() );
+        sal_Int32 nIndex = InsertEntry( rFontMetric.GetFamilyName() );
         if ( nIndex != LISTBOX_ERROR )
         {
-            if ( nIndex < mpFontList->size() ) {
+            if ( nIndex < static_cast<sal_Int32>(mpFontList->size()) ) {
                 ImplFontList::iterator it = mpFontList->begin();
                 ::std::advance( it, nIndex );
                 mpFontList->insert( it, rFontMetric );
@@ -1402,11 +1402,11 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
         if ( pAry == FontList::GetStdSizeAry() )
         {
             // for scalable fonts all font size names
-            sal_uLong nCount = aFontSizeNames.Count();
-            for( sal_uLong i = 0; i < nCount; i++ )
+            sal_Int32 nCount = aFontSizeNames.Count();
+            for( sal_Int32 i = 0; i < nCount; i++ )
             {
                 OUString    aSizeName = aFontSizeNames.GetIndexName( i );
-                sal_IntPtr  nSize = aFontSizeNames.GetIndexSize( i );
+                sal_Int32   nSize = aFontSizeNames.GetIndexSize( i );
                 ComboBox::InsertEntry( aSizeName, nPos );
                 ComboBox::SetEntryData( nPos, reinterpret_cast<void*>(-nSize) ); // mark as special
                 nPos++;
