@@ -136,7 +136,6 @@ private:
                           css::drawing::XShape >& xShape );
     void exportPlotArea( const css::uno::Reference<
                              css::chart::XChartDocument >& rChartDoc );
-    void exportPlotAreaShapeProps( const css::uno::Reference< css::beans::XPropertySet >& xPropSet  );
     void exportFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void exportGradientFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void exportBitmapFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );

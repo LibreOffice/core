@@ -1039,6 +1039,12 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
             XML_val, "0",
             FSEND);
 
+    // shape properties
+    if( xPropSet.is() )
+    {
+        exportShapeProps( xPropSet );
+    }
+
     pFS->endElement( FSNS( XML_c, XML_title ) );
 }
 
@@ -1172,7 +1178,7 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
         Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
         if( xWallPropSet.is() )
         {
-            exportPlotAreaShapeProps( xWallPropSet );
+            exportShapeProps( xWallPropSet );
         }
     }
 
@@ -1260,18 +1266,6 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos,
 
     pFS->endElement(FSNS(XML_c, XML_manualLayout));
     pFS->endElement(FSNS(XML_c, XML_layout));
-}
-
-void ChartExport::exportPlotAreaShapeProps( const Reference< XPropertySet >& xPropSet )
-{
-    FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_spPr ),
-            FSEND );
-
-    exportFill( xPropSet );
-    WriteOutline( xPropSet );
-
-    pFS->endElement( FSNS( XML_c, XML_spPr ) );
 }
 
 void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
@@ -2313,7 +2307,7 @@ void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet )
     pFS->startElement( FSNS( XML_c, XML_spPr ),
             FSEND );
 
-    WriteFill( xPropSet );
+    exportFill( xPropSet );
     WriteOutline( xPropSet );
 
     pFS->endElement( FSNS( XML_c, XML_spPr ) );
