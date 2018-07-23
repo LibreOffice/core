@@ -1013,7 +1013,7 @@ static ImplUniToDBCSHighTab const aJOHABDBCSHighTab[256] =
     { 0x06, 0xFA, aImplUniToDBCSTab_JOHAB_56 },                 /* 0x56 */
     { 0x03, 0xFC, aImplUniToDBCSTab_JOHAB_57 },                 /* 0x57 */
     { 0x00, 0xFD, aImplUniToDBCSTab_JOHAB_58 },                 /* 0x58 */
-    { 0x07, 0xFF, aImplUniToDBCSTab_JOHAB_59 },                 /* 0x59 */
+    { 0x0F, 0xFF, aImplUniToDBCSTab_JOHAB_59 },                 /* 0x59 */
     { 0x01, 0xE9, aImplUniToDBCSTab_JOHAB_5A },                 /* 0x5A */
     { 0x05, 0xFA, aImplUniToDBCSTab_JOHAB_5B },                 /* 0x5B */
     { 0x01, 0xFD, aImplUniToDBCSTab_JOHAB_5C },                 /* 0x5C */
