@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_a1881cc6",
+        "filename": "svtools/source/inc/svtaccessiblefactory.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-23T12:21:11Z",
+      "side": 1,
+      "message": "this is wrong\n goes always -\u003e goes away",
+      "revId": "26f1fc7c520b442a3c56b3346a19d921e1574f81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_818518b0",
+        "filename": "toolkit/inc/helper/accessibilityclient.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-23T12:21:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "26f1fc7c520b442a3c56b3346a19d921e1574f81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
