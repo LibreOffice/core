@@ -55,6 +55,7 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuitem menu:id=".uno:TableNumberFormatDialog"/>
+  <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
   <menu:menuitem menu:id=".uno:TableDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
