@@ -207,19 +207,6 @@ ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
     return pAnchorOverlayObject;
 }
 
-/*static*/ void AnchorOverlayObject::DestroyAnchorOverlayObject( AnchorOverlayObject* pAnchor )
-{
-    if ( pAnchor )
-    {
-        if ( pAnchor->getOverlayManager() )
-        {
-            // remove this object from the chain
-            pAnchor->getOverlayManager()->remove(*pAnchor);
-        }
-        delete pAnchor;
-    }
-}
-
 AnchorOverlayObject::AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
                                           const basegfx::B2DPoint& rSecondPos,
                                           const basegfx::B2DPoint& rThirdPos,
@@ -245,6 +232,11 @@ AnchorOverlayObject::AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
 
 AnchorOverlayObject::~AnchorOverlayObject()
 {
+    if ( getOverlayManager() )
+    {
+        // remove this object from the chain
+        getOverlayManager()->remove(*this);
+    }
 }
 
 void AnchorOverlayObject::implEnsureGeometry()
