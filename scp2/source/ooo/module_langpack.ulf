@@ -633,6 +633,12 @@ en-US = "Georgian"
 [STR_DESC_MODULE_LANGPACK_KA]
 en-US = "Installs Georgian support in %PRODUCTNAME %PRODUCTVERSION"
 
+[STR_NAME_MODULE_LANGPACK_KAB]
+en-US = "Kabyle"
+
+[STR_DESC_MODULE_LANGPACK_KAB]
+en-US = "Installs Kabyle support in %PRODUCTNAME %PRODUCTVERSION"
+
 [STR_NAME_MODULE_LANGPACK_EO]
 en-US = "Esperanto"
 
