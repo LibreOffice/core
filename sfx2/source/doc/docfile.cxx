@@ -2597,7 +2597,7 @@ void SfxMedium::GetMedium_Impl()
         if ( !GetError() && !pImpl->xStream.is() && !pImpl->xInputStream.is() )
             SetError(ERRCODE_IO_ACCESSDENIED);
 
-        if ( !GetError() )
+        if ( !GetError() && !pImpl->m_pInStream )
         {
             if ( pImpl->xStream.is() )
                 pImpl->m_pInStream = utl::UcbStreamHelper::CreateStream( pImpl->xStream );
