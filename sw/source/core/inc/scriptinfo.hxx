@@ -67,7 +67,7 @@ private:
     std::unordered_set<size_t> m_KashidaInvalid;
     std::deque<TextFrameIndex> m_NoKashidaLine;
     std::deque<TextFrameIndex> m_NoKashidaLineEnd;
-    std::deque<TextFrameIndex> m_HiddenChg;
+    std::vector<TextFrameIndex> m_HiddenChg;
     //! Records a single change in compression.
     struct CompressionChangeInfo
     {
