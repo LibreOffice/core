@@ -31,7 +31,7 @@ namespace toolkit
         instance, which is used for creating all kind of Accessibility related
         components.
 
-        When the AccessibilityClient goes always, this factory goes always, to, and the respective
+        When the AccessibilityClient goes away, this factory goes away, to, and the respective
         library is unloaded.
 
         This class is not thread-safe.
