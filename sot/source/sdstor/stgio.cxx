@@ -54,7 +54,7 @@ StgIo::~StgIo()
 
 bool StgIo::Load()
 {
-    if( m_pStrm )
+    if( GetStrm() )
     {
         if( m_aHdr.Load( *this ) )
         {
@@ -141,8 +141,8 @@ bool StgIo::CommitAll()
             m_aHdr.SetTOCStart( m_pTOC->GetStart() );
             if( m_aHdr.Store( *this ) )
             {
-                m_pStrm->Flush();
-                const ErrCode n = m_pStrm->GetError();
+                GetStrm()->Flush();
+                const ErrCode n = GetStrm()->GetError();
                 SetError( n );
 #ifdef DBG_UTIL
                 if( n==ERRCODE_NONE ) ValidateFATs();
