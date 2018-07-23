@@ -3335,12 +3335,26 @@ find_ucrt()
         UCRTSDKDIR=$formatted_path
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
         UCRTVERSION=$regvalue
+        # Rest if not exist
+        if ! test -d "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"; then
+          UCRTSDKDIR=
+          AC_MSG_RESULT([UCRT: give up registry detection and retrieve from IDE env file])
+        fi
     fi
     if test -z "$UCRTSDKDIR"; then
         if test -f "$VC_PRODUCT_DIR/../Common7/Tools/vsvars32.bat"; then
             PathFormat "`win_get_env_from_vsvars32bat "UniversalCRTSdkDir"`"
             UCRTSDKDIR=$formatted_path
-            UCRTVERSION=`win_get_env_from_vsvars32bat "UCRTVersion"`
+            UCRTVERSION=$(win_get_env_from_vsvars32bat UCRTVersion)
+            dnl Hack needed at least by tml:
+            if test "$UCRTVERSION" = 10.0.15063.0 \
+                -a ! -f "${UCRTSDKDIR}Include/10.0.15063.0/um/sqlext.h" \
+                -a -f "${UCRTSDKDIR}Include/10.0.14393.0/um/sqlext.h"
+            then
+                UCRTVERSION=10.0.14393.0
+            fi
+        else
+          AC_MSG_ERROR([No UCRT found])
         fi
     fi
 }
@@ -5261,9 +5275,9 @@ find_dotnetsdk46()
 find_winsdk_version()
 {
     # Args: $1 : SDK version as in "6.0A", "7.0" etc
-    # Return values: $winsdktest, $winsdklibsubdir
+    # Return values: $winsdktest, $winsdkbinsubdir, $winsdklibsubdir
 
-    unset winsdktest winsdklibsubdir
+    unset winsdktest winsdkbinsubdir winsdklibsubdir
 
     # Why we look for them in this particular order I don't know. But OTOH I
     case "$1" in
@@ -5296,7 +5310,21 @@ find_winsdk_version()
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/ProductVersion"
+            if test -n "$regvalue"; then
+                winsdkbinsubdir="$regvalue".0
+            fi
             winsdklibsubdir=$regvalue
+            if test "$regvalue" = "10.0.14393"; then
+                winsdklibsubdir="10.0.14393.0"
+            elif test "$regvalue" = "10.0.15063"; then
+                winsdklibsubdir="10.0.15063.0"
+                dnl Hack needed at least by tml:
+                if test ! -f "${winsdktest}/Include/10.0.15063.0/um/sqlext.h" \
+                    -a -f "${winsdktest}/Include/10.0.14393.0/um/sqlext.h"
+                then
+                    winsdklibsubdir="10.0.14393.0"
+                fi
+            fi
             return
         fi
         ;;
@@ -5306,7 +5334,7 @@ find_winsdk_version()
 find_winsdk()
 {
     # Args: $1 (optional) : list of acceptable SDK versions
-    # Return value: $winsdktest
+    # Return value: From find_winsdk_version
 
     unset winsdktest
 
@@ -5378,15 +5406,137 @@ find_msvc_x64_dlls()
     done
 }
 
+dnl =========================================
+dnl Check for the Windows  SDK.
+dnl =========================================
+if test "$_os" = "WINNT"; then
+    AC_MSG_CHECKING([for Windows SDK])
+    if test "$build_os" = "cygwin"; then
+        find_winsdk
+        WINDOWS_SDK_HOME=$winsdktest
+
+        # normalize if found
+        if test -n "$WINDOWS_SDK_HOME"; then
+            WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
+            WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
+        fi
+
+        WINDOWS_SDK_LIB_SUBDIR=$winsdklibsubdir
+    fi
+
+    if test -n "$WINDOWS_SDK_HOME"; then
+        # Remove a possible trailing backslash
+        WINDOWS_SDK_HOME=`echo $WINDOWS_SDK_HOME | $SED 's/\/$//'`
+
+        if test -f "$WINDOWS_SDK_HOME/Include/adoint.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/SqlUcode.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/usp10.h"; then
+            have_windows_sdk_headers=yes
+        elif test -f "$WINDOWS_SDK_HOME/Include/um/adoint.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/um/SqlUcode.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/um/usp10.h"; then
+            have_windows_sdk_headers=yes
+        elif test -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/adoint.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/SqlUcode.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/usp10.h"; then
+            have_windows_sdk_headers=yes
+        else
+            have_windows_sdk_headers=no
+        fi
+
+        if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
+            have_windows_sdk_libs=yes
+        elif test -f "$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/user32.lib"; then
+            have_windows_sdk_libs=yes
+        else
+            have_windows_sdk_libs=no
+        fi
+
+        if test $have_windows_sdk_headers = no -o $have_windows_sdk_libs = no; then
+            AC_MSG_ERROR([Some (all?) Windows SDK files not found, please check if all needed parts of
+the  Windows SDK are installed.])
+        fi
+    fi
+
+    if test -z "$WINDOWS_SDK_HOME"; then
+        AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway!?])
+    elif echo $WINDOWS_SDK_HOME | grep "v7.1" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=70
+        AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
+    elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=80
+        AC_MSG_RESULT([found Windows SDK 8.0 ($WINDOWS_SDK_HOME)])
+        dnl compatibility warning if not explicitly choosing the 80 SDK:
+        if test -z "$with_windows_sdk"; then
+            AC_MSG_WARN([If a build should run on Windows XP,])
+            AC_MSG_WARN([use --with-windows-sdk=7.1A])
+            add_warning "If a build should run on Windows XP,"
+            add_warning "use --with-windows-sdk=7.1A"
+        fi
+    elif echo $WINDOWS_SDK_HOME | grep "8.1" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=81
+        AC_MSG_RESULT([found Windows SDK 8.1 ($WINDOWS_SDK_HOME)])
+    elif echo $WINDOWS_SDK_HOME | grep "/10" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=10
+        AC_MSG_RESULT([found Windows SDK 10.0 ($WINDOWS_SDK_HOME)])
+    else
+        AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
+    fi
+    PathFormat "$WINDOWS_SDK_HOME"
+    WINDOWS_SDK_HOME="$formatted_path"
+    if test "$build_os" = "cygwin"; then
+        SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/Include"
+        if test -d "$WINDOWS_SDK_HOME/include/um"; then
+            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
+        elif test -d "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um"; then
+            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/shared"
+        fi
+    fi
+
+    dnl TODO: solenv/bin/modules/installer/windows/msiglobal.pm wants to use a
+    dnl WiLangId.vbs that is included only in some SDKs (e.g., included in v7.1
+    dnl but not in v8.0), so allow this to be overridden with a
+    dnl WINDOWS_SDK_WILANGID for now; a full-blown --with-windows-sdk-wilangid
+    dnl and configuration error if no WiLangId.vbs is found would arguably be
+    dnl better, but I do not know under which conditions exactly it is needed by
+    dnl msiglobal.pm:
+    if test -z "$WINDOWS_SDK_WILANGID" -a -n "$WINDOWS_SDK_HOME"; then
+        WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/Samples/sysmgmt/msi/scripts/WiLangId.vbs
+        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
+            WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/bin/$WINDOWS_SDK_ARCH/WiLangId.vbs
+        fi
+        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
+            WINDOWS_SDK_WILANGID=$(cygpath -sm "C:/Program Files (x86)/Windows Kits/8.1/bin/$WINDOWS_SDK_ARCH/WiLangId.vbs")
+        fi
+        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
+            AC_MSG_WARN([WiLangId.vbs not found - building translated packages will fail])
+            add_warning "WiLangId.vbs not found - building translated packages will fail"
+        fi
+    fi
+fi
+AC_SUBST(WINDOWS_SDK_HOME)
+AC_SUBST(WINDOWS_SDK_LIB_SUBDIR)
+AC_SUBST(WINDOWS_SDK_VERSION)
+AC_SUBST(WINDOWS_SDK_WILANGID)
+
 if test "$build_os" = "cygwin"; then
-    dnl Check midl.exe
+    dnl Check midl.exe; this being the first check for a tool in the SDK bin
+    dnl dir, it also determines that dir's path w/o an arch segment if any,
+    dnl WINDOWS_SDK_BINDIR_NO_ARCH:
     AC_MSG_CHECKING([for midl.exe])
 
     find_winsdk
-    if test -f "$winsdktest/Bin/midl.exe"; then
-        MIDL_PATH="$winsdktest/Bin"
+    if test -n "$winsdkbinsubdir" \
+        -a -f "$winsdktest/Bin/$winsdkbinsubdir/$WINDOWS_SDK_ARCH/midl.exe"
+    then
+        MIDL_PATH=$winsdktest/Bin/$winsdkbinsubdir/$WINDOWS_SDK_ARCH
+        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME/Bin/$winsdkbinsubdir
     elif test -f "$winsdktest/Bin/$WINDOWS_SDK_ARCH/midl.exe"; then
-        MIDL_PATH="$winsdktest/Bin/$WINDOWS_SDK_ARCH"
+        MIDL_PATH=$winsdktest/Bin/$WINDOWS_SDK_ARCH
+        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME/Bin
+    elif test -f "$winsdktest/Bin/midl.exe"; then
+        MIDL_PATH=$winsdktest/Bin
+        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME/Bin
     fi
     if test ! -f "$MIDL_PATH/midl.exe"; then
         AC_MSG_ERROR([midl.exe not found in $winsdktest/Bin/$WINDOWS_SDK_ARCH, Windows SDK installation broken?])
@@ -5396,6 +5546,18 @@ if test "$build_os" = "cygwin"; then
 
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     MIDL_PATH=`win_short_path_for_make "$MIDL_PATH"`
+
+    if test -f "$WINDOWS_SDK_BINDIR_NO_ARCH/msiinfo.exe" \
+         -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/msidb.exe" \
+         -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/uuidgen.exe" \
+         -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/msitran.exe"; then :
+    elif test -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/msiinfo.exe" \
+         -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/msidb.exe" \
+         -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/uuidgen.exe" \
+         -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/msitran.exe"; then :
+    else
+        AC_MSG_ERROR([Some (all?) Windows Installer tools in the Windows SDK are missing, please install.])
+    fi
 
     dnl Check csc.exe
     AC_MSG_CHECKING([for csc.exe])
@@ -5414,10 +5576,14 @@ if test "$build_os" = "cygwin"; then
     dnl Check al.exe
     AC_MSG_CHECKING([for al.exe])
     find_winsdk
-    if test -f "$winsdktest/Bin/al.exe"; then
-        AL_PATH="$winsdktest/Bin"
+    if test -n "$winsdkbinsubdir" \
+        -a -f "$winsdktest/Bin/$winsdkbinsubdir/$WINDOWS_SDK_ARCH/al.exe"
+    then
+        AL_PATH="$winsdktest/Bin/$winsdkbinsubdir/$WINDOWS_SDK_ARCH"
     elif test -f "$winsdktest/Bin/$WINDOWS_SDK_ARCH/al.exe"; then
         AL_PATH="$winsdktest/Bin/$WINDOWS_SDK_ARCH"
+    elif test -f "$winsdktest/Bin/al.exe"; then
+        AL_PATH="$winsdktest/Bin"
     fi
 
     if test -z "$AL_PATH"; then
@@ -9711,133 +9877,6 @@ if test "$_os" = "Linux"; then
 fi
 
 dnl =========================================
-dnl Check for the Windows  SDK.
-dnl =========================================
-dnl FIXME: I don't know yet if the Windows SDK works with MinGW, keep it until I know better,
-dnl and add "-a \( "$WITH_MINGW" != "yes" \)" then
-if test "$_os" = "WINNT"; then
-    AC_MSG_CHECKING([for Windows SDK])
-    if test "$build_os" = "cygwin"; then
-        find_winsdk
-        WINDOWS_SDK_HOME=$winsdktest
-
-        # normalize if found
-        if test -n "$WINDOWS_SDK_HOME"; then
-            WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
-            WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
-        fi
-
-        WINDOWS_SDK_LIB_SUBDIR=$winsdklibsubdir
-    fi
-
-    if test -n "$WINDOWS_SDK_HOME"; then
-        # Remove a possible trailing backslash
-        WINDOWS_SDK_HOME=`echo $WINDOWS_SDK_HOME | $SED 's/\/$//'`
-
-        if test -f "$WINDOWS_SDK_HOME/Include/adoint.h" \
-             -a -f "$WINDOWS_SDK_HOME/Include/SqlUcode.h" \
-             -a -f "$WINDOWS_SDK_HOME/Include/usp10.h"; then
-            have_windows_sdk_headers=yes
-        elif test -f "$WINDOWS_SDK_HOME/Include/um/adoint.h" \
-             -a -f "$WINDOWS_SDK_HOME/Include/um/SqlUcode.h" \
-             -a -f "$WINDOWS_SDK_HOME/Include/um/usp10.h"; then
-            have_windows_sdk_headers=yes
-        elif test -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/adoint.h" \
-             -a -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/SqlUcode.h" \
-             -a -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/usp10.h"; then
-            have_windows_sdk_headers=yes
-        else
-            have_windows_sdk_headers=no
-        fi
-
-        if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
-            have_windows_sdk_libs=yes
-        elif test -f "$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/user32.lib"; then
-            have_windows_sdk_libs=yes
-        else
-            have_windows_sdk_libs=no
-        fi
-
-        if test $have_windows_sdk_headers = no -o $have_windows_sdk_libs = no; then
-            AC_MSG_ERROR([Some (all?) Windows SDK files not found, please check if all needed parts of
-the  Windows SDK are installed.])
-        fi
-
-        if test ! -f "$WINDOWS_SDK_HOME/bin/msiinfo.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/msidb.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/msitran.exe"; then :
-        elif test ! -f "$WINDOWS_SDK_HOME/bin/x86/msiinfo.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/msidb.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/uuidgen.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/msitran.exe"; then :
-        else
-            AC_MSG_ERROR([Some (all?) Windows Installer tools in the Windows SDK are missing, please install.])
-        fi
-    fi
-
-    if test -z "$WINDOWS_SDK_HOME"; then
-        AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway!?])
-    elif echo $WINDOWS_SDK_HOME | grep "v7.1" >/dev/null 2>/dev/null; then
-        WINDOWS_SDK_VERSION=70
-        AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
-    elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
-        WINDOWS_SDK_VERSION=80
-        AC_MSG_RESULT([found Windows SDK 8.0 ($WINDOWS_SDK_HOME)])
-        dnl compatibility warning if not explicitly choosing the 80 SDK:
-        if test -z "$with_windows_sdk"; then
-            AC_MSG_WARN([If a build should run on Windows XP,])
-            AC_MSG_WARN([use --with-windows-sdk=7.1A])
-            add_warning "If a build should run on Windows XP,"
-            add_warning "use --with-windows-sdk=7.1A"
-        fi
-    elif echo $WINDOWS_SDK_HOME | grep "8.1" >/dev/null 2>/dev/null; then
-        WINDOWS_SDK_VERSION=81
-        AC_MSG_RESULT([found Windows SDK 8.1 ($WINDOWS_SDK_HOME)])
-    elif echo $WINDOWS_SDK_HOME | grep "/10" >/dev/null 2>/dev/null; then
-        WINDOWS_SDK_VERSION=10
-        AC_MSG_RESULT([found Windows SDK 10.0 ($WINDOWS_SDK_HOME)])
-    else
-        AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
-    fi
-    PathFormat "$WINDOWS_SDK_HOME"
-    WINDOWS_SDK_HOME="$formatted_path"
-    if test "$build_os" = "cygwin"; then
-        SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
-        if test -d "$WINDOWS_SDK_HOME/include/um"; then
-            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
-        elif test -d "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um"; then
-            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/shared"
-        fi
-    fi
-
-    dnl TODO: solenv/bin/modules/installer/windows/msiglobal.pm wants to use a
-    dnl WiLangId.vbs that is included only in some SDKs (e.g., included in v7.1
-    dnl but not in v8.0), so allow this to be overridden with a
-    dnl WINDOWS_SDK_WILANGID for now; a full-blown --with-windows-sdk-wilangid
-    dnl and configuration error if no WiLangId.vbs is found would arguably be
-    dnl better, but I do not know under which conditions exactly it is needed by
-    dnl msiglobal.pm:
-    if test -z "$WINDOWS_SDK_WILANGID" -a -n "$WINDOWS_SDK_HOME"; then
-        WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/Samples/sysmgmt/msi/scripts/WiLangId.vbs
-        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
-            WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/bin/$WINDOWS_SDK_ARCH/WiLangId.vbs
-        fi
-        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
-            WINDOWS_SDK_WILANGID=$(cygpath -sm "C:/Program Files (x86)/Windows Kits/8.1/bin/$WINDOWS_SDK_ARCH/WiLangId.vbs")
-        fi
-        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
-            AC_MSG_WARN([WiLangId.vbs not found - building translated packages will fail])
-            add_warning "WiLangId.vbs not found - building translated packages will fail"
-        fi
-    fi
-fi
-AC_SUBST(WINDOWS_SDK_HOME)
-AC_SUBST(WINDOWS_SDK_LIB_SUBDIR)
-AC_SUBST(WINDOWS_SDK_VERSION)
-AC_SUBST(WINDOWS_SDK_WILANGID)
-
-dnl =========================================
 dnl Check for uuidgen
 dnl =========================================
 if test "$_os" = "WINNT" -a "$cross_compiling" != "yes"; then
@@ -12869,7 +12908,7 @@ else
         fi
         if test "$BITNESS_OVERRIDE" = 64; then
             # needed for msi packaging
-            pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
+            pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/x86" "before"
         fi
         # .NET 4.6 and higher don't have bin directory
         if test -f "$DOTNET_FRAMEWORK_HOME/bin"; then
@@ -12885,16 +12924,11 @@ else
             pathmunge "$MSBUILD_PATH" "before"
         fi
         if test "$BITNESS_OVERRIDE" = 64; then
-            if test "$vcexpress" = "Express"; then
-                pathmunge "$COMPATH/bin/x86_amd64" "before"
-                pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
-            else
-                pathmunge "$COMPATH/bin/amd64" "before"
-                pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
-            fi
+            pathmunge "$COMPATH/bin/amd64" "before"
+            pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/x64" "before"
         else
             pathmunge "$COMPATH/bin" "before"
-            pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
+            pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/x86" "before"
         fi
         if test "$ENABLE_JAVA" != "" -a "$JDK"!="gcj"; then
             if test -d "$JAVA_HOME/jre/bin/client"; then
