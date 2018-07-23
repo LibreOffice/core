@@ -441,7 +441,7 @@ Author: Oliver Bolte <obo@openoffice.org>
 Date:   Tue Jan 11 10:18:37 2005 +0000
 
     INTEGRATION: CWS i18n15 (1.16.4); FILE MERGED
-    2004/10/07 18:19:11 khong 1.16.4.1: #i33756# update Hangarian breakiterator
+    2004/10/07 18:19:11 khong 1.16.4.1: #i33756# update Hungarian breakiterator
 
 commit d2a6a31e6981800c2a920f8c6ff901c341a0466e
 Author: Kurt Zenker <kz@openoffice.org>
@@ -509,7 +509,7 @@ Date:   Wed Mar 17 08:02:01 2004 +0000
 
     INTEGRATION: CWS i18n11 (1.12.14); FILE MERGED
     2004/02/10 14:21:13 er 1.12.14.3: RESYNC: (1.12-1.13); FILE MERGED
-    2004/02/05 16:45:30 khong 1.12.14.2: #i24850# fix the problem in previousCharBlock, when target char block is in poistion 1
+    2004/02/05 16:45:30 khong 1.12.14.2: #i24850# fix the problem in previousCharBlock, when target char block is in position 1
     2004/02/04 02:13:48 khong 1.12.14.1: #i24098# check boundary condition for Sentence, Script, CharBlock breakiterator
 
 commit 4da98b648497af30de0fcf1a16e649ce18b0564f

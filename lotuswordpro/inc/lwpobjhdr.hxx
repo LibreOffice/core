@@ -76,7 +76,7 @@ private:
     sal_uInt32 m_nSize;     //Data size
     bool m_bCompressed;
 
-    //localize the following memebers to save memory
+    //localize the following members to save memory
     //sal_uInt8 m_nFlagBits;
     //sal_uInt32 m_nVersionID;
     //sal_uInt32 m_nRefCount;
