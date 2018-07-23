@@ -38,7 +38,8 @@ public:
 
     UITestUnoObj();
 
-    sal_Bool SAL_CALL executeCommand(const OUString& rCommand) override;
+    sal_Bool SAL_CALL executeCommand(const OUString& rCommand,
+        const css::uno::Sequence< css::beans::PropertyValue >& rArgs = css::uno::Sequence< css::beans::PropertyValue >()) override;
 
     sal_Bool SAL_CALL executeDialog(const OUString& rCommand) override;
 
@@ -59,10 +60,11 @@ UITestUnoObj::UITestUnoObj():
 {
 }
 
-sal_Bool SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
+sal_Bool SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand,
+    const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     SolarMutexGuard aGuard;
-    return UITest::executeCommand(rCommand);
+    return UITest::executeCommand(rCommand, rArgs);
 }
 
 sal_Bool SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)

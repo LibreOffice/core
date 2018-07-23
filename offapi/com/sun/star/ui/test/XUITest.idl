@@ -11,12 +11,13 @@
 #define __com_sun_star_ui_test_XUITest_idl__
 
 #include <com/sun/star/ui/test/XUIObject.idl>
+#include <com/sun/star/beans/PropertyValues.idl>
 
 module com { module sun { module star { module ui { module test {
 
 interface XUITest
 {
-    boolean executeCommand([in] string command);
+    boolean executeCommand([in] string command, [in] com::sun::star::beans::PropertyValues propValues);
 
     boolean executeDialog([in] string command);
 

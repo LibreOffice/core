@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <vector>
 #include <vcl/uitest/uitest.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
@@ -17,12 +18,23 @@
 
 #include <comphelper/dispatchcommand.hxx>
 
-bool UITest::executeCommand(const OUString& rCommand)
+
+bool UITest::executeCommand(const OUString& rCommand, const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
-    return comphelper::dispatchCommand(
-        rCommand,
+    css::uno::Sequence< css::beans::PropertyValue > lNewArgs =
         {{"SynchronMode", -1, css::uno::Any(true),
-          css::beans::PropertyState_DIRECT_VALUE}});
+          css::beans::PropertyState_DIRECT_VALUE}};
+
+    sal_uInt32 nArgs = rArgs.getLength();
+    if ( nArgs > 0 )
+    {
+        sal_uInt32 nIndex( lNewArgs.getLength() );
+        lNewArgs.realloc( lNewArgs.getLength()+rArgs.getLength() );
+
+        for ( sal_uInt32 i = 0; i < nArgs; i++ )
+            lNewArgs[nIndex++] = rArgs[i];
+    }
+    return comphelper::dispatchCommand(rCommand,lNewArgs);
 }
 
 bool UITest::executeDialog(const OUString& rCommand)
