@@ -828,7 +828,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
     const bool bFull = rInf.Width() < rInf.X() + Width();
     const bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
-    SetAscent( std::max<sal_uInt16>(GetRelPos(), 0) );
+    SetAscent( static_cast<sal_uInt16>(std::max(GetRelPos(), 0)) );
     if( GetAscent() > Height() )
         Height( GetAscent() );
 
