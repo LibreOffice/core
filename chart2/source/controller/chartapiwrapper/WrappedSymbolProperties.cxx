@@ -159,15 +159,15 @@ void lcl_setSymbolTypeToSymbol( sal_Int32 nSymbolType, chart2::Symbol& rSymbol )
     }
 }
 
-void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
+void lcl_addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact
                                     , tSeriesOrDiagramPropertyType ePropertyType )
 {
-    rList.push_back( new WrappedSymbolTypeProperty( spChart2ModelContact, ePropertyType ) );
-    rList.push_back( new WrappedSymbolBitmapURLProperty( spChart2ModelContact, ePropertyType ) );
-    rList.push_back( new WrappedSymbolBitmapProperty( spChart2ModelContact, ePropertyType ) );
-    rList.push_back( new WrappedSymbolSizeProperty( spChart2ModelContact, ePropertyType  ) );
-    rList.push_back( new WrappedSymbolAndLinesProperty( spChart2ModelContact, ePropertyType  ) );
+    rList.emplace_back( new WrappedSymbolTypeProperty( spChart2ModelContact, ePropertyType ) );
+    rList.emplace_back( new WrappedSymbolBitmapURLProperty( spChart2ModelContact, ePropertyType ) );
+    rList.emplace_back( new WrappedSymbolBitmapProperty( spChart2ModelContact, ePropertyType ) );
+    rList.emplace_back( new WrappedSymbolSizeProperty( spChart2ModelContact, ePropertyType  ) );
+    rList.emplace_back( new WrappedSymbolAndLinesProperty( spChart2ModelContact, ePropertyType  ) );
 }
 
 }//anonymous namespace
@@ -205,13 +205,13 @@ void WrappedSymbolProperties::addProperties( std::vector< Property > & rOutPrope
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
+void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< std::unique_ptr<WrappedProperty> >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
-void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
+void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< std::unique_ptr<WrappedProperty> >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );

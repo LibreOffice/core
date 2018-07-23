@@ -34,7 +34,7 @@ class WrappedSplineProperties
 {
 public:
     static void addProperties( std::vector< css::beans::Property > & rOutProperties );
-    static void addWrappedProperties( std::vector< WrappedProperty* >& rList
+    static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 

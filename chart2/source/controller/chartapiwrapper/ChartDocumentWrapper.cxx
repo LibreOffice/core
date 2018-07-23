@@ -1399,21 +1399,21 @@ const Sequence< beans::Property >& ChartDocumentWrapper::getPropertySequence()
     return *StaticChartDocumentWrapperPropertyArray::get();
 }
 
-const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedProperties()
+const std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrappedProperties()
 {
-    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
-    aWrappedProperties.push_back( new WrappedDataSourceLabelsInFirstRowProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedDataSourceLabelsInFirstColumnProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedHasLegendProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedHasMainTitleProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedHasSubTitleProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedAddInProperty( *this ) );
-    aWrappedProperties.push_back( new WrappedBaseDiagramProperty( *this ) );
-    aWrappedProperties.push_back( new WrappedAdditionalShapesProperty( *this ) );
-    aWrappedProperties.push_back( new WrappedRefreshAddInAllowedProperty( *this ) );
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("NullDate",Any() ) ); // i99104
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableComplexChartTypes", uno::Any(true) ) );
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableDataTableDialog", uno::Any(true) ) );
+    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
+    aWrappedProperties.emplace_back( new WrappedDataSourceLabelsInFirstRowProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedDataSourceLabelsInFirstColumnProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedHasLegendProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedHasMainTitleProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedHasSubTitleProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedAddInProperty( *this ) );
+    aWrappedProperties.emplace_back( new WrappedBaseDiagramProperty( *this ) );
+    aWrappedProperties.emplace_back( new WrappedAdditionalShapesProperty( *this ) );
+    aWrappedProperties.emplace_back( new WrappedRefreshAddInAllowedProperty( *this ) );
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty("NullDate",Any() ) ); // i99104
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty("EnableComplexChartTypes", uno::Any(true) ) );
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty("EnableDataTableDialog", uno::Any(true) ) );
 
     return aWrappedProperties;
 }

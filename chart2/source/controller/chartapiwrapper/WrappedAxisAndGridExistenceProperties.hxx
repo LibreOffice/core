@@ -34,21 +34,21 @@ namespace wrapper
 class WrappedAxisAndGridExistenceProperties
 {
 public:
-    static void addWrappedProperties( std::vector< WrappedProperty* >& rList
+    static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
         , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
 class WrappedAxisTitleExistenceProperties
 {
 public:
-    static void addWrappedProperties( std::vector< WrappedProperty* >& rList
+    static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
         , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
 class WrappedAxisLabelExistenceProperties
 {
 public:
-   static void addWrappedProperties( std::vector< WrappedProperty* >& rList
+   static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
        , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
