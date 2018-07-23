@@ -175,10 +175,10 @@ void SwAnnotationWin::dispose()
 
     RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
 
-    sidebarwindows::AnchorOverlayObject::DestroyAnchorOverlayObject( mpAnchor );
+    delete mpAnchor;
     mpAnchor = nullptr;
 
-    sidebarwindows::ShadowOverlayObject::DestroyShadowOverlayObject( mpShadow );
+    delete mpShadow;
     mpShadow = nullptr;
 
     delete mpTextRangeOverlay;

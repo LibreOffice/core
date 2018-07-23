@@ -180,18 +180,6 @@ ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
     return pShadowOverlayObject;
 }
 
-/* static */ void ShadowOverlayObject::DestroyShadowOverlayObject( ShadowOverlayObject* pShadow )
-{
-    if ( pShadow )
-    {
-        if ( pShadow->getOverlayManager() )
-        {
-            pShadow->getOverlayManager()->remove(*pShadow);
-        }
-        delete pShadow;
-    }
-}
-
 ShadowOverlayObject::ShadowOverlayObject( const basegfx::B2DPoint& rBasePos,
                                           const basegfx::B2DPoint& rSecondPosition,
                                           Color aBaseColor )
@@ -203,6 +191,10 @@ ShadowOverlayObject::ShadowOverlayObject( const basegfx::B2DPoint& rBasePos,
 
 ShadowOverlayObject::~ShadowOverlayObject()
 {
+    if ( getOverlayManager() )
+    {
+        getOverlayManager()->remove(*this);
+    }
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ShadowOverlayObject::createOverlayObjectPrimitive2DSequence()

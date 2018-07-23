@@ -46,9 +46,10 @@ private:
         ShadowOverlayObject( const basegfx::B2DPoint& rBasePos,
                              const basegfx::B2DPoint& rSecondPosition,
                              Color aBaseColor );
-        virtual ~ShadowOverlayObject() override;
 
 public:
+        virtual ~ShadowOverlayObject() override;
+
         void SetShadowState(ShadowState aState);
         ShadowState GetShadowState() {return mShadowState;}
 
@@ -56,7 +57,6 @@ public:
                           const basegfx::B2DPoint& rPoint2 );
 
         static ShadowOverlayObject* CreateShadowOverlayObject( SwView const & rDocView );
-        static void DestroyShadowOverlayObject( ShadowOverlayObject* pShadow );
 };
 
 } } // end of namespace sw::sidebarwindows
