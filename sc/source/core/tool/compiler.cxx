@@ -5844,8 +5844,17 @@ void ScCompiler::HandleIIOpCode(OpCode nOpCode, formula::ParamClass eClass, Form
         if (nNumParams != 1)
             return;
 
-        if (eClass == formula::ForceArray || mbMatrixFlag)
+        // NOTE: eClass is the CurrentFactor token's GetInForceArray() state,
+        // not the function's parameter classification.
+        if (mbMatrixFlag ||
+                eClass == formula::ForceArray ||
+                eClass == formula::ReferenceOrForceArray ||
+                eClass == formula::SuppressedReferenceOrForceArray)
             return;
+
+        /* TODO: this assumes that there is no function taking a single
+         * parameter that does evaluate a range reference. There currently
+         * isn't any, but we should rather check that. */
 
         if ((*pppToken[0])->GetType() != svDoubleRef)
             return;
