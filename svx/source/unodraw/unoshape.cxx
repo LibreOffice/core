@@ -706,7 +706,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
 
     // tdf#118662 instead of creating an E3dView instance every time to paint
     // a single SdrObject, use the existing SdrObject::SingleObjectPainter to
-    // use less ressources and runtime
+    // use less resources and runtime
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     const tools::Rectangle aBoundRect(GetSdrObject()->GetCurrentBoundRect());
 

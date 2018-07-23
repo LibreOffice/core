@@ -813,7 +813,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     }
 
     // If the HTML or no help is installed, but aHelpURL nevertheless references valid help content,
-    // that implies that that help content belongs to an extension (and thus would not be available
+    // that implies that this help content belongs to an extension (and thus would not be available
     // in neither the offline nor online HTML help); in that case, fall through to the "old-help to
     // display" code below:
     if (SfxContentHelper::IsHelpErrorDocument(aHelpURL))
