@@ -58,12 +58,12 @@ class SwXMLTableContext : public XMLTextTableContext
         ColumnWidthInfo(sal_uInt16 wdth, bool isRel) : width(wdth), isRelative(isRel) {};
     };
     std::vector<ColumnWidthInfo> m_aColumnWidths;
-    std::vector<OUString> *m_pColumnDefaultCellStyleNames;
+    std::unique_ptr<std::vector<OUString>> m_pColumnDefaultCellStyleNames;
 
     css::uno::Reference< css::text::XTextCursor > m_xOldCursor;
     css::uno::Reference< css::text::XTextContent > m_xTextContent;
 
-    SwXMLTableRows_Impl * m_pRows;
+    std::unique_ptr<SwXMLTableRows_Impl> m_pRows;
 
     SwTableNode         *m_pTableNode;
     SwTableBox          *m_pBox1;
@@ -77,7 +77,7 @@ class SwXMLTableContext : public XMLTextTableContext
     // the column width, and protection flag
     typedef std::unordered_map<TableBoxIndex,SwTableBoxFormat*,
                           TableBoxIndexHasher> map_BoxFormat;
-    map_BoxFormat* m_pSharedBoxFormats;
+    std::unique_ptr<map_BoxFormat> m_pSharedBoxFormats;
 
     SvXMLImportContextRef   m_xParentTable;   // if table is a sub table
 
