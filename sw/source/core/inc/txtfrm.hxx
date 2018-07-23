@@ -922,7 +922,7 @@ struct MergedPara
     /// const_casts it and modifies it (also, Update will modify it)
     OUString mergedText;
     /// most paragraph properties are taken from the first non-empty node
-    SwTextNode const*const pParaPropsNode;
+    SwTextNode const* pParaPropsNode;
     /// except break attributes, those are taken from the first node
     SwTextNode *const pFirstNode;
     MergedPara(SwTextFrame & rFrame, std::vector<Extent>&& rExtents,

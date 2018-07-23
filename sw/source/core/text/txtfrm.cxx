@@ -756,14 +756,15 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
     sal_Int32 nTFIndex(0);
     sal_Int32 nToDelete(nLen);
     sal_Int32 nDeleted(0);
-    bool bFoundNode(false);
+    size_t nFoundNode(0);
+    size_t nErased(0);
     auto it = rMerged.extents.begin();
     for (; it != rMerged.extents.end(); )
     {
         bool bErase(false);
         if (it->pNode == &rNode)
         {
-            bFoundNode = true;
+            ++nFoundNode;
             if (nIndex + nToDelete <= it->nStart)
             {
                 nToDelete = 0;
@@ -792,6 +793,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                     bErase = nDeleteHere == it->nEnd - it->nStart;
                     if (bErase)
                     {
+                        ++nErased;
                         assert(it->nStart == nIndex);
                         it = rMerged.extents.erase(it);
                     }
@@ -831,7 +833,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                 }
             }
         }
-        else if (bFoundNode)
+        else if (nFoundNode != 0)
         {
             break;
         }
@@ -841,11 +843,22 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
             ++it;
         }
     }
-    assert(bFoundNode && "text node not found - why is it sending hints to us");
+    assert(nFoundNode != 0 && "text node not found - why is it sending hints to us");
     assert(nIndex - nDeleted <= rNode.Len());
     // if there's a remaining deletion, it must be in gap at the end of the node
 // can't do: might be last one in node was erased   assert(nLen == 0 || rMerged.empty() || (it-1)->nEnd <= nIndex);
-// TODO in ^ case, rMerged.listener.StopListening() ? and reset pFirst/pProps ...
+    // note: if first node gets deleted then that must call DelFrames as
+    // pFirstNode is never updated
+    if (nErased == nFoundNode)
+    {   // all visible text from node was erased
+        if (rMerged.pParaPropsNode == &rNode)
+        {
+            rMerged.pParaPropsNode = rMerged.extents.empty()
+                ? rMerged.pFirstNode
+                : rMerged.extents.front().pNode;
+        }
+        rMerged.listener.EndListening(&const_cast<SwTextNode&>(rNode));
+    }
     rMerged.mergedText = text.makeStringAndClear();
     return TextFrameIndex(nDeleted);
 }
