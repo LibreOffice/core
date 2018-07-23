@@ -1700,8 +1700,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 const int nRgt = (bTableVertical ? nPageHeight : nPageWidth) -
                                  (aTabCols.GetLeftMin() + aTabCols.GetRight());
 
-                const sal_uInt16 nL = std::max< sal_uInt16 >(nLft, 0);
-                const sal_uInt16 nR = std::max< sal_uInt16 >(nRgt, 0);
+                const sal_uInt16 nL = static_cast< sal_uInt16 >(std::max(nLft, 0));
+                const sal_uInt16 nR = static_cast< sal_uInt16 >(std::max(nRgt, 0));
 
                 SvxColumnItem aColItem(nNum, nL, nR);
 
@@ -1937,8 +1937,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 const int nRgt = (bVerticalWriting ? nPageWidth : nPageHeight) -
                                  (aTabCols.GetLeftMin() + aTabCols.GetRight());
 
-                const sal_uInt16 nL = std::max< sal_uInt16 >(nLft, 0);
-                const sal_uInt16 nR = std::max< sal_uInt16 >(nRgt, 0);
+                const sal_uInt16 nL = static_cast< sal_uInt16 >(std::max(nLft, 0));
+                const sal_uInt16 nR = static_cast< sal_uInt16 >(std::max(nRgt, 0));
 
                 SvxColumnItem aColItem(0, nL, nR);
 
@@ -2011,8 +2011,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     const int nLft = aTabCols.GetLeftMin() + aTabCols.GetLeft();
                     const int nRgt = nPageWidth -(aTabCols.GetLeftMin() + aTabCols.GetRight());
 
-                    const sal_uInt16 nL = std::max< sal_uInt16 >(nLft, 0);
-                    const sal_uInt16 nR = std::max< sal_uInt16 >(nRgt, 0);
+                    const sal_uInt16 nL = static_cast< sal_uInt16 >(std::max(nLft, 0));
+                    const sal_uInt16 nR = static_cast< sal_uInt16 >(std::max(nRgt, 0));
 
                     aRectangle.SetLeft( nL );
                     if(nNum > 1)
